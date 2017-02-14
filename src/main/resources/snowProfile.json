@@ -1,0 +1,306 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+	"title" : "Snow profile",
+	"description" : "JSON description of a snow profile.",
+	"type" : "object",
+	"properties" : {
+		"author" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/author" },
+		"location" : {
+			"type" : "object",
+			"properties" : {
+				"country" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/countryAlpha2Code"},
+				"region" : { "type" : "string" },
+				"subregion" : { "type" : "string" },
+				"name" : { "type" : "string" },
+				"geo" : { "$ref": "http://json-schema.org/geo" },
+				"elevation" : {
+					"type" : "integer",
+					"minimum" : 0,
+					"maximum" : 8850
+				},
+				"angle" : { "type" : "integer" },
+				"aspect" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/aspect" },
+				"quality" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/quality" },
+				"customData" : {
+					"type" : "object",
+					"patternProperties": {
+						"^customData_": {}
+					},
+					"additionalProperties" : false
+				}
+			},
+			"additionalProperties" : false
+		},
+		"datetime" : {
+			"type" : "object",
+			"properties" : {
+				"date" : { "format" : "date-time", "type" : "string" },
+				"quality" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/quality" }
+			},
+			"additionalProperties" : false
+		},
+		"conditions" : {
+			"type" : "object",
+			"properties" : {
+				"airTemperature" : { "type" : "number" },
+				"cloudiness" : { "$ref" : "#/definitions/cloudiness" },
+				"precipitationType" : { "$ref" : "#/definitions/precipitationType" },
+				"precipitationIntensity" : { "$ref" : "#/definitions/precipitationIntensity" },
+				"windSpeed" : { "$ref" : "#/definitions/windSpeed" },
+				"windDirection" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/aspect" },
+				"customData" : {
+					"type" : "object",
+					"patternProperties": {
+						"^customData_": {}
+					},
+					"additionalProperties" : false
+				}
+			},
+			"additionalProperties" : false
+		},
+		"layers" : {
+			"type" : "array",
+			"items" : { "$ref" : "#/definitions/layer" },
+			"additionalItems" : false
+		},
+		"stabilityTests" : {
+			"type" : "array",
+			"items" : {
+				"oneOf" : [
+					{ "$ref" : "#/definitions/CT" },
+					{ "$ref" : "#/definitions/ECT" },
+					{ "$ref" : "#/definitions/RB" },
+					{ "$ref" : "#/definitions/PST" }
+				]
+			},
+			"additionalItems" : false
+		},
+		"temperatureProfile" : { "$ref" : "#/definitions/temperatureProfile" },
+		"ramProfile" : { "$ref" : "#/definitions/ramProfile" },
+		"densityProfile" : { "$ref" : "#/definitions/densityProfile" },
+		"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"customData" : {
+			"type" : "object",
+			"patternProperties": {
+				"^customData_": {}
+			},
+			"additionalProperties" : false
+		}
+	},
+	
+	"additionalProperties" : false,
+	
+	"definitions" : {
+		"CT" : {
+			"type" : "object",
+			"properties" : {
+				"stabilityTestType" : {
+					"type" : "string",
+					"enum" : [ "CT" ]
+				},
+				"step" : {
+					"type" : "integer",
+					"minimum" : 0,
+					"maximum" : 31
+				},
+				"height" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"fractureType" : { "$ref" : "#/definitions/fractureType" },
+				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+			},
+			"additionalProperties" : false
+		},
+		"ECT" : {
+			"type" : "object",
+			"properties" : {
+				"stabilityTestType" : {
+					"type" : "string",
+					"enum" : [ "ECT" ]
+				},
+				"propagationType" : { "$ref" : "#/definitions/propagationType" },
+				"step" : {
+					"type" : "integer",
+					"minimum" : 0,
+					"maximum" : 31
+				},
+				"height" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"fractureType" : { "$ref" : "#/definitions/fractureType" },
+				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+			},
+			"additionalProperties" : false
+		},
+		"RB" : {
+			"type" : "object",
+			"properties" : {
+				"stabilityTestType" : {
+					"type" : "string",
+					"enum" : [ "RB" ]
+				},
+				"step" : {
+					"type" : "integer",
+					"minimum" : 1,
+					"maximum" : 7
+				},
+				"height" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"fractureType" : { "$ref" : "#/definitions/fractureType" },
+				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+			},
+			"additionalProperties" : false
+		},
+		"PST" : {
+			"type" : "object",
+			"properties" : {
+				"stabilityTestType" : {
+					"type" : "string",
+					"enum" : [ "PST" ]
+				},
+				"cutLength" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"columnLength" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"height" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"fractureTypePST" : { "$ref" : "#/definitions/fractureTypePST" },
+				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+			}
+		},
+		"temperatureProfile" : {
+			"type" : "array",
+			"items" : {
+				"height" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"temperature" : {
+					"type" : "number",
+					"maximum" : 0
+				}
+			},
+			"additionalProperties" : false
+		},
+		"ramProfile" : {
+			"type" : "array",
+			"items" : {
+				"penetrationDepth" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"count" : {
+					"type" : "integer",
+					"minimum" : 0
+				},
+				"dropHeight" : {
+					"type" : "number",
+					"minimum" : 0
+				}
+			},
+			"additionalProperties" : false
+		},
+		"densityProfile" : {
+			"type" : "array",
+			"items" : {
+				"heightTop" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"heightBottom" : {
+					"type" : "number",
+					"minimum" : 0
+				},
+				"density" : {
+					"type" : "number",
+					"minimum" : 0
+				}
+			},
+			"additionalProperties" : false
+		},
+		"layer" : {
+			"type" : "object",
+			"properties" : {
+				"heightTop" : { "type" : "number" },
+				"heightBottom" : { "type" : "number" },
+				"wetness" : { "$ref" : "#/definitions/wetness" },
+				"grainShapes" : {
+					"type" : "object",
+					"properties" : {
+						"primary" : { "$ref" : "#/definitions/grainShape" },
+						"secondary" : { "$ref" : "#/definitions/grainShape" }
+					},
+					"additionalProperties" : false
+				},
+				"grainSizes" : {
+					"type" : "object",
+					"properties" : {
+						"min" : {
+							"type" : "number"
+						},
+						"max" : {
+							"type" : "number"
+						}
+					},
+					"additionalProperties" : false
+				},
+				"hardness" : { "$ref" : "#/definitions/hardness" }
+			},
+			"additionalProperties" : false
+		},
+		"cloudiness" : {
+			"type" : "integer",
+			"minimum" : 0,
+			"maximum" : 8
+		},
+		"precipitationType" : {
+			"type" : "string",
+			"enum" : [ "none", "snow", "rain", "graupel" ]
+		},
+		"windSpeed" : {
+			"type" : "string",
+			"enum" : [ "calm", "gentle", "moderate", "strong", "gale", "storm" ]
+		},
+		"precipitationIntensity" : {
+			"type" : "string",
+			"enum" : [ "light", "moderate", "heavy" ]
+		},
+		"fractureType" : {
+			"type" : "string",
+			"enum" : [ "fullBreak", "partialBreak", "noBreak" ]
+		},
+		"fractureTypePST" : {
+			"type" : "string",
+			"enum" : [ "END", "SF", "Arr" ]
+		},
+		"propagationType" : {
+			"type" : "string",
+			"enum" : [ "N", "P" ]
+		},
+		"wetness" : {
+			"type" : "integer",
+			"minimum" : 1,
+			"maximum" : 5
+		},
+		"hardness" : {
+			"type" : "number",
+			"multipleOf" : 0.5,
+			"maximum" : 6,
+			"minimum" : 1
+		},
+		"grainShape" : {
+			"type" : "string",
+			"enum" : [ "PP", "PPgp", "MM", "DF", "RG", "FC", "FCrx", "DH", "SH", "MF", "MFcr", "IF" ]
+		}
+	}
+}

@@ -1,0 +1,155 @@
+{
+	"author" : {
+		"name" : "Patrick Nairz",
+		"email" : "patrick.nairz@tirol.gv.at",
+		"organization" : "LWDTirol",
+		"role" : "Avalanche Warning Service"
+	},
+	"location" : {
+		"country" : "Austria",
+		"region" : "Tirol",
+		"subregion" : "Arlberg",
+		"name" : "Kriegerhorn",
+		"geo" : {
+			"latitude" : 47.0125421,
+			"longitude" : 11.2015420
+		},
+		"elevation" : 2450,
+		"angle" : 34,
+		"aspect" : "N",
+		"quality" : "measured"
+	},
+	"datetime" : {
+		"date" : "2015-12-05T12:15:00+01:00",
+		"quality" : "measured"
+	},
+	"conditions" : {
+		"airTemperature" : -4.3,
+		"cloudiness" : 3,
+		"precipitationType" : "snow",
+		"precipitationIntensity" : "light",
+		"windSpeed" : "moderate",
+		"windDirection" : "SW"
+	},
+	"layers" : [
+		{
+			"heightTop" : 120,
+			"heightBottom" : 90,
+			"wetness" : 1,
+			"grainShapes" : {
+				"primary" : "PPp",
+				"secondary" : "PP"
+			},
+			"grainSizes" : {
+				"min" : 2,
+				"max" : 2.5
+			},
+			"hardness" : 1
+		},
+		{
+			"heightTop" : 90,
+			"heightBottom" : 65,
+			"wetness" : 1,
+			"grainShapes" : {
+				"primary" : "DF",
+				"secondary" : "DF"
+			},
+			"grainSizes" : {
+				"min" : 1,
+				"max" : 1.5
+			},
+			"hardness" : 3
+		},
+		{
+			"heightTop" : 65,
+			"heightBottom" : 62,
+			"wetness" : 1,
+			"grainShapes" : {
+				"primary" : "MFcr",
+				"secondary" : "RG"
+			},
+			"grainSizes" : {
+				"min" : 4,
+				"max" : 5
+			},
+			"hardness" : 4
+		},
+		{
+			"heightTop" : 62,
+			"heightBottom" : 0,
+			"wetness" : 1,
+			"grainShapes" : {
+				"primary" : "DH",
+				"secondary" : "DH"
+			},
+			"grainSizes" : {
+				"min" : 3,
+				"max" : 4
+			},
+			"hardness" : 1
+		}
+	],
+	"stabilityTests" : [
+		{
+			"stabilityTestType" : "RB",
+			"step" : 4,
+			"height" : 62,
+			"fractureType" : "fullBreak"
+		},
+		{
+			"stabilityTestType" : "ECT",
+			"propagationType" : "P",
+			"step" : 11,
+			"height" : 62,
+			"fractureType" : "fullBreak"
+		}
+	],
+	"temperatureProfile" : [
+		{
+			"height" : 90,
+			"temperature" : -12.6
+		},
+		{
+			"height" : 70,
+			"temperature" : -8.4
+		},
+		{
+			"height" : 50,
+			"temperature" : -6.1
+		},
+		{
+			"height" : 30,
+			"temperature" : -3.6
+		},
+		{
+			"height" : 10,
+			"temperature" : -2.1
+		},
+		{
+			"height" : 0,
+			"temperature" : -0.6
+		}
+	],
+	"densityProfile" : [
+		{
+			"heightTop" : 120,
+			"heightBottom" : 90,
+			"density" : 200
+		},
+		{
+			"heightTop" : 90,
+			"heightBottom" : 65,
+			"density" : 300
+		},
+		{
+			"heightTop" : 65,
+			"heightBottom" : 62,
+			"density" : 600
+		},
+		{
+			"heightTop" : 62,
+			"heightBottom" : 0,
+			"density" : 200
+		}
+	]	
+}

@@ -1,0 +1,128 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Avalanche Bulletin",
+	"description": "An avalanche bulletin.",
+	"type": "object",
+	"properties" : {
+		"author" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/author" },
+
+		"tendency" : { "$ref" : "#/definitions/tendency" },
+
+		"avalancheSituationHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"avalancheSituationComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"activityHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"activityComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"synopsisHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"synopsisComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"snowpackStructureHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"snowpackStructureComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"travelAdvisoryHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"travelAdvisoryComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"tendencyComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+
+		"validity" : {
+			"type" : "object",
+			"properties" : {
+				"from" : { "format" : "date-time", "type" : "string" },
+				"until" : { "format" : "date-time", "type" : "string" }
+			},
+			"additionalProperties" : false
+		},
+
+		"country" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/countryAlpha2Code" },
+		"region" : { "type" : "string" },
+		
+		"daytimeBulletins" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"triggerType" : { "$ref" : "#/definitions/triggerType" },
+					"avalancheType" : { "$ref" : "#/definitions/avalancheType" },
+					"validity" : {
+						"type" : "object",
+						"properties" : {
+							"from" : { "format" : "date-time", "type" : "string" },
+							"until" : { "format" : "date-time", "type" : "string" }
+						},
+						"additionalProperties" : false
+					},
+					"subregionBulletins" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"properties" : {
+								"elevation" : { "type" : "integer" },
+								"subregion" : { "type" : "string" },
+								"dangerRatings" : {
+									"type" : "object",
+									"properties" : {
+										"above" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/dangerRating" },
+										"below" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/dangerRating" }
+									}
+								},
+								"problemDescriptions" : {
+									"type" : "array",
+									"items" : {
+										"type" : "object",
+										"properties" : {
+											"elevationLimit" : { "type" : "integer" },
+											"dangerZone" : { "$ref" : "#/definitions/dangerZone" },
+											"avalancheProblem" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/avalancheProblem" },
+											"aspects" : {
+												"type" : "array",
+												"uniqueItems": true,
+												"items" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/aspect" },
+												"additionalProperties" : false
+											},
+											"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+										},
+										"additionalProperties" : false						
+									}
+								},
+								"dangerPatterns" : {
+									"type" : "array",
+									"maxItems" : 3,
+									"uniqueItems": true,
+									"items" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/dangerPattern" },
+									"additionalProperties" : false
+								}
+							},
+							"additionalProperties" : false						
+						}
+					}
+				},
+				"additionalProperties" : false						
+			},
+			"additionalProperties" : false
+		},
+		"customData" : {
+			"type" : "object",
+			"patternProperties": {
+				"^customData_": {}
+			},
+			"additionalProperties" : false
+		}
+	},
+
+	"additionalProperties" : false,
+
+	"definitions" : {
+		"tendency" : {
+			"type" : "string",
+			"enum" : [ "increasing", "decreasing", "no_change" ]
+		},
+		"triggerType" : {
+			"type" : "string",
+			"enum" : [ "high_load", "low_load", "spontaneous" ]
+		},
+		"avalancheType" : {
+			"type" : "string",
+			"enum" : [ "slab", "loose", "glide" ]
+		},
+		"dangerZone" : {
+			"type" : "string",
+			"enum" : [ "above", "below" ]
+		}
+	}
+}
