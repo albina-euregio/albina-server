@@ -1,6 +1,6 @@
 package org.avalanches.albina.controller;
 
-import org.avalanches.albina.exception.AvalancheInformationSystemException;
+import org.avalanches.albina.exception.AlbinaException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class SnowProfileClassifierTest {
 
 	@Ignore
 	@Test
-	public void getSnowProfilesTest() throws AvalancheInformationSystemException {
+	public void getSnowProfilesTest() throws AlbinaException {
 		// TODO implement snow profile test
 	}
 }

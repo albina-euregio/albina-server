@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.avalanches.albina.controller.AvalancheBulletinController;
-import org.avalanches.albina.exception.AvalancheInformationSystemException;
+import org.avalanches.albina.exception.AlbinaException;
 import org.avalanches.albina.model.AvalancheBulletin;
 import org.avalanches.albina.model.enumerations.CountryCode;
 import org.avalanches.albina.util.GlobalVariables;
@@ -63,7 +63,7 @@ public class AvalancheBulletinService {
 				}
 			}
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AvalancheInformationSystemException e) {
+		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
@@ -85,7 +85,7 @@ public class AvalancheBulletinService {
 			}
 			String json = bulletin.toJSON().toString();
 			return Response.ok(json, MediaType.APPLICATION_JSON).build();
-		} catch (AvalancheInformationSystemException e) {
+		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletin: " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
@@ -114,7 +114,7 @@ public class AvalancheBulletinService {
 					return Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(bulletinId)).build())
 							.type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
 				}
-			} catch (AvalancheInformationSystemException e) {
+			} catch (AlbinaException e) {
 				logger.warn("Error creating bulletin - " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 			}
@@ -141,7 +141,7 @@ public class AvalancheBulletinService {
 				jsonObject.append("bulletinId", bulletinId);
 				return Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(bulletinId)).build())
 						.type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
-			} catch (AvalancheInformationSystemException e) {
+			} catch (AlbinaException e) {
 				logger.warn("Error updating bulletin - " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 			}
@@ -158,7 +158,7 @@ public class AvalancheBulletinService {
 		try {
 			AvalancheBulletinController.getInstance().deleteBulletin(bulletinId);
 			return Response.ok().type(MediaType.APPLICATION_JSON).build();
-		} catch (AvalancheInformationSystemException e) {
+		} catch (AlbinaException e) {
 			logger.warn("Error deleting bulletin - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}

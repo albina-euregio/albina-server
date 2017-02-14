@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.List;
 
-import org.avalanches.albina.exception.AvalancheInformationSystemException;
+import org.avalanches.albina.exception.AlbinaException;
 import org.avalanches.albina.model.SnowProfile;
 import org.avalanches.albina.model.enumerations.Aspect;
 import org.avalanches.albina.model.enumerations.CountryCode;
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author Norbert Lanzanasto
  *
  */
-public class SnowProfileController extends AvalancheInformationSystemController {
+public class SnowProfileController extends AlbinaController {
 
 	private static Logger logger = LoggerFactory.getLogger(SnowProfileController.class);
 
@@ -74,9 +74,9 @@ public class SnowProfileController extends AvalancheInformationSystemController 
 	 * @param profileId
 	 *            The ID of the desired snow profile.
 	 * @return The snow profile with the given ID.
-	 * @throws AvalancheInformationSystemException
+	 * @throws AlbinaException
 	 */
-	public SnowProfile getSnowProfile(String profileId) throws AvalancheInformationSystemException {
+	public SnowProfile getSnowProfile(String profileId) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -84,7 +84,7 @@ public class SnowProfileController extends AvalancheInformationSystemController 
 			SnowProfile snowProfile = session.get(SnowProfile.class, profileId);
 			if (snowProfile == null) {
 				transaction.rollback();
-				throw new AvalancheInformationSystemException("No profile with ID: " + profileId);
+				throw new AlbinaException("No profile with ID: " + profileId);
 			}
 			Hibernate.initialize(snowProfile.getLayers());
 			Hibernate.initialize(snowProfile.getStabilityTests());
@@ -97,13 +97,13 @@ public class SnowProfileController extends AvalancheInformationSystemController 
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
 	}
 
-	public Serializable saveSnowProfile(SnowProfile profile) throws AvalancheInformationSystemException {
+	public Serializable saveSnowProfile(SnowProfile profile) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -114,13 +114,13 @@ public class SnowProfileController extends AvalancheInformationSystemController 
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
 	}
 
-	public void updateSnowProfile(SnowProfile profile) throws AvalancheInformationSystemException {
+	public void updateSnowProfile(SnowProfile profile) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -130,7 +130,7 @@ public class SnowProfileController extends AvalancheInformationSystemController 
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
@@ -139,7 +139,7 @@ public class SnowProfileController extends AvalancheInformationSystemController 
 	@SuppressWarnings("unchecked")
 	public List<SnowProfile> getSnowProfiles(int page, CountryCode country, String region, String subregion,
 			DateTime startDate, DateTime endDate, int above, int below, List<Aspect> aspects)
-			throws AvalancheInformationSystemException {
+			throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -179,13 +179,13 @@ public class SnowProfileController extends AvalancheInformationSystemController 
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
 	}
 
-	public void deleteSnowProfile(String profileId) throws AvalancheInformationSystemException {
+	public void deleteSnowProfile(String profileId) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -197,7 +197,7 @@ public class SnowProfileController extends AvalancheInformationSystemController 
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}

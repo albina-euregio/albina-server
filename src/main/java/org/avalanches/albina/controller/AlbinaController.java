@@ -4,19 +4,19 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 /**
- * Parent controller for the avalanche information system. This singleton is
+ * Parent controller for ALBINA. This singleton is
  * responsible for holding object like the session factory for all child
  * controllers.
  * 
  * @author Norbert Lanzanasto
  *
  */
-public class AvalancheInformationSystemController {
+public class AlbinaController {
 
 	/**
 	 * The single instance of this class.
 	 */
-	private static AvalancheInformationSystemController instance = null;
+	private static AlbinaController instance = null;
 
 	/**
 	 * The session factory to talk to the database.
@@ -26,7 +26,7 @@ public class AvalancheInformationSystemController {
 	/**
 	 * Default constructor.
 	 */
-	protected AvalancheInformationSystemController() {
+	protected AlbinaController() {
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
@@ -35,9 +35,9 @@ public class AvalancheInformationSystemController {
 	 * 
 	 * @return The instance of this class.
 	 */
-	public static AvalancheInformationSystemController getInstance() {
+	public static AlbinaController getInstance() {
 		if (instance == null) {
-			instance = new AvalancheInformationSystemController();
+			instance = new AlbinaController();
 		}
 		return instance;
 	}

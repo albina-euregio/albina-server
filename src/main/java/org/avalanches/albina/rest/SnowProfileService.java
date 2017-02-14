@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.avalanches.albina.controller.SnowProfileController;
-import org.avalanches.albina.exception.AvalancheInformationSystemException;
+import org.avalanches.albina.exception.AlbinaException;
 import org.avalanches.albina.model.SnowProfile;
 import org.avalanches.albina.model.enumerations.Aspect;
 import org.avalanches.albina.model.enumerations.CountryCode;
@@ -66,7 +66,7 @@ public class SnowProfileService {
 				}
 			}
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AvalancheInformationSystemException e) {
+		} catch (AlbinaException e) {
 			logger.warn("Error loading profiles - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
@@ -87,7 +87,7 @@ public class SnowProfileService {
 			}
 			String json = profile.toJSON().toString();
 			return Response.ok(json, MediaType.APPLICATION_JSON).build();
-		} catch (AvalancheInformationSystemException e) {
+		} catch (AlbinaException e) {
 			logger.warn("Error loading profile: " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
@@ -116,7 +116,7 @@ public class SnowProfileService {
 					return Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(profileId)).build())
 							.type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
 				}
-			} catch (AvalancheInformationSystemException e) {
+			} catch (AlbinaException e) {
 				logger.warn("Error creating profile - " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 			}
@@ -143,7 +143,7 @@ public class SnowProfileService {
 				jsonObject.append("profileId", profileId);
 				return Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(profileId)).build())
 						.type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
-			} catch (AvalancheInformationSystemException e) {
+			} catch (AlbinaException e) {
 				logger.warn("Error updating profile - " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 			}
@@ -160,7 +160,7 @@ public class SnowProfileService {
 		try {
 			SnowProfileController.getInstance().deleteSnowProfile(profileId);
 			return Response.ok().build();
-		} catch (AvalancheInformationSystemException e) {
+		} catch (AlbinaException e) {
 			logger.warn("Error deleting profile - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}

@@ -3,7 +3,7 @@ package org.avalanches.albina.controller;
 import java.io.Serializable;
 import java.util.List;
 
-import org.avalanches.albina.exception.AvalancheInformationSystemException;
+import org.avalanches.albina.exception.AlbinaException;
 import org.avalanches.albina.model.AvalancheBulletin;
 import org.avalanches.albina.model.enumerations.CountryCode;
 import org.avalanches.albina.util.GlobalVariables;
@@ -21,7 +21,7 @@ import org.joda.time.DateTime;
  * @author Norbert Lanzanasto
  *
  */
-public class AvalancheBulletinController extends AvalancheInformationSystemController {
+public class AvalancheBulletinController extends AlbinaController {
 
 	// private static Logger logger =
 	// LoggerFactory.getLogger(AvalancheBulletinController.class);
@@ -44,9 +44,9 @@ public class AvalancheBulletinController extends AvalancheInformationSystemContr
 	 * @param bulletinId
 	 *            The ID of the desired avalanche bulletin.
 	 * @return The avalanche bulletin with the given ID.
-	 * @throws AvalancheInformationSystemException
+	 * @throws AlbinaException
 	 */
-	public AvalancheBulletin getBulletin(String bulletinId) throws AvalancheInformationSystemException {
+	public AvalancheBulletin getBulletin(String bulletinId) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -54,7 +54,7 @@ public class AvalancheBulletinController extends AvalancheInformationSystemContr
 			AvalancheBulletin bulletin = session.get(AvalancheBulletin.class, bulletinId);
 			if (bulletin == null) {
 				transaction.rollback();
-				throw new AvalancheInformationSystemException("No bulletin with ID: " + bulletinId);
+				throw new AlbinaException("No bulletin with ID: " + bulletinId);
 			}
 			Hibernate.initialize(bulletin.getActivityComment());
 			Hibernate.initialize(bulletin.getActivityHighlight());
@@ -73,13 +73,13 @@ public class AvalancheBulletinController extends AvalancheInformationSystemContr
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
 	}
 
-	public Serializable saveBulletin(AvalancheBulletin bulletin) throws AvalancheInformationSystemException {
+	public Serializable saveBulletin(AvalancheBulletin bulletin) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -90,13 +90,13 @@ public class AvalancheBulletinController extends AvalancheInformationSystemContr
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
 	}
 
-	public void updateBulletin(AvalancheBulletin bulletin) throws AvalancheInformationSystemException {
+	public void updateBulletin(AvalancheBulletin bulletin) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -106,7 +106,7 @@ public class AvalancheBulletinController extends AvalancheInformationSystemContr
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
@@ -114,7 +114,7 @@ public class AvalancheBulletinController extends AvalancheInformationSystemContr
 
 	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> getBulletin(int page, CountryCode country, String region, DateTime startDate,
-			DateTime endDate) throws AvalancheInformationSystemException {
+			DateTime endDate) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -158,13 +158,13 @@ public class AvalancheBulletinController extends AvalancheInformationSystemContr
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
 	}
 
-	public void deleteBulletin(String bulletinId) throws AvalancheInformationSystemException {
+	public void deleteBulletin(String bulletinId) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -172,14 +172,14 @@ public class AvalancheBulletinController extends AvalancheInformationSystemContr
 			AvalancheBulletin avalancheBulletin = session.get(AvalancheBulletin.class, bulletinId);
 			if (avalancheBulletin == null) {
 				transaction.rollback();
-				throw new AvalancheInformationSystemException("No bulletin with ID: " + bulletinId);
+				throw new AlbinaException("No bulletin with ID: " + bulletinId);
 			}
 			session.delete(avalancheBulletin);
 			transaction.commit();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AvalancheInformationSystemException(he.getMessage());
+			throw new AlbinaException(he.getMessage());
 		} finally {
 			session.close();
 		}
