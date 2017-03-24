@@ -18,6 +18,7 @@ public class AvalancheBulletinCaamlValidatorTest {
 
 	private String validBulletinStringFromResource;
 	private String invalidBulletinStringFromResource;
+	private String unclearBulletinStringFromResource;
 
 	@Before
 	public void setUp() {
@@ -52,6 +53,22 @@ public class AvalancheBulletinCaamlValidatorTest {
 		}
 
 		invalidBulletinStringFromResource = bulletinStringBuilder.toString();
+
+		// Load invalid avalanche bulletin JSON from resources
+		is = classloader.getResourceAsStream("unclearBulletin.xml");
+
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+
+		unclearBulletinStringFromResource = bulletinStringBuilder.toString();
 	}
 
 	@Test
@@ -68,6 +85,17 @@ public class AvalancheBulletinCaamlValidatorTest {
 	@Test(expected = SAXException.class)
 	public void testValidateAvalancheBulletinCaamlInvalid() throws SAXException, IOException {
 		CaamlValidator.validateCaamlBulletin(invalidBulletinStringFromResource);
+	}
+
+	@Test
+	public void testValidateAvalancheBulletinCaamlUnclear() {
+		try {
+			CaamlValidator.validateCaamlBulletin(unclearBulletinStringFromResource);
+		} catch (SAXException e) {
+			Assert.fail();
+		} catch (IOException e) {
+			Assert.fail();
+		}
 	}
 
 }
