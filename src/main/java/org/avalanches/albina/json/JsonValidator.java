@@ -74,7 +74,7 @@ public class JsonValidator {
 		JSONObject result = new JSONObject();
 		ProcessingReport report = null;
 		try {
-			String jsonSchema = GlobalVariables.getFileString(type);
+			String jsonSchema = GlobalVariables.getJsonSchemaFileString(type);
 
 			logger.debug("Applying schema: @<@<" + jsonSchema + ">@>@ to data: #<#<" + jsonData + ">#>#");
 			JsonNode schemaNode = JsonLoader.fromString(jsonSchema);

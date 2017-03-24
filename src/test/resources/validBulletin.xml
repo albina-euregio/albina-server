@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<caaml:Bulletin xmlns:caaml="http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS CAAMLv5_BulletinEAWS.xsd"  gml:id="BulletinDeID359" xml:lang="de">
+	<caaml:metaDataProperty>
+		<caaml:MetaData>
+			<caaml:dateTimeReport>2010-01-07T07:30:00+01:00</caaml:dateTimeReport>
+			<caaml:srcRef xlink:href="OpIDLwdTirol"/>
+			<caaml:comment>Patrick Nairz</caaml:comment>
+		</caaml:MetaData>
+	</caaml:metaDataProperty>
+	<caaml:validTime>
+		<caaml:TimeInstant>
+			<caaml:timePosition>2010-01-07+01:00</caaml:timePosition>
+		</caaml:TimeInstant>
+	</caaml:validTime>
+	<caaml:bulletinResultsOf>
+		<caaml:BulletinMeasurements>
+			<caaml:extFiles>
+				<caaml:ExtFile gml:id="ExtFileID01">
+					<caaml:description/>
+					<caaml:fileReferenceURI>http://lwd.tirol.gv.at/fotos/2003-12-19_Hochtennboden.JPG</caaml:fileReferenceURI>
+				</caaml:ExtFile>
+			</caaml:extFiles>
+			<caaml:comment>In Kammnähe entstehen neue, zum Teil recht störanfällige Triebschneepakete. Ab morgen mit Neuschnee und Wind deutlicher Gefahrenanstieg, v.a. im Süden.</caaml:comment>
+			<caaml:highlights>Oberflächennahen Triebschnee beachten!</caaml:highlights>
+			<caaml:dangerRatings>
+				<caaml:DangerRating>
+					<caaml:validTime>
+						<caaml:TimeInstant>
+							<caaml:timePosition>2010-01-04+01:00</caaml:timePosition>
+						</caaml:TimeInstant>
+					</caaml:validTime>
+					<caaml:mainValue>3</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:validTime>
+						<caaml:TimeInstant>
+							<caaml:timePosition>2010-01-05+01:00</caaml:timePosition>
+						</caaml:TimeInstant>
+					</caaml:validTime>
+					<caaml:mainValue>3</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:validTime>
+						<caaml:TimeInstant>
+							<caaml:timePosition>2010-01-06+01:00</caaml:timePosition>
+						</caaml:TimeInstant>
+					</caaml:validTime>
+					<caaml:mainValue>2</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:validTime>
+						<caaml:TimePeriod>
+							<caaml:beginPosition>2010-01-07T00:00:00+01:00</caaml:beginPosition>
+							<caaml:endPosition>2010-01-07T11:59:59+01:00</caaml:endPosition>
+						</caaml:TimePeriod>
+					</caaml:validTime>
+					<caaml:validAspect xlink:href="AspectRange_N"/>
+					<caaml:validAspect xlink:href="AspectRange_NE"/>
+					<caaml:validAspect xlink:href="AspectRange_E"/>
+					<caaml:validAspect xlink:href="AspectRange_SE"/>
+					<caaml:validAspect xlink:href="AspectRange_S"/>
+					<caaml:validAspect xlink:href="AspectRange_NW"/>
+					<caaml:validElevation xlink:href="ElevationRange_2000Hi"/>
+					<caaml:terrainFeature>Triebschneehaenge</caaml:terrainFeature>
+					<caaml:mainValue>2</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:validTime>
+						<caaml:TimePeriod>
+							<caaml:beginPosition>2010-01-07T12:00:00+01:00</caaml:beginPosition>
+							<caaml:endPosition>2010-01-07T23:59:59+01:00</caaml:endPosition>
+						</caaml:TimePeriod>
+					</caaml:validTime>
+					<caaml:validAspect xlink:href="AspectRange_N"/>
+					<caaml:validAspect xlink:href="AspectRange_NE"/>
+					<caaml:validAspect xlink:href="AspectRange_E"/>
+					<caaml:validAspect xlink:href="AspectRange_SE"/>
+					<caaml:validAspect xlink:href="AspectRange_S"/>
+					<caaml:validAspect xlink:href="AspectRange_NW"/>
+					<caaml:validElevation xlink:href="ElevationRange_2000Hi"/>
+					<caaml:terrainFeature>Triebschneehaenge</caaml:terrainFeature>
+					<caaml:mainValue>2</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:validTime>
+						<caaml:TimeInstant>
+							<caaml:timePosition>2010-01-08+01:00</caaml:timePosition>
+						</caaml:TimeInstant>
+					</caaml:validTime>
+					<caaml:mainValue>3</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:locRef xlink:href="AT7R1"/>
+					<caaml:validTime>
+						<caaml:TimePeriod>
+							<caaml:beginPosition>2010-01-07T00:00:00+01:00</caaml:beginPosition>
+							<caaml:endPosition>2010-01-07T11:59:59+01:00</caaml:endPosition>
+						</caaml:TimePeriod>
+					</caaml:validTime>
+					<caaml:validElevation xlink:href="ElevationRange_1800Hi"/>
+					<caaml:mainValue>2</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:locRef xlink:href="AT7R1"/>
+					<caaml:validTime>
+						<caaml:TimePeriod>
+							<caaml:beginPosition>2010-01-07T00:00:00+01:00</caaml:beginPosition>
+							<caaml:endPosition>2010-01-07T11:59:59+01:00</caaml:endPosition>
+						</caaml:TimePeriod>
+					</caaml:validTime>
+					<caaml:validElevation xlink:href="ElevationRange_1800Lw"/>
+					<caaml:mainValue>1</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:locRef xlink:href="AT7R1"/>
+					<caaml:validTime>
+						<caaml:TimePeriod>
+							<caaml:beginPosition>2010-01-07T12:00:00+01:00</caaml:beginPosition>
+							<caaml:endPosition>2010-01-07T23:59:59+01:00</caaml:endPosition>
+						</caaml:TimePeriod>
+					</caaml:validTime>
+					<caaml:validElevation xlink:href="ElevationRange_1800Hi"/>
+					<caaml:mainValue>2</caaml:mainValue>
+				</caaml:DangerRating>
+				<caaml:DangerRating>
+					<caaml:locRef xlink:href="AT7R1"/>
+					<caaml:validTime>
+						<caaml:TimePeriod>
+							<caaml:beginPosition>2010-01-07T12:00:00+01:00</caaml:beginPosition>
+							<caaml:endPosition>2010-01-07T23:59:59+01:00</caaml:endPosition>
+						</caaml:TimePeriod>
+					</caaml:validTime>
+					<caaml:validElevation xlink:href="ElevationRange_1800Lw"/>
+					<caaml:mainValue>1</caaml:mainValue>
+				</caaml:DangerRating>
+			</caaml:dangerRatings>
+			<caaml:wxSynopsisHighlights/>
+			<caaml:wxSynopsisComment>Bergwetter heute: Die Schneeschauer klingen von Westen her ab, Wolken und Nebel lockern auf, etwas Sonne könnte sich in den Nordalpen ausgehen. Die Sicht ist aber teilweise recht diffus Gegen Abend erneut Eintrübung aus dem Süden. Zudem ist es weiterhin winterlich kalt. Temperatur in 2000m: -11 bis -7 Grad, in 3000m -17 bis -14 Grad. Schwacher, in Kamm- und Gipfelnähe mäßiger Wind aus West bis Südwest.</caaml:wxSynopsisComment>
+			<caaml:avActivityHighlights/>
+			<caaml:avActivityComment/>
+			<caaml:snowpackStructureHighlights/>
+			<caaml:snowpackStructureComment>Seit den Nachtstunden hat es in weiten Teilen Tirols wenige cm geschneit. Vermehrt in südlichen Regionen wird somit gerade eine schwach ausgebildete Oberflächenreifschicht eingeschneit. Entscheidnend für die Lawinengefahr sind derzeit jedoch immer noch die am vergangenen Samstag gebildeten Triebschneepakete. Diese lagern häufig bis etwa 2300m, im nördlichen Osttirol teilweise bis etwa 2700m hinauf auf einer etwas weicheren Schicht aus filzigen Kristallen, die wiederum auf einer harten Schmelzharschkruste lagern. Die Verbindung ist mancherort noch nicht ideal, eine Störung durch Zusatzbelastung somit möglich. In tiefen und mittleren Lagen kann die Schneedecke durch einen Wechsel von dünnen harten und lockeren, weichen Schichten charakterisiert werden. Oberhalb etwa 2300m tritt vermehrt eine von mächtigeren härteren Schichten überlagerte bodennahe Schicht aus kantigen Kristallen als mögliche Gleitfläche für Lawinen in Erscheinung.</caaml:snowpackStructureComment>
+			<caaml:travelAdvisoryHighlights/>
+			<caaml:travelAdvisoryComment>Die Lawinengefahr ist weiterhin höhenabhängig. Unterhalb der Waldgrenze herrscht verbreitet geringe Lawinengefahr. Darüber ist diese inzwischen in allen Regionen mäßig.&#xd;
+Gefahrenstellen für den Wintersportler finden sich vor allem in Form von Triebschneeansammlungen, die sich am vergangenen Samstag gebildet haben. In kammnahen Bereichen entstehen derzeit zudem kleinräumige, frische Triebschneepakete. Zwar haben sich durch den Kälteeinfluss Spannungen innerhalb der Schneedecke abgebaut, dennoch können überall dort, wo diese Triebschneepakete etwas mächtiger ausgefallen sind, immer noch Lawinen im sehr steilen Gelände ausgelöst werden. Vereinzelt ist dies noch durch geringe Belastung möglich. Solche Gefahrenbereiche sind vermehrt hinter Geländekanten sowie in sehr steilen Rinnen und Mulden anzutreffen. Die wenigen cm Neuschnee erschweren die Erkennbarkeit dieser bis gestern meist noch gut zu sehenden Triebschneepakete.&#xd;
+Oberhalb etwa 2300m kann vor allem an Übergangsbereichen von wenig zu viel Schnee die Altschneedecke im sehr steilen Gelände insbesondere durch große Zusatzbelastung gestört werden.</caaml:travelAdvisoryComment>
+		</caaml:BulletinMeasurements>
+	</caaml:bulletinResultsOf>
+	<caaml:locRef xlink:href="AT7"/>
+</caaml:Bulletin>

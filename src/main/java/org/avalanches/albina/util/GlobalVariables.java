@@ -11,10 +11,10 @@ import org.joda.time.format.ISODateTimeFormat;
 public class GlobalVariables {
 
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
-
 	public static int paginationCount = 50;
+	private static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 
-	public static String getFileString(String fileName) throws FileNotFoundException {
+	public static String getJsonSchemaFileString(String fileName) throws FileNotFoundException {
 		StringBuilder result = new StringBuilder("");
 
 		URL resource = GlobalVariables.class.getResource("/" + fileName + ".json");
@@ -28,5 +28,9 @@ public class GlobalVariables {
 		scanner.close();
 
 		return result.toString();
+	}
+
+	public static String getBulletinCaamlSchemaFileString() {
+		return bulletinCaamlSchemaFileString;
 	}
 }
