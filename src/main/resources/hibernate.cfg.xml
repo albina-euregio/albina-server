@@ -2,15 +2,15 @@
 
 <!DOCTYPE hibernate-configuration PUBLIC
 	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 	
 <hibernate-configuration>
 
   <session-factory>
 
 	<!-- Database connection settings -->
-    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ais</property>
+    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ais?useSSL=false</property>
     <property name="hibernate.connection.username">ais</property>
     <property name="hibernate.connection.password">lawine</property>
     
@@ -18,7 +18,7 @@
     <property name="connection_pool_size">1</property>
     
 	<!-- SQL dialect -->
-    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.dialect">org.hibernate.spatial.dialect.mysql.MySQL56SpatialDialect</property>
     
     <!-- Disable the second-level cache -->
     <property name="cache_provider_class">org.hibernate.cache.NoCacheProvider</property>
@@ -31,13 +31,14 @@
     <!-- <property name="hbm2ddl.auto">update</property>  -->
     
     <!-- Names the annotated entity class -->
-    <mapping class="org.avalanches.ais.model.Texts"/>
-    <mapping class="org.avalanches.ais.model.Author"/>
-    <mapping class="org.avalanches.ais.model.SnowProfile"/>
-    <mapping class="org.avalanches.ais.model.AvalancheProblemDescription"/>
-    <mapping class="org.avalanches.ais.model.SubregionBulletin"/>
-    <mapping class="org.avalanches.ais.model.DaytimeBulletin"/>
-    <mapping class="org.avalanches.ais.model.AvalancheBulletin"/>
+    <mapping class="org.avalanches.albina.model.Texts"/>
+    <mapping class="org.avalanches.albina.model.Author"/>
+    <mapping class="org.avalanches.albina.model.SnowProfile"/>
+    <mapping class="org.avalanches.albina.model.AvalancheProblemDescription"/>
+    <mapping class="org.avalanches.albina.model.SubregionBulletin"/>
+    <mapping class="org.avalanches.albina.model.DaytimeBulletin"/>
+    <mapping class="org.avalanches.albina.model.AvalancheBulletin"/>
+    <mapping class="org.avalanches.albina.model.Region"/>
     
   </session-factory>
   
