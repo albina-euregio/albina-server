@@ -21,6 +21,9 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Polygon;
+
 /**
  * This class holds all information about one region.
  * 
@@ -37,8 +40,8 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 	@Column(name = "PUBLIC_ID")
 	private String publicId;
 
-	// @Column(name = "POLYGON", columnDefinition = "geometry(POLYGON)")
-	// private Polygon polygon;
+	@Column(name = "POLYGON")
+	private Polygon polygon;
 
 	@ManyToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "PARENTREGION_ID")
@@ -114,19 +117,10 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 				Element linearRing = doc.createElement("gml:LinearRing");
 				Element posList = doc.createElement("gml:posList");
 
-				// int index = 0;
-				// StringBuilder sb = new StringBuilder();
-				// PathIterator iterator =
-				// subregion.polygon.getPathIterator(null);
-				// while (!iterator.isDone() && index <
-				// subregion.polygon.npoints) {
-				// double[] coords = new double[6];
-				// iterator.currentSegment(coords);
-				// sb.append(coords[0] + " " + coords[1] + " ");
-				// iterator.next();
-				// index++;
-				// }
-				// posList.appendChild(doc.createTextNode(sb.toString()));
+				StringBuilder sb = new StringBuilder();
+				for (Coordinate coordinate : subregion.polygon.getCoordinates())
+					sb.append(coordinate.x + " " + coordinate.y + " ");
+				posList.appendChild(doc.createTextNode(sb.toString()));
 
 				linearRing.appendChild(posList);
 				exterior.appendChild(linearRing);
@@ -173,18 +167,12 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 			JSONArray coordinates = new JSONArray();
 			JSONArray innerCoordinates = new JSONArray();
 
-			// int index = 0;
-			// PathIterator iterator = subregion.polygon.getPathIterator(null);
-			// while (!iterator.isDone() && index < subregion.polygon.npoints) {
-			// double[] coords = new double[6];
-			// iterator.currentSegment(coords);
-			// JSONArray entry = new JSONArray();
-			// entry.put(coords[0]);
-			// entry.put(coords[1]);
-			// innerCoordinates.put(entry);
-			// iterator.next();
-			// index++;
-			// }
+			for (Coordinate coordinate : subregion.polygon.getCoordinates()) {
+				JSONArray entry = new JSONArray();
+				entry.put(coordinate.x);
+				entry.put(coordinate.y);
+				innerCoordinates.put(entry);
+			}
 
 			coordinates.put(innerCoordinates);
 			geometry.put("coordinates", coordinates);
