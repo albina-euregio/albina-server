@@ -15,7 +15,7 @@ public class SnowProfileClassifier {
 		rateStabilityTest(profile);
 
 		// rate temperature profile
-		// rate ramm profile
+		// rate ram profile
 
 		// TODO implement classify()
 		// weight each factor
