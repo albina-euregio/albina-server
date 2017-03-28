@@ -89,19 +89,20 @@
 			"hardness" : 1
 		}
 	],
-	"stabilityTests" : [
+	"rutschBlockTests" : [
 		{
 			"stabilityTestType" : "RB",
 			"step" : 4,
 			"height" : 62,
-			"fractureType" : "fullBreak"
-		},
+			"fractureType" : "wholeBlock"
+		}
+	],
+	"extendedColumnTests" : [
 		{
 			"stabilityTestType" : "ECT",
-			"propagationType" : "P",
 			"step" : 11,
 			"height" : 62,
-			"fractureType" : "fullBreak"
+			"fractureType" : "propagation"
 		}
 	],
 	"temperatureProfile" : [
