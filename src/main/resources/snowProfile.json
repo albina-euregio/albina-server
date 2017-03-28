@@ -63,16 +63,24 @@
 			"items" : { "$ref" : "#/definitions/layer" },
 			"additionalItems" : false
 		},
-		"stabilityTests" : {
+		"compressionTests" : {
 			"type" : "array",
-			"items" : {
-				"oneOf" : [
-					{ "$ref" : "#/definitions/CT" },
-					{ "$ref" : "#/definitions/ECT" },
-					{ "$ref" : "#/definitions/RB" },
-					{ "$ref" : "#/definitions/PST" }
-				]
-			},
+			"items" : {	"$ref" : "#/definitions/CT" },
+			"additionalItems" : false
+		},
+		"extendedColumnTests" : {
+			"type" : "array",
+			"items" : {	"$ref" : "#/definitions/ECT" },
+			"additionalItems" : false
+		},
+		"rutschBlockTests" : {
+			"type" : "array",
+			"items" : {	"$ref" : "#/definitions/RB" },
+			"additionalItems" : false
+		},
+		"propagationSawTests" : {
+			"type" : "array",
+			"items" : {	"$ref" : "#/definitions/PST" },
 			"additionalItems" : false
 		},
 		"temperatureProfile" : { "$ref" : "#/definitions/temperatureProfile" },
@@ -107,7 +115,7 @@
 					"type" : "number",
 					"minimum" : 0
 				},
-				"fractureType" : { "$ref" : "#/definitions/fractureType" },
+				"fractureType" : { "$ref" : "#/definitions/ctFractureType" },
 				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
 			},
 			"additionalProperties" : false
@@ -119,7 +127,6 @@
 					"type" : "string",
 					"enum" : [ "ECT" ]
 				},
-				"propagationType" : { "$ref" : "#/definitions/propagationType" },
 				"step" : {
 					"type" : "integer",
 					"minimum" : 0,
@@ -129,7 +136,7 @@
 					"type" : "number",
 					"minimum" : 0
 				},
-				"fractureType" : { "$ref" : "#/definitions/fractureType" },
+				"fractureType" : { "$ref" : "#/definitions/ectFractureType" },
 				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
 			},
 			"additionalProperties" : false
@@ -150,7 +157,7 @@
 					"type" : "number",
 					"minimum" : 0
 				},
-				"fractureType" : { "$ref" : "#/definitions/fractureType" },
+				"fractureType" : { "$ref" : "#/definitions/rbFractureType" },
 				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
 			},
 			"additionalProperties" : false
@@ -174,7 +181,10 @@
 					"type" : "number",
 					"minimum" : 0
 				},
-				"fractureTypePST" : { "$ref" : "#/definitions/fractureTypePST" },
+				"weakLayerId" : {
+					"type" : "string"
+				},
+				"fractureType" : { "$ref" : "#/definitions/pstFractureType" },
 				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
 			}
 		},
@@ -275,13 +285,21 @@
 			"type" : "string",
 			"enum" : [ "light", "moderate", "heavy" ]
 		},
-		"fractureType" : {
+		"ctFractureType" : {
 			"type" : "string",
-			"enum" : [ "fullBreak", "partialBreak", "noBreak" ]
+			"enum" : [ "suddenPlanar", "suddenCollapse", "resistantPlanar", "progressiveCompression", "nonPlanarBreak", "noBreak" ]
 		},
-		"fractureTypePST" : {
+		"ectFractureType" : {
 			"type" : "string",
-			"enum" : [ "END", "SF", "Arr" ]
+			"enum" : [ "propagation", "noPropagation", "noBreak" ]
+		},
+		"rbFractureType" : {
+			"type" : "string",
+			"enum" : [ "wholeBlock", "partialBreak", "noBreak" ]
+		},
+		"pstFractureType" : {
+			"type" : "string",
+			"enum" : [ "Arr", "SF", "End" ]
 		},
 		"propagationType" : {
 			"type" : "string",
@@ -300,7 +318,7 @@
 		},
 		"grainShape" : {
 			"type" : "string",
-			"enum" : [ "PP", "PPgp", "MM", "DF", "RG", "FC", "FCrx", "DH", "SH", "MF", "MFcr", "IF" ]
+			"enum" : [ "PP", "PPgp", "MM", "DF", "RG", "FC", "FCxr", "DH", "SH", "MF", "MFcr", "IF" ]
 		}
 	}
 }
