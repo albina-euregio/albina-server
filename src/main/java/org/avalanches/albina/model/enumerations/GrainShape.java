@@ -1,7 +1,7 @@
 package org.avalanches.albina.model.enumerations;
 
 public enum GrainShape {
-	PP, PPgp, MM, DF, RG, FC, FCrx, DH, SH, MF, MFcr, IF;
+	PP, PPgp, MM, DF, RG, FC, FCxr, DH, SH, MF, MFcr, IF;
 
 	public static GrainShape fromString(String text) {
 		if (text != null) {
