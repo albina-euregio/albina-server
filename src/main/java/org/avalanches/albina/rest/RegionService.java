@@ -45,7 +45,7 @@ public class RegionService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getRegions(@QueryParam("region") String region) {
+	public Response getJsonRegions(@QueryParam("region") String region) {
 		logger.debug("GET JSON regions");
 
 		try {
@@ -64,10 +64,58 @@ public class RegionService {
 	}
 
 	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_XML)
+	public Response getCaamlRegions(@QueryParam("region") String region) {
+		logger.debug("GET XML regions");
+
+		try {
+			try {
+				List<Region> regions = RegionController.getInstance().getRegions(region);
+				if (regions == null) {
+					DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+					DocumentBuilder docBuilder;
+					docBuilder = docFactory.newDocumentBuilder();
+					Document doc = docBuilder.newDocument();
+					Element rootElement = doc.createElement("message");
+					rootElement.appendChild(doc.createTextNode("Region not found for ID: " + region));
+					Transformer transformer = TransformerFactory.newInstance().newTransformer();
+					StreamResult result = new StreamResult(new StringWriter());
+					DOMSource source = new DOMSource(doc);
+					transformer.transform(source, result);
+					return Response.status(Response.Status.NOT_FOUND).entity(result.getWriter().toString()).build();
+				}
+
+				StringBuilder sb = new StringBuilder();
+				for (Region entry : regions) {
+					Document caaml = entry.toCAAML();
+					Transformer transformer = TransformerFactory.newInstance().newTransformer();
+					StreamResult result = new StreamResult(new StringWriter());
+					DOMSource source = new DOMSource(caaml);
+					transformer.transform(source, result);
+					String string = result.getWriter().toString();
+					sb.append(string);
+				}
+
+				return Response.ok(sb.toString(), MediaType.APPLICATION_XML).build();
+			} catch (AlbinaException e) {
+				logger.warn("Error loading region: " + e.getMessage());
+				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
+			}
+		} catch (TransformerException ex) {
+			ex.printStackTrace();
+			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.getMessage().toString()).build();
+		}
+	}
+
+	@GET
 	@Path("/{regionId}")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getCaamlRegionCatalog(@PathParam("regionId") String regionId) {
+	public Response getCaamlRegion(@PathParam("regionId") String regionId) {
 		logger.debug("GET XML region: " + regionId);
 
 		try {
@@ -105,7 +153,7 @@ public class RegionService {
 	@Path("/{regionId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getJsonRegionCatalog(@PathParam("regionId") String regionId) {
+	public Response getJsonRegiong(@PathParam("regionId") String regionId) {
 		logger.debug("GET JSON region: " + regionId);
 
 		try {
