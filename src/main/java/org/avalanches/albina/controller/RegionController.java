@@ -1,11 +1,15 @@
 package org.avalanches.albina.controller;
 
+import java.util.List;
+
 import org.avalanches.albina.exception.AlbinaException;
 import org.avalanches.albina.model.Region;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +56,37 @@ public class RegionController extends AlbinaController {
 			Hibernate.initialize(region.getSubregions());
 			transaction.commit();
 			return region;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Region> getRegions(String regionId) throws AlbinaException {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			Criteria criteria = session.createCriteria(Region.class);
+
+			if (regionId == null || regionId == "") {
+				criteria.add(Restrictions.isNull("parentRegion"));
+			} else {
+				criteria.add(Restrictions.eq("parentRegion.id", regionId));
+			}
+
+			List<Region> regions = criteria.list();
+
+			for (Region region : regions) {
+				Hibernate.initialize(region.getSubregions());
+			}
+
+			transaction.commit();
+			return regions;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();

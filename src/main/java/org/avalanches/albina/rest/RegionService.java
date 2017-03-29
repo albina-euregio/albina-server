@@ -1,12 +1,14 @@
 package org.avalanches.albina.rest;
 
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,8 +33,8 @@ import org.w3c.dom.Element;
 
 import io.swagger.annotations.Api;
 
-@Path("/locationCatalogs")
-@Api(value = "/locationCatalogs")
+@Path("/regions")
+@Api(value = "/regions")
 public class RegionService {
 
 	private static Logger logger = LoggerFactory.getLogger(RegionService.class);
@@ -41,6 +43,28 @@ public class RegionService {
 	UriInfo uri;
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getRegions(@QueryParam("region") String region) {
+		logger.debug("GET JSON regions");
+
+		try {
+			List<Region> regions = RegionController.getInstance().getRegions(region);
+			JSONObject jsonResult = new JSONObject();
+			if (regions != null) {
+				for (Region entry : regions) {
+					jsonResult.put(String.valueOf(entry.getId()), entry.toJSON());
+				}
+			}
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading regions - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
+
+	@GET
+	@Path("/{regionId}")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getCaamlRegionCatalog(@PathParam("regionId") String regionId) {
@@ -78,6 +102,7 @@ public class RegionService {
 	}
 
 	@GET
+	@Path("/{regionId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJsonRegionCatalog(@PathParam("regionId") String regionId) {
