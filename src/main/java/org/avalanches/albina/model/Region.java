@@ -57,6 +57,38 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 		subregions = new HashSet<Region>();
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPublicId() {
+		return publicId;
+	}
+
+	public void setPublicId(String publicId) {
+		this.publicId = publicId;
+	}
+
+	public Polygon getPolygon() {
+		return polygon;
+	}
+
+	public void setPolygon(Polygon polygon) {
+		this.polygon = polygon;
+	}
+
+	public Region getParentRegion() {
+		return parentRegion;
+	}
+
+	public void setParentRegion(Region parentRegion) {
+		this.parentRegion = parentRegion;
+	}
+
 	public Set<Region> getSubregions() {
 		return subregions;
 	}
@@ -117,10 +149,12 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 				Element linearRing = doc.createElement("gml:LinearRing");
 				Element posList = doc.createElement("gml:posList");
 
-				StringBuilder sb = new StringBuilder();
-				for (Coordinate coordinate : subregion.polygon.getCoordinates())
-					sb.append(coordinate.x + " " + coordinate.y + " ");
-				posList.appendChild(doc.createTextNode(sb.toString()));
+				if (subregion.polygon != null && subregion.polygon.getCoordinates() != null) {
+					StringBuilder sb = new StringBuilder();
+					for (Coordinate coordinate : subregion.polygon.getCoordinates())
+						sb.append(coordinate.x + " " + coordinate.y + " ");
+					posList.appendChild(doc.createTextNode(sb.toString()));
+				}
 
 				linearRing.appendChild(posList);
 				exterior.appendChild(linearRing);
@@ -146,10 +180,10 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 
 		json.put("type", "FeatureCollection");
 		JSONObject crs = new JSONObject();
-		crs.append("type", "name");
+		crs.put("type", "name");
 		JSONObject properties = new JSONObject();
-		properties.append("name", "urn:ogc:def:crs:OGC:1.3:CRS84");
-		crs.append("properties", properties);
+		properties.put("name", "urn:ogc:def:crs:OGC:1.3:CRS84");
+		crs.put("properties", properties);
 		json.put("crs", crs);
 
 		JSONArray features = new JSONArray();
@@ -167,11 +201,13 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 			JSONArray coordinates = new JSONArray();
 			JSONArray innerCoordinates = new JSONArray();
 
-			for (Coordinate coordinate : subregion.polygon.getCoordinates()) {
-				JSONArray entry = new JSONArray();
-				entry.put(coordinate.x);
-				entry.put(coordinate.y);
-				innerCoordinates.put(entry);
+			if (subregion.polygon != null && subregion.polygon.getCoordinates() != null) {
+				for (Coordinate coordinate : subregion.polygon.getCoordinates()) {
+					JSONArray entry = new JSONArray();
+					entry.put(coordinate.x);
+					entry.put(coordinate.y);
+					innerCoordinates.put(entry);
+				}
 			}
 
 			coordinates.put(innerCoordinates);
