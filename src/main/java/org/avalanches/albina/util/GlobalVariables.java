@@ -12,6 +12,9 @@ public class GlobalVariables {
 
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static int paginationCount = 50;
+	// public static String referenceSystemUrn =
+	// "urn:ogc:def:crs:OGC:1.3:CRS84";
+	public static String referenceSystemUrn = "EPSG:32632";
 	private static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 
 	public static String getJsonSchemaFileString(String fileName) throws FileNotFoundException {

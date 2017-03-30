@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.avalanches.albina.util.GlobalVariables;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -93,7 +94,7 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 		Element polygon = doc.createElement("gml:Polygon");
 		polygon.setAttribute("gml:id", "P" + getId());
 		polygon.setAttribute("srsDimension", "2");
-		polygon.setAttribute("srsName", "urn:ogc:def:crs:OGC:1.3:CRS84");
+		polygon.setAttribute("srsName", GlobalVariables.referenceSystemUrn);
 		Element exterior = doc.createElement("gml:exterior");
 		Element linearRing = doc.createElement("gml:LinearRing");
 		Element posList = doc.createElement("gml:posList");

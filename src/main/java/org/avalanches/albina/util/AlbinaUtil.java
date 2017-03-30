@@ -43,7 +43,7 @@ public class AlbinaUtil {
 		JSONObject crs = new JSONObject();
 		crs.put("type", "name");
 		JSONObject properties = new JSONObject();
-		properties.put("name", "urn:ogc:def:crs:OGC:1.3:CRS84");
+		properties.put("name", GlobalVariables.referenceSystemUrn);
 		crs.put("properties", properties);
 		json.put("crs", crs);
 		return json;
