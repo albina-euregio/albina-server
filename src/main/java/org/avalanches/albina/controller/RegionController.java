@@ -65,6 +65,10 @@ public class RegionController extends AlbinaController {
 		}
 	}
 
+	public List<Region> getRegions() throws AlbinaException {
+		return getRegions(null);
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Region> getRegions(String regionId) throws AlbinaException {
 		Session session = sessionFactory.openSession();

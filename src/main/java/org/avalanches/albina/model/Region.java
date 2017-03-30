@@ -1,7 +1,5 @@
 package org.avalanches.albina.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,9 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -86,74 +81,26 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 		this.subregions = subregions;
 	}
 
-	public Document toCAAML() {
-		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder;
-			docBuilder = docFactory.newDocumentBuilder();
-			Document doc = docBuilder.newDocument();
-			Element rootElement = doc.createElement("LocationCollection");
-			rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
-			rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
-			rootElement.setAttribute("xmlns:app", "ALBINA");
-			rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-			rootElement.setAttribute("xmlns:schemaLocation",
-					"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
-			doc.appendChild(rootElement);
-
-			Element metaDataProperty = doc.createElement("metaDataProperty");
-			Element metaData = doc.createElement("MetaData");
-			Element dateTimeReport = doc.createElement("dateTimeReport");
-			// TODO use datetimeformatter from global variables
-			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-			dateTimeReport.appendChild(doc.createTextNode(dt.format(new Date())));
-			metaData.appendChild(dateTimeReport);
-			Element srcRef = doc.createElement("srcRef");
-			Element operation = doc.createElement("Operation");
-			operation.setAttribute("gml:id", "ALBINA");
-			Element name = doc.createElement("name");
-			name.appendChild(doc.createTextNode("ALBINA"));
-			operation.appendChild(name);
-			srcRef.appendChild(operation);
-			metaData.appendChild(srcRef);
-			metaDataProperty.appendChild(metaData);
-			rootElement.appendChild(metaDataProperty);
-
-			Element locations = doc.createElement("locations");
-			locations.appendChild(regionToCaaml(this, doc));
-			for (Region subregion : subregions)
-				locations.appendChild(regionToCaaml(subregion, doc));
-
-			rootElement.appendChild(locations);
-
-			return doc;
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private Element regionToCaaml(Region subregion, Document doc) {
+	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
-		region.setAttribute("gml:id", "R" + subregion.getId());
+		region.setAttribute("gml:id", "R" + getId());
 		Element regionname = doc.createElement("name");
-		regionname.appendChild(doc.createTextNode(subregion.name));
+		regionname.appendChild(doc.createTextNode(name));
 		region.appendChild(regionname);
 		Element regionSubType = doc.createElement("regionSubType");
 		region.appendChild(regionSubType);
 		Element outline = doc.createElement("outline");
 		Element polygon = doc.createElement("gml:Polygon");
-		polygon.setAttribute("gml:id", "P" + subregion.getId());
+		polygon.setAttribute("gml:id", "P" + getId());
 		polygon.setAttribute("srsDimension", "2");
 		polygon.setAttribute("srsName", "urn:ogc:def:crs:OGC:1.3:CRS84");
 		Element exterior = doc.createElement("gml:exterior");
 		Element linearRing = doc.createElement("gml:LinearRing");
 		Element posList = doc.createElement("gml:posList");
 
-		if (subregion.polygon != null && subregion.polygon.getCoordinates() != null) {
+		if (this.polygon != null && this.polygon.getCoordinates() != null) {
 			StringBuilder sb = new StringBuilder();
-			for (Coordinate coordinate : subregion.polygon.getCoordinates())
+			for (Coordinate coordinate : this.polygon.getCoordinates())
 				sb.append(coordinate.x + " " + coordinate.y + " ");
 			posList.appendChild(doc.createTextNode(sb.toString()));
 		}
@@ -168,33 +115,12 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 
 	@Override
 	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		json.put("type", "FeatureCollection");
-		JSONObject crs = new JSONObject();
-		crs.put("type", "name");
-		JSONObject properties = new JSONObject();
-		properties.put("name", "urn:ogc:def:crs:OGC:1.3:CRS84");
-		crs.put("properties", properties);
-		json.put("crs", crs);
-
-		JSONArray features = new JSONArray();
-		features.put(regionToJson(this));
-		for (Region subregion : subregions)
-			features.put(regionToJson(subregion));
-
-		json.put("features", features);
-
-		return json;
-	}
-
-	private JSONObject regionToJson(Region region) {
 		JSONObject feature = new JSONObject();
 
 		feature.put("type", "Feature");
 		JSONObject featureProperties = new JSONObject();
-		featureProperties.put("name", region.name);
-		featureProperties.put("id", region.getId());
+		featureProperties.put("name", name);
+		featureProperties.put("id", getId());
 		feature.put("properties", featureProperties);
 
 		JSONObject geometry = new JSONObject();
@@ -202,8 +128,8 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 		JSONArray coordinates = new JSONArray();
 		JSONArray innerCoordinates = new JSONArray();
 
-		if (region.polygon != null && region.polygon.getCoordinates() != null) {
-			for (Coordinate coordinate : region.polygon.getCoordinates()) {
+		if (polygon != null && polygon.getCoordinates() != null) {
+			for (Coordinate coordinate : polygon.getCoordinates()) {
 				JSONArray entry = new JSONArray();
 				entry.put(coordinate.x);
 				entry.put(coordinate.y);
