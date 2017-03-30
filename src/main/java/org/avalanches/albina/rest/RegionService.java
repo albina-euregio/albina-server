@@ -51,12 +51,16 @@ public class RegionService {
 		try {
 			List<Region> regions = RegionController.getInstance().getRegions(region);
 			JSONObject jsonResult = new JSONObject();
-			if (regions != null) {
+			if (regions == null) {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.append("message", "Region not found for ID: " + region);
+				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
+			} else {
 				for (Region entry : regions) {
 					jsonResult.put(String.valueOf(entry.getId()), entry.toJSON());
 				}
+				return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 			}
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading regions - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -79,25 +83,16 @@ public class RegionService {
 					Document doc = docBuilder.newDocument();
 					Element rootElement = doc.createElement("message");
 					rootElement.appendChild(doc.createTextNode("Region not found for ID: " + region));
-					Transformer transformer = TransformerFactory.newInstance().newTransformer();
-					StreamResult result = new StreamResult(new StringWriter());
-					DOMSource source = new DOMSource(doc);
-					transformer.transform(source, result);
-					return Response.status(Response.Status.NOT_FOUND).entity(result.getWriter().toString()).build();
+					return Response.status(Response.Status.NOT_FOUND).entity(convertDocToString(doc)).build();
+				} else {
+					StringBuilder sb = new StringBuilder();
+					for (Region entry : regions) {
+						Document caaml = entry.toCAAML();
+						String string = convertDocToString(caaml);
+						sb.append(string);
+					}
+					return Response.ok(sb.toString(), MediaType.APPLICATION_XML).build();
 				}
-
-				StringBuilder sb = new StringBuilder();
-				for (Region entry : regions) {
-					Document caaml = entry.toCAAML();
-					Transformer transformer = TransformerFactory.newInstance().newTransformer();
-					StreamResult result = new StreamResult(new StringWriter());
-					DOMSource source = new DOMSource(caaml);
-					transformer.transform(source, result);
-					String string = result.getWriter().toString();
-					sb.append(string);
-				}
-
-				return Response.ok(sb.toString(), MediaType.APPLICATION_XML).build();
 			} catch (AlbinaException e) {
 				logger.warn("Error loading region: " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
@@ -128,14 +123,11 @@ public class RegionService {
 					Document doc = docBuilder.newDocument();
 					Element rootElement = doc.createElement("message");
 					rootElement.appendChild(doc.createTextNode("Region not found for ID: " + regionId));
-					Transformer transformer = TransformerFactory.newInstance().newTransformer();
-					StreamResult result = new StreamResult(new StringWriter());
-					DOMSource source = new DOMSource(doc);
-					transformer.transform(source, result);
-					return Response.status(Response.Status.NOT_FOUND).entity(result.getWriter().toString()).build();
+					return Response.status(Response.Status.NOT_FOUND).entity(convertDocToString(doc)).build();
+				} else {
+					String caaml = convertDocToString(region.toCAAML());
+					return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 				}
-				String caaml = region.toCAAML().toString();
-				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 			} catch (AlbinaException e) {
 				logger.warn("Error loading region: " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
@@ -162,12 +154,21 @@ public class RegionService {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.append("message", "Region not found for ID: " + regionId);
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
+			} else {
+				String json = region.toJSON().toString();
+				return Response.ok(json, MediaType.APPLICATION_JSON).build();
 			}
-			String json = region.toJSON().toString();
-			return Response.ok(json, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading region: " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
+	}
+
+	private String convertDocToString(Document doc) throws TransformerException {
+		Transformer transformer = TransformerFactory.newInstance().newTransformer();
+		StreamResult result = new StreamResult(new StringWriter());
+		DOMSource source = new DOMSource(doc);
+		transformer.transform(source, result);
+		return result.getWriter().toString();
 	}
 }

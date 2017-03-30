@@ -37,9 +37,6 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 	@Column(name = "NAME")
 	private String name;
 
-	@Column(name = "PUBLIC_ID")
-	private String publicId;
-
 	@Column(name = "POLYGON")
 	private Polygon polygon;
 
@@ -63,14 +60,6 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getPublicId() {
-		return publicId;
-	}
-
-	public void setPublicId(String publicId) {
-		this.publicId = publicId;
 	}
 
 	public Polygon getPolygon() {
@@ -131,38 +120,9 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 			rootElement.appendChild(metaDataProperty);
 
 			Element locations = doc.createElement("locations");
-
-			for (Region subregion : subregions) {
-				Element region = doc.createElement("Region");
-				region.setAttribute("gml:id", "R" + subregion.publicId);
-				Element regionname = doc.createElement("name");
-				regionname.appendChild(doc.createTextNode(subregion.name));
-				region.appendChild(regionname);
-				Element regionSubType = doc.createElement("regionSubType");
-				region.appendChild(regionSubType);
-				Element outline = doc.createElement("outline");
-				Element polygon = doc.createElement("gml:Polygon");
-				polygon.setAttribute("gml:id", "P" + subregion.publicId);
-				polygon.setAttribute("srsDimension", "2");
-				polygon.setAttribute("srsName", "urn:ogc:def:crs:OGC:1.3:CRS84");
-				Element exterior = doc.createElement("gml:exterior");
-				Element linearRing = doc.createElement("gml:LinearRing");
-				Element posList = doc.createElement("gml:posList");
-
-				if (subregion.polygon != null && subregion.polygon.getCoordinates() != null) {
-					StringBuilder sb = new StringBuilder();
-					for (Coordinate coordinate : subregion.polygon.getCoordinates())
-						sb.append(coordinate.x + " " + coordinate.y + " ");
-					posList.appendChild(doc.createTextNode(sb.toString()));
-				}
-
-				linearRing.appendChild(posList);
-				exterior.appendChild(linearRing);
-				polygon.appendChild(exterior);
-				outline.appendChild(polygon);
-				region.appendChild(outline);
-				locations.appendChild(region);
-			}
+			locations.appendChild(regionToCaaml(this, doc));
+			for (Region subregion : subregions)
+				locations.appendChild(regionToCaaml(subregion, doc));
 
 			rootElement.appendChild(locations);
 
@@ -172,6 +132,38 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	private Element regionToCaaml(Region subregion, Document doc) {
+		Element region = doc.createElement("Region");
+		region.setAttribute("gml:id", "R" + subregion.getId());
+		Element regionname = doc.createElement("name");
+		regionname.appendChild(doc.createTextNode(subregion.name));
+		region.appendChild(regionname);
+		Element regionSubType = doc.createElement("regionSubType");
+		region.appendChild(regionSubType);
+		Element outline = doc.createElement("outline");
+		Element polygon = doc.createElement("gml:Polygon");
+		polygon.setAttribute("gml:id", "P" + subregion.getId());
+		polygon.setAttribute("srsDimension", "2");
+		polygon.setAttribute("srsName", "urn:ogc:def:crs:OGC:1.3:CRS84");
+		Element exterior = doc.createElement("gml:exterior");
+		Element linearRing = doc.createElement("gml:LinearRing");
+		Element posList = doc.createElement("gml:posList");
+
+		if (subregion.polygon != null && subregion.polygon.getCoordinates() != null) {
+			StringBuilder sb = new StringBuilder();
+			for (Coordinate coordinate : subregion.polygon.getCoordinates())
+				sb.append(coordinate.x + " " + coordinate.y + " ");
+			posList.appendChild(doc.createTextNode(sb.toString()));
+		}
+
+		linearRing.appendChild(posList);
+		exterior.appendChild(linearRing);
+		polygon.appendChild(exterior);
+		outline.appendChild(polygon);
+		region.appendChild(outline);
+		return region;
 	}
 
 	@Override
@@ -187,37 +179,41 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 		json.put("crs", crs);
 
 		JSONArray features = new JSONArray();
-		for (Region subregion : subregions) {
-			JSONObject feature = new JSONObject();
-
-			feature.put("type", "Feature");
-			JSONObject featureProperties = new JSONObject();
-			featureProperties.put("name", subregion.name);
-			featureProperties.put("id", subregion.publicId);
-			feature.put("properties", featureProperties);
-
-			JSONObject geometry = new JSONObject();
-			geometry.put("type", "Polygon");
-			JSONArray coordinates = new JSONArray();
-			JSONArray innerCoordinates = new JSONArray();
-
-			if (subregion.polygon != null && subregion.polygon.getCoordinates() != null) {
-				for (Coordinate coordinate : subregion.polygon.getCoordinates()) {
-					JSONArray entry = new JSONArray();
-					entry.put(coordinate.x);
-					entry.put(coordinate.y);
-					innerCoordinates.put(entry);
-				}
-			}
-
-			coordinates.put(innerCoordinates);
-			geometry.put("coordinates", coordinates);
-			feature.put("geometry", geometry);
-			features.put(feature);
-		}
+		features.put(regionToJson(this));
+		for (Region subregion : subregions)
+			features.put(regionToJson(subregion));
 
 		json.put("features", features);
 
 		return json;
+	}
+
+	private JSONObject regionToJson(Region region) {
+		JSONObject feature = new JSONObject();
+
+		feature.put("type", "Feature");
+		JSONObject featureProperties = new JSONObject();
+		featureProperties.put("name", region.name);
+		featureProperties.put("id", region.getId());
+		feature.put("properties", featureProperties);
+
+		JSONObject geometry = new JSONObject();
+		geometry.put("type", "Polygon");
+		JSONArray coordinates = new JSONArray();
+		JSONArray innerCoordinates = new JSONArray();
+
+		if (region.polygon != null && region.polygon.getCoordinates() != null) {
+			for (Coordinate coordinate : region.polygon.getCoordinates()) {
+				JSONArray entry = new JSONArray();
+				entry.put(coordinate.x);
+				entry.put(coordinate.y);
+				innerCoordinates.put(entry);
+			}
+		}
+
+		coordinates.put(innerCoordinates);
+		geometry.put("coordinates", coordinates);
+		feature.put("geometry", geometry);
+		return feature;
 	}
 }
