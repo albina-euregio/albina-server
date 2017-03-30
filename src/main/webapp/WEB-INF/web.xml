@@ -10,6 +10,10 @@
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
  
+    <listener>
+        <listener-class>org.avalanches.albina.util.ContextFinalizer</listener-class>
+    </listener>
+
  	<servlet>
         <servlet-name>AvalancheInformationSystem</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
