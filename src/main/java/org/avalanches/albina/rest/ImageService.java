@@ -33,7 +33,7 @@ public class ImageService {
 	UriInfo uri;
 
 	@POST
-	@Path("/fileupload") // Your Path or URL to call this service
+	@Path("/fileupload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(@DefaultValue("true") @FormDataParam("enabled") boolean enabled,
 			@FormDataParam("file") InputStream uploadedInputStream,
