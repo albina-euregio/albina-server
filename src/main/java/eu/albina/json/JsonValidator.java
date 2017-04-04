@@ -61,6 +61,18 @@ public class JsonValidator {
 	}
 
 	/**
+	 * Validates a JSON string against the news JSON schema.
+	 * 
+	 * @param news
+	 *            The string representing the news in JSON format.
+	 * @return Returns a JSON object containing the error messages (or empty for
+	 *         success).
+	 */
+	public static JSONObject validateNews(String news) {
+		return validate(news, "news");
+	}
+
+	/**
 	 * Validates a JSON string against an JSON Schema.
 	 * 
 	 * @param jsonData
@@ -114,5 +126,4 @@ public class JsonValidator {
 
 		return result;
 	}
-
 }

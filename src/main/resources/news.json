@@ -1,0 +1,13 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "News",
+	"description": "A news object.",
+	"type": "object",
+	"properties" : {
+		"title" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"content" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"dateTime" : { "format" : "date-time", "type" : "string" }
+	},
+
+	"additionalProperties" : false
+}

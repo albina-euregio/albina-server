@@ -31,14 +31,15 @@
     <!-- <property name="hbm2ddl.auto">update</property>  -->
     
     <!-- Names the annotated entity class -->
-    <mapping class="org.avalanches.albina.model.Texts"/>
-    <mapping class="org.avalanches.albina.model.Author"/>
-    <mapping class="org.avalanches.albina.model.SnowProfile"/>
-    <mapping class="org.avalanches.albina.model.AvalancheProblemDescription"/>
-    <mapping class="org.avalanches.albina.model.SubregionBulletin"/>
-    <mapping class="org.avalanches.albina.model.DaytimeBulletin"/>
-    <mapping class="org.avalanches.albina.model.AvalancheBulletin"/>
-    <mapping class="org.avalanches.albina.model.Region"/>
+    <mapping class="eu.albina.model.Texts"/>
+    <mapping class="eu.albina.model.Author"/>
+    <mapping class="eu.albina.model.SnowProfile"/>
+    <mapping class="eu.albina.model.AvalancheProblemDescription"/>
+    <mapping class="eu.albina.model.SubregionBulletin"/>
+    <mapping class="eu.albina.model.DaytimeBulletin"/>
+    <mapping class="eu.albina.model.AvalancheBulletin"/>
+    <mapping class="eu.albina.model.Region"/>
+    <mapping class="eu.albina.model.News"/>
     
   </session-factory>
   
