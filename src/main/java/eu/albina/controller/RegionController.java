@@ -8,8 +8,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -22,7 +20,8 @@ import eu.albina.model.Region;
  */
 public class RegionController extends AlbinaController {
 
-	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
+	// private static Logger logger =
+	// LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
 

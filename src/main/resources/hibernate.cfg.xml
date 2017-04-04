@@ -40,6 +40,7 @@
     <mapping class="eu.albina.model.AvalancheBulletin"/>
     <mapping class="eu.albina.model.Region"/>
     <mapping class="eu.albina.model.News"/>
+    <mapping class="eu.albina.model.User"/>
     
   </session-factory>
   

@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.NewsController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
+import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 
@@ -69,6 +70,7 @@ public class NewsService {
 	}
 
 	@POST
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJsonNews(String newsString) {

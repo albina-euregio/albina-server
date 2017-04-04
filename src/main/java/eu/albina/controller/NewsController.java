@@ -10,8 +10,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
@@ -24,7 +22,8 @@ import eu.albina.model.News;
  */
 public class NewsController extends AlbinaController {
 
-	private static Logger logger = LoggerFactory.getLogger(NewsController.class);
+	// private static Logger logger =
+	// LoggerFactory.getLogger(NewsController.class);
 
 	private static NewsController instance = null;
 
