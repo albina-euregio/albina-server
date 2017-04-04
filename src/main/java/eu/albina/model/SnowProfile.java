@@ -78,7 +78,7 @@ public class SnowProfile extends AbstractPersistentObject implements AvalancheIn
 	@JoinTable(name = "DENSITY_MEASUREMENTS", joinColumns = @JoinColumn(name = "SNOW_PROFILE_ID"))
 	private Set<DensityMeasurement> densityProfile;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "COMMENT_ID")
 	private Texts comment;
 

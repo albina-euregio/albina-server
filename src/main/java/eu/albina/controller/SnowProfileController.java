@@ -139,8 +139,7 @@ public class SnowProfileController extends AlbinaController {
 
 	@SuppressWarnings("unchecked")
 	public List<SnowProfile> getSnowProfiles(int page, CountryCode country, String region, String subregion,
-			DateTime startDate, DateTime endDate, int above, int below, List<Aspect> aspects)
-			throws AlbinaException {
+			DateTime startDate, DateTime endDate, int above, int below, List<Aspect> aspects) throws AlbinaException {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
@@ -175,6 +174,11 @@ public class SnowProfileController extends AlbinaController {
 			}
 
 			List<SnowProfile> profiles = criteria.list();
+
+			for (SnowProfile snowProfile : profiles) {
+				Hibernate.initialize(snowProfile.getComment());
+			}
+
 			transaction.commit();
 			return profiles;
 		} catch (HibernateException he) {
