@@ -100,4 +100,6 @@ public class NewsService {
 		} else
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(validationResult.toString()).build();
 	}
+
+	// TODO implement PUT and DELETE
 }

@@ -24,6 +24,7 @@ import eu.albina.model.enumerations.AvalancheProblem;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.CountryCode;
 import eu.albina.model.enumerations.DangerRating;
+import eu.albina.rest.filter.Secured;
 import io.swagger.annotations.Api;
 
 @Path("/incidents")
@@ -65,6 +66,7 @@ public class AvalancheIncidentService {
 	}
 
 	@POST
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createIncident() {
 		logger.debug("POST incident");
@@ -75,6 +77,7 @@ public class AvalancheIncidentService {
 	}
 
 	@PUT
+	@Secured
 	@Path("/{incidentId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateIncident(@PathParam("incidentId") String incidentId) {
@@ -86,6 +89,7 @@ public class AvalancheIncidentService {
 	}
 
 	@DELETE
+	@Secured
 	@Path("/{incidentId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteIncident(@PathParam("incidentId") String incidentId) {

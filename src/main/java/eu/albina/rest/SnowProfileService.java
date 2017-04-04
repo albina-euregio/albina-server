@@ -27,6 +27,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.SnowProfile;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.CountryCode;
+import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 
@@ -94,6 +95,7 @@ public class SnowProfileService {
 	}
 
 	@POST
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createJSONProfile(String profileString) {
@@ -125,6 +127,7 @@ public class SnowProfileService {
 	}
 
 	@PUT
+	@Secured
 	@Path("/{profileId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -152,6 +155,7 @@ public class SnowProfileService {
 	}
 
 	@DELETE
+	@Secured
 	@Path("/{profileId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
