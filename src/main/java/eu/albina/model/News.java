@@ -45,6 +45,8 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 		}
 		if (json.has("date") && !json.isNull("date"))
 			dateTime = new org.joda.time.DateTime(json.getString("date"));
+		else
+			dateTime = new org.joda.time.DateTime();
 	}
 
 	public Texts getTitle() {
