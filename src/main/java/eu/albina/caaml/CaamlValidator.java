@@ -36,7 +36,7 @@ public class CaamlValidator {
 	 *             If the caamlString is not valid.
 	 */
 	public static boolean validateCaamlBulletin(String caamlString) throws SAXException, IOException {
-		String bulletinCaamlSchemaString = GlobalVariables.getBulletinCaamlSchemaFileString();
+		String bulletinCaamlSchemaString = GlobalVariables.bulletinCaamlSchemaFileString;
 		URL schemaFile = new URL(bulletinCaamlSchemaString);
 		StringReader stringReader = new StringReader(caamlString);
 		Source xmlFile = new StreamSource(stringReader);

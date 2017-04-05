@@ -1,6 +1,7 @@
 package eu.albina.rest.filter;
 
-import java.io.IOException;
+import java.security.Principal;
+import java.util.Date;
 
 import javax.annotation.Priority;
 import javax.ws.rs.NotAuthorizedException;
@@ -9,7 +10,13 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import eu.albina.controller.AuthenticationController;
 
@@ -18,8 +25,10 @@ import eu.albina.controller.AuthenticationController;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
 
+	private static Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
+
 	@Override
-	public void filter(ContainerRequestContext requestContext) throws IOException {
+	public void filter(ContainerRequestContext requestContext) {
 
 		// Get the HTTP Authorization header from the request
 		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
@@ -35,13 +44,45 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 		try {
 			// Validate the token
-			validateToken(token);
+			DecodedJWT decodedToken = AuthenticationController.getInstance().decodeToken(token);
+			Date currentDate = new Date();
+			if (currentDate.after(decodedToken.getExpiresAt())) {
+				logger.warn("Token expired!");
+				throw new Exception();
+			}
+
+			final SecurityContext currentSecurityContext = requestContext.getSecurityContext();
+			requestContext.setSecurityContext(new SecurityContext() {
+
+				@Override
+				public Principal getUserPrincipal() {
+
+					return new Principal() {
+
+						@Override
+						public String getName() {
+							return decodedToken.getSubject();
+						}
+					};
+				}
+
+				@Override
+				public boolean isUserInRole(String role) {
+					return true;
+				}
+
+				@Override
+				public boolean isSecure() {
+					return currentSecurityContext.isSecure();
+				}
+
+				@Override
+				public String getAuthenticationScheme() {
+					return "Bearer";
+				}
+			});
 		} catch (Exception e) {
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
 		}
-	}
-
-	private void validateToken(String token) throws Exception {
-		AuthenticationController.getInstance().isTokenValid(token);
 	}
 }

@@ -1,8 +1,7 @@
 package eu.albina.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -10,10 +9,14 @@ import org.hibernate.Transaction;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
+import eu.albina.util.GlobalVariables;
 
 /**
  * Controller for authentication.
@@ -25,9 +28,18 @@ public class AuthenticationController extends AlbinaController {
 	// private static Logger logger =
 	// LoggerFactory.getLogger(AuthenticationController.class);
 	private static AuthenticationController instance = null;
-	private static List<String> tokens = new ArrayList<String>();
+	private JWTVerifier verifier;
 
 	private AuthenticationController() {
+		Algorithm algorithm;
+		try {
+			algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+			verifier = JWT.require(algorithm).withIssuer(GlobalVariables.tokenEncodingIssuer).build();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static AuthenticationController getInstance() {
@@ -62,16 +74,30 @@ public class AuthenticationController extends AlbinaController {
 	}
 
 	public String issueToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
-		Algorithm algorithm = Algorithm.HMAC256("secret");
-		// TODO check what issuer means
-		String token = JWT.create().withIssuer("auth0").sign(algorithm);
-		tokens.add(token);
+		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+		long time = System.currentTimeMillis() + GlobalVariables.tokenExpirationDuration;
+		Date expirationTime = new Date(time);
+		Date issuedAt = new Date();
+		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
+				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
 		return token;
 	}
 
-	public void isTokenValid(String token) throws Exception {
-		// TODO check validity of token
-		if (!tokens.contains(token))
-			throw new AlbinaException("Not authorized!");
+	public DecodedJWT decodeToken(String token) throws Exception {
+		try {
+			return verifier.verify(token);
+		} catch (JWTVerificationException exception) {
+			throw new AlbinaException("Not authorized");
+		}
+	}
+
+	public String refreshToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
+		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+		long time = System.currentTimeMillis() + GlobalVariables.tokenExpirationDuration;
+		Date expirationTime = new Date(time);
+		Date issuedAt = new Date();
+		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
+				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
+		return token;
 	}
 }
