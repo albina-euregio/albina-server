@@ -1,6 +1,7 @@
 package eu.albina.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -13,6 +14,7 @@ import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
+import eu.albina.model.Text;
 
 /**
  * Controller for news.
@@ -77,6 +79,50 @@ public class NewsController extends AlbinaController {
 			Serializable newsId = session.save(news);
 			transaction.commit();
 			return newsId;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public List<News> findNews(String searchString) throws AlbinaException {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			Criteria criteria = session.createCriteria(News.class);
+
+			@SuppressWarnings("unchecked")
+			List<News> news = criteria.list();
+			List<News> results = new ArrayList<News>();
+			boolean hit = false;
+
+			for (News entry : news) {
+				Hibernate.initialize(entry.getTitle());
+				Hibernate.initialize(entry.getContent());
+				for (Text title : entry.getTitle().getTexts()) {
+					if (title.getText().contains(searchString)) {
+						results.add(entry);
+						hit = true;
+						break;
+					}
+				}
+				if (!hit)
+					for (Text content : entry.getContent().getTexts()) {
+						if (content.getText().contains(searchString)) {
+							results.add(entry);
+							break;
+						}
+					}
+				hit = false;
+			}
+
+			transaction.commit();
+			return results;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();

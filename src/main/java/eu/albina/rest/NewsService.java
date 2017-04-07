@@ -69,6 +69,32 @@ public class NewsService {
 		}
 	}
 
+	@GET
+	@Path("/search")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response findJsonNews(@QueryParam("s") String searchString) {
+		logger.debug("FIND JSON news");
+
+		try {
+			List<News> news = NewsController.getInstance().findNews(searchString);
+			if (news == null) {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.append("message", "No news found!");
+				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
+			} else {
+				JSONArray json = new JSONArray();
+				for (News entry : news) {
+					json.put(entry.toJSON());
+				}
+				return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+			}
+		} catch (AlbinaException e) {
+			logger.warn("Error loading news - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
+
 	@POST
 	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
