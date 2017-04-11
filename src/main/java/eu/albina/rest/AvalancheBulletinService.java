@@ -56,8 +56,8 @@ public class AvalancheBulletinService {
 			endDate = DateTime.parse(until, GlobalVariables.formatterDateTime);
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, country,
-					region, startDate, endDate);
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, country, region,
+					startDate, endDate);
 			JSONObject jsonResult = new JSONObject();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
@@ -104,8 +104,7 @@ public class AvalancheBulletinService {
 
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString);
 		if (validationResult.length() == 0) {
-			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson,
-					securityContext.getUserPrincipal().getName());
+			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, securityContext.getUserPrincipal().getName());
 			try {
 				Serializable bulletinId = AvalancheBulletinController.getInstance().saveBulletin(bulletin);
 				if (bulletinId == null) {
@@ -131,14 +130,15 @@ public class AvalancheBulletinService {
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateJSONBulletin(@PathParam("bulletinId") String bulletinId, String bulletinString) {
+	public Response updateJSONBulletin(@PathParam("bulletinId") String bulletinId, String bulletinString,
+			@Context SecurityContext securityContext) {
 		logger.debug("PUT JSON bulletin");
 
 		JSONObject bulletinJson = new JSONObject(bulletinString);
 
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateSnowProfile(bulletinString);
 		if (validationResult.length() == 0) {
-			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
+			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, securityContext.getUserPrincipal().getName());
 			bulletin.setId(bulletinId);
 			try {
 				AvalancheBulletinController.getInstance().updateBulletin(bulletin);

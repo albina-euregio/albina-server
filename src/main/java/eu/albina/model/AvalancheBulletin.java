@@ -35,7 +35,7 @@ import eu.albina.util.GlobalVariables;
  */
 @Entity
 @Table(name = "AVALANCHE_BULLETINS")
-public class AlbinaBulletin extends AbstractPersistentObject implements AvalancheInformationObject {
+public class AvalancheBulletin extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	/** Information about the author of the avalanche bulletin */
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -59,11 +59,11 @@ public class AlbinaBulletin extends AbstractPersistentObject implements Avalanch
 
 	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "ABOVE_ID")
-	private AlbinaElevationDescription above;
+	private AvalancheBulletinElevationDescription above;
 
 	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "BELOW_ID")
-	private AlbinaElevationDescription below;
+	private AvalancheBulletinElevationDescription below;
 
 	/** Map containing all text parts available for a bulletin */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -75,7 +75,7 @@ public class AlbinaBulletin extends AbstractPersistentObject implements Avalanch
 	/**
 	 * Standard constructor for an avalanche bulletin.
 	 */
-	public AlbinaBulletin() {
+	public AvalancheBulletin() {
 		textPartsMap = new HashMap<TextPart, Texts>();
 		regions = new HashSet<String>();
 	}
@@ -87,7 +87,7 @@ public class AlbinaBulletin extends AbstractPersistentObject implements Avalanch
 	 * @param json
 	 *            JSONObject holding information about an avalanche bulletin.
 	 */
-	public AlbinaBulletin(JSONObject json, String username) {
+	public AvalancheBulletin(JSONObject json, String username) {
 		this();
 
 		try {
@@ -117,10 +117,10 @@ public class AlbinaBulletin extends AbstractPersistentObject implements Avalanch
 		}
 
 		if (json.has("above"))
-			this.above = new AlbinaElevationDescription(json.getJSONObject("above"));
+			this.above = new AvalancheBulletinElevationDescription(json.getJSONObject("above"));
 
 		if (json.has("below"))
-			this.below = new AlbinaElevationDescription(json.getJSONObject("below"));
+			this.below = new AvalancheBulletinElevationDescription(json.getJSONObject("below"));
 	}
 
 	public User getUser() {
@@ -243,11 +243,11 @@ public class AlbinaBulletin extends AbstractPersistentObject implements Avalanch
 		this.regions = regions;
 	}
 
-	public AlbinaElevationDescription getAbove() {
+	public AvalancheBulletinElevationDescription getAbove() {
 		return above;
 	}
 
-	public AlbinaElevationDescription getBelow() {
+	public AvalancheBulletinElevationDescription getBelow() {
 		return below;
 	}
 

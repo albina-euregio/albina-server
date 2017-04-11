@@ -21,7 +21,7 @@ import eu.albina.model.enumerations.AvalancheProblem;
 
 @Entity
 @Table(name = "AVALANCHE_PROBLEM_DESCRIPTIONS")
-public class AlbinaElevationDescription extends AbstractPersistentObject implements AvalancheInformationObject {
+public class AvalancheBulletinElevationDescription extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@Column(name = "DANGER_RATING")
 	private int dangerRating;
@@ -36,11 +36,11 @@ public class AlbinaElevationDescription extends AbstractPersistentObject impleme
 	@Enumerated(EnumType.STRING)
 	private Set<Aspect> aspects;
 
-	public AlbinaElevationDescription() {
+	public AvalancheBulletinElevationDescription() {
 		this.aspects = new HashSet<Aspect>();
 	}
 
-	public AlbinaElevationDescription(JSONObject json) {
+	public AvalancheBulletinElevationDescription(JSONObject json) {
 		this();
 
 		this.dangerRating = json.getInt("dangerRating");

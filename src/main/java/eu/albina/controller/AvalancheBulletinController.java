@@ -61,7 +61,6 @@ public class AvalancheBulletinController extends AlbinaController {
 			Hibernate.initialize(bulletin.getActivityHighlight());
 			Hibernate.initialize(bulletin.getAvalancheSituationComment());
 			Hibernate.initialize(bulletin.getAvalancheSituationHighlight());
-			Hibernate.initialize(bulletin.getDaytimeBulletins());
 			Hibernate.initialize(bulletin.getSnowpackStructureComment());
 			Hibernate.initialize(bulletin.getSnowpackStructureHighlight());
 			Hibernate.initialize(bulletin.getSynopsisComment());
@@ -144,7 +143,6 @@ public class AvalancheBulletinController extends AlbinaController {
 				Hibernate.initialize(bulletin.getActivityHighlight());
 				Hibernate.initialize(bulletin.getAvalancheSituationComment());
 				Hibernate.initialize(bulletin.getAvalancheSituationHighlight());
-				Hibernate.initialize(bulletin.getDaytimeBulletins());
 				Hibernate.initialize(bulletin.getSnowpackStructureComment());
 				Hibernate.initialize(bulletin.getSnowpackStructureHighlight());
 				Hibernate.initialize(bulletin.getSynopsisComment());

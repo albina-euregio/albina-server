@@ -3,6 +3,8 @@ package eu.albina.model;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.json.JSONObject;
@@ -14,13 +16,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.model.Author;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.Text;
-import eu.albina.model.Texts;
-import eu.albina.model.enumerations.CountryCode;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.Tendency;
 
 public class AvalancheBulletinTest {
 
@@ -33,14 +29,10 @@ public class AvalancheBulletinTest {
 	public void setUp() throws Exception {
 		// Create bulletin instance
 		bulletin = new AvalancheBulletin();
-		Author author = new Author();
-		author.setName("Patrick Nairz");
-		author.setEmail("patrick.nairz@tirol.gv.at");
-		author.setRole("Avalanche Warning Service");
-		author.setOrganization("LWDTirol");
-		bulletin.setAuthor(author);
-
-		bulletin.setTendency(Tendency.increasing);
+		User user = new User();
+		user.setName("Norbert Lanzanasto");
+		user.setEmail("n.lanzanasto@gmail.com");
+		bulletin.setUser(user);
 
 		Texts avalancheSituationHighlight = new Texts();
 		Text textDe = new Text();
@@ -56,8 +48,11 @@ public class AvalancheBulletinTest {
 		bulletin.setValidFrom(new DateTime(2016, 1, 05, 07, 30));
 		bulletin.setValidUntil(new DateTime(2016, 1, 06, 07, 30));
 
-		bulletin.setCountry(CountryCode.AT);
-		bulletin.setRegion("Tirol");
+		Set<String> regions = new HashSet<String>();
+		regions.add("0400710");
+		regions.add("0400711");
+		regions.add("0400712");
+		bulletin.setRegions(regions);
 
 		// Load JSON from resources
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -81,7 +76,7 @@ public class AvalancheBulletinTest {
 	@Test
 	public void testCreateObjectFromJSONAndBack() {
 		JSONObject data = new JSONObject(bulletinJsonString);
-		AvalancheBulletin b = new AvalancheBulletin(data);
+		AvalancheBulletin b = new AvalancheBulletin(data, "n.lanzanasto@gmail.com");
 		JSONAssert.assertEquals(bulletinJsonString, b.toJSON(), JSONCompareMode.NON_EXTENSIBLE);
 	}
 }
