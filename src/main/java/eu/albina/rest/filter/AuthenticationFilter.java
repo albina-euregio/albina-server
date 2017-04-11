@@ -68,7 +68,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 				@Override
 				public boolean isUserInRole(String role) {
-					return true;
+					return AuthenticationController.getInstance().isUserInRole(role, decodedToken.getSubject());
 				}
 
 				@Override

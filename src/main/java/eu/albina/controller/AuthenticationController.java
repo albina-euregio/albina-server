@@ -16,6 +16,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
+import eu.albina.model.enumerations.Role;
 import eu.albina.util.GlobalVariables;
 
 /**
@@ -99,5 +100,26 @@ public class AuthenticationController extends AlbinaController {
 		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
 				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
 		return token;
+	}
+
+	public boolean isUserInRole(String role, String username) {
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			User user = session.get(User.class, username);
+			if (user == null) {
+				transaction.rollback();
+				return false;
+			}
+			transaction.commit();
+
+			if (user.getRoles().contains(Role.fromString(role)))
+				return true;
+			else
+				return false;
+		} finally {
+			session.close();
+		}
 	}
 }

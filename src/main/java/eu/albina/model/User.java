@@ -1,11 +1,17 @@
 package eu.albina.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.json.JSONObject;
+
+import eu.albina.model.enumerations.Role;
 
 @Entity
 @Table(name = "USERS")
@@ -24,6 +30,11 @@ public class User {
 	@Column(name = "NAME")
 	private String name;
 
+	@Column
+	@Enumerated
+	@ElementCollection(targetClass = Role.class)
+	private List<Role> roles;
+
 	/**
 	 * Standard constructor for a user.
 	 */
@@ -35,6 +46,8 @@ public class User {
 			this.email = json.getString("email");
 		if (json.has("password") && !json.isNull("password"))
 			this.password = json.getString("password");
+		if (json.has("name") && !json.isNull("name"))
+			this.name = json.getString("name");
 	}
 
 	public String getEmail() {
@@ -59,5 +72,13 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Role role) {
+		this.roles.add(role);
 	}
 }
