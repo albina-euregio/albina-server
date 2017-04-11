@@ -273,7 +273,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		validity.put("until", validUntil.toString(GlobalVariables.formatterDateTime));
 		json.put("validity", validity);
 
-		json.put("region", regions);
+		json.put("regions", regions);
 		JSONArray regions = new JSONArray();
 		for (Object region : regions) {
 			regions.put(region);
