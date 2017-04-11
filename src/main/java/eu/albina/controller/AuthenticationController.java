@@ -3,7 +3,6 @@ package eu.albina.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.mindrot.jbcrypt.BCrypt;
@@ -51,27 +50,9 @@ public class AuthenticationController extends AlbinaController {
 	}
 
 	public void authenticate(String username, String password) throws Exception {
-		Session session = sessionFactory.openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-			User user = session.get(User.class, username);
-			if (user == null) {
-				transaction.rollback();
-				throw new AlbinaException("No user with username: " + username);
-			}
-			transaction.commit();
-
-			if (!BCrypt.checkpw(password, user.getPassword()))
-				throw new AlbinaException("Password not correct!");
-
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			session.close();
-		}
+		User user = UserController.getInstance().getUser(username);
+		if (!BCrypt.checkpw(password, user.getPassword()))
+			throw new AlbinaException("Password not correct!");
 	}
 
 	public String issueToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
