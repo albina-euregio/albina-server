@@ -1,10 +1,8 @@
 package eu.albina.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -30,10 +28,9 @@ public class User {
 	@Column(name = "NAME")
 	private String name;
 
-	@Column
-	@Enumerated
-	@ElementCollection(targetClass = Role.class)
-	private List<Role> roles;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ROLE")
+	private Role role;
 
 	/**
 	 * Standard constructor for a user.
@@ -48,6 +45,8 @@ public class User {
 			this.password = json.getString("password");
 		if (json.has("name") && !json.isNull("name"))
 			this.name = json.getString("name");
+		if (json.has("role") && !json.isNull("role"))
+			this.role = Role.fromString(json.getString("role"));
 	}
 
 	public String getEmail() {
@@ -74,11 +73,11 @@ public class User {
 		this.name = name;
 	}
 
-	public List<Role> getRoles() {
-		return roles;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoles(Role role) {
-		this.roles.add(role);
+	public void setRole(Role role) {
+		this.role = role;
 	}
 }

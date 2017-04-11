@@ -1,16 +1,15 @@
 package eu.albina.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Table;
 
 import org.json.JSONArray;
@@ -20,8 +19,9 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheProblem;
 
 @Entity
-@Table(name = "AVALANCHE_PROBLEM_DESCRIPTIONS")
-public class AvalancheBulletinElevationDescription extends AbstractPersistentObject implements AvalancheInformationObject {
+@Table(name = "AVALANCHE_BULLETIN_ELEVATION_DESCRIPTIONS")
+public class AvalancheBulletinElevationDescription extends AbstractPersistentObject
+		implements AvalancheInformationObject {
 
 	@Column(name = "DANGER_RATING")
 	private int dangerRating;
@@ -30,14 +30,13 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 	@Column(name = "AVALANCHE_PROBLEM")
 	private AvalancheProblem avalancheProblem;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "AVALANCHE_PROBLEM_DESCRIPTION_ASPECTS", joinColumns = @JoinColumn(name = "AVALANCHE_PROBLEM_DESCRIPTION_ID"))
+	@ElementCollection
+	@CollectionTable(name = "AVALANCHE_BULLETIN_ELEVATION_DESCRIPTION_ASPECTS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ELEVATION_DESCRIPTION_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
-	@Enumerated(EnumType.STRING)
-	private Set<Aspect> aspects;
+	private List<Aspect> aspects;
 
 	public AvalancheBulletinElevationDescription() {
-		this.aspects = new HashSet<Aspect>();
+		this.aspects = new ArrayList<Aspect>();
 	}
 
 	public AvalancheBulletinElevationDescription(JSONObject json) {
@@ -67,11 +66,11 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 		this.avalancheProblem = avalancheProblem;
 	}
 
-	public Set<Aspect> getAspects() {
+	public List<Aspect> getAspects() {
 		return aspects;
 	}
 
-	public void setAspects(Set<Aspect> aspects) {
+	public void setAspects(List<Aspect> aspects) {
 		this.aspects = aspects;
 	}
 

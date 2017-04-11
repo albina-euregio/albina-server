@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.FetchType;
@@ -51,17 +53,19 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	private org.joda.time.DateTime validUntil;
 
 	/** The regions the avalanche bulletin is for. */
-	@Column(name = "REGIONS")
+	@ElementCollection
+	@CollectionTable(name = "AVALANCHE_BULLETIN_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@Column(name = "REGION_ID")
 	private Set<String> regions;
 
 	@Column(name = "ELEVATION")
 	private int elevation;
 
-	@OneToOne(cascade = { CascadeType.ALL })
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "ABOVE_ID")
 	private AvalancheBulletinElevationDescription above;
 
-	@OneToOne(cascade = { CascadeType.ALL })
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "BELOW_ID")
 	private AvalancheBulletinElevationDescription below;
 

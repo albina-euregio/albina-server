@@ -95,7 +95,7 @@ public class AuthenticationController extends AlbinaController {
 			}
 			transaction.commit();
 
-			if (user.getRoles().contains(Role.fromString(role)))
+			if (user.getRole().equals(Role.fromString(role)))
 				return true;
 			else
 				return false;

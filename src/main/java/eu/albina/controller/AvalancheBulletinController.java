@@ -68,6 +68,10 @@ public class AvalancheBulletinController extends AlbinaController {
 			Hibernate.initialize(bulletin.getTendencyComment());
 			Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 			Hibernate.initialize(bulletin.getTravelAdvisoryHighlight());
+			Hibernate.initialize(bulletin.getAbove().getAspects());
+			Hibernate.initialize(bulletin.getBelow().getAspects());
+			Hibernate.initialize(bulletin.getRegions());
+			Hibernate.initialize(bulletin.getUser());
 			transaction.commit();
 			return bulletin;
 		} catch (HibernateException he) {
@@ -150,6 +154,10 @@ public class AvalancheBulletinController extends AlbinaController {
 				Hibernate.initialize(bulletin.getTendencyComment());
 				Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 				Hibernate.initialize(bulletin.getTravelAdvisoryHighlight());
+				Hibernate.initialize(bulletin.getAbove().getAspects());
+				Hibernate.initialize(bulletin.getBelow().getAspects());
+				Hibernate.initialize(bulletin.getRegions());
+				Hibernate.initialize(bulletin.getUser());
 			}
 
 			transaction.commit();
