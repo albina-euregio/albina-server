@@ -15,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import org.joda.time.DateTime;
@@ -96,14 +97,15 @@ public class AvalancheBulletinService {
 	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createJSONBulletin(String bulletinString) {
+	public Response createJSONBulletin(String bulletinString, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletin");
 
 		JSONObject bulletinJson = new JSONObject(bulletinString);
 
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString);
 		if (validationResult.length() == 0) {
-			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
+			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson,
+					securityContext.getUserPrincipal().getName());
 			try {
 				Serializable bulletinId = AvalancheBulletinController.getInstance().saveBulletin(bulletin);
 				if (bulletinId == null) {
