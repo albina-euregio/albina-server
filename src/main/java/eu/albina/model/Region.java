@@ -6,10 +6,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,7 +31,15 @@ import eu.albina.util.GlobalVariables;
  */
 @Entity
 @Table(name = "REGIONS")
-public class Region extends AbstractPersistentObject implements AvalancheInformationObject {
+public class Region implements AvalancheInformationObject {
+
+	@Id
+	@Column(name = "ID")
+	private String id;
+
+	@Version
+	@Column(name = "VERSION")
+	private Integer version;
 
 	@Column(name = "NAME")
 	private String name;
@@ -49,6 +59,22 @@ public class Region extends AbstractPersistentObject implements AvalancheInforma
 	 */
 	public Region() {
 		subregions = new HashSet<Region>();
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	public String getName() {
