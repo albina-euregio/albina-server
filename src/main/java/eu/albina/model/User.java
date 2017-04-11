@@ -20,6 +20,10 @@ public class User {
 	@Column(name = "PASSWORD")
 	private String password;
 
+	/** Name of the user **/
+	@Column(name = "NAME")
+	private String name;
+
 	/**
 	 * Standard constructor for a user.
 	 */
@@ -47,5 +51,13 @@ public class User {
 
 	public void setPassword(String password) {
 		this.email = password;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
