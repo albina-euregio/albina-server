@@ -25,7 +25,14 @@
 			"additionalProperties" : false
 		},
 
-		"region" : { "type" : "string" },
+		"regions" : {
+			"type" : "array",
+			"uniqueItems" : true,
+			"items" : {
+				"type" : "string"
+			},
+			"additionalProperties" : false
+		},
 		
 		"elevation" : { "type" : "integer" },
 		
