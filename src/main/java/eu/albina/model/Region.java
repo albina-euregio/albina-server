@@ -54,6 +54,10 @@ public class Region implements AvalancheInformationObject {
 	@OneToMany(mappedBy = "parentRegion")
 	private Set<Region> subregions;
 
+	@ManyToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "AGGREGATEDREGION_ID")
+	private Region aggregatedRegion;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -99,6 +103,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void setParentRegion(Region parentRegion) {
 		this.parentRegion = parentRegion;
+	}
+
+	public Region getAggregatedRegion() {
+		return aggregatedRegion;
+	}
+
+	public void setAggregatedRegion(Region aggregatedRegion) {
+		this.aggregatedRegion = aggregatedRegion;
 	}
 
 	public Set<Region> getSubregions() {
@@ -149,6 +161,10 @@ public class Region implements AvalancheInformationObject {
 		JSONObject featureProperties = new JSONObject();
 		featureProperties.put("name", name);
 		featureProperties.put("id", getId());
+		if (getParentRegion() != null)
+			featureProperties.put("parentRegion", getParentRegion().getId());
+		if (getAggregatedRegion() != null)
+			featureProperties.put("aggregatedRegion", getAggregatedRegion().getId());
 		feature.put("properties", featureProperties);
 
 		JSONObject geometry = new JSONObject();
