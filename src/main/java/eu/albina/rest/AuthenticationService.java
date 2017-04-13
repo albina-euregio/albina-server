@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import org.json.JSONObject;
+
 import eu.albina.controller.AuthenticationController;
 import eu.albina.model.Credentials;
 import eu.albina.rest.filter.Secured;
@@ -29,7 +31,9 @@ public class AuthenticationService {
 		try {
 			AuthenticationController.getInstance().authenticate(username, password);
 			String token = AuthenticationController.getInstance().issueToken(username);
-			return Response.ok(token).build();
+			JSONObject jsonResult = new JSONObject();
+			jsonResult.put("token", token);
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
