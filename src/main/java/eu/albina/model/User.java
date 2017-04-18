@@ -32,6 +32,10 @@ public class User {
 	@Column(name = "ROLE")
 	private Role role;
 
+	/** Image of the user **/
+	@Column(name = "IMAGE", columnDefinition = "BLOB")
+	private String image;
+
 	/**
 	 * Standard constructor for a user.
 	 */
@@ -47,6 +51,8 @@ public class User {
 			this.name = json.getString("name");
 		if (json.has("role") && !json.isNull("role"))
 			this.role = Role.fromString(json.getString("role"));
+		if (json.has("image") && !json.isNull("image"))
+			this.image = json.getString("image");
 	}
 
 	public String getEmail() {
@@ -79,5 +85,13 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

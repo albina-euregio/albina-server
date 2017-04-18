@@ -39,6 +39,8 @@ public class AuthenticationService {
 			User user = UserController.getInstance().getUser(username);
 			jsonResult.put("username", user.getName());
 
+			jsonResult.put("image", user.getImage());
+
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
