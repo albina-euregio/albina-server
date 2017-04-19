@@ -49,6 +49,13 @@
 	    <scope>provided</scope>
 	</dependency>
 
+<!-- socketio -->
+	<dependency>
+		<groupId>com.corundumstudio.socketio</groupId>
+		<artifactId>netty-socketio</artifactId>
+		<version>1.7.12</version>
+	</dependency>
+
 <!-- joda time -->
   	<dependency>
 		<groupId>joda-time</groupId>
