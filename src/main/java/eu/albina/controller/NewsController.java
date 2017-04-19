@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
 import eu.albina.model.Text;
+import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for news.
@@ -22,7 +23,7 @@ import eu.albina.model.Text;
  * @author Norbert Lanzanasto
  *
  */
-public class NewsController extends AlbinaController {
+public class NewsController {
 
 	// private static Logger logger =
 	// LoggerFactory.getLogger(NewsController.class);
@@ -41,7 +42,7 @@ public class NewsController extends AlbinaController {
 
 	@SuppressWarnings("unchecked")
 	public List<News> getNews(DateTime startDate, DateTime endDate) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -72,7 +73,7 @@ public class NewsController extends AlbinaController {
 	}
 
 	public Serializable saveNews(News news) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -90,7 +91,7 @@ public class NewsController extends AlbinaController {
 
 	@SuppressWarnings("deprecation")
 	public List<News> findNews(String searchString) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

@@ -1,4 +1,4 @@
-package eu.albina.util;
+package eu.albina.listener;
 
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -7,22 +7,31 @@ import java.util.Enumeration;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 
-public class ContextFinalizer implements ServletContextListener {
+import eu.albina.util.HibernateUtil;
 
-	private static final Logger logger = LoggerFactory.getLogger(ContextFinalizer.class);
+@WebListener
+public class AlbinaServiceContextListener implements ServletContextListener {
+
+	private static final Logger logger = LoggerFactory.getLogger(AlbinaServiceContextListener.class);
 
 	@Override
-	public void contextInitialized(ServletContextEvent sce) {
+	public void contextDestroyed(ServletContextEvent arg0) {
+		HibernateUtil.closeSessionFactory();
+		System.out.println("ServletContextListener destroyed");
 	}
 
+	// Run this before web application is started
 	@Override
-	public void contextDestroyed(ServletContextEvent sce) {
+	public void contextInitialized(ServletContextEvent arg0) {
+		HibernateUtil.createSessionFactory();
+
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		Driver d = null;
 		while (drivers.hasMoreElements()) {
@@ -40,6 +49,7 @@ public class ContextFinalizer implements ServletContextListener {
 			logger.warn("SEVERE problem cleaning up: " + e.getMessage());
 			e.printStackTrace();
 		}
-	}
 
+		logger.debug("ServletContextListener started");
+	}
 }

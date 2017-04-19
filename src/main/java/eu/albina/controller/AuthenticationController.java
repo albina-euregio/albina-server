@@ -17,6 +17,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for authentication.
@@ -24,7 +25,7 @@ import eu.albina.util.GlobalVariables;
  * @author Norbert Lanzanasto
  *
  */
-public class AuthenticationController extends AlbinaController {
+public class AuthenticationController {
 	// private static Logger logger =
 	// LoggerFactory.getLogger(AuthenticationController.class);
 	private static AuthenticationController instance = null;
@@ -84,7 +85,7 @@ public class AuthenticationController extends AlbinaController {
 	}
 
 	public boolean isUserInRole(String role, String username) {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

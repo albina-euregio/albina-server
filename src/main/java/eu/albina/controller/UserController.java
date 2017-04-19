@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
+import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for users.
@@ -13,7 +14,7 @@ import eu.albina.model.User;
  * @author Norbert Lanzanasto
  *
  */
-public class UserController extends AlbinaController {
+public class UserController {
 	// private static Logger logger =
 	// LoggerFactory.getLogger(UserController.class);
 	private static UserController instance = null;
@@ -29,7 +30,7 @@ public class UserController extends AlbinaController {
 	}
 
 	public User getUser(String username) throws Exception {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

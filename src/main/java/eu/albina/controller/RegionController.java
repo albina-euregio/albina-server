@@ -11,6 +11,7 @@ import org.hibernate.criterion.Restrictions;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
+import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for regions.
@@ -18,7 +19,7 @@ import eu.albina.model.Region;
  * @author Norbert Lanzanasto
  *
  */
-public class RegionController extends AlbinaController {
+public class RegionController {
 
 	// private static Logger logger =
 	// LoggerFactory.getLogger(RegionController.class);
@@ -44,7 +45,7 @@ public class RegionController extends AlbinaController {
 	 * @throws AlbinaException
 	 */
 	public Region getRegion(String regionId) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -71,7 +72,7 @@ public class RegionController extends AlbinaController {
 
 	@SuppressWarnings("unchecked")
 	public List<Region> getRegions(String regionId) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

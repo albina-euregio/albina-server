@@ -15,6 +15,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.CountryCode;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for snow profiles.
@@ -22,7 +23,7 @@ import eu.albina.util.GlobalVariables;
  * @author Norbert Lanzanasto
  *
  */
-public class AvalancheBulletinController extends AlbinaController {
+public class AvalancheBulletinController {
 
 	// private static Logger logger =
 	// LoggerFactory.getLogger(AvalancheBulletinController.class);
@@ -48,7 +49,7 @@ public class AvalancheBulletinController extends AlbinaController {
 	 * @throws AlbinaException
 	 */
 	public AvalancheBulletin getBulletin(String bulletinId) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -84,7 +85,7 @@ public class AvalancheBulletinController extends AlbinaController {
 	}
 
 	public Serializable saveBulletin(AvalancheBulletin bulletin) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -101,7 +102,7 @@ public class AvalancheBulletinController extends AlbinaController {
 	}
 
 	public void updateBulletin(AvalancheBulletin bulletin) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -117,9 +118,9 @@ public class AvalancheBulletinController extends AlbinaController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletin(int page, CountryCode country, String region, DateTime startDate,
+	public List<AvalancheBulletin> getBulletin(int page, CountryCode country, List<String> regions, DateTime startDate,
 			DateTime endDate) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -130,8 +131,10 @@ public class AvalancheBulletinController extends AlbinaController {
 			if (country != null) {
 				criteria.add(Restrictions.eq("country", country));
 			}
-			if (region != null && !region.isEmpty()) {
-				criteria.add(Restrictions.eq("region", region).ignoreCase());
+			if (regions != null && !regions.isEmpty()) {
+				for (String region : regions) {
+					criteria.add(Restrictions.in("regions", region));
+				}
 			}
 			if (startDate != null) {
 				criteria.add(Restrictions.ge("validFrom", startDate));
@@ -172,7 +175,7 @@ public class AvalancheBulletinController extends AlbinaController {
 	}
 
 	public void deleteBulletin(String bulletinId) throws AlbinaException {
-		Session session = sessionFactory.openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
