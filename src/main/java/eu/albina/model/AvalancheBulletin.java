@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -26,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import eu.albina.controller.UserController;
+import eu.albina.model.enumerations.Status;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.GlobalVariables;
 
@@ -60,6 +62,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	@Column(name = "ELEVATION")
 	private int elevation;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "STATUS")
+	private Status status;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "ABOVE_ID")
@@ -125,6 +131,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (json.has("below"))
 			this.below = new AvalancheBulletinElevationDescription(json.getJSONObject("below"));
+
+		if (json.has("status"))
+			this.status = Status.fromString(json.getString("status"));
 	}
 
 	public User getUser() {
@@ -255,6 +264,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return below;
 	}
 
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -282,6 +299,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		json.put("above", above.toJSON());
 
 		json.put("below", below.toJSON());
+
+		json.put("status", status);
 
 		return json;
 	}
