@@ -33,7 +33,7 @@ public class User {
 	private Role role;
 
 	/** Image of the user **/
-	@Column(name = "IMAGE", columnDefinition = "BLOB")
+	@Column(name = "IMAGE", columnDefinition = "LONGBLOB")
 	private String image;
 
 	/**
