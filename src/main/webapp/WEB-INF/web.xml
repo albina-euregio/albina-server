@@ -10,10 +10,6 @@
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
  
-    <listener>
-        <listener-class>eu.albina.util.ContextFinalizer</listener-class>
-    </listener>
-
  	<servlet>
         <servlet-name>ALBINA</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
