@@ -43,8 +43,9 @@ public class AvalancheBulletinService {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getJSONBulletins(@QueryParam("country") CountryCode country, @QueryParam("region") String region,
-			@QueryParam("from") String from, @QueryParam("until") String until) {
+	public Response getJSONBulletins(@QueryParam("country") CountryCode country,
+			@QueryParam("regions") List<String> regions, @QueryParam("from") String from,
+			@QueryParam("until") String until) {
 		logger.debug("GET JSON bulletins");
 
 		DateTime startDate = null;
@@ -56,8 +57,8 @@ public class AvalancheBulletinService {
 			endDate = DateTime.parse(until, GlobalVariables.formatterDateTime);
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, country, region,
-					startDate, endDate);
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, country,
+					regions, startDate, endDate);
 			JSONObject jsonResult = new JSONObject();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
@@ -104,7 +105,8 @@ public class AvalancheBulletinService {
 
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString);
 		if (validationResult.length() == 0) {
-			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, securityContext.getUserPrincipal().getName());
+			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson,
+					securityContext.getUserPrincipal().getName());
 			try {
 				Serializable bulletinId = AvalancheBulletinController.getInstance().saveBulletin(bulletin);
 				if (bulletinId == null) {
@@ -138,7 +140,8 @@ public class AvalancheBulletinService {
 
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateSnowProfile(bulletinString);
 		if (validationResult.length() == 0) {
-			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, securityContext.getUserPrincipal().getName());
+			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson,
+					securityContext.getUserPrincipal().getName());
 			bulletin.setId(bulletinId);
 			try {
 				AvalancheBulletinController.getInstance().updateBulletin(bulletin);
