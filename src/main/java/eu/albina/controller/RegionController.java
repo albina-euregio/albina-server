@@ -76,11 +76,12 @@ public class RegionController {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Criteria criteria = session.createCriteria(Region.class);
+			Criteria criteria = session.createCriteria(Region.class, "region");
 
 			if (regionId == null || regionId == "") {
 				criteria.add(Restrictions.isNull("parentRegion"));
 			} else {
+				criteria.createAlias("region.parentRegion", "parentRegion");
 				criteria.add(Restrictions.eq("parentRegion.id", regionId));
 			}
 
