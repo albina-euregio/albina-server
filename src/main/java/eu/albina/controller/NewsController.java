@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
 import eu.albina.model.Text;
+import eu.albina.model.enumerations.Status;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -38,6 +39,37 @@ public class NewsController {
 			instance = new NewsController();
 		}
 		return instance;
+	}
+
+	/**
+	 * Retrieve a news from the database by ID.
+	 * 
+	 * @param newsId
+	 *            The ID of the desired news.
+	 * @return The news with the given ID.
+	 * @throws AlbinaException
+	 */
+	public News getNews(String newsId) throws AlbinaException {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			News news = session.get(News.class, newsId);
+			if (news == null) {
+				transaction.rollback();
+				throw new AlbinaException("No news with ID: " + newsId);
+			}
+			transaction.commit();
+			Hibernate.initialize(news.getTitle());
+			Hibernate.initialize(news.getContent());
+			return news;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -89,6 +121,32 @@ public class NewsController {
 		}
 	}
 
+	public void updateNews(String newsId, News news) throws AlbinaException {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			News n = session.get(News.class, newsId);
+			if (n == null) {
+				transaction.rollback();
+				throw new AlbinaException("No news with ID: " + newsId);
+			} else if ((n.getStatus() == Status.pending) || (n.getStatus() == Status.published)) {
+				transaction.rollback();
+				throw new AlbinaException("News already published!");
+			}
+			transaction.commit();
+			transaction = session.beginTransaction();
+			session.update(news);
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
 	@SuppressWarnings("deprecation")
 	public List<News> findNews(String searchString) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -124,6 +182,32 @@ public class NewsController {
 
 			transaction.commit();
 			return results;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	public void deleteNews(String newsId) throws AlbinaException {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			News news = session.get(News.class, newsId);
+			if (news == null) {
+				transaction.rollback();
+				throw new AlbinaException("No news with ID: " + newsId);
+			} else if ((news.getStatus() == Status.pending) || (news.getStatus() == Status.published)) {
+				transaction.rollback();
+				throw new AlbinaException("News already published!");
+			}
+			transaction.commit();
+			transaction = session.beginTransaction();
+			session.delete(news);
+			transaction.commit();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();

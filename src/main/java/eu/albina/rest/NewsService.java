@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -23,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.NewsController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
-import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 
@@ -70,6 +72,30 @@ public class NewsService {
 	}
 
 	@GET
+	@Path("/{newsId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getJsonNews(@PathParam("newsId") String newsId) {
+		logger.debug("GET JSON news: " + newsId);
+
+		try {
+			News news = NewsController.getInstance().getNews(newsId);
+			if (news == null) {
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.append("message", "News not found for ID: " + newsId);
+				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
+			} else {
+				JSONArray json = new JSONArray();
+				json.put(news.toJSON());
+				return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+			}
+		} catch (AlbinaException e) {
+			logger.warn("Error loading news: " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@GET
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -96,7 +122,7 @@ public class NewsService {
 	}
 
 	@POST
-	@Secured
+	// @Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJsonNews(String newsString) {
@@ -127,5 +153,44 @@ public class NewsService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(validationResult.toString()).build();
 	}
 
-	// TODO implement PUT and DELETE
+	@PUT
+	// @Secured
+	@Path("/{newsId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateJsonNews(@PathParam("newsId") String newsId, String newsString) {
+		logger.debug("PUT JSON news");
+
+		JSONObject newsJson = new JSONObject(newsString);
+
+		JSONObject validationResult = eu.albina.json.JsonValidator.validateNews(newsString);
+		if (validationResult.length() == 0) {
+			News news = new News(newsJson);
+			try {
+				NewsController.getInstance().updateNews(newsId, news);
+				return Response.ok().type(MediaType.APPLICATION_JSON).build();
+			} catch (AlbinaException e) {
+				logger.warn("Error updating news - " + e.getMessage());
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			}
+		} else
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(validationResult.toString()).build();
+	}
+
+	@DELETE
+	// @Secured
+	@Path("/{newsId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteJsonNews(@PathParam("newsId") String newsId) {
+		logger.debug("PUT JSON news");
+
+		try {
+			NewsController.getInstance().deleteNews(newsId);
+			return Response.ok().type(MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error updating news - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
 }
