@@ -12,11 +12,11 @@ public abstract class AbstractPersistentObject implements PersistentObject {
 
 	@Id
 	@Column(name = "ID")
-	private String id = IdGenerator.createId();
+	protected String id = IdGenerator.createId();
 
 	@Version
 	@Column(name = "VERSION")
-	private Integer version;
+	protected Integer version;
 
 	public String getId() {
 		return id;

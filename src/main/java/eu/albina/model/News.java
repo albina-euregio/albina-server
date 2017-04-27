@@ -3,6 +3,8 @@ package eu.albina.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -12,6 +14,7 @@ import org.hibernate.annotations.Type;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import eu.albina.model.enumerations.Status;
 import eu.albina.util.GlobalVariables;
 
 @Entity
@@ -30,6 +33,10 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private org.joda.time.DateTime dateTime;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "STATUS")
+	private Status status;
+
 	/**
 	 * Standard constructor for an author.
 	 */
@@ -47,6 +54,8 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 			dateTime = new org.joda.time.DateTime(json.getString("date"));
 		else
 			dateTime = new org.joda.time.DateTime();
+		if (json.has("status") && !json.isNull("status"))
+			status = Status.fromString(json.getString("status"));
 	}
 
 	public Texts getTitle() {
@@ -73,10 +82,20 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 		this.dateTime = dateTime;
 	}
 
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 
+		if (id != null && id != "")
+			json.put("id", id);
 		if (title != null) {
 			JSONArray array = title.toJSONArray();
 			json.put("title", array);
@@ -87,6 +106,8 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 		}
 		if (dateTime != null)
 			json.put("date", dateTime.toString(GlobalVariables.formatterDateTime));
+
+		json.put("status", status);
 
 		return json;
 	}

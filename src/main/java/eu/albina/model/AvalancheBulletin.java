@@ -276,6 +276,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 
+		if (id != null && id != "")
+			json.put("id", id);
+
 		if (user != null && user.getName() != null && user.getName() != "")
 			json.put("user", user.getName());
 
