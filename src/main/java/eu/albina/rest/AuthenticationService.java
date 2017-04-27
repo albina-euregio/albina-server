@@ -19,8 +19,10 @@ import eu.albina.controller.UserController;
 import eu.albina.model.Credentials;
 import eu.albina.model.User;
 import eu.albina.rest.filter.Secured;
+import io.swagger.annotations.Api;
 
 @Path("/authentication")
+@Api(value = "/authentication")
 public class AuthenticationService {
 
 	@POST
