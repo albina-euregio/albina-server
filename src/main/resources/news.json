@@ -4,10 +4,19 @@
 	"description": "A news object.",
 	"type": "object",
 	"properties" : {
+		"id" : { "type" : "string" },
 		"title" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
 		"content" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"dateTime" : { "format" : "date-time", "type" : "string" }
+		"dateTime" : { "format" : "date-time", "type" : "string" },
+		"status" : {  }
 	},
 
-	"additionalProperties" : false
+	"additionalProperties" : false,
+	
+	"definitions" : {
+		"status" : {
+			"type" : "string",
+			"enum" : [ "missing", "incomplete", "complete", "pending", "published" ]
+		}
+	}
 }
