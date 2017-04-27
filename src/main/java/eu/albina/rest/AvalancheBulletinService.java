@@ -27,7 +27,6 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.CountryCode;
-import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 
@@ -95,7 +94,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured
+	// @Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletin(String bulletinString, @Context SecurityContext securityContext) {
@@ -128,7 +127,7 @@ public class AvalancheBulletinService {
 	}
 
 	@PUT
-	@Secured
+	// @Secured
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -158,7 +157,7 @@ public class AvalancheBulletinService {
 	}
 
 	@DELETE
-	@Secured
+	// @Secured
 	@Path("/{bulletinId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
