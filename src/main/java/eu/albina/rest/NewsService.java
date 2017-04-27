@@ -28,6 +28,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 
 @Path("/news")
 @Api(value = "/news")
@@ -41,7 +42,9 @@ public class NewsService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getJsonNews(@QueryParam("from") String from, @QueryParam("until") String until) {
+	public Response getJsonNews(
+			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
+			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until) {
 		logger.debug("GET JSON news");
 
 		DateTime startDate = null;
