@@ -166,7 +166,7 @@
   </dependencies>
 
   <build>
-    <finalName>ALBINA</finalName>
+    <finalName>albina</finalName>
 	<plugins>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
