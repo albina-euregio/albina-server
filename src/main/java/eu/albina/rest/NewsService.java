@@ -102,7 +102,8 @@ public class NewsService {
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response findJsonNews(@QueryParam("s") String searchString) {
+	public Response findJsonNews(
+			@ApiParam(value = "A full text search will be performed looking for this string") @QueryParam("s") String searchString) {
 		logger.debug("FIND JSON news");
 
 		try {

@@ -29,6 +29,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.CountryCode;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 
 @Path("/bulletins")
 @Api(value = "/bulletins")
@@ -43,8 +44,9 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(@QueryParam("country") CountryCode country,
-			@QueryParam("regions") List<String> regions, @QueryParam("from") String from,
-			@QueryParam("until") String until) {
+			@QueryParam("regions") List<String> regions,
+			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
+			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until) {
 		logger.debug("GET JSON bulletins");
 
 		DateTime startDate = null;
