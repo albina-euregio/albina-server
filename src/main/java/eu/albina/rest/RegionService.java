@@ -110,7 +110,7 @@ public class RegionService {
 	@Path("/{regionId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getJsonRegiong(@PathParam("regionId") String regionId) {
+	public Response getJsonRegion(@PathParam("regionId") String regionId) {
 		logger.debug("GET JSON region: " + regionId);
 
 		try {
