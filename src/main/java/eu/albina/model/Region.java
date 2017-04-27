@@ -123,7 +123,7 @@ public class Region implements AvalancheInformationObject {
 
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
-		region.setAttribute("gml:id", "R" + getId());
+		region.setAttribute("gml:id", getId());
 		Element regionname = doc.createElement("name");
 		regionname.appendChild(doc.createTextNode(name));
 		region.appendChild(regionname);
@@ -131,7 +131,7 @@ public class Region implements AvalancheInformationObject {
 		region.appendChild(regionSubType);
 		Element outline = doc.createElement("outline");
 		Element polygon = doc.createElement("gml:Polygon");
-		polygon.setAttribute("gml:id", "P" + getId());
+		polygon.setAttribute("gml:id", getId());
 		polygon.setAttribute("srsDimension", "2");
 		polygon.setAttribute("srsName", GlobalVariables.referenceSystemUrn);
 		Element exterior = doc.createElement("gml:exterior");
