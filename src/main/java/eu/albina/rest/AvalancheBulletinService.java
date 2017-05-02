@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.enumerations.CountryCode;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -43,8 +42,7 @@ public class AvalancheBulletinService {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getJSONBulletins(@QueryParam("country") CountryCode country,
-			@QueryParam("regions") List<String> regions,
+	public Response getJSONBulletins(
 			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
 			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until) {
 		logger.debug("GET JSON bulletins");
@@ -58,8 +56,8 @@ public class AvalancheBulletinService {
 			endDate = DateTime.parse(until, GlobalVariables.formatterDateTime);
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, country,
-					regions, startDate, endDate);
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, startDate,
+					endDate);
 			JSONObject jsonResult = new JSONObject();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
@@ -69,7 +67,7 @@ public class AvalancheBulletinService {
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}
 

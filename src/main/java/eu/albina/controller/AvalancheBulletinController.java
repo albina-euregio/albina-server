@@ -13,7 +13,6 @@ import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.enumerations.CountryCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
@@ -118,8 +117,7 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletin(int page, CountryCode country, List<String> regions, DateTime startDate,
-			DateTime endDate) throws AlbinaException {
+	public List<AvalancheBulletin> getBulletin(int page, DateTime startDate, DateTime endDate) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
@@ -128,14 +126,6 @@ public class AvalancheBulletinController {
 					.setFirstResult((page - 1) * GlobalVariables.paginationCount)
 					.setFetchSize(GlobalVariables.paginationCount);
 
-			if (country != null) {
-				criteria.add(Restrictions.eq("country", country));
-			}
-			if (regions != null && !regions.isEmpty()) {
-				for (String region : regions) {
-					criteria.add(Restrictions.in("regions", region));
-				}
-			}
 			if (startDate != null) {
 				criteria.add(Restrictions.ge("validFrom", startDate));
 			}
