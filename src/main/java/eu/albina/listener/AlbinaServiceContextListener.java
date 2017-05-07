@@ -66,8 +66,9 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 
 	private void startSocketIO() {
 		Configuration configuration = new Configuration();
-		configuration.setHostname("localhost");
-		configuration.setPort(5000);
+		// configuration.setHostname("localhost");
+		// configuration.setHostname("127.0.0.1");
+		configuration.setPort(9092);
 		socketIOServer = new SocketIOServer(configuration);
 
 		socketIOServer.addEventListener(EventName.bulletinUpdate.toString(), String.class, new DataListener<String>() {
