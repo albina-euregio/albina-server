@@ -13,6 +13,11 @@ public class HeaderEnhancer implements WriterInterceptor {
 	@Override
 	public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
 		context.getHeaders().add("Access-Control-Allow-Origin", "*");
+		context.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+		context.getHeaders().add("Access-Control-Allow-Credentials", "true");
+		context.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+		context.getHeaders().add("Access-Control-Max-Age", "1209600");
+
 		context.proceed();
 	}
 
