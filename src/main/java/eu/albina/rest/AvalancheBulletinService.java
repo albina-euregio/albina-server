@@ -44,7 +44,8 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(
 			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
-			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until) {
+			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until,
+			@QueryParam("region") String region) {
 		logger.debug("GET JSON bulletins");
 
 		DateTime startDate = null;
@@ -57,7 +58,7 @@ public class AvalancheBulletinService {
 
 		try {
 			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, startDate,
-					endDate);
+					endDate, region);
 			JSONObject jsonResult = new JSONObject();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {

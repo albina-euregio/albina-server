@@ -16,9 +16,8 @@ public class GlobalVariables {
 	public static long tokenExpirationDuration = 60000 * 15;
 	// TODO create secret
 	public static String tokenEncodingSecret = "secret";
-	// public static String referenceSystemUrn =
-	// "urn:ogc:def:crs:OGC:1.3:CRS84";
-	public static String referenceSystemUrn = "EPSG:32632";
+	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
+	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 	public static String tokenEncodingIssuer = "albina";
 

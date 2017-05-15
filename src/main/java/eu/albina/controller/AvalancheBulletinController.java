@@ -1,19 +1,17 @@
 package eu.albina.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -117,25 +115,28 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletin(int page, DateTime startDate, DateTime endDate) throws AlbinaException {
+	public List<AvalancheBulletin> getBulletin(int page, DateTime startDate, DateTime endDate, String region)
+			throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Criteria criteria = session.createCriteria(AvalancheBulletin.class)
-					.setFirstResult((page - 1) * GlobalVariables.paginationCount)
-					.setFetchSize(GlobalVariables.paginationCount);
 
-			if (startDate != null) {
-				criteria.add(Restrictions.ge("validFrom", startDate));
-			}
-			if (endDate != null) {
-				criteria.add(Restrictions.le("validUntil", endDate));
-			}
+			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletinsValidFrom)
+					.setParameter("validFrom", startDate).list();
 
-			List<AvalancheBulletin> bulletins = criteria.list();
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
 			for (AvalancheBulletin bulletin : bulletins) {
+				for (String entry : bulletin.getRegions()) {
+					if (entry.startsWith(region)) {
+						results.add(bulletin);
+						break;
+					}
+				}
+			}
+
+			for (AvalancheBulletin bulletin : results) {
 				Hibernate.initialize(bulletin.getActivityComment());
 				Hibernate.initialize(bulletin.getActivityHighlight());
 				Hibernate.initialize(bulletin.getAvalancheSituationComment());
@@ -154,7 +155,7 @@ public class AvalancheBulletinController {
 			}
 
 			transaction.commit();
-			return bulletins;
+			return results;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
