@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import eu.albina.model.enumerations.Role;
 
@@ -93,5 +95,22 @@ public class User {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public Element toCAAML(Document doc) {
+		Element operation = doc.createElement("Operation");
+		operation.setAttribute("gml:id", "OpIDLwdTirol");
+		Element name = doc.createElement("name");
+		name.appendChild(doc.createTextNode("Lawinenwarndienst Tirol"));
+		operation.appendChild(name);
+		Element contactPerson = doc.createElement("contactPerson");
+		Element person = doc.createElement("Person");
+		person.setAttribute("gml:id", email);
+		Element personName = doc.createElement("name");
+		personName.appendChild(doc.createTextNode(this.name));
+		person.appendChild(personName);
+		contactPerson.appendChild(person);
+		operation.appendChild(contactPerson);
+		return operation;
 	}
 }

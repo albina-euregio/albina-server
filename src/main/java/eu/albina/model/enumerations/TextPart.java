@@ -1,7 +1,7 @@
 package eu.albina.model.enumerations;
 
 public enum TextPart {
-	avalancheSituationHighlight, avalancheSituationComment, activityHighlight, activityComment, synopsisHighlight, synopsisComment, snowpackStructureHighlight, snowpackStructureComment, travelAdvisoryHighlight, travelAdvisoryComment, tendencyComment;
+	synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment;
 
 	public static TextPart fromString(String text) {
 		if (text != null) {
@@ -11,5 +11,29 @@ public enum TextPart {
 			}
 		}
 		return null;
+	}
+
+	public String toCaamlString() {
+		switch (this) {
+		case avActivityHighlights:
+			return "avActivityHighlights";
+		case avActivityComment:
+			return "avActivityComment";
+		case synopsisHighlights:
+			return "wxSynopsisHighlights";
+		case synopsisComment:
+			return "wxSynopsisComment";
+		case snowpackStructureHighlights:
+			return "snowpackStructureHighlights";
+		case snowpackStructureComment:
+			return "snowpackStructureComment";
+		case travelAdvisoryHighlights:
+			return "travelAdvisoryHighlights";
+		case travelAdvisoryComment:
+			return "travelAdvisoryComment";
+
+		default:
+			return null;
+		}
 	}
 }

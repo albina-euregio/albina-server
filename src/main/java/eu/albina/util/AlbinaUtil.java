@@ -78,4 +78,24 @@ public class AlbinaUtil {
 		rootElement.appendChild(metaDataProperty);
 		return rootElement;
 	}
+
+	public static Element createObservationsHeaderCaaml(Document doc) {
+		Element rootElement = doc.createElement("observations");
+		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
+		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
+		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		rootElement.setAttribute("xmlns:schemaLocation",
+				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS CAAMLv5_BulletinEAWS.xsd");
+		rootElement.setAttribute("xmlns:app", "ALBINA");
+
+		return rootElement;
+	}
+
+	public static String createValidElevationAttribute(int elevation, boolean above) {
+		if (above)
+			return "ElevationRange_" + elevation + "Hi";
+		else
+			return "ElevationRange_" + elevation + "Lw";
+	}
 }

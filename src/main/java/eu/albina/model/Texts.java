@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import eu.albina.model.enumerations.LanguageCode;
+
 @Entity
 @Table(name = "TEXTS")
 public class Texts extends AbstractPersistentObject implements AvalancheInformationObject {
@@ -34,6 +36,15 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 
 	public Set<Text> getTexts() {
 		return texts;
+	}
+
+	// TODO what to return if languageCode is not present?
+	public String getText(LanguageCode languageCode) {
+		for (Text text : texts) {
+			if (text.getLanguage() == languageCode)
+				return text.getText();
+		}
+		return null;
 	}
 
 	public void setTexts(Set<Text> texts) {

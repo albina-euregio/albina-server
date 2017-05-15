@@ -17,15 +17,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -69,6 +77,57 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@GET
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
+	public Response getXMLBulletins(
+			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
+			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until,
+			@QueryParam("region") String region, @QueryParam("lang") LanguageCode language) {
+		logger.debug("GET XML bulletins");
+
+		DateTime startDate = null;
+		DateTime endDate = null;
+
+		if (from != null)
+			startDate = DateTime.parse(from, GlobalVariables.formatterDateTime);
+		if (until != null)
+			endDate = DateTime.parse(until, GlobalVariables.formatterDateTime);
+
+		try {
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, startDate,
+					endDate, region);
+
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder;
+			docBuilder = docFactory.newDocumentBuilder();
+
+			Document doc = docBuilder.newDocument();
+			Element rootElement = AlbinaUtil.createObservationsHeaderCaaml(doc);
+
+			if (bulletins != null) {
+				for (AvalancheBulletin bulletin : bulletins) {
+					rootElement.appendChild(bulletin.toCAAML(doc, language));
+				}
+			}
+			doc.appendChild(rootElement);
+			return Response.ok(AlbinaUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			try {
+				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
+			} catch (Exception ex) {
+				return Response.status(400).type(MediaType.APPLICATION_XML).build();
+			}
+		} catch (TransformerException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).build();
+		} catch (ParserConfigurationException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		}
 	}
 

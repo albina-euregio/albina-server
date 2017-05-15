@@ -55,17 +55,14 @@ public class AvalancheBulletinController {
 				transaction.rollback();
 				throw new AlbinaException("No bulletin with ID: " + bulletinId);
 			}
-			Hibernate.initialize(bulletin.getActivityComment());
-			Hibernate.initialize(bulletin.getActivityHighlight());
-			Hibernate.initialize(bulletin.getAvalancheSituationComment());
-			Hibernate.initialize(bulletin.getAvalancheSituationHighlight());
+			Hibernate.initialize(bulletin.getAvActivityComment());
+			Hibernate.initialize(bulletin.getAvActivityHighlights());
 			Hibernate.initialize(bulletin.getSnowpackStructureComment());
-			Hibernate.initialize(bulletin.getSnowpackStructureHighlight());
+			Hibernate.initialize(bulletin.getSnowpackStructureHighlights());
 			Hibernate.initialize(bulletin.getSynopsisComment());
-			Hibernate.initialize(bulletin.getSynopsisHighlight());
-			Hibernate.initialize(bulletin.getTendencyComment());
+			Hibernate.initialize(bulletin.getSynopsisHighlights());
 			Hibernate.initialize(bulletin.getTravelAdvisoryComment());
-			Hibernate.initialize(bulletin.getTravelAdvisoryHighlight());
+			Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
 			Hibernate.initialize(bulletin.getAbove().getAspects());
 			Hibernate.initialize(bulletin.getBelow().getAspects());
 			Hibernate.initialize(bulletin.getRegions());
@@ -137,17 +134,14 @@ public class AvalancheBulletinController {
 			}
 
 			for (AvalancheBulletin bulletin : results) {
-				Hibernate.initialize(bulletin.getActivityComment());
-				Hibernate.initialize(bulletin.getActivityHighlight());
-				Hibernate.initialize(bulletin.getAvalancheSituationComment());
-				Hibernate.initialize(bulletin.getAvalancheSituationHighlight());
+				Hibernate.initialize(bulletin.getAvActivityComment());
+				Hibernate.initialize(bulletin.getAvActivityHighlights());
 				Hibernate.initialize(bulletin.getSnowpackStructureComment());
-				Hibernate.initialize(bulletin.getSnowpackStructureHighlight());
+				Hibernate.initialize(bulletin.getSnowpackStructureHighlights());
 				Hibernate.initialize(bulletin.getSynopsisComment());
-				Hibernate.initialize(bulletin.getSynopsisHighlight());
-				Hibernate.initialize(bulletin.getTendencyComment());
+				Hibernate.initialize(bulletin.getSynopsisHighlights());
 				Hibernate.initialize(bulletin.getTravelAdvisoryComment());
-				Hibernate.initialize(bulletin.getTravelAdvisoryHighlight());
+				Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
 				Hibernate.initialize(bulletin.getAbove().getAspects());
 				Hibernate.initialize(bulletin.getBelow().getAspects());
 				Hibernate.initialize(bulletin.getRegions());
