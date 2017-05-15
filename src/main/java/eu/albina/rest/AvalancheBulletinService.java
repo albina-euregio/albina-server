@@ -221,7 +221,7 @@ public class AvalancheBulletinService {
 	@Path("/{bulletinId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteJSONProfile(@PathParam("bulletinId") String bulletinId) {
+	public Response deleteJSONBulletin(@PathParam("bulletinId") String bulletinId) {
 		logger.debug("DELETE JSON bulletin: " + bulletinId);
 		try {
 			AvalancheBulletinController.getInstance().deleteBulletin(bulletinId);
