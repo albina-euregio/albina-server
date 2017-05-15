@@ -1,5 +1,5 @@
 {
-	"avalancheSituationHighlight" : [
+	"avActivityHighlights" : [
 		{
 			"languageCode" : "de",
 			"text" : "Am Morgen günstige Verhältnisse - dann rascher Anstieg der Lawinengefahr!"
@@ -9,7 +9,7 @@
 			"text" : "Avalanche situation highlight in english."
 		}
 	],
-	"avalancheSituationComment" : [
+	"avActivityComment" : [
 		{
 			"languageCode" : "de",
 			"text" : "Vormittag steigt die Lawinengefahr dann aber markant an und erreicht verbreitet die Stufe 3 (erheblich). Grund dafür ist der Festigkeitsverlust der Schneedecke auf Grund von Tageserwärmung und starker Sonneneinstrahlung. Man muss dann zunehmend mit Selbstauslösungen von feuchten Lockerschneelawinen und Nassschneelawinen rechnen. In sonnseitigen Hängen sind vor allem Höhenlagen unterhalb 2800m betroffen, schattseitig unterhalb etwa 2200m. Auf steilen Wiesenhängen sind auch Gleitschneelawinen möglich. Weil ausgelöste Lawinen teilweise bis zum Untergrund durchreißen, können sie auch große Ausmaße erreichen. Skitouren und Variantenfahrten sollten daher unbedingt rechtzeitig beendet werden!"
