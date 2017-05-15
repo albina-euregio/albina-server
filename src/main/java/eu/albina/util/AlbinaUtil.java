@@ -86,7 +86,7 @@ public class AlbinaUtil {
 		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		rootElement.setAttribute("xmlns:schemaLocation",
-				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS CAAMLv5_BulletinEAWS.xsd");
+				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
 		rootElement.setAttribute("xmlns:app", "ALBINA");
 
 		return rootElement;
