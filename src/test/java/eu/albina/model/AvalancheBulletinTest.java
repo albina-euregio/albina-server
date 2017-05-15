@@ -43,15 +43,15 @@ public class AvalancheBulletinTest {
 		textEn.setLanguage(LanguageCode.en);
 		textEn.setText("Avalanche situation highlight in english.");
 		avalancheSituationHighlight.addText(textEn);
-		bulletin.setAvalancheSituationHighlight(avalancheSituationHighlight);
+		bulletin.setAvActivityHighlights(avalancheSituationHighlight);
 
 		bulletin.setValidFrom(new DateTime(2016, 1, 05, 07, 30));
 		bulletin.setValidUntil(new DateTime(2016, 1, 06, 07, 30));
 
 		Set<String> regions = new HashSet<String>();
-		regions.add("0400710");
-		regions.add("0400711");
-		regions.add("0400712");
+		regions.add("AT-07-10");
+		regions.add("AT-07-11");
+		regions.add("AT-07-12");
 		bulletin.setRegions(regions);
 
 		// Load JSON from resources
