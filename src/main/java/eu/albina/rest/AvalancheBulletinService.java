@@ -53,7 +53,7 @@ public class AvalancheBulletinService {
 	public Response getJSONBulletins(
 			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
 			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until,
-			@QueryParam("region") String region) {
+			@QueryParam("regions") List<String> regions) {
 		logger.debug("GET JSON bulletins");
 
 		DateTime startDate = null;
@@ -66,7 +66,7 @@ public class AvalancheBulletinService {
 
 		try {
 			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, startDate,
-					endDate, region);
+					endDate, regions);
 			JSONObject jsonResult = new JSONObject();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
@@ -86,7 +86,7 @@ public class AvalancheBulletinService {
 	public Response getXMLBulletins(
 			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
 			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until,
-			@QueryParam("region") String region, @QueryParam("lang") LanguageCode language) {
+			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET XML bulletins");
 
 		DateTime startDate = null;
@@ -94,12 +94,16 @@ public class AvalancheBulletinService {
 
 		if (from != null)
 			startDate = DateTime.parse(from, GlobalVariables.formatterDateTime);
+		else
+			startDate = new DateTime();
 		if (until != null)
 			endDate = DateTime.parse(until, GlobalVariables.formatterDateTime);
+		else
+			endDate = new DateTime();
 
 		try {
 			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, startDate,
-					endDate, region);
+					endDate, regions);
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;

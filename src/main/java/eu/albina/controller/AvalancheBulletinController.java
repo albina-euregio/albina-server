@@ -112,7 +112,7 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletin(int page, DateTime startDate, DateTime endDate, String region)
+	public List<AvalancheBulletin> getBulletin(int page, DateTime startDate, DateTime endDate, List<String> regions)
 			throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
@@ -123,14 +123,21 @@ public class AvalancheBulletinController {
 					.setParameter("validFrom", startDate).list();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			boolean hit = false;
 
 			for (AvalancheBulletin bulletin : bulletins) {
 				for (String entry : bulletin.getRegions()) {
-					if (entry.startsWith(region)) {
-						results.add(bulletin);
-						break;
+					for (String region : regions) {
+						if (entry.startsWith(region)) {
+							results.add(bulletin);
+							hit = true;
+							break;
+						}
 					}
+					if (hit)
+						break;
 				}
+				hit = false;
 			}
 
 			for (AvalancheBulletin bulletin : results) {
