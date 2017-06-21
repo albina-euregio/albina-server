@@ -51,9 +51,9 @@ public class NewsService {
 		DateTime endDate = null;
 
 		if (from != null)
-			startDate = DateTime.parse(from, GlobalVariables.formatterDateTime);
+			startDate = DateTime.parse(from, GlobalVariables.parserDateTime);
 		if (until != null)
-			endDate = DateTime.parse(until, GlobalVariables.formatterDateTime);
+			endDate = DateTime.parse(until, GlobalVariables.parserDateTime);
 
 		try {
 			List<News> news = NewsController.getInstance().getNews(startDate, endDate);

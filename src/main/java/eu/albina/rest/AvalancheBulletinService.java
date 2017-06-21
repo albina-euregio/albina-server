@@ -48,6 +48,7 @@ public class AvalancheBulletinService {
 	UriInfo uri;
 
 	@GET
+	// @Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(
@@ -60,9 +61,9 @@ public class AvalancheBulletinService {
 		DateTime endDate = null;
 
 		if (from != null)
-			startDate = DateTime.parse(from, GlobalVariables.formatterDateTime);
+			startDate = DateTime.parse(from, GlobalVariables.parserDateTime);
 		if (until != null)
-			endDate = DateTime.parse(until, GlobalVariables.formatterDateTime);
+			endDate = DateTime.parse(until, GlobalVariables.parserDateTime);
 
 		try {
 			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, startDate,
@@ -93,11 +94,11 @@ public class AvalancheBulletinService {
 		DateTime endDate = null;
 
 		if (from != null)
-			startDate = DateTime.parse(from, GlobalVariables.formatterDateTime);
+			startDate = DateTime.parse(from, GlobalVariables.parserDateTime);
 		else
 			startDate = new DateTime();
 		if (until != null)
-			endDate = DateTime.parse(until, GlobalVariables.formatterDateTime);
+			endDate = DateTime.parse(until, GlobalVariables.parserDateTime);
 		else
 			endDate = new DateTime();
 
@@ -136,6 +137,33 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
+	// @Secured
+	@Path("/status")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
+	public Response getStatus(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
+		DateTime startDate = null;
+
+		if (date != null)
+			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
+
+		DateTime now = new DateTime();
+
+		// TODO get status for region and day
+		JSONObject jsonResult = new JSONObject();
+		if (startDate.getDayOfMonth() == now.getDayOfMonth())
+			jsonResult.put("status", "draft");
+		if (startDate.isBeforeNow())
+			jsonResult.put("status", "published");
+		else
+			jsonResult.put("status", "missing");
+
+		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+	}
+
+	@GET
+	// @Secured
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

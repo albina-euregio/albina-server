@@ -12,6 +12,7 @@ public class GlobalVariables {
 
 	public static String imagesDir = "/images";
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
+	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
 	public static int paginationCount = 50;
 	public static long tokenExpirationDuration = 60000 * 15;
 	// TODO create secret
