@@ -4,17 +4,32 @@
 	"description": "An avalanche bulletin.",
 	"type": "object",
 	"properties" : {
-		"avalancheSituationHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"avalancheSituationComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"activityHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"activityComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"synopsisHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"synopsisComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"snowpackStructureHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"snowpackStructureComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"travelAdvisoryHighlight" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"travelAdvisoryComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
-		"tendencyComment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"id" : {
+			"type" : "string"
+		},
+
+		"status" : {
+			"type" : "string",
+			"enum" : [ "published", "draft", "missing", "obsolete" ]
+		},
+		
+		"aggregatedRegionId" : {
+			"type" : "string"
+		},
+	
+		"author" : { "$ref" : "#/definitions/author" },
+
+		"avalancheSituationHighlight" : { "$ref" : "#/definitions/textPart" },
+		"avalancheSituationComment" : { "$ref" : "#/definitions/textPart" },
+		"activityHighlight" : { "$ref" : "#/definitions/textPart" },
+		"activityComment" : { "$ref" : "#/definitions/textPart" },
+		"synopsisHighlight" : { "$ref" : "#/definitions/textPart" },
+		"synopsisComment" : { "$ref" : "#/definitions/textPart" },
+		"snowpackStructureHighlight" : { "$ref" : "#/definitions/textPart" },
+		"snowpackStructureComment" : { "$ref" : "#/definitions/textPart" },
+		"travelAdvisoryHighlight" : { "$ref" : "#/definitions/textPart" },
+		"travelAdvisoryComment" : { "$ref" : "#/definitions/textPart" },
+		"tendencyComment" : { "$ref" : "#/definitions/textPart" },
 
 		"validity" : {
 			"type" : "object",
@@ -39,12 +54,12 @@
 		"above" : {
 			"type" : "object",
 			"properties" : {
-				"dangerRating" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/dangerRating" },
-				"avalancheProblem" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/avalancheProblem" },
+				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
+				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
 				"aspects" : {
 					"type" : "array",
 					"uniqueItems": true,
-					"items" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/aspect" },
+					"items" : { "$ref" : "#/definitions/aspect" },
 					"additionalProperties" : false
 				}
 			},
@@ -54,12 +69,12 @@
 		"below" : {
 			"type" : "object",
 			"properties" : {
-				"dangerRating" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/dangerRating" },
-				"avalancheProblem" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/avalancheProblem" },
+				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
+				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
 				"aspects" : {
 					"type" : "array",
 					"uniqueItems": true,
-					"items" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/aspect" },
+					"items" : { "$ref" : "#/definitions/aspect" },
 					"additionalProperties" : false
 				}
 			},
@@ -67,5 +82,75 @@
 		}
 	},
 
-	"additionalProperties" : false
+	"additionalProperties" : false,
+	
+	"definitions" : {
+		"author" : {
+			"id" : "#author",
+			"type" : "object",
+			"properties" : {
+				"name" : { "type" : "string" },
+				"email" : { "type" : "string", "format" : "email" },
+				"phone" : { "type" : "string" },
+				"organization" : { "type" : "string" },
+				"role" : { "type" : "string" },
+				"customData" : {
+					"type" : "object",
+					"patternProperties": {
+						"^customData_": {}
+					},
+					"additionalProperties" : false
+				}
+			},
+			"additionalProperties" : false
+		},
+		"textPart" : {
+			"id" : "#textPart",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Text Part",
+			"description" : "A text part in different languages.",
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"text" : { "type" : "string" },
+					"languageCode" : { "$ref" : "#/definitions/languageCode" }
+				},
+				"additionalProperties" : false
+			}
+		},
+		"languageCode" : {
+			"id" : "#languageCode",
+			"$schema": "http://json-schema.org/draft-04/schema#",
+			"title": "Language Code",
+			"description": "Two-letter language codes (ISO 639-1).",
+			"type" : "string",
+			"enum" : [ "aa", "ab", "ae", "af", "ak", "am", "an", "ar", "as", "av", "ay", "az", "ba", "be", "bg", "bh", "bi", "bm", "bn", "bo", "br", "bs", "ca", "ce", "ch", "co", "cr", "cs", "cu", "cv", "cy", "da", "de", "dv", "dz", "ee", "el", "en", "eo", "es", "et", "eu", "fa", "ff", "fi", "fj", "fo", "fr", "fy", "ga", "gd", "gl", "gn", "gu", "gv", "ha", "he", "hi", "ho", "hr", "ht", "hu", "hy", "hz", "ia", "id","ie", "ig", "ii", "ik", "io", "is", "it", "iu", "ja", "jv", "ka", "kg", "ki", "kj", "kk", "kl", "km", "kn", "ko", "kr", "ks", "ku", "kv", "kw", "ky", "la", "lb", "lg", "li", "ln", "lo", "lt", "lu", "lv", "mg", "mh", "mi", "mk", "ml", "mn", "mr", "ms", "mt", "my", "na", "nb", "nd", "ne", "ng", "nl", "nn", "no", "nr", "nv", "ny", "oc", "oj", "om", "or", "os", "pa", "pi", "pl", "ps", "pt", "qu", "rm", "rn", "ro", "ru", "rw", "sa", "sc", "sd", "se", "sg", "si", "sk", "sl", "sm", "sn", "so", "sq", "sr", "ss", "st", "su", "sv", "sw", "ta", "te", "tg", "th", "ti", "tk", "tl", "tn", "to", "tr", "ts", "tt", "tw", "ty", "ug", "uk", "ur", "uz", "ve", "vi", "vo", "wa", "wo", "xh", "yi", "yo", "za", "zh", "zu" ]
+		},
+		"aspect" : {
+			"id" : "#aspect",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Aspect",
+			"description" : "All aspects.",
+			"type" : "string",
+			"enum" : [ "N", "NE", "E", "SE", "S", "SW", "W", "NW" ]
+		},
+		"dangerRating" : {
+			"id" : "#dangerRating",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Danger Rating",
+			"description" : "Danger rating used in an avalanche bulletin.",
+			"type" : "integer",
+			"minimum" : 1,
+			"maximum" : 5
+		},
+		"avalancheProblem" : {
+			"id" : "#avalancheProblem",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Avalanche Problem",
+			"description" : "The five avalanche problems.",
+			"type" : "string",
+			"enum" : [ "new_snow", "wind_drifted_snow", "old_snow", "wet_snow", "gliding_snow" ]
+		}
+	}
 }
