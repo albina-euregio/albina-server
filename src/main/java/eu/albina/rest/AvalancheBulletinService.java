@@ -139,14 +139,16 @@ public class AvalancheBulletinService {
 	@GET
 	// @Secured
 	@Path("/status")
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStatus(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
 		DateTime startDate = null;
 
 		if (date != null)
 			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
+		else
+			startDate = new DateTime();
 
 		DateTime now = new DateTime();
 
