@@ -97,6 +97,7 @@ public class User {
 		this.image = image;
 	}
 
+	// TODO implement correct operation
 	public Element toCAAML(Document doc) {
 		Element operation = doc.createElement("Operation");
 		operation.setAttribute("gml:id", "OpIDLwdTirol");
