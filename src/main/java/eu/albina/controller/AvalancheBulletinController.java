@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -112,7 +113,7 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletin(int page, DateTime startDate, DateTime endDate, List<String> regions)
+	public List<AvalancheBulletin> getBulletins(int page, DateTime startDate, DateTime endDate, List<String> regions)
 			throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
@@ -157,6 +158,47 @@ public class AvalancheBulletinController {
 
 			transaction.commit();
 			return results;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public BulletinStatus getStatus(DateTime date, String region) throws AlbinaException {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+
+			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetStatus)
+					.setParameter("date", date).list();
+
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+
+			// select bulletins within the region
+			for (AvalancheBulletin bulletin : bulletins) {
+				for (String entry : bulletin.getRegions()) {
+					if (entry.startsWith(region)) {
+						results.add(bulletin);
+						break;
+					}
+				}
+			}
+
+			BulletinStatus result = BulletinStatus.missing;
+
+			// get status of bulletins
+			for (AvalancheBulletin bulletin : results) {
+				if (bulletin.getStatus().compareTo(result) < 0)
+					result = bulletin.getStatus();
+			}
+
+			transaction.commit();
+			return result;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();

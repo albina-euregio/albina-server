@@ -33,7 +33,7 @@ import org.w3c.dom.Element;
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.Status;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
@@ -72,7 +72,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
-	private Status status;
+	private BulletinStatus status;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "ABOVE_ID")
@@ -140,7 +140,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			this.below = new AvalancheBulletinElevationDescription(json.getJSONObject("below"));
 
 		if (json.has("status"))
-			this.status = Status.fromString(json.getString("status"));
+			this.status = BulletinStatus.fromString(json.getString("status"));
 	}
 
 	public User getUser() {
@@ -247,11 +247,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return below;
 	}
 
-	public Status getStatus() {
+	public BulletinStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(BulletinStatus status) {
 		this.status = status;
 	}
 

@@ -32,7 +32,9 @@ import org.w3c.dom.Element;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
@@ -48,7 +50,7 @@ public class AvalancheBulletinService {
 	UriInfo uri;
 
 	@GET
-	// @Secured
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(
@@ -66,7 +68,7 @@ public class AvalancheBulletinService {
 			endDate = DateTime.parse(until, GlobalVariables.parserDateTime);
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, startDate,
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(1, startDate,
 					endDate, regions);
 			JSONObject jsonResult = new JSONObject();
 			if (bulletins != null) {
@@ -90,6 +92,8 @@ public class AvalancheBulletinService {
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET XML bulletins");
 
+		// TODO only return bulletins with status published
+
 		DateTime startDate = null;
 		DateTime endDate = null;
 
@@ -103,7 +107,7 @@ public class AvalancheBulletinService {
 			endDate = new DateTime();
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletin(1, startDate,
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(1, startDate,
 					endDate, regions);
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -137,7 +141,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	// @Secured
+	@Secured
 	@Path("/status")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -150,22 +154,19 @@ public class AvalancheBulletinService {
 		else
 			startDate = new DateTime();
 
-		DateTime now = new DateTime();
-
-		// TODO get status for region and day
-		JSONObject jsonResult = new JSONObject();
-		if (startDate.getDayOfMonth() == now.getDayOfMonth())
-			jsonResult.put("status", "draft");
-		if (startDate.isBeforeNow())
-			jsonResult.put("status", "published");
-		else
-			jsonResult.put("status", "missing");
-
-		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		try {
+			BulletinStatus status = AvalancheBulletinController.getInstance().getStatus(startDate, region);
+			JSONObject jsonResult = new JSONObject();
+			jsonResult.put("status", status.toString());
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading status - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
 	}
 
 	@GET
-	// @Secured
+	@Secured
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -188,7 +189,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	// @Secured
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletin(String bulletinString, @Context SecurityContext securityContext) {
@@ -221,7 +222,7 @@ public class AvalancheBulletinService {
 	}
 
 	@PUT
-	// @Secured
+	@Secured
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -251,7 +252,7 @@ public class AvalancheBulletinService {
 	}
 
 	@DELETE
-	// @Secured
+	@Secured
 	@Path("/{bulletinId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

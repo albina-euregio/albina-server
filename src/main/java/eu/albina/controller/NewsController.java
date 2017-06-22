@@ -15,7 +15,7 @@ import org.joda.time.DateTime;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
 import eu.albina.model.Text;
-import eu.albina.model.enumerations.Status;
+import eu.albina.model.enumerations.NewsStatus;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -130,7 +130,7 @@ public class NewsController {
 			if (n == null) {
 				transaction.rollback();
 				throw new AlbinaException("No news with ID: " + newsId);
-			} else if ((n.getStatus() == Status.pending) || (n.getStatus() == Status.published)) {
+			} else if ((n.getStatus() == NewsStatus.pending) || (n.getStatus() == NewsStatus.published)) {
 				transaction.rollback();
 				throw new AlbinaException("News already published!");
 			}
@@ -200,7 +200,7 @@ public class NewsController {
 			if (news == null) {
 				transaction.rollback();
 				throw new AlbinaException("No news with ID: " + newsId);
-			} else if ((news.getStatus() == Status.pending) || (news.getStatus() == Status.published)) {
+			} else if ((news.getStatus() == NewsStatus.pending) || (news.getStatus() == NewsStatus.published)) {
 				transaction.rollback();
 				throw new AlbinaException("News already published!");
 			}

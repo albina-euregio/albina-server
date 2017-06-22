@@ -14,7 +14,7 @@ import org.hibernate.annotations.Type;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import eu.albina.model.enumerations.Status;
+import eu.albina.model.enumerations.NewsStatus;
 import eu.albina.util.GlobalVariables;
 
 @Entity
@@ -35,7 +35,7 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
-	private Status status;
+	private NewsStatus status;
 
 	/**
 	 * Standard constructor for an author.
@@ -55,7 +55,7 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 		else
 			dateTime = new org.joda.time.DateTime();
 		if (json.has("status") && !json.isNull("status"))
-			status = Status.fromString(json.getString("status"));
+			status = NewsStatus.fromString(json.getString("status"));
 	}
 
 	public Texts getTitle() {
@@ -82,11 +82,11 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 		this.dateTime = dateTime;
 	}
 
-	public Status getStatus() {
+	public NewsStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(NewsStatus status) {
 		this.status = status;
 	}
 
