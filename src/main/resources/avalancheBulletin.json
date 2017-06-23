@@ -140,9 +140,8 @@
 			"$schema" : "http://json-schema.org/draft-04/schema#",
 			"title" : "Danger Rating",
 			"description" : "Danger rating used in an avalanche bulletin.",
-			"type" : "integer",
-			"minimum" : 0,
-			"maximum" : 5
+			"type" : "string",
+			"enum" : [ "no_rating", "low", "moderate", "considerable", "high", "very_high"]
 		},
 		"avalancheProblem" : {
 			"id" : "#avalancheProblem",

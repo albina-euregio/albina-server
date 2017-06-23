@@ -49,13 +49,13 @@
 	"elevation" : 2000,
 
 	"above" : {
-		"dangerRating" : 2,
+		"dangerRating" : "moderate",
 		"avalancheProblem" : "new_snow",
 		"aspects" : [ "NW", "N", "NE"]
 	},
 
 	"below" : {
-		"dangerRating" : 1,
+		"dangerRating" : "low",
 		"avalancheProblem" : "wind_drifted_snow",
 		"aspects" : [ "NW", "N", "NE" ]
 	}

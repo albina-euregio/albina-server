@@ -17,14 +17,16 @@ import org.json.JSONObject;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheProblem;
+import eu.albina.model.enumerations.DangerRating;
 
 @Entity
 @Table(name = "AVALANCHE_BULLETIN_ELEVATION_DESCRIPTIONS")
 public class AvalancheBulletinElevationDescription extends AbstractPersistentObject
 		implements AvalancheInformationObject {
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_RATING")
-	private int dangerRating;
+	private DangerRating dangerRating;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "AVALANCHE_PROBLEM")
@@ -43,7 +45,7 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 		this();
 
 		if (json.has("dangerRating"))
-			this.dangerRating = json.getInt("dangerRating");
+			this.dangerRating = DangerRating.valueOf(json.getString("dangerRating").toLowerCase());
 		if (json.has("avalancheProblem"))
 			this.avalancheProblem = AvalancheProblem.valueOf(json.getString("avalancheProblem").toLowerCase());
 		if (json.has("aspects")) {
@@ -54,11 +56,11 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 		}
 	}
 
-	public int getDangerRating() {
+	public DangerRating getDangerRating() {
 		return dangerRating;
 	}
 
-	public void setDangerRating(int dangerRating) {
+	public void setDangerRating(DangerRating dangerRating) {
 		this.dangerRating = dangerRating;
 	}
 
@@ -81,7 +83,8 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
-		json.put("dangerRating", this.dangerRating);
+		if (dangerRating != null)
+			json.put("dangerRating", this.dangerRating.toString());
 		if (avalancheProblem != null)
 			json.put("avalancheProblem", this.avalancheProblem.toString());
 
