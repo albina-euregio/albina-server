@@ -42,11 +42,15 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 	public AvalancheBulletinElevationDescription(JSONObject json) {
 		this();
 
-		this.dangerRating = json.getInt("dangerRating");
-		this.avalancheProblem = AvalancheProblem.valueOf(json.getString("avalancheProblem").toLowerCase());
-		JSONArray aspects = json.getJSONArray("aspects");
-		for (Object entry : aspects) {
-			this.aspects.add(Aspect.valueOf(((String) entry).toUpperCase()));
+		if (json.has("dangerRating"))
+			this.dangerRating = json.getInt("dangerRating");
+		if (json.has("avalancheProblem"))
+			this.avalancheProblem = AvalancheProblem.valueOf(json.getString("avalancheProblem").toLowerCase());
+		if (json.has("aspects")) {
+			JSONArray aspects = json.getJSONArray("aspects");
+			for (Object entry : aspects) {
+				this.aspects.add(Aspect.valueOf(((String) entry).toUpperCase()));
+			}
 		}
 	}
 
@@ -78,7 +82,8 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		json.put("dangerRating", this.dangerRating);
-		json.put("avalancheProblem", this.avalancheProblem.toString());
+		if (avalancheProblem != null)
+			json.put("avalancheProblem", this.avalancheProblem.toString());
 
 		if (aspects != null && aspects.size() > 0) {
 			JSONArray aspects = new JSONArray();

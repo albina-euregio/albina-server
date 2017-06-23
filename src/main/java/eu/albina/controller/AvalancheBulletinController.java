@@ -64,8 +64,10 @@ public class AvalancheBulletinController {
 			Hibernate.initialize(bulletin.getSynopsisHighlights());
 			Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 			Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
-			Hibernate.initialize(bulletin.getAbove().getAspects());
-			Hibernate.initialize(bulletin.getBelow().getAspects());
+			if (bulletin.getAbove() != null)
+				Hibernate.initialize(bulletin.getAbove().getAspects());
+			if (bulletin.getBelow() != null)
+				Hibernate.initialize(bulletin.getBelow().getAspects());
 			Hibernate.initialize(bulletin.getRegions());
 			Hibernate.initialize(bulletin.getUser());
 			transaction.commit();
@@ -113,15 +115,15 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletins(int page, DateTime startDate, DateTime endDate, List<String> regions)
+	public List<AvalancheBulletin> getBulletins(DateTime date, List<String> regions)
 			throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
 
-			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletinsValidFrom)
-					.setParameter("validFrom", startDate).list();
+			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("date", date).list();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 			boolean hit = false;
@@ -150,8 +152,10 @@ public class AvalancheBulletinController {
 				Hibernate.initialize(bulletin.getSynopsisHighlights());
 				Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 				Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
-				Hibernate.initialize(bulletin.getAbove().getAspects());
-				Hibernate.initialize(bulletin.getBelow().getAspects());
+				if (bulletin.getAbove() != null)
+					Hibernate.initialize(bulletin.getAbove().getAspects());
+				if (bulletin.getBelow() != null)
+					Hibernate.initialize(bulletin.getBelow().getAspects());
 				Hibernate.initialize(bulletin.getRegions());
 				Hibernate.initialize(bulletin.getUser());
 			}
@@ -174,7 +178,7 @@ public class AvalancheBulletinController {
 		try {
 			transaction = session.beginTransaction();
 
-			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetStatus)
+			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("date", date).list();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();

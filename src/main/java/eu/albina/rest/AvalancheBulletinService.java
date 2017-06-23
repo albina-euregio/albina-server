@@ -3,6 +3,7 @@ package eu.albina.rest;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.json.JsonArray;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,6 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.joda.time.DateTime;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,26 +56,28 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(
-			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
-			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions) {
 		logger.debug("GET JSON bulletins");
 
 		DateTime startDate = null;
-		DateTime endDate = null;
 
-		if (from != null)
-			startDate = DateTime.parse(from, GlobalVariables.parserDateTime);
-		if (until != null)
-			endDate = DateTime.parse(until, GlobalVariables.parserDateTime);
+		if (date != null)
+			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
+		else
+			startDate = new DateTime();
+		
+		if (regions.isEmpty()) {
+			regions.add("IT-32");
+			regions.add("AT-07");
+		}
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(1, startDate,
-					endDate, regions);
-			JSONObject jsonResult = new JSONObject();
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, regions);
+			JSONArray jsonResult = new JSONArray();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
-					jsonResult.put(String.valueOf(bulletin.getId()), bulletin.toJSON());
+					jsonResult.put(bulletin.toJSON());
 				}
 			}
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
@@ -87,28 +91,21 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getXMLBulletins(
-			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("from") String from,
-			@ApiParam(value = "Endtime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("until") String until,
+			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET XML bulletins");
 
 		// TODO only return bulletins with status published
 
 		DateTime startDate = null;
-		DateTime endDate = null;
 
-		if (from != null)
-			startDate = DateTime.parse(from, GlobalVariables.parserDateTime);
+		if (date != null)
+			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
 		else
 			startDate = new DateTime();
-		if (until != null)
-			endDate = DateTime.parse(until, GlobalVariables.parserDateTime);
-		else
-			endDate = new DateTime();
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(1, startDate,
-					endDate, regions);
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, regions);
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
@@ -232,7 +229,7 @@ public class AvalancheBulletinService {
 
 		JSONObject bulletinJson = new JSONObject(bulletinString);
 
-		JSONObject validationResult = eu.albina.json.JsonValidator.validateSnowProfile(bulletinString);
+		JSONObject validationResult = eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString);
 		if (validationResult.length() == 0) {
 			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson,
 					securityContext.getUserPrincipal().getName());

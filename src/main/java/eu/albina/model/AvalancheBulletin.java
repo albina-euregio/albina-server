@@ -49,7 +49,7 @@ import eu.albina.util.GlobalVariables;
 public class AvalancheBulletin extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	/** Information about the author of the avalanche bulletin */
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
@@ -60,7 +60,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "VALID_UNTIL")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private org.joda.time.DateTime validUntil;
-
+	
+	@Column(name = "AGGREGATED_REGION_ID")
+	private String aggregatedRegionId;
+	
 	/** The regions the avalanche bulletin is for. */
 	@ElementCollection
 	@CollectionTable(name = "AVALANCHE_BULLETIN_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
@@ -125,6 +128,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			this.validFrom = new org.joda.time.DateTime(validity.getString("from"));
 			this.validUntil = new org.joda.time.DateTime(validity.getString("until"));
 		}
+		
+		if (json.has("aggregatedRegionId"))
+			this.aggregatedRegionId = json.getString("aggregatedRegionId");
 
 		if (json.has("regions")) {
 			JSONArray regions = json.getJSONArray("regions");
@@ -230,6 +236,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public void setValidUntil(org.joda.time.DateTime validUntil) {
 		this.validUntil = validUntil;
 	}
+	
+	public String getAggregatedRegionId() {
+		return aggregatedRegionId;
+	}
+	
+	public void setAggregatedRegionId(String aggregatedRegionId) {
+		this.aggregatedRegionId = aggregatedRegionId;
+	}
 
 	public Set<String> getRegions() {
 		return regions;
@@ -261,7 +275,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (id != null && id != "")
 			json.put("id", id);
-
+		
 		if (user != null && user.getName() != null && user.getName() != "")
 			json.put("user", user.getName());
 
@@ -275,6 +289,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		validity.put("from", validFrom.toString(GlobalVariables.formatterDateTime));
 		validity.put("until", validUntil.toString(GlobalVariables.formatterDateTime));
 		json.put("validity", validity);
+		
+		json.put("aggregatedRegionId", aggregatedRegionId);
 
 		json.put("regions", regions);
 		JSONArray regions = new JSONArray();
@@ -283,8 +299,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		}
 
 		json.put("elevation", elevation);
-		json.put("above", above.toJSON());
-		json.put("below", below.toJSON());
+		if (above != null)
+			json.put("above", above.toJSON());
+		if (below != null)
+			json.put("below", below.toJSON());
 		json.put("status", status);
 
 		return json;
