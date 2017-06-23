@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.mindrot.jbcrypt.BCrypt;
@@ -21,7 +22,7 @@ public class UtilTest {
 
 	private static Logger logger = LoggerFactory.getLogger(UtilTest.class);
 
-	private String imgBaseUrl = "C:/Users/norbert/Google Drive/albina/Administration/ProjektKommunikation/FotosProjectMembers/150x150/";
+	private String imgBaseUrl = "C:/Users/Norbert Lanzanasto/Google Drive/albina/Administration/ProjektKommunikation/FotosProjectMembers/150x150/";
 	private List<String> names = new ArrayList<String>();
 	private List<String> passwords = new ArrayList<String>();
 
@@ -58,6 +59,7 @@ public class UtilTest {
 		passwords.add("Norbert");
 	}
 
+	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
 		int i = 11;
