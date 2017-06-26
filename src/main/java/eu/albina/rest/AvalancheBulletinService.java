@@ -3,7 +3,6 @@ package eu.albina.rest;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.json.JsonArray;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -66,14 +65,15 @@ public class AvalancheBulletinService {
 			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
 		else
 			startDate = new DateTime();
-		
+
 		if (regions.isEmpty()) {
 			regions.add("IT-32");
 			regions.add("AT-07");
 		}
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, regions);
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate,
+					regions);
 			JSONArray jsonResult = new JSONArray();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
@@ -105,7 +105,8 @@ public class AvalancheBulletinService {
 			startDate = new DateTime();
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, regions);
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate,
+					regions);
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;

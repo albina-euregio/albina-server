@@ -32,8 +32,8 @@ import org.w3c.dom.Element;
 
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
@@ -60,10 +60,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "VALID_UNTIL")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private org.joda.time.DateTime validUntil;
-	
+
 	@Column(name = "AGGREGATED_REGION_ID")
 	private String aggregatedRegionId;
-	
+
 	/** The regions the avalanche bulletin is for. */
 	@ElementCollection
 	@CollectionTable(name = "AVALANCHE_BULLETIN_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
@@ -128,7 +128,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			this.validFrom = new org.joda.time.DateTime(validity.getString("from"));
 			this.validUntil = new org.joda.time.DateTime(validity.getString("until"));
 		}
-		
+
 		if (json.has("aggregatedRegionId"))
 			this.aggregatedRegionId = json.getString("aggregatedRegionId");
 
@@ -138,6 +138,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				this.regions.add((String) entry);
 			}
 		}
+
+		if (json.has("elevation"))
+			this.elevation = json.getInt("elevation");
 
 		if (json.has("above"))
 			this.above = new AvalancheBulletinElevationDescription(json.getJSONObject("above"));
@@ -236,11 +239,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public void setValidUntil(org.joda.time.DateTime validUntil) {
 		this.validUntil = validUntil;
 	}
-	
+
 	public String getAggregatedRegionId() {
 		return aggregatedRegionId;
 	}
-	
+
 	public void setAggregatedRegionId(String aggregatedRegionId) {
 		this.aggregatedRegionId = aggregatedRegionId;
 	}
@@ -269,13 +272,21 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.status = status;
 	}
 
+	public int getElevation() {
+		return elevation;
+	}
+
+	public void setElevation(int elevation) {
+		this.elevation = elevation;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 
 		if (id != null && id != "")
 			json.put("id", id);
-		
+
 		if (user != null && user.getName() != null && user.getName() != "")
 			json.put("user", user.getName());
 
@@ -289,7 +300,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		validity.put("from", validFrom.toString(GlobalVariables.formatterDateTime));
 		validity.put("until", validUntil.toString(GlobalVariables.formatterDateTime));
 		json.put("validity", validity);
-		
+
 		json.put("aggregatedRegionId", aggregatedRegionId);
 
 		json.put("regions", regions);
