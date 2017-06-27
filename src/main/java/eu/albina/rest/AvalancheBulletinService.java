@@ -66,6 +66,8 @@ public class AvalancheBulletinService {
 		else
 			startDate = new DateTime();
 
+		// TODO load bulletins for the region the user has rights for (and
+		// neighbours?), or all?
 		if (regions.isEmpty()) {
 			regions.add("IT-32");
 			regions.add("AT-07");
@@ -262,6 +264,33 @@ public class AvalancheBulletinService {
 					.type(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error deleting bulletin - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@POST
+	@Secured
+	@Path("/{date}/publish")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response publishBulletins(@PathParam("date") String date) {
+		logger.debug("POST publish bulletins");
+
+		try {
+			DateTime startDate = null;
+
+			if (date != null)
+				startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
+			else
+				throw new AlbinaException("No date!");
+
+			// TODO get region from user object
+			String region = "IT-32-TN";
+
+			AvalancheBulletinController.getInstance().publishBulletins(startDate, region);
+			return Response.ok(MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}

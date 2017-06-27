@@ -115,8 +115,7 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletins(DateTime date, List<String> regions)
-			throws AlbinaException {
+	public List<AvalancheBulletin> getBulletins(DateTime date, List<String> regions) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
@@ -223,6 +222,47 @@ public class AvalancheBulletinController {
 				throw new AlbinaException("No bulletin with ID: " + bulletinId);
 			}
 			session.delete(avalancheBulletin);
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void publishBulletins(DateTime date, String region) throws AlbinaException {
+
+		// TODO publish only in regions the user has the right, save
+		// recommendations for neighbours
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+
+			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("date", date).list();
+
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+
+			// select bulletins within the region
+			for (AvalancheBulletin bulletin : bulletins) {
+				for (String entry : bulletin.getRegions()) {
+					if (entry.startsWith(region)) {
+						results.add(bulletin);
+						break;
+					}
+				}
+			}
+
+			for (AvalancheBulletin bulletin : results) {
+				bulletin.setStatus(BulletinStatus.published);
+				session.update(bulletin);
+			}
+
 			transaction.commit();
 		} catch (HibernateException he) {
 			if (transaction != null)
