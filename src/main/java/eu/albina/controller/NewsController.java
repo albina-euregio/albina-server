@@ -196,4 +196,10 @@ public class NewsController {
 			session.close();
 		}
 	}
+
+	public void publishNews(String newsId) throws AlbinaException {
+		News news = getNews(newsId);
+		news.setStatus(NewsStatus.published);
+		updateNews(newsId, news);
+	}
 }

@@ -197,9 +197,28 @@ public class NewsService {
 
 		try {
 			NewsController.getInstance().deleteNews(newsId);
-			return Response.ok().type(MediaType.APPLICATION_JSON).build();
+			return Response.ok(uri.getAbsolutePathBuilder().path(String.valueOf(newsId)).build())
+					.type(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error updating news - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
+
+	@POST
+	@Secured
+	@Path("/{newsId}/publish")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response publishNews(@PathParam("newsId") String newsId) {
+		logger.debug("POST publish news");
+
+		try {
+			NewsController.getInstance().publishNews(newsId);
+			return Response.ok(uri.getAbsolutePathBuilder().path(String.valueOf(newsId)).build())
+					.type(MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error publishing news - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
