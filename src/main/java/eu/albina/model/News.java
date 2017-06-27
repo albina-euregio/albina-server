@@ -38,7 +38,7 @@ public class News extends AbstractPersistentObject implements AvalancheInformati
 	private NewsStatus status;
 
 	/**
-	 * Standard constructor for an author.
+	 * Standard constructor for news.
 	 */
 	public News() {
 	}

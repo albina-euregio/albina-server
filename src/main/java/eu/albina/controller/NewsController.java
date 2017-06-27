@@ -121,30 +121,10 @@ public class NewsController {
 		}
 	}
 
-	public void updateNews(String newsId, News news) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-			News n = session.get(News.class, newsId);
-			if (n == null) {
-				transaction.rollback();
-				throw new AlbinaException("No news with ID: " + newsId);
-			} else if ((n.getStatus() == NewsStatus.pending) || (n.getStatus() == NewsStatus.published)) {
-				transaction.rollback();
-				throw new AlbinaException("News already published!");
-			}
-			transaction.commit();
-			transaction = session.beginTransaction();
-			session.update(news);
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			session.close();
-		}
+	public Serializable updateNews(String newsId, News news) throws AlbinaException {
+		// TODO find better solution (session.update())
+		deleteNews(newsId);
+		return saveNews(news);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -200,7 +180,7 @@ public class NewsController {
 			if (news == null) {
 				transaction.rollback();
 				throw new AlbinaException("No news with ID: " + newsId);
-			} else if ((news.getStatus() == NewsStatus.pending) || (news.getStatus() == NewsStatus.published)) {
+			} else if (news.getStatus() == NewsStatus.published) {
 				transaction.rollback();
 				throw new AlbinaException("News already published!");
 			}

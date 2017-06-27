@@ -7,8 +7,8 @@
 		"id" : { "type" : "string" },
 		"title" : { "$ref" : "#/definitions/textPart" },
 		"content" : { "$ref" : "#/definitions/textPart" },
-		"dateTime" : { "format" : "date-time", "type" : "string" },
-		"status" : {  }
+		"date" : { "format" : "date-time", "type" : "string" },
+		"status" : { "$ref" : "#/definitions/status" }
 	},
 
 	"additionalProperties" : false,
@@ -16,7 +16,7 @@
 	"definitions" : {
 		"status" : {
 			"type" : "string",
-			"enum" : [ "missing", "draft", "published" ]
+			"enum" : [ "draft", "published" ]
 		},
 		"textPart" : {
 			"id" : "#textPart",

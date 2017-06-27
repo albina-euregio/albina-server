@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.NewsController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
+import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -40,6 +41,7 @@ public class NewsService {
 	UriInfo uri;
 
 	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getJsonNews(
@@ -75,6 +77,7 @@ public class NewsService {
 	}
 
 	@GET
+	@Secured
 	@Path("/{newsId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -99,6 +102,7 @@ public class NewsService {
 	}
 
 	@GET
+	@Secured
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -126,7 +130,7 @@ public class NewsService {
 	}
 
 	@POST
-	// @Secured
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJsonNews(String newsString) {
@@ -158,7 +162,7 @@ public class NewsService {
 	}
 
 	@PUT
-	// @Secured
+	@Secured
 	@Path("/{newsId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -170,9 +174,11 @@ public class NewsService {
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateNews(newsString);
 		if (validationResult.length() == 0) {
 			News news = new News(newsJson);
+			news.setId(newsId);
 			try {
-				NewsController.getInstance().updateNews(newsId, news);
-				return Response.ok().type(MediaType.APPLICATION_JSON).build();
+				Serializable id = NewsController.getInstance().updateNews(newsId, news);
+				return Response.ok(uri.getAbsolutePathBuilder().path(String.valueOf(id)).build())
+						.type(MediaType.APPLICATION_JSON).build();
 			} catch (AlbinaException e) {
 				logger.warn("Error updating news - " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -182,7 +188,7 @@ public class NewsService {
 	}
 
 	@DELETE
-	// @Secured
+	@Secured
 	@Path("/{newsId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

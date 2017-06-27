@@ -1,7 +1,7 @@
 package eu.albina.model.enumerations;
 
 public enum NewsStatus {
-	draft, pending, published;
+	draft, published;
 
 	public static NewsStatus fromString(String text) {
 		if (text != null) {
