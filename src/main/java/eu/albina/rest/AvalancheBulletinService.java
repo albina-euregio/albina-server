@@ -258,7 +258,8 @@ public class AvalancheBulletinService {
 		logger.debug("DELETE JSON bulletin: " + bulletinId);
 		try {
 			AvalancheBulletinController.getInstance().deleteBulletin(bulletinId);
-			return Response.ok().type(MediaType.APPLICATION_JSON).build();
+			return Response.ok(uri.getAbsolutePathBuilder().path(String.valueOf(bulletinId)).build())
+					.type(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error deleting bulletin - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
