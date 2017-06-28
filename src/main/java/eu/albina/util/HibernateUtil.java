@@ -15,7 +15,7 @@ public class HibernateUtil {
 	private static SessionFactory sessionFactory;
 	private static final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
 
-	public static String queryGetBulletins = "from AvalancheBulletin as b where b.validFrom <= :date and b.validUntil > :date";
+	public static String queryGetBulletins = "from AvalancheBulletin as b where :startDate = b.validFrom or :endDate = b.validUntil";
 
 	public static void createSessionFactory() {
 		try {

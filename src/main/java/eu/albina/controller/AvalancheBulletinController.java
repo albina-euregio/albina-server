@@ -115,14 +115,15 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletins(DateTime date, List<String> regions) throws AlbinaException {
+	public List<AvalancheBulletin> getBulletins(DateTime startDate, DateTime endDate, List<String> regions)
+			throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
 
 			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
-					.setParameter("date", date).list();
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 			boolean hit = false;
@@ -171,14 +172,14 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public BulletinStatus getStatus(DateTime date, String region) throws AlbinaException {
+	public BulletinStatus getStatus(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
 
 			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
-					.setParameter("date", date).list();
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 

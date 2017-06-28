@@ -60,11 +60,13 @@ public class AvalancheBulletinService {
 		logger.debug("GET JSON bulletins");
 
 		DateTime startDate = null;
+		DateTime endDate = null;
 
 		if (date != null)
 			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
 		else
-			startDate = new DateTime();
+			startDate = new DateTime().withTimeAtStartOfDay();
+		endDate = startDate.plusDays(1);
 
 		// TODO load bulletins for the region the user has rights for (and
 		// neighbours?), or all?
@@ -75,7 +77,7 @@ public class AvalancheBulletinService {
 
 		try {
 			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate,
-					regions);
+					endDate, regions);
 			JSONArray jsonResult = new JSONArray();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
@@ -100,15 +102,17 @@ public class AvalancheBulletinService {
 		// TODO only return bulletins with status published
 
 		DateTime startDate = null;
+		DateTime endDate = null;
 
 		if (date != null)
 			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
 		else
-			startDate = new DateTime();
+			startDate = new DateTime().withTimeAtStartOfDay();
+		endDate = startDate.plusDays(1);
 
 		try {
 			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate,
-					regions);
+					endDate, regions);
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
@@ -148,14 +152,16 @@ public class AvalancheBulletinService {
 	public Response getStatus(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
 		DateTime startDate = null;
+		DateTime endDate = null;
 
 		if (date != null)
 			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
 		else
-			startDate = new DateTime();
+			startDate = new DateTime().withTimeAtStartOfDay();
+		endDate = startDate.plusDays(1);
 
 		try {
-			BulletinStatus status = AvalancheBulletinController.getInstance().getStatus(startDate, region);
+			BulletinStatus status = AvalancheBulletinController.getInstance().getStatus(startDate, endDate, region);
 			JSONObject jsonResult = new JSONObject();
 			jsonResult.put("status", status.toString());
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
