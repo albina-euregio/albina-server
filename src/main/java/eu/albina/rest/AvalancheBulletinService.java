@@ -291,16 +291,18 @@ public class AvalancheBulletinService {
 
 		try {
 			DateTime startDate = null;
+			DateTime endDate = null;
 
 			if (date != null)
 				startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
 			else
 				throw new AlbinaException("No date!");
+			endDate = startDate.plusDays(1);
 
 			// TODO get region from user object
 			String region = "IT-32-TN";
 
-			AvalancheBulletinController.getInstance().publishBulletins(startDate, region);
+			AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region);
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());

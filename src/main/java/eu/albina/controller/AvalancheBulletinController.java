@@ -234,7 +234,7 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void publishBulletins(DateTime date, String region) throws AlbinaException {
+	public void publishBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
 
 		// TODO publish only in regions the user has the right, save
 		// recommendations for neighbours
@@ -245,7 +245,7 @@ public class AvalancheBulletinController {
 			transaction = session.beginTransaction();
 
 			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
-					.setParameter("date", date).list();
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
