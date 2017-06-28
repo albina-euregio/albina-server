@@ -19,15 +19,13 @@
 	
 		"author" : { "$ref" : "#/definitions/author" },
 
-		"avalancheSituationHighlight" : { "$ref" : "#/definitions/textPart" },
-		"avalancheSituationComment" : { "$ref" : "#/definitions/textPart" },
-		"activityHighlight" : { "$ref" : "#/definitions/textPart" },
-		"activityComment" : { "$ref" : "#/definitions/textPart" },
-		"synopsisHighlight" : { "$ref" : "#/definitions/textPart" },
+		"avActivityHighlights" : { "$ref" : "#/definitions/textPart" },
+		"avActivityComment" : { "$ref" : "#/definitions/textPart" },
+		"synopsisHighlights" : { "$ref" : "#/definitions/textPart" },
 		"synopsisComment" : { "$ref" : "#/definitions/textPart" },
-		"snowpackStructureHighlight" : { "$ref" : "#/definitions/textPart" },
+		"snowpackStructureHighlights" : { "$ref" : "#/definitions/textPart" },
 		"snowpackStructureComment" : { "$ref" : "#/definitions/textPart" },
-		"travelAdvisoryHighlight" : { "$ref" : "#/definitions/textPart" },
+		"travelAdvisoryHighlights" : { "$ref" : "#/definitions/textPart" },
 		"travelAdvisoryComment" : { "$ref" : "#/definitions/textPart" },
 		"tendencyComment" : { "$ref" : "#/definitions/textPart" },
 
