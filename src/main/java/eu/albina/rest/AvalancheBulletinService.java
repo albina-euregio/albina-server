@@ -104,6 +104,13 @@ public class AvalancheBulletinService {
 		DateTime startDate = null;
 		DateTime endDate = null;
 
+		// TODO load bulletins for the region the user has rights for (and
+		// neighbours?), or all?
+		if (regions.isEmpty()) {
+			regions.add("IT-32");
+			regions.add("AT-07");
+		}
+
 		if (date != null)
 			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
 		else
