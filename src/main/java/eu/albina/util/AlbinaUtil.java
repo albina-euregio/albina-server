@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -21,6 +22,8 @@ public class AlbinaUtil {
 
 	public static String convertDocToString(Document doc) throws TransformerException {
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 		StreamResult result = new StreamResult(new StringWriter());
 		DOMSource source = new DOMSource(doc);
 		transformer.transform(source, result);
