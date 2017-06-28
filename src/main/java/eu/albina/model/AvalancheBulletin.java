@@ -321,7 +321,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public Element toCAAML(Document doc, LanguageCode languageCode) {
 		Element rootElement = doc.createElement("Bulletin");
-		rootElement.setAttribute("gml:id", getId());
+		if (getId() != null)
+			rootElement.setAttribute("gml:id", getId());
 		if (languageCode == null)
 			languageCode = LanguageCode.en;
 		rootElement.setAttribute("xml:lang", languageCode.toString());
@@ -333,9 +334,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 		dateTimeReport.appendChild(doc.createTextNode(dt.format(new Date())));
 		metaData.appendChild(dateTimeReport);
-		Element srcRef = doc.createElement("srcRef");
-		srcRef.appendChild(user.toCAAML(doc));
-		metaData.appendChild(srcRef);
+		if (user != null) {
+			Element srcRef = doc.createElement("srcRef");
+			srcRef.appendChild(user.toCAAML(doc));
+			metaData.appendChild(srcRef);
+		}
 		metaDataProperty.appendChild(metaData);
 		rootElement.appendChild(metaDataProperty);
 
@@ -345,16 +348,18 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			rootElement.appendChild(locRef);
 		}
 
-		Element validTime = doc.createElement("validTime");
-		Element timePeriod = doc.createElement("TimePeriod");
-		Element beginPosition = doc.createElement("beginPosition");
-		beginPosition.appendChild(doc.createTextNode(validFrom.toString(GlobalVariables.formatterDateTime)));
-		timePeriod.appendChild(beginPosition);
-		Element endPosition = doc.createElement("endPosition");
-		endPosition.appendChild(doc.createTextNode(validUntil.toString(GlobalVariables.formatterDateTime)));
-		timePeriod.appendChild(endPosition);
-		validTime.appendChild(timePeriod);
-		rootElement.appendChild(validTime);
+		if (validFrom != null && validUntil != null) {
+			Element validTime = doc.createElement("validTime");
+			Element timePeriod = doc.createElement("TimePeriod");
+			Element beginPosition = doc.createElement("beginPosition");
+			beginPosition.appendChild(doc.createTextNode(validFrom.toString(GlobalVariables.formatterDateTime)));
+			timePeriod.appendChild(beginPosition);
+			Element endPosition = doc.createElement("endPosition");
+			endPosition.appendChild(doc.createTextNode(validUntil.toString(GlobalVariables.formatterDateTime)));
+			timePeriod.appendChild(endPosition);
+			validTime.appendChild(timePeriod);
+			rootElement.appendChild(validTime);
+		}
 
 		Element bulletinResultsOf = doc.createElement("bulletinResultsOf");
 		Element bulletinMeasurements = doc.createElement("BulletinMeasurements");
@@ -365,25 +370,31 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			Element validElevationAbove = doc.createElement("validElevation");
 			validElevationAbove.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, true));
 			dangerRatingAbove.appendChild(validElevationAbove);
-			Element mainValueAbove = doc.createElement("mainValue");
-			mainValueAbove.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
-			dangerRatingAbove.appendChild(mainValueAbove);
+			if (above != null && above.getDangerRating() != null) {
+				Element mainValueAbove = doc.createElement("mainValue");
+				mainValueAbove.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
+				dangerRatingAbove.appendChild(mainValueAbove);
+			}
 			dangerRatings.appendChild(dangerRatingAbove);
 			Element dangerRatingBelow = doc.createElement("DangerRating");
 			Element validElevationBelow = doc.createElement("validElevation");
 			validElevationBelow.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, false));
 			dangerRatingBelow.appendChild(validElevationBelow);
-			Element mainValueBelow = doc.createElement("mainValue");
-			mainValueBelow.appendChild(doc.createTextNode(String.valueOf(below.getDangerRating())));
-			dangerRatingBelow.appendChild(mainValueBelow);
+			if (below != null && below.getDangerRating() != null) {
+				Element mainValueBelow = doc.createElement("mainValue");
+				mainValueBelow.appendChild(doc.createTextNode(String.valueOf(below.getDangerRating())));
+				dangerRatingBelow.appendChild(mainValueBelow);
+			}
 			dangerRatings.appendChild(dangerRatingBelow);
 		} else {
 			// NOTE if no elevation is set, the elevation description is
 			// above
 			Element dangerRating = doc.createElement("DangerRating");
-			Element mainValue = doc.createElement("mainValue");
-			mainValue.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
-			dangerRating.appendChild(mainValue);
+			if (above != null && above.getDangerRating() != null) {
+				Element mainValue = doc.createElement("mainValue");
+				mainValue.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
+				dangerRating.appendChild(mainValue);
+			}
 			dangerRatings.appendChild(dangerRating);
 		}
 		bulletinMeasurements.appendChild(dangerRatings);
@@ -394,23 +405,28 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			Element validElevationAbove = doc.createElement("validElevation");
 			validElevationAbove.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, true));
 			avProblemAbove.appendChild(validElevationAbove);
-			Element typeAbove = doc.createElement("type");
-			typeAbove.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
-			avProblemAbove.appendChild(typeAbove);
+			if (above != null && above.getAvalancheProblem() != null) {
+				Element typeAbove = doc.createElement("type");
+				typeAbove.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
+				avProblemAbove.appendChild(typeAbove);
+			}
 			for (Aspect aspect : above.getAspects()) {
 				Element validAspect = doc.createElement("validAspect");
 				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
 				avProblemAbove.appendChild(validAspect);
 			}
+
 			avProblems.appendChild(avProblemAbove);
 
 			Element avProblemBelow = doc.createElement("AvProblem");
 			Element validElevationBelow = doc.createElement("validElevation");
 			validElevationBelow.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, false));
 			avProblemBelow.appendChild(validElevationBelow);
-			Element typeBelow = doc.createElement("type");
-			typeBelow.appendChild(doc.createTextNode(below.getAvalancheProblem().toCaamlString()));
-			avProblemBelow.appendChild(typeBelow);
+			if (below != null && below.getAvalancheProblem() != null) {
+				Element typeBelow = doc.createElement("type");
+				typeBelow.appendChild(doc.createTextNode(below.getAvalancheProblem().toCaamlString()));
+				avProblemBelow.appendChild(typeBelow);
+			}
 			for (Aspect aspect : below.getAspects()) {
 				Element validAspect = doc.createElement("validAspect");
 				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
@@ -419,9 +435,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			avProblems.appendChild(avProblemBelow);
 		} else {
 			Element avProblem = doc.createElement("AvProblem");
-			Element type = doc.createElement("type");
-			type.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
-			avProblem.appendChild(type);
+			if (above != null && above.getAvalancheProblem() != null) {
+				Element type = doc.createElement("type");
+				type.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
+				avProblem.appendChild(type);
+			}
 			for (Aspect aspect : above.getAspects()) {
 				Element validAspect = doc.createElement("validAspect");
 				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
@@ -433,7 +451,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		for (TextPart part : TextPart.values()) {
 			if (textPartsMap.get(part) != null && textPartsMap.get(part).getTexts() != null
-					&& (!textPartsMap.get(part).getTexts().isEmpty())) {
+					&& (!textPartsMap.get(part).getTexts().isEmpty())
+					&& (textPartsMap.get(part).getText(languageCode) != null)) {
 				Element textPart = doc.createElement(part.toCaamlString());
 				textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode)));
 				bulletinMeasurements.appendChild(textPart);
