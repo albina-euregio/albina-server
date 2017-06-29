@@ -38,6 +38,10 @@ public class User {
 	@Column(name = "IMAGE", columnDefinition = "LONGBLOB")
 	private String image;
 
+	/** Organization the user works for **/
+	@Column(name = "ORGANIZATION")
+	private String organization;
+
 	/**
 	 * Standard constructor for a user.
 	 */
@@ -55,6 +59,8 @@ public class User {
 			this.role = Role.fromString(json.getString("role"));
 		if (json.has("image") && !json.isNull("image"))
 			this.image = json.getString("image");
+		if (json.has("organization") && !json.isNull("organization"))
+			this.organization = json.getString("organization");
 	}
 
 	public String getEmail() {
@@ -97,12 +103,20 @@ public class User {
 		this.image = image;
 	}
 
-	// TODO implement correct operation
+	public String getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
+
+	// TODO implement correct id
 	public Element toCAAML(Document doc) {
 		Element operation = doc.createElement("Operation");
 		operation.setAttribute("gml:id", "OpIDLwdTirol");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode("Lawinenwarndienst Tirol"));
+		name.appendChild(doc.createTextNode(this.organization));
 		operation.appendChild(name);
 		Element contactPerson = doc.createElement("contactPerson");
 		Element person = doc.createElement("Person");

@@ -2,7 +2,9 @@ package eu.albina.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -13,6 +15,8 @@ import org.joda.time.DateTime;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.Role;
+import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -68,7 +72,9 @@ public class AvalancheBulletinController {
 				Hibernate.initialize(bulletin.getAbove().getAspects());
 			if (bulletin.getBelow() != null)
 				Hibernate.initialize(bulletin.getBelow().getAspects());
-			Hibernate.initialize(bulletin.getRegions());
+			Hibernate.initialize(bulletin.getSuggestedRegions());
+			Hibernate.initialize(bulletin.getSavedRegions());
+			Hibernate.initialize(bulletin.getPublishedRegions());
 			Hibernate.initialize(bulletin.getUser());
 			transaction.commit();
 			return bulletin;
@@ -81,6 +87,7 @@ public class AvalancheBulletinController {
 		}
 	}
 
+	// TODO check if already published
 	public Serializable saveBulletin(AvalancheBulletin bulletin) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
@@ -98,6 +105,7 @@ public class AvalancheBulletinController {
 		}
 	}
 
+	// TODO check if already published
 	public void updateBulletin(AvalancheBulletin bulletin) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
@@ -126,22 +134,11 @@ public class AvalancheBulletinController {
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-			boolean hit = false;
 
-			for (AvalancheBulletin bulletin : bulletins) {
-				for (String entry : bulletin.getRegions()) {
-					for (String region : regions) {
-						if (entry.startsWith(region)) {
-							results.add(bulletin);
-							hit = true;
-							break;
-						}
-					}
-					if (hit)
-						break;
-				}
-				hit = false;
-			}
+			for (AvalancheBulletin bulletin : bulletins)
+				for (String region : regions)
+					if (bulletin.affectsRegion(region))
+						results.add(bulletin);
 
 			for (AvalancheBulletin bulletin : results) {
 				Hibernate.initialize(bulletin.getAvActivityComment());
@@ -156,7 +153,9 @@ public class AvalancheBulletinController {
 					Hibernate.initialize(bulletin.getAbove().getAspects());
 				if (bulletin.getBelow() != null)
 					Hibernate.initialize(bulletin.getBelow().getAspects());
-				Hibernate.initialize(bulletin.getRegions());
+				Hibernate.initialize(bulletin.getSuggestedRegions());
+				Hibernate.initialize(bulletin.getSavedRegions());
+				Hibernate.initialize(bulletin.getPublishedRegions());
 				Hibernate.initialize(bulletin.getUser());
 			}
 
@@ -184,20 +183,15 @@ public class AvalancheBulletinController {
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
 			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins) {
-				for (String entry : bulletin.getRegions()) {
-					if (entry.startsWith(region)) {
-						results.add(bulletin);
-						break;
-					}
-				}
-			}
-
-			BulletinStatus result = BulletinStatus.missing;
+			for (AvalancheBulletin bulletin : bulletins)
+				if (bulletin.affectsRegion(region))
+					results.add(bulletin);
 
 			// get status of bulletins
+			// TODO this relies on publishing for whole region (e.g. IT-32-BZ)
+			BulletinStatus result = BulletinStatus.missing;
 			for (AvalancheBulletin bulletin : results) {
-				if (bulletin.getStatus().compareTo(result) < 0)
+				if (bulletin.getStatus(region).compareTo(result) < 0)
 					result = bulletin.getStatus();
 			}
 
@@ -212,7 +206,7 @@ public class AvalancheBulletinController {
 		}
 	}
 
-	public void deleteBulletin(String bulletinId) throws AlbinaException {
+	public void deleteBulletin(String bulletinId, Role role) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
@@ -221,8 +215,33 @@ public class AvalancheBulletinController {
 			if (avalancheBulletin == null) {
 				transaction.rollback();
 				throw new AlbinaException("No bulletin with ID: " + bulletinId);
+			} else if (avalancheBulletin.getStatus(AuthorizationUtil.getRegion(role)) == BulletinStatus.published) {
+				transaction.rollback();
+				throw new AlbinaException("Bulletin already published!");
 			}
-			session.delete(avalancheBulletin);
+
+			Set<String> regions = avalancheBulletin.getSavedRegions();
+			Set<String> result = new HashSet<String>();
+			for (String region : regions) {
+				if (!AuthorizationUtil.hasPermissionForRegion(role, region))
+					result.add(region);
+			}
+			avalancheBulletin.setSavedRegions(regions);
+
+			regions = avalancheBulletin.getSuggestedRegions();
+			result = new HashSet<String>();
+			for (String region : regions) {
+				if (!AuthorizationUtil.hasPermissionForRegion(role, region))
+					result.add(region);
+			}
+			avalancheBulletin.setSuggestedRegions(regions);
+
+			if (avalancheBulletin.getSavedRegions().isEmpty() && avalancheBulletin.getPublishedRegions().isEmpty())
+				session.delete(avalancheBulletin);
+			else {
+				session.update(avalancheBulletin);
+			}
+
 			transaction.commit();
 		} catch (HibernateException he) {
 			if (transaction != null)
@@ -250,16 +269,30 @@ public class AvalancheBulletinController {
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
 			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins) {
-				for (String entry : bulletin.getRegions()) {
-					if (entry.startsWith(region)) {
-						results.add(bulletin);
-						break;
-					}
-				}
-			}
+			for (AvalancheBulletin bulletin : bulletins)
+				if (bulletin.affectsRegion(region))
+					results.add(bulletin);
 
+			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
+				result = new HashSet<String>();
+				for (String entry : bulletin.getSavedRegions())
+					if (entry.startsWith(region))
+						result.add(entry);
+				for (String entry : result) {
+					bulletin.getSavedRegions().remove(entry);
+					bulletin.getPublishedRegions().add(entry);
+				}
+
+				result = new HashSet<String>();
+				for (String entry : bulletin.getSuggestedRegions())
+					if (entry.startsWith(region))
+						result.add(entry);
+				for (String entry : result) {
+					bulletin.getSuggestedRegions().remove(entry);
+					bulletin.getPublishedRegions().add(entry);
+				}
+
 				bulletin.setStatus(BulletinStatus.published);
 				session.update(bulletin);
 			}

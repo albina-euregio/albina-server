@@ -19,6 +19,7 @@ import eu.albina.controller.UserController;
 import eu.albina.model.Credentials;
 import eu.albina.model.User;
 import eu.albina.rest.filter.Secured;
+import eu.albina.util.AuthorizationUtil;
 import io.swagger.annotations.Api;
 
 @Path("/authentication")
@@ -42,6 +43,8 @@ public class AuthenticationService {
 			jsonResult.put("username", user.getName());
 
 			jsonResult.put("image", user.getImage());
+
+			jsonResult.put("region", AuthorizationUtil.getRegion(user.getRole()));
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {

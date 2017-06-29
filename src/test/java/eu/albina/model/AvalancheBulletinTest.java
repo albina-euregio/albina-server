@@ -52,7 +52,7 @@ public class AvalancheBulletinTest {
 		regions.add("AT-07-10");
 		regions.add("AT-07-11");
 		regions.add("AT-07-12");
-		bulletin.setRegions(regions);
+		bulletin.setSavedRegions(regions);
 
 		// Load JSON from resources
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();

@@ -1,6 +1,7 @@
 package eu.albina.rest.filter;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
@@ -30,29 +32,28 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) {
-		// TODO fix role based authorization
-		// // Get the resource class which matches with the requested URL
-		// // Extract the roles declared by it
-		// Class<?> resourceClass = resourceInfo.getResourceClass();
-		// List<Role> classRoles = extractRoles(resourceClass);
-		//
-		// // Get the resource method which matches with the requested URL
-		// // Extract the roles declared by it
-		// Method resourceMethod = resourceInfo.getResourceMethod();
-		// List<Role> methodRoles = extractRoles(resourceMethod);
-		//
-		// try {
-		// // Check if the user is allowed to execute the method
-		// // The method annotations override the class annotations
-		// if (methodRoles.isEmpty()) {
-		// checkPermissions(classRoles, requestContext);
-		// } else {
-		// checkPermissions(methodRoles, requestContext);
-		// }
-		//
-		// } catch (Exception e) {
-		// requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
-		// }
+		// Get the resource class which matches with the requested URL
+		// Extract the roles declared by it
+		Class<?> resourceClass = resourceInfo.getResourceClass();
+		List<Role> classRoles = extractRoles(resourceClass);
+
+		// Get the resource method which matches with the requested URL
+		// Extract the roles declared by it
+		Method resourceMethod = resourceInfo.getResourceMethod();
+		List<Role> methodRoles = extractRoles(resourceMethod);
+
+		try {
+			// Check if the user is allowed to execute the method
+			// The method annotations override the class annotations
+			if (methodRoles.isEmpty()) {
+				checkPermissions(classRoles, requestContext);
+			} else {
+				checkPermissions(methodRoles, requestContext);
+			}
+
+		} catch (Exception e) {
+			requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
+		}
 	}
 
 	// Extract the roles from the annotated element

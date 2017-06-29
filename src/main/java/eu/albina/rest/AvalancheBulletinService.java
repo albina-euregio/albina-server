@@ -31,12 +31,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -51,7 +55,7 @@ public class AvalancheBulletinService {
 	UriInfo uri;
 
 	@GET
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(
@@ -68,8 +72,6 @@ public class AvalancheBulletinService {
 			startDate = new DateTime().withTimeAtStartOfDay();
 		endDate = startDate.plusDays(1);
 
-		// TODO load bulletins for the region the user has rights for (and
-		// neighbours?), or all?
 		if (regions.isEmpty()) {
 			regions.add("IT-32");
 			regions.add("AT-07");
@@ -99,13 +101,9 @@ public class AvalancheBulletinService {
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET XML bulletins");
 
-		// TODO only return bulletins with status published
-
 		DateTime startDate = null;
 		DateTime endDate = null;
 
-		// TODO load bulletins for the region the user has rights for (and
-		// neighbours?), or all?
 		if (regions.isEmpty()) {
 			regions.add("IT-32");
 			regions.add("AT-07");
@@ -162,7 +160,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
 	@Path("/status")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -189,7 +187,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -212,7 +210,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletin(String bulletinString, @Context SecurityContext securityContext) {
@@ -222,8 +220,8 @@ public class AvalancheBulletinService {
 
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString);
 		if (validationResult.length() == 0) {
-			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson,
-					securityContext.getUserPrincipal().getName());
+			String username = securityContext.getUserPrincipal().getName();
+			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, username);
 			try {
 				Serializable bulletinId = AvalancheBulletinController.getInstance().saveBulletin(bulletin);
 				if (bulletinId == null) {
@@ -245,7 +243,7 @@ public class AvalancheBulletinService {
 	}
 
 	@PUT
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -257,8 +255,8 @@ public class AvalancheBulletinService {
 
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString);
 		if (validationResult.length() == 0) {
-			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson,
-					securityContext.getUserPrincipal().getName());
+			String username = securityContext.getUserPrincipal().getName();
+			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, username);
 			bulletin.setId(bulletinId);
 			try {
 				AvalancheBulletinController.getInstance().updateBulletin(bulletin);
@@ -275,14 +273,17 @@ public class AvalancheBulletinService {
 	}
 
 	@DELETE
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/{bulletinId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteJSONBulletin(@PathParam("bulletinId") String bulletinId) {
+	public Response deleteJSONBulletin(@PathParam("bulletinId") String bulletinId,
+			@Context SecurityContext securityContext) {
 		logger.debug("DELETE JSON bulletin: " + bulletinId);
+
 		try {
-			AvalancheBulletinController.getInstance().deleteBulletin(bulletinId);
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			AvalancheBulletinController.getInstance().deleteBulletin(bulletinId, user.getRole());
 			return Response.ok(uri.getAbsolutePathBuilder().path(String.valueOf(bulletinId)).build())
 					.type(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -292,28 +293,32 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured
-	@Path("/{date}/publish")
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Path("/publish")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response publishBulletins(@PathParam("date") String date) {
+	public Response publishBulletins(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@Context SecurityContext securityContext) {
 		logger.debug("POST publish bulletins");
 
 		try {
-			DateTime startDate = null;
-			DateTime endDate = null;
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (date != null)
-				startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
-			else
-				throw new AlbinaException("No date!");
-			endDate = startDate.plusDays(1);
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRole(), region)) {
+				DateTime startDate = null;
+				DateTime endDate = null;
 
-			// TODO get region from user object
-			String region = "IT-32-TN";
+				if (date != null)
+					startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
+				else
+					throw new AlbinaException("No date!");
+				endDate = startDate.plusDays(1);
 
-			AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region);
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region);
+				return Response.ok(MediaType.APPLICATION_JSON).build();
+			} else
+				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();

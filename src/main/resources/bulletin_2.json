@@ -54,7 +54,7 @@
 			"until" : "2017-02-12T16:59:59+01:00"
 	},
 
-	"regions" : [ "IT-32-TN-01", "IT-32-TN-02", "IT-32-TN-03", "IT-32-TN-04", "IT-32-TN-05", "IT-32-TN-06" ],
+	"savedRegions" : [ "IT-32-TN-01", "IT-32-TN-02", "IT-32-TN-03", "IT-32-TN-04", "IT-32-TN-05", "IT-32-TN-06" ],
 	
 	"elevation" : 2000,
 

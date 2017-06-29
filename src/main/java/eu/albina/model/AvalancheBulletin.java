@@ -64,11 +64,23 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "AGGREGATED_REGION_ID")
 	private String aggregatedRegionId;
 
-	/** The regions the avalanche bulletin is for. */
+	/** The recommended regions the avalanche bulletin is for. */
 	@ElementCollection
-	@CollectionTable(name = "AVALANCHE_BULLETIN_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@CollectionTable(name = "AVALANCHE_BULLETIN_SUGGESTED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
-	private Set<String> regions;
+	private Set<String> suggestedRegions;
+
+	/** The published regions the avalanche bulletin is for. */
+	@ElementCollection
+	@CollectionTable(name = "AVALANCHE_BULLETIN_PUBLISHED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@Column(name = "REGION_ID")
+	private Set<String> publishedRegions;
+
+	/** The saved regions the avalanche bulletin is for. */
+	@ElementCollection
+	@CollectionTable(name = "AVALANCHE_BULLETIN_SAVED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@Column(name = "REGION_ID")
+	private Set<String> savedRegions;
 
 	@Column(name = "ELEVATION")
 	private int elevation;
@@ -97,7 +109,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	 */
 	public AvalancheBulletin() {
 		textPartsMap = new HashMap<TextPart, Texts>();
-		regions = new HashSet<String>();
+		publishedRegions = new HashSet<String>();
+		savedRegions = new HashSet<String>();
+		suggestedRegions = new HashSet<String>();
 	}
 
 	/**
@@ -132,10 +146,24 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (json.has("aggregatedRegionId"))
 			this.aggregatedRegionId = json.getString("aggregatedRegionId");
 
-		if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("regions");
+		if (json.has("suggestedRegions")) {
+			JSONArray regions = json.getJSONArray("suggestedRegions");
 			for (Object entry : regions) {
-				this.regions.add((String) entry);
+				this.suggestedRegions.add((String) entry);
+			}
+		}
+
+		if (json.has("publishedRegions")) {
+			JSONArray regions = json.getJSONArray("publishedRegions");
+			for (Object entry : regions) {
+				this.publishedRegions.add((String) entry);
+			}
+		}
+
+		if (json.has("savedRegions")) {
+			JSONArray regions = json.getJSONArray("savedRegions");
+			for (Object entry : regions) {
+				this.savedRegions.add((String) entry);
 			}
 		}
 
@@ -248,12 +276,28 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.aggregatedRegionId = aggregatedRegionId;
 	}
 
-	public Set<String> getRegions() {
-		return regions;
+	public Set<String> getSuggestedRegions() {
+		return suggestedRegions;
 	}
 
-	public void setRegions(Set<String> regions) {
-		this.regions = regions;
+	public void setSuggestedRegions(Set<String> regions) {
+		this.suggestedRegions = regions;
+	}
+
+	public Set<String> getSavedRegions() {
+		return savedRegions;
+	}
+
+	public void setSavedRegions(Set<String> regions) {
+		this.savedRegions = regions;
+	}
+
+	public Set<String> getPublishedRegions() {
+		return publishedRegions;
+	}
+
+	public void setPublishedRegions(Set<String> regions) {
+		this.publishedRegions = regions;
 	}
 
 	public AvalancheBulletinElevationDescription getAbove() {
@@ -268,6 +312,15 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return status;
 	}
 
+	public BulletinStatus getStatus(String region) {
+		BulletinStatus result = BulletinStatus.draft;
+		for (String entry : getPublishedRegions())
+			if (entry.startsWith(region))
+				result = BulletinStatus.published;
+
+		return result;
+	}
+
 	public void setStatus(BulletinStatus status) {
 		this.status = status;
 	}
@@ -278,6 +331,20 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public void setElevation(int elevation) {
 		this.elevation = elevation;
+	}
+
+	public boolean affectsRegion(String region) {
+		for (String entry : getSuggestedRegions())
+			if (entry.startsWith(region))
+				return true;
+		for (String entry : getSavedRegions())
+			if (entry.startsWith(region))
+				return true;
+		for (String entry : getPublishedRegions())
+			if (entry.startsWith(region))
+				return true;
+
+		return false;
 	}
 
 	@Override
@@ -303,11 +370,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		json.put("aggregatedRegionId", aggregatedRegionId);
 
-		json.put("regions", regions);
-		JSONArray regions = new JSONArray();
-		for (Object region : regions) {
-			regions.put(region);
-		}
+		// TODO check if this works
+		json.put("suggestedRegions", suggestedRegions);
+		json.put("savedRegions", savedRegions);
+		json.put("publishedRegions", publishedRegions);
 
 		json.put("elevation", elevation);
 		if (above != null)
@@ -320,148 +386,155 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	}
 
 	public Element toCAAML(Document doc, LanguageCode languageCode) {
-		Element rootElement = doc.createElement("Bulletin");
-		if (getId() != null)
-			rootElement.setAttribute("gml:id", getId());
-		if (languageCode == null)
-			languageCode = LanguageCode.en;
-		rootElement.setAttribute("xml:lang", languageCode.toString());
+		if (!publishedRegions.isEmpty()) {
+			Element rootElement = doc.createElement("Bulletin");
+			if (getId() != null)
+				rootElement.setAttribute("gml:id", getId());
+			if (languageCode == null)
+				languageCode = LanguageCode.en;
+			rootElement.setAttribute("xml:lang", languageCode.toString());
 
-		Element metaDataProperty = doc.createElement("metaDataProperty");
-		Element metaData = doc.createElement("MetaData");
-		Element dateTimeReport = doc.createElement("dateTimeReport");
-		// TODO use datetimeformatter from global variables
-		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		dateTimeReport.appendChild(doc.createTextNode(dt.format(new Date())));
-		metaData.appendChild(dateTimeReport);
-		if (user != null) {
-			Element srcRef = doc.createElement("srcRef");
-			srcRef.appendChild(user.toCAAML(doc));
-			metaData.appendChild(srcRef);
-		}
-		metaDataProperty.appendChild(metaData);
-		rootElement.appendChild(metaDataProperty);
-
-		for (String region : regions) {
-			Element locRef = doc.createElement("locRef");
-			locRef.setAttribute("xlink:href", region);
-			rootElement.appendChild(locRef);
-		}
-
-		if (validFrom != null && validUntil != null) {
-			Element validTime = doc.createElement("validTime");
-			Element timePeriod = doc.createElement("TimePeriod");
-			Element beginPosition = doc.createElement("beginPosition");
-			beginPosition.appendChild(doc.createTextNode(validFrom.toString(GlobalVariables.formatterDateTime)));
-			timePeriod.appendChild(beginPosition);
-			Element endPosition = doc.createElement("endPosition");
-			endPosition.appendChild(doc.createTextNode(validUntil.toString(GlobalVariables.formatterDateTime)));
-			timePeriod.appendChild(endPosition);
-			validTime.appendChild(timePeriod);
-			rootElement.appendChild(validTime);
-		}
-
-		Element bulletinResultsOf = doc.createElement("bulletinResultsOf");
-		Element bulletinMeasurements = doc.createElement("BulletinMeasurements");
-
-		Element dangerRatings = doc.createElement("dangerRatings");
-		if (elevation > 0) {
-			Element dangerRatingAbove = doc.createElement("DangerRating");
-			Element validElevationAbove = doc.createElement("validElevation");
-			validElevationAbove.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, true));
-			dangerRatingAbove.appendChild(validElevationAbove);
-			if (above != null && above.getDangerRating() != null) {
-				Element mainValueAbove = doc.createElement("mainValue");
-				mainValueAbove.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
-				dangerRatingAbove.appendChild(mainValueAbove);
+			Element metaDataProperty = doc.createElement("metaDataProperty");
+			Element metaData = doc.createElement("MetaData");
+			Element dateTimeReport = doc.createElement("dateTimeReport");
+			// TODO use datetimeformatter from global variables
+			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+			dateTimeReport.appendChild(doc.createTextNode(dt.format(new Date())));
+			metaData.appendChild(dateTimeReport);
+			if (user != null) {
+				Element srcRef = doc.createElement("srcRef");
+				srcRef.appendChild(user.toCAAML(doc));
+				metaData.appendChild(srcRef);
 			}
-			dangerRatings.appendChild(dangerRatingAbove);
-			Element dangerRatingBelow = doc.createElement("DangerRating");
-			Element validElevationBelow = doc.createElement("validElevation");
-			validElevationBelow.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, false));
-			dangerRatingBelow.appendChild(validElevationBelow);
-			if (below != null && below.getDangerRating() != null) {
-				Element mainValueBelow = doc.createElement("mainValue");
-				mainValueBelow.appendChild(doc.createTextNode(String.valueOf(below.getDangerRating())));
-				dangerRatingBelow.appendChild(mainValueBelow);
-			}
-			dangerRatings.appendChild(dangerRatingBelow);
-		} else {
-			// NOTE if no elevation is set, the elevation description is
-			// above
-			Element dangerRating = doc.createElement("DangerRating");
-			if (above != null && above.getDangerRating() != null) {
-				Element mainValue = doc.createElement("mainValue");
-				mainValue.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
-				dangerRating.appendChild(mainValue);
-			}
-			dangerRatings.appendChild(dangerRating);
-		}
-		bulletinMeasurements.appendChild(dangerRatings);
+			metaDataProperty.appendChild(metaData);
+			rootElement.appendChild(metaDataProperty);
 
-		Element avProblems = doc.createElement("avProblems");
-		if (elevation > 0) {
-			Element avProblemAbove = doc.createElement("AvProblem");
-			Element validElevationAbove = doc.createElement("validElevation");
-			validElevationAbove.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, true));
-			avProblemAbove.appendChild(validElevationAbove);
-			if (above != null && above.getAvalancheProblem() != null) {
-				Element typeAbove = doc.createElement("type");
-				typeAbove.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
-				avProblemAbove.appendChild(typeAbove);
-			}
-			for (Aspect aspect : above.getAspects()) {
-				Element validAspect = doc.createElement("validAspect");
-				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-				avProblemAbove.appendChild(validAspect);
+			for (String region : publishedRegions) {
+				Element locRef = doc.createElement("locRef");
+				locRef.setAttribute("xlink:href", region);
+				rootElement.appendChild(locRef);
 			}
 
-			avProblems.appendChild(avProblemAbove);
+			if (validFrom != null && validUntil != null) {
+				Element validTime = doc.createElement("validTime");
+				Element timePeriod = doc.createElement("TimePeriod");
+				Element beginPosition = doc.createElement("beginPosition");
+				beginPosition.appendChild(doc.createTextNode(validFrom.toString(GlobalVariables.formatterDateTime)));
+				timePeriod.appendChild(beginPosition);
+				Element endPosition = doc.createElement("endPosition");
+				endPosition.appendChild(doc.createTextNode(validUntil.toString(GlobalVariables.formatterDateTime)));
+				timePeriod.appendChild(endPosition);
+				validTime.appendChild(timePeriod);
+				rootElement.appendChild(validTime);
+			}
 
-			Element avProblemBelow = doc.createElement("AvProblem");
-			Element validElevationBelow = doc.createElement("validElevation");
-			validElevationBelow.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, false));
-			avProblemBelow.appendChild(validElevationBelow);
-			if (below != null && below.getAvalancheProblem() != null) {
-				Element typeBelow = doc.createElement("type");
-				typeBelow.appendChild(doc.createTextNode(below.getAvalancheProblem().toCaamlString()));
-				avProblemBelow.appendChild(typeBelow);
-			}
-			for (Aspect aspect : below.getAspects()) {
-				Element validAspect = doc.createElement("validAspect");
-				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-				avProblemBelow.appendChild(validAspect);
-			}
-			avProblems.appendChild(avProblemBelow);
-		} else {
-			Element avProblem = doc.createElement("AvProblem");
-			if (above != null && above.getAvalancheProblem() != null) {
-				Element type = doc.createElement("type");
-				type.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
-				avProblem.appendChild(type);
-			}
-			for (Aspect aspect : above.getAspects()) {
-				Element validAspect = doc.createElement("validAspect");
-				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-				avProblem.appendChild(validAspect);
-			}
-			avProblems.appendChild(avProblem);
-		}
-		bulletinMeasurements.appendChild(avProblems);
+			Element bulletinResultsOf = doc.createElement("bulletinResultsOf");
+			Element bulletinMeasurements = doc.createElement("BulletinMeasurements");
 
-		for (TextPart part : TextPart.values()) {
-			if (textPartsMap.get(part) != null && textPartsMap.get(part).getTexts() != null
-					&& (!textPartsMap.get(part).getTexts().isEmpty())
-					&& (textPartsMap.get(part).getText(languageCode) != null)) {
-				Element textPart = doc.createElement(part.toCaamlString());
-				textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode)));
-				bulletinMeasurements.appendChild(textPart);
+			Element dangerRatings = doc.createElement("dangerRatings");
+			if (elevation > 0) {
+				Element dangerRatingAbove = doc.createElement("DangerRating");
+				Element validElevationAbove = doc.createElement("validElevation");
+				validElevationAbove.setAttribute("xlink:href",
+						AlbinaUtil.createValidElevationAttribute(elevation, true));
+				dangerRatingAbove.appendChild(validElevationAbove);
+				if (above != null && above.getDangerRating() != null) {
+					Element mainValueAbove = doc.createElement("mainValue");
+					mainValueAbove.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
+					dangerRatingAbove.appendChild(mainValueAbove);
+				}
+				dangerRatings.appendChild(dangerRatingAbove);
+				Element dangerRatingBelow = doc.createElement("DangerRating");
+				Element validElevationBelow = doc.createElement("validElevation");
+				validElevationBelow.setAttribute("xlink:href",
+						AlbinaUtil.createValidElevationAttribute(elevation, false));
+				dangerRatingBelow.appendChild(validElevationBelow);
+				if (below != null && below.getDangerRating() != null) {
+					Element mainValueBelow = doc.createElement("mainValue");
+					mainValueBelow.appendChild(doc.createTextNode(String.valueOf(below.getDangerRating())));
+					dangerRatingBelow.appendChild(mainValueBelow);
+				}
+				dangerRatings.appendChild(dangerRatingBelow);
+			} else {
+				// NOTE if no elevation is set, the elevation description is
+				// above
+				Element dangerRating = doc.createElement("DangerRating");
+				if (above != null && above.getDangerRating() != null) {
+					Element mainValue = doc.createElement("mainValue");
+					mainValue.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
+					dangerRating.appendChild(mainValue);
+				}
+				dangerRatings.appendChild(dangerRating);
 			}
-		}
+			bulletinMeasurements.appendChild(dangerRatings);
 
-		bulletinResultsOf.appendChild(bulletinMeasurements);
-		rootElement.appendChild(bulletinResultsOf);
+			Element avProblems = doc.createElement("avProblems");
+			if (elevation > 0) {
+				Element avProblemAbove = doc.createElement("AvProblem");
+				Element validElevationAbove = doc.createElement("validElevation");
+				validElevationAbove.setAttribute("xlink:href",
+						AlbinaUtil.createValidElevationAttribute(elevation, true));
+				avProblemAbove.appendChild(validElevationAbove);
+				if (above != null && above.getAvalancheProblem() != null) {
+					Element typeAbove = doc.createElement("type");
+					typeAbove.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
+					avProblemAbove.appendChild(typeAbove);
+				}
+				for (Aspect aspect : above.getAspects()) {
+					Element validAspect = doc.createElement("validAspect");
+					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+					avProblemAbove.appendChild(validAspect);
+				}
 
-		return rootElement;
+				avProblems.appendChild(avProblemAbove);
+
+				Element avProblemBelow = doc.createElement("AvProblem");
+				Element validElevationBelow = doc.createElement("validElevation");
+				validElevationBelow.setAttribute("xlink:href",
+						AlbinaUtil.createValidElevationAttribute(elevation, false));
+				avProblemBelow.appendChild(validElevationBelow);
+				if (below != null && below.getAvalancheProblem() != null) {
+					Element typeBelow = doc.createElement("type");
+					typeBelow.appendChild(doc.createTextNode(below.getAvalancheProblem().toCaamlString()));
+					avProblemBelow.appendChild(typeBelow);
+				}
+				for (Aspect aspect : below.getAspects()) {
+					Element validAspect = doc.createElement("validAspect");
+					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+					avProblemBelow.appendChild(validAspect);
+				}
+				avProblems.appendChild(avProblemBelow);
+			} else {
+				Element avProblem = doc.createElement("AvProblem");
+				if (above != null && above.getAvalancheProblem() != null) {
+					Element type = doc.createElement("type");
+					type.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
+					avProblem.appendChild(type);
+				}
+				for (Aspect aspect : above.getAspects()) {
+					Element validAspect = doc.createElement("validAspect");
+					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+					avProblem.appendChild(validAspect);
+				}
+				avProblems.appendChild(avProblem);
+			}
+			bulletinMeasurements.appendChild(avProblems);
+
+			for (TextPart part : TextPart.values()) {
+				if (textPartsMap.get(part) != null && textPartsMap.get(part).getTexts() != null
+						&& (!textPartsMap.get(part).getTexts().isEmpty())
+						&& (textPartsMap.get(part).getText(languageCode) != null)) {
+					Element textPart = doc.createElement(part.toCaamlString());
+					textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode)));
+					bulletinMeasurements.appendChild(textPart);
+				}
+			}
+
+			bulletinResultsOf.appendChild(bulletinMeasurements);
+			rootElement.appendChild(bulletinResultsOf);
+
+			return rootElement;
+		} else
+			return null;
 	}
 }

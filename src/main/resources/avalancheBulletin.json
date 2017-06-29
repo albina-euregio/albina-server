@@ -38,46 +38,14 @@
 			"additionalProperties" : false
 		},
 
-		"regions" : {
-			"type" : "array",
-			"uniqueItems" : true,
-			"items" : {
-				"type" : "string"
-			},
-			"additionalProperties" : false
-		},
+		"suggestedRegions" : { "$ref" : "#/definitions/region" },
+		"savedRegions" : { "$ref" : "#/definitions/region" },
+		"publishedRegions" : { "$ref" : "#/definitions/region" },
 		
 		"elevation" : { "type" : "integer" },
 		
-		"above" : {
-			"type" : "object",
-			"properties" : {
-				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
-				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
-				"aspects" : {
-					"type" : "array",
-					"uniqueItems": true,
-					"items" : { "$ref" : "#/definitions/aspect" },
-					"additionalProperties" : false
-				}
-			},
-			"additionalProperties" : false						
-		},
-		
-		"below" : {
-			"type" : "object",
-			"properties" : {
-				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
-				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
-				"aspects" : {
-					"type" : "array",
-					"uniqueItems": true,
-					"items" : { "$ref" : "#/definitions/aspect" },
-					"additionalProperties" : false
-				}
-			},
-			"additionalProperties" : false						
-		}
+		"above" : { "$ref" : "#/definitions/elevationDescription" },
+		"below" : { "$ref" : "#/definitions/elevationDescription" }
 	},
 
 	"additionalProperties" : false,
@@ -101,6 +69,30 @@
 				}
 			},
 			"additionalProperties" : false
+		},
+		"region" : {
+			"id" : "#region",
+			"type" : "array",
+			"uniqueItems" : true,
+			"items" : {
+				"type" : "string"
+			},
+			"additionalProperties" : false
+		},
+		"elevationDescription" : {
+			"id" : "#elevationDescription",
+			"type" : "object",
+			"properties" : {
+				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
+				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
+				"aspects" : {
+					"type" : "array",
+					"uniqueItems": true,
+					"items" : { "$ref" : "#/definitions/aspect" },
+					"additionalProperties" : false
+				}
+			},
+			"additionalProperties" : false						
 		},
 		"textPart" : {
 			"id" : "#textPart",

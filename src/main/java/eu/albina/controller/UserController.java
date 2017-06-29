@@ -29,9 +29,10 @@ public class UserController {
 		return instance;
 	}
 
-	public User getUser(String username) throws Exception {
+	public User getUser(String username) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
+
 		try {
 			transaction = session.beginTransaction();
 			User user = session.get(User.class, username);
