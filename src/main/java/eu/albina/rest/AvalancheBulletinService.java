@@ -128,13 +128,23 @@ public class AvalancheBulletinService {
 			Document doc = docBuilder.newDocument();
 			Element rootElement = AlbinaUtil.createObservationsHeaderCaaml(doc);
 
+			boolean found = false;
+
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
-					rootElement.appendChild(bulletin.toCAAML(doc, language));
+					if (bulletin.getStatus() == BulletinStatus.published) {
+						rootElement.appendChild(bulletin.toCAAML(doc, language));
+						found = true;
+					}
 				}
 			}
 			doc.appendChild(rootElement);
-			return Response.ok(AlbinaUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
+			if (found) {
+				return Response.ok(AlbinaUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
+			} else {
+				logger.debug("No bulletins with status published.");
+				return Response.noContent().build();
+			}
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			try {
