@@ -17,6 +17,13 @@
 			"type" : "string"
 		},
 	
+		"creator" : {
+			"type" : "string"
+		},
+		"creatorRegion" : {
+			"type" : "string"
+		},
+
 		"author" : { "$ref" : "#/definitions/author" },
 
 		"avActivityHighlights" : { "$ref" : "#/definitions/textPart" },

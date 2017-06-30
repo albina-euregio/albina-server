@@ -36,6 +36,7 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 
 /**
@@ -52,6 +53,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private User user;
+
+	@Column(name = "CREATOR")
+	private String creator;
+	@Column(name = "CREATOR_REGION")
+	private String creatorRegion;
 
 	/** Validity of the avalanche bulletin */
 	@Column(name = "VALID_FROM")
@@ -124,12 +130,19 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public AvalancheBulletin(JSONObject json, String username) {
 		this();
 
-		try {
-			this.user = UserController.getInstance().getUser(username);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (username != null) {
+			try {
+				this.user = UserController.getInstance().getUser(username);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+
+		if (json.has("creator"))
+			this.creator = json.getString("creator");
+		if (json.has("creatorRegion"))
+			this.creatorRegion = json.getString("creatorRegion");
 
 		for (TextPart part : TextPart.values()) {
 			if (json.has(part.toString())) {
@@ -186,6 +199,22 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public String getCreatorRegion() {
+		return creatorRegion;
+	}
+
+	public void setCreatorRegion(String creatorRegion) {
+		this.creatorRegion = creatorRegion;
 	}
 
 	public Texts getAvActivityHighlights() {
@@ -334,15 +363,18 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	}
 
 	public boolean affectsRegion(String region) {
-		for (String entry : getSuggestedRegions())
-			if (entry.startsWith(region))
-				return true;
-		for (String entry : getSavedRegions())
-			if (entry.startsWith(region))
-				return true;
-		for (String entry : getPublishedRegions())
-			if (entry.startsWith(region))
-				return true;
+		if (getSuggestedRegions() != null)
+			for (String entry : getSuggestedRegions())
+				if (entry.startsWith(region))
+					return true;
+		if (getSavedRegions() != null)
+			for (String entry : getSavedRegions())
+				if (entry.startsWith(region))
+					return true;
+		if (getPublishedRegions() != null)
+			for (String entry : getPublishedRegions())
+				if (entry.startsWith(region))
+					return true;
 
 		return false;
 	}
@@ -356,6 +388,15 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (user != null && user.getName() != null && user.getName() != "")
 			json.put("user", user.getName());
+
+		if (user != null && user.getRole() != null)
+			json.put("ownerRegion", AuthorizationUtil.getRegion(user.getRole()));
+
+		if (creator != null && creator != "")
+			json.put("creator", creator);
+
+		if (creatorRegion != null && creatorRegion != "")
+			json.put("creatorRegion", creatorRegion);
 
 		for (TextPart part : TextPart.values()) {
 			if ((textPartsMap.get(part) != null)) {

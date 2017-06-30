@@ -255,15 +255,20 @@ public class AvalancheBulletinService {
 
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString);
 		if (validationResult.length() == 0) {
-			String username = securityContext.getUserPrincipal().getName();
-			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, username);
-			bulletin.setId(bulletinId);
+			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, null);
 			try {
-				AvalancheBulletinController.getInstance().updateBulletin(bulletin);
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.append("bulletinId", bulletinId);
-				return Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(bulletinId)).build())
-						.type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
+				AvalancheBulletinController.getInstance().deleteBulletinAdmin(bulletinId);
+				Serializable newBulletinId = AvalancheBulletinController.getInstance().saveBulletin(bulletin);
+				if (newBulletinId == null) {
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.append("message", "Bulletin not updated!");
+					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
+				} else {
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("bulletinId", newBulletinId);
+					return Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(newBulletinId)).build())
+							.type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
+				}
 			} catch (AlbinaException e) {
 				logger.warn("Error updating bulletin - " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();

@@ -206,6 +206,30 @@ public class AvalancheBulletinController {
 		}
 	}
 
+	public void deleteBulletinAdmin(String bulletinId) throws AlbinaException {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+
+			AvalancheBulletin avalancheBulletin = session.get(AvalancheBulletin.class, bulletinId);
+			if (avalancheBulletin == null) {
+				transaction.rollback();
+				throw new AlbinaException("No bulletin with ID: " + bulletinId);
+			}
+
+			session.delete(avalancheBulletin);
+
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
 	public void deleteBulletin(String bulletinId, Role role) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
