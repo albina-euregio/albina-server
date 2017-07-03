@@ -9,6 +9,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,8 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 
+import eu.albina.controller.ChatController;
+import eu.albina.model.ChatMessage;
 import eu.albina.model.enumerations.EventName;
 import eu.albina.util.HibernateUtil;
 
@@ -82,8 +85,8 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		socketIOServer.addEventListener(EventName.chatEvent.toString(), String.class, new DataListener<String>() {
 			@Override
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
-				// TODO save chat message
 				socketIOServer.getBroadcastOperations().sendEvent(EventName.chatEvent.toString(), data);
+				ChatController.getInstance().saveChatMessage(new ChatMessage(new JSONObject(data)));
 			}
 		});
 

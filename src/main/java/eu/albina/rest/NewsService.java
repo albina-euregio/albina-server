@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.NewsController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.News;
+import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
@@ -41,7 +42,6 @@ public class NewsService {
 	UriInfo uri;
 
 	@GET
-	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getJsonNews(
@@ -77,7 +77,6 @@ public class NewsService {
 	}
 
 	@GET
-	@Secured
 	@Path("/{newsId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -102,7 +101,6 @@ public class NewsService {
 	}
 
 	@GET
-	@Secured
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -130,7 +128,7 @@ public class NewsService {
 	}
 
 	@POST
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJsonNews(String newsString) {
@@ -162,7 +160,7 @@ public class NewsService {
 	}
 
 	@PUT
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/{newsId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -188,7 +186,7 @@ public class NewsService {
 	}
 
 	@DELETE
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/{newsId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -206,7 +204,7 @@ public class NewsService {
 	}
 
 	@POST
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/{newsId}/publish")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

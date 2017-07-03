@@ -48,6 +48,7 @@
     <mapping class="eu.albina.model.Region"/>
     <mapping class="eu.albina.model.News"/>
     <mapping class="eu.albina.model.User"/>
+    <mapping class="eu.albina.model.ChatMessage"/>
     
   </session-factory>
   
