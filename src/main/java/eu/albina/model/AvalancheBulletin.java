@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +14,6 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -90,10 +90,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	@Column(name = "ELEVATION")
 	private int elevation;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "STATUS")
-	private BulletinStatus status;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "ABOVE_ID")
@@ -188,9 +184,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (json.has("below"))
 			this.below = new AvalancheBulletinElevationDescription(json.getJSONObject("below"));
-
-		if (json.has("status"))
-			this.status = BulletinStatus.fromString(json.getString("status"));
 	}
 
 	public User getUser() {
@@ -337,8 +330,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return below;
 	}
 
-	public BulletinStatus getStatus() {
-		return status;
+	public BulletinStatus getStatus(List<String> regions) {
+		BulletinStatus result = BulletinStatus.draft;
+		for (String entry : getPublishedRegions())
+			for (String region : regions)
+				if (entry.startsWith(region))
+					result = BulletinStatus.published;
+
+		return result;
 	}
 
 	public BulletinStatus getStatus(String region) {
@@ -348,10 +347,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				result = BulletinStatus.published;
 
 		return result;
-	}
-
-	public void setStatus(BulletinStatus status) {
-		this.status = status;
 	}
 
 	public int getElevation() {
@@ -421,7 +416,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			json.put("above", above.toJSON());
 		if (below != null)
 			json.put("below", below.toJSON());
-		json.put("status", status);
 
 		return json;
 	}

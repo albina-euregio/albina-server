@@ -130,7 +130,7 @@ public class AvalancheBulletinService {
 
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
-					if (bulletin.getStatus() == BulletinStatus.published) {
+					if (bulletin.getStatus(regions) == BulletinStatus.published) {
 						rootElement.appendChild(bulletin.toCAAML(doc, language));
 						found = true;
 					}
@@ -322,6 +322,39 @@ public class AvalancheBulletinService {
 
 				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region);
 				return Response.ok(MediaType.APPLICATION_JSON).build();
+			} else
+				throw new AlbinaException("User is not authorized for this region!");
+		} catch (AlbinaException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Path("/check")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response checkBulletins(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@Context SecurityContext securityContext) {
+		logger.debug("POST publish bulletins");
+
+		try {
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRole(), region)) {
+				DateTime startDate = null;
+				DateTime endDate = null;
+
+				if (date != null)
+					startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
+				else
+					throw new AlbinaException("No date!");
+				endDate = startDate.plusDays(1);
+
+				JSONArray result = AvalancheBulletinController.getInstance().checkBulletins(startDate, endDate, region);
+				return Response.ok(result.toString(), MediaType.APPLICATION_JSON).build();
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {

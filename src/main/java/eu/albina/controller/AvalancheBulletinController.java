@@ -11,9 +11,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.joda.time.DateTime;
+import org.json.JSONArray;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.AuthorizationUtil;
@@ -192,7 +194,7 @@ public class AvalancheBulletinController {
 			BulletinStatus result = BulletinStatus.missing;
 			for (AvalancheBulletin bulletin : results) {
 				if (bulletin.getStatus(region).compareTo(result) < 0)
-					result = bulletin.getStatus();
+					result = bulletin.getStatus(region);
 			}
 
 			transaction.commit();
@@ -278,10 +280,6 @@ public class AvalancheBulletinController {
 
 	@SuppressWarnings("unchecked")
 	public void publishBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
-
-		// TODO publish only in regions the user has the right, save
-		// recommendations for neighbours
-
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
@@ -299,6 +297,8 @@ public class AvalancheBulletinController {
 
 			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
+
+				// publish all saved regions
 				result = new HashSet<String>();
 				for (String entry : bulletin.getSavedRegions())
 					if (entry.startsWith(region))
@@ -308,20 +308,89 @@ public class AvalancheBulletinController {
 					bulletin.getPublishedRegions().add(entry);
 				}
 
+				// delete suggestions within the region
 				result = new HashSet<String>();
 				for (String entry : bulletin.getSuggestedRegions())
 					if (entry.startsWith(region))
 						result.add(entry);
 				for (String entry : result) {
 					bulletin.getSuggestedRegions().remove(entry);
-					bulletin.getPublishedRegions().add(entry);
+					// bulletin.getPublishedRegions().add(entry);
 				}
 
-				bulletin.setStatus(BulletinStatus.published);
 				session.update(bulletin);
 			}
 
 			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONArray checkBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
+		JSONArray json = new JSONArray();
+		boolean missingAvActivityHighlights = false;
+		boolean missingAvActivityComment = false;
+		boolean pendingSuggestions = false;
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+
+			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
+
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			// select bulletins within the region
+			for (AvalancheBulletin bulletin : bulletins)
+				if (bulletin.affectsRegion(region))
+					results.add(bulletin);
+
+			List<Region> regions = RegionController.getInstance().getRegions(region);
+
+			List<String> definedRegions = new ArrayList<String>();
+			for (AvalancheBulletin bulletin : results) {
+
+				for (String entry : bulletin.getSavedRegions())
+					if (entry.startsWith(region))
+						definedRegions.add(entry);
+
+				if (!pendingSuggestions)
+					for (String entry : bulletin.getSuggestedRegions())
+						if (entry.startsWith(region))
+							pendingSuggestions = true;
+
+				if (missingAvActivityHighlights || bulletin.getAvActivityHighlights() == null
+						|| bulletin.getAvActivityHighlights().getTexts() == null
+						|| bulletin.getAvActivityHighlights().getTexts().size() < 1)
+					missingAvActivityHighlights = true;
+				if (missingAvActivityComment || bulletin.getAvActivityComment() == null
+						|| bulletin.getAvActivityComment().getTexts() == null
+						|| bulletin.getAvActivityComment().getTexts().size() < 1)
+					missingAvActivityComment = true;
+			}
+
+			if (definedRegions.size() > regions.size())
+				json.put("duplicateRegion");
+			else if (definedRegions.size() < regions.size())
+				json.put("missingRegion");
+
+			if (missingAvActivityHighlights)
+				json.put("missingAvActivityHighlights");
+			if (missingAvActivityComment)
+				json.put("missingAvActivityComment");
+			if (pendingSuggestions)
+				json.put("pendingSuggestions");
+
+			transaction.commit();
+
+			return json;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
