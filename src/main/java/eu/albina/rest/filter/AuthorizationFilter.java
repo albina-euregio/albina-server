@@ -16,6 +16,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.Role;
 
@@ -24,8 +27,7 @@ import eu.albina.model.enumerations.Role;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(AuthorizationFilter.class);
+	private static Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
 
 	@Context
 	private ResourceInfo resourceInfo;
@@ -52,6 +54,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 			}
 
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
 		}
 	}
