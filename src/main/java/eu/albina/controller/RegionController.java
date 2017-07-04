@@ -1,6 +1,8 @@
 package eu.albina.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -8,9 +10,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
+import org.json.JSONObject;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
+import eu.albina.model.RegionLock;
+import eu.albina.model.enumerations.EventName;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -25,8 +32,10 @@ public class RegionController {
 	// LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
+	private List<RegionLock> regionLocks;
 
 	private RegionController() {
+		regionLocks = new ArrayList<RegionLock>();
 	}
 
 	public static RegionController getInstance() {
@@ -100,5 +109,52 @@ public class RegionController {
 		} finally {
 			session.close();
 		}
+	}
+
+	public void lockRegion(RegionLock lock) throws AlbinaException {
+		for (RegionLock regionLock : regionLocks) {
+			if (regionLock.getDate().equals(lock.getDate()) && regionLock.getRegion() == lock.getRegion())
+				throw new AlbinaException("Region already locked!");
+		}
+		regionLocks.add(lock);
+	}
+
+	public void unlockRegion(String region, DateTime date) throws AlbinaException {
+		date = date.withTimeAtStartOfDay();
+
+		RegionLock hit = null;
+		for (RegionLock regionLock : regionLocks) {
+			if (regionLock.getDate().equals(date) && regionLock.getRegion() == region)
+				hit = regionLock;
+		}
+
+		if (hit != null)
+			regionLocks.remove(hit);
+		else
+			throw new AlbinaException("Region not locked!");
+	}
+
+	public void unlockRegion(UUID sessionId) {
+		List<RegionLock> hits = new ArrayList<RegionLock>();
+		for (RegionLock regionLock : regionLocks) {
+			if (regionLock.getSessionId() == sessionId)
+				hits.add(regionLock);
+		}
+		for (RegionLock regionLock : hits) {
+			regionLocks.remove(regionLock);
+			JSONObject json = new JSONObject();
+			json.put("region", regionLock.getRegion());
+			json.put("date", regionLock.getDate().toString(GlobalVariables.formatterDateTime));
+			SocketIOController.sendEvent(EventName.unlockRegion.toString(), json.toString());
+		}
+	}
+
+	public List<DateTime> getLockedRegions(String region) {
+		List<DateTime> result = new ArrayList<DateTime>();
+		for (RegionLock regionLock : regionLocks) {
+			if (regionLock.getRegion() == region)
+				result.add(regionLock.getDate());
+		}
+		return result;
 	}
 }

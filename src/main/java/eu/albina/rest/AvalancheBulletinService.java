@@ -94,6 +94,28 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Path("/locked")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getLockedBulletins(
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
+		logger.debug("GET JSON locked bulletins");
+
+		DateTime dateTime = null;
+
+		if (date != null)
+			dateTime = DateTime.parse(date, GlobalVariables.parserDateTime);
+		else
+			dateTime = new DateTime().withTimeAtStartOfDay();
+
+		JSONArray json = new JSONArray();
+		for (String bulletin : AvalancheBulletinController.getInstance().getLockedBulletins(dateTime))
+			json.put(bulletin);
+		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+	}
+
+	@GET
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getXMLBulletins(

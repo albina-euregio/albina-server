@@ -2,8 +2,10 @@ package eu.albina.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Hibernate;
@@ -33,8 +35,10 @@ public class AvalancheBulletinController {
 	// LoggerFactory.getLogger(AvalancheBulletinController.class);
 
 	private static AvalancheBulletinController instance = null;
+	private Map<DateTime, List<String>> lockedAvalancheBulletins;
 
 	private AvalancheBulletinController() {
+		lockedAvalancheBulletins = new HashMap<DateTime, List<String>>();
 	}
 
 	public static AvalancheBulletinController getInstance() {
@@ -400,4 +404,34 @@ public class AvalancheBulletinController {
 		}
 	}
 
+	public void lockBulletin(DateTime date, String bulletinId) throws AlbinaException {
+		date = date.withTimeAtStartOfDay();
+		if (lockedAvalancheBulletins.containsKey(date)) {
+			if (!lockedAvalancheBulletins.get(date).contains(bulletinId))
+				lockedAvalancheBulletins.get(date).add(bulletinId);
+			else
+				throw new AlbinaException("Region already locked!");
+		} else {
+			lockedAvalancheBulletins.put(date, new ArrayList<String>());
+			lockedAvalancheBulletins.get(date).add(bulletinId);
+		}
+	}
+
+	public void unlockBulletin(DateTime date, String bulletinId) throws AlbinaException {
+		date = date.withTimeAtStartOfDay();
+		if (lockedAvalancheBulletins.containsKey(date)) {
+			if (lockedAvalancheBulletins.get(date).contains(bulletinId))
+				lockedAvalancheBulletins.get(date).remove(bulletinId);
+			else
+				throw new AlbinaException("Region not locked!");
+		} else
+			throw new AlbinaException("Region not locked!");
+	}
+
+	public List<String> getLockedBulletins(DateTime date) {
+		if (lockedAvalancheBulletins.containsKey(date))
+			return lockedAvalancheBulletins.get(date);
+		else
+			return new ArrayList<String>();
+	}
 }
