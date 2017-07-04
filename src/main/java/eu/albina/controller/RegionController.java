@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 
@@ -85,16 +83,14 @@ public class RegionController {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Criteria criteria = session.createCriteria(Region.class, "region");
 
-			if (regionId == null || regionId == "") {
-				criteria.add(Restrictions.isNull("parentRegion"));
-			} else {
-				criteria.createAlias("region.parentRegion", "parentRegion");
-				criteria.add(Restrictions.eq("parentRegion.id", regionId));
-			}
+			List<Region> regions = null;
 
-			List<Region> regions = criteria.list();
+			if (regionId == null || regionId == "")
+				regions = session.createQuery(HibernateUtil.queryGetTopLevelRegions).list();
+			else
+				regions = session.createQuery(HibernateUtil.queryGetSubregions).setParameter("regionId", regionId)
+						.list();
 
 			for (Region region : regions) {
 				Hibernate.initialize(region.getSubregions());

@@ -16,6 +16,8 @@ public class HibernateUtil {
 	private static final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
 
 	public static String queryGetBulletins = "from AvalancheBulletin as b where :startDate = b.validFrom or :endDate = b.validUntil";
+	public static String queryGetTopLevelRegions = "from Region as r where r.parentRegion is null";
+	public static String queryGetSubregions = "from Region as r where r.parentRegion.id = :regionId";
 
 	public static void createSessionFactory() {
 		try {
