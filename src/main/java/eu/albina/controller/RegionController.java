@@ -10,6 +10,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -26,8 +28,7 @@ import eu.albina.util.HibernateUtil;
  */
 public class RegionController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(RegionController.class);
+	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
 	private List<RegionLock> regionLocks;
@@ -105,7 +106,8 @@ public class RegionController {
 
 	public void lockRegion(RegionLock lock) throws AlbinaException {
 		for (RegionLock regionLock : regionLocks) {
-			if (regionLock.getDate().equals(lock.getDate()) && regionLock.getRegion() == lock.getRegion())
+			if (regionLock.getDate().getMillis() == lock.getDate().getMillis()
+					&& regionLock.getRegion().equals(lock.getRegion()))
 				throw new AlbinaException("Region already locked!");
 		}
 		regionLocks.add(lock);
@@ -116,7 +118,7 @@ public class RegionController {
 
 		RegionLock hit = null;
 		for (RegionLock regionLock : regionLocks) {
-			if (regionLock.getDate().equals(date) && regionLock.getRegion() == region)
+			if ((regionLock.getDate().getMillis() == date.getMillis()) && (regionLock.getRegion().equals(region)))
 				hit = regionLock;
 		}
 

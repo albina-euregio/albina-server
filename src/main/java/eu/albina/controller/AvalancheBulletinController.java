@@ -409,7 +409,8 @@ public class AvalancheBulletinController {
 
 	public void lockBulletin(BulletinLock lock) throws AlbinaException {
 		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (bulletinLock.getDate().equals(lock.getDate()) && bulletinLock.getBulletin() == lock.getBulletin())
+			if (bulletinLock.getDate().getMillis() == lock.getDate().getMillis()
+					&& bulletinLock.getBulletin().equals(lock.getBulletin()))
 				throw new AlbinaException("Bulletin already locked!");
 		}
 		bulletinLocks.add(lock);
@@ -420,7 +421,7 @@ public class AvalancheBulletinController {
 
 		BulletinLock hit = null;
 		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (bulletinLock.getDate().equals(date) && bulletinLock.getBulletin() == bulletin)
+			if (bulletinLock.getDate().getMillis() == date.getMillis() && bulletinLock.getBulletin().equals(bulletin))
 				hit = bulletinLock;
 		}
 
