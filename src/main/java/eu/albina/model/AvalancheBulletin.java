@@ -1,7 +1,5 @@
 package eu.albina.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +23,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -130,7 +129,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			try {
 				this.user = UserController.getInstance().getUser(username);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -406,7 +404,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		json.put("aggregatedRegionId", aggregatedRegionId);
 
-		// TODO check if this works
 		json.put("suggestedRegions", suggestedRegions);
 		json.put("savedRegions", savedRegions);
 		json.put("publishedRegions", publishedRegions);
@@ -432,9 +429,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			Element metaDataProperty = doc.createElement("metaDataProperty");
 			Element metaData = doc.createElement("MetaData");
 			Element dateTimeReport = doc.createElement("dateTimeReport");
-			// TODO use datetimeformatter from global variables
-			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-			dateTimeReport.appendChild(doc.createTextNode(dt.format(new Date())));
+			dateTimeReport
+					.appendChild(doc.createTextNode((new DateTime()).toString(GlobalVariables.formatterDateTime)));
 			metaData.appendChild(dateTimeReport);
 			if (user != null) {
 				Element srcRef = doc.createElement("srcRef");

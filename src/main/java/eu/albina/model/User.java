@@ -111,10 +111,9 @@ public class User {
 		this.organization = organization;
 	}
 
-	// TODO implement correct id
 	public Element toCAAML(Document doc) {
 		Element operation = doc.createElement("Operation");
-		operation.setAttribute("gml:id", "OpIDLwdTirol");
+		operation.setAttribute("gml:id", this.organization);
 		Element name = doc.createElement("name");
 		name.appendChild(doc.createTextNode(this.organization));
 		operation.appendChild(name);

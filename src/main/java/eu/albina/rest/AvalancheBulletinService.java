@@ -98,20 +98,12 @@ public class AvalancheBulletinService {
 	@Path("/locked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getLockedBulletins(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
+	public Response getLockedBulletins(@QueryParam("region") String bulletin) {
 		logger.debug("GET JSON locked bulletins");
 
-		DateTime dateTime = null;
-
-		if (date != null)
-			dateTime = DateTime.parse(date, GlobalVariables.parserDateTime);
-		else
-			dateTime = new DateTime().withTimeAtStartOfDay();
-
 		JSONArray json = new JSONArray();
-		for (String bulletin : AvalancheBulletinController.getInstance().getLockedBulletins(dateTime))
-			json.put(bulletin);
+		for (DateTime date : AvalancheBulletinController.getInstance().getLockedBulletins(bulletin))
+			json.put(date.toString(GlobalVariables.formatterDateTime));
 		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 	}
 

@@ -38,7 +38,6 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 		return texts;
 	}
 
-	// TODO what to return if languageCode is not present?
 	public String getText(LanguageCode languageCode) {
 		for (Text text : texts) {
 			if (text.getLanguage() == languageCode)
@@ -65,7 +64,6 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 
 	@Override
 	public JSONObject toJSON() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

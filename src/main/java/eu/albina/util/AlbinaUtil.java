@@ -1,8 +1,6 @@
 package eu.albina.util;
 
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,6 +12,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -65,9 +64,7 @@ public class AlbinaUtil {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
-		// TODO use datetimeformatter from global variables
-		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		dateTimeReport.appendChild(doc.createTextNode(dt.format(new Date())));
+		dateTimeReport.appendChild(doc.createTextNode((new DateTime()).toString(GlobalVariables.formatterDateTime)));
 		metaData.appendChild(dateTimeReport);
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");

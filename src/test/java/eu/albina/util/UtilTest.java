@@ -80,10 +80,8 @@ public class UtilTest {
 			encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
 			fileInputStreamReader.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

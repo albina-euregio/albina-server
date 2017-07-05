@@ -1,7 +1,7 @@
 package eu.albina.model.enumerations;
 
 public enum EventName {
-	bulletinUpdate, chatEvent, notification, lockBulletin, unlockBulletin, lockRegion, unlockRegion;
+	bulletinUpdate, chatEvent, lockBulletin, unlockBulletin, lockRegion, unlockRegion;
 
 	public static EventName fromString(String text) {
 		if (text != null) {

@@ -15,6 +15,7 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 
+import eu.albina.model.BulletinLock;
 import eu.albina.model.ChatMessage;
 import eu.albina.model.RegionLock;
 import eu.albina.model.enumerations.EventName;
@@ -42,7 +43,6 @@ public class SocketIOController {
 		socketIOServer.addConnectListener(new ConnectListener() {
 			@Override
 			public void onConnect(SocketIOClient client) {
-				// TODO implement
 				logger.debug("[SocketIO] Client connected!");
 			}
 		});
@@ -72,23 +72,18 @@ public class SocketIOController {
 			}
 		});
 
-		socketIOServer.addEventListener(EventName.notification.toString(), String.class, new DataListener<String>() {
-			@Override
-			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
-				// TODO save notification
-				sendEvent(EventName.notification.toString(), data);
-			}
-		});
-
 		socketIOServer.addEventListener(EventName.lockBulletin.toString(), String.class, new DataListener<String>() {
 			@Override
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
 				JSONObject message = new JSONObject(data);
 				DateTime dateTime = null;
-				if (message.has("date") && message.has("bulletinId")) {
+				if (message.has("date") && message.has("bulletin")) {
 					dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
 
-					AvalancheBulletinController.getInstance().lockBulletin(dateTime, message.getString("bulletinId"));
+					BulletinLock lock = new BulletinLock(client.getSessionId(), message.getString("bulletin"),
+							dateTime);
+					AvalancheBulletinController.getInstance().lockBulletin(lock);
+
 					sendEvent(EventName.lockBulletin.toString(), data);
 				} else {
 					logger.debug("[SocketIO] Bulletin could not be locked!");
@@ -101,10 +96,10 @@ public class SocketIOController {
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
 				JSONObject message = new JSONObject(data);
 				DateTime dateTime = null;
-				if (message.has("date") && message.has("bulletinId")) {
+				if (message.has("date") && message.has("bulletin")) {
 					dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
 
-					AvalancheBulletinController.getInstance().unlockBulletin(dateTime, message.getString("bulletinId"));
+					AvalancheBulletinController.getInstance().unlockBulletin(message.getString("bulletin"), dateTime);
 					sendEvent(EventName.unlockBulletin.toString(), data);
 				} else {
 					logger.debug("[SocketIO] Bulletin could not be unlocked!");

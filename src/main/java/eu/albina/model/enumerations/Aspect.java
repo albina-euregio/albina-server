@@ -13,7 +13,6 @@ public enum Aspect {
 		return null;
 	}
 
-	// TODO test
 	public String toCaamlString() {
 		return "AspectRange_" + this.toString();
 	}

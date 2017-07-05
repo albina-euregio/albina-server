@@ -2,11 +2,10 @@ package eu.albina.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -14,13 +13,17 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.EventName;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.AuthorizationUtil;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -35,10 +38,10 @@ public class AvalancheBulletinController {
 	// LoggerFactory.getLogger(AvalancheBulletinController.class);
 
 	private static AvalancheBulletinController instance = null;
-	private Map<DateTime, List<String>> lockedAvalancheBulletins;
+	private List<BulletinLock> bulletinLocks;
 
 	private AvalancheBulletinController() {
-		lockedAvalancheBulletins = new HashMap<DateTime, List<String>>();
+		bulletinLocks = new ArrayList<BulletinLock>();
 	}
 
 	public static AvalancheBulletinController getInstance() {
@@ -194,7 +197,7 @@ public class AvalancheBulletinController {
 					results.add(bulletin);
 
 			// get status of bulletins
-			// TODO this relies on publishing for whole region (e.g. IT-32-BZ)
+			// this relies on publishing for whole region (e.g. IT-32-BZ)
 			BulletinStatus result = BulletinStatus.missing;
 			for (AvalancheBulletin bulletin : results) {
 				if (bulletin.getStatus(region).compareTo(result) < 0)
@@ -404,34 +407,50 @@ public class AvalancheBulletinController {
 		}
 	}
 
-	public void lockBulletin(DateTime date, String bulletinId) throws AlbinaException {
+	public void lockBulletin(BulletinLock lock) throws AlbinaException {
+		for (BulletinLock bulletinLock : bulletinLocks) {
+			if (bulletinLock.getDate().equals(lock.getDate()) && bulletinLock.getBulletin() == lock.getBulletin())
+				throw new AlbinaException("Bulletin already locked!");
+		}
+		bulletinLocks.add(lock);
+	}
+
+	public void unlockBulletin(String bulletin, DateTime date) throws AlbinaException {
 		date = date.withTimeAtStartOfDay();
-		if (lockedAvalancheBulletins.containsKey(date)) {
-			if (!lockedAvalancheBulletins.get(date).contains(bulletinId))
-				lockedAvalancheBulletins.get(date).add(bulletinId);
-			else
-				throw new AlbinaException("Region already locked!");
-		} else {
-			lockedAvalancheBulletins.put(date, new ArrayList<String>());
-			lockedAvalancheBulletins.get(date).add(bulletinId);
+
+		BulletinLock hit = null;
+		for (BulletinLock bulletinLock : bulletinLocks) {
+			if (bulletinLock.getDate().equals(date) && bulletinLock.getBulletin() == bulletin)
+				hit = bulletinLock;
+		}
+
+		if (hit != null)
+			bulletinLocks.remove(hit);
+		else
+			throw new AlbinaException("Bulletin not locked!");
+	}
+
+	public void unlockBulletin(UUID sessionId) {
+		List<BulletinLock> hits = new ArrayList<BulletinLock>();
+		for (BulletinLock bulletinLock : bulletinLocks) {
+			if (bulletinLock.getSessionId() == sessionId)
+				hits.add(bulletinLock);
+		}
+		for (BulletinLock bulletinLock : hits) {
+			bulletinLocks.remove(bulletinLock);
+			JSONObject json = new JSONObject();
+			json.put("bulletin", bulletinLock.getBulletin());
+			json.put("date", bulletinLock.getDate().toString(GlobalVariables.formatterDateTime));
+			SocketIOController.sendEvent(EventName.unlockBulletin.toString(), json.toString());
 		}
 	}
 
-	public void unlockBulletin(DateTime date, String bulletinId) throws AlbinaException {
-		date = date.withTimeAtStartOfDay();
-		if (lockedAvalancheBulletins.containsKey(date)) {
-			if (lockedAvalancheBulletins.get(date).contains(bulletinId))
-				lockedAvalancheBulletins.get(date).remove(bulletinId);
-			else
-				throw new AlbinaException("Region not locked!");
-		} else
-			throw new AlbinaException("Region not locked!");
-	}
-
-	public List<String> getLockedBulletins(DateTime date) {
-		if (lockedAvalancheBulletins.containsKey(date))
-			return lockedAvalancheBulletins.get(date);
-		else
-			return new ArrayList<String>();
+	public List<DateTime> getLockedBulletins(String bulletin) {
+		List<DateTime> result = new ArrayList<DateTime>();
+		for (BulletinLock bulletinLock : bulletinLocks) {
+			if (bulletinLock.getBulletin() == bulletin)
+				result.add(bulletinLock.getDate());
+		}
+		return result;
 	}
 }

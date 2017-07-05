@@ -5,6 +5,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.albina.exception.AlbinaException;
@@ -26,6 +27,7 @@ public class NewsControllerTest {
 		// HibernateUtil.closeSessionFactory();
 	}
 
+	@Ignore
 	@Test
 	public void getNewsTest() {
 		try {
@@ -38,6 +40,7 @@ public class NewsControllerTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void getNewsStartTest() {
 		try {
@@ -51,6 +54,7 @@ public class NewsControllerTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void getNewsEndTest() {
 		try {
@@ -64,6 +68,7 @@ public class NewsControllerTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void getNewsStartEndTest() {
 		try {
