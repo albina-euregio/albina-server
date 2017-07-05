@@ -1,7 +1,5 @@
 package eu.albina.controller;
 
-import java.util.List;
-
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -9,7 +7,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.News;
 import eu.albina.util.HibernateUtil;
 
 public class NewsControllerTest {
@@ -31,7 +28,7 @@ public class NewsControllerTest {
 	@Test
 	public void getNewsTest() {
 		try {
-			List<News> news = NewsController.getInstance().getNews(null, null);
+			NewsController.getInstance().getNews(null, null);
 
 			// TODO implement
 
@@ -45,7 +42,7 @@ public class NewsControllerTest {
 	public void getNewsStartTest() {
 		try {
 			DateTime startDate = new DateTime();
-			List<News> news = NewsController.getInstance().getNews(startDate, null);
+			NewsController.getInstance().getNews(startDate, null);
 
 			// TODO implement
 
@@ -59,7 +56,7 @@ public class NewsControllerTest {
 	public void getNewsEndTest() {
 		try {
 			DateTime endDate = new DateTime();
-			List<News> news = NewsController.getInstance().getNews(null, endDate);
+			NewsController.getInstance().getNews(null, endDate);
 
 			// TODO implement
 
@@ -74,7 +71,7 @@ public class NewsControllerTest {
 		try {
 			DateTime startDate = new DateTime();
 			DateTime endDate = new DateTime();
-			List<News> news = NewsController.getInstance().getNews(startDate, endDate);
+			NewsController.getInstance().getNews(startDate, endDate);
 
 			// TODO implement
 
