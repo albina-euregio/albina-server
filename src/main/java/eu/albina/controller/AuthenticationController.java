@@ -85,7 +85,7 @@ public class AuthenticationController {
 	}
 
 	public boolean isUserInRole(String role, String username) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

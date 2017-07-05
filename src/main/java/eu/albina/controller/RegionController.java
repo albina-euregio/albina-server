@@ -10,8 +10,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -28,7 +26,8 @@ import eu.albina.util.HibernateUtil;
  */
 public class RegionController {
 
-	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
+	// private static Logger logger =
+	// LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
 	private List<RegionLock> regionLocks;
@@ -53,7 +52,7 @@ public class RegionController {
 	 * @throws AlbinaException
 	 */
 	public Region getRegion(String regionId) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -80,7 +79,7 @@ public class RegionController {
 
 	@SuppressWarnings("unchecked")
 	public List<Region> getRegions(String regionId) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

@@ -30,7 +30,7 @@ public class UserController {
 	}
 
 	public User getUser(String username) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 
 		try {

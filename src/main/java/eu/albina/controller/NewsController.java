@@ -48,7 +48,7 @@ public class NewsController {
 	 * @throws AlbinaException
 	 */
 	public News getNews(String newsId) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -72,7 +72,7 @@ public class NewsController {
 
 	@SuppressWarnings("unchecked")
 	public List<News> getNews(DateTime startDate, DateTime endDate) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -105,7 +105,7 @@ public class NewsController {
 	}
 
 	public Serializable saveNews(News news) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -128,7 +128,7 @@ public class NewsController {
 
 	@SuppressWarnings("unchecked")
 	public List<News> findNews(String searchString) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -169,7 +169,7 @@ public class NewsController {
 	}
 
 	public void deleteNews(String newsId) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

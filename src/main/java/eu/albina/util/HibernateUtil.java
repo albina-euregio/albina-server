@@ -12,8 +12,10 @@ public class HibernateUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
 
-	private static SessionFactory sessionFactory;
-	private static final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+	private static HibernateUtil instance = null;
+
+	private SessionFactory sessionFactory;
+	private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
 
 	public static String queryGetBulletins = "from AvalancheBulletin as b where :startDate = b.validFrom or :endDate = b.validUntil";
 	public static String queryGetTopLevelRegions = "from Region as r where r.parentRegion is null";
@@ -25,7 +27,14 @@ public class HibernateUtil {
 	public static String queryGetChatMessages = "from ChatMessage as cm";
 	public static String queryGetChatMessagesDate = "from ChatMessage as cm where cm.datetime >= :date";
 
-	public static void createSessionFactory() {
+	public static HibernateUtil getInstance() {
+		if (instance == null) {
+			instance = new HibernateUtil();
+		}
+		return instance;
+	}
+
+	public void createSessionFactory() {
 		try {
 			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 			logger.debug("Session factory created!");
@@ -35,11 +44,10 @@ public class HibernateUtil {
 		}
 	}
 
-	public static void closeSessionFactory() {
+	public void closeSessionFactory() {
 		if (sessionFactory != null) {
 			try {
 				sessionFactory.close();
-				StandardServiceRegistryBuilder.destroy(registry);
 				logger.debug("Session factory closed!");
 			} catch (HibernateException ignored) {
 				logger.error("Couldn't close SessionFactory", ignored);
@@ -47,7 +55,7 @@ public class HibernateUtil {
 		}
 	}
 
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 }

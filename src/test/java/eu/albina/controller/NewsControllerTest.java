@@ -16,12 +16,12 @@ public class NewsControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		HibernateUtil.createSessionFactory();
+		HibernateUtil.getInstance().createSessionFactory();
 	}
 
 	@After
 	public void shutDown() {
-		// HibernateUtil.closeSessionFactory();
+		// HibernateUtil.getInstance().closeSessionFactory();
 	}
 
 	@Ignore

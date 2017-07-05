@@ -60,7 +60,7 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 */
 	public AvalancheBulletin getBulletin(String bulletinId) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -98,7 +98,7 @@ public class AvalancheBulletinController {
 
 	// TODO check if already published
 	public Serializable saveBulletin(AvalancheBulletin bulletin) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -116,7 +116,7 @@ public class AvalancheBulletinController {
 
 	// TODO check if already published
 	public void updateBulletin(AvalancheBulletin bulletin) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -134,7 +134,7 @@ public class AvalancheBulletinController {
 	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> getBulletins(DateTime startDate, DateTime endDate, List<String> regions)
 			throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -181,7 +181,7 @@ public class AvalancheBulletinController {
 
 	@SuppressWarnings("unchecked")
 	public BulletinStatus getStatus(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -216,7 +216,7 @@ public class AvalancheBulletinController {
 	}
 
 	public void deleteBulletinAdmin(String bulletinId) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -240,7 +240,7 @@ public class AvalancheBulletinController {
 	}
 
 	public void deleteBulletin(String bulletinId, Role role) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -287,7 +287,7 @@ public class AvalancheBulletinController {
 
 	@SuppressWarnings("unchecked")
 	public void publishBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -345,7 +345,7 @@ public class AvalancheBulletinController {
 		boolean missingAvActivityComment = false;
 		boolean pendingSuggestions = false;
 
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

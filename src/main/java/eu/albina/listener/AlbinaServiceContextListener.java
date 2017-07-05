@@ -24,7 +24,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
-		HibernateUtil.closeSessionFactory();
+		HibernateUtil.getInstance().closeSessionFactory();
 		SocketIOController.stop();
 		System.out.println("ServletContextListener destroyed");
 	}
@@ -32,7 +32,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 	// Run this before web application is started
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-		HibernateUtil.createSessionFactory();
+		HibernateUtil.getInstance().createSessionFactory();
 
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		Driver d = null;

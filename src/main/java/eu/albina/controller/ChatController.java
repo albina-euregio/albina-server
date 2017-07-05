@@ -37,7 +37,7 @@ public class ChatController {
 
 	@SuppressWarnings("unchecked")
 	public List<ChatMessage> getChatMessages(DateTime date) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -61,7 +61,7 @@ public class ChatController {
 	}
 
 	public Serializable saveChatMessage(ChatMessage chatMessage) throws AlbinaException {
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
