@@ -3,11 +3,9 @@ package eu.albina.controller;
 import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
@@ -43,13 +41,13 @@ public class ChatController {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Criteria criteria = session.createCriteria(ChatMessage.class);
 
-			if (date != null) {
-				date = date.withTimeAtStartOfDay();
-				criteria.add(Restrictions.ge("date", date));
-			}
-			List<ChatMessage> chatMessages = criteria.list();
+			List<ChatMessage> chatMessages = null;
+			if (date != null)
+				chatMessages = session.createQuery(HibernateUtil.queryGetChatMessagesDate).setParameter("date", date)
+						.list();
+			else
+				chatMessages = session.createQuery(HibernateUtil.queryGetChatMessages).list();
 
 			transaction.commit();
 			return chatMessages;
