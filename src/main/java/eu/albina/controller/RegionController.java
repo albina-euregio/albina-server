@@ -83,19 +83,15 @@ public class RegionController {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-
 			List<Region> regions = null;
-
 			if (regionId == null || regionId == "")
 				regions = session.createQuery(HibernateUtil.queryGetTopLevelRegions).list();
 			else
 				regions = session.createQuery(HibernateUtil.queryGetSubregions).setParameter("regionId", regionId)
 						.list();
-
 			for (Region region : regions) {
 				Hibernate.initialize(region.getSubregions());
 			}
-
 			transaction.commit();
 			return regions;
 		} catch (HibernateException he) {

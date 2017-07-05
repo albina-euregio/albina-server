@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
@@ -78,15 +76,17 @@ public class NewsController {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Criteria criteria = session.createCriteria(News.class);
 
-			if (startDate != null) {
-				criteria.add(Restrictions.ge("dateTime", startDate));
-			}
-			if (endDate != null) {
-				criteria.add(Restrictions.le("dateTime", endDate));
-			}
-			List<News> news = criteria.list();
+			List<News> news = null;
+			if (startDate != null && endDate != null)
+				news = session.createQuery(HibernateUtil.queryGetNewsStartEnd).setParameter("startDate", startDate)
+						.setParameter("endDate", endDate).list();
+			else if (startDate != null)
+				news = session.createQuery(HibernateUtil.queryGetNewsStart).setParameter("startDate", startDate).list();
+			else if (endDate != null)
+				news = session.createQuery(HibernateUtil.queryGetNewsStart).setParameter("endDate", endDate).list();
+			else
+				news = session.createQuery(HibernateUtil.queryGetNews).list();
 
 			for (News entry : news) {
 				Hibernate.initialize(entry.getTitle());
@@ -122,21 +122,18 @@ public class NewsController {
 	}
 
 	public Serializable updateNews(String newsId, News news) throws AlbinaException {
-		// TODO find better solution (session.update())
 		deleteNews(newsId);
 		return saveNews(news);
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings("unchecked")
 	public List<News> findNews(String searchString) throws AlbinaException {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Criteria criteria = session.createCriteria(News.class);
 
-			@SuppressWarnings("unchecked")
-			List<News> news = criteria.list();
+			List<News> news = session.createQuery(HibernateUtil.queryGetNews).list();
 			List<News> results = new ArrayList<News>();
 			boolean hit = false;
 
