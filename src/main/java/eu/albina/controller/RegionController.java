@@ -138,7 +138,7 @@ public class RegionController {
 			JSONObject json = new JSONObject();
 			json.put("region", regionLock.getRegion());
 			json.put("date", regionLock.getDate().toString(GlobalVariables.formatterDateTime));
-			SocketIOController.sendEvent(EventName.unlockRegion.toString(), json.toString());
+			SocketIOController.getInstance().sendEvent(EventName.unlockRegion.toString(), json.toString());
 			logger.debug("[SocketIO] Region unlocked: " + regionLock.getRegion() + ", " + regionLock.getDate());
 		}
 	}

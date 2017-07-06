@@ -443,7 +443,7 @@ public class AvalancheBulletinController {
 			JSONObject json = new JSONObject();
 			json.put("bulletin", bulletinLock.getBulletin());
 			json.put("date", bulletinLock.getDate().toString(GlobalVariables.formatterDateTime));
-			SocketIOController.sendEvent(EventName.unlockBulletin.toString(), json.toString());
+			SocketIOController.getInstance().sendEvent(EventName.unlockBulletin.toString(), json.toString());
 			logger.debug("[SocketIO] Bulletin unlocked: " + bulletinLock.getBulletin() + ", " + bulletinLock.getDate());
 		}
 	}
