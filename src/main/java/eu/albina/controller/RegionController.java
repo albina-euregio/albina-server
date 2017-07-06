@@ -110,21 +110,20 @@ public class RegionController {
 					&& regionLock.getRegion().equals(lock.getRegion()))
 				throw new AlbinaException("Region already locked!");
 		}
+		logger.info("[lock region] Region locked: " + lock.getDate().getMillis() + ", " + lock.getDate());
 		regionLocks.add(lock);
 	}
 
 	public void unlockRegion(String region, DateTime date) throws AlbinaException {
-		date = date.withTimeAtStartOfDay();
-
 		RegionLock hit = null;
-		for (RegionLock regionLock : regionLocks) {
+		for (RegionLock regionLock : regionLocks)
 			if ((regionLock.getDate().getMillis() == date.getMillis()) && (regionLock.getRegion().equals(region)))
 				hit = regionLock;
-		}
 
-		if (hit != null)
+		if (hit != null) {
 			regionLocks.remove(hit);
-		else
+			logger.info("[unlock region] Region unlocked: " + date.getMillis() + ", " + date);
+		} else
 			throw new AlbinaException("Region not locked!");
 	}
 

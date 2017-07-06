@@ -108,10 +108,11 @@ public class SocketIOController {
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
 				sendEvent(EventName.lockRegion.toString(), data);
 				JSONObject message = new JSONObject(data);
-				DateTime dateTime = null;
+				DateTime date = null;
 				if (message.has("date") && message.has("region")) {
-					dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-					RegionLock lock = new RegionLock(client.getSessionId(), message.getString("region"), dateTime);
+					date = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
+					logger.info("[lock region] date: " + date.toString());
+					RegionLock lock = new RegionLock(client.getSessionId(), message.getString("region"), date);
 					RegionController.getInstance().lockRegion(lock);
 				} else
 					logger.warn("[SocketIO] Region could not be locked!");
@@ -123,10 +124,11 @@ public class SocketIOController {
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
 				sendEvent(EventName.unlockRegion.toString(), data);
 				JSONObject message = new JSONObject(data);
-				DateTime dateTime = null;
+				DateTime date = null;
 				if (message.has("date") && message.has("region")) {
-					dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-					RegionController.getInstance().unlockRegion(message.getString("region"), dateTime);
+					date = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
+					logger.info("[unlock region] date: " + date.toString());
+					RegionController.getInstance().unlockRegion(message.getString("region"), date);
 				} else
 					logger.warn("[SocketIO] Region could not be unlocked!");
 			}
