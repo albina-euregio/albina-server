@@ -25,7 +25,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		HibernateUtil.getInstance().closeSessionFactory();
-		SocketIOController.getInstance().stop();
+		SocketIOController.getInstance().stopSocketIO();
 		System.out.println("ServletContextListener destroyed");
 	}
 
@@ -52,7 +52,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 			e.printStackTrace();
 		}
 
-		SocketIOController.getInstance().start();
+		SocketIOController.getInstance().startSocketIO();
 
 		logger.debug("ServletContextListener started");
 	}

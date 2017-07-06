@@ -44,7 +44,7 @@ public class SocketIOController {
 		return instance;
 	}
 
-	public void start() {
+	public void startSocketIO() {
 		if (socketIOServer == null) {
 			Configuration configuration = new Configuration();
 			// configuration.setHostname("localhost");
@@ -157,10 +157,13 @@ public class SocketIOController {
 	}
 
 	public void sendEvent(String eventName, String data) {
-		socketIOServer.getBroadcastOperations().sendEvent(eventName, data);
+		if (socketIOServer != null)
+			socketIOServer.getBroadcastOperations().sendEvent(eventName, data);
+		else
+			logger.warn("SocketIOServer not started!");
 	}
 
-	public void stop() {
+	public void stopSocketIO() {
 		socketIOServer.stop();
 	}
 }
