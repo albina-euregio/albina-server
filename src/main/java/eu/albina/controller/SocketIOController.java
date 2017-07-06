@@ -51,7 +51,8 @@ public class SocketIOController {
 			@Override
 			public void onDisconnect(SocketIOClient client) {
 				UUID sessionId = client.getSessionId();
-				RegionController.getInstance().unlockRegion(sessionId);
+				RegionController.getInstance().unlockRegions(sessionId);
+				AvalancheBulletinController.getInstance().unlockBulletins(sessionId);
 				logger.debug("[SocketIO] Client disconnected: " + sessionId.toString());
 			}
 		});
@@ -75,69 +76,59 @@ public class SocketIOController {
 		socketIOServer.addEventListener(EventName.lockBulletin.toString(), String.class, new DataListener<String>() {
 			@Override
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
+				sendEvent(EventName.lockBulletin.toString(), data);
 				JSONObject message = new JSONObject(data);
 				DateTime dateTime = null;
 				if (message.has("date") && message.has("bulletin")) {
 					dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-
 					BulletinLock lock = new BulletinLock(client.getSessionId(), message.getString("bulletin"),
 							dateTime);
 					AvalancheBulletinController.getInstance().lockBulletin(lock);
-
-					sendEvent(EventName.lockBulletin.toString(), data);
-				} else {
-					logger.debug("[SocketIO] Bulletin could not be locked!");
-				}
+				} else
+					logger.warn("[SocketIO] Bulletin could not be locked!");
 			}
 		});
 
 		socketIOServer.addEventListener(EventName.unlockBulletin.toString(), String.class, new DataListener<String>() {
 			@Override
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
+				sendEvent(EventName.unlockBulletin.toString(), data);
 				JSONObject message = new JSONObject(data);
 				DateTime dateTime = null;
 				if (message.has("date") && message.has("bulletin")) {
 					dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-
 					AvalancheBulletinController.getInstance().unlockBulletin(message.getString("bulletin"), dateTime);
-					sendEvent(EventName.unlockBulletin.toString(), data);
-				} else {
-					logger.debug("[SocketIO] Bulletin could not be unlocked!");
-				}
+				} else
+					logger.warn("[SocketIO] Bulletin could not be unlocked!");
 			}
 		});
 
 		socketIOServer.addEventListener(EventName.lockRegion.toString(), String.class, new DataListener<String>() {
 			@Override
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
+				sendEvent(EventName.lockRegion.toString(), data);
 				JSONObject message = new JSONObject(data);
 				DateTime dateTime = null;
 				if (message.has("date") && message.has("region")) {
 					dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-
 					RegionLock lock = new RegionLock(client.getSessionId(), message.getString("region"), dateTime);
 					RegionController.getInstance().lockRegion(lock);
-
-					sendEvent(EventName.lockRegion.toString(), data);
-				} else {
-					logger.debug("[SocketIO] Region could not be locked!");
-				}
+				} else
+					logger.warn("[SocketIO] Region could not be locked!");
 			}
 		});
 
 		socketIOServer.addEventListener(EventName.unlockRegion.toString(), String.class, new DataListener<String>() {
 			@Override
 			public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
+				sendEvent(EventName.unlockRegion.toString(), data);
 				JSONObject message = new JSONObject(data);
 				DateTime dateTime = null;
 				if (message.has("date") && message.has("region")) {
 					dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-
 					RegionController.getInstance().unlockRegion(message.getString("region"), dateTime);
-					sendEvent(EventName.unlockRegion.toString(), data);
-				} else {
-					logger.debug("[SocketIO] Region could not be unlocked!");
-				}
+				} else
+					logger.warn("[SocketIO] Region could not be unlocked!");
 			}
 		});
 
