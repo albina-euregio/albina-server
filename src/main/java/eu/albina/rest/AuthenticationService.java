@@ -18,6 +18,7 @@ import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
 import eu.albina.model.Credentials;
 import eu.albina.model.User;
+import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AuthorizationUtil;
 import io.swagger.annotations.Api;
@@ -35,9 +36,11 @@ public class AuthenticationService {
 
 		try {
 			AuthenticationController.getInstance().authenticate(username, password);
-			String token = AuthenticationController.getInstance().issueToken(username);
+			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
+			String refreshToken = AuthenticationController.getInstance().issueRefreshToken(username);
 			JSONObject jsonResult = new JSONObject();
-			jsonResult.put("token", token);
+			jsonResult.put("access_token", accessToken);
+			jsonResult.put("refresh_token", refreshToken);
 
 			User user = UserController.getInstance().getUser(username);
 			jsonResult.put("username", user.getName());
@@ -53,15 +56,20 @@ public class AuthenticationService {
 	}
 
 	@GET
-	@Secured
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response refreshToken(@Context SecurityContext securityContext) {
 		try {
 			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
-			String token = AuthenticationController.getInstance().refreshToken(username);
-			return Response.ok(token).build();
+
+			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
+
+			JSONObject jsonResult = new JSONObject();
+			jsonResult.put("access_token", accessToken);
+
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}

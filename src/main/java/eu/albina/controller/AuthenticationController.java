@@ -56,9 +56,19 @@ public class AuthenticationController {
 			throw new AlbinaException("Password not correct!");
 	}
 
-	public String issueToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
+	public String issueAccessToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
 		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
-		long time = System.currentTimeMillis() + GlobalVariables.tokenExpirationDuration;
+		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
+		Date expirationTime = new Date(time);
+		Date issuedAt = new Date();
+		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
+				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
+		return token;
+	}
+
+	public String issueRefreshToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
+		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+		long time = System.currentTimeMillis() + GlobalVariables.refreshTokenExpirationDuration;
 		Date expirationTime = new Date(time);
 		Date issuedAt = new Date();
 		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
@@ -76,7 +86,7 @@ public class AuthenticationController {
 
 	public String refreshToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
 		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
-		long time = System.currentTimeMillis() + GlobalVariables.tokenExpirationDuration;
+		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
 		Date expirationTime = new Date(time);
 		Date issuedAt = new Date();
 		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)

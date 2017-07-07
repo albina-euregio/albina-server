@@ -146,7 +146,7 @@ public class RegionController {
 	public List<DateTime> getLockedRegions(String region) {
 		List<DateTime> result = new ArrayList<DateTime>();
 		for (RegionLock regionLock : regionLocks) {
-			if (regionLock.getRegion() == region)
+			if (regionLock.getRegion().equals(region))
 				result.add(regionLock.getDate());
 		}
 		return result;

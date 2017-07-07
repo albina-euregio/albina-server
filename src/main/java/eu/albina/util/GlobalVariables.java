@@ -14,13 +14,16 @@ public class GlobalVariables {
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
 	public static int paginationCount = 50;
-	public static long tokenExpirationDuration = 60000 * 15;
+
 	// TODO create secret
 	public static String tokenEncodingSecret = "secret";
+	public static String tokenEncodingIssuer = "albina";
+	public static long accessTokenExpirationDuration = 1000 * 60 * 60 * 24;
+	public static long refreshTokenExpirationDuration = 1000 * 60 * 60 * 24 * 7;
+
 	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
-	public static String tokenEncodingIssuer = "albina";
 
 	public static String getJsonSchemaFileString(String fileName) throws FileNotFoundException {
 		StringBuilder result = new StringBuilder("");
