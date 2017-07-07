@@ -260,7 +260,7 @@ public class AvalancheBulletinController {
 				if (!AuthorizationUtil.hasPermissionForRegion(role, region))
 					result.add(region);
 			}
-			avalancheBulletin.setSavedRegions(regions);
+			avalancheBulletin.setSavedRegions(result);
 
 			regions = avalancheBulletin.getSuggestedRegions();
 			result = new HashSet<String>();
@@ -268,7 +268,7 @@ public class AvalancheBulletinController {
 				if (!AuthorizationUtil.hasPermissionForRegion(role, region))
 					result.add(region);
 			}
-			avalancheBulletin.setSuggestedRegions(regions);
+			avalancheBulletin.setSuggestedRegions(result);
 
 			if (avalancheBulletin.getSavedRegions().isEmpty() && avalancheBulletin.getPublishedRegions().isEmpty())
 				session.delete(avalancheBulletin);
