@@ -48,6 +48,7 @@
 		"suggestedRegions" : { "$ref" : "#/definitions/region" },
 		"savedRegions" : { "$ref" : "#/definitions/region" },
 		"publishedRegions" : { "$ref" : "#/definitions/region" },
+		"obsoleteRegions" : { "$ref" : "#/definitions/region" },
 		
 		"elevation" : { "type" : "integer" },
 		

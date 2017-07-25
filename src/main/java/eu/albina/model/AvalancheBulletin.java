@@ -81,6 +81,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "REGION_ID")
 	private Set<String> publishedRegions;
 
+	/** The obsolete regions the avalanche bulletin is for. */
+	@ElementCollection
+	@CollectionTable(name = "AVALANCHE_BULLETIN_OBSOLETE_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@Column(name = "REGION_ID")
+	private Set<String> obsoleteRegions;
+
 	/** The saved regions the avalanche bulletin is for. */
 	@ElementCollection
 	@CollectionTable(name = "AVALANCHE_BULLETIN_SAVED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
@@ -111,6 +117,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public AvalancheBulletin() {
 		textPartsMap = new HashMap<TextPart, Texts>();
 		publishedRegions = new HashSet<String>();
+		obsoleteRegions = new HashSet<String>();
 		savedRegions = new HashSet<String>();
 		suggestedRegions = new HashSet<String>();
 	}
@@ -164,6 +171,13 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			JSONArray regions = json.getJSONArray("publishedRegions");
 			for (Object entry : regions) {
 				this.publishedRegions.add((String) entry);
+			}
+		}
+
+		if (json.has("obsoleteRegions")) {
+			JSONArray regions = json.getJSONArray("obsoleteRegions");
+			for (Object entry : regions) {
+				this.obsoleteRegions.add((String) entry);
 			}
 		}
 
@@ -320,6 +334,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.publishedRegions = regions;
 	}
 
+	public Set<String> getObsoleteRegions() {
+		return obsoleteRegions;
+	}
+
+	public void setObsoleteRegions(Set<String> regions) {
+		this.obsoleteRegions = regions;
+	}
+
 	public AvalancheBulletinElevationDescription getAbove() {
 		return above;
 	}
@@ -407,6 +429,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		json.put("suggestedRegions", suggestedRegions);
 		json.put("savedRegions", savedRegions);
 		json.put("publishedRegions", publishedRegions);
+		json.put("obsoleteRegions", obsoleteRegions);
 
 		json.put("elevation", elevation);
 		if (above != null)

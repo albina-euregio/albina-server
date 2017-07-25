@@ -85,6 +85,7 @@ public class AvalancheBulletinController {
 			Hibernate.initialize(bulletin.getSuggestedRegions());
 			Hibernate.initialize(bulletin.getSavedRegions());
 			Hibernate.initialize(bulletin.getPublishedRegions());
+			Hibernate.initialize(bulletin.getObsoleteRegions());
 			Hibernate.initialize(bulletin.getUser());
 			transaction.commit();
 			return bulletin;
@@ -166,6 +167,7 @@ public class AvalancheBulletinController {
 				Hibernate.initialize(bulletin.getSuggestedRegions());
 				Hibernate.initialize(bulletin.getSavedRegions());
 				Hibernate.initialize(bulletin.getPublishedRegions());
+				Hibernate.initialize(bulletin.getObsoleteRegions());
 				Hibernate.initialize(bulletin.getUser());
 			}
 
@@ -366,7 +368,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : results) {
 
 				for (String entry : bulletin.getSavedRegions())
-					if (entry.startsWith(region))
+					if (entry.startsWith(region) && !definedRegions.contains(entry))
 						definedRegions.add(entry);
 
 				if (!pendingSuggestions)
