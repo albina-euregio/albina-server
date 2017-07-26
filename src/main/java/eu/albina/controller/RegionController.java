@@ -10,8 +10,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -28,7 +26,8 @@ import eu.albina.util.HibernateUtil;
  */
 public class RegionController {
 
-	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
+	// private static Logger logger =
+	// LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
 	private List<RegionLock> regionLocks;
@@ -110,7 +109,6 @@ public class RegionController {
 					&& regionLock.getRegion().equals(lock.getRegion()))
 				throw new AlbinaException("Region already locked!");
 		}
-		logger.info("[lock region] Region locked: " + lock.getDate().getMillis() + ", " + lock.getDate());
 		regionLocks.add(lock);
 	}
 
@@ -120,10 +118,9 @@ public class RegionController {
 			if ((regionLock.getDate().getMillis() == date.getMillis()) && (regionLock.getRegion().equals(region)))
 				hit = regionLock;
 
-		if (hit != null) {
+		if (hit != null)
 			regionLocks.remove(hit);
-			logger.info("[unlock region] Region unlocked: " + date.getMillis() + ", " + date);
-		} else
+		else
 			throw new AlbinaException("Region not locked!");
 	}
 
@@ -139,7 +136,6 @@ public class RegionController {
 			json.put("region", regionLock.getRegion());
 			json.put("date", regionLock.getDate().toString(GlobalVariables.formatterDateTime));
 			SocketIOController.getInstance().sendEvent(EventName.unlockRegion.toString(), json.toString());
-			logger.debug("[SocketIO] Region unlocked: " + regionLock.getRegion() + ", " + regionLock.getDate());
 		}
 	}
 

@@ -14,8 +14,6 @@ import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
@@ -36,7 +34,8 @@ import eu.albina.util.HibernateUtil;
  */
 public class AvalancheBulletinController {
 
-	private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
+	// private static Logger logger =
+	// LoggerFactory.getLogger(AvalancheBulletinController.class);
 
 	private static AvalancheBulletinController instance = null;
 	private List<BulletinLock> bulletinLocks;
@@ -446,7 +445,6 @@ public class AvalancheBulletinController {
 			json.put("bulletin", bulletinLock.getBulletin());
 			json.put("date", bulletinLock.getDate().toString(GlobalVariables.formatterDateTime));
 			SocketIOController.getInstance().sendEvent(EventName.unlockBulletin.toString(), json.toString());
-			logger.debug("[SocketIO] Bulletin unlocked: " + bulletinLock.getBulletin() + ", " + bulletinLock.getDate());
 		}
 	}
 

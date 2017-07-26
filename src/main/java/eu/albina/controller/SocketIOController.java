@@ -15,6 +15,7 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.ChatMessage;
 import eu.albina.model.RegionLock;
@@ -55,7 +56,7 @@ public class SocketIOController {
 			socketIOServer.addConnectListener(new ConnectListener() {
 				@Override
 				public void onConnect(SocketIOClient client) {
-					logger.debug("[SocketIO] Client connected!");
+					logger.info("Client connected: " + client.getSessionId());
 				}
 			});
 
@@ -65,7 +66,7 @@ public class SocketIOController {
 					UUID sessionId = client.getSessionId();
 					RegionController.getInstance().unlockRegions(sessionId);
 					AvalancheBulletinController.getInstance().unlockBulletins(sessionId);
-					logger.debug("[SocketIO] Client disconnected: " + sessionId.toString());
+					logger.info("Client disconnected: " + sessionId.toString());
 				}
 			});
 
@@ -97,9 +98,16 @@ public class SocketIOController {
 								dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
 								BulletinLock lock = new BulletinLock(client.getSessionId(),
 										message.getString("bulletin"), dateTime);
-								AvalancheBulletinController.getInstance().lockBulletin(lock);
-							} else
-								logger.warn("[SocketIO] Bulletin could not be locked!");
+								try {
+									AvalancheBulletinController.getInstance().lockBulletin(lock);
+									ackRequest.sendAckData(true);
+								} catch (AlbinaException ae) {
+									ackRequest.sendAckData(false);
+								}
+							} else {
+								logger.warn("Bulletin could not be locked!");
+								ackRequest.sendAckData(false);
+							}
 						}
 					});
 
@@ -112,26 +120,42 @@ public class SocketIOController {
 							DateTime dateTime = null;
 							if (message.has("date") && message.has("bulletin")) {
 								dateTime = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-								AvalancheBulletinController.getInstance().unlockBulletin(message.getString("bulletin"),
-										dateTime);
-							} else
-								logger.warn("[SocketIO] Bulletin could not be unlocked!");
+								try {
+									AvalancheBulletinController.getInstance()
+											.unlockBulletin(message.getString("bulletin"), dateTime);
+									ackRequest.sendAckData(true);
+								} catch (AlbinaException ae) {
+									ackRequest.sendAckData(false);
+								}
+							} else {
+								logger.warn("Bulletin could not be unlocked!");
+								ackRequest.sendAckData(false);
+							}
 						}
 					});
 
 			socketIOServer.addEventListener(EventName.lockRegion.toString(), String.class, new DataListener<String>() {
 				@Override
 				public void onData(SocketIOClient client, String data, AckRequest ackRequest) throws Exception {
-					sendEvent(EventName.lockRegion.toString(), data);
 					JSONObject message = new JSONObject(data);
 					DateTime date = null;
 					if (message.has("date") && message.has("region")) {
 						date = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-						logger.info("[lock region] date: " + date.toString());
 						RegionLock lock = new RegionLock(client.getSessionId(), message.getString("region"), date);
-						RegionController.getInstance().lockRegion(lock);
-					} else
-						logger.warn("[SocketIO] Region could not be locked!");
+						try {
+							RegionController.getInstance().lockRegion(lock);
+							sendEvent(EventName.lockRegion.toString(), data);
+							ackRequest.sendAckData(true);
+							logger.info("Region locked: " + message.getString("region") + ", " + date.toString());
+						} catch (AlbinaException ae) {
+							logger.warn("Region could not be locked: " + message.getString("region") + ", "
+									+ date.toString());
+							ackRequest.sendAckData(false);
+						}
+					} else {
+						logger.warn("Region could not be locked!");
+						ackRequest.sendAckData(false);
+					}
 				}
 			});
 
@@ -144,10 +168,20 @@ public class SocketIOController {
 							DateTime date = null;
 							if (message.has("date") && message.has("region")) {
 								date = DateTime.parse(message.getString("date"), GlobalVariables.parserDateTime);
-								logger.info("[unlock region] date: " + date.toString());
-								RegionController.getInstance().unlockRegion(message.getString("region"), date);
-							} else
-								logger.warn("[SocketIO] Region could not be unlocked!");
+								try {
+									RegionController.getInstance().unlockRegion(message.getString("region"), date);
+									ackRequest.sendAckData(true);
+									logger.info(
+											"Region unlocked: " + message.getString("region") + ", " + date.toString());
+								} catch (AlbinaException ae) {
+									logger.warn("Region could not be unlocked: " + message.getString("region") + ", "
+											+ date.toString());
+									ackRequest.sendAckData(false);
+								}
+							} else {
+								logger.warn("Region could not be unlocked!");
+								ackRequest.sendAckData(false);
+							}
 						}
 					});
 
