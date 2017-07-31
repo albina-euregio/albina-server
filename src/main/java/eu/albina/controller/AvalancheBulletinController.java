@@ -20,6 +20,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.EventName;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.AuthorizationUtil;
@@ -346,6 +347,7 @@ public class AvalancheBulletinController {
 		boolean missingAvActivityHighlights = false;
 		boolean missingAvActivityComment = false;
 		boolean pendingSuggestions = false;
+		boolean missingDangerRating = false;
 
 		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
 		Transaction transaction = null;
@@ -383,6 +385,12 @@ public class AvalancheBulletinController {
 						|| bulletin.getAvActivityComment().getTexts() == null
 						|| bulletin.getAvActivityComment().getTexts().size() < 1)
 					missingAvActivityComment = true;
+
+				if (bulletin.getAbove().getDangerRating() == DangerRating.missing
+						|| (bulletin.getBelow() != null && bulletin.getElevation() > 0
+								&& bulletin.getBelow().getDangerRating() == DangerRating.missing)) {
+					missingDangerRating = true;
+				}
 			}
 
 			if (definedRegions.size() > regions.size())
@@ -396,6 +404,8 @@ public class AvalancheBulletinController {
 				json.put("missingAvActivityComment");
 			if (pendingSuggestions)
 				json.put("pendingSuggestions");
+			if (missingDangerRating)
+				json.put("missingDangerRating");
 
 			transaction.commit();
 

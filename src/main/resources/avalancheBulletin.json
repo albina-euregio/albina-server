@@ -139,7 +139,7 @@
 			"title" : "Danger Rating",
 			"description" : "Danger rating used in an avalanche bulletin.",
 			"type" : "string",
-			"enum" : [ "no_rating", "low", "moderate", "considerable", "high", "very_high"]
+			"enum" : [ "missing", "no_rating", "low", "moderate", "considerable", "high", "very_high"]
 		},
 		"avalancheProblem" : {
 			"id" : "#avalancheProblem",
