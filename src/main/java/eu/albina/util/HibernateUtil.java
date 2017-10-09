@@ -25,7 +25,7 @@ public class HibernateUtil {
 	public static String queryGetNewsEnd = "from News as n where n.datetime <= :endDate";
 	public static String queryGetNewsStartEnd = "from News as n where n.datetime >= :startDate and n.datetime <= :endDate";
 	public static String queryGetChatMessages = "from ChatMessage as cm";
-	public static String queryGetChatMessagesDate = "from ChatMessage as cm where cm.datetime >= :date";
+	public static String queryGetChatMessagesDate = "from ChatMessage as cm where cm.dateTime >= :date";
 
 	public static HibernateUtil getInstance() {
 		if (instance == null) {
