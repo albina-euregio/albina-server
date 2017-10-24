@@ -123,8 +123,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	}
 
 	/**
-	 * Custom constructor that creates an avalanche bulletin object from JSON
-	 * input.
+	 * Custom constructor that creates an avalanche bulletin object from JSON input.
 	 * 
 	 * @param json
 	 *            JSONObject holding information about an avalanche bulletin.
@@ -394,6 +393,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return false;
 	}
 
+	public boolean hasDaytimeDependency() {
+		// TODO check if there is a better way
+		if (validUntil.getHourOfDay() == 12)
+			return true;
+		else
+			return false;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -460,6 +467,23 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				srcRef.appendChild(user.toCAAML(doc));
 				metaData.appendChild(srcRef);
 			}
+
+			Element resolution300 = doc.createElement("albina:resolution");
+			resolution300.appendChild(doc.createTextNode("300"));
+			Element filetypeJPG = doc.createElement("albina:filetype");
+			filetypeJPG.appendChild(doc.createTextNode("jpg"));
+
+			Element customData = doc.createElement("customData");
+			Element dangerRatingMap = doc.createElement("albina:DangerRatingMap");
+			dangerRatingMap.appendChild(resolution300);
+			dangerRatingMap.appendChild(filetypeJPG);
+			Element url = doc.createElement("albina:url");
+			url.appendChild(doc.createTextNode(GlobalVariables.univieBaseUrlTN
+					+ validFrom.toString(GlobalVariables.formatterDate) + "_" + getId() + ".jpg"));
+			dangerRatingMap.appendChild(url);
+			customData.appendChild(dangerRatingMap);
+			metaData.appendChild(customData);
+
 			metaDataProperty.appendChild(metaData);
 			rootElement.appendChild(metaDataProperty);
 
