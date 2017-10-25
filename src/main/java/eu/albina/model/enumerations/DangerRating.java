@@ -12,4 +12,26 @@ public enum DangerRating {
 		}
 		return null;
 	}
+
+	public static String getCAAMLString(DangerRating dangerRating) {
+		switch (dangerRating) {
+		case missing:
+			return "missing";
+		case no_rating:
+			return "n/a";
+		case low:
+			return "1";
+		case moderate:
+			return "2";
+		case considerable:
+			return "3";
+		case high:
+			return "4";
+		case very_high:
+			return "5";
+
+		default:
+			return "missing";
+		}
+	}
 }

@@ -31,6 +31,7 @@ import org.w3c.dom.Element;
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
@@ -531,7 +532,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				dangerRatingAbove.appendChild(validElevationAbove);
 				if (above != null && above.getDangerRating() != null) {
 					Element mainValueAbove = doc.createElement("mainValue");
-					mainValueAbove.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
+					mainValueAbove
+							.appendChild(doc.createTextNode(DangerRating.getCAAMLString(above.getDangerRating())));
 					dangerRatingAbove.appendChild(mainValueAbove);
 				}
 				dangerRatings.appendChild(dangerRatingAbove);
@@ -542,7 +544,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				dangerRatingBelow.appendChild(validElevationBelow);
 				if (below != null && below.getDangerRating() != null) {
 					Element mainValueBelow = doc.createElement("mainValue");
-					mainValueBelow.appendChild(doc.createTextNode(String.valueOf(below.getDangerRating())));
+					mainValueBelow
+							.appendChild(doc.createTextNode(DangerRating.getCAAMLString(below.getDangerRating())));
 					dangerRatingBelow.appendChild(mainValueBelow);
 				}
 				dangerRatings.appendChild(dangerRatingBelow);
@@ -552,7 +555,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				Element dangerRating = doc.createElement("DangerRating");
 				if (above != null && above.getDangerRating() != null) {
 					Element mainValue = doc.createElement("mainValue");
-					mainValue.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
+					mainValue.appendChild(doc.createTextNode(DangerRating.getCAAMLString(above.getDangerRating())));
 					dangerRating.appendChild(mainValue);
 				}
 				dangerRatings.appendChild(dangerRating);
