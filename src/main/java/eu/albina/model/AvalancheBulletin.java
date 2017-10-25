@@ -154,6 +154,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			}
 		}
 
+		if (json.has("publicationDate"))
+			this.publicationDate = new org.joda.time.DateTime(json.getString("publicationDate"));
+
 		if (json.has("validity")) {
 			JSONObject validity = json.getJSONObject("validity");
 			this.validFrom = new org.joda.time.DateTime(validity.getString("from"));
