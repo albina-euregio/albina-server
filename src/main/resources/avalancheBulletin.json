@@ -36,6 +36,8 @@
 		"travelAdvisoryComment" : { "$ref" : "#/definitions/textPart" },
 		"tendencyComment" : { "$ref" : "#/definitions/textPart" },
 
+		"publicationDate" : { "format" : "date-time", "type" : "string" }, 
+
 		"validity" : {
 			"type" : "object",
 			"properties" : {
