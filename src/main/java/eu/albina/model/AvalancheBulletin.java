@@ -23,7 +23,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -57,6 +56,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	private String creator;
 	@Column(name = "CREATOR_REGION")
 	private String creatorRegion;
+
+	@Column(name = "PUBLICATION_DATE")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private org.joda.time.DateTime publicationDate;
 
 	/** Validity of the avalanche bulletin */
 	@Column(name = "VALID_FROM")
@@ -285,6 +288,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		textPartsMap.put(TextPart.travelAdvisoryComment, travelAdvisoryComment);
 	}
 
+	public org.joda.time.DateTime getPublicationDate() {
+		return publicationDate;
+	}
+
+	public void setPublicationDate(org.joda.time.DateTime publicationDate) {
+		this.publicationDate = publicationDate;
+	}
+
 	public org.joda.time.DateTime getValidFrom() {
 		return validFrom;
 	}
@@ -426,6 +437,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			}
 		}
 
+		if (publicationDate != null)
+			json.put("publicationDate", publicationDate.toString(GlobalVariables.formatterDateTime));
+
 		JSONObject validity = new JSONObject();
 		validity.put("from", validFrom.toString(GlobalVariables.formatterDateTime));
 		validity.put("until", validUntil.toString(GlobalVariables.formatterDateTime));
@@ -459,8 +473,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			Element metaDataProperty = doc.createElement("metaDataProperty");
 			Element metaData = doc.createElement("MetaData");
 			Element dateTimeReport = doc.createElement("dateTimeReport");
-			dateTimeReport
-					.appendChild(doc.createTextNode((new DateTime()).toString(GlobalVariables.formatterDateTime)));
+			dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
 			metaData.appendChild(dateTimeReport);
 			if (user != null) {
 				Element srcRef = doc.createElement("srcRef");

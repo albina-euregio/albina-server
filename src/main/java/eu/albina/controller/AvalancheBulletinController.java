@@ -308,6 +308,10 @@ public class AvalancheBulletinController {
 			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
 
+				// set publication date if no regions where published before
+				if (bulletin.getPublishedRegions().isEmpty())
+					bulletin.setPublicationDate(new DateTime());
+
 				// publish all saved regions
 				result = new HashSet<String>();
 				for (String entry : bulletin.getSavedRegions())

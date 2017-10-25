@@ -142,13 +142,14 @@ public class AvalancheBulletinService {
 
 			// create meta data
 			boolean hasDaytimeDependency = false;
+			DateTime publicationDate = new DateTime();
 			if (bulletins != null) {
 				for (AvalancheBulletin bulletin : bulletins) {
 					if (bulletin.getStatus(regions) == BulletinStatus.published) {
-						if (bulletin.hasDaytimeDependency()) {
+						if (bulletin.hasDaytimeDependency())
 							hasDaytimeDependency = true;
-							break;
-						}
+						if (bulletin.getPublicationDate().isBefore(publicationDate))
+							publicationDate = bulletin.getPublicationDate();
 					}
 				}
 			}
@@ -156,8 +157,7 @@ public class AvalancheBulletinService {
 			Element metaDataProperty = doc.createElement("metaDataProperty");
 			Element metaData = doc.createElement("MetaData");
 			Element dateTimeReport = doc.createElement("dateTimeReport");
-			dateTimeReport
-					.appendChild(doc.createTextNode((new DateTime()).toString(GlobalVariables.formatterDateTime)));
+			dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
 			metaData.appendChild(dateTimeReport);
 
 			Element customData = doc.createElement("customData");
