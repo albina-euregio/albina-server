@@ -24,7 +24,7 @@ import eu.albina.model.enumerations.Role;
 
 @Secured
 @Provider
-@Priority(Priorities.AUTHENTICATION)
+@Priority(Priorities.AUTHORIZATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
 
 	private static Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
