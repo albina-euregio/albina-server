@@ -405,13 +405,13 @@ public class AvalancheBulletinService {
 		if (validationResult.length() == 0) {
 			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, null);
 			try {
-				AvalancheBulletinController.getInstance().deleteBulletinAdmin(bulletinId);
 				Serializable newBulletinId = AvalancheBulletinController.getInstance().saveBulletin(bulletin);
 				if (newBulletinId == null) {
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.append("message", "Bulletin not updated!");
 					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
 				} else {
+					AvalancheBulletinController.getInstance().deleteBulletinAdmin(bulletinId);
 					JSONObject jsonObject = new JSONObject();
 					jsonObject.put("bulletinId", newBulletinId);
 					return Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(newBulletinId)).build())
