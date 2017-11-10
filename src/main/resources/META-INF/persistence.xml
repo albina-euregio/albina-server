@@ -1,0 +1,52 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+   <persistence-unit name="eu.albina" transaction-type="RESOURCE_LOCAL">
+      
+      <class>eu.albina.model.Texts</class>
+      <class>eu.albina.model.User</class>
+      <class>eu.albina.model.Region</class>
+      <class>eu.albina.model.AvalancheBulletinElevationDescription</class>
+      <class>eu.albina.model.AvalancheBulletin</class>
+      <class>eu.albina.model.News</class>
+      <class>eu.albina.model.ChatMessage</class>
+      
+      <properties>        
+
+		<!-- Database connection settings -->
+	    <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+	    <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ais?useSSL=false"/>
+	    <property name="hibernate.connection.username" value="ais"/>
+	    <property name="hibernate.connection.password" value="lawine"/>
+	    
+	    <!-- Hibernate ENVERS Configuration -->
+		<property name="org.hibernate.envers.audit_table_suffix" value="_AUDIT"/>
+		<property name="org.hibernate.envers.revision_field_name" value="REVISION_ID"/>
+		<property name="org.hibernate.envers.revision_type_field_name" value="REVTYPE"/>
+		<property name="org.hibernate.envers.do_not_audit_optimistic_locking_field" value="true"/>
+		<property name="org.hibernate.envers.default_schema" value="ROCC"/>
+		 
+		<!-- c3p0 connection pool -->    
+		<property name="hibernate.c3p0.min_size" value="5"/>
+		<property name="hibernate.c3p0.max_size" value="20"/>
+		<property name="hibernate.c3p0.timeout" value="0"/>
+		<property name="hibernate.c3p0.max_statements" value="50"/>
+		<property name="hibernate.c3p0.acquire_increment" value="1"/>
+		<property name="hibernate.c3p0.idle_test_period" value="3000"/>
+	
+		<!-- SQL dialect -->
+	    <property name="hibernate.dialect" value="org.hibernate.spatial.dialect.mysql.MySQL56SpatialDialect"/>
+	    
+	    <!-- Disable the second-level cache -->
+	    <property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+	    
+	    <!-- Echo all executed SQL to stdout -->
+	    <property name="show_sql" value="false"/>
+	    
+	    <!-- Drop and re-create the database schema on startup -->
+        <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+
+      </properties>
+   </persistence-unit>
+</persistence>

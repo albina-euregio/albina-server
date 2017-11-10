@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
@@ -48,11 +49,11 @@ public class NewsController {
 	 * @throws AlbinaException
 	 */
 	public News getNews(String newsId) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			News news = session.get(News.class, newsId);
+			transaction.begin();
+			News news = entityManager.find(News.class, newsId);
 			if (news == null) {
 				transaction.rollback();
 				throw new AlbinaException("No news with ID: " + newsId);
@@ -66,27 +67,29 @@ public class NewsController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<News> getNews(DateTime startDate, DateTime endDate) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
+			transaction.begin();
 
 			List<News> news = null;
 			if (startDate != null && endDate != null)
-				news = session.createQuery(HibernateUtil.queryGetNewsStartEnd).setParameter("startDate", startDate)
-						.setParameter("endDate", endDate).list();
+				news = entityManager.createQuery(HibernateUtil.queryGetNewsStartEnd)
+						.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			else if (startDate != null)
-				news = session.createQuery(HibernateUtil.queryGetNewsStart).setParameter("startDate", startDate).list();
+				news = entityManager.createQuery(HibernateUtil.queryGetNewsStart).setParameter("startDate", startDate)
+						.getResultList();
 			else if (endDate != null)
-				news = session.createQuery(HibernateUtil.queryGetNewsStart).setParameter("endDate", endDate).list();
+				news = entityManager.createQuery(HibernateUtil.queryGetNewsStart).setParameter("endDate", endDate)
+						.getResultList();
 			else
-				news = session.createQuery(HibernateUtil.queryGetNews).list();
+				news = entityManager.createQuery(HibernateUtil.queryGetNews).getResultList();
 
 			for (News entry : news) {
 				Hibernate.initialize(entry.getTitle());
@@ -100,24 +103,24 @@ public class NewsController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
 	public Serializable saveNews(News news) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			Serializable newsId = session.save(news);
+			transaction.begin();
+			entityManager.persist(news);
 			transaction.commit();
-			return newsId;
+			return news.getId();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
@@ -128,12 +131,12 @@ public class NewsController {
 
 	@SuppressWarnings("unchecked")
 	public List<News> findNews(String searchString) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
+			transaction.begin();
 
-			List<News> news = session.createQuery(HibernateUtil.queryGetNews).list();
+			List<News> news = entityManager.createQuery(HibernateUtil.queryGetNews).getResultList();
 			List<News> results = new ArrayList<News>();
 			boolean hit = false;
 
@@ -164,16 +167,16 @@ public class NewsController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
 	public void deleteNews(String newsId) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			News news = session.get(News.class, newsId);
+			transaction.begin();
+			News news = entityManager.find(News.class, newsId);
 			if (news == null) {
 				transaction.rollback();
 				throw new AlbinaException("No news with ID: " + newsId);
@@ -182,15 +185,15 @@ public class NewsController {
 				throw new AlbinaException("News already published!");
 			}
 			transaction.commit();
-			transaction = session.beginTransaction();
-			session.delete(news);
+			transaction.begin();
+			entityManager.remove(news);
 			transaction.commit();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 

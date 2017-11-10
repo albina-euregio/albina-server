@@ -115,6 +115,8 @@ public class AvalancheBulletinService {
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET XML bulletins");
 
+		// TODO get last published revision of bulletins
+
 		DateTime startDate = null;
 		DateTime endDate = null;
 
@@ -404,19 +406,11 @@ public class AvalancheBulletinService {
 		JSONObject validationResult = eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString);
 		if (validationResult.length() == 0) {
 			AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, null);
+			bulletin.setCreator(bulletinJson.getString("creator"));
+			bulletin.setId(bulletinJson.getString("id"));
 			try {
-				Serializable newBulletinId = AvalancheBulletinController.getInstance().saveBulletin(bulletin);
-				if (newBulletinId == null) {
-					JSONObject jsonObject = new JSONObject();
-					jsonObject.append("message", "Bulletin not updated!");
-					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
-				} else {
-					AvalancheBulletinController.getInstance().deleteBulletinAdmin(bulletinId);
-					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("bulletinId", newBulletinId);
-					return Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(newBulletinId)).build())
-							.type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
-				}
+				AvalancheBulletinController.getInstance().updateBulletin(bulletin);
+				return Response.ok().type(MediaType.APPLICATION_JSON).build();
 			} catch (AlbinaException e) {
 				logger.warn("Error updating bulletin - " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -441,6 +435,39 @@ public class AvalancheBulletinService {
 					.type(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error deleting bulletin - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Path("/submit")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response submitBulletins(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@Context SecurityContext securityContext) {
+		logger.debug("POST submit bulletins");
+
+		try {
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRole(), region)) {
+				DateTime startDate = null;
+				DateTime endDate = null;
+
+				if (date != null)
+					startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
+				else
+					throw new AlbinaException("No date!");
+				endDate = startDate.plusDays(1);
+
+				AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region);
+				return Response.ok(MediaType.APPLICATION_JSON).build();
+			} else
+				throw new AlbinaException("User is not authorized for this region!");
+		} catch (AlbinaException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}

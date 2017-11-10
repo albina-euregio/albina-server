@@ -3,8 +3,9 @@ package eu.albina.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.auth0.jwt.JWT;
@@ -95,11 +96,11 @@ public class AuthenticationController {
 	}
 
 	public boolean isUserInRole(String role, String username) {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			User user = session.get(User.class, username);
+			transaction.begin();
+			User user = entityManager.find(User.class, username);
 			if (user == null) {
 				transaction.rollback();
 				return false;
@@ -111,7 +112,7 @@ public class AuthenticationController {
 			else
 				return false;
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 }

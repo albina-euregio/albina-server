@@ -3,9 +3,10 @@ package eu.albina.controller;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
@@ -37,17 +38,17 @@ public class ChatController {
 
 	@SuppressWarnings("unchecked")
 	public List<ChatMessage> getChatMessages(DateTime date) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
+			transaction.begin();
 
 			List<ChatMessage> chatMessages = null;
 			if (date != null)
-				chatMessages = session.createQuery(HibernateUtil.queryGetChatMessagesDate).setParameter("date", date)
-						.list();
+				chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessagesDate)
+						.setParameter("date", date).getResultList();
 			else
-				chatMessages = session.createQuery(HibernateUtil.queryGetChatMessages).list();
+				chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessages).getResultList();
 
 			transaction.commit();
 			return chatMessages;
@@ -56,24 +57,24 @@ public class ChatController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
 	public Serializable saveChatMessage(ChatMessage chatMessage) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			Serializable chatMessageId = session.save(chatMessage);
+			transaction.begin();
+			entityManager.persist(chatMessage);
 			transaction.commit();
-			return chatMessageId;
+			return chatMessage.getId();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 }

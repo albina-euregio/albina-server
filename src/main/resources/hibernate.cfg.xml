@@ -13,7 +13,14 @@
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ais?useSSL=false</property>
     <property name="hibernate.connection.username">ais</property>
     <property name="hibernate.connection.password">lawine</property>
-
+    
+    <!-- Hibernate ENVERS Configuration -->
+	<property name="org.hibernate.envers.audit_table_suffix">_AUDIT</property>
+	<property name="org.hibernate.envers.revision_field_name">REVISION_ID</property>
+	<property name="org.hibernate.envers.revision_type_field_name">REVTYPE</property>
+	<property name="org.hibernate.envers.do_not_audit_optimistic_locking_field">true</property>
+	<property name="org.hibernate.envers.default_schema">ROCC</property>
+	 
 	<!-- c3p0 connection pool -->    
 	<property name="hibernate.c3p0.min_size">5</property>
 	<property name="hibernate.c3p0.max_size">20</property>

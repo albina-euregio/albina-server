@@ -1,22 +1,20 @@
 package eu.albina.model;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
-import eu.albina.util.IdGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 @MappedSuperclass
 public abstract class AbstractPersistentObject implements PersistentObject {
 
 	@Id
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@Column(name = "ID")
-	protected String id = IdGenerator.createId();
-
-	@Version
-	@Column(name = "VERSION")
-	protected Integer version;
+	protected String id;
 
 	public String getId() {
 		return id;
@@ -24,14 +22,6 @@ public abstract class AbstractPersistentObject implements PersistentObject {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public boolean equals(Object o) {

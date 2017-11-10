@@ -198,6 +198,7 @@ public class SocketIOController {
 	}
 
 	public void stopSocketIO() {
-		socketIOServer.stop();
+		if (socketIOServer != null)
+			socketIOServer.stop();
 	}
 }

@@ -23,6 +23,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -44,6 +45,7 @@ import eu.albina.util.GlobalVariables;
  * @author Norbert Lanzanasto
  *
  */
+@Audited
 @Entity
 @Table(name = "AVALANCHE_BULLETINS")
 public class AvalancheBulletin extends AbstractPersistentObject implements AvalancheInformationObject {
@@ -85,12 +87,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "REGION_ID")
 	private Set<String> publishedRegions;
 
-	/** The obsolete regions the avalanche bulletin is for. */
-	@ElementCollection
-	@CollectionTable(name = "AVALANCHE_BULLETIN_OBSOLETE_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "REGION_ID")
-	private Set<String> obsoleteRegions;
-
 	/** The saved regions the avalanche bulletin is for. */
 	@ElementCollection
 	@CollectionTable(name = "AVALANCHE_BULLETIN_SAVED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
@@ -100,11 +96,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "ELEVATION")
 	private int elevation;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "ABOVE_ID")
 	private AvalancheBulletinElevationDescription above;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "BELOW_ID")
 	private AvalancheBulletinElevationDescription below;
 
@@ -121,7 +117,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public AvalancheBulletin() {
 		textPartsMap = new HashMap<TextPart, Texts>();
 		publishedRegions = new HashSet<String>();
-		obsoleteRegions = new HashSet<String>();
 		savedRegions = new HashSet<String>();
 		suggestedRegions = new HashSet<String>();
 	}
@@ -177,13 +172,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			JSONArray regions = json.getJSONArray("publishedRegions");
 			for (Object entry : regions) {
 				this.publishedRegions.add((String) entry);
-			}
-		}
-
-		if (json.has("obsoleteRegions")) {
-			JSONArray regions = json.getJSONArray("obsoleteRegions");
-			for (Object entry : regions) {
-				this.obsoleteRegions.add((String) entry);
 			}
 		}
 
@@ -348,20 +336,20 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.publishedRegions = regions;
 	}
 
-	public Set<String> getObsoleteRegions() {
-		return obsoleteRegions;
-	}
-
-	public void setObsoleteRegions(Set<String> regions) {
-		this.obsoleteRegions = regions;
-	}
-
 	public AvalancheBulletinElevationDescription getAbove() {
 		return above;
 	}
 
+	public void setAbove(AvalancheBulletinElevationDescription above) {
+		this.above = above;
+	}
+
 	public AvalancheBulletinElevationDescription getBelow() {
 		return below;
+	}
+
+	public void setBelow(AvalancheBulletinElevationDescription below) {
+		this.below = below;
 	}
 
 	public BulletinStatus getStatus(List<String> regions) {
@@ -454,7 +442,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		json.put("suggestedRegions", suggestedRegions);
 		json.put("savedRegions", savedRegions);
 		json.put("publishedRegions", publishedRegions);
-		json.put("obsoleteRegions", obsoleteRegions);
 
 		json.put("elevation", elevation);
 		if (above != null)
@@ -633,5 +620,41 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			return rootElement;
 		} else
 			return null;
+	}
+
+	public void copy(AvalancheBulletin bulletin) {
+		setUser(bulletin.getUser());
+		setCreator(bulletin.getCreator());
+		setCreatorRegion(bulletin.getCreatorRegion());
+		setPublicationDate(bulletin.getPublicationDate());
+		setValidFrom(bulletin.getValidFrom());
+		setValidUntil(bulletin.getValidUntil());
+		setAggregatedRegionId(bulletin.getAggregatedRegionId());
+		setSuggestedRegions(bulletin.getSuggestedRegions());
+		setPublishedRegions(bulletin.getPublishedRegions());
+		setSavedRegions(bulletin.getSavedRegions());
+		setElevation(bulletin.getElevation());
+
+		if (bulletin.getAbove() != null) {
+			if (above == null)
+				above = bulletin.getAbove();
+			else {
+				above.setAspects(bulletin.getAbove().getAspects());
+				above.setAvalancheProblem(bulletin.getAbove().getAvalancheProblem());
+				above.setDangerRating(bulletin.getAbove().getDangerRating());
+			}
+		}
+
+		if (bulletin.getBelow() != null) {
+			if (below == null)
+				below = bulletin.getBelow();
+			else {
+				below.setAspects(bulletin.getBelow().getAspects());
+				below.setAvalancheProblem(bulletin.getBelow().getAvalancheProblem());
+				below.setDangerRating(bulletin.getBelow().getDangerRating());
+			}
+		}
+
+		textPartsMap = bulletin.textPartsMap;
 	}
 }
