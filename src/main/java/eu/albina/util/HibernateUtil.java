@@ -15,6 +15,7 @@ public class HibernateUtil {
 	private EntityManagerFactory entityManagerFactory;
 
 	public static String queryGetBulletins = "from AvalancheBulletin as b where :startDate = b.validFrom or :endDate = b.validUntil";
+	public static String queryGetReports = "from AvalancheReport as r where :date = r.date and :region = r.region";
 	public static String queryGetTopLevelRegions = "from Region as r where r.parentRegion is null";
 	public static String queryGetSubregions = "from Region as r where r.parentRegion.id = :regionId";
 	public static String queryGetNews = "from News as n";
@@ -36,7 +37,7 @@ public class HibernateUtil {
 
 	public void setUp() {
 		entityManagerFactory = Persistence.createEntityManagerFactory("eu.albina");
-		logger.info("Entity manager created!");
+		logger.info("Entity manager factory created!");
 	}
 
 	public EntityManagerFactory getEntityManagerFactory() {
@@ -46,7 +47,7 @@ public class HibernateUtil {
 	public void shutDown() {
 		if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
 			entityManagerFactory.close();
-			logger.info("Entity manager closed!");
+			logger.info("Entity manager factory closed!");
 		}
 	}
 }

@@ -2,8 +2,10 @@ package eu.albina.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,7 +22,6 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
-import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.EventName;
 import eu.albina.model.enumerations.Role;
@@ -29,7 +30,7 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
- * Controller for snow profiles.
+ * Controller for avalanche bulletins.
  * 
  * @author Norbert Lanzanasto
  *
@@ -89,6 +90,48 @@ public class AvalancheBulletinController {
 			Hibernate.initialize(bulletin.getUser());
 			transaction.commit();
 			return bulletin;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void saveBulletins(List<AvalancheBulletin> bulletins, DateTime startDate, DateTime endDate, String region)
+			throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+
+			List<AvalancheBulletin> originalBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
+			Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
+
+			for (AvalancheBulletin bulletin : originalBulletins)
+				results.put(bulletin.getId(), bulletin);
+
+			List<String> ids = new ArrayList<String>();
+			for (AvalancheBulletin bulletin : bulletins) {
+				ids.add(bulletin.getId());
+				// bulletin already exists
+				if (results.containsKey(bulletin.getId()))
+					results.get(bulletin.getId()).copy(bulletin);
+				// bulletin has to be created
+				else
+					entityManager.persist(bulletin);
+			}
+
+			for (AvalancheBulletin avalancheBulletin : results.values()) {
+				// bulletin has to be removed
+				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId()))
+					entityManager.remove(avalancheBulletin);
+			}
+
+			transaction.commit();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
@@ -166,42 +209,6 @@ public class AvalancheBulletinController {
 			}
 			transaction.commit();
 			return results;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public BulletinStatus getStatus(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
-
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
-
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-
-			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegion(region))
-					results.add(bulletin);
-
-			// get status of bulletins
-			// this relies on publishing for whole region (e.g. IT-32-BZ)
-			BulletinStatus result = BulletinStatus.missing;
-			for (AvalancheBulletin bulletin : results) {
-				if (bulletin.getStatus(region).compareTo(result) < 0)
-					result = bulletin.getStatus(region);
-			}
-
-			transaction.commit();
-			return result;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
@@ -307,7 +314,8 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void publishBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
+	public void publishBulletins(DateTime startDate, DateTime endDate, String region, DateTime publicationDate)
+			throws AlbinaException {
 
 		// TODO check if current status is submitted
 
@@ -324,8 +332,8 @@ public class AvalancheBulletinController {
 					results.add(bulletin);
 			for (AvalancheBulletin bulletin : results) {
 				// set publication date if no regions where published before
-				if (bulletin.getPublishedRegions().isEmpty())
-					bulletin.setPublicationDate(new DateTime());
+				if (bulletin.getCreatorRegion().startsWith(region))
+					bulletin.setPublicationDate(publicationDate);
 				entityManager.merge(bulletin);
 			}
 			transaction.commit();

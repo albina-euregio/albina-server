@@ -76,19 +76,19 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	private String aggregatedRegionId;
 
 	/** The recommended regions the avalanche bulletin is for. */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_BULLETIN_SUGGESTED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> suggestedRegions;
 
 	/** The published regions the avalanche bulletin is for. */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_BULLETIN_PUBLISHED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> publishedRegions;
 
 	/** The saved regions the avalanche bulletin is for. */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_BULLETIN_SAVED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> savedRegions;
@@ -129,6 +129,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	 */
 	public AvalancheBulletin(JSONObject json, String username) {
 		this();
+
+		if (json.has("id"))
+			this.id = json.getString("id");
 
 		if (username != null) {
 			try {
