@@ -11,20 +11,30 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.EventName;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
@@ -175,6 +185,171 @@ public class AvalancheBulletinController {
 		} finally {
 			entityManager.close();
 		}
+	}
+
+	public String getCaaml(DateTime startDate, DateTime endDate, List<String> regions, LanguageCode language)
+			throws TransformerException, AlbinaException, ParserConfigurationException {
+		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
+				endDate, regions);
+
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		docBuilder = docFactory.newDocumentBuilder();
+
+		Document doc = docBuilder.newDocument();
+		Element rootElement = AlbinaUtil.createObsCollectionHeaderCaaml(doc);
+
+		// create meta data
+		boolean hasDaytimeDependency = false;
+		DateTime publicationDate = new DateTime();
+		if (result.bulletins != null) {
+			for (AvalancheBulletin bulletin : result.bulletins) {
+				if (bulletin.getStatus(regions) == BulletinStatus.published) {
+					if (bulletin.hasDaytimeDependency())
+						hasDaytimeDependency = true;
+					if (bulletin.getPublicationDate() != null
+							&& bulletin.getPublicationDate().isBefore(publicationDate))
+						publicationDate = bulletin.getPublicationDate();
+				}
+			}
+		}
+
+		Element metaDataProperty = doc.createElement("metaDataProperty");
+		Element metaData = doc.createElement("MetaData");
+		Element dateTimeReport = doc.createElement("dateTimeReport");
+		dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
+		metaData.appendChild(dateTimeReport);
+
+		Element customData = doc.createElement("customData");
+		Element daytimeDependency = doc.createElement("albina:daytimeDependency");
+		if (hasDaytimeDependency) {
+			daytimeDependency.appendChild(doc.createTextNode("true"));
+			customData.appendChild(daytimeDependency);
+
+			Element dangerRatingMapAM300 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionAM300 = doc.createElement("albina:resolution");
+			resolutionAM300.appendChild(doc.createTextNode("300"));
+			dangerRatingMapAM300.appendChild(resolutionAM300);
+			Element filetypeAM300 = doc.createElement("albina:filetype");
+			filetypeAM300.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapAM300.appendChild(filetypeAM300);
+			Element daytimeAM300 = doc.createElement("albina:daytime");
+			daytimeAM300.appendChild(doc.createTextNode(GlobalVariables.urlStringForenoon));
+			dangerRatingMapAM300.appendChild(daytimeAM300);
+			Element urlAM300 = doc.createElement("albina:url");
+			urlAM300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringForenoon, regions, 300, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapAM300.appendChild(urlAM300);
+			customData.appendChild(dangerRatingMapAM300);
+
+			Element dangerRatingMapPM300 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionPM300 = doc.createElement("albina:resolution");
+			resolutionPM300.appendChild(doc.createTextNode("300"));
+			dangerRatingMapPM300.appendChild(resolutionPM300);
+			Element filetypePM300 = doc.createElement("albina:filetype");
+			filetypePM300.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapPM300.appendChild(filetypePM300);
+			Element daytimePM300 = doc.createElement("albina:daytime");
+			daytimePM300.appendChild(doc.createTextNode(GlobalVariables.urlStringAfternoon));
+			dangerRatingMapPM300.appendChild(daytimePM300);
+			Element urlPM300 = doc.createElement("albina:url");
+			urlPM300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringAfternoon, regions, 300, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapPM300.appendChild(urlPM300);
+			customData.appendChild(dangerRatingMapPM300);
+
+			Element dangerRatingMapAM150 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionAM150 = doc.createElement("albina:resolution");
+			resolutionAM150.appendChild(doc.createTextNode("150"));
+			dangerRatingMapAM150.appendChild(resolutionAM150);
+			Element filetypeAM150 = doc.createElement("albina:filetype");
+			filetypeAM150.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapAM150.appendChild(filetypeAM150);
+			Element daytimeAM150 = doc.createElement("albina:daytime");
+			daytimeAM150.appendChild(doc.createTextNode(GlobalVariables.urlStringForenoon));
+			dangerRatingMapAM150.appendChild(daytimeAM150);
+			Element urlAM150 = doc.createElement("albina:url");
+			urlAM150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringForenoon, regions, 150, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapAM150.appendChild(urlAM150);
+			customData.appendChild(dangerRatingMapAM150);
+
+			Element dangerRatingMapPM150 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionPM150 = doc.createElement("albina:resolution");
+			resolutionPM150.appendChild(doc.createTextNode("150"));
+			dangerRatingMapPM150.appendChild(resolutionPM150);
+			Element filetypePM150 = doc.createElement("albina:filetype");
+			filetypePM150.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapPM150.appendChild(filetypePM150);
+			Element daytimePM150 = doc.createElement("albina:daytime");
+			daytimePM150.appendChild(doc.createTextNode(GlobalVariables.urlStringAfternoon));
+			dangerRatingMapPM150.appendChild(daytimePM150);
+			Element urlPM150 = doc.createElement("albina:url");
+			urlPM150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringAfternoon, regions, 150, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapPM150.appendChild(urlPM150);
+			customData.appendChild(dangerRatingMapPM150);
+
+		} else {
+			daytimeDependency.appendChild(doc.createTextNode("false"));
+			customData.appendChild(daytimeDependency);
+
+			Element dangerRatingMapFullday300 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionFullday300 = doc.createElement("albina:resolution");
+			resolutionFullday300.appendChild(doc.createTextNode("300"));
+			dangerRatingMapFullday300.appendChild(resolutionFullday300);
+			Element filetypeFullday300 = doc.createElement("albina:filetype");
+			filetypeFullday300.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapFullday300.appendChild(filetypeFullday300);
+			Element daytimeFullday300 = doc.createElement("albina:daytime");
+			daytimeFullday300.appendChild(doc.createTextNode(GlobalVariables.urlStringFullday));
+			dangerRatingMapFullday300.appendChild(daytimeFullday300);
+			Element urlFullday300 = doc.createElement("albina:url");
+			urlFullday300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringFullday, regions, 300, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapFullday300.appendChild(urlFullday300);
+			customData.appendChild(dangerRatingMapFullday300);
+
+			Element dangerRatingMapFullday150 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionFullday150 = doc.createElement("albina:resolution");
+			resolutionFullday150.appendChild(doc.createTextNode("150"));
+			dangerRatingMapFullday150.appendChild(resolutionFullday150);
+			Element filetypeFullday150 = doc.createElement("albina:filetype");
+			filetypeFullday150.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapFullday150.appendChild(filetypeFullday150);
+			Element daytimeFullday150 = doc.createElement("albina:daytime");
+			daytimeFullday150.appendChild(doc.createTextNode(GlobalVariables.urlStringFullday));
+			dangerRatingMapFullday150.appendChild(daytimeFullday150);
+			Element urlFullday150 = doc.createElement("albina:url");
+			urlFullday150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringFullday, regions, 150, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapFullday150.appendChild(urlFullday150);
+			customData.appendChild(dangerRatingMapFullday150);
+		}
+		metaData.appendChild(customData);
+
+		metaDataProperty.appendChild(metaData);
+		rootElement.appendChild(metaDataProperty);
+
+		Element observations = doc.createElement("observations");
+
+		boolean found = false;
+
+		if (result.bulletins != null) {
+			for (AvalancheBulletin bulletin : result.bulletins) {
+				if (bulletin.getStatus(regions) == BulletinStatus.published) {
+					observations.appendChild(bulletin.toCAAML(doc, language, startDate, result.version));
+					found = true;
+				}
+			}
+		}
+		rootElement.appendChild(observations);
+		doc.appendChild(rootElement);
+
+		if (found)
+			return AlbinaUtil.convertDocToString(doc);
+		else
+			return null;
 	}
 
 	@SuppressWarnings("unchecked")

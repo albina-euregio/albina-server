@@ -32,6 +32,7 @@ public class GlobalVariables {
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 
 	public static String univieBaseUrl = "https://data1.geo.univie.ac.at/exchange/albina/trentino/awm/";
+	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps_test.php";
 
 	public static String getJsonSchemaFileString(String fileName) throws FileNotFoundException {
 		StringBuilder result = new StringBuilder("");
