@@ -24,6 +24,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -455,7 +456,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return json;
 	}
 
-	public Element toCAAML(Document doc, LanguageCode languageCode) {
+	public Element toCAAML(Document doc, LanguageCode languageCode, DateTime startDate, int version) {
 		if (!publishedRegions.isEmpty()) {
 			Element rootElement = doc.createElement("Bulletin");
 			if (getId() != null)
@@ -478,15 +479,15 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			Element resolution300 = doc.createElement("albina:resolution");
 			resolution300.appendChild(doc.createTextNode("300"));
 			Element filetypeJPG = doc.createElement("albina:filetype");
-			filetypeJPG.appendChild(doc.createTextNode("jpg"));
+			filetypeJPG.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
 
 			Element customData = doc.createElement("customData");
 			Element dangerRatingMap = doc.createElement("albina:DangerRatingMap");
 			dangerRatingMap.appendChild(resolution300);
 			dangerRatingMap.appendChild(filetypeJPG);
 			Element url = doc.createElement("albina:url");
-			url.appendChild(doc.createTextNode(GlobalVariables.univieBaseUrlTN
-					+ validFrom.toString(GlobalVariables.formatterDate) + "_" + getId() + ".jpg"));
+			url.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlAggregatedRegion(startDate, version, getId(),
+					GlobalVariables.fileExtensionJpg)));
 			dangerRatingMap.appendChild(url);
 			customData.appendChild(dangerRatingMap);
 			metaData.appendChild(customData);

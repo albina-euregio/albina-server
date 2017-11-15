@@ -1,6 +1,7 @@
 package eu.albina.util;
 
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -98,5 +99,42 @@ public class AlbinaUtil {
 			return "ElevationRange_" + elevation + "Hi";
 		else
 			return "ElevationRange_" + elevation + "Lw";
+	}
+
+	public static String createMapUrlOverview(DateTime date, int version, String daytime, List<String> regions,
+			int resolution, String fileExtension) {
+		StringBuilder result = new StringBuilder();
+		result.append(GlobalVariables.univieBaseUrl);
+		result.append(date.toString(GlobalVariables.formatterDate));
+		result.append(GlobalVariables.urlSeperator);
+		result.append(version);
+		result.append(GlobalVariables.urlSeperator);
+		result.append(daytime);
+		result.append(GlobalVariables.urlSeperator);
+
+		for (String region : regions) {
+			result.append(region);
+			result.append(GlobalVariables.urlSeperator);
+		}
+
+		result.append(resolution);
+		result.append(".");
+		result.append(fileExtension);
+
+		return result.toString();
+	}
+
+	public static String createMapUrlAggregatedRegion(DateTime date, int version, String id, String fileExtension) {
+		StringBuilder result = new StringBuilder();
+		result.append(GlobalVariables.univieBaseUrl);
+		result.append(date.toString(GlobalVariables.formatterDate));
+		result.append(GlobalVariables.urlSeperator);
+		result.append(version);
+		result.append(GlobalVariables.urlSeperator);
+		result.append(id);
+		result.append(".");
+		result.append(fileExtension);
+
+		return result.toString();
 	}
 }

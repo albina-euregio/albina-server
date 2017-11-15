@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -301,12 +302,13 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getPublishedBulletins(DateTime startDate, DateTime endDate, List<String> regions)
-			throws AlbinaException {
+	public AvalancheBulletinVersionTuple getPublishedBulletins(DateTime startDate, DateTime endDate,
+			List<String> regions) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+			int revision = 0;
 
 			for (String region : regions) {
 				// get report
@@ -325,7 +327,6 @@ public class AvalancheReportController {
 					List<AvalancheReport> audit = q.getResultList();
 					transaction.commit();
 
-					int revision = 0;
 					for (AvalancheReport avalancheReport : audit) {
 						if (avalancheReport.getRegion().startsWith(region)
 								&& (avalancheReport.getStatus() == BulletinStatus.published
@@ -347,20 +348,20 @@ public class AvalancheReportController {
 				}
 			}
 
+			// just used to initialize all necessary fields
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
 			try {
 				docBuilder = docFactory.newDocumentBuilder();
 				Document doc = docBuilder.newDocument();
 				for (AvalancheBulletin avalancheBulletin : result) {
-					avalancheBulletin.toCAAML(doc, LanguageCode.en);
+					avalancheBulletin.toCAAML(doc, LanguageCode.en, startDate, 0);
 				}
 			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			return result;
+			return new AvalancheBulletinVersionTuple(revision, result);
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();

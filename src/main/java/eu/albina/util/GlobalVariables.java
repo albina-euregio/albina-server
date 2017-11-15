@@ -15,6 +15,11 @@ public class GlobalVariables {
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
 	public static int paginationCount = 50;
+	public static String urlSeperator = "_";
+	public static String urlStringForenoon = "am";
+	public static String urlStringAfternoon = "pm";
+	public static String urlStringFullday = "fullday";
+	public static String fileExtensionJpg = "jpg";
 
 	// TODO create secret
 	public static String tokenEncodingSecret = "secret";
@@ -26,7 +31,7 @@ public class GlobalVariables {
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 
-	public static String univieBaseUrlTN = "https://data1.geo.univie.ac.at/exchange/albina/trentino/awm/";
+	public static String univieBaseUrl = "https://data1.geo.univie.ac.at/exchange/albina/trentino/awm/";
 
 	public static String getJsonSchemaFileString(String fileName) throws FileNotFoundException {
 		StringBuilder result = new StringBuilder("");
