@@ -141,6 +141,41 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
+	public void changeReport(DateTime startDate, String region, User user) throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+
+			// get report
+			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReports)
+					.setParameter("date", startDate).setParameter("region", region).getResultList();
+
+			// get revision number
+			AuditReader reader = AuditReaderFactory.get(entityManager);
+			int revision = (int) reader.createQuery().forRevisionsOfEntity(AvalancheBulletin.class, false, true)
+					.addProjection(AuditEntity.revisionNumber().max()).getSingleResult();
+
+			if (reports.size() == 1) {
+				AvalancheReport avalancheReport = reports.get(0);
+				avalancheReport.setTimestamp(new DateTime());
+				avalancheReport.setUser(user);
+				avalancheReport.setRevision(revision);
+			} else {
+				throw new AlbinaException("Report error!");
+			}
+
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public void publishReport(DateTime startDate, String region, User user, DateTime publicationDate)
 			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -242,7 +277,7 @@ public class AvalancheReportController {
 				case published:
 					throw new AlbinaException("Bulletins already published!");
 				case updated:
-					avalancheReport.setStatus(BulletinStatus.submitted);
+					avalancheReport.setStatus(BulletinStatus.resubmitted);
 					break;
 				case resubmitted:
 					throw new AlbinaException("Bulletins already resubmitted!");

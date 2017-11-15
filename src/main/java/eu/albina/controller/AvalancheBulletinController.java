@@ -100,8 +100,8 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void saveBulletins(List<AvalancheBulletin> bulletins, DateTime startDate, DateTime endDate, String region)
-			throws AlbinaException {
+	public void saveBulletins(List<AvalancheBulletin> bulletins, DateTime startDate, DateTime endDate, String region,
+			DateTime publicationDate) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -117,6 +117,8 @@ public class AvalancheBulletinController {
 			List<String> ids = new ArrayList<String>();
 			for (AvalancheBulletin bulletin : bulletins) {
 				ids.add(bulletin.getId());
+				if (publicationDate != null)
+					bulletin.setPublicationDate(publicationDate);
 				// bulletin already exists
 				if (results.containsKey(bulletin.getId()))
 					results.get(bulletin.getId()).copy(bulletin);
