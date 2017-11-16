@@ -25,6 +25,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -401,8 +402,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	}
 
 	public boolean hasDaytimeDependency() {
-		// TODO check if there is a better way
-		if (validUntil.getHourOfDay() == 12)
+		Duration duration = new Duration(validFrom, validUntil);
+		long standardHours = duration.getStandardHours();
+		if (standardHours < 24)
 			return true;
 		else
 			return false;
