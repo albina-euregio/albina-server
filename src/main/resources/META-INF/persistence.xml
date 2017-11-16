@@ -45,7 +45,7 @@
 	    <property name="show_sql" value="false"/>
 	    
 	    <!-- Drop and re-create the database schema on startup -->
-        <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+        <property name="hibernate.hbm2ddl.auto" value="create"/>
 
       </properties>
    </persistence-unit>
