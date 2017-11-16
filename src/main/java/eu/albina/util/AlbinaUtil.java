@@ -1,6 +1,13 @@
 package eu.albina.util;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,6 +23,8 @@ import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import eu.albina.exception.AlbinaException;
 
 public class AlbinaUtil {
 
@@ -79,10 +88,11 @@ public class AlbinaUtil {
 		return rootElement;
 	}
 
-	public static Element createObservationsHeaderCaaml(Document doc) {
-		Element rootElement = doc.createElement("observations");
+	public static Element createObsCollectionHeaderCaaml(Document doc) {
+		Element rootElement = doc.createElement("ObsCollection");
 		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
 		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
+		rootElement.setAttribute("xmlns:albina", "http://212.47.231.185:8080/caaml/albina.xsd");
 		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		rootElement.setAttribute("xmlns:schemaLocation",
@@ -97,5 +107,87 @@ public class AlbinaUtil {
 			return "ElevationRange_" + elevation + "Hi";
 		else
 			return "ElevationRange_" + elevation + "Lw";
+	}
+
+	public static String createMapUrlOverview(DateTime date, int version, String daytime, List<String> regions,
+			int resolution, String fileExtension) {
+		StringBuilder result = new StringBuilder();
+		result.append(GlobalVariables.univieBaseUrl);
+		result.append(date.toString(GlobalVariables.formatterDate));
+		result.append(GlobalVariables.urlSeperator);
+		result.append(version);
+		result.append(GlobalVariables.urlSeperator);
+		result.append(daytime);
+		result.append(GlobalVariables.urlSeperator);
+
+		for (String region : regions) {
+			result.append(region);
+			result.append(GlobalVariables.urlSeperator);
+		}
+
+		result.append(resolution);
+		result.append(".");
+		result.append(fileExtension);
+
+		return result.toString();
+	}
+
+	public static String createMapUrlAggregatedRegion(DateTime date, int version, String id, String fileExtension) {
+		StringBuilder result = new StringBuilder();
+		result.append(GlobalVariables.univieBaseUrl);
+		result.append(date.toString(GlobalVariables.formatterDate));
+		result.append(GlobalVariables.urlSeperator);
+		result.append(version);
+		result.append(GlobalVariables.urlSeperator);
+		result.append(id);
+		result.append(".");
+		result.append(fileExtension);
+
+		return result.toString();
+	}
+
+	public static String triggerMapProduction(String caaml) throws AlbinaException {
+		HttpURLConnection connection = null;
+
+		try {
+			// Create connection
+			URL url = new URL(GlobalVariables.univieMapProductionUrl);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+			connection.setRequestProperty("Content-Length", Integer.toString(caaml.getBytes().length));
+			connection.setRequestProperty("Content-Language", "en-US");
+
+			connection.setUseCaches(false);
+			connection.setDoOutput(true);
+
+			// Send request
+			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+			wr.writeBytes(caaml);
+			wr.close();
+
+			// Get Response
+			InputStream is = connection.getInputStream();
+			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+			StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
+			String line;
+			while ((line = rd.readLine()) != null) {
+				response.append(line);
+				response.append('\r');
+			}
+			rd.close();
+
+			if (connection.getResponseCode() != 200 && connection.getResponseCode() != 200)
+				throw new AlbinaException("Error while triggering map production!");
+
+			return response.toString();
+		} catch (Exception e) {
+			throw new AlbinaException(e.getMessage());
+		} finally {
+			if (connection != null) {
+				connection.disconnect();
+			}
+		}
 	}
 }

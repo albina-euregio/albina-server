@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 
@@ -52,11 +53,11 @@ public class RegionController {
 	 * @throws AlbinaException
 	 */
 	public Region getRegion(String regionId) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			Region region = session.get(Region.class, regionId);
+			transaction.begin();
+			Region region = entityManager.find(Region.class, regionId);
 			if (region == null) {
 				transaction.rollback();
 				throw new AlbinaException("No region with ID: " + regionId);
@@ -69,7 +70,7 @@ public class RegionController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
@@ -79,16 +80,16 @@ public class RegionController {
 
 	@SuppressWarnings("unchecked")
 	public List<Region> getRegions(String regionId) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
+			transaction.begin();
 			List<Region> regions = null;
 			if (regionId == null || regionId == "")
-				regions = session.createQuery(HibernateUtil.queryGetTopLevelRegions).list();
+				regions = entityManager.createQuery(HibernateUtil.queryGetTopLevelRegions).getResultList();
 			else
-				regions = session.createQuery(HibernateUtil.queryGetSubregions).setParameter("regionId", regionId)
-						.list();
+				regions = entityManager.createQuery(HibernateUtil.queryGetSubregions).setParameter("regionId", regionId)
+						.getResultList();
 			for (Region region : regions) {
 				Hibernate.initialize(region.getSubregions());
 			}
@@ -99,7 +100,7 @@ public class RegionController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 

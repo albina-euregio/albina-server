@@ -23,7 +23,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -32,6 +34,7 @@ import org.w3c.dom.Element;
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
@@ -44,6 +47,7 @@ import eu.albina.util.GlobalVariables;
  * @author Norbert Lanzanasto
  *
  */
+@Audited
 @Entity
 @Table(name = "AVALANCHE_BULLETINS")
 public class AvalancheBulletin extends AbstractPersistentObject implements AvalancheInformationObject {
@@ -58,6 +62,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "CREATOR_REGION")
 	private String creatorRegion;
 
+	@Column(name = "PUBLICATION_DATE")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private org.joda.time.DateTime publicationDate;
+
 	/** Validity of the avalanche bulletin */
 	@Column(name = "VALID_FROM")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -70,25 +78,19 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	private String aggregatedRegionId;
 
 	/** The recommended regions the avalanche bulletin is for. */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_BULLETIN_SUGGESTED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> suggestedRegions;
 
 	/** The published regions the avalanche bulletin is for. */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_BULLETIN_PUBLISHED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> publishedRegions;
 
-	/** The obsolete regions the avalanche bulletin is for. */
-	@ElementCollection
-	@CollectionTable(name = "AVALANCHE_BULLETIN_OBSOLETE_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "REGION_ID")
-	private Set<String> obsoleteRegions;
-
 	/** The saved regions the avalanche bulletin is for. */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_BULLETIN_SAVED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> savedRegions;
@@ -96,11 +98,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "ELEVATION")
 	private int elevation;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "ABOVE_ID")
 	private AvalancheBulletinElevationDescription above;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "BELOW_ID")
 	private AvalancheBulletinElevationDescription below;
 
@@ -117,20 +119,21 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public AvalancheBulletin() {
 		textPartsMap = new HashMap<TextPart, Texts>();
 		publishedRegions = new HashSet<String>();
-		obsoleteRegions = new HashSet<String>();
 		savedRegions = new HashSet<String>();
 		suggestedRegions = new HashSet<String>();
 	}
 
 	/**
-	 * Custom constructor that creates an avalanche bulletin object from JSON
-	 * input.
+	 * Custom constructor that creates an avalanche bulletin object from JSON input.
 	 * 
 	 * @param json
 	 *            JSONObject holding information about an avalanche bulletin.
 	 */
 	public AvalancheBulletin(JSONObject json, String username) {
 		this();
+
+		if (json.has("id"))
+			this.id = json.getString("id");
 
 		if (username != null) {
 			try {
@@ -150,6 +153,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				this.textPartsMap.put(part, new Texts(json.getJSONArray(part.toString())));
 			}
 		}
+
+		if (json.has("publicationDate"))
+			this.publicationDate = new org.joda.time.DateTime(json.getString("publicationDate"));
 
 		if (json.has("validity")) {
 			JSONObject validity = json.getJSONObject("validity");
@@ -171,13 +177,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			JSONArray regions = json.getJSONArray("publishedRegions");
 			for (Object entry : regions) {
 				this.publishedRegions.add((String) entry);
-			}
-		}
-
-		if (json.has("obsoleteRegions")) {
-			JSONArray regions = json.getJSONArray("obsoleteRegions");
-			for (Object entry : regions) {
-				this.obsoleteRegions.add((String) entry);
 			}
 		}
 
@@ -286,6 +285,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		textPartsMap.put(TextPart.travelAdvisoryComment, travelAdvisoryComment);
 	}
 
+	public org.joda.time.DateTime getPublicationDate() {
+		return publicationDate;
+	}
+
+	public void setPublicationDate(org.joda.time.DateTime publicationDate) {
+		this.publicationDate = publicationDate;
+	}
+
 	public org.joda.time.DateTime getValidFrom() {
 		return validFrom;
 	}
@@ -334,20 +341,20 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.publishedRegions = regions;
 	}
 
-	public Set<String> getObsoleteRegions() {
-		return obsoleteRegions;
-	}
-
-	public void setObsoleteRegions(Set<String> regions) {
-		this.obsoleteRegions = regions;
-	}
-
 	public AvalancheBulletinElevationDescription getAbove() {
 		return above;
 	}
 
+	public void setAbove(AvalancheBulletinElevationDescription above) {
+		this.above = above;
+	}
+
 	public AvalancheBulletinElevationDescription getBelow() {
 		return below;
+	}
+
+	public void setBelow(AvalancheBulletinElevationDescription below) {
+		this.below = below;
 	}
 
 	public BulletinStatus getStatus(List<String> regions) {
@@ -394,6 +401,15 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return false;
 	}
 
+	public boolean hasDaytimeDependency() {
+		Duration duration = new Duration(validFrom, validUntil);
+		long standardHours = duration.getStandardHours();
+		if (standardHours < 24)
+			return true;
+		else
+			return false;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -419,6 +435,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			}
 		}
 
+		if (publicationDate != null)
+			json.put("publicationDate", publicationDate.toString(GlobalVariables.formatterDateTime));
+
 		JSONObject validity = new JSONObject();
 		validity.put("from", validFrom.toString(GlobalVariables.formatterDateTime));
 		validity.put("until", validUntil.toString(GlobalVariables.formatterDateTime));
@@ -429,7 +448,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		json.put("suggestedRegions", suggestedRegions);
 		json.put("savedRegions", savedRegions);
 		json.put("publishedRegions", publishedRegions);
-		json.put("obsoleteRegions", obsoleteRegions);
 
 		json.put("elevation", elevation);
 		if (above != null)
@@ -440,7 +458,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return json;
 	}
 
-	public Element toCAAML(Document doc, LanguageCode languageCode) {
+	public Element toCAAML(Document doc, LanguageCode languageCode, DateTime startDate, int version) {
 		if (!publishedRegions.isEmpty()) {
 			Element rootElement = doc.createElement("Bulletin");
 			if (getId() != null)
@@ -452,14 +470,30 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			Element metaDataProperty = doc.createElement("metaDataProperty");
 			Element metaData = doc.createElement("MetaData");
 			Element dateTimeReport = doc.createElement("dateTimeReport");
-			dateTimeReport
-					.appendChild(doc.createTextNode((new DateTime()).toString(GlobalVariables.formatterDateTime)));
+			dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
 			metaData.appendChild(dateTimeReport);
 			if (user != null) {
 				Element srcRef = doc.createElement("srcRef");
 				srcRef.appendChild(user.toCAAML(doc));
 				metaData.appendChild(srcRef);
 			}
+
+			Element resolution300 = doc.createElement("albina:resolution");
+			resolution300.appendChild(doc.createTextNode("300"));
+			Element filetypeJPG = doc.createElement("albina:filetype");
+			filetypeJPG.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+
+			Element customData = doc.createElement("customData");
+			Element dangerRatingMap = doc.createElement("albina:DangerRatingMap");
+			dangerRatingMap.appendChild(resolution300);
+			dangerRatingMap.appendChild(filetypeJPG);
+			Element url = doc.createElement("albina:url");
+			url.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlAggregatedRegion(startDate, version, getId(),
+					GlobalVariables.fileExtensionJpg)));
+			dangerRatingMap.appendChild(url);
+			customData.appendChild(dangerRatingMap);
+			metaData.appendChild(customData);
+
 			metaDataProperty.appendChild(metaData);
 			rootElement.appendChild(metaDataProperty);
 
@@ -494,7 +528,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				dangerRatingAbove.appendChild(validElevationAbove);
 				if (above != null && above.getDangerRating() != null) {
 					Element mainValueAbove = doc.createElement("mainValue");
-					mainValueAbove.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
+					mainValueAbove
+							.appendChild(doc.createTextNode(DangerRating.getCAAMLString(above.getDangerRating())));
 					dangerRatingAbove.appendChild(mainValueAbove);
 				}
 				dangerRatings.appendChild(dangerRatingAbove);
@@ -505,7 +540,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				dangerRatingBelow.appendChild(validElevationBelow);
 				if (below != null && below.getDangerRating() != null) {
 					Element mainValueBelow = doc.createElement("mainValue");
-					mainValueBelow.appendChild(doc.createTextNode(String.valueOf(below.getDangerRating())));
+					mainValueBelow
+							.appendChild(doc.createTextNode(DangerRating.getCAAMLString(below.getDangerRating())));
 					dangerRatingBelow.appendChild(mainValueBelow);
 				}
 				dangerRatings.appendChild(dangerRatingBelow);
@@ -515,7 +551,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				Element dangerRating = doc.createElement("DangerRating");
 				if (above != null && above.getDangerRating() != null) {
 					Element mainValue = doc.createElement("mainValue");
-					mainValue.appendChild(doc.createTextNode(String.valueOf(above.getDangerRating())));
+					mainValue.appendChild(doc.createTextNode(DangerRating.getCAAMLString(above.getDangerRating())));
 					dangerRating.appendChild(mainValue);
 				}
 				dangerRatings.appendChild(dangerRating);
@@ -590,5 +626,41 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			return rootElement;
 		} else
 			return null;
+	}
+
+	public void copy(AvalancheBulletin bulletin) {
+		setUser(bulletin.getUser());
+		setCreator(bulletin.getCreator());
+		setCreatorRegion(bulletin.getCreatorRegion());
+		setPublicationDate(bulletin.getPublicationDate());
+		setValidFrom(bulletin.getValidFrom());
+		setValidUntil(bulletin.getValidUntil());
+		setAggregatedRegionId(bulletin.getAggregatedRegionId());
+		setSuggestedRegions(bulletin.getSuggestedRegions());
+		setPublishedRegions(bulletin.getPublishedRegions());
+		setSavedRegions(bulletin.getSavedRegions());
+		setElevation(bulletin.getElevation());
+
+		if (bulletin.getAbove() != null) {
+			if (above == null)
+				above = bulletin.getAbove();
+			else {
+				above.setAspects(bulletin.getAbove().getAspects());
+				above.setAvalancheProblem(bulletin.getAbove().getAvalancheProblem());
+				above.setDangerRating(bulletin.getAbove().getDangerRating());
+			}
+		}
+
+		if (bulletin.getBelow() != null) {
+			if (below == null)
+				below = bulletin.getBelow();
+			else {
+				below.setAspects(bulletin.getBelow().getAspects());
+				below.setAvalancheProblem(bulletin.getBelow().getAvalancheProblem());
+				below.setDangerRating(bulletin.getBelow().getDangerRating());
+			}
+		}
+
+		textPartsMap = bulletin.textPartsMap;
 	}
 }

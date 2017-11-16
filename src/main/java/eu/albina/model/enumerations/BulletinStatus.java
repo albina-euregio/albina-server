@@ -1,7 +1,7 @@
 package eu.albina.model.enumerations;
 
 public enum BulletinStatus {
-	obsolete, published, draft, missing;
+	republished, resubmitted, updated, published, submitted, draft, missing;
 
 	public static BulletinStatus fromString(String text) {
 		if (text != null) {

@@ -37,6 +37,7 @@ public class UtilTest {
 		names.add("Günther Geier");
 		names.add("Fabio Gheser");
 		names.add("Lukas Rastner");
+		names.add("Alex Boninsegna");
 		names.add("Rudi Mair");
 		names.add("Patrick Nairz");
 		names.add("Karel Kriz");
@@ -55,6 +56,7 @@ public class UtilTest {
 		passwords.add("Günther");
 		passwords.add("Fabio");
 		passwords.add("Lukas");
+		passwords.add("Alex");
 		passwords.add("Rudi");
 		passwords.add("Patrick");
 		passwords.add("Karel");
@@ -68,7 +70,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		int i = 5;
+		int i = 9;
 		File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 		String encodstring = encodeFileToBase64Binary(f);
 		String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());

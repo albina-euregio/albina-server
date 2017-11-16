@@ -16,7 +16,7 @@ public class NewsControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		HibernateUtil.getInstance().createSessionFactory();
+		HibernateUtil.getInstance().setUp();
 	}
 
 	@After

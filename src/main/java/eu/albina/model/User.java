@@ -1,18 +1,23 @@
 package eu.albina.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.envers.Audited;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.albina.model.enumerations.Role;
 
+@Audited
 @Entity
 @Table(name = "USERS")
 public class User {
@@ -42,6 +47,10 @@ public class User {
 	@Column(name = "ORGANIZATION")
 	private String organization;
 
+	/** The avalanche bulletins of the user */
+	@OneToMany(mappedBy = "user")
+	private List<AvalancheBulletin> bulletins;
+
 	/**
 	 * Standard constructor for a user.
 	 */
@@ -61,6 +70,14 @@ public class User {
 			this.image = json.getString("image");
 		if (json.has("organization") && !json.isNull("organization"))
 			this.organization = json.getString("organization");
+	}
+
+	public List<AvalancheBulletin> getBulletins() {
+		return bulletins;
+	}
+
+	public void setBulletins(List<AvalancheBulletin> bulletins) {
+		this.bulletins = bulletins;
 	}
 
 	public String getEmail() {

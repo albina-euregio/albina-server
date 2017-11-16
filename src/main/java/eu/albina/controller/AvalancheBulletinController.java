@@ -2,33 +2,45 @@ package eu.albina.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.EventName;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
- * Controller for snow profiles.
+ * Controller for avalanche bulletins.
  * 
  * @author Norbert Lanzanasto
  *
@@ -61,11 +73,11 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 */
 	public AvalancheBulletin getBulletin(String bulletinId) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			AvalancheBulletin bulletin = session.get(AvalancheBulletin.class, bulletinId);
+			transaction.begin();
+			AvalancheBulletin bulletin = entityManager.find(AvalancheBulletin.class, bulletinId);
 			if (bulletin == null) {
 				transaction.rollback();
 				throw new AlbinaException("No bulletin with ID: " + bulletinId);
@@ -85,7 +97,6 @@ public class AvalancheBulletinController {
 			Hibernate.initialize(bulletin.getSuggestedRegions());
 			Hibernate.initialize(bulletin.getSavedRegions());
 			Hibernate.initialize(bulletin.getPublishedRegions());
-			Hibernate.initialize(bulletin.getObsoleteRegions());
 			Hibernate.initialize(bulletin.getUser());
 			transaction.commit();
 			return bulletin;
@@ -94,63 +105,267 @@ public class AvalancheBulletinController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
-	// TODO check if already published
+	@SuppressWarnings("unchecked")
+	public void saveBulletins(List<AvalancheBulletin> bulletins, DateTime startDate, DateTime endDate, String region,
+			DateTime publicationDate) throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+
+			List<AvalancheBulletin> originalBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
+			Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
+
+			for (AvalancheBulletin bulletin : originalBulletins)
+				results.put(bulletin.getId(), bulletin);
+
+			List<String> ids = new ArrayList<String>();
+			for (AvalancheBulletin bulletin : bulletins) {
+				ids.add(bulletin.getId());
+				if (publicationDate != null)
+					bulletin.setPublicationDate(publicationDate);
+				// bulletin already exists
+				if (results.containsKey(bulletin.getId()))
+					results.get(bulletin.getId()).copy(bulletin);
+				// bulletin has to be created
+				else
+					entityManager.persist(bulletin);
+			}
+
+			for (AvalancheBulletin avalancheBulletin : results.values()) {
+				// bulletin has to be removed
+				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId()))
+					entityManager.remove(avalancheBulletin);
+			}
+
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
 	public Serializable saveBulletin(AvalancheBulletin bulletin) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			Serializable bulletinId = session.save(bulletin);
+			transaction.begin();
+			entityManager.persist(bulletin);
 			transaction.commit();
-			return bulletinId;
+			return bulletin.getId();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
-	// TODO check if already published
 	public void updateBulletin(AvalancheBulletin bulletin) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			session.update(bulletin);
+			transaction.begin();
+			AvalancheBulletin originalBulletin = entityManager.find(AvalancheBulletin.class, bulletin.getId());
+			originalBulletin.copy(bulletin);
 			transaction.commit();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
+	}
+
+	public String getCaaml(DateTime startDate, DateTime endDate, List<String> regions, LanguageCode language)
+			throws TransformerException, AlbinaException, ParserConfigurationException {
+		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
+				endDate, regions);
+
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		docBuilder = docFactory.newDocumentBuilder();
+
+		Document doc = docBuilder.newDocument();
+		Element rootElement = AlbinaUtil.createObsCollectionHeaderCaaml(doc);
+
+		// create meta data
+		boolean hasDaytimeDependency = false;
+		DateTime publicationDate = new DateTime();
+		if (result.bulletins != null) {
+			for (AvalancheBulletin bulletin : result.bulletins) {
+				if (bulletin.getStatus(regions) == BulletinStatus.published) {
+					if (bulletin.hasDaytimeDependency())
+						hasDaytimeDependency = true;
+					if (bulletin.getPublicationDate() != null
+							&& bulletin.getPublicationDate().isBefore(publicationDate))
+						publicationDate = bulletin.getPublicationDate();
+				}
+			}
+		}
+
+		Element metaDataProperty = doc.createElement("metaDataProperty");
+		Element metaData = doc.createElement("MetaData");
+		Element dateTimeReport = doc.createElement("dateTimeReport");
+		dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
+		metaData.appendChild(dateTimeReport);
+
+		Element customData = doc.createElement("customData");
+		Element daytimeDependency = doc.createElement("albina:daytimeDependency");
+		if (hasDaytimeDependency) {
+			daytimeDependency.appendChild(doc.createTextNode("true"));
+			customData.appendChild(daytimeDependency);
+
+			Element dangerRatingMapAM300 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionAM300 = doc.createElement("albina:resolution");
+			resolutionAM300.appendChild(doc.createTextNode("300"));
+			dangerRatingMapAM300.appendChild(resolutionAM300);
+			Element filetypeAM300 = doc.createElement("albina:filetype");
+			filetypeAM300.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapAM300.appendChild(filetypeAM300);
+			Element daytimeAM300 = doc.createElement("albina:daytime");
+			daytimeAM300.appendChild(doc.createTextNode(GlobalVariables.urlStringForenoon));
+			dangerRatingMapAM300.appendChild(daytimeAM300);
+			Element urlAM300 = doc.createElement("albina:url");
+			urlAM300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringForenoon, regions, 300, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapAM300.appendChild(urlAM300);
+			customData.appendChild(dangerRatingMapAM300);
+
+			Element dangerRatingMapPM300 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionPM300 = doc.createElement("albina:resolution");
+			resolutionPM300.appendChild(doc.createTextNode("300"));
+			dangerRatingMapPM300.appendChild(resolutionPM300);
+			Element filetypePM300 = doc.createElement("albina:filetype");
+			filetypePM300.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapPM300.appendChild(filetypePM300);
+			Element daytimePM300 = doc.createElement("albina:daytime");
+			daytimePM300.appendChild(doc.createTextNode(GlobalVariables.urlStringAfternoon));
+			dangerRatingMapPM300.appendChild(daytimePM300);
+			Element urlPM300 = doc.createElement("albina:url");
+			urlPM300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringAfternoon, regions, 300, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapPM300.appendChild(urlPM300);
+			customData.appendChild(dangerRatingMapPM300);
+
+			Element dangerRatingMapAM150 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionAM150 = doc.createElement("albina:resolution");
+			resolutionAM150.appendChild(doc.createTextNode("150"));
+			dangerRatingMapAM150.appendChild(resolutionAM150);
+			Element filetypeAM150 = doc.createElement("albina:filetype");
+			filetypeAM150.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapAM150.appendChild(filetypeAM150);
+			Element daytimeAM150 = doc.createElement("albina:daytime");
+			daytimeAM150.appendChild(doc.createTextNode(GlobalVariables.urlStringForenoon));
+			dangerRatingMapAM150.appendChild(daytimeAM150);
+			Element urlAM150 = doc.createElement("albina:url");
+			urlAM150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringForenoon, regions, 150, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapAM150.appendChild(urlAM150);
+			customData.appendChild(dangerRatingMapAM150);
+
+			Element dangerRatingMapPM150 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionPM150 = doc.createElement("albina:resolution");
+			resolutionPM150.appendChild(doc.createTextNode("150"));
+			dangerRatingMapPM150.appendChild(resolutionPM150);
+			Element filetypePM150 = doc.createElement("albina:filetype");
+			filetypePM150.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapPM150.appendChild(filetypePM150);
+			Element daytimePM150 = doc.createElement("albina:daytime");
+			daytimePM150.appendChild(doc.createTextNode(GlobalVariables.urlStringAfternoon));
+			dangerRatingMapPM150.appendChild(daytimePM150);
+			Element urlPM150 = doc.createElement("albina:url");
+			urlPM150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringAfternoon, regions, 150, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapPM150.appendChild(urlPM150);
+			customData.appendChild(dangerRatingMapPM150);
+
+		} else {
+			daytimeDependency.appendChild(doc.createTextNode("false"));
+			customData.appendChild(daytimeDependency);
+
+			Element dangerRatingMapFullday300 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionFullday300 = doc.createElement("albina:resolution");
+			resolutionFullday300.appendChild(doc.createTextNode("300"));
+			dangerRatingMapFullday300.appendChild(resolutionFullday300);
+			Element filetypeFullday300 = doc.createElement("albina:filetype");
+			filetypeFullday300.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapFullday300.appendChild(filetypeFullday300);
+			Element daytimeFullday300 = doc.createElement("albina:daytime");
+			daytimeFullday300.appendChild(doc.createTextNode(GlobalVariables.urlStringFullday));
+			dangerRatingMapFullday300.appendChild(daytimeFullday300);
+			Element urlFullday300 = doc.createElement("albina:url");
+			urlFullday300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringFullday, regions, 300, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapFullday300.appendChild(urlFullday300);
+			customData.appendChild(dangerRatingMapFullday300);
+
+			Element dangerRatingMapFullday150 = doc.createElement("albina:DangerRatingMap");
+			Element resolutionFullday150 = doc.createElement("albina:resolution");
+			resolutionFullday150.appendChild(doc.createTextNode("150"));
+			dangerRatingMapFullday150.appendChild(resolutionFullday150);
+			Element filetypeFullday150 = doc.createElement("albina:filetype");
+			filetypeFullday150.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
+			dangerRatingMapFullday150.appendChild(filetypeFullday150);
+			Element daytimeFullday150 = doc.createElement("albina:daytime");
+			daytimeFullday150.appendChild(doc.createTextNode(GlobalVariables.urlStringFullday));
+			dangerRatingMapFullday150.appendChild(daytimeFullday150);
+			Element urlFullday150 = doc.createElement("albina:url");
+			urlFullday150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+					GlobalVariables.urlStringFullday, regions, 150, GlobalVariables.fileExtensionJpg)));
+			dangerRatingMapFullday150.appendChild(urlFullday150);
+			customData.appendChild(dangerRatingMapFullday150);
+		}
+		metaData.appendChild(customData);
+
+		metaDataProperty.appendChild(metaData);
+		rootElement.appendChild(metaDataProperty);
+
+		Element observations = doc.createElement("observations");
+
+		boolean found = false;
+
+		if (result.bulletins != null) {
+			for (AvalancheBulletin bulletin : result.bulletins) {
+				if (bulletin.getStatus(regions) == BulletinStatus.published) {
+					observations.appendChild(bulletin.toCAAML(doc, language, startDate, result.version));
+					found = true;
+				}
+			}
+		}
+		rootElement.appendChild(observations);
+		doc.appendChild(rootElement);
+
+		if (found)
+			return AlbinaUtil.convertDocToString(doc);
+		else
+			return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> getBulletins(DateTime startDate, DateTime endDate, List<String> regions)
 			throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-
-			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
-
+			transaction.begin();
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-
 			for (AvalancheBulletin bulletin : bulletins)
 				for (String region : regions)
 					if (bulletin.affectsRegion(region))
 						results.add(bulletin);
-
 			for (AvalancheBulletin bulletin : results) {
 				Hibernate.initialize(bulletin.getAvActivityComment());
 				Hibernate.initialize(bulletin.getAvActivityHighlights());
@@ -167,10 +382,8 @@ public class AvalancheBulletinController {
 				Hibernate.initialize(bulletin.getSuggestedRegions());
 				Hibernate.initialize(bulletin.getSavedRegions());
 				Hibernate.initialize(bulletin.getPublishedRegions());
-				Hibernate.initialize(bulletin.getObsoleteRegions());
 				Hibernate.initialize(bulletin.getUser());
 			}
-
 			transaction.commit();
 			return results;
 		} catch (HibernateException he) {
@@ -178,82 +391,19 @@ public class AvalancheBulletinController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public BulletinStatus getStatus(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-
-			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
-
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-
-			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegion(region))
-					results.add(bulletin);
-
-			// get status of bulletins
-			// this relies on publishing for whole region (e.g. IT-32-BZ)
-			BulletinStatus result = BulletinStatus.missing;
-			for (AvalancheBulletin bulletin : results) {
-				if (bulletin.getStatus(region).compareTo(result) < 0)
-					result = bulletin.getStatus(region);
-			}
-
-			transaction.commit();
-			return result;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			session.close();
-		}
-	}
-
-	public void deleteBulletinAdmin(String bulletinId) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-
-			AvalancheBulletin avalancheBulletin = session.get(AvalancheBulletin.class, bulletinId);
-			if (avalancheBulletin == null) {
-				transaction.rollback();
-				throw new AlbinaException("No bulletin with ID: " + bulletinId);
-			}
-
-			session.delete(avalancheBulletin);
-
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
 	public void deleteBulletin(String bulletinId, Role role) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			AvalancheBulletin avalancheBulletin = session.get(AvalancheBulletin.class, bulletinId);
+			transaction.begin();
+			AvalancheBulletin avalancheBulletin = entityManager.find(AvalancheBulletin.class, bulletinId);
 			if (avalancheBulletin == null) {
 				transaction.rollback();
 				throw new AlbinaException("No bulletin with ID: " + bulletinId);
-			} else if (avalancheBulletin.getStatus(AuthorizationUtil.getRegion(role)) == BulletinStatus.published) {
-				transaction.rollback();
-				throw new AlbinaException("Bulletin already published!");
 			}
 
 			Set<String> regions = avalancheBulletin.getSavedRegions();
@@ -273,9 +423,9 @@ public class AvalancheBulletinController {
 			avalancheBulletin.setSuggestedRegions(result);
 
 			if (avalancheBulletin.getSavedRegions().isEmpty() && avalancheBulletin.getPublishedRegions().isEmpty())
-				session.delete(avalancheBulletin);
+				entityManager.remove(avalancheBulletin);
 			else {
-				session.update(avalancheBulletin);
+				entityManager.merge(avalancheBulletin);
 			}
 
 			transaction.commit();
@@ -284,19 +434,19 @@ public class AvalancheBulletinController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public void publishBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+	public void submitBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
+			transaction.begin();
 
-			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
@@ -323,21 +473,53 @@ public class AvalancheBulletinController {
 				for (String entry : bulletin.getSuggestedRegions())
 					if (entry.startsWith(region))
 						result.add(entry);
-				for (String entry : result) {
+				for (String entry : result)
 					bulletin.getSuggestedRegions().remove(entry);
-					// bulletin.getPublishedRegions().add(entry);
-				}
 
-				session.update(bulletin);
+				entityManager.merge(bulletin);
 			}
 
+			transaction.commit();
+
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void publishBulletins(DateTime startDate, DateTime endDate, String region, DateTime publicationDate)
+			throws AlbinaException {
+
+		// TODO check if current status is submitted
+
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			// select bulletins within the region
+			for (AvalancheBulletin bulletin : bulletins)
+				if (bulletin.affectsRegion(region))
+					results.add(bulletin);
+			for (AvalancheBulletin bulletin : results) {
+				// set publication date if no regions where published before
+				if (bulletin.getCreatorRegion().startsWith(region))
+					bulletin.setPublicationDate(publicationDate);
+				entityManager.merge(bulletin);
+			}
 			transaction.commit();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 
@@ -349,13 +531,13 @@ public class AvalancheBulletinController {
 		boolean pendingSuggestions = false;
 		boolean missingDangerRating = false;
 
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
+			transaction.begin();
 
-			List<AvalancheBulletin> bulletins = session.createQuery(HibernateUtil.queryGetBulletins)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate).list();
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 			// select bulletins within the region
@@ -415,7 +597,7 @@ public class AvalancheBulletinController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 

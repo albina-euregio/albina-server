@@ -10,11 +10,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Table;
 
+import org.hibernate.envers.Audited;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import eu.albina.model.enumerations.LanguageCode;
 
+@Audited
 @Entity
 @Table(name = "TEXTS")
 public class Texts extends AbstractPersistentObject implements AvalancheInformationObject {

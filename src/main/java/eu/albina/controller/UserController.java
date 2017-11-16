@@ -1,8 +1,9 @@
 package eu.albina.controller;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
@@ -30,12 +31,11 @@ public class UserController {
 	}
 
 	public User getUser(String username) throws AlbinaException {
-		Session session = HibernateUtil.getInstance().getSessionFactory().openSession();
-		Transaction transaction = null;
-
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
 		try {
-			transaction = session.beginTransaction();
-			User user = session.get(User.class, username);
+			transaction.begin();
+			User user = entityManager.find(User.class, username);
 			if (user == null) {
 				transaction.rollback();
 				throw new AlbinaException("No user with username: " + username);
@@ -48,7 +48,7 @@ public class UserController {
 				transaction.rollback();
 			throw new AlbinaException(he.getMessage());
 		} finally {
-			session.close();
+			entityManager.close();
 		}
 	}
 }

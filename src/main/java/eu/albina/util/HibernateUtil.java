@@ -1,10 +1,8 @@
 package eu.albina.util;
 
-import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +12,10 @@ public class HibernateUtil {
 
 	private static HibernateUtil instance = null;
 
-	private SessionFactory sessionFactory;
-	private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+	private EntityManagerFactory entityManagerFactory;
 
 	public static String queryGetBulletins = "from AvalancheBulletin as b where :startDate = b.validFrom or :endDate = b.validUntil";
+	public static String queryGetReports = "from AvalancheReport as r where :date = r.date and :region = r.region";
 	public static String queryGetTopLevelRegions = "from Region as r where r.parentRegion is null";
 	public static String queryGetSubregions = "from Region as r where r.parentRegion.id = :regionId";
 	public static String queryGetNews = "from News as n";
@@ -34,28 +32,22 @@ public class HibernateUtil {
 		return instance;
 	}
 
-	public void createSessionFactory() {
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-			logger.debug("Session factory created!");
-		} catch (Exception e) {
-			logger.error("Error creating Session: " + e);
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public HibernateUtil() {
 	}
 
-	public void closeSessionFactory() {
-		if (sessionFactory != null) {
-			try {
-				sessionFactory.close();
-				logger.debug("Session factory closed!");
-			} catch (HibernateException ignored) {
-				logger.error("Couldn't close SessionFactory", ignored);
-			}
-		}
+	public void setUp() {
+		entityManagerFactory = Persistence.createEntityManagerFactory("eu.albina");
+		logger.info("Entity manager factory created!");
 	}
 
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
+	public EntityManagerFactory getEntityManagerFactory() {
+		return entityManagerFactory;
+	}
+
+	public void shutDown() {
+		if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+			entityManagerFactory.close();
+			logger.info("Entity manager factory closed!");
+		}
 	}
 }
