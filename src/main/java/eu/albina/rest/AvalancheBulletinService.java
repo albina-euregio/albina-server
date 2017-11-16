@@ -68,8 +68,9 @@ public class AvalancheBulletinService {
 		endDate = startDate.plusDays(1);
 
 		if (regions.isEmpty()) {
-			regions.add("IT-32");
-			regions.add("AT-07");
+			regions.add(GlobalVariables.codeTrentino);
+			regions.add(GlobalVariables.codeSouthTyrol);
+			regions.add(GlobalVariables.codeTyrol);
 		}
 
 		try {
@@ -114,9 +115,9 @@ public class AvalancheBulletinService {
 		DateTime endDate = null;
 
 		if (regions.isEmpty()) {
-			regions.add("IT-32-TN");
-			regions.add("IT-32-BZ");
-			regions.add("AT-07");
+			regions.add(GlobalVariables.codeTrentino);
+			regions.add(GlobalVariables.codeSouthTyrol);
+			regions.add(GlobalVariables.codeTyrol);
 		}
 
 		if (date != null)
@@ -444,7 +445,10 @@ public class AvalancheBulletinService {
 
 				// create maps
 				ArrayList<String> regions = new ArrayList<String>();
-				regions.add(region);
+				regions.add(GlobalVariables.codeTrentino);
+				regions.add(GlobalVariables.codeSouthTyrol);
+				regions.add(GlobalVariables.codeTyrol);
+
 				try {
 					AlbinaUtil.triggerMapProduction(AvalancheBulletinController.getInstance().getCaaml(startDate,
 							endDate, regions, LanguageCode.en));

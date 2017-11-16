@@ -21,6 +21,10 @@ public class GlobalVariables {
 	public static String urlStringFullday = "fullday";
 	public static String fileExtensionJpg = "jpg";
 
+	public static String codeTrentino = "IT-32-TN";
+	public static String codeSouthTyrol = "IT-32-BZ";
+	public static String codeTyrol = "AT-07";
+
 	// TODO create secret
 	public static String tokenEncodingSecret = "secret";
 	public static String tokenEncodingIssuer = "albina";
@@ -32,7 +36,8 @@ public class GlobalVariables {
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 
 	public static String univieBaseUrl = "https://data1.geo.univie.ac.at/exchange/albina/trentino/awm/";
-	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps_test.php";
+	public static String univieMapProductionTestUrl = "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps_test.php";
+	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps.php";
 
 	public static String getJsonSchemaFileString(String fileName) throws FileNotFoundException {
 		StringBuilder result = new StringBuilder("");
