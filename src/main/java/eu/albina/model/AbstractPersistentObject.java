@@ -12,7 +12,7 @@ public abstract class AbstractPersistentObject implements PersistentObject {
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
 	@Column(name = "ID")
 	protected String id;
 
