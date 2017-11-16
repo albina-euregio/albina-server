@@ -26,7 +26,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent arg0) {
 		HibernateUtil.getInstance().shutDown();
 		SocketIOController.getInstance().stopSocketIO();
-		System.out.println("ServletContextListener destroyed");
+		logger.debug("ServletContextListener destroyed");
 	}
 
 	// Run this before web application is started
