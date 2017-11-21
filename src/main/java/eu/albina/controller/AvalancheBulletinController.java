@@ -553,6 +553,9 @@ public class AvalancheBulletinController {
 				for (String entry : bulletin.getSavedRegions())
 					if (entry.startsWith(region) && !definedRegions.contains(entry))
 						definedRegions.add(entry);
+				for (String entry : bulletin.getPublishedRegions())
+					if (entry.startsWith(region) && !definedRegions.contains(entry))
+						definedRegions.add(entry);
 
 				if (!pendingSuggestions)
 					for (String entry : bulletin.getSuggestedRegions())
