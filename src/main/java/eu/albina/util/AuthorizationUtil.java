@@ -11,19 +11,19 @@ public class AuthorizationUtil {
 			return true;
 
 		case TRENTINO:
-			if (region.startsWith("IT-32-TN"))
+			if (region.startsWith(GlobalVariables.codeTrentino))
 				return true;
 			else
 				return false;
 
 		case TYROL:
-			if (region.startsWith("AT-07"))
+			if (region.startsWith(GlobalVariables.codeTyrol))
 				return true;
 			else
 				return false;
 
 		case SOUTH_TYROL:
-			if (region.startsWith("IT-32-BZ"))
+			if (region.startsWith(GlobalVariables.codeSouthTyrol))
 				return true;
 			else
 				return false;
@@ -43,16 +43,16 @@ public class AuthorizationUtil {
 		switch (role) {
 
 		case ADMIN:
-			return "IT-32-TN";
+			return GlobalVariables.codeTrentino;
 
 		case TRENTINO:
-			return "IT-32-TN";
+			return GlobalVariables.codeTrentino;
 
 		case TYROL:
-			return "AT-07";
+			return GlobalVariables.codeTyrol;
 
 		case SOUTH_TYROL:
-			return "IT-32-BZ";
+			return GlobalVariables.codeSouthTyrol;
 
 		case EVTZ:
 			return null;

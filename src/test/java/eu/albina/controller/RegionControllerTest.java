@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 public class RegionControllerTest {
@@ -39,7 +40,7 @@ public class RegionControllerTest {
 	@Test
 	public void getSubregionsTest() {
 		try {
-			List<Region> regions = RegionController.getInstance().getRegions("IT-32-TN");
+			List<Region> regions = RegionController.getInstance().getRegions(GlobalVariables.codeTrentino);
 			Assert.assertEquals(21, regions.size());
 		} catch (AlbinaException e) {
 			e.printStackTrace();
