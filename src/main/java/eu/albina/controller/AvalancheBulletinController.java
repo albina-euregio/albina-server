@@ -238,7 +238,7 @@ public class AvalancheBulletinController {
 			dangerRatingMapAM300.appendChild(daytimeAM300);
 			Element urlAM300 = doc.createElement("albina:url");
 			urlAM300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
-					GlobalVariables.urlStringForenoon, regions, 300, GlobalVariables.fileExtensionJpg)));
+					GlobalVariables.urlStringForenoon, 300, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapAM300.appendChild(urlAM300);
 			customData.appendChild(dangerRatingMapAM300);
 
@@ -254,7 +254,7 @@ public class AvalancheBulletinController {
 			dangerRatingMapPM300.appendChild(daytimePM300);
 			Element urlPM300 = doc.createElement("albina:url");
 			urlPM300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
-					GlobalVariables.urlStringAfternoon, regions, 300, GlobalVariables.fileExtensionJpg)));
+					GlobalVariables.urlStringAfternoon, 300, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapPM300.appendChild(urlPM300);
 			customData.appendChild(dangerRatingMapPM300);
 
@@ -270,7 +270,7 @@ public class AvalancheBulletinController {
 			dangerRatingMapAM150.appendChild(daytimeAM150);
 			Element urlAM150 = doc.createElement("albina:url");
 			urlAM150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
-					GlobalVariables.urlStringForenoon, regions, 150, GlobalVariables.fileExtensionJpg)));
+					GlobalVariables.urlStringForenoon, 150, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapAM150.appendChild(urlAM150);
 			customData.appendChild(dangerRatingMapAM150);
 
@@ -286,7 +286,7 @@ public class AvalancheBulletinController {
 			dangerRatingMapPM150.appendChild(daytimePM150);
 			Element urlPM150 = doc.createElement("albina:url");
 			urlPM150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
-					GlobalVariables.urlStringAfternoon, regions, 150, GlobalVariables.fileExtensionJpg)));
+					GlobalVariables.urlStringAfternoon, 150, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapPM150.appendChild(urlPM150);
 			customData.appendChild(dangerRatingMapPM150);
 
@@ -306,7 +306,7 @@ public class AvalancheBulletinController {
 			dangerRatingMapFullday300.appendChild(daytimeFullday300);
 			Element urlFullday300 = doc.createElement("albina:url");
 			urlFullday300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
-					GlobalVariables.urlStringFullday, regions, 300, GlobalVariables.fileExtensionJpg)));
+					GlobalVariables.urlStringFullday, 300, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapFullday300.appendChild(urlFullday300);
 			customData.appendChild(dangerRatingMapFullday300);
 
@@ -322,7 +322,7 @@ public class AvalancheBulletinController {
 			dangerRatingMapFullday150.appendChild(daytimeFullday150);
 			Element urlFullday150 = doc.createElement("albina:url");
 			urlFullday150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
-					GlobalVariables.urlStringFullday, regions, 150, GlobalVariables.fileExtensionJpg)));
+					GlobalVariables.urlStringFullday, 150, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapFullday150.appendChild(urlFullday150);
 			customData.appendChild(dangerRatingMapFullday150);
 		}

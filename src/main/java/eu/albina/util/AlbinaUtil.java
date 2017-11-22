@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -109,8 +108,8 @@ public class AlbinaUtil {
 			return "ElevationRange_" + elevation + "Lw";
 	}
 
-	public static String createMapUrlOverview(DateTime date, int version, String daytime, List<String> regions,
-			int resolution, String fileExtension) {
+	public static String createMapUrlOverview(DateTime date, int version, String daytime, int resolution,
+			String fileExtension) {
 		StringBuilder result = new StringBuilder();
 		result.append(GlobalVariables.univieBaseUrl);
 		result.append(date.toString(GlobalVariables.formatterDate));
@@ -119,12 +118,6 @@ public class AlbinaUtil {
 		result.append(GlobalVariables.urlSeperator);
 		result.append(daytime);
 		result.append(GlobalVariables.urlSeperator);
-
-		for (String region : regions) {
-			result.append(region);
-			result.append(GlobalVariables.urlSeperator);
-		}
-
 		result.append(resolution);
 		result.append(".");
 		result.append(fileExtension);
