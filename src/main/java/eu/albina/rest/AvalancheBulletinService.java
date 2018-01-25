@@ -34,7 +34,6 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
@@ -444,19 +443,20 @@ public class AvalancheBulletinService {
 				AvalancheReportController.getInstance().publishReport(startDate, region, user, publicationDate);
 
 				// create maps
-				ArrayList<String> regions = new ArrayList<String>();
-				regions.add(GlobalVariables.codeTrentino);
-				regions.add(GlobalVariables.codeSouthTyrol);
-				regions.add(GlobalVariables.codeTyrol);
-
-				try {
-					AlbinaUtil.triggerMapProduction(AvalancheBulletinController.getInstance().getCaaml(startDate,
-							endDate, regions, LanguageCode.en));
-				} catch (TransformerException e) {
-					throw new AlbinaException(e.getMessage());
-				} catch (ParserConfigurationException e) {
-					throw new AlbinaException(e.getMessage());
-				}
+				logger.warn("Map production disabled!");
+				/*
+				 * ArrayList<String> regions = new ArrayList<String>();
+				 * regions.add(GlobalVariables.codeTrentino);
+				 * regions.add(GlobalVariables.codeSouthTyrol);
+				 * regions.add(GlobalVariables.codeTyrol);
+				 * 
+				 * try {
+				 * AlbinaUtil.triggerMapProduction(AvalancheBulletinController.getInstance().
+				 * getCaaml(startDate, endDate, regions, LanguageCode.en)); } catch
+				 * (TransformerException e) { throw new AlbinaException(e.getMessage()); } catch
+				 * (ParserConfigurationException e) { throw new AlbinaException(e.getMessage());
+				 * }
+				 */
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();
 			} else
