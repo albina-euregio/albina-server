@@ -57,14 +57,18 @@
 	"savedRegions" : [ "AT-07-10", "AT-07-11", "AT-07-12" ],
 	
 	"elevation" : 2000,
+	
+	"hasDaytimeDependency" : false,
+	
+	"hasElevationDependency" : true,
 
-	"above" : {
+	"forenoonAbove" : {
 		"dangerRating" : "considerable",
 		"avalancheProblem" : "new_snow",
 		"aspects" : [ "NW", "N", "NE"]
 	},
 
-	"below" : {
+	"forenoonBelow" : {
 		"dangerRating" : "moderate",
 		"avalancheProblem" : "wind_drifted_snow",
 		"aspects" : [ "NW", "N", "NE" ]

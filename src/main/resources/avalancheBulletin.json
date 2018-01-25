@@ -13,10 +13,6 @@
 			"enum" : [ "published", "draft", "missing", "obsolete" ]
 		},
 		
-		"aggregatedRegionId" : {
-			"type" : "string"
-		},
-	
 		"creator" : {
 			"type" : "string"
 		},
@@ -53,9 +49,13 @@
 		"obsoleteRegions" : { "$ref" : "#/definitions/region" },
 		
 		"elevation" : { "type" : "integer" },
+		"hasDaytimeDependency" : { "type" : "boolean" },
+		"hasElevationDependency" : { "type" : "boolean" },
 		
-		"above" : { "$ref" : "#/definitions/elevationDescription" },
-		"below" : { "$ref" : "#/definitions/elevationDescription" }
+		"forenoonAbove" : { "$ref" : "#/definitions/elevationDescription" },
+		"forenoonBelow" : { "$ref" : "#/definitions/elevationDescription" },
+		"afternoonAbove" : { "$ref" : "#/definitions/elevationDescription" },
+		"afternoonBelow" : { "$ref" : "#/definitions/elevationDescription" }
 	},
 
 	"additionalProperties" : false,

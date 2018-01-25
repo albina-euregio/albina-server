@@ -90,10 +90,14 @@ public class AvalancheBulletinController {
 			Hibernate.initialize(bulletin.getSynopsisHighlights());
 			Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 			Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
-			if (bulletin.getAbove() != null)
-				Hibernate.initialize(bulletin.getAbove().getAspects());
-			if (bulletin.getBelow() != null)
-				Hibernate.initialize(bulletin.getBelow().getAspects());
+			if (bulletin.getForenoonAbove() != null)
+				Hibernate.initialize(bulletin.getForenoonAbove().getAspects());
+			if (bulletin.getForenoonBelow() != null)
+				Hibernate.initialize(bulletin.getAfternoonBelow().getAspects());
+			if (bulletin.getAfternoonAbove() != null)
+				Hibernate.initialize(bulletin.getForenoonAbove().getAspects());
+			if (bulletin.getAfternoonBelow() != null)
+				Hibernate.initialize(bulletin.getAfternoonBelow().getAspects());
 			Hibernate.initialize(bulletin.getSuggestedRegions());
 			Hibernate.initialize(bulletin.getSavedRegions());
 			Hibernate.initialize(bulletin.getPublishedRegions());
@@ -338,7 +342,9 @@ public class AvalancheBulletinController {
 		if (result.bulletins != null) {
 			for (AvalancheBulletin bulletin : result.bulletins) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published) {
-					observations.appendChild(bulletin.toCAAML(doc, language, startDate, result.version));
+					for (Element element : bulletin.toCAAML(doc, language, startDate, result.version)) {
+						observations.appendChild(element);
+					}
 					found = true;
 				}
 			}
@@ -362,10 +368,14 @@ public class AvalancheBulletinController {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin bulletin : bulletins)
+			for (AvalancheBulletin bulletin : bulletins) {
 				for (String region : regions)
-					if (bulletin.affectsRegion(region))
+					if (bulletin.affectsRegion(region)) {
 						results.add(bulletin);
+						break;
+					}
+			}
+
 			for (AvalancheBulletin bulletin : results) {
 				Hibernate.initialize(bulletin.getAvActivityComment());
 				Hibernate.initialize(bulletin.getAvActivityHighlights());
@@ -375,10 +385,14 @@ public class AvalancheBulletinController {
 				Hibernate.initialize(bulletin.getSynopsisHighlights());
 				Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 				Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
-				if (bulletin.getAbove() != null)
-					Hibernate.initialize(bulletin.getAbove().getAspects());
-				if (bulletin.getBelow() != null)
-					Hibernate.initialize(bulletin.getBelow().getAspects());
+				if (bulletin.getForenoonAbove() != null)
+					Hibernate.initialize(bulletin.getForenoonAbove().getAspects());
+				if (bulletin.getForenoonBelow() != null)
+					Hibernate.initialize(bulletin.getForenoonBelow().getAspects());
+				if (bulletin.getAfternoonAbove() != null)
+					Hibernate.initialize(bulletin.getAfternoonAbove().getAspects());
+				if (bulletin.getAfternoonBelow() != null)
+					Hibernate.initialize(bulletin.getAfternoonBelow().getAspects());
 				Hibernate.initialize(bulletin.getSuggestedRegions());
 				Hibernate.initialize(bulletin.getSavedRegions());
 				Hibernate.initialize(bulletin.getPublishedRegions());
@@ -571,9 +585,9 @@ public class AvalancheBulletinController {
 						|| bulletin.getAvActivityComment().getTexts().size() < 1)
 					missingAvActivityComment = true;
 
-				if (bulletin.getAbove().getDangerRating() == DangerRating.missing
-						|| (bulletin.getBelow() != null && bulletin.getElevation() > 0
-								&& bulletin.getBelow().getDangerRating() == DangerRating.missing)) {
+				if (bulletin.getForenoonAbove().getDangerRating() == DangerRating.missing
+						|| (bulletin.getForenoonBelow() != null && bulletin.getElevation() > 0
+								&& bulletin.getForenoonBelow().getDangerRating() == DangerRating.missing)) {
 					missingDangerRating = true;
 				}
 			}
