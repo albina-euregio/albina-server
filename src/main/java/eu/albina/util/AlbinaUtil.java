@@ -101,11 +101,19 @@ public class AlbinaUtil {
 		return rootElement;
 	}
 
-	public static String createValidElevationAttribute(int elevation, boolean above) {
-		if (above)
-			return "ElevationRange_" + elevation + "Hi";
-		else
-			return "ElevationRange_" + elevation + "Lw";
+	public static String createValidElevationAttribute(int elevation, boolean above, boolean treeline) {
+		// TODO allow treeline in CAAML
+		if (treeline) {
+			if (above)
+				return "ElevationRange_TreelineHi";
+			else
+				return "ElevationRange_TreelineLw";
+		} else {
+			if (above)
+				return "ElevationRange_" + elevation + "Hi";
+			else
+				return "ElevationRange_" + elevation + "Lw";
+		}
 	}
 
 	public static String createMapUrlOverview(DateTime date, int version, String daytime, int resolution,

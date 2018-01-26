@@ -49,6 +49,7 @@
 		"obsoleteRegions" : { "$ref" : "#/definitions/region" },
 		
 		"elevation" : { "type" : "integer" },
+		"treeline" : { "type" : "boolean" },
 		"hasDaytimeDependency" : { "type" : "boolean" },
 		"hasElevationDependency" : { "type" : "boolean" },
 		

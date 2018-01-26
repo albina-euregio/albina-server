@@ -96,6 +96,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "ELEVATION")
 	private int elevation;
 
+	@Column(name = "TREELINE")
+	private boolean treeline;
+
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
 	private boolean hasDaytimeDependency;
 
@@ -204,6 +207,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (json.has("elevation"))
 			this.elevation = json.getInt("elevation");
+
+		if (json.has("treeline"))
+			this.treeline = json.getBoolean("treeline");
 
 		if (json.has("forenoonAbove"))
 			this.forenoonAbove = new AvalancheBulletinElevationDescription(json.getJSONObject("forenoonAbove"));
@@ -413,6 +419,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.elevation = elevation;
 	}
 
+	public boolean getTreeline() {
+		return treeline;
+	}
+
+	public void setTreeline(boolean treeline) {
+		this.treeline = treeline;
+	}
+
 	public boolean isHasDaytimeDependency() {
 		return hasDaytimeDependency;
 	}
@@ -474,11 +488,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (creatorRegion != null && creatorRegion != "")
 			json.put("creatorRegion", creatorRegion);
 
-		for (TextPart part : TextPart.values()) {
-			if ((textPartsMap.get(part) != null)) {
+		for (TextPart part : TextPart.values())
+			if ((textPartsMap.get(part) != null))
 				json.put(part.toString(), textPartsMap.get(part).toJSONArray());
-			}
-		}
 
 		if (publicationDate != null)
 			json.put("publicationDate", publicationDate.toString(GlobalVariables.formatterDateTime));
@@ -495,8 +507,13 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		json.put("hasDaytimeDependency", hasDaytimeDependency);
 		json.put("hasElevationDependency", hasElevationDependency);
 
-		if (hasElevationDependency)
-			json.put("elevation", elevation);
+		if (hasElevationDependency) {
+			if (treeline) {
+				json.put("treeline", treeline);
+			} else {
+				json.put("elevation", elevation);
+			}
+		}
 
 		if (hasElevationDependency && forenoonBelow != null)
 			json.put("forenoonBelow", forenoonBelow.toJSON());
@@ -569,7 +586,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			rootElement.appendChild(locRef);
 		}
 
-		// TODO use correct validity (split if daytime dependency)
 		if (validFrom != null && validUntil != null) {
 
 			DateTime start = new DateTime(validFrom);
@@ -607,7 +623,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (hasElevationDependency) {
 			Element dangerRatingAbove = doc.createElement("DangerRating");
 			Element validElevationAbove = doc.createElement("validElevation");
-			validElevationAbove.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, true));
+			validElevationAbove.setAttribute("xlink:href",
+					AlbinaUtil.createValidElevationAttribute(elevation, true, treeline));
 			dangerRatingAbove.appendChild(validElevationAbove);
 			if (above != null && above.getDangerRating() != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
@@ -617,10 +634,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			dangerRatings.appendChild(dangerRatingAbove);
 			Element dangerRatingBelow = doc.createElement("DangerRating");
 			Element validElevationBelow = doc.createElement("validElevation");
-			validElevationBelow.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, false));
+			validElevationBelow.setAttribute("xlink:href",
+					AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
 			dangerRatingBelow.appendChild(validElevationBelow);
 			if (below != null && below.getDangerRating() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
+				// TODO add treeline as elevation
 				mainValueBelow.appendChild(doc.createTextNode(DangerRating.getCAAMLString(below.getDangerRating())));
 				dangerRatingBelow.appendChild(mainValueBelow);
 			}
@@ -641,7 +660,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (hasElevationDependency) {
 			Element avProblemAbove = doc.createElement("AvProblem");
 			Element validElevationAbove = doc.createElement("validElevation");
-			validElevationAbove.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, true));
+			validElevationAbove.setAttribute("xlink:href",
+					AlbinaUtil.createValidElevationAttribute(elevation, true, treeline));
 			avProblemAbove.appendChild(validElevationAbove);
 			if (above != null && above.getAvalancheProblem() != null) {
 				Element typeAbove = doc.createElement("type");
@@ -658,7 +678,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 			Element avProblemBelow = doc.createElement("AvProblem");
 			Element validElevationBelow = doc.createElement("validElevation");
-			validElevationBelow.setAttribute("xlink:href", AlbinaUtil.createValidElevationAttribute(elevation, false));
+			validElevationBelow.setAttribute("xlink:href",
+					AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
 			avProblemBelow.appendChild(validElevationBelow);
 			if (below != null && below.getAvalancheProblem() != null) {
 				Element typeBelow = doc.createElement("type");
