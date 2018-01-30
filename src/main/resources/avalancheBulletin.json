@@ -21,6 +21,9 @@
 		},
 
 		"author" : { "$ref" : "#/definitions/author" },
+		
+		"avActivityHighlightsTextcat" : { "type" : "string" },
+		"avActivityCommentTextcat" : { "type" : "string" },
 
 		"avActivityHighlights" : { "$ref" : "#/definitions/textPart" },
 		"avActivityComment" : { "$ref" : "#/definitions/textPart" },

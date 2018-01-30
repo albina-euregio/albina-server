@@ -121,6 +121,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@JoinColumn(name = "AFTERNOON_BELOW_ID")
 	private AvalancheBulletinElevationDescription afternoonBelow;
 
+	@Column(name = "AV_ACTIVITY_HIGHLIGHTS_TEXTCAT")
+	private String avActivityHighlightsTextcat;
+
+	@Column(name = "AV_ACTIVITY_COMMENT_TEXTCAT")
+	private String avActivityCommentTextcat;
+
 	/** Map containing all text parts available for a bulletin */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "AVALANCHE_BULLETIN_TEXTS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
@@ -162,6 +168,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			this.creator = json.getString("creator");
 		if (json.has("creatorRegion"))
 			this.creatorRegion = json.getString("creatorRegion");
+
+		if (json.has("avActivityHighlightsTextcat"))
+			this.avActivityHighlightsTextcat = json.getString("avActivityHighlightsTextcat");
+		if (json.has("avActivityCommentTextcat"))
+			this.avActivityCommentTextcat = json.getString("avActivityCommentTextcat");
 
 		for (TextPart part : TextPart.values()) {
 			if (json.has(part.toString())) {
@@ -246,6 +257,22 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public void setCreatorRegion(String creatorRegion) {
 		this.creatorRegion = creatorRegion;
+	}
+
+	public String getAvActivityHighlightsTextcat() {
+		return avActivityHighlightsTextcat;
+	}
+
+	public void setAvActivityHighlightsTextcat(String avActivityHighlightsTextcat) {
+		this.avActivityHighlightsTextcat = avActivityHighlightsTextcat;
+	}
+
+	public String getAvActivityCommentTextcat() {
+		return avActivityCommentTextcat;
+	}
+
+	public void setAvActivityCommentTextcat(String avActivityCommentTextcat) {
+		this.avActivityCommentTextcat = avActivityCommentTextcat;
 	}
 
 	public Texts getAvActivityHighlights() {
@@ -487,6 +514,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (creatorRegion != null && creatorRegion != "")
 			json.put("creatorRegion", creatorRegion);
+
+		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
+			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
+		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
+			json.put("avActivityCommentTextcat", avActivityCommentTextcat);
 
 		for (TextPart part : TextPart.values())
 			if ((textPartsMap.get(part) != null))
@@ -792,5 +824,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		}
 
 		textPartsMap = bulletin.textPartsMap;
+
+		setAvActivityHighlightsTextcat(bulletin.getAvActivityHighlightsTextcat());
+		setAvActivityCommentTextcat(bulletin.getAvActivityCommentTextcat());
 	}
 }
