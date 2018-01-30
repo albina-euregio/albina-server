@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.mindrot.jbcrypt.BCrypt;
@@ -40,6 +39,11 @@ public class UtilTest {
 		names.add("Alex Boninsegna");
 		names.add("Rudi Mair");
 		names.add("Patrick Nairz");
+		names.add("Lukas Ruetz");
+		names.add("Matthias Walcher");
+		names.add("Stella Gschossmann");
+		names.add("Gabriel Gätz");
+		names.add("Alexander Ungerer");
 		names.add("Karel Kriz");
 		names.add("Alexander Pucher");
 		names.add("Daniel Nell");
@@ -60,6 +64,11 @@ public class UtilTest {
 		passwords.add("Alex");
 		passwords.add("Rudi");
 		passwords.add("Patrick");
+		passwords.add("Lukas");
+		passwords.add("Matthias");
+		passwords.add("Stella");
+		passwords.add("Gabriel");
+		passwords.add("Alexander");
 		passwords.add("Karel");
 		passwords.add("Alexander");
 		passwords.add("Daniel");
@@ -69,10 +78,9 @@ public class UtilTest {
 		passwords.add("Alberto");
 	}
 
-	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		int i = 18;
+		int i = 16;
 		File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 		String encodstring = encodeFileToBase64Binary(f);
 		String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
