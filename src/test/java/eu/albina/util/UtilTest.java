@@ -21,7 +21,7 @@ public class UtilTest {
 
 	private static Logger logger = LoggerFactory.getLogger(UtilTest.class);
 
-	private String imgBaseUrl = "C:/Users/Norbert Lanzanasto/Google Drive/albina/Administration/ProjektKommunikation/FotosProjectMembers/150x150/";
+	private String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
 	private List<String> names = new ArrayList<String>();
 	private List<String> passwords = new ArrayList<String>();
 
@@ -51,6 +51,12 @@ public class UtilTest {
 		names.add("Christoph Mitterer");
 		names.add("Norbert Lanzanasto");
 		names.add("Alberto Dalmaso");
+		names.add("Jürg Schweizer");
+		names.add("Matthias Gerber");
+		names.add("Thomas Stucki");
+		names.add("Kurt Winkler");
+		names.add("Ulrich Niederer");
+		names.add("Marc Ruesch");
 
 		passwords.add("Alberto");
 		passwords.add("Sergio");
@@ -76,17 +82,24 @@ public class UtilTest {
 		passwords.add("Christoph");
 		passwords.add("Norbert");
 		passwords.add("Alberto");
+		passwords.add("Jürg");
+		passwords.add("Matthias");
+		passwords.add("Thomas");
+		passwords.add("Kurt");
+		passwords.add("Ulrich");
+		passwords.add("Marc");
 	}
 
 	@Test
 	public void encodeImageAndPassword() {
-		int i = 16;
-		File f = new File(imgBaseUrl + names.get(i) + ".jpg");
-		String encodstring = encodeFileToBase64Binary(f);
-		String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
-		logger.warn(names.get(i));
-		logger.warn("Image: " + encodstring);
-		logger.warn("Password: " + pwd);
+		for (int i = 0; i < 30; i++) {
+			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
+			String encodstring = encodeFileToBase64Binary(f);
+			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
+			logger.warn(names.get(i));
+			logger.warn("Image: " + encodstring);
+			logger.warn("Password: " + pwd);
+		}
 	}
 
 	private static String encodeFileToBase64Binary(File file) {
