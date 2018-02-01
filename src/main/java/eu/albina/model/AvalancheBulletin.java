@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -35,6 +36,7 @@ import org.w3c.dom.Element;
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TextPart;
@@ -127,6 +129,20 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "AV_ACTIVITY_COMMENT_TEXTCAT")
 	private String avActivityCommentTextcat;
 
+	@Column(name = "SNOWPACK_STRUCTURE_HIGHLIGHTS_TEXTCAT")
+	private String snowpackStructureHighlightsTextcat;
+
+	@Column(name = "SNOWPACK_STRUCTURE_COMMENT_TEXTCAT")
+	private String snowpackStructureCommentTextcat;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "DANGER_PATTERN_1")
+	private DangerPattern dangerPattern1;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "DANGER_PATTERN_2")
+	private DangerPattern dangerPattern2;
+
 	/** Map containing all text parts available for a bulletin */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "AVALANCHE_BULLETIN_TEXTS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
@@ -173,6 +189,15 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			this.avActivityHighlightsTextcat = json.getString("avActivityHighlightsTextcat");
 		if (json.has("avActivityCommentTextcat"))
 			this.avActivityCommentTextcat = json.getString("avActivityCommentTextcat");
+		if (json.has("snowpackStructureHighlightsTextcat"))
+			this.snowpackStructureHighlightsTextcat = json.getString("snowpackStructureHighlightsTextcat");
+		if (json.has("snowpackStructureCommentTextcat"))
+			this.snowpackStructureCommentTextcat = json.getString("snowpackStructureCommentTextcat");
+
+		if (json.has("dangerPattern1"))
+			this.dangerPattern1 = DangerPattern.valueOf(json.getString("dangerPattern1").toLowerCase());
+		if (json.has("dangerPattern2"))
+			this.dangerPattern2 = DangerPattern.valueOf(json.getString("dangerPattern2").toLowerCase());
 
 		for (TextPart part : TextPart.values()) {
 			if (json.has(part.toString())) {
@@ -275,6 +300,22 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.avActivityCommentTextcat = avActivityCommentTextcat;
 	}
 
+	public String getSnowpackStructureHighlightsTextcat() {
+		return snowpackStructureHighlightsTextcat;
+	}
+
+	public void setSnowpackStructureHighlightsTextcat(String snowpackStructureHighlightsTextcat) {
+		this.snowpackStructureHighlightsTextcat = snowpackStructureHighlightsTextcat;
+	}
+
+	public String getSnowpackStructureCommentTextcat() {
+		return snowpackStructureCommentTextcat;
+	}
+
+	public void setSnowpackStructureCommentTextcat(String snowpackStructureCommentTextcat) {
+		this.snowpackStructureCommentTextcat = snowpackStructureCommentTextcat;
+	}
+
 	public Texts getAvActivityHighlights() {
 		return textPartsMap.get(TextPart.avActivityHighlights);
 	}
@@ -337,6 +378,22 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public void setTravelAdvisoryComment(Texts travelAdvisoryComment) {
 		textPartsMap.put(TextPart.travelAdvisoryComment, travelAdvisoryComment);
+	}
+
+	public DangerPattern getDangerPattern1() {
+		return dangerPattern1;
+	}
+
+	public void setDangerPattern1(DangerPattern dangerPattern) {
+		this.dangerPattern1 = dangerPattern;
+	}
+
+	public DangerPattern getDangerPattern2() {
+		return dangerPattern2;
+	}
+
+	public void setDangerPattern2(DangerPattern dangerPattern) {
+		this.dangerPattern2 = dangerPattern;
 	}
 
 	public org.joda.time.DateTime getPublicationDate() {
@@ -519,10 +576,20 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
 		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
 			json.put("avActivityCommentTextcat", avActivityCommentTextcat);
+		if (snowpackStructureHighlightsTextcat != null && snowpackStructureHighlightsTextcat != "")
+			json.put("snowpackStructureHighlightsTextcat", snowpackStructureHighlightsTextcat);
+		if (snowpackStructureCommentTextcat != null && snowpackStructureCommentTextcat != "")
+			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
 
 		for (TextPart part : TextPart.values())
 			if ((textPartsMap.get(part) != null))
 				json.put(part.toString(), textPartsMap.get(part).toJSONArray());
+
+		if (dangerPattern1 != null)
+			json.put("dangerPattern1", this.dangerPattern1.toString());
+
+		if (dangerPattern2 != null)
+			json.put("dangerPattern2", this.dangerPattern2.toString());
 
 		if (publicationDate != null)
 			json.put("publicationDate", publicationDate.toString(GlobalVariables.formatterDateTime));
@@ -564,6 +631,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, DateTime startDate, int version,
 			boolean isAfternoon) {
+
+		// TODO add danger patterns to CAAML
+
 		AvalancheBulletinElevationDescription above;
 		AvalancheBulletinElevationDescription below;
 
