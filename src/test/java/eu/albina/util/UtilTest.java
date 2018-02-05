@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.mindrot.jbcrypt.BCrypt;
@@ -90,6 +91,7 @@ public class UtilTest {
 		passwords.add("Marc");
 	}
 
+	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
 		for (int i = 0; i < 30; i++) {
