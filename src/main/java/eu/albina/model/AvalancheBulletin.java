@@ -632,8 +632,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, DateTime startDate, int version,
 			boolean isAfternoon) {
 
-		// TODO add danger patterns to CAAML
-
 		AvalancheBulletinElevationDescription above;
 		AvalancheBulletinElevationDescription below;
 
@@ -757,6 +755,44 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			dangerRatings.appendChild(dangerRating);
 		}
 		bulletinMeasurements.appendChild(dangerRatings);
+
+		if (dangerPattern1 != null || dangerPattern1 != null) {
+			Element dangerPatterns = doc.createElement("dangerPatterns");
+			// TODO add danger patterns to CAAML
+			if (dangerPattern1 != null) {
+				Element dangerPatternOne = doc.createElement("DangerPattern");
+				Element dangerPatternOneType = doc.createElement("type");
+				dangerPatternOneType.appendChild(doc.createTextNode(DangerPattern.getCAAMLString(dangerPattern1)));
+				dangerPatternOne.appendChild(dangerPatternOneType);
+				for (Aspect aspect : above.getAspects()) {
+					Element validAspect = doc.createElement("validAspect");
+					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+					dangerPatternOne.appendChild(validAspect);
+				}
+				Element validElevation = doc.createElement("validElevation");
+				validElevation.setAttribute("xlink:href",
+						AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
+				dangerPatternOne.appendChild(validElevation);
+				dangerPatterns.appendChild(dangerPatternOne);
+			}
+			if (dangerPattern2 != null) {
+				Element dangerPatternTwo = doc.createElement("DangerPattern");
+				Element dangerPatternTwoType = doc.createElement("type");
+				dangerPatternTwoType.appendChild(doc.createTextNode(DangerPattern.getCAAMLString(dangerPattern2)));
+				dangerPatternTwo.appendChild(dangerPatternTwoType);
+				for (Aspect aspect : above.getAspects()) {
+					Element validAspect = doc.createElement("validAspect");
+					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+					dangerPatternTwo.appendChild(validAspect);
+				}
+				Element validElevation = doc.createElement("validElevation");
+				validElevation.setAttribute("xlink:href",
+						AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
+				dangerPatternTwo.appendChild(validElevation);
+				dangerPatterns.appendChild(dangerPatternTwo);
+			}
+			bulletinMeasurements.appendChild(dangerPatterns);
+		}
 
 		Element avProblems = doc.createElement("avProblems");
 		if (hasElevationDependency) {
