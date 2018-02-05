@@ -3,12 +3,14 @@ package eu.albina.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -36,6 +38,10 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 	@Column(name = "DANGER_RATING")
 	private DangerRating dangerRating;
 
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "MATRIX_INFORMATION_ID")
+	private MatrixInformation matrixInformation;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "AVALANCHE_PROBLEM")
 	private AvalancheProblem avalancheProblem;
@@ -56,6 +62,8 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 			this.id = json.getString("id");
 		if (json.has("dangerRating"))
 			this.dangerRating = DangerRating.valueOf(json.getString("dangerRating").toLowerCase());
+		if (json.has("matrixInformation"))
+			this.matrixInformation = new MatrixInformation(json.getJSONObject("matrixInformation"));
 		if (json.has("avalancheProblem"))
 			this.avalancheProblem = AvalancheProblem.valueOf(json.getString("avalancheProblem").toLowerCase());
 		if (json.has("aspects")) {
@@ -72,6 +80,14 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 
 	public void setDangerRating(DangerRating dangerRating) {
 		this.dangerRating = dangerRating;
+	}
+
+	public MatrixInformation getMatrixInformation() {
+		return matrixInformation;
+	}
+
+	public void setMatrixInformation(MatrixInformation matrixInformation) {
+		this.matrixInformation = matrixInformation;
 	}
 
 	public AvalancheProblem getAvalancheProblem() {
@@ -97,6 +113,8 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 			json.put("id", id);
 		if (dangerRating != null)
 			json.put("dangerRating", this.dangerRating.toString());
+		if (matrixInformation != null)
+			json.put("matrixInformation", matrixInformation.toJSON());
 		if (avalancheProblem != null)
 			json.put("avalancheProblem", this.avalancheProblem.toString());
 

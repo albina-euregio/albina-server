@@ -7,6 +7,7 @@
       <class>eu.albina.model.Texts</class>
       <class>eu.albina.model.User</class>
       <class>eu.albina.model.Region</class>
+      <class>eu.albina.model.MatrixInformation</class>
       <class>eu.albina.model.AvalancheBulletinElevationDescription</class>
       <class>eu.albina.model.AvalancheBulletin</class>
       <class>eu.albina.model.News</class>
