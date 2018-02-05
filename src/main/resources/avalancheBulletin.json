@@ -10,7 +10,7 @@
 
 		"status" : {
 			"type" : "string",
-			"enum" : [ "published", "draft", "missing", "obsolete" ]
+			"enum" : [ "republished", "resubmitted", "updated", "published", "submitted", "draft", "missing" ]
 		},
 		
 		"creator" : {
@@ -98,6 +98,7 @@
 			"type" : "object",
 			"properties" : {
 				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
+				"matrixInformation" : { "$ref" : "#/definitions/matrixInformation" },
 				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
 				"aspects" : {
 					"type" : "array",
@@ -154,6 +155,53 @@
 			"description" : "The five avalanche problems.",
 			"type" : "string",
 			"enum" : [ "new_snow", "wind_drifted_snow", "weak_persistent_layer", "wet_snow", "gliding_snow", "favourable_situation" ]
+		},
+		"matrixInformation" : {
+			"id" : "#matrixInformation",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Matrix Information",
+			"description" : "Specification of the used field in the matrix.",
+			"type" : "object",
+			"properties" : {
+				"avalancheSize" : { "$ref" : "#/definitions/avalancheSize" },
+				"avalancheReleaseProbability" : { "$ref" : "#/definitions/avalancheReleaseProbability" },
+				"hazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" },
+				"spontaneousAvalancheReleaseProbability" : { "$ref" : "#/definitions/spontaneousAvalancheReleaseProbability" },
+				"spontaneousHazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" }
+			},
+			"additionalProperties" : false						
+		},
+		"avalancheSize" : {
+			"id" : "#avalancheSize",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Avalanche Size",
+			"description" : "Size of an avalanche.",
+			"type" : "string",
+			"enum" : [ "small", "medium", "large", "very_large", "extreme" ]
+		},
+		"avalancheReleaseProbability" : {
+			"id" : "#avalancheReleaseProbability",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Avalanche Release Probability",
+			"description" : "The probability of an avalanche release.",
+			"type" : "string",
+			"enum" : [ "one", "two", "three", "four" ]
+		},
+		"hazardSiteDistribution" : {
+			"id" : "#hazardSiteDistribution",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Hazard Site Distribution",
+			"description" : "Distribution of hazardous sites.",
+			"type" : "string",
+			"enum" : [ "single", "some", "many", "many_most", "moderately_steep" ]
+		},
+		"spontaneousAvalancheReleaseProbability" : {
+			"id" : "#spontaneousAvalancheReleaseProbability",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Spontaneous Avalanche Release Probability",
+			"description" : "The probability of a spontaneous avalanche release.",
+			"type" : "string",
+			"enum" : [ "one", "two", "three", "four" ]
 		}
 	}
 }
