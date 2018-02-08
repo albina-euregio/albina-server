@@ -888,6 +888,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		setElevation(bulletin.getElevation());
 		setHasDaytimeDependency(bulletin.isHasDaytimeDependency());
 		setHasElevationDependency(bulletin.isHasElevationDependency());
+		setTreeline(bulletin.getTreeline());
 
 		if (bulletin.getForenoonAbove() != null) {
 			if (forenoonAbove == null)
@@ -896,6 +897,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				forenoonAbove.setAspects(bulletin.getForenoonAbove().getAspects());
 				forenoonAbove.setAvalancheProblem(bulletin.getForenoonAbove().getAvalancheProblem());
 				forenoonAbove.setDangerRating(bulletin.getForenoonAbove().getDangerRating());
+				forenoonAbove.setMatrixInformation(bulletin.getForenoonAbove().getMatrixInformation());
 			}
 		}
 
@@ -906,6 +908,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				forenoonBelow.setAspects(bulletin.getForenoonBelow().getAspects());
 				forenoonBelow.setAvalancheProblem(bulletin.getForenoonBelow().getAvalancheProblem());
 				forenoonBelow.setDangerRating(bulletin.getForenoonBelow().getDangerRating());
+				forenoonBelow.setMatrixInformation(bulletin.getForenoonBelow().getMatrixInformation());
 			}
 		}
 
@@ -916,6 +919,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				afternoonAbove.setAspects(bulletin.getAfternoonAbove().getAspects());
 				afternoonAbove.setAvalancheProblem(bulletin.getAfternoonAbove().getAvalancheProblem());
 				afternoonAbove.setDangerRating(bulletin.getAfternoonAbove().getDangerRating());
+				afternoonAbove.setMatrixInformation(bulletin.getAfternoonAbove().getMatrixInformation());
 			}
 		}
 
@@ -926,6 +930,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				afternoonBelow.setAspects(bulletin.getAfternoonBelow().getAspects());
 				afternoonBelow.setAvalancheProblem(bulletin.getAfternoonBelow().getAvalancheProblem());
 				afternoonBelow.setDangerRating(bulletin.getAfternoonBelow().getDangerRating());
+				afternoonBelow.setMatrixInformation(bulletin.getAfternoonBelow().getMatrixInformation());
 			}
 		}
 

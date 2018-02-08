@@ -3,14 +3,15 @@ package eu.albina.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -38,8 +39,16 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 	@Column(name = "DANGER_RATING")
 	private DangerRating dangerRating;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "MATRIX_INFORMATION_ID")
+	/** Information about the location of the snow profile */
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "dangerRating", column = @Column(name = "MATRIX_INFORMATION_DANGER_RATING")),
+			@AttributeOverride(name = "avalancheSize", column = @Column(name = "MATRIX_INFORMATION_AVALANCHE_SIZE")),
+			@AttributeOverride(name = "avalancheReleaseProbability", column = @Column(name = "MATRIX_INFORMATION_AVALANCHE_RELEASE_PROBABILITY")),
+			@AttributeOverride(name = "hazardSiteDistribution", column = @Column(name = "MATRIX_INFORMATION_HAZARD_SITE_DISTRIBUTION")),
+			@AttributeOverride(name = "spontaneousDangerRating", column = @Column(name = "MATRIX_INFORMATION_SPONTANEOUS_DANGER_RATING")),
+			@AttributeOverride(name = "spontaneousAvalancheReleaseProbability", column = @Column(name = "MATRIX_INFORMATION_SPONTANEOUS_AVALANCHE_RELEASE_PROBABILITY")),
+			@AttributeOverride(name = "spontaneousHazardSiteDistribution", column = @Column(name = "MATRIX_INFORMATION_SPONTANEOUS_HAZARD_SITE_DISTRIBUTION")) })
 	private MatrixInformation matrixInformation;
 
 	@Enumerated(EnumType.STRING)
