@@ -1,7 +1,7 @@
 package eu.albina.model.enumerations;
 
 public enum AvalancheSize {
-	small, middle, large, very_large, extreme;
+	small, medium, large, very_large, extreme;
 
 	public static AvalancheSize fromString(String text) {
 		if (text != null) {
