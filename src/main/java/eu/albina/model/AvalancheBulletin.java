@@ -320,12 +320,28 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return textPartsMap.get(TextPart.avActivityHighlights);
 	}
 
+	public String getAvActivityHighlightsIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.avActivityHighlights);
+		if (texts != null)
+			return texts.getText(lang);
+		else
+			return null;
+	}
+
 	public void setAvActivityHighlights(Texts avActivityHighlights) {
 		textPartsMap.put(TextPart.avActivityHighlights, avActivityHighlights);
 	}
 
 	public Texts getAvActivityComment() {
 		return textPartsMap.get(TextPart.avActivityComment);
+	}
+
+	public String getAvActivityCommentIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.avActivityComment);
+		if (texts != null)
+			return texts.getText(lang);
+		else
+			return null;
 	}
 
 	public void setAvActivityComment(Texts avActivityComment) {
@@ -336,12 +352,28 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return textPartsMap.get(TextPart.synopsisHighlights);
 	}
 
+	public String getSynopsisHighlightsIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.synopsisHighlights);
+		if (texts != null)
+			return texts.getText(lang);
+		else
+			return null;
+	}
+
 	public void setSynopsisHighlights(Texts synopsisHighlights) {
 		textPartsMap.put(TextPart.synopsisHighlights, synopsisHighlights);
 	}
 
 	public Texts getSynopsisComment() {
 		return textPartsMap.get(TextPart.synopsisComment);
+	}
+
+	public String getSynopsisCommentIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.synopsisComment);
+		if (texts != null)
+			return texts.getText(lang);
+		else
+			return null;
 	}
 
 	public void setSynopsisComment(Texts synopsisComment) {
@@ -352,12 +384,28 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return textPartsMap.get(TextPart.snowpackStructureHighlights);
 	}
 
+	public String getSnowpackStructureHighlightsIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.snowpackStructureHighlights);
+		if (texts != null)
+			return texts.getText(lang);
+		else
+			return null;
+	}
+
 	public void setSnowpackStructureHighlights(Texts snowpackStructureHighlights) {
 		textPartsMap.put(TextPart.snowpackStructureHighlights, snowpackStructureHighlights);
 	}
 
 	public Texts getSnowpackStructureComment() {
 		return textPartsMap.get(TextPart.snowpackStructureComment);
+	}
+
+	public String getSnowpackStructureCommentIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.snowpackStructureComment);
+		if (texts != null)
+			return texts.getText(lang);
+		else
+			return null;
 	}
 
 	public void setSnowpackStructureComment(Texts snowpackStructureComment) {
@@ -368,12 +416,22 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return textPartsMap.get(TextPart.travelAdvisoryHighlights);
 	}
 
+	public String getTravelAdvisoryHighlightsIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.travelAdvisoryHighlights);
+		return texts.getText(lang);
+	}
+
 	public void setTravelAdvisoryHighlights(Texts travelAdvisoryHighlights) {
 		textPartsMap.put(TextPart.travelAdvisoryHighlights, travelAdvisoryHighlights);
 	}
 
 	public Texts getTravelAdvisoryComment() {
 		return textPartsMap.get(TextPart.travelAdvisoryComment);
+	}
+
+	public String getTravelAdvisoryCommentIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.travelAdvisoryComment);
+		return texts.getText(lang);
 	}
 
 	public void setTravelAdvisoryComment(Texts travelAdvisoryComment) {
