@@ -1,13 +1,18 @@
 package eu.albina.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
@@ -17,10 +22,15 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.enumerations.LanguageCode;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UtilTest {
 
 	private static Logger logger = LoggerFactory.getLogger(UtilTest.class);
+
+	private List<AvalancheBulletin> bulletins;
 
 	private String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
 	private List<String> names = new ArrayList<String>();
@@ -89,6 +99,30 @@ public class UtilTest {
 		passwords.add("Kurt");
 		passwords.add("Ulrich");
 		passwords.add("Marc");
+
+		// Load valid avalanche bulletin JSON from resources
+		bulletins = new ArrayList<AvalancheBulletin>();
+		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+		InputStream is = classloader.getResourceAsStream("validBulletin.json");
+		StringBuilder bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		String validBulletinStringFromResource = bulletinStringBuilder.toString();
+		AvalancheBulletin bulletin = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), null);
+		bulletins.add(bulletin);
+	}
+
+	@Test
+	public void createFreemarker() throws IOException, URISyntaxException {
+		AlbinaUtil.createFreemarkerConfigurationInstance();
+		AlbinaUtil.createEmailHtml(bulletins, LanguageCode.de);
 	}
 
 	@Ignore
