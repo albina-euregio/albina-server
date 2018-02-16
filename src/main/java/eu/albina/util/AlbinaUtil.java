@@ -61,6 +61,30 @@ public class AlbinaUtil {
 
 	private static Configuration cfg;
 
+	public static void createFreemarkerConfigurationInstance() throws IOException, URISyntaxException {
+		cfg = new Configuration(Configuration.VERSION_2_3_27);
+
+		// Specify the source where the template files come from. Here I set a
+		// plain directory for it, but non-file-system sources are possible too:
+		cfg.setDirectoryForTemplateLoading(new File(ClassLoader.getSystemResource("templates").toURI()));
+
+		// Set the preferred charset template files are stored in. UTF-8 is
+		// a good choice in most applications:
+		cfg.setDefaultEncoding("UTF-8");
+
+		// Sets how errors will appear.
+		// During web page *development* TemplateExceptionHandler.HTML_DEBUG_HANDLER is
+		// better.
+		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+
+		// Don't log exceptions inside FreeMarker that it will thrown at you anyway:
+		cfg.setLogTemplateExceptions(false);
+
+		// Wrap unchecked exceptions thrown during template processing into
+		// TemplateException-s.
+		cfg.setWrapUncheckedExceptions(true);
+	}
+
 	public static Configuration getFreeMarkerConfiguration() {
 		return cfg;
 	}
@@ -239,22 +263,26 @@ public class AlbinaUtil {
 			image.put("ci", "http://212.47.231.185:8080/images/ci.png");
 			image.put("logo", "http://212.47.231.185:8080/images/Avalanche.png");
 			Map<String, Object> socialMediaImages = new HashMap<>();
-			socialMediaImages.put("facebook", "http://212.47.231.185:8080/images/facebook.png");
-			socialMediaImages.put("twitter", "http://212.47.231.185:8080/images/twitter.png");
-			socialMediaImages.put("instagram", "http://212.47.231.185:8080/images/instagram.png");
-			socialMediaImages.put("youtube", "http://212.47.231.185:8080/images/youtube.png");
-			socialMediaImages.put("whatsapp", "http://212.47.231.185:8080/images/whatsapp.png");
-			/*
-			 * socialMediaImages.put("facebook", "cid:facebook");
-			 * socialMediaImages.put("twitter", "cid:twitter");
-			 * socialMediaImages.put("instagram", "cid:instagram");
-			 * socialMediaImages.put("youtube", "cid:youtube");
-			 * socialMediaImages.put("whatsapp", "cid:whatsapp");
-			 */
+			// socialMediaImages.put("facebook",
+			// "http://212.47.231.185:8080/images/facebook.png");
+			// socialMediaImages.put("twitter",
+			// "http://212.47.231.185:8080/images/twitter.png");
+			// socialMediaImages.put("instagram",
+			// "http://212.47.231.185:8080/images/instagram.png");
+			// socialMediaImages.put("youtube",
+			// "http://212.47.231.185:8080/images/youtube.png");
+			// socialMediaImages.put("whatsapp",
+			// "http://212.47.231.185:8080/images/whatsapp.png");
+			socialMediaImages.put("facebook", "cid:facebook");
+			socialMediaImages.put("twitter", "cid:twitter");
+			socialMediaImages.put("instagram", "cid:instagram");
+			socialMediaImages.put("youtube", "cid:youtube");
+			socialMediaImages.put("whatsapp", "cid:whatsapp");
 			image.put("socialmedia", socialMediaImages);
 			Map<String, Object> mapImage = new HashMap<>();
-			mapImage.put("overview", "http://212.47.231.185:8080/images/map_overview.png");
-			// mapImage.put("overview", "cid:map_overview");
+			// mapImage.put("overview",
+			// "http://212.47.231.185:8080/images/map_overview.png");
+			mapImage.put("overview", "cid:map_overview");
 			image.put("map", mapImage);
 			root.put("image", image);
 
@@ -349,30 +377,6 @@ public class AlbinaUtil {
 		return null;
 	}
 
-	public static void createFreemarkerConfigurationInstance() throws IOException, URISyntaxException {
-		cfg = new Configuration(Configuration.VERSION_2_3_27);
-
-		// Specify the source where the template files come from. Here I set a
-		// plain directory for it, but non-file-system sources are possible too:
-		cfg.setDirectoryForTemplateLoading(new File(ClassLoader.getSystemResource("templates").toURI()));
-
-		// Set the preferred charset template files are stored in. UTF-8 is
-		// a good choice in most applications:
-		cfg.setDefaultEncoding("UTF-8");
-
-		// Sets how errors will appear.
-		// During web page *development* TemplateExceptionHandler.HTML_DEBUG_HANDLER is
-		// better.
-		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-		// Don't log exceptions inside FreeMarker that it will thrown at you anyway:
-		cfg.setLogTemplateExceptions(false);
-
-		// Wrap unchecked exceptions thrown during template processing into
-		// TemplateException-s.
-		cfg.setWrapUncheckedExceptions(true);
-	}
-
 	public static void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang) throws MessagingException {
 		logger.debug("Sending mail...");
 		Properties props = new Properties();
@@ -410,7 +414,19 @@ public class AlbinaUtil {
 
 		// add logo image
 		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images/logo.png");
+		switch (lang) {
+		case en:
+			imageUrl = ClassLoader.getSystemResource("images/logo_en.png");
+			break;
+		case de:
+			imageUrl = ClassLoader.getSystemResource("images/logo_de.png");
+			break;
+		case it:
+			imageUrl = ClassLoader.getSystemResource("images/logo_it.png");
+			break;
+		default:
+			break;
+		}
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
 		messageBodyPart.setHeader("Content-ID", "logo");
