@@ -38,6 +38,7 @@ import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.MapUtil;
 
 /**
  * Controller for avalanche bulletins.
@@ -241,7 +242,7 @@ public class AvalancheBulletinController {
 			daytimeAM300.appendChild(doc.createTextNode(GlobalVariables.urlStringForenoon));
 			dangerRatingMapAM300.appendChild(daytimeAM300);
 			Element urlAM300 = doc.createElement("albina:url");
-			urlAM300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+			urlAM300.appendChild(doc.createTextNode(MapUtil.createMapUrlOverview(startDate, result.version,
 					GlobalVariables.urlStringForenoon, 300, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapAM300.appendChild(urlAM300);
 			customData.appendChild(dangerRatingMapAM300);
@@ -257,7 +258,7 @@ public class AvalancheBulletinController {
 			daytimePM300.appendChild(doc.createTextNode(GlobalVariables.urlStringAfternoon));
 			dangerRatingMapPM300.appendChild(daytimePM300);
 			Element urlPM300 = doc.createElement("albina:url");
-			urlPM300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+			urlPM300.appendChild(doc.createTextNode(MapUtil.createMapUrlOverview(startDate, result.version,
 					GlobalVariables.urlStringAfternoon, 300, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapPM300.appendChild(urlPM300);
 			customData.appendChild(dangerRatingMapPM300);
@@ -273,7 +274,7 @@ public class AvalancheBulletinController {
 			daytimeAM150.appendChild(doc.createTextNode(GlobalVariables.urlStringForenoon));
 			dangerRatingMapAM150.appendChild(daytimeAM150);
 			Element urlAM150 = doc.createElement("albina:url");
-			urlAM150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+			urlAM150.appendChild(doc.createTextNode(MapUtil.createMapUrlOverview(startDate, result.version,
 					GlobalVariables.urlStringForenoon, 150, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapAM150.appendChild(urlAM150);
 			customData.appendChild(dangerRatingMapAM150);
@@ -289,7 +290,7 @@ public class AvalancheBulletinController {
 			daytimePM150.appendChild(doc.createTextNode(GlobalVariables.urlStringAfternoon));
 			dangerRatingMapPM150.appendChild(daytimePM150);
 			Element urlPM150 = doc.createElement("albina:url");
-			urlPM150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+			urlPM150.appendChild(doc.createTextNode(MapUtil.createMapUrlOverview(startDate, result.version,
 					GlobalVariables.urlStringAfternoon, 150, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapPM150.appendChild(urlPM150);
 			customData.appendChild(dangerRatingMapPM150);
@@ -309,7 +310,7 @@ public class AvalancheBulletinController {
 			daytimeFullday300.appendChild(doc.createTextNode(GlobalVariables.urlStringFullday));
 			dangerRatingMapFullday300.appendChild(daytimeFullday300);
 			Element urlFullday300 = doc.createElement("albina:url");
-			urlFullday300.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+			urlFullday300.appendChild(doc.createTextNode(MapUtil.createMapUrlOverview(startDate, result.version,
 					GlobalVariables.urlStringFullday, 300, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapFullday300.appendChild(urlFullday300);
 			customData.appendChild(dangerRatingMapFullday300);
@@ -325,7 +326,7 @@ public class AvalancheBulletinController {
 			daytimeFullday150.appendChild(doc.createTextNode(GlobalVariables.urlStringFullday));
 			dangerRatingMapFullday150.appendChild(daytimeFullday150);
 			Element urlFullday150 = doc.createElement("albina:url");
-			urlFullday150.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlOverview(startDate, result.version,
+			urlFullday150.appendChild(doc.createTextNode(MapUtil.createMapUrlOverview(startDate, result.version,
 					GlobalVariables.urlStringFullday, 150, GlobalVariables.fileExtensionJpg)));
 			dangerRatingMapFullday150.appendChild(urlFullday150);
 			customData.appendChild(dangerRatingMapFullday150);

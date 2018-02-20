@@ -44,6 +44,7 @@ import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.MapUtil;
 
 /**
  * This class holds all information about one avalanche bulletin.
@@ -762,8 +763,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		dangerRatingMap.appendChild(resolution300);
 		dangerRatingMap.appendChild(filetypeJPG);
 		Element url = doc.createElement("albina:url");
-		url.appendChild(doc.createTextNode(AlbinaUtil.createMapUrlAggregatedRegion(startDate, version, getId(),
-				GlobalVariables.fileExtensionJpg)));
+		url.appendChild(doc.createTextNode(
+				MapUtil.createMapUrlAggregatedRegion(startDate, version, getId(), GlobalVariables.fileExtensionJpg)));
 		dangerRatingMap.appendChild(url);
 		customData.appendChild(dangerRatingMap);
 		metaData.appendChild(customData);

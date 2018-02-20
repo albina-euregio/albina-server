@@ -121,8 +121,8 @@ public class UtilTest {
 
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		AlbinaUtil.createFreemarkerConfigurationInstance();
-		AlbinaUtil.createEmailHtml(bulletins, LanguageCode.de);
+		EmailUtil.createFreemarkerConfigurationInstance();
+		EmailUtil.createEmailHtml(bulletins, LanguageCode.de);
 	}
 
 	@Ignore

@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 
 import eu.albina.controller.SocketIOController;
-import eu.albina.util.AlbinaUtil;
+import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 
 @WebListener
@@ -38,7 +38,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		HibernateUtil.getInstance().setUp();
 
 		try {
-			AlbinaUtil.createFreemarkerConfigurationInstance();
+			EmailUtil.createFreemarkerConfigurationInstance();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
