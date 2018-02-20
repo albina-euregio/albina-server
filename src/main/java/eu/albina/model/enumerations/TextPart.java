@@ -1,7 +1,7 @@
 package eu.albina.model.enumerations;
 
 public enum TextPart {
-	synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment;
+	synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment, tendencyComment;
 
 	public static TextPart fromString(String text) {
 		if (text != null) {

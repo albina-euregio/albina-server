@@ -39,6 +39,7 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
@@ -135,6 +136,13 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Column(name = "SNOWPACK_STRUCTURE_COMMENT_TEXTCAT")
 	private String snowpackStructureCommentTextcat;
 
+	@Column(name = "TENDENCY_COMMENT_TEXTCAT")
+	private String tendencyCommentTextcat;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "TENDENCY")
+	private Tendency tendency;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_PATTERN_1")
 	private DangerPattern dangerPattern1;
@@ -193,6 +201,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			this.snowpackStructureHighlightsTextcat = json.getString("snowpackStructureHighlightsTextcat");
 		if (json.has("snowpackStructureCommentTextcat"))
 			this.snowpackStructureCommentTextcat = json.getString("snowpackStructureCommentTextcat");
+		if (json.has("tendencyCommentTextcat"))
+			this.tendencyCommentTextcat = json.getString("tendencyCommentTextcat");
+
+		if (json.has("tendency"))
+			this.tendency = Tendency.valueOf(json.getString("tendency").toLowerCase());
 
 		if (json.has("dangerPattern1"))
 			this.dangerPattern1 = DangerPattern.valueOf(json.getString("dangerPattern1").toLowerCase());
@@ -316,6 +329,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.snowpackStructureCommentTextcat = snowpackStructureCommentTextcat;
 	}
 
+	public String getTendencyCommentTextcat() {
+		return tendencyCommentTextcat;
+	}
+
+	public void setTendencyCommentTextcat(String tendencyCommentTextcat) {
+		this.tendencyCommentTextcat = tendencyCommentTextcat;
+	}
+
 	public Texts getAvActivityHighlights() {
 		return textPartsMap.get(TextPart.avActivityHighlights);
 	}
@@ -378,6 +399,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public void setTravelAdvisoryComment(Texts travelAdvisoryComment) {
 		textPartsMap.put(TextPart.travelAdvisoryComment, travelAdvisoryComment);
+	}
+
+	public Tendency getTendency() {
+		return tendency;
+	}
+
+	public void setTendency(Tendency tendency) {
+		this.tendency = tendency;
 	}
 
 	public DangerPattern getDangerPattern1() {
@@ -580,14 +609,18 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			json.put("snowpackStructureHighlightsTextcat", snowpackStructureHighlightsTextcat);
 		if (snowpackStructureCommentTextcat != null && snowpackStructureCommentTextcat != "")
 			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
+		if (tendencyCommentTextcat != null && tendencyCommentTextcat != "")
+			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
 
 		for (TextPart part : TextPart.values())
 			if ((textPartsMap.get(part) != null))
 				json.put(part.toString(), textPartsMap.get(part).toJSONArray());
 
+		if (tendency != null)
+			json.put("tendency", this.tendency.toString());
+
 		if (dangerPattern1 != null)
 			json.put("dangerPattern1", this.dangerPattern1.toString());
-
 		if (dangerPattern2 != null)
 			json.put("dangerPattern2", this.dangerPattern2.toString());
 

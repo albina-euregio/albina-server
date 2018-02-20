@@ -24,6 +24,9 @@
 		
 		"avActivityHighlightsTextcat" : { "type" : "string" },
 		"avActivityCommentTextcat" : { "type" : "string" },
+		"snowpackStructureHighlightsTextcat" : { "type" : "string" },
+		"snowpackStructureCommentTextcat" : { "type" : "string" },
+		"tendencyCommentTextcat" : { "type" : "string" },
 
 		"avActivityHighlights" : { "$ref" : "#/definitions/textPart" },
 		"avActivityComment" : { "$ref" : "#/definitions/textPart" },
@@ -50,6 +53,11 @@
 		"savedRegions" : { "$ref" : "#/definitions/region" },
 		"publishedRegions" : { "$ref" : "#/definitions/region" },
 		"obsoleteRegions" : { "$ref" : "#/definitions/region" },
+		
+		"tendency" : {
+			"type" : "string",
+			"enum" : [ "decreasing", "steady", "increasing" ]
+		},
 		
 		"elevation" : { "type" : "integer" },
 		"treeline" : { "type" : "boolean" },
