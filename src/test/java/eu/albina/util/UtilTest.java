@@ -117,6 +117,8 @@ public class UtilTest {
 		String validBulletinStringFromResource = bulletinStringBuilder.toString();
 		AvalancheBulletin bulletin = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), null);
 		bulletins.add(bulletin);
+		AvalancheBulletin bulletin2 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), null);
+		bulletins.add(bulletin2);
 	}
 
 	@Test
