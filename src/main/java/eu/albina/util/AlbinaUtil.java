@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import eu.albina.model.enumerations.DangerRating;
 import freemarker.template.Configuration;
 
 public class AlbinaUtil {
@@ -26,6 +27,30 @@ public class AlbinaUtil {
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
 
 	private static Configuration cfg;
+
+	public static final String dangerRatingColorLow = "#CCFF66";
+	public static final String dangerRatingColorModerate = "#FFFF00";
+	public static final String dangerRatingColorConsiderable = "#FF9900";
+	public static final String dangerRatingColorHigh = "#FF0000";
+	public static final String dangerRatingColorVeryHigh = "#800000";
+	public static final String dangerRatingColorMissing = "#969696";
+
+	public static String getDangerRatingColor(DangerRating dangerRating) {
+		switch (dangerRating) {
+		case low:
+			return dangerRatingColorLow;
+		case moderate:
+			return dangerRatingColorModerate;
+		case considerable:
+			return dangerRatingColorConsiderable;
+		case high:
+			return dangerRatingColorHigh;
+		case very_high:
+			return dangerRatingColorVeryHigh;
+		default:
+			return dangerRatingColorMissing;
+		}
+	}
 
 	public static String convertDocToString(Document doc) throws TransformerException {
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
