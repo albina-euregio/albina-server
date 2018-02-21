@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.Tendency;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -77,27 +78,23 @@ public class EmailUtil {
 			Map<String, Object> image = new HashMap<>();
 			image.put("ci", "http://212.47.231.185:8080/images/ci.png");
 			image.put("logo", "http://212.47.231.185:8080/images/Avalanche.png");
+			// image.put("ci", "cid:ci);
+			// image.put("logo", "cid:logo);
 			Map<String, Object> socialMediaImages = new HashMap<>();
-			// socialMediaImages.put("facebook",
-			// "http://212.47.231.185:8080/images/facebook.png");
-			// socialMediaImages.put("twitter",
-			// "http://212.47.231.185:8080/images/twitter.png");
-			// socialMediaImages.put("instagram",
-			// "http://212.47.231.185:8080/images/instagram.png");
-			// socialMediaImages.put("youtube",
-			// "http://212.47.231.185:8080/images/youtube.png");
-			// socialMediaImages.put("whatsapp",
-			// "http://212.47.231.185:8080/images/whatsapp.png");
-			socialMediaImages.put("facebook", "cid:facebook");
-			socialMediaImages.put("twitter", "cid:twitter");
-			socialMediaImages.put("instagram", "cid:instagram");
-			socialMediaImages.put("youtube", "cid:youtube");
-			socialMediaImages.put("whatsapp", "cid:whatsapp");
+			socialMediaImages.put("facebook", "http://212.47.231.185:8080/images/facebook.png");
+			socialMediaImages.put("twitter", "http://212.47.231.185:8080/images/twitter.png");
+			socialMediaImages.put("instagram", "http://212.47.231.185:8080/images/instagram.png");
+			socialMediaImages.put("youtube", "http://212.47.231.185:8080/images/youtube.png");
+			socialMediaImages.put("whatsapp", "http://212.47.231.185:8080/images/whatsapp.png");
+			// socialMediaImages.put("facebook", "cid:facebook");
+			// socialMediaImages.put("twitter", "cid:twitter");
+			// socialMediaImages.put("instagram", "cid:instagram");
+			// socialMediaImages.put("youtube", "cid:youtube");
+			// socialMediaImages.put("whatsapp", "cid:whatsapp");
 			image.put("socialmedia", socialMediaImages);
 			Map<String, Object> mapImage = new HashMap<>();
-			// mapImage.put("overview",
-			// "http://212.47.231.185:8080/images/map_overview.png");
-			mapImage.put("overview", "cid:map_overview");
+			mapImage.put("overview", "http://212.47.231.185:8080/images/map_overview.png");
+			// mapImage.put("overview", "cid:map_overview");
 			image.put("map", mapImage);
 			root.put("image", image);
 
@@ -112,6 +109,8 @@ public class EmailUtil {
 				text.put("unsubscribe", "Unsubscribe");
 				// TODO
 				text.put("date", "Friday, 02/16/2018");
+				text.put("tendency", "Tendency");
+				text.put("snowpack", "Snowpack");
 				break;
 			case de:
 				text.put("headline", "Lawinen Report");
@@ -120,6 +119,8 @@ public class EmailUtil {
 				text.put("unsubscribe", "Abmelden");
 				// TODO
 				text.put("date", "Freitag, 16.02.2018");
+				text.put("tendency", "Tendenz");
+				text.put("snowpack", "Schneedecke");
 				break;
 			case it:
 				text.put("headline", "Valanghe Report");
@@ -128,6 +129,8 @@ public class EmailUtil {
 				text.put("unsubscribe", "TODO");
 				// TODO
 				text.put("date", "Venerdi, 16.02.2018");
+				text.put("tendency", "TODO");
+				text.put("snowpack", "TODO");
 				break;
 
 			default:
@@ -138,25 +141,48 @@ public class EmailUtil {
 			ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				Map<String, Object> bulletin = new HashMap<>();
+
 				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
 				else
 					bulletin.put("snowpackStructureHighlights", "");
+
 				if (avalancheBulletin.getAvActivityCommentIn(lang) != null)
 					bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang));
 				else
 					bulletin.put("snowpackStructureHighlights", "");
+
 				if (avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null)
 					bulletin.put("snowpackStructureHighlights",
 							avalancheBulletin.getSnowpackStructureHighlightsIn(lang));
 				else
 					bulletin.put("snowpackStructureHighlights", "");
+
 				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
 					bulletin.put("snowpackStructureComment", avalancheBulletin.getSnowpackStructureCommentIn(lang));
 				else
-					bulletin.put("snowpackStructureHighlights", "");
-				// TODO use correct map
+					bulletin.put("snowpackStructureComment", "");
+
+				if (avalancheBulletin.getTendencyCommentIn(lang) != null)
+					bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
+				else
+					bulletin.put("tendencyComment", "");
+
+				if (avalancheBulletin.getTendency() == Tendency.decreasing)
+					bulletin.put("tendency", "cid:decreasing");
+				else if (avalancheBulletin.getTendency() == Tendency.steady)
+					bulletin.put("tendency", "cid:steady");
+				else if (avalancheBulletin.getTendency() == Tendency.increasing)
+					bulletin.put("tendency", "cid:increasing");
+				else
+					bulletin.put("tendency", "");
+
+				bulletin.put("dangerRatingColor",
+						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating()));
+
+				// TODO use correct map and symbols
 				bulletin.put("map", "http://212.47.231.185:8080/images/map_detail.png");
+				bulletin.put("symbols", "http://212.47.231.185:8080/images/symbols_detail.png");
 				arrayList.add(bulletin);
 			}
 			root.put("bulletins", arrayList);
@@ -285,6 +311,26 @@ public class EmailUtil {
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
 		messageBodyPart.setHeader("Content-ID", "whatsapp");
+		multipart.addBodyPart(messageBodyPart);
+
+		// TODO add tendency symbols (decreasing, steady, increasing)
+		messageBodyPart = new MimeBodyPart();
+		imageUrl = ClassLoader.getSystemResource("images/tendency_decreasing.png");
+		fds = new FileDataSource(imageUrl.toString());
+		messageBodyPart.setDataHandler(new DataHandler(fds));
+		messageBodyPart.setHeader("Content-ID", "decreasing");
+		multipart.addBodyPart(messageBodyPart);
+		messageBodyPart = new MimeBodyPart();
+		imageUrl = ClassLoader.getSystemResource("images/tendency_steady.png");
+		fds = new FileDataSource(imageUrl.toString());
+		messageBodyPart.setDataHandler(new DataHandler(fds));
+		messageBodyPart.setHeader("Content-ID", "steady");
+		multipart.addBodyPart(messageBodyPart);
+		messageBodyPart = new MimeBodyPart();
+		imageUrl = ClassLoader.getSystemResource("images/tendency_increasing.png");
+		fds = new FileDataSource(imageUrl.toString());
+		messageBodyPart.setDataHandler(new DataHandler(fds));
+		messageBodyPart.setHeader("Content-ID", "increasing");
 		multipart.addBodyPart(messageBodyPart);
 
 		// TODO add maps
