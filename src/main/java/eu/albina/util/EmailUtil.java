@@ -178,7 +178,7 @@ public class EmailUtil {
 					bulletin.put("tendency", "");
 
 				bulletin.put("dangerRatingColor",
-						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating()));
+						"\"" + AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating()) + "\"");
 
 				// TODO use correct map and symbols
 				bulletin.put("map", "http://212.47.231.185:8080/images/map_detail.png");
