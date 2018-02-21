@@ -177,8 +177,8 @@ public class EmailUtil {
 				else
 					bulletin.put("tendency", "");
 
-				bulletin.put("dangerRatingColor",
-						"\"" + AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating()) + "\"");
+				bulletin.put("dangerRatingColorStyle", EmailUtil.getDangerRatingColorStyle(
+						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
 
 				// TODO use correct map and symbols
 				bulletin.put("map", "http://212.47.231.185:8080/images/map_detail.png");
@@ -216,6 +216,11 @@ public class EmailUtil {
 		}
 
 		return null;
+	}
+
+	private static String getDangerRatingColorStyle(String dangerRatingColor) {
+		return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px; border-left: 3px solid "
+				+ dangerRatingColor + ";\"";
 	}
 
 	public static void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang) throws MessagingException {
