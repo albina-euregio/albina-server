@@ -460,6 +460,22 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		textPartsMap.put(TextPart.travelAdvisoryComment, travelAdvisoryComment);
 	}
 
+	public Texts getTendencyComment() {
+		return textPartsMap.get(TextPart.tendencyComment);
+	}
+
+	public String getTendencyCommentIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.tendencyComment);
+		if (texts != null)
+			return texts.getText(lang);
+		else
+			return null;
+	}
+
+	public void setTendencyComment(Texts tendencyComment) {
+		textPartsMap.put(TextPart.tendencyComment, tendencyComment);
+	}
+
 	public Tendency getTendency() {
 		return tendency;
 	}
@@ -639,6 +655,19 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			return true;
 		else
 			return false;
+	}
+
+	public DangerRating getHighestDangerRating() {
+		DangerRating result = DangerRating.missing;
+		if (forenoonAbove != null && result.compareTo(forenoonAbove.getDangerRating()) < 0)
+			result = forenoonAbove.getDangerRating();
+		if (forenoonBelow != null && result.compareTo(forenoonBelow.getDangerRating()) < 0)
+			result = forenoonBelow.getDangerRating();
+		if (afternoonAbove != null && result.compareTo(afternoonAbove.getDangerRating()) < 0)
+			result = afternoonAbove.getDangerRating();
+		if (afternoonBelow != null && result.compareTo(afternoonBelow.getDangerRating()) < 0)
+			result = afternoonBelow.getDangerRating();
+		return result;
 	}
 
 	@Override
