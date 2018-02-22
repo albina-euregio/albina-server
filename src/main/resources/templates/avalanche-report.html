@@ -145,7 +145,7 @@ h1,h2,h3,h4,h5,h6 {
 	margin-bottom: 15px;
 	color: #565f61;
 }
-h1 {
+h1, h2 {
 	color: #1aabff;
 }
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
@@ -170,7 +170,7 @@ p, ul {
 	font-size: 14px; 
 	line-height: 1.6;
 }
-p.lead { font-size: 24px; font-weight:bold; }
+p.lead { font-size: 24px; font-weight:bold; margin-bottom: 0px; }
 p.last { margin-bottom:0px;}
 
 ul li {
@@ -269,23 +269,19 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 
 }
 
-.danger-rating {
-	border-left: 3px solid #ff0000;	
-}
-
 .snowpack {
-	border-left: 3px solid #1aabff;
+	border-left: 5px solid #1aabff;
 	padding-left: 10px;
 }
 
 .bulletin-content {
 	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-bottom: 40px;
 }
 		</style>
 	</head>
 	 
-	<body bgcolor="#f6fafc" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+	<body bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 
 		<!-- HEADER -->
 		<table class="head-wrap" bgcolor="#FFFFFF">
@@ -317,7 +313,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 		</table>
 
 		<!-- BODY -->
-		<table class="body-wrap" bgcolor="#f6fafc">
+		<table class="body-wrap" bgcolor="#FFFFFF">
 			<tr>
 				<td></td>
 				<td class="container" align="" bgcolor="#FFFFFF">
@@ -326,8 +322,8 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 							<tr>
 								<td>
 									<p class="lead">${text.headline}</p>
-									<h1>${text.date}</h1>
-									<p>
+									<h2>${text.date}</h2>
+									<p style="margin-bottom: 0px;">
 										<a href="${link.website}">
 											<img src="${image.map.overview}"/>
 										</a>
@@ -340,11 +336,11 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 			</tr>
 		</table>
 		<#list bulletins as bulletin>
-			<table class="body-wrap" bgcolor="#f6fafc">
+			<table class="body-wrap" bgcolor="#FFFFFF">
 				<tr>
 					<td class="container" align="" bgcolor="#FFFFFF">
 						<div class="content bulletin-content">
-							<table style="padding: 15px;">
+							<table ${bulletin.dangerRatingColorStyle}>
 								<tr>
 									<td>
 										<img src="${bulletin.map}"/>
@@ -365,9 +361,9 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 							<table style="padding: 15px;" class="snowpack" bgcolor="#f6fafc">
 								<tr>
 									<td style="vertical-align: top;">
-										<h4>${text.snowpack}</h4>
+										<h4 style="padding-top: 5px;">${text.snowpack}</h4>
 										<p class="">${bulletin.snowpackStructureComment}</p>
-										<h4>${text.tendency}</h4>
+										<h4 style="padding-top: 15px;">${text.tendency}</h4>
 										<p class="">${bulletin.tendencyComment}</p>
 									</td>
 								</tr>

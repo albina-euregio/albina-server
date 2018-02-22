@@ -145,7 +145,7 @@ h1,h2,h3,h4,h5,h6 {
 	margin-bottom: 15px;
 	color: #565f61;
 }
-h1 {
+h1, h2 {
 	color: #1aabff;
 }
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
@@ -170,7 +170,7 @@ p, ul {
 	font-size: 14px; 
 	line-height: 1.6;
 }
-p.lead { font-size: 24px; font-weight:bold; }
+p.lead { font-size: 24px; font-weight:bold; margin-bottom: 0px; }
 p.last { margin-bottom:0px;}
 
 ul li {
@@ -269,23 +269,19 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 
 }
 
-.danger-rating {
-	border-left: 3px solid #ff0000;	
-}
-
 .snowpack {
-	border-left: 3px solid #1aabff;
+	border-left: 5px solid #1aabff;
 	padding-left: 10px;
 }
 
 .bulletin-content {
 	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-bottom: 40px;
 }
 		</style>
 	</head>
 	 
-	<body bgcolor="#f6fafc" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; height: 100%; width: 100%;">
+	<body bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; height: 100%; width: 100%;">
 
 		<!-- HEADER -->
 		<table class="head-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; border-bottom: 1px solid #99daff;" width="100%">
@@ -317,7 +313,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 		</table>
 
 		<!-- BODY -->
-		<table class="body-wrap" bgcolor="#f6fafc" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+		<table class="body-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
 			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 				<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;"></td>
 				<td class="container" align="" bgcolor="#FFFFFF" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; display: block; max-width: 800px; margin: 0 auto; clear: both;">
@@ -325,9 +321,9 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 						<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px;" width="100%">
 							<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 								<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-									<p class="lead" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; line-height: 1.6; font-size: 24px; font-weight: bold;">${text.headline}</p>
-									<h1 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #1aabff; font-weight: 200; font-size: 40px;">${text.date}</h1>
-									<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">
+									<p class="lead" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; line-height: 1.6; font-size: 24px; font-weight: bold; margin-bottom: 0px;">${text.headline}</p>
+									<h2 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #1aabff; font-weight: 200; font-size: 37px;">${text.date}</h2>
+									<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; font-size: 14px; line-height: 1.6; margin-bottom: 0px;">
 										<a href="${link.website}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB;">
 											<img src="${image.map.overview}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 										</a>
@@ -340,11 +336,11 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 			</tr>
 		</table>
 		<#list bulletins as bulletin>
-			<table class="body-wrap" bgcolor="#f6fafc" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+			<table class="body-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
 				<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 					<td class="container" align="" bgcolor="#FFFFFF" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; display: block; max-width: 800px; margin: 0 auto; clear: both;">
-						<div class="content bulletin-content" style="text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding: 0px; max-width: 800px; margin: 0 auto; display: block; margin-top: 15px; margin-bottom: 15px;">
-							<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px;" width="100%">
+						<div class="content bulletin-content" style="text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding: 0px; max-width: 800px; margin: 0 auto; display: block; margin-top: 15px; margin-bottom: 40px;">
+							<table ${bulletin.dangerratingcolorstyle}>
 								<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 									<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 										<img src="${bulletin.map}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
@@ -354,7 +350,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 									</td>
 								</tr>
 							</table>
-							<table ${bulletin.dangerRatingColorStyle} width="100%">
+							<table ${bulletin.dangerratingcolorstyle}>
 								<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 									<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; vertical-align: top;" valign="top">
 										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px;">${bulletin.avAvalancheHighlights}</h4>
@@ -362,12 +358,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 									</td>
 								</tr>
 							</table>
-							<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 3px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px;" class="snowpack" bgcolor="#f6fafc" width="100%">
+							<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 5px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px;" class="snowpack" bgcolor="#f6fafc" width="100%">
 								<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 									<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; vertical-align: top;" valign="top">
-										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px;">${text.snowpack}</h4>
+										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 5px;">${text.snowpack}</h4>
 										<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">${bulletin.snowpackStructureComment}</p>
-										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px;">${text.tendency}</h4>
+										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 15px;">${text.tendency}</h4>
 										<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">${bulletin.tendencyComment}</p>
 									</td>
 								</tr>

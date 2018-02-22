@@ -177,7 +177,7 @@ public class EmailUtil {
 				else
 					bulletin.put("tendency", "");
 
-				bulletin.put("dangerRatingColorStyle", EmailUtil.getDangerRatingColorStyle(
+				bulletin.put("dangerratingcolorstyle", EmailUtil.getDangerRatingColorStyle(
 						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
 
 				// TODO use correct map and symbols
@@ -219,7 +219,7 @@ public class EmailUtil {
 	}
 
 	private static String getDangerRatingColorStyle(String dangerRatingColor) {
-		return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px; border-left: 3px solid "
+		return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px; border-left: 5px solid "
 				+ dangerRatingColor + ";\"";
 	}
 

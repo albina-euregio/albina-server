@@ -135,7 +135,7 @@ h1,h2,h3,h4,h5,h6 {
 	margin-bottom: 15px;
 	color: #565f61;
 }
-h1 {
+h1, h2 {
 	color: #1aabff;
 }
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
@@ -160,7 +160,7 @@ p, ul {
 	font-size: 14px; 
 	line-height: 1.6;
 }
-p.lead { font-size: 24px; font-weight:bold; }
+p.lead { font-size: 24px; font-weight:bold; margin-bottom: 0px;}
 p.last { margin-bottom:0px;}
 
 ul li {
@@ -259,16 +259,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 
 }
 
-.danger-rating {
-	border-left: 3px solid #ff0000;	
-}
-
 .snowpack {
-	border-left: 3px solid #1aabff;
+	border-left: 5px solid #1aabff;
 	padding-left: 10px;
 }
 
 .bulletin-content {
 	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-bottom: 40px;
 }
