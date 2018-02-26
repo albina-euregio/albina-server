@@ -20,13 +20,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.albina.model.enumerations.DangerRating;
-import freemarker.template.Configuration;
 
 public class AlbinaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
 
-	private static Configuration cfg;
+	public static final boolean createCAAML = true;
+	public static final boolean createMaps = false;
+	public static final boolean publishToSocialMedia = false;
 
 	public static final String dangerRatingColorLow = "#CCFF66";
 	public static final String dangerRatingColorModerate = "#FFFF00";
