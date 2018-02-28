@@ -121,10 +121,11 @@ public class UtilTest {
 		bulletins.add(bulletin2);
 	}
 
+	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		EmailUtil.createFreemarkerConfigurationInstance();
-		EmailUtil.createEmailHtml(bulletins, LanguageCode.de);
+		EmailUtil.getInstance().createFreemarkerConfigurationInstance();
+		EmailUtil.getInstance().createEmailHtml(bulletins, LanguageCode.de);
 	}
 
 	@Ignore
