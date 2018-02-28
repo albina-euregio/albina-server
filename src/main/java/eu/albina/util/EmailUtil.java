@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,16 +39,33 @@ import freemarker.template.TemplateExceptionHandler;
 
 public class EmailUtil {
 
+	private static EmailUtil instance = null;
+
 	private static final Logger logger = LoggerFactory.getLogger(EmailUtil.class);
 
 	private static Configuration cfg;
 
-	public static void createFreemarkerConfigurationInstance() throws IOException, URISyntaxException {
+	protected EmailUtil() {
+		// Exists only to defeat instantiation.
+	}
+
+	public static EmailUtil getInstance() {
+		if (instance == null) {
+			instance = new EmailUtil();
+		}
+		return instance;
+	}
+
+	public void createFreemarkerConfigurationInstance() throws IOException, URISyntaxException {
 		cfg = new Configuration(Configuration.VERSION_2_3_27);
 
 		// Specify the source where the template files come from. Here I set a
 		// plain directory for it, but non-file-system sources are possible too:
-		cfg.setDirectoryForTemplateLoading(new File(ClassLoader.getSystemResource("templates").toURI()));
+		URL resource = this.getClass().getResource("/templates");
+
+		URI uri = resource.toURI();
+		File file = new File(uri);
+		cfg.setDirectoryForTemplateLoading(file);
 
 		// Set the preferred charset template files are stored in. UTF-8 is
 		// a good choice in most applications:
@@ -66,11 +84,11 @@ public class EmailUtil {
 		cfg.setWrapUncheckedExceptions(true);
 	}
 
-	public static Configuration getFreeMarkerConfiguration() {
+	public Configuration getFreeMarkerConfiguration() {
 		return cfg;
 	}
 
-	public static String createEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	public String createEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		try {
 			// Create data model
 			Map<String, Object> root = new HashMap<>();
@@ -177,7 +195,7 @@ public class EmailUtil {
 				else
 					bulletin.put("tendency", "");
 
-				bulletin.put("dangerratingcolorstyle", EmailUtil.getDangerRatingColorStyle(
+				bulletin.put("dangerratingcolorstyle", EmailUtil.getInstance().getDangerRatingColorStyle(
 						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
 
 				// TODO use correct map and symbols
@@ -218,12 +236,12 @@ public class EmailUtil {
 		return null;
 	}
 
-	private static String getDangerRatingColorStyle(String dangerRatingColor) {
+	private String getDangerRatingColorStyle(String dangerRatingColor) {
 		return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px; border-left: 5px solid "
 				+ dangerRatingColor + ";\"";
 	}
 
-	public static void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang) throws MessagingException {
+	public void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang) throws MessagingException {
 		logger.debug("Sending mail...");
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
@@ -246,7 +264,7 @@ public class EmailUtil {
 
 		// add html
 		BodyPart messageBodyPart = new MimeBodyPart();
-		String htmlText = EmailUtil.createEmailHtml(bulletins, lang);
+		String htmlText = EmailUtil.getInstance().createEmailHtml(bulletins, lang);
 		messageBodyPart.setContent(htmlText, "text/html");
 		multipart.addBodyPart(messageBodyPart);
 

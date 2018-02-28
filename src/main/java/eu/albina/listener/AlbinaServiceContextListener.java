@@ -38,7 +38,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		HibernateUtil.getInstance().setUp();
 
 		try {
-			EmailUtil.createFreemarkerConfigurationInstance();
+			EmailUtil.getInstance().createFreemarkerConfigurationInstance();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
