@@ -118,7 +118,6 @@ public class EmailUtil {
 
 			Map<String, Object> text = new HashMap<>();
 			text.put("title", "Avalanche.report");
-			// TODO lang
 			switch (lang) {
 			case en:
 				text.put("headline", "Avalanche Report");
@@ -129,6 +128,8 @@ public class EmailUtil {
 				text.put("date", "Friday, 02/16/2018");
 				text.put("tendency", "Tendency");
 				text.put("snowpack", "Snowpack");
+				text.put("dangerPatterns", "Danger patterns");
+				text.put("warningLevelFor", "Warning Level for ");
 				break;
 			case de:
 				text.put("headline", "Lawinen Report");
@@ -139,6 +140,8 @@ public class EmailUtil {
 				text.put("date", "Freitag, 16.02.2018");
 				text.put("tendency", "Tendenz");
 				text.put("snowpack", "Schneedecke");
+				text.put("dangerPatterns", "Gefahrenmuster");
+				text.put("warningLevelFor", "Warnstufe für ");
 				break;
 			case it:
 				text.put("headline", "Valanghe Report");
@@ -149,6 +152,8 @@ public class EmailUtil {
 				text.put("date", "Venerdi, 16.02.2018");
 				text.put("tendency", "TODO");
 				text.put("snowpack", "TODO");
+				text.put("dangerPatterns", "TODO");
+				text.put("warningLevelFor", "TODO");
 				break;
 
 			default:
@@ -159,6 +164,8 @@ public class EmailUtil {
 			ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				Map<String, Object> bulletin = new HashMap<>();
+
+				bulletin.put("warningLevelText", getDangerRatingText(avalancheBulletin, lang));
 
 				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
@@ -187,20 +194,26 @@ public class EmailUtil {
 					bulletin.put("tendencyComment", "");
 
 				if (avalancheBulletin.getTendency() == Tendency.decreasing)
-					bulletin.put("tendency", "cid:decreasing");
+					// bulletin.put("tendency", "cid:decreasing");
+					bulletin.put("tendency", "http://212.47.231.185:8080/images/tendency_decreasing_black.png");
 				else if (avalancheBulletin.getTendency() == Tendency.steady)
-					bulletin.put("tendency", "cid:steady");
+					// bulletin.put("tendency", "cid:steady");
+					bulletin.put("tendency", "http://212.47.231.185:8080/images/tendency_steady_black.png");
 				else if (avalancheBulletin.getTendency() == Tendency.increasing)
-					bulletin.put("tendency", "cid:increasing");
+					// bulletin.put("tendency", "cid:increasing");
+					bulletin.put("tendency", "http://212.47.231.185:8080/images/tendency_increasing_black.png");
 				else
 					bulletin.put("tendency", "");
 
 				bulletin.put("dangerratingcolorstyle", EmailUtil.getInstance().getDangerRatingColorStyle(
 						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
+				bulletin.put("headlinestyle", EmailUtil.getInstance()
+						.getHeadlineStyle(AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
 
 				// TODO use correct map and symbols
-				bulletin.put("map", "http://212.47.231.185:8080/images/map_detail.png");
-				bulletin.put("symbols", "http://212.47.231.185:8080/images/symbols_detail.png");
+				bulletin.put("map", "http://212.47.231.185:8080/images/map_detail_3.png");
+				bulletin.put("symbols", "http://212.47.231.185:8080/images/symbols.png");
+				bulletin.put("dangerPatterns", "http://212.47.231.185:8080/images/dangerPatterns.png");
 				arrayList.add(bulletin);
 			}
 			root.put("bulletins", arrayList);
@@ -236,8 +249,84 @@ public class EmailUtil {
 		return null;
 	}
 
+	private String getDangerRatingText(AvalancheBulletin bulletin, LanguageCode lang) {
+		switch (bulletin.getHighestDangerRating()) {
+		case low:
+			switch (lang) {
+			case en:
+				return "Low, Level 1";
+			case de:
+				return "Gering, Stufe 1";
+			case it:
+				return "TODO";
+			default:
+				return "Low, Level 1";
+			}
+		case moderate:
+			switch (lang) {
+			case en:
+				return "Moderate, Level 2";
+			case de:
+				return "Mäßig, Stufe 2";
+			case it:
+				return "TODO";
+			default:
+				return "Moderate, Level 2";
+			}
+		case considerable:
+			switch (lang) {
+			case en:
+				return "Considerable, Level 3";
+			case de:
+				return "Erheblich, Stufe 3";
+			case it:
+				return "TODO";
+			default:
+				return "Considerable, Level 3";
+			}
+		case high:
+			switch (lang) {
+			case en:
+				return "High, Level 4";
+			case de:
+				return "Groß, Stufe 4";
+			case it:
+				return "TODO";
+			default:
+				return "High, Level 4";
+			}
+		case very_high:
+			switch (lang) {
+			case en:
+				return "Very High, Level 5";
+			case de:
+				return "Sehr Groß, Stufe 5";
+			case it:
+				return "TODO";
+			default:
+				return "Very High, Level 5";
+			}
+		default:
+			switch (lang) {
+			case en:
+				return "Missing";
+			case de:
+				return "Fehlt";
+			case it:
+				return "TODO";
+			default:
+				return "Missing";
+			}
+		}
+	}
+
 	private String getDangerRatingColorStyle(String dangerRatingColor) {
 		return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px; border-left: 5px solid "
+				+ dangerRatingColor + ";\"";
+	}
+
+	private String getHeadlineStyle(String dangerRatingColor) {
+		return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
 				+ dangerRatingColor + ";\"";
 	}
 

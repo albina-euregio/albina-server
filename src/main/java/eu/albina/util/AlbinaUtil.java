@@ -25,9 +25,11 @@ public class AlbinaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
 
-	public static final boolean createCAAML = true;
 	public static final boolean createMaps = false;
+	public static final boolean createPdf = true;
+	public static final boolean sendEmails = false;
 	public static final boolean publishToSocialMedia = false;
+	public static final boolean createCAAML = true;
 
 	public static final String dangerRatingColorLow = "#CCFF66";
 	public static final String dangerRatingColorModerate = "#FFFF00";
