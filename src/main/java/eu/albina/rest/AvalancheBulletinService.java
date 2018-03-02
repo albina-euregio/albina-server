@@ -34,8 +34,10 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.MapUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
@@ -277,6 +279,9 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			AvalancheReportController.getInstance().changeReport(startDate, region, user);
 
+			// TODO maybe start in an own thread
+			// PublicationController.getInstance().change(bulletins);
+
 			JSONObject jsonObject = new JSONObject();
 			// TODO return some meaningful path
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
@@ -414,6 +419,16 @@ public class AvalancheBulletinService {
 		}
 	}
 
+	/**
+	 * Publish an major update to an already published bulletin.
+	 * 
+	 * @param region
+	 *            The region to publish the bulletins for.
+	 * @param date
+	 *            The date to publish the bulletins for.
+	 * @param securityContext
+	 * @return
+	 */
 	@POST
 	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/publish")
@@ -442,21 +457,28 @@ public class AvalancheBulletinService {
 				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region, publicationDate);
 				AvalancheReportController.getInstance().publishReport(startDate, region, user, publicationDate);
 
-				// create maps
-				logger.warn("Map production disabled!");
-				/*
-				 * ArrayList<String> regions = new ArrayList<String>();
-				 * regions.add(GlobalVariables.codeTrentino);
-				 * regions.add(GlobalVariables.codeSouthTyrol);
-				 * regions.add(GlobalVariables.codeTyrol);
-				 * 
-				 * try {
-				 * AlbinaUtil.triggerMapProduction(AvalancheBulletinController.getInstance().
-				 * getCaaml(startDate, endDate, regions, LanguageCode.en)); } catch
-				 * (TransformerException e) { throw new AlbinaException(e.getMessage()); } catch
-				 * (ParserConfigurationException e) { throw new AlbinaException(e.getMessage());
-				 * }
-				 */
+				// TODO delete this
+				// create maps at Univie
+				if (AlbinaUtil.createMaps) {
+					ArrayList<String> regions = new ArrayList<String>();
+					regions.add(GlobalVariables.codeTrentino);
+					regions.add(GlobalVariables.codeSouthTyrol);
+					regions.add(GlobalVariables.codeTyrol);
+
+					try {
+						MapUtil.triggerMapProductionUnivie(AvalancheBulletinController.getInstance().getCaaml(startDate,
+								endDate, regions, LanguageCode.en));
+					} catch (TransformerException e) {
+						throw new AlbinaException(e.getMessage());
+					} catch (ParserConfigurationException e) {
+						throw new AlbinaException(e.getMessage());
+					}
+				} else
+					logger.warn("Map production disabled!");
+
+				// TODO the method publishBulletins should only be used for an major update (not
+				// at 17:00 PM or 07:30 AM)
+				// PublicationController.getInstance().update(startDate, endDate, region);
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();
 			} else
