@@ -156,7 +156,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 }
 
 h1 { font-weight:200; font-size: 40px;}
-h2 { font-weight:200; font-size: 37px;}
+h2 { font-weight:bold; font-size: 24px;}
 h3 { font-weight:500; font-size: 27px;}
 h4 { font-weight:500; font-size: 23px;}
 h5 { font-weight:900; font-size: 14px;}
@@ -170,7 +170,7 @@ p, ul {
 	font-size: 14px; 
 	line-height: 1.6;
 }
-p.lead { font-size: 24px; font-weight:bold; margin-bottom: 0px; }
+p.lead { font-size: 24px; margin-bottom: 0px; }
 p.last { margin-bottom:0px;}
 
 ul li {
@@ -278,6 +278,20 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	margin-top: 15px;
 	margin-bottom: 40px;
 }
+
+.symbols {
+	border-left: 1px solid #e6eef2;
+	padding-left: 15px;
+	padding-right: 15px;
+	vertical-align: top;
+}
+
+.tendency {
+	text-align: center;
+}
+
+.danger-patterns {
+}
 		</style>
 	</head>
 	 
@@ -340,17 +354,32 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 				<tr>
 					<td class="container" align="" bgcolor="#FFFFFF">
 						<div class="content bulletin-content">
-							<table ${bulletin.dangerRatingColorStyle}>
+							<table ${bulletin.dangerratingcolorstyle}>
+								<tr>
+									<td>
+										<p style="margin-bottom: 0px;">${text.warningLevelFor}<b>${text.date}</b></p>
+										<h2 ${bulletin.headlinestyle}>${bulletin.warningLevelText}</h2>
+									</td>
+								</tr>
+							</table>
+							<table ${bulletin.dangerratingcolorstyle}>
 								<tr>
 									<td>
 										<img src="${bulletin.map}"/>
 									</td>
 									<td>
 										<img src="${bulletin.symbols}"/>
+									<td class="symbols danger-patterns">
+										<h5>${text.dangerPatterns}</h5>
+										<img src="${bulletin.dangerPatterns}"/>
+									</td>
+									<td class="symbols tendency">
+										<h5>${text.tendency}</h5>
+										<img src="${bulletin.tendency}"/>
 									</td>
 								</tr>
 							</table>
-							<table ${bulletin.dangerRatingColorStyle}>
+							<table ${bulletin.dangerratingcolorstyle}>
 								<tr>
 									<td style="vertical-align: top;">
 										<h4>${bulletin.avAvalancheHighlights}</h4>
