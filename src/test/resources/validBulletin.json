@@ -79,5 +79,7 @@
 			"NE"
 		]
 	},
-	"tendency" : "increasing"
+	"tendency" : "increasing",
+	"dangerPattern1" : "dp1",
+	"dangerPattern2" : "dp4"
 }

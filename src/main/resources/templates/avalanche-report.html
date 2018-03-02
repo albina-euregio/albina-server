@@ -292,6 +292,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 
 .danger-patterns {
 }
+
+.danger-pattern {
+	color: #565f61;
+	border: 2px solid #565f61;
+    border-radius: 5px;
+}
 		</style>
 	</head>
 	 
@@ -371,7 +377,8 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 										<img src="${bulletin.symbols}"/>
 									<td class="symbols danger-patterns">
 										<h5>${text.dangerPatterns}</h5>
-										<img src="${bulletin.dangerPatterns}"/>
+										<p class="danger-pattern">${bulletin.dangerPattern1}</p>
+										<p class="danger-pattern">${bulletin.dangerPattern2}</p>
 									</td>
 									<td class="symbols tendency">
 										<h5>${text.tendency}</h5>
