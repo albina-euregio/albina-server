@@ -224,8 +224,11 @@ public class EmailUtil {
 
 				// TODO use correct map and symbols
 				bulletin.put("map", "http://212.47.231.185:8080/images/map_detail_3.png");
-				bulletin.put("symbols", "http://212.47.231.185:8080/images/symbols.png");
-				bulletin.put("dangerPatterns", "http://212.47.231.185:8080/images/dangerPatterns.png");
+				bulletin.put("avalancheSituation1", "http://212.47.231.185:8080/images/Drifting_snow_c.png");
+				bulletin.put("avalancheSituation2", "http://212.47.231.185:8080/images/Old_snow_c.png");
+				bulletin.put("aspects1", "http://212.47.231.185:8080/images/aspects1.png");
+				bulletin.put("aspects2", "http://212.47.231.185:8080/images/aspects2.png");
+				bulletin.put("mountain", "http://212.47.231.185:8080/images/mountain.png");
 				arrayList.add(bulletin);
 			}
 			root.put("bulletins", arrayList);
