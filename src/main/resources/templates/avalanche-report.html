@@ -35,6 +35,12 @@ body {
 	height: 100%;
 }
 
+@media screen and (min-width: 600px)  {
+	.width-fix {
+		width:100%!important;
+		min-width:100%;
+	}
+}
 
 /* ------------------------------------- 
 		ELEMENTS 
@@ -266,7 +272,19 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	table.social div[class="column"] {
 		width:auto!important;
 	}
+}
 
+@media screen and (min-width: 600px)  {
+  .pictograms-1 { 
+        width: 50%!important;
+        min-width: 50%;
+		float: left;
+    }
+  .pictograms-2 { 
+        width: 50%!important;
+        min-width: 50%;
+		float: right;
+    }
 }
 
 .snowpack {
@@ -280,13 +298,16 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 }
 
 .symbols {
-	border-left: 1px solid #e6eef2;
+	border-right: 1px solid #e6eef2;
 	padding-left: 15px;
 	padding-right: 15px;
 	vertical-align: top;
 }
 
 .tendency {
+	padding-left: 15px;
+	padding-right: 15px;
+	vertical-align: top;
 	text-align: center;
 }
 
@@ -294,10 +315,24 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 }
 
 .danger-pattern {
+	font-size: 12px;
 	color: #565f61;
 	border: 1px solid #565f61;
     border-radius: 15px;
 	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: auto;
+}
+
+.avalanche-situation {
+	max-width: 60px;
+	margin: 5px;
+}
+
+.mountain {
+	border-right: 1px solid #e6eef2;
 }
 		</style>
 	</head>
@@ -364,34 +399,65 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 							<table ${bulletin.dangerratingcolorstyle}>
 								<tr>
 									<td>
-										<p style="margin-bottom: 0px;">${text.warningLevelFor}<b>${text.date}</b></p>
-										<h2 ${bulletin.headlinestyle}>${bulletin.warningLevelText}</h2>
-									</td>
-								</tr>
-							</table>
-							<table ${bulletin.dangerratingcolorstyle}>
-								<tr>
-									<td>
-										<img src="${bulletin.map}"/>
-									</td>
-									<td>
-										<img src="${bulletin.symbols}"/>
-									<td class="symbols danger-patterns">
-										<h5>${text.dangerPatterns}</h5>
-										<p class="danger-pattern">${bulletin.dangerPattern1}</p>
-										<p class="danger-pattern">${bulletin.dangerPattern2}</p>
-									</td>
-									<td class="symbols tendency">
-										<h5>${text.tendency}</h5>
-										<img src="${bulletin.tendency}"/>
-									</td>
-								</tr>
-							</table>
-							<table ${bulletin.dangerratingcolorstyle}>
-								<tr>
-									<td style="vertical-align: top;">
-										<h4>${bulletin.avAvalancheHighlights}</h4>
-										<p class="">${bulletin.avAvalancheComment}</p>
+										<table>
+											<tr>
+												<td>
+													<p style="margin-bottom: 0px;">${text.warningLevelFor}<b>${text.date}</b></p>
+													<h2 ${bulletin.headlinestyle}>${bulletin.warningLevelText}</h2>
+												</td>
+											</tr>
+										</table>
+										<table class="pictograms-1" style="margin-top: 10px;">
+											<tr>
+												<td>
+													<img src="${bulletin.map}"/>
+												</td>
+												<td class="mountain">
+													<img src="${bulletin.mountain}"/>
+												</td>
+												<td class="symbols">
+													<table>
+														<tr>
+															<td>
+																<img class="avalanche-situation" src="${bulletin.avalancheSituation1}"/>
+															</td>
+															<td>
+																<img class="avalanche-situation" src="${bulletin.aspects1}"/>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<img class="avalanche-situation" src="${bulletin.avalancheSituation2}"/>
+															</td>
+															<td>
+																<img class="avalanche-situation" src="${bulletin.aspects2}"/>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+										<table class="pictograms-2" style="margin-top: 10px;">
+											<tr>
+												<td class="symbols danger-patterns">
+													<h5>${text.dangerPatterns}</h5>
+													<p class="danger-pattern">${bulletin.dangerPattern1}</p>
+													<p class="danger-pattern">${bulletin.dangerPattern2}</p>
+												</td>
+												<td class="tendency">
+													<h5>${text.tendency}</h5>
+													<img src="${bulletin.tendency}"/>
+												</td>
+											</tr>
+										</table>
+										<table >
+											<tr>
+												<td style="vertical-align: top;">
+													<h4>${bulletin.avAvalancheHighlights}</h4>
+													<p class="">${bulletin.avAvalancheComment}</p>
+												</td>
+											</tr>
+										</table>
 									</td>
 								</tr>
 							</table>

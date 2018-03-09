@@ -1,11 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<html style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 	<head>
 		<!-- If you delete this meta tag, the ground will open and swallow you. -->
-		<meta name="viewport" content="width=device-width" />
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Avalanche Report</title>
-		<link rel="stylesheet" type="text/css" href="stylesheets/avalanche-report.css" >
+		<meta name="viewport" content="width=device-width">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Avalanche.report</title>
+		<link rel="stylesheet" type="text/css" href="stylesheets/avalanche-report.css">
+		
 		<style>
 /* ------------------------------------- 
 		GLOBAL 
@@ -34,6 +35,12 @@ body {
 	height: 100%;
 }
 
+@media screen and (min-width: 600px)  {
+	.width-fix {
+		width:100%!important;
+		min-width:100%;
+	}
+}
 
 /* ------------------------------------- 
 		ELEMENTS 
@@ -109,8 +116,6 @@ table.head-ci {
 ------------------------------------- */
 table.body-wrap {
 	width: 100%;
-	margin-top: 0px;
-	margin-bottom: 15px;
 }
 
 
@@ -146,7 +151,7 @@ h1,h2,h3,h4,h5,h6 {
 	margin-bottom: 15px;
 	color: #565f61;
 }
-h1 {
+h1, h2 {
 	color: #1aabff;
 }
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
@@ -157,7 +162,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 }
 
 h1 { font-weight:200; font-size: 40px;}
-h2 { font-weight:200; font-size: 37px;}
+h2 { font-weight:bold; font-size: 24px;}
 h3 { font-weight:500; font-size: 27px;}
 h4 { font-weight:500; font-size: 23px;}
 h5 { font-weight:900; font-size: 14px;}
@@ -171,7 +176,7 @@ p, ul {
 	font-size: 14px; 
 	line-height: 1.6;
 }
-p.lead { font-size: 24px; font-weight:bold; }
+p.lead { font-size: 24px; margin-bottom: 0px; }
 p.last { margin-bottom:0px;}
 
 ul li {
@@ -267,68 +272,116 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	table.social div[class="column"] {
 		width:auto!important;
 	}
-
 }
 
-.danger-rating {
-	border-left: 3px solid #ff0000;	
+@media screen and (min-width: 600px)  {
+  .pictograms-1 { 
+        width: 50%!important;
+        min-width: 50%;
+		float: left;
+    }
+  .pictograms-2 { 
+        width: 50%!important;
+        min-width: 50%;
+		float: right;
+    }
 }
 
 .snowpack {
-	border-left: 3px solid #1aabff;
+	border-left: 5px solid #1aabff;
 	padding-left: 10px;
 }
 
 .bulletin-content {
 	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-bottom: 40px;
+}
+
+.symbols {
+	border-right: 1px solid #e6eef2;
+	padding-left: 15px;
+	padding-right: 15px;
+	vertical-align: top;
+}
+
+.tendency {
+	padding-left: 15px;
+	padding-right: 15px;
+	vertical-align: top;
+	text-align: center;
+}
+
+.danger-patterns {
+}
+
+.danger-pattern {
+	font-size: 12px;
+	color: #565f61;
+	border: 1px solid #565f61;
+    border-radius: 15px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: auto;
+}
+
+.avalanche-situation {
+	max-width: 60px;
+	margin: 5px;
+}
+
+.mountain {
+	border-right: 1px solid #e6eef2;
 }
 		</style>
 	</head>
 	 
-	<body bgcolor="#f6fafc" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+	<body bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; height: 100%; width: 100%;">
 
 		<!-- HEADER -->
-		<table class="head-wrap" bgcolor="#FFFFFF">
-			<tr>
-				<img height="4px" src="./images/ci.png"/>
-				<td>
+		<table class="head-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; border-bottom: 1px solid #99daff;" width="100%">
+			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+				<img height="4px" src="http://212.47.231.185:8080/images/ci.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+				<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 				</td>
-				<td class="header container" align="">
-					<div class="content" style="padding: 15px;">
-						<table bgcolor="" >
-							<tr>
-								<td>
-									<a class="btn" href="${link.website}">
-										<img src="./images./logo.png"/>
+			</tr>
+			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+				<td class="header container" align="" style="text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding: 15px; display: block; max-width: 800px; margin: 0 auto; clear: both;">
+					<div class="content" style="text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding: 0px; max-width: 800px; margin: 0 auto; display: block;">
+						<table bgcolor="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+							<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+								<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+									<a class="btn" href="https://avalanche.report" style="margin: 0; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; text-decoration: none; color: #565f61; padding: 0px 10px; font-weight: bold; margin-right: 10px; text-align: center; cursor: pointer; display: inline-block;">
+										<img src="http://212.47.231.185:8080/images/Avalanche.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 								</a>
 								</td>
-								<td align="right">
-									<a class="btn" href="${link.website}">Website &raquo;</a>
+								<td align="right" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+									<a class="btn" href="https://avalanche.report" style="margin: 0; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; text-decoration: none; color: #565f61; padding: 0px 10px; font-weight: bold; margin-right: 10px; text-align: center; cursor: pointer; display: inline-block;">Webseite &raquo;</a>
 								</td>
 							</tr>
 						</table>
 					</div>
 					
 				</td>
-				<td></td>
+				<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;"></td>
 			</tr>
 		</table>
 
 		<!-- BODY -->
-		<table class="body-wrap" bgcolor="">
-			<tr>
-				<td></td>
-				<td class="container" align="" bgcolor="#FFFFFF">
-					<div class="content">
-						<table style="padding: 15px;">
-							<tr>
-								<td>
-									<p class="lead">Lawinen Report</p>
-									<h1>Freitag, 16.02.2018</h1>
-									<p>
-										<a href="${link.website}">
-											<img src="./images/map_overview.png"/>
+		<table class="body-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+				<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;"></td>
+				<td class="container" align="" bgcolor="#FFFFFF" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; display: block; max-width: 800px; margin: 0 auto; clear: both;">
+					<div class="content" style="text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding: 0px; max-width: 800px; margin: 0 auto; display: block;">
+						<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px;" width="100%">
+							<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+								<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+									<p class="lead" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; line-height: 1.6; font-size: 24px; margin-bottom: 0px;">Lawinen Report</p>
+									<h2 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #1aabff; font-weight: bold; font-size: 24px;">Freitag, 16.02.2018</h2>
+									<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; font-size: 14px; line-height: 1.6; margin-bottom: 0px;">
+										<a href="https://avalanche.report" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB;">
+											<img src="http://212.47.231.185:8080/images/map_overview.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 										</a>
 									</p>
 								</td>
@@ -338,125 +391,217 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 				</td>
 			</tr>
 		</table>
-		<table class="body-wrap" bgcolor="">
-			<tr>
-				<td></td>
-				<td class="container" align="" bgcolor="#FFFFFF">
-					<div class="content bulletin-content">
-						<table style="padding: 15px;">
-							<tr>
-								<td>
-									<img src="./images/map_detail.png"/>
-								</td>
-								<td>
-									<img src="./images/symbols_detail.png"/>
-								</td>
-							</tr>
-						</table>
-						<table style="padding: 15px; border-left: 3px solid #ff0000;">
-							<tr>
-								<td style="vertical-align: top;">
-									<h4>Am Morgen günstige Verhältnisse - dann rascher Anstieg der Lawinengefahr!</h4>
-									<p class="">Vormittag steigt die Lawinengefahr dann aber markant an und erreicht verbreitet die Stufe 3 (erheblich). Grund dafür ist der Festigkeitsverlust der Schneedecke auf Grund von Tageserwärmung und starker Sonneneinstrahlung. Man muss dann zunehmend mit Selbstauslösungen von feuchten Lockerschneelawinen und Nassschneelawinen rechnen. In sonnseitigen Hängen sind vor allem Höhenlagen unterhalb 2800m betroffen, schattseitig unterhalb etwa 2200m. Auf steilen Wiesenhängen sind auch Gleitschneelawinen möglich. Weil ausgelöste Lawinen teilweise bis zum Untergrund durchreißen, können sie auch große Ausmaße erreichen. Skitouren und Variantenfahrten sollten daher unbedingt rechtzeitig beendet werden!</p>
-								</td>
-							</tr>
-						</table>
-						<table style="padding: 15px;" class="snowpack" bgcolor="#f6fafc">
-							<tr>
-								<td style="vertical-align: top;">
-									<h4>Schneedecke</h4>
-									<p class="">Die Schneedecke ist sonnseitig unterhalb etwa 2800m, schattseitig unterhalb etwa 2200m schon weitgehend durchfeuchtet. Nach einer meist klaren Nacht mit guter Ausstrahlung konnte sich an der Schneeoberfläche häufig ein tragfähiger Harschdeckel bilden. Tageserwärmung und Sonneneinstrahlung sorgen dann aber schon am Vormittag für ein Aufweichen dieses Harschdeckels und damit einen entsprechenden Festigkeitsverlust der Schneedecke.</p>
-									<h4>Tendenz</h4>
-									<p class="">Starker Anstieg der Lawinengefahr mit einsetzendem Schneefall.</p>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-			</tr>
-		</table>
-		<table class="body-wrap" bgcolor="">
-			<tr>
-				<td></td>
-				<td class="container" align="" bgcolor="#FFFFFF">
-					<div class="content bulletin-content">
-						<table style="padding: 15px;">
-							<tr>
-								<td>
-									<img src="./images/map_detail.png"/>
-								</td>
-								<td>
-									<img src="./images/symbols_detail.png"/>
-								</td>
-							</tr>
-						</table>
-						<table style="padding: 15px; border-left: 3px solid #ff0000;">
-							<tr>
-								<td style="vertical-align: top;">
-									<h4>Am Morgen günstige Verhältnisse - dann rascher Anstieg der Lawinengefahr!</h4>
-									<p class="">Vormittag steigt die Lawinengefahr dann aber markant an und erreicht verbreitet die Stufe 3 (erheblich). Grund dafür ist der Festigkeitsverlust der Schneedecke auf Grund von Tageserwärmung und starker Sonneneinstrahlung. Man muss dann zunehmend mit Selbstauslösungen von feuchten Lockerschneelawinen und Nassschneelawinen rechnen. In sonnseitigen Hängen sind vor allem Höhenlagen unterhalb 2800m betroffen, schattseitig unterhalb etwa 2200m. Auf steilen Wiesenhängen sind auch Gleitschneelawinen möglich. Weil ausgelöste Lawinen teilweise bis zum Untergrund durchreißen, können sie auch große Ausmaße erreichen. Skitouren und Variantenfahrten sollten daher unbedingt rechtzeitig beendet werden!</p>
-								</td>
-							</tr>
-						</table>
-						<table style="padding: 15px;" class="snowpack" bgcolor="#f6fafc">
-							<tr>
-								<td style="vertical-align: top;">
-									<h4>Schneedecke</h4>
-									<p class="">Die Schneedecke ist sonnseitig unterhalb etwa 2800m, schattseitig unterhalb etwa 2200m schon weitgehend durchfeuchtet. Nach einer meist klaren Nacht mit guter Ausstrahlung konnte sich an der Schneeoberfläche häufig ein tragfähiger Harschdeckel bilden. Tageserwärmung und Sonneneinstrahlung sorgen dann aber schon am Vormittag für ein Aufweichen dieses Harschdeckels und damit einen entsprechenden Festigkeitsverlust der Schneedecke.</p>
-									<h4>Tendenz</h4>
-									<p class="">Starker Anstieg der Lawinengefahr mit einsetzendem Schneefall.</p>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-			</tr>
-		</table>
+			<table class="body-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+				<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+					<td class="container" align="" bgcolor="#FFFFFF" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; display: block; max-width: 800px; margin: 0 auto; clear: both;">
+						<div class="content bulletin-content" style="text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding: 0px; max-width: 800px; margin: 0 auto; display: block; margin-top: 15px; margin-bottom: 40px;">
+							<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px; border-left: 5px solid #FF9900;">
+								<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+									<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+										<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+													<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; font-size: 14px; line-height: 1.6; margin-bottom: 0px;">Warnstufe für <b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">Freitag, 16.02.2018</b></p>
+													<h2 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: #FF9900;">Erheblich, Stufe 3</h2>
+												</td>
+											</tr>
+										</table>
+										<table class="pictograms-1" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px;" width="100%">
+											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+													<img src="http://212.47.231.185:8080/images/map_detail_3.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+												</td>
+												<td class="mountain" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2;">
+													<img src="http://212.47.231.185:8080/images/mountain.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+												</td>
+												<td class="symbols" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2; padding-left: 15px; padding-right: 15px; vertical-align: top;" valign="top">
+													<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+														<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																<img class="avalanche-situation" src="http://212.47.231.185:8080/images/Drifting_snow_c.png" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																<img class="avalanche-situation" src="http://212.47.231.185:8080/images/aspects1.png" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+														</tr>
+														<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																<img class="avalanche-situation" src="http://212.47.231.185:8080/images/Old_snow_c.png" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																<img class="avalanche-situation" src="http://212.47.231.185:8080/images/aspects2.png" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+										<table class="pictograms-2" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px;" width="100%">
+											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+												<td class="symbols danger-patterns" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2; padding-left: 15px; padding-right: 15px; vertical-align: top;" valign="top">
+													<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">Gefahrenmuster</h5>
+													<p class="danger-pattern" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; width: auto;">Bodennahe Schwachschicht vom Frühwinter</p>
+													<p class="danger-pattern" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; width: auto;">Kalt auf warm / warm auf kalt</p>
+												</td>
+												<td class="tendency" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding-left: 15px; padding-right: 15px; vertical-align: top; text-align: center;" valign="top" align="center">
+													<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">Tendenz</h5>
+													<img src="http://212.47.231.185:8080/images/tendency_increasing_black.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+												</td>
+											</tr>
+										</table>
+										<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; vertical-align: top;" valign="top">
+													<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px;">Am Morgen günstige Verhältnisse - dann rascher Anstieg der Lawinengefahr!</h4>
+													<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">Vormittag steigt die Lawinengefahr dann aber markant an und erreicht verbreitet die Stufe 3 (erheblich). Grund dafür ist der Festigkeitsverlust der Schneedecke auf Grund von Tageserwärmung und starker Sonneneinstrahlung. Man muss dann zunehmend mit Selbstauslösungen von feuchten Lockerschneelawinen und Nassschneelawinen rechnen. In sonnseitigen Hängen sind vor allem Höhenlagen unterhalb 2800m betroffen, schattseitig unterhalb etwa 2200m. Auf steilen Wiesenhängen sind auch Gleitschneelawinen möglich. Weil ausgelöste Lawinen teilweise bis zum Untergrund durchreißen, können sie auch große Ausmaße erreichen. Skitouren und Variantenfahrten sollten daher unbedingt rechtzeitig beendet werden!</p>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+							<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 5px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px;" class="snowpack" bgcolor="#f6fafc" width="100%">
+								<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+									<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; vertical-align: top;" valign="top">
+										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 5px;">Schneedecke</h4>
+										<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">Die Schneedecke ist sonnseitig unterhalb etwa 2800m, schattseitig unterhalb etwa 2200m schon weitgehend durchfeuchtet. Nach einer meist klaren Nacht mit guter Ausstrahlung konnte sich an der Schneeoberfläche häufig ein tragfähiger Harschdeckel bilden. Tageserwärmung und Sonneneinstrahlung sorgen dann aber schon am Vormittag für ein Aufweichen dieses Harschdeckels und damit einen entsprechenden Festigkeitsverlust der Schneedecke.</p>
+										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 15px;">Tendenz</h4>
+										<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">Frühlingshafte Verhältnisse mit einem tageszeitlichen Anstieg der Lawinengefahr.</p>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table class="body-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+				<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+					<td class="container" align="" bgcolor="#FFFFFF" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; display: block; max-width: 800px; margin: 0 auto; clear: both;">
+						<div class="content bulletin-content" style="text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding: 0px; max-width: 800px; margin: 0 auto; display: block; margin-top: 15px; margin-bottom: 40px;">
+							<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px; border-left: 5px solid #FF9900;">
+								<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+									<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+										<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+													<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; font-size: 14px; line-height: 1.6; margin-bottom: 0px;">Warnstufe für <b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">Freitag, 16.02.2018</b></p>
+													<h2 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: #FF9900;">Erheblich, Stufe 3</h2>
+												</td>
+											</tr>
+										</table>
+										<table class="pictograms-1" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px;" width="100%">
+											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+													<img src="http://212.47.231.185:8080/images/map_detail_3.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+												</td>
+												<td class="mountain" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2;">
+													<img src="http://212.47.231.185:8080/images/mountain.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+												</td>
+												<td class="symbols" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2; padding-left: 15px; padding-right: 15px; vertical-align: top;" valign="top">
+													<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+														<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																<img class="avalanche-situation" src="http://212.47.231.185:8080/images/Drifting_snow_c.png" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																<img class="avalanche-situation" src="http://212.47.231.185:8080/images/aspects1.png" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+														</tr>
+														<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																<img class="avalanche-situation" src="http://212.47.231.185:8080/images/Old_snow_c.png" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																<img class="avalanche-situation" src="http://212.47.231.185:8080/images/aspects2.png" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+										<table class="pictograms-2" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px;" width="100%">
+											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+												<td class="symbols danger-patterns" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2; padding-left: 15px; padding-right: 15px; vertical-align: top;" valign="top">
+													<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">Gefahrenmuster</h5>
+													<p class="danger-pattern" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; width: auto;">Bodennahe Schwachschicht vom Frühwinter</p>
+													<p class="danger-pattern" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; width: auto;">Kalt auf warm / warm auf kalt</p>
+												</td>
+												<td class="tendency" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding-left: 15px; padding-right: 15px; vertical-align: top; text-align: center;" valign="top" align="center">
+													<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">Tendenz</h5>
+													<img src="http://212.47.231.185:8080/images/tendency_increasing_black.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+												</td>
+											</tr>
+										</table>
+										<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; vertical-align: top;" valign="top">
+													<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px;">Am Morgen günstige Verhältnisse - dann rascher Anstieg der Lawinengefahr!</h4>
+													<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">Vormittag steigt die Lawinengefahr dann aber markant an und erreicht verbreitet die Stufe 3 (erheblich). Grund dafür ist der Festigkeitsverlust der Schneedecke auf Grund von Tageserwärmung und starker Sonneneinstrahlung. Man muss dann zunehmend mit Selbstauslösungen von feuchten Lockerschneelawinen und Nassschneelawinen rechnen. In sonnseitigen Hängen sind vor allem Höhenlagen unterhalb 2800m betroffen, schattseitig unterhalb etwa 2200m. Auf steilen Wiesenhängen sind auch Gleitschneelawinen möglich. Weil ausgelöste Lawinen teilweise bis zum Untergrund durchreißen, können sie auch große Ausmaße erreichen. Skitouren und Variantenfahrten sollten daher unbedingt rechtzeitig beendet werden!</p>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+							<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 5px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px;" class="snowpack" bgcolor="#f6fafc" width="100%">
+								<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+									<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; vertical-align: top;" valign="top">
+										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 5px;">Schneedecke</h4>
+										<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">Die Schneedecke ist sonnseitig unterhalb etwa 2800m, schattseitig unterhalb etwa 2200m schon weitgehend durchfeuchtet. Nach einer meist klaren Nacht mit guter Ausstrahlung konnte sich an der Schneeoberfläche häufig ein tragfähiger Harschdeckel bilden. Tageserwärmung und Sonneneinstrahlung sorgen dann aber schon am Vormittag für ein Aufweichen dieses Harschdeckels und damit einen entsprechenden Festigkeitsverlust der Schneedecke.</p>
+										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 15px;">Tendenz</h4>
+										<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">Frühlingshafte Verhältnisse mit einem tageszeitlichen Anstieg der Lawinengefahr.</p>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</table>
 
 		<!-- FOOTER -->
-		<table class="footer-wrap" bgcolor="#FFFFFF">
-			<tr>
-				<td align="center">
-					<h5 class="">Folge uns</h5>
+		<table class="footer-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; border-top: 1px solid #99daff; padding-top: 15px; clear: both;" width="100%">
+			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+				<td align="center" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+					<h5 class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">Folge uns</h5>
 				</td>
 			</tr>
-			<tr>
-				<td align="center">
-					<a class="social-media-button" href="${link.socialmedia.facebook}">
-						<img src="./images/facebook.png"/>
+			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+				<td align="center" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+					<a class="social-media-button" href="https://avalanche.report/facebook" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB; padding-left: 5px; padding-right: 5px;">
+						<img src="http://212.47.231.185:8080/images/facebook.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 					</a>
-					<a class="social-media-button" href="${link.socialmedia.twitter}">
-						<img src="./images/twitter.png"/>
+					<a class="social-media-button" href="https://avalanche.report/twitter" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB; padding-left: 5px; padding-right: 5px;">
+						<img src="http://212.47.231.185:8080/images/twitter.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 					</a>
-					<a class="social-media-button" href="${link.socialmedia.instagram}">
-						<img src="./images/instagram.png"/>
+					<a class="social-media-button" href="https://avalanche.report/instagram" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB; padding-left: 5px; padding-right: 5px;">
+						<img src="http://212.47.231.185:8080/images/instagram.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 					</a>
-					<a class="social-media-button" href="${link.socialmedia.youtube}">
-						<img src="./images/youtube.png"/>
+					<a class="social-media-button" href="https://avalanche.report/youtube" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB; padding-left: 5px; padding-right: 5px;">
+						<img src="http://212.47.231.185:8080/images/youtube.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 					</a>
-					<a class="social-media-button" href="${link.socialmedia.whatsapp}">
-						<img src="./images/whatsapp.png"/>
+					<a class="social-media-button" href="https://avalanche.report/whatsapp" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB; padding-left: 5px; padding-right: 5px;">
+						<img src="http://212.47.231.185:8080/images/whatsapp.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 					</a>
 				</td>
 			</tr>
-			<tr>
-				<td class="container">
-					<div class="content">
-						<table>
-							<tr>
-								<td align="center">
-									<p>
-										<a href="${link.unsubscribe}">Abmelden</a>
+			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+				<td class="container" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; display: block; max-width: 800px; margin: 0 auto; clear: both;">
+					<div class="content" style="text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding: 0px; max-width: 800px; margin: 0 auto; display: block;">
+						<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+							<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+								<td align="center" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+									<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">
+										<a href="https://avalanche.report/unsubscribe" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB;">Abmelden</a>
 									</p>
 								</td>
 							</tr>
 						</table>
 					</div>
 				</td>
-				<td></td>
+				<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;"></td>
 			</tr>
 		</table>
 
-		<img height="4px" src="./images/ci.png"/>
+		<img height="4px" src="http://212.47.231.185:8080/images/ci.png" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 	</body>
 </html>
