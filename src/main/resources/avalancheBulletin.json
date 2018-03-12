@@ -107,7 +107,7 @@
 			"properties" : {
 				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
 				"matrixInformation" : { "$ref" : "#/definitions/matrixInformation" },
-				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
+				"avalancheSituation" : { "$ref" : "#/definitions/avalancheSituation" },
 				"aspects" : {
 					"type" : "array",
 					"uniqueItems": true,
@@ -156,11 +156,11 @@
 			"type" : "string",
 			"enum" : [ "missing", "no_rating", "low", "moderate", "considerable", "high", "very_high"]
 		},
-		"avalancheProblem" : {
-			"id" : "#avalancheProblem",
+		"avalancheSituation" : {
+			"id" : "#avalancheSituation",
 			"$schema" : "http://json-schema.org/draft-04/schema#",
-			"title" : "Avalanche Problem",
-			"description" : "The five avalanche problems.",
+			"title" : "Avalanche Situation",
+			"description" : "The five avalanche situations.",
 			"type" : "string",
 			"enum" : [ "new_snow", "wind_drifted_snow", "weak_persistent_layer", "wet_snow", "gliding_snow", "favourable_situation" ]
 		},

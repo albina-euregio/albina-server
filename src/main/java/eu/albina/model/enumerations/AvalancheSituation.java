@@ -1,11 +1,11 @@
 package eu.albina.model.enumerations;
 
-public enum AvalancheProblem {
+public enum AvalancheSituation {
 	new_snow, wind_drifted_snow, weak_persistent_layer, wet_snow, gliding_snow, favourable_situation;
 
-	public static AvalancheProblem fromString(String text) {
+	public static AvalancheSituation fromString(String text) {
 		if (text != null) {
-			for (AvalancheProblem type : AvalancheProblem.values()) {
+			for (AvalancheSituation type : AvalancheSituation.values()) {
 				if (text.equalsIgnoreCase(type.toString()))
 					return type;
 			}

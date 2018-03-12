@@ -22,7 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.AvalancheProblem;
+import eu.albina.model.enumerations.AvalancheSituation;
 import eu.albina.model.enumerations.DangerRating;
 
 @Audited
@@ -52,8 +52,8 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 	private MatrixInformation matrixInformation;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_PROBLEM")
-	private AvalancheProblem avalancheProblem;
+	@Column(name = "AVALANCHE_SITUATION")
+	private AvalancheSituation avalancheSituation;
 
 	@ElementCollection
 	@CollectionTable(name = "AVALANCHE_BULLETIN_ELEVATION_DESCRIPTION_ASPECTS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ELEVATION_DESCRIPTION_ID", referencedColumnName = "ID"))
@@ -73,8 +73,8 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 			this.dangerRating = DangerRating.valueOf(json.getString("dangerRating").toLowerCase());
 		if (json.has("matrixInformation"))
 			this.matrixInformation = new MatrixInformation(json.getJSONObject("matrixInformation"));
-		if (json.has("avalancheProblem"))
-			this.avalancheProblem = AvalancheProblem.valueOf(json.getString("avalancheProblem").toLowerCase());
+		if (json.has("avalancheSituation"))
+			this.avalancheSituation = AvalancheSituation.valueOf(json.getString("avalancheSituation").toLowerCase());
 		if (json.has("aspects")) {
 			JSONArray aspects = json.getJSONArray("aspects");
 			for (Object entry : aspects) {
@@ -99,12 +99,12 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 		this.matrixInformation = matrixInformation;
 	}
 
-	public AvalancheProblem getAvalancheProblem() {
-		return avalancheProblem;
+	public AvalancheSituation getAvalancheSituation() {
+		return avalancheSituation;
 	}
 
-	public void setAvalancheProblem(AvalancheProblem avalancheProblem) {
-		this.avalancheProblem = avalancheProblem;
+	public void setAvalancheSituation(AvalancheSituation avalancheSituation) {
+		this.avalancheSituation = avalancheSituation;
 	}
 
 	public Set<Aspect> getAspects() {
@@ -124,8 +124,8 @@ public class AvalancheBulletinElevationDescription extends AbstractPersistentObj
 			json.put("dangerRating", this.dangerRating.toString());
 		if (matrixInformation != null)
 			json.put("matrixInformation", matrixInformation.toJSON());
-		if (avalancheProblem != null)
-			json.put("avalancheProblem", this.avalancheProblem.toString());
+		if (avalancheSituation != null)
+			json.put("avalancheSituation", this.avalancheSituation.toString());
 
 		if (aspects != null && aspects.size() > 0) {
 			JSONArray aspects = new JSONArray();

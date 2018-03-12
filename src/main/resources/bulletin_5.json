@@ -60,13 +60,13 @@
 
 	"above" : {
 		"dangerRating" : "moderate",
-		"avalancheProblem" : "new_snow",
+		"avalancheSituation" : "new_snow",
 		"aspects" : [ "NW", "N", "NE"]
 	},
 
 	"below" : {
 		"dangerRating" : "low",
-		"avalancheProblem" : "wind_drifted_snow",
+		"avalancheSituation" : "wind_drifted_snow",
 		"aspects" : [ "NW", "N", "NE" ]
 	}
 }

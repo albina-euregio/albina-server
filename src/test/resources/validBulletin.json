@@ -63,7 +63,7 @@
 	"hasElevationDependency": true,
 	"forenoonAbove": {
 		"dangerRating": "considerable",
-		"avalancheProblem": "new_snow",
+		"avalancheSituation": "new_snow",
 		"aspects": [
 			"NW",
 			"N",
@@ -72,7 +72,7 @@
 	},
 	"forenoonBelow": {
 		"dangerRating": "moderate",
-		"avalancheProblem": "wind_drifted_snow",
+		"avalancheSituation": "wind_drifted_snow",
 		"aspects": [
 			"NW",
 			"N",

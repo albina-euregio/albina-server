@@ -922,9 +922,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			validElevationAbove.setAttribute("xlink:href",
 					AlbinaUtil.createValidElevationAttribute(elevation, true, treeline));
 			avProblemAbove.appendChild(validElevationAbove);
-			if (above != null && above.getAvalancheProblem() != null) {
+			if (above != null && above.getAvalancheSituation() != null) {
 				Element typeAbove = doc.createElement("type");
-				typeAbove.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
+				typeAbove.appendChild(doc.createTextNode(above.getAvalancheSituation().toCaamlString()));
 				avProblemAbove.appendChild(typeAbove);
 			}
 			for (Aspect aspect : above.getAspects()) {
@@ -940,9 +940,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			validElevationBelow.setAttribute("xlink:href",
 					AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
 			avProblemBelow.appendChild(validElevationBelow);
-			if (below != null && below.getAvalancheProblem() != null) {
+			if (below != null && below.getAvalancheSituation() != null) {
 				Element typeBelow = doc.createElement("type");
-				typeBelow.appendChild(doc.createTextNode(below.getAvalancheProblem().toCaamlString()));
+				typeBelow.appendChild(doc.createTextNode(below.getAvalancheSituation().toCaamlString()));
 				avProblemBelow.appendChild(typeBelow);
 			}
 			for (Aspect aspect : below.getAspects()) {
@@ -953,9 +953,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			avProblems.appendChild(avProblemBelow);
 		} else {
 			Element avProblem = doc.createElement("AvProblem");
-			if (above != null && above.getAvalancheProblem() != null) {
+			if (above != null && above.getAvalancheSituation() != null) {
 				Element type = doc.createElement("type");
-				type.appendChild(doc.createTextNode(above.getAvalancheProblem().toCaamlString()));
+				type.appendChild(doc.createTextNode(above.getAvalancheSituation().toCaamlString()));
 				avProblem.appendChild(type);
 			}
 			for (Aspect aspect : above.getAspects()) {
@@ -1016,7 +1016,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				forenoonAbove = bulletin.getForenoonAbove();
 			else {
 				forenoonAbove.setAspects(bulletin.getForenoonAbove().getAspects());
-				forenoonAbove.setAvalancheProblem(bulletin.getForenoonAbove().getAvalancheProblem());
+				forenoonAbove.setAvalancheSituation(bulletin.getForenoonAbove().getAvalancheSituation());
 				forenoonAbove.setDangerRating(bulletin.getForenoonAbove().getDangerRating());
 				forenoonAbove.setMatrixInformation(bulletin.getForenoonAbove().getMatrixInformation());
 			}
@@ -1027,7 +1027,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				forenoonBelow = bulletin.getForenoonBelow();
 			else {
 				forenoonBelow.setAspects(bulletin.getForenoonBelow().getAspects());
-				forenoonBelow.setAvalancheProblem(bulletin.getForenoonBelow().getAvalancheProblem());
+				forenoonBelow.setAvalancheSituation(bulletin.getForenoonBelow().getAvalancheSituation());
 				forenoonBelow.setDangerRating(bulletin.getForenoonBelow().getDangerRating());
 				forenoonBelow.setMatrixInformation(bulletin.getForenoonBelow().getMatrixInformation());
 			}
@@ -1038,7 +1038,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				afternoonAbove = bulletin.getAfternoonAbove();
 			else {
 				afternoonAbove.setAspects(bulletin.getAfternoonAbove().getAspects());
-				afternoonAbove.setAvalancheProblem(bulletin.getAfternoonAbove().getAvalancheProblem());
+				afternoonAbove.setAvalancheSituation(bulletin.getAfternoonAbove().getAvalancheSituation());
 				afternoonAbove.setDangerRating(bulletin.getAfternoonAbove().getDangerRating());
 				afternoonAbove.setMatrixInformation(bulletin.getAfternoonAbove().getMatrixInformation());
 			}
@@ -1049,7 +1049,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				afternoonBelow = bulletin.getAfternoonBelow();
 			else {
 				afternoonBelow.setAspects(bulletin.getAfternoonBelow().getAspects());
-				afternoonBelow.setAvalancheProblem(bulletin.getAfternoonBelow().getAvalancheProblem());
+				afternoonBelow.setAvalancheSituation(bulletin.getAfternoonBelow().getAvalancheSituation());
 				afternoonBelow.setDangerRating(bulletin.getAfternoonBelow().getDangerRating());
 				afternoonBelow.setMatrixInformation(bulletin.getAfternoonBelow().getMatrixInformation());
 			}
