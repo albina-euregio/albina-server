@@ -110,20 +110,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	private boolean hasElevationDependency;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "FORENOON_ABOVE_ID")
-	private AvalancheBulletinElevationDescription forenoonAbove;
+	@JoinColumn(name = "FORENOON_ID")
+	private AvalancheBulletinDaytimeDescription forenoon;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "FORENOON_BELOW_ID")
-	private AvalancheBulletinElevationDescription forenoonBelow;
-
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "AFTERNOON_ABOVE_ID")
-	private AvalancheBulletinElevationDescription afternoonAbove;
-
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "AFTERNOON_BELOW_ID")
-	private AvalancheBulletinElevationDescription afternoonBelow;
+	@JoinColumn(name = "AFTERNOON_ID")
+	private AvalancheBulletinDaytimeDescription afternoon;
 
 	@Column(name = "AV_ACTIVITY_HIGHLIGHTS_TEXTCAT")
 	private String avActivityHighlightsTextcat;
@@ -261,17 +253,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (json.has("treeline"))
 			this.treeline = json.getBoolean("treeline");
 
-		if (json.has("forenoonAbove"))
-			this.forenoonAbove = new AvalancheBulletinElevationDescription(json.getJSONObject("forenoonAbove"));
+		if (json.has("forenoon"))
+			this.forenoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("forenoon"));
 
-		if (json.has("forenoonBelow"))
-			this.forenoonBelow = new AvalancheBulletinElevationDescription(json.getJSONObject("forenoonBelow"));
-
-		if (json.has("afternoonAbove"))
-			this.afternoonAbove = new AvalancheBulletinElevationDescription(json.getJSONObject("afternoonAbove"));
-
-		if (json.has("afternoonBelow"))
-			this.afternoonBelow = new AvalancheBulletinElevationDescription(json.getJSONObject("afternoonBelow"));
+		if (json.has("afternoon"))
+			this.afternoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("afternoon"));
 	}
 
 	public User getUser() {
@@ -548,36 +534,20 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.publishedRegions = regions;
 	}
 
-	public AvalancheBulletinElevationDescription getForenoonAbove() {
-		return forenoonAbove;
+	public AvalancheBulletinDaytimeDescription getForenoon() {
+		return forenoon;
 	}
 
-	public void setForenoonAbove(AvalancheBulletinElevationDescription forenoonAbove) {
-		this.forenoonAbove = forenoonAbove;
+	public void setForenoon(AvalancheBulletinDaytimeDescription forenoon) {
+		this.forenoon = forenoon;
 	}
 
-	public AvalancheBulletinElevationDescription getForenoonBelow() {
-		return forenoonBelow;
+	public AvalancheBulletinDaytimeDescription getAfternoon() {
+		return afternoon;
 	}
 
-	public void setForenoonBelow(AvalancheBulletinElevationDescription forenoonBelow) {
-		this.forenoonBelow = forenoonBelow;
-	}
-
-	public AvalancheBulletinElevationDescription getAfternoonAbove() {
-		return afternoonAbove;
-	}
-
-	public void setAfternoonAbove(AvalancheBulletinElevationDescription afternoonAbove) {
-		this.afternoonAbove = afternoonAbove;
-	}
-
-	public AvalancheBulletinElevationDescription getAfternoonBelow() {
-		return afternoonBelow;
-	}
-
-	public void setAfternoonBelow(AvalancheBulletinElevationDescription afternoonBelow) {
-		this.afternoonBelow = afternoonBelow;
+	public void setAfternoon(AvalancheBulletinDaytimeDescription afternoon) {
+		this.afternoon = afternoon;
 	}
 
 	public BulletinStatus getStatus(List<String> regions) {
@@ -659,14 +629,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public DangerRating getHighestDangerRating() {
 		DangerRating result = DangerRating.missing;
-		if (forenoonAbove != null && result.compareTo(forenoonAbove.getDangerRating()) < 0)
-			result = forenoonAbove.getDangerRating();
-		if (forenoonBelow != null && result.compareTo(forenoonBelow.getDangerRating()) < 0)
-			result = forenoonBelow.getDangerRating();
-		if (afternoonAbove != null && result.compareTo(afternoonAbove.getDangerRating()) < 0)
-			result = afternoonAbove.getDangerRating();
-		if (afternoonBelow != null && result.compareTo(afternoonBelow.getDangerRating()) < 0)
-			result = afternoonBelow.getDangerRating();
+		if (forenoon != null && result.compareTo(forenoon.getDangerRatingAbove()) < 0)
+			result = forenoon.getDangerRatingAbove();
+		if (forenoon != null && result.compareTo(forenoon.getDangerRatingBelow()) < 0)
+			result = forenoon.getDangerRatingBelow();
+		if (afternoon != null && result.compareTo(afternoon.getDangerRatingAbove()) < 0)
+			result = afternoon.getDangerRatingAbove();
+		if (afternoon != null && result.compareTo(afternoon.getDangerRatingBelow()) < 0)
+			result = afternoon.getDangerRatingBelow();
 		return result;
 	}
 
@@ -735,17 +705,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			}
 		}
 
-		if (hasElevationDependency && forenoonBelow != null)
-			json.put("forenoonBelow", forenoonBelow.toJSON());
+		if (forenoon != null)
+			json.put("forenoon", forenoon.toJSON());
 
-		if (forenoonAbove != null)
-			json.put("forenoonAbove", forenoonAbove.toJSON());
-
-		if (hasDaytimeDependency && afternoonAbove != null)
-			json.put("afternoonAbove", afternoonAbove.toJSON());
-
-		if (hasDaytimeDependency && hasElevationDependency && afternoonBelow != null)
-			json.put("afternoonBelow", afternoonBelow.toJSON());
+		if (hasDaytimeDependency && afternoon != null)
+			json.put("afternoon", afternoon.toJSON());
 
 		return json;
 	}
@@ -753,16 +717,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, DateTime startDate, int version,
 			boolean isAfternoon) {
 
-		AvalancheBulletinElevationDescription above;
-		AvalancheBulletinElevationDescription below;
+		AvalancheBulletinDaytimeDescription bulletin;
 
-		if (isAfternoon) {
-			above = this.afternoonAbove;
-			below = this.afternoonBelow;
-		} else {
-			above = this.forenoonAbove;
-			below = this.forenoonBelow;
-		}
+		if (isAfternoon)
+			bulletin = this.afternoon;
+		else
+			bulletin = this.forenoon;
 
 		Element rootElement = doc.createElement("Bulletin");
 		if (getId() != null)
@@ -847,9 +807,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			validElevationAbove.setAttribute("xlink:href",
 					AlbinaUtil.createValidElevationAttribute(elevation, true, treeline));
 			dangerRatingAbove.appendChild(validElevationAbove);
-			if (above != null && above.getDangerRating() != null) {
+			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
-				mainValueAbove.appendChild(doc.createTextNode(DangerRating.getCAAMLString(above.getDangerRating())));
+				mainValueAbove
+						.appendChild(doc.createTextNode(DangerRating.getCAAMLString(bulletin.getDangerRatingAbove())));
 				dangerRatingAbove.appendChild(mainValueAbove);
 			}
 			dangerRatings.appendChild(dangerRatingAbove);
@@ -858,26 +819,27 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			validElevationBelow.setAttribute("xlink:href",
 					AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
 			dangerRatingBelow.appendChild(validElevationBelow);
-			if (below != null && below.getDangerRating() != null) {
+			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
 				// TODO add treeline as elevation
-				mainValueBelow.appendChild(doc.createTextNode(DangerRating.getCAAMLString(below.getDangerRating())));
+				mainValueBelow
+						.appendChild(doc.createTextNode(DangerRating.getCAAMLString(bulletin.getDangerRatingBelow())));
 				dangerRatingBelow.appendChild(mainValueBelow);
 			}
 			dangerRatings.appendChild(dangerRatingBelow);
 		} else {
 			// NOTE if no elevation dependency is set, the elevation description is above
 			Element dangerRating = doc.createElement("DangerRating");
-			if (above != null && above.getDangerRating() != null) {
+			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValue = doc.createElement("mainValue");
-				mainValue.appendChild(doc.createTextNode(DangerRating.getCAAMLString(above.getDangerRating())));
+				mainValue.appendChild(doc.createTextNode(DangerRating.getCAAMLString(bulletin.getDangerRatingAbove())));
 				dangerRating.appendChild(mainValue);
 			}
 			dangerRatings.appendChild(dangerRating);
 		}
 		bulletinMeasurements.appendChild(dangerRatings);
 
-		if (dangerPattern1 != null || dangerPattern1 != null) {
+		if (dangerPattern1 != null || dangerPattern2 != null) {
 			Element dangerPatterns = doc.createElement("dangerPatterns");
 			// TODO add danger patterns to CAAML
 			if (dangerPattern1 != null) {
@@ -885,15 +847,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				Element dangerPatternOneType = doc.createElement("type");
 				dangerPatternOneType.appendChild(doc.createTextNode(DangerPattern.getCAAMLString(dangerPattern1)));
 				dangerPatternOne.appendChild(dangerPatternOneType);
-				for (Aspect aspect : above.getAspects()) {
-					Element validAspect = doc.createElement("validAspect");
-					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-					dangerPatternOne.appendChild(validAspect);
-				}
-				Element validElevation = doc.createElement("validElevation");
-				validElevation.setAttribute("xlink:href",
-						AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
-				dangerPatternOne.appendChild(validElevation);
 				dangerPatterns.appendChild(dangerPatternOne);
 			}
 			if (dangerPattern2 != null) {
@@ -901,70 +854,44 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				Element dangerPatternTwoType = doc.createElement("type");
 				dangerPatternTwoType.appendChild(doc.createTextNode(DangerPattern.getCAAMLString(dangerPattern2)));
 				dangerPatternTwo.appendChild(dangerPatternTwoType);
-				for (Aspect aspect : above.getAspects()) {
-					Element validAspect = doc.createElement("validAspect");
-					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-					dangerPatternTwo.appendChild(validAspect);
-				}
-				Element validElevation = doc.createElement("validElevation");
-				validElevation.setAttribute("xlink:href",
-						AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
-				dangerPatternTwo.appendChild(validElevation);
 				dangerPatterns.appendChild(dangerPatternTwo);
 			}
 			bulletinMeasurements.appendChild(dangerPatterns);
 		}
 
 		Element avProblems = doc.createElement("avProblems");
-		if (hasElevationDependency) {
-			Element avProblemAbove = doc.createElement("AvProblem");
-			Element validElevationAbove = doc.createElement("validElevation");
-			validElevationAbove.setAttribute("xlink:href",
-					AlbinaUtil.createValidElevationAttribute(elevation, true, treeline));
-			avProblemAbove.appendChild(validElevationAbove);
-			if (above != null && above.getAvalancheSituation() != null) {
-				Element typeAbove = doc.createElement("type");
-				typeAbove.appendChild(doc.createTextNode(above.getAvalancheSituation().toCaamlString()));
-				avProblemAbove.appendChild(typeAbove);
-			}
-			for (Aspect aspect : above.getAspects()) {
-				Element validAspect = doc.createElement("validAspect");
-				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-				avProblemAbove.appendChild(validAspect);
-			}
-
-			avProblems.appendChild(avProblemAbove);
-
-			Element avProblemBelow = doc.createElement("AvProblem");
-			Element validElevationBelow = doc.createElement("validElevation");
-			validElevationBelow.setAttribute("xlink:href",
-					AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
-			avProblemBelow.appendChild(validElevationBelow);
-			if (below != null && below.getAvalancheSituation() != null) {
-				Element typeBelow = doc.createElement("type");
-				typeBelow.appendChild(doc.createTextNode(below.getAvalancheSituation().toCaamlString()));
-				avProblemBelow.appendChild(typeBelow);
-			}
-			for (Aspect aspect : below.getAspects()) {
-				Element validAspect = doc.createElement("validAspect");
-				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-				avProblemBelow.appendChild(validAspect);
-			}
-			avProblems.appendChild(avProblemBelow);
-		} else {
-			Element avProblem = doc.createElement("AvProblem");
-			if (above != null && above.getAvalancheSituation() != null) {
-				Element type = doc.createElement("type");
-				type.appendChild(doc.createTextNode(above.getAvalancheSituation().toCaamlString()));
-				avProblem.appendChild(type);
-			}
-			for (Aspect aspect : above.getAspects()) {
-				Element validAspect = doc.createElement("validAspect");
-				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-				avProblem.appendChild(validAspect);
-			}
-			avProblems.appendChild(avProblem);
+		Element avProblemAbove = doc.createElement("AvProblem");
+		if (bulletin != null && bulletin.getAvalancheSituation1() != null) {
+			Element typeAbove = doc.createElement("type");
+			typeAbove.appendChild(
+					doc.createTextNode(bulletin.getAvalancheSituation1().getAvalancheSituation().toCaamlString()));
+			avProblemAbove.appendChild(typeAbove);
 		}
+		for (Aspect aspect : bulletin.getAvalancheSituation1().getAspects()) {
+			Element validAspect = doc.createElement("validAspect");
+			validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+			avProblemAbove.appendChild(validAspect);
+		}
+
+		avProblems.appendChild(avProblemAbove);
+
+		Element avProblemBelow = doc.createElement("AvProblem");
+		Element validElevationBelow = doc.createElement("validElevation");
+		validElevationBelow.setAttribute("xlink:href",
+				AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
+		avProblemBelow.appendChild(validElevationBelow);
+		if (bulletin != null && bulletin.getAvalancheSituation2() != null) {
+			Element typeBelow = doc.createElement("type");
+			typeBelow.appendChild(
+					doc.createTextNode(bulletin.getAvalancheSituation2().getAvalancheSituation().toCaamlString()));
+			avProblemBelow.appendChild(typeBelow);
+		}
+		for (Aspect aspect : bulletin.getAvalancheSituation2().getAspects()) {
+			Element validAspect = doc.createElement("validAspect");
+			validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+			avProblemBelow.appendChild(validAspect);
+		}
+		avProblems.appendChild(avProblemBelow);
 		bulletinMeasurements.appendChild(avProblems);
 
 		for (TextPart part : TextPart.values()) {
@@ -1011,47 +938,29 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		setHasElevationDependency(bulletin.isHasElevationDependency());
 		setTreeline(bulletin.getTreeline());
 
-		if (bulletin.getForenoonAbove() != null) {
-			if (forenoonAbove == null)
-				forenoonAbove = bulletin.getForenoonAbove();
+		if (bulletin.getForenoon() != null) {
+			if (forenoon == null)
+				forenoon = bulletin.getForenoon();
 			else {
-				forenoonAbove.setAspects(bulletin.getForenoonAbove().getAspects());
-				forenoonAbove.setAvalancheSituation(bulletin.getForenoonAbove().getAvalancheSituation());
-				forenoonAbove.setDangerRating(bulletin.getForenoonAbove().getDangerRating());
-				forenoonAbove.setMatrixInformation(bulletin.getForenoonAbove().getMatrixInformation());
+				forenoon.setDangerRatingAbove(bulletin.getForenoon().getDangerRatingAbove());
+				forenoon.setMatrixInformationAbove(bulletin.getForenoon().getMatrixInformationAbove());
+				forenoon.setDangerRatingBelow(bulletin.getForenoon().getDangerRatingBelow());
+				forenoon.setMatrixInformationBelow(bulletin.getForenoon().getMatrixInformationBelow());
+				forenoon.setAvalancheSituation1(bulletin.getForenoon().getAvalancheSituation1());
+				forenoon.setAvalancheSituation2(bulletin.getForenoon().getAvalancheSituation2());
 			}
 		}
 
-		if (bulletin.getForenoonBelow() != null) {
-			if (forenoonBelow == null)
-				forenoonBelow = bulletin.getForenoonBelow();
+		if (bulletin.getAfternoon() != null) {
+			if (afternoon == null)
+				afternoon = bulletin.getAfternoon();
 			else {
-				forenoonBelow.setAspects(bulletin.getForenoonBelow().getAspects());
-				forenoonBelow.setAvalancheSituation(bulletin.getForenoonBelow().getAvalancheSituation());
-				forenoonBelow.setDangerRating(bulletin.getForenoonBelow().getDangerRating());
-				forenoonBelow.setMatrixInformation(bulletin.getForenoonBelow().getMatrixInformation());
-			}
-		}
-
-		if (bulletin.getAfternoonAbove() != null) {
-			if (afternoonAbove == null)
-				afternoonAbove = bulletin.getAfternoonAbove();
-			else {
-				afternoonAbove.setAspects(bulletin.getAfternoonAbove().getAspects());
-				afternoonAbove.setAvalancheSituation(bulletin.getAfternoonAbove().getAvalancheSituation());
-				afternoonAbove.setDangerRating(bulletin.getAfternoonAbove().getDangerRating());
-				afternoonAbove.setMatrixInformation(bulletin.getAfternoonAbove().getMatrixInformation());
-			}
-		}
-
-		if (bulletin.getAfternoonBelow() != null) {
-			if (afternoonBelow == null)
-				afternoonBelow = bulletin.getAfternoonBelow();
-			else {
-				afternoonBelow.setAspects(bulletin.getAfternoonBelow().getAspects());
-				afternoonBelow.setAvalancheSituation(bulletin.getAfternoonBelow().getAvalancheSituation());
-				afternoonBelow.setDangerRating(bulletin.getAfternoonBelow().getDangerRating());
-				afternoonBelow.setMatrixInformation(bulletin.getAfternoonBelow().getMatrixInformation());
+				afternoon.setDangerRatingAbove(bulletin.getForenoon().getDangerRatingAbove());
+				afternoon.setMatrixInformationAbove(bulletin.getForenoon().getMatrixInformationAbove());
+				afternoon.setDangerRatingBelow(bulletin.getForenoon().getDangerRatingBelow());
+				afternoon.setMatrixInformationBelow(bulletin.getForenoon().getMatrixInformationBelow());
+				afternoon.setAvalancheSituation1(bulletin.getForenoon().getAvalancheSituation1());
+				afternoon.setAvalancheSituation2(bulletin.getForenoon().getAvalancheSituation2());
 			}
 		}
 

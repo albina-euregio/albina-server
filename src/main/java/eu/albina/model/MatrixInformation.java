@@ -7,42 +7,42 @@ import javax.persistence.Enumerated;
 
 import org.json.JSONObject;
 
-import eu.albina.model.enumerations.AvalancheReleaseProbability;
+import eu.albina.model.enumerations.ArtificialAvalancheReleaseProbability;
 import eu.albina.model.enumerations.AvalancheSize;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.HazardSiteDistribution;
-import eu.albina.model.enumerations.SpontaneousAvalancheReleaseProbability;
+import eu.albina.model.enumerations.NaturalAvalancheReleaseProbability;
 
 @Embeddable
 public class MatrixInformation implements AvalancheInformationObject {
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_RATING")
-	private DangerRating dangerRating;
+	@Column(name = "ARTIFICIAL_DANGER_RATING")
+	private DangerRating artificialDangerRating;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_SIZE")
-	private AvalancheSize avalancheSize;
+	@Column(name = "ARTIFICIAL_AVALANCHE_SIZE")
+	private AvalancheSize artificialAvalancheSize;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_RELEASE_PROBABILITY")
-	private AvalancheReleaseProbability avalancheReleaseProbability;
+	@Column(name = "ARTIFICIAL_AVALANCHE_RELEASE_PROBABILITY")
+	private ArtificialAvalancheReleaseProbability artificialAvalancheReleaseProbability;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "HARZARD_SITE_DISTRIBUTION")
-	private HazardSiteDistribution hazardSiteDistribution;
+	@Column(name = "ARTIFICIAL_HARZARD_SITE_DISTRIBUTION")
+	private HazardSiteDistribution artificialHazardSiteDistribution;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SPONTANEOUS_DANGER_RATING")
-	private DangerRating spontaneousDangerRating;
+	@Column(name = "NATURAL_DANGER_RATING")
+	private DangerRating naturalDangerRating;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SPONTANEOUS_AVALANCHE_RELEASE_PROBABILITY")
-	private SpontaneousAvalancheReleaseProbability spontaneousAvalancheReleaseProbability;
+	@Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY")
+	private NaturalAvalancheReleaseProbability naturalAvalancheReleaseProbability;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SPONTANEOUS_HAZARD_SITE_DISTRIBUTION")
-	private HazardSiteDistribution spontaneousHazardSiteDistribution;
+	@Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION")
+	private HazardSiteDistribution naturalHazardSiteDistribution;
 
 	public MatrixInformation() {
 	}
@@ -50,99 +50,101 @@ public class MatrixInformation implements AvalancheInformationObject {
 	public MatrixInformation(JSONObject json) {
 		this();
 
-		if (json.has("dangerRating"))
-			this.dangerRating = DangerRating.fromString(json.getString("dangerRating"));
-		if (json.has("avalancheSize"))
-			this.avalancheSize = AvalancheSize.fromString(json.getString("avalancheSize"));
-		if (json.has("avalancheReleaseProbability"))
-			this.avalancheReleaseProbability = AvalancheReleaseProbability
-					.fromString(json.getString("avalancheReleaseProbability"));
-		if (json.has("hazardSiteDistribution"))
-			this.hazardSiteDistribution = HazardSiteDistribution.fromString(json.getString("hazardSiteDistribution"));
-		if (json.has("spontaneousDangerRating"))
-			this.spontaneousDangerRating = DangerRating.fromString(json.getString("spontaneousDangerRating"));
-		if (json.has("spontaneousAvalancheReleaseProbability"))
-			this.spontaneousAvalancheReleaseProbability = SpontaneousAvalancheReleaseProbability
-					.fromString(json.getString("spontaneousAvalancheReleaseProbability"));
-		if (json.has("spontaneousHazardSiteDistribution"))
-			this.spontaneousHazardSiteDistribution = HazardSiteDistribution
-					.fromString(json.getString("spontaneousHazardSiteDistribution"));
+		if (json.has("artificialDangerRating"))
+			this.artificialDangerRating = DangerRating.fromString(json.getString("artificialDangerRating"));
+		if (json.has("artificialAvalancheSize"))
+			this.artificialAvalancheSize = AvalancheSize.fromString(json.getString("artificialAvalancheSize"));
+		if (json.has("artificialAvalancheReleaseProbability"))
+			this.artificialAvalancheReleaseProbability = ArtificialAvalancheReleaseProbability
+					.fromString(json.getString("artificialAvalancheReleaseProbability"));
+		if (json.has("artificialHazardSiteDistribution"))
+			this.artificialHazardSiteDistribution = HazardSiteDistribution
+					.fromString(json.getString("artificialHazardSiteDistribution"));
+		if (json.has("naturalDangerRating"))
+			this.naturalDangerRating = DangerRating.fromString(json.getString("naturalDangerRating"));
+		if (json.has("naturalAvalancheReleaseProbability"))
+			this.naturalAvalancheReleaseProbability = NaturalAvalancheReleaseProbability
+					.fromString(json.getString("naturalAvalancheReleaseProbability"));
+		if (json.has("naturalHazardSiteDistribution"))
+			this.naturalHazardSiteDistribution = HazardSiteDistribution
+					.fromString(json.getString("naturalHazardSiteDistribution"));
 	}
 
-	public DangerRating getDangerRating() {
-		return dangerRating;
+	public DangerRating getArtificialDangerRating() {
+		return artificialDangerRating;
 	}
 
-	public void setDangerRating(DangerRating dangerRating) {
-		this.dangerRating = dangerRating;
+	public void setArtificialDangerRating(DangerRating artificialDangerRating) {
+		this.artificialDangerRating = artificialDangerRating;
 	}
 
-	public AvalancheSize getAvalancheSize() {
-		return avalancheSize;
+	public AvalancheSize getArtificialAvalancheSize() {
+		return artificialAvalancheSize;
 	}
 
-	public void setAvalancheSize(AvalancheSize avalancheSize) {
-		this.avalancheSize = avalancheSize;
+	public void setArtificialAvalancheSize(AvalancheSize artificialAvalancheSize) {
+		this.artificialAvalancheSize = artificialAvalancheSize;
 	}
 
-	public AvalancheReleaseProbability getAvalancheReleaseProbability() {
-		return avalancheReleaseProbability;
+	public ArtificialAvalancheReleaseProbability getArtificialAvalancheReleaseProbability() {
+		return artificialAvalancheReleaseProbability;
 	}
 
-	public void setAvalancheReleaseProbability(AvalancheReleaseProbability avalancheReleaseProbability) {
-		this.avalancheReleaseProbability = avalancheReleaseProbability;
+	public void setArtificialAvalancheReleaseProbability(
+			ArtificialAvalancheReleaseProbability artificialAvalancheReleaseProbability) {
+		this.artificialAvalancheReleaseProbability = artificialAvalancheReleaseProbability;
 	}
 
-	public HazardSiteDistribution getHazardSiteDistribution() {
-		return hazardSiteDistribution;
+	public HazardSiteDistribution getArtificialHazardSiteDistribution() {
+		return artificialHazardSiteDistribution;
 	}
 
-	public void setHazardSiteDistribution(HazardSiteDistribution hazardSiteDistribution) {
-		this.hazardSiteDistribution = hazardSiteDistribution;
+	public void setArtificialHazardSiteDistribution(HazardSiteDistribution artificialHazardSiteDistribution) {
+		this.artificialHazardSiteDistribution = artificialHazardSiteDistribution;
 	}
 
-	public DangerRating getSpontaneousDangerRating() {
-		return spontaneousDangerRating;
+	public DangerRating getNaturalDangerRating() {
+		return naturalDangerRating;
 	}
 
-	public void setSpontaneousDangerRating(DangerRating spontaneousDangerRating) {
-		this.spontaneousDangerRating = spontaneousDangerRating;
+	public void setNaturalDangerRating(DangerRating naturalDangerRating) {
+		this.naturalDangerRating = naturalDangerRating;
 	}
 
-	public SpontaneousAvalancheReleaseProbability getSpontaneousAvalancheReleaseProbability() {
-		return spontaneousAvalancheReleaseProbability;
+	public NaturalAvalancheReleaseProbability getNaturalAvalancheReleaseProbability() {
+		return naturalAvalancheReleaseProbability;
 	}
 
-	public void setSpontaneousAvalancheReleaseProbability(
-			SpontaneousAvalancheReleaseProbability spontaneousAvalancheReleaseProbability) {
-		this.spontaneousAvalancheReleaseProbability = spontaneousAvalancheReleaseProbability;
+	public void setNaturalAvalancheReleaseProbability(
+			NaturalAvalancheReleaseProbability naturalAvalancheReleaseProbability) {
+		this.naturalAvalancheReleaseProbability = naturalAvalancheReleaseProbability;
 	}
 
-	public HazardSiteDistribution getSpontaneousHazardSiteDistribution() {
-		return spontaneousHazardSiteDistribution;
+	public HazardSiteDistribution getNaturalHazardSiteDistribution() {
+		return naturalHazardSiteDistribution;
 	}
 
-	public void setSpontaneousHazardSiteDistribution(HazardSiteDistribution spontaneousHazardSiteDistribution) {
-		this.spontaneousHazardSiteDistribution = spontaneousHazardSiteDistribution;
+	public void setNaturalHazardSiteDistribution(HazardSiteDistribution naturalHazardSiteDistribution) {
+		this.naturalHazardSiteDistribution = naturalHazardSiteDistribution;
 	}
 
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
-		if (dangerRating != null)
-			json.put("dangerRating", this.dangerRating.toString());
-		if (avalancheSize != null)
-			json.put("avalancheSize", this.avalancheSize.toString());
-		if (avalancheReleaseProbability != null)
-			json.put("avalancheReleaseProbability", this.avalancheReleaseProbability.toString());
-		if (hazardSiteDistribution != null)
-			json.put("hazardSiteDistribution", this.hazardSiteDistribution.toString());
-		if (spontaneousDangerRating != null)
-			json.put("spontaneousDangerRating", this.spontaneousDangerRating.toString());
-		if (spontaneousAvalancheReleaseProbability != null)
-			json.put("spontaneousAvalancheReleaseProbability", this.spontaneousAvalancheReleaseProbability.toString());
-		if (spontaneousHazardSiteDistribution != null)
-			json.put("spontaneousHazardSiteDistribution", this.spontaneousHazardSiteDistribution.toString());
+		if (artificialDangerRating != null)
+			json.put("artificialDangerRating", this.artificialDangerRating.toString());
+		if (artificialAvalancheSize != null)
+			json.put("artificialAvalancheSize", this.artificialAvalancheSize.toString());
+		if (artificialAvalancheReleaseProbability != null)
+			json.put("artificialAvalancheReleaseProbability", this.artificialAvalancheReleaseProbability.toString());
+		if (artificialHazardSiteDistribution != null)
+			json.put("artificialHazardSiteDistribution", this.artificialHazardSiteDistribution.toString());
+		if (naturalDangerRating != null)
+			json.put("naturalDangerRating", this.naturalDangerRating.toString());
+		if (naturalAvalancheReleaseProbability != null)
+			json.put("naturalAvalancheReleaseProbability", this.naturalAvalancheReleaseProbability.toString());
+		if (naturalHazardSiteDistribution != null)
+			json.put("naturalHazardSiteDistribution", this.naturalHazardSiteDistribution.toString());
 
 		return json;
 	}

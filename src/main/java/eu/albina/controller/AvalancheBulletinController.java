@@ -83,26 +83,7 @@ public class AvalancheBulletinController {
 				transaction.rollback();
 				throw new AlbinaException("No bulletin with ID: " + bulletinId);
 			}
-			Hibernate.initialize(bulletin.getAvActivityComment());
-			Hibernate.initialize(bulletin.getAvActivityHighlights());
-			Hibernate.initialize(bulletin.getSnowpackStructureComment());
-			Hibernate.initialize(bulletin.getSnowpackStructureHighlights());
-			Hibernate.initialize(bulletin.getSynopsisComment());
-			Hibernate.initialize(bulletin.getSynopsisHighlights());
-			Hibernate.initialize(bulletin.getTravelAdvisoryComment());
-			Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
-			if (bulletin.getForenoonAbove() != null)
-				Hibernate.initialize(bulletin.getForenoonAbove().getAspects());
-			if (bulletin.getForenoonBelow() != null)
-				Hibernate.initialize(bulletin.getAfternoonBelow().getAspects());
-			if (bulletin.getAfternoonAbove() != null)
-				Hibernate.initialize(bulletin.getForenoonAbove().getAspects());
-			if (bulletin.getAfternoonBelow() != null)
-				Hibernate.initialize(bulletin.getAfternoonBelow().getAspects());
-			Hibernate.initialize(bulletin.getSuggestedRegions());
-			Hibernate.initialize(bulletin.getSavedRegions());
-			Hibernate.initialize(bulletin.getPublishedRegions());
-			Hibernate.initialize(bulletin.getUser());
+			initializeBulletin(bulletin);
 			transaction.commit();
 			return bulletin;
 		} catch (HibernateException he) {
@@ -112,6 +93,33 @@ public class AvalancheBulletinController {
 		} finally {
 			entityManager.close();
 		}
+	}
+
+	private void initializeBulletin(AvalancheBulletin bulletin) {
+		Hibernate.initialize(bulletin.getAvActivityComment());
+		Hibernate.initialize(bulletin.getAvActivityHighlights());
+		Hibernate.initialize(bulletin.getSnowpackStructureComment());
+		Hibernate.initialize(bulletin.getSnowpackStructureHighlights());
+		Hibernate.initialize(bulletin.getSynopsisComment());
+		Hibernate.initialize(bulletin.getSynopsisHighlights());
+		Hibernate.initialize(bulletin.getTravelAdvisoryComment());
+		Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
+		if (bulletin.getForenoon() != null) {
+			if (bulletin.getForenoon().getAvalancheSituation1() != null)
+				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation1().getAspects());
+			if (bulletin.getForenoon().getAvalancheSituation1() != null)
+				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation2().getAspects());
+		}
+		if (bulletin.getAfternoon() != null) {
+			if (bulletin.getAfternoon().getAvalancheSituation1() != null)
+				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation1().getAspects());
+			if (bulletin.getAfternoon().getAvalancheSituation2() != null)
+				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation2().getAspects());
+		}
+		Hibernate.initialize(bulletin.getSuggestedRegions());
+		Hibernate.initialize(bulletin.getSavedRegions());
+		Hibernate.initialize(bulletin.getPublishedRegions());
+		Hibernate.initialize(bulletin.getUser());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -377,28 +385,9 @@ public class AvalancheBulletinController {
 					}
 			}
 
-			for (AvalancheBulletin bulletin : results) {
-				Hibernate.initialize(bulletin.getAvActivityComment());
-				Hibernate.initialize(bulletin.getAvActivityHighlights());
-				Hibernate.initialize(bulletin.getSnowpackStructureComment());
-				Hibernate.initialize(bulletin.getSnowpackStructureHighlights());
-				Hibernate.initialize(bulletin.getSynopsisComment());
-				Hibernate.initialize(bulletin.getSynopsisHighlights());
-				Hibernate.initialize(bulletin.getTravelAdvisoryComment());
-				Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
-				if (bulletin.getForenoonAbove() != null)
-					Hibernate.initialize(bulletin.getForenoonAbove().getAspects());
-				if (bulletin.getForenoonBelow() != null)
-					Hibernate.initialize(bulletin.getForenoonBelow().getAspects());
-				if (bulletin.getAfternoonAbove() != null)
-					Hibernate.initialize(bulletin.getAfternoonAbove().getAspects());
-				if (bulletin.getAfternoonBelow() != null)
-					Hibernate.initialize(bulletin.getAfternoonBelow().getAspects());
-				Hibernate.initialize(bulletin.getSuggestedRegions());
-				Hibernate.initialize(bulletin.getSavedRegions());
-				Hibernate.initialize(bulletin.getPublishedRegions());
-				Hibernate.initialize(bulletin.getUser());
-			}
+			for (AvalancheBulletin bulletin : results)
+				initializeBulletin(bulletin);
+
 			transaction.commit();
 			return results;
 		} catch (HibernateException he) {
@@ -586,9 +575,9 @@ public class AvalancheBulletinController {
 						|| bulletin.getAvActivityComment().getTexts().size() < 1)
 					missingAvActivityComment = true;
 
-				if (bulletin.getForenoonAbove().getDangerRating() == DangerRating.missing
-						|| (bulletin.getForenoonBelow() != null && bulletin.getElevation() > 0
-								&& bulletin.getForenoonBelow().getDangerRating() == DangerRating.missing)) {
+				if (bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
+						|| (bulletin.getForenoon() != null && bulletin.getElevation() > 0
+								&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
 					missingDangerRating = true;
 				}
 			}

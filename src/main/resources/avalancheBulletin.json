@@ -64,10 +64,11 @@
 		"hasDaytimeDependency" : { "type" : "boolean" },
 		"hasElevationDependency" : { "type" : "boolean" },
 		
-		"forenoonAbove" : { "$ref" : "#/definitions/elevationDescription" },
-		"forenoonBelow" : { "$ref" : "#/definitions/elevationDescription" },
-		"afternoonAbove" : { "$ref" : "#/definitions/elevationDescription" },
-		"afternoonBelow" : { "$ref" : "#/definitions/elevationDescription" }
+		"forenoon" : { "$ref" : "#/definitions/daytimeDescription" },
+		"afternoon" : { "$ref" : "#/definitions/daytimeDescription" },
+		
+		"dangerPattern1" : { "$ref" : "#/definitions/dangerPattern" },
+		"dangerPattern2" : { "$ref" : "#/definitions/dangerPattern" }
 	},
 
 	"additionalProperties" : false,
@@ -101,14 +102,23 @@
 			},
 			"additionalProperties" : false
 		},
-		"elevationDescription" : {
-			"id" : "#elevationDescription",
+		"daytimeDescription" : {
+			"id" : "#daytimeDescription",
 			"type" : "object",
 			"properties" : {
-				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
-				"matrixInformation" : { "$ref" : "#/definitions/matrixInformation" },
-				"avalancheSituation" : { "$ref" : "#/definitions/avalancheSituation" },
-				"aspects" : {
+				"dangerRatingAbove" : { "$ref" : "#/definitions/dangerRating" },
+				"matrixInformationAbove" : { "$ref" : "#/definitions/matrixInformation" },
+				"dangerRatingBelow" : { "$ref" : "#/definitions/dangerRating" },
+				"matrixInformationBelow" : { "$ref" : "#/definitions/matrixInformation" },
+				"avalancheSituation1" : { "$ref" : "#/definitions/avalancheSituation" },
+				"aspects1" : {
+					"type" : "array",
+					"uniqueItems": true,
+					"items" : { "$ref" : "#/definitions/aspect" },
+					"additionalProperties" : false
+				},
+				"avalancheSituation2" : { "$ref" : "#/definitions/avalancheSituation" },
+				"aspects2" : {
 					"type" : "array",
 					"uniqueItems": true,
 					"items" : { "$ref" : "#/definitions/aspect" },
@@ -171,13 +181,23 @@
 			"description" : "Specification of the used field in the matrix.",
 			"type" : "object",
 			"properties" : {
-				"avalancheSize" : { "$ref" : "#/definitions/avalancheSize" },
-				"avalancheReleaseProbability" : { "$ref" : "#/definitions/avalancheReleaseProbability" },
-				"hazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" },
-				"spontaneousAvalancheReleaseProbability" : { "$ref" : "#/definitions/spontaneousAvalancheReleaseProbability" },
-				"spontaneousHazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" }
+				"artificialDangerRating" : { "$ref" : "#/definitions/dangerRating" },
+				"artificialAvalancheSize" : { "$ref" : "#/definitions/avalancheSize" },
+				"artificialAvalancheReleaseProbability" : { "$ref" : "#/definitions/avalancheReleaseProbability" },
+				"artificialHazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" },
+				"naturalDangerRating" : { "$ref" : "#/definitions/dangerRating" },
+				"naturalAvalancheReleaseProbability" : { "$ref" : "#/definitions/naturalAvalancheReleaseProbability" },
+				"naturalHazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" }
 			},
 			"additionalProperties" : false						
+		},
+		"dangerPattern" : {
+			"id" : "#dangerPattern",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Danger pattern",
+			"description" : "The ten danger patterns.",
+			"type" : "string",
+			"enum" : [ "dp1", "dp2", "dp3", "dp4", "dp5", "dp6", "dp7", "dp8", "dp9", "dp10" ]
 		},
 		"avalancheSize" : {
 			"id" : "#avalancheSize",
@@ -187,11 +207,11 @@
 			"type" : "string",
 			"enum" : [ "small", "medium", "large", "very_large", "extreme" ]
 		},
-		"avalancheReleaseProbability" : {
-			"id" : "#avalancheReleaseProbability",
+		"artificialAvalancheReleaseProbability" : {
+			"id" : "#artificialAvalancheReleaseProbability",
 			"$schema" : "http://json-schema.org/draft-04/schema#",
-			"title" : "Avalanche Release Probability",
-			"description" : "The probability of an avalanche release.",
+			"title" : "Artificial Avalanche Release Probability",
+			"description" : "The probability of an artificial avalanche release.",
 			"type" : "string",
 			"enum" : [ "one", "two", "three", "four" ]
 		},
@@ -203,11 +223,11 @@
 			"type" : "string",
 			"enum" : [ "single", "some", "many", "many_most", "moderately_steep" ]
 		},
-		"spontaneousAvalancheReleaseProbability" : {
-			"id" : "#spontaneousAvalancheReleaseProbability",
+		"naturalAvalancheReleaseProbability" : {
+			"id" : "#naturalAvalancheReleaseProbability",
 			"$schema" : "http://json-schema.org/draft-04/schema#",
-			"title" : "Spontaneous Avalanche Release Probability",
-			"description" : "The probability of a spontaneous avalanche release.",
+			"title" : "Natural Avalanche Release Probability",
+			"description" : "The probability of a natural avalanche release.",
 			"type" : "string",
 			"enum" : [ "one", "two", "three", "four" ]
 		}

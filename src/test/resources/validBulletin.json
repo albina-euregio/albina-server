@@ -61,19 +61,17 @@
 	"elevation": 2000,
 	"hasDaytimeDependency": false,
 	"hasElevationDependency": true,
-	"forenoonAbove": {
-		"dangerRating": "considerable",
-		"avalancheSituation": "new_snow",
-		"aspects": [
+	"forenoon": {
+		"dangerRatingAbove": "considerable",
+		"dangerRatingBelow": "moderate",
+		"avalancheSituation1": "new_snow",
+		"aspects1": [
 			"NW",
 			"N",
 			"NE"
-		]
-	},
-	"forenoonBelow": {
-		"dangerRating": "moderate",
-		"avalancheSituation": "wind_drifted_snow",
-		"aspects": [
+		],
+		"avalancheSituation2": "wind_drifted_snow",
+		"aspects2": [
 			"NW",
 			"N",
 			"NE"

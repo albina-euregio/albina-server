@@ -8,7 +8,8 @@
       <class>eu.albina.model.User</class>
       <class>eu.albina.model.Region</class>
       <class>eu.albina.model.MatrixInformation</class>
-      <class>eu.albina.model.AvalancheBulletinElevationDescription</class>
+      <class>eu.albina.model.AvalancheSituation</class>
+      <class>eu.albina.model.AvalancheBulletinDaytimeDescription</class>
       <class>eu.albina.model.AvalancheBulletin</class>
       <class>eu.albina.model.News</class>
       <class>eu.albina.model.ChatMessage</class>
@@ -43,12 +44,12 @@
 	    <property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>
 	    
 	    <!-- Echo all executed SQL to stdout -->
-	    <property name="show_sql" value="false"/>
+	    <property name="show_sql" value="true"/>
 	    
 	    <!-- Drop and re-create the database schema on startup -->
         <!--  property name="hibernate.hbm2ddl.auto" value="create"/> -->
         <!--  property name="hibernate.hbm2ddl.auto" value="update"/> -->
-		<property name="hibernate.hbm2ddl.auto" value="update"/>
+		<property name="hibernate.hbm2ddl.auto" value="create"/>
 		
       </properties>
    </persistence-unit>
