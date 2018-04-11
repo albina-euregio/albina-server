@@ -56,7 +56,7 @@ public class SocketIOController {
 			socketIOServer.addConnectListener(new ConnectListener() {
 				@Override
 				public void onConnect(SocketIOClient client) {
-					logger.info("Client connected: " + client.getSessionId());
+					logger.debug("Client connected: " + client.getSessionId());
 				}
 			});
 
@@ -66,7 +66,7 @@ public class SocketIOController {
 					UUID sessionId = client.getSessionId();
 					RegionController.getInstance().unlockRegions(sessionId);
 					AvalancheBulletinController.getInstance().unlockBulletins(sessionId);
-					logger.info("Client disconnected: " + sessionId.toString());
+					logger.debug("Client disconnected: " + sessionId.toString());
 				}
 			});
 
