@@ -955,12 +955,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			if (afternoon == null)
 				afternoon = bulletin.getAfternoon();
 			else {
-				afternoon.setDangerRatingAbove(bulletin.getForenoon().getDangerRatingAbove());
-				afternoon.setMatrixInformationAbove(bulletin.getForenoon().getMatrixInformationAbove());
-				afternoon.setDangerRatingBelow(bulletin.getForenoon().getDangerRatingBelow());
-				afternoon.setMatrixInformationBelow(bulletin.getForenoon().getMatrixInformationBelow());
-				afternoon.setAvalancheSituation1(bulletin.getForenoon().getAvalancheSituation1());
-				afternoon.setAvalancheSituation2(bulletin.getForenoon().getAvalancheSituation2());
+				afternoon.setDangerRatingAbove(bulletin.getAfternoon().getDangerRatingAbove());
+				afternoon.setMatrixInformationAbove(bulletin.getAfternoon().getMatrixInformationAbove());
+				afternoon.setDangerRatingBelow(bulletin.getAfternoon().getDangerRatingBelow());
+				afternoon.setMatrixInformationBelow(bulletin.getAfternoon().getMatrixInformationBelow());
+				afternoon.setAvalancheSituation1(bulletin.getAfternoon().getAvalancheSituation1());
+				afternoon.setAvalancheSituation2(bulletin.getAfternoon().getAvalancheSituation2());
 			}
 		}
 
