@@ -64,18 +64,22 @@
 	"forenoon": {
 		"dangerRatingAbove": "considerable",
 		"dangerRatingBelow": "moderate",
-		"avalancheSituation1": "new_snow",
-		"aspects1": [
-			"NW",
-			"N",
-			"NE"
-		],
-		"avalancheSituation2": "wind_drifted_snow",
-		"aspects2": [
-			"NW",
-			"N",
-			"NE"
-		]
+		"avalancheSituation1": {
+			"avalanche-situation": "new_snow",
+			"aspects": [
+				"NW",
+				"N",
+				"NE"
+			]
+		},
+		"avalancheSituation2": {
+			"avalanche-situation": "wind_drifted_snow",
+			"aspects2": [
+				"NW",
+				"N",
+				"NE"
+			]
+		}
 	},
 	"tendency" : "increasing",
 	"dangerPattern1" : "dp1",
