@@ -323,7 +323,16 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	padding-right: 10px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	width: auto;
+	margin-right: 5px;
+	display: inline-block;
+}
+
+.detail-map {
+	max-width: 150px;
+}
+
+.mountain-icon {
+	max-width: 110px;
 }
 
 .avalanche-situation {
@@ -412,14 +421,20 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 												</td>
 											</tr>
 										</table>
+
+
 										<table class="pictograms-1" style="margin-top: 10px;">
 											<tr>
 												<td>
-													<img src="${bulletin.map}"/>
+													<img class="detail-map" src="${bulletin.map}"/>
 												</td>
 												<td class="mountain">
-													<img src="${bulletin.mountain}"/>
+													<img class="mountain-icon" src="${bulletin.mountain}"/>
 												</td>
+											</tr>
+										</table>
+										<table class="pictograms-2" style="margin-top: 10px;">
+											<tr>
 												<td class="symbols">
 													<table>
 														<tr>
@@ -439,15 +454,6 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 															</td>
 														</tr>
 													</table>
-												</td>
-											</tr>
-										</table>
-										<table class="pictograms-2" style="margin-top: 10px;">
-											<tr>
-												<td class="symbols danger-patterns">
-													<h5>${text.dangerPatterns}</h5>
-													<p class="danger-pattern">${bulletin.dangerPattern1}</p>
-													<p class="danger-pattern">${bulletin.dangerPattern2}</p>
 												</td>
 												<td class="tendency">
 													<h5>${text.tendency}</h5>
@@ -470,6 +476,9 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 								<tr>
 									<td style="vertical-align: top;">
 										<h4 style="padding-top: 5px;">${text.snowpack}</h4>
+										<h5>${text.dangerPatterns}</h5>
+										<p class="danger-pattern">${bulletin.dangerPattern1}</p>
+										<p class="danger-pattern">${bulletin.dangerPattern2}</p>
 										<p class="">${bulletin.snowpackStructureComment}</p>
 										<h4 style="padding-top: 15px;">${text.tendency}</h4>
 										<p class="">${bulletin.tendencyComment}</p>
