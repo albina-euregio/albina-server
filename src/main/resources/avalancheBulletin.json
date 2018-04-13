@@ -110,20 +110,8 @@
 				"matrixInformationAbove" : { "$ref" : "#/definitions/matrixInformation" },
 				"dangerRatingBelow" : { "$ref" : "#/definitions/dangerRating" },
 				"matrixInformationBelow" : { "$ref" : "#/definitions/matrixInformation" },
-				"avalancheSituation1" : { "$ref" : "#/definitions/avalancheSituation" },
-				"aspects1" : {
-					"type" : "array",
-					"uniqueItems": true,
-					"items" : { "$ref" : "#/definitions/aspect" },
-					"additionalProperties" : false
-				},
-				"avalancheSituation2" : { "$ref" : "#/definitions/avalancheSituation" },
-				"aspects2" : {
-					"type" : "array",
-					"uniqueItems": true,
-					"items" : { "$ref" : "#/definitions/aspect" },
-					"additionalProperties" : false
-				}
+				"avalancheSituation1" : { "$ref" : "#/definitions/avalancheSituationObject" },
+				"avalancheSituation2" : { "$ref" : "#/definitions/avalancheSituationObject" }
 			},
 			"additionalProperties" : false						
 		},
@@ -165,6 +153,22 @@
 			"description" : "Danger rating used in an avalanche bulletin.",
 			"type" : "string",
 			"enum" : [ "missing", "no_rating", "low", "moderate", "considerable", "high", "very_high"]
+		},
+		"avalancheSituationObject" : {
+			"id" : "#avalancheSituation",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Avalanche Situation",
+			"description" : "The five avalanche situations.",
+			"type" : "object",
+			"properties" : {
+				"avalancheSituation" : { "$ref" : "#/definitions/avalancheSituation" },
+				"aspects" : {
+					"type" : "array",
+					"uniqueItems": true,
+					"items" : { "$ref" : "#/definitions/aspect" },
+					"additionalProperties" : false
+				}
+			}
 		},
 		"avalancheSituation" : {
 			"id" : "#avalancheSituation",
