@@ -57,7 +57,9 @@ public class MapUtil {
 	 *            The bulletins to create the maps from.
 	 */
 	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) {
+
 		// TODO implement creation of danger rating maps
+
 		// overview map big (email, pdf)
 		// overview map small (homepage archive)
 		// map for each aggregated region (email, pdf)

@@ -46,7 +46,6 @@ public class EmailUtil {
 	private static Configuration cfg;
 
 	protected EmailUtil() {
-		// Exists only to defeat instantiation.
 	}
 
 	public static EmailUtil getInstance() {
@@ -273,7 +272,7 @@ public class EmailUtil {
 			case de:
 				return "Gering, Stufe 1";
 			case it:
-				return "TODO";
+				return "Debole, Grado 1";
 			default:
 				return "Low, Level 1";
 			}
@@ -284,7 +283,7 @@ public class EmailUtil {
 			case de:
 				return "Mäßig, Stufe 2";
 			case it:
-				return "TODO";
+				return "Moderato, Grado 2";
 			default:
 				return "Moderate, Level 2";
 			}
@@ -295,7 +294,7 @@ public class EmailUtil {
 			case de:
 				return "Erheblich, Stufe 3";
 			case it:
-				return "TODO";
+				return "Marcato, Grado 3";
 			default:
 				return "Considerable, Level 3";
 			}
@@ -306,7 +305,7 @@ public class EmailUtil {
 			case de:
 				return "Groß, Stufe 4";
 			case it:
-				return "TODO";
+				return "Forte, Grado 4";
 			default:
 				return "High, Level 4";
 			}
@@ -317,7 +316,7 @@ public class EmailUtil {
 			case de:
 				return "Sehr Groß, Stufe 5";
 			case it:
-				return "TODO";
+				return "Molto Forte, Grado 5";
 			default:
 				return "Very High, Level 5";
 			}
@@ -328,7 +327,7 @@ public class EmailUtil {
 			case de:
 				return "Fehlt";
 			case it:
-				return "TODO";
+				return "Mancha";
 			default:
 				return "Missing";
 			}
@@ -345,7 +344,8 @@ public class EmailUtil {
 				+ dangerRatingColor + ";\"";
 	}
 
-	public void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang) throws MessagingException {
+	public void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
+			throws MessagingException {
 		logger.debug("Sending mail...");
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
@@ -362,7 +362,7 @@ public class EmailUtil {
 		message.setSubject("Avalanche Report");
 		// TODO set from
 		message.setFrom(new InternetAddress("info@avalanche.report"));
-		// TODO set recipients
+		// TODO set recipients based on region
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress("n.lanzanasto@gmail.com"));
 		MimeMultipart multipart = new MimeMultipart("related");
 
@@ -462,7 +462,7 @@ public class EmailUtil {
 
 		// TODO add maps
 
-		// TODO add PDF
+		// TODO add PDF (shell we add it?)
 
 		message.setContent(multipart);
 

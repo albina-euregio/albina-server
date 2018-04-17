@@ -2,8 +2,13 @@ package eu.albina.controller;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.EmailUtil;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
 import eu.albina.util.PdfUtil;
 
@@ -32,13 +37,62 @@ public class PublicationController {
 
 	/**
 	 * Trigger all tasks that have to take place after an avalanche bulletin has
-	 * been published. This happens at 17:00 PM and 07:30 AM (if needed).
+	 * been published. This happens at 17:00 PM and 08:00 AM (if needed).
 	 * 
 	 * @param bulletins
 	 *            The bulletins that were published.
+	 * @throws MessagingException
 	 */
-	public void publish(List<AvalancheBulletin> bulletins) {
+	public void publish(List<AvalancheBulletin> bulletins) throws MessagingException {
+
 		// TODO implement
+
+		// create maps
+		if (AlbinaUtil.createMaps) {
+			MapUtil.createDangerRatingMaps(bulletins);
+		}
+
+		// create pdfs
+		if (AlbinaUtil.createPdf) {
+			PdfUtil.createOverviewPdf(bulletins);
+			PdfUtil.createRegionPdfs(bulletins);
+		}
+
+		// send emails
+		if (AlbinaUtil.sendEmails) {
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeTyrol);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeTyrol);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeTyrol);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeSouthTyrol);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeSouthTyrol);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeSouthTyrol);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeTrentino);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeTrentino);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeTrentino);
+		}
+
+		// publish on social media
+		if (AlbinaUtil.publishToSocialMedia) {
+
+			// TODO publish on social media
+
+		}
+	}
+
+	/**
+	 * Triggers all tasks that have to take place after an update has been published
+	 * (this can be at any time, triggered by one province).
+	 * 
+	 * @param bulletins
+	 *            The bulletins that were updated.
+	 * @param region
+	 *            The region that was updated.
+	 * @throws MessagingException
+	 */
+	public void update(List<AvalancheBulletin> bulletins, String region) throws MessagingException {
+
+		// TODO implement
+
 		// create maps
 		if (AlbinaUtil.createMaps) {
 			MapUtil.createDangerRatingMaps(bulletins);
@@ -50,23 +104,19 @@ public class PublicationController {
 			PdfUtil.createRegionPdfs(bulletins);
 		}
 
-		// send emails
-		// publish to social media
-	}
-
-	/**
-	 * Triggers all tasks that have to take place after an update has been published
-	 * (this can be at any time, triggered by one province).
-	 * 
-	 * @param bulletins
-	 *            The bulletins that were updated.
-	 */
-	public void update(List<AvalancheBulletin> bulletins) {
-		// TODO implement
-		// create maps
-		// create pdf
 		// send emails to region
-		// publish to social media for region
+		if (AlbinaUtil.sendEmails) {
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, region);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, region);
+			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, region);
+		}
+
+		// publish on social media
+		if (AlbinaUtil.publishToSocialMedia) {
+
+			// TODO publish on social media only for updated region
+
+		}
 	}
 
 	/**
@@ -78,8 +128,18 @@ public class PublicationController {
 	 *            The bulletins that were changed.
 	 */
 	public void change(List<AvalancheBulletin> bulletins) {
+
 		// TODO implement
+
 		// create maps
-		// create pdf
+		if (AlbinaUtil.createMaps) {
+			MapUtil.createDangerRatingMaps(bulletins);
+		}
+
+		// create pdfs
+		if (AlbinaUtil.createPdf) {
+			PdfUtil.createOverviewPdf(bulletins);
+			PdfUtil.createRegionPdfs(bulletins);
+		}
 	}
 }

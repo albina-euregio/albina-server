@@ -3,6 +3,7 @@ package eu.albina.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.PublicationController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
@@ -34,10 +36,8 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.MapUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
@@ -248,7 +248,7 @@ public class AvalancheBulletinService {
 	@Path("/change")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response changeJSONBulletins(
+	public Response changeBulletins(
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			String bulletinsString, @QueryParam("region") String region, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins change");
@@ -269,7 +269,6 @@ public class AvalancheBulletinService {
 			for (int i = 0; i < bulletinsJson.length(); i++) {
 				// TODO validate
 				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
-				String username = securityContext.getUserPrincipal().getName();
 				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
 				if (bulletin.affectsRegion(region))
 					bulletins.add(bulletin);
@@ -277,16 +276,12 @@ public class AvalancheBulletinService {
 
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
 					new DateTime());
-
 			AvalancheReportController.getInstance().changeReport(startDate, region, user);
 
 			// TODO maybe start in an own thread
-			// PublicationController.getInstance().change(bulletins);
+			PublicationController.getInstance().change(bulletins);
 
-			JSONObject jsonObject = new JSONObject();
-			// TODO return some meaningful path
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
+			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -421,7 +416,8 @@ public class AvalancheBulletinService {
 	}
 
 	/**
-	 * Publish an major update to an already published bulletin.
+	 * Publish an major update to an already published bulletin (not at 5PM nor
+	 * 8AM).
 	 * 
 	 * @param region
 	 *            The region to publish the bulletins for.
@@ -458,28 +454,20 @@ public class AvalancheBulletinService {
 				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region, publicationDate);
 				AvalancheReportController.getInstance().publishReport(startDate, region, user, publicationDate);
 
-				// TODO delete this
-				// create maps at Univie
-				if (AlbinaUtil.createMaps) {
-					ArrayList<String> regions = new ArrayList<String>();
-					regions.add(GlobalVariables.codeTrentino);
-					regions.add(GlobalVariables.codeSouthTyrol);
-					regions.add(GlobalVariables.codeTyrol);
+				List<String> regions = new ArrayList<String>();
+				regions.add(region);
 
-					try {
-						MapUtil.triggerMapProductionUnivie(AvalancheBulletinController.getInstance().getCaaml(startDate,
-								endDate, regions, LanguageCode.en));
-					} catch (TransformerException e) {
-						throw new AlbinaException(e.getMessage());
-					} catch (ParserConfigurationException e) {
-						throw new AlbinaException(e.getMessage());
-					}
-				} else
-					logger.warn("Map production disabled!");
-
-				// TODO the method publishBulletins should only be used for an major update (not
-				// at 17:00 PM or 07:30 AM)
-				// PublicationController.getInstance().update(startDate, endDate, region);
+				try {
+					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
+							.getBulletins(startDate, endDate, regions);
+					PublicationController.getInstance().update(bulletins, region);
+				} catch (AlbinaException e) {
+					logger.warn("Error loading bulletins - " + e.getMessage());
+					throw new AlbinaException(e.getMessage());
+				} catch (MessagingException e) {
+					logger.warn("Error sending emails - " + e.getMessage());
+					throw new AlbinaException(e.getMessage());
+				}
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();
 			} else
