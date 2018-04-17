@@ -115,9 +115,9 @@ public class UtilTest {
 			logger.warn("Error parsing bulletin!");
 		}
 		String validBulletinStringFromResource = bulletinStringBuilder.toString();
-		AvalancheBulletin bulletin = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), null);
+		AvalancheBulletin bulletin = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin);
-		AvalancheBulletin bulletin2 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), null);
+		AvalancheBulletin bulletin2 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin2);
 	}
 

@@ -217,20 +217,20 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 			endDate = startDate.plusDays(1);
 
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+
 			JSONArray bulletinsJson = new JSONArray(bulletinsString);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (int i = 0; i < bulletinsJson.length(); i++) {
 				// TODO validate
 				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
-				String username = securityContext.getUserPrincipal().getName();
-				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, username);
+				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
 				if (bulletin.affectsRegion(region))
 					bulletins.add(bulletin);
 			}
 
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, null);
 
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			AvalancheReportController.getInstance().saveReport(startDate, region, user);
 
 			JSONObject jsonObject = new JSONObject();
@@ -262,13 +262,15 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 			endDate = startDate.plusDays(1);
 
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+
 			JSONArray bulletinsJson = new JSONArray(bulletinsString);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (int i = 0; i < bulletinsJson.length(); i++) {
 				// TODO validate
 				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
 				String username = securityContext.getUserPrincipal().getName();
-				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, username);
+				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
 				if (bulletin.affectsRegion(region))
 					bulletins.add(bulletin);
 			}
@@ -276,7 +278,6 @@ public class AvalancheBulletinService {
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
 					new DateTime());
 
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			AvalancheReportController.getInstance().changeReport(startDate, region, user);
 
 			// TODO maybe start in an own thread

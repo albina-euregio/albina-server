@@ -62,10 +62,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
-	@Column(name = "CREATOR")
-	private String creator;
-	@Column(name = "CREATOR_REGION")
-	private String creatorRegion;
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "AVALANCHE_BULLETIN_ADDITIONAL_USER", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@Column(name = "ADDITIONAL_USER_NAME")
+	private Set<String> additionalAuthors;
 
 	@Column(name = "PUBLICATION_DATE")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -155,6 +155,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	 * Standard constructor for an avalanche bulletin.
 	 */
 	public AvalancheBulletin() {
+		additionalAuthors = new HashSet<String>();
 		textPartsMap = new HashMap<TextPart, Texts>();
 		publishedRegions = new HashSet<String>();
 		savedRegions = new HashSet<String>();
@@ -167,24 +168,29 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	 * @param json
 	 *            JSONObject holding information about an avalanche bulletin.
 	 */
-	public AvalancheBulletin(JSONObject json, String username) {
+	public AvalancheBulletin(JSONObject json) {
 		this();
 
 		if (json.has("id"))
 			this.id = json.getString("id");
 
-		if (username != null) {
-			try {
-				this.user = UserController.getInstance().getUser(username);
-			} catch (Exception e) {
-				e.printStackTrace();
+		if (json.has("author")) {
+			JSONObject author = json.getJSONObject("author");
+			if (author.has("email")) {
+				try {
+					this.user = UserController.getInstance().getUser(author.getString("email"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
-		if (json.has("creator"))
-			this.creator = json.getString("creator");
-		if (json.has("creatorRegion"))
-			this.creatorRegion = json.getString("creatorRegion");
+		if (json.has("additionalAuthors")) {
+			JSONArray additionalAuthors = json.getJSONArray("additionalAuthors");
+			for (Object entry : additionalAuthors) {
+				this.additionalAuthors.add((String) entry);
+			}
+		}
 
 		if (json.has("avActivityHighlightsTextcat"))
 			this.avActivityHighlightsTextcat = json.getString("avActivityHighlightsTextcat");
@@ -268,20 +274,17 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.user = user;
 	}
 
-	public String getCreator() {
-		return creator;
+	public Set<String> getAdditionalAuthors() {
+		return additionalAuthors;
 	}
 
-	public void setCreator(String creator) {
-		this.creator = creator;
+	public void setAdditionalAuthors(Set<String> additionalAuthors) {
+		this.additionalAuthors = additionalAuthors;
 	}
 
-	public String getCreatorRegion() {
-		return creatorRegion;
-	}
-
-	public void setCreatorRegion(String creatorRegion) {
-		this.creatorRegion = creatorRegion;
+	public void addAdditionalAuthor(String additionalAuthor) {
+		if (!this.additionalAuthors.contains(additionalAuthor))
+			this.additionalAuthors.add(additionalAuthor);
 	}
 
 	public String getAvActivityHighlightsTextcat() {
@@ -648,16 +651,18 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			json.put("id", id);
 
 		if (user != null && user.getName() != null && user.getName() != "")
-			json.put("user", user.getName());
+			json.put("author", user.toJSON());
+
+		if (additionalAuthors != null && additionalAuthors.size() > 0) {
+			JSONArray users = new JSONArray();
+			for (String user : additionalAuthors) {
+				users.put(user);
+			}
+			json.put("additionalAuthors", users);
+		}
 
 		if (user != null && user.getRole() != null)
 			json.put("ownerRegion", AuthorizationUtil.getRegion(user.getRole()));
-
-		if (creator != null && creator != "")
-			json.put("creator", creator);
-
-		if (creatorRegion != null && creatorRegion != "")
-			json.put("creatorRegion", creatorRegion);
 
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
@@ -925,8 +930,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public void copy(AvalancheBulletin bulletin) {
 		setUser(bulletin.getUser());
-		setCreator(bulletin.getCreator());
-		setCreatorRegion(bulletin.getCreatorRegion());
+		setAdditionalAuthors(bulletin.getAdditionalAuthors());
 		setPublicationDate(bulletin.getPublicationDate());
 		setValidFrom(bulletin.getValidFrom());
 		setValidUntil(bulletin.getValidUntil());

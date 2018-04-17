@@ -120,6 +120,7 @@ public class AvalancheBulletinController {
 		Hibernate.initialize(bulletin.getSavedRegions());
 		Hibernate.initialize(bulletin.getPublishedRegions());
 		Hibernate.initialize(bulletin.getUser());
+		Hibernate.initialize(bulletin.getAdditionalAuthors());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -143,11 +144,13 @@ public class AvalancheBulletinController {
 				if (publicationDate != null)
 					bulletin.setPublicationDate(publicationDate);
 				// bulletin already exists
-				if (results.containsKey(bulletin.getId()))
-					results.get(bulletin.getId()).copy(bulletin);
+				if (results.containsKey(bulletin.getId())) {
+					AvalancheBulletin b = results.get(bulletin.getId());
+					b.copy(bulletin);
 				// bulletin has to be created
-				else
+				} else {
 					entityManager.persist(bulletin);
+				}
 			}
 
 			for (AvalancheBulletin avalancheBulletin : results.values()) {
@@ -513,7 +516,7 @@ public class AvalancheBulletinController {
 					results.add(bulletin);
 			for (AvalancheBulletin bulletin : results) {
 				// set publication date if no regions where published before
-				if (bulletin.getCreatorRegion().startsWith(region))
+				if (AuthorizationUtil.getRegion(bulletin.getUser().getRole()).startsWith(region))
 					bulletin.setPublicationDate(publicationDate);
 				entityManager.merge(bulletin);
 			}

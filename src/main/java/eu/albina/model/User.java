@@ -16,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.albina.model.enumerations.Role;
+import eu.albina.util.AuthorizationUtil;
 
 @Audited
 @Entity
@@ -126,6 +127,18 @@ public class User {
 
 	public void setOrganization(String organization) {
 		this.organization = organization;
+	}
+
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+
+		json.put("email", getEmail());
+		json.put("name", getName());
+		json.put("image", getImage());
+		json.put("region", AuthorizationUtil.getRegion(getRole()));
+		json.put("role", getRole());
+
+		return json;
 	}
 
 	public Element toCAAML(Document doc) {

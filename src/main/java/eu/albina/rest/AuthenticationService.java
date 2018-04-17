@@ -20,7 +20,6 @@ import eu.albina.model.Credentials;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.AuthorizationUtil;
 import io.swagger.annotations.Api;
 
 @Path("/authentication")
@@ -38,16 +37,11 @@ public class AuthenticationService {
 			AuthenticationController.getInstance().authenticate(username, password);
 			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
 			String refreshToken = AuthenticationController.getInstance().issueRefreshToken(username);
-			JSONObject jsonResult = new JSONObject();
-			jsonResult.put("access_token", accessToken);
-			jsonResult.put("refresh_token", refreshToken);
 
 			User user = UserController.getInstance().getUser(username);
-			jsonResult.put("username", user.getName());
-
-			jsonResult.put("image", user.getImage());
-
-			jsonResult.put("region", AuthorizationUtil.getRegion(user.getRole()));
+			JSONObject jsonResult = user.toJSON();
+			jsonResult.put("access_token", accessToken);
+			jsonResult.put("refresh_token", refreshToken);
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {

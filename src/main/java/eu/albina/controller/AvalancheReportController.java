@@ -24,6 +24,7 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -342,8 +343,9 @@ public class AvalancheReportController {
 						}
 					}
 					for (AvalancheBulletin bulletin : bulletins)
-						if (bulletin.getCreatorRegion().startsWith(region) && (bulletin.getValidFrom().equals(startDate)
-								|| bulletin.getValidUntil().equals(endDate)))
+						if (AuthorizationUtil.getRegion(bulletin.getUser().getRole()).startsWith(region)
+								&& (bulletin.getValidFrom().equals(startDate)
+										|| bulletin.getValidUntil().equals(endDate)))
 							result.add(bulletin);
 				}
 			}
