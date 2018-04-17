@@ -865,38 +865,38 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		}
 
 		Element avProblems = doc.createElement("avProblems");
-		Element avProblemAbove = doc.createElement("AvProblem");
-		if (bulletin != null && bulletin.getAvalancheSituation1() != null) {
-			Element typeAbove = doc.createElement("type");
-			typeAbove.appendChild(
+		Element avProblem1 = doc.createElement("AvProblem");
+		if (bulletin != null && bulletin.getAvalancheSituation1() != null
+				&& bulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
+			Element type1 = doc.createElement("type");
+			type1.appendChild(
 					doc.createTextNode(bulletin.getAvalancheSituation1().getAvalancheSituation().toCaamlString()));
-			avProblemAbove.appendChild(typeAbove);
+			avProblem1.appendChild(type1);
+			if (bulletin.getAvalancheSituation1().getAspects() != null) {
+				for (Aspect aspect : bulletin.getAvalancheSituation1().getAspects()) {
+					Element validAspect = doc.createElement("validAspect");
+					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+					avProblem1.appendChild(validAspect);
+				}
+			}
 		}
-		for (Aspect aspect : bulletin.getAvalancheSituation1().getAspects()) {
-			Element validAspect = doc.createElement("validAspect");
-			validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-			avProblemAbove.appendChild(validAspect);
-		}
-
-		avProblems.appendChild(avProblemAbove);
-
-		Element avProblemBelow = doc.createElement("AvProblem");
-		Element validElevationBelow = doc.createElement("validElevation");
-		validElevationBelow.setAttribute("xlink:href",
-				AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
-		avProblemBelow.appendChild(validElevationBelow);
-		if (bulletin != null && bulletin.getAvalancheSituation2() != null) {
-			Element typeBelow = doc.createElement("type");
-			typeBelow.appendChild(
+		avProblems.appendChild(avProblem1);
+		Element avProblem2 = doc.createElement("AvProblem");
+		if (bulletin != null && bulletin.getAvalancheSituation2() != null
+				&& bulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
+			Element type2 = doc.createElement("type");
+			type2.appendChild(
 					doc.createTextNode(bulletin.getAvalancheSituation2().getAvalancheSituation().toCaamlString()));
-			avProblemBelow.appendChild(typeBelow);
+			avProblem2.appendChild(type2);
+			if (bulletin.getAvalancheSituation2().getAspects() != null) {
+				for (Aspect aspect : bulletin.getAvalancheSituation2().getAspects()) {
+					Element validAspect = doc.createElement("validAspect");
+					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+					avProblem2.appendChild(validAspect);
+				}
+			}
 		}
-		for (Aspect aspect : bulletin.getAvalancheSituation2().getAspects()) {
-			Element validAspect = doc.createElement("validAspect");
-			validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-			avProblemBelow.appendChild(validAspect);
-		}
-		avProblems.appendChild(avProblemBelow);
+		avProblems.appendChild(avProblem2);
 		bulletinMeasurements.appendChild(avProblems);
 
 		for (TextPart part : TextPart.values()) {

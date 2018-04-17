@@ -337,6 +337,7 @@ public class AvalancheReportController {
 								AuditQuery q2 = reader.createQuery().forEntitiesAtRevision(AvalancheBulletin.class,
 										avalancheReport.getRevision());
 								bulletins = q2.getResultList();
+
 								transaction.commit();
 								revision = avalancheReport.getRevision().intValue();
 							}
@@ -372,5 +373,4 @@ public class AvalancheReportController {
 			entityManager.close();
 		}
 	}
-
 }
