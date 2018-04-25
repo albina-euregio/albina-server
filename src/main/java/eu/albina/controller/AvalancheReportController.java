@@ -15,6 +15,8 @@ import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import eu.albina.exception.AlbinaException;
@@ -35,8 +37,7 @@ import eu.albina.util.HibernateUtil;
  */
 public class AvalancheReportController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(AvalancheReportController.class);
+	private static Logger logger = LoggerFactory.getLogger(AvalancheReportController.class);
 
 	private static AvalancheReportController instance = null;
 
@@ -177,9 +178,18 @@ public class AvalancheReportController {
 		}
 	}
 
+	public void publishReport(DateTime startDate, List<String> regions, User user, DateTime publicationDate)
+			throws AlbinaException {
+		for (String region : regions)
+			publishReport(startDate, region, user, publicationDate);
+	}
+
 	@SuppressWarnings("unchecked")
 	public void publishReport(DateTime startDate, String region, User user, DateTime publicationDate)
 			throws AlbinaException {
+
+		// TODO save CAAML and JSON to report?
+
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -191,8 +201,17 @@ public class AvalancheReportController {
 
 			// get revision number
 			AuditReader reader = AuditReaderFactory.get(entityManager);
-			int revision = (int) reader.createQuery().forRevisionsOfEntity(AvalancheBulletin.class, false, true)
-					.addProjection(AuditEntity.revisionNumber().max()).getSingleResult();
+			int revision = 0;
+			AuditQuery revisionsOfEntity = reader.createQuery().forRevisionsOfEntity(AvalancheBulletin.class, false,
+					true);
+			if (revisionsOfEntity != null) {
+				AuditQuery addProjection = revisionsOfEntity.addProjection(AuditEntity.revisionNumber().max());
+				if (addProjection != null) {
+					Object singleResult = addProjection.getSingleResult();
+					if (singleResult != null)
+						revision = (int) singleResult;
+				}
+			}
 
 			if (reports.isEmpty()) {
 				AvalancheReport avalancheReport = new AvalancheReport();
@@ -200,7 +219,7 @@ public class AvalancheReportController {
 				avalancheReport.setUser(user);
 				avalancheReport.setDate(startDate);
 				avalancheReport.setRegion(region);
-				avalancheReport.setStatus(BulletinStatus.draft);
+				avalancheReport.setStatus(BulletinStatus.published);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
 			} else if (reports.size() == 1) {
@@ -210,19 +229,24 @@ public class AvalancheReportController {
 				avalancheReport.setRevision(revision);
 				switch (avalancheReport.getStatus()) {
 				case draft:
-					throw new AlbinaException("Bulletins have to be submitted first!");
+					logger.warn("Bulletins have to be submitted first!");
+					avalancheReport.setStatus(BulletinStatus.updated);
+					break;
 				case submitted:
 					avalancheReport.setStatus(BulletinStatus.published);
 					break;
 				case published:
-					throw new AlbinaException("Bulletins already published!");
+					logger.warn("Bulletins already published!");
+					break;
 				case updated:
-					throw new AlbinaException("Bulletins have to be resubmitted first!");
+					logger.warn("Bulletins have to be resubmitted first!");
+					break;
 				case resubmitted:
 					avalancheReport.setStatus(BulletinStatus.republished);
 					break;
 				case republished:
-					throw new AlbinaException("Bulletins already republished!");
+					logger.warn("Bulletins already republished!");
+					break;
 				default:
 					break;
 				}
@@ -253,8 +277,17 @@ public class AvalancheReportController {
 
 			// get revision number
 			AuditReader reader = AuditReaderFactory.get(entityManager);
-			int revision = (int) reader.createQuery().forRevisionsOfEntity(AvalancheBulletin.class, false, true)
-					.addProjection(AuditEntity.revisionNumber().max()).getSingleResult();
+			int revision = 0;
+			AuditQuery revisionsOfEntity = reader.createQuery().forRevisionsOfEntity(AvalancheBulletin.class, false,
+					true);
+			if (revisionsOfEntity != null) {
+				AuditQuery addProjection = revisionsOfEntity.addProjection(AuditEntity.revisionNumber().max());
+				if (addProjection != null) {
+					Object singleResult = addProjection.getSingleResult();
+					if (singleResult != null)
+						revision = (int) singleResult;
+				}
+			}
 
 			if (reports.isEmpty()) {
 				AvalancheReport avalancheReport = new AvalancheReport();
@@ -262,7 +295,7 @@ public class AvalancheReportController {
 				avalancheReport.setUser(user);
 				avalancheReport.setDate(startDate);
 				avalancheReport.setRegion(region);
-				avalancheReport.setStatus(BulletinStatus.draft);
+				avalancheReport.setStatus(BulletinStatus.missing);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
 			} else if (reports.size() == 1) {
@@ -275,16 +308,20 @@ public class AvalancheReportController {
 					avalancheReport.setStatus(BulletinStatus.submitted);
 					break;
 				case submitted:
-					throw new AlbinaException("Bulletins already submitted!");
+					logger.warn("Bulletins already submitted!");
+					break;
 				case published:
-					throw new AlbinaException("Bulletins already published!");
+					logger.warn("Bulletins already published!");
+					break;
 				case updated:
 					avalancheReport.setStatus(BulletinStatus.resubmitted);
 					break;
 				case resubmitted:
-					throw new AlbinaException("Bulletins already resubmitted!");
+					logger.debug("Bulletins already resubmitted!");
+					break;
 				case republished:
-					throw new AlbinaException("Bulletins already republished!");
+					logger.warn("Bulletins already republished!");
+					break;
 				default:
 					break;
 				}

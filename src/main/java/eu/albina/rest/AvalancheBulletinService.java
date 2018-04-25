@@ -460,7 +460,7 @@ public class AvalancheBulletinService {
 				try {
 					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
 							.getBulletins(startDate, endDate, regions);
-					PublicationController.getInstance().update(bulletins, region);
+					PublicationController.getInstance().update(bulletins, regions);
 				} catch (AlbinaException e) {
 					logger.warn("Error loading bulletins - " + e.getMessage());
 					throw new AlbinaException(e.getMessage());

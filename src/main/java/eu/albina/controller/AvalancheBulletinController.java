@@ -147,7 +147,7 @@ public class AvalancheBulletinController {
 				if (results.containsKey(bulletin.getId())) {
 					AvalancheBulletin b = results.get(bulletin.getId());
 					b.copy(bulletin);
-				// bulletin has to be created
+					// bulletin has to be created
 				} else {
 					entityManager.persist(bulletin);
 				}
@@ -495,6 +495,12 @@ public class AvalancheBulletinController {
 		} finally {
 			entityManager.close();
 		}
+	}
+
+	public void publishBulletins(DateTime startDate, DateTime endDate, List<String> regions, DateTime publicationDate)
+			throws AlbinaException {
+		for (String region : regions)
+			this.publishBulletins(startDate, endDate, region, publicationDate);
 	}
 
 	@SuppressWarnings("unchecked")

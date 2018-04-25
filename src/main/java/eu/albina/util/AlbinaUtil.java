@@ -14,23 +14,31 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.joda.time.DateTime;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import eu.albina.controller.AvalancheReportController;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class AlbinaUtil {
 
-	// private static final Logger logger =
-	// LoggerFactory.getLogger(AlbinaUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
 
 	public static final boolean createMaps = false;
 	public static final boolean createPdf = true;
 	public static final boolean sendEmails = false;
 	public static final boolean publishToSocialMedia = false;
 	public static final boolean createCAAML = true;
+
+	public static final boolean publishBulletinsTyrol = true;
+	public static final boolean publishBulletinsSouthTyrol = true;
+	public static final boolean publishBulletinsTrentino = true;
 
 	public static final String dangerRatingColorLow = "#CCFF66";
 	public static final String dangerRatingColorModerate = "#FFFF00";
@@ -293,5 +301,18 @@ public class AlbinaUtil {
 			else
 				return "ElevationRange_" + elevation + "Lw";
 		}
+	}
+
+	public static boolean hasBulletinChanged(DateTime startDate, String region) {
+		boolean result = false;
+		try {
+			BulletinStatus status = AvalancheReportController.getInstance().getStatus(startDate, region);
+			if (status != BulletinStatus.published && status != BulletinStatus.republished)
+				result = true;
+		} catch (AlbinaException e) {
+			logger.error("Change detection of bulletin failed: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

@@ -89,7 +89,7 @@ public class PublicationController {
 	 *            The region that was updated.
 	 * @throws MessagingException
 	 */
-	public void update(List<AvalancheBulletin> bulletins, String region) throws MessagingException {
+	public void update(List<AvalancheBulletin> bulletins, List<String> regions) throws MessagingException {
 
 		// TODO implement
 
@@ -104,17 +104,19 @@ public class PublicationController {
 			PdfUtil.createRegionPdfs(bulletins);
 		}
 
-		// send emails to region
+		// send emails to regions
 		if (AlbinaUtil.sendEmails) {
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, region);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, region);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, region);
+			for (String region : regions) {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, region);
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, region);
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, region);
+			}
 		}
 
 		// publish on social media
 		if (AlbinaUtil.publishToSocialMedia) {
 
-			// TODO publish on social media only for updated region
+			// TODO publish on social media only for updated regions
 
 		}
 	}

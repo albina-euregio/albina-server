@@ -25,6 +25,8 @@ public class GlobalVariables {
 	public static String codeSouthTyrol = "IT-32-BZ";
 	public static String codeTyrol = "AT-07";
 
+	public static String avalancheReportUsername = "info@avalanche.report";
+
 	// TODO create secret
 	public static String tokenEncodingSecret = "secret";
 	public static String tokenEncodingIssuer = "albina";

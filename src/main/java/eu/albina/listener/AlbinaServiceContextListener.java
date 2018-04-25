@@ -19,6 +19,7 @@ import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import eu.albina.controller.SocketIOController;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.SchedulerUtil;
 
 @WebListener
 public class AlbinaServiceContextListener implements ServletContextListener {
@@ -28,6 +29,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		HibernateUtil.getInstance().shutDown();
+		SchedulerUtil.getInstance().shutDown();
 		SocketIOController.getInstance().stopSocketIO();
 		logger.debug("ServletContextListener destroyed");
 	}
@@ -66,6 +68,9 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		}
 
 		SocketIOController.getInstance().startSocketIO();
+
+		SchedulerUtil.getInstance().setUp();
+		SchedulerUtil.getInstance().start();
 
 		logger.debug("ServletContextListener started");
 	}
