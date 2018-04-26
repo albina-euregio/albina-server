@@ -315,4 +315,17 @@ public class AlbinaUtil {
 		}
 		return result;
 	}
+
+	public static JSONObject createBulletinStatusUpdateJson(String region, DateTime date, BulletinStatus status) {
+		JSONObject json = new JSONObject();
+
+		if (region != null && region != "")
+			json.put("region", region);
+		if (date != null)
+			json.put("date", date.toString(GlobalVariables.formatterDateTime));
+		if (status != null)
+			json.put("status", status);
+
+		return json;
+	}
 }

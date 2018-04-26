@@ -53,7 +53,8 @@ public class PublicationJob implements org.quartz.Job {
 				try {
 					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
 							.getBulletins(startDate, endDate, regions);
-					PublicationController.getInstance().publish(bulletins);
+					if (bulletins != null && !bulletins.isEmpty())
+						PublicationController.getInstance().publish(bulletins);
 				} catch (AlbinaException e) {
 					logger.warn("Error loading bulletins - " + e.getMessage());
 					throw new AlbinaException(e.getMessage());
