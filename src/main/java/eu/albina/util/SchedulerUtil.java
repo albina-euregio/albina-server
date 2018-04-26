@@ -50,13 +50,13 @@ public class SchedulerUtil {
 			JobDetail publicationJob = newJob(PublicationJob.class).withIdentity("jobPublication", "groupAlbina")
 					.build();
 			Trigger publicationTrigger = newTrigger().withIdentity("triggerPublication", "groupAlbina").startNow()
-					.withSchedule(cronSchedule("0 0/10 * * * ?")).build();
+					.withSchedule(cronSchedule("0 0 17 * * ?")).build();
 			scheduler.scheduleJob(publicationJob, publicationTrigger);
 
 			// start update job (8AM)
 			JobDetail updateJob = newJob(UpdateJob.class).withIdentity("jobUpdate", "groupAlbina").build();
 			Trigger updateTrigger = newTrigger().withIdentity("triggerUpdate", "groupAlbina").startNow()
-					.withSchedule(cronSchedule("0 5/10 * * * ?")).build();
+					.withSchedule(cronSchedule("0 0 8 * * ?")).build();
 			scheduler.scheduleJob(updateJob, updateTrigger);
 
 		} catch (SchedulerException e) {
