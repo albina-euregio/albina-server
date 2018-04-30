@@ -167,7 +167,9 @@
 					"uniqueItems": true,
 					"items" : { "$ref" : "#/definitions/aspect" },
 					"additionalProperties" : false
-				}
+				},
+				"elevationHigh" : { "type": "integer" },
+				"elevationLow" : { "type": "integer" }
 			}
 		},
 		"avalancheSituation" : {
