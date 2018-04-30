@@ -38,6 +38,12 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	@Column(name = "ASPECT")
 	private Set<Aspect> aspects;
 
+	@Column(name = "ELEVATION_HIGH")
+	private int elevationHigh;
+
+	@Column(name = "ELEVATION_LOW")
+	private int elevationLow;
+
 	public AvalancheSituation() {
 		this.aspects = new HashSet<Aspect>();
 	}
@@ -54,6 +60,10 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 				this.aspects.add(Aspect.valueOf(((String) entry).toUpperCase()));
 			}
 		}
+		if (json.has("elevationHigh"))
+			this.elevationHigh = json.getInt("elevationHigh");
+		if (json.has("elevationLow"))
+			this.elevationLow = json.getInt("elevationLow");
 	}
 
 	public eu.albina.model.enumerations.AvalancheSituation getAvalancheSituation() {
@@ -72,6 +82,22 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		this.aspects = aspects;
 	}
 
+	public int getElevationHigh() {
+		return elevationHigh;
+	}
+
+	public void setElevationHigh(int elevationHigh) {
+		this.elevationHigh = elevationHigh;
+	}
+
+	public int getElevationLow() {
+		return elevationLow;
+	}
+
+	public void setElevationLow(int elevationLow) {
+		this.elevationLow = elevationLow;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -84,6 +110,11 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 			}
 			json.put("aspects", aspects);
 		}
+		if (elevationHigh > 0)
+			json.put("elevationHigh", elevationHigh);
+		if (elevationLow > 0)
+			json.put("elevationLow", elevationLow);
+
 		return json;
 	}
 
