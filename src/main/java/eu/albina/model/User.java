@@ -141,6 +141,15 @@ public class User {
 		return json;
 	}
 
+	public JSONObject toSmallJSON() {
+		JSONObject json = new JSONObject();
+
+		json.put("email", getEmail());
+		json.put("name", getName());
+
+		return json;
+	}
+
 	public Element toCAAML(Document doc) {
 		Element operation = doc.createElement("Operation");
 		operation.setAttribute("gml:id", this.organization);

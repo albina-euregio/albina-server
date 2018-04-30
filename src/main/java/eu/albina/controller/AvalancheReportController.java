@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.envers.AuditReader;
@@ -18,7 +15,6 @@ import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
@@ -27,7 +23,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.EventName;
-import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.HibernateUtil;
@@ -423,17 +418,8 @@ public class AvalancheReportController {
 			}
 
 			// just used to initialize all necessary fields
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder;
-			try {
-				docBuilder = docFactory.newDocumentBuilder();
-				Document doc = docBuilder.newDocument();
-				for (AvalancheBulletin avalancheBulletin : result) {
-					avalancheBulletin.toCAAML(doc, LanguageCode.en, startDate, 0);
-				}
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			}
+			for (AvalancheBulletin avalancheBulletin : result)
+				avalancheBulletin.toJSON();
 
 			return new AvalancheBulletinVersionTuple(revision, result);
 		} catch (HibernateException he) {

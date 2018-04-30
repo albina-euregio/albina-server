@@ -52,6 +52,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(
@@ -107,10 +108,10 @@ public class AvalancheBulletinService {
 	@GET
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getXMLBulletins(
+	public Response getPublishedXMLBulletins(
 			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
-		logger.debug("GET XML bulletins");
+		logger.debug("GET published XML bulletins");
 
 		DateTime startDate = null;
 		DateTime endDate = null;
@@ -128,7 +129,8 @@ public class AvalancheBulletinService {
 		endDate = startDate.plusDays(1);
 
 		try {
-			String caaml = AvalancheBulletinController.getInstance().getCaaml(startDate, endDate, regions, language);
+			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, endDate,
+					regions, language);
 			if (caaml != null) {
 				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 			} else {
@@ -148,6 +150,46 @@ public class AvalancheBulletinService {
 		} catch (ParserConfigurationException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPublishedJSONBulletins(
+			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
+		logger.debug("GET published JSON bulletins");
+
+		DateTime startDate = null;
+		DateTime endDate = null;
+
+		if (regions.isEmpty()) {
+			regions.add(GlobalVariables.codeTrentino);
+			regions.add(GlobalVariables.codeSouthTyrol);
+			regions.add(GlobalVariables.codeTyrol);
+		}
+
+		if (date != null)
+			startDate = DateTime.parse(date, GlobalVariables.parserDateTime);
+		else
+			startDate = new DateTime().withTimeAtStartOfDay();
+		endDate = startDate.plusDays(1);
+
+		try {
+			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
+					.getPublishedBulletinsJson(startDate, endDate, regions);
+			JSONArray jsonResult = new JSONArray();
+			if (bulletins != null) {
+				for (AvalancheBulletin bulletin : bulletins) {
+					jsonResult.put(bulletin.toSmallJSON());
+				}
+			}
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}
 

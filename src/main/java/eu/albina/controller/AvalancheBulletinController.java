@@ -203,8 +203,8 @@ public class AvalancheBulletinController {
 		}
 	}
 
-	public String getCaaml(DateTime startDate, DateTime endDate, List<String> regions, LanguageCode language)
-			throws TransformerException, AlbinaException, ParserConfigurationException {
+	public String getPublishedBulletinsCaaml(DateTime startDate, DateTime endDate, List<String> regions,
+			LanguageCode language) throws TransformerException, AlbinaException, ParserConfigurationException {
 		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
 				endDate, regions);
 
@@ -366,6 +366,17 @@ public class AvalancheBulletinController {
 		doc.appendChild(rootElement);
 
 		return AlbinaUtil.convertDocToString(doc);
+	}
+
+	public List<AvalancheBulletin> getPublishedBulletinsJson(DateTime startDate, DateTime endDate, List<String> regions)
+			throws AlbinaException {
+		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
+				endDate, regions);
+
+		if (result != null)
+			return result.bulletins;
+		else
+			throw new AlbinaException("Published bulletins could not be loaded!");
 	}
 
 	@SuppressWarnings("unchecked")

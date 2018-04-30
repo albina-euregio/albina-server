@@ -719,6 +719,76 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return json;
 	}
 
+	public JSONObject toSmallJSON() {
+		JSONObject json = new JSONObject();
+
+		if (id != null && id != "")
+			json.put("id", id);
+
+		if (user != null && user.getName() != null && user.getName() != "")
+			json.put("author", user.toSmallJSON());
+
+		if (additionalAuthors != null && additionalAuthors.size() > 0) {
+			JSONArray users = new JSONArray();
+			for (String user : additionalAuthors) {
+				users.put(user);
+			}
+			json.put("additionalAuthors", users);
+		}
+
+		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
+			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
+		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
+			json.put("avActivityCommentTextcat", avActivityCommentTextcat);
+		if (snowpackStructureHighlightsTextcat != null && snowpackStructureHighlightsTextcat != "")
+			json.put("snowpackStructureHighlightsTextcat", snowpackStructureHighlightsTextcat);
+		if (snowpackStructureCommentTextcat != null && snowpackStructureCommentTextcat != "")
+			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
+		if (tendencyCommentTextcat != null && tendencyCommentTextcat != "")
+			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
+
+		for (TextPart part : TextPart.values())
+			if ((textPartsMap.get(part) != null))
+				json.put(part.toString(), textPartsMap.get(part).toJSONArray());
+
+		if (tendency != null)
+			json.put("tendency", this.tendency.toString());
+
+		if (dangerPattern1 != null)
+			json.put("dangerPattern1", this.dangerPattern1.toString());
+		if (dangerPattern2 != null)
+			json.put("dangerPattern2", this.dangerPattern2.toString());
+
+		if (publicationDate != null)
+			json.put("publicationDate", publicationDate.toString(GlobalVariables.formatterDateTime));
+
+		JSONObject validity = new JSONObject();
+		validity.put("from", validFrom.toString(GlobalVariables.formatterDateTime));
+		validity.put("until", validUntil.toString(GlobalVariables.formatterDateTime));
+		json.put("validity", validity);
+
+		json.put("regions", publishedRegions);
+
+		json.put("hasDaytimeDependency", hasDaytimeDependency);
+		json.put("hasElevationDependency", hasElevationDependency);
+
+		if (hasElevationDependency) {
+			if (treeline) {
+				json.put("treeline", treeline);
+			} else {
+				json.put("elevation", elevation);
+			}
+		}
+
+		if (forenoon != null)
+			json.put("forenoon", forenoon.toSmallJSON());
+
+		if (hasDaytimeDependency && afternoon != null)
+			json.put("afternoon", afternoon.toSmallJSON());
+
+		return json;
+	}
+
 	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, DateTime startDate, int version,
 			boolean isAfternoon) {
 

@@ -161,4 +161,18 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		return json;
 	}
 
+	public JSONObject toSmallJSON() {
+		JSONObject json = new JSONObject();
+		if (id != null)
+			json.put("id", id);
+		if (dangerRatingAbove != null)
+			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
+		if (dangerRatingBelow != null)
+			json.put("dangerRatingBelow", this.dangerRatingBelow.toString());
+		if (avalancheSituation1 != null)
+			json.put("avalancheSituation1", avalancheSituation1.toJSON());
+		if (avalancheSituation2 != null)
+			json.put("avalancheSituation2", avalancheSituation2.toJSON());
+		return json;
+	}
 }
