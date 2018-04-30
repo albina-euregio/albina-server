@@ -150,7 +150,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
 		if (matrixInformationAbove != null)
 			json.put("matrixInformationAbove", matrixInformationAbove.toJSON());
-		if (dangerRatingAbove != null)
+		if (dangerRatingBelow != null)
 			json.put("dangerRatingBelow", this.dangerRatingBelow.toString());
 		if (matrixInformationBelow != null)
 			json.put("matrixInformationBelow", matrixInformationBelow.toJSON());
