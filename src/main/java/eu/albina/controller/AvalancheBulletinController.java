@@ -217,15 +217,20 @@ public class AvalancheBulletinController {
 
 		// create meta data
 		boolean hasDaytimeDependency = false;
-		DateTime publicationDate = new DateTime();
-		if (result.bulletins != null) {
+		DateTime publicationDate = null;
+		if (result.bulletins != null && !result.bulletins.isEmpty()) {
 			for (AvalancheBulletin bulletin : result.bulletins) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published) {
 					if (bulletin.hasDaytimeDependency())
 						hasDaytimeDependency = true;
-					if (bulletin.getPublicationDate() != null
-							&& bulletin.getPublicationDate().isBefore(publicationDate))
-						publicationDate = bulletin.getPublicationDate();
+					if (bulletin.getPublicationDate() != null) {
+						if (publicationDate == null)
+							publicationDate = bulletin.getPublicationDate();
+						else {
+							if (bulletin.getPublicationDate().isAfter(publicationDate))
+								publicationDate = bulletin.getPublicationDate();
+						}
+					}
 				}
 			}
 
