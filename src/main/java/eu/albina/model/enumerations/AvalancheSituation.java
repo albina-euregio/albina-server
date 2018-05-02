@@ -20,7 +20,7 @@ public enum AvalancheSituation {
 		case wind_drifted_snow:
 			return "drifting snow";
 		case weak_persistent_layer:
-			return "weak_persistent_layer";
+			return "old snow";
 		case wet_snow:
 			return "wet snow";
 		case gliding_snow:
