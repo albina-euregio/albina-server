@@ -220,7 +220,8 @@ public class AvalancheBulletinController {
 		DateTime publicationDate = null;
 		if (result.bulletins != null && !result.bulletins.isEmpty()) {
 			for (AvalancheBulletin bulletin : result.bulletins) {
-				if (bulletin.getStatus(regions) == BulletinStatus.published) {
+				if (bulletin.getStatus(regions) == BulletinStatus.published
+						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
 					if (bulletin.hasDaytimeDependency())
 						hasDaytimeDependency = true;
 					if (bulletin.getPublicationDate() != null) {
@@ -354,7 +355,8 @@ public class AvalancheBulletinController {
 			Element observations = doc.createElement("observations");
 
 			for (AvalancheBulletin bulletin : result.bulletins) {
-				if (bulletin.getStatus(regions) == BulletinStatus.published) {
+				if (bulletin.getStatus(regions) == BulletinStatus.published
+						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
 					for (Element element : bulletin.toCAAML(doc, language, startDate, result.version)) {
 						observations.appendChild(element);
 					}
