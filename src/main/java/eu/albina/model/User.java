@@ -2,15 +2,20 @@ package eu.albina.model;
 
 import java.util.List;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -36,9 +41,11 @@ public class User {
 	@Column(name = "NAME")
 	private String name;
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_EMAIL"))
+	@Column(name = "USER_ROLE")
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ROLE")
-	private Role role;
+	private List<Role> roles;
 
 	/** Image of the user **/
 	@Column(name = "IMAGE", columnDefinition = "LONGBLOB")
@@ -65,8 +72,12 @@ public class User {
 			this.password = json.getString("password");
 		if (json.has("name") && !json.isNull("name"))
 			this.name = json.getString("name");
-		if (json.has("role") && !json.isNull("role"))
-			this.role = Role.fromString(json.getString("role"));
+		if (json.has("roles")) {
+			JSONArray roles = json.getJSONArray("roles");
+			for (Object entry : roles) {
+				this.roles.add(Role.fromString((String) entry));
+			}
+		}
 		if (json.has("image") && !json.isNull("image"))
 			this.image = json.getString("image");
 		if (json.has("organization") && !json.isNull("organization"))
@@ -105,12 +116,17 @@ public class User {
 		this.name = name;
 	}
 
-	public Role getRole() {
-		return role;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void addRole(Role role) {
+		if (!this.roles.contains(role))
+			this.roles.add(role);
 	}
 
 	public String getImage() {
@@ -135,8 +151,15 @@ public class User {
 		json.put("email", getEmail());
 		json.put("name", getName());
 		json.put("image", getImage());
-		json.put("region", AuthorizationUtil.getRegion(getRole()));
-		json.put("role", getRole());
+		json.put("region", AuthorizationUtil.getRegion(getRoles()));
+
+		if (roles != null && roles.size() > 0) {
+			JSONArray jsonRoles = new JSONArray();
+			for (Role role : roles) {
+				jsonRoles.put(role.toString());
+			}
+			json.put("roles", jsonRoles);
+		}
 
 		return json;
 	}

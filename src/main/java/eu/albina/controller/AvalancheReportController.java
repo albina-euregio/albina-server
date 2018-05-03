@@ -410,7 +410,7 @@ public class AvalancheReportController {
 						}
 					}
 					for (AvalancheBulletin bulletin : bulletins)
-						if (AuthorizationUtil.getRegion(bulletin.getUser().getRole()).startsWith(region)
+						if (AuthorizationUtil.getRegion(bulletin.getUser().getRoles()).startsWith(region)
 								&& (bulletin.getValidFrom().equals(startDate)
 										|| bulletin.getValidUntil().equals(endDate)))
 							result.add(bulletin);

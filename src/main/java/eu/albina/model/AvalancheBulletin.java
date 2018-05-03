@@ -661,8 +661,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			json.put("additionalAuthors", users);
 		}
 
-		if (user != null && user.getRole() != null)
-			json.put("ownerRegion", AuthorizationUtil.getRegion(user.getRole()));
+		if (user != null && user.getRoles() != null)
+			json.put("ownerRegion", AuthorizationUtil.getRegion(user.getRoles()));
 
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);

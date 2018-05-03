@@ -413,7 +413,7 @@ public class AvalancheBulletinController {
 		}
 	}
 
-	public void deleteBulletin(String bulletinId, Role role) throws AlbinaException {
+	public void deleteBulletin(String bulletinId, List<Role> roles) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -427,7 +427,7 @@ public class AvalancheBulletinController {
 			Set<String> regions = avalancheBulletin.getSavedRegions();
 			Set<String> result = new HashSet<String>();
 			for (String region : regions) {
-				if (!AuthorizationUtil.hasPermissionForRegion(role, region))
+				if (!AuthorizationUtil.hasPermissionForRegion(roles, region))
 					result.add(region);
 			}
 			avalancheBulletin.setSavedRegions(result);
@@ -435,7 +435,7 @@ public class AvalancheBulletinController {
 			regions = avalancheBulletin.getSuggestedRegions();
 			result = new HashSet<String>();
 			for (String region : regions) {
-				if (!AuthorizationUtil.hasPermissionForRegion(role, region))
+				if (!AuthorizationUtil.hasPermissionForRegion(roles, region))
 					result.add(region);
 			}
 			avalancheBulletin.setSuggestedRegions(result);
@@ -533,7 +533,7 @@ public class AvalancheBulletinController {
 					results.add(bulletin);
 			for (AvalancheBulletin bulletin : results) {
 				// set publication date if no regions where published before
-				if (AuthorizationUtil.getRegion(bulletin.getUser().getRole()).startsWith(region))
+				if (AuthorizationUtil.getRegion(bulletin.getUser().getRoles()).startsWith(region))
 					bulletin.setPublicationDate(publicationDate);
 				entityManager.merge(bulletin);
 			}

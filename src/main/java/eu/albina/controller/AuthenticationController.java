@@ -107,10 +107,11 @@ public class AuthenticationController {
 			}
 			transaction.commit();
 
-			if (user.getRole().equals(Role.fromString(role)))
-				return true;
-			else
-				return false;
+			for (Role userRole : user.getRoles()) {
+				if (userRole.equals(Role.fromString(role)))
+					return true;
+			}
+			return false;
 		} finally {
 			entityManager.close();
 		}

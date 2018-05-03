@@ -51,7 +51,7 @@ public class AvalancheBulletinService {
 	UriInfo uri;
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -92,7 +92,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/locked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -154,7 +154,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublishedJSONBulletins(
@@ -194,7 +194,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/status")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -219,7 +219,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -435,7 +435,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRole(), region)) {
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRoles(), region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
@@ -481,7 +481,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRole(), region)) {
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRoles(), region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
@@ -533,7 +533,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRole(), region)) {
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRoles(), region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
