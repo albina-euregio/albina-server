@@ -11,11 +11,10 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <jersey.version>2.25.1</jersey.version>
+    <jersey.version>2.27</jersey.version>
     <slf4j.version>1.7.25</slf4j.version>
     <hibernate.version>5.2.9.Final</hibernate.version>
   </properties>
-  
   
   <dependencyManagement>
     <dependencies>
@@ -47,21 +46,23 @@
 	
 <!-- rest -->
 	<dependency>
-      <groupId>org.glassfish.jersey.containers</groupId>
-      <artifactId>jersey-container-servlet-core</artifactId>
-      <!-- use the following artifactId if you don't need servlet 2.x compatibility -->
-      <!-- artifactId>jersey-container-servlet</artifactId -->
-    </dependency>
+	    <groupId>org.glassfish.jersey.containers</groupId>
+	    <artifactId>jersey-container-servlet</artifactId>
+	</dependency>
     <dependency>
         <groupId>org.glassfish.jersey.media</groupId>
         <artifactId>jersey-media-moxy</artifactId>
     </dependency>
-    <dependency>
+	<dependency>
+	    <groupId>org.glassfish.jersey.inject</groupId>
+	    <artifactId>jersey-hk2</artifactId>
+	</dependency>
+	<dependency>
 	    <groupId>javax.servlet</groupId>
 	    <artifactId>javax.servlet-api</artifactId>
-	    <version>4.0.0-b03</version>
+	    <version>4.0.1</version>
 	    <scope>provided</scope>
-	</dependency>
+	</dependency>    
 
 <!-- joda time -->
   	<dependency>
@@ -165,6 +166,12 @@
 	  <groupId>io.swagger</groupId>
 	  <artifactId>swagger-jersey-jaxrs</artifactId>
 	  <version>1.5.13</version>
+	  <exclusions>
+		<exclusion>
+		  <groupId>com.sun.jersey</groupId>
+		  <artifactId>jersey-core</artifactId>
+		</exclusion>
+	  </exclusions>
 	</dependency>
 
 <!-- socket.io -->
@@ -202,6 +209,14 @@
 				<target>1.8</target>
 			</configuration>
 		</plugin>
+	    <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-enforcer-plugin</artifactId>
+	        <version>1.4.1</version>
+	        <configuration>
+	            <rules><dependencyConvergence/></rules>
+	        </configuration>
+	    </plugin>
 	</plugins>
   </build>
 </project>
