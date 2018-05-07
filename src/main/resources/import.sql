@@ -124,7 +124,7 @@ insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('gabriel.gaetz@tirol.gv.at
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('alexander.ungerer@tirol.gv.at', 'TYROL');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('alberto.trenti@provincia.tn.it', 'TRENTINO');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('sergio.benigni@provincia.tn.it', 'TRENTINO');
-insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('paolo.cetari@provincia.tn.it', 'TRENTINO');
+insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('paolo.cestari@provincia.tn.it', 'TRENTINO');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('marco.gadotti@provincia.tn.it', 'TRENTINO');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('walter.beozzo@provincia.tn.it', 'TRENTINO');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('gianluca.tognoni@provincia.tn.it', 'TRENTINO');
