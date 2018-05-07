@@ -61,8 +61,20 @@
 	    <groupId>javax.servlet</groupId>
 	    <artifactId>javax.servlet-api</artifactId>
 	    <version>4.0.1</version>
-	    <scope>provided</scope>
 	</dependency>    
+
+<!-- swagger -->
+    <dependency>
+	  <groupId>io.swagger</groupId>
+	  <artifactId>swagger-jersey-jaxrs</artifactId>
+	  <version>1.5.13</version>
+	  <exclusions>
+		<exclusion>
+		  <groupId>javax.ws.rs</groupId>
+		  <artifactId>jsr311-api</artifactId>
+		</exclusion>
+	  </exclusions>
+	</dependency>
 
 <!-- joda time -->
   	<dependency>
@@ -161,19 +173,6 @@
 		<scope>test</scope>
 	</dependency>
    
-<!-- swagger -->
-    <dependency>
-	  <groupId>io.swagger</groupId>
-	  <artifactId>swagger-jersey-jaxrs</artifactId>
-	  <version>1.5.13</version>
-	  <exclusions>
-		<exclusion>
-		  <groupId>com.sun.jersey</groupId>
-		  <artifactId>jersey-core</artifactId>
-		</exclusion>
-	  </exclusions>
-	</dependency>
-
 <!-- socket.io -->
 	<dependency>
 	      <groupId>com.corundumstudio.socketio</groupId>
