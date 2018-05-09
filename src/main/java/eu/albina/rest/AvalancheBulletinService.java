@@ -129,6 +129,8 @@ public class AvalancheBulletinService {
 			startDate = new DateTime().withTimeAtStartOfDay();
 		endDate = startDate.plusDays(1);
 
+		// TODO check if data is at most tomorrow (if it is after 5PM)
+
 		try {
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, endDate,
 					regions, language);
@@ -177,6 +179,8 @@ public class AvalancheBulletinService {
 		else
 			startDate = new DateTime().withTimeAtStartOfDay();
 		endDate = startDate.plusDays(1);
+
+		// TODO check if data is at most tomorrow (if it is after 5PM)
 
 		try {
 			Collection<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
