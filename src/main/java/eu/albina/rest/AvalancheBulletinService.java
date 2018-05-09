@@ -157,7 +157,6 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublishedJSONBulletins(
