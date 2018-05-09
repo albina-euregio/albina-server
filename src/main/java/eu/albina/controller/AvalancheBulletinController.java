@@ -29,7 +29,6 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.BulletinLock;
-import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.EventName;
@@ -555,6 +554,8 @@ public class AvalancheBulletinController {
 		JSONArray json = new JSONArray();
 		boolean missingAvActivityHighlights = false;
 		boolean missingAvActivityComment = false;
+		boolean missingSnowpackStructureHighlights = false;
+		boolean missingSnowpackStructureComment = false;
 		boolean pendingSuggestions = false;
 		boolean missingDangerRating = false;
 
@@ -572,8 +573,6 @@ public class AvalancheBulletinController {
 				if (bulletin.affectsRegion(region))
 					results.add(bulletin);
 
-			List<Region> regions = RegionController.getInstance().getRegions(region);
-
 			List<String> definedRegions = new ArrayList<String>();
 			for (AvalancheBulletin bulletin : results) {
 
@@ -589,31 +588,49 @@ public class AvalancheBulletinController {
 						if (entry.startsWith(region))
 							pendingSuggestions = true;
 
-				if (missingAvActivityHighlights || bulletin.getAvActivityHighlights() == null
-						|| bulletin.getAvActivityHighlights().getTexts() == null
-						|| bulletin.getAvActivityHighlights().getTexts().size() < 1)
+				if (missingAvActivityHighlights || bulletin.getAvActivityHighlightsTextcat() == null
+						|| bulletin.getAvActivityHighlightsTextcat().isEmpty())
 					missingAvActivityHighlights = true;
-				if (missingAvActivityComment || bulletin.getAvActivityComment() == null
-						|| bulletin.getAvActivityComment().getTexts() == null
-						|| bulletin.getAvActivityComment().getTexts().size() < 1)
+				if (missingAvActivityComment || bulletin.getAvActivityCommentTextcat() == null
+						|| bulletin.getAvActivityCommentTextcat().isEmpty())
 					missingAvActivityComment = true;
+				if (missingSnowpackStructureHighlights || bulletin.getSnowpackStructureHighlightsTextcat() == null
+						|| bulletin.getSnowpackStructureHighlightsTextcat().isEmpty())
+					missingSnowpackStructureHighlights = true;
+				if (missingSnowpackStructureComment || bulletin.getSnowpackStructureCommentTextcat() == null
+						|| bulletin.getSnowpackStructureCommentTextcat().isEmpty())
+					missingSnowpackStructureComment = true;
 
-				if (bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
-						|| (bulletin.getForenoon() != null && bulletin.getElevation() > 0
+				if (bulletin.getForenoon() == null
+						|| bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
+						|| (bulletin.getForenoon() != null && bulletin.isHasElevationDependency()
 								&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
+					missingDangerRating = true;
+				}
+
+				if (missingDangerRating || (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() == null)
+						|| (bulletin.isHasDaytimeDependency()
+								&& bulletin.getAfternoon().getDangerRatingAbove() == DangerRating.missing)
+						|| (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() != null
+								&& bulletin.isHasElevationDependency()
+								&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
 					missingDangerRating = true;
 				}
 			}
 
-			if (definedRegions.size() > regions.size())
+			if (definedRegions.size() > AlbinaUtil.getRegionCount(region))
 				json.put("duplicateRegion");
-			else if (definedRegions.size() < regions.size())
+			else if (definedRegions.size() < AlbinaUtil.getRegionCount(region))
 				json.put("missingRegion");
 
 			if (missingAvActivityHighlights)
 				json.put("missingAvActivityHighlights");
 			if (missingAvActivityComment)
 				json.put("missingAvActivityComment");
+			if (missingSnowpackStructureHighlights)
+				json.put("missingSnowpackStructureHighlights");
+			if (missingSnowpackStructureComment)
+				json.put("missingSnowpackStructureComment");
 			if (pendingSuggestions)
 				json.put("pendingSuggestions");
 			if (missingDangerRating)

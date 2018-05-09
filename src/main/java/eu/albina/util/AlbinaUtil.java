@@ -36,6 +36,10 @@ public class AlbinaUtil {
 	public static final boolean publishToSocialMedia = false;
 	public static final boolean createCAAML = true;
 
+	public static final int regionCountTyrol = 29;
+	public static final int regionCountSouthTyrol = 20;
+	public static final int regionCountTrentino = 21;
+
 	public static final boolean publishBulletinsTyrol = true;
 	public static final boolean publishBulletinsSouthTyrol = true;
 	public static final boolean publishBulletinsTrentino = true;
@@ -79,6 +83,20 @@ public class AlbinaUtil {
 	public static final String dp8En = "Surface hoar blanketed with snow";
 	public static final String dp9En = "Graupel blanketed with snow";
 	public static final String dp10En = "Springtime scenario";
+
+	public static int getRegionCount(String region) {
+		switch (region) {
+		case "AT-07":
+			return regionCountTyrol;
+		case "IT-32-BZ":
+			return regionCountSouthTyrol;
+		case "IT-32-TN":
+			return regionCountTrentino;
+
+		default:
+			return -1;
+		}
+	}
 
 	public static String getDangerPatternText(DangerPattern dp, LanguageCode lang) {
 		switch (dp) {
