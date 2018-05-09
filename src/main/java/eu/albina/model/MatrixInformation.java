@@ -149,4 +149,31 @@ public class MatrixInformation implements AvalancheInformationObject {
 		return json;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (!MatrixInformation.class.isAssignableFrom(obj.getClass())) {
+			return false;
+		}
+		final MatrixInformation other = (MatrixInformation) obj;
+
+		if (this.artificialDangerRating != other.artificialDangerRating)
+			return false;
+		if (this.artificialAvalancheSize != other.artificialAvalancheSize)
+			return false;
+		if (this.artificialAvalancheReleaseProbability != other.artificialAvalancheReleaseProbability)
+			return false;
+		if (this.artificialHazardSiteDistribution != other.artificialHazardSiteDistribution)
+			return false;
+		if (this.naturalDangerRating != other.naturalDangerRating)
+			return false;
+		if (this.naturalAvalancheReleaseProbability != other.naturalAvalancheReleaseProbability)
+			return false;
+		if (this.naturalHazardSiteDistribution != other.naturalHazardSiteDistribution)
+			return false;
+
+		return true;
+	}
 }

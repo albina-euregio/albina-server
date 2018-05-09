@@ -287,6 +287,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			this.additionalAuthors.add(additionalAuthor);
 	}
 
+	public Map<TextPart, Texts> getTextPartsMap() {
+		return textPartsMap;
+	}
+
 	public String getAvActivityHighlightsTextcat() {
 		return avActivityHighlightsTextcat;
 	}
@@ -521,6 +525,10 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.suggestedRegions = regions;
 	}
 
+	public void addSuggestedRegion(String region) {
+		this.suggestedRegions.add(region);
+	}
+
 	public Set<String> getSavedRegions() {
 		return savedRegions;
 	}
@@ -529,12 +537,20 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		this.savedRegions = regions;
 	}
 
+	public void addSavedRegion(String region) {
+		this.savedRegions.add(region);
+	}
+
 	public Set<String> getPublishedRegions() {
 		return publishedRegions;
 	}
 
 	public void setPublishedRegions(Set<String> regions) {
 		this.publishedRegions = regions;
+	}
+
+	public void addPublishedRegion(String region) {
+		this.publishedRegions.add(region);
 	}
 
 	public AvalancheBulletinDaytimeDescription getForenoon() {
@@ -800,8 +816,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			bulletin = this.forenoon;
 
 		Element rootElement = doc.createElement("Bulletin");
-		if (getId() != null)
-			rootElement.setAttribute("gml:id", getId());
+		if (getId() != null) {
+			if (isAfternoon)
+				rootElement.setAttribute("gml:id", getId() + "_PM");
+			else
+				rootElement.setAttribute("gml:id", getId());
+		}
 		if (languageCode == null)
 			languageCode = LanguageCode.en;
 		rootElement.setAttribute("xml:lang", languageCode.toString());
@@ -1042,5 +1062,60 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		setAvActivityHighlightsTextcat(bulletin.getAvActivityHighlightsTextcat());
 		setAvActivityCommentTextcat(bulletin.getAvActivityCommentTextcat());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (!AvalancheBulletin.class.isAssignableFrom(obj.getClass())) {
+			return false;
+		}
+		final AvalancheBulletin other = (AvalancheBulletin) obj;
+
+		// TODO textcat ids will be different for italian and german
+
+		if ((this.validFrom == null) ? (other.validFrom != null) : !this.validFrom.equals(other.validFrom))
+			return false;
+		if ((this.validUntil == null) ? (other.validUntil != null) : !this.validUntil.equals(other.validUntil))
+			return false;
+		if (this.elevation != other.elevation)
+			return false;
+		if (this.treeline != other.treeline)
+			return false;
+		if (this.hasDaytimeDependency != other.hasDaytimeDependency)
+			return false;
+		if (this.hasElevationDependency != other.hasElevationDependency)
+			return false;
+		if ((this.forenoon == null) ? (other.forenoon != null) : !this.forenoon.equals(other.forenoon))
+			return false;
+		if ((this.afternoon == null) ? (other.afternoon != null) : !this.afternoon.equals(other.afternoon))
+			return false;
+		if ((this.avActivityHighlightsTextcat == null) ? (other.avActivityHighlightsTextcat != null)
+				: !this.avActivityHighlightsTextcat.equals(other.avActivityHighlightsTextcat))
+			return false;
+		if ((this.avActivityCommentTextcat == null) ? (other.avActivityCommentTextcat != null)
+				: !this.avActivityCommentTextcat.equals(other.avActivityCommentTextcat))
+			return false;
+		if ((this.snowpackStructureHighlightsTextcat == null) ? (other.snowpackStructureHighlightsTextcat != null)
+				: !this.snowpackStructureHighlightsTextcat.equals(other.snowpackStructureHighlightsTextcat))
+			return false;
+		if ((this.snowpackStructureCommentTextcat == null) ? (other.snowpackStructureCommentTextcat != null)
+				: !this.snowpackStructureCommentTextcat.equals(other.snowpackStructureCommentTextcat))
+			return false;
+		if ((this.tendencyCommentTextcat == null) ? (other.tendencyCommentTextcat != null)
+				: !this.tendencyCommentTextcat.equals(other.tendencyCommentTextcat))
+			return false;
+		if ((this.tendency == null) ? (other.tendency != null) : !this.tendency.equals(other.tendency))
+			return false;
+		if ((this.dangerPattern1 == null) ? (other.dangerPattern1 != null)
+				: !this.dangerPattern1.equals(other.dangerPattern1))
+			return false;
+		if ((this.dangerPattern2 == null) ? (other.dangerPattern2 != null)
+				: !this.dangerPattern2.equals(other.dangerPattern2))
+			return false;
+
+		return true;
 	}
 }

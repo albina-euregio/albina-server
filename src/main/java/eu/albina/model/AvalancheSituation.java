@@ -9,6 +9,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -33,7 +34,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	@Column(name = "AVALANCHE_SITUATION")
 	private eu.albina.model.enumerations.AvalancheSituation avalancheSituation;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_SITUATION_ASPECTS", joinColumns = @JoinColumn(name = "AVALANCHE_SITUATION_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
 	private Set<Aspect> aspects;
@@ -118,4 +119,25 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		return json;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (!AvalancheSituation.class.isAssignableFrom(obj.getClass())) {
+			return false;
+		}
+		final AvalancheSituation other = (AvalancheSituation) obj;
+
+		if (this.avalancheSituation != other.avalancheSituation)
+			return false;
+		if (!this.aspects.containsAll(other.getAspects()) || !other.getAspects().containsAll(this.aspects))
+			return false;
+		if (this.elevationHigh != other.elevationHigh)
+			return false;
+		if (this.elevationLow != other.elevationLow)
+			return false;
+
+		return true;
+	}
 }

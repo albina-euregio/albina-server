@@ -1,16 +1,22 @@
 package eu.albina.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
+import org.hibernate.proxy.HibernateProxy;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -24,7 +30,6 @@ import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.EventName;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -368,60 +373,50 @@ public class AvalancheReportController {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public AvalancheBulletinVersionTuple getPublishedBulletins(DateTime startDate, DateTime endDate,
 			List<String> regions) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
+
+		int revision = -1;
+
 		try {
-			List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-			int revision = 0;
+			Map<String, Integer> revisionMap = new HashMap<String, Integer>();
+			Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
 
 			for (String region : regions) {
-				// get report
-				transaction.begin();
-				List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReports)
-						.setParameter("date", startDate).setParameter("region", region).getResultList();
-				transaction.commit();
+				// get bulletins for this region
+				AvalancheBulletinVersionTuple publishedBulletinsForRegion = getPublishedBulletinsForRegion(startDate,
+						endDate, region);
 
-				List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-
-				if (reports != null && !reports.isEmpty()) {
-					transaction.begin();
-					AuditReader reader = AuditReaderFactory.get(entityManager);
-					AuditQuery q = reader.createQuery().forRevisionsOfEntity(AvalancheReport.class, true, true);
-					q.add(AuditEntity.id().eq(reports.get(0).getId()));
-					List<AvalancheReport> audit = q.getResultList();
-					transaction.commit();
-
-					for (AvalancheReport avalancheReport : audit) {
-						if (avalancheReport.getRegion().startsWith(region)
-								&& (avalancheReport.getStatus() == BulletinStatus.published
-										|| avalancheReport.getStatus() == BulletinStatus.republished)) {
-							if (avalancheReport.getRevision().intValue() > revision) {
-								transaction.begin();
-								AuditQuery q2 = reader.createQuery().forEntitiesAtRevision(AvalancheBulletin.class,
-										avalancheReport.getRevision());
-								bulletins = q2.getResultList();
-
-								transaction.commit();
-								revision = avalancheReport.getRevision().intValue();
+				for (AvalancheBulletin bulletin : publishedBulletinsForRegion.bulletins) {
+					if (revisionMap.containsKey(bulletin.getId())) {
+						// merge bulletins with same id
+						if (revisionMap.get(bulletin.getId()).equals(publishedBulletinsForRegion.version)
+								|| bulletin.equals(resultMap.get(bulletin.getId()))) {
+							for (String publishedRegion : bulletin.getPublishedRegions()) {
+								resultMap.get(bulletin.getId()).addPublishedRegion(publishedRegion);
+							}
+							// create new bulletin if revisions are different
+						} else {
+							bulletin.setId(bulletin.getId() + "_" + revisionMap.get(bulletin.getId()));
+							if (!revisionMap.containsKey(bulletin.getId())) {
+								revisionMap.put(bulletin.getId(), publishedBulletinsForRegion.version);
+								resultMap.put(bulletin.getId(), bulletin);
+							} else {
+								for (String publishedRegion : bulletin.getPublishedRegions()) {
+									resultMap.get(bulletin.getId()).addPublishedRegion(publishedRegion);
+								}
 							}
 						}
+					} else {
+						revisionMap.put(bulletin.getId(), publishedBulletinsForRegion.version);
+						resultMap.put(bulletin.getId(), bulletin);
 					}
-					for (AvalancheBulletin bulletin : bulletins)
-						if (AuthorizationUtil.getRegion(bulletin.getUser().getRoles()).startsWith(region)
-								&& (bulletin.getValidFrom().equals(startDate)
-										|| bulletin.getValidUntil().equals(endDate)))
-							result.add(bulletin);
 				}
 			}
 
-			// just used to initialize all necessary fields
-			for (AvalancheBulletin avalancheBulletin : result)
-				avalancheBulletin.toJSON();
-
-			return new AvalancheBulletinVersionTuple(revision, result);
+			return new AvalancheBulletinVersionTuple(revision, resultMap.values());
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
@@ -429,5 +424,141 @@ public class AvalancheReportController {
 		} finally {
 			entityManager.close();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private AvalancheBulletinVersionTuple getPublishedBulletinsForRegion(DateTime startDate, DateTime endDate,
+			String region) throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		Number revision = -1;
+
+		try {
+			// get report for date and region
+			transaction.begin();
+			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReports)
+					.setParameter("date", startDate).setParameter("region", region).getResultList();
+			transaction.commit();
+
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+
+			if (reports != null && !reports.isEmpty()) {
+
+				List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
+
+				// get report history
+				transaction.begin();
+				AuditReader reader = AuditReaderFactory.get(entityManager);
+				AuditQuery q = reader.createQuery().forRevisionsOfEntity(AvalancheReport.class, true, true);
+				q.add(AuditEntity.id().eq(reports.get(0).getId()));
+				List<AvalancheReport> audit = q.getResultList();
+				transaction.commit();
+
+				// get latest report with status published or republished
+				for (AvalancheReport avalancheReport : audit) {
+					if ((avalancheReport.getRegion().startsWith(region)
+							|| region.startsWith(avalancheReport.getRegion()))
+							&& (avalancheReport.getStatus() == BulletinStatus.published
+									|| avalancheReport.getStatus() == BulletinStatus.republished)) {
+						if (avalancheReport.getRevision().intValue() > revision.intValue()) {
+							revision = avalancheReport.getRevision();
+						}
+					}
+				}
+
+				if (revision.intValue() > -1) {
+					transaction.begin();
+					AuditQuery q2 = reader.createQuery().forEntitiesAtRevision(AvalancheBulletin.class, revision);
+					bulletins = q2.getResultList();
+
+					// just used to initialize all necessary fields
+					for (AvalancheBulletin avalancheBulletin : bulletins)
+						initializeBulletin(avalancheBulletin);
+
+					transaction.commit();
+				}
+
+				for (AvalancheBulletin bulletin : bulletins) {
+					if (bulletin.getValidFrom().equals(startDate) || bulletin.getValidUntil().equals(endDate)) {
+						Set<String> newPublishedRegions = new HashSet<String>();
+
+						// delete all published regions which are foreign
+						if (bulletin.getPublishedRegions() != null) {
+							for (String publishedRegion : bulletin.getPublishedRegions()) {
+								if (publishedRegion.startsWith(region))
+									newPublishedRegions.add(publishedRegion);
+							}
+							if (newPublishedRegions.size() != 0) {
+								bulletin.setPublishedRegions(newPublishedRegions);
+								results.add(bulletin);
+							}
+						}
+					}
+				}
+			}
+
+			return new AvalancheBulletinVersionTuple(revision.intValue(), results);
+
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	private void initializeBulletin(AvalancheBulletin bulletin) {
+		if (bulletin.getUser() != null)
+			bulletin.setUser(initializeAndUnproxy(bulletin.getUser()));
+		if (bulletin.getForenoon() != null) {
+			bulletin.setForenoon(initializeAndUnproxy(bulletin.getForenoon()));
+			if (bulletin.getForenoon().getAvalancheSituation1() != null) {
+				bulletin.getForenoon()
+						.setAvalancheSituation1(initializeAndUnproxy(bulletin.getForenoon().getAvalancheSituation1()));
+				bulletin.getForenoon().getAvalancheSituation1().getAspects().size();
+			}
+			if (bulletin.getForenoon().getAvalancheSituation2() != null) {
+				bulletin.getForenoon()
+						.setAvalancheSituation2(initializeAndUnproxy(bulletin.getForenoon().getAvalancheSituation2()));
+				bulletin.getForenoon().getAvalancheSituation2().getAspects().size();
+			}
+		}
+		if (bulletin.getAfternoon() != null) {
+			bulletin.setAfternoon(initializeAndUnproxy(bulletin.getAfternoon()));
+			if (bulletin.getAfternoon().getAvalancheSituation1() != null) {
+				bulletin.getAfternoon()
+						.setAvalancheSituation1(initializeAndUnproxy(bulletin.getAfternoon().getAvalancheSituation1()));
+				bulletin.getAfternoon().getAvalancheSituation1().getAspects().size();
+			}
+			if (bulletin.getAfternoon().getAvalancheSituation2() != null) {
+				bulletin.getAfternoon()
+						.setAvalancheSituation2(initializeAndUnproxy(bulletin.getAfternoon().getAvalancheSituation2()));
+				bulletin.getAfternoon().getAvalancheSituation2().getAspects().size();
+			}
+		}
+		if (bulletin.getAdditionalAuthors() != null)
+			bulletin.getAdditionalAuthors().size();
+		if (bulletin.getPublishedRegions() != null)
+			bulletin.getPublishedRegions().size();
+		if (bulletin.getSuggestedRegions() != null)
+			bulletin.getSuggestedRegions().size();
+		if (bulletin.getSavedRegions() != null)
+			bulletin.getSavedRegions().size();
+		if (bulletin.getTextPartsMap() != null)
+			bulletin.getTextPartsMap().size();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> T initializeAndUnproxy(T entity) {
+		if (entity == null) {
+			throw new NullPointerException("Entity passed for initialization is null");
+		}
+
+		Hibernate.initialize(entity);
+		if (entity instanceof HibernateProxy) {
+			entity = (T) ((HibernateProxy) entity).getHibernateLazyInitializer().getImplementation();
+		}
+		return entity;
 	}
 }

@@ -1,6 +1,7 @@
 package eu.albina.rest;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -178,7 +179,7 @@ public class AvalancheBulletinService {
 		endDate = startDate.plusDays(1);
 
 		try {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
+			Collection<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
 					.getPublishedBulletinsJson(startDate, endDate, regions);
 			JSONArray jsonResult = new JSONArray();
 			if (bulletins != null) {
@@ -318,6 +319,9 @@ public class AvalancheBulletinService {
 
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
 					new DateTime());
+			DateTime publicationDate = new DateTime();
+			AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region);
+			AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region, publicationDate);
 			AvalancheReportController.getInstance().changeReport(startDate, region, user);
 
 			// TODO maybe start in an own thread

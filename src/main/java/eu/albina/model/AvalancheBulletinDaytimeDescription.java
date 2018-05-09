@@ -175,4 +175,36 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			json.put("avalancheSituation2", avalancheSituation2.toJSON());
 		return json;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (!AvalancheBulletinDaytimeDescription.class.isAssignableFrom(obj.getClass())) {
+			return false;
+		}
+		final AvalancheBulletinDaytimeDescription other = (AvalancheBulletinDaytimeDescription) obj;
+
+		if ((this.dangerRatingAbove == null) ? (other.dangerRatingAbove != null)
+				: !this.dangerRatingAbove.equals(other.dangerRatingAbove))
+			return false;
+		if ((this.matrixInformationAbove == null) ? (other.matrixInformationAbove != null)
+				: !this.matrixInformationAbove.equals(other.matrixInformationAbove))
+			return false;
+		if ((this.dangerRatingBelow == null) ? (other.dangerRatingBelow != null)
+				: !this.dangerRatingBelow.equals(other.dangerRatingBelow))
+			return false;
+		if ((this.matrixInformationBelow == null) ? (other.matrixInformationBelow != null)
+				: !this.matrixInformationBelow.equals(other.matrixInformationBelow))
+			return false;
+		if ((this.avalancheSituation1 == null) ? (other.avalancheSituation1 != null)
+				: !this.avalancheSituation1.equals(other.avalancheSituation1))
+			return false;
+		if ((this.avalancheSituation2 == null) ? (other.avalancheSituation2 != null)
+				: !this.avalancheSituation2.equals(other.avalancheSituation2))
+			return false;
+
+		return true;
+	}
 }

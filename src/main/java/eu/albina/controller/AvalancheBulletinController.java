@@ -2,6 +2,7 @@ package eu.albina.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -370,8 +371,8 @@ public class AvalancheBulletinController {
 		return AlbinaUtil.convertDocToString(doc);
 	}
 
-	public List<AvalancheBulletin> getPublishedBulletinsJson(DateTime startDate, DateTime endDate, List<String> regions)
-			throws AlbinaException {
+	public Collection<AvalancheBulletin> getPublishedBulletinsJson(DateTime startDate, DateTime endDate,
+			List<String> regions) throws AlbinaException {
 		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
 				endDate, regions);
 
@@ -527,10 +528,12 @@ public class AvalancheBulletinController {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+
 			// select bulletins within the region
 			for (AvalancheBulletin bulletin : bulletins)
 				if (bulletin.affectsRegion(region))
 					results.add(bulletin);
+
 			for (AvalancheBulletin bulletin : results) {
 				// set publication date if no regions where published before
 				if (AuthorizationUtil.getRegion(bulletin.getUser().getRoles()).startsWith(region))
