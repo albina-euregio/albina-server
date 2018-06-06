@@ -114,7 +114,7 @@ insert into USERS (EMAIL, PASSWORD, NAME, ORGANIZATION, IMAGE) values ('ruesch@s
 /* ROLES */
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('norbert.lanzanasto@tirol.gv.at', 'ADMIN');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('norbert.lanzanasto@tirol.gv.at', 'TYROL');
-insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('christ.mitterer@tirol.gv.at', 'TYROL');
+insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('chris.mitterer@tirol.gv.at', 'TYROL');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('rudi.mair@tirol.gv.at', 'TYROL');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('patrick.nairz@tirol.gv.at', 'TYROL');
 insert into USER_ROLE (USER_EMAIL, USER_ROLE) values ('lukas.ruetz@tirol.gv.at', 'TYROL');
