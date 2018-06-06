@@ -18,6 +18,7 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.proxy.HibernateProxy;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -494,7 +495,10 @@ public class AvalancheReportController {
 				}
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					if (bulletin.getValidFrom().equals(startDate) || bulletin.getValidUntil().equals(endDate)) {
+					if (bulletin.getValidFrom().toDateTime(DateTimeZone.UTC)
+							.equals(startDate.toDateTime(DateTimeZone.UTC))
+							|| bulletin.getValidUntil().toDateTime(DateTimeZone.UTC)
+									.equals(endDate.toDateTime(DateTimeZone.UTC))) {
 						Set<String> newPublishedRegions = new HashSet<String>();
 
 						// delete all published regions which are foreign
