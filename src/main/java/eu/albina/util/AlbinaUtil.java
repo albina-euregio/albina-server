@@ -1,6 +1,7 @@
 package eu.albina.util;
 
 import java.io.StringWriter;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -324,8 +325,10 @@ public class AlbinaUtil {
 	public static boolean hasBulletinChanged(DateTime startDate, String region) {
 		boolean result = false;
 		try {
-			BulletinStatus status = AvalancheReportController.getInstance().getStatus(startDate, region);
-			if (status != BulletinStatus.published && status != BulletinStatus.republished)
+			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getStatus(startDate,
+					startDate, region);
+			if (status.size() == 1 && status.get(startDate) != BulletinStatus.published
+					&& status.get(startDate) != BulletinStatus.republished)
 				result = true;
 		} catch (AlbinaException e) {
 			logger.error("Change detection of bulletin failed: " + e.getMessage());

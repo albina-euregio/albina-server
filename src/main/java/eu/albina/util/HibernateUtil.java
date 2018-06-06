@@ -15,7 +15,8 @@ public class HibernateUtil {
 	private EntityManagerFactory entityManagerFactory;
 
 	public static String queryGetBulletins = "from AvalancheBulletin as b where :startDate = b.validFrom or :endDate = b.validUntil";
-	public static String queryGetReports = "from AvalancheReport as r where :date = r.date and :region = r.region";
+	public static String queryGetReports = "from AvalancheReport as r where :date = r.date";
+	public static String queryGetReportsForRegion = "from AvalancheReport as r where :date = r.date and :region = r.region";
 	public static String queryGetTopLevelRegions = "from Region as r where r.parentRegion is null";
 	public static String queryGetSubregions = "from Region as r where r.parentRegion.id = :regionId";
 	public static String queryGetNews = "from News as n";
