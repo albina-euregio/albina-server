@@ -228,7 +228,7 @@ public class AvalancheReportController {
 
 			// get revision number
 			AuditReader reader = AuditReaderFactory.get(entityManager);
-			int revision = 0;
+			int revision = 1;
 			AuditQuery revisionsOfEntity = reader.createQuery().forRevisionsOfEntity(AvalancheBulletin.class, false,
 					true);
 			if (revisionsOfEntity != null) {
