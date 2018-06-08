@@ -1168,6 +1168,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		setAvActivityHighlightsTextcat(bulletin.getAvActivityHighlightsTextcat());
 		setAvActivityCommentTextcat(bulletin.getAvActivityCommentTextcat());
+		setSnowpackStructureHighlightsTextcat(bulletin.getSnowpackStructureHighlightsTextcat());
+		setSnowpackStructureCommentTextcat(bulletin.getSnowpackStructureCommentTextcat());
+		setTendencyCommentTextcat(bulletin.getTendencyCommentTextcat());
 	}
 
 	@Override
