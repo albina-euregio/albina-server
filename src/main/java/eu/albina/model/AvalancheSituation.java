@@ -42,8 +42,14 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	@Column(name = "ELEVATION_HIGH")
 	private int elevationHigh;
 
+	@Column(name = "TREELINE_HIGH")
+	private boolean treelineHigh;
+
 	@Column(name = "ELEVATION_LOW")
 	private int elevationLow;
+
+	@Column(name = "TREELINE_LOW")
+	private boolean treelineLow;
 
 	public AvalancheSituation() {
 		this.aspects = new HashSet<Aspect>();
@@ -63,8 +69,12 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		}
 		if (json.has("elevationHigh"))
 			this.elevationHigh = json.getInt("elevationHigh");
+		if (json.has("treelineHigh"))
+			this.treelineHigh = json.getBoolean("treelineHigh");
 		if (json.has("elevationLow"))
 			this.elevationLow = json.getInt("elevationLow");
+		if (json.has("treelineLow"))
+			this.treelineLow = json.getBoolean("treelineLow");
 	}
 
 	public eu.albina.model.enumerations.AvalancheSituation getAvalancheSituation() {
@@ -91,12 +101,28 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		this.elevationHigh = elevationHigh;
 	}
 
+	public boolean getTreelineHigh() {
+		return treelineHigh;
+	}
+
+	public void setTreelineHigh(boolean treelineHigh) {
+		this.treelineHigh = treelineHigh;
+	}
+
 	public int getElevationLow() {
 		return elevationLow;
 	}
 
 	public void setElevationLow(int elevationLow) {
 		this.elevationLow = elevationLow;
+	}
+
+	public boolean getTreelineLow() {
+		return treelineLow;
+	}
+
+	public void setTreelineLow(boolean treelineLow) {
+		this.treelineLow = treelineLow;
 	}
 
 	@Override
@@ -111,9 +137,14 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 			}
 			json.put("aspects", aspects);
 		}
-		if (elevationHigh > 0)
+
+		if (treelineHigh)
+			json.put("treelineHigh", treelineHigh);
+		else if (elevationHigh > 0)
 			json.put("elevationHigh", elevationHigh);
-		if (elevationLow > 0)
+		if (treelineLow)
+			json.put("treelineLow", treelineLow);
+		else if (elevationLow > 0)
 			json.put("elevationLow", elevationLow);
 
 		return json;

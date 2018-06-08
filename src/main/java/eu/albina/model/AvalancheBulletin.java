@@ -936,7 +936,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (dangerPattern1 != null || dangerPattern2 != null) {
 			Element dangerPatterns = doc.createElement("dangerPatterns");
-			// TODO add danger patterns to CAAML
 			if (dangerPattern1 != null) {
 				Element dangerPatternOne = doc.createElement("DangerPattern");
 				Element dangerPatternOneType = doc.createElement("type");
@@ -969,6 +968,60 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					avProblem1.appendChild(validAspect);
 				}
 			}
+
+			// TODO add elevation to CAAML
+			if (bulletin.getAvalancheSituation1().getTreelineHigh()
+					|| bulletin.getAvalancheSituation1().getElevationHigh() > 0) {
+				if (bulletin.getAvalancheSituation1().getTreelineLow()
+						|| bulletin.getAvalancheSituation1().getElevationLow() > 0) {
+					// elevation high and low set
+					Element validElevation = doc.createElement("validElevation");
+					Element elevationRange = doc.createElement("elevationRange");
+					Element beginPosition = doc.createElement("begionPosition");
+					if (bulletin.getAvalancheSituation1().getTreelineLow())
+						// TODO
+						beginPosition.appendChild(doc.createTextNode("Treeline"));
+					else
+						beginPosition.appendChild(doc
+								.createTextNode(String.valueOf(bulletin.getAvalancheSituation1().getElevationLow())));
+					Element endPosition = doc.createElement("endPosition");
+					if (bulletin.getAvalancheSituation1().getTreelineHigh())
+						// TODO Allow treeline in CAAML
+						endPosition.appendChild(doc.createTextNode("Treeline"));
+					else
+						endPosition.appendChild(doc
+								.createTextNode(String.valueOf(bulletin.getAvalancheSituation1().getElevationHigh())));
+					elevationRange.appendChild(beginPosition);
+					elevationRange.appendChild(endPosition);
+					validElevation.appendChild(elevationRange);
+					avProblem1.appendChild(validElevation);
+				} else {
+					// elevation high set
+					Element validElevation = doc.createElement("validElevation");
+					String elevationString;
+					if (bulletin.getAvalancheSituation1().getTreelineHigh())
+						elevationString = AlbinaUtil.createValidElevationAttribute(0, false, true);
+					else
+						elevationString = AlbinaUtil.createValidElevationAttribute(
+								bulletin.getAvalancheSituation1().getElevationHigh(), false, false);
+					validElevation.setAttribute("xlink:href", elevationString);
+					avProblem1.appendChild(validElevation);
+				}
+			} else if (bulletin.getAvalancheSituation1().getTreelineLow()
+					|| bulletin.getAvalancheSituation1().getElevationLow() > 0) {
+				// elevation low set
+				Element validElevation = doc.createElement("validElevation");
+				String elevationString;
+				if (bulletin.getAvalancheSituation1().getTreelineLow())
+					elevationString = AlbinaUtil.createValidElevationAttribute(0, true, true);
+				else
+					elevationString = AlbinaUtil.createValidElevationAttribute(
+							bulletin.getAvalancheSituation1().getElevationLow(), true, false);
+				validElevation.setAttribute("xlink:href", elevationString);
+				avProblem1.appendChild(validElevation);
+			} else {
+				// no elevation set
+			}
 		}
 		avProblems.appendChild(avProblem1);
 		Element avProblem2 = doc.createElement("AvProblem");
@@ -984,6 +1037,59 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
 					avProblem2.appendChild(validAspect);
 				}
+			}
+			// TODO add elevation to CAAML
+			if (bulletin.getAvalancheSituation2().getTreelineHigh()
+					|| bulletin.getAvalancheSituation2().getElevationHigh() > 0) {
+				if (bulletin.getAvalancheSituation2().getTreelineLow()
+						|| bulletin.getAvalancheSituation2().getElevationLow() > 0) {
+					// elevation high and low set
+					Element validElevation = doc.createElement("validElevation");
+					Element elevationRange = doc.createElement("elevationRange");
+					Element beginPosition = doc.createElement("begionPosition");
+					if (bulletin.getAvalancheSituation2().getTreelineLow())
+						// TODO
+						beginPosition.appendChild(doc.createTextNode("Treeline"));
+					else
+						beginPosition.appendChild(doc
+								.createTextNode(String.valueOf(bulletin.getAvalancheSituation2().getElevationLow())));
+					Element endPosition = doc.createElement("endPosition");
+					if (bulletin.getAvalancheSituation2().getTreelineHigh())
+						// TODO Allow treeline in CAAML
+						endPosition.appendChild(doc.createTextNode("Treeline"));
+					else
+						endPosition.appendChild(doc
+								.createTextNode(String.valueOf(bulletin.getAvalancheSituation2().getElevationHigh())));
+					elevationRange.appendChild(beginPosition);
+					elevationRange.appendChild(endPosition);
+					validElevation.appendChild(elevationRange);
+					avProblem2.appendChild(validElevation);
+				} else {
+					// elevation high set
+					Element validElevation = doc.createElement("validElevation");
+					String elevationString;
+					if (bulletin.getAvalancheSituation2().getTreelineHigh())
+						elevationString = AlbinaUtil.createValidElevationAttribute(0, false, true);
+					else
+						elevationString = AlbinaUtil.createValidElevationAttribute(
+								bulletin.getAvalancheSituation2().getElevationHigh(), false, false);
+					validElevation.setAttribute("xlink:href", elevationString);
+					avProblem2.appendChild(validElevation);
+				}
+			} else if (bulletin.getAvalancheSituation2().getTreelineLow()
+					|| bulletin.getAvalancheSituation2().getElevationLow() > 0) {
+				// elevation low set
+				Element validElevation = doc.createElement("validElevation");
+				String elevationString;
+				if (bulletin.getAvalancheSituation2().getTreelineLow())
+					elevationString = AlbinaUtil.createValidElevationAttribute(0, true, true);
+				else
+					elevationString = AlbinaUtil.createValidElevationAttribute(
+							bulletin.getAvalancheSituation2().getElevationLow(), true, false);
+				validElevation.setAttribute("xlink:href", elevationString);
+				avProblem2.appendChild(validElevation);
+			} else {
+				// no elevation set
 			}
 		}
 		avProblems.appendChild(avProblem2);
