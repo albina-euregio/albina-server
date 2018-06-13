@@ -11,11 +11,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.Credentials;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -25,6 +29,11 @@ import io.swagger.annotations.Api;
 @Path("/authentication")
 @Api(value = "/authentication")
 public class AuthenticationService {
+
+	private static Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+
+	@Context
+	UriInfo uri;
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -66,6 +75,62 @@ public class AuthenticationService {
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
+	@Path("/create")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createUser(String userString, @Context SecurityContext securityContext) {
+		logger.debug("POST JSON user");
+		try {
+			JSONObject userJson = new JSONObject(userString);
+			User user = new User(userJson);
+
+			// check if email already exists
+			if (!UserController.getInstance().userExists(user.getEmail())) {
+				UserController.getInstance().createUser(user);
+				JSONObject jsonObject = new JSONObject();
+				// TODO return some meaningful path
+				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
+						.entity(jsonObject.toString()).build();
+			} else {
+				logger.warn("Error creating user - User already exists");
+				JSONObject json = new JSONObject();
+				json.append("message", "Error creating user - User already exists");
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+			}
+		} catch (AlbinaException e) {
+			logger.warn("Error creating user - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
+	@Path("/change")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response changePassword(String data, @Context SecurityContext securityContext) {
+		logger.debug("POST JSON user");
+		try {
+			JSONObject dataJson = new JSONObject(data);
+
+			Principal principal = securityContext.getUserPrincipal();
+			String username = principal.getName();
+
+			UserController.getInstance().changePassword(username, dataJson.get("oldPassword").toString(),
+					dataJson.get("newPassword").toString());
+
+			JSONObject jsonObject = new JSONObject();
+			// TODO return some meaningful path
+			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
+					.entity(jsonObject.toString()).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error changing password - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
 }
