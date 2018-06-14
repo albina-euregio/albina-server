@@ -44,7 +44,6 @@ import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.MapUtil;
 
 /**
  * This class holds all information about one avalanche bulletin.
@@ -805,7 +804,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return json;
 	}
 
-	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, DateTime startDate, int version,
+	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, DateTime startDate,
 			boolean isAfternoon) {
 
 		AvalancheBulletinDaytimeDescription bulletin;
@@ -836,22 +835,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			srcRef.appendChild(user.toCAAML(doc));
 			metaData.appendChild(srcRef);
 		}
-
-		Element resolution300 = doc.createElement("albina:resolution");
-		resolution300.appendChild(doc.createTextNode("300"));
-		Element filetypeJPG = doc.createElement("albina:filetype");
-		filetypeJPG.appendChild(doc.createTextNode(GlobalVariables.fileExtensionJpg));
-
-		Element customData = doc.createElement("customData");
-		Element dangerRatingMap = doc.createElement("albina:DangerRatingMap");
-		dangerRatingMap.appendChild(resolution300);
-		dangerRatingMap.appendChild(filetypeJPG);
-		Element url = doc.createElement("albina:url");
-		url.appendChild(doc.createTextNode(
-				MapUtil.createMapUrlAggregatedRegion(startDate, version, getId(), GlobalVariables.fileExtensionJpg)));
-		dangerRatingMap.appendChild(url);
-		customData.appendChild(dangerRatingMap);
-		metaData.appendChild(customData);
 
 		metaDataProperty.appendChild(metaData);
 		rootElement.appendChild(metaDataProperty);
@@ -1111,13 +1094,13 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return rootElement;
 	}
 
-	public List<Element> toCAAML(Document doc, LanguageCode languageCode, DateTime startDate, int version) {
+	public List<Element> toCAAML(Document doc, LanguageCode languageCode, DateTime startDate) {
 		if (!publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLBulletin(doc, languageCode, startDate, version, false));
+			result.add(createCAAMLBulletin(doc, languageCode, startDate, false));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLBulletin(doc, languageCode, startDate, version, true));
+				result.add(createCAAMLBulletin(doc, languageCode, startDate, true));
 
 			return result;
 		} else
