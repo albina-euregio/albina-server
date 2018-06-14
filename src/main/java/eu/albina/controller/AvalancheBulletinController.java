@@ -482,9 +482,12 @@ public class AvalancheBulletinController {
 				if (missingAvActivityComment || bulletin.getAvActivityCommentTextcat() == null
 						|| bulletin.getAvActivityCommentTextcat().isEmpty())
 					missingAvActivityComment = true;
-				if (missingSnowpackStructureHighlights || bulletin.getSnowpackStructureHighlightsTextcat() == null
-						|| bulletin.getSnowpackStructureHighlightsTextcat().isEmpty())
-					missingSnowpackStructureHighlights = true;
+				/*
+				 * if (missingSnowpackStructureHighlights ||
+				 * bulletin.getSnowpackStructureHighlightsTextcat() == null ||
+				 * bulletin.getSnowpackStructureHighlightsTextcat().isEmpty())
+				 * missingSnowpackStructureHighlights = true;
+				 */
 				if (missingSnowpackStructureComment || bulletin.getSnowpackStructureCommentTextcat() == null
 						|| bulletin.getSnowpackStructureCommentTextcat().isEmpty())
 					missingSnowpackStructureComment = true;
