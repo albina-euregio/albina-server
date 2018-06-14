@@ -27,6 +27,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.Texts;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.EventName;
@@ -564,8 +565,11 @@ public class AvalancheReportController {
 			bulletin.getSuggestedRegions().size();
 		if (bulletin.getSavedRegions() != null)
 			bulletin.getSavedRegions().size();
-		if (bulletin.getTextPartsMap() != null)
+		if (bulletin.getTextPartsMap() != null) {
 			bulletin.getTextPartsMap().size();
+			for (Texts element : bulletin.getTextPartsMap().values())
+				element.getTexts().size();
+		}
 	}
 
 	@SuppressWarnings("unchecked")

@@ -31,6 +31,8 @@ public enum TextPart {
 			return "travelAdvisoryHighlights";
 		case travelAdvisoryComment:
 			return "travelAdvisoryComment";
+		case tendencyComment:
+			return "tendencyComment";
 
 		default:
 			return null;
