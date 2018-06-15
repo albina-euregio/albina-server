@@ -102,12 +102,39 @@ public class UserController {
 				transaction.rollback();
 				throw new AlbinaException("No user with username: " + username);
 			}
-			String encryptedOldPassword = BCrypt.hashpw(oldPassword, BCrypt.gensalt());
-			if (user.getPassword().equals(encryptedOldPassword))
+			if (BCrypt.checkpw(oldPassword, user.getPassword())) {
 				user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+				transaction.commit();
+			} else {
+				transaction.rollback();
+				throw new AlbinaException("Password incorrect");
+			}
+			return user.getEmail();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	public boolean checkPassword(String username, String password) throws AlbinaException {
+		boolean result = false;
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			User user = entityManager.find(User.class, username);
+			if (user == null) {
+				transaction.rollback();
+				throw new AlbinaException("No user with username: " + username);
+			}
+			if (BCrypt.checkpw(password, user.getPassword()))
+				result = true;
 			transaction.commit();
 
-			return user.getEmail();
+			return result;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();

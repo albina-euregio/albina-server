@@ -5,6 +5,7 @@ import java.security.Principal;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -108,7 +109,7 @@ public class AuthenticationService {
 		}
 	}
 
-	@POST
+	@PUT
 	@Secured({ Role.ADMIN })
 	@Path("/change")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -130,6 +131,30 @@ public class AuthenticationService {
 					.entity(jsonObject.toString()).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error changing password - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
+
+	@PUT
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Path("/check")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response checkPassword(String data, @Context SecurityContext securityContext) {
+		logger.debug("GET JSON check password");
+		try {
+			JSONObject dataJson = new JSONObject(data);
+
+			Principal principal = securityContext.getUserPrincipal();
+			String username = principal.getName();
+
+			if (UserController.getInstance().checkPassword(username, dataJson.getString("password")))
+				return Response.ok(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
+						.build();
+			else
+				return Response.status(400).type(MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error checking password - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
