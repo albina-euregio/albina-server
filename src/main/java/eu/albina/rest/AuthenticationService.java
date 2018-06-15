@@ -148,7 +148,8 @@ public class AuthenticationService {
 			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
-			if (UserController.getInstance().checkPassword(username, dataJson.getString("password")))
+			if (dataJson.has("password")
+					&& UserController.getInstance().checkPassword(username, dataJson.getString("password")))
 				return Response.ok(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 						.build();
 			else
