@@ -105,7 +105,7 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		this.email = password;
+		this.password = password;
 	}
 
 	public String getName() {
