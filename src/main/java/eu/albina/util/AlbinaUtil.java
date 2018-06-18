@@ -68,16 +68,16 @@ public class AlbinaUtil {
 	public static final String dp9De = "Eingeschneiter Graupel";
 	public static final String dp10De = "Frühjahrssituation";
 
-	public static final String dp1It = "TODO";
-	public static final String dp2It = "TODO";
-	public static final String dp3It = "TODO";
-	public static final String dp4It = "TODO";
-	public static final String dp5It = "TODO";
-	public static final String dp6It = "TODO";
-	public static final String dp7It = "TODO";
-	public static final String dp8It = "TODO";
-	public static final String dp9It = "TODO";
-	public static final String dp10It = "TODO";
+	public static final String dp1It = "La seconda nevicata";
+	public static final String dp2It = "Valanga per scivolamento di neve";
+	public static final String dp3It = "Pioggia";
+	public static final String dp4It = "Freddo su caldo / caldo su freddo";
+	public static final String dp5It = "Neve dopo un lungo periodo di freddo";
+	public static final String dp6It = "Neve fresca fredda a debole coesione e vento";
+	public static final String dp7It = "Zone con poca neve durante inverni ricchi di neve";
+	public static final String dp8It = "Brina di superficie sepolta";
+	public static final String dp9It = "Neve pallottolare coperta da neve fresca";
+	public static final String dp10It = "Situazione primaverile";
 
 	public static final String dp1En = "Deep persistent weak layer";
 	public static final String dp2En = "Gliding avalanche";
