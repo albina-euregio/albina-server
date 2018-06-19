@@ -87,10 +87,24 @@ public class ChatController {
 	}
 
 	public void addActiveUser(User user) throws AlbinaException {
-		activeUsers.add(user);
+		boolean found = false;
+		for (User u : activeUsers) {
+			if (u.getEmail().equals(user.getEmail())) {
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+			activeUsers.add(user);
 	}
 
 	public void deleteActiveUser(User user) throws AlbinaException {
-		activeUsers.remove(user);
+		List<User> remove = new ArrayList<User>();
+		for (User u : activeUsers) {
+			if (u.getEmail().equals(user.getEmail()))
+				remove.add(u);
+		}
+		for (User u2 : remove)
+			activeUsers.remove(u2);
 	}
 }
