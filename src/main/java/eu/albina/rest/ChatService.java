@@ -60,4 +60,20 @@ public class ChatService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Path("/users")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getActiveUsers() {
+		logger.debug("GET JSON active users");
+
+		List<String> activeUsers = ChatController.getInstance().getActiveUsers();
+		JSONArray json = new JSONArray();
+		for (String entry : activeUsers)
+			json.put(entry);
+
+		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+	}
 }

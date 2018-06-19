@@ -1,6 +1,7 @@
 package eu.albina.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -25,8 +26,10 @@ public class ChatController {
 	// LoggerFactory.getLogger(ChatController.class);
 
 	private static ChatController instance = null;
+	private List<String> activeUsers;
 
 	private ChatController() {
+		activeUsers = new ArrayList<String>();
 	}
 
 	public static ChatController getInstance() {
@@ -34,6 +37,10 @@ public class ChatController {
 			instance = new ChatController();
 		}
 		return instance;
+	}
+
+	public List<String> getActiveUsers() {
+		return activeUsers;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -76,5 +83,13 @@ public class ChatController {
 		} finally {
 			entityManager.close();
 		}
+	}
+
+	public void addActiveUser(String username) {
+		activeUsers.add(username);
+	}
+
+	public void deleteActiveUser(String username) {
+		activeUsers.remove(username);
 	}
 }

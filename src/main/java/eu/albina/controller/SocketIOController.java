@@ -56,7 +56,12 @@ public class SocketIOController {
 			socketIOServer.addConnectListener(new ConnectListener() {
 				@Override
 				public void onConnect(SocketIOClient client) {
-					logger.debug("Client connected: " + client.getSessionId());
+					String username = client.getHandshakeData().getSingleUrlParam("username");
+					if (username != null && !username.isEmpty()) {
+						sendEvent(EventName.login.toString(), username);
+						ChatController.getInstance().addActiveUser(username);
+					}
+					logger.debug("Client connected: " + username + " [" + client.getSessionId() + "]");
 				}
 			});
 
@@ -66,7 +71,12 @@ public class SocketIOController {
 					UUID sessionId = client.getSessionId();
 					RegionController.getInstance().unlockRegions(sessionId);
 					AvalancheBulletinController.getInstance().unlockBulletins(sessionId);
-					logger.debug("Client disconnected: " + sessionId.toString());
+					String username = client.getHandshakeData().getSingleUrlParam("username");
+					if (username != null && !username.isEmpty()) {
+						sendEvent(EventName.logout.toString(), username);
+						ChatController.getInstance().deleteActiveUser(username);
+					}
+					logger.debug("Client disconnected: " + username + " [" + sessionId.toString() + "]");
 				}
 			});
 
