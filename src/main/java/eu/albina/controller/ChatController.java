@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.ChatMessage;
+import eu.albina.model.User;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -26,10 +27,10 @@ public class ChatController {
 	// LoggerFactory.getLogger(ChatController.class);
 
 	private static ChatController instance = null;
-	private List<String> activeUsers;
+	private List<User> activeUsers;
 
 	private ChatController() {
-		activeUsers = new ArrayList<String>();
+		activeUsers = new ArrayList<User>();
 	}
 
 	public static ChatController getInstance() {
@@ -39,7 +40,7 @@ public class ChatController {
 		return instance;
 	}
 
-	public List<String> getActiveUsers() {
+	public List<User> getActiveUsers() {
 		return activeUsers;
 	}
 
@@ -85,11 +86,11 @@ public class ChatController {
 		}
 	}
 
-	public void addActiveUser(String username) {
-		activeUsers.add(username);
+	public void addActiveUser(User user) throws AlbinaException {
+		activeUsers.add(user);
 	}
 
-	public void deleteActiveUser(String username) {
-		activeUsers.remove(username);
+	public void deleteActiveUser(User user) throws AlbinaException {
+		activeUsers.remove(user);
 	}
 }

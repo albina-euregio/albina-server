@@ -19,6 +19,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.ChatMessage;
 import eu.albina.model.RegionLock;
+import eu.albina.model.User;
 import eu.albina.model.enumerations.EventName;
 import eu.albina.util.GlobalVariables;
 
@@ -58,8 +59,13 @@ public class SocketIOController {
 				public void onConnect(SocketIOClient client) {
 					String username = client.getHandshakeData().getSingleUrlParam("username");
 					if (username != null && !username.isEmpty()) {
-						sendEvent(EventName.login.toString(), username);
-						ChatController.getInstance().addActiveUser(username);
+						try {
+							User user = UserController.getInstance().getUser(username);
+							ChatController.getInstance().addActiveUser(user);
+							sendEvent(EventName.login.toString(), user.toJSON().toString());
+						} catch (AlbinaException e) {
+							logger.warn("Active user could not be added: " + e.getMessage());
+						}
 					}
 					logger.debug("Client connected: " + username + " [" + client.getSessionId() + "]");
 				}
@@ -73,8 +79,13 @@ public class SocketIOController {
 					AvalancheBulletinController.getInstance().unlockBulletins(sessionId);
 					String username = client.getHandshakeData().getSingleUrlParam("username");
 					if (username != null && !username.isEmpty()) {
-						sendEvent(EventName.logout.toString(), username);
-						ChatController.getInstance().deleteActiveUser(username);
+						try {
+							User user = UserController.getInstance().getUser(username);
+							ChatController.getInstance().deleteActiveUser(user);
+							sendEvent(EventName.logout.toString(), user.toJSON().toString());
+						} catch (AlbinaException e) {
+							logger.warn("Active user could not be deleted: " + e.getMessage());
+						}
 					}
 					logger.debug("Client disconnected: " + username + " [" + sessionId.toString() + "]");
 				}
