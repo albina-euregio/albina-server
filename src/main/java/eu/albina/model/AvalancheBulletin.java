@@ -647,13 +647,17 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	public DangerRating getHighestDangerRating() {
 		DangerRating result = DangerRating.missing;
-		if (forenoon != null && result.compareTo(forenoon.getDangerRatingAbove()) < 0)
+		if (forenoon != null && forenoon.getDangerRatingAbove() != null
+				&& result.compareTo(forenoon.getDangerRatingAbove()) < 0)
 			result = forenoon.getDangerRatingAbove();
-		if (forenoon != null && result.compareTo(forenoon.getDangerRatingBelow()) < 0)
+		if (forenoon != null && forenoon.getDangerRatingBelow() != null
+				&& result.compareTo(forenoon.getDangerRatingBelow()) < 0)
 			result = forenoon.getDangerRatingBelow();
-		if (afternoon != null && result.compareTo(afternoon.getDangerRatingAbove()) < 0)
+		if (afternoon != null && afternoon.getDangerRatingAbove() != null
+				&& result.compareTo(afternoon.getDangerRatingAbove()) < 0)
 			result = afternoon.getDangerRatingAbove();
-		if (afternoon != null && result.compareTo(afternoon.getDangerRatingBelow()) < 0)
+		if (afternoon != null && afternoon.getDangerRatingBelow() != null
+				&& result.compareTo(afternoon.getDangerRatingBelow()) < 0)
 			result = afternoon.getDangerRatingBelow();
 		return result;
 	}
