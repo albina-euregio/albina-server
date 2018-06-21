@@ -8,45 +8,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import org.joda.time.DateTime;
-
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 
 public class MapUtil {
 
 	// private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
-
-	public static String createMapUrlOverview(DateTime date, int version, String daytime, int resolution,
-			String fileExtension) {
-		StringBuilder result = new StringBuilder();
-		result.append(GlobalVariables.univieBaseUrl);
-		result.append(date.toString(GlobalVariables.formatterDate));
-		result.append(GlobalVariables.urlSeperator);
-		result.append(version);
-		result.append(GlobalVariables.urlSeperator);
-		result.append(daytime);
-		result.append(GlobalVariables.urlSeperator);
-		result.append(resolution);
-		result.append(".");
-		result.append(fileExtension);
-
-		return result.toString();
-	}
-
-	public static String createMapUrlAggregatedRegion(DateTime date, int version, String id, String fileExtension) {
-		StringBuilder result = new StringBuilder();
-		result.append(GlobalVariables.univieBaseUrl);
-		result.append(date.toString(GlobalVariables.formatterDate));
-		result.append(GlobalVariables.urlSeperator);
-		result.append(version);
-		result.append(GlobalVariables.urlSeperator);
-		result.append(id);
-		result.append(".");
-		result.append(fileExtension);
-
-		return result.toString();
-	}
 
 	/**
 	 * Create images of each map needed for the different products of
