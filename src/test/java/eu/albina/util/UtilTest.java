@@ -117,8 +117,51 @@ public class UtilTest {
 		String validBulletinStringFromResource = bulletinStringBuilder.toString();
 		AvalancheBulletin bulletin = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin);
+
+		is = classloader.getResourceAsStream("validBulletin2.json");
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		validBulletinStringFromResource = bulletinStringBuilder.toString();
 		AvalancheBulletin bulletin2 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin2);
+
+		is = classloader.getResourceAsStream("validBulletin3.json");
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		validBulletinStringFromResource = bulletinStringBuilder.toString();
+		AvalancheBulletin bulletin3 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+		bulletins.add(bulletin3);
+
+		is = classloader.getResourceAsStream("validBulletin4.json");
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		validBulletinStringFromResource = bulletinStringBuilder.toString();
+		AvalancheBulletin bulletin4 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+		bulletins.add(bulletin4);
 	}
 
 	@Ignore
