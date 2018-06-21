@@ -35,7 +35,7 @@ body {
 	height: 100%;
 }
 
-@media screen and (min-width: 600px)  {
+@media screen and (min-width: 700px)  {
 	.width-fix {
 		width:100%!important;
 		min-width:100%;
@@ -147,7 +147,7 @@ table.footer-wrap {
 ------------------------------------- */
 h1,h2,h3,h4,h5,h6 {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-	line-height: 1.1;
+	line-height: 1;
 	margin-bottom: 15px;
 	color: #565f61;
 }
@@ -265,8 +265,6 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 -------------------------------------------- */
 @media only screen and (max-width: 800px) {
 	
-	a[class="btn"] { display:block!important; margin-bottom:10px!important; background-image:none!important; margin-right:0!important;}
-
 	div[class="column"] { width: auto!important; float:none!important;}
 	
 	table.social div[class="column"] {
@@ -274,17 +272,18 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	}
 }
 
-@media screen and (min-width: 600px)  {
-  .pictograms-1 { 
-        width: 50%!important;
-        min-width: 50%;
+@media screen and (min-width: 700px)  {
+	.pictograms-1 {
+		width: 49%!important;
+		min-width: 49%;
 		float: left;
-    }
-  .pictograms-2 { 
-        width: 50%!important;
-        min-width: 50%;
+		border-right: 1px solid #e6eef2;
+	}
+	.pictograms-2 {
+		width: 49%!important;
+		min-width: 49%;
 		float: right;
-    }
+	}
 }
 
 .snowpack {
@@ -297,17 +296,10 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	margin-bottom: 40px;
 }
 
-.symbols {
-	border-right: 1px solid #e6eef2;
-	padding-left: 15px;
-	padding-right: 15px;
-	vertical-align: top;
-}
-
 .tendency {
 	padding-left: 15px;
 	padding-right: 15px;
-	vertical-align: top;
+	vertical-align: middle;
 	text-align: center;
 }
 
@@ -321,10 +313,11 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
     border-radius: 15px;
 	padding-left: 10px;
 	padding-right: 10px;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	margin-right: 5px;
 	display: inline-block;
+	background-color: #FFFFFF;
 }
 
 .detail-map {
@@ -333,6 +326,19 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 
 .mountain-icon {
 	max-width: 110px;
+}
+
+.danger-rating-elevation-text {
+	 font-size: 12px;
+	 position: absolute;
+	 bottom: 0px;
+	 right: 10px;
+}
+
+.tendency-symbol {
+	display: inline-block;
+	max-width: 40px;
+	margin-left: 5px;
 }
 
 .avalanche-situation {
@@ -345,9 +351,24 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	margin: 5px;
 }
 
+.avalanche-situation-limit-above {
+	font-size: 12px;
+	position: absolute;
+	right: 22px;
+	bottom: -3px;
+}
+
+.avalanche-situation-limit-below {
+	font-size: 12px;
+	position: absolute;
+	right: 22px;
+	bottom: 8px;
+}
+
 .mountain {
 	border-right: 1px solid #e6eef2;
 }
+
 		</style>
 	</head>
 	 
@@ -356,8 +377,8 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 		<!-- HEADER -->
 		<table class="head-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; border-bottom: 1px solid #99daff;" width="100%">
 			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-				<img height="4px" src="${image.ci}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
 				<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+					<img height="4px" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%; width: 100%;" src="${image.ci}">
 				</td>
 			</tr>
 			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
@@ -366,12 +387,14 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 						<table bgcolor="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
 							<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 								<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-									<a class="btn" href="${link.website}" style="margin: 0; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; text-decoration: none; color: #565f61; padding: 0px 10px; font-weight: bold; margin-right: 10px; text-align: center; cursor: pointer; display: inline-block;">
-										<img src="${image.logo}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
-								</a>
+									<p class="lead" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; line-height: 1.6; font-size: 24px; margin-bottom: 0px;">${text.headline}</p>
+									<h2 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1; color: #1aabff; font-weight: bold; font-size: 24px; margin-bottom: 5px;">${text.date}</h2>
+									<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; line-height: 1.6; margin-bottom: 0px; font-size: 12px;">${text.publishedAt}<b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">${text.publicationDate}</b></p>
 								</td>
 								<td align="right" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-									<a class="btn" href="${link.website}" style="margin: 0; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; text-decoration: none; color: #565f61; padding: 0px 10px; font-weight: bold; margin-right: 10px; text-align: center; cursor: pointer; display: inline-block;">${text.website} &raquo;</a>
+									<a class="btn" href="${link.website}" style="margin: 0; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; text-decoration: none; color: #565f61; padding: 0px 10px; font-weight: bold; margin-right: 10px; text-align: center; cursor: pointer; display: inline-block;">
+										<img style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%; height: 80px;" src="${image.logo}" height="80">
+									</a>
 								</td>
 							</tr>
 						</table>
@@ -391,8 +414,6 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 						<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px;" width="100%">
 							<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 								<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-									<p class="lead" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; line-height: 1.6; font-size: 24px; margin-bottom: 0px;">${text.headline}</p>
-									<h2 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #1aabff; font-weight: bold; font-size: 24px;">${text.date}</h2>
 									<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; font-size: 14px; line-height: 1.6; margin-bottom: 0px;">
 										<a href="${link.website}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #2BA6CB;">
 											<img src="${image.map.overview}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
@@ -416,55 +437,90 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 										<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
 											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-													<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; font-weight: normal; font-size: 14px; line-height: 1.6; margin-bottom: 0px;">${text.warningLevelFor}<b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">${text.date}</b></p>
 													<h2 ${bulletin.headlinestyle}>${bulletin.warningLevelText}</h2>
 												</td>
 											</tr>
 										</table>
 
 
-										<table class="pictograms-1" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px;" width="100%">
+										<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px;" width="100%">
 											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 													<img class="detail-map" src="${bulletin.map}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 150px;">
 												</td>
-												<td class="mountain" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2;">
-													<img class="mountain-icon" src="${bulletin.mountain}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 110px;">
-												</td>
-											</tr>
-										</table>
-										<table class="pictograms-2" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px;" width="100%">
-											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-												<td class="symbols" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2; padding-left: 15px; padding-right: 15px; vertical-align: top;" valign="top">
-													<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+													<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; border-bottom: 1px solid #e6eef2; padding-bottom: 5px;" width="100%">
 														<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-																<img class="avalanche-situation" src="${bulletin.avalancheSituation1}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 50px; margin: 5px;">
-															</td>
-															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-																<img class="avalanche-situation-aspects" src="${bulletin.aspects1}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
-															</td>
-														</tr>
-														<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-																<img class="avalanche-situation" src="${bulletin.avalancheSituation2}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 50px; margin: 5px;">
-															</td>
-															<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-																<img class="avalanche-situation-aspects" src="${bulletin.aspects2}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+																<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 0;">
+																	<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																		<td class="mountain" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-right: 1px solid #e6eef2;">
+																			<div style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; position: relative; width: 115px;">
+																				<img class="mountain-icon" src="${bulletin.dangerRating.symbol}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 110px;">
+																				<p class="danger-rating-elevation-text" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; position: absolute; bottom: 0px; right: 10px;"><b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">${bulletin.dangerRating.elevation}</b></p>
+																			</div>
+																		</td>
+																		<td class="tendency" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding-left: 15px; padding-right: 15px; vertical-align: middle; text-align: center;" valign="middle" align="center">
+																			<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
+																				<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																					<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																						<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1; color: #565f61; font-weight: 900; font-size: 14px; text-align: left; margin-bottom: 10px;">${text.tendency}: ${bulletin.tendencyText}</h5>
+																						<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1; margin-bottom: 15px; color: #565f61; font-size: 14px; text-align: left; font-weight: 100;">${text.tendencyDate}</h5>
+																					</td>
+																					<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+																						<img class="tendency-symbol" src="${bulletin.tendency}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; display: inline-block; max-width: 40px; margin-left: 5px;">
+																					</td>
+																				</tr>
+																			</table>
+																		</td>
+																	</tr>
+																</table>
 															</td>
 														</tr>
 													</table>
-												</td>
-												<td class="tendency" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; padding-left: 15px; padding-right: 15px; vertical-align: top; text-align: center;" valign="top" align="center">
-													<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">${text.tendency}</h5>
-													<img src="${bulletin.tendency}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+													<table class="pictograms-1" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin: 5px 5px 0 0; width: 0;">
+														<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+															<td style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin: 0 5px;">
+																<img class="avalanche-situation" src="${bulletin.avalancheSituation1.symbol}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 50px; margin: 5px;">
+																<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px;">${bulletin.avalancheSituation1.text}</p>
+															</td>
+															<td style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin: 0 5px;">
+																<img class="avalanche-situation-aspects" src="${bulletin.avalancheSituation1.aspects}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+															<td style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin: 0 5px; width: 100px;" width="100">
+																<div style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; position: relative; width: 115px;">
+																	<img class="avalanche-situation-aspects" src="${bulletin.avalancheSituation1.elevation.symbol}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+																	<p class="avalanche-situation-limit-above" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; position: absolute; right: 22px; bottom: -3px;"><b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">${bulletin.avalancheSituation1.elevation.limitAbove}</b></p>
+																	<p class="avalanche-situation-limit-below" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; position: absolute; right: 22px; bottom: 8px;"><b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">${bulletin.avalancheSituation1.elevation.limitBelow}</b></p>
+																</div>
+															</td>
+														</tr>
+													</table>
+													<table class="pictograms-2" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-top: 5px; width: 0;">
+														<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
+															<td style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin: 0 5px;">
+																<img class="avalanche-situation" src="${bulletin.avalancheSituation2.symbol}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 50px; margin: 5px;">
+																<p style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px;">${bulletin.avalancheSituation2.text}</p>
+															</td>
+															<td style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin: 0 5px;">
+																<img class="avalanche-situation-aspects" src="${bulletin.avalancheSituation2.aspects}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+															</td>
+															<td style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100px; margin: 0 5px;" width="100">
+																<div style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; position: relative; width: 115px;">
+																	<img class="avalanche-situation-aspects" src="${bulletin.avalancheSituation2.elevation.symbol}" style="padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 60px; margin: 5px;">
+																	<p class="avalanche-situation-limit-above" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; position: absolute; right: 22px; bottom: -3px;"><b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">${bulletin.avalancheSituation2.elevation.limitAbove}</b></p>
+																	<p class="avalanche-situation-limit-below" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; position: absolute; right: 22px; bottom: 8px;"><b style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">${bulletin.avalancheSituation2.elevation.limitBelow}</b></p>
+																</div>
+															</td>
+														</tr>
+													</table>
 												</td>
 											</tr>
 										</table>
 										<table style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%;" width="100%">
 											<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 												<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; vertical-align: top;" valign="top">
-													<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px;">${bulletin.avAvalancheHighlights}</h4>
+													<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px;">${bulletin.avAvalancheHighlights}</h4>
 													<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">${bulletin.avAvalancheComment}</p>
 												</td>
 											</tr>
@@ -475,12 +531,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 							<table style="margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 5px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px;" class="snowpack" bgcolor="#f6fafc" width="100%">
 								<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 									<td style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; vertical-align: top;" valign="top">
-										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 5px;">${text.snowpack}</h4>
-										<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">${text.dangerPatterns}</h5>
-										<p class="danger-pattern" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; margin-right: 5px; display: inline-block;">${bulletin.dangerPattern1}</p>
-										<p class="danger-pattern" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; margin-right: 5px; display: inline-block;">${bulletin.dangerPattern2}</p>
+										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 5px;">${text.snowpack}</h4>
+										<h5 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px; margin-right: 5px; display: inline-block;">${text.dangerPatterns}</h5>
+										<p class="danger-pattern" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; margin-right: 5px; display: inline-block; background-color: #FFFFFF;">${bulletin.dangerPattern1}</p>
+										<p class="danger-pattern" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; margin-right: 5px; display: inline-block; background-color: #FFFFFF;">${bulletin.dangerPattern2}</p>
 										<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">${bulletin.snowpackStructureComment}</p>
-										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 15px;">${text.tendency}</h4>
+										<h4 style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1; margin-bottom: 15px; color: #565f61; font-weight: 500; font-size: 23px; padding-top: 15px;">${text.tendency}</h4>
 										<p class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;">${bulletin.tendencyComment}</p>
 									</td>
 								</tr>
@@ -495,7 +551,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 		<table class="footer-wrap" bgcolor="#FFFFFF" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; border-top: 1px solid #99daff; padding-top: 15px; clear: both;" width="100%">
 			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
 				<td align="center" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
-					<h5 class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">${text.follow}</h5>
+					<h5 class="" style="margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1; margin-bottom: 15px; color: #565f61; font-weight: 900; font-size: 14px;">${text.follow}</h5>
 				</td>
 			</tr>
 			<tr style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61;">
@@ -535,6 +591,6 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 			</tr>
 		</table>
 
-		<img height="4px" src="${image.ci}" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%;">
+		<img height="4px" style="margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; max-width: 100%; width: 100%;" src="${image.ci}">
 	</body>
 </html>

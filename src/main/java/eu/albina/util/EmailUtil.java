@@ -93,8 +93,8 @@ public class EmailUtil {
 			Map<String, Object> root = new HashMap<>();
 
 			Map<String, Object> image = new HashMap<>();
-			image.put("ci", "http://212.47.231.185:8080/images/ci.png");
-			image.put("logo", "http://212.47.231.185:8080/images/Avalanche.png");
+			image.put("ci", "http://212.47.231.185:8080/images/Colorbar/Colorbar.svg");
+			image.put("logo", "http://212.47.231.185:8080/images/Logos/Logo Avalanche.report.png");
 			// image.put("ci", "cid:ci);
 			// image.put("logo", "cid:logo);
 			Map<String, Object> socialMediaImages = new HashMap<>();
@@ -117,14 +117,17 @@ public class EmailUtil {
 
 			Map<String, Object> text = new HashMap<>();
 			text.put("title", "Avalanche.report");
+			text.put("publicationDate", "03.01.2018, 05:20 PM");
+
 			switch (lang) {
 			case en:
-				text.put("headline", "Avalanche Report");
-				text.put("website", "Website");
+				text.put("headline", "Avalanche Forecast");
+				// TODO
 				text.put("follow", "Follow us");
 				text.put("unsubscribe", "Unsubscribe");
-				// TODO
-				text.put("date", "Friday, 02/16/2018");
+				text.put("date", "Thursday 04.01.2018");
+				text.put("tendencyDate", "on Friday 05.01.2018");
+				text.put("publishedAt", "Published ");
 				text.put("tendency", "Tendency");
 				text.put("snowpack", "Snowpack");
 				text.put("dangerPatterns", "Danger patterns");
@@ -132,11 +135,13 @@ public class EmailUtil {
 				break;
 			case de:
 				text.put("headline", "Lawinen Report");
-				text.put("website", "Webseite");
+				// TODO
 				text.put("follow", "Folge uns");
 				text.put("unsubscribe", "Abmelden");
-				// TODO
-				text.put("date", "Freitag, 16.02.2018");
+				text.put("date", "Freitag 04.01.2018");
+				text.put("tendencyDate", "am Freitag 05.01.2018");
+				text.put("publishedAt", "Publiziert ");
+				text.put("publicationDate", "03.01.2018, 05:20 PM");
 				text.put("tendency", "Tendenz");
 				text.put("snowpack", "Schneedecke");
 				text.put("dangerPatterns", "Gefahrenmuster");
@@ -144,14 +149,16 @@ public class EmailUtil {
 				break;
 			case it:
 				text.put("headline", "Valanghe Report");
-				text.put("website", "Website");
+				// TODO
 				text.put("follow", "TODO");
 				text.put("unsubscribe", "TODO");
-				// TODO
-				text.put("date", "Venerdi, 16.02.2018");
-				text.put("tendency", "TODO");
-				text.put("snowpack", "TODO");
-				text.put("dangerPatterns", "TODO");
+				text.put("date", "Giovedì 04.01.2018");
+				text.put("tendencyDate", "su venerdì 05.01.2018");
+				text.put("publishedAt", "TODO ");
+				text.put("publicationDate", "03.01.2018, 05:20 PM");
+				text.put("tendency", "Tendenza");
+				text.put("snowpack", "Descrizione struttura manto nevoso");
+				text.put("dangerPatterns", "Situazioni tipo");
 				text.put("warningLevelFor", "TODO");
 				break;
 
@@ -204,17 +211,57 @@ public class EmailUtil {
 				else
 					bulletin.put("tendencyComment", "");
 
-				if (avalancheBulletin.getTendency() == Tendency.decreasing)
+				if (avalancheBulletin.getTendency() == Tendency.decreasing) {
 					// bulletin.put("tendency", "cid:decreasing");
-					bulletin.put("tendency", "http://212.47.231.185:8080/images/tendency_decreasing_black.png");
-				else if (avalancheBulletin.getTendency() == Tendency.steady)
+					bulletin.put("tendencySymbol", "http://212.47.231.185:8080/images/tendency_decreasing_black.png");
+					switch (lang) {
+					case de:
+						bulletin.put("tendencyText", "Lawinengefahr sinkt");
+						break;
+					case en:
+						bulletin.put("tendencyText", "Avalanche danger decreasing");
+						break;
+					case it:
+						bulletin.put("tendencyText", "Pericolo valanghe in diminuazione");
+						break;
+					default:
+						break;
+					}
+				} else if (avalancheBulletin.getTendency() == Tendency.steady) {
 					// bulletin.put("tendency", "cid:steady");
 					bulletin.put("tendency", "http://212.47.231.185:8080/images/tendency_steady_black.png");
-				else if (avalancheBulletin.getTendency() == Tendency.increasing)
+					switch (lang) {
+					case de:
+						bulletin.put("tendencyText", "Lawinengefahr bleibt gleich");
+						break;
+					case en:
+						bulletin.put("tendencyText", "Avalanche danger stays the same");
+						break;
+					case it:
+						bulletin.put("tendencyText", "Pericolo valanghe stabile");
+						break;
+					default:
+						break;
+					}
+				} else if (avalancheBulletin.getTendency() == Tendency.increasing) {
 					// bulletin.put("tendency", "cid:increasing");
 					bulletin.put("tendency", "http://212.47.231.185:8080/images/tendency_increasing_black.png");
-				else
+					switch (lang) {
+					case de:
+						bulletin.put("tendencyText", "Lawinengefahr steigt");
+						break;
+					case en:
+						bulletin.put("tendencyText", "Avalanche danger increasing");
+						break;
+					case it:
+						bulletin.put("tendencyText", "Pericolo valanghe in aumento");
+						break;
+					default:
+						break;
+					}
+				} else {
 					bulletin.put("tendency", "");
+				}
 
 				bulletin.put("dangerratingcolorstyle", EmailUtil.getInstance().getDangerRatingColorStyle(
 						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
@@ -222,12 +269,31 @@ public class EmailUtil {
 						.getHeadlineStyle(AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
 
 				// TODO use correct map and symbols
+				Map<String, Object> dangerRating = new HashMap<>();
+				dangerRating.put("symbol", "http://212.47.231.185:8080/images/Warning Pictos/level_3_2.svg");
+				dangerRating.put("elevation", "1900m");
+				bulletin.put("dangerRating", dangerRating);
 				bulletin.put("map", "http://212.47.231.185:8080/images/map_detail_3.png");
-				bulletin.put("avalancheSituation1", "http://212.47.231.185:8080/images/Drifting_snow_c.png");
-				bulletin.put("avalancheSituation2", "http://212.47.231.185:8080/images/Old_snow_c.png");
-				bulletin.put("aspects1", "http://212.47.231.185:8080/images/aspects1.png");
-				bulletin.put("aspects2", "http://212.47.231.185:8080/images/aspects2.png");
-				bulletin.put("mountain", "http://212.47.231.185:8080/images/mountain.png");
+				Map<String, Object> avalancheSituation1 = new HashMap<>();
+				avalancheSituation1.put("symbol", "http://212.47.231.185:8080/images/Drifting_snow_c.png");
+				avalancheSituation1.put("text", "New Snow");
+				avalancheSituation1.put("aspects", "http://212.47.231.185:8080/images/Expositions/exposition_bg.svg");
+				Map<String, Object> elevation1 = new HashMap<>();
+				elevation1.put("symbol", "http://212.47.231.185:8080/images/Warning Pictos/levels_above.svg");
+				elevation1.put("limitAbove", "1800m");
+				elevation1.put("limitBelow", "");
+				avalancheSituation1.put("elevation", elevation1);
+				bulletin.put("avalancheSituation1", avalancheSituation1);
+				Map<String, Object> avalancheSituation2 = new HashMap<>();
+				avalancheSituation2.put("symbol", "http://212.47.231.185:8080/images/Wet_snow_c.png");
+				avalancheSituation2.put("text", "Wet Snow");
+				avalancheSituation2.put("aspects", "http://212.47.231.185:8080/images/Expositions/exposition_bg.svg");
+				Map<String, Object> elevation2 = new HashMap<>();
+				elevation2.put("symbol", "http://212.47.231.185:8080/images/Warning Pictos/levels_below.svg");
+				elevation2.put("limitAbove", "");
+				elevation2.put("limitBelow", "2000m");
+				avalancheSituation2.put("elevation", elevation2);
+				bulletin.put("avalancheSituation2", avalancheSituation2);
 				arrayList.add(bulletin);
 			}
 			root.put("bulletins", arrayList);
@@ -245,6 +311,7 @@ public class EmailUtil {
 			root.put("link", link);
 
 			// Get template
+			// TODO get template w/o daytime dependency
 			Template temp = cfg.getTemplate("albina-email.html");
 
 			// Merge template and model
