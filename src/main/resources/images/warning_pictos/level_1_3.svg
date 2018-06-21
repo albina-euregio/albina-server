@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="65px" height="48px" viewBox="0 0 65 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>level_1_3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="11.3341781 0 50.7957094 0 61.1361349 18 0.869061866 18"></polygon>
+        <path d="M0.949999809,27 L14.0306811,4.50122814 L17.6003047,10.7480695 C17.7944467,11.0878179 18.2859966,11.0829516 18.4733741,10.7394261 L24.0457295,0.523441142 L39.2556676,27 L0.949999809,27 Z" id="path-3"></path>
+    </defs>
+    <g id="Picto-Export" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Levels" transform="translate(-455.000000, -118.000000)">
+            <g id="0-1-2-3-4-5" transform="translate(200.000000, 50.000000)">
+                <g id="level_1_3" transform="translate(255.000000, 68.000000)">
+                    <path d="M51.8752542,28.0000007 L64.5007508,28.0000007 L64.5007508,29.0000007 L52.4497223,29.0000007 L62.9343035,47.2509384 C63.1257922,47.5842706 62.8851701,48.0000007 62.5007508,48.0000007 L0.500750752,48.0000007 C0.115177279,48.0000007 -0.125299957,47.5820215 0.0684971586,47.2486904 L25.0684972,4.24869044 C25.262115,3.91566781 25.7437513,3.91746942 25.9348723,4.2519312 L29.4905978,10.4744508 L35.061803,0.260574604 C35.248935,-0.0825008778 35.7396399,-0.0879203739 35.9343035,0.250938439 L51.8752542,28.0000007 Z" id="Mountain" fill="#222222"></path>
+                    <g id="Low" transform="translate(0.500751, 29.000001)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Bottom" fill="#222222" xlink:href="#path-1"></use>
+                        <g id="Danger-Level-/-Level-1-BG" mask="url(#mask-2)" fill="#CCFF66">
+                            <g transform="translate(-1.000000, -30.000000)" id="Warning-Level">
+                                <rect x="0" y="0" width="65" height="50"></rect>
+                            </g>
+                        </g>
+                        <text id="1" mask="url(#mask-2)" font-family="SFProText-Bold, SF Pro Text" font-size="12" font-weight="bold" letter-spacing="0.5" fill="#222222">
+                            <tspan x="28.1708984" y="14">1</tspan>
+                        </text>
+                    </g>
+                    <g id="High" transform="translate(11.500751, 1.000001)">
+                        <mask id="mask-4" fill="white">
+                            <use xlink:href="#path-3"></use>
+                        </mask>
+                        <use id="Top" fill="#222222" xlink:href="#path-3"></use>
+                        <g id="Danger-Level-/-Level-3-BG" mask="url(#mask-4)" fill="#FF9900">
+                            <g transform="translate(-12.000000, -2.000000)" id="Warning-Level">
+                                <rect x="0" y="0" width="65" height="50"></rect>
+                            </g>
+                        </g>
+                        <text id="3" mask="url(#mask-4)" font-family="SFProText-Bold, SF Pro Text" font-size="12" font-weight="bold" letter-spacing="0.5" fill="#222222">
+                            <tspan x="16.2363281" y="23">3</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

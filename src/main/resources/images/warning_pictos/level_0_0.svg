@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="48px" viewBox="0 0 64 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>level_0_0</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M63.4335528,47.2509378 C63.6250415,47.5842699 63.3844194,48 63,48 L1,48 C0.614426527,48 0.373949291,47.5820208 0.567746407,47.2486898 L25.5677464,4.24868977 C25.7613642,3.91566714 26.2430006,3.91746875 26.4341216,4.25193053 L29.989847,10.4744501 L35.5610522,0.260573935 C35.7481843,-0.0825015475 36.2388892,-0.0879210436 36.4335528,0.25093777 L63.4335528,47.2509378 Z" id="path-1"></path>
+        <path d="M63.4335528,47.2509378 C63.6250415,47.5842699 63.3844194,48 63,48 L1,48 C0.614426527,48 0.373949291,47.5820208 0.567746407,47.2486898 L25.5677464,4.24868977 C25.7613642,3.91566714 26.2430006,3.91746875 26.4341216,4.25193053 L29.989847,10.4744501 L35.5610522,0.260573935 C35.7481843,-0.0825015475 36.2388892,-0.0879210436 36.4335528,0.25093777 L63.4335528,47.2509378 Z" id="path-3"></path>
+    </defs>
+    <g id="Picto-Export" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Levels" transform="translate(-200.000000, -50.000000)">
+            <g id="0-1-2-3-4-5" transform="translate(200.000000, 50.000000)">
+                <g id="level_0_0">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Mountain" fill="#FFFFFF" xlink:href="#path-1"></use>
+                    <mask id="mask-4" fill="white">
+                        <use xlink:href="#path-3"></use>
+                    </mask>
+                    <path stroke="#222222" d="M63,47.5 L36,0.5 L30,11.5 L26,4.5 L1,47.5 L63,47.5 Z"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

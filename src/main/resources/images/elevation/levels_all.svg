@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="63px" height="48px" viewBox="0 0 63 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>levels_all</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Picto-Export" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Levels" transform="translate(-20.000000, -224.000000)">
+            <g id="Blues" transform="translate(20.000000, 20.000000)">
+                <g id="levels_all" transform="translate(0.000000, 204.000000)">
+                    <polygon id="Bottom" fill="#19ABFF" points="0.500750752 47.0000007 9.50075075 32.0000007 53.5007508 32.0000007 62.5007508 47.0000007"></polygon>
+                    <polygon id="Middle" fill="#19ABFF" points="8.50075075 33.0000007 18.5007508 16.0000007 44.5007508 16.0000007 54.5007508 33.0000007"></polygon>
+                    <polygon id="Top" fill="#19ABFF" points="18.5007508 17.0000007 25.5007508 5.00000067 29.5007508 11.0000007 35.5007508 1.00000067 44.5007508 17.0000007"></polygon>
+                    <path d="M62.5007508,47.5000007 L35.5007508,0.50000067 L29.5007508,11.5000007 L25.5007508,4.50000067 L0.500750752,47.5000007 L62.5007508,47.5000007 Z" id="Mountain" stroke="#222222"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
