@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -26,10 +27,15 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.AvalancheSituation;
+import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import freemarker.template.Configuration;
@@ -93,16 +99,29 @@ public class EmailUtil {
 			Map<String, Object> root = new HashMap<>();
 
 			Map<String, Object> image = new HashMap<>();
-			image.put("ci", "http://212.47.231.185:8080/images/Colorbar/Colorbar.svg");
-			image.put("logo", "http://212.47.231.185:8080/images/Logos/Logo Avalanche.report.png");
+			switch (lang) {
+			case de:
+				image.put("logo", GlobalVariables.serverImagesUrl + "logo/Logo Lawinen.report.png");
+				break;
+			case it:
+				image.put("logo", GlobalVariables.serverImagesUrl + "logo/Logo Valanghe.report.png");
+				break;
+			case en:
+				image.put("logo", GlobalVariables.serverImagesUrl + "logo/Logo Avalanche.report.png");
+				break;
+			default:
+				image.put("logo", GlobalVariables.serverImagesUrl + "logo/Logo Avalanche.report.png");
+				break;
+			}
+			image.put("ci", GlobalVariables.serverImagesUrl + "Colorbar.gif");
 			// image.put("ci", "cid:ci);
 			// image.put("logo", "cid:logo);
 			Map<String, Object> socialMediaImages = new HashMap<>();
-			socialMediaImages.put("facebook", "http://212.47.231.185:8080/images/facebook.png");
-			socialMediaImages.put("twitter", "http://212.47.231.185:8080/images/twitter.png");
-			socialMediaImages.put("instagram", "http://212.47.231.185:8080/images/instagram.png");
-			socialMediaImages.put("youtube", "http://212.47.231.185:8080/images/youtube.png");
-			socialMediaImages.put("whatsapp", "http://212.47.231.185:8080/images/whatsapp.png");
+			socialMediaImages.put("facebook", GlobalVariables.serverImagesUrl + "facebook.png");
+			socialMediaImages.put("twitter", GlobalVariables.serverImagesUrl + "twitter.png");
+			socialMediaImages.put("instagram", GlobalVariables.serverImagesUrl + "instagram.png");
+			socialMediaImages.put("youtube", GlobalVariables.serverImagesUrl + "youtube.png");
+			socialMediaImages.put("whatsapp", GlobalVariables.serverImagesUrl + "whatsapp.png");
 			// socialMediaImages.put("facebook", "cid:facebook");
 			// socialMediaImages.put("twitter", "cid:twitter");
 			// socialMediaImages.put("instagram", "cid:instagram");
@@ -110,61 +129,26 @@ public class EmailUtil {
 			// socialMediaImages.put("whatsapp", "cid:whatsapp");
 			image.put("socialmedia", socialMediaImages);
 			Map<String, Object> mapImage = new HashMap<>();
-			mapImage.put("overview", "http://212.47.231.185:8080/images/map_overview.png");
+
+			// TODO add map URL to email
+			mapImage.put("overview", GlobalVariables.serverImagesUrl + "map_overview.png");
 			// mapImage.put("overview", "cid:map_overview");
+
 			image.put("map", mapImage);
 			root.put("image", image);
 
 			Map<String, Object> text = new HashMap<>();
-			text.put("title", "Avalanche.report");
-			text.put("publicationDate", "03.01.2018, 05:20 PM");
-
-			switch (lang) {
-			case en:
-				text.put("headline", "Avalanche Forecast");
-				// TODO
-				text.put("follow", "Follow us");
-				text.put("unsubscribe", "Unsubscribe");
-				text.put("date", "Thursday 04.01.2018");
-				text.put("tendencyDate", "on Friday 05.01.2018");
-				text.put("publishedAt", "Published ");
-				text.put("tendency", "Tendency");
-				text.put("snowpack", "Snowpack");
-				text.put("dangerPatterns", "Danger patterns");
-				text.put("warningLevelFor", "Warning Level for ");
-				break;
-			case de:
-				text.put("headline", "Lawinen Report");
-				// TODO
-				text.put("follow", "Folge uns");
-				text.put("unsubscribe", "Abmelden");
-				text.put("date", "Freitag 04.01.2018");
-				text.put("tendencyDate", "am Freitag 05.01.2018");
-				text.put("publishedAt", "Publiziert ");
-				text.put("publicationDate", "03.01.2018, 05:20 PM");
-				text.put("tendency", "Tendenz");
-				text.put("snowpack", "Schneedecke");
-				text.put("dangerPatterns", "Gefahrenmuster");
-				text.put("warningLevelFor", "Warnstufe für ");
-				break;
-			case it:
-				text.put("headline", "Valanghe Report");
-				// TODO
-				text.put("follow", "TODO");
-				text.put("unsubscribe", "TODO");
-				text.put("date", "Giovedì 04.01.2018");
-				text.put("tendencyDate", "su venerdì 05.01.2018");
-				text.put("publishedAt", "TODO ");
-				text.put("publicationDate", "03.01.2018, 05:20 PM");
-				text.put("tendency", "Tendenza");
-				text.put("snowpack", "Descrizione struttura manto nevoso");
-				text.put("dangerPatterns", "Situazioni tipo");
-				text.put("warningLevelFor", "TODO");
-				break;
-
-			default:
-				break;
-			}
+			String publicationDate = getPublicationDate(bulletins, lang);
+			text.put("publicationDate", publicationDate);
+			if (publicationDate.isEmpty())
+				text.put("publishedAt", "");
+			else
+				text.put("publishedAt", GlobalVariables.getPublishedText(lang));
+			text.put("date", getDate(bulletins, lang));
+			text.put("title", GlobalVariables.getTitle(lang));
+			text.put("headline", GlobalVariables.getHeadline(lang));
+			text.put("follow", GlobalVariables.getFollowUs(lang));
+			text.put("unsubscribe", GlobalVariables.getUnsubscribe(lang));
 			root.put("text", text);
 
 			ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
@@ -176,139 +160,374 @@ public class EmailUtil {
 				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
 				else
-					bulletin.put("snowpackStructureHighlights", "");
+					bulletin.put("avAvalancheHighlights", "");
 
 				if (avalancheBulletin.getAvActivityCommentIn(lang) != null)
 					bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang));
 				else
-					bulletin.put("snowpackStructureHighlights", "");
+					bulletin.put("avAvalancheComment", "");
 
-				if (avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null)
-					bulletin.put("snowpackStructureHighlights",
-							avalancheBulletin.getSnowpackStructureHighlightsIn(lang));
-				else
-					bulletin.put("snowpackStructureHighlights", "");
+				if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
+						|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
+						|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null
+						|| avalancheBulletin.getTendencyCommentIn(lang) != null) {
+					bulletin.put("snowpackstyle", EmailUtil.getInstance().getSnowpackStyle(true));
+					if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
+							|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
+							|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null) {
+						bulletin.put("snowpackStructureHeadline", GlobalVariables.getSnowpackHeadline(lang));
 
-				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
-					bulletin.put("snowpackStructureComment", avalancheBulletin.getSnowpackStructureCommentIn(lang));
-				else
-					bulletin.put("snowpackStructureComment", "");
+						if (avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null)
+							bulletin.put("snowpackStructureHighlights",
+									avalancheBulletin.getSnowpackStructureHighlightsIn(lang));
+						else
+							bulletin.put("snowpackStructureHighlights", "");
 
-				// TODO check if this works
-				if (avalancheBulletin.getDangerPattern1() != null)
-					bulletin.put("dangerPattern1",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
-				else
-					bulletin.put("dangerPattern1", "");
-				if (avalancheBulletin.getDangerPattern2() != null)
-					bulletin.put("dangerPattern2",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
-				else
-					bulletin.put("dangerPattern2", "");
+						if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
+							bulletin.put("snowpackStructureComment",
+									avalancheBulletin.getSnowpackStructureCommentIn(lang));
+						else
+							bulletin.put("snowpackStructureComment", "");
 
-				if (avalancheBulletin.getTendencyCommentIn(lang) != null)
-					bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
-				else
-					bulletin.put("tendencyComment", "");
-
-				if (avalancheBulletin.getTendency() == Tendency.decreasing) {
-					// bulletin.put("tendency", "cid:decreasing");
-					bulletin.put("tendencySymbol", "http://212.47.231.185:8080/images/tendency_decreasing_black.png");
-					switch (lang) {
-					case de:
-						bulletin.put("tendencyText", "Lawinengefahr sinkt");
-						break;
-					case en:
-						bulletin.put("tendencyText", "Avalanche danger decreasing");
-						break;
-					case it:
-						bulletin.put("tendencyText", "Pericolo valanghe in diminuazione");
-						break;
-					default:
-						break;
+						if (avalancheBulletin.getDangerPattern1() != null
+								|| avalancheBulletin.getDangerPattern2() != null) {
+							bulletin.put("dangerPatternsHeadline", GlobalVariables.getDangerPatternsHeadline(lang));
+							bulletin.put("dangerpatternstyle", EmailUtil.getInstance().getDangerPatternStyle(true));
+							if (avalancheBulletin.getDangerPattern1() != null)
+								bulletin.put("dangerPattern1",
+										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
+							else
+								bulletin.put("dangerPattern1", "");
+							if (avalancheBulletin.getDangerPattern2() != null)
+								bulletin.put("dangerPattern2",
+										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
+							else
+								bulletin.put("dangerPattern2", "");
+						} else {
+							bulletin.put("dangerPatternsHeadline", "");
+							bulletin.put("dangerpatternstyle", EmailUtil.getInstance().getDangerPatternStyle(false));
+						}
+					} else {
+						bulletin.put("snowpackStructureHeadline", "");
+						bulletin.put("snowpackStructureHighlights", "");
+						bulletin.put("snowpackStructureComment", "");
+						bulletin.put("dangerPatternsHeadline", "");
+						bulletin.put("dangerPattern1", "");
+						bulletin.put("dangerPattern2", "");
+						bulletin.put("dangerpatternstyle", EmailUtil.getInstance().getDangerPatternStyle(false));
 					}
-				} else if (avalancheBulletin.getTendency() == Tendency.steady) {
-					// bulletin.put("tendency", "cid:steady");
-					bulletin.put("tendency", "http://212.47.231.185:8080/images/tendency_steady_black.png");
-					switch (lang) {
-					case de:
-						bulletin.put("tendencyText", "Lawinengefahr bleibt gleich");
-						break;
-					case en:
-						bulletin.put("tendencyText", "Avalanche danger stays the same");
-						break;
-					case it:
-						bulletin.put("tendencyText", "Pericolo valanghe stabile");
-						break;
-					default:
-						break;
-					}
-				} else if (avalancheBulletin.getTendency() == Tendency.increasing) {
-					// bulletin.put("tendency", "cid:increasing");
-					bulletin.put("tendency", "http://212.47.231.185:8080/images/tendency_increasing_black.png");
-					switch (lang) {
-					case de:
-						bulletin.put("tendencyText", "Lawinengefahr steigt");
-						break;
-					case en:
-						bulletin.put("tendencyText", "Avalanche danger increasing");
-						break;
-					case it:
-						bulletin.put("tendencyText", "Pericolo valanghe in aumento");
-						break;
-					default:
-						break;
+
+					// tendency
+					if (avalancheBulletin.getTendencyCommentIn(lang) != null) {
+						bulletin.put("tendencyHeadline", GlobalVariables.getTendencyHeadline(lang));
+						bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
+					} else {
+						bulletin.put("tendencyHeadline", "");
+						bulletin.put("tendencyComment", "");
 					}
 				} else {
-					bulletin.put("tendency", "");
+					bulletin.put("snowpackstyle", EmailUtil.getInstance().getSnowpackStyle(false));
+					bulletin.put("snowpackStructureHeadline", "");
+					bulletin.put("snowpackStructureHighlights", "");
+					bulletin.put("snowpackStructureComment", "");
+					bulletin.put("dangerPatternsHeadline", "");
+					bulletin.put("dangerPattern1", "");
+					bulletin.put("dangerPattern2", "");
+					bulletin.put("dangerpatternstyle", EmailUtil.getInstance().getDangerPatternStyle(false));
+					bulletin.put("tendencyHeadline", "");
+					bulletin.put("tendencyComment", "");
 				}
+
+				Map<String, Object> tendency = new HashMap<>();
+				tendency.put("text", GlobalVariables.getTendencyText(avalancheBulletin.getTendency(), lang));
+				if (avalancheBulletin.getTendency() == Tendency.decreasing) {
+					// tendency.put("symbol", "cid:tendency/decreasing");
+					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency_decreasing_blue.png");
+					tendency.put("date", getTendencyDate(bulletins, lang));
+				} else if (avalancheBulletin.getTendency() == Tendency.steady) {
+					// tendency.put("symbol", "cid:tendency/steady");
+					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency_steady_blue.png");
+					tendency.put("date", getTendencyDate(bulletins, lang));
+				} else if (avalancheBulletin.getTendency() == Tendency.increasing) {
+					// tendency.put("symbol", "cid:tendency/increasing");
+					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency_increasing_blue.png");
+					tendency.put("date", getTendencyDate(bulletins, lang));
+				} else {
+					tendency.put("symbol", "");
+					tendency.put("date", "");
+				}
+				bulletin.put("tendency", tendency);
 
 				bulletin.put("dangerratingcolorstyle", EmailUtil.getInstance().getDangerRatingColorStyle(
 						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
 				bulletin.put("headlinestyle", EmailUtil.getInstance()
 						.getHeadlineStyle(AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
 
-				// TODO use correct map and symbols
+				// danger rating
 				Map<String, Object> dangerRating = new HashMap<>();
-				dangerRating.put("symbol", "http://212.47.231.185:8080/images/Warning Pictos/level_3_2.svg");
-				dangerRating.put("elevation", "1900m");
+				dangerRating.put("symbol",
+						GlobalVariables.serverImagesUrl + "warning_pictos/level_"
+								+ getWarningLevelId(avalancheBulletin.getForenoon(),
+										avalancheBulletin.isHasElevationDependency())
+								+ ".svg");
+				// dangerRating.put("symbol", "cid:warning_picto/" +
+				// getWarningLevelId(avalancheBulletin.getForenoon(),
+				// avalancheBulletin.isHasElevationDependency()));
+				if (avalancheBulletin.isHasElevationDependency()) {
+					if (avalancheBulletin.getTreeline())
+						dangerRating.put("elevation", GlobalVariables.getTreelineString(lang));
+					else if (avalancheBulletin.getElevation() > 0)
+						dangerRating.put("elevation", avalancheBulletin.getElevation() + "m");
+					else
+						dangerRating.put("elevation", "");
+				} else
+					dangerRating.put("elevation", "");
 				bulletin.put("dangerRating", dangerRating);
-				bulletin.put("map", "http://212.47.231.185:8080/images/map_detail_3.png");
+
+				// TODO add correct map
+				bulletin.put("map", GlobalVariables.serverImagesUrl + "map_detail_3.png");
+
+				// avalanche situation 1
 				Map<String, Object> avalancheSituation1 = new HashMap<>();
-				avalancheSituation1.put("symbol", "http://212.47.231.185:8080/images/Drifting_snow_c.png");
-				avalancheSituation1.put("text", "New Snow");
-				avalancheSituation1.put("aspects", "http://212.47.231.185:8080/images/Expositions/exposition_bg.svg");
-				Map<String, Object> elevation1 = new HashMap<>();
-				elevation1.put("symbol", "http://212.47.231.185:8080/images/Warning Pictos/levels_above.svg");
-				elevation1.put("limitAbove", "1800m");
-				elevation1.put("limitBelow", "");
-				avalancheSituation1.put("elevation", elevation1);
+				if (avalancheBulletin.getForenoon().getAvalancheSituation1() != null) {
+					if (avalancheBulletin.getForenoon().getAvalancheSituation1().getAvalancheSituation() != null) {
+						avalancheSituation1.put("symbol",
+								GlobalVariables.serverImagesUrl
+										+ "avalanche_situations/color/" + avalancheBulletin.getForenoon()
+												.getAvalancheSituation1().getAvalancheSituation().toStringId()
+										+ ".svg");
+						// avalancheSituation1.put("symbol", "cid:avalanche-situation/" +
+						// avalancheBulletin.getForenoon()
+						// .getAvalancheSituation1().getAvalancheSituation().toStringId());
+						avalancheSituation1.put("text", avalancheBulletin.getForenoon().getAvalancheSituation1()
+								.getAvalancheSituation().toString(lang));
+					} else {
+						avalancheSituation1.put("symbol", "");
+						avalancheSituation1.put("text", "");
+					}
+					avalancheSituation1.put("aspectBg", GlobalVariables.serverImagesUrl + "aspects/exposition_bg.svg");
+					// avalancheSituation1.put("aspectBg", "cid:aspect/bg");
+					if (avalancheBulletin.getForenoon().getAvalancheSituation1().getAspects() != null) {
+						Set<Aspect> aspects = avalancheBulletin.getForenoon().getAvalancheSituation1().getAspects();
+						for (Aspect aspect : Aspect.values()) {
+							if (aspects.contains(aspect)) {
+								avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
+										GlobalVariables.serverImagesUrl + "aspects/exposition_" + aspect.toString()
+												+ ".svg");
+								// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(), "cid:aspect/"
+								// + aspect.toString());
+							} else {
+								avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
+										GlobalVariables.serverImagesUrl + "aspects/exposition_empty.svg");
+								// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
+								// "cid:aspect/empty");
+							}
+						}
+					} else
+						for (Aspect aspect : Aspect.values()) {
+							avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
+									GlobalVariables.serverImagesUrl + "aspects/exposition_empty.svg");
+							// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
+							// "cid:aspect/empty");
+						}
+					Map<String, Object> elevation = new HashMap<>();
+					if (avalancheBulletin.getForenoon().getAvalancheSituation1().getTreelineHigh()
+							|| avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationHigh() > 0) {
+						if (avalancheBulletin.getForenoon().getAvalancheSituation1().getTreelineLow()
+								|| avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationLow() > 0) {
+							// elevation high and low set
+							elevation.put("symbol", GlobalVariables.serverImagesUrl + "elevation/levels_middle.svg");
+							// elevation.put("symbol", "cid:elevation/middle");
+							if (avalancheBulletin.getForenoon().getAvalancheSituation1().getTreelineLow())
+								elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
+							else if (avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationLow() > 0)
+								elevation.put("limitAbove",
+										avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationLow()
+												+ "m");
+							if (avalancheBulletin.getForenoon().getAvalancheSituation1().getTreelineHigh())
+								elevation.put("limitBelow", GlobalVariables.getTreelineString(lang));
+							else if (avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationHigh() > 0)
+								elevation.put("limitBelow",
+										avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationHigh()
+												+ "m");
+						} else {
+							// elevation high set
+							elevation.put("symbol", GlobalVariables.serverImagesUrl + "elevation/levels_below.svg");
+							// elevation.put("symbol", "cid:elevation/below");
+							elevation.put("limitAbove", "");
+							if (avalancheBulletin.getForenoon().getAvalancheSituation1().getTreelineHigh())
+								elevation.put("limitBelow", GlobalVariables.getTreelineString(lang));
+							else if (avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationHigh() > 0)
+								elevation.put("limitBelow",
+										avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationHigh()
+												+ "m");
+						}
+					} else if (avalancheBulletin.getForenoon().getAvalancheSituation1().getTreelineLow()
+							|| avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationLow() > 0) {
+						// elevation low set
+						elevation.put("symbol", GlobalVariables.serverImagesUrl + "elevation/levels_above.svg");
+						// elevation.put("symbol", "cid:elevation/above");
+						if (avalancheBulletin.getForenoon().getAvalancheSituation1().getTreelineLow())
+							elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
+						else if (avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationLow() > 0)
+							elevation.put("limitAbove",
+									avalancheBulletin.getForenoon().getAvalancheSituation1().getElevationLow() + "m");
+						elevation.put("limitBelow", "");
+					} else {
+						// no elevation set
+						elevation.put("symbol", GlobalVariables.serverImagesUrl + "elevation/levels_all.svg");
+						// elevation.put("symbol", "cid:elevation/all");
+						elevation.put("limitAbove", "");
+						elevation.put("limitBelow", "");
+					}
+					avalancheSituation1.put("elevation", elevation);
+				} else {
+					avalancheSituation1.put("symbol", "");
+					avalancheSituation1.put("text", "");
+					avalancheSituation1.put("aspectBg", GlobalVariables.serverImagesUrl + "aspects/exposition_bg.svg");
+					// avalancheSituation1.put("aspectBg", "cid:aspect/bg");
+					for (Aspect aspect : Aspect.values()) {
+						avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
+								GlobalVariables.serverImagesUrl + "aspects/exposition_empty.svg");
+						// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
+						// "cid:aspect/empty");
+					}
+					Map<String, Object> elevation = new HashMap<>();
+					elevation.put("symbol", "");
+					elevation.put("limitAbove", "");
+					elevation.put("limitBelow", "");
+					avalancheSituation1.put("elevation", elevation);
+				}
 				bulletin.put("avalancheSituation1", avalancheSituation1);
+
+				// avalanche situation 2
 				Map<String, Object> avalancheSituation2 = new HashMap<>();
-				avalancheSituation2.put("symbol", "http://212.47.231.185:8080/images/Wet_snow_c.png");
-				avalancheSituation2.put("text", "Wet Snow");
-				avalancheSituation2.put("aspects", "http://212.47.231.185:8080/images/Expositions/exposition_bg.svg");
-				Map<String, Object> elevation2 = new HashMap<>();
-				elevation2.put("symbol", "http://212.47.231.185:8080/images/Warning Pictos/levels_below.svg");
-				elevation2.put("limitAbove", "");
-				elevation2.put("limitBelow", "2000m");
-				avalancheSituation2.put("elevation", elevation2);
+				if (avalancheBulletin.getForenoon().getAvalancheSituation2() != null) {
+					if (avalancheBulletin.getForenoon().getAvalancheSituation2().getAvalancheSituation() != null) {
+						avalancheSituation2.put("symbol",
+								GlobalVariables.serverImagesUrl
+										+ "avalanche_situations/color/" + avalancheBulletin.getForenoon()
+												.getAvalancheSituation2().getAvalancheSituation().toStringId()
+										+ ".svg");
+						// avalancheSituation2.put("symbol", "cid:avalanche-situation/" +
+						// avalancheBulletin.getForenoon()
+						// .getAvalancheSituation2().getAvalancheSituation().toStringId());
+						avalancheSituation2.put("text", avalancheBulletin.getForenoon().getAvalancheSituation2()
+								.getAvalancheSituation().toString(lang));
+					} else {
+						avalancheSituation2.put("symbol", "");
+						avalancheSituation2.put("text", "");
+					}
+					avalancheSituation2.put("aspectBg", GlobalVariables.serverImagesUrl + "aspects/exposition_bg.svg");
+					// avalancheSituation2.put("aspectBg", "cid:aspect/bg");
+					if (avalancheBulletin.getForenoon().getAvalancheSituation2().getAspects() != null) {
+						Set<Aspect> aspects = avalancheBulletin.getForenoon().getAvalancheSituation2().getAspects();
+						for (Aspect aspect : Aspect.values()) {
+							if (aspects.contains(aspect)) {
+								avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
+										GlobalVariables.serverImagesUrl + "aspects/exposition_" + aspect.toString()
+												+ ".svg");
+								// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(), "cid:aspect/"
+								// + aspect.toString());
+							} else {
+								avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
+										GlobalVariables.serverImagesUrl + "aspects/exposition_empty.svg");
+								// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
+								// "cid:aspect/empty");
+							}
+						}
+					} else
+						for (Aspect aspect : Aspect.values()) {
+							avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
+									GlobalVariables.serverImagesUrl + "aspects/exposition_empty.svg");
+							// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
+							// "cid:aspect/empty");
+						}
+					Map<String, Object> elevation = new HashMap<>();
+					if (avalancheBulletin.getForenoon().getAvalancheSituation2().getTreelineHigh()
+							|| avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationHigh() > 0) {
+						if (avalancheBulletin.getForenoon().getAvalancheSituation2().getTreelineLow()
+								|| avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationLow() > 0) {
+							// elevation high and low set
+							elevation.put("symbol", GlobalVariables.serverImagesUrl + "elevation/levels_middle.svg");
+							// elevation.put("symbol", "cid:elevation/middle");
+							if (avalancheBulletin.getForenoon().getAvalancheSituation2().getTreelineLow())
+								elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
+							else if (avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationLow() > 0)
+								elevation.put("limitAbove",
+										avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationLow()
+												+ "m");
+							if (avalancheBulletin.getForenoon().getAvalancheSituation2().getTreelineHigh())
+								elevation.put("limitBelow", GlobalVariables.getTreelineString(lang));
+							else if (avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationHigh() > 0)
+								elevation.put("limitBelow",
+										avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationHigh()
+												+ "m");
+						} else {
+							// elevation high set
+							elevation.put("symbol", GlobalVariables.serverImagesUrl + "elevation/levels_below.svg");
+							// elevation.put("symbol", "cid:elevation/below");
+							elevation.put("limitAbove", "");
+							if (avalancheBulletin.getForenoon().getAvalancheSituation2().getTreelineHigh())
+								elevation.put("limitBelow", GlobalVariables.getTreelineString(lang));
+							else if (avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationHigh() > 0)
+								elevation.put("limitBelow",
+										avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationHigh()
+												+ "m");
+						}
+					} else if (avalancheBulletin.getForenoon().getAvalancheSituation2().getTreelineLow()
+							|| avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationLow() > 0) {
+						// elevation low set
+						elevation.put("symbol", GlobalVariables.serverImagesUrl + "elevation/levels_above.svg");
+						// elevation.put("symbol", "cid:elevation/above");
+						if (avalancheBulletin.getForenoon().getAvalancheSituation2().getTreelineLow())
+							elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
+						else if (avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationLow() > 0)
+							elevation.put("limitAbove",
+									avalancheBulletin.getForenoon().getAvalancheSituation2().getElevationLow() + "m");
+						elevation.put("limitBelow", "");
+					} else {
+						// no elevation set
+						elevation.put("symbol", GlobalVariables.serverImagesUrl + "elevation/levels_all.svg");
+						// elevation.put("symbol", "cid:elevation/all");
+						elevation.put("limitAbove", "");
+						elevation.put("limitBelow", "");
+					}
+					avalancheSituation2.put("elevation", elevation);
+				} else {
+					avalancheSituation2.put("symbol", "");
+					avalancheSituation2.put("text", "");
+					avalancheSituation2.put("aspectBg", GlobalVariables.serverImagesUrl + "aspects/exposition_bg.svg");
+					// avalancheSituation2.put("aspectBg", "cid:aspect/bg");
+					for (Aspect aspect : Aspect.values()) {
+						avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
+								GlobalVariables.serverImagesUrl + "aspects/exposition_empty.svg");
+						// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
+						// "cid:aspect/empty");
+					}
+					Map<String, Object> elevation = new HashMap<>();
+					elevation.put("symbol", "");
+					elevation.put("limitAbove", "");
+					elevation.put("limitBelow", "");
+					avalancheSituation2.put("elevation", elevation);
+				}
 				bulletin.put("avalancheSituation2", avalancheSituation2);
+
 				arrayList.add(bulletin);
 			}
 			root.put("bulletins", arrayList);
 
-			Map<String, Object> link = new HashMap<>();
-			link.put("website", "https://avalanche.report");
-			link.put("unsubscribe", "https://avalanche.report/unsubscribe");
+			Map<String, Object> links = new HashMap<>();
+			links.put("website", "https://avalanche.report");
+			links.put("unsubscribe", "https://avalanche.report/unsubscribe");
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook", "https://avalanche.report/facebook");
 			socialMediaLinks.put("twitter", "https://avalanche.report/twitter");
 			socialMediaLinks.put("instagram", "https://avalanche.report/instagram");
 			socialMediaLinks.put("youtube", "https://avalanche.report/youtube");
 			socialMediaLinks.put("whatsapp", "https://avalanche.report/whatsapp");
-			link.put("socialmedia", socialMediaLinks);
-			root.put("link", link);
+			links.put("socialmedia", socialMediaLinks);
+			root.put("link", links);
 
 			// Get template
 			// TODO get template w/o daytime dependency
@@ -328,6 +547,109 @@ public class EmailUtil {
 		}
 
 		return null;
+	}
+
+	private String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = null;
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			DateTime bulletinDate = avalancheBulletin.getValidUntil();
+			if (date == null)
+				date = bulletinDate;
+			else if (bulletinDate.isAfter(date))
+				date = bulletinDate;
+		}
+
+		StringBuilder result = new StringBuilder();
+		if (date != null) {
+			result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+
+			switch (lang) {
+			case en:
+				result.append(date.toString(GlobalVariables.dateTimeEn));
+				break;
+			case de:
+				result.append(date.toString(GlobalVariables.dateTimeDe));
+				break;
+			case it:
+				result.append(date.toString(GlobalVariables.dateTimeIt));
+				break;
+			default:
+				result.append(date.toString(GlobalVariables.dateTimeEn));
+				break;
+			}
+		} else {
+			// TODO what if no date is given (should not happen)
+			result.append("-");
+		}
+
+		return result.toString();
+	}
+
+	private String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = null;
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			DateTime bulletinDate = avalancheBulletin.getValidUntil();
+			if (date == null)
+				date = bulletinDate;
+			else if (bulletinDate.isAfter(date))
+				date = bulletinDate;
+		}
+
+		if (date != null) {
+			date = date.plusDays(1);
+			StringBuilder result = new StringBuilder();
+
+			switch (lang) {
+			case en:
+				result.append("on ");
+				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+				result.append(date.toString(GlobalVariables.dateTimeEn));
+				break;
+			case de:
+				result.append("am ");
+				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+				result.append(date.toString(GlobalVariables.dateTimeDe));
+				break;
+			case it:
+				result.append("su ");
+				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+				result.append(date.toString(GlobalVariables.dateTimeIt));
+				break;
+			default:
+				result.append("on ");
+				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+				result.append(date.toString(GlobalVariables.dateTimeEn));
+				break;
+			}
+
+			return result.toString();
+		} else {
+			return "";
+		}
+	}
+
+	private String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = null;
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			DateTime bulletinDate = avalancheBulletin.getPublicationDate();
+			if (date == null)
+				date = bulletinDate;
+			else if (bulletinDate.isAfter(date))
+				date = bulletinDate;
+		}
+		if (date != null) {
+			switch (lang) {
+			case en:
+				return date.toString(GlobalVariables.publicationDateTimeEn);
+			case de:
+				return date.toString(GlobalVariables.publicationDateTimeDe);
+			case it:
+				return date.toString(GlobalVariables.publicationDateTimeIt);
+			default:
+				return date.toString(GlobalVariables.publicationDateTimeEn);
+			}
+		} else
+			return "";
 	}
 
 	private String getDangerRatingText(AvalancheBulletin bulletin, LanguageCode lang) {
@@ -411,6 +733,20 @@ public class EmailUtil {
 				+ dangerRatingColor + ";\"";
 	}
 
+	private String getDangerPatternStyle(boolean b) {
+		if (b)
+			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; margin-right: 5px; display: inline-block; background-color: #FFFFFF;\"";
+		else
+			return "";
+	}
+
+	private String getSnowpackStyle(boolean b) {
+		if (!b)
+			return "style=\"display: none;\"";
+		else
+			return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 5px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px;\"";
+	}
+
 	public void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
 			throws MessagingException {
 		logger.debug("Sending mail...");
@@ -425,10 +761,22 @@ public class EmailUtil {
 		Transport transport = mailSession.getTransport();
 
 		MimeMessage message = new MimeMessage(mailSession);
-		// TODO set subject
-		message.setSubject("Avalanche Report");
-		// TODO set from
-		message.setFrom(new InternetAddress("info@avalanche.report"));
+		switch (lang) {
+		case de:
+			message.setSubject("Lawinenvorhersage, " + getDate(bulletins, lang));
+			break;
+		case it:
+			message.setSubject("Avalanche Forecase, " + getDate(bulletins, lang));
+			break;
+		case en:
+			message.setSubject("Previsione Valanghe, " + getDate(bulletins, lang));
+			break;
+
+		default:
+			break;
+		}
+		message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername));
+
 		// TODO set recipients based on region
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress("n.lanzanasto@gmail.com"));
 		MimeMultipart multipart = new MimeMultipart("related");
@@ -441,7 +789,7 @@ public class EmailUtil {
 
 		// add CI image
 		messageBodyPart = new MimeBodyPart();
-		URL imageUrl = ClassLoader.getSystemResource("images/ci.png");
+		URL imageUrl = ClassLoader.getSystemResource("images/Colorbar.gif");
 		DataSource fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
 		messageBodyPart.setHeader("Content-ID", "ci");
@@ -451,13 +799,13 @@ public class EmailUtil {
 		messageBodyPart = new MimeBodyPart();
 		switch (lang) {
 		case en:
-			imageUrl = ClassLoader.getSystemResource("images/logo_en.png");
+			imageUrl = ClassLoader.getSystemResource("images/Logo Avalanche.report.png");
 			break;
 		case de:
-			imageUrl = ClassLoader.getSystemResource("images/logo_de.png");
+			imageUrl = ClassLoader.getSystemResource("images/Logo Lawinen.report.png");
 			break;
 		case it:
-			imageUrl = ClassLoader.getSystemResource("images/logo_it.png");
+			imageUrl = ClassLoader.getSystemResource("images/Logo Valanghe.report.png");
 			break;
 		default:
 			break;
@@ -507,21 +855,24 @@ public class EmailUtil {
 		messageBodyPart.setHeader("Content-ID", "whatsapp");
 		multipart.addBodyPart(messageBodyPart);
 
-		// TODO add tendency symbols (decreasing, steady, increasing)
+		// TODO add icons for each bulletin
+		addIcons(bulletins, multipart);
+
+		// add tendency symbols
 		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images/tendency_decreasing.png");
+		imageUrl = ClassLoader.getSystemResource("images/tendency_decreasing_blue.png");
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
 		messageBodyPart.setHeader("Content-ID", "decreasing");
 		multipart.addBodyPart(messageBodyPart);
 		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images/tendency_steady.png");
+		imageUrl = ClassLoader.getSystemResource("images/tendency_steady_blue.png");
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
 		messageBodyPart.setHeader("Content-ID", "steady");
 		multipart.addBodyPart(messageBodyPart);
 		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images/tendency_increasing.png");
+		imageUrl = ClassLoader.getSystemResource("images/tendency_increasing_blue.png");
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
 		messageBodyPart.setHeader("Content-ID", "increasing");
@@ -529,12 +880,282 @@ public class EmailUtil {
 
 		// TODO add maps
 
-		// TODO add PDF (shell we add it?)
-
 		message.setContent(multipart);
 
 		transport.connect();
 		transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 		transport.close();
+	}
+
+	private void addIcons(List<AvalancheBulletin> bulletins, MimeMultipart multipart) throws MessagingException {
+		List<String> warningPictos = new ArrayList<String>();
+		List<Tendency> tendencies = new ArrayList<Tendency>();
+		List<eu.albina.model.enumerations.AvalancheSituation> avalancheSituations = new ArrayList<eu.albina.model.enumerations.AvalancheSituation>();
+		List<String> elevations = new ArrayList<String>();
+
+		MimeBodyPart messageBodyPart;
+		URL imageUrl;
+		FileDataSource fds;
+
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			// add danger level
+			String id = getWarningLevelId(avalancheBulletin.getForenoon(),
+					avalancheBulletin.isHasElevationDependency());
+			if (!warningPictos.contains(id)) {
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/warning_pictos/level_" + id);
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "warning_picto/" + id);
+				multipart.addBodyPart(messageBodyPart);
+				warningPictos.add(id);
+			}
+
+			// add tendency symbol
+			switch (avalancheBulletin.getTendency()) {
+			case increasing:
+				if (!tendencies.contains(Tendency.increasing)) {
+					messageBodyPart = new MimeBodyPart();
+					imageUrl = ClassLoader.getSystemResource("images/tendency_increasing_blue.png");
+					fds = new FileDataSource(imageUrl.toString());
+					messageBodyPart.setDataHandler(new DataHandler(fds));
+					messageBodyPart.setHeader("Content-ID", "tendency/increasing");
+					multipart.addBodyPart(messageBodyPart);
+					tendencies.add(Tendency.increasing);
+				}
+				break;
+			case steady:
+				if (!tendencies.contains(Tendency.steady)) {
+					messageBodyPart = new MimeBodyPart();
+					imageUrl = ClassLoader.getSystemResource("images/tendency_steady_blue.png");
+					fds = new FileDataSource(imageUrl.toString());
+					messageBodyPart.setDataHandler(new DataHandler(fds));
+					messageBodyPart.setHeader("Content-ID", "tendency/steady");
+					multipart.addBodyPart(messageBodyPart);
+					tendencies.add(Tendency.steady);
+				}
+				break;
+			case decreasing:
+				if (!tendencies.contains(Tendency.decreasing)) {
+					messageBodyPart = new MimeBodyPart();
+					imageUrl = ClassLoader.getSystemResource("images/tendency_decreasing_blue.png");
+					fds = new FileDataSource(imageUrl.toString());
+					messageBodyPart.setDataHandler(new DataHandler(fds));
+					messageBodyPart.setHeader("Content-ID", "tendency/decreasing");
+					multipart.addBodyPart(messageBodyPart);
+					tendencies.add(Tendency.decreasing);
+				}
+				break;
+
+			default:
+				break;
+			}
+
+			// add aspects icons
+			messageBodyPart = new MimeBodyPart();
+			imageUrl = ClassLoader.getSystemResource("images/aspects/exposition_bg.svg");
+			fds = new FileDataSource(imageUrl.toString());
+			messageBodyPart.setDataHandler(new DataHandler(fds));
+			messageBodyPart.setHeader("Content-ID", "cid:aspect/bg");
+			multipart.addBodyPart(messageBodyPart);
+
+			messageBodyPart = new MimeBodyPart();
+			imageUrl = ClassLoader.getSystemResource("images/aspects/exposition_empty.svg");
+			fds = new FileDataSource(imageUrl.toString());
+			messageBodyPart.setDataHandler(new DataHandler(fds));
+			messageBodyPart.setHeader("Content-ID", "cid:aspect/empty");
+			multipart.addBodyPart(messageBodyPart);
+
+			for (Aspect aspect : Aspect.values()) {
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/aspects/exposition_" + aspect.toString() + ".svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:aspect/" + aspect.toString());
+				multipart.addBodyPart(messageBodyPart);
+			}
+
+			// add avalanche situation icons
+			if (avalancheBulletin.getForenoon().getAvalancheSituation1() != null) {
+				if (avalancheBulletin.getForenoon().getAvalancheSituation1().getAvalancheSituation() != null)
+					addAvalancheSituation(avalancheBulletin.getForenoon().getAvalancheSituation1(), multipart,
+							avalancheSituations);
+				addAvalancheSituationElevation(avalancheBulletin.getForenoon().getAvalancheSituation1(), multipart,
+						elevations);
+			}
+			if (avalancheBulletin.getForenoon().getAvalancheSituation2() != null) {
+				if (avalancheBulletin.getForenoon().getAvalancheSituation2().getAvalancheSituation() != null)
+					addAvalancheSituation(avalancheBulletin.getForenoon().getAvalancheSituation2(), multipart,
+							avalancheSituations);
+				addAvalancheSituationElevation(avalancheBulletin.getForenoon().getAvalancheSituation2(), multipart,
+						elevations);
+			}
+
+			if (avalancheBulletin.hasDaytimeDependency()) {
+				id = getWarningLevelId(avalancheBulletin.getAfternoon(), avalancheBulletin.isHasElevationDependency());
+				if (!warningPictos.contains(id)) {
+					messageBodyPart = new MimeBodyPart();
+					imageUrl = ClassLoader.getSystemResource("images/warning_pictos/level_" + id);
+					fds = new FileDataSource(imageUrl.toString());
+					messageBodyPart.setDataHandler(new DataHandler(fds));
+					messageBodyPart.setHeader("Content-ID", "cid:warning_picto/" + id);
+					multipart.addBodyPart(messageBodyPart);
+					warningPictos.add(id);
+				}
+
+				// add avalanche situation icons
+				if (avalancheBulletin.getAfternoon().getAvalancheSituation1() != null) {
+					if (avalancheBulletin.getAfternoon().getAvalancheSituation1().getAvalancheSituation() != null)
+						addAvalancheSituation(avalancheBulletin.getAfternoon().getAvalancheSituation1(), multipart,
+								avalancheSituations);
+					addAvalancheSituationElevation(avalancheBulletin.getAfternoon().getAvalancheSituation1(), multipart,
+							elevations);
+				}
+				if (avalancheBulletin.getAfternoon().getAvalancheSituation2() != null) {
+					if (avalancheBulletin.getAfternoon().getAvalancheSituation2().getAvalancheSituation() != null)
+						addAvalancheSituation(avalancheBulletin.getAfternoon().getAvalancheSituation2(), multipart,
+								avalancheSituations);
+					addAvalancheSituationElevation(avalancheBulletin.getAfternoon().getAvalancheSituation2(), multipart,
+							elevations);
+				}
+			}
+		}
+
+	}
+
+	private void addAvalancheSituationElevation(AvalancheSituation avalancheSituation, MimeMultipart multipart,
+			List<String> elevations) throws MessagingException {
+		MimeBodyPart messageBodyPart;
+		URL imageUrl;
+		FileDataSource fds;
+
+		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
+			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+				// elevation high and low set
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/elevation/levels_middle.svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:elevation/middle");
+				multipart.addBodyPart(messageBodyPart);
+				elevations.add("levels_middle");
+			} else {
+				// elevation high set
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/elevation/levels_below.svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:elevation/below");
+				multipart.addBodyPart(messageBodyPart);
+				elevations.add("levels_below");
+			}
+		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			// elevation low set
+			messageBodyPart = new MimeBodyPart();
+			imageUrl = ClassLoader.getSystemResource("images/elevation/levels_above.svg");
+			fds = new FileDataSource(imageUrl.toString());
+			messageBodyPart.setDataHandler(new DataHandler(fds));
+			messageBodyPart.setHeader("Content-ID", "cid:elevation/above");
+			multipart.addBodyPart(messageBodyPart);
+			elevations.add("levels_above");
+		} else {
+			// no elevation set
+			messageBodyPart = new MimeBodyPart();
+			imageUrl = ClassLoader.getSystemResource("images/elevation/levels_all.svg");
+			fds = new FileDataSource(imageUrl.toString());
+			messageBodyPart.setDataHandler(new DataHandler(fds));
+			messageBodyPart.setHeader("Content-ID", "cid:elevation/all");
+			multipart.addBodyPart(messageBodyPart);
+			elevations.add("levels_all");
+		}
+	}
+
+	private void addAvalancheSituation(AvalancheSituation avalancheSituation, MimeMultipart multipart,
+			List<eu.albina.model.enumerations.AvalancheSituation> avalancheSituations) throws MessagingException {
+		MimeBodyPart messageBodyPart;
+		URL imageUrl;
+		FileDataSource fds;
+
+		switch (avalancheSituation.getAvalancheSituation()) {
+		case new_snow:
+			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.new_snow)) {
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/new_snow.svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/new_snow");
+				multipart.addBodyPart(messageBodyPart);
+				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.new_snow);
+			}
+			break;
+		case wind_drifted_snow:
+			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.wind_drifted_snow)) {
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/wind_drifted_snow.svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/wind_drifted_snow");
+				multipart.addBodyPart(messageBodyPart);
+				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.wind_drifted_snow);
+			}
+			break;
+		case weak_persistent_layer:
+			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.weak_persistent_layer)) {
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/weak_persistent_layer.svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/weak_persistent_layer");
+				multipart.addBodyPart(messageBodyPart);
+				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.weak_persistent_layer);
+			}
+			break;
+		case wet_snow:
+			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.wet_snow)) {
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/wet_snow.svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/wet_snow");
+				multipart.addBodyPart(messageBodyPart);
+				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.wet_snow);
+			}
+			break;
+		case gliding_snow:
+			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.gliding_snow)) {
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/gliding_snow.svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/gliding_snow");
+				multipart.addBodyPart(messageBodyPart);
+				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.gliding_snow);
+			}
+			break;
+		case favourable_situation:
+			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.favourable_situation)) {
+				messageBodyPart = new MimeBodyPart();
+				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/favourable_situation.svg");
+				fds = new FileDataSource(imageUrl.toString());
+				messageBodyPart.setDataHandler(new DataHandler(fds));
+				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/favourable_situation");
+				multipart.addBodyPart(messageBodyPart);
+				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.favourable_situation);
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription,
+			boolean elevationDependency) {
+		if (elevationDependency)
+			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
+					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
+		else
+			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove()) + "_"
+					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 	}
 }

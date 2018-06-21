@@ -5,21 +5,34 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Scanner;
 
+import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.Tendency;
+
 public class GlobalVariables {
 
+	public static String serverImagesUrl = "http://212.47.231.185:8080/images/";
+
+	public static String[] daysDe = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" };
+	public static String[] daysIt = { "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica" };
+	public static String[] daysEn = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
 	public static String imagesDir = "/images";
+
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
+	public static DateTimeFormatter dateTimeEn = DateTimeFormat.forPattern(" dd.MM.yyyy");
+	public static DateTimeFormatter dateTimeDe = DateTimeFormat.forPattern(" dd.MM.yyyy");
+	public static DateTimeFormatter dateTimeIt = DateTimeFormat.forPattern(" dd.MM.yyyy");
+	public static DateTimeFormatter publicationDateTimeEn = DateTimeFormat.forPattern("dd.MM.yyyy, hh:mm aa");
+	public static DateTimeFormatter publicationDateTimeDe = DateTimeFormat.forPattern("dd.MM.yyyy, HH:mm");
+	public static DateTimeFormatter publicationDateTimeIt = DateTimeFormat.forPattern("dd.MM.yyyy, HH:mm");
+
 	public static int paginationCount = 50;
-	public static String urlSeperator = "_";
-	public static String urlStringForenoon = "am";
-	public static String urlStringAfternoon = "pm";
-	public static String urlStringFullday = "fullday";
-	public static String fileExtensionJpg = "jpg";
 
 	public static String codeTrentino = "IT-32-TN";
 	public static String codeSouthTyrol = "IT-32-BZ";
@@ -37,8 +50,6 @@ public class GlobalVariables {
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 
-	public static String univieBaseUrl = "https://data1.geo.univie.ac.at/exchange/albina/trentino/awm/";
-	public static String univieMapProductionTestUrl = "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps_test.php";
 	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps.php";
 
 	public static String getJsonSchemaFileString(String fileName) throws FileNotFoundException {
@@ -55,5 +66,181 @@ public class GlobalVariables {
 		scanner.close();
 
 		return result.toString();
+	}
+
+	public static String getDayName(int day, LanguageCode lang) {
+		if (day < 8) {
+			switch (lang) {
+			case de:
+				return daysDe[day - 1];
+			case it:
+				return daysIt[day - 1];
+			case en:
+				return daysEn[day - 1];
+			default:
+				return daysEn[day - 1];
+			}
+		} else
+			return "";
+	}
+
+	public static String getTreelineString(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Waldgrenze";
+		case it:
+			return "Linea del bosco";
+		case en:
+			return "Treeline";
+		default:
+			return "Treeline";
+		}
+	}
+
+	public static String getPublishedText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Publiziert ";
+		case it:
+			return "Pubblicato ";
+		case en:
+			return "Published ";
+		default:
+			return "Published ";
+		}
+	}
+
+	public static Object getTendencyHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Tendenz";
+		case it:
+			return "Tendenza";
+		case en:
+			return "Tendency";
+		default:
+			return "Tendency";
+		}
+	}
+
+	public static String getTendencyText(Tendency tendency, LanguageCode lang) {
+		if (tendency != null) {
+			switch (tendency) {
+			case increasing:
+				switch (lang) {
+				case de:
+					return "Tendenz: Lawinengefahr steigt";
+				case it:
+					return "Tendenza: Pericolo valanghe in aumento";
+				case en:
+					return "Tendency: Avalanche danger increasing";
+				default:
+					return "Tendency: Avalanche danger increasing";
+				}
+			case steady:
+				switch (lang) {
+				case de:
+					return "Tendenz: Lawinengefahr bleibt gleich";
+				case it:
+					return "Tendenza: Pericolo valanghe stabile";
+				case en:
+					return "Tendency: Avalanche danger stays the same";
+				default:
+					return "Tendency: Avalanche danger stays the same";
+				}
+			case decreasing:
+				switch (lang) {
+				case de:
+					return "Tendenz: Lawinengefahr nimmt ab";
+				case it:
+					return "Tendenza: Pericolo valanghe in diminuazione";
+				case en:
+					return "Tendency: Avalanche danger decreasing";
+				default:
+					return "Tendency: Avalanche danger decreasing";
+				}
+			default:
+				return "";
+			}
+		} else
+			return "";
+	}
+
+	public static String getDangerPatternsHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Gefahrenmuster";
+		case it:
+			return "Situazioni tipo";
+		case en:
+			return "Danger patterns";
+		default:
+			return "Danger patterns";
+		}
+	}
+
+	public static String getSnowpackHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Schneedecke";
+		case it:
+			return "Descrizione struttura manto nevoso";
+		case en:
+			return "Snowpack";
+		default:
+			return "Snowpack";
+		}
+	}
+
+	public static String getTitle(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinen.report";
+		case it:
+			return "Valanghe.report";
+		case en:
+			return "Avalanche.report";
+		default:
+			return "Avalanche.report";
+		}
+	}
+
+	public static String getHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenvorhersage";
+		case it:
+			return "Previsione Valanghe";
+		case en:
+			return "Avalanche Forecast";
+		default:
+			return "Avalanche Forecast";
+		}
+	}
+
+	public static String getFollowUs(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Folge uns";
+		case it:
+			return "Seguici";
+		case en:
+			return "Follow us";
+		default:
+			return "Follow us";
+		}
+	}
+
+	public static String getUnsubscribe(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Abmelden";
+		case it:
+			return "Annullare l'iscrizione";
+		case en:
+			return "Unsubscribe";
+		default:
+			return "Unsubscribe";
+		}
 	}
 }
