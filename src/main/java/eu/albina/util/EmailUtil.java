@@ -745,7 +745,7 @@ public class EmailUtil {
 		if (!b)
 			return "style=\"display: none;\"";
 		else
-			return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 5px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px;\"";
+			return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 5px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px; background-color: #f6fafc;\"";
 	}
 
 	public void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
