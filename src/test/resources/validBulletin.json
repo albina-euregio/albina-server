@@ -65,7 +65,7 @@
 		"dangerRatingAbove": "considerable",
 		"dangerRatingBelow": "moderate",
 		"avalancheSituation1": {
-			"avalanche-situation": "new_snow",
+			"avalancheSituation": "new_snow",
 			"aspects": [
 				"NW",
 				"N",
@@ -73,8 +73,8 @@
 			]
 		},
 		"avalancheSituation2": {
-			"avalanche-situation": "wind_drifted_snow",
-			"aspects2": [
+			"avalancheSituation": "wind_drifted_snow",
+			"aspects": [
 				"NW",
 				"N",
 				"NE"
