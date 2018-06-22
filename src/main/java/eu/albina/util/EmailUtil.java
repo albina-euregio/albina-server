@@ -99,6 +99,7 @@ public class EmailUtil {
 			Map<String, Object> root = new HashMap<>();
 
 			Map<String, Object> image = new HashMap<>();
+			// image.put("logo", "cid:logo");
 			switch (lang) {
 			case de:
 				image.put("logo", GlobalVariables.serverImagesUrl + "logo/Logo Lawinen.report.png");
@@ -766,7 +767,7 @@ public class EmailUtil {
 			message.setSubject("Lawinenvorhersage, " + getDate(bulletins, lang));
 			break;
 		case it:
-			message.setSubject("Avalanche Forecase, " + getDate(bulletins, lang));
+			message.setSubject("Avalanche Forecast, " + getDate(bulletins, lang));
 			break;
 		case en:
 			message.setSubject("Previsione Valanghe, " + getDate(bulletins, lang));
@@ -792,7 +793,7 @@ public class EmailUtil {
 		URL imageUrl = ClassLoader.getSystemResource("images/Colorbar.gif");
 		DataSource fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "ci");
+		messageBodyPart.setHeader("Content-ID", "cid:ci");
 		multipart.addBodyPart(messageBodyPart);
 
 		// add logo image
@@ -812,7 +813,7 @@ public class EmailUtil {
 		}
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "logo");
+		messageBodyPart.setHeader("Content-ID", "cid:logo");
 		multipart.addBodyPart(messageBodyPart);
 
 		// add facebook image
@@ -820,7 +821,7 @@ public class EmailUtil {
 		imageUrl = ClassLoader.getSystemResource("images/facebook.png");
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "facebook");
+		messageBodyPart.setHeader("Content-ID", "cid:facebook");
 		multipart.addBodyPart(messageBodyPart);
 
 		// add twitter image
@@ -828,7 +829,7 @@ public class EmailUtil {
 		imageUrl = ClassLoader.getSystemResource("images/twitter.png");
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "twitter");
+		messageBodyPart.setHeader("Content-ID", "cid:twitter");
 		multipart.addBodyPart(messageBodyPart);
 
 		// add instagram image
@@ -836,7 +837,7 @@ public class EmailUtil {
 		imageUrl = ClassLoader.getSystemResource("images/instagram.png");
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "instagram");
+		messageBodyPart.setHeader("Content-ID", "cid:instagram");
 		multipart.addBodyPart(messageBodyPart);
 
 		// add youtube image
@@ -844,7 +845,7 @@ public class EmailUtil {
 		imageUrl = ClassLoader.getSystemResource("images/youtube.png");
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "youtube");
+		messageBodyPart.setHeader("Content-ID", "cid:youtube");
 		multipart.addBodyPart(messageBodyPart);
 
 		// add whatsapp image
@@ -852,31 +853,11 @@ public class EmailUtil {
 		imageUrl = ClassLoader.getSystemResource("images/whatsapp.png");
 		fds = new FileDataSource(imageUrl.toString());
 		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "whatsapp");
+		messageBodyPart.setHeader("Content-ID", "cid:whatsapp");
 		multipart.addBodyPart(messageBodyPart);
 
 		// TODO add icons for each bulletin
 		addIcons(bulletins, multipart);
-
-		// add tendency symbols
-		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images/tendency_decreasing_blue.png");
-		fds = new FileDataSource(imageUrl.toString());
-		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "decreasing");
-		multipart.addBodyPart(messageBodyPart);
-		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images/tendency_steady_blue.png");
-		fds = new FileDataSource(imageUrl.toString());
-		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "steady");
-		multipart.addBodyPart(messageBodyPart);
-		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images/tendency_increasing_blue.png");
-		fds = new FileDataSource(imageUrl.toString());
-		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "increasing");
-		multipart.addBodyPart(messageBodyPart);
 
 		// TODO add maps
 
