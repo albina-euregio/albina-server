@@ -284,6 +284,35 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 		min-width: 49%;
 		float: right;
 	}
+
+	.overview-map {
+		width: 49%!important;
+		min-width: 49%;
+		float: left;
+		text-align: center;
+	}
+	.overview-map-pm {
+		width: 49%!important;
+		min-width: 49%;
+		float: right;
+		text-align: center;
+	}
+}
+
+.map-daytime-text {
+	color: #565f61;
+	font-size: 22px;
+	margin-bottom: 0;
+}
+
+.daytime-text {
+	color: #565f61;
+	font-size: 22px;
+}
+
+.daytime-text-div {
+	vertical-align: top;
+	padding-top: 5px;
 }
 
 .snowpack {
@@ -363,6 +392,18 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	border-right: 1px solid #e6eef2;
 }
 
+.danger-rating-number {
+	text-align: center;
+	margin-bottom: 0;
+	font-size: 12px;
+}
+
+.danger-rating-text {
+	text-align: center;
+	margin-bottom: 0;
+	font-size: 12px;
+}
+
 		</style>
 	</head>
 	 
@@ -405,7 +446,12 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 				<td></td>
 				<td class="container" align="" bgcolor="#FFFFFF">
 					<div class="content">
-						<table style="padding: 15px 0;">
+						<table class="overview-map" style="padding: 15px 0;">
+							<tr>
+								<td>
+									<h2 class="map-daytime-text">${text.am}</h2>
+								</td>
+							</tr>
 							<tr>
 								<td>
 									<p style="margin-bottom: 0px;">
@@ -416,7 +462,76 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 								</td>
 							</tr>
 						</table>
+						<table class="overview-map-pm" style="padding: 15px 0;">
+							<tr>
+								<td>
+									<h2 class="map-daytime-text">${text.pm}</h2>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<p style="margin-bottom: 0px;">
+										<a href="${link.website}">
+											<img src="${image.map.overviewPM}"/>
+										</a>
+									</p>
+								</td>
+							</tr>
+						</table>
 					</div>
+				</td>
+			</tr>
+		</table>
+		<table style="width: auto; margin-left: auto; margin-right: auto; text-align: center; border-spacing: 0px;">
+			<tr>
+				<td>
+					<div style="background-color: #CCFF66; height: 10px; width: 75px;"></div>
+				</td>
+				<td>
+					<div style="background-color: #FFFF00; height: 10px; width: 75px;"></div>
+				</td>
+				<td>
+					<div style="background-color: #FF9900; height: 10px; width: 75px;"></div>
+				</td>
+				<td>
+					<div style="background-color: #FF0000; height: 10px; width: 75px;"></div>
+				</td>
+				<td>
+					<div style="background-color: #800000; height: 10px; width: 75px;"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="danger-rating-number"><b>1</b></p>
+				</td>
+				<td>
+					<p class="danger-rating-number"><b>2</b></p>
+				</td>
+				<td>
+					<p class="danger-rating-number"><b>3</b></p>
+				</td>
+				<td>
+					<p class="danger-rating-number"><b>4</b></p>
+				</td>
+				<td>
+					<p class="danger-rating-number"><b>5</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="danger-rating-text">${text.dangerRating.low}</p>
+				</td>
+				<td>
+					<p class="danger-rating-text">${text.dangerRating.moderate}</p>
+				</td>
+				<td>
+					<p class="danger-rating-text">${text.dangerRating.considerable}</p>
+				</td>
+				<td>
+					<p class="danger-rating-text">${text.dangerRating.high}</p>
+				</td>
+				<td>
+					<p class="danger-rating-text">${text.dangerRating.veryHigh}</p>
 				</td>
 			</tr>
 		</table>
@@ -439,6 +554,9 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 
 										<table style="margin-top: 10px;">
 											<tr>
+												<td class="daytime-text-div">
+													<h2 class="daytime-text">${bulletin.textam}</h2>
+												</td>
 												<td style="width: 150px;">
 													<img class="detail-map" src="${bulletin.map}"/>
 												</td>
@@ -467,7 +585,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 																				<tr>
 																					<td>
 																						<h5 style="text-align: left; margin-bottom: 10px;">${bulletin.tendency.text}</h5>
-																						<h5 style="text-align: left; font-weight: 100;">${bulletin.tendency.date}</h5>
+																						<h5 style="text-align: left; font-weight: 100; margin-bottom: 0;">${bulletin.tendency.date}</h5>
 																					</td>
 																					<td>
 																						<img class="tendency-symbol" src="${bulletin.tendency.symbol}"/>
@@ -635,6 +753,209 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 												</td>
 											</tr>
 										</table>
+										<div ${bulletin.stylepm}>
+											<table>
+												<tr>
+													<td class="daytime-text-div">
+														<h2 class="daytime-text">${bulletin.textpm}</h2>
+													</td>
+													<td style="width: 150px;">
+														<img class="detail-map" src="${bulletin.map}"/>
+													</td>
+													<td>
+														<table style="border-bottom: 1px solid #e6eef2; padding-bottom: 5px;">
+															<tr>
+																<td>
+																	<table style="width: 0;">
+																		<tr>
+																			<td class="mountain">
+																				<div style="width: 115px; height: 60px;">
+																					<div style="max-height: 0; max-width: 0; overflow: visible;">
+																						<div style="height: 60px; width: 60px;">
+																							<img style="height: 60px; width: 60px; display: inline-block;" src="${bulletin.pm.dangerRating.symbol}"/>
+																						</div>
+																					</div>
+																					<div style="max-height: 0; max-width: 0; overflow: visible;">
+																						<div style="height: 60px; width: 60px;">
+																							<p style="height: 60px; width: 60px; display: inline-block; font-size: 12px; margin-top: 24px; margin-left: 62px;"><b>${bulletin.pm.dangerRating.elevation}</b></p>
+																						</div>
+																					</div>
+																				</div>
+																			</td>
+																			<td class="tendency">
+																				<table>
+																					<tr>
+																						<td>
+																							<h5 style="text-align: left; margin-bottom: 10px;">${bulletin.tendency.text}</h5>
+																							<h5 style="text-align: left; font-weight: 100;">${bulletin.tendency.date}</h5>
+																						</td>
+																						<td>
+																							<img class="tendency-symbol" src="${bulletin.tendency.symbol}"/>
+																						</td>
+																					</tr>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+														</table>
+														<table class="pictograms-1" style="margin: 5px 5px 0 0; width: 0;">
+															<tr>
+																<td style="margin: 0 5px; width: 70px;">
+																	<img class="avalanche-situation" src="${bulletin.avalancheSituation1.symbol}"/>
+																	<p style="font-size: 12px;">${bulletin.pm.avalancheSituation1.text}</p>
+																</td>
+																<td style="margin: 0 5px; width: 70px;">
+																	<div class="avalanche-situation-aspects-outer-div">
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectN}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectNE}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectE}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectSE}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectS}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectSW}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectW}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectNW}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation1.aspectBg}"/>
+																			</div>
+																		</div>
+																	</div>
+																</td>
+																<td style="width: 100px; margin: 0 5px;">
+																	<div style="width: 80px; height: 48px;">
+																		<div style="max-height: 0; max-width: 0; overflow: visible;">
+																			<div style="width: 80px; height: 48px;">
+																				<img style="width: 80px; height: 48px; display: inline-block;" src="${bulletin.pm.avalancheSituation1.elevation.symbol}"/>
+																			</div>
+																		</div>
+																		<div style="max-height: 0; max-width: 0; overflow: visible;">
+																			<div style="width: 80px; height: 48px;">
+																				<p style="width: 80px; height: 48px; display: inline-block; font-size: 12px; margin-top: 24px; margin-left: 68px;"><b>${bulletin.pm.avalancheSituation1.elevation.limitAbove}</b></p>
+																			</div>
+																		</div>
+																		<div style="max-height: 0; max-width: 0; overflow: visible;">
+																			<div style="width: 80px; height: 48px;">
+																				<p style="width: 80px; height: 48px; display: inline-block; font-size: 12px; margin-top: 7px; margin-left: 68px;"><b>${bulletin.pm.avalancheSituation1.elevation.limitBelow}</b></p>
+																			</div>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+														</table>
+														<table class="pictograms-2" style="margin-top: 5px; width: 0;">
+															<tr>
+																<td style="margin: 0 5px; width: 70px;">
+																	<img class="avalanche-situation" src="${bulletin.avalancheSituation2.symbol}"/>
+																	<p style="font-size: 12px;">${bulletin.pm.avalancheSituation2.text}</p>
+																</td>
+																<td style="margin: 0 5px; width: 70px;">
+																	<div class="avalanche-situation-aspects">
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectN}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectNE}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectE}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectSE}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectS}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectSW}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectW}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectNW}"/>
+																			</div>
+																		</div>
+																		<div class="avalanche-situation-aspects-div">
+																			<div class="avalanche-situation-aspects">
+																				<img class="avalanche-situation-aspects-img" src="${bulletin.pm.avalancheSituation2.aspectBg}"/>
+																			</div>
+																		</div>
+																	</div>
+																</td>
+																<td style="width: 100px; margin: 0 5px;">
+																	<div style="width: 80px; height: 48px;">
+																		<div style="max-height: 0; max-width: 0; overflow: visible;">
+																			<div style="width: 80px; height: 48px;">
+																				<img style="width: 80px; height: 48px; display: inline-block;" src="${bulletin.pm.avalancheSituation2.elevation.symbol}"/>
+																			</div>
+																		</div>
+																		<div style="max-height: 0; max-width: 0; overflow: visible;">
+																			<div style="width: 80px; height: 48px;">
+																				<p style="width: 80px; height: 48px; display: inline-block; font-size: 12px; margin-top: 24px; margin-left: 68px;"><b>${bulletin.pm.avalancheSituation2.elevation.limitAbove}</b></p>
+																			</div>
+																		</div>
+																		<div style="max-height: 0; max-width: 0; overflow: visible;">
+																			<div style="width: 80px; height: 48px;">
+																				<p style="width: 80px; height: 48px; display: inline-block; font-size: 12px; margin-top: 7px; margin-left: 68px;"><b>${bulletin.pm.avalancheSituation2.elevation.limitBelow}</b></p>
+																			</div>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+											</table>
+										</div>
 										<table>
 											<tr>
 												<td style="vertical-align: top; padding-top: 10px;">

@@ -9,6 +9,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 
@@ -241,6 +242,99 @@ public class GlobalVariables {
 			return "Unsubscribe";
 		default:
 			return "Unsubscribe";
+		}
+	}
+
+	public static String getDangerRatingText(DangerRating dangerRating, LanguageCode lang) {
+		switch (dangerRating) {
+		case low:
+			switch (lang) {
+			case de:
+				return "gering";
+			case it:
+				return "debole";
+			case en:
+				return "low";
+			default:
+				return "low";
+			}
+		case moderate:
+			switch (lang) {
+			case de:
+				return "mäßig";
+			case it:
+				return "moderato";
+			case en:
+				return "moderate";
+			default:
+				return "moderate";
+			}
+		case considerable:
+			switch (lang) {
+			case de:
+				return "erheblich";
+			case it:
+				return "marcato";
+			case en:
+				return "considerable";
+			default:
+				return "considerable";
+			}
+		case high:
+			switch (lang) {
+			case de:
+				return "groß";
+			case it:
+				return "forte";
+			case en:
+				return "high";
+			default:
+				return "high";
+			}
+		case very_high:
+			switch (lang) {
+			case de:
+				return "sehr groß";
+			case it:
+				return "molto forte";
+			case en:
+				return "very high";
+			default:
+				return "very high";
+			}
+		case missing:
+			switch (lang) {
+			case de:
+				return "fehlt";
+			case it:
+				return "mancha";
+			case en:
+				return "missing";
+			default:
+				return "missing";
+			}
+		case no_rating:
+			switch (lang) {
+			case de:
+				return "keine Beurteilung";
+			case it:
+				return "senza valutazione";
+			case en:
+				return "no rating";
+			default:
+				return "no rating";
+			}
+		default:
+			switch (lang) {
+			case de:
+				return "fehlt";
+			case it:
+				return "mancha";
+			case en:
+				return "missing";
+			default:
+				return "missing";
+			}
 		}
 	}
 }
