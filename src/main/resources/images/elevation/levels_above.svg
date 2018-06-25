@@ -1,22 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="80px" height="48px" viewBox="0 0 80 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
-    <title>levels_above</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Picto-Export" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Levels" transform="translate(-20.000000, -20.000000)">
-            <g id="Blues" transform="translate(20.000000, 20.000000)">
-                <g id="levels_above">
-                    <polygon id="Middle" fill="#19ABFF" points="8.50075075 33.0000007 18.5007508 16.0000007 44.5007508 16.0000007 54.5007508 33.0000007"></polygon>
-                    <polygon id="Top" fill="#19ABFF" points="18.5007508 17.0000007 25.5007508 5.00000067 29.5007508 11.0000007 35.5007508 1.00000067 44.5007508 17.0000007"></polygon>
-                    <path d="M62.5007508,47.5000007 L35.5007508,0.50000067 L29.5007508,11.5000007 L25.5007508,4.50000067 L0.500750752,47.5000007 L62.5007508,47.5000007 Z" id="Mountain" stroke="#222222"></path>
-                    <polygon id="Rectangle" fill="#222222" points="10.1007511 32.0000007 64.5007508 32.0000007 64.5007508 33.0000007 9.50075075 33.0000007"></polygon>
-                    <g id="Icon-/-Down-Open-Blue" transform="translate(74.500000, 12.500000) scale(1, -1) translate(-74.500000, -12.500000) translate(69.000000, 7.000000)" fill="#19ABFF">
-                        <path d="M7.94974747,6.44974747 L7.94974747,0.449747468 L8.94974747,0.449747468 L8.94974747,6.44974747 L8.94974747,7.44974747 L1.94974747,7.44974747 L1.94974747,6.44974747 L7.94974747,6.44974747 Z" id="Combined-Shape" transform="translate(5.449747, 3.949747) rotate(-315.000000) translate(-5.449747, -3.949747) "></path>
-                    </g>
-                </g>
-            </g>
-        </g>
-    </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="80px" height="48px" viewBox="0 0 80 48" enable-background="new 0 0 80 48" xml:space="preserve">
+<title>levels_above</title>
+<desc>Created with Sketch.</desc>
+<g id="Picto-Export">
+	<g id="Levels" transform="translate(-20.000000, -20.000000)">
+		<g id="Blues" transform="translate(20.000000, 20.000000)">
+			<g id="levels_above">
+				<polygon id="Middle" fill="#19ABFF" points="9.102,33 19.102,16 45.102,16 55.102,33 				"/>
+				<polygon id="Top" fill="#19ABFF" points="19.102,17 26.102,5 30.102,11 36.102,1 45.102,17 				"/>
+				<path id="Mountain" fill="none" stroke="#222222" d="M63.102,47.5l-27-47l-6,11l-4-7l-25,43H63.102z"/>
+				<polygon id="Rectangle" fill="#222222" points="10.701,32 65.102,32 65.102,33 10.102,33 				"/>
+				
+					<g id="Icon-_x2F_-Down-Open-Blue" transform="translate(74.500000, 12.500000) scale(1, -1) translate(-74.500000, -12.500000) translate(69.000000, 7.000000)">
+					<path id="Combined-Shape" fill="#19ABFF" d="M6.05,7.485l4.243-4.243L11,3.95L6.757,8.192L6.05,8.899L1.101,3.95l0.707-0.707
+						L6.05,7.485z"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</g>
 </svg>
