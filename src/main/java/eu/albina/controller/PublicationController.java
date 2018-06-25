@@ -1,8 +1,13 @@
 package eu.albina.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.mail.MessagingException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
@@ -20,8 +25,7 @@ import eu.albina.util.PdfUtil;
  */
 public class PublicationController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(PublicationController.class);
+	private static Logger logger = LoggerFactory.getLogger(PublicationController.class);
 
 	private static PublicationController instance = null;
 
@@ -60,15 +64,87 @@ public class PublicationController {
 
 		// send emails
 		if (AlbinaUtil.sendEmails) {
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeTyrol);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeTyrol);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeTyrol);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeSouthTyrol);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeSouthTyrol);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeSouthTyrol);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeTrentino);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeTrentino);
-			EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeTrentino);
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeTyrol);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeTyrol);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeTyrol);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeSouthTyrol);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeSouthTyrol);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeSouthTyrol);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeTrentino);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, GlobalVariables.codeTrentino);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
+			try {
+				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, GlobalVariables.codeTrentino);
+			} catch (IOException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		// publish on social media
@@ -107,9 +183,33 @@ public class PublicationController {
 		// send emails to regions
 		if (AlbinaUtil.sendEmails) {
 			for (String region : regions) {
-				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, region);
-				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, region);
-				EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, region);
+				try {
+					EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, region);
+				} catch (IOException e) {
+					logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+					e.printStackTrace();
+				}
+				try {
+					EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.it, region);
+				} catch (IOException e) {
+					logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+					e.printStackTrace();
+				}
+				try {
+					EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.en, region);
+				} catch (IOException e) {
+					logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error sending emails in DE to AT-07:" + e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		}
 

@@ -1,7 +1,5 @@
 package eu.albina.listener;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 
 import eu.albina.controller.SocketIOController;
-import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.SchedulerUtil;
 
@@ -38,16 +35,6 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		HibernateUtil.getInstance().setUp();
-
-		try {
-			EmailUtil.getInstance().createFreemarkerConfigurationInstance();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		Driver d = null;

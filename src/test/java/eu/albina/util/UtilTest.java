@@ -11,6 +11,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -167,8 +169,13 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		EmailUtil.getInstance().createFreemarkerConfigurationInstance();
 		EmailUtil.getInstance().createEmailHtml(bulletins, LanguageCode.de);
+	}
+
+	@Ignore
+	@Test
+	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
+		EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeTyrol);
 	}
 
 	@Ignore

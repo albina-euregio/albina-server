@@ -15,7 +15,9 @@ import eu.albina.model.enumerations.Tendency;
 
 public class GlobalVariables {
 
-	public static String serverImagesUrl = "http://212.47.231.185:8080/images/";
+	// public static String serverImagesUrl = "http://212.47.231.185:8080/images/";
+	// TODO just for testing
+	public static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
 
 	public static String[] daysDe = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" };
 	public static String[] daysIt = { "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica" };
