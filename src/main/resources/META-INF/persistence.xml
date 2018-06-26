@@ -44,7 +44,7 @@
 	    <property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>
 	    
 	    <!-- Echo all executed SQL to stdout -->
-	    <property name="show_sql" value="true"/>
+	    <property name="show_sql" value="false"/>
 	    
 	    <!-- Set time zone -->
 	    <property name="hibernate.jdbc.time_zone" value="UTC"/>
