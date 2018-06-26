@@ -30,13 +30,6 @@
     
   <dependencies>
   
-<!-- freemarker -->
-	<dependency>
-	  <groupId>org.freemarker</groupId>
-	  <artifactId>freemarker</artifactId>
-	  <version>2.3.27-incubating</version>
-	</dependency>
-
 <!-- timer -->
 	<dependency>
       <groupId>org.quartz-scheduler</groupId>
@@ -71,9 +64,21 @@
 
 <!-- email -->
 	<dependency>
+	  <groupId>org.freemarker</groupId>
+	  <artifactId>freemarker</artifactId>
+	  <version>2.3.27-incubating</version>
+	</dependency>
+	<dependency>
 	    <groupId>javax.mail</groupId>
 	    <artifactId>mail</artifactId>
 	    <version>1.5.0-b01</version>
+	</dependency>
+
+<!-- pdf -->
+	<dependency>
+		<groupId>org.apache.pdfbox</groupId>
+		<artifactId>pdfbox</artifactId>
+		<version>2.0.4</version>
 	</dependency>
 
 <!-- swagger -->
