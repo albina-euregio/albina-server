@@ -3,8 +3,6 @@ package eu.albina.jobs;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.mail.MessagingException;
-
 import org.joda.time.DateTime;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -57,9 +55,6 @@ public class PublicationJob implements org.quartz.Job {
 						PublicationController.getInstance().publish(bulletins);
 				} catch (AlbinaException e) {
 					logger.warn("Error loading bulletins - " + e.getMessage());
-					throw new AlbinaException(e.getMessage());
-				} catch (MessagingException e) {
-					logger.warn("Error sending emails - " + e.getMessage());
 					throw new AlbinaException(e.getMessage());
 				}
 			} catch (AlbinaException e) {

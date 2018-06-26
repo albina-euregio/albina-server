@@ -37,6 +37,7 @@ public class UtilTest {
 	private String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
 	private List<String> names = new ArrayList<String>();
 	private List<String> passwords = new ArrayList<String>();
+	private List<String> recipients = new ArrayList<String>();
 
 	@Before
 	public void setUp() {
@@ -164,6 +165,10 @@ public class UtilTest {
 		validBulletinStringFromResource = bulletinStringBuilder.toString();
 		AvalancheBulletin bulletin4 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin4);
+
+		recipients.add("n.lanzanasto@gmail.com");
+		recipients.add("norbert.lanzanasto@tirol.gv.at");
+		// recipients.add("fabrizi@transporter.at");
 	}
 
 	@Ignore
@@ -175,7 +180,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
-		EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, GlobalVariables.codeTyrol);
+		EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, recipients);
 	}
 
 	@Ignore

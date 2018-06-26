@@ -3,6 +3,7 @@ package eu.albina.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,8 +15,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -32,7 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -93,14 +91,99 @@ public class EmailUtil {
 		return cfg;
 	}
 
+	public void sendEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
+		// TODO filter bulletins based on region
+		for (String region : regions) {
+			List<AvalancheBulletin> bulletinList = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin avalancheBulletin : bulletins) {
+				if (avalancheBulletin.affectsRegion(region))
+					bulletinList.add(avalancheBulletin);
+			}
+			for (LanguageCode lang : GlobalVariables.languages) {
+				// TODO get recipients
+				// List<String> recipients = SubscriberService.getInstance().getRecipients(lang,
+				// region);
+				List<String> recipients = new ArrayList<String>();
+				sendEmail(bulletinList, lang, recipients);
+			}
+		}
+	}
+
+	public void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, List<String> recipients) {
+		logger.debug("Sending email in " + lang + "...");
+
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(GlobalVariables.emailUsername, GlobalVariables.emailPassword);
+			}
+		});
+
+		try {
+			MimeMessage message = new MimeMessage(session);
+			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
+			message.addHeader("format", "flowed");
+			message.addHeader("Content-Transfer-Encoding", "8bit");
+
+			switch (lang) {
+			case de:
+				message.setSubject("Lawinenvorhersage, " + getDate(bulletins, lang), "UTF-8");
+				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Lawinen.report"));
+				break;
+			case it:
+				message.setSubject("Avalanche Forecast, " + getDate(bulletins, lang), "UTF-8");
+				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Valanghe.report"));
+				break;
+			case en:
+				message.setSubject("Previsione Valanghe, " + getDate(bulletins, lang), "UTF-8");
+				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
+				break;
+
+			default:
+				break;
+			}
+
+			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername));
+
+			for (String recipient : recipients)
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+
+			MimeMultipart multipart = new MimeMultipart("related");
+
+			// add html
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
+			String htmlText = createEmailHtml(bulletins, lang);
+			messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
+			multipart.addBodyPart(messageBodyPart);
+
+			// TODO add maps
+
+			message.setContent(multipart, "utf-8");
+			Transport.send(message);
+
+			logger.debug("Emails sent in " + lang + ".");
+		} catch (MessagingException e) {
+			logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
 	public String createEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		try {
 			// Create data model
 			Map<String, Object> root = new HashMap<>();
-			root.put("timestamp", new DateTime().getMillis());
 
 			Map<String, Object> image = new HashMap<>();
-			// image.put("logo", "cid:logo");
 			switch (lang) {
 			case de:
 				image.put("logo", GlobalVariables.serverImagesUrl + "logo/lawinen_report.png");
@@ -116,32 +199,22 @@ public class EmailUtil {
 				break;
 			}
 			image.put("dangerLevel5Style", getDangerLevel5Style());
-			// image.put("dangerLevel5Style", "cid:dangerRating5bg);
 			image.put("ci", GlobalVariables.serverImagesUrl + "Colorbar.gif");
-			// image.put("ci", "cid:ci);
-			// image.put("logo", "cid:logo);
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.serverImagesUrl + "social_media/facebook.png");
 			socialMediaImages.put("twitter", GlobalVariables.serverImagesUrl + "social_media/twitter.png");
 			socialMediaImages.put("instagram", GlobalVariables.serverImagesUrl + "social_media/instagram.png");
 			socialMediaImages.put("youtube", GlobalVariables.serverImagesUrl + "social_media/youtube.png");
 			socialMediaImages.put("whatsapp", GlobalVariables.serverImagesUrl + "social_media/whatsapp.png");
-			// socialMediaImages.put("facebook", "cid:facebook");
-			// socialMediaImages.put("twitter", "cid:twitter");
-			// socialMediaImages.put("instagram", "cid:instagram");
-			// socialMediaImages.put("youtube", "cid:youtube");
-			// socialMediaImages.put("whatsapp", "cid:whatsapp");
 			image.put("socialmedia", socialMediaImages);
 			Map<String, Object> mapImage = new HashMap<>();
 
 			// TODO add map URL to email
 			mapImage.put("overview", GlobalVariables.serverImagesUrl + "bulletin-overview.jpg");
-			// mapImage.put("overview", "cid:map_overview");
 			if (hasDaytimeDependency(bulletins))
 				mapImage.put("overviewPM", GlobalVariables.serverImagesUrl + "bulletin-overview.jpg");
 			else
 				mapImage.put("overviewPM", "");
-			// mapImage.put("overview", "cid:map_overview_pm");
 
 			image.put("map", mapImage);
 			root.put("image", image);
@@ -275,15 +348,12 @@ public class EmailUtil {
 				Map<String, Object> tendency = new HashMap<>();
 				tendency.put("text", GlobalVariables.getTendencyText(avalancheBulletin.getTendency(), lang));
 				if (avalancheBulletin.getTendency() == Tendency.decreasing) {
-					// tendency.put("symbol", "cid:tendency/decreasing");
 					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency/tendency_decreasing_blue.png");
 					tendency.put("date", getTendencyDate(bulletins, lang));
 				} else if (avalancheBulletin.getTendency() == Tendency.steady) {
-					// tendency.put("symbol", "cid:tendency/steady");
 					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency/tendency_steady_blue.png");
 					tendency.put("date", getTendencyDate(bulletins, lang));
 				} else if (avalancheBulletin.getTendency() == Tendency.increasing) {
-					// tendency.put("symbol", "cid:tendency/increasing");
 					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency/tendency_increasing_blue.png");
 					tendency.put("date", getTendencyDate(bulletins, lang));
 				} else {
@@ -807,447 +877,6 @@ public class EmailUtil {
 			return "style=\"display: none; overflow: hidden; height: 0px;\"";
 		else
 			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px; border-top: 1px solid #e6eef2; padding-top: 10px;\"";
-	}
-
-	public void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
-			throws MessagingException, URISyntaxException, IOException {
-		logger.debug("Sending mail...");
-
-		final String username = "norbert.lanzanasto@gmail.com";
-		final String password = "Go6Zaithee";
-
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
-
-		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		});
-
-		try {
-			MimeMessage message = new MimeMessage(session);
-			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-			message.addHeader("format", "flowed");
-			message.addHeader("Content-Transfer-Encoding", "8bit");
-			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername));
-
-			switch (lang) {
-			case de:
-				message.setSubject("Lawinenvorhersage, " + getDate(bulletins, lang), "UTF-8");
-				break;
-			case it:
-				message.setSubject("Avalanche Forecast, " + getDate(bulletins, lang), "UTF-8");
-				break;
-			case en:
-				message.setSubject("Previsione Valanghe, " + getDate(bulletins, lang), "UTF-8");
-				break;
-
-			default:
-				break;
-			}
-
-			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername));
-
-			// TODO set recipients based on region
-			// message.setRecipients(Message.RecipientType.TO,
-			// InternetAddress.parse("to-email@gmail.com"));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress("n.lanzanasto@gmail.com"));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress("norbert.lanzanasto@tirol.gv.at"));
-			// message.addRecipient(Message.RecipientType.TO, new
-			// InternetAddress("fabrizi@transporter.at"));
-
-			MimeMultipart multipart = new MimeMultipart("related");
-
-			// add html
-			MimeBodyPart messageBodyPart = new MimeBodyPart();
-			String htmlText = createEmailHtml(bulletins, lang);
-			messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
-			multipart.addBodyPart(messageBodyPart);
-
-			// URL imageUrl;
-			// DataSource fds;
-			// File file;
-			//
-			// // add CI image
-			// messageBodyPart = new MimeBodyPart();
-			// imageUrl = ClassLoader.getSystemResource("images/Colorbar.gif");
-			// file = new File(imageUrl.toURI());
-			// fds = new FileDataSource(file);
-			// messageBodyPart.setDataHandler(new DataHandler(fds));
-			// messageBodyPart.setHeader("Content-ID", "cid:ci");
-			// multipart.addBodyPart(messageBodyPart);
-			//
-			// // add logo image
-			// messageBodyPart = new MimeBodyPart();
-			// switch (lang) {
-			// case en:
-			// imageUrl = ClassLoader.getSystemResource("images/logo/avalanche_report.png");
-			// break;
-			// case de:
-			// imageUrl = ClassLoader.getSystemResource("images/logo/lawinen_report.png");
-			// break;
-			// case it:
-			// imageUrl = ClassLoader.getSystemResource("images/logo/valanghe_report.png");
-			// break;
-			// default:
-			// imageUrl = ClassLoader.getSystemResource("images/logo/avalanche_report.png");
-			// break;
-			// }
-			// file = new File(imageUrl.toURI());
-			// fds = new FileDataSource(file);
-			// messageBodyPart.setDataHandler(new DataHandler(fds));
-			// messageBodyPart.setHeader("Content-ID", "cid:logo");
-			// multipart.addBodyPart(messageBodyPart);
-			//
-			// // add facebook image
-			// messageBodyPart = new MimeBodyPart();
-			// imageUrl = ClassLoader.getSystemResource("images/social_media/facebook.png");
-			// file = new File(imageUrl.toURI());
-			// fds = new FileDataSource(file);
-			// messageBodyPart.setDataHandler(new DataHandler(fds));
-			// messageBodyPart.setHeader("Content-ID", "cid:facebook");
-			// multipart.addBodyPart(messageBodyPart);
-			//
-			// // add twitter image
-			// messageBodyPart = new MimeBodyPart();
-			// imageUrl = ClassLoader.getSystemResource("images/social_media/twitter.png");
-			// file = new File(imageUrl.toURI());
-			// fds = new FileDataSource(file);
-			// messageBodyPart.setDataHandler(new DataHandler(fds));
-			// messageBodyPart.setHeader("Content-ID", "cid:twitter");
-			// multipart.addBodyPart(messageBodyPart);
-			//
-			// // add instagram image
-			// messageBodyPart = new MimeBodyPart();
-			// imageUrl =
-			// ClassLoader.getSystemResource("images/social_media/instagram.png");
-			// file = new File(imageUrl.toURI());
-			// fds = new FileDataSource(file);
-			// messageBodyPart.setDataHandler(new DataHandler(fds));
-			// messageBodyPart.setHeader("Content-ID", "cid:instagram");
-			// multipart.addBodyPart(messageBodyPart);
-			//
-			// // add youtube image
-			// messageBodyPart = new MimeBodyPart();
-			// imageUrl = ClassLoader.getSystemResource("images/social_media/youtube.png");
-			// file = new File(imageUrl.toURI());
-			// fds = new FileDataSource(file);
-			// messageBodyPart.setDataHandler(new DataHandler(fds));
-			// messageBodyPart.setHeader("Content-ID", "cid:youtube");
-			// multipart.addBodyPart(messageBodyPart);
-			//
-			// // add whatsapp image
-			// messageBodyPart = new MimeBodyPart();
-			// imageUrl = ClassLoader.getSystemResource("images/social_media/whatsapp.png");
-			// file = new File(imageUrl.toURI());
-			// fds = new FileDataSource(file);
-			// messageBodyPart.setDataHandler(new DataHandler(fds));
-			// messageBodyPart.setHeader("Content-ID", "cid:whatsapp");
-			// multipart.addBodyPart(messageBodyPart);
-			//
-			// // add icons for each bulletin
-			// addIcons(bulletins, multipart);
-
-			// TODO add maps
-
-			message.setContent(multipart, "utf-8");
-			Transport.send(message);
-
-			logger.debug("Emails sent in " + lang + " to " + region);
-		} catch (MessagingException e) {
-			logger.error("Emails could not be sent in " + lang + " to " + region + ": " + e.getMessage());
-			throw new RuntimeException(e);
-		}
-	}
-
-	private void addIcons(List<AvalancheBulletin> bulletins, MimeMultipart multipart)
-			throws MessagingException, URISyntaxException {
-		List<String> warningPictos = new ArrayList<String>();
-		List<Tendency> tendencies = new ArrayList<Tendency>();
-		List<eu.albina.model.enumerations.AvalancheSituation> avalancheSituations = new ArrayList<eu.albina.model.enumerations.AvalancheSituation>();
-		List<String> elevations = new ArrayList<String>();
-
-		MimeBodyPart messageBodyPart;
-		URL imageUrl;
-		FileDataSource fds;
-		File file;
-
-		// add aspects icons
-		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images//aspects//exposition_bg.svg");
-		file = new File(imageUrl.toURI());
-		fds = new FileDataSource(file);
-		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "cid:aspect/bg");
-		multipart.addBodyPart(messageBodyPart);
-
-		messageBodyPart = new MimeBodyPart();
-		imageUrl = ClassLoader.getSystemResource("images/aspects/exposition_empty.svg");
-		file = new File(imageUrl.toURI());
-		fds = new FileDataSource(file);
-		messageBodyPart.setDataHandler(new DataHandler(fds));
-		messageBodyPart.setHeader("Content-ID", "cid:aspect/empty");
-		multipart.addBodyPart(messageBodyPart);
-
-		for (Aspect aspect : Aspect.values()) {
-			messageBodyPart = new MimeBodyPart();
-			imageUrl = ClassLoader.getSystemResource("images/aspects/exposition_" + aspect.toString() + ".svg");
-			file = new File(imageUrl.toURI());
-			fds = new FileDataSource(file);
-			messageBodyPart.setDataHandler(new DataHandler(fds));
-			messageBodyPart.setHeader("Content-ID", "cid:aspect/" + aspect.toString());
-			multipart.addBodyPart(messageBodyPart);
-		}
-
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			// add danger level
-			String id = getWarningLevelId(avalancheBulletin.getForenoon(),
-					avalancheBulletin.isHasElevationDependency());
-			if (!warningPictos.contains(id)) {
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/warning_pictos/level_" + id + ".svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:warning_picto/" + id);
-				multipart.addBodyPart(messageBodyPart);
-				warningPictos.add(id);
-			}
-
-			// add tendency symbol
-			if (avalancheBulletin.getTendency() != null)
-				switch (avalancheBulletin.getTendency()) {
-				case increasing:
-					if (!tendencies.contains(Tendency.increasing)) {
-						messageBodyPart = new MimeBodyPart();
-						imageUrl = ClassLoader.getSystemResource("images/tendency/tendency_increasing_blue.png");
-						file = new File(imageUrl.toURI());
-						fds = new FileDataSource(file);
-						messageBodyPart.setDataHandler(new DataHandler(fds));
-						messageBodyPart.setHeader("Content-ID", "cid:tendency/increasing");
-						multipart.addBodyPart(messageBodyPart);
-						tendencies.add(Tendency.increasing);
-					}
-					break;
-				case steady:
-					if (!tendencies.contains(Tendency.steady)) {
-						messageBodyPart = new MimeBodyPart();
-						imageUrl = ClassLoader.getSystemResource("images/tendency/tendency_steady_blue.png");
-						file = new File(imageUrl.toURI());
-						fds = new FileDataSource(file);
-						messageBodyPart.setDataHandler(new DataHandler(fds));
-						messageBodyPart.setHeader("Content-ID", "cid:tendency/steady");
-						multipart.addBodyPart(messageBodyPart);
-						tendencies.add(Tendency.steady);
-					}
-					break;
-				case decreasing:
-					if (!tendencies.contains(Tendency.decreasing)) {
-						messageBodyPart = new MimeBodyPart();
-						imageUrl = ClassLoader.getSystemResource("images/tendency/tendency_decreasing_blue.png");
-						file = new File(imageUrl.toURI());
-						fds = new FileDataSource(file);
-						messageBodyPart.setDataHandler(new DataHandler(fds));
-						messageBodyPart.setHeader("Content-ID", "cid:tendency/decreasing");
-						multipart.addBodyPart(messageBodyPart);
-						tendencies.add(Tendency.decreasing);
-					}
-					break;
-
-				default:
-					break;
-				}
-
-			// add avalanche situation icons
-			if (avalancheBulletin.getForenoon().getAvalancheSituation1() != null) {
-				if (avalancheBulletin.getForenoon().getAvalancheSituation1().getAvalancheSituation() != null)
-					addAvalancheSituation(avalancheBulletin.getForenoon().getAvalancheSituation1(), multipart,
-							avalancheSituations);
-				addAvalancheSituationElevation(avalancheBulletin.getForenoon().getAvalancheSituation1(), multipart,
-						elevations);
-			}
-			if (avalancheBulletin.getForenoon().getAvalancheSituation2() != null) {
-				if (avalancheBulletin.getForenoon().getAvalancheSituation2().getAvalancheSituation() != null)
-					addAvalancheSituation(avalancheBulletin.getForenoon().getAvalancheSituation2(), multipart,
-							avalancheSituations);
-				addAvalancheSituationElevation(avalancheBulletin.getForenoon().getAvalancheSituation2(), multipart,
-						elevations);
-			}
-
-			if (avalancheBulletin.isHasDaytimeDependency()) {
-				id = getWarningLevelId(avalancheBulletin.getAfternoon(), avalancheBulletin.isHasElevationDependency());
-				if (!warningPictos.contains(id)) {
-					messageBodyPart = new MimeBodyPart();
-					imageUrl = ClassLoader.getSystemResource("images/warning_pictos/level_" + id + ".svg");
-					file = new File(imageUrl.toURI());
-					fds = new FileDataSource(file);
-					messageBodyPart.setDataHandler(new DataHandler(fds));
-					messageBodyPart.setHeader("Content-ID", "cid:warning_picto/" + id);
-					multipart.addBodyPart(messageBodyPart);
-					warningPictos.add(id);
-				}
-
-				// add avalanche situation icons
-				if (avalancheBulletin.getAfternoon().getAvalancheSituation1() != null) {
-					if (avalancheBulletin.getAfternoon().getAvalancheSituation1().getAvalancheSituation() != null)
-						addAvalancheSituation(avalancheBulletin.getAfternoon().getAvalancheSituation1(), multipart,
-								avalancheSituations);
-					addAvalancheSituationElevation(avalancheBulletin.getAfternoon().getAvalancheSituation1(), multipart,
-							elevations);
-				}
-				if (avalancheBulletin.getAfternoon().getAvalancheSituation2() != null) {
-					if (avalancheBulletin.getAfternoon().getAvalancheSituation2().getAvalancheSituation() != null)
-						addAvalancheSituation(avalancheBulletin.getAfternoon().getAvalancheSituation2(), multipart,
-								avalancheSituations);
-					addAvalancheSituationElevation(avalancheBulletin.getAfternoon().getAvalancheSituation2(), multipart,
-							elevations);
-				}
-			}
-		}
-
-	}
-
-	private void addAvalancheSituationElevation(AvalancheSituation avalancheSituation, MimeMultipart multipart,
-			List<String> elevations) throws MessagingException, URISyntaxException {
-		MimeBodyPart messageBodyPart;
-		URL imageUrl;
-		FileDataSource fds;
-		File file;
-
-		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
-			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
-				// elevation high and low set
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/elevation/levels_middle.svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:elevation/middle");
-				multipart.addBodyPart(messageBodyPart);
-				elevations.add("levels_middle");
-			} else {
-				// elevation high set
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/elevation/levels_below.svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:elevation/below");
-				multipart.addBodyPart(messageBodyPart);
-				elevations.add("levels_below");
-			}
-		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
-			// elevation low set
-			messageBodyPart = new MimeBodyPart();
-			imageUrl = ClassLoader.getSystemResource("images/elevation/levels_above.svg");
-			file = new File(imageUrl.toURI());
-			fds = new FileDataSource(file);
-			messageBodyPart.setDataHandler(new DataHandler(fds));
-			messageBodyPart.setHeader("Content-ID", "cid:elevation/above");
-			multipart.addBodyPart(messageBodyPart);
-			elevations.add("levels_above");
-		} else {
-			// no elevation set
-			messageBodyPart = new MimeBodyPart();
-			imageUrl = ClassLoader.getSystemResource("images/elevation/levels_all.svg");
-			file = new File(imageUrl.toURI());
-			fds = new FileDataSource(file);
-			messageBodyPart.setDataHandler(new DataHandler(fds));
-			messageBodyPart.setHeader("Content-ID", "cid:elevation/all");
-			multipart.addBodyPart(messageBodyPart);
-			elevations.add("levels_all");
-		}
-	}
-
-	private void addAvalancheSituation(AvalancheSituation avalancheSituation, MimeMultipart multipart,
-			List<eu.albina.model.enumerations.AvalancheSituation> avalancheSituations)
-			throws MessagingException, URISyntaxException {
-		MimeBodyPart messageBodyPart;
-		URL imageUrl;
-		FileDataSource fds;
-		File file;
-
-		switch (avalancheSituation.getAvalancheSituation()) {
-		case new_snow:
-			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.new_snow)) {
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/new_snow.svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/new_snow");
-				multipart.addBodyPart(messageBodyPart);
-				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.new_snow);
-			}
-			break;
-		case wind_drifted_snow:
-			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.wind_drifted_snow)) {
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/wind_drifted_snow.svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/wind_drifted_snow");
-				multipart.addBodyPart(messageBodyPart);
-				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.wind_drifted_snow);
-			}
-			break;
-		case weak_persistent_layer:
-			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.weak_persistent_layer)) {
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/weak_persistent_layer.svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/weak_persistent_layer");
-				multipart.addBodyPart(messageBodyPart);
-				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.weak_persistent_layer);
-			}
-			break;
-		case wet_snow:
-			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.wet_snow)) {
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/wet_snow.svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/wet_snow");
-				multipart.addBodyPart(messageBodyPart);
-				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.wet_snow);
-			}
-			break;
-		case gliding_snow:
-			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.gliding_snow)) {
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/gliding_snow.svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/gliding_snow");
-				multipart.addBodyPart(messageBodyPart);
-				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.gliding_snow);
-			}
-			break;
-		case favourable_situation:
-			if (!avalancheSituations.contains(eu.albina.model.enumerations.AvalancheSituation.favourable_situation)) {
-				messageBodyPart = new MimeBodyPart();
-				imageUrl = ClassLoader.getSystemResource("images/avalanche_situations/color/favourable_situation.svg");
-				file = new File(imageUrl.toURI());
-				fds = new FileDataSource(file);
-				messageBodyPart.setDataHandler(new DataHandler(fds));
-				messageBodyPart.setHeader("Content-ID", "cid:avalanche_situation/favourable_situation");
-				multipart.addBodyPart(messageBodyPart);
-				avalancheSituations.add(eu.albina.model.enumerations.AvalancheSituation.favourable_situation);
-			}
-			break;
-
-		default:
-			break;
-		}
 	}
 
 	private String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription,

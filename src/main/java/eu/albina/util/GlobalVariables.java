@@ -3,6 +3,8 @@ package eu.albina.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.joda.time.format.DateTimeFormat;
@@ -19,11 +21,12 @@ public class GlobalVariables {
 	// TODO just for testing
 	public static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
 
+	public static String emailUsername = "norbert.lanzanasto@gmail.com";
+	public static String emailPassword = "Go6Zaithee";
+
 	public static String[] daysDe = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" };
 	public static String[] daysIt = { "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica" };
 	public static String[] daysEn = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-
-	public static String imagesDir = "/images";
 
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
@@ -35,11 +38,35 @@ public class GlobalVariables {
 	public static DateTimeFormatter publicationDateTimeDe = DateTimeFormat.forPattern("dd.MM.yyyy, HH:mm");
 	public static DateTimeFormatter publicationDateTimeIt = DateTimeFormat.forPattern("dd.MM.yyyy, HH:mm");
 
-	public static int paginationCount = 50;
-
 	public static String codeTrentino = "IT-32-TN";
 	public static String codeSouthTyrol = "IT-32-BZ";
 	public static String codeTyrol = "AT-07";
+
+	public static List<String> regions = new ArrayList<String>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("AT-07");
+			add("IT-32-BZ");
+			add("IT-32-TN");
+		}
+	};
+
+	public static List<LanguageCode> languages = new ArrayList<LanguageCode>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add(LanguageCode.de);
+			add(LanguageCode.it);
+			add(LanguageCode.en);
+		}
+	};
 
 	public static String avalancheReportUsername = "info@avalanche.report";
 
