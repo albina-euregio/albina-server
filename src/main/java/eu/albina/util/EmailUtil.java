@@ -292,8 +292,8 @@ public class EmailUtil {
 				}
 				bulletin.put("tendency", tendency);
 
-				bulletin.put("dangerratingcolorstyle", getDangerRatingColorStyle(
-						AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
+				bulletin.put("dangerratingcolorstyle",
+						getDangerRatingColorStyle(avalancheBulletin.getHighestDangerRating()));
 				bulletin.put("headlinestyle",
 						getHeadlineStyle(AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
 
@@ -769,9 +769,13 @@ public class EmailUtil {
 		}
 	}
 
-	private String getDangerRatingColorStyle(String dangerRatingColor) {
-		return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; padding: 15px; border-left: 5px solid "
-				+ dangerRatingColor + ";\"";
+	private String getDangerRatingColorStyle(DangerRating dangerRating) {
+		if (dangerRating.equals(DangerRating.very_high)) {
+			return "background=\"" + GlobalVariables.serverImagesUrl + "bg_checkered.png"
+					+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
+		} else
+			return "style=\"background-color: " + AlbinaUtil.getDangerRatingColor(dangerRating)
+					+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
 	}
 
 	private String getHeadlineStyle(String dangerRatingColor) {
@@ -793,9 +797,9 @@ public class EmailUtil {
 
 	private String getSnowpackStyle(boolean b) {
 		if (!b)
-			return "style=\"display: none;\"";
+			return "style=\"overflow: hidden; float: left; display: none !important; line-height: 0px; height: 0px; border-spacing: 0px;\"";
 		else
-			return "style=\"margin: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; border-left: 5px solid #1aabff; padding-left: 10px; width: 100%; padding: 15px; background-color: #f6fafc;\"";
+			return "style=\"padding: 0px; border-spacing: 0px; width: 100%; background-color: #f6fafc;\"";
 	}
 
 	private String getPMStyle(boolean daytimeDependency) {
@@ -853,6 +857,8 @@ public class EmailUtil {
 			// InternetAddress.parse("to-email@gmail.com"));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress("n.lanzanasto@gmail.com"));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress("norbert.lanzanasto@tirol.gv.at"));
+			// message.addRecipient(Message.RecipientType.TO, new
+			// InternetAddress("fabrizi@transporter.at"));
 
 			MimeMultipart multipart = new MimeMultipart("related");
 

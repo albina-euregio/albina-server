@@ -272,7 +272,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	}
 }
 
-@media screen and (min-width: 700px)  {
+@media screen and (min-width: 500px)  {
 	.pictograms-1 {
 		width: 49%!important;
 		min-width: 49%;
@@ -542,9 +542,11 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 				<tr>
 					<td class="container" align="" bgcolor="#FFFFFF">
 						<div class="content bulletin-content">
-							<table ${bulletin.dangerratingcolorstyle}>
+							<table style="border-spacing: 0px;">
 								<tr>
-									<td>
+									<td ${bulletin.dangerratingcolorstyle}>
+									</td>
+									<td style="padding: 15px;">
 										<table>
 											<tr>
 												<td>
@@ -971,7 +973,9 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 							</table>
 							<table ${bulletin.snowpackstyle}>
 								<tr>
-									<td style="vertical-align: top;">
+									<td style="background-color: #1aabff; width: 10px; min-widht: 10px; height: 100%;";>
+									<td>
+									<td style="vertical-align: top; padding: 15px;">
 										<h4 style="padding-top: 5px;">${bulletin.snowpackStructureHeadline}</h4>
 										<h5 style="margin-right: 5px; display: inline-block">${bulletin.dangerPatternsHeadline}</h5>
 										<p ${bulletin.dangerpatternstyle}>${bulletin.dangerPattern1}</p>
