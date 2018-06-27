@@ -183,6 +183,11 @@ public class UtilTest {
 		EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, recipients);
 	}
 
+	@Test
+	public void createPdf() {
+		PdfUtil.createOverviewPdf(bulletins, LanguageCode.de);
+	}
+
 	@Ignore
 	@Test
 	public void encodeImageAndPassword() {

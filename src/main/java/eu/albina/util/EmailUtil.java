@@ -132,19 +132,20 @@ public class EmailUtil {
 
 			switch (lang) {
 			case de:
-				message.setSubject("Lawinenvorhersage, " + getDate(bulletins, lang), "UTF-8");
+				message.setSubject("Lawinenvorhersage, " + AlbinaUtil.getDate(bulletins, lang), "UTF-8");
 				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Lawinen.report"));
 				break;
 			case it:
-				message.setSubject("Avalanche Forecast, " + getDate(bulletins, lang), "UTF-8");
+				message.setSubject("Previsione Valanghe, " + AlbinaUtil.getDate(bulletins, lang), "UTF-8");
 				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Valanghe.report"));
 				break;
 			case en:
-				message.setSubject("Previsione Valanghe, " + getDate(bulletins, lang), "UTF-8");
+				message.setSubject("Avalanche Forecast, " + AlbinaUtil.getDate(bulletins, lang), "UTF-8");
 				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
 				break;
-
 			default:
+				message.setSubject("Avalanche Forecast, " + AlbinaUtil.getDate(bulletins, lang), "UTF-8");
+				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
 				break;
 			}
 
@@ -226,7 +227,7 @@ public class EmailUtil {
 				text.put("publishedAt", "");
 			else
 				text.put("publishedAt", GlobalVariables.getPublishedText(lang));
-			text.put("date", getDate(bulletins, lang));
+			text.put("date", AlbinaUtil.getDate(bulletins, lang));
 			text.put("title", GlobalVariables.getTitle(lang));
 			text.put("headline", GlobalVariables.getHeadline(lang));
 			text.put("follow", GlobalVariables.getFollowUs(lang));
@@ -652,42 +653,6 @@ public class EmailUtil {
 				return true;
 		}
 		return false;
-	}
-
-	private String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		DateTime date = null;
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DateTime bulletinDate = avalancheBulletin.getValidUntil();
-			if (date == null)
-				date = bulletinDate;
-			else if (bulletinDate.isAfter(date))
-				date = bulletinDate;
-		}
-
-		StringBuilder result = new StringBuilder();
-		if (date != null) {
-			result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-
-			switch (lang) {
-			case en:
-				result.append(date.toString(GlobalVariables.dateTimeEn));
-				break;
-			case de:
-				result.append(date.toString(GlobalVariables.dateTimeDe));
-				break;
-			case it:
-				result.append(date.toString(GlobalVariables.dateTimeIt));
-				break;
-			default:
-				result.append(date.toString(GlobalVariables.dateTimeEn));
-				break;
-			}
-		} else {
-			// TODO what if no date is given (should not happen)
-			result.append("-");
-		}
-
-		return result.toString();
 	}
 
 	private String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {

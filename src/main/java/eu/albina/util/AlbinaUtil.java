@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,6 +20,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import org.w3c.dom.Element;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
@@ -370,5 +373,53 @@ public class AlbinaUtil {
 		}
 
 		return encodedfile;
+	}
+
+	public static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		StringBuilder result = new StringBuilder();
+		DateTime date = getDate(bulletins);
+		if (date != null) {
+			result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+
+			switch (lang) {
+			case en:
+				result.append(date.toString(GlobalVariables.dateTimeEn));
+				break;
+			case de:
+				result.append(date.toString(GlobalVariables.dateTimeDe));
+				break;
+			case it:
+				result.append(date.toString(GlobalVariables.dateTimeIt));
+				break;
+			default:
+				result.append(date.toString(GlobalVariables.dateTimeEn));
+				break;
+			}
+		} else {
+			// TODO what if no date is given (should not happen)
+			result.append("-");
+		}
+
+		return result.toString();
+	}
+
+	public static String getFilenameDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = getDate(bulletins);
+		if (date != null)
+			return " " + date.toString(DateTimeFormat.forPattern("dd-MM-yyyy"));
+		else
+			return "";
+	}
+
+	private static DateTime getDate(List<AvalancheBulletin> bulletins) {
+		DateTime date = null;
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			DateTime bulletinDate = avalancheBulletin.getValidUntil();
+			if (date == null)
+				date = bulletinDate;
+			else if (bulletinDate.isAfter(date))
+				date = bulletinDate;
+		}
+		return date;
 	}
 }

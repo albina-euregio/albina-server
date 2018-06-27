@@ -57,7 +57,7 @@ public class PublicationController {
 
 		// create pdfs
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdf(bulletins);
+			PdfUtil.createOverviewPdfs(bulletins);
 			PdfUtil.createRegionPdfs(bulletins);
 		}
 
@@ -103,7 +103,7 @@ public class PublicationController {
 
 		// create pdf
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdf(bulletins);
+			PdfUtil.createOverviewPdfs(bulletins);
 			PdfUtil.createRegionPdfs(bulletins);
 		}
 
@@ -147,7 +147,7 @@ public class PublicationController {
 
 		// create pdfs
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdf(bulletins);
+			PdfUtil.createOverviewPdfs(bulletins);
 			PdfUtil.createRegionPdfs(bulletins);
 		}
 	}
