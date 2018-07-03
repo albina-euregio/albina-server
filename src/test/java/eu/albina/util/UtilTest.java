@@ -186,7 +186,8 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createPdf() {
-		PdfUtil.createOverviewPdf(bulletins, LanguageCode.it);
+		// PdfUtil.createOverviewPdf(bulletins, LanguageCode.it);
+		PdfUtil.createOverviewPdfs(bulletins);
 	}
 
 	@Ignore
