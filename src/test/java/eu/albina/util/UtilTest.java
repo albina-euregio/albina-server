@@ -183,9 +183,10 @@ public class UtilTest {
 		EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, recipients);
 	}
 
+	@Ignore
 	@Test
 	public void createPdf() {
-		PdfUtil.createOverviewPdf(bulletins, LanguageCode.de);
+		PdfUtil.createOverviewPdf(bulletins, LanguageCode.it);
 	}
 
 	@Ignore

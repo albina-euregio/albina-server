@@ -30,6 +30,7 @@ import org.w3c.dom.Element;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
@@ -241,6 +242,141 @@ public class AlbinaUtil {
 		}
 	}
 
+	public static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription,
+			boolean elevationDependency) {
+		if (elevationDependency)
+			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
+					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
+		else
+			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove()) + "_"
+					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
+	}
+
+	public static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = null;
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			DateTime bulletinDate = avalancheBulletin.getValidUntil();
+			if (date == null)
+				date = bulletinDate;
+			else if (bulletinDate.isAfter(date))
+				date = bulletinDate;
+		}
+
+		if (date != null) {
+			date = date.plusDays(1);
+			StringBuilder result = new StringBuilder();
+
+			switch (lang) {
+			case en:
+				result.append("on ");
+				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+				result.append(date.toString(GlobalVariables.dateTimeEn));
+				break;
+			case de:
+				result.append("am ");
+				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+				result.append(date.toString(GlobalVariables.dateTimeDe));
+				break;
+			case it:
+				result.append("su ");
+				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+				result.append(date.toString(GlobalVariables.dateTimeIt));
+				break;
+			default:
+				result.append("on ");
+				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+				result.append(date.toString(GlobalVariables.dateTimeEn));
+				break;
+			}
+
+			return result.toString();
+		} else {
+			return "";
+		}
+	}
+
+	public static String getDangerRatingText(AvalancheBulletin bulletin, LanguageCode lang) {
+		switch (bulletin.getHighestDangerRating()) {
+		case low:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 1 - Gering";
+			case it:
+				return "Grado Pericolo 1 - Debole";
+			case en:
+				return "Danger Level 1 - Low";
+			default:
+				return "Danger Level 1 - Low";
+			}
+		case moderate:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 2 - Mäßig";
+			case it:
+				return "Grado Pericolo 2 - Moderato";
+			case en:
+				return "Danger Level 2 - Moderate";
+			default:
+				return "Danger Level 2 - Moderate";
+			}
+		case considerable:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 3 - Erheblich";
+			case it:
+				return "Grado Pericolo 3 - Marcato";
+			case en:
+				return "Danger Level 3 - Considerable";
+			default:
+				return "Danger Level 3 - Considerable";
+			}
+		case high:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 4 - Groß";
+			case it:
+				return "Grado Pericolo 4 - Forte";
+			case en:
+				return "Danger Level 4 - High";
+			default:
+				return "Danger Level 4 - High";
+			}
+		case very_high:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 5 - Sehr Groß";
+			case it:
+				return "Grado Pericolo 5 - Molto Forte";
+			case en:
+				return "Danger Level 5 - Very High";
+			default:
+				return "Danger Level 5 - Very High";
+			}
+		case no_rating:
+			switch (lang) {
+			case de:
+				return "Keine Beurteilung";
+			case it:
+				return "Senza Valutazione";
+			case en:
+				return "No Rating";
+			default:
+				return "No Rating";
+			}
+		default:
+			switch (lang) {
+			case de:
+				return "Fehlt";
+			case it:
+				return "Mancha";
+			case en:
+				return "Missing";
+			default:
+				return "Missing";
+			}
+		}
+	}
+
 	public static String convertDocToString(Document doc) throws TransformerException {
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -403,6 +539,10 @@ public class AlbinaUtil {
 		return result.toString();
 	}
 
+	public static int getYear(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		return getDate(bulletins).getYear();
+	}
+
 	public static String getFilenameDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getDate(bulletins);
 		if (date != null)
@@ -421,5 +561,50 @@ public class AlbinaUtil {
 				date = bulletinDate;
 		}
 		return date;
+	}
+
+	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = null;
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			DateTime bulletinDate = avalancheBulletin.getPublicationDate();
+			if (date == null)
+				date = bulletinDate;
+			else if (bulletinDate.isAfter(date))
+				date = bulletinDate;
+		}
+		if (date != null) {
+			switch (lang) {
+			case en:
+				return date.toString(GlobalVariables.publicationDateTimeEn);
+			case de:
+				return date.toString(GlobalVariables.publicationDateTimeDe);
+			case it:
+				return date.toString(GlobalVariables.publicationDateTimeIt);
+			default:
+				return date.toString(GlobalVariables.publicationDateTimeEn);
+			}
+		} else
+			return "";
+	}
+
+	public static String getUrl(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "WWW.LAWINEN.REPORT";
+		case it:
+			return "WWW.VALANGHE.REPORT";
+		case en:
+			return "WWW.AVALANCHE.REPORT";
+		default:
+			return "WWW.AVALANCHE.REPORT";
+		}
+	}
+
+	public static boolean hasDaytimeDependency(List<AvalancheBulletin> bulletins) {
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			if (avalancheBulletin.hasDaytimeDependency())
+				return true;
+		}
+		return false;
 	}
 }

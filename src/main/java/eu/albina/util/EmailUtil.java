@@ -25,7 +25,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,7 +211,7 @@ public class EmailUtil {
 
 			// TODO add map URL to email
 			mapImage.put("overview", GlobalVariables.serverImagesUrl + "bulletin-overview.jpg");
-			if (hasDaytimeDependency(bulletins))
+			if (AlbinaUtil.hasDaytimeDependency(bulletins))
 				mapImage.put("overviewPM", GlobalVariables.serverImagesUrl + "bulletin-overview.jpg");
 			else
 				mapImage.put("overviewPM", "");
@@ -221,7 +220,7 @@ public class EmailUtil {
 			root.put("image", image);
 
 			Map<String, Object> text = new HashMap<>();
-			String publicationDate = getPublicationDate(bulletins, lang);
+			String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
 			text.put("publicationDate", publicationDate);
 			if (publicationDate.isEmpty())
 				text.put("publishedAt", "");
@@ -232,7 +231,7 @@ public class EmailUtil {
 			text.put("headline", GlobalVariables.getHeadline(lang));
 			text.put("follow", GlobalVariables.getFollowUs(lang));
 			text.put("unsubscribe", GlobalVariables.getUnsubscribe(lang));
-			if (hasDaytimeDependency(bulletins)) {
+			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
 				text.put("am", "AM");
 				text.put("pm", "PM");
 			} else {
@@ -263,7 +262,7 @@ public class EmailUtil {
 					bulletin.put("textpm", "");
 				}
 
-				bulletin.put("warningLevelText", getDangerRatingText(avalancheBulletin, lang));
+				bulletin.put("warningLevelText", AlbinaUtil.getDangerRatingText(avalancheBulletin, lang));
 
 				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
@@ -350,13 +349,13 @@ public class EmailUtil {
 				tendency.put("text", GlobalVariables.getTendencyText(avalancheBulletin.getTendency(), lang));
 				if (avalancheBulletin.getTendency() == Tendency.decreasing) {
 					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency/tendency_decreasing_blue.png");
-					tendency.put("date", getTendencyDate(bulletins, lang));
+					tendency.put("date", AlbinaUtil.getTendencyDate(bulletins, lang));
 				} else if (avalancheBulletin.getTendency() == Tendency.steady) {
 					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency/tendency_steady_blue.png");
-					tendency.put("date", getTendencyDate(bulletins, lang));
+					tendency.put("date", AlbinaUtil.getTendencyDate(bulletins, lang));
 				} else if (avalancheBulletin.getTendency() == Tendency.increasing) {
 					tendency.put("symbol", GlobalVariables.serverImagesUrl + "tendency/tendency_increasing_blue.png");
-					tendency.put("date", getTendencyDate(bulletins, lang));
+					tendency.put("date", AlbinaUtil.getTendencyDate(bulletins, lang));
 				} else {
 					tendency.put("symbol", "");
 					tendency.put("date", "");
@@ -422,9 +421,9 @@ public class EmailUtil {
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
-		dangerRating.put("symbol", GlobalVariables.serverImagesUrl + "warning_pictos/level_"
-				+ getWarningLevelId(avalancheBulletin.getForenoon(), avalancheBulletin.isHasElevationDependency())
-				+ ".png");
+		dangerRating.put("symbol",
+				GlobalVariables.serverImagesUrl + "warning_pictos/level_" + AlbinaUtil.getWarningLevelId(
+						avalancheBulletin.getForenoon(), avalancheBulletin.isHasElevationDependency()) + ".png");
 		// dangerRating.put("symbol", "cid:warning_picto/" +
 		// getWarningLevelId(avalancheBulletin.getForenoon(),
 		// avalancheBulletin.isHasElevationDependency()));
@@ -647,163 +646,6 @@ public class EmailUtil {
 		bulletin.put("avalancheSituation2", avalancheSituation2);
 	}
 
-	private boolean hasDaytimeDependency(List<AvalancheBulletin> bulletins) {
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			if (avalancheBulletin.hasDaytimeDependency())
-				return true;
-		}
-		return false;
-	}
-
-	private String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		DateTime date = null;
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DateTime bulletinDate = avalancheBulletin.getValidUntil();
-			if (date == null)
-				date = bulletinDate;
-			else if (bulletinDate.isAfter(date))
-				date = bulletinDate;
-		}
-
-		if (date != null) {
-			date = date.plusDays(1);
-			StringBuilder result = new StringBuilder();
-
-			switch (lang) {
-			case en:
-				result.append("on ");
-				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-				result.append(date.toString(GlobalVariables.dateTimeEn));
-				break;
-			case de:
-				result.append("am ");
-				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-				result.append(date.toString(GlobalVariables.dateTimeDe));
-				break;
-			case it:
-				result.append("su ");
-				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-				result.append(date.toString(GlobalVariables.dateTimeIt));
-				break;
-			default:
-				result.append("on ");
-				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-				result.append(date.toString(GlobalVariables.dateTimeEn));
-				break;
-			}
-
-			return result.toString();
-		} else {
-			return "";
-		}
-	}
-
-	private String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		DateTime date = null;
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DateTime bulletinDate = avalancheBulletin.getPublicationDate();
-			if (date == null)
-				date = bulletinDate;
-			else if (bulletinDate.isAfter(date))
-				date = bulletinDate;
-		}
-		if (date != null) {
-			switch (lang) {
-			case en:
-				return date.toString(GlobalVariables.publicationDateTimeEn);
-			case de:
-				return date.toString(GlobalVariables.publicationDateTimeDe);
-			case it:
-				return date.toString(GlobalVariables.publicationDateTimeIt);
-			default:
-				return date.toString(GlobalVariables.publicationDateTimeEn);
-			}
-		} else
-			return "";
-	}
-
-	private String getDangerRatingText(AvalancheBulletin bulletin, LanguageCode lang) {
-		switch (bulletin.getHighestDangerRating()) {
-		case low:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 1 - Gering";
-			case it:
-				return "Grado Pericolo 1 - Debole";
-			case en:
-				return "Danger Level 1 - Low";
-			default:
-				return "Danger Level 1 - Low";
-			}
-		case moderate:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 2 - Mäßig";
-			case it:
-				return "Grado Pericolo 2 - Moderato";
-			case en:
-				return "Danger Level 2 - Moderate";
-			default:
-				return "Danger Level 2 - Moderate";
-			}
-		case considerable:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 3 - Erheblich";
-			case it:
-				return "Grado Pericolo 3 - Marcato";
-			case en:
-				return "Danger Level 3 - Considerable";
-			default:
-				return "Danger Level 3 - Considerable";
-			}
-		case high:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 4 - Groß";
-			case it:
-				return "Grado Pericolo 4 - Forte";
-			case en:
-				return "Danger Level 4 - High";
-			default:
-				return "Danger Level 4 - High";
-			}
-		case very_high:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 5 - Sehr Groß";
-			case it:
-				return "Grado Pericolo 5 - Molto Forte";
-			case en:
-				return "Danger Level 5 - Very High";
-			default:
-				return "Danger Level 5 - Very High";
-			}
-		case no_rating:
-			switch (lang) {
-			case de:
-				return "Keine Beurteilung";
-			case it:
-				return "Senza Valutazione";
-			case en:
-				return "No Rating";
-			default:
-				return "No Rating";
-			}
-		default:
-			switch (lang) {
-			case de:
-				return "Fehlt";
-			case it:
-				return "Mancha";
-			case en:
-				return "Missing";
-			default:
-				return "Missing";
-			}
-		}
-	}
-
 	private String getDangerRatingColorStyle(DangerRating dangerRating) {
 		if (dangerRating.equals(DangerRating.very_high)) {
 			return "background=\"" + GlobalVariables.serverImagesUrl + "bg_checkered.png"
@@ -842,15 +684,5 @@ public class EmailUtil {
 			return "style=\"display: none; overflow: hidden; height: 0px;\"";
 		else
 			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px; border-top: 1px solid #e6eef2; padding-top: 10px;\"";
-	}
-
-	private String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription,
-			boolean elevationDependency) {
-		if (elevationDependency)
-			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
-					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
-		else
-			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove()) + "_"
-					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 	}
 }

@@ -20,6 +20,10 @@ public class GlobalVariables {
 	// public static String serverImagesUrl = "http://212.47.231.185:8080/images/";
 	// TODO just for testing
 	public static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
+	public static String localImagesPath = "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
+
+	// TODO for testing
+	public static String pdfDirectory = "D:\\";
 
 	public static String emailUsername = "norbert.lanzanasto@gmail.com";
 	public static String emailPassword = "Go6Zaithee";
@@ -140,7 +144,7 @@ public class GlobalVariables {
 		}
 	}
 
-	public static Object getTendencyHeadline(LanguageCode lang) {
+	public static String getTendencyHeadline(LanguageCode lang) {
 		switch (lang) {
 		case de:
 			return "Tendenz";
