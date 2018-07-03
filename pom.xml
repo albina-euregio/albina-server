@@ -14,6 +14,7 @@
     <jersey.version>2.27</jersey.version>
     <slf4j.version>1.7.25</slf4j.version>
     <hibernate.version>5.2.9.Final</hibernate.version>
+    <itextpdf.version>7.0.4</itextpdf.version>
   </properties>
   
   <dependencyManagement>
@@ -80,7 +81,17 @@
 		<artifactId>pdfbox</artifactId>
 		<version>2.0.4</version>
 	</dependency>
-
+	<dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>kernel</artifactId>
+        <version>${itextpdf.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>layout</artifactId>
+        <version>${itextpdf.version}</version>
+    </dependency>
+    
 <!-- swagger -->
     <dependency>
 	  <groupId>io.swagger</groupId>
