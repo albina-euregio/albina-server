@@ -91,8 +91,8 @@ public class PdfUtil {
 
 	public static void createOverviewPdf(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		try {
-			openSansRegularFont = PdfFontFactory.createFont(OPEN_SANS_REGULAR, PdfEncodings.WINANSI);
-			openSansBoldFont = PdfFontFactory.createFont(OPEN_SANS_BOLD, PdfEncodings.WINANSI);
+			openSansRegularFont = PdfFontFactory.createFont(OPEN_SANS_REGULAR, PdfEncodings.WINANSI, true);
+			openSansBoldFont = PdfFontFactory.createFont(OPEN_SANS_BOLD, PdfEncodings.WINANSI, true);
 
 			PdfDocument pdf;
 			PdfWriter writer;
@@ -317,7 +317,7 @@ public class PdfUtil {
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
 						cell.setTextAlignment(TextAlignment.LEFT);
 						cell.setBorder(Border.NO_BORDER);
-						cell.setBackgroundColor(whiteColor);
+						// cell.setBackgroundColor(whiteColor);
 						dangerPatternTable.addCell(cell);
 					}
 					if (avalancheBulletin.getDangerPattern2() != null) {
@@ -328,7 +328,7 @@ public class PdfUtil {
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
 						cell.setTextAlignment(TextAlignment.LEFT);
 						cell.setBorder(Border.NO_BORDER);
-						cell.setBackgroundColor(whiteColor);
+						// cell.setBackgroundColor(whiteColor);
 						dangerPatternTable.addCell(cell);
 					}
 
@@ -564,7 +564,6 @@ public class PdfUtil {
 				table.addCell(cell);
 			}
 
-			// TODO add aspects
 			if (avalancheSituation.getAspects() != null && avalancheSituation.getAspects().size() > 0) {
 				Set<Aspect> aspects = avalancheSituation.getAspects();
 
