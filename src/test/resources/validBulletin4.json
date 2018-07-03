@@ -1,6 +1,7 @@
   {
     "afternoon": {
       "avalancheSituation2": {
+     	"elevationLow" : 1500,
         "aspects": [
           "SE",
           "S",
@@ -11,6 +12,7 @@
         "avalancheSituation": "wind_drifted_snow"
       },
       "avalancheSituation1": {
+      	"treelineHigh" : true,
         "aspects": [
           "N",
           "W",
