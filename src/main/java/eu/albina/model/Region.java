@@ -41,8 +41,14 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "VERSION")
 	private Integer version;
 
-	@Column(name = "NAME")
-	private String name;
+	@Column(name = "NAME_DE")
+	private String nameDe;
+
+	@Column(name = "NAME_IT")
+	private String nameIt;
+
+	@Column(name = "NAME_EN")
+	private String nameEn;
 
 	@Column(name = "POLYGON")
 	private Polygon polygon;
@@ -81,12 +87,28 @@ public class Region implements AvalancheInformationObject {
 		this.version = version;
 	}
 
-	public String getName() {
-		return name;
+	public String getNameDe() {
+		return nameDe;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNameDe(String name) {
+		this.nameDe = name;
+	}
+
+	public String getNameIt() {
+		return nameIt;
+	}
+
+	public void setNameIt(String name) {
+		this.nameIt = name;
+	}
+
+	public String getNameEn() {
+		return nameEn;
+	}
+
+	public void setNameEn(String name) {
+		this.nameEn = name;
 	}
 
 	public Polygon getPolygon() {
@@ -124,9 +146,13 @@ public class Region implements AvalancheInformationObject {
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
-		Element regionname = doc.createElement("name");
-		regionname.appendChild(doc.createTextNode(name));
-		region.appendChild(regionname);
+		Element regionNameDe = doc.createElement("nameDe");
+		regionNameDe.appendChild(doc.createTextNode(nameDe));
+		Element regionNameIt = doc.createElement("nameIt");
+		regionNameIt.appendChild(doc.createTextNode(nameIt));
+		Element regionNameEn = doc.createElement("nameEn");
+		regionNameEn.appendChild(doc.createTextNode(nameEn));
+		region.appendChild(regionNameDe);
 		Element regionSubType = doc.createElement("regionSubType");
 		region.appendChild(regionSubType);
 		Element outline = doc.createElement("outline");
@@ -159,7 +185,9 @@ public class Region implements AvalancheInformationObject {
 
 		feature.put("type", "Feature");
 		JSONObject featureProperties = new JSONObject();
-		featureProperties.put("name", name);
+		featureProperties.put("nameDe", nameDe);
+		featureProperties.put("nameIt", nameIt);
+		featureProperties.put("nameEn", nameEn);
 		featureProperties.put("id", getId());
 		if (getParentRegion() != null)
 			featureProperties.put("parentRegion", getParentRegion().getId());
