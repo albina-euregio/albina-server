@@ -55,7 +55,7 @@ public class AvalancheBulletinService {
 	UriInfo uri;
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.OBSERVER })
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -96,7 +96,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.OBSERVER })
 	@Path("/locked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -201,7 +201,8 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	// @Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	// @Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL,
+	// Role.OBSERVER })
 	@Path("/status")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -239,7 +240,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.OBSERVER })
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -262,7 +263,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletins(
@@ -306,7 +307,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/change")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -356,7 +357,7 @@ public class AvalancheBulletinService {
 	/*
 	 * @POST
 	 * 
-	 * @Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	 * @Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	 * 
 	 * @Consumes(MediaType.APPLICATION_JSON)
 	 * 
@@ -389,7 +390,7 @@ public class AvalancheBulletinService {
 	 * 
 	 * @PUT
 	 * 
-	 * @Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	 * @Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	 * 
 	 * @Path("/{bulletinId}")
 	 * 
@@ -421,7 +422,7 @@ public class AvalancheBulletinService {
 	 * 
 	 * @DELETE
 	 * 
-	 * @Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	 * @Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	 * 
 	 * @Path("/{bulletinId}")
 	 * 
@@ -446,7 +447,7 @@ public class AvalancheBulletinService {
 	 */
 
 	@POST
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/submit")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -492,7 +493,7 @@ public class AvalancheBulletinService {
 	 * @return
 	 */
 	@POST
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/publish")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -544,7 +545,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
 	@Path("/check")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
