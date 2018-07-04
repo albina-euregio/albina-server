@@ -24,6 +24,11 @@ public class AuthorizationUtil {
 					return true;
 				else
 					break;
+			case STYRIA:
+				if (region.startsWith(GlobalVariables.codeStyria))
+					return true;
+				else
+					break;
 			default:
 				break;
 			}
@@ -40,6 +45,8 @@ public class AuthorizationUtil {
 				return GlobalVariables.codeTyrol;
 			case SOUTH_TYROL:
 				return GlobalVariables.codeSouthTyrol;
+			case STYRIA:
+				return GlobalVariables.codeStyria;
 			default:
 				break;
 			}

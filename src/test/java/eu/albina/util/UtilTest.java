@@ -71,6 +71,8 @@ public class UtilTest {
 		names.add("Kurt Winkler");
 		names.add("Ulrich Niederer");
 		names.add("Marc Ruesch");
+		names.add("Arno Studeregger");
+		names.add("Alfred Ortner");
 
 		passwords.add("Alberto");
 		passwords.add("Sergio");
@@ -102,6 +104,8 @@ public class UtilTest {
 		passwords.add("Kurt");
 		passwords.add("Ulrich");
 		passwords.add("Marc");
+		passwords.add("Arno");
+		passwords.add("Alfred");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -193,7 +197,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 0; i < 30; i++) {
+		for (int i = 0; i < 32; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());

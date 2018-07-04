@@ -60,7 +60,7 @@ public class AuthenticationService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response refreshToken(@Context SecurityContext securityContext) {

@@ -45,6 +45,7 @@ public class GlobalVariables {
 	public static String codeTrentino = "IT-32-TN";
 	public static String codeSouthTyrol = "IT-32-BZ";
 	public static String codeTyrol = "AT-07";
+	public static String codeStyria = "AT-06";
 
 	public static List<String> regions = new ArrayList<String>() {
 		/**
@@ -56,6 +57,7 @@ public class GlobalVariables {
 			add("AT-07");
 			add("IT-32-BZ");
 			add("IT-32-TN");
+			add("AT-06");
 		}
 	};
 
