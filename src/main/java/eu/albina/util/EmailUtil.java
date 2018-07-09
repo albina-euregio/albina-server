@@ -2,6 +2,7 @@ package eu.albina.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
@@ -9,6 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +30,12 @@ import javax.mail.internet.MimeMultipart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -90,7 +96,74 @@ public class EmailUtil {
 		return cfg;
 	}
 
-	public void sendEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
+	public void sendConfirmationEmail(Subscriber subscriber)
+			throws IllegalArgumentException, UnsupportedEncodingException {
+		logger.debug("Sending confirmation email to " + subscriber.getEmail());
+		String token = issueConfirmationToken(subscriber.getEmail());
+		Session session = getEmailSession();
+
+		try {
+			MimeMessage message = new MimeMessage(session);
+			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
+			message.addHeader("format", "flowed");
+			message.addHeader("Content-Transfer-Encoding", "8bit");
+
+			switch (subscriber.getLanguage()) {
+			case de:
+				message.setSubject("", "UTF-8");
+				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Lawinen.report"));
+				break;
+			case it:
+				message.setSubject("", "UTF-8");
+				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Valanghe.report"));
+				break;
+			case en:
+				message.setSubject("", "UTF-8");
+				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
+				break;
+			default:
+				message.setSubject("", "UTF-8");
+				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
+				break;
+			}
+
+			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername));
+
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(subscriber.getEmail()));
+
+			MimeMultipart multipart = new MimeMultipart("related");
+
+			// add html
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
+			String htmlText = createConfirmationEmailHtml(token, subscriber.getLanguage());
+			messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
+			multipart.addBodyPart(messageBodyPart);
+			message.setContent(multipart, "utf-8");
+			Transport.send(message);
+
+			logger.debug("Confirmation email sent to " + subscriber.getEmail());
+		} catch (MessagingException e) {
+			logger.error("Confirmation email could not be sent to " + subscriber.getEmail() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("Confirmation email could not be sent to " + subscriber.getEmail() + ": " + e.getMessage());
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	private String issueConfirmationToken(String email) throws IllegalArgumentException, UnsupportedEncodingException {
+		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+		long time = System.currentTimeMillis() + GlobalVariables.confirmationTokenExpirationDuration;
+		Date expirationTime = new Date(time);
+		Date issuedAt = new Date();
+		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(email)
+				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
+		return token;
+	}
+
+	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
 		// TODO filter bulletins based on region
 		for (String region : regions) {
 			List<AvalancheBulletin> bulletinList = new ArrayList<AvalancheBulletin>();
@@ -103,25 +176,29 @@ public class EmailUtil {
 				// List<String> recipients = SubscriberService.getInstance().getRecipients(lang,
 				// region);
 				List<String> recipients = new ArrayList<String>();
-				sendEmail(bulletinList, lang, recipients);
+				sendBulletinEmail(bulletinList, lang, recipients);
 			}
 		}
 	}
 
-	public void sendEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, List<String> recipients) {
-		logger.debug("Sending email in " + lang + "...");
-
+	private Session getEmailSession() {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
 
-		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+		return Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(GlobalVariables.emailUsername, GlobalVariables.emailPassword);
 			}
 		});
+	}
+
+	public void sendBulletinEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, List<String> recipients) {
+		logger.debug("Sending bulletin email in " + lang + "...");
+
+		Session session = getEmailSession();
 
 		try {
 			MimeMessage message = new MimeMessage(session);
@@ -157,7 +234,7 @@ public class EmailUtil {
 
 			// add html
 			MimeBodyPart messageBodyPart = new MimeBodyPart();
-			String htmlText = createEmailHtml(bulletins, lang);
+			String htmlText = createBulletinEmailHtml(bulletins, lang);
 			messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
 			multipart.addBodyPart(messageBodyPart);
 
@@ -178,7 +255,130 @@ public class EmailUtil {
 		}
 	}
 
-	public String createEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	public String createConfirmationEmailHtml(String token, LanguageCode lang) {
+		try {
+			// Create data model
+			Map<String, Object> root = new HashMap<>();
+			root.put("token", token);
+			root.put("snowpackstyle", getSnowpackStyle(true));
+			Map<String, Object> image = new HashMap<>();
+			switch (lang) {
+			case de:
+				image.put("logo", GlobalVariables.serverImagesUrl + "logo/lawinen_report.png");
+				break;
+			case it:
+				image.put("logo", GlobalVariables.serverImagesUrl + "logo/valanghe_report.png");
+				break;
+			case en:
+				image.put("logo", GlobalVariables.serverImagesUrl + "logo/avalanche_report.png");
+				break;
+			default:
+				image.put("logo", GlobalVariables.serverImagesUrl + "logo/avalanche_report.png");
+				break;
+			}
+			image.put("ci", GlobalVariables.serverImagesUrl + "Colorbar.gif");
+			Map<String, Object> socialMediaImages = new HashMap<>();
+			socialMediaImages.put("facebook", GlobalVariables.serverImagesUrl + "social_media/facebook.png");
+			socialMediaImages.put("twitter", GlobalVariables.serverImagesUrl + "social_media/twitter.png");
+			socialMediaImages.put("instagram", GlobalVariables.serverImagesUrl + "social_media/instagram.png");
+			socialMediaImages.put("youtube", GlobalVariables.serverImagesUrl + "social_media/youtube.png");
+			socialMediaImages.put("whatsapp", GlobalVariables.serverImagesUrl + "social_media/whatsapp.png");
+			image.put("socialmedia", socialMediaImages);
+			root.put("image", image);
+
+			// TODO add texts
+			Map<String, Object> text = new HashMap<>();
+			text.put("title", GlobalVariables.getTitle(lang));
+			text.put("follow", GlobalVariables.getFollowUs(lang));
+			switch (lang) {
+			case de:
+				text.put("title", "Lawinen.report");
+				text.put("headline", "Hallo!");
+				text.put("confirm", "Bestätigen");
+				text.put("confirmation", "Anmeldebestätigung");
+				break;
+			case it:
+				text.put("title", "Valanghe.report");
+				text.put("headline", "Ciao!");
+				text.put("confirm", "Confermare");
+				text.put("confirmation", "Conferma d'iscrizione");
+				break;
+			case en:
+				text.put("title", "Avalanche.report");
+				text.put("headline", "Hello!");
+				text.put("confirm", "Confirm");
+				text.put("confirmation", "Registration confirmation");
+				break;
+			default:
+				text.put("title", "Avalanche.report");
+				text.put("headline", "Hello!");
+				text.put("confirm", "Confirm");
+				text.put("confirmation", "Registration confirmation");
+				break;
+			}
+			text.put("body1", getConfirmationText1(lang));
+			text.put("body2", getConfirmationText2(lang));
+			root.put("text", text);
+
+			Map<String, Object> links = new HashMap<>();
+			links.put("confirm", "https://avalanche.report/subscribe/" + token);
+			links.put("website", "https://avalanche.report");
+			Map<String, Object> socialMediaLinks = new HashMap<>();
+			socialMediaLinks.put("facebook", "https://avalanche.report/facebook");
+			socialMediaLinks.put("twitter", "https://avalanche.report/twitter");
+			socialMediaLinks.put("instagram", "https://avalanche.report/instagram");
+			socialMediaLinks.put("youtube", "https://avalanche.report/youtube");
+			socialMediaLinks.put("whatsapp", "https://avalanche.report/whatsapp");
+			links.put("socialmedia", socialMediaLinks);
+			root.put("link", links);
+
+			// Get template
+			Template temp = cfg.getTemplate("confirmation-email.html");
+
+			// Merge template and model
+			// Writer out = new StringWriter();
+			Writer out = new OutputStreamWriter(System.out);
+			temp.process(root, out);
+
+			return out.toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TemplateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private String getConfirmationText1(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Danke für deine Registrierung bei Lawinen.report.\n\nUm die Registrierung abzuschließen, klicke bitte auf folgenden Link:\n";
+		case it:
+			return "Grazie per esservi registrati su Avalanche.report.\n\nPer completare la registrazione, seguire il link:\n";
+		case en:
+			return "Thank you for registering at Avalanche.report.\n\nTo complete the registration, follow the link:\n";
+		default:
+			return "Thank you for registering at Avalanche.report.\n\nTo complete the registration, follow the link:\n";
+		}
+	}
+
+	private String getConfirmationText2(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Wenn du dich nicht bei Lawinen.report registriert hast, ignoriere einfach diese Nachricht.";
+		case it:
+			return "Se non si è registrato su Valanghe.report, è sufficiente ignorare questo messaggio.";
+		case en:
+			return "If you did not register at Avalanche.report, just ignore this message.";
+		default:
+			return "If you did not register at Avalanche.report, just ignore this message.";
+		}
+	}
+
+	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		try {
 			// Create data model
 			Map<String, Object> root = new HashMap<>();

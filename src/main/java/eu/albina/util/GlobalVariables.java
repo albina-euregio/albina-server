@@ -79,6 +79,7 @@ public class GlobalVariables {
 	public static String tokenEncodingIssuer = "albina";
 	public static long accessTokenExpirationDuration = 1000 * 60 * 60 * 24;
 	public static long refreshTokenExpirationDuration = 1000 * 60 * 60 * 24 * 7;
+	public static long confirmationTokenExpirationDuration = 1000 * 60 * 60 * 24 * 3;
 
 	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
 	// public static String referenceSystemUrn = "EPSG:32632";

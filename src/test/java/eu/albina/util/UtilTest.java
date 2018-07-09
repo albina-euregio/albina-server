@@ -174,13 +174,19 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		EmailUtil.getInstance().createEmailHtml(bulletins, LanguageCode.de);
+		EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de);
 	}
 
 	@Ignore
 	@Test
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
-		EmailUtil.getInstance().sendEmail(bulletins, LanguageCode.de, recipients);
+		EmailUtil.getInstance().sendBulletinEmail(bulletins, LanguageCode.de, recipients);
+	}
+
+	@Ignore
+	@Test
+	public void createConfirmationFreemarker() throws IOException, URISyntaxException {
+		EmailUtil.getInstance().createConfirmationEmailHtml("token", LanguageCode.en);
 	}
 
 	@Ignore

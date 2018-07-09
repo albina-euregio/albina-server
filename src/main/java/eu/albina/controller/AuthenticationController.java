@@ -77,7 +77,7 @@ public class AuthenticationController {
 		return token;
 	}
 
-	public DecodedJWT decodeToken(String token) throws Exception {
+	public DecodedJWT decodeToken(String token) throws AlbinaException {
 		try {
 			return verifier.verify(token);
 		} catch (JWTVerificationException exception) {

@@ -1,14 +1,19 @@
 package eu.albina.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URISyntaxException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
+import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -18,8 +23,7 @@ import eu.albina.util.HibernateUtil;
  *
  */
 public class SubscriberController {
-	// private static Logger logger =
-	// LoggerFactory.getLogger(SubscriberController.class);
+	private static Logger logger = LoggerFactory.getLogger(SubscriberController.class);
 	private static SubscriberController instance = null;
 
 	private SubscriberController() {
@@ -54,24 +58,34 @@ public class SubscriberController {
 		}
 	}
 
-	public Serializable createSubscriber(Subscriber subscriber) throws AlbinaException {
+	public Serializable createSubscriber(Subscriber subscriber)
+			throws HibernateException, URISyntaxException, IOException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			transaction.begin();
 			entityManager.persist(subscriber);
 			transaction.commit();
+
+			EmailUtil.getInstance().sendConfirmationEmail(subscriber);
+
 			return subscriber.getEmail();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
+			throw he;
+		} catch (IOException e) {
+			logger.error("Confirmation email could not be send!");
+			throw e;
+		} catch (URISyntaxException e) {
+			logger.error("Confirmation email could not be send!");
+			throw e;
 		} finally {
 			entityManager.close();
 		}
 	}
 
-	public Serializable deleteSubscriber(String email) throws AlbinaException {
+	public Serializable deleteSubscriber(String email) throws AlbinaException, HibernateException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -87,13 +101,13 @@ public class SubscriberController {
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
+			throw he;
 		} finally {
 			entityManager.close();
 		}
 	}
 
-	public void confirmSubscriber(String email) throws AlbinaException {
+	public void confirmSubscriber(String email) throws AlbinaException, HibernateException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -105,7 +119,7 @@ public class SubscriberController {
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
+			throw he;
 		} finally {
 			entityManager.close();
 		}

@@ -64,7 +64,7 @@ public class PublicationController {
 		// send emails
 		if (AlbinaUtil.sendEmails) {
 			try {
-				EmailUtil.getInstance().sendEmails(bulletins, GlobalVariables.regions);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, GlobalVariables.regions);
 			} catch (IOException e) {
 				logger.error("Error preparing emails:" + e.getMessage());
 				e.printStackTrace();
@@ -110,7 +110,7 @@ public class PublicationController {
 		// send emails to regions
 		if (AlbinaUtil.sendEmails) {
 			try {
-				EmailUtil.getInstance().sendEmails(bulletins, regions);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
 			} catch (IOException e) {
 				logger.error("Error preparing emails:" + e.getMessage());
 				e.printStackTrace();
