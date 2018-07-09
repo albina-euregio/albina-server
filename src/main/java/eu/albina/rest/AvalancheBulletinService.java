@@ -37,6 +37,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
@@ -196,6 +197,43 @@ public class AvalancheBulletinService {
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@GET
+	@Path("/highest")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getHighestDangerRating(
+			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@QueryParam("regions") List<String> regions) {
+		logger.debug("GET highest danger rating");
+
+		DateTime startDate = null;
+		DateTime endDate = null;
+
+		if (regions.isEmpty()) {
+			regions.add(GlobalVariables.codeTrentino);
+			regions.add(GlobalVariables.codeSouthTyrol);
+			regions.add(GlobalVariables.codeTyrol);
+		}
+
+		if (date != null)
+			startDate = DateTime.parse(date, GlobalVariables.parserDateTime).toDateTime(DateTimeZone.UTC);
+		else
+			startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+		endDate = startDate.plusDays(1);
+
+		try {
+			DangerRating highestDangerRating = AvalancheBulletinController.getInstance()
+					.getHighestDangerRating(startDate, endDate, regions);
+
+			JSONObject jsonResult = new JSONObject();
+			jsonResult.put("dangerRating", highestDangerRating);
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading highest danger rating - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}
