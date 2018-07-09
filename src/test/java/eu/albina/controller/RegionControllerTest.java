@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.albina.exception.AlbinaException;
@@ -27,6 +28,7 @@ public class RegionControllerTest {
 		// HibernateUtil.getInstance().closeSessionFactory();
 	}
 
+	@Ignore
 	@Test
 	public void getTopLevelRegionsTest() {
 		try {
@@ -37,6 +39,7 @@ public class RegionControllerTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void getSubregionsTest() {
 		try {
