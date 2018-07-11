@@ -17,13 +17,12 @@ import eu.albina.model.enumerations.Tendency;
 
 public class GlobalVariables {
 
-	// public static String serverImagesUrl = "http://212.47.231.185:8080/images/";
-	// TODO just for testing
-	public static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
-	public static String localImagesPath = "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
+	public static String localImagesPath = "images/";
 
 	// TODO for testing
 	public static String pdfDirectory = "D:\\";
+	public static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
+	public static String mapsPath = "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
 
 	public static String emailUsername = "norbert.lanzanasto@gmail.com";
 	public static String emailPassword = "Go6Zaithee";

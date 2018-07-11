@@ -2,18 +2,21 @@ package eu.albina.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.io.util.ResourceUtil;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.color.DeviceCmyk;
 import com.itextpdf.kernel.color.DeviceRgb;
@@ -199,7 +202,7 @@ public class PdfUtil {
 			cell.setTextAlignment(TextAlignment.LEFT);
 			secondTable.addCell(cell);
 			ImageData regionAMImageDate = ImageDataFactory
-					.create(GlobalVariables.localImagesPath + "bulletin-report-region.png");
+					.create(GlobalVariables.mapsPath + "bulletin-report-region.png");
 			Image regionAMImg = new Image(regionAMImageDate);
 			regionAMImg.scaleToFit(regionMapSize, regionMapSize);
 			regionAMImg.setMarginRight(10);
@@ -229,7 +232,7 @@ public class PdfUtil {
 			cell.setTextAlignment(TextAlignment.LEFT);
 			secondTable.addCell(cell);
 			ImageData regionPMImageDate = ImageDataFactory
-					.create(GlobalVariables.localImagesPath + "bulletin-report-region.png");
+					.create(GlobalVariables.mapsPath + "bulletin-report-region.png");
 			Image regionPMImg = new Image(regionPMImageDate);
 			regionPMImg.scaleToFit(regionMapSize, regionMapSize);
 			regionPMImg.setMarginRight(10);
@@ -254,7 +257,7 @@ public class PdfUtil {
 			float[] secondColumnWidths = { 1, 1 };
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			ImageData regionImageDate = ImageDataFactory
-					.create(GlobalVariables.localImagesPath + "bulletin-report-region.png");
+					.create(GlobalVariables.mapsPath + "bulletin-report-region.png");
 			Image regionImg = new Image(regionImageDate);
 			regionImg.scaleToFit(regionMapSize, regionMapSize);
 			regionImg.setMarginRight(10);
@@ -424,11 +427,12 @@ public class PdfUtil {
 
 		Paragraph firstRow = new Paragraph("").setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 
-		ImageData regionImageData = ImageDataFactory.create(GlobalVariables.localImagesPath + "warning_pictos\\level_"
+		Image regionImg = getImage("warning_pictos/level_"
 				+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency()) + ".png");
-		Image regionImg = new Image(regionImageData);
-		regionImg.scaleToFit(70, 30);
-		firstRow.add(regionImg);
+		if (regionImg != null) {
+			regionImg.scaleToFit(70, 30);
+			firstRow.add(regionImg);
+		}
 
 		Cell cell = new Cell(1, 1).add(firstRow);
 		cell.setTextAlignment(TextAlignment.LEFT);
@@ -481,26 +485,26 @@ public class PdfUtil {
 			cell.setHeight(height);
 			cell.setBorder(Border.NO_BORDER);
 			if (avalancheBulletin.getTendency() == Tendency.decreasing) {
-				ImageData tendencyImageData = ImageDataFactory
-						.create(GlobalVariables.localImagesPath + "tendency\\tendency_decreasing_blue.png");
-				Image tendencyImg = new Image(tendencyImageData);
-				tendencyImg.scaleToFit(25, 20);
-				tendencyImg.setMarginLeft(5);
-				cell.add(tendencyImg);
+				Image tendencyImg = getImage("tendency/tendency_decreasing_blue.png");
+				if (tendencyImg != null) {
+					tendencyImg.scaleToFit(25, 20);
+					tendencyImg.setMarginLeft(5);
+					cell.add(tendencyImg);
+				}
 			} else if (avalancheBulletin.getTendency() == Tendency.steady) {
-				ImageData tendencyImageData = ImageDataFactory
-						.create(GlobalVariables.localImagesPath + "tendency\\tendency_steady_blue.png");
-				Image tendencyImg = new Image(tendencyImageData);
-				tendencyImg.scaleToFit(25, 20);
-				tendencyImg.setMarginLeft(5);
-				cell.add(tendencyImg);
+				Image tendencyImg = getImage("tendency/tendency_steady_blue.png");
+				if (tendencyImg != null) {
+					tendencyImg.scaleToFit(25, 20);
+					tendencyImg.setMarginLeft(5);
+					cell.add(tendencyImg);
+				}
 			} else if (avalancheBulletin.getTendency() == Tendency.increasing) {
-				ImageData tendencyImageData = ImageDataFactory
-						.create(GlobalVariables.localImagesPath + "tendency\\tendency_increasing_blue.png");
-				Image tendencyImg = new Image(tendencyImageData);
-				tendencyImg.scaleToFit(25, 20);
-				tendencyImg.setMarginLeft(5);
-				cell.add(tendencyImg);
+				Image tendencyImg = getImage("tendency/tendency_increasing_blue.png");
+				if (tendencyImg != null) {
+					tendencyImg.scaleToFit(25, 20);
+					tendencyImg.setMarginLeft(5);
+					cell.add(tendencyImg);
+				}
 			}
 
 			firstRowTable.addCell(cell);
@@ -541,13 +545,25 @@ public class PdfUtil {
 		return table;
 	}
 
+	private Image getImage(String path) {
+		try {
+			InputStream resourceStream = ResourceUtil.getResourceStream(GlobalVariables.localImagesPath + path);
+			byte[] byteArray = IOUtils.toByteArray(resourceStream);
+			ImageData imageData = ImageDataFactory.create(byteArray);
+			return new Image(imageData);
+		} catch (IOException e) {
+			logger.warn("Image could not be loaded: " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	private void createAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, Table table,
 			boolean isSecond, Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime)
 			throws MalformedURLException {
 		float[] avalancheSituationColumnWidths = { 1 };
 		Table avalancheSituationTable;
 		Paragraph paragraph;
-		ImageData imageData;
 		Image img;
 		Cell cell;
 		int padding = 0;
@@ -559,18 +575,19 @@ public class PdfUtil {
 				avalancheSituationTable.setMarginTop(5);
 				avalancheSituationTable.setWidth(60);
 				avalancheSituationTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
-				imageData = ImageDataFactory.create(GlobalVariables.localImagesPath + "avalanche_situations\\color\\"
-						+ avalancheSituation.getAvalancheSituation().toStringId() + ".png");
-				img = new Image(imageData);
-				img.scaleToFit(60, 35);
-				if (isSecond) {
-					avalancheSituationTable.setBorderLeft(new SolidBorder(greyDarkColor, 0.5f));
-					img.setMarginLeft(5);
+				img = getImage("avalanche_situations/color/" + avalancheSituation.getAvalancheSituation().toStringId()
+						+ ".png");
+				if (img != null) {
+					img.scaleToFit(60, 35);
+					if (isSecond)
+						img.setMarginLeft(5);
+					cell = new Cell(1, 1).add(img);
+					cell.setBorder(Border.NO_BORDER);
+					cell.setWidth(60);
+					avalancheSituationTable.addCell(cell);
 				}
-				cell = new Cell(1, 1).add(img);
-				cell.setBorder(Border.NO_BORDER);
-				cell.setWidth(60);
-				avalancheSituationTable.addCell(cell);
+				if (isSecond)
+					avalancheSituationTable.setBorderLeft(new SolidBorder(greyDarkColor, 0.5f));
 				paragraph = new Paragraph(avalancheSituation.getAvalancheSituation().toString(lang))
 						.setFont(openSansRegularFont).setFontSize(8).setFontColor(greyDarkColor)
 						.setMultipliedLeading(1.0f);
@@ -624,14 +641,14 @@ public class PdfUtil {
 					}
 				}
 
-				imageData = ImageDataFactory.create(
-						GlobalVariables.localImagesPath + "aspects\\" + new Integer(result).toString() + ".png");
-				img = new Image(imageData);
-				img.scaleToFit(30, 30);
-				cell = new Cell(1, 1).add(img);
-				cell.setBorder(Border.NO_BORDER);
-				cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-				table.addCell(cell);
+				img = getImage("aspects/" + new Integer(result).toString() + ".png");
+				if (img != null) {
+					img.scaleToFit(30, 30);
+					cell = new Cell(1, 1).add(img);
+					cell.setBorder(Border.NO_BORDER);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					table.addCell(cell);
+				}
 			}
 
 			float[] elevationColumnWidths = { 1 };
@@ -640,18 +657,17 @@ public class PdfUtil {
 			if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
 				if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 					// elevation high and low set
-					imageData = ImageDataFactory
-							.create(GlobalVariables.localImagesPath + "elevation\\levels_middle_two.png");
-					img = new Image(imageData);
-					img.scaleToFit(70, 25);
-					cell = new Cell(1, 1);
-					cell.setTextAlignment(TextAlignment.LEFT);
-					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-					cell.setBorder(Border.NO_BORDER);
-					cell.setPadding(padding);
-					cell.add(img);
-					table.addCell(cell);
-
+					img = getImage("elevation/levels_middle_two.png");
+					if (img != null) {
+						img.scaleToFit(70, 25);
+						cell = new Cell(1, 1);
+						cell.setTextAlignment(TextAlignment.LEFT);
+						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+						cell.setBorder(Border.NO_BORDER);
+						cell.setPadding(padding);
+						cell.add(img);
+						table.addCell(cell);
+					}
 					if (avalancheSituation.getTreelineLow()) {
 						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
@@ -700,17 +716,17 @@ public class PdfUtil {
 					}
 				} else {
 					// elevation high set
-					imageData = ImageDataFactory
-							.create(GlobalVariables.localImagesPath + "elevation\\levels_below.png");
-					img = new Image(imageData);
-					img.scaleToFit(70, 25);
-					cell = new Cell(1, 1);
-					cell.setTextAlignment(TextAlignment.LEFT);
-					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-					cell.setBorder(Border.NO_BORDER);
-					cell.setPadding(padding);
-					cell.add(img);
-					table.addCell(cell);
+					img = getImage("elevation/levels_below.png");
+					if (img != null) {
+						img.scaleToFit(70, 25);
+						cell = new Cell(1, 1);
+						cell.setTextAlignment(TextAlignment.LEFT);
+						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+						cell.setBorder(Border.NO_BORDER);
+						cell.setPadding(padding);
+						cell.add(img);
+						table.addCell(cell);
+					}
 
 					if (avalancheSituation.getTreelineHigh()) {
 						paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFont(openSansBoldFont)
@@ -721,6 +737,7 @@ public class PdfUtil {
 						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 						cell.setBorder(Border.NO_BORDER);
 						cell.add(paragraph);
+						elevationTable.addCell(cell);
 					} else if (avalancheSituation.getElevationHigh() > 0) {
 						paragraph = new Paragraph(avalancheSituation.getElevationHigh() + "m").setFont(openSansBoldFont)
 								.setFontSize(8).setFontColor(greyDarkColor);
@@ -730,24 +747,23 @@ public class PdfUtil {
 						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 						cell.setBorder(Border.NO_BORDER);
 						cell.add(paragraph);
+						elevationTable.addCell(cell);
 					}
-
-					cell.setPadding(0);
-					elevationTable.addCell(cell);
 				}
 			} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 				// elevation low set
-				imageData = ImageDataFactory.create(GlobalVariables.localImagesPath + "elevation\\levels_above.png");
-				img = new Image(imageData);
-				img.scaleToFit(70, 25);
-				img.setMarginLeft(5);
-				cell = new Cell(1, 1);
-				cell.setTextAlignment(TextAlignment.LEFT);
-				cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-				cell.setBorder(Border.NO_BORDER);
-				cell.setPadding(padding);
-				cell.add(img);
-				table.addCell(cell);
+				img = getImage("elevation/levels_above.png");
+				if (img != null) {
+					img.scaleToFit(70, 25);
+					img.setMarginLeft(5);
+					cell = new Cell(1, 1);
+					cell.setTextAlignment(TextAlignment.LEFT);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					cell.setBorder(Border.NO_BORDER);
+					cell.setPadding(padding);
+					cell.add(img);
+					table.addCell(cell);
+				}
 
 				if (avalancheSituation.getTreelineLow()) {
 					paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFont(openSansBoldFont)
@@ -758,6 +774,7 @@ public class PdfUtil {
 					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 					cell.setBorder(Border.NO_BORDER);
 					cell.add(paragraph);
+					elevationTable.addCell(cell);
 				} else if (avalancheSituation.getElevationLow() > 0) {
 					paragraph = new Paragraph(avalancheSituation.getElevationLow() + "m").setFont(openSansBoldFont)
 							.setFontSize(8).setFontColor(greyDarkColor);
@@ -767,24 +784,22 @@ public class PdfUtil {
 					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 					cell.setBorder(Border.NO_BORDER);
 					cell.add(paragraph);
+					elevationTable.addCell(cell);
 				}
-
-				cell.setPadding(0);
-				elevationTable.addCell(cell);
 			} else {
 				// no elevation set
-				imageData = ImageDataFactory.create(GlobalVariables.localImagesPath + "elevation\\levels_all.png");
-				img = new Image(imageData);
-				img.scaleToFit(70, 25);
-				img.setMarginLeft(5);
-
-				cell = new Cell(1, 1);
-				cell.setTextAlignment(TextAlignment.LEFT);
-				cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-				cell.setBorder(Border.NO_BORDER);
-				cell.setPadding(padding);
-				cell.add(img);
-				table.addCell(cell);
+				img = getImage("elevation/levels_all.png");
+				if (img != null) {
+					img.scaleToFit(70, 25);
+					img.setMarginLeft(5);
+					cell = new Cell(1, 1);
+					cell.setTextAlignment(TextAlignment.LEFT);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					cell.setBorder(Border.NO_BORDER);
+					cell.setPadding(padding);
+					cell.add(img);
+					table.addCell(cell);
+				}
 			}
 
 			cell = new Cell(1, 1);
@@ -825,7 +840,7 @@ public class PdfUtil {
 			// Add overview maps
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
 				ImageData overviewMapAMImageData = ImageDataFactory
-						.create(GlobalVariables.localImagesPath + "bulletin-overview.jpg");
+						.create(GlobalVariables.mapsPath + "bulletin-overview.jpg");
 				Image overviewMapAMImg = new Image(overviewMapAMImageData);
 				overviewMapAMImg.scaleToFit(220, 500);
 				overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - 230, 500);
@@ -834,7 +849,7 @@ public class PdfUtil {
 						.setColor(greyDarkColor, true).showText("AM").endText();
 
 				ImageData overviewMapPMImageData = ImageDataFactory
-						.create(GlobalVariables.localImagesPath + "bulletin-overview.jpg");
+						.create(GlobalVariables.mapsPath + "bulletin-overview.jpg");
 				Image overviewMapPMImg = new Image(overviewMapPMImageData);
 				overviewMapPMImg.scaleToFit(220, 500);
 				overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 + 10, 500);
@@ -843,7 +858,7 @@ public class PdfUtil {
 						.setColor(greyDarkColor, true).showText("PM").endText();
 			} else {
 				ImageData overviewMapImageData = ImageDataFactory
-						.create(GlobalVariables.localImagesPath + "bulletin-overview.jpg");
+						.create(GlobalVariables.mapsPath + "bulletin-overview.jpg");
 				Image overviewMapImg = new Image(overviewMapImageData);
 				overviewMapImg.scaleToFit(220, 500);
 				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 110, 500);
