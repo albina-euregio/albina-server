@@ -3,9 +3,13 @@ package eu.albina.util;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
@@ -51,9 +55,13 @@ import eu.albina.model.enumerations.Tendency;
 
 public class PdfUtil {
 
-	public static final String OPEN_SANS_REGULAR = "./src/main/resources/fonts/open-sans/OpenSans-Regular.ttf";
-	public static final String OPEN_SANS_BOLD = "./src/main/resources/fonts/open-sans/OpenSans-Bold.ttf";
-	public static final String OPEN_SANS_LIGHT = "./src/main/resources/fonts/open-sans/OpenSans-Light.ttf";
+	private static final Logger logger = LoggerFactory.getLogger(PdfUtil.class);
+
+	private static PdfUtil instance = null;
+
+	public static final String OPEN_SANS_REGULAR = "/src/main/resources/fonts/open-sans/OpenSans-Regular.ttf";
+	public static final String OPEN_SANS_BOLD = "/src/main/resources/fonts/open-sans/OpenSans-Bold.ttf";
+	public static final String OPEN_SANS_LIGHT = "/src/main/resources/fonts/open-sans/OpenSans-Light.ttf";
 
 	public static final Color blueColorCmyk = new DeviceCmyk(0.63f, 0.22f, 0.f, 0.f);
 	public static final Color greyDarkColorCmyk = new DeviceCmyk(0.66f, 0.52f, 0.52f, 0.25f);
@@ -78,47 +86,62 @@ public class PdfUtil {
 	private static PdfFont openSansRegularFont;
 	private static PdfFont openSansBoldFont;
 
+	protected PdfUtil() throws IOException, URISyntaxException {
+		initialize();
+	}
+
+	private void initialize() throws IOException {
+		PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");
+	}
+
+	public static PdfUtil getInstance() throws IOException, URISyntaxException {
+		if (instance == null) {
+			instance = new PdfUtil();
+		}
+		return instance;
+	}
+
 	/**
 	 * Create a PDF containing all the information for the EUREGIO.
 	 * 
 	 * @param bulletins
 	 *            The bulletins to create the PDF of.
 	 */
-	public static void createOverviewPdfs(List<AvalancheBulletin> bulletins) {
+	public void createOverviewPdfs(List<AvalancheBulletin> bulletins) {
 		for (LanguageCode lang : GlobalVariables.languages)
 			createOverviewPdf(bulletins, lang);
 	}
 
-	public static void createOverviewPdf(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	public void createOverviewPdf(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		try {
-			openSansRegularFont = PdfFontFactory.createFont(OPEN_SANS_REGULAR, PdfEncodings.WINANSI, true);
-			openSansBoldFont = PdfFontFactory.createFont(OPEN_SANS_BOLD, PdfEncodings.WINANSI, true);
-
 			PdfDocument pdf;
 			PdfWriter writer;
 
 			switch (lang) {
 			case de:
-				writer = new PdfWriter(GlobalVariables.pdfDirectory + "Lawinenvorhersage "
+				writer = new PdfWriter(GlobalVariables.pdfDirectory + "Lawinenvorhersage"
 						+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
 				pdf = new PdfDocument(writer);
 				break;
 			case it:
-				writer = new PdfWriter(GlobalVariables.pdfDirectory + "Previsione Valanghe "
+				writer = new PdfWriter(GlobalVariables.pdfDirectory + "Previsione Valanghe"
 						+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
 				pdf = new PdfDocument(writer);
 				break;
 			case en:
-				writer = new PdfWriter(GlobalVariables.pdfDirectory + "Avalanche Forecast "
+				writer = new PdfWriter(GlobalVariables.pdfDirectory + "Avalanche Forecast"
 						+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
 				pdf = new PdfDocument(writer);
 				break;
 			default:
-				writer = new PdfWriter(GlobalVariables.pdfDirectory + "Avalanche Forecast "
+				writer = new PdfWriter(GlobalVariables.pdfDirectory + "Avalanche Forecast"
 						+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
 				pdf = new PdfDocument(writer);
 				break;
 			}
+
+			openSansRegularFont = PdfFontFactory.createRegisteredFont("opensans", PdfEncodings.WINANSI);
+			openSansBoldFont = PdfFontFactory.createRegisteredFont("opensans-bold", PdfEncodings.WINANSI);
 
 			pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new AvalancheBulletinEventHandler(lang, bulletins));
 			Document document = new Document(pdf);
@@ -134,15 +157,15 @@ public class PdfUtil {
 
 			document.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.error("PDF could not be created: " + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.error("PDF could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
-	private static void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
+	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
 			PdfDocument pdf, String tendencyDate, PdfWriter writer) throws MalformedURLException {
 		document.add(new AreaBreak());
 
@@ -383,7 +406,7 @@ public class PdfUtil {
 		document.add(table).setLeftMargin(50);
 	}
 
-	private static Table createSymbols(AvalancheBulletin avalancheBulletin, boolean isAfternoon, LanguageCode lang,
+	private Table createSymbols(AvalancheBulletin avalancheBulletin, boolean isAfternoon, LanguageCode lang,
 			String tendencyDate, PdfDocument pdf, Document document, PdfWriter writer) throws MalformedURLException {
 		AvalancheBulletinDaytimeDescription daytimeBulletin;
 		int height = 30;
@@ -498,9 +521,9 @@ public class PdfUtil {
 		return table;
 	}
 
-	private static Table createAvalancheSituations(AvalancheBulletinDaytimeDescription daytimeBulletin,
-			LanguageCode lang, PdfDocument pdf, Document document, PdfWriter writer, boolean isAfternoon,
-			boolean hasDaytime) throws MalformedURLException {
+	private Table createAvalancheSituations(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang,
+			PdfDocument pdf, Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime)
+			throws MalformedURLException {
 		float[] columnWidths = { 1, 1, 1, 1, 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
 
@@ -518,7 +541,7 @@ public class PdfUtil {
 		return table;
 	}
 
-	private static void createAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, Table table,
+	private void createAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, Table table,
 			boolean isSecond, Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime)
 			throws MalformedURLException {
 		float[] avalancheSituationColumnWidths = { 1 };
@@ -774,7 +797,7 @@ public class PdfUtil {
 		}
 	}
 
-	private static Color getDangerRatingColor(DangerRating dangerRating) {
+	private Color getDangerRatingColor(DangerRating dangerRating) {
 		switch (dangerRating) {
 		case low:
 			return dangerLevel1Color;
@@ -791,7 +814,7 @@ public class PdfUtil {
 		}
 	}
 
-	private static void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
+	private void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
 			PdfDocument pdf) {
 		try {
 			PdfPage page = pdf.addNewPage();
@@ -956,7 +979,7 @@ public class PdfUtil {
 	 * @param bulletins
 	 *            The bulletins to create the region PDFs of.
 	 */
-	public static void createRegionPdfs(List<AvalancheBulletin> bulletins) {
+	public void createRegionPdfs(List<AvalancheBulletin> bulletins) {
 		// TODO Implement creation of PDFs for each province.
 	}
 }

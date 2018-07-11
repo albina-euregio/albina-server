@@ -57,8 +57,16 @@ public class PublicationController {
 
 		// create pdfs
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdfs(bulletins);
-			PdfUtil.createRegionPdfs(bulletins);
+			try {
+				PdfUtil.getInstance().createOverviewPdfs(bulletins);
+				PdfUtil.getInstance().createRegionPdfs(bulletins);
+			} catch (IOException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		// send emails
@@ -103,8 +111,16 @@ public class PublicationController {
 
 		// create pdf
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdfs(bulletins);
-			PdfUtil.createRegionPdfs(bulletins);
+			try {
+				PdfUtil.getInstance().createOverviewPdfs(bulletins);
+				PdfUtil.getInstance().createRegionPdfs(bulletins);
+			} catch (IOException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		// send emails to regions
@@ -147,8 +163,16 @@ public class PublicationController {
 
 		// create pdfs
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdfs(bulletins);
-			PdfUtil.createRegionPdfs(bulletins);
+			try {
+				PdfUtil.getInstance().createOverviewPdfs(bulletins);
+				PdfUtil.getInstance().createRegionPdfs(bulletins);
+			} catch (IOException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 }

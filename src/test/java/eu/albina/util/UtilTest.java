@@ -191,9 +191,9 @@ public class UtilTest {
 
 	@Ignore
 	@Test
-	public void createPdf() {
+	public void createPdf() throws IOException, URISyntaxException {
 		// PdfUtil.createOverviewPdf(bulletins, LanguageCode.it);
-		PdfUtil.createOverviewPdfs(bulletins);
+		PdfUtil.getInstance().createOverviewPdfs(bulletins);
 	}
 
 	@Ignore
