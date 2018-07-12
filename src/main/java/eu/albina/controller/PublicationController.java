@@ -57,14 +57,22 @@ public class PublicationController {
 
 		// create pdfs
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdfs(bulletins);
-			PdfUtil.createRegionPdfs(bulletins);
+			try {
+				PdfUtil.getInstance().createOverviewPdfs(bulletins);
+				PdfUtil.getInstance().createRegionPdfs(bulletins);
+			} catch (IOException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		// send emails
 		if (AlbinaUtil.sendEmails) {
 			try {
-				EmailUtil.getInstance().sendEmails(bulletins, GlobalVariables.regions);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, GlobalVariables.regions);
 			} catch (IOException e) {
 				logger.error("Error preparing emails:" + e.getMessage());
 				e.printStackTrace();
@@ -103,14 +111,22 @@ public class PublicationController {
 
 		// create pdf
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdfs(bulletins);
-			PdfUtil.createRegionPdfs(bulletins);
+			try {
+				PdfUtil.getInstance().createOverviewPdfs(bulletins);
+				PdfUtil.getInstance().createRegionPdfs(bulletins);
+			} catch (IOException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		// send emails to regions
 		if (AlbinaUtil.sendEmails) {
 			try {
-				EmailUtil.getInstance().sendEmails(bulletins, regions);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
 			} catch (IOException e) {
 				logger.error("Error preparing emails:" + e.getMessage());
 				e.printStackTrace();
@@ -147,8 +163,16 @@ public class PublicationController {
 
 		// create pdfs
 		if (AlbinaUtil.createPdf) {
-			PdfUtil.createOverviewPdfs(bulletins);
-			PdfUtil.createRegionPdfs(bulletins);
+			try {
+				PdfUtil.getInstance().createOverviewPdfs(bulletins);
+				PdfUtil.getInstance().createRegionPdfs(bulletins);
+			} catch (IOException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				logger.error("Error creating pdfs:" + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 }

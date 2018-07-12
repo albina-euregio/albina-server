@@ -269,6 +269,22 @@ public class AvalancheBulletinController {
 			throw new AlbinaException("Published bulletins could not be loaded!");
 	}
 
+	public DangerRating getHighestDangerRating(DateTime startDate, DateTime endDate, List<String> regions)
+			throws AlbinaException {
+		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
+				endDate, regions);
+
+		if (result != null) {
+			DangerRating dangerRating = DangerRating.missing;
+			for (AvalancheBulletin bulletin : result.bulletins) {
+				if (bulletin.getHighestDangerRating().compareTo(dangerRating) <= 0)
+					dangerRating = bulletin.getHighestDangerRating();
+			}
+			return dangerRating;
+		} else
+			throw new AlbinaException("Published bulletins could not be loaded!");
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> getBulletins(DateTime startDate, DateTime endDate, List<String> regions)
 			throws AlbinaException {

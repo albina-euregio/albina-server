@@ -17,13 +17,12 @@ import eu.albina.model.enumerations.Tendency;
 
 public class GlobalVariables {
 
-	// public static String serverImagesUrl = "http://212.47.231.185:8080/images/";
-	// TODO just for testing
-	public static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
-	public static String localImagesPath = "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
+	public static String localImagesPath = "images/";
 
 	// TODO for testing
 	public static String pdfDirectory = "D:\\";
+	public static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
+	public static String mapsPath = "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
 
 	public static String emailUsername = "norbert.lanzanasto@gmail.com";
 	public static String emailPassword = "Go6Zaithee";
@@ -81,6 +80,7 @@ public class GlobalVariables {
 	public static String tokenEncodingIssuer = "albina";
 	public static long accessTokenExpirationDuration = 1000 * 60 * 60 * 24;
 	public static long refreshTokenExpirationDuration = 1000 * 60 * 60 * 24 * 7;
+	public static long confirmationTokenExpirationDuration = 1000 * 60 * 60 * 24 * 3;
 
 	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
 	// public static String referenceSystemUrn = "EPSG:32632";
