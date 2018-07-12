@@ -56,7 +56,7 @@ public class AvalancheBulletinService {
 	UriInfo uri;
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA, Role.OBSERVER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -97,7 +97,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA, Role.OBSERVER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
 	@Path("/locked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -239,7 +239,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	// @Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL,
+	// @Secured({ Role.ADMIN, Role.FORECASTER,
 	// Role.OBSERVER })
 	@Path("/status")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -278,7 +278,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA, Role.OBSERVER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -301,7 +301,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
+	@Secured({ Role.FORECASTER })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletins(
@@ -345,7 +345,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
+	@Secured({ Role.FORECASTER })
 	@Path("/change")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -395,7 +395,7 @@ public class AvalancheBulletinService {
 	/*
 	 * @POST
 	 * 
-	 * @Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
+	 * @Secured({ Role.FORECASTER })
 	 * 
 	 * @Consumes(MediaType.APPLICATION_JSON)
 	 * 
@@ -428,7 +428,7 @@ public class AvalancheBulletinService {
 	 * 
 	 * @PUT
 	 * 
-	 * @Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
+	 * @Secured({ Role.FORECASTER })
 	 * 
 	 * @Path("/{bulletinId}")
 	 * 
@@ -460,7 +460,7 @@ public class AvalancheBulletinService {
 	 * 
 	 * @DELETE
 	 * 
-	 * @Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
+	 * @Secured({ Role.FORECASTER })
 	 * 
 	 * @Path("/{bulletinId}")
 	 * 
@@ -485,7 +485,7 @@ public class AvalancheBulletinService {
 	 */
 
 	@POST
-	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
+	@Secured({ Role.FORECASTER })
 	@Path("/submit")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -497,7 +497,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRoles(), region)) {
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
@@ -531,7 +531,7 @@ public class AvalancheBulletinService {
 	 * @return
 	 */
 	@POST
-	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
+	@Secured({ Role.FORECASTER })
 	@Path("/publish")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -543,7 +543,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRoles(), region)) {
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
@@ -583,7 +583,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.STYRIA })
+	@Secured({ Role.FORECASTER })
 	@Path("/check")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -595,7 +595,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user.getRoles(), region)) {
+			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 

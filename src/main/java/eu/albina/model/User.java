@@ -1,6 +1,9 @@
 package eu.albina.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -21,7 +24,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.albina.model.enumerations.Role;
-import eu.albina.util.AuthorizationUtil;
 
 @Audited
 @Entity
@@ -47,6 +49,11 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private List<Role> roles;
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "USER_REGION", joinColumns = @JoinColumn(name = "USER_EMAIL"))
+	@Column(name = "USER_REGION")
+	private Set<String> regions;
+
 	/** Image of the user **/
 	@Column(name = "IMAGE", columnDefinition = "LONGBLOB")
 	private String image;
@@ -63,6 +70,8 @@ public class User {
 	 * Standard constructor for a user.
 	 */
 	public User() {
+		regions = new HashSet<String>();
+		roles = new ArrayList<Role>();
 	}
 
 	public User(JSONObject json) {
@@ -76,6 +85,12 @@ public class User {
 			JSONArray roles = json.getJSONArray("roles");
 			for (Object entry : roles) {
 				this.roles.add(Role.fromString((String) entry));
+			}
+		}
+		if (json.has("regions")) {
+			JSONArray regions = json.getJSONArray("regions");
+			for (Object region : regions) {
+				this.regions.add(region.toString());
 			}
 		}
 		if (json.has("image") && !json.isNull("image"))
@@ -129,6 +144,19 @@ public class User {
 			this.roles.add(role);
 	}
 
+	public Set<String> getRegions() {
+		return regions;
+	}
+
+	public void setRegions(Set<String> regions) {
+		this.regions = regions;
+	}
+
+	public void addRegion(String region) {
+		if (!this.regions.contains(region))
+			this.regions.add(region);
+	}
+
 	public String getImage() {
 		return image;
 	}
@@ -151,7 +179,6 @@ public class User {
 		json.put("email", getEmail());
 		json.put("name", getName());
 		json.put("image", getImage());
-		json.put("region", AuthorizationUtil.getRegion(getRoles()));
 
 		if (roles != null && roles.size() > 0) {
 			JSONArray jsonRoles = new JSONArray();
@@ -159,6 +186,14 @@ public class User {
 				jsonRoles.put(role.toString());
 			}
 			json.put("roles", jsonRoles);
+		}
+
+		if (regions != null && regions.size() > 0) {
+			JSONArray jsonRegions = new JSONArray();
+			for (String region : regions) {
+				jsonRegions.put(region.toString());
+			}
+			json.put("regions", jsonRegions);
 		}
 
 		return json;

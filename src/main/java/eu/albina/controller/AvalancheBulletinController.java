@@ -29,11 +29,11 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.BulletinLock;
+import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.EventName;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.Role;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
@@ -317,7 +317,7 @@ public class AvalancheBulletinController {
 		}
 	}
 
-	public void deleteBulletin(String bulletinId, List<Role> roles) throws AlbinaException {
+	public void deleteBulletin(String bulletinId, User user) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -331,7 +331,7 @@ public class AvalancheBulletinController {
 			Set<String> regions = avalancheBulletin.getSavedRegions();
 			Set<String> result = new HashSet<String>();
 			for (String region : regions) {
-				if (!AuthorizationUtil.hasPermissionForRegion(roles, region))
+				if (!AuthorizationUtil.hasPermissionForRegion(user, region))
 					result.add(region);
 			}
 			avalancheBulletin.setSavedRegions(result);
@@ -339,7 +339,7 @@ public class AvalancheBulletinController {
 			regions = avalancheBulletin.getSuggestedRegions();
 			result = new HashSet<String>();
 			for (String region : regions) {
-				if (!AuthorizationUtil.hasPermissionForRegion(roles, region))
+				if (!AuthorizationUtil.hasPermissionForRegion(user, region))
 					result.add(region);
 			}
 			avalancheBulletin.setSuggestedRegions(result);
@@ -439,7 +439,7 @@ public class AvalancheBulletinController {
 
 			for (AvalancheBulletin bulletin : results) {
 				// set publication date if no regions where published before
-				if (AuthorizationUtil.getRegion(bulletin.getUser().getRoles()).startsWith(region))
+				if (bulletin.getOwnerRegion().startsWith(region))
 					bulletin.setPublicationDate(publicationDate);
 				entityManager.merge(bulletin);
 			}

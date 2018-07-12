@@ -1,7 +1,7 @@
 package eu.albina.model.enumerations;
 
 public enum Role {
-	ADMIN, TRENTINO, SOUTH_TYROL, TYROL, STYRIA, OBSERVER;
+	ADMIN, FORECASTER, OBSERVER;
 
 	public static Role fromString(String text) {
 		if (text != null) {

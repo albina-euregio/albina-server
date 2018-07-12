@@ -42,7 +42,6 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 
 /**
@@ -60,6 +59,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private User user;
+
+	@Column(name = "OWNER_REGION")
+	private String ownerRegion;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_BULLETIN_ADDITIONAL_USER", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
@@ -191,6 +193,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			}
 		}
 
+		if (json.has("ownerRegion"))
+			this.ownerRegion = json.getString("ownerRegion");
 		if (json.has("avActivityHighlightsTextcat"))
 			this.avActivityHighlightsTextcat = json.getString("avActivityHighlightsTextcat");
 		if (json.has("avActivityCommentTextcat"))
@@ -284,6 +288,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public void addAdditionalAuthor(String additionalAuthor) {
 		if (!this.additionalAuthors.contains(additionalAuthor))
 			this.additionalAuthors.add(additionalAuthor);
+	}
+
+	public String getOwnerRegion() {
+		return ownerRegion;
+	}
+
+	public void setOwnerRegion(String ownerRegion) {
+		this.ownerRegion = ownerRegion;
 	}
 
 	public Map<TextPart, Texts> getTextPartsMap() {
@@ -681,7 +693,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		}
 
 		if (user != null && user.getRoles() != null)
-			json.put("ownerRegion", AuthorizationUtil.getRegion(user.getRoles()));
+			json.put("ownerRegion", ownerRegion);
 
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
@@ -1035,7 +1047,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					Element elevationRange = doc.createElement("elevationRange");
 					Element beginPosition = doc.createElement("begionPosition");
 					if (bulletin.getAvalancheSituation2().getTreelineLow())
-						// TODO
+						// TODO Allow treeline in CAAML
 						beginPosition.appendChild(doc.createTextNode("Treeline"));
 					else
 						beginPosition.appendChild(doc
