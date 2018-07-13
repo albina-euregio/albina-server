@@ -143,8 +143,18 @@ public class PdfUtil {
 				break;
 			}
 
+			// PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");
+			PdfFontFactory.registerDirectory(GlobalVariables.localFontsPath);
+			for (String font : PdfFontFactory.getRegisteredFonts()) {
+				System.out.println(font);
+			}
 			openSansRegularFont = PdfFontFactory.createRegisteredFont("opensans", PdfEncodings.WINANSI);
 			openSansBoldFont = PdfFontFactory.createRegisteredFont("opensans-bold", PdfEncodings.WINANSI);
+			// fallback if font is not found
+			if (openSansRegularFont == null || openSansBoldFont == null) {
+				openSansRegularFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI);
+				openSansBoldFont = PdfFontFactory.createRegisteredFont("helvetica-bold", PdfEncodings.WINANSI);
+			}
 
 			pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new AvalancheBulletinEventHandler(lang, bulletins));
 			Document document = new Document(pdf);

@@ -18,6 +18,7 @@ import eu.albina.model.enumerations.Tendency;
 public class GlobalVariables {
 
 	public static String localImagesPath = "images/";
+	public static String localFontsPath = "src/resources/fonts/open-sans";
 
 	// TODO for testing
 	public static String pdfDirectory = "D:\\";
