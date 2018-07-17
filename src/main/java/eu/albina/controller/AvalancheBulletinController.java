@@ -438,9 +438,7 @@ public class AvalancheBulletinController {
 					results.add(bulletin);
 
 			for (AvalancheBulletin bulletin : results) {
-				// set publication date if no regions where published before
-				if (bulletin.getOwnerRegion().startsWith(region))
-					bulletin.setPublicationDate(publicationDate);
+				bulletin.setPublicationDate(publicationDate);
 				entityManager.merge(bulletin);
 			}
 			transaction.commit();
