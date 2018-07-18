@@ -40,12 +40,6 @@ public class AlbinaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
 
-	public static final boolean createMaps = false;
-	public static final boolean createPdf = true;
-	public static final boolean sendEmails = false;
-	public static final boolean publishToSocialMedia = false;
-	public static final boolean createCAAML = true;
-
 	public static final int regionCountTyrol = 29;
 	public static final int regionCountSouthTyrol = 20;
 	public static final int regionCountTrentino = 21;
@@ -554,7 +548,7 @@ public class AlbinaUtil {
 	private static DateTime getDate(List<AvalancheBulletin> bulletins) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DateTime bulletinDate = avalancheBulletin.getValidUntil();
+			DateTime bulletinDate = avalancheBulletin.getValidFrom();
 			if (date == null)
 				date = bulletinDate;
 			else if (bulletinDate.isAfter(date))
