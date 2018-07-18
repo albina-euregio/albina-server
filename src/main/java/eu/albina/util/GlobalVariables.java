@@ -2,9 +2,12 @@ package eu.albina.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 import org.joda.time.format.DateTimeFormat;
@@ -17,13 +20,23 @@ import eu.albina.model.enumerations.Tendency;
 
 public class GlobalVariables {
 
+	public static boolean createMaps = false;
+	public static boolean createPdf = true;
+	public static boolean sendEmails = false;
+	public static boolean publishToSocialMedia = false;
+	public static boolean publishAt5PM = true;
+	public static boolean publishAt8AM = true;
+
 	public static String localImagesPath = "images/";
-	public static String localFontsPath = "src/resources/fonts/open-sans";
+	public static String localFontsPath = "fonts/open-sans";
 
 	// TODO for testing
-	public static String pdfDirectory = "D:\\";
+	// public static String pdfDirectory = "D:\\";
+	public static String pdfDirectory = "pdfs/";
 	public static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
-	public static String mapsPath = "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
+	// public static String mapsPath =
+	// "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
+	public static String mapsPath = "images/";
 
 	public static String emailUsername = "norbert.lanzanasto@gmail.com";
 	public static String emailPassword = "Go6Zaithee";
@@ -370,6 +383,40 @@ public class GlobalVariables {
 				return "missing";
 			default:
 				return "missing";
+			}
+		}
+	}
+
+	public static void loadConfigProperties() {
+		Properties prop = new Properties();
+		InputStream input = null;
+
+		try {
+			input = GlobalVariables.class.getClassLoader().getResourceAsStream("/config.properties");
+			prop.load(input);
+
+			localImagesPath = prop.getProperty("localImagesPath");
+			localFontsPath = prop.getProperty("localFontsPath");
+			pdfDirectory = prop.getProperty("pdfDirectory");
+			serverImagesUrl = prop.getProperty("serverImagesUrl");
+			mapsPath = prop.getProperty("mapsPath");
+			emailUsername = prop.getProperty("emailUsername");
+			emailPassword = prop.getProperty("emailPassword");
+			createMaps = Boolean.parseBoolean(prop.getProperty("createMaps"));
+			createPdf = Boolean.parseBoolean(prop.getProperty("createPdf"));
+			sendEmails = Boolean.parseBoolean(prop.getProperty("sendEmails"));
+			publishToSocialMedia = Boolean.parseBoolean(prop.getProperty("publishToSocialMedia"));
+			publishAt5PM = Boolean.parseBoolean(prop.getProperty("publishAt5PM"));
+			publishAt8AM = Boolean.parseBoolean(prop.getProperty("publishAt8AM"));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

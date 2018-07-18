@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
@@ -46,17 +45,19 @@ public class PublicationController {
 	 *            The bulletins that were published.
 	 * @throws MessagingException
 	 */
-	public void publish(List<AvalancheBulletin> bulletins) {
+	public void publishAutmatically(List<AvalancheBulletin> bulletins) {
+		if (GlobalVariables.publishAt5PM)
+			publish(bulletins);
+	}
 
-		// TODO implement
-
+	private void publish(List<AvalancheBulletin> bulletins) {
 		// create maps
-		if (AlbinaUtil.createMaps) {
+		if (GlobalVariables.createMaps) {
 			MapUtil.createDangerRatingMaps(bulletins);
 		}
 
 		// create pdfs
-		if (AlbinaUtil.createPdf) {
+		if (GlobalVariables.createPdf) {
 			try {
 				PdfUtil.getInstance().createOverviewPdfs(bulletins);
 				PdfUtil.getInstance().createRegionPdfs(bulletins);
@@ -70,7 +71,7 @@ public class PublicationController {
 		}
 
 		// send emails
-		if (AlbinaUtil.sendEmails) {
+		if (GlobalVariables.sendEmails) {
 			try {
 				EmailUtil.getInstance().sendBulletinEmails(bulletins, GlobalVariables.regions);
 			} catch (IOException e) {
@@ -83,11 +84,16 @@ public class PublicationController {
 		}
 
 		// publish on social media
-		if (AlbinaUtil.publishToSocialMedia) {
+		if (GlobalVariables.publishToSocialMedia) {
 
 			// TODO publish on social media
 
 		}
+	}
+
+	public void updateAutomatically(List<AvalancheBulletin> bulletins, List<String> regions) throws MessagingException {
+		if (GlobalVariables.publishAt8AM)
+			update(bulletins, regions);
 	}
 
 	/**
@@ -101,16 +107,13 @@ public class PublicationController {
 	 * @throws MessagingException
 	 */
 	public void update(List<AvalancheBulletin> bulletins, List<String> regions) throws MessagingException {
-
-		// TODO implement
-
 		// create maps
-		if (AlbinaUtil.createMaps) {
+		if (GlobalVariables.createMaps) {
 			MapUtil.createDangerRatingMaps(bulletins);
 		}
 
 		// create pdf
-		if (AlbinaUtil.createPdf) {
+		if (GlobalVariables.createPdf) {
 			try {
 				PdfUtil.getInstance().createOverviewPdfs(bulletins);
 				PdfUtil.getInstance().createRegionPdfs(bulletins);
@@ -124,7 +127,7 @@ public class PublicationController {
 		}
 
 		// send emails to regions
-		if (AlbinaUtil.sendEmails) {
+		if (GlobalVariables.sendEmails) {
 			try {
 				EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
 			} catch (IOException e) {
@@ -137,7 +140,7 @@ public class PublicationController {
 		}
 
 		// publish on social media
-		if (AlbinaUtil.publishToSocialMedia) {
+		if (GlobalVariables.publishToSocialMedia) {
 
 			// TODO publish on social media only for updated regions
 
@@ -157,12 +160,12 @@ public class PublicationController {
 		// TODO implement
 
 		// create maps
-		if (AlbinaUtil.createMaps) {
+		if (GlobalVariables.createMaps) {
 			MapUtil.createDangerRatingMaps(bulletins);
 		}
 
 		// create pdfs
-		if (AlbinaUtil.createPdf) {
+		if (GlobalVariables.createPdf) {
 			try {
 				PdfUtil.getInstance().createOverviewPdfs(bulletins);
 				PdfUtil.getInstance().createRegionPdfs(bulletins);

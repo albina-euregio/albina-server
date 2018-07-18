@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 
 import eu.albina.controller.SocketIOController;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.SchedulerUtil;
 
@@ -55,6 +56,8 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		}
 
 		SocketIOController.getInstance().startSocketIO();
+
+		GlobalVariables.loadConfigProperties();
 
 		SchedulerUtil.getInstance().setUp();
 		SchedulerUtil.getInstance().start();

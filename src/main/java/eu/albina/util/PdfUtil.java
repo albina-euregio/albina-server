@@ -2,7 +2,6 @@ package eu.albina.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.Iterator;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.io.util.ResourceUtil;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.color.DeviceCmyk;
 import com.itextpdf.kernel.color.DeviceRgb;
@@ -145,9 +143,9 @@ public class PdfUtil {
 
 			// PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");
 			PdfFontFactory.registerDirectory(GlobalVariables.localFontsPath);
-			for (String font : PdfFontFactory.getRegisteredFonts()) {
-				System.out.println(font);
-			}
+			// for (String font : PdfFontFactory.getRegisteredFonts()) {
+			// System.out.println(font);
+			// }
 			openSansRegularFont = PdfFontFactory.createRegisteredFont("opensans", PdfEncodings.WINANSI);
 			openSansBoldFont = PdfFontFactory.createRegisteredFont("opensans-bold", PdfEncodings.WINANSI);
 			// fallback if font is not found
@@ -179,7 +177,7 @@ public class PdfUtil {
 	}
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
-			PdfDocument pdf, String tendencyDate, PdfWriter writer) throws MalformedURLException {
+			PdfDocument pdf, String tendencyDate, PdfWriter writer) throws IOException {
 		document.add(new AreaBreak());
 
 		float leadingHeadline = 1.f;
@@ -211,8 +209,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			secondTable.addCell(cell);
-			ImageData regionAMImageDate = ImageDataFactory
-					.create(GlobalVariables.mapsPath + "bulletin-report-region.png");
+			ImageData regionAMImageDate = ImageDataFactory.create(IOUtils.toByteArray(this.getClass().getClassLoader()
+					.getResourceAsStream(GlobalVariables.mapsPath + "bulletin-report-region.png")));
 			Image regionAMImg = new Image(regionAMImageDate);
 			regionAMImg.scaleToFit(regionMapSize, regionMapSize);
 			regionAMImg.setMarginRight(10);
@@ -241,8 +239,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			secondTable.addCell(cell);
-			ImageData regionPMImageDate = ImageDataFactory
-					.create(GlobalVariables.mapsPath + "bulletin-report-region.png");
+			ImageData regionPMImageDate = ImageDataFactory.create(IOUtils.toByteArray(this.getClass().getClassLoader()
+					.getResourceAsStream(GlobalVariables.mapsPath + "bulletin-report-region.png")));
 			Image regionPMImg = new Image(regionPMImageDate);
 			regionPMImg.scaleToFit(regionMapSize, regionMapSize);
 			regionPMImg.setMarginRight(10);
@@ -266,8 +264,8 @@ public class PdfUtil {
 		} else {
 			float[] secondColumnWidths = { 1, 1 };
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
-			ImageData regionImageDate = ImageDataFactory
-					.create(GlobalVariables.mapsPath + "bulletin-report-region.png");
+			ImageData regionImageDate = ImageDataFactory.create(IOUtils.toByteArray(this.getClass().getClassLoader()
+					.getResourceAsStream(GlobalVariables.mapsPath + "bulletin-report-region.png")));
 			Image regionImg = new Image(regionImageDate);
 			regionImg.scaleToFit(regionMapSize, regionMapSize);
 			regionImg.setMarginRight(10);
@@ -557,9 +555,9 @@ public class PdfUtil {
 
 	private Image getImage(String path) {
 		try {
-			InputStream resourceStream = ResourceUtil.getResourceStream(GlobalVariables.localImagesPath + path);
-			byte[] byteArray = IOUtils.toByteArray(resourceStream);
-			ImageData imageData = ImageDataFactory.create(byteArray);
+			String name = GlobalVariables.localImagesPath + path;
+			ImageData imageData = ImageDataFactory
+					.create(IOUtils.toByteArray(this.getClass().getClassLoader().getResourceAsStream(name)));
 			return new Image(imageData);
 		} catch (IOException e) {
 			logger.warn("Image could not be loaded: " + e.getMessage());
@@ -681,7 +679,7 @@ public class PdfUtil {
 					if (avalancheSituation.getTreelineLow()) {
 						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
-						paragraph2.setRelativePosition(-6, 3, 0, 0);
+						paragraph2.setRelativePosition(-6, 2, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
 						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
@@ -692,7 +690,7 @@ public class PdfUtil {
 					} else if (avalancheSituation.getElevationLow() > 0) {
 						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationLow() + "m")
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
-						paragraph2.setRelativePosition(-6, 3, 0, 0);
+						paragraph2.setRelativePosition(-6, 2, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
 						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
@@ -849,8 +847,8 @@ public class PdfUtil {
 
 			// Add overview maps
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-				ImageData overviewMapAMImageData = ImageDataFactory
-						.create(GlobalVariables.mapsPath + "bulletin-overview.jpg");
+				ImageData overviewMapAMImageData = ImageDataFactory.create(IOUtils.toByteArray(this.getClass()
+						.getClassLoader().getResourceAsStream(GlobalVariables.mapsPath + "bulletin-overview.jpg")));
 				Image overviewMapAMImg = new Image(overviewMapAMImageData);
 				overviewMapAMImg.scaleToFit(220, 500);
 				overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - 230, 500);
@@ -858,8 +856,8 @@ public class PdfUtil {
 				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14).moveText(pageSize.getWidth() / 2 - 226, 714)
 						.setColor(greyDarkColor, true).showText("AM").endText();
 
-				ImageData overviewMapPMImageData = ImageDataFactory
-						.create(GlobalVariables.mapsPath + "bulletin-overview.jpg");
+				ImageData overviewMapPMImageData = ImageDataFactory.create(IOUtils.toByteArray(this.getClass()
+						.getClassLoader().getResourceAsStream(GlobalVariables.mapsPath + "bulletin-overview.jpg")));
 				Image overviewMapPMImg = new Image(overviewMapPMImageData);
 				overviewMapPMImg.scaleToFit(220, 500);
 				overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 + 10, 500);
@@ -867,8 +865,8 @@ public class PdfUtil {
 				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14).moveText(pageSize.getWidth() / 2 + 14, 714)
 						.setColor(greyDarkColor, true).showText("PM").endText();
 			} else {
-				ImageData overviewMapImageData = ImageDataFactory
-						.create(GlobalVariables.mapsPath + "bulletin-overview.jpg");
+				ImageData overviewMapImageData = ImageDataFactory.create(IOUtils.toByteArray(this.getClass()
+						.getClassLoader().getResourceAsStream(GlobalVariables.mapsPath + "bulletin-overview.jpg")));
 				Image overviewMapImg = new Image(overviewMapImageData);
 				overviewMapImg.scaleToFit(220, 500);
 				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 110, 500);
@@ -992,6 +990,9 @@ public class PdfUtil {
 			canvas.close();
 			pdfCanvas.release();
 		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
