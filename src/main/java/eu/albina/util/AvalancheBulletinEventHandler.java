@@ -53,14 +53,14 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			PdfFont openSansRegularFont;
 			PdfFont openSansBoldFont;
 			PdfFont openSansLightFont;
-			openSansRegularFont = PdfFontFactory.createRegisteredFont("opensans", PdfEncodings.WINANSI);
-			openSansBoldFont = PdfFontFactory.createRegisteredFont("opensans-bold", PdfEncodings.WINANSI);
-			openSansLightFont = PdfFontFactory.createRegisteredFont("opensans-light", PdfEncodings.WINANSI);
+			openSansRegularFont = PdfFontFactory.createRegisteredFont("opensans", PdfEncodings.WINANSI, true);
+			openSansBoldFont = PdfFontFactory.createRegisteredFont("opensans-bold", PdfEncodings.WINANSI, true);
+			openSansLightFont = PdfFontFactory.createRegisteredFont("opensans-light", PdfEncodings.WINANSI, true);
 			// fallback if font is not found
 			if (openSansRegularFont == null || openSansBoldFont == null) {
-				openSansRegularFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI);
-				openSansBoldFont = PdfFontFactory.createRegisteredFont("helvetica-bold", PdfEncodings.WINANSI);
-				openSansLightFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI);
+				openSansRegularFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI, true);
+				openSansBoldFont = PdfFontFactory.createRegisteredFont("helvetica-bold", PdfEncodings.WINANSI, true);
+				openSansLightFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI, true);
 			}
 
 			// Add headline
