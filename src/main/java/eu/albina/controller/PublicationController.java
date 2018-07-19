@@ -1,14 +1,19 @@
 package eu.albina.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.mail.MessagingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.thread.EmailThread;
-import eu.albina.thread.MapThread;
-import eu.albina.thread.PdfThread;
+import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.MapUtil;
+import eu.albina.util.PdfUtil;
 
 /**
  * Controller for avalanche reports.
@@ -18,8 +23,7 @@ import eu.albina.util.GlobalVariables;
  */
 public class PublicationController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(PublicationController.class);
+	private static Logger logger = LoggerFactory.getLogger(PublicationController.class);
 
 	private static PublicationController instance = null;
 
@@ -48,22 +52,16 @@ public class PublicationController {
 
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		// create maps
-		if (GlobalVariables.createMaps) {
-			MapThread thread = new MapThread(avalancheReportIds, bulletins);
-			thread.run();
-		}
+		if (GlobalVariables.createMaps)
+			createMaps(avalancheReportIds, bulletins);
 
 		// create pdfs
-		if (GlobalVariables.createPdf) {
-			PdfThread thread = new PdfThread(avalancheReportIds, bulletins);
-			thread.run();
-		}
+		if (GlobalVariables.createPdf)
+			createPdf(avalancheReportIds, bulletins);
 
 		// send emails
-		if (GlobalVariables.sendEmails) {
-			EmailThread thread = new EmailThread(avalancheReportIds, bulletins, GlobalVariables.regions);
-			thread.run();
-		}
+		if (GlobalVariables.sendEmails)
+			sendEmails(avalancheReportIds, bulletins, GlobalVariables.regions);
 
 		// publish on social media
 		if (GlobalVariables.publishToSocialMedia) {
@@ -92,23 +90,18 @@ public class PublicationController {
 	 */
 	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions)
 			throws MessagingException {
+
 		// create maps
-		if (GlobalVariables.createMaps) {
-			MapThread thread = new MapThread(avalancheReportIds, bulletins);
-			thread.run();
-		}
+		if (GlobalVariables.createMaps)
+			createMaps(avalancheReportIds, bulletins);
 
 		// create pdf
-		if (GlobalVariables.createPdf) {
-			PdfThread thread = new PdfThread(avalancheReportIds, bulletins);
-			thread.run();
-		}
+		if (GlobalVariables.createPdf)
+			createPdf(avalancheReportIds, bulletins);
 
 		// send emails to regions
-		if (GlobalVariables.sendEmails) {
-			EmailThread thread = new EmailThread(avalancheReportIds, bulletins, regions);
-			thread.run();
-		}
+		if (GlobalVariables.sendEmails)
+			sendEmails(avalancheReportIds, bulletins, regions);
 
 		// publish on social media
 		if (GlobalVariables.publishToSocialMedia) {
@@ -131,15 +124,63 @@ public class PublicationController {
 		// TODO implement
 
 		// create maps
-		if (GlobalVariables.createMaps) {
-			MapThread thread = new MapThread(avalancheReportIds, bulletins);
-			thread.run();
-		}
+		if (GlobalVariables.createMaps)
+			createMaps(avalancheReportIds, bulletins);
 
 		// create pdfs
-		if (GlobalVariables.createPdf) {
-			PdfThread thread = new PdfThread(avalancheReportIds, bulletins);
-			thread.run();
-		}
+		if (GlobalVariables.createPdf)
+			createPdf(avalancheReportIds, bulletins);
+	}
+
+	private void createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+		new Thread(new Runnable() {
+			public void run() {
+				logger.info("Map production started");
+				MapUtil.createDangerRatingMaps(bulletins);
+				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportIds);
+				logger.info("Map production finished");
+			}
+		}).start();
+	}
+
+	private void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					logger.info("Email production started");
+					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
+					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
+				} catch (IOException e) {
+					logger.error("Error preparing emails:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error preparing emails:" + e.getMessage());
+					e.printStackTrace();
+				} finally {
+					logger.info("Email production finished");
+				}
+			}
+		}).start();
+	}
+
+	private void createPdf(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					logger.info("PDF production started");
+					PdfUtil.getInstance().createOverviewPdfs(bulletins);
+					PdfUtil.getInstance().createRegionPdfs(bulletins);
+					AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
+				} catch (IOException e) {
+					logger.error("Error creating pdfs:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error creating pdfs:" + e.getMessage());
+					e.printStackTrace();
+				} finally {
+					logger.info("Map production finished");
+				}
+			}
+		}).start();
 	}
 }
