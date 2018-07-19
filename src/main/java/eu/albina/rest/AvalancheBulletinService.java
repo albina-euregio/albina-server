@@ -103,7 +103,6 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getLockedBulletins(@QueryParam("region") String bulletin) {
 		logger.debug("GET JSON locked bulletins");
-		// TODO check if query param "region" is correct
 		JSONArray json = new JSONArray();
 		for (DateTime date : AvalancheBulletinController.getInstance().getLockedBulletins(bulletin))
 			json.put(date.toString(GlobalVariables.formatterDateTime));
@@ -132,8 +131,6 @@ public class AvalancheBulletinService {
 		else
 			startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
 		endDate = startDate.plusDays(1);
-
-		// TODO check if data is at most tomorrow (if it is after 5PM)
 
 		try {
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, endDate,
@@ -182,8 +179,6 @@ public class AvalancheBulletinService {
 		else
 			startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
 		endDate = startDate.plusDays(1);
-
-		// TODO check if data is at most tomorrow (if it is after 5PM)
 
 		try {
 			Collection<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()

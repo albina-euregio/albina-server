@@ -998,10 +998,10 @@ public class PdfUtil {
 			canvas.close();
 			pdfCanvas.release();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			logger.error("PDF front page could not be created: " + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.error("PDF front page could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

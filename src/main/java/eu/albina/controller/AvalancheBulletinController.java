@@ -422,8 +422,6 @@ public class AvalancheBulletinController {
 	public void publishBulletins(DateTime startDate, DateTime endDate, String region, DateTime publicationDate)
 			throws AlbinaException {
 
-		// TODO check if current status is submitted
-
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {

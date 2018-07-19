@@ -343,10 +343,10 @@ public class EmailUtil {
 
 			return out.toString();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.error("Confirmation email could not be created: " + e.getMessage());
 			e.printStackTrace();
 		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
+			logger.error("Confirmation email could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -602,10 +602,10 @@ public class EmailUtil {
 
 			return out.toString();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.error("Bulletin email could not be created: " + e.getMessage());
 			e.printStackTrace();
 		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
+			logger.error("Bulletin email could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
 

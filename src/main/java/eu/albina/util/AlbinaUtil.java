@@ -453,7 +453,7 @@ public class AlbinaUtil {
 	}
 
 	public static String createValidElevationAttribute(int elevation, boolean above, boolean treeline) {
-		// TODO allow treeline in CAAML
+		// TODO Allow treeline in CAAML
 		if (treeline) {
 			if (above)
 				return "ElevationRange_TreelineHi";

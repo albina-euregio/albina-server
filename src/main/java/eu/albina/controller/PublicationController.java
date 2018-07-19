@@ -120,9 +120,6 @@ public class PublicationController {
 	 *            The bulletins that were changed.
 	 */
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
-
-		// TODO implement
-
 		// create maps
 		if (GlobalVariables.createMaps)
 			createMaps(avalancheReportIds, bulletins);

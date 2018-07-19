@@ -917,7 +917,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			dangerRatingBelow.appendChild(validElevationBelow);
 			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
-				// TODO add treeline as elevation
 				mainValueBelow
 						.appendChild(doc.createTextNode(DangerRating.getCAAMLString(bulletin.getDangerRatingBelow())));
 				dangerRatingBelow.appendChild(mainValueBelow);
@@ -970,7 +969,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				}
 			}
 
-			// TODO add elevation to CAAML
 			if (bulletin.getAvalancheSituation1().getTreelineHigh()
 					|| bulletin.getAvalancheSituation1().getElevationHigh() > 0) {
 				if (bulletin.getAvalancheSituation1().getTreelineLow()
@@ -980,7 +978,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					Element elevationRange = doc.createElement("elevationRange");
 					Element beginPosition = doc.createElement("begionPosition");
 					if (bulletin.getAvalancheSituation1().getTreelineLow())
-						// TODO
 						beginPosition.appendChild(doc.createTextNode("Treeline"));
 					else
 						beginPosition.appendChild(doc
@@ -1039,7 +1036,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					avProblem2.appendChild(validAspect);
 				}
 			}
-			// TODO add elevation to CAAML
 			if (bulletin.getAvalancheSituation2().getTreelineHigh()
 					|| bulletin.getAvalancheSituation2().getElevationHigh() > 0) {
 				if (bulletin.getAvalancheSituation2().getTreelineLow()

@@ -258,7 +258,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	}
 
 	public Element toCAAML(Document doc, LanguageCode languageCode) {
-		// TODO implement
 		return null;
 	}
 }
