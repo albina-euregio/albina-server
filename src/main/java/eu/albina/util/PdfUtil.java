@@ -82,7 +82,8 @@ public class PdfUtil {
 	public static final Color dangerLevel2Color = new DeviceRgb(255, 255, 70);
 	public static final Color dangerLevel3Color = new DeviceRgb(255, 152, 44);
 	public static final Color dangerLevel4Color = new DeviceRgb(255, 0, 23);
-	public static final Color dangerLevel5Color = new DeviceRgb(255, 0, 23);
+	public static final Color dangerLevel5ColorRed = new DeviceRgb(255, 0, 23);
+	public static final Color dangerLevel5ColorBlack = new DeviceRgb(0, 0, 0);
 
 	private static PdfFont openSansRegularFont;
 	private static PdfFont openSansBoldFont;
@@ -831,7 +832,7 @@ public class PdfUtil {
 		case high:
 			return dangerLevel4Color;
 		case very_high:
-			return dangerLevel5Color;
+			return dangerLevel5ColorRed;
 		default:
 			return whiteColor;
 		}
@@ -875,7 +876,7 @@ public class PdfUtil {
 
 			// add legend
 			int legendEntryWidth = 50;
-			int legendEntryHeight = 7;
+			int legendEntryHeight = 8;
 			int y = 478;
 			Rectangle dangerLevel1Rectangle = new Rectangle(
 					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
@@ -891,10 +892,17 @@ public class PdfUtil {
 			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, y,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel4Rectangle).setColor(dangerLevel4Color, true).fill();
-			Rectangle dangerLevel5Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2, y, legendEntryWidth,
-					legendEntryHeight);
-			pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5Color, true).fill();
+
+			for (int j = 0; j < 2; j++) {
+				for (int i = 0; i < 12; i++) {
+					Rectangle dangerLevel5Rectangle = new Rectangle(
+							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, y + j * 4, 4, 4);
+					if ((i + j) % 2 == 0)
+						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorRed, true).fill();
+					else
+						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorBlack, true).fill();
+				}
+			}
 
 			float width;
 			float fontSize = 8;
