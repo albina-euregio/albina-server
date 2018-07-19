@@ -843,9 +843,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
-		Element dateTimeReport = doc.createElement("dateTimeReport");
-		dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
-		metaData.appendChild(dateTimeReport);
+		if (publicationDate != null) {
+			Element dateTimeReport = doc.createElement("dateTimeReport");
+			dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
+			metaData.appendChild(dateTimeReport);
+		}
 		if (user != null) {
 			Element srcRef = doc.createElement("srcRef");
 			srcRef.appendChild(user.toCAAML(doc));
