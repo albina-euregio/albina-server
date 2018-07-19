@@ -176,6 +176,7 @@ public class EmailUtil {
 				// List<String> recipients = SubscriberService.getInstance().getRecipients(lang,
 				// region);
 				List<String> recipients = new ArrayList<String>();
+				recipients.add("norbert.lanzanasto@tirol.gv.at");
 				sendBulletinEmail(bulletinList, lang, recipients);
 			}
 		}
