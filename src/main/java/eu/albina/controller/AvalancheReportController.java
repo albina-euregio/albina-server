@@ -172,7 +172,7 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void changeReport(DateTime startDate, String region, User user) throws AlbinaException {
+	public String changeReport(DateTime startDate, String region, User user) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -187,8 +187,9 @@ public class AvalancheReportController {
 			int revision = (int) reader.createQuery().forRevisionsOfEntity(AvalancheBulletin.class, false, true)
 					.addProjection(AuditEntity.revisionNumber().max()).getSingleResult();
 
+			AvalancheReport avalancheReport;
 			if (reports.size() == 1) {
-				AvalancheReport avalancheReport = reports.get(0);
+				avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(new DateTime());
 				avalancheReport.setUser(user);
 				avalancheReport.setRevision(revision);
@@ -197,6 +198,8 @@ public class AvalancheReportController {
 			}
 
 			transaction.commit();
+
+			return avalancheReport.getId();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
@@ -206,14 +209,18 @@ public class AvalancheReportController {
 		}
 	}
 
-	public void publishReport(DateTime startDate, List<String> regions, User user, DateTime publicationDate)
+	public List<String> publishReport(DateTime startDate, List<String> regions, User user, DateTime publicationDate)
 			throws AlbinaException {
-		for (String region : regions)
-			publishReport(startDate, region, user, publicationDate);
+		List<String> avalancheReportIds = new ArrayList<String>();
+		for (String region : regions) {
+			String avalancheReportId = publishReport(startDate, region, user, publicationDate);
+			avalancheReportIds.add(avalancheReportId);
+		}
+		return avalancheReportIds;
 	}
 
 	@SuppressWarnings("unchecked")
-	public void publishReport(DateTime startDate, String region, User user, DateTime publicationDate)
+	public String publishReport(DateTime startDate, String region, User user, DateTime publicationDate)
 			throws AlbinaException {
 
 		// TODO save CAAML and JSON to report?
@@ -243,8 +250,10 @@ public class AvalancheReportController {
 
 			JSONObject data = null;
 
+			AvalancheReport avalancheReport;
+
 			if (reports.isEmpty()) {
-				AvalancheReport avalancheReport = new AvalancheReport();
+				avalancheReport = new AvalancheReport();
 				avalancheReport.setTimestamp(publicationDate);
 				avalancheReport.setUser(user);
 				avalancheReport.setDate(startDate);
@@ -254,7 +263,7 @@ public class AvalancheReportController {
 				entityManager.persist(avalancheReport);
 				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
-				AvalancheReport avalancheReport = reports.get(0);
+				avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(publicationDate);
 				avalancheReport.setUser(user);
 				avalancheReport.setRevision(revision);
@@ -294,6 +303,8 @@ public class AvalancheReportController {
 
 			if (data != null)
 				SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(), data.toString());
+
+			return avalancheReport.getId();
 
 		} catch (HibernateException he) {
 			if (transaction != null)
@@ -583,5 +594,101 @@ public class AvalancheReportController {
 			entity = (T) ((HibernateProxy) entity).getHibernateLazyInitializer().getImplementation();
 		}
 		return entity;
+	}
+
+	public void setAvalancheReportEmailFlag(List<String> avalancheReportIds) {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			for (String avalancheReportId : avalancheReportIds) {
+				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+				avalancheReport.setEmailCreated(true);
+			}
+			entityManager.flush();
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Email flag could not be set!");
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	public void setAvalancheReportPdfFlag(List<String> avalancheReportIds) {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			for (String avalancheReportId : avalancheReportIds) {
+				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+				avalancheReport.setPdfCreated(true);
+			}
+			entityManager.flush();
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("PDF flag could not be set!");
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	public void setAvalancheReportMapFlag(List<String> avalancheReportIds) {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			for (String avalancheReportId : avalancheReportIds) {
+				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+				avalancheReport.setMapCreated(true);
+			}
+			entityManager.flush();
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Map flag could not be set!");
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	public void setAvalancheReportWhatsappFlag(String avalancheReportId) {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setWhatsappSent(true);
+			entityManager.flush();
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Whatsapp flag could not be set!");
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	public void setAvalancheReportTelegramFlag(String avalancheReportId) {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setTelegramSent(true);
+			entityManager.flush();
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Telegram flag could not be set!");
+		} finally {
+			entityManager.close();
+		}
 	}
 }

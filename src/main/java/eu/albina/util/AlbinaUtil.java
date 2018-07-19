@@ -40,13 +40,17 @@ public class AlbinaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
 
+	// REGION
 	public static final int regionCountTyrol = 29;
 	public static final int regionCountSouthTyrol = 20;
 	public static final int regionCountTrentino = 21;
 
+	// TODO move to GlobalVariables, load via config file
+	// REGION
 	public static final boolean publishBulletinsTyrol = true;
 	public static final boolean publishBulletinsSouthTyrol = true;
 	public static final boolean publishBulletinsTrentino = true;
+	public static final boolean publishBulletinsStyria = true;
 
 	public static final String dangerRatingColorLow = "#CCFF66";
 	public static final String dangerRatingColorModerate = "#FFFF00";
@@ -88,6 +92,7 @@ public class AlbinaUtil {
 	public static final String dp9En = "Graupel blanketed with snow";
 	public static final String dp10En = "Springtime scenario";
 
+	// REGION
 	public static int getRegionCount(String region) {
 		switch (region) {
 		case "AT-07":
@@ -246,6 +251,7 @@ public class AlbinaUtil {
 					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 	}
 
+	// LANG
 	public static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
@@ -289,6 +295,7 @@ public class AlbinaUtil {
 		}
 	}
 
+	// LANG
 	public static String getDangerRatingText(AvalancheBulletin bulletin, LanguageCode lang) {
 		switch (bulletin.getHighestDangerRating()) {
 		case low:
@@ -505,6 +512,7 @@ public class AlbinaUtil {
 		return encodedfile;
 	}
 
+	// LANG
 	public static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		StringBuilder result = new StringBuilder();
 		DateTime date = getDate(bulletins);
@@ -557,6 +565,7 @@ public class AlbinaUtil {
 		return date;
 	}
 
+	// LANG
 	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
@@ -581,6 +590,7 @@ public class AlbinaUtil {
 			return "";
 	}
 
+	// LANG
 	public static String getUrl(LanguageCode lang) {
 		switch (lang) {
 		case de:

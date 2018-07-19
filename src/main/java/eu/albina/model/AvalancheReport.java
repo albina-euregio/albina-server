@@ -51,6 +51,21 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "REVISION")
 	private int revision;
 
+	@Column(name = "PDF_CREATED")
+	private boolean pdfCreated;
+
+	@Column(name = "MAP_CREATED")
+	private boolean mapCreated;
+
+	@Column(name = "EMAIL_CREATED")
+	private boolean emailCreated;
+
+	@Column(name = "WHATSAPP_SENT")
+	private boolean whatsappSent;
+
+	@Column(name = "TELEGRAM_SENT")
+	private boolean telegramSent;
+
 	/**
 	 * Standard constructor for an avalanche report.
 	 */
@@ -88,6 +103,17 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 		if (json.has("revision"))
 			this.revision = json.getInt("revision");
+
+		if (json.has("pdfCreated"))
+			this.pdfCreated = json.getBoolean("pdfCreated");
+		if (json.has("emailCreated"))
+			this.emailCreated = json.getBoolean("emailCreated");
+		if (json.has("mapCreated"))
+			this.mapCreated = json.getBoolean("mapCreated");
+		if (json.has("whatsappSent"))
+			this.whatsappSent = json.getBoolean("whatsappSent");
+		if (json.has("telegramSent"))
+			this.telegramSent = json.getBoolean("telegramSent");
 	}
 
 	public User getUser() {
@@ -138,6 +164,46 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.revision = revision;
 	}
 
+	public boolean isPdfCreated() {
+		return pdfCreated;
+	}
+
+	public void setPdfCreated(boolean pdf) {
+		this.pdfCreated = pdf;
+	}
+
+	public boolean isMapCreated() {
+		return mapCreated;
+	}
+
+	public void setMapCreated(boolean mapCreated) {
+		this.mapCreated = mapCreated;
+	}
+
+	public boolean isEmailCreated() {
+		return emailCreated;
+	}
+
+	public void setEmailCreated(boolean email) {
+		this.emailCreated = email;
+	}
+
+	public boolean isWhatsappSent() {
+		return whatsappSent;
+	}
+
+	public void setWhatsappSent(boolean whatsapp) {
+		this.whatsappSent = whatsapp;
+	}
+
+	public boolean isTelegramSent() {
+		return telegramSent;
+	}
+
+	public void setTelegramSent(boolean telegram) {
+		this.telegramSent = telegram;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -162,6 +228,31 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 		if (revision > 0)
 			json.put("revision", revision);
+
+		if (pdfCreated)
+			json.put("pdfCreated", true);
+		else
+			json.put("pdfCreated", false);
+
+		if (mapCreated)
+			json.put("mapCreated", true);
+		else
+			json.put("mapCreated", false);
+
+		if (emailCreated)
+			json.put("emailCreated", true);
+		else
+			json.put("emailCreated", false);
+
+		if (whatsappSent)
+			json.put("whatsappSent", true);
+		else
+			json.put("whatsappSent", false);
+
+		if (telegramSent)
+			json.put("telegramSent", true);
+		else
+			json.put("telegramSent", false);
 
 		return json;
 	}

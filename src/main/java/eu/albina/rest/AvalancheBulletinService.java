@@ -380,10 +380,11 @@ public class AvalancheBulletinService {
 			DateTime publicationDate = new DateTime();
 			AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region);
 			AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region, publicationDate);
-			AvalancheReportController.getInstance().changeReport(startDate, region, user);
+			List<String> avalancheReportIds = new ArrayList<String>();
+			String avalancheReportId = AvalancheReportController.getInstance().changeReport(startDate, region, user);
+			avalancheReportIds.add(avalancheReportId);
 
-			// TODO maybe start in an own thread
-			PublicationController.getInstance().change(bulletins);
+			PublicationController.getInstance().change(avalancheReportIds, bulletins);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -556,7 +557,10 @@ public class AvalancheBulletinService {
 				DateTime publicationDate = new DateTime();
 
 				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region, publicationDate);
-				AvalancheReportController.getInstance().publishReport(startDate, region, user, publicationDate);
+				List<String> avalancheReportIds = new ArrayList<String>();
+				String avalancheReportId = AvalancheReportController.getInstance().publishReport(startDate, region,
+						user, publicationDate);
+				avalancheReportIds.add(avalancheReportId);
 
 				List<String> regions = new ArrayList<String>();
 				regions.add(region);
@@ -564,7 +568,7 @@ public class AvalancheBulletinService {
 				try {
 					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
 							.getBulletins(startDate, endDate, regions);
-					PublicationController.getInstance().update(bulletins, regions);
+					PublicationController.getInstance().update(avalancheReportIds, bulletins, regions);
 				} catch (AlbinaException e) {
 					logger.warn("Error loading bulletins - " + e.getMessage());
 					throw new AlbinaException(e.getMessage());

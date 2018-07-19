@@ -27,6 +27,7 @@ public class PublicationJob implements org.quartz.Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		logger.info("Publication job triggered!");
 
+		// REGION
 		List<String> regions = new ArrayList<String>();
 		if (AlbinaUtil.publishBulletinsTyrol)
 			regions.add(GlobalVariables.codeTyrol);
@@ -34,6 +35,8 @@ public class PublicationJob implements org.quartz.Job {
 			regions.add(GlobalVariables.codeSouthTyrol);
 		if (AlbinaUtil.publishBulletinsTrentino)
 			regions.add(GlobalVariables.codeTrentino);
+		if (AlbinaUtil.publishBulletinsStyria)
+			regions.add(GlobalVariables.codeStyria);
 
 		if (!regions.isEmpty()) {
 			try {
@@ -46,13 +49,19 @@ public class PublicationJob implements org.quartz.Job {
 
 				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, regions,
 						publicationDate);
-				AvalancheReportController.getInstance().publishReport(startDate, regions, user, publicationDate);
+
+				List<String> avalancheReportIds = new ArrayList<String>();
+				for (String region : regions) {
+					String avalancheReportId = AvalancheReportController.getInstance().publishReport(startDate, region,
+							user, publicationDate);
+					avalancheReportIds.add(avalancheReportId);
+				}
 
 				try {
 					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
 							.getBulletins(startDate, endDate, regions);
 					if (bulletins != null && !bulletins.isEmpty())
-						PublicationController.getInstance().publishAutmatically(bulletins);
+						PublicationController.getInstance().publishAutomatically(avalancheReportIds, bulletins);
 				} catch (AlbinaException e) {
 					logger.warn("Error loading bulletins - " + e.getMessage());
 					throw new AlbinaException(e.getMessage());

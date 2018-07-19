@@ -41,6 +41,7 @@ public class GlobalVariables {
 	public static String emailUsername = "norbert.lanzanasto@gmail.com";
 	public static String emailPassword = "Go6Zaithee";
 
+	// LANG
 	public static String[] daysDe = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" };
 	public static String[] daysIt = { "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica" };
 	public static String[] daysEn = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -48,18 +49,23 @@ public class GlobalVariables {
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
+
+	// LANG
 	public static DateTimeFormatter dateTimeEn = DateTimeFormat.forPattern(" dd.MM.yyyy");
 	public static DateTimeFormatter dateTimeDe = DateTimeFormat.forPattern(" dd.MM.yyyy");
 	public static DateTimeFormatter dateTimeIt = DateTimeFormat.forPattern(" dd.MM.yyyy");
+	// LANG
 	public static DateTimeFormatter publicationDateTimeEn = DateTimeFormat.forPattern("dd.MM.yyyy, hh:mm aa");
 	public static DateTimeFormatter publicationDateTimeDe = DateTimeFormat.forPattern("dd.MM.yyyy, HH:mm");
 	public static DateTimeFormatter publicationDateTimeIt = DateTimeFormat.forPattern("dd.MM.yyyy, HH:mm");
 
+	// REGION
 	public static String codeTrentino = "IT-32-TN";
 	public static String codeSouthTyrol = "IT-32-BZ";
 	public static String codeTyrol = "AT-07";
 	public static String codeStyria = "AT-06";
 
+	// REGION
 	public static List<String> regions = new ArrayList<String>() {
 		/**
 		 * 
@@ -74,6 +80,7 @@ public class GlobalVariables {
 		}
 	};
 
+	// LANG
 	public static List<LanguageCode> languages = new ArrayList<LanguageCode>() {
 		/**
 		 * 
@@ -118,6 +125,7 @@ public class GlobalVariables {
 		return result.toString();
 	}
 
+	// LANG
 	public static String getDayName(int day, LanguageCode lang) {
 		if (day < 8) {
 			switch (lang) {
@@ -134,6 +142,7 @@ public class GlobalVariables {
 			return "";
 	}
 
+	// LANG
 	public static String getTreelineString(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -147,6 +156,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getPublishedText(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -160,6 +170,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getTendencyHeadline(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -173,6 +184,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getTendencyText(Tendency tendency, LanguageCode lang) {
 		if (tendency != null) {
 			switch (tendency) {
@@ -216,6 +228,7 @@ public class GlobalVariables {
 			return "";
 	}
 
+	// LANG
 	public static String getDangerPatternsHeadline(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -229,6 +242,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getSnowpackHeadline(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -242,6 +256,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getTitle(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -255,6 +270,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getHeadline(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -268,6 +284,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getFollowUs(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -281,6 +298,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getUnsubscribe(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -294,6 +312,7 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
 	public static String getDangerRatingText(DangerRating dangerRating, LanguageCode lang) {
 		switch (dangerRating) {
 		case low:
