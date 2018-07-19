@@ -30,6 +30,12 @@ public class GlobalVariables {
 	public static String localImagesPath = "images/";
 	public static String localFontsPath = "fonts/open-sans";
 
+	// REGION
+	public static boolean publishBulletinsTyrol = true;
+	public static boolean publishBulletinsSouthTyrol = true;
+	public static boolean publishBulletinsTrentino = true;
+	public static boolean publishBulletinsStyria = true;
+
 	// TODO for testing
 	// public static String pdfDirectory = "D:\\";
 	public static String pdfDirectory = "pdfs/";
@@ -427,6 +433,11 @@ public class GlobalVariables {
 			publishToSocialMedia = Boolean.parseBoolean(prop.getProperty("publishToSocialMedia"));
 			publishAt5PM = Boolean.parseBoolean(prop.getProperty("publishAt5PM"));
 			publishAt8AM = Boolean.parseBoolean(prop.getProperty("publishAt8AM"));
+			publishBulletinsTyrol = Boolean.parseBoolean(prop.getProperty("publishBulletinsTyrol"));
+			publishBulletinsSouthTyrol = Boolean.parseBoolean(prop.getProperty("publishBulletinsSouthTyrol"));
+			publishBulletinsTrentino = Boolean.parseBoolean(prop.getProperty("publishBulletinsTrentino"));
+			publishBulletinsStyria = Boolean.parseBoolean(prop.getProperty("publishBulletinsStyria"));
+
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {

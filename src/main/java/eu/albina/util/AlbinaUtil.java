@@ -45,13 +45,6 @@ public class AlbinaUtil {
 	public static final int regionCountSouthTyrol = 20;
 	public static final int regionCountTrentino = 21;
 
-	// TODO move to GlobalVariables, load via config file
-	// REGION
-	public static final boolean publishBulletinsTyrol = true;
-	public static final boolean publishBulletinsSouthTyrol = true;
-	public static final boolean publishBulletinsTrentino = true;
-	public static final boolean publishBulletinsStyria = true;
-
 	public static final String dangerRatingColorLow = "#CCFF66";
 	public static final String dangerRatingColorModerate = "#FFFF00";
 	public static final String dangerRatingColorConsiderable = "#FF9900";

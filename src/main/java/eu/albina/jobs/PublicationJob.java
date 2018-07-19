@@ -16,7 +16,6 @@ import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.User;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 
 public class PublicationJob implements org.quartz.Job {
@@ -29,13 +28,13 @@ public class PublicationJob implements org.quartz.Job {
 
 		// REGION
 		List<String> regions = new ArrayList<String>();
-		if (AlbinaUtil.publishBulletinsTyrol)
+		if (GlobalVariables.publishBulletinsTyrol)
 			regions.add(GlobalVariables.codeTyrol);
-		if (AlbinaUtil.publishBulletinsSouthTyrol)
+		if (GlobalVariables.publishBulletinsSouthTyrol)
 			regions.add(GlobalVariables.codeSouthTyrol);
-		if (AlbinaUtil.publishBulletinsTrentino)
+		if (GlobalVariables.publishBulletinsTrentino)
 			regions.add(GlobalVariables.codeTrentino);
-		if (AlbinaUtil.publishBulletinsStyria)
+		if (GlobalVariables.publishBulletinsStyria)
 			regions.add(GlobalVariables.codeStyria);
 
 		if (!regions.isEmpty()) {
