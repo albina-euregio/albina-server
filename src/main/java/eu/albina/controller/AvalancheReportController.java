@@ -100,6 +100,46 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
+	public Map<DateTime, AvalancheReport> getPublicationStatus(DateTime startDate, DateTime endDate, String region)
+			throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+
+			Map<DateTime, AvalancheReport> result = new HashMap<DateTime, AvalancheReport>();
+			DateTime date = startDate;
+
+			while (date.isBefore(endDate) || date.isEqual(endDate)) {
+				// get report
+				List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+				if (region != null && region != "")
+					reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
+							.setParameter("date", date).setParameter("region", region).getResultList();
+				for (AvalancheReport avalancheReport : reports) {
+					if (avalancheReport.getStatus() == BulletinStatus.published
+							|| avalancheReport.getStatus() == BulletinStatus.republished) {
+						initializeAndUnproxy(avalancheReport);
+						initializeAndUnproxy(avalancheReport.getUser());
+						result.put(date, avalancheReport);
+					}
+				}
+				date = date.plusDays(1);
+			}
+
+			transaction.commit();
+
+			return result;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public void saveReport(DateTime startDate, String region, User user) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();

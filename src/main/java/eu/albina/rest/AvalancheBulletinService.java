@@ -35,6 +35,7 @@ import eu.albina.controller.PublicationController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
@@ -262,6 +263,44 @@ public class AvalancheBulletinService {
 				JSONObject json = new JSONObject();
 				json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
 				json.put("status", entry.getValue().toString());
+				jsonResult.put(json);
+			}
+
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading status - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
+	@Path("/status/publication")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPublicationStatus(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
+		DateTime startDate = null;
+		DateTime endDate = null;
+
+		if (start != null)
+			startDate = DateTime.parse(start, GlobalVariables.parserDateTime).toDateTime(DateTimeZone.UTC);
+		else
+			startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+
+		if (end != null)
+			endDate = DateTime.parse(end, GlobalVariables.parserDateTime).toDateTime(DateTimeZone.UTC);
+
+		try {
+			Map<DateTime, AvalancheReport> status = AvalancheReportController.getInstance()
+					.getPublicationStatus(startDate, endDate, region);
+			JSONArray jsonResult = new JSONArray();
+
+			for (Entry<DateTime, AvalancheReport> entry : status.entrySet()) {
+				JSONObject json = new JSONObject();
+				json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
+				json.put("report", entry.getValue().toJSON());
 				jsonResult.put(json);
 			}
 
