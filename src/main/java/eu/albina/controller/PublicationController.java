@@ -175,7 +175,7 @@ public class PublicationController {
 					logger.error("Error creating pdfs:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
-					logger.info("Map production finished");
+					logger.info("PDF production finished");
 				}
 			}
 		}).start();
