@@ -28,13 +28,13 @@ public class PublicationJob implements org.quartz.Job {
 
 		// REGION
 		List<String> regions = new ArrayList<String>();
-		if (GlobalVariables.publishBulletinsTyrol)
+		if (GlobalVariables.isPublishBulletinsTyrol())
 			regions.add(GlobalVariables.codeTyrol);
-		if (GlobalVariables.publishBulletinsSouthTyrol)
+		if (GlobalVariables.isPublishBulletinsSouthTyrol())
 			regions.add(GlobalVariables.codeSouthTyrol);
-		if (GlobalVariables.publishBulletinsTrentino)
+		if (GlobalVariables.isPublishBulletinsTrentino())
 			regions.add(GlobalVariables.codeTrentino);
-		if (GlobalVariables.publishBulletinsStyria)
+		if (GlobalVariables.isPublishBulletinsStyria())
 			regions.add(GlobalVariables.codeStyria);
 
 		if (!regions.isEmpty()) {

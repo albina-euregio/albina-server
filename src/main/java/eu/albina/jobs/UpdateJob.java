@@ -36,13 +36,13 @@ public class UpdateJob implements org.quartz.Job {
 			DateTime endDate = startDate.plusDays(1).withTimeAtStartOfDay();
 
 			List<String> regions = new ArrayList<String>();
-			if (GlobalVariables.publishBulletinsTyrol
+			if (GlobalVariables.isPublishBulletinsTyrol()
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeTyrol))
 				regions.add(GlobalVariables.codeTyrol);
-			if (GlobalVariables.publishBulletinsSouthTyrol
+			if (GlobalVariables.isPublishBulletinsSouthTyrol()
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeSouthTyrol))
 				regions.add(GlobalVariables.codeSouthTyrol);
-			if (GlobalVariables.publishBulletinsTrentino
+			if (GlobalVariables.isPublishBulletinsTrentino()
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeTrentino))
 				regions.add(GlobalVariables.codeTrentino);
 

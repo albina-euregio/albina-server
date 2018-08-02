@@ -49,7 +49,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Rectangle pageSize = page.getPageSize();
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
-			PdfFontFactory.registerDirectory(GlobalVariables.localFontsPath);
+			PdfFontFactory.registerDirectory(GlobalVariables.getLocalFontsPath());
 			PdfFont openSansRegularFont;
 			PdfFont openSansBoldFont;
 			PdfFont openSansLightFont;

@@ -46,25 +46,25 @@ public class PublicationController {
 	 * @throws MessagingException
 	 */
 	public void publishAutomatically(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
-		if (GlobalVariables.publishAt5PM)
+		if (GlobalVariables.isPublishAt5PM())
 			publish(avalancheReportIds, bulletins);
 	}
 
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		// create maps
-		if (GlobalVariables.createMaps)
+		if (GlobalVariables.isCreateMaps())
 			createMaps(avalancheReportIds, bulletins);
 
 		// create pdfs
-		if (GlobalVariables.createPdf)
+		if (GlobalVariables.isCreatePdf())
 			createPdf(avalancheReportIds, bulletins);
 
 		// send emails
-		if (GlobalVariables.sendEmails)
+		if (GlobalVariables.isSendEmails())
 			sendEmails(avalancheReportIds, bulletins, GlobalVariables.regions);
 
 		// publish on social media
-		if (GlobalVariables.publishToSocialMedia) {
+		if (GlobalVariables.isPublishToSocialMedia()) {
 
 			// TODO publish on social media
 
@@ -73,7 +73,7 @@ public class PublicationController {
 
 	public void updateAutomatically(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
 			List<String> regions) throws MessagingException {
-		if (GlobalVariables.publishAt8AM)
+		if (GlobalVariables.isPublishAt8AM())
 			update(avalancheReportIds, bulletins, regions);
 	}
 
@@ -92,19 +92,19 @@ public class PublicationController {
 			throws MessagingException {
 
 		// create maps
-		if (GlobalVariables.createMaps)
+		if (GlobalVariables.isCreateMaps())
 			createMaps(avalancheReportIds, bulletins);
 
 		// create pdf
-		if (GlobalVariables.createPdf)
+		if (GlobalVariables.isCreatePdf())
 			createPdf(avalancheReportIds, bulletins);
 
 		// send emails to regions
-		if (GlobalVariables.sendEmails)
+		if (GlobalVariables.isSendEmails())
 			sendEmails(avalancheReportIds, bulletins, regions);
 
 		// publish on social media
-		if (GlobalVariables.publishToSocialMedia) {
+		if (GlobalVariables.isPublishToSocialMedia()) {
 
 			// TODO publish on social media only for updated regions
 
@@ -121,11 +121,11 @@ public class PublicationController {
 	 */
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		// create maps
-		if (GlobalVariables.createMaps)
+		if (GlobalVariables.isCreateMaps())
 			createMaps(avalancheReportIds, bulletins);
 
 		// create pdfs
-		if (GlobalVariables.createPdf)
+		if (GlobalVariables.isCreatePdf())
 			createPdf(avalancheReportIds, bulletins);
 	}
 
