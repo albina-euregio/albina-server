@@ -125,6 +125,10 @@ public class AvalancheBulletinController {
 	@SuppressWarnings("unchecked")
 	public void saveBulletins(List<AvalancheBulletin> bulletins, DateTime startDate, DateTime endDate, String region,
 			DateTime publicationDate) throws AlbinaException {
+
+		if (checkBulletinsForDuplicateRegion(bulletins, region))
+			throw new AlbinaException("duplicateRegion");
+
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -449,6 +453,23 @@ public class AvalancheBulletinController {
 		}
 	}
 
+	private boolean checkBulletinsForDuplicateRegion(List<AvalancheBulletin> bulletins, String region) {
+		boolean duplicateRegion = false;
+		Set<String> definedRegions = new HashSet<String>();
+		for (AvalancheBulletin bulletin : bulletins) {
+
+			for (String entry : bulletin.getSavedRegions())
+				if (entry.startsWith(region))
+					if (!definedRegions.add(entry.toLowerCase()))
+						duplicateRegion = true;
+			for (String entry : bulletin.getPublishedRegions())
+				if (entry.startsWith(region))
+					if (!definedRegions.add(entry.toLowerCase()))
+						duplicateRegion = true;
+		}
+		return duplicateRegion;
+	}
+
 	@SuppressWarnings("unchecked")
 	public JSONArray checkBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
 		JSONArray json = new JSONArray();
@@ -473,15 +494,13 @@ public class AvalancheBulletinController {
 				if (bulletin.affectsRegion(region))
 					results.add(bulletin);
 
-			List<String> definedRegions = new ArrayList<String>();
-			for (AvalancheBulletin bulletin : results) {
+			if (checkBulletinsForDuplicateRegion(bulletins, region))
+				json.put("duplicateRegion");
 
-				for (String entry : bulletin.getSavedRegions())
-					if (entry.startsWith(region) && !definedRegions.contains(entry))
-						definedRegions.add(entry);
-				for (String entry : bulletin.getPublishedRegions())
-					if (entry.startsWith(region) && !definedRegions.contains(entry))
-						definedRegions.add(entry);
+			Set<String> definedRegions = new HashSet<String>();
+			for (AvalancheBulletin bulletin : results) {
+				definedRegions.addAll(bulletin.getSavedRegions());
+				definedRegions.addAll(bulletin.getPublishedRegions());
 
 				if (!pendingSuggestions)
 					for (String entry : bulletin.getSuggestedRegions())
@@ -521,11 +540,8 @@ public class AvalancheBulletinController {
 				}
 			}
 
-			if (definedRegions.size() > AlbinaUtil.getRegionCount(region))
-				json.put("duplicateRegion");
-			else if (definedRegions.size() < AlbinaUtil.getRegionCount(region))
+			if (definedRegions.size() < AlbinaUtil.getRegionCount(region))
 				json.put("missingRegion");
-
 			if (missingAvActivityHighlights)
 				json.put("missingAvActivityHighlights");
 			if (missingAvActivityComment)
