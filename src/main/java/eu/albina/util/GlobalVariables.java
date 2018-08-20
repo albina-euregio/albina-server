@@ -122,7 +122,9 @@ public class GlobalVariables {
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 
-	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps.php";
+	// public static String univieMapProductionUrl =
+	// "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps.php";
+	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
 
 	public static boolean isCreateMaps() {
 		return createMaps;
