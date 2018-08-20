@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.Subscriber;
@@ -97,7 +98,7 @@ public class EmailUtil {
 	}
 
 	public void sendConfirmationEmail(Subscriber subscriber)
-			throws IllegalArgumentException, UnsupportedEncodingException {
+			throws IllegalArgumentException, UnsupportedEncodingException, AlbinaException {
 		logger.debug("Sending confirmation email to " + subscriber.getEmail());
 		String token = issueConfirmationToken(subscriber.getEmail());
 		Session session = getEmailSession();
@@ -145,11 +146,11 @@ public class EmailUtil {
 		} catch (MessagingException e) {
 			logger.error("Confirmation email could not be sent to " + subscriber.getEmail() + ": " + e.getMessage());
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new AlbinaException(e.getMessage());
 		} catch (UnsupportedEncodingException e) {
 			logger.error("Confirmation email could not be sent to " + subscriber.getEmail() + ": " + e.getMessage());
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new AlbinaException(e.getMessage());
 		}
 	}
 

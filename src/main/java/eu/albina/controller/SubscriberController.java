@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
-import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -59,7 +58,10 @@ public class SubscriberController {
 	}
 
 	public Serializable createSubscriber(Subscriber subscriber)
-			throws HibernateException, URISyntaxException, IOException {
+			throws HibernateException, URISyntaxException, IOException, AlbinaException {
+		if (getSubscriber(subscriber.getEmail()) != null)
+			deleteSubscriber(subscriber.getEmail());
+
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -67,19 +69,20 @@ public class SubscriberController {
 			entityManager.persist(subscriber);
 			transaction.commit();
 
-			EmailUtil.getInstance().sendConfirmationEmail(subscriber);
+			// TODO enable
+			// EmailUtil.getInstance().sendConfirmationEmail(subscriber);
 
 			return subscriber.getEmail();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
 			throw he;
-		} catch (IOException e) {
-			logger.error("Confirmation email could not be send!");
-			throw e;
-		} catch (URISyntaxException e) {
-			logger.error("Confirmation email could not be send!");
-			throw e;
+			// } catch (IOException e) {
+			// logger.error("Confirmation email could not be send!");
+			// throw e;
+			// } catch (URISyntaxException e) {
+			// logger.error("Confirmation email could not be send!");
+			// throw e;
 		} finally {
 			entityManager.close();
 		}

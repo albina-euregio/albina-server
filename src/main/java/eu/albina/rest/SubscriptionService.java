@@ -42,7 +42,7 @@ public class SubscriptionService {
 	@Path("/subscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getJSONBulletins(Subscriber subscriber) {
+	public Response addSubscriber(Subscriber subscriber) {
 		logger.debug("POST JSON subscribe");
 
 		try {
@@ -58,6 +58,9 @@ public class SubscriptionService {
 			logger.warn("Error subscribe - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		} catch (IOException e) {
+			logger.warn("Error subscribe - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+		} catch (AlbinaException e) {
 			logger.warn("Error subscribe - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		}
