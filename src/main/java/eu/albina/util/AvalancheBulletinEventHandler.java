@@ -111,10 +111,8 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 			pdfCanvas.release();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
