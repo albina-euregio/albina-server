@@ -480,184 +480,270 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getDangerRatingSymbolHeadline(LanguageCode lang) {
+	public static String getDangerRatingHeadline(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Symbol";
+			return "Gefahrenstufe";
 		case it:
-			return "Emblema";
+			return "Grado";
 		case en:
-			return "Icon";
+			return "Danger level";
 		default:
-			return "Icon";
+			return "Danger level";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingSnowpackHeadline(LanguageCode lang) {
+	public static String getCharacteristicsHeadline(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Schneedeckenstabilität";
+			return "Merkmale";
 		case it:
-			return "Stabilità del manto nevoso";
+			return "Caratteristiche";
 		case en:
-			return "Snowpack stability";
+			return "Characteristics";
 		default:
-			return "Snowpack stability";
+			return "Characteristics";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingAvalancheHeadline(LanguageCode lang) {
+	public static String getRecommendationsHeadline(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Lawinen-Auslösewahrscheinlichkeit";
+			return "Empfehlungen für Personen außerhalb gesicherter Gebiete";
 		case it:
-			return "Probabilità di distacco di valanghe";
+			return "Raccomandazioni per le persone che praticano attività fuoripista";
 		case en:
-			return "Avalanche triggering probability";
+			return "Recommendations for backcountry recreationists";
 		default:
-			return "Avalanche triggering probability";
+			return "Recommendations for backcountry recreationists";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingVeryHighSnowpackText(LanguageCode lang) {
+	public static String getDangerRatingVeryHighCharacteristicsTextBold(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Die Schneedecke ist allgemein schwach verfestigt und weitgehend instabil.";
+			return "Katastrophensituation";
 		case it:
-			return "Il manto nevoso è in generale debolmente consolidato e per lo più instabile.";
+			return "Situazione catastrofica";
 		case en:
-			return "The snowpack is poorly bonded and largely unstable in general.";
+			return "Disaster situation";
 		default:
-			return "The snowpack is poorly bonded and largely unstable in general.";
+			return "Disaster situation";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingHighSnowpackText(LanguageCode lang) {
+	public static String getDangerRatingVeryHighCharacteristicsText(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Die Schneedecke ist an den meisten Steilhängen schwach verfestigt.";
+			return "Viele große und sehr große spontane Lawinen sind zu erwarten. Diese können Straßen und Siedlungen in Tallagen erreichen.";
 		case it:
-			return "Il manto nevoso è debolmente consolidato su la maggior parte dei pendii ripidi.";
+			return "Si prevedono numerose valanghe spontanee di dimensioni grandi e molto grandi che possono raggiungere le strade e i centri abitati situati a fondovalle.";
 		case en:
-			return "The snowpack is poorly bonded on most steep slopes.";
+			return "Numerous large and very large natural avalanches can be expected. These can reach roads and settlements in the valley.";
 		default:
-			return "The snowpack is poorly bonded on most steep slopes.";
+			return "Numerous large and very large natural avalanches can be expected. These can reach roads and settlements in the valley.";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingConsiderableSnowpackText(LanguageCode lang) {
+	public static String getDangerRatingHighCharacteristicsTextBold(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Die Schneedecke ist an vielen Steilhängen* nur mäßig bis schwach verfestigt.";
+			return "Sehr kritische Lawinensituation";
 		case it:
-			return "Il manto nevoso presenta un consolidamento da moderato a debole su molti pendii ripidi.";
+			return "Situazione valanghiva molto critica";
 		case en:
-			return "The snowpack is moderately to poorly bonded on many steep slopes.";
+			return "Very critical avalanche situation";
 		default:
-			return "The snowpack is moderately to poorly bonded on many steep slopes.";
+			return "Very critical avalanche situation";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingModerateSnowpackText(LanguageCode lang) {
+	public static String getDangerRatingHighCharacteristicsText(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Die Schneedecke ist an einigen Steilhängen* nur mäßig verfestigt, ansonsten allgemein gut verfestigt.";
+			return "Spontane und oft auch grosse Lawinen sind wahrscheinlich. An vielen Steilhängen können Lawinen leicht ausgelöst werden. Fernauslösungen sind typisch. Wummgeräusche und Risse sind häufig.";
 		case it:
-			return "Il manto nevoso è moderatamente consolidato su alcuni pendii ripidi, per il resto è ben consolidato.";
+			return "Probabili valanghe spontanee, spesso anche di grandi dimensioni. Su molti pendii ripidi è facile provocare il distacco di valanghe. I distacchi a distanza sono tipici di questo grado di pericolo. I rumori di “whum” e le fessure sono frequenti.";
 		case en:
-			return "The snowpack is only moderately well bonded on some steep slopes*, otherwise well bonded in general.";
+			return "Natural and often large avalanches are likely. Avalanches can easily be triggered on many steep slopes. Remote triggering is typical. Whumpf sounds and shooting cracks occur frequently.";
 		default:
-			return "The snowpack is only moderately well bonded on some steep slopes*, otherwise well bonded in general.";
+			return "Natural and often large avalanches are likely. Avalanches can easily be triggered on many steep slopes. Remote triggering is typical. Whumpf sounds and shooting cracks occur frequently.";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingLowSnowpackText(LanguageCode lang) {
+	public static String getDangerRatingConsiderableCharacteristicsTextBold(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Die Schneedecke ist allgemein gut verfestigt und stabil.";
+			return "Kritische Lawinensituation";
 		case it:
-			return "Il manto nevoso è in generale ben consolidato oppure a debole coesione e senza tensioni.";
+			return "Situazione valanghiva critica";
 		case en:
-			return "The snowpack is well bonded and stable in general.";
+			return "Critical avalanche situation";
 		default:
-			return "The snowpack is well bonded and stable in general.";
+			return "Critical avalanche situation";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingVeryHighAvalancheText(LanguageCode lang) {
+	public static String getDangerRatingConsiderableCharacteristicsText(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Spontan sind viele große, mehrfach auch sehr große Lawinen, auch in mäßig steilem Gelände zu erwarten.";
+			return "Wummgeräusche und Risse sind typisch. Lawinen können vor allem an Steilhängen der in der Lawinenvorhersage angegebenen Expositionen und Höhenlagen leicht ausgelöst werden. Spontane Lawinen und Fernauslösungen sind möglich.";
 		case it:
-			return "Sono da aspettarsi molte grandi valanghe spontanee, anche su terreno moderatamente ripido.";
+			return "I rumori di “whum” e le fessure sono tipici. Le valanghe possono facilmente essere staccate, soprattutto sui pendii ripidi alle esposizioni e alle quote indicate nel bollettino delle valanghe. Possibili valanghe spontanee e distacchi a distanza.";
 		case en:
-			return "Numerous large-sized and often very large-sized natural avalanches can be expected, even in moderately steep terrain.";
+			return "Whumpf sounds and shooting cracks are typical. Avalanches can easily be triggered, particularly on steep slopes with the aspect and elevation indicated in the avalanche bulletin. Natural avalanches and remote triggering can occur.";
 		default:
-			return "Numerous large-sized and often very large-sized natural avalanches can be expected, even in moderately steep terrain.";
+			return "Whumpf sounds and shooting cracks are typical. Avalanches can easily be triggered, particularly on steep slopes with the aspect and elevation indicated in the avalanche bulletin. Natural avalanches and remote triggering can occur.";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingHighAvalancheText(LanguageCode lang) {
+	public static String getDangerRatingModerateCharacteristicsTextBold(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Lawinenauslösung ist bereits bei geringer Zusatzbelastung** an zahlreichen Steilhängen wahrscheinlich. Fallweise sind spontan viele mittlere, mehrfach auch große Lawinen zu erwarten.";
+			return "Mehrheitlich günstige Lawinensituation";
 		case it:
-			return "Il distacco è probabile già con un debole sovraccarico su molti pendii ripidi. In alcune situazioni sono da aspettarsi molte valanghe spontanee di media grandezza e, talvolta, anche grandi valanghe.";
+			return "Situazione valanghiva per lo più favorevole";
 		case en:
-			return "Triggering is likely even from low additional loads** on many steep slopes. In some cases, numerous medium-sized and often large-sized natural avalanches can be expected.";
+			return "Mostly favourable avalanche situation";
 		default:
-			return "Triggering is likely even from low additional loads** on many steep slopes. In some cases, numerous medium-sized and often large-sized natural avalanches can be expected.";
+			return "Mostly favourable avalanche situation";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingConsiderableAvalancheText(LanguageCode lang) {
+	public static String getDangerRatingModerateCharacteristicsText(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Lawinenauslösung ist bereits bei geringer Zusatzbelastung** vor allem an den angegebenen Steilhängen* möglich. Fallweise sind spontan einige mittlere, vereinzelt aber auch große Lawinen möglich.";
+			return "Alarmzeichen können vereinzelt auftreten. Lawinen können vor allem an sehr steilen Hängen der in der Lawinenvorhersage angegebenen Expositionen und Höhenlagen ausgelöst werden. Größere spontane Lawinen sind nicht zu erwarten.";
 		case it:
-			return "Il distacco è possibile con debole sovraccarico soprattutto sui pendii ripidi indicati. In alcune situazioni sono possibili valanghe spontanee di media grandezza e, in singoli casi, anche grandi valanghe.";
+			return "Possibile la presenza di singoli segnali di allarme. Le valanghe possono essere staccate specialmente sui pendii molto ripidi alle esposizioni e alle quote indicate nel bollettino delle valanghe. Non sono previste valanghe spontanee di grandi dimensioni.";
 		case en:
-			return "Triggering is possible, evenen from low additional loads** particularly on the indicated steep slopes*. In some cases medium-sized, in isolated cases large-sized natural avalanches are possible.";
+			return "Warning signs can occur in isolated cases. Avalanches can be triggered in particular on very steep slopes with the aspect and elevation indicated in the avalanche bulletin. Large natural avalanches are unlikely.";
 		default:
-			return "Triggering is possible, evenen from low additional loads** particularly on the indicated steep slopes*. In some cases medium-sized, in isolated cases large-sized natural avalanches are possible.";
+			return "Warning signs can occur in isolated cases. Avalanches can be triggered in particular on very steep slopes with the aspect and elevation indicated in the avalanche bulletin. Large natural avalanches are unlikely.";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingModerateAvalancheText(LanguageCode lang) {
+	public static String getDangerRatingLowCharacteristicsTextBold(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Lawinenauslösung ist insbesondere bei großer Zusatzbelastung**, vor allem an den angegebenen Steilhängen* möglich. Große spontane Lawinen sind nicht zu erwarten.";
+			return "Allgemein günstige Lawinensituation";
 		case it:
-			return "Il distacco è possibile principalmente con forte sovraccarico soprattutto sui pendii ripidi indicati. Non sono da aspettarsi grandi valanghe spontanee.";
+			return "Situazione valanghiva generalmente favorevole";
 		case en:
-			return "Triggering is possible primarly from high additional loads**, particularly on the indicated steep slopes*. Large-sized natural avalanches are unlikely.";
+			return "Generally favourable avalanche situation";
 		default:
-			return "Triggering is possible primarly from high additional loads**, particularly on the indicated steep slopes*. Large-sized natural avalanches are unlikely.";
+			return "Generally favourable avalanche situation";
 		}
 	}
 
 	// LANG
-	public static String getDangerRatingLowAvalancheText(LanguageCode lang) {
+	public static String getDangerRatingLowCharacteristicsText(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Lawinenauslösung ist allgemein nur bei großer Zusatzbelastung** an vereinzelten Stellen im extremen Steilgelände* möglich. Spontan sind nur Rutsche und kleine Lawinen möglich.";
+			return "Es sind keine Alarmzeichen feststellbar. Lawinen können nur vereinzelt, vor allem an extrem steilen Hängen ausgelöst werden.";
 		case it:
-			return "Il distacco è generalmente possibile solo con forte sovraccarico su pochissimi punti sul terreno ripido estremo. Sono possibli scaricamenti e piccole valanghe spontanee.";
+			return "Non si manifestano segnali di allarme. Possibile solo il distacco di valanghe isolate, soprattutto sui pendii estremamente ripidi.";
 		case en:
-			return "Triggering is generally possible only from high additional loads** in isolated areas of very steep, extreme terrain. Only sluffs and small-sized natural avalanches are possible.";
+			return "No warning signs present. Avalanches can only be triggered in isolated cases, in particular on extremely steep slopes.";
 		default:
-			return "Triggering is generally possible only from high additional loads** in isolated areas of very steep, extreme terrain. Only sluffs and small-sized natural avalanches are possible.";
+			return "No warning signs present. Avalanches can only be triggered in isolated cases, in particular on extremely steep slopes.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingVeryHighRecommendationsText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Verzicht auf Schneesport abseits geöffneter Abfahrten und Routen empfohlen.";
+		case it:
+			return "Si consiglia di rinunciare alle attività sportive al di fuori delle discese e degli itinerari aperti.";
+		case en:
+			return "You are advised not to engage in winter sports beyond open ski runs and trails.";
+		default:
+			return "You are advised not to engage in winter sports beyond open ski runs and trails.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingHighRecommendationsText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Sich auf mässig steiles Gelände beschränken. Auslaufbereiche grosser Lawinen beachten. Unerfahrene bleiben auf den geöffneten Abfahrten und Routen.\r\n"
+					+ "Rund 10 % aller Todesopfer.";
+		case it:
+			return "Limitarsi ai pendii poco ripidi. Attenzione alla zona di deposito di valanghe di grandi dimensioni. Le persone inesperte rimangono sulle discese e sugli itinerari aperti.\r\n"
+					+ "Circa il 10 % delle vittime.";
+		case en:
+			return "Stay on moderately steep terrain. Heed runout zones of large avalanches. Unexperienced persons should remain on open ski runs and trails.\r\n"
+					+ "Around 10 % of avalanche fatalities.";
+		default:
+			return "Stay on moderately steep terrain. Heed runout zones of large avalanches. Unexperienced persons should remain on open ski runs and trails.\r\n"
+					+ "Around 10 % of avalanche fatalities.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingConsiderableRecommendationsText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Für Wintersportler kritischste Situation! Optimale Routenwahl und Anwendung von risikomindernden Massnahmen sind nötig. Sehr steile Hänge der im Lawinenbulletin angegebenen Expositionen und Höhenlagen meiden. Unerfahrene bleiben besser auf den geöffneten Abfahrten und Routen.\r\n"
+					+ "Rund die Hälfte aller Todesopfer.";
+		case it:
+			return "Questa è la situazione più critica per gli appassionati di sport invernali! Sono necessarie una scelta ottimale dell’itinerario e l’adozione di misure atte a ridurre il rischio. Evitare i pendii molto ripidi alle esposizioni e alle quote indicate nel bollettino delle valanghe. È meglio che le persone inesperte rimangano sulle discese e sugli itinerari aperti.\r\n"
+					+ "Circa il 50 % delle vittime.";
+		case en:
+			return "The most critical situation for backcountry recreationists. Select best possible route and take action to reduce risks. Avoid very steep slopes with the aspect and elevation indicated in the avalanche bulletin. Unexperienced persons are advised to remain on open ski runs and trails.\r\n"
+					+ "Around 50 % of avalanche fatalities.";
+		default:
+			return "The most critical situation for backcountry recreationists. Select best possible route and take action to reduce risks. Avoid very steep slopes with the aspect and elevation indicated in the avalanche bulletin. Unexperienced persons are advised to remain on open ski runs and trails.\r\n"
+					+ "Around 50 % of avalanche fatalities.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingModerateRecommendationsText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Vorsichtige Routenwahl, vor allem an Hängen der im Lawinenbulletin angegebenen Expositionen und Höhenlagen. Sehr steile Hänge einzeln befahren. Besondere Vorsicht bei ungünstigem Schneedeckenaufbau (Altschneeproblem).\r\n"
+					+ "Rund 30 % aller Todesopfer.";
+		case it:
+			return "Prudente scelta dell’itinerario, soprattutto sui pendii alle esposizioni e alle quote indicate nel bollettino delle valanghe. Percorrere i pendii molto ripidi una persona alla volta. Un’attenzione particolare è richiesta quando la struttura del manto nevoso è sfavorevole (situazione tipo neve vecchia).\r\n"
+					+ "Circa il 30 % delle vittime.";
+		case en:
+			return "Routes should be selected carefully, especially on slopes with the aspect and elevation indicated in the avalanche bulletin. Travel very steep slopes one person at a time. Pay attention to unfavourable snowpack structure (persistent weak layers, old snow problem).\r\n"
+					+ "Around 30 % of avalanche fatalities.";
+		default:
+			return "Routes should be selected carefully, especially on slopes with the aspect and elevation indicated in the avalanche bulletin. Travel very steep slopes one person at a time. Pay attention to unfavourable snowpack structure (persistent weak layers, old snow problem).\r\n"
+					+ "Around 30 % of avalanche fatalities.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingLowRecommendationsText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Extrem steile Hänge einzeln befahren und Absturzgefahr beachten.\r\n"
+					+ "Rund 5 % aller Todesopfer.";
+		case it:
+			return "Percorrere i pendii estremamente ripidi una persona alla volta, prestando attenzione al pericolo di caduta.\r\n"
+					+ "Circa il 5 % delle vittime.";
+		case en:
+			return "Travel extremely steep slopes one person at a time and be alert to the danger of falling.\r\n"
+					+ "Around 5 % of avalanche fatalities.";
+		default:
+			return "Travel extremely steep slopes one person at a time and be alert to the danger of falling.\r\n"
+					+ "Around 5 % of avalanche fatalities.";
 		}
 	}
 
@@ -746,111 +832,6 @@ public class GlobalVariables {
 			return "Avalanche Forecast";
 		default:
 			return "Avalanche Forecast";
-		}
-	}
-
-	// LANG
-	// TODO it
-	public static String getSlopeText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "* Das lawinengefährliche Gelände ist im Lawinenlagebericht im Allgemeinen näher beschrieben (Höhenlage, Exposition, Geländeform):";
-		case it:
-			return "";
-		case en:
-			return "* The avalanche-prone locations are described in greater detail in the avalanche bulletin (altitude, slope aspect, type of terrain):";
-		default:
-			return "* The avalanche-prone locations are described in greater detail in the avalanche bulletin (altitude, slope aspect, type of terrain):";
-		}
-	}
-
-	// LANG
-	// TODO it
-	public static String getSlopeTextItem1(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "mässig steiles Gelände: Hänge flacher als rund 30 Grad";
-		case it:
-			return "";
-		case en:
-			return "moderately steep terrain: slopes shallower than 30 degrees";
-		default:
-			return "moderately steep terrain: slopes shallower than 30 degrees";
-		}
-	}
-
-	// LANG
-	// TODO it
-	public static String getSlopeTextItem2(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Steilhänge: Hänge steiler als rund 30 Grad";
-		case it:
-			return "";
-		case en:
-			return "steep slope: slopes steeper than 30 degrees";
-		default:
-			return "steep slope: slopes steeper than 30 degrees";
-		}
-	}
-
-	// LANG
-	// TODO it
-	public static String getSlopeTextItem3(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "extremes Steilgelände: besonders ungünstige Hänge bezüglich Neigung (steiler als etwa 40 Grad), Geländeform, Kammnähe und Bodenrauigkeit";
-		case it:
-			return "";
-		case en:
-			return "very steep, extreme terrain: adverse slope angle (more than 40 degrees), terrain profile, proximity to ridge, smoothness of underlying ground surface";
-		default:
-			return "very steep, extreme terrain: adverse slope angle (more than 40 degrees), terrain profile, proximity to ridge, smoothness of underlying ground surface";
-		}
-	}
-
-	// LANG
-	// TODO it
-	public static String getAdditionalLoadText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "** Zusatzbelastung:";
-		case it:
-			return "";
-		case en:
-			return "** additional loads:";
-		default:
-			return "** additional loads:";
-		}
-	}
-
-	// LANG
-	// TODO it
-	public static String getAdditionalLoadTextItem1(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "gering: einzelner Skifahrer / Snowboarder, sanft schwingend, nicht stürzend; Schneeschuhgeher; Gruppe mit Entlastungsabständen (>10m)";
-		case it:
-			return "";
-		case en:
-			return "low: individual skier / snowboarder, riding softly, not falling; snowshoer; group with good spacing (minimum 10m) keeping distances";
-		default:
-			return "low: individual skier / snowboarder, riding softly, not falling; snowshoer; group with good spacing (minimum 10m) keeping distances";
-		}
-	}
-
-	// LANG
-	// TODO it
-	public static String getAdditionalLoadTextItem2(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "gross: zwei oder mehrere Skifahrer / Snowboarder etc. ohne Entlastungsabstände; Pistenfahrzeug; Sprengung; einzelner Fussgänger / Alpinist";
-		case it:
-			return "";
-		case en:
-			return "high: two or more skiers / snowboarders etc. without good spacing (or without intervals); snowmachine; explosives; single hiker/climber";
-		default:
-			return "high: two or more skiers / snowboarders etc. without good spacing (or without intervals); snowmachine; explosives; single hiker/climber";
 		}
 	}
 

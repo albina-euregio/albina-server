@@ -34,7 +34,6 @@ import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.element.ListItem;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
@@ -996,15 +995,16 @@ public class PdfUtil {
 					.showText(GlobalVariables.getDangerRatingText(DangerRating.very_high, lang)).endText();
 
 			// Add avalanche danger scale
-			float marginRight = 0.f;
+			float marginRight = 10.f;
 			float marginLeft = 0.f;
-			int tableFontSize = 8;
+			int tableFontSize = 7;
+			int dangerRatingFontSize = 12;
 
 			float[] columnWidths = { 1, 1, 1 };
-			Table table = new Table(columnWidths).setBorder(Border.NO_BORDER).setMarginTop(300)
+			Table table = new Table(columnWidths).setAutoLayout().setBorder(Border.NO_BORDER).setMarginTop(290)
 					.setMarginLeft(marginLeft).setMarginRight(marginRight).setWidthPercent(100);
 
-			Paragraph symbolHeadline = new Paragraph(GlobalVariables.getDangerRatingSymbolHeadline(lang))
+			Paragraph symbolHeadline = new Paragraph(GlobalVariables.getDangerRatingHeadline(lang))
 					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
 			Cell cell = new Cell(1, 1).add(symbolHeadline);
 			cell.setPaddingLeft(5);
@@ -1014,9 +1014,9 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			Paragraph snowpackHeadline = new Paragraph(GlobalVariables.getDangerRatingSnowpackHeadline(lang))
+			Paragraph characteristicsHeadline = new Paragraph(GlobalVariables.getCharacteristicsHeadline(lang))
 					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(snowpackHeadline);
+			cell = new Cell(1, 1).add(characteristicsHeadline);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1024,9 +1024,9 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			Paragraph avalancheHeadline = new Paragraph(GlobalVariables.getDangerRatingAvalancheHeadline(lang))
+			Paragraph recommendationsHeadline = new Paragraph(GlobalVariables.getRecommendationsHeadline(lang))
 					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(avalancheHeadline);
+			cell = new Cell(1, 1).add(recommendationsHeadline);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1034,17 +1034,24 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			Image dangerRatingImg = getImage("danger_levels/color/danger_level_5.png");
-			dangerRatingImg.scaleToFit(70, 40);
-			cell = new Cell(1, 1).add(dangerRatingImg);
-			cell.setTextAlignment(TextAlignment.LEFT);
+			Paragraph dangerRatingText = new Paragraph("5").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+					.setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(dangerRatingText);
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.very_high, lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell.add(dangerRatingText);
+			cell.setTextAlignment(TextAlignment.CENTER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			Paragraph snowpackText = new Paragraph(GlobalVariables.getDangerRatingVeryHighSnowpackText(lang))
+			Paragraph characteristicsText = new Paragraph(
+					GlobalVariables.getDangerRatingVeryHighCharacteristicsTextBold(lang)).setFont(openSansBoldFont)
+							.setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(characteristicsText);
+			characteristicsText = new Paragraph(GlobalVariables.getDangerRatingVeryHighCharacteristicsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(snowpackText);
+			cell.add(characteristicsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1052,9 +1059,10 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			Paragraph avalancheText = new Paragraph(GlobalVariables.getDangerRatingVeryHighAvalancheText(lang))
-					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(avalancheText);
+			Paragraph recommendationsText = new Paragraph(
+					GlobalVariables.getDangerRatingVeryHighRecommendationsText(lang)).setFont(openSansRegularFont)
+							.setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(recommendationsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1062,17 +1070,23 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			dangerRatingImg = getImage("danger_levels/color/danger_level_4.png");
-			dangerRatingImg.scaleToFit(70, 40);
-			cell = new Cell(1, 1).add(dangerRatingImg);
-			cell.setTextAlignment(TextAlignment.LEFT);
+			dangerRatingText = new Paragraph("4").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+					.setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(dangerRatingText);
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.high, lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell.add(dangerRatingText);
+			cell.setTextAlignment(TextAlignment.CENTER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			snowpackText = new Paragraph(GlobalVariables.getDangerRatingHighSnowpackText(lang))
+			characteristicsText = new Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsTextBold(lang))
+					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(characteristicsText);
+			characteristicsText = new Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(snowpackText);
+			cell.add(characteristicsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1080,9 +1094,9 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			avalancheText = new Paragraph(GlobalVariables.getDangerRatingHighAvalancheText(lang))
+			recommendationsText = new Paragraph(GlobalVariables.getDangerRatingHighRecommendationsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(avalancheText);
+			cell = new Cell(1, 1).add(recommendationsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1090,17 +1104,24 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			dangerRatingImg = getImage("danger_levels/color/danger_level_3.png");
-			dangerRatingImg.scaleToFit(70, 40);
-			cell = new Cell(1, 1).add(dangerRatingImg);
-			cell.setTextAlignment(TextAlignment.LEFT);
+			dangerRatingText = new Paragraph("3").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+					.setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(dangerRatingText);
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.considerable, lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell.add(dangerRatingText);
+			cell.setTextAlignment(TextAlignment.CENTER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			snowpackText = new Paragraph(GlobalVariables.getDangerRatingConsiderableSnowpackText(lang))
+			characteristicsText = new Paragraph(
+					GlobalVariables.getDangerRatingConsiderableCharacteristicsTextBold(lang)).setFont(openSansBoldFont)
+							.setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(characteristicsText);
+			characteristicsText = new Paragraph(GlobalVariables.getDangerRatingConsiderableCharacteristicsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(snowpackText);
+			cell.add(characteristicsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1108,9 +1129,9 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			avalancheText = new Paragraph(GlobalVariables.getDangerRatingConsiderableAvalancheText(lang))
+			recommendationsText = new Paragraph(GlobalVariables.getDangerRatingConsiderableRecommendationsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(avalancheText);
+			cell = new Cell(1, 1).add(recommendationsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1118,17 +1139,23 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			dangerRatingImg = getImage("danger_levels/color/danger_level_2.png");
-			dangerRatingImg.scaleToFit(70, 40);
-			cell = new Cell(1, 1).add(dangerRatingImg);
-			cell.setTextAlignment(TextAlignment.LEFT);
+			dangerRatingText = new Paragraph("2").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+					.setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(dangerRatingText);
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.moderate, lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell.add(dangerRatingText);
+			cell.setTextAlignment(TextAlignment.CENTER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			snowpackText = new Paragraph(GlobalVariables.getDangerRatingModerateSnowpackText(lang))
+			characteristicsText = new Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsTextBold(lang))
+					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(characteristicsText);
+			characteristicsText = new Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(snowpackText);
+			cell.add(characteristicsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1136,9 +1163,9 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			avalancheText = new Paragraph(GlobalVariables.getDangerRatingModerateAvalancheText(lang))
+			recommendationsText = new Paragraph(GlobalVariables.getDangerRatingModerateRecommendationsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(avalancheText);
+			cell = new Cell(1, 1).add(recommendationsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1146,17 +1173,23 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			dangerRatingImg = getImage("danger_levels/color/danger_level_1.png");
-			dangerRatingImg.scaleToFit(70, 40);
-			cell = new Cell(1, 1).add(dangerRatingImg);
-			cell.setTextAlignment(TextAlignment.LEFT);
+			dangerRatingText = new Paragraph("1").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+					.setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(dangerRatingText);
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.low, lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell.add(dangerRatingText);
+			cell.setTextAlignment(TextAlignment.CENTER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			snowpackText = new Paragraph(GlobalVariables.getDangerRatingLowSnowpackText(lang))
+			characteristicsText = new Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsTextBold(lang))
+					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(characteristicsText);
+			characteristicsText = new Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(snowpackText);
+			cell.add(characteristicsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1164,9 +1197,9 @@ public class PdfUtil {
 			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
 			table.addCell(cell);
 
-			avalancheText = new Paragraph(GlobalVariables.getDangerRatingLowAvalancheText(lang))
+			recommendationsText = new Paragraph(GlobalVariables.getDangerRatingLowRecommendationsText(lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-			cell = new Cell(1, 1).add(avalancheText);
+			cell = new Cell(1, 1).add(recommendationsText);
 			cell.setPaddingLeft(5);
 			cell.setPaddingRight(5);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -1175,33 +1208,6 @@ public class PdfUtil {
 			table.addCell(cell);
 
 			document.add(table);
-
-			// adding content
-			marginRight = 40.f;
-			marginLeft = 30.f;
-			int footnotesFontSize = 6;
-
-			Paragraph slope = new Paragraph(GlobalVariables.getSlopeText(lang)).setFont(openSansBoldFont)
-					.setFontSize(footnotesFontSize).setMarginRight(marginRight).setMarginLeft(marginLeft);
-			document.add(slope);
-			com.itextpdf.layout.element.List slopeList = new com.itextpdf.layout.element.List().setSymbolIndent(12)
-					.setMarginLeft(10 + marginLeft).setListSymbol("\u2022").setFont(openSansRegularFont)
-					.setFontSize(footnotesFontSize).setMarginRight(marginRight);
-			slopeList.add(new ListItem(GlobalVariables.getSlopeTextItem1(lang)))
-					.add(new ListItem(GlobalVariables.getSlopeTextItem2(lang)))
-					.add(new ListItem(GlobalVariables.getSlopeTextItem3(lang)));
-			document.add(slopeList);
-
-			Paragraph additionalLoad = new Paragraph(GlobalVariables.getAdditionalLoadText(lang))
-					.setFont(openSansBoldFont).setFontSize(footnotesFontSize).setMarginRight(marginRight)
-					.setMarginLeft(marginLeft);
-			document.add(additionalLoad);
-			com.itextpdf.layout.element.List additionalLoadList = new com.itextpdf.layout.element.List()
-					.setSymbolIndent(12).setMarginLeft(10 + marginLeft).setListSymbol("\u2022")
-					.setFont(openSansRegularFont).setFontSize(footnotesFontSize).setMarginRight(marginRight);
-			additionalLoadList.add(new ListItem(GlobalVariables.getAdditionalLoadTextItem1(lang)))
-					.add(new ListItem(GlobalVariables.getAdditionalLoadTextItem2(lang)));
-			document.add(additionalLoadList);
 
 			canvas.close();
 			pdfCanvas.release();
