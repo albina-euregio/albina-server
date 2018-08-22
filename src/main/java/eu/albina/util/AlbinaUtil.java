@@ -244,7 +244,6 @@ public class AlbinaUtil {
 					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 	}
 
-	// LANG
 	public static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
@@ -258,116 +257,12 @@ public class AlbinaUtil {
 		if (date != null) {
 			date = date.plusDays(1);
 			StringBuilder result = new StringBuilder();
-
-			switch (lang) {
-			case en:
-				result.append("on ");
-				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-				result.append(date.toString(GlobalVariables.dateTimeEn));
-				break;
-			case de:
-				result.append("am ");
-				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-				result.append(date.toString(GlobalVariables.dateTimeDe));
-				break;
-			case it:
-				result.append("su ");
-				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-				result.append(date.toString(GlobalVariables.dateTimeIt));
-				break;
-			default:
-				result.append("on ");
-				result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-				result.append(date.toString(GlobalVariables.dateTimeEn));
-				break;
-			}
-
+			result.append(GlobalVariables.getTendencyBindingWord(lang));
+			result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+			result.append(date.toString(GlobalVariables.getDateTimeFormatter(lang)));
 			return result.toString();
 		} else {
 			return "";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingText(AvalancheBulletin bulletin, LanguageCode lang) {
-		switch (bulletin.getHighestDangerRating()) {
-		case low:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 1 - Gering";
-			case it:
-				return "Grado Pericolo 1 - Debole";
-			case en:
-				return "Danger Level 1 - Low";
-			default:
-				return "Danger Level 1 - Low";
-			}
-		case moderate:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 2 - Mäßig";
-			case it:
-				return "Grado Pericolo 2 - Moderato";
-			case en:
-				return "Danger Level 2 - Moderate";
-			default:
-				return "Danger Level 2 - Moderate";
-			}
-		case considerable:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 3 - Erheblich";
-			case it:
-				return "Grado Pericolo 3 - Marcato";
-			case en:
-				return "Danger Level 3 - Considerable";
-			default:
-				return "Danger Level 3 - Considerable";
-			}
-		case high:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 4 - Groß";
-			case it:
-				return "Grado Pericolo 4 - Forte";
-			case en:
-				return "Danger Level 4 - High";
-			default:
-				return "Danger Level 4 - High";
-			}
-		case very_high:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 5 - Sehr Groß";
-			case it:
-				return "Grado Pericolo 5 - Molto Forte";
-			case en:
-				return "Danger Level 5 - Very High";
-			default:
-				return "Danger Level 5 - Very High";
-			}
-		case no_rating:
-			switch (lang) {
-			case de:
-				return "Keine Beurteilung";
-			case it:
-				return "Senza Valutazione";
-			case en:
-				return "No Rating";
-			default:
-				return "No Rating";
-			}
-		default:
-			switch (lang) {
-			case de:
-				return "Fehlt";
-			case it:
-				return "Mancha";
-			case en:
-				return "Missing";
-			default:
-				return "Missing";
-			}
 		}
 	}
 
@@ -505,27 +400,12 @@ public class AlbinaUtil {
 		return encodedfile;
 	}
 
-	// LANG
 	public static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		StringBuilder result = new StringBuilder();
 		DateTime date = getDate(bulletins);
 		if (date != null) {
 			result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-
-			switch (lang) {
-			case en:
-				result.append(date.toString(GlobalVariables.dateTimeEn));
-				break;
-			case de:
-				result.append(date.toString(GlobalVariables.dateTimeDe));
-				break;
-			case it:
-				result.append(date.toString(GlobalVariables.dateTimeIt));
-				break;
-			default:
-				result.append(date.toString(GlobalVariables.dateTimeEn));
-				break;
-			}
+			result.append(date.toString(GlobalVariables.getDateTimeFormatter(lang)));
 		} else {
 			// TODO what if no date is given (should not happen)
 			result.append("-");
@@ -558,7 +438,6 @@ public class AlbinaUtil {
 		return date;
 	}
 
-	// LANG
 	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
@@ -568,33 +447,10 @@ public class AlbinaUtil {
 			else if (bulletinDate.isAfter(date))
 				date = bulletinDate;
 		}
-		if (date != null) {
-			switch (lang) {
-			case en:
-				return date.toString(GlobalVariables.publicationDateTimeEn);
-			case de:
-				return date.toString(GlobalVariables.publicationDateTimeDe);
-			case it:
-				return date.toString(GlobalVariables.publicationDateTimeIt);
-			default:
-				return date.toString(GlobalVariables.publicationDateTimeEn);
-			}
-		} else
+		if (date != null)
+			return date.toString(GlobalVariables.getPublicationDateTimeFormatter(lang));
+		else
 			return "";
-	}
-
-	// LANG
-	public static String getUrl(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "WWW.LAWINEN.REPORT";
-		case it:
-			return "WWW.VALANGHE.REPORT";
-		case en:
-			return "WWW.AVALANCHE.REPORT";
-		default:
-			return "WWW.AVALANCHE.REPORT";
-		}
 	}
 
 	public static boolean hasDaytimeDependency(List<AvalancheBulletin> bulletins) {

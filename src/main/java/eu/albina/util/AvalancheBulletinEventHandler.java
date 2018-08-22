@@ -83,7 +83,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blueColor, true)
 					.showText(copyright);
 
-			String urlString = AlbinaUtil.getUrl(lang);
+			String urlString = GlobalVariables.getCapitalUrl(lang);
 			Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
 			pdfCanvas.rectangle(buttonRectangle).setColor(blueColor, true).fill();
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)

@@ -115,29 +115,9 @@ public class PdfUtil {
 			PdfDocument pdf;
 			PdfWriter writer;
 
-			// LANG
-			switch (lang) {
-			case de:
-				writer = new PdfWriter(GlobalVariables.getPdfDirectory() + "Lawinenvorhersage"
-						+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
-				pdf = new PdfDocument(writer);
-				break;
-			case it:
-				writer = new PdfWriter(GlobalVariables.getPdfDirectory() + "Previsione Valanghe"
-						+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
-				pdf = new PdfDocument(writer);
-				break;
-			case en:
-				writer = new PdfWriter(GlobalVariables.getPdfDirectory() + "Avalanche Forecast"
-						+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
-				pdf = new PdfDocument(writer);
-				break;
-			default:
-				writer = new PdfWriter(GlobalVariables.getPdfDirectory() + "Avalanche Forecast"
-						+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
-				pdf = new PdfDocument(writer);
-				break;
-			}
+			writer = new PdfWriter(GlobalVariables.getPdfDirectory() + GlobalVariables.getPdfFilename(lang)
+					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
+			pdf = new PdfDocument(writer);
 
 			// PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");
 			PdfFontFactory.registerDirectory(GlobalVariables.getLocalFontsPath());
@@ -188,10 +168,11 @@ public class PdfUtil {
 		table.setWidthPercent(100);
 		Cell cell;
 
-		Paragraph dangerRatingHeadline = new Paragraph(AlbinaUtil.getDangerRatingText(avalancheBulletin, lang))
-				.setFont(openSansBoldFont).setFontSize(14)
-				.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating()))
-				.setMultipliedLeading(leadingHeadline);
+		Paragraph dangerRatingHeadline = new Paragraph(
+				GlobalVariables.getDangerRatingTextLong(avalancheBulletin.getHighestDangerRating(), lang))
+						.setFont(openSansBoldFont).setFontSize(14)
+						.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating()))
+						.setMultipliedLeading(leadingHeadline);
 		cell = new Cell(1, 10).add(dangerRatingHeadline);
 		cell.setBackgroundColor(getDangerRatingBackgroundColor(avalancheBulletin.getHighestDangerRating()));
 		cell.setTextAlignment(TextAlignment.LEFT);
@@ -964,35 +945,35 @@ public class PdfUtil {
 
 			y = 459;
 			width = openSansRegularFont
-					.getContentWidth(new PdfString(GlobalVariables.getDangerRatingText(DangerRating.low, lang)))
+					.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang)))
 					* 0.001f * fontSize / 2;
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 					.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
-					.showText(GlobalVariables.getDangerRatingText(DangerRating.low, lang)).endText();
-			width = openSansRegularFont
-					.getContentWidth(new PdfString(GlobalVariables.getDangerRatingText(DangerRating.moderate, lang)))
-					* 0.001f * fontSize / 2;
+					.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang)).endText();
+			width = openSansRegularFont.getContentWidth(
+					new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang))) * 0.001f
+					* fontSize / 2;
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 					.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(greyDarkColor, true)
-					.showText(GlobalVariables.getDangerRatingText(DangerRating.moderate, lang)).endText();
+					.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang)).endText();
 			width = openSansRegularFont.getContentWidth(
-					new PdfString(GlobalVariables.getDangerRatingText(DangerRating.considerable, lang))) * 0.001f
+					new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang))) * 0.001f
 					* fontSize / 2;
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 					.moveText(pageSize.getWidth() / 2 - width, y).setColor(greyDarkColor, true)
-					.showText(GlobalVariables.getDangerRatingText(DangerRating.considerable, lang)).endText();
+					.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang)).endText();
 			width = openSansRegularFont
-					.getContentWidth(new PdfString(GlobalVariables.getDangerRatingText(DangerRating.high, lang)))
+					.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang)))
 					* 0.001f * fontSize / 2;
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 					.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(greyDarkColor, true)
-					.showText(GlobalVariables.getDangerRatingText(DangerRating.high, lang)).endText();
-			width = openSansRegularFont
-					.getContentWidth(new PdfString(GlobalVariables.getDangerRatingText(DangerRating.very_high, lang)))
-					* 0.001f * fontSize / 2;
+					.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang)).endText();
+			width = openSansRegularFont.getContentWidth(
+					new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang))) * 0.001f
+					* fontSize / 2;
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 					.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
-					.showText(GlobalVariables.getDangerRatingText(DangerRating.very_high, lang)).endText();
+					.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang)).endText();
 
 			// Add avalanche danger scale
 			float marginRight = 10.f;
@@ -1037,7 +1018,7 @@ public class PdfUtil {
 			Paragraph dangerRatingText = new Paragraph("5").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 					.setFontColor(greyDarkColor);
 			cell = new Cell(1, 1).add(dangerRatingText);
-			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.very_high, lang))
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
 			cell.add(dangerRatingText);
 			cell.setTextAlignment(TextAlignment.CENTER);
@@ -1073,7 +1054,7 @@ public class PdfUtil {
 			dangerRatingText = new Paragraph("4").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 					.setFontColor(greyDarkColor);
 			cell = new Cell(1, 1).add(dangerRatingText);
-			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.high, lang))
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
 			cell.add(dangerRatingText);
 			cell.setTextAlignment(TextAlignment.CENTER);
@@ -1107,7 +1088,7 @@ public class PdfUtil {
 			dangerRatingText = new Paragraph("3").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 					.setFontColor(greyDarkColor);
 			cell = new Cell(1, 1).add(dangerRatingText);
-			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.considerable, lang))
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
 			cell.add(dangerRatingText);
 			cell.setTextAlignment(TextAlignment.CENTER);
@@ -1142,7 +1123,7 @@ public class PdfUtil {
 			dangerRatingText = new Paragraph("2").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 					.setFontColor(greyDarkColor);
 			cell = new Cell(1, 1).add(dangerRatingText);
-			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.moderate, lang))
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
 			cell.add(dangerRatingText);
 			cell.setTextAlignment(TextAlignment.CENTER);
@@ -1176,7 +1157,7 @@ public class PdfUtil {
 			dangerRatingText = new Paragraph("1").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 					.setFontColor(greyDarkColor);
 			cell = new Cell(1, 1).add(dangerRatingText);
-			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingText(DangerRating.low, lang))
+			dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang))
 					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
 			cell.add(dangerRatingText);
 			cell.setTextAlignment(TextAlignment.CENTER);

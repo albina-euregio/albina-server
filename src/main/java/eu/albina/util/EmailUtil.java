@@ -208,27 +208,9 @@ public class EmailUtil {
 			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
 			message.addHeader("format", "flowed");
 			message.addHeader("Content-Transfer-Encoding", "8bit");
-
-			switch (lang) {
-			case de:
-				message.setSubject("Lawinenvorhersage, " + AlbinaUtil.getDate(bulletins, lang), "UTF-8");
-				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Lawinen.report"));
-				break;
-			case it:
-				message.setSubject("Previsione Valanghe, " + AlbinaUtil.getDate(bulletins, lang), "UTF-8");
-				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Valanghe.report"));
-				break;
-			case en:
-				message.setSubject("Avalanche Forecast, " + AlbinaUtil.getDate(bulletins, lang), "UTF-8");
-				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
-				break;
-			default:
-				message.setSubject("Avalanche Forecast, " + AlbinaUtil.getDate(bulletins, lang), "UTF-8");
-				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
-				break;
-			}
-
-			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername));
+			message.setSubject(GlobalVariables.getEmailSubject(lang), GlobalVariables.getEmailEncoding());
+			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
+					GlobalVariables.getEmailFromPersonal(lang)));
 
 			for (String recipient : recipients)
 				message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
@@ -289,7 +271,7 @@ public class EmailUtil {
 			image.put("socialmedia", socialMediaImages);
 			root.put("image", image);
 
-			// TODO add texts
+			// add texts
 			Map<String, Object> text = new HashMap<>();
 			text.put("title", GlobalVariables.getTitle(lang));
 			text.put("follow", GlobalVariables.getFollowUs(lang));
@@ -443,11 +425,12 @@ public class EmailUtil {
 			}
 
 			Map<String, Object> dangerRatings = new HashMap<>();
-			dangerRatings.put("low", GlobalVariables.getDangerRatingText(DangerRating.low, lang));
-			dangerRatings.put("moderate", GlobalVariables.getDangerRatingText(DangerRating.moderate, lang));
-			dangerRatings.put("considerable", GlobalVariables.getDangerRatingText(DangerRating.considerable, lang));
-			dangerRatings.put("high", GlobalVariables.getDangerRatingText(DangerRating.high, lang));
-			dangerRatings.put("veryHigh", GlobalVariables.getDangerRatingText(DangerRating.very_high, lang));
+			dangerRatings.put("low", GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang));
+			dangerRatings.put("moderate", GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang));
+			dangerRatings.put("considerable",
+					GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang));
+			dangerRatings.put("high", GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang));
+			dangerRatings.put("veryHigh", GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang));
 			text.put("dangerRating", dangerRatings);
 
 			root.put("text", text);
@@ -465,7 +448,8 @@ public class EmailUtil {
 					bulletin.put("textpm", "");
 				}
 
-				bulletin.put("warningLevelText", AlbinaUtil.getDangerRatingText(avalancheBulletin, lang));
+				bulletin.put("warningLevelText",
+						GlobalVariables.getDangerRatingTextLong(avalancheBulletin.getHighestDangerRating(), lang));
 
 				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));

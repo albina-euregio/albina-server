@@ -126,6 +126,8 @@ public class GlobalVariables {
 	// "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps.php";
 	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
 
+	private static String emailEncoding = "UTF-8";
+
 	public static boolean isCreateMaps() {
 		return createMaps;
 	}
@@ -836,7 +838,178 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getDangerRatingText(DangerRating dangerRating, LanguageCode lang) {
+	public static String getEmailSubject(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenvorhersage, ";
+		case it:
+			return "Provisione Valanghe, ";
+		case en:
+			return "Avalanche Forecast, ";
+		default:
+			return "Avalanche Forecast, ";
+		}
+	}
+
+	// LANG
+	public static String getEmailFromPersonal(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinen.report";
+		case it:
+			return "Valanghe.report";
+		case en:
+			return "Avalanche.report";
+		default:
+			return "Avalanche.report";
+		}
+	}
+
+	public static String getEmailEncoding() {
+		return emailEncoding;
+	}
+
+	// LANG
+	public static String getPdfFilename(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenvorhersage";
+		case it:
+			return "Previsione Valanghe";
+		case en:
+			return "Avalanche Forecast";
+		default:
+			return "Avalanche Forecast";
+		}
+	}
+
+	// LANG
+	public static DateTimeFormatter getDateTimeFormatter(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return dateTimeDe;
+		case it:
+			return dateTimeIt;
+		case en:
+			return dateTimeEn;
+		default:
+			return dateTimeEn;
+		}
+	}
+
+	// LANG
+	public static String getCapitalUrl(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "WWW.LAWINEN.REPORT";
+		case it:
+			return "WWW.VALANGHE.REPORT";
+		case en:
+			return "WWW.AVALANCHE.REPORT";
+		default:
+			return "WWW.AVALANCHE.REPORT";
+		}
+	}
+
+	// LANG
+	public static DateTimeFormatter getPublicationDateTimeFormatter(LanguageCode lang) {
+		switch (lang) {
+		case en:
+			return publicationDateTimeEn;
+		case de:
+			return publicationDateTimeDe;
+		case it:
+			return publicationDateTimeIt;
+		default:
+			return publicationDateTimeEn;
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingTextLong(DangerRating dangerRating, LanguageCode lang) {
+		switch (dangerRating) {
+		case low:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 1 - Gering";
+			case it:
+				return "Grado Pericolo 1 - Debole";
+			case en:
+				return "Danger Level 1 - Low";
+			default:
+				return "Danger Level 1 - Low";
+			}
+		case moderate:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 2 - Mäßig";
+			case it:
+				return "Grado Pericolo 2 - Moderato";
+			case en:
+				return "Danger Level 2 - Moderate";
+			default:
+				return "Danger Level 2 - Moderate";
+			}
+		case considerable:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 3 - Erheblich";
+			case it:
+				return "Grado Pericolo 3 - Marcato";
+			case en:
+				return "Danger Level 3 - Considerable";
+			default:
+				return "Danger Level 3 - Considerable";
+			}
+		case high:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 4 - Groß";
+			case it:
+				return "Grado Pericolo 4 - Forte";
+			case en:
+				return "Danger Level 4 - High";
+			default:
+				return "Danger Level 4 - High";
+			}
+		case very_high:
+			switch (lang) {
+			case de:
+				return "Gefahrenstufe 5 - Sehr Groß";
+			case it:
+				return "Grado Pericolo 5 - Molto Forte";
+			case en:
+				return "Danger Level 5 - Very High";
+			default:
+				return "Danger Level 5 - Very High";
+			}
+		case no_rating:
+			switch (lang) {
+			case de:
+				return "Keine Beurteilung";
+			case it:
+				return "Senza Valutazione";
+			case en:
+				return "No Rating";
+			default:
+				return "No Rating";
+			}
+		default:
+			switch (lang) {
+			case de:
+				return "Fehlt";
+			case it:
+				return "Mancha";
+			case en:
+				return "Missing";
+			default:
+				return "Missing";
+			}
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingTextShort(DangerRating dangerRating, LanguageCode lang) {
 		switch (dangerRating) {
 		case low:
 			switch (lang) {
@@ -1039,5 +1212,18 @@ public class GlobalVariables {
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
 		if (configuration.has("publishBulletinsStyria"))
 			setPublishBulletinsStyria(configuration.getBoolean("publishBulletinsStyria"));
+	}
+
+	public static Object getTendencyBindingWord(LanguageCode lang) {
+		switch (lang) {
+		case en:
+			return "on ";
+		case de:
+			return "am ";
+		case it:
+			return "su ";
+		default:
+			return "on ";
+		}
 	}
 }
