@@ -527,7 +527,7 @@ public class GlobalVariables {
 		case de:
 			return "Die Schneedecke ist allgemein schwach verfestigt und weitgehend instabil.";
 		case it:
-			return "";
+			return "Il manto nevoso è in generale debolmente consolidato e per lo più instabile.";
 		case en:
 			return "The snowpack is poorly bonded and largely unstable in general.";
 		default:
@@ -541,7 +541,7 @@ public class GlobalVariables {
 		case de:
 			return "Die Schneedecke ist an den meisten Steilhängen schwach verfestigt.";
 		case it:
-			return "";
+			return "Il manto nevoso è debolmente consolidato su la maggior parte dei pendii ripidi.";
 		case en:
 			return "The snowpack is poorly bonded on most steep slopes.";
 		default:
@@ -555,7 +555,7 @@ public class GlobalVariables {
 		case de:
 			return "Die Schneedecke ist an vielen Steilhängen* nur mäßig bis schwach verfestigt.";
 		case it:
-			return "";
+			return "Il manto nevoso presenta un consolidamento da moderato a debole su molti pendii ripidi.";
 		case en:
 			return "The snowpack is moderately to poorly bonded on many steep slopes.";
 		default:
@@ -569,7 +569,7 @@ public class GlobalVariables {
 		case de:
 			return "Die Schneedecke ist an einigen Steilhängen* nur mäßig verfestigt, ansonsten allgemein gut verfestigt.";
 		case it:
-			return "";
+			return "Il manto nevoso è moderatamente consolidato su alcuni pendii ripidi, per il resto è ben consolidato.";
 		case en:
 			return "The snowpack is only moderately well bonded on some steep slopes*, otherwise well bonded in general.";
 		default:
@@ -583,7 +583,7 @@ public class GlobalVariables {
 		case de:
 			return "Die Schneedecke ist allgemein gut verfestigt und stabil.";
 		case it:
-			return "";
+			return "Il manto nevoso è in generale ben consolidato oppure a debole coesione e senza tensioni.";
 		case en:
 			return "The snowpack is well bonded and stable in general.";
 		default:
@@ -597,7 +597,7 @@ public class GlobalVariables {
 		case de:
 			return "Spontan sind viele große, mehrfach auch sehr große Lawinen, auch in mäßig steilem Gelände zu erwarten.";
 		case it:
-			return "";
+			return "Sono da aspettarsi molte grandi valanghe spontanee, anche su terreno moderatamente ripido.";
 		case en:
 			return "Numerous large-sized and often very large-sized natural avalanches can be expected, even in moderately steep terrain.";
 		default:
@@ -611,7 +611,7 @@ public class GlobalVariables {
 		case de:
 			return "Lawinenauslösung ist bereits bei geringer Zusatzbelastung** an zahlreichen Steilhängen wahrscheinlich. Fallweise sind spontan viele mittlere, mehrfach auch große Lawinen zu erwarten.";
 		case it:
-			return "";
+			return "Il distacco è probabile già con un debole sovraccarico su molti pendii ripidi. In alcune situazioni sono da aspettarsi molte valanghe spontanee di media grandezza e, talvolta, anche grandi valanghe.";
 		case en:
 			return "Triggering is likely even from low additional loads** on many steep slopes. In some cases, numerous medium-sized and often large-sized natural avalanches can be expected.";
 		default:
@@ -625,7 +625,7 @@ public class GlobalVariables {
 		case de:
 			return "Lawinenauslösung ist bereits bei geringer Zusatzbelastung** vor allem an den angegebenen Steilhängen* möglich. Fallweise sind spontan einige mittlere, vereinzelt aber auch große Lawinen möglich.";
 		case it:
-			return "";
+			return "Il distacco è possibile con debole sovraccarico soprattutto sui pendii ripidi indicati. In alcune situazioni sono possibili valanghe spontanee di media grandezza e, in singoli casi, anche grandi valanghe.";
 		case en:
 			return "Triggering is possible, evenen from low additional loads** particularly on the indicated steep slopes*. In some cases medium-sized, in isolated cases large-sized natural avalanches are possible.";
 		default:
@@ -639,7 +639,7 @@ public class GlobalVariables {
 		case de:
 			return "Lawinenauslösung ist insbesondere bei großer Zusatzbelastung**, vor allem an den angegebenen Steilhängen* möglich. Große spontane Lawinen sind nicht zu erwarten.";
 		case it:
-			return "";
+			return "Il distacco è possibile principalmente con forte sovraccarico soprattutto sui pendii ripidi indicati. Non sono da aspettarsi grandi valanghe spontanee.";
 		case en:
 			return "Triggering is possible primarly from high additional loads**, particularly on the indicated steep slopes*. Large-sized natural avalanches are unlikely.";
 		default:
@@ -653,7 +653,7 @@ public class GlobalVariables {
 		case de:
 			return "Lawinenauslösung ist allgemein nur bei großer Zusatzbelastung** an vereinzelten Stellen im extremen Steilgelände* möglich. Spontan sind nur Rutsche und kleine Lawinen möglich.";
 		case it:
-			return "";
+			return "Il distacco è generalmente possibile solo con forte sovraccarico su pochissimi punti sul terreno ripido estremo. Sono possibli scaricamenti e piccole valanghe spontanee.";
 		case en:
 			return "Triggering is generally possible only from high additional loads** in isolated areas of very steep, extreme terrain. Only sluffs and small-sized natural avalanches are possible.";
 		default:
