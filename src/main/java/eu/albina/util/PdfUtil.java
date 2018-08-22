@@ -26,8 +26,6 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfString;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.action.PdfAction;
-import com.itextpdf.kernel.pdf.annot.PdfLinkAnnotation;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.Document;
@@ -36,8 +34,6 @@ import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.element.Link;
-import com.itextpdf.layout.element.ListItem;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
@@ -119,6 +115,7 @@ public class PdfUtil {
 			PdfDocument pdf;
 			PdfWriter writer;
 
+			// LANG
 			switch (lang) {
 			case de:
 				writer = new PdfWriter(GlobalVariables.getPdfDirectory() + "Lawinenvorhersage"
@@ -555,7 +552,7 @@ public class PdfUtil {
 		return table;
 	}
 
-	private Image getImage(String path) {
+	public Image getImage(String path) {
 		try {
 			String name = GlobalVariables.getLocalImagesPath() + path;
 			ImageData imageData = ImageDataFactory
@@ -997,41 +994,186 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
 					.showText(GlobalVariables.getDangerRatingText(DangerRating.very_high, lang)).endText();
 
-			// adding content
-			float marginRight = 50.f;
-			float marginLeft = 30.f;
-			Paragraph title = new Paragraph("How To").setFont(openSansRegularFont).setFontSize(14).setMarginTop(290)
-					.setMarginRight(marginRight).setMarginLeft(marginLeft);
-			document.add(title);
-			Paragraph subtitle1 = new Paragraph(
-					"Ich bin Blindtext. Von Geburt an. Es hat lange gedauert, bis ich begriffen habe, was es bedeutet, ein blinder Text zu sein:")
-							.setFont(openSansBoldFont).setFontSize(10).setMarginRight(marginRight)
-							.setMarginLeft(marginLeft);
-			document.add(subtitle1);
-			com.itextpdf.layout.element.List list1 = new com.itextpdf.layout.element.List().setSymbolIndent(12)
-					.setMarginLeft(10 + marginLeft).setListSymbol("\u2022").setFont(openSansRegularFont).setFontSize(10)
-					.setMarginRight(marginRight);
-			list1.add(new ListItem("Oft wird man gar nicht erst gelesen"))
-					.add(new ListItem("Man wirkt hier und da aus dem Zusammenhang gerissen"))
-					.add(new ListItem("Aber bin ich deshalb ein schlechter Text?"));
-			document.add(list1);
-			Paragraph subtitle2 = new Paragraph("Man macht gar keinen Sinn, Nullkommajosef:").setFont(openSansBoldFont)
-					.setFontSize(10).setMarginRight(marginRight).setMarginLeft(marginLeft);
-			document.add(subtitle2);
-			com.itextpdf.layout.element.List list2 = new com.itextpdf.layout.element.List().setSymbolIndent(12)
-					.setMarginLeft(10 + marginLeft).setListSymbol("\u2022").setFont(openSansRegularFont).setFontSize(10)
-					.setMarginRight(marginRight);
-			list2.add(new ListItem("Ich weiß, dass ich nie die Chance haben werde im Stern zu erscheinen"))
-					.add(new ListItem("Man wirkt hier und da aus dem Zusammenhang gerissen"));
-			document.add(list2);
+			// Add avalanche danger scale
+			float marginRight = 0.f;
+			float marginLeft = 0.f;
+			int tableFontSize = 9;
 
-			PdfLinkAnnotation annotation = new PdfLinkAnnotation(new Rectangle(0, 0))
-					.setAction(PdfAction.createURI("http://www.avalanches.org/"));
-			Link link = new Link("www.avalanches.org", annotation);
-			Paragraph normalText = new Paragraph("Weitere Fachbegriffe und Definitionen finden Sie im Glossar unter ")
-					.add(link.setFontColor(blueColor)).setFont(openSansRegularFont).setFontSize(10)
-					.setMarginRight(marginRight).setMarginLeft(marginLeft);
-			document.add(normalText);
+			float[] columnWidths = { 1, 1, 1 };
+			Table table = new Table(columnWidths).setBorder(Border.NO_BORDER).setMarginTop(300)
+					.setMarginLeft(marginLeft).setMarginRight(marginRight).setWidthPercent(100);
+
+			Paragraph symbolHeadline = new Paragraph(GlobalVariables.getDangerRatingSymbolHeadline(lang))
+					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			Cell cell = new Cell(1, 1).add(symbolHeadline);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			Paragraph snowpackHeadline = new Paragraph(GlobalVariables.getDangerRatingSnowpackHeadline(lang))
+					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(snowpackHeadline);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			Paragraph avalancheHeadline = new Paragraph(GlobalVariables.getDangerRatingAvalancheHeadline(lang))
+					.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(avalancheHeadline);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			Image dangerRatingImg = getImage("danger_levels/color/danger_level_5.png");
+			dangerRatingImg.scaleToFit(70, 40);
+			cell = new Cell(1, 1).add(dangerRatingImg);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			Paragraph snowpackText = new Paragraph(GlobalVariables.getDangerRatingVeryHighSnowpackText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(snowpackText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			Paragraph avalancheText = new Paragraph(GlobalVariables.getDangerRatingVeryHighAvalancheText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(avalancheText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			dangerRatingImg = getImage("danger_levels/color/danger_level_4.png");
+			dangerRatingImg.scaleToFit(70, 40);
+			cell = new Cell(1, 1).add(dangerRatingImg);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			snowpackText = new Paragraph(GlobalVariables.getDangerRatingHighSnowpackText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(snowpackText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			avalancheText = new Paragraph(GlobalVariables.getDangerRatingHighAvalancheText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(avalancheText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			dangerRatingImg = getImage("danger_levels/color/danger_level_3.png");
+			dangerRatingImg.scaleToFit(70, 40);
+			cell = new Cell(1, 1).add(dangerRatingImg);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			snowpackText = new Paragraph(GlobalVariables.getDangerRatingConsiderableSnowpackText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(snowpackText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			avalancheText = new Paragraph(GlobalVariables.getDangerRatingConsiderableAvalancheText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(avalancheText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			dangerRatingImg = getImage("danger_levels/color/danger_level_2.png");
+			dangerRatingImg.scaleToFit(70, 40);
+			cell = new Cell(1, 1).add(dangerRatingImg);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			snowpackText = new Paragraph(GlobalVariables.getDangerRatingModerateSnowpackText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(snowpackText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			avalancheText = new Paragraph(GlobalVariables.getDangerRatingModerateAvalancheText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(avalancheText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			dangerRatingImg = getImage("danger_levels/color/danger_level_1.png");
+			dangerRatingImg.scaleToFit(70, 40);
+			cell = new Cell(1, 1).add(dangerRatingImg);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			snowpackText = new Paragraph(GlobalVariables.getDangerRatingLowSnowpackText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(snowpackText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			avalancheText = new Paragraph(GlobalVariables.getDangerRatingLowAvalancheText(lang))
+					.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
+			cell = new Cell(1, 1).add(avalancheText);
+			cell.setPaddingLeft(5);
+			cell.setPaddingRight(5);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
+			table.addCell(cell);
+
+			document.add(table);
 
 			canvas.close();
 			pdfCanvas.release();

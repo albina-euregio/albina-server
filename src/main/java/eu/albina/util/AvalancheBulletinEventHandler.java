@@ -1,11 +1,10 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import com.itextpdf.io.font.PdfEncodings;
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.color.DeviceCmyk;
 import com.itextpdf.kernel.events.Event;
@@ -64,22 +63,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			}
 
 			// Add headline
-			String headline;
-			switch (lang) {
-			case de:
-				headline = "Lawinenvorhersage";
-				break;
-			case it:
-				headline = "Provisione Valanghe";
-				break;
-			case en:
-				headline = "Avalanche Forecast";
-				break;
-			default:
-				headline = "Avalanche Forecast";
-				break;
-			}
-
+			String headline = GlobalVariables.getHeadlineText(lang);
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 					.setColor(greyDarkColor, true).showText(headline);
 			String date = AlbinaUtil.getDate(bulletins, lang);
@@ -94,21 +78,8 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 			Canvas canvas = new Canvas(pdfCanvas, pdfDoc, page.getPageSize());
 
-			String copyright;
-			switch (lang) {
-			case de:
-				copyright = AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla, bla bla bla";
-				break;
-			case it:
-				copyright = AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla, bla bla bla";
-				break;
-			case en:
-				copyright = AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla, bla bla bla";
-				break;
-			default:
-				copyright = AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla, bla bla bla";
-				break;
-			}
+			// Add copyright
+			String copyright = GlobalVariables.getCopyrightText(lang);
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blueColor, true)
 					.showText(copyright);
 
@@ -125,34 +96,13 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			pdfCanvas.setLineWidth(1).setStrokeColor(blueColor).moveTo(0, 48).lineTo(pageSize.getWidth(), 48).stroke();
 
 			// Add CI
-			ImageData ciImageData = ImageDataFactory.create(
-					"D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\Colorbar.gif");
-			Image ciImg = new Image(ciImageData);
+			Image ciImg = PdfUtil.getInstance().getImage("Colorbar.gif");
 			ciImg.scaleAbsolute(pageSize.getWidth(), 4);
 			ciImg.setFixedPosition(0, pageSize.getHeight() - 4);
 			canvas.add(ciImg);
 
-			// Add Logo
-			ImageData logoImageData;
-			switch (lang) {
-			case de:
-				logoImageData = ImageDataFactory.create(
-						"D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\logo\\lawinen_report.png");
-				break;
-			case it:
-				logoImageData = ImageDataFactory.create(
-						"D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\logo\\valanghe_report.png");
-				break;
-			case en:
-				logoImageData = ImageDataFactory.create(
-						"D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\logo\\avalanche_report.png");
-				break;
-			default:
-				logoImageData = ImageDataFactory.create(
-						"D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\logo\\avalanche_report.png");
-				break;
-			}
-			Image logoImg = new Image(logoImageData);
+			// Add logo
+			Image logoImg = PdfUtil.getInstance().getImage(GlobalVariables.getLogoPath(lang));
 			logoImg.scaleToFit(130, 55);
 			logoImg.setFixedPosition(pageSize.getWidth() - 100, pageSize.getHeight() - 72);
 			canvas.add(logoImg);
@@ -161,6 +111,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 			pdfCanvas.release();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

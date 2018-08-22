@@ -457,7 +457,7 @@ public class GlobalVariables {
 		case de:
 			return "Schneedecke";
 		case it:
-			return "Descrizione struttura manto nevoso";
+			return "Manto nevoso";
 		case en:
 			return "Snowpack";
 		default:
@@ -476,6 +476,188 @@ public class GlobalVariables {
 			return "Avalanche.report";
 		default:
 			return "Avalanche.report";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingSymbolHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Symbol";
+		case it:
+			return "Emblema";
+		case en:
+			return "Icon";
+		default:
+			return "Icon";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingSnowpackHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Schneedeckenstabilität";
+		case it:
+			return "Stabilità del manto nevoso";
+		case en:
+			return "Snowpack stability";
+		default:
+			return "Snowpack stability";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingAvalancheHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinen-Auslösewahrscheinlichkeit";
+		case it:
+			return "Probabilità di distacco di valanghe";
+		case en:
+			return "Avalanche triggering probability";
+		default:
+			return "Avalanche triggering probability";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingVeryHighSnowpackText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Die Schneedecke ist allgemein schwach verfestigt und weitgehend instabil.";
+		case it:
+			return "";
+		case en:
+			return "The snowpack is poorly bonded and largely unstable in general.";
+		default:
+			return "The snowpack is poorly bonded and largely unstable in general.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingHighSnowpackText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Die Schneedecke ist an den meisten Steilhängen schwach verfestigt.";
+		case it:
+			return "";
+		case en:
+			return "The snowpack is poorly bonded on most steep slopes.";
+		default:
+			return "The snowpack is poorly bonded on most steep slopes.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingConsiderableSnowpackText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Die Schneedecke ist an vielen Steilhängen* nur mäßig bis schwach verfestigt.";
+		case it:
+			return "";
+		case en:
+			return "The snowpack is moderately to poorly bonded on many steep slopes.";
+		default:
+			return "The snowpack is moderately to poorly bonded on many steep slopes.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingModerateSnowpackText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Die Schneedecke ist an einigen Steilhängen* nur mäßig verfestigt, ansonsten allgemein gut verfestigt.";
+		case it:
+			return "";
+		case en:
+			return "The snowpack is onlky moderately well bonded on some steep slopes*, otherwise well bonded in general.";
+		default:
+			return "The snowpack is onlky moderately well bonded on some steep slopes*, otherwise well bonded in general.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingLowSnowpackText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Die Schneedecke ist allgemein gut verfestigt und stabil.";
+		case it:
+			return "";
+		case en:
+			return "The snowpack is well bonded and stable in general.";
+		default:
+			return "The snowpack is well bonded and stable in general.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingVeryHighAvalancheText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Spontan sind viele große, mehrfach auch sehr große Lawinen, auch in mäßig steilem Gelände zu erwarten.";
+		case it:
+			return "";
+		case en:
+			return "Numerous large-sized and often very large-sized natural avalanches can be expected, even in moderately steep terrain.";
+		default:
+			return "Numerous large-sized and often very large-sized natural avalanches can be expected, even in moderately steep terrain.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingHighAvalancheText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenauslösung ist bereits bei geringer Zusatzbelastung** an zahlreichen Steilhängen wahrscheinlich. Fallweise sind spontan viele mittlere, mehrfach auch große Lawinen zu erwarten.";
+		case it:
+			return "";
+		case en:
+			return "Triggering is likely even from low additional loads** on many steep slopes. In some cases, numerous medium-sized and often large-sized natural avalanches can be expected.";
+		default:
+			return "Triggering is likely even from low additional loads** on many steep slopes. In some cases, numerous medium-sized and often large-sized natural avalanches can be expected.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingConsiderableAvalancheText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenauslösung ist bereits bei geringer Zusatzbelastung** vor allem an den angegebenen Steilhängen* möglich. Fallweise sind spontan einige mittlere, vereinzelt aber auch große Lawinen möglich.";
+		case it:
+			return "";
+		case en:
+			return "Triggering is possible, evenen from low additional loads** particularly on the indicated steep slopes*. In some cases medium-sized, in isolated cases large-sized natural avalanches are possible.";
+		default:
+			return "Triggering is possible, evenen from low additional loads** particularly on the indicated steep slopes*. In some cases medium-sized, in isolated cases large-sized natural avalanches are possible.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingModerateAvalancheText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenauslösung ist insbesondere bei großer Zusatzbelastung**, vor allem an den angegebenen Steilhängen* möglich. Große spontane Lawinen sind nicht zu erwarten.";
+		case it:
+			return "";
+		case en:
+			return "Triggering is possible primarly from high additional loads**, particularly on the indicated steep slopes*. Large-sized natural avalanches are unlikely.";
+		default:
+			return "Triggering is possible primarly from high additional loads**, particularly on the indicated steep slopes*. Large-sized natural avalanches are unlikely.";
+		}
+	}
+
+	// LANG
+	public static String getDangerRatingLowAvalancheText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenauslösung ist allgemein nur bei großer Zusatzbelastung** an vereinzelten Stellen im extremen Steilgelände* möglich. Spontan sind nur Rutsche und kleine Lawinen möglich.";
+		case it:
+			return "";
+		case en:
+			return "Triggering is generally possible only from high additional loads** in isolated areas of very steep, extreme terrain. Only sluffs and small-sized natural avalanches are possible.";
+		default:
+			return "Triggering is generally possible only from high additional loads** in isolated areas of very steep, extreme terrain. Only sluffs and small-sized natural avalanches are possible.";
 		}
 	}
 
@@ -518,6 +700,52 @@ public class GlobalVariables {
 			return "Unsubscribe";
 		default:
 			return "Unsubscribe";
+		}
+	}
+
+	// LANG
+	public static String getLogoPath(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "logo/lawinen_report.png";
+		case it:
+			return "logo/valanghe_report.png";
+		case en:
+			return "logo/avalanche_report.png";
+		default:
+			return "logo/avalanche_report.png";
+		}
+	}
+
+	// LANG
+	public static String getCopyrightText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			// return AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla";
+			return "";
+		case it:
+			// return AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla";
+			return "";
+		case en:
+			// return AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla";
+			return "";
+		default:
+			// return AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla";
+			return "";
+		}
+	}
+
+	// LANG
+	public static String getHeadlineText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenvorhersage";
+		case it:
+			return "Provisione Valanghe";
+		case en:
+			return "Avalanche Forecast";
+		default:
+			return "Avalanche Forecast";
 		}
 	}
 
