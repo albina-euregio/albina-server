@@ -34,6 +34,7 @@ import com.itextpdf.layout.border.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.ListItem;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
@@ -997,7 +998,7 @@ public class PdfUtil {
 			// Add avalanche danger scale
 			float marginRight = 0.f;
 			float marginLeft = 0.f;
-			int tableFontSize = 9;
+			int tableFontSize = 8;
 
 			float[] columnWidths = { 1, 1, 1 };
 			Table table = new Table(columnWidths).setBorder(Border.NO_BORDER).setMarginTop(300)
@@ -1174,6 +1175,33 @@ public class PdfUtil {
 			table.addCell(cell);
 
 			document.add(table);
+
+			// adding content
+			marginRight = 40.f;
+			marginLeft = 30.f;
+			int footnotesFontSize = 6;
+
+			Paragraph slope = new Paragraph(GlobalVariables.getSlopeText(lang)).setFont(openSansBoldFont)
+					.setFontSize(footnotesFontSize).setMarginRight(marginRight).setMarginLeft(marginLeft);
+			document.add(slope);
+			com.itextpdf.layout.element.List slopeList = new com.itextpdf.layout.element.List().setSymbolIndent(12)
+					.setMarginLeft(10 + marginLeft).setListSymbol("\u2022").setFont(openSansRegularFont)
+					.setFontSize(footnotesFontSize).setMarginRight(marginRight);
+			slopeList.add(new ListItem(GlobalVariables.getSlopeTextItem1(lang)))
+					.add(new ListItem(GlobalVariables.getSlopeTextItem2(lang)))
+					.add(new ListItem(GlobalVariables.getSlopeTextItem3(lang)));
+			document.add(slopeList);
+
+			Paragraph additionalLoad = new Paragraph(GlobalVariables.getAdditionalLoadText(lang))
+					.setFont(openSansBoldFont).setFontSize(footnotesFontSize).setMarginRight(marginRight)
+					.setMarginLeft(marginLeft);
+			document.add(additionalLoad);
+			com.itextpdf.layout.element.List additionalLoadList = new com.itextpdf.layout.element.List()
+					.setSymbolIndent(12).setMarginLeft(10 + marginLeft).setListSymbol("\u2022")
+					.setFont(openSansRegularFont).setFontSize(footnotesFontSize).setMarginRight(marginRight);
+			additionalLoadList.add(new ListItem(GlobalVariables.getAdditionalLoadTextItem1(lang)))
+					.add(new ListItem(GlobalVariables.getAdditionalLoadTextItem2(lang)));
+			document.add(additionalLoadList);
 
 			canvas.close();
 			pdfCanvas.release();

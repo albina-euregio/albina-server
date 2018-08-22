@@ -571,9 +571,9 @@ public class GlobalVariables {
 		case it:
 			return "";
 		case en:
-			return "The snowpack is onlky moderately well bonded on some steep slopes*, otherwise well bonded in general.";
+			return "The snowpack is only moderately well bonded on some steep slopes*, otherwise well bonded in general.";
 		default:
-			return "The snowpack is onlky moderately well bonded on some steep slopes*, otherwise well bonded in general.";
+			return "The snowpack is only moderately well bonded on some steep slopes*, otherwise well bonded in general.";
 		}
 	}
 
@@ -746,6 +746,111 @@ public class GlobalVariables {
 			return "Avalanche Forecast";
 		default:
 			return "Avalanche Forecast";
+		}
+	}
+
+	// LANG
+	// TODO it
+	public static String getSlopeText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "* Das lawinengefährliche Gelände ist im Lawinenlagebericht im Allgemeinen näher beschrieben (Höhenlage, Exposition, Geländeform):";
+		case it:
+			return "";
+		case en:
+			return "* The avalanche-prone locations are described in greater detail in the avalanche bulletin (altitude, slope aspect, type of terrain):";
+		default:
+			return "* The avalanche-prone locations are described in greater detail in the avalanche bulletin (altitude, slope aspect, type of terrain):";
+		}
+	}
+
+	// LANG
+	// TODO it
+	public static String getSlopeTextItem1(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "mässig steiles Gelände: Hänge flacher als rund 30 Grad";
+		case it:
+			return "";
+		case en:
+			return "moderately steep terrain: slopes shallower than 30 degrees";
+		default:
+			return "moderately steep terrain: slopes shallower than 30 degrees";
+		}
+	}
+
+	// LANG
+	// TODO it
+	public static String getSlopeTextItem2(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Steilhänge: Hänge steiler als rund 30 Grad";
+		case it:
+			return "";
+		case en:
+			return "steep slope: slopes steeper than 30 degrees";
+		default:
+			return "steep slope: slopes steeper than 30 degrees";
+		}
+	}
+
+	// LANG
+	// TODO it
+	public static String getSlopeTextItem3(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "extremes Steilgelände: besonders ungünstige Hänge bezüglich Neigung (steiler als etwa 40 Grad), Geländeform, Kammnähe und Bodenrauigkeit";
+		case it:
+			return "";
+		case en:
+			return "very steep, extreme terrain: adverse slope angle (more than 40 degrees), terrain profile, proximity to ridge, smoothness of underlying ground surface";
+		default:
+			return "very steep, extreme terrain: adverse slope angle (more than 40 degrees), terrain profile, proximity to ridge, smoothness of underlying ground surface";
+		}
+	}
+
+	// LANG
+	// TODO it
+	public static String getAdditionalLoadText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "** Zusatzbelastung:";
+		case it:
+			return "";
+		case en:
+			return "** additional loads:";
+		default:
+			return "** additional loads:";
+		}
+	}
+
+	// LANG
+	// TODO it
+	public static String getAdditionalLoadTextItem1(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "gering: einzelner Skifahrer / Snowboarder, sanft schwingend, nicht stürzend; Schneeschuhgeher; Gruppe mit Entlastungsabständen (>10m)";
+		case it:
+			return "";
+		case en:
+			return "low: individual skier / snowboarder, riding softly, not falling; snowshoer; group with good spacing (minimum 10m) keeping distances";
+		default:
+			return "low: individual skier / snowboarder, riding softly, not falling; snowshoer; group with good spacing (minimum 10m) keeping distances";
+		}
+	}
+
+	// LANG
+	// TODO it
+	public static String getAdditionalLoadTextItem2(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "gross: zwei oder mehrere Skifahrer / Snowboarder etc. ohne Entlastungsabstände; Pistenfahrzeug; Sprengung; einzelner Fussgänger / Alpinist";
+		case it:
+			return "";
+		case en:
+			return "high: two or more skiers / snowboarders etc. without good spacing (or without intervals); snowmachine; explosives; single hiker/climber";
+		default:
+			return "high: two or more skiers / snowboarders etc. without good spacing (or without intervals); snowmachine; explosives; single hiker/climber";
 		}
 	}
 
