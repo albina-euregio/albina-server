@@ -183,7 +183,7 @@ public class PdfUtil {
 
 		float leadingHeadline = 1.f;
 		float leadingText = 1.2f;
-		float paddingLeft = 15.f;
+		float paddingLeft = 10.f;
 		float regionMapSize = 100;
 
 		float[] columnWidths = { 1 };
@@ -193,9 +193,10 @@ public class PdfUtil {
 
 		Paragraph dangerRatingHeadline = new Paragraph(AlbinaUtil.getDangerRatingText(avalancheBulletin, lang))
 				.setFont(openSansBoldFont).setFontSize(14)
-				.setFontColor(getDangerRatingColor(avalancheBulletin.getHighestDangerRating()))
+				.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating()))
 				.setMultipliedLeading(leadingHeadline);
 		cell = new Cell(1, 10).add(dangerRatingHeadline);
+		cell.setBackgroundColor(getDangerRatingBackgroundColor(avalancheBulletin.getHighestDangerRating()));
 		cell.setTextAlignment(TextAlignment.LEFT);
 		cell.setPaddingLeft(paddingLeft);
 		cell.setBorder(Border.NO_BORDER);
@@ -835,6 +836,40 @@ public class PdfUtil {
 			return dangerLevel5ColorRed;
 		default:
 			return whiteColor;
+		}
+	}
+
+	private Color getDangerRatingBackgroundColor(DangerRating dangerRating) {
+		switch (dangerRating) {
+		case low:
+			return dangerLevel1Color;
+		case moderate:
+			return dangerLevel2Color;
+		case considerable:
+			return whiteColor;
+		case high:
+			return whiteColor;
+		case very_high:
+			return whiteColor;
+		default:
+			return whiteColor;
+		}
+	}
+
+	private Color getDangerRatingTextColor(DangerRating dangerRating) {
+		switch (dangerRating) {
+		case low:
+			return greyDarkColor;
+		case moderate:
+			return greyDarkColor;
+		case considerable:
+			return dangerLevel3Color;
+		case high:
+			return dangerLevel4Color;
+		case very_high:
+			return dangerLevel5ColorRed;
+		default:
+			return greyDarkColor;
 		}
 	}
 
