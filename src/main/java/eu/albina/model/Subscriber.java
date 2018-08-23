@@ -132,4 +132,12 @@ public class Subscriber {
 
 		return json;
 	}
+
+	public boolean affectsRegion(String region) {
+		if (getRegions() != null)
+			for (String entry : getRegions())
+				if (entry.startsWith(region))
+					return true;
+		return false;
+	}
 }
