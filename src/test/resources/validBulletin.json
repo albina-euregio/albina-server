@@ -58,9 +58,9 @@
 		"AT-07-11",
 		"AT-07-12"
 	],
-	"elevation": 2000,
 	"hasDaytimeDependency": false,
 	"hasElevationDependency": true,
+	"treeline" : true,
 	"forenoon": {
 		"dangerRatingAbove": "considerable",
 		"dangerRatingBelow": "moderate",
