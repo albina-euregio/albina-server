@@ -53,38 +53,41 @@ public class AlbinaUtil {
 	public static final String dangerRatingColorMissing = "#969696";
 	public static final String greyDarkColor = "#565F61";
 
-	public static final String dp1De = "Bodennahe Schwachschicht vom Frühwinter";
-	public static final String dp2De = "Gleitschnee";
-	public static final String dp3De = "Regen";
-	public static final String dp4De = "Kalt auf warm / warm auf kalt";
-	public static final String dp5De = "Schnee nach langer Kälteperiode";
-	public static final String dp6De = "Lockerer Schnee und Wind";
-	public static final String dp7De = "Schneearm neben schneereich";
-	public static final String dp8De = "Eingeschneiter Oberflächenreif";
-	public static final String dp9De = "Eingeschneiter Graupel";
-	public static final String dp10De = "Frühjahrssituation";
+	// LANG
+	public static final String dp1De = "gm 1: bodennahe schwachschicht vom frühwinter";
+	public static final String dp2De = "gm 2: gleitschnee";
+	public static final String dp3De = "gm 3: regen";
+	public static final String dp4De = "gm 4: kalt auf warm / warm auf kalt";
+	public static final String dp5De = "gm 5: schnee nach langer kälteperiode";
+	public static final String dp6De = "gm 6: lockerer schnee und wind";
+	public static final String dp7De = "gm 7: schneearm neben schneereich";
+	public static final String dp8De = "gm 8: eingeschneiter oberflächenreif";
+	public static final String dp9De = "gm 9: eingeschneiter graupel";
+	public static final String dp10De = "gm 10: frühjahrssituation";
 
-	public static final String dp1It = "La seconda nevicata";
-	public static final String dp2It = "Valanga per scivolamento di neve";
-	public static final String dp3It = "Pioggia";
-	public static final String dp4It = "Freddo su caldo / caldo su freddo";
-	public static final String dp5It = "Neve dopo un lungo periodo di freddo";
-	public static final String dp6It = "Neve fresca fredda a debole coesione e vento";
-	public static final String dp7It = "Zone con poca neve durante inverni ricchi di neve";
-	public static final String dp8It = "Brina di superficie sepolta";
-	public static final String dp9It = "Neve pallottolare coperta da neve fresca";
-	public static final String dp10It = "Situazione primaverile";
+	// LANG
+	public static final String dp1It = "st 1: la seconda nevicata";
+	public static final String dp2It = "st 2: valanga per scivolamento di neve";
+	public static final String dp3It = "st 3: pioggia";
+	public static final String dp4It = "st 4: freddo su caldo / caldo su freddo";
+	public static final String dp5It = "st 5: neve dopo un lungo periodo di freddo";
+	public static final String dp6It = "st 6: Neve fresca fredda a debole coesione e vento";
+	public static final String dp7It = "st 7: zone con poca neve durante inverni ricchi di neve";
+	public static final String dp8It = "st 8: brina di superficie sepolta";
+	public static final String dp9It = "st 9: neve pallottolare coperta da neve fresca";
+	public static final String dp10It = "st 10: situazione primaverile";
 
-	public static final String dp1En = "Deep persistent weak layer";
-	public static final String dp2En = "Gliding avalanche";
-	public static final String dp3En = "Rain";
-	public static final String dp4En = "Cold following warm / warm following cold";
-	public static final String dp5En = "Snowfall after a long period of cold";
-	public static final String dp6En = "Cold, loose snow and wind";
-	public static final String dp7En = "Snow-poor zones in snow-rich surrounding";
-	public static final String dp8En = "Surface hoar blanketed with snow";
-	public static final String dp9En = "Graupel blanketed with snow";
-	public static final String dp10En = "Springtime scenario";
+	// LANG
+	public static final String dp1En = "dp 1: deep persistent weak layer";
+	public static final String dp2En = "dp 2: gliding snow";
+	public static final String dp3En = "dp 3: rain";
+	public static final String dp4En = "dp 4: cold following warm / warm following cold";
+	public static final String dp5En = "dp 5: snowfall after a long period of cold";
+	public static final String dp6En = "dp 6: cold, loose snow and wind";
+	public static final String dp7En = "dp 7: snow-poor zones in snow-rich surrounding";
+	public static final String dp8En = "dp 8: surface hoar blanketed with snow";
+	public static final String dp9En = "dp 9: graupel blanketed with snow";
+	public static final String dp10En = "dp 10: springtime scenario";
 
 	// REGION
 	public static int getRegionCount(String region) {

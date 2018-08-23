@@ -869,7 +869,7 @@ public class PdfUtil {
 				overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - 230, 500);
 				canvas.add(overviewMapAMImg);
 				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14).moveText(pageSize.getWidth() / 2 - 226, 714)
-						.setColor(greyDarkColor, true).showText("AM").endText();
+						.setColor(greyDarkColor, true).showText(GlobalVariables.getAMText(lang)).endText();
 
 				ImageData overviewMapPMImageData = ImageDataFactory
 						.create(IOUtils.toByteArray(this.getClass().getClassLoader()
@@ -879,7 +879,7 @@ public class PdfUtil {
 				overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 + 10, 500);
 				canvas.add(overviewMapPMImg);
 				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14).moveText(pageSize.getWidth() / 2 + 14, 714)
-						.setColor(greyDarkColor, true).showText("PM").endText();
+						.setColor(greyDarkColor, true).showText(GlobalVariables.getPMText(lang)).endText();
 			} else {
 				ImageData overviewMapImageData = ImageDataFactory
 						.create(IOUtils.toByteArray(this.getClass().getClassLoader()

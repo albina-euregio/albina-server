@@ -64,13 +64,13 @@ public class GlobalVariables {
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
 
 	// LANG
-	public static DateTimeFormatter dateTimeEn = DateTimeFormat.forPattern(" dd.MM.yyyy");
+	public static DateTimeFormatter dateTimeEn = DateTimeFormat.forPattern(" dd MM yyyy");
 	public static DateTimeFormatter dateTimeDe = DateTimeFormat.forPattern(" dd.MM.yyyy");
 	public static DateTimeFormatter dateTimeIt = DateTimeFormat.forPattern(" dd.MM.yyyy");
 	// LANG
-	public static DateTimeFormatter publicationDateTimeEn = DateTimeFormat.forPattern("dd.MM.yyyy, hh:mm aa");
-	public static DateTimeFormatter publicationDateTimeDe = DateTimeFormat.forPattern("dd.MM.yyyy, HH:mm");
-	public static DateTimeFormatter publicationDateTimeIt = DateTimeFormat.forPattern("dd.MM.yyyy, HH:mm");
+	public static DateTimeFormatter publicationDateTimeEn = DateTimeFormat.forPattern("dd MM yyyy, HH:mm");
+	public static DateTimeFormatter publicationDateTimeDe = DateTimeFormat.forPattern("dd.MM.yyyy 'um' HH:mm");
+	public static DateTimeFormatter publicationDateTimeIt = DateTimeFormat.forPattern("dd.MM.yyyy 'alle ore' HH:mm");
 
 	// REGION
 	public static String codeTrentino = "IT-32-TN";
@@ -371,9 +371,9 @@ public class GlobalVariables {
 	public static String getPublishedText(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Publiziert ";
+			return "Veröffentlicht am ";
 		case it:
-			return "Pubblicato ";
+			return "Pubbliccato il ";
 		case en:
 			return "Published ";
 		default:
@@ -406,9 +406,9 @@ public class GlobalVariables {
 				case it:
 					return "Tendenza: Pericolo valanghe in aumento";
 				case en:
-					return "Tendency: Avalanche danger increasing";
+					return "Tendency: Increasing avalanche danger";
 				default:
-					return "Tendency: Avalanche danger increasing";
+					return "Tendency: Increasing avalanche danger";
 				}
 			case steady:
 				switch (lang) {
@@ -417,9 +417,9 @@ public class GlobalVariables {
 				case it:
 					return "Tendenza: Pericolo valanghe stabile";
 				case en:
-					return "Tendency: Avalanche danger stays the same";
+					return "Tendency: Constant avalanche danger";
 				default:
-					return "Tendency: Avalanche danger stays the same";
+					return "Tendency: Constant avalanche danger";
 				}
 			case decreasing:
 				switch (lang) {
@@ -428,9 +428,9 @@ public class GlobalVariables {
 				case it:
 					return "Tendenza: Pericolo valanghe in diminuazione";
 				case en:
-					return "Tendency: Avalanche danger decreasing";
+					return "Tendency: Decreasing avalanche danger";
 				default:
-					return "Tendency: Avalanche danger decreasing";
+					return "Tendency: Decreasing avalanche danger";
 				}
 			default:
 				return "";
@@ -445,7 +445,7 @@ public class GlobalVariables {
 		case de:
 			return "Gefahrenmuster";
 		case it:
-			return "Situazioni tipo";
+			return "Situazione tipo";
 		case en:
 			return "Danger patterns";
 		default:
@@ -1263,7 +1263,7 @@ public class GlobalVariables {
 		case de:
 			return "am ";
 		case it:
-			return "su ";
+			return "per ";
 		default:
 			return "on ";
 		}
