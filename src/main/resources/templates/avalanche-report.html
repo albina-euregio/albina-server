@@ -368,8 +368,14 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 }
 
 .avalanche-situation-aspects-img {
-	width: 60px;
-	height: 60px;
+	max-width: 60px;
+	max-height: 60px;
+	display: inline-block;
+}
+
+.avalanche-situation-elevation-img {
+	max-width: 80px;
+	max-height: 48px;
 	display: inline-block;
 }
 
@@ -649,7 +655,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 																<div style="width: 80px; height: 48px;">
 																	<div style="max-height: 0; max-width: 0; overflow: visible;">
 																		<div style="width: 80px; height: 48px;">
-																			<img style="width: 80px; height: 48px; display: inline-block;" src="${bulletin.avalancheSituation1.elevation.symbol}"/>
+																			<img class="avalanche-situation-elevation-img" src="${bulletin.avalancheSituation1.elevation.symbol}"/>
 																		</div>
 																	</div>
 																	<div style="max-height: 0; max-width: 0; overflow: visible;">
@@ -725,7 +731,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 																<div style="width: 80px; height: 48px;">
 																	<div style="max-height: 0; max-width: 0; overflow: visible;">
 																		<div style="width: 80px; height: 48px;">
-																			<img style="width: 80px; height: 48px; display: inline-block;" src="${bulletin.avalancheSituation2.elevation.symbol}"/>
+																			<img class="avalanche-situation-elevation-img" src="${bulletin.avalancheSituation2.elevation.symbol}"/>
 																		</div>
 																	</div>
 																	<div style="max-height: 0; max-width: 0; overflow: visible;">
@@ -851,7 +857,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 																	<div style="width: 80px; height: 48px;">
 																		<div style="max-height: 0; max-width: 0; overflow: visible;">
 																			<div style="width: 80px; height: 48px;">
-																				<img style="width: 80px; height: 48px; display: inline-block;" src="${bulletin.pm.avalancheSituation1.elevation.symbol}"/>
+																				<img class="avalanche-situation-elevation-img" src="${bulletin.pm.avalancheSituation1.elevation.symbol}"/>
 																			</div>
 																		</div>
 																		<div style="max-height: 0; max-width: 0; overflow: visible;">
@@ -927,7 +933,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 																	<div style="width: 80px; height: 48px;">
 																		<div style="max-height: 0; max-width: 0; overflow: visible;">
 																			<div style="width: 80px; height: 48px;">
-																				<img style="width: 80px; height: 48px; display: inline-block;" src="${bulletin.pm.avalancheSituation2.elevation.symbol}"/>
+																				<img class="avalanche-situation-elevation-img" src="${bulletin.pm.avalancheSituation2.elevation.symbol}"/>
 																			</div>
 																		</div>
 																		<div style="max-height: 0; max-width: 0; overflow: visible;">
