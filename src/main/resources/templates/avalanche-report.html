@@ -272,27 +272,11 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 	}
 }
 
-@media screen and (min-width: 500px)  {
-	.overview-map {
-		width: 49%!important;
-		min-width: 49%;
-		max-width: 400px;
-		float: left;
-		text-align: center;
-	}
-	.overview-map-pm {
-		width: 49%!important;
-		min-width: 49%;
-		max-width: 400px;
-		float: right;
-		text-align: center;
-	}
-}
-
 .map-daytime-text {
 	color: #565f61;
 	font-size: 22px;
-	margin-bottom: 0;
+	margin-bottom: 5px;
+	text-align: center;
 }
 
 .daytime-text {
@@ -301,7 +285,6 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 }
 
 .daytime-text-div {
-	vertical-align: top;
 	padding-top: 5px;
 }
 
@@ -439,10 +422,9 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 		<!-- BODY -->
 		<table class="body-wrap" bgcolor="#FFFFFF">
 			<tr>
-				<td></td>
 				<td class="container" align="" bgcolor="#FFFFFF">
 					<div class="content">
-						<table class="overview-map" style="padding: 15px 0;">
+						<table style="padding: 15px 0;">
 							<tr>
 								<td>
 									<h2 class="map-daytime-text">${text.am}</h2>
@@ -450,25 +432,23 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 							</tr>
 							<tr>
 								<td>
-									<p style="margin-bottom: 0px;">
+									<p style="margin-bottom: 0px; text-align: center;">
 										<a href="${link.website}">
-											<img src="${image.map.overview}"/>
+											<img style="max-width: 600px;" src="${image.map.overview}"/>
 										</a>
 									</p>
 								</td>
 							</tr>
-						</table>
-						<table class="overview-map-pm" style="padding: 15px 0;">
 							<tr>
 								<td>
-									<h2 class="map-daytime-text">${text.pm}</h2>
+									<h2 class="map-daytime-text" style="margin-top: 15px;">${text.pm}</h2>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									<p style="margin-bottom: 0px;">
+									<p style="margin-bottom: 0px; text-align: center;">
 										<a href="${link.website}">
-											<img src="${image.map.overviewPM}"/>
+											<img style="max-width: 600px;" src="${image.map.overviewPM}"/>
 										</a>
 									</p>
 								</td>
@@ -555,6 +535,8 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 												<td class="daytime-text-div">
 													<h2 class="daytime-text">${bulletin.textam}</h2>
 												</td>
+											</tr>
+											<tr>
 												<td style="width: 150px; padding-right: 10px;">
 													<img class="detail-map" src="${bulletin.map}"/>
 												</td>
@@ -757,6 +739,8 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 													<td class="daytime-text-div">
 														<h2 class="daytime-text">${bulletin.textpm}</h2>
 													</td>
+												</tr>
+												<tr>
 													<td style="width: 150px;">
 														<img class="detail-map" src="${bulletin.map}"/>
 													</td>
