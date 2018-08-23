@@ -29,7 +29,7 @@ public class GlobalVariables {
 
 	private static boolean createMaps = false;
 	private static boolean createPdf = true;
-	private static boolean sendEmails = false;
+	private static boolean sendEmails = true;
 	private static boolean publishToSocialMedia = false;
 	private static boolean publishAt5PM = true;
 	private static boolean publishAt8AM = true;
@@ -862,6 +862,20 @@ public class GlobalVariables {
 			return "Avalanche.report";
 		default:
 			return "Avalanche.report";
+		}
+	}
+
+	// LANG
+	public static String getConfirmationEmailSubject(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Anmeldung Lawinen.report";
+		case it:
+			return "Registrazione Valanghe.report";
+		case en:
+			return "Subscription Avalanche.report";
+		default:
+			return "Subscription Avalanche.report";
 		}
 	}
 
