@@ -940,6 +940,34 @@ public class GlobalVariables {
 	}
 
 	// LANG
+	public static String getAMText(LanguageCode lang) {
+		switch (lang) {
+		case en:
+			return "AM";
+		case de:
+			return "Vormittag";
+		case it:
+			return "Mattina";
+		default:
+			return "AM";
+		}
+	}
+
+	// LANG
+	public static String getPMText(LanguageCode lang) {
+		switch (lang) {
+		case en:
+			return "PM";
+		case de:
+			return "Nachmittag";
+		case it:
+			return "Pommeriggio";
+		default:
+			return "PM";
+		}
+	}
+
+	// LANG
 	public static String getDangerRatingTextLong(DangerRating dangerRating, LanguageCode lang) {
 		switch (dangerRating) {
 		case low:
