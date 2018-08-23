@@ -400,8 +400,8 @@ public class EmailUtil {
 			text.put("follow", GlobalVariables.getFollowUs(lang));
 			text.put("unsubscribe", GlobalVariables.getUnsubscribe(lang));
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-				text.put("am", "AM");
-				text.put("pm", "PM");
+				text.put("am", GlobalVariables.getAMText(lang));
+				text.put("pm", GlobalVariables.getPMText(lang));
 			} else {
 				text.put("am", "");
 				text.put("pm", "");
@@ -424,8 +424,8 @@ public class EmailUtil {
 
 				bulletin.put("stylepm", getPMStyle(avalancheBulletin.isHasDaytimeDependency()));
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("textam", "AM:");
-					bulletin.put("textpm", "PM:");
+					bulletin.put("textam", GlobalVariables.getAMText(lang));
+					bulletin.put("textpm", GlobalVariables.getPMText(lang));
 				} else {
 					bulletin.put("textam", "");
 					bulletin.put("textpm", "");
