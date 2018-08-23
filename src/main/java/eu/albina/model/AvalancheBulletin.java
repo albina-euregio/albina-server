@@ -27,7 +27,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -646,15 +645,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					return true;
 
 		return false;
-	}
-
-	public boolean hasDaytimeDependency() {
-		Duration duration = new Duration(validFrom, validUntil);
-		long standardHours = duration.getStandardHours();
-		if (standardHours < 24)
-			return true;
-		else
-			return false;
 	}
 
 	public DangerRating getHighestDangerRating() {
