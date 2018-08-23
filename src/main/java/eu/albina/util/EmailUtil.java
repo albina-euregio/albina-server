@@ -2,7 +2,6 @@ package eu.albina.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
@@ -27,12 +26,14 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
+import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -109,26 +110,10 @@ public class EmailUtil {
 			message.addHeader("format", "flowed");
 			message.addHeader("Content-Transfer-Encoding", "8bit");
 
-			switch (subscriber.getLanguage()) {
-			case de:
-				message.setSubject("", "UTF-8");
-				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Lawinen.report"));
-				break;
-			case it:
-				message.setSubject("", "UTF-8");
-				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Valanghe.report"));
-				break;
-			case en:
-				message.setSubject("", "UTF-8");
-				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
-				break;
-			default:
-				message.setSubject("", "UTF-8");
-				message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername, "Avalanche.report"));
-				break;
-			}
-
-			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername));
+			message.setSubject(GlobalVariables.getConfirmationEmailSubject(subscriber.getLanguage()),
+					GlobalVariables.getEmailEncoding());
+			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
+					GlobalVariables.getEmailFromPersonal(subscriber.getLanguage())));
 
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(subscriber.getEmail()));
 
@@ -139,7 +124,7 @@ public class EmailUtil {
 			String htmlText = createConfirmationEmailHtml(token, subscriber.getLanguage());
 			messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
 			multipart.addBodyPart(messageBodyPart);
-			message.setContent(multipart, "utf-8");
+			message.setContent(multipart, GlobalVariables.getEmailEncoding());
 			Transport.send(message);
 
 			logger.debug("Confirmation email sent to " + subscriber.getEmail());
@@ -165,20 +150,14 @@ public class EmailUtil {
 	}
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
-		// TODO filter bulletins based on region
-		for (String region : regions) {
-			List<AvalancheBulletin> bulletinList = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin avalancheBulletin : bulletins) {
-				if (avalancheBulletin.affectsRegion(region))
-					bulletinList.add(avalancheBulletin);
-			}
-			for (LanguageCode lang : GlobalVariables.languages) {
-				// TODO get recipients
-				// List<String> recipients = SubscriberService.getInstance().getRecipients(lang,
-				// region);
-				List<String> recipients = new ArrayList<String>();
-				recipients.add("norbert.lanzanasto@tirol.gv.at");
-				sendBulletinEmail(bulletinList, lang, recipients);
+		for (LanguageCode lang : GlobalVariables.languages) {
+			try {
+				// get recipients
+				List<String> recipients = SubscriberController.getInstance().getSubscriberEmails(lang, regions);
+				sendBulletinEmail(bulletins, lang, recipients);
+			} catch (HibernateException e) {
+				logger.error("Subscribers could not be loaded for " + lang + ": " + e.getMessage());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -208,27 +187,31 @@ public class EmailUtil {
 			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
 			message.addHeader("format", "flowed");
 			message.addHeader("Content-Transfer-Encoding", "8bit");
-			message.setSubject(GlobalVariables.getEmailSubject(lang), GlobalVariables.getEmailEncoding());
+			message.setSubject(GlobalVariables.getEmailSubject(lang) + AlbinaUtil.getDate(bulletins, lang),
+					GlobalVariables.getEmailEncoding());
 			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
 					GlobalVariables.getEmailFromPersonal(lang)));
 
-			for (String recipient : recipients)
-				message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+			if (recipients != null && !recipients.isEmpty()) {
+				for (String recipient : recipients)
+					message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 
-			MimeMultipart multipart = new MimeMultipart("related");
+				MimeMultipart multipart = new MimeMultipart("related");
 
-			// add html
-			MimeBodyPart messageBodyPart = new MimeBodyPart();
-			String htmlText = createBulletinEmailHtml(bulletins, lang);
-			messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
-			multipart.addBodyPart(messageBodyPart);
+				// add html
+				MimeBodyPart messageBodyPart = new MimeBodyPart();
+				String htmlText = createBulletinEmailHtml(bulletins, lang);
+				messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
+				multipart.addBodyPart(messageBodyPart);
 
-			// TODO add maps
+				// TODO add maps
 
-			message.setContent(multipart, "utf-8");
-			Transport.send(message);
+				message.setContent(multipart, GlobalVariables.getEmailEncoding());
+				Transport.send(message);
 
-			logger.debug("Emails sent in " + lang + ".");
+				logger.debug("Emails sent in " + lang + ".");
+			} else
+				logger.debug("No recipients for emails in " + lang + ".");
 		} catch (MessagingException e) {
 			logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
 			e.printStackTrace();
@@ -321,8 +304,8 @@ public class EmailUtil {
 			Template temp = cfg.getTemplate("confirmation-email.html");
 
 			// Merge template and model
-			// Writer out = new StringWriter();
-			Writer out = new OutputStreamWriter(System.out);
+			Writer out = new StringWriter();
+			// Writer out = new OutputStreamWriter(System.out);
 			temp.process(root, out);
 
 			return out.toString();
@@ -610,11 +593,10 @@ public class EmailUtil {
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
-		dangerRating.put("symbol",
-				GlobalVariables.getServerImagesUrl() + "warning_pictos/level_" + AlbinaUtil.getWarningLevelId(
-						avalancheBulletin.getForenoon(), avalancheBulletin.isHasElevationDependency()) + ".png");
+		dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/level_"
+				+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency()) + ".png");
 		// dangerRating.put("symbol", "cid:warning_picto/" +
-		// getWarningLevelId(avalancheBulletin.getForenoon(),
+		// getWarningLevelId(daytimeBulletin,
 		// avalancheBulletin.isHasElevationDependency()));
 		if (avalancheBulletin.isHasElevationDependency()) {
 			if (avalancheBulletin.getTreeline())
@@ -632,7 +614,8 @@ public class EmailUtil {
 
 		// avalanche situation 1
 		Map<String, Object> avalancheSituation1 = new HashMap<>();
-		if (daytimeBulletin.getAvalancheSituation1() != null) {
+		if (daytimeBulletin.getAvalancheSituation1() != null
+				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
 			if (daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
 				avalancheSituation1.put("symbol", GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/"
 						+ daytimeBulletin.getAvalancheSituation1().getAvalancheSituation().toStringId() + ".png");
@@ -647,7 +630,8 @@ public class EmailUtil {
 			}
 			avalancheSituation1.put("aspectBg", GlobalVariables.getServerImagesUrl() + "aspects/exposition_bg.png");
 			// avalancheSituation1.put("aspectBg", "cid:aspect/bg");
-			if (daytimeBulletin.getAvalancheSituation1().getAspects() != null) {
+			if (daytimeBulletin.getAvalancheSituation1().getAspects() != null
+					&& !daytimeBulletin.getAvalancheSituation1().getAspects().isEmpty()) {
 				Set<Aspect> aspects = daytimeBulletin.getAvalancheSituation1().getAspects();
 				for (Aspect aspect : Aspect.values()) {
 					if (aspects.contains(aspect)) {
@@ -717,11 +701,10 @@ public class EmailUtil {
 		} else {
 			avalancheSituation1.put("symbol", "");
 			avalancheSituation1.put("text", "");
-			avalancheSituation1.put("aspectBg", GlobalVariables.getServerImagesUrl() + "aspects/exposition_bg.png");
+			avalancheSituation1.put("aspectBg", "");
 			// avalancheSituation1.put("aspectBg", "cid:aspect/bg");
 			for (Aspect aspect : Aspect.values()) {
-				avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
-						GlobalVariables.getServerImagesUrl() + "aspects/exposition_empty.svg");
+				avalancheSituation1.put("aspect" + aspect.toUpperCaseString(), "");
 				// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
 				// "cid:aspect/empty");
 			}
@@ -735,7 +718,8 @@ public class EmailUtil {
 
 		// avalanche situation 2
 		Map<String, Object> avalancheSituation2 = new HashMap<>();
-		if (daytimeBulletin.getAvalancheSituation2() != null) {
+		if (daytimeBulletin.getAvalancheSituation2() != null
+				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
 			if (daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
 				avalancheSituation2.put("symbol", GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/"
 						+ daytimeBulletin.getAvalancheSituation2().getAvalancheSituation().toStringId() + ".png");
@@ -750,7 +734,8 @@ public class EmailUtil {
 			}
 			avalancheSituation2.put("aspectBg", GlobalVariables.getServerImagesUrl() + "aspects/exposition_bg.png");
 			// avalancheSituation2.put("aspectBg", "cid:aspect/bg");
-			if (daytimeBulletin.getAvalancheSituation2().getAspects() != null) {
+			if (daytimeBulletin.getAvalancheSituation2().getAspects() != null
+					&& !daytimeBulletin.getAvalancheSituation2().getAspects().isEmpty()) {
 				Set<Aspect> aspects = daytimeBulletin.getAvalancheSituation2().getAspects();
 				for (Aspect aspect : Aspect.values()) {
 					if (aspects.contains(aspect)) {
@@ -820,11 +805,10 @@ public class EmailUtil {
 		} else {
 			avalancheSituation2.put("symbol", "");
 			avalancheSituation2.put("text", "");
-			avalancheSituation2.put("aspectBg", GlobalVariables.getServerImagesUrl() + "aspects/exposition_bg.png");
+			avalancheSituation2.put("aspectBg", "");
 			// avalancheSituation2.put("aspectBg", "cid:aspect/bg");
 			for (Aspect aspect : Aspect.values()) {
-				avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
-						GlobalVariables.getServerImagesUrl() + "aspects/exposition_empty.png");
+				avalancheSituation2.put("aspect" + aspect.toUpperCaseString(), "");
 				// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
 				// "cid:aspect/empty");
 			}
