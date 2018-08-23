@@ -536,8 +536,7 @@ public class EmailUtil {
 
 				bulletin.put("dangerratingcolorstyle",
 						getDangerRatingColorStyle(avalancheBulletin.getHighestDangerRating()));
-				bulletin.put("headlinestyle",
-						getHeadlineStyle(AlbinaUtil.getDangerRatingColor(avalancheBulletin.getHighestDangerRating())));
+				bulletin.put("headlinestyle", getHeadlineStyle(avalancheBulletin.getHighestDangerRating()));
 
 				addDaytimeInfo(lang, avalancheBulletin, bulletin, false);
 				Map<String, Object> pm = new HashMap<>();
@@ -830,9 +829,15 @@ public class EmailUtil {
 					+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
 	}
 
-	private String getHeadlineStyle(String dangerRatingColor) {
-		return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.1; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-				+ dangerRatingColor + ";\"";
+	private String getHeadlineStyle(DangerRating dangerRating) {
+		if (dangerRating.equals(DangerRating.low) || dangerRating.equals(DangerRating.moderate)) {
+			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
+					+ AlbinaUtil.greyDarkColor + "; background-color: " + AlbinaUtil.getDangerRatingColor(dangerRating)
+					+ ";\"";
+		} else {
+			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
+					+ AlbinaUtil.getDangerRatingColor(dangerRating) + ";\"";
+		}
 	}
 
 	private String getDangerLevel5Style() {

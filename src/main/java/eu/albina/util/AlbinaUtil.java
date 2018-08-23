@@ -51,6 +51,7 @@ public class AlbinaUtil {
 	public static final String dangerRatingColorHigh = "#FF0000";
 	public static final String dangerRatingColorVeryHigh = "#800000";
 	public static final String dangerRatingColorMissing = "#969696";
+	public static final String greyDarkColor = "#565F61";
 
 	public static final String dp1De = "Bodennahe Schwachschicht vom Frühwinter";
 	public static final String dp2De = "Gleitschnee";
