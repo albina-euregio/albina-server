@@ -3,16 +3,19 @@ package eu.albina.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -22,7 +25,8 @@ import eu.albina.util.HibernateUtil;
  *
  */
 public class SubscriberController {
-	private static Logger logger = LoggerFactory.getLogger(SubscriberController.class);
+	// private static Logger logger =
+	// LoggerFactory.getLogger(SubscriberController.class);
 	private static SubscriberController instance = null;
 
 	private SubscriberController() {
@@ -59,8 +63,13 @@ public class SubscriberController {
 
 	public Serializable createSubscriber(Subscriber subscriber)
 			throws HibernateException, URISyntaxException, IOException, AlbinaException {
-		if (getSubscriber(subscriber.getEmail()) != null)
-			deleteSubscriber(subscriber.getEmail());
+
+		try {
+			Subscriber s = getSubscriber(subscriber.getEmail());
+			if (s != null)
+				deleteSubscriber(subscriber.getEmail());
+		} catch (AlbinaException e) {
+		}
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -70,7 +79,7 @@ public class SubscriberController {
 			transaction.commit();
 
 			// TODO enable
-			// EmailUtil.getInstance().sendConfirmationEmail(subscriber);
+			EmailUtil.getInstance().sendConfirmationEmail(subscriber);
 
 			return subscriber.getEmail();
 		} catch (HibernateException he) {
@@ -126,5 +135,55 @@ public class SubscriberController {
 		} finally {
 			entityManager.close();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Subscriber> getSubscribers(LanguageCode lang, List<String> regions) throws HibernateException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+
+			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage)
+					.setParameter("language", lang).getResultList();
+			List<Subscriber> results = new ArrayList<Subscriber>();
+			for (Subscriber subscriber : subscribers) {
+				for (String region : regions)
+					if (subscriber.affectsRegion(region)) {
+						results.add(subscriber);
+						break;
+					}
+			}
+
+			for (Subscriber subscriber : results)
+				initializeSubscriber(subscriber);
+
+			transaction.commit();
+			return results;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw he;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	public List<String> getSubscriberEmails(LanguageCode lang, List<String> regions) throws HibernateException {
+		List<String> result = new ArrayList<String>();
+		List<Subscriber> subscribers = getSubscribers(lang, regions);
+
+		for (Subscriber subscriber : subscribers)
+			result.add(subscriber.getEmail());
+
+		return result;
+	}
+
+	private void initializeSubscriber(Subscriber subscriber) {
+		Hibernate.initialize(subscriber.getEmail());
+		Hibernate.initialize(subscriber.getConfirmed());
+		Hibernate.initialize(subscriber.getLanguage());
+		Hibernate.initialize(subscriber.getPdfAttachment());
+		Hibernate.initialize(subscriber.getRegions());
 	}
 }
