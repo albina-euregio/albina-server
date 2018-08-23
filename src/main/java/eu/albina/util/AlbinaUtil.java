@@ -456,7 +456,7 @@ public class AlbinaUtil {
 
 	public static boolean hasDaytimeDependency(List<AvalancheBulletin> bulletins) {
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			if (avalancheBulletin.hasDaytimeDependency())
+			if (avalancheBulletin.isHasDaytimeDependency())
 				return true;
 		}
 		return false;
