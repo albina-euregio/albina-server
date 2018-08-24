@@ -71,6 +71,10 @@ public class GlobalVariables {
 	public static DateTimeFormatter publicationDateTimeEn = DateTimeFormat.forPattern("dd MM yyyy, HH:mm");
 	public static DateTimeFormatter publicationDateTimeDe = DateTimeFormat.forPattern("dd.MM.yyyy 'um' HH:mm");
 	public static DateTimeFormatter publicationDateTimeIt = DateTimeFormat.forPattern("dd.MM.yyyy 'alle ore' HH:mm");
+	// LANG
+	public static DateTimeFormatter tendencyDateTimeEn = DateTimeFormat.forPattern(" dd MM yyyy");
+	public static DateTimeFormatter tendencyDateTimeDe = DateTimeFormat.forPattern(", 'den' dd.MM.yyyy");
+	public static DateTimeFormatter tendencyDateTimeIt = DateTimeFormat.forPattern(" 'il' dd.MM.yyyy");
 
 	// REGION
 	public static String codeTrentino = "IT-32-TN";
@@ -901,13 +905,13 @@ public class GlobalVariables {
 	public static DateTimeFormatter getDateTimeFormatter(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return dateTimeDe;
+			return tendencyDateTimeDe;
 		case it:
-			return dateTimeIt;
+			return tendencyDateTimeIt;
 		case en:
-			return dateTimeEn;
+			return tendencyDateTimeEn;
 		default:
-			return dateTimeEn;
+			return tendencyDateTimeEn;
 		}
 	}
 

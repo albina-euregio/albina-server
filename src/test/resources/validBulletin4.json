@@ -58,7 +58,7 @@
     "dangerPattern1": "dp3",
     "forenoon": {
       "avalancheSituation2": {
-        "elevationLow": 100,
+        "treelineLow": true,
         "aspects": [
           "N",
           "W",
@@ -66,11 +66,11 @@
           "NE",
           "E"
         ],
-        "elevationHigh": 200,
+        "elevationHigh": 2500,
         "avalancheSituation": "wind_drifted_snow"
       },
       "avalancheSituation1": {
-        "elevationLow": 2000,
+        "elevationLow": 1000,
         "aspects": [
           "SE",
           "S",
@@ -78,7 +78,7 @@
           "NE",
           "E"
         ],
-        "elevationHigh": 2000,
+        "treelineHigh": true,
         "avalancheSituation": "new_snow"
       },
       "id": "881add68-79d6-46e4-b4b0-04396392645d",
