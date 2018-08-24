@@ -483,6 +483,8 @@ public class EmailUtil {
 						} else {
 							bulletin.put("dangerPatternsHeadline", "");
 							bulletin.put("dangerpatternstyle", getDangerPatternStyle(false));
+							bulletin.put("dangerPattern1", "");
+							bulletin.put("dangerPattern2", "");
 						}
 					} else {
 						bulletin.put("snowpackStructureHeadline", "");
