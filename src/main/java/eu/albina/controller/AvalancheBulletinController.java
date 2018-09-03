@@ -473,6 +473,14 @@ public class AvalancheBulletinController {
 		return duplicateRegion;
 	}
 
+	private Set<String> getOwnRegions(Set<String> regions, String region) {
+		Set<String> result = new HashSet<String>();
+		for (String entry : regions)
+			if (entry.startsWith(region))
+				result.add(entry);
+		return result;
+	}
+
 	@SuppressWarnings("unchecked")
 	public JSONArray checkBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
 		JSONArray json = new JSONArray();
@@ -502,8 +510,8 @@ public class AvalancheBulletinController {
 
 			Set<String> definedRegions = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
-				definedRegions.addAll(bulletin.getSavedRegions());
-				definedRegions.addAll(bulletin.getPublishedRegions());
+				definedRegions.addAll(getOwnRegions(bulletin.getSavedRegions(), region));
+				definedRegions.addAll(getOwnRegions(bulletin.getPublishedRegions(), region));
 
 				if (!pendingSuggestions)
 					for (String entry : bulletin.getSuggestedRegions())
