@@ -158,7 +158,8 @@ public class AvalancheBulletinController {
 
 			for (AvalancheBulletin avalancheBulletin : results.values()) {
 				// bulletin has to be removed
-				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId()))
+				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId())
+						&& avalancheBulletin.getOwnerRegion().startsWith(region))
 					entityManager.remove(avalancheBulletin);
 			}
 
@@ -518,36 +519,38 @@ public class AvalancheBulletinController {
 						if (entry.startsWith(region))
 							pendingSuggestions = true;
 
-				if (missingAvActivityHighlights || bulletin.getAvActivityHighlightsTextcat() == null
-						|| bulletin.getAvActivityHighlightsTextcat().isEmpty())
-					missingAvActivityHighlights = true;
-				if (missingAvActivityComment || bulletin.getAvActivityCommentTextcat() == null
-						|| bulletin.getAvActivityCommentTextcat().isEmpty())
-					missingAvActivityComment = true;
-				/*
-				 * if (missingSnowpackStructureHighlights ||
-				 * bulletin.getSnowpackStructureHighlightsTextcat() == null ||
-				 * bulletin.getSnowpackStructureHighlightsTextcat().isEmpty())
-				 * missingSnowpackStructureHighlights = true;
-				 */
-				if (missingSnowpackStructureComment || bulletin.getSnowpackStructureCommentTextcat() == null
-						|| bulletin.getSnowpackStructureCommentTextcat().isEmpty())
-					missingSnowpackStructureComment = true;
+				if (bulletin.affectsRegionWithoutSuggestions(region)) {
+					if (missingAvActivityHighlights || bulletin.getAvActivityHighlightsTextcat() == null
+							|| bulletin.getAvActivityHighlightsTextcat().isEmpty())
+						missingAvActivityHighlights = true;
+					if (missingAvActivityComment || bulletin.getAvActivityCommentTextcat() == null
+							|| bulletin.getAvActivityCommentTextcat().isEmpty())
+						missingAvActivityComment = true;
+					/*
+					 * if (missingSnowpackStructureHighlights ||
+					 * bulletin.getSnowpackStructureHighlightsTextcat() == null ||
+					 * bulletin.getSnowpackStructureHighlightsTextcat().isEmpty())
+					 * missingSnowpackStructureHighlights = true;
+					 */
+					if (missingSnowpackStructureComment || bulletin.getSnowpackStructureCommentTextcat() == null
+							|| bulletin.getSnowpackStructureCommentTextcat().isEmpty())
+						missingSnowpackStructureComment = true;
 
-				if (bulletin.getForenoon() == null
-						|| bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
-						|| (bulletin.getForenoon() != null && bulletin.isHasElevationDependency()
-								&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
-					missingDangerRating = true;
-				}
+					if (bulletin.getForenoon() == null
+							|| bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
+							|| (bulletin.getForenoon() != null && bulletin.isHasElevationDependency()
+									&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
+						missingDangerRating = true;
+					}
 
-				if (missingDangerRating || (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() == null)
-						|| (bulletin.isHasDaytimeDependency()
-								&& bulletin.getAfternoon().getDangerRatingAbove() == DangerRating.missing)
-						|| (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() != null
-								&& bulletin.isHasElevationDependency()
-								&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
-					missingDangerRating = true;
+					if (missingDangerRating || (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() == null)
+							|| (bulletin.isHasDaytimeDependency()
+									&& bulletin.getAfternoon().getDangerRatingAbove() == DangerRating.missing)
+							|| (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() != null
+									&& bulletin.isHasElevationDependency()
+									&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
+						missingDangerRating = true;
+					}
 				}
 			}
 

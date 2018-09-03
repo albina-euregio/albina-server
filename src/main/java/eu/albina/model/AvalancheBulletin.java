@@ -647,6 +647,19 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return false;
 	}
 
+	public boolean affectsRegionWithoutSuggestions(String region) {
+		if (getSavedRegions() != null)
+			for (String entry : getSavedRegions())
+				if (entry.startsWith(region))
+					return true;
+		if (getPublishedRegions() != null)
+			for (String entry : getPublishedRegions())
+				if (entry.startsWith(region))
+					return true;
+
+		return false;
+	}
+
 	public DangerRating getHighestDangerRating() {
 		DangerRating result = DangerRating.missing;
 		if (forenoon != null && forenoon.getDangerRatingAbove() != null
