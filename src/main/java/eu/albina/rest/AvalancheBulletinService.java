@@ -379,7 +379,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured({ Role.FORECASTER, Role.FOREMAN })
+	@Secured({ Role.FORECASTER })
 	@Path("/change")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
