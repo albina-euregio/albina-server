@@ -37,7 +37,7 @@ public class ChatService {
 	UriInfo uri;
 
 	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getJsonChatMessages(
@@ -63,7 +63,7 @@ public class ChatService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Path("/users")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

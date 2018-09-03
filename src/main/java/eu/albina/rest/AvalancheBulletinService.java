@@ -57,7 +57,7 @@ public class AvalancheBulletinService {
 	UriInfo uri;
 
 	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -98,7 +98,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@Path("/locked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -235,7 +235,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	// @Secured({ Role.ADMIN, Role.FORECASTER,
+	// @Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN,
 	// Role.OBSERVER })
 	@Path("/status")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -274,7 +274,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@Path("/status/publication")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -312,7 +312,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -335,7 +335,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured({ Role.FORECASTER })
+	@Secured({ Role.FORECASTER, Role.FOREMAN })
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletins(
@@ -379,7 +379,7 @@ public class AvalancheBulletinService {
 	}
 
 	@POST
-	@Secured({ Role.FORECASTER })
+	@Secured({ Role.FORECASTER, Role.FOREMAN })
 	@Path("/change")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -430,7 +430,7 @@ public class AvalancheBulletinService {
 	/*
 	 * @POST
 	 * 
-	 * @Secured({ Role.FORECASTER })
+	 * @Secured({ Role.FORECASTER, Role.FOREMAN })
 	 * 
 	 * @Consumes(MediaType.APPLICATION_JSON)
 	 * 
@@ -463,7 +463,7 @@ public class AvalancheBulletinService {
 	 * 
 	 * @PUT
 	 * 
-	 * @Secured({ Role.FORECASTER })
+	 * @Secured({ Role.FORECASTER, Role.FOREMAN })
 	 * 
 	 * @Path("/{bulletinId}")
 	 * 
@@ -495,7 +495,7 @@ public class AvalancheBulletinService {
 	 * 
 	 * @DELETE
 	 * 
-	 * @Secured({ Role.FORECASTER })
+	 * @Secured({ Role.FORECASTER, Role.FOREMAN })
 	 * 
 	 * @Path("/{bulletinId}")
 	 * 
@@ -621,7 +621,7 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	@Secured({ Role.FORECASTER })
+	@Secured({ Role.FORECASTER, Role.FOREMAN })
 	@Path("/check")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

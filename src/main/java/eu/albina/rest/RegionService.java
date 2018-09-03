@@ -71,7 +71,7 @@ public class RegionService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.OBSERVER })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@Path("/locked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
