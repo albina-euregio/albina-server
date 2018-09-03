@@ -35,29 +35,30 @@ public class UpdateJob implements org.quartz.Job {
 			DateTime startDate = new DateTime().withTimeAtStartOfDay();
 			DateTime endDate = startDate.plusDays(1).withTimeAtStartOfDay();
 
-			List<String> regions = new ArrayList<String>();
+			List<String> changedRegions = new ArrayList<String>();
 			if (GlobalVariables.isPublishBulletinsTyrol()
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeTyrol))
-				regions.add(GlobalVariables.codeTyrol);
+				changedRegions.add(GlobalVariables.codeTyrol);
 			if (GlobalVariables.isPublishBulletinsSouthTyrol()
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeSouthTyrol))
-				regions.add(GlobalVariables.codeSouthTyrol);
+				changedRegions.add(GlobalVariables.codeSouthTyrol);
 			if (GlobalVariables.isPublishBulletinsTrentino()
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeTrentino))
-				regions.add(GlobalVariables.codeTrentino);
+				changedRegions.add(GlobalVariables.codeTrentino);
 
 			DateTime publicationDate = new DateTime();
 
-			if (!regions.isEmpty()) {
-				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, regions,
+			if (!changedRegions.isEmpty()) {
+				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, changedRegions,
 						publicationDate);
 				List<String> avalancheReportIds = AvalancheReportController.getInstance().publishReport(startDate,
-						regions, user, publicationDate);
+						changedRegions, user, publicationDate);
 
 				try {
 					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
-							.getBulletins(startDate, endDate, regions);
-					PublicationController.getInstance().updateAutomatically(avalancheReportIds, bulletins, regions);
+							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+					PublicationController.getInstance().updateAutomatically(avalancheReportIds, bulletins,
+							changedRegions);
 				} catch (AlbinaException e) {
 					logger.warn("Error loading bulletins - " + e.getMessage());
 					throw new AlbinaException(e.getMessage());
