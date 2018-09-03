@@ -412,7 +412,7 @@ public class AvalancheBulletinService {
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
 					new DateTime());
 			DateTime publicationDate = new DateTime();
-			AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region);
+			AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
 			AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, region, publicationDate);
 			List<String> avalancheReportIds = new ArrayList<String>();
 			String avalancheReportId = AvalancheReportController.getInstance().changeReport(startDate, region, user);
@@ -542,7 +542,7 @@ public class AvalancheBulletinService {
 					throw new AlbinaException("No date!");
 				endDate = startDate.plusDays(1);
 
-				AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region);
+				AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
 				AvalancheReportController.getInstance().submitReport(startDate, region, user);
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();

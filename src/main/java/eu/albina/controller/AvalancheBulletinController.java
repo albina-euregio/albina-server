@@ -365,7 +365,7 @@ public class AvalancheBulletinController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void submitBulletins(DateTime startDate, DateTime endDate, String region) throws AlbinaException {
+	public void submitBulletins(DateTime startDate, DateTime endDate, String region, User user) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -383,6 +383,9 @@ public class AvalancheBulletinController {
 
 			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
+
+				// set author
+				bulletin.setUser(user);
 
 				// publish all saved regions
 				result = new HashSet<String>();
