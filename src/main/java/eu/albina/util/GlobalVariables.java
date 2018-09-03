@@ -92,10 +92,24 @@ public class GlobalVariables {
 		private static final long serialVersionUID = 1L;
 
 		{
-			add("AT-07");
-			add("IT-32-BZ");
-			add("IT-32-TN");
-			add("AT-06");
+			add(codeTyrol);
+			add(codeSouthTyrol);
+			add(codeTrentino);
+			add(codeStyria);
+		}
+	};
+
+	// REGION
+	public static List<String> regionsEuregio = new ArrayList<String>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add(codeTyrol);
+			add(codeSouthTyrol);
+			add(codeTrentino);
 		}
 	};
 
