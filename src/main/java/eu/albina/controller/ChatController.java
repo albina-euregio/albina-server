@@ -86,7 +86,7 @@ public class ChatController {
 		}
 	}
 
-	public void addActiveUser(User user) throws AlbinaException {
+	public synchronized void addActiveUser(User user) throws AlbinaException {
 		boolean found = false;
 		for (User u : activeUsers) {
 			if (u.getEmail().equals(user.getEmail())) {
