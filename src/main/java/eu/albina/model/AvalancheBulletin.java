@@ -17,6 +17,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
@@ -117,18 +118,23 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@JoinColumn(name = "AFTERNOON_ID")
 	private AvalancheBulletinDaytimeDescription afternoon;
 
+	@Lob
 	@Column(name = "AV_ACTIVITY_HIGHLIGHTS_TEXTCAT")
 	private String avActivityHighlightsTextcat;
 
+	@Lob
 	@Column(name = "AV_ACTIVITY_COMMENT_TEXTCAT")
 	private String avActivityCommentTextcat;
 
+	@Lob
 	@Column(name = "SNOWPACK_STRUCTURE_HIGHLIGHTS_TEXTCAT")
 	private String snowpackStructureHighlightsTextcat;
 
+	@Lob
 	@Column(name = "SNOWPACK_STRUCTURE_COMMENT_TEXTCAT")
 	private String snowpackStructureCommentTextcat;
 
+	@Lob
 	@Column(name = "TENDENCY_COMMENT_TEXTCAT")
 	private String tendencyCommentTextcat;
 
