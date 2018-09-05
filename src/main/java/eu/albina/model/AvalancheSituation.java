@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,6 +39,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "AVALANCHE_SITUATION_ASPECTS", joinColumns = @JoinColumn(name = "AVALANCHE_SITUATION_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
+	@Fetch(FetchMode.JOIN)
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")
