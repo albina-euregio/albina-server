@@ -30,7 +30,7 @@ import eu.albina.util.GlobalVariables;
  *
  */
 @Entity
-@Table(name = "REGIONS")
+@Table(name = "regions")
 public class Region implements AvalancheInformationObject {
 
 	@Id

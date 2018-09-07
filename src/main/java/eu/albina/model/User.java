@@ -27,7 +27,7 @@ import eu.albina.model.enumerations.Role;
 
 @Audited
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 public class User {
 
 	/** Email address of the user */

@@ -26,7 +26,7 @@ import eu.albina.util.GlobalVariables;
  */
 @Audited
 @Entity
-@Table(name = "AVALANCHE_REPORTS")
+@Table(name = "avalanche_reports")
 public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	/** Information about the author of the avalanche bulletin */

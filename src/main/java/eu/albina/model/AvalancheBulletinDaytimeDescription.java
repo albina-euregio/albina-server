@@ -21,7 +21,7 @@ import eu.albina.model.enumerations.DangerRating;
 
 @Audited
 @Entity
-@Table(name = "AVALANCHE_BULLETIN_DAYTIME_DESCRIPTIONS")
+@Table(name = "avalanche_bulletin_daytime_descriptions")
 public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObject
 		implements AvalancheInformationObject {
 

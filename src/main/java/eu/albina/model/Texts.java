@@ -18,7 +18,7 @@ import eu.albina.model.enumerations.LanguageCode;
 
 @Audited
 @Entity
-@Table(name = "TEXTS")
+@Table(name = "texts")
 public class Texts extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@ElementCollection(fetch = FetchType.EAGER)

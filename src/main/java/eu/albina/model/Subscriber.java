@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
-@Table(name = "SUBSCRIBER")
+@Table(name = "subscriber")
 public class Subscriber {
 
 	/** Email address of the subscriber */

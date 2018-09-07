@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import eu.albina.util.GlobalVariables;
 
 @Entity
-@Table(name = "CHAT_MESSAGE")
+@Table(name = "chat_message")
 public class ChatMessage extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@Column(name = "TEXT")

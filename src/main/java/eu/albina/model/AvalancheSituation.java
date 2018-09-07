@@ -25,7 +25,7 @@ import eu.albina.model.enumerations.Aspect;
 
 @Audited
 @Entity
-@Table(name = "AVALANCHE_SITUATION")
+@Table(name = "avalanche_situation")
 public class AvalancheSituation extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@OneToOne
