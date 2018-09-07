@@ -418,6 +418,20 @@ public class AlbinaUtil {
 		return result.toString();
 	}
 
+	public static String getShortDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		StringBuilder result = new StringBuilder();
+		DateTime date = getDate(bulletins);
+		if (date != null) {
+			result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
+			result.append(date.toString(GlobalVariables.getShortDateTimeFormatter(lang)));
+		} else {
+			// TODO what if no date is given (should not happen)
+			result.append("-");
+		}
+
+		return result.toString();
+	}
+
 	public static int getYear(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		return getDate(bulletins).getYear();
 	}
