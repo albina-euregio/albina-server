@@ -64,7 +64,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	private String ownerRegion;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "AVALANCHE_BULLETIN_ADDITIONAL_USER", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@CollectionTable(name = "avalanche_bulletin_additional_user", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "ADDITIONAL_USER_NAME")
 	private Set<String> additionalAuthors;
 
@@ -82,19 +82,19 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	/** The recommended regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "AVALANCHE_BULLETIN_SUGGESTED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@CollectionTable(name = "avalanche_bulletin_suggested_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> suggestedRegions;
 
 	/** The published regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "AVALANCHE_BULLETIN_PUBLISHED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@CollectionTable(name = "avalanche_bulletin_published_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> publishedRegions;
 
 	/** The saved regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "AVALANCHE_BULLETIN_SAVED_REGIONS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@CollectionTable(name = "avalanche_bulletin_saved_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> savedRegions;
 

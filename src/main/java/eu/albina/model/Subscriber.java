@@ -32,7 +32,7 @@ public class Subscriber {
 	private boolean confirmed;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "SUBSCRIBER_REGIONS", joinColumns = @JoinColumn(name = "SUBSCRIBER_ID"))
+	@CollectionTable(name = "subscriber_regions", joinColumns = @JoinColumn(name = "SUBSCRIBER_ID"))
 	@Column(name = "REGION_ID")
 	private List<String> regions;
 

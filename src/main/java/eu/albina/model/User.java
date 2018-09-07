@@ -44,13 +44,13 @@ public class User {
 	private String name;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_EMAIL"))
+	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "USER_EMAIL"))
 	@Column(name = "USER_ROLE")
 	@Enumerated(EnumType.STRING)
 	private List<Role> roles;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "USER_REGION", joinColumns = @JoinColumn(name = "USER_EMAIL"))
+	@CollectionTable(name = "user_region", joinColumns = @JoinColumn(name = "USER_EMAIL"))
 	@Column(name = "USER_REGION")
 	private Set<String> regions;
 

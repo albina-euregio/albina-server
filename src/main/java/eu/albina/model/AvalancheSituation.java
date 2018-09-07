@@ -37,7 +37,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	private eu.albina.model.enumerations.AvalancheSituation avalancheSituation;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "AVALANCHE_SITUATION_ASPECTS", joinColumns = @JoinColumn(name = "AVALANCHE_SITUATION_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "avalanche_situation_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_SITUATION_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
 	@Fetch(FetchMode.JOIN)
 	private Set<Aspect> aspects;
