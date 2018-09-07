@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
@@ -930,6 +931,20 @@ public class GlobalVariables {
 	}
 
 	// LANG
+	public static DateTimeFormatter getShortDateTimeFormatter(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return dateTimeDe;
+		case it:
+			return dateTimeIt;
+		case en:
+			return dateTimeEn;
+		default:
+			return dateTimeEn;
+		}
+	}
+
+	// LANG
 	public static String getCapitalUrl(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -1285,5 +1300,15 @@ public class GlobalVariables {
 		default:
 			return "on ";
 		}
+	}
+
+	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
+		DangerRating result = DangerRating.missing;
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			DangerRating highestDangerRating = avalancheBulletin.getHighestDangerRating();
+			if (highestDangerRating.compareTo(result) > 0)
+				result = highestDangerRating;
+		}
+		return result;
 	}
 }
