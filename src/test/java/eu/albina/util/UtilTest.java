@@ -231,4 +231,9 @@ public class UtilTest {
 
 		return encodedfile;
 	}
+
+	@Test
+	public void drawImage() throws IOException, URISyntaxException {
+		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en);
+	}
 }
