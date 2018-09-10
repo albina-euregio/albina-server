@@ -234,7 +234,7 @@ public class UtilTest {
 
 	@Ignore
 	@Test
-	public void drawImage() throws IOException, URISyntaxException {
+	public void createStaticWidget() throws IOException, URISyntaxException {
 		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en);
 	}
 }

@@ -272,13 +272,22 @@ public class StaticWidgetUtil {
 			ig2.drawString(asFourthLine.getIterator(), 30, 718);
 			ig2.drawString(asUrlLine.getIterator(), 40, 770);
 
-			logo = resizeWidth(logo, 180);
+			logo = resizeHeight(logo, 110);
 			ig2.drawImage(ci, 0, 0, null);
-			ig2.drawImage(logo, 210, 35, null);
+			ig2.drawImage(logo, 70, 35, null);
 			ig2.drawImage(overviewThumbnail, 100, 170, null);
 
-			ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() + GlobalVariables.getPdfFilename(lang)
-					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
+			BufferedImage interregLogo = loadImage(
+					GlobalVariables.getMapsPath() + "logo/interreg_italia-oesterreich_02_GRAYSCALE.png");
+			// BufferedImage interregLogo = loadImage(GlobalVariables.getMapsPath() +
+			// "logo/interreg_italia-oesterreich_02_RGB.png");
+			interregLogo = resizeHeight(interregLogo, 110);
+			ig2.drawImage(interregLogo, 350, 45, null);
+
+			// ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() +
+			// GlobalVariables.getPdfFilename(lang)
+			// + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
+			ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
 			// ImageIO.write(bi, "gif", new File("c:\\yourImageName.GIF"));
 			// ImageIO.write(bi, "BMP", new File("c:\\yourImageName.BMP"));
