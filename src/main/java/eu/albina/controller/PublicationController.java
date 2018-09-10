@@ -14,6 +14,7 @@ import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
 import eu.albina.util.PdfUtil;
+import eu.albina.util.StaticWidgetUtil;
 
 /**
  * Controller for avalanche reports.
@@ -59,6 +60,10 @@ public class PublicationController {
 		if (GlobalVariables.isCreatePdf())
 			createPdf(avalancheReportIds, bulletins);
 
+		// create static widgets
+		if (GlobalVariables.isCreateStaticWidget())
+			createStaticWidgets(avalancheReportIds, bulletins);
+
 		// send emails
 		if (GlobalVariables.isSendEmails())
 			sendEmails(avalancheReportIds, bulletins, GlobalVariables.regions);
@@ -71,6 +76,16 @@ public class PublicationController {
 		}
 	}
 
+	/**
+	 * Trigger all tasks that have to take place after an avalanche bulletin has
+	 * been published. This happens at 17:00 PM and 08:00 AM (if needed).
+	 * 
+	 * @param bulletins
+	 *            The bulletins that were published.
+	 * @param regions
+	 *            The regions that were updated.
+	 * @throws MessagingException
+	 */
 	public void updateAutomatically(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
 			List<String> regions) throws MessagingException {
 		if (GlobalVariables.isPublishAt8AM())
@@ -98,6 +113,10 @@ public class PublicationController {
 		// create pdf
 		if (GlobalVariables.isCreatePdf())
 			createPdf(avalancheReportIds, bulletins);
+
+		// create static widgets
+		if (GlobalVariables.isCreateStaticWidget())
+			createStaticWidgets(avalancheReportIds, bulletins);
 
 		// send emails to regions
 		if (GlobalVariables.isSendEmails())
@@ -127,6 +146,10 @@ public class PublicationController {
 		// create pdfs
 		if (GlobalVariables.isCreatePdf())
 			createPdf(avalancheReportIds, bulletins);
+
+		// create static widgets
+		if (GlobalVariables.isCreateStaticWidget())
+			createStaticWidgets(avalancheReportIds, bulletins);
 	}
 
 	private void createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
@@ -176,6 +199,26 @@ public class PublicationController {
 					e.printStackTrace();
 				} finally {
 					logger.info("PDF production finished");
+				}
+			}
+		}).start();
+	}
+
+	private void createStaticWidgets(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					logger.info("Static widget production started");
+					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins);
+					AvalancheReportController.getInstance().setAvalancheReportStaticWidgetFlag(avalancheReportIds);
+				} catch (IOException e) {
+					logger.error("Error creating static widgets:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error creating static widgets:" + e.getMessage());
+					e.printStackTrace();
+				} finally {
+					logger.info("Static widget production finished");
 				}
 			}
 		}).start();

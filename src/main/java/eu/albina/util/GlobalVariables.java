@@ -30,6 +30,7 @@ public class GlobalVariables {
 
 	private static boolean createMaps = false;
 	private static boolean createPdf = true;
+	private static boolean createStaticWidget = true;
 	private static boolean sendEmails = true;
 	private static boolean publishToSocialMedia = false;
 	private static boolean publishAt5PM = true;
@@ -44,7 +45,9 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTrentino = true;
 	private static boolean publishBulletinsStyria = true;
 
-	// TODO for testing
+	// TODO set correct directory for all files (path should include date,
+	// suggestion from vienna)
+	// for testing
 	// private static String pdfDirectory = "D:\\";
 	private static String pdfDirectory = "pdfs/";
 	private static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
@@ -163,6 +166,15 @@ public class GlobalVariables {
 	public static void setCreatePdf(boolean createPdf) throws ConfigurationException {
 		GlobalVariables.createPdf = createPdf;
 		setConfigProperty("createPdf", createPdf);
+	}
+
+	public static boolean isCreateStaticWidget() {
+		return createStaticWidget;
+	}
+
+	public static void setCreateStaticWidget(boolean createStaticWidget) throws ConfigurationException {
+		GlobalVariables.createStaticWidget = createStaticWidget;
+		setConfigProperty("createStaticWidget", createStaticWidget);
 	}
 
 	public static boolean isSendEmails() {
@@ -1191,6 +1203,7 @@ public class GlobalVariables {
 			emailPassword = config.getString("emailPassword");
 			createMaps = config.getBoolean("createMaps");
 			createPdf = config.getBoolean("createPdf");
+			createStaticWidget = config.getBoolean("createStaticWidget");
 			sendEmails = config.getBoolean("sendEmails");
 			publishToSocialMedia = config.getBoolean("publishToSocialMedia");
 			publishAt5PM = config.getBoolean("publishAt5PM");
@@ -1224,6 +1237,7 @@ public class GlobalVariables {
 			json.put("emailPassword", emailPassword);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
+		json.put("createStaticWidget", createStaticWidget);
 		json.put("sendEmails", sendEmails);
 		json.put("publishToSocialMedia", publishToSocialMedia);
 		json.put("publishAt5PM", publishAt5PM);
@@ -1271,6 +1285,8 @@ public class GlobalVariables {
 			setCreateMaps(configuration.getBoolean("createMaps"));
 		if (configuration.has("createPdf"))
 			setCreatePdf(configuration.getBoolean("createPdf"));
+		if (configuration.has("createStaticWidget"))
+			setCreateStaticWidget(configuration.getBoolean("createStaticWidget"));
 		if (configuration.has("sendEmails"))
 			setSendEmails(configuration.getBoolean("sendEmails"));
 		if (configuration.has("publishToSocialMedia"))
@@ -1289,6 +1305,7 @@ public class GlobalVariables {
 			setPublishBulletinsStyria(configuration.getBoolean("publishBulletinsStyria"));
 	}
 
+	// LANG
 	public static Object getTendencyBindingWord(LanguageCode lang) {
 		switch (lang) {
 		case en:

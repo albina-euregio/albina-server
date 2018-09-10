@@ -54,6 +54,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "PDF_CREATED")
 	private boolean pdfCreated;
 
+	@Column(name = "STATIC_WIDGET_CREATED")
+	private boolean staticWidgetCreated;
+
 	@Column(name = "MAP_CREATED")
 	private boolean mapCreated;
 
@@ -170,6 +173,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setPdfCreated(boolean pdf) {
 		this.pdfCreated = pdf;
+	}
+
+	public boolean isStaticWidgetCreated() {
+		return staticWidgetCreated;
+	}
+
+	public void setStaticWidgetCreated(boolean staticWidget) {
+		this.staticWidgetCreated = staticWidget;
 	}
 
 	public boolean isMapCreated() {

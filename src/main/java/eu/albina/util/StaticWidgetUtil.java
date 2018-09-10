@@ -60,6 +60,18 @@ public class StaticWidgetUtil {
 		return instance;
 	}
 
+	/**
+	 * Create static widgets containing overview information for the EUREGIO for
+	 * print media.
+	 * 
+	 * @param bulletins
+	 *            The bulletins to create the PDF of.
+	 */
+	public void createStaticWidgets(List<AvalancheBulletin> bulletins) {
+		for (LanguageCode lang : GlobalVariables.languages)
+			createStaticWidget(bulletins, lang);
+	}
+
 	// LANG
 	public void createStaticWidget(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		try {
@@ -265,38 +277,11 @@ public class StaticWidgetUtil {
 			ig2.drawImage(logo, 210, 35, null);
 			ig2.drawImage(overviewThumbnail, 100, 170, null);
 
-			// // get metrics from the graphics
-			// FontMetrics metrics = url.getFontMetrics(openSansBoldFont);
-			// // get the height of a line of text in this
-			// // font and render context
-			// int hgt = metrics.getHeight();
-			// // get the advance of my text in this font
-			// // and render context
-			// int adv = metrics.stringWidth(text);
-			// // calculate the size of a box to hold the
-			// // text with some padding.
-			// Dimension size = new Dimension(adv + 2, hgt + 2);
-
-			// FontMetrics fontMetrics = ig2.getFontMetrics();
-			// int stringWidth = fontMetrics.stringWidth(message);
-			// int stringHeight = fontMetrics.getAscent();
-			// ig2.setPaint(Color.BLACK);
-			// ig2.drawString(message, (width - stringWidth) / 2, height / 2 + stringHeight
-			// / 4);
-
-			// TODO save in correct directory
-			ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
+			ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() + GlobalVariables.getPdfFilename(lang)
+					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
 			// ImageIO.write(bi, "gif", new File("c:\\yourImageName.GIF"));
 			// ImageIO.write(bi, "BMP", new File("c:\\yourImageName.BMP"));
-
-			// GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			// Font[] fonts = ge.getAllFonts();
-			// for (Font entry : fonts) {
-			// System.out.print(entry.getFontName() + " : ");
-			// System.out.println(entry.getFamily());
-			// }
-
 		} catch (IOException ie) {
 			ie.printStackTrace();
 		}
