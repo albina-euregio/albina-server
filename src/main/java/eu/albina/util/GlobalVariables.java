@@ -50,7 +50,7 @@ public class GlobalVariables {
 	// for testing
 	// private static String pdfDirectory = "D:\\";
 	private static String pdfDirectory = "pdfs/";
-	private static String serverImagesUrl = "https://natlefs.snowobserver.com/images/";
+	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	// private static String mapsPath =
 	// "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
 	private static String mapsPath = "images/";
