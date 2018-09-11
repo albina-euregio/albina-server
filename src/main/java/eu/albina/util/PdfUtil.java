@@ -115,6 +115,7 @@ public class PdfUtil {
 			PdfDocument pdf;
 			PdfWriter writer;
 
+			// TODO add directory structure on production server
 			writer = new PdfWriter(GlobalVariables.getPdfDirectory() + GlobalVariables.getPdfFilename(lang)
 					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
 			pdf = new PdfDocument(writer);

@@ -278,12 +278,13 @@ public class StaticWidgetUtil {
 			ig2.drawImage(overviewThumbnail, 100, 170, null);
 
 			BufferedImage interregLogo = loadImage(
-					GlobalVariables.getMapsPath() + "logo/interreg_italia-oesterreich_02_GRAYSCALE.png");
+					GlobalVariables.getServerImagesUrl() + "logo/interreg_italia-oesterreich_02_GRAYSCALE.png");
 			// BufferedImage interregLogo = loadImage(GlobalVariables.getMapsPath() +
 			// "logo/interreg_italia-oesterreich_02_RGB.png");
 			interregLogo = resizeHeight(interregLogo, 110);
 			ig2.drawImage(interregLogo, 350, 45, null);
 
+			// TODO add directory structure on production server
 			// ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() +
 			// GlobalVariables.getPdfFilename(lang)
 			// + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
