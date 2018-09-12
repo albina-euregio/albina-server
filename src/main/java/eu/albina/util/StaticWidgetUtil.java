@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.AttributedString;
 import java.util.List;
 
@@ -100,10 +101,13 @@ public class StaticWidgetUtil {
 			ig2.setPaint(greyLightColor);
 			ig2.fill(new Rectangle2D.Double(0, 569, 600, 1));
 
-			BufferedImage ci = resize(loadImage(GlobalVariables.getMapsPath() + "Colorbar.gif"), 600, 15);
+			BufferedImage ci = resize(loadImageFromUrl(GlobalVariables.getServerImagesUrl() + "Colorbar.gif"), 600, 15);
 			// TODO use correct overview thumbnail map
+			// BufferedImage overviewThumbnail = resizeHeight(
+			// loadImageFromFile(GlobalVariables.getMapsPath() + "overview_thumbnail.jpg"),
+			// 400);
 			BufferedImage overviewThumbnail = resizeHeight(
-					loadImage(GlobalVariables.getMapsPath() + "overview_thumbnail.jpg"), 400);
+					loadImageFromUrl(GlobalVariables.getServerImagesUrl() + "overview_thumbnail.jpg"), 400);
 
 			if (highestDangerRating != DangerRating.very_high) {
 				ig2.setPaint(getDangerRatingColor(highestDangerRating));
@@ -140,7 +144,7 @@ public class StaticWidgetUtil {
 			AttributedString asFourthLine;
 			switch (lang) {
 			case de:
-				logo = loadImage(GlobalVariables.getMapsPath() + "logo/lawinen_report.png");
+				logo = loadImageFromUrl(GlobalVariables.getServerImagesUrl() + "logo/lawinen_report.png");
 
 				firstLine = "Für " + date + " maximal";
 				asFirstLine = new AttributedString(firstLine);
@@ -164,7 +168,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			case it:
-				logo = loadImage(GlobalVariables.getMapsPath() + "logo/valanghe_report.png");
+				logo = loadImageFromUrl(GlobalVariables.getServerImagesUrl() + "logo/valanghe_report.png");
 
 				firstLine = "Per " + date + " al massimo";
 				asFirstLine = new AttributedString(firstLine);
@@ -188,7 +192,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			case en:
-				logo = loadImage(GlobalVariables.getMapsPath() + "logo/avalanche_report.png");
+				logo = loadImageFromUrl(GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
 
 				firstLine = "On " + date + " at maximum";
 				asFirstLine = new AttributedString(firstLine);
@@ -212,7 +216,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			default:
-				logo = loadImage(GlobalVariables.getMapsPath() + "logo/avalanche_report.png");
+				logo = loadImageFromUrl(GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
 
 				firstLine = "On " + date + " at maximum";
 				asFirstLine = new AttributedString(firstLine);
@@ -277,18 +281,17 @@ public class StaticWidgetUtil {
 			ig2.drawImage(logo, 70, 35, null);
 			ig2.drawImage(overviewThumbnail, 100, 170, null);
 
-			BufferedImage interregLogo = loadImage(
+			BufferedImage interregLogo = loadImageFromUrl(
 					GlobalVariables.getServerImagesUrl() + "logo/interreg_italia-oesterreich_02_GRAYSCALE.png");
-			// BufferedImage interregLogo = loadImage(GlobalVariables.getMapsPath() +
+			// BufferedImage interregLogo = loadImage(GlobalVariables.getServerImagesUrl() +
 			// "logo/interreg_italia-oesterreich_02_RGB.png");
 			interregLogo = resizeHeight(interregLogo, 110);
 			ig2.drawImage(interregLogo, 350, 45, null);
 
 			// TODO add directory structure on production server
-			// ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() +
-			// GlobalVariables.getPdfFilename(lang)
-			// + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
-			ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
+			ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() + GlobalVariables.getPdfFilename(lang)
+					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
+			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
 			// ImageIO.write(bi, "gif", new File("c:\\yourImageName.GIF"));
 			// ImageIO.write(bi, "BMP", new File("c:\\yourImageName.BMP"));
@@ -342,7 +345,18 @@ public class StaticWidgetUtil {
 		return dimg;
 	}
 
-	private BufferedImage loadImage(String path) {
+	private BufferedImage loadImageFromUrl(String path) {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new URL(path));
+		} catch (IOException e) {
+			logger.error("Error loading image: " + path);
+			e.printStackTrace();
+		}
+		return img;
+	}
+
+	private BufferedImage loadImageFromFile(String path) {
 		BufferedImage img = null;
 		try {
 			img = ImageIO.read(new File(path));
