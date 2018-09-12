@@ -23,7 +23,7 @@
         <property name="hibernate.connection.password" value="MD>5:X*n%)1V"/>
 
         <!-- Hibernate ENVERS Configuration -->
-        <property name="org.hibernate.envers.audit_table_suffix" value="_AUDIT"/>
+        <property name="org.hibernate.envers.audit_table_suffix" value="_audit"/>
         <property name="org.hibernate.envers.revision_field_name" value="REVISION_ID"/>
         <property name="org.hibernate.envers.revision_type_field_name" value="REVTYPE"/>
         <property name="org.hibernate.envers.do_not_audit_optimistic_locking_field" value="true"/>
@@ -40,6 +40,7 @@
 
         <!-- SQL dialect -->
         <property name="hibernate.dialect" value="org.hibernate.spatial.dialect.mysql.MySQL56SpatialDialect"/>
+        <!-- <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB53Dialect"/> -->
 
         <!-- Disable the second-level cache -->
         <property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>
