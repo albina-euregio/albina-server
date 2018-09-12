@@ -47,13 +47,12 @@ public class GlobalVariables {
 
 	// TODO set correct directory for all files (path should include date,
 	// suggestion from vienna)
-	// for testing
 	// private static String pdfDirectory = "D:\\";
-	private static String pdfDirectory = "pdfs/";
-	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
+	private static String pdfDirectory = "/mnt/daten1/pdfs/";
 	// private static String mapsPath =
 	// "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
-	private static String mapsPath = "images/";
+	private static String mapsPath = "/mnt/daten1/images/";
+	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 
 	private static String emailUsername = "norbert.lanzanasto@gmail.com";
 	private static String emailPassword = "Go6Zaithee";
