@@ -53,7 +53,12 @@ public class GlobalVariables {
 	// "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
 	private static String mapsPath = "/mnt/daten1/images/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
+	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 
+	private static boolean smtpAuth = true;
+	private static boolean smtpTls = true;
+	private static String smtpHost = "smtp.gmail.com";
+	private static String smtpPort = "587";
 	private static String emailUsername = "norbert.lanzanasto@gmail.com";
 	private static String emailPassword = "Go6Zaithee";
 
@@ -284,6 +289,15 @@ public class GlobalVariables {
 		setConfigProperty("serverImagesUrl", serverImagesUrl);
 	}
 
+	public static String getServerImagesUrlLocalhost() {
+		return serverImagesUrlLocalhost;
+	}
+
+	public static void setServerImagesUrlLocalhost(String serverImagesUrlLocalhost) throws ConfigurationException {
+		GlobalVariables.serverImagesUrlLocalhost = serverImagesUrlLocalhost;
+		setConfigProperty("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
+	}
+
 	public static String getMapsPath() {
 		return mapsPath;
 	}
@@ -291,6 +305,42 @@ public class GlobalVariables {
 	public static void setMapsPath(String mapsPath) throws ConfigurationException {
 		GlobalVariables.mapsPath = mapsPath;
 		setConfigProperty("mapsPath", mapsPath);
+	}
+
+	public static boolean getSmtpAuth() {
+		return smtpAuth;
+	}
+
+	public static void setSmtpAuth(boolean smtpAuth) throws ConfigurationException {
+		GlobalVariables.smtpAuth = smtpAuth;
+		setConfigProperty("smtpAuth", smtpAuth);
+	}
+
+	public static boolean getSmtpTls() {
+		return smtpTls;
+	}
+
+	public static void setSmtpTls(boolean smtpTls) throws ConfigurationException {
+		GlobalVariables.smtpTls = smtpTls;
+		setConfigProperty("smtpTls", smtpTls);
+	}
+
+	public static String getSmtpHost() {
+		return smtpHost;
+	}
+
+	public static void setSmtpHost(String smtpHost) throws ConfigurationException {
+		GlobalVariables.smtpHost = smtpHost;
+		setConfigProperty("smtpHost", smtpHost);
+	}
+
+	public static String getSmtpPort() {
+		return smtpPort;
+	}
+
+	public static void setSmtpPort(String smtpPort) throws ConfigurationException {
+		GlobalVariables.smtpPort = smtpPort;
+		setConfigProperty("smtpPort", smtpPort);
 	}
 
 	public static String getEmailUsername() {
@@ -1197,6 +1247,7 @@ public class GlobalVariables {
 			localFontsPath = config.getString("localFontsPath");
 			pdfDirectory = config.getString("pdfDirectory");
 			serverImagesUrl = config.getString("serverImagesUrl");
+			serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
 			mapsPath = config.getString("mapsPath");
 			emailUsername = config.getString("emailUsername");
 			emailPassword = config.getString("emailPassword");
@@ -1228,8 +1279,16 @@ public class GlobalVariables {
 			json.put("pdfDirectory", pdfDirectory);
 		if (serverImagesUrl != null)
 			json.put("serverImagesUrl", serverImagesUrl);
+		if (serverImagesUrlLocalhost != null)
+			json.put("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
 		if (mapsPath != null)
 			json.put("mapsPath", mapsPath);
+		json.put("smtpAuth", smtpAuth);
+		json.put("smtpTls", smtpTls);
+		if (smtpHost != null)
+			json.put("smtpHost", smtpHost);
+		if (smtpPort != null)
+			json.put("smtpPort", smtpPort);
 		if (emailUsername != null)
 			json.put("emailUsername", emailUsername);
 		if (emailPassword != null)
@@ -1274,8 +1333,18 @@ public class GlobalVariables {
 			setPdfDirectory(configuration.getString("pdfDirectory"));
 		if (configuration.has("serverImagesUrl"))
 			setServerImagesUrl(configuration.getString("serverImagesUrl"));
+		if (configuration.has("serverImagesUrlLocalhost"))
+			setServerImagesUrlLocalhost(configuration.getString("serverImagesUrlLocalhost"));
 		if (configuration.has("mapsPath"))
 			setMapsPath(configuration.getString("mapsPath"));
+		if (configuration.has("smtpAuth"))
+			setSmtpAuth(configuration.getBoolean("smtpAuth"));
+		if (configuration.has("smtpTls"))
+			setSmtpTls(configuration.getBoolean("smtpTls"));
+		if (configuration.has("smtpHost"))
+			setSmtpHost(configuration.getString("smtpHost"));
+		if (configuration.has("smtpPort"))
+			setSmtpPort(configuration.getString("smtpPort"));
 		if (configuration.has("emailUsername"))
 			setEmailUsername(configuration.getString("emailUsername"));
 		if (configuration.has("emailPassword"))

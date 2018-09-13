@@ -164,10 +164,10 @@ public class EmailUtil {
 
 	private Session getEmailSession() {
 		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.auth", GlobalVariables.getSmtpAuth());
+		props.put("mail.smtp.starttls.enable", GlobalVariables.getSmtpTls());
+		props.put("mail.smtp.host", GlobalVariables.getSmtpHost());
+		props.put("mail.smtp.port", GlobalVariables.getSmtpPort());
 
 		return Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
