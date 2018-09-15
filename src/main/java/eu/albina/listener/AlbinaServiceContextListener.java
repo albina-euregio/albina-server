@@ -18,6 +18,7 @@ import eu.albina.controller.SocketIOController;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.SchedulerUtil;
+import io.netty.util.internal.InternalThreadLocalMap;
 
 @WebListener
 public class AlbinaServiceContextListener implements ServletContextListener {
@@ -29,12 +30,15 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		HibernateUtil.getInstance().shutDown();
 		SchedulerUtil.getInstance().shutDown();
 		SocketIOController.getInstance().stopSocketIO();
+		InternalThreadLocalMap.destroy();
 		logger.debug("ServletContextListener destroyed");
 	}
 
 	// Run this before web application is started
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
+		GlobalVariables.loadConfigProperties();
+
 		HibernateUtil.getInstance().setUp();
 
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
@@ -56,8 +60,6 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		}
 
 		SocketIOController.getInstance().startSocketIO();
-
-		GlobalVariables.loadConfigProperties();
 
 		SchedulerUtil.getInstance().setUp();
 		SchedulerUtil.getInstance().start();
