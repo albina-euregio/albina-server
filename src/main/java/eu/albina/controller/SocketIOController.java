@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
+import com.corundumstudio.socketio.SocketConfig;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
@@ -51,7 +52,15 @@ public class SocketIOController {
 			Configuration configuration = new Configuration();
 			// configuration.setHostname("localhost");
 			// configuration.setHostname("127.0.0.1");
-			configuration.setPort(9092);
+			configuration.setOrigin(GlobalVariables.getSocketIoOrigin());
+			configuration.setPort(GlobalVariables.getSocketIoPort());
+			// configuration.setPingInterval(500);
+			// configuration.setPingInterval(1000);
+			configuration.setFirstDataTimeout(180000);
+			configuration.setPingTimeout(180000);
+			configuration.setUpgradeTimeout(180000);
+			SocketConfig socketConfig = configuration.getSocketConfig();
+			socketConfig.setReuseAddress(true);
 			socketIOServer = new SocketIOServer(configuration);
 
 			socketIOServer.addConnectListener(new ConnectListener() {

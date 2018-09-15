@@ -55,6 +55,9 @@ public class GlobalVariables {
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 
+	private static String socketIoOrigin = "https://admin.avalanche.report";
+	private static int socketIoPort = 9092;
+
 	private static boolean smtpAuth = true;
 	private static boolean smtpTls = true;
 	private static String smtpHost = "smtp.gmail.com";
@@ -90,7 +93,7 @@ public class GlobalVariables {
 	public static String codeTyrol = "AT-07";
 	public static String codeStyria = "AT-06";
 
-	public static String propertiesFilePath = "/META-INF/config.properties";
+	public static String propertiesFilePath = "META-INF/config.properties";
 
 	// REGION
 	public static List<String> regions = new ArrayList<String>() {
@@ -215,6 +218,24 @@ public class GlobalVariables {
 	public static void setPublishAt8AM(boolean publishAt8AM) throws ConfigurationException {
 		GlobalVariables.publishAt8AM = publishAt8AM;
 		setConfigProperty("publishAt8AM", publishAt8AM);
+	}
+
+	public static String getSocketIoOrigin() {
+		return socketIoOrigin;
+	}
+
+	public static void setSocketIoOrigin(String socketIoOrigin) throws ConfigurationException {
+		GlobalVariables.socketIoOrigin = socketIoOrigin;
+		setConfigProperty("socketIoOrigin", socketIoOrigin);
+	}
+
+	public static int getSocketIoPort() {
+		return socketIoPort;
+	}
+
+	public static void setSocketIoPort(int socketIoPort) throws ConfigurationException {
+		GlobalVariables.socketIoPort = socketIoPort;
+		setConfigProperty("socketIoPort", socketIoPort);
 	}
 
 	public static String getLocalImagesPath() {
@@ -1254,6 +1275,8 @@ public class GlobalVariables {
 			createMaps = config.getBoolean("createMaps");
 			createPdf = config.getBoolean("createPdf");
 			createStaticWidget = config.getBoolean("createStaticWidget");
+			socketIoOrigin = config.getString("socketIoOrigin");
+			socketIoPort = config.getInt("socketIoPort");
 			sendEmails = config.getBoolean("sendEmails");
 			publishToSocialMedia = config.getBoolean("publishToSocialMedia");
 			publishAt5PM = config.getBoolean("publishAt5PM");
@@ -1262,6 +1285,7 @@ public class GlobalVariables {
 			publishBulletinsSouthTyrol = config.getBoolean("publishBulletinsSouthTyrol");
 			publishBulletinsTrentino = config.getBoolean("publishBulletinsTrentino");
 			publishBulletinsStyria = config.getBoolean("publishBulletinsStyria");
+			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration file could not be loaded!");
 			e.printStackTrace();
@@ -1293,6 +1317,9 @@ public class GlobalVariables {
 			json.put("emailUsername", emailUsername);
 		if (emailPassword != null)
 			json.put("emailPassword", emailPassword);
+		if (socketIoOrigin != null)
+			json.put("socketIoOrigin", socketIoOrigin);
+		json.put("socketIoPort", socketIoPort);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createStaticWidget", createStaticWidget);
@@ -1312,11 +1339,12 @@ public class GlobalVariables {
 		Configurations configs = new Configurations();
 		FileBasedConfigurationBuilder<PropertiesConfiguration> propertiesBuilder = configs
 				.propertiesBuilder(propertiesFilePath);
-		Configuration config;
+		PropertiesConfiguration configuration;
 		try {
-			config = configs.properties(propertiesFilePath);
-			config.setProperty(key, value);
+			configuration = propertiesBuilder.getConfiguration();
+			configuration.setProperty(key, value);
 			propertiesBuilder.save();
+			logger.info("Configuration saved!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration could not be saved!");
 			e.printStackTrace();
@@ -1353,6 +1381,10 @@ public class GlobalVariables {
 			setCreateMaps(configuration.getBoolean("createMaps"));
 		if (configuration.has("createPdf"))
 			setCreatePdf(configuration.getBoolean("createPdf"));
+		if (configuration.has("socketIoOrigin"))
+			setSocketIoOrigin(configuration.getString("socketIoOrigin"));
+		if (configuration.has("socketIoPort"))
+			setSocketIoPort(configuration.getInt("socketIoPort"));
 		if (configuration.has("createStaticWidget"))
 			setCreateStaticWidget(configuration.getBoolean("createStaticWidget"));
 		if (configuration.has("sendEmails"))
