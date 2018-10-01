@@ -334,7 +334,7 @@ public class AlbinaUtil {
 		Element rootElement = doc.createElement("ObsCollection");
 		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
 		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
-		rootElement.setAttribute("xmlns:albina", "http://212.47.231.185:8080/caaml/albina.xsd");
+		rootElement.setAttribute("xmlns:albina", GlobalVariables.albinaXmlSchemaUrl);
 		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		rootElement.setAttribute("xmlns:schemaLocation",

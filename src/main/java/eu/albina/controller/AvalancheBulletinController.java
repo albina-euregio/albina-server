@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerException;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -239,7 +240,8 @@ public class AvalancheBulletinController {
 			Element metaDataProperty = doc.createElement("metaDataProperty");
 			Element metaData = doc.createElement("MetaData");
 			Element dateTimeReport = doc.createElement("dateTimeReport");
-			dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
+			dateTimeReport.appendChild(doc.createTextNode(
+					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
 			metaData.appendChild(dateTimeReport);
 
 			metaDataProperty.appendChild(metaData);

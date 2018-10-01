@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -728,11 +729,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			json.put("dangerPattern2", this.dangerPattern2.toString());
 
 		if (publicationDate != null)
-			json.put("publicationDate", publicationDate.toString(GlobalVariables.formatterDateTime));
+			json.put("publicationDate",
+					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
 
 		JSONObject validity = new JSONObject();
-		validity.put("from", validFrom.toString(GlobalVariables.formatterDateTime));
-		validity.put("until", validUntil.toString(GlobalVariables.formatterDateTime));
+		validity.put("from", validFrom.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
+		validity.put("until", validUntil.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
 		json.put("validity", validity);
 
 		json.put("suggestedRegions", suggestedRegions);
@@ -800,11 +802,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			json.put("dangerPattern2", this.dangerPattern2.toString());
 
 		if (publicationDate != null)
-			json.put("publicationDate", publicationDate.toString(GlobalVariables.formatterDateTime));
+			json.put("publicationDate",
+					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
 
 		JSONObject validity = new JSONObject();
-		validity.put("from", validFrom.toString(GlobalVariables.formatterDateTime));
-		validity.put("until", validUntil.toString(GlobalVariables.formatterDateTime));
+		validity.put("from", validFrom.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
+		validity.put("until", validUntil.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
 		json.put("validity", validity);
 
 		json.put("regions", publishedRegions);
@@ -854,7 +857,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		Element metaData = doc.createElement("MetaData");
 		if (publicationDate != null) {
 			Element dateTimeReport = doc.createElement("dateTimeReport");
-			dateTimeReport.appendChild(doc.createTextNode(publicationDate.toString(GlobalVariables.formatterDateTime)));
+			dateTimeReport.appendChild(doc.createTextNode(
+					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
 			metaData.appendChild(dateTimeReport);
 		}
 		if (user != null) {
@@ -874,20 +878,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (validFrom != null && validUntil != null) {
 
-			DateTime start = new DateTime(validFrom);
-			DateTime end = new DateTime(validUntil);
+			DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
+			DateTime end = new DateTime(validUntil).withZone(DateTimeZone.UTC);
 
 			if (hasDaytimeDependency) {
-				DateTime noon = new DateTime(validFrom);
-				noon = noon.withHourOfDay(12);
-
-				if (noon.isBefore(validFrom))
-					noon = noon.plusDays(1);
-
-				if (!isAfternoon)
-					end = new DateTime(noon);
-				else if (isAfternoon)
-					start = new DateTime(noon);
+				if (isAfternoon)
+					start = start.plusHours(12);
+				else
+					end = end.minusHours(12);
 			}
 
 			Element validTime = doc.createElement("validTime");

@@ -95,6 +95,8 @@ public class GlobalVariables {
 
 	public static String propertiesFilePath = "META-INF/config.properties";
 
+	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
+
 	// REGION
 	public static List<String> regions = new ArrayList<String>() {
 		/**
