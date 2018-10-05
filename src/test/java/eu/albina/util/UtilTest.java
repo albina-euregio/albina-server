@@ -55,16 +55,12 @@ public class UtilTest {
 		names.add("Patrick Nairz");
 		names.add("Lukas Ruetz");
 		names.add("Matthias Walcher");
-		names.add("Stella Gschossmann");
-		names.add("Gabriel Gätz");
-		names.add("Alexander Ungerer");
 		names.add("Karel Kriz");
 		names.add("Alexander Pucher");
 		names.add("Daniel Nell");
 		names.add("Matthias Fink");
 		names.add("Christoph Mitterer");
 		names.add("Norbert Lanzanasto");
-		names.add("Alberto Dalmaso");
 		names.add("Jürg Schweizer");
 		names.add("Matthias Gerber");
 		names.add("Thomas Stucki");
@@ -73,6 +69,8 @@ public class UtilTest {
 		names.add("Marc Ruesch");
 		names.add("Arno Studeregger");
 		names.add("Alfred Ortner");
+		names.add("Jonathan Flunger");
+		names.add("Felix Mast");
 
 		passwords.add("Alberto");
 		passwords.add("Sergio");
@@ -88,16 +86,12 @@ public class UtilTest {
 		passwords.add("Patrick");
 		passwords.add("Lukas");
 		passwords.add("Matthias");
-		passwords.add("Stella");
-		passwords.add("Gabriel");
-		passwords.add("Alexander");
 		passwords.add("Karel");
 		passwords.add("Alexander");
 		passwords.add("Daniel");
 		passwords.add("Matthias");
 		passwords.add("Christoph");
 		passwords.add("Norbert");
-		passwords.add("Alberto");
 		passwords.add("Jürg");
 		passwords.add("Matthias");
 		passwords.add("Thomas");
@@ -106,6 +100,8 @@ public class UtilTest {
 		passwords.add("Marc");
 		passwords.add("Arno");
 		passwords.add("Alfred");
+		passwords.add("Jonathan");
+		passwords.add("Felix");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -204,8 +200,17 @@ public class UtilTest {
 
 	@Ignore
 	@Test
+	public void createSpecificPdfs() throws IOException, URISyntaxException {
+		String filename = "2030-02-14";
+		int count = 6;
+		List<AvalancheBulletin> list = loadBulletins(filename, count);
+		PdfUtil.getInstance().createOverviewPdfs(list);
+	}
+
+	@Ignore
+	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 0; i < 32; i++) {
+		for (int i = 0; i < 30; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
@@ -213,6 +218,12 @@ public class UtilTest {
 			logger.warn("Image: " + encodstring);
 			logger.warn("Password: " + pwd);
 		}
+	}
+
+	@Ignore
+	@Test
+	public void createStaticWidget() throws IOException, URISyntaxException {
+		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en);
 	}
 
 	private static String encodeFileToBase64Binary(File file) {
@@ -232,9 +243,26 @@ public class UtilTest {
 		return encodedfile;
 	}
 
-	@Ignore
-	@Test
-	public void createStaticWidget() throws IOException, URISyntaxException {
-		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en);
+	private List<AvalancheBulletin> loadBulletins(String filename, int count) {
+		List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+		for (int i = 1; i <= count; i++) {
+			bulletins = new ArrayList<AvalancheBulletin>();
+			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+			InputStream is = classloader.getResourceAsStream(filename + "_" + i + ".json");
+			StringBuilder bulletinStringBuilder = new StringBuilder();
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(is));
+				String line = null;
+				while ((line = in.readLine()) != null) {
+					bulletinStringBuilder.append(line);
+				}
+			} catch (Exception e) {
+				logger.warn("Error parsing bulletin!");
+			}
+			String validBulletinStringFromResource = bulletinStringBuilder.toString();
+			AvalancheBulletin bulletin = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+			result.add(bulletin);
+		}
+		return result;
 	}
 }
