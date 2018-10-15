@@ -162,6 +162,8 @@ insert into user_region (USER_EMAIL, USER_REGION) values ('norbert.lanzanasto@ti
 insert into user_region (USER_EMAIL, USER_REGION) values ('norbert.lanzanasto@tirol.gv.at', 'IT-32-BZ');
 insert into user_region (USER_EMAIL, USER_REGION) values ('norbert.lanzanasto@tirol.gv.at', 'AT-06');
 insert into user_region (USER_EMAIL, USER_REGION) values ('chris.mitterer@tirol.gv.at', 'AT-07');
+insert into user_region (USER_EMAIL, USER_REGION) values ('chris.mitterer@tirol.gv.at', 'IT-32-BZ');
+insert into user_region (USER_EMAIL, USER_REGION) values ('chris.mitterer@tirol.gv.at', 'IT-32-TN');
 insert into user_region (USER_EMAIL, USER_REGION) values ('rudi.mair@tirol.gv.at', 'AT-07');
 insert into user_region (USER_EMAIL, USER_REGION) values ('patrick.nairz@tirol.gv.at', 'AT-07');
 insert into user_region (USER_EMAIL, USER_REGION) values ('lukas.ruetz@tirol.gv.at', 'AT-07');
