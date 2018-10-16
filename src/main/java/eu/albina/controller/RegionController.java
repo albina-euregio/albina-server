@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
-import eu.albina.model.enumerations.EventName;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
@@ -136,7 +135,9 @@ public class RegionController {
 			JSONObject json = new JSONObject();
 			json.put("region", regionLock.getRegion());
 			json.put("date", regionLock.getDate().toString(GlobalVariables.formatterDateTime));
-			SocketIOController.getInstance().sendEvent(EventName.unlockRegion.toString(), json.toString());
+			// TODO implement via websockets
+			// SocketIOController.getInstance().sendEvent(EventName.unlockRegion.toString(),
+			// json.toString());
 		}
 	}
 

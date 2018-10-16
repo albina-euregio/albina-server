@@ -30,7 +30,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.Texts;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.model.enumerations.EventName;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 
@@ -199,8 +198,10 @@ public class AvalancheReportController {
 
 			transaction.commit();
 
-			if (data != null)
-				SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(), data.toString());
+			// TODO implement via websockets
+			// if (data != null)
+			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
+			// data.toString());
 
 		} catch (HibernateException he) {
 			if (transaction != null)
@@ -341,8 +342,10 @@ public class AvalancheReportController {
 
 			transaction.commit();
 
-			if (data != null)
-				SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(), data.toString());
+			// TODO implement via websockets
+			// if (data != null)
+			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
+			// data.toString());
 
 			return avalancheReport.getId();
 
@@ -429,8 +432,10 @@ public class AvalancheReportController {
 
 			transaction.commit();
 
-			if (data != null)
-				SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(), data.toString());
+			// TODO implement via websockets
+			// if (data != null)
+			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
+			// data.toString());
 
 		} catch (HibernateException he) {
 			if (transaction != null)

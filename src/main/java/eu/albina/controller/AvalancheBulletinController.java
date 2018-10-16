@@ -33,7 +33,6 @@ import eu.albina.model.BulletinLock;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.EventName;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
@@ -618,7 +617,9 @@ public class AvalancheBulletinController {
 			JSONObject json = new JSONObject();
 			json.put("bulletin", bulletinLock.getBulletin());
 			json.put("date", bulletinLock.getDate().toString(GlobalVariables.formatterDateTime));
-			SocketIOController.getInstance().sendEvent(EventName.unlockBulletin.toString(), json.toString());
+			// TODO implement via websockets
+			// SocketIOController.getInstance().sendEvent(EventName.unlockBulletin.toString(),
+			// json.toString());
 		}
 	}
 
