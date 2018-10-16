@@ -1,0 +1,129 @@
+{
+	"tendencyCommentTextcat": "117[6910[6766],11098,6519,6480,11613].82[6335,5,10116,14927]",
+	"regions": [
+		"IT-32-TN-09",
+		"IT-32-BZ-14",
+		"IT-32-BZ-15",
+		"IT-32-TN-02",
+		"IT-32-TN-13",
+		"IT-32-TN-01",
+		"IT-32-TN-04",
+		"IT-32-TN-14",
+		"IT-32-TN-06",
+		"IT-32-TN-05",
+		"IT-32-TN-16",
+		"IT-32-TN-08",
+		"IT-32-TN-19",
+		"IT-32-TN-07",
+		"IT-32-TN-20",
+		"IT-32-TN-10",
+		"IT-32-TN-21"
+	],
+	"tendency": "increasing",
+	"forenoon": {
+		"dangerRatingBelow": "low",
+		"avalancheSituation2": {},
+		"avalancheSituation1": {
+			"treelineLow": true,
+			"aspects": [
+				"nw",
+				"ne",
+				"e",
+				"n",
+				"w"
+			],
+			"avalancheSituation": "wind_drifted_snow"
+		},
+		"id": "eff4f0a3-aa80-4244-bfd0-0392857b65ac",
+		"dangerRatingAbove": "moderate"
+	},
+	"hasElevationDependency": true,
+	"avActivityHighlightsTextcat": "5[10166,3896[3773]]",
+	"hasDaytimeDependency": false,
+	"avActivityCommentTextcat": "111[7663[5861],14929,7521[836,7593,3727,819],4183,5890,9413].16[1451[6776],7751,9413].16[1434,7753[10213,5932[4170,3773]],9413].56[1390[10281],6555,9343,6191,6942]",
+	"avActivityComment": [
+		{
+			"text": " Des accumulations de neige soufflée plutôt petites se sont formées dans les derniers jours sur les pentes exposées à l'ouest, au nord et à l'est surtout à proximité des crêtes. Celles-ci constituent le danger principal. Les accumulations récentes et déjà plus anciennes de neige soufflée devraient être évaluées avec prudence au-dessus de la limite de la forêt. Elles peuvent par endroits être déclenchées avec en général une surcharge importante et atteindre une taille moyenne.",
+			"languageCode": "fr"
+		},
+		{
+			"text": " In the last few days rather small wind slabs formed in particular adjacent to ridgelines on west, north and east facing slopes. These represent the main danger. The fresh and somewhat older wind slabs are to be evaluated with care and prudence above the tree line. They can in some places be released, mostly by large loads and reach medium size.",
+			"languageCode": "en"
+		},
+		{
+			"text": " In den letzten Tagen entstanden vor allem an kammnahen West-, Nord- und Osthängen eher kleine Triebschneeansammlungen. Diese bilden die Hauptgefahr. Die frischen und schon etwas älteren Triebschneeansammlungen sollten oberhalb der Waldgrenze vorsichtig beurteilt werden. Sie können stellenweise mit meist grosser Belastung ausgelöst werden und mittlere Grösse erreichen.",
+			"languageCode": "de"
+		},
+		{
+			"text": " Negli ultimi giorni soprattutto sui pendii vicino alle creste esposti a ovest, nord ed est si sono formati accumuli di neve ventata di dimensioni piuttosto piccole. Questi ultimi rappresentano la principale fonte di pericolo. I nuovi accumuli di neve ventata e quelli meno recenti dovrebbero essere valutati con attenzione al di sopra del limite del bosco. Essi possono in alcuni punti distaccarsi per lo più con un forte sovraccarico e raggiungere dimensioni medie.",
+			"languageCode": "it"
+		}
+	],
+	"tendencyComment": [
+		{
+			"text": " Verso sera gli accumuli di neve ventata cresceranno ulteriormente. I punti pericolosi e la probabilità di distacco aumenteranno.",
+			"languageCode": "it"
+		},
+		{
+			"text": " En soirée les accumulations de neige soufflée se développent encore davantage. Les endroits dangereux et la propension au déclenchement augmentent.",
+			"languageCode": "fr"
+		},
+		{
+			"text": " Gegen Abend wachsen die Triebschneeansammlungen nochmals an. Gefahrenstellen und Auslösebereitschaft nehmen zu.",
+			"languageCode": "de"
+		},
+		{
+			"text": " Towards the evening the wind slabs will increase in size once again. The prevalence of avalanche prone locations and likelihood of triggering will increase.",
+			"languageCode": "en"
+		}
+	],
+	"additionalAuthors": [
+		"Fabio Gheser",
+		"Sergio Benigni"
+	],
+	"dangerPattern1": "dp6",
+	"avActivityHighlights": [
+		{
+			"text": " Neige soufflée au-dessus de la limite de la forêt.",
+			"languageCode": "fr"
+		},
+		{
+			"text": " Triebschnee oberhalb der Waldgrenze.",
+			"languageCode": "de"
+		},
+		{
+			"text": " Wind slabs above the tree line.",
+			"languageCode": "en"
+		},
+		{
+			"text": " Neve ventata al di sopra del limite del bosco.",
+			"languageCode": "it"
+		}
+	],
+	"snowpackStructureComment": [
+		{
+			"text": " The wind slabs represent the main danger. The wind has transported the fresh and old snow. In some localities they will increase in size once again. In some cases the various wind slabs have bonded poorly together. These can be released, especially at their margins,. The old snowpack will be increasingly stable.",
+			"languageCode": "en"
+		},
+		{
+			"text": " Les accumulations de neige soufflée constituent le danger principal. Le vent a transporté la neige fraîche et la neige ancienne. Elles se développent encore davantage localement. Les différentes accumulations de neige soufflée sont parfois mal liées entre elles. Celles-ci peuvent être déclenchées surtout à leur périphérie. Le manteau neigeux ancien est de plus en plus stable.",
+			"languageCode": "fr"
+		},
+		{
+			"text": " Die Triebschneeansammlungen bilden die Hauptgefahr. Der Wind hat Neu- und Altschnee verfrachtet. Lokal wachsen sie nochmals an. Die verschiedenen Triebschneeansammlungen sind teilweise schlecht miteinander verbunden. Diese können vor allem in ihren Randbereichen ausgelöst werden. Die Altschneedecke ist zunehmend stabil.",
+			"languageCode": "de"
+		},
+		{
+			"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo. Il vento ha causato il trasporto della neve fresca e della neve vecchia. Localmente, essi cresceranno ulteriormente. Il legame reciproco dei vari accumuli di neve ventata è in parte sfavorevole. Questi ultimi possono subire un distacco specialmente nelle zone marginali. Il manto di neve vecchia è progressivamente stabile.",
+			"languageCode": "it"
+		}
+	],
+	"treeline": true,
+	"id": "729cd621-6826-422b-ad45-83f724c6b994",
+	"validity": {
+		"from": "2030-02-15T23:00:00Z",
+		"until": "2030-02-16T23:00:00Z"
+	},
+	"snowpackStructureCommentTextcat": "16[1428,7751,9413].19[5999,9868].18[7641,11098,6522[10281],6917,6480,11613].21[6727,3738,5890,11097,6126,5996,7566].16[1451[6776],7768[10213,5929,9383],9413].11[10388,3976,6034,9543]",
+	"publicationDate": "2018-10-03T05:27:41Z"
+}
