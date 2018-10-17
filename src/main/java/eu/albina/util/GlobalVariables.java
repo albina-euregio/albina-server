@@ -1132,13 +1132,13 @@ public class GlobalVariables {
 		default:
 			switch (lang) {
 			case de:
-				return "Fehlt";
+				return "Keine Beurteilung";
 			case it:
-				return "Mancha";
+				return "Senza Valutazione";
 			case en:
-				return "Missing";
+				return "No Rating";
 			default:
-				return "Missing";
+				return "No Rating";
 			}
 		}
 	}
