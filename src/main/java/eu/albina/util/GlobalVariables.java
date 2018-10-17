@@ -45,15 +45,12 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTrentino = true;
 	private static boolean publishBulletinsStyria = true;
 
-	// TODO set correct directory for all files (path should include date,
-	// suggestion from vienna)
+	// TODO set correct directory for all files
 	// private static String pdfDirectory = "D:\\";
 	private static String pdfDirectory = "/mnt/daten1/pdfs/";
-	// private static String mapsPath =
-	// "D:\\norbert\\workspaces\\albina-euregio\\albina-server\\src\\main\\resources\\images\\";
-	private static String mapsPath = "/mnt/daten1/images/";
+	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
-	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
+	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 
 	private static String socketIoOrigin = "https://admin.avalanche.report";
 	private static int socketIoPort = 9092;
