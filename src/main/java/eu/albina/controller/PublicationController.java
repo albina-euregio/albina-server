@@ -53,26 +53,35 @@ public class PublicationController {
 
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		// create maps
-		if (GlobalVariables.isCreateMaps())
-			createMaps(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateMaps()) {
+			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			createMapsThread.start();
+			try {
+				createMapsThread.join();
 
-		// create pdfs
-		if (GlobalVariables.isCreatePdf())
-			createPdf(avalancheReportIds, bulletins);
+				// create pdfs
+				if (GlobalVariables.isCreatePdf())
+					createPdf(avalancheReportIds, bulletins);
 
-		// create static widgets
-		if (GlobalVariables.isCreateStaticWidget())
-			createStaticWidgets(avalancheReportIds, bulletins);
+				// create static widgets
+				if (GlobalVariables.isCreateStaticWidget())
+					createStaticWidgets(avalancheReportIds, bulletins);
 
-		// send emails
-		if (GlobalVariables.isSendEmails())
-			sendEmails(avalancheReportIds, bulletins, GlobalVariables.regions);
+				// send emails
+				if (GlobalVariables.isSendEmails())
+					sendEmails(avalancheReportIds, bulletins, GlobalVariables.regions);
 
-		// publish on social media
-		if (GlobalVariables.isPublishToSocialMedia()) {
+				// publish on social media
+				if (GlobalVariables.isPublishToSocialMedia()) {
 
-			// TODO publish on social media
+					// TODO publish on social media
 
+				}
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -107,26 +116,34 @@ public class PublicationController {
 			throws MessagingException {
 
 		// create maps
-		if (GlobalVariables.isCreateMaps())
-			createMaps(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateMaps()) {
+			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			createMapsThread.start();
+			try {
+				createMapsThread.join();
 
-		// create pdf
-		if (GlobalVariables.isCreatePdf())
-			createPdf(avalancheReportIds, bulletins);
+				// create pdf
+				if (GlobalVariables.isCreatePdf())
+					createPdf(avalancheReportIds, bulletins);
 
-		// create static widgets
-		if (GlobalVariables.isCreateStaticWidget())
-			createStaticWidgets(avalancheReportIds, bulletins);
+				// create static widgets
+				if (GlobalVariables.isCreateStaticWidget())
+					createStaticWidgets(avalancheReportIds, bulletins);
 
-		// send emails to regions
-		if (GlobalVariables.isSendEmails())
-			sendEmails(avalancheReportIds, bulletins, regions);
+				// send emails to regions
+				if (GlobalVariables.isSendEmails())
+					sendEmails(avalancheReportIds, bulletins, regions);
 
-		// publish on social media
-		if (GlobalVariables.isPublishToSocialMedia()) {
+				// publish on social media
+				if (GlobalVariables.isPublishToSocialMedia()) {
 
-			// TODO publish on social media only for updated regions
+					// TODO publish on social media only for updated regions
 
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -140,27 +157,36 @@ public class PublicationController {
 	 */
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		// create maps
-		if (GlobalVariables.isCreateMaps())
-			createMaps(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateMaps()) {
+			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			createMapsThread.start();
+			try {
+				createMapsThread.join();
 
-		// create pdfs
-		if (GlobalVariables.isCreatePdf())
-			createPdf(avalancheReportIds, bulletins);
+				// create pdfs
+				if (GlobalVariables.isCreatePdf())
+					createPdf(avalancheReportIds, bulletins);
 
-		// create static widgets
-		if (GlobalVariables.isCreateStaticWidget())
-			createStaticWidgets(avalancheReportIds, bulletins);
+				// create static widgets
+				if (GlobalVariables.isCreateStaticWidget())
+					createStaticWidgets(avalancheReportIds, bulletins);
+
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
-	private void createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
-		new Thread(new Runnable() {
+	private Thread createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+		return new Thread(new Runnable() {
 			public void run() {
 				logger.info("Map production started");
 				MapUtil.createDangerRatingMaps(bulletins);
 				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportIds);
 				logger.info("Map production finished");
 			}
-		}).start();
+		});
 	}
 
 	private void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
