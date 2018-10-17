@@ -103,12 +103,15 @@ public class StaticWidgetUtil {
 
 			BufferedImage ci = resize(loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "Colorbar.gif"),
 					600, 15);
-			// TODO use correct overview thumbnail map
-			// BufferedImage overviewThumbnail = resizeHeight(
-			// loadImageFromFile(GlobalVariables.getMapsPath() + "overview_thumbnail.jpg"),
-			// 400);
-			BufferedImage overviewThumbnail = resizeHeight(
-					loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "overview_thumbnail.jpg"), 400);
+
+			// TODO use thumbnail map with highest danger rating
+			BufferedImage overviewThumbnail;
+			if (AlbinaUtil.hasDaytimeDependency(bulletins))
+				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()
+						+ AlbinaUtil.getValidityDate(bulletins) + "/am_albina_thumbnail.jpg"), 400);
+			else
+				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()
+						+ AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_thumbnail.jpg"), 400);
 
 			if (highestDangerRating != DangerRating.very_high) {
 				ig2.setPaint(getDangerRatingColor(highestDangerRating));
@@ -291,8 +294,8 @@ public class StaticWidgetUtil {
 			ig2.drawImage(interregLogo, 350, 45, null);
 
 			// TODO add directory structure on production server
-			ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() + GlobalVariables.getPdfFilename(lang)
-					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
+			ImageIO.write(bi, "PNG",
+					new File(GlobalVariables.getPdfDirectory() + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
 			// ImageIO.write(bi, "gif", new File("c:\\yourImageName.GIF"));

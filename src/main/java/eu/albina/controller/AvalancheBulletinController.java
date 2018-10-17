@@ -252,7 +252,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : result.bulletins) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published
 						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
-					for (Element element : bulletin.toCAAML(doc, language, startDate)) {
+					for (Element element : bulletin.toCAAML(doc, language)) {
 						observations.appendChild(element);
 					}
 				}

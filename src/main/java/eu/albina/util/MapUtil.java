@@ -8,8 +8,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.enumerations.LanguageCode;
 
 public class MapUtil {
 
@@ -27,10 +38,62 @@ public class MapUtil {
 
 		// TODO implement creation of danger rating maps
 
-		// overview map big (email, pdf)
-		// overview map small (homepage archive)
-		// map for each aggregated region (email, pdf)
-		// map for TN, BZ and TI (for later, email, pdf)
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder;
+			docBuilder = docFactory.newDocumentBuilder();
+
+			Document doc = docBuilder.newDocument();
+			Element rootElement = AlbinaUtil.createObsCollectionHeaderCaaml(doc);
+
+			// create meta data
+			DateTime publicationDate = null;
+			if (bulletins != null && !bulletins.isEmpty()) {
+				for (AvalancheBulletin bulletin : bulletins) {
+					if (bulletin.getPublicationDate() != null) {
+						if (publicationDate == null)
+							publicationDate = bulletin.getPublicationDate();
+						else {
+							if (bulletin.getPublicationDate().isAfter(publicationDate))
+								publicationDate = bulletin.getPublicationDate();
+						}
+					}
+				}
+
+				Element metaDataProperty = doc.createElement("metaDataProperty");
+				Element metaData = doc.createElement("MetaData");
+				Element dateTimeReport = doc.createElement("dateTimeReport");
+				dateTimeReport.appendChild(doc.createTextNode(
+						publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
+				metaData.appendChild(dateTimeReport);
+
+				metaDataProperty.appendChild(metaData);
+				rootElement.appendChild(metaDataProperty);
+
+				Element observations = doc.createElement("observations");
+
+				for (AvalancheBulletin bulletin : bulletins) {
+					for (Element element : bulletin.toCAAML(doc, LanguageCode.en)) {
+						observations.appendChild(element);
+					}
+				}
+				rootElement.appendChild(observations);
+
+			}
+
+			doc.appendChild(rootElement);
+
+			triggerMapProductionUnivie(AlbinaUtil.convertDocToString(doc));
+		} catch (AlbinaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	public static String triggerMapProductionUnivie(String caaml) throws AlbinaException {

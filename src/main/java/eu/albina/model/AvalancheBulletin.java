@@ -29,6 +29,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -684,6 +685,17 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return result;
 	}
 
+	public DateTime getValidityDate() {
+		DateTime date = validFrom.withTimeAtStartOfDay();
+		if (validFrom.getHourOfDay() > 12)
+			date = date.plusDays(1);
+		return date;
+	}
+
+	public String getValidityDateString() {
+		return getValidityDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -832,8 +844,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return json;
 	}
 
-	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, DateTime startDate,
-			boolean isAfternoon) {
+	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
 
 		AvalancheBulletinDaytimeDescription bulletin;
 
@@ -1115,13 +1126,13 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return rootElement;
 	}
 
-	public List<Element> toCAAML(Document doc, LanguageCode languageCode, DateTime startDate) {
+	public List<Element> toCAAML(Document doc, LanguageCode languageCode) {
 		if (!publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLBulletin(doc, languageCode, startDate, false));
+			result.add(createCAAMLBulletin(doc, languageCode, false));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLBulletin(doc, languageCode, startDate, true));
+				result.add(createCAAMLBulletin(doc, languageCode, true));
 
 			return result;
 		} else
