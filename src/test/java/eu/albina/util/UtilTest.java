@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,10 @@ import org.junit.runners.MethodSorters;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Image;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
@@ -106,7 +111,7 @@ public class UtilTest {
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-		InputStream is = classloader.getResourceAsStream("validBulletin.json");
+		InputStream is = classloader.getResourceAsStream("2030-02-16_1.json");
 		StringBuilder bulletinStringBuilder = new StringBuilder();
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
@@ -121,7 +126,7 @@ public class UtilTest {
 		AvalancheBulletin bulletin = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin);
 
-		is = classloader.getResourceAsStream("validBulletin2.json");
+		is = classloader.getResourceAsStream("2030-02-16_2.json");
 		bulletinStringBuilder = new StringBuilder();
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
@@ -136,7 +141,7 @@ public class UtilTest {
 		AvalancheBulletin bulletin2 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin2);
 
-		is = classloader.getResourceAsStream("validBulletin3.json");
+		is = classloader.getResourceAsStream("2030-02-16_3.json");
 		bulletinStringBuilder = new StringBuilder();
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
@@ -151,7 +156,7 @@ public class UtilTest {
 		AvalancheBulletin bulletin3 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin3);
 
-		is = classloader.getResourceAsStream("validBulletin4.json");
+		is = classloader.getResourceAsStream("2030-02-16_4.json");
 		bulletinStringBuilder = new StringBuilder();
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
@@ -165,6 +170,21 @@ public class UtilTest {
 		validBulletinStringFromResource = bulletinStringBuilder.toString();
 		AvalancheBulletin bulletin4 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin4);
+
+		is = classloader.getResourceAsStream("2030-02-16_5.json");
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		validBulletinStringFromResource = bulletinStringBuilder.toString();
+		AvalancheBulletin bulletin5 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+		bulletins.add(bulletin5);
 
 		recipients.add("n.lanzanasto@gmail.com");
 		recipients.add("norbert.lanzanasto@tirol.gv.at");
@@ -200,9 +220,17 @@ public class UtilTest {
 
 	@Ignore
 	@Test
+	public void loadImage() throws MalformedURLException {
+		String string = GlobalVariables.getMapsPath() + "2030-02-16/" + "fd_albina_map.jpg";
+		ImageData overviewMapAMImageData = ImageDataFactory.create(string);
+		Image overviewMapAMImg = new Image(overviewMapAMImageData);
+	}
+
+	@Ignore
+	@Test
 	public void createSpecificPdfs() throws IOException, URISyntaxException {
-		String filename = "2030-02-14";
-		int count = 6;
+		String filename = "2030-02-16";
+		int count = 5;
 		List<AvalancheBulletin> list = loadBulletins(filename, count);
 		PdfUtil.getInstance().createOverviewPdfs(list);
 	}
