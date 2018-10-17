@@ -29,6 +29,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -42,7 +43,7 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
-import eu.albina.util.AlbinaUtil;
+import eu.albina.util.XmlUtil;
 import eu.albina.util.GlobalVariables;
 
 /**
@@ -684,6 +685,17 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return result;
 	}
 
+	public DateTime getValidityDate() {
+		DateTime date = validFrom.withTimeAtStartOfDay();
+		if (validFrom.getHourOfDay() > 12)
+			date = date.plusDays(1);
+		return date;
+	}
+
+	public String getValidityDateString() {
+		return getValidityDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -832,8 +844,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return json;
 	}
 
-	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, DateTime startDate,
-			boolean isAfternoon) {
+	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
 
 		AvalancheBulletinDaytimeDescription bulletin;
 
@@ -908,7 +919,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			Element dangerRatingAbove = doc.createElement("DangerRating");
 			Element validElevationAbove = doc.createElement("validElevation");
 			validElevationAbove.setAttribute("xlink:href",
-					AlbinaUtil.createValidElevationAttribute(elevation, true, treeline));
+					XmlUtil.createValidElevationAttribute(elevation, true, treeline));
 			dangerRatingAbove.appendChild(validElevationAbove);
 			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
@@ -920,7 +931,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			Element dangerRatingBelow = doc.createElement("DangerRating");
 			Element validElevationBelow = doc.createElement("validElevation");
 			validElevationBelow.setAttribute("xlink:href",
-					AlbinaUtil.createValidElevationAttribute(elevation, false, treeline));
+					XmlUtil.createValidElevationAttribute(elevation, false, treeline));
 			dangerRatingBelow.appendChild(validElevationBelow);
 			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
@@ -1005,9 +1016,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					Element validElevation = doc.createElement("validElevation");
 					String elevationString;
 					if (bulletin.getAvalancheSituation1().getTreelineHigh())
-						elevationString = AlbinaUtil.createValidElevationAttribute(0, false, true);
+						elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
 					else
-						elevationString = AlbinaUtil.createValidElevationAttribute(
+						elevationString = XmlUtil.createValidElevationAttribute(
 								bulletin.getAvalancheSituation1().getElevationHigh(), false, false);
 					validElevation.setAttribute("xlink:href", elevationString);
 					avProblem1.appendChild(validElevation);
@@ -1018,9 +1029,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				Element validElevation = doc.createElement("validElevation");
 				String elevationString;
 				if (bulletin.getAvalancheSituation1().getTreelineLow())
-					elevationString = AlbinaUtil.createValidElevationAttribute(0, true, true);
+					elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
 				else
-					elevationString = AlbinaUtil.createValidElevationAttribute(
+					elevationString = XmlUtil.createValidElevationAttribute(
 							bulletin.getAvalancheSituation1().getElevationLow(), true, false);
 				validElevation.setAttribute("xlink:href", elevationString);
 				avProblem1.appendChild(validElevation);
@@ -1073,9 +1084,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					Element validElevation = doc.createElement("validElevation");
 					String elevationString;
 					if (bulletin.getAvalancheSituation2().getTreelineHigh())
-						elevationString = AlbinaUtil.createValidElevationAttribute(0, false, true);
+						elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
 					else
-						elevationString = AlbinaUtil.createValidElevationAttribute(
+						elevationString = XmlUtil.createValidElevationAttribute(
 								bulletin.getAvalancheSituation2().getElevationHigh(), false, false);
 					validElevation.setAttribute("xlink:href", elevationString);
 					avProblem2.appendChild(validElevation);
@@ -1086,9 +1097,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				Element validElevation = doc.createElement("validElevation");
 				String elevationString;
 				if (bulletin.getAvalancheSituation2().getTreelineLow())
-					elevationString = AlbinaUtil.createValidElevationAttribute(0, true, true);
+					elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
 				else
-					elevationString = AlbinaUtil.createValidElevationAttribute(
+					elevationString = XmlUtil.createValidElevationAttribute(
 							bulletin.getAvalancheSituation2().getElevationLow(), true, false);
 				validElevation.setAttribute("xlink:href", elevationString);
 				avProblem2.appendChild(validElevation);
@@ -1115,13 +1126,13 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return rootElement;
 	}
 
-	public List<Element> toCAAML(Document doc, LanguageCode languageCode, DateTime startDate) {
+	public List<Element> toCAAML(Document doc, LanguageCode languageCode) {
 		if (!publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLBulletin(doc, languageCode, startDate, false));
+			result.add(createCAAMLBulletin(doc, languageCode, false));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLBulletin(doc, languageCode, startDate, true));
+				result.add(createCAAMLBulletin(doc, languageCode, true));
 
 			return result;
 		} else

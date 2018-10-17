@@ -103,12 +103,15 @@ public class StaticWidgetUtil {
 
 			BufferedImage ci = resize(loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "Colorbar.gif"),
 					600, 15);
-			// TODO use correct overview thumbnail map
-			// BufferedImage overviewThumbnail = resizeHeight(
-			// loadImageFromFile(GlobalVariables.getMapsPath() + "overview_thumbnail.jpg"),
-			// 400);
-			BufferedImage overviewThumbnail = resizeHeight(
-					loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "overview_thumbnail.jpg"), 400);
+
+			// TODO use thumbnail map with highest danger rating
+			BufferedImage overviewThumbnail;
+			if (AlbinaUtil.hasDaytimeDependency(bulletins))
+				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()
+						+ AlbinaUtil.getValidityDate(bulletins) + "/am_albina_thumbnail.jpg"), 400);
+			else
+				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()
+						+ AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_thumbnail.jpg"), 400);
 
 			if (highestDangerRating != DangerRating.very_high) {
 				ig2.setPaint(getDangerRatingColor(highestDangerRating));
@@ -291,8 +294,8 @@ public class StaticWidgetUtil {
 			ig2.drawImage(interregLogo, 350, 45, null);
 
 			// TODO add directory structure on production server
-			ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() + GlobalVariables.getPdfFilename(lang)
-					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
+			ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDate(bulletins)
+					+ "/" + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
 			// ImageIO.write(bi, "gif", new File("c:\\yourImageName.GIF"));
@@ -313,22 +316,23 @@ public class StaticWidgetUtil {
 		return dimg;
 	}
 
-	private static BufferedImage resizeWidth(BufferedImage img, int newW) {
-		double oldW = img.getWidth();
-		double oldH = img.getHeight();
-		double factor = (oldH / oldW);
-		double newHDouble = factor * newW;
-		int newH = (int) newHDouble;
-
-		Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
-		BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
-
-		Graphics2D g2d = dimg.createGraphics();
-		g2d.drawImage(tmp, 0, 0, null);
-		g2d.dispose();
-
-		return dimg;
-	}
+	// private static BufferedImage resizeWidth(BufferedImage img, int newW) {
+	// double oldW = img.getWidth();
+	// double oldH = img.getHeight();
+	// double factor = (oldH / oldW);
+	// double newHDouble = factor * newW;
+	// int newH = (int) newHDouble;
+	//
+	// Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+	// BufferedImage dimg = new BufferedImage(newW, newH,
+	// BufferedImage.TYPE_INT_ARGB);
+	//
+	// Graphics2D g2d = dimg.createGraphics();
+	// g2d.drawImage(tmp, 0, 0, null);
+	// g2d.dispose();
+	//
+	// return dimg;
+	// }
 
 	private static BufferedImage resizeHeight(BufferedImage img, int newH) {
 		double oldW = img.getWidth();
@@ -358,16 +362,16 @@ public class StaticWidgetUtil {
 		return img;
 	}
 
-	private BufferedImage loadImageFromFile(String path) {
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(new File(path));
-		} catch (IOException e) {
-			logger.error("Error loading image: " + path);
-			e.printStackTrace();
-		}
-		return img;
-	}
+	// private BufferedImage loadImageFromFile(String path) {
+	// BufferedImage img = null;
+	// try {
+	// img = ImageIO.read(new File(path));
+	// } catch (IOException e) {
+	// logger.error("Error loading image: " + path);
+	// e.printStackTrace();
+	// }
+	// return img;
+	// }
 
 	private Color getDangerRatingColor(DangerRating dangerRating) {
 		switch (dangerRating) {

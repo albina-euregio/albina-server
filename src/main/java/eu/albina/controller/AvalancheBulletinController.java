@@ -36,6 +36,7 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
+import eu.albina.util.XmlUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
@@ -217,7 +218,7 @@ public class AvalancheBulletinController {
 		docBuilder = docFactory.newDocumentBuilder();
 
 		Document doc = docBuilder.newDocument();
-		Element rootElement = AlbinaUtil.createObsCollectionHeaderCaaml(doc);
+		Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
 
 		// create meta data
 		DateTime publicationDate = null;
@@ -251,7 +252,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : result.bulletins) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published
 						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
-					for (Element element : bulletin.toCAAML(doc, language, startDate)) {
+					for (Element element : bulletin.toCAAML(doc, language)) {
 						observations.appendChild(element);
 					}
 				}
@@ -261,7 +262,7 @@ public class AvalancheBulletinController {
 
 		doc.appendChild(rootElement);
 
-		return AlbinaUtil.convertDocToString(doc);
+		return XmlUtil.convertDocToString(doc);
 	}
 
 	public Collection<AvalancheBulletin> getPublishedBulletinsJson(DateTime startDate, DateTime endDate,

@@ -8,8 +8,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import javax.xml.transform.TransformerException;
+
+import org.w3c.dom.Document;
+
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.enumerations.LanguageCode;
 
 public class MapUtil {
 
@@ -27,10 +32,16 @@ public class MapUtil {
 
 		// TODO implement creation of danger rating maps
 
-		// overview map big (email, pdf)
-		// overview map small (homepage archive)
-		// map for each aggregated region (email, pdf)
-		// map for TN, BZ and TI (for later, email, pdf)
+		try {
+			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
+			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
+		} catch (AlbinaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static String triggerMapProductionUnivie(String caaml) throws AlbinaException {

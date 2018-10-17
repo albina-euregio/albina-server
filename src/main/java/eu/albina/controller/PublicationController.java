@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.xml.transform.TransformerException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.StaticWidgetUtil;
+import eu.albina.util.XmlUtil;
 
 /**
  * Controller for avalanche reports.
@@ -52,27 +54,40 @@ public class PublicationController {
 	}
 
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+
+		// create CAAML
+		createCaaml(avalancheReportIds, bulletins);
+
 		// create maps
-		if (GlobalVariables.isCreateMaps())
-			createMaps(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateMaps()) {
+			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			createMapsThread.start();
+			try {
+				createMapsThread.join();
 
-		// create pdfs
-		if (GlobalVariables.isCreatePdf())
-			createPdf(avalancheReportIds, bulletins);
+				// create pdfs
+				if (GlobalVariables.isCreatePdf())
+					createPdf(avalancheReportIds, bulletins);
 
-		// create static widgets
-		if (GlobalVariables.isCreateStaticWidget())
-			createStaticWidgets(avalancheReportIds, bulletins);
+				// create static widgets
+				if (GlobalVariables.isCreateStaticWidget())
+					createStaticWidgets(avalancheReportIds, bulletins);
 
-		// send emails
-		if (GlobalVariables.isSendEmails())
-			sendEmails(avalancheReportIds, bulletins, GlobalVariables.regions);
+				// send emails
+				if (GlobalVariables.isSendEmails())
+					sendEmails(avalancheReportIds, bulletins, GlobalVariables.regions);
 
-		// publish on social media
-		if (GlobalVariables.isPublishToSocialMedia()) {
+				// publish on social media
+				if (GlobalVariables.isPublishToSocialMedia()) {
 
-			// TODO publish on social media
+					// TODO publish on social media
 
+				}
+
+			} catch (InterruptedException e) {
+				logger.error("Map production interrupted: " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -106,27 +121,38 @@ public class PublicationController {
 	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions)
 			throws MessagingException {
 
+		// create CAAML
+		createCaaml(avalancheReportIds, bulletins);
+
 		// create maps
-		if (GlobalVariables.isCreateMaps())
-			createMaps(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateMaps()) {
+			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			createMapsThread.start();
+			try {
+				createMapsThread.join();
 
-		// create pdf
-		if (GlobalVariables.isCreatePdf())
-			createPdf(avalancheReportIds, bulletins);
+				// create pdf
+				if (GlobalVariables.isCreatePdf())
+					createPdf(avalancheReportIds, bulletins);
 
-		// create static widgets
-		if (GlobalVariables.isCreateStaticWidget())
-			createStaticWidgets(avalancheReportIds, bulletins);
+				// create static widgets
+				if (GlobalVariables.isCreateStaticWidget())
+					createStaticWidgets(avalancheReportIds, bulletins);
 
-		// send emails to regions
-		if (GlobalVariables.isSendEmails())
-			sendEmails(avalancheReportIds, bulletins, regions);
+				// send emails to regions
+				if (GlobalVariables.isSendEmails())
+					sendEmails(avalancheReportIds, bulletins, regions);
 
-		// publish on social media
-		if (GlobalVariables.isPublishToSocialMedia()) {
+				// publish on social media
+				if (GlobalVariables.isPublishToSocialMedia()) {
 
-			// TODO publish on social media only for updated regions
+					// TODO publish on social media only for updated regions
 
+				}
+			} catch (InterruptedException e) {
+				logger.error("Map production interrupted: " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -139,28 +165,57 @@ public class PublicationController {
 	 *            The bulletins that were changed.
 	 */
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+
+		// create CAAML
+		createCaaml(avalancheReportIds, bulletins);
+
 		// create maps
-		if (GlobalVariables.isCreateMaps())
-			createMaps(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateMaps()) {
+			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			createMapsThread.start();
+			try {
+				createMapsThread.join();
 
-		// create pdfs
-		if (GlobalVariables.isCreatePdf())
-			createPdf(avalancheReportIds, bulletins);
+				// create pdfs
+				if (GlobalVariables.isCreatePdf())
+					createPdf(avalancheReportIds, bulletins);
 
-		// create static widgets
-		if (GlobalVariables.isCreateStaticWidget())
-			createStaticWidgets(avalancheReportIds, bulletins);
+				// create static widgets
+				if (GlobalVariables.isCreateStaticWidget())
+					createStaticWidgets(avalancheReportIds, bulletins);
+
+			} catch (InterruptedException e) {
+				logger.error("Map production interrupted: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 
-	private void createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
-		new Thread(new Runnable() {
+	// LANG
+	private void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+		try {
+			logger.info("CAAML production started");
+			XmlUtil.createCaamlFiles(bulletins);
+			AvalancheReportController.getInstance().setAvalancheReportCaamlFlag(avalancheReportIds);
+			logger.info("CAAML production finished");
+		} catch (TransformerException e) {
+			logger.error("Error producing CAAML: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private Thread createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+		return new Thread(new Runnable() {
 			public void run() {
 				logger.info("Map production started");
 				MapUtil.createDangerRatingMaps(bulletins);
 				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportIds);
 				logger.info("Map production finished");
 			}
-		}).start();
+		});
 	}
 
 	private void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {

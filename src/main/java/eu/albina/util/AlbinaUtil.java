@@ -4,28 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.exception.AlbinaException;
@@ -270,95 +256,6 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static String convertDocToString(Document doc) throws TransformerException {
-		Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		StreamResult result = new StreamResult(new StringWriter());
-		DOMSource source = new DOMSource(doc);
-		transformer.transform(source, result);
-		return result.getWriter().toString();
-	}
-
-	public static Document createXmlError(String key, String value) throws ParserConfigurationException {
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder;
-		docBuilder = docFactory.newDocumentBuilder();
-		Document doc = docBuilder.newDocument();
-		Element rootElement = doc.createElement(key);
-		rootElement.appendChild(doc.createTextNode(value));
-		return doc;
-	}
-
-	public static JSONObject createRegionHeaderJson() {
-		JSONObject json = new JSONObject();
-		json.put("type", "FeatureCollection");
-		JSONObject crs = new JSONObject();
-		crs.put("type", "name");
-		JSONObject properties = new JSONObject();
-		properties.put("name", GlobalVariables.referenceSystemUrn);
-		crs.put("properties", properties);
-		json.put("crs", crs);
-		return json;
-	}
-
-	public static Element createRegionHeaderCaaml(Document doc) throws ParserConfigurationException {
-		Element rootElement = doc.createElement("LocationCollection");
-		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
-		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
-		rootElement.setAttribute("xmlns:app", "ALBINA");
-		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		rootElement.setAttribute("xmlns:schemaLocation",
-				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
-		doc.appendChild(rootElement);
-
-		Element metaDataProperty = doc.createElement("metaDataProperty");
-		Element metaData = doc.createElement("MetaData");
-		Element dateTimeReport = doc.createElement("dateTimeReport");
-		dateTimeReport.appendChild(doc.createTextNode((new DateTime()).toString(GlobalVariables.formatterDateTime)));
-		metaData.appendChild(dateTimeReport);
-		Element srcRef = doc.createElement("srcRef");
-		Element operation = doc.createElement("Operation");
-		operation.setAttribute("gml:id", "ALBINA");
-		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode("ALBINA"));
-		operation.appendChild(name);
-		srcRef.appendChild(operation);
-		metaData.appendChild(srcRef);
-		metaDataProperty.appendChild(metaData);
-		rootElement.appendChild(metaDataProperty);
-		return rootElement;
-	}
-
-	public static Element createObsCollectionHeaderCaaml(Document doc) {
-		Element rootElement = doc.createElement("ObsCollection");
-		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
-		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
-		rootElement.setAttribute("xmlns:albina", GlobalVariables.albinaXmlSchemaUrl);
-		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		rootElement.setAttribute("xmlns:schemaLocation",
-				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
-		rootElement.setAttribute("xmlns:app", "ALBINA");
-
-		return rootElement;
-	}
-
-	public static String createValidElevationAttribute(int elevation, boolean above, boolean treeline) {
-		// TODO Allow treeline in CAAML
-		if (treeline) {
-			if (above)
-				return "ElevationRange_TreelineHi";
-			else
-				return "ElevationRange_TreelineLw";
-		} else {
-			if (above)
-				return "ElevationRange_" + elevation + "Hi";
-			else
-				return "ElevationRange_" + elevation + "Lw";
-		}
-	}
-
 	public static boolean hasBulletinChanged(DateTime startDate, String region) {
 		boolean result = false;
 		try {
@@ -372,19 +269,6 @@ public class AlbinaUtil {
 			e.printStackTrace();
 		}
 		return result;
-	}
-
-	public static JSONObject createBulletinStatusUpdateJson(String region, DateTime date, BulletinStatus status) {
-		JSONObject json = new JSONObject();
-
-		if (region != null && region != "")
-			json.put("region", region);
-		if (date != null)
-			json.put("date", date.toString(GlobalVariables.formatterDateTime));
-		if (status != null)
-			json.put("status", status);
-
-		return json;
 	}
 
 	public static String encodeFileToBase64Binary(File file) {
@@ -439,9 +323,16 @@ public class AlbinaUtil {
 	public static String getFilenameDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getDate(bulletins);
 		if (date != null)
-			return " " + date.toString(DateTimeFormat.forPattern("dd-MM-yyyy"));
+			return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd")) + "_" + lang.toString();
 		else
-			return "";
+			return "_" + lang.toString();
+	}
+
+	public static String getValidityDate(List<AvalancheBulletin> bulletins) {
+		DateTime date = getDate(bulletins);
+		if (date.getHourOfDay() > 12)
+			date = date.plusDays(1);
+		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
 	private static DateTime getDate(List<AvalancheBulletin> bulletins) {

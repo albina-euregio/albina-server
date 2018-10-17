@@ -377,12 +377,17 @@ public class EmailUtil {
 			image.put("socialmedia", socialMediaImages);
 			Map<String, Object> mapImage = new HashMap<>();
 
-			// TODO add map URL to email
-			mapImage.put("overview", GlobalVariables.getServerImagesUrl() + "bulletin-overview.jpg");
-			if (AlbinaUtil.hasDaytimeDependency(bulletins))
-				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "bulletin-overview.jpg");
-			else
+			// maps
+			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
+				mapImage.put("overview",
+						GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/am_albina_map.jpg");
+				mapImage.put("overviewPM",
+						GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/pm_albina_map.jpg");
+			} else {
+				mapImage.put("overview",
+						GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_map.jpg");
 				mapImage.put("overviewPM", "");
+			}
 
 			image.put("map", mapImage);
 			root.put("image", image);
@@ -610,8 +615,13 @@ public class EmailUtil {
 			dangerRating.put("elevation", "");
 		bulletin.put("dangerRating", dangerRating);
 
-		// TODO add correct map
-		bulletin.put("map", GlobalVariables.getServerImagesUrl() + "bulletin-report-region.png");
+		// maps
+		if (isAfternoon)
+			bulletin.put("map", GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString() + "/"
+					+ avalancheBulletin.getId() + "_PM.jpg");
+		else
+			bulletin.put("map", GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString() + "/"
+					+ avalancheBulletin.getId() + ".jpg");
 
 		// avalanche situation 1
 		Map<String, Object> avalancheSituation1 = new HashMap<>();
@@ -720,7 +730,7 @@ public class EmailUtil {
 		// avalanche situation 2
 		Map<String, Object> avalancheSituation2 = new HashMap<>();
 		if (daytimeBulletin.getAvalancheSituation2() != null
-				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
+				&& daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
 			if (daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
 				avalancheSituation2.put("symbol", GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/"
 						+ daytimeBulletin.getAvalancheSituation2().getAvalancheSituation().toStringId() + ".png");

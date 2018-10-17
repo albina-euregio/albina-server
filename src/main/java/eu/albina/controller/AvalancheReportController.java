@@ -30,8 +30,8 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.Texts;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.JsonUtil;
 
 /**
  * Controller for avalanche reports.
@@ -165,7 +165,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.draft);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				AvalancheReport avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(new DateTime());
@@ -191,7 +191,7 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}
@@ -302,7 +302,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.published);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(publicationDate);
@@ -335,7 +335,7 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}
@@ -394,7 +394,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.missing);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				AvalancheReport avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(new DateTime());
@@ -425,7 +425,7 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}
@@ -709,6 +709,26 @@ public class AvalancheReportController {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setMapCreated(true);
+			}
+			entityManager.flush();
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Map flag could not be set!");
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	public void setAvalancheReportCaamlFlag(List<String> avalancheReportIds) {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			for (String avalancheReportId : avalancheReportIds) {
+				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+				avalancheReport.setCaamlCreated(true);
 			}
 			entityManager.flush();
 			transaction.commit();
