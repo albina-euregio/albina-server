@@ -31,8 +31,8 @@ import eu.albina.model.Texts;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.EventName;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.JsonUtil;
 
 /**
  * Controller for avalanche reports.
@@ -166,7 +166,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.draft);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				AvalancheReport avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(new DateTime());
@@ -192,7 +192,7 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}
@@ -301,7 +301,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.published);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(publicationDate);
@@ -334,7 +334,7 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}
@@ -391,7 +391,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.missing);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				AvalancheReport avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(new DateTime());
@@ -422,7 +422,7 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = AlbinaUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}

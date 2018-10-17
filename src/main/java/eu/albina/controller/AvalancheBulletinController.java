@@ -37,6 +37,7 @@ import eu.albina.model.enumerations.EventName;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
+import eu.albina.util.XmlUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
@@ -218,7 +219,7 @@ public class AvalancheBulletinController {
 		docBuilder = docFactory.newDocumentBuilder();
 
 		Document doc = docBuilder.newDocument();
-		Element rootElement = AlbinaUtil.createObsCollectionHeaderCaaml(doc);
+		Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
 
 		// create meta data
 		DateTime publicationDate = null;
@@ -262,7 +263,7 @@ public class AvalancheBulletinController {
 
 		doc.appendChild(rootElement);
 
-		return AlbinaUtil.convertDocToString(doc);
+		return XmlUtil.convertDocToString(doc);
 	}
 
 	public Collection<AvalancheBulletin> getPublishedBulletinsJson(DateTime startDate, DateTime endDate,

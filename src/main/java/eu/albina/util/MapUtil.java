@@ -44,7 +44,7 @@ public class MapUtil {
 			docBuilder = docFactory.newDocumentBuilder();
 
 			Document doc = docBuilder.newDocument();
-			Element rootElement = AlbinaUtil.createObsCollectionHeaderCaaml(doc);
+			Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
 
 			// create meta data
 			DateTime publicationDate = null;
@@ -83,7 +83,7 @@ public class MapUtil {
 
 			doc.appendChild(rootElement);
 
-			triggerMapProductionUnivie(AlbinaUtil.convertDocToString(doc));
+			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
 		} catch (AlbinaException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
