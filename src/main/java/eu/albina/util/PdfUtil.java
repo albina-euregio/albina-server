@@ -116,8 +116,10 @@ public class PdfUtil {
 			PdfWriter writer;
 
 			// TODO add directory structure on production server
-			writer = new PdfWriter(
-					GlobalVariables.getPdfDirectory() + AlbinaUtil.getFilenameDate(bulletins, lang) + ".pdf");
+			String validityDateString = AlbinaUtil.getValidityDate(bulletins);
+
+			writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString
+					+ "_" + lang.toString() + ".pdf");
 			pdf = new PdfDocument(writer);
 
 			// PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");

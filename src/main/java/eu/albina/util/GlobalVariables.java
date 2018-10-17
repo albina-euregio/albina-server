@@ -47,7 +47,7 @@ public class GlobalVariables {
 
 	// TODO set correct directory for all files
 	// private static String pdfDirectory = "D:\\";
-	private static String pdfDirectory = "/mnt/daten1/pdfs/";
+	private static String pdfDirectory = "/mnt/albina_files/";
 	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";

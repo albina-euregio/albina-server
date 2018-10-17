@@ -51,6 +51,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "REVISION")
 	private int revision;
 
+	@Column(name = "CAAML_CREATED")
+	private boolean caamlCreated;
+
 	@Column(name = "PDF_CREATED")
 	private boolean pdfCreated;
 
@@ -107,6 +110,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (json.has("revision"))
 			this.revision = json.getInt("revision");
 
+		if (json.has("caamlCreated"))
+			this.caamlCreated = json.getBoolean("caamlCreated");
 		if (json.has("pdfCreated"))
 			this.pdfCreated = json.getBoolean("pdfCreated");
 		if (json.has("emailCreated"))
@@ -165,6 +170,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setRevision(int revision) {
 		this.revision = revision;
+	}
+
+	public boolean isCaamlCreated() {
+		return caamlCreated;
+	}
+
+	public void setCaamlCreated(boolean caaml) {
+		this.caamlCreated = caaml;
 	}
 
 	public boolean isPdfCreated() {
@@ -239,6 +252,11 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 		if (revision > 0)
 			json.put("revision", revision);
+
+		if (caamlCreated)
+			json.put("caamlCreated", true);
+		else
+			json.put("caamlCreated", false);
 
 		if (pdfCreated)
 			json.put("pdfCreated", true);

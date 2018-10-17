@@ -716,6 +716,26 @@ public class AvalancheReportController {
 		}
 	}
 
+	public void setAvalancheReportCaamlFlag(List<String> avalancheReportIds) {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			for (String avalancheReportId : avalancheReportIds) {
+				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+				avalancheReport.setCaamlCreated(true);
+			}
+			entityManager.flush();
+			transaction.commit();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			logger.error("Map flag could not be set!");
+		} finally {
+			entityManager.close();
+		}
+	}
+
 	public void setAvalancheReportWhatsappFlag(String avalancheReportId) {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();

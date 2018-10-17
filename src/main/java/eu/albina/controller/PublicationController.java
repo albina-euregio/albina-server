@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.xml.transform.TransformerException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.StaticWidgetUtil;
+import eu.albina.util.XmlUtil;
 
 /**
  * Controller for avalanche reports.
@@ -52,6 +54,10 @@ public class PublicationController {
 	}
 
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+
+		// create CAAML
+		createCaaml(avalancheReportIds, bulletins);
+
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
 			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
@@ -79,7 +85,7 @@ public class PublicationController {
 				}
 
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				logger.error("Map production interrupted: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -115,6 +121,9 @@ public class PublicationController {
 	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions)
 			throws MessagingException {
 
+		// create CAAML
+		createCaaml(avalancheReportIds, bulletins);
+
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
 			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
@@ -141,7 +150,7 @@ public class PublicationController {
 
 				}
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				logger.error("Map production interrupted: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -156,6 +165,10 @@ public class PublicationController {
 	 *            The bulletins that were changed.
 	 */
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+
+		// create CAAML
+		createCaaml(avalancheReportIds, bulletins);
+
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
 			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
@@ -172,9 +185,25 @@ public class PublicationController {
 					createStaticWidgets(avalancheReportIds, bulletins);
 
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				logger.error("Map production interrupted: " + e.getMessage());
 				e.printStackTrace();
 			}
+		}
+	}
+
+	// LANG
+	private void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+		try {
+			logger.info("CAAML production started");
+			XmlUtil.createCaamlFiles(bulletins);
+			AvalancheReportController.getInstance().setAvalancheReportCaamlFlag(avalancheReportIds);
+			logger.info("CAAML production finished");
+		} catch (TransformerException e) {
+			logger.error("Error producing CAAML: " + e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

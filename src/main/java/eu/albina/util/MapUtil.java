@@ -8,15 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
@@ -39,50 +33,7 @@ public class MapUtil {
 		// TODO implement creation of danger rating maps
 
 		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder;
-			docBuilder = docFactory.newDocumentBuilder();
-
-			Document doc = docBuilder.newDocument();
-			Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
-
-			// create meta data
-			DateTime publicationDate = null;
-			if (bulletins != null && !bulletins.isEmpty()) {
-				for (AvalancheBulletin bulletin : bulletins) {
-					if (bulletin.getPublicationDate() != null) {
-						if (publicationDate == null)
-							publicationDate = bulletin.getPublicationDate();
-						else {
-							if (bulletin.getPublicationDate().isAfter(publicationDate))
-								publicationDate = bulletin.getPublicationDate();
-						}
-					}
-				}
-
-				Element metaDataProperty = doc.createElement("metaDataProperty");
-				Element metaData = doc.createElement("MetaData");
-				Element dateTimeReport = doc.createElement("dateTimeReport");
-				dateTimeReport.appendChild(doc.createTextNode(
-						publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
-				metaData.appendChild(dateTimeReport);
-
-				metaDataProperty.appendChild(metaData);
-				rootElement.appendChild(metaDataProperty);
-
-				Element observations = doc.createElement("observations");
-
-				for (AvalancheBulletin bulletin : bulletins) {
-					for (Element element : bulletin.toCAAML(doc, LanguageCode.en)) {
-						observations.appendChild(element);
-					}
-				}
-				rootElement.appendChild(observations);
-
-			}
-
-			doc.appendChild(rootElement);
-
+			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
 		} catch (AlbinaException e) {
 			// TODO Auto-generated catch block
@@ -90,9 +41,6 @@ public class MapUtil {
 		} catch (TransformerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ParserConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 	}
 
