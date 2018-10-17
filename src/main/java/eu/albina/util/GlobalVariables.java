@@ -50,7 +50,7 @@ public class GlobalVariables {
 	private static String pdfDirectory = "/mnt/albina_files/";
 	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
-	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
+	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 
 	private static String socketIoOrigin = "https://admin.avalanche.report";
 	private static int socketIoPort = 9092;
