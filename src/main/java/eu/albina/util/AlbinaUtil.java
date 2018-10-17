@@ -439,9 +439,16 @@ public class AlbinaUtil {
 	public static String getFilenameDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getDate(bulletins);
 		if (date != null)
-			return " " + date.toString(DateTimeFormat.forPattern("dd-MM-yyyy"));
+			return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd")) + "_" + lang.toString();
 		else
-			return "";
+			return "_" + lang.toString();
+	}
+
+	public static String getValidityDate(List<AvalancheBulletin> bulletins) {
+		DateTime date = getDate(bulletins);
+		if (date.getHourOfDay() > 12)
+			date = date.plusDays(1);
+		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
 	private static DateTime getDate(List<AvalancheBulletin> bulletins) {
