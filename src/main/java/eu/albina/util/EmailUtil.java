@@ -599,8 +599,19 @@ public class EmailUtil {
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
-		dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/level_"
-				+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency()) + ".png");
+		// TODO test
+		if ((daytimeBulletin.getDangerRatingBelow() == null
+				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.missing
+				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.no_rating)
+				&& (daytimeBulletin.getDangerRatingAbove() == null
+						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.missing
+						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.no_rating)) {
+			dangerRating.put("symbol", "");
+		} else {
+			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/level_"
+					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
+					+ ".png");
+		}
 		// dangerRating.put("symbol", "cid:warning_picto/" +
 		// getWarningLevelId(daytimeBulletin,
 		// avalancheBulletin.isHasElevationDependency()));
