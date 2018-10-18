@@ -1,5 +1,6 @@
 package eu.albina.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.websocket.EncodeException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -19,7 +21,6 @@ import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.proxy.HibernateProxy;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,11 +28,12 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.BulletinUpdate;
 import eu.albina.model.Texts;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.rest.AvalancheBulletinUpdateEndpoint;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.JsonUtil;
 
 /**
  * Controller for avalanche reports.
@@ -154,7 +156,7 @@ public class AvalancheReportController {
 			int revision = (int) reader.createQuery().forRevisionsOfEntity(AvalancheBulletin.class, false, true)
 					.addProjection(AuditEntity.revisionNumber().max()).getSingleResult();
 
-			JSONObject data = null;
+			BulletinUpdate bulletinUpdate = null;
 
 			if (reports.isEmpty()) {
 				AvalancheReport avalancheReport = new AvalancheReport();
@@ -165,7 +167,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.draft);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				AvalancheReport avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(new DateTime());
@@ -191,17 +193,20 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}
 
 			transaction.commit();
 
-			// TODO implement websockets: bulletin update
-			// if (data != null)
-			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
-			// data.toString());
+			if (bulletinUpdate != null) {
+				try {
+					AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
+				} catch (IOException | EncodeException e) {
+					e.printStackTrace();
+				}
+			}
 
 		} catch (HibernateException he) {
 			if (transaction != null)
@@ -289,7 +294,7 @@ public class AvalancheReportController {
 				}
 			}
 
-			JSONObject data = null;
+			BulletinUpdate bulletinUpdate = null;
 
 			AvalancheReport avalancheReport;
 
@@ -302,7 +307,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.published);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(publicationDate);
@@ -335,17 +340,20 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}
 
 			transaction.commit();
 
-			// TODO implement websockets: bulletin update
-			// if (data != null)
-			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
-			// data.toString());
+			if (bulletinUpdate != null) {
+				try {
+					AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
+				} catch (IOException | EncodeException e) {
+					e.printStackTrace();
+				}
+			}
 
 			return avalancheReport.getId();
 
@@ -383,7 +391,7 @@ public class AvalancheReportController {
 				}
 			}
 
-			JSONObject data = null;
+			BulletinUpdate bulletinUpdate = null;
 
 			if (reports.isEmpty()) {
 				AvalancheReport avalancheReport = new AvalancheReport();
@@ -394,7 +402,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.missing);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
-				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 			} else if (reports.size() == 1) {
 				AvalancheReport avalancheReport = reports.get(0);
 				avalancheReport.setTimestamp(new DateTime());
@@ -425,17 +433,20 @@ public class AvalancheReportController {
 				default:
 					break;
 				}
-				data = JsonUtil.createBulletinStatusUpdateJson(region, startDate, avalancheReport.getStatus());
+				bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 			} else {
 				throw new AlbinaException("Report error!");
 			}
 
 			transaction.commit();
 
-			// TODO implement websockets: bulletin update
-			// if (data != null)
-			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
-			// data.toString());
+			if (bulletinUpdate != null) {
+				try {
+					AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
+				} catch (IOException | EncodeException e) {
+					e.printStackTrace();
+				}
+			}
 
 		} catch (HibernateException he) {
 			if (transaction != null)
