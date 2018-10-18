@@ -7,9 +7,11 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
@@ -189,6 +191,25 @@ public class PublicationController {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void startUpdateThread(DateTime startDate, DateTime endDate, List<String> regions,
+			List<String> avalancheReportIds) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
+							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+					PublicationController.getInstance().update(avalancheReportIds, bulletins, regions);
+				} catch (AlbinaException e) {
+					logger.warn("Error loading bulletins - " + e.getMessage());
+					e.printStackTrace();
+				} catch (MessagingException e) {
+					logger.warn("Error sending emails - " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 
 	// LANG
