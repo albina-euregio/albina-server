@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,6 @@ import org.junit.runners.MethodSorters;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.layout.element.Image;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
@@ -216,14 +211,6 @@ public class UtilTest {
 	public void createPdf() throws IOException, URISyntaxException {
 		// PdfUtil.createOverviewPdf(bulletins, LanguageCode.it);
 		PdfUtil.getInstance().createOverviewPdfs(bulletins);
-	}
-
-	@Ignore
-	@Test
-	public void loadImage() throws MalformedURLException {
-		String string = GlobalVariables.getMapsPath() + "2030-02-16/" + "fd_albina_map.jpg";
-		ImageData overviewMapAMImageData = ImageDataFactory.create(string);
-		Image overviewMapAMImg = new Image(overviewMapAMImageData);
 	}
 
 	@Ignore
