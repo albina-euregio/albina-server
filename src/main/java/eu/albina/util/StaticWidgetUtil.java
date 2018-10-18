@@ -104,7 +104,7 @@ public class StaticWidgetUtil {
 			BufferedImage ci = resize(loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "Colorbar.gif"),
 					600, 15);
 
-			// TODO use thumbnail map with highest danger rating
+			// TODO use thumbnail map with highest danger rating or show both maps beside
 			BufferedImage overviewThumbnail;
 			if (AlbinaUtil.hasDaytimeDependency(bulletins))
 				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()

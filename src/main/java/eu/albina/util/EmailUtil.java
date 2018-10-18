@@ -204,8 +204,6 @@ public class EmailUtil {
 				messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
 				multipart.addBodyPart(messageBodyPart);
 
-				// TODO add maps
-
 				message.setContent(multipart, GlobalVariables.getEmailEncoding());
 				Transport.send(message);
 

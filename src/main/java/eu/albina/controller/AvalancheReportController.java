@@ -198,7 +198,7 @@ public class AvalancheReportController {
 
 			transaction.commit();
 
-			// TODO implement via websockets
+			// TODO implement websockets: bulletin update
 			// if (data != null)
 			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
 			// data.toString());
@@ -342,7 +342,7 @@ public class AvalancheReportController {
 
 			transaction.commit();
 
-			// TODO implement via websockets
+			// TODO implement websockets: bulletin update
 			// if (data != null)
 			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
 			// data.toString());
@@ -432,7 +432,7 @@ public class AvalancheReportController {
 
 			transaction.commit();
 
-			// TODO implement via websockets
+			// TODO implement websockets: bulletin update
 			// if (data != null)
 			// SocketIOController.getInstance().sendEvent(EventName.bulletinUpdate.toString(),
 			// data.toString());

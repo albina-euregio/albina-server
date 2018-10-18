@@ -1,21 +1,23 @@
 package eu.albina.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.websocket.EncodeException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
-import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
-import eu.albina.util.GlobalVariables;
+import eu.albina.rest.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -26,8 +28,7 @@ import eu.albina.util.HibernateUtil;
  */
 public class RegionController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(RegionController.class);
+	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
 	private List<RegionLock> regionLocks;
@@ -112,10 +113,11 @@ public class RegionController {
 		regionLocks.add(lock);
 	}
 
-	public void unlockRegion(String region, DateTime date) throws AlbinaException {
+	public void unlockRegion(RegionLock lock) throws AlbinaException {
 		RegionLock hit = null;
 		for (RegionLock regionLock : regionLocks)
-			if ((regionLock.getDate().getMillis() == date.getMillis()) && (regionLock.getRegion().equals(region)))
+			if ((regionLock.getDate().getMillis() == lock.getDate().getMillis())
+					&& (regionLock.getRegion().equals(lock.getRegion())))
 				hit = regionLock;
 
 		if (hit != null)
@@ -124,7 +126,7 @@ public class RegionController {
 			throw new AlbinaException("Region not locked!");
 	}
 
-	public void unlockRegions(UUID sessionId) {
+	public void unlockRegions(String sessionId) {
 		List<RegionLock> hits = new ArrayList<RegionLock>();
 		for (RegionLock regionLock : regionLocks) {
 			if (regionLock.getSessionId() == sessionId)
@@ -132,12 +134,13 @@ public class RegionController {
 		}
 		for (RegionLock regionLock : hits) {
 			regionLocks.remove(regionLock);
-			JSONObject json = new JSONObject();
-			json.put("region", regionLock.getRegion());
-			json.put("date", regionLock.getDate().toString(GlobalVariables.formatterDateTime));
-			// TODO implement via websockets
-			// SocketIOController.getInstance().sendEvent(EventName.unlockRegion.toString(),
-			// json.toString());
+			regionLock.setLock(false);
+			try {
+				RegionEndpoint.broadcast(regionLock);
+			} catch (IOException | EncodeException e) {
+				logger.error("Error broadcasting region unlock: " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 

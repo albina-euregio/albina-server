@@ -202,7 +202,7 @@ public class PublicationController {
 			logger.error("Error producing CAAML: " + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.error("Error producing CAAML: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
