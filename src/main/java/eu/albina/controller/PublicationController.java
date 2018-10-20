@@ -265,7 +265,8 @@ public class PublicationController {
 				try {
 					logger.info("PDF production started");
 					PdfUtil.getInstance().createOverviewPdfs(bulletins);
-					PdfUtil.getInstance().createRegionPdfs(bulletins);
+					for (String region : GlobalVariables.regionsEuregio)
+						PdfUtil.getInstance().createRegionPdfs(bulletins, region);
 					AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
 				} catch (IOException e) {
 					logger.error("Error creating pdfs:" + e.getMessage());

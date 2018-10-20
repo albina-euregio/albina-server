@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -107,10 +108,10 @@ public class PdfUtil {
 	 */
 	public void createOverviewPdfs(List<AvalancheBulletin> bulletins) {
 		for (LanguageCode lang : GlobalVariables.languages)
-			createOverviewPdf(bulletins, lang);
+			createPdf(bulletins, lang, null);
 	}
 
-	public void createOverviewPdf(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	public void createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		try {
 			PdfDocument pdf;
 			PdfWriter writer;
@@ -118,8 +119,14 @@ public class PdfUtil {
 			// TODO add directory structure on production server
 			String validityDateString = AlbinaUtil.getValidityDate(bulletins);
 
-			writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString
-					+ "_" + lang.toString() + ".pdf");
+			// TODO use correct region string
+			if (region != null)
+				writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString
+						+ "_" + region + "_" + lang.toString() + ".pdf");
+			else
+				writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString
+						+ "_" + lang.toString() + ".pdf");
+
 			pdf = new PdfDocument(writer);
 
 			// PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");
@@ -140,7 +147,7 @@ public class PdfUtil {
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 
-			createPdfFrontPage(bulletins, lang, document, pdf);
+			createPdfFrontPage(bulletins, lang, document, pdf, region);
 
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
@@ -155,6 +162,27 @@ public class PdfUtil {
 			logger.error("PDF could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Create PDFs for each province (TN, BZ, TI) containing an overview map and the
+	 * detailed information about each aggregated region touching the province.
+	 * 
+	 * @param bulletins
+	 *            The bulletins to create the region PDFs of.
+	 * @param region
+	 *            The region to create the PDFs for.
+	 */
+	public void createRegionPdfs(List<AvalancheBulletin> bulletins, String region) {
+		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			if (avalancheBulletin.affectsRegionOnlyPublished(region))
+				regionBulletins.add(avalancheBulletin);
+		}
+
+		if (!regionBulletins.isEmpty())
+			for (LanguageCode lang : GlobalVariables.languages)
+				createPdf(regionBulletins, lang, region);
 	}
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
@@ -854,8 +882,45 @@ public class PdfUtil {
 		}
 	}
 
+	// REGION
+	private String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency) {
+		StringBuilder sb = new StringBuilder();
+		if (hasDaytimeDependency) {
+			if (isAfternoon)
+				sb.append("pm");
+			else
+				sb.append("am");
+		} else
+			sb.append("fd");
+		sb.append("_");
+		if (region != null) {
+			switch (region) {
+			case "AT-07":
+				sb.append("tyrol");
+				break;
+			case "IT-32-BZ":
+				sb.append("southtyrol");
+				break;
+			case "IT-32-TN":
+				sb.append("trentino");
+				break;
+			default:
+				sb.append("albina");
+				break;
+			}
+		} else {
+			sb.append("albina");
+		}
+		sb.append("_map");
+
+		// TODO add check for b/w
+
+		sb.append(".jpg");
+		return sb.toString();
+	}
+
 	private void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
-			PdfDocument pdf) {
+			PdfDocument pdf, String region) {
 		try {
 			PdfPage page = pdf.addNewPage();
 			Rectangle pageSize = page.getPageSize();
@@ -865,7 +930,7 @@ public class PdfUtil {
 			// Add overview maps
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
 				ImageData overviewMapAMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
-						+ AlbinaUtil.getValidityDate(bulletins) + "/" + "am_albina_map.jpg");
+						+ AlbinaUtil.getValidityDate(bulletins) + "/" + getOverviewMapFilename(region, false, true));
 				Image overviewMapAMImg = new Image(overviewMapAMImageData);
 				overviewMapAMImg.scaleToFit(220, 500);
 				overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - 230, 500);
@@ -874,7 +939,7 @@ public class PdfUtil {
 						.setColor(greyDarkColor, true).showText(GlobalVariables.getAMText(lang)).endText();
 
 				ImageData overviewMapPMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
-						+ AlbinaUtil.getValidityDate(bulletins) + "/" + "pm_albina_map.jpg");
+						+ AlbinaUtil.getValidityDate(bulletins) + "/" + getOverviewMapFilename(region, true, true));
 				Image overviewMapPMImg = new Image(overviewMapPMImageData);
 				overviewMapPMImg.scaleToFit(220, 500);
 				overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 + 10, 500);
@@ -883,10 +948,15 @@ public class PdfUtil {
 						.setColor(greyDarkColor, true).showText(GlobalVariables.getPMText(lang)).endText();
 			} else {
 				ImageData overviewMapImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
-						+ AlbinaUtil.getValidityDate(bulletins) + "/" + "fd_albina_map.jpg");
+						+ AlbinaUtil.getValidityDate(bulletins) + "/" + getOverviewMapFilename(region, false, false));
 				Image overviewMapImg = new Image(overviewMapImageData);
-				overviewMapImg.scaleToFit(220, 500);
-				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 110, 500);
+				if (region != null) {
+					overviewMapImg.scaleToFit(350, 500);
+					overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 175, 500);
+				} else {
+					overviewMapImg.scaleToFit(220, 500);
+					overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 110, 500);
+				}
 				canvas.add(overviewMapImg);
 			}
 
@@ -1196,16 +1266,5 @@ public class PdfUtil {
 			logger.error("PDF front page could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Create PDFs for each province (TN, BZ, TI) containing an overview map and the
-	 * detailed information about each aggregated region touching the province.
-	 * 
-	 * @param bulletins
-	 *            The bulletins to create the region PDFs of.
-	 */
-	public void createRegionPdfs(List<AvalancheBulletin> bulletins) {
-		// TODO Implement creation of PDFs for each province.
 	}
 }
