@@ -43,8 +43,8 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
-import eu.albina.util.XmlUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.XmlUtil;
 
 /**
  * This class holds all information about one avalanche bulletin.
@@ -660,6 +660,15 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			for (String entry : getSavedRegions())
 				if (entry.startsWith(region))
 					return true;
+		if (getPublishedRegions() != null)
+			for (String entry : getPublishedRegions())
+				if (entry.startsWith(region))
+					return true;
+
+		return false;
+	}
+
+	public boolean affectsRegionOnlyPublished(String region) {
 		if (getPublishedRegions() != null)
 			for (String entry : getPublishedRegions())
 				if (entry.startsWith(region))

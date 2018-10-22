@@ -264,9 +264,14 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("PDF production started");
-					PdfUtil.getInstance().createOverviewPdfs(bulletins);
-					PdfUtil.getInstance().createRegionPdfs(bulletins);
-					AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
+					boolean result = true;
+					if (!PdfUtil.getInstance().createOverviewPdfs(bulletins))
+						result = false;
+					for (String region : GlobalVariables.regionsEuregio)
+						if (!PdfUtil.getInstance().createRegionPdfs(bulletins, region))
+							result = false;
+					if (result)
+						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
 				} catch (IOException e) {
 					logger.error("Error creating pdfs:" + e.getMessage());
 					e.printStackTrace();
