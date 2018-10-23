@@ -75,12 +75,21 @@ public class PdfUtil {
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
 	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
 	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
+
 	public static final Color dangerLevel1Color = new DeviceRgb(197, 255, 118);
 	public static final Color dangerLevel2Color = new DeviceRgb(255, 255, 70);
 	public static final Color dangerLevel3Color = new DeviceRgb(255, 152, 44);
 	public static final Color dangerLevel4Color = new DeviceRgb(255, 0, 23);
 	public static final Color dangerLevel5ColorRed = new DeviceRgb(255, 0, 23);
 	public static final Color dangerLevel5ColorBlack = new DeviceRgb(0, 0, 0);
+
+	// TODO use grayscale values
+	public static final Color dangerLevel1Bw = new DeviceRgb(197, 255, 118);
+	public static final Color dangerLevel2Bw = new DeviceRgb(255, 255, 70);
+	public static final Color dangerLevel3Bw = new DeviceRgb(255, 152, 44);
+	public static final Color dangerLevel4Bw = new DeviceRgb(255, 0, 23);
+	public static final Color dangerLevel5BwRed = new DeviceRgb(255, 0, 23);
+	public static final Color dangerLevel5BwBlack = new DeviceRgb(0, 0, 0);
 
 	private static PdfFont openSansRegularFont;
 	private static PdfFont openSansBoldFont;
@@ -1011,29 +1020,58 @@ public class PdfUtil {
 		int legendEntryWidth = 50;
 		int legendEntryHeight = 8;
 		int y = 478;
-		Rectangle dangerLevel1Rectangle = new Rectangle(
-				pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
-				legendEntryHeight);
-		pdfCanvas.rectangle(dangerLevel1Rectangle).setColor(dangerLevel1Color, true).fill();
-		Rectangle dangerLevel2Rectangle = new Rectangle(
-				pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
-				legendEntryHeight);
-		pdfCanvas.rectangle(dangerLevel2Rectangle).setColor(dangerLevel2Color, true).fill();
-		Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, y,
-				legendEntryWidth, legendEntryHeight);
-		pdfCanvas.rectangle(dangerLevel3Rectangle).setColor(dangerLevel3Color, true).fill();
-		Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, y,
-				legendEntryWidth, legendEntryHeight);
-		pdfCanvas.rectangle(dangerLevel4Rectangle).setColor(dangerLevel4Color, true).fill();
 
-		for (int j = 0; j < 2; j++) {
-			for (int i = 0; i < 12; i++) {
-				Rectangle dangerLevel5Rectangle = new Rectangle(
-						pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, y + j * 4, 4, 4);
-				if ((i + j) % 2 == 0)
-					pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorRed, true).fill();
-				else
-					pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorBlack, true).fill();
+		if (grayscale) {
+			Rectangle dangerLevel1Rectangle = new Rectangle(
+					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
+					legendEntryHeight);
+			pdfCanvas.rectangle(dangerLevel1Rectangle).setColor(dangerLevel1Bw, true).fill();
+			Rectangle dangerLevel2Rectangle = new Rectangle(
+					pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
+					legendEntryHeight);
+			pdfCanvas.rectangle(dangerLevel2Rectangle).setColor(dangerLevel2Bw, true).fill();
+			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, y,
+					legendEntryWidth, legendEntryHeight);
+			pdfCanvas.rectangle(dangerLevel3Rectangle).setColor(dangerLevel3Bw, true).fill();
+			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, y,
+					legendEntryWidth, legendEntryHeight);
+			pdfCanvas.rectangle(dangerLevel4Rectangle).setColor(dangerLevel4Bw, true).fill();
+
+			for (int j = 0; j < 2; j++) {
+				for (int i = 0; i < 12; i++) {
+					Rectangle dangerLevel5Rectangle = new Rectangle(
+							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, y + j * 4, 4, 4);
+					if ((i + j) % 2 == 0)
+						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5BwRed, true).fill();
+					else
+						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5BwBlack, true).fill();
+				}
+			}
+		} else {
+			Rectangle dangerLevel1Rectangle = new Rectangle(
+					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
+					legendEntryHeight);
+			pdfCanvas.rectangle(dangerLevel1Rectangle).setColor(dangerLevel1Color, true).fill();
+			Rectangle dangerLevel2Rectangle = new Rectangle(
+					pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
+					legendEntryHeight);
+			pdfCanvas.rectangle(dangerLevel2Rectangle).setColor(dangerLevel2Color, true).fill();
+			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, y,
+					legendEntryWidth, legendEntryHeight);
+			pdfCanvas.rectangle(dangerLevel3Rectangle).setColor(dangerLevel3Color, true).fill();
+			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, y,
+					legendEntryWidth, legendEntryHeight);
+			pdfCanvas.rectangle(dangerLevel4Rectangle).setColor(dangerLevel4Color, true).fill();
+
+			for (int j = 0; j < 2; j++) {
+				for (int i = 0; i < 12; i++) {
+					Rectangle dangerLevel5Rectangle = new Rectangle(
+							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, y + j * 4, 4, 4);
+					if ((i + j) % 2 == 0)
+						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorRed, true).fill();
+					else
+						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorBlack, true).fill();
+				}
 			}
 		}
 
