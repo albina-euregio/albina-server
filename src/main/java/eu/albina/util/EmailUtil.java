@@ -671,7 +671,8 @@ public class EmailUtil {
 				if (daytimeBulletin.getAvalancheSituation1().getTreelineLow()
 						|| daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0) {
 					// elevation high and low set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_middle_two.png");
+					elevation.put("symbol",
+							GlobalVariables.getServerImagesUrl() + "elevation/color/levels_middle_two.png");
 					// elevation.put("symbol", "cid:elevation/middle");
 					if (daytimeBulletin.getAvalancheSituation1().getTreelineLow())
 						elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -683,7 +684,7 @@ public class EmailUtil {
 						elevation.put("limitBelow", daytimeBulletin.getAvalancheSituation1().getElevationHigh() + "m");
 				} else {
 					// elevation high set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_below.png");
+					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_below.png");
 					// elevation.put("symbol", "cid:elevation/below");
 					elevation.put("limitAbove", "");
 					if (daytimeBulletin.getAvalancheSituation1().getTreelineHigh())
@@ -694,7 +695,7 @@ public class EmailUtil {
 			} else if (daytimeBulletin.getAvalancheSituation1().getTreelineLow()
 					|| daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0) {
 				// elevation low set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_above.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_above.png");
 				// elevation.put("symbol", "cid:elevation/above");
 				if (daytimeBulletin.getAvalancheSituation1().getTreelineLow())
 					elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -703,7 +704,7 @@ public class EmailUtil {
 				elevation.put("limitBelow", "");
 			} else {
 				// no elevation set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_all.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");
 				elevation.put("limitBelow", "");
@@ -775,7 +776,8 @@ public class EmailUtil {
 				if (daytimeBulletin.getAvalancheSituation2().getTreelineLow()
 						|| daytimeBulletin.getAvalancheSituation2().getElevationLow() > 0) {
 					// elevation high and low set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_middle_two.png");
+					elevation.put("symbol",
+							GlobalVariables.getServerImagesUrl() + "elevation/color/levels_middle_two.png");
 					// elevation.put("symbol", "cid:elevation/middle");
 					if (daytimeBulletin.getAvalancheSituation2().getTreelineLow())
 						elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -787,7 +789,7 @@ public class EmailUtil {
 						elevation.put("limitBelow", daytimeBulletin.getAvalancheSituation2().getElevationHigh() + "m");
 				} else {
 					// elevation high set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_below.png");
+					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_below.png");
 					// elevation.put("symbol", "cid:elevation/below");
 					elevation.put("limitAbove", "");
 					if (daytimeBulletin.getAvalancheSituation2().getTreelineHigh())
@@ -798,7 +800,7 @@ public class EmailUtil {
 			} else if (daytimeBulletin.getAvalancheSituation2().getTreelineLow()
 					|| daytimeBulletin.getAvalancheSituation2().getElevationLow() > 0) {
 				// elevation low set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_above.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_above.png");
 				// elevation.put("symbol", "cid:elevation/above");
 				if (daytimeBulletin.getAvalancheSituation2().getTreelineLow())
 					elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -807,7 +809,7 @@ public class EmailUtil {
 				elevation.put("limitBelow", "");
 			} else {
 				// no elevation set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_all.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");
 				elevation.put("limitBelow", "");

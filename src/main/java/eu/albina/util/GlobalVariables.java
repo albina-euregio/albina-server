@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
@@ -892,17 +893,37 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getLogoPath(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "logo/lawinen_report.png";
-		case it:
-			return "logo/valanghe_report.png";
-		case en:
-			return "logo/avalanche_report.png";
-		default:
-			return "logo/avalanche_report.png";
+	public static String getLogoPath(LanguageCode lang, boolean grayscale) {
+		if (grayscale) {
+			switch (lang) {
+			case de:
+				return "logo/grey/lawinen_report.png";
+			case it:
+				return "logo/grey/valanghe_report.png";
+			case en:
+				return "logo/grey/avalanche_report.png";
+			default:
+				return "logo/grey/avalanche_report.png";
+			}
+		} else {
+			switch (lang) {
+			case de:
+				return "logo/color/lawinen_report.png";
+			case it:
+				return "logo/color/valanghe_report.png";
+			case en:
+				return "logo/color/avalanche_report.png";
+			default:
+				return "logo/color/avalanche_report.png";
+			}
 		}
+	}
+
+	public static String getInterregLogoPath(boolean grayscale) {
+		if (grayscale)
+			return "logo/grey/interreg.png";
+		else
+			return "logo/grey/interreg.png";
 	}
 
 	// LANG
@@ -1402,6 +1423,46 @@ public class GlobalVariables {
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
 		if (configuration.has("publishBulletinsStyria"))
 			setPublishBulletinsStyria(configuration.getBoolean("publishBulletinsStyria"));
+	}
+
+	public static String getTendencySymbolPath(Tendency tendency, boolean grayscale) {
+		if (grayscale) {
+			switch (tendency) {
+			case increasing:
+				return "tendency/tendency_increasing_black.png";
+			case steady:
+				return "tendency/tendency_steady_black.png";
+			case decreasing:
+				return "tendency/tendency_decreasing_black.png";
+			default:
+				return null;
+			}
+		} else {
+			switch (tendency) {
+			case increasing:
+				return "tendency/tendency_increasing_blue.png";
+			case steady:
+				return "tendency/tendency_steady_blue.png";
+			case decreasing:
+				return "tendency/tendency_decreasing_blue.png";
+			default:
+				return null;
+			}
+		}
+	}
+
+	public static String getAvalancheSituationSymbolPath(AvalancheSituation avalancheSituation, boolean grayscale) {
+		if (grayscale)
+			return "avalanche_situations/grey/" + avalancheSituation.getAvalancheSituation().toStringId() + ".png";
+		else
+			return "avalanche_situations/color/" + avalancheSituation.getAvalancheSituation().toStringId() + ".png";
+	}
+
+	public static String getAspectSymbolPath(int result, boolean grayscale) {
+		if (grayscale)
+			return "aspects/grey/" + new Integer(result).toString() + ".png";
+		else
+			return "aspects/color/" + new Integer(result).toString() + ".png";
 	}
 
 	// LANG
