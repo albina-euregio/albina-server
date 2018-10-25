@@ -2,6 +2,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -200,7 +201,18 @@ public class PublicationController {
 				try {
 					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
 							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
-					PublicationController.getInstance().update(avalancheReportIds, bulletins, regions);
+
+					// TODO what if there is no bulletin? Delete all products?
+
+					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+					for (AvalancheBulletin avalancheBulletin : bulletins) {
+						if (avalancheBulletin.getPublishedRegions() != null
+								&& !avalancheBulletin.getPublishedRegions().isEmpty())
+							result.add(avalancheBulletin);
+					}
+					if (result != null && !result.isEmpty())
+						PublicationController.getInstance().update(avalancheReportIds, result, regions);
+
 				} catch (AlbinaException e) {
 					logger.warn("Error loading bulletins - " + e.getMessage());
 					e.printStackTrace();

@@ -1136,7 +1136,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	}
 
 	public List<Element> toCAAML(Document doc, LanguageCode languageCode) {
-		if (!publishedRegions.isEmpty()) {
+		if (publishedRegions != null && !publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
 			result.add(createCAAMLBulletin(doc, languageCode, false));
 
