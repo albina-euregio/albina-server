@@ -92,9 +92,11 @@ public class XmlUtil {
 				Element observations = doc.createElement("observations");
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					if (bulletin != null)
-						for (Element element : bulletin.toCAAML(doc, language)) {
-							observations.appendChild(element);
+					List<Element> caaml = bulletin.toCAAML(doc, language);
+					if (caaml != null)
+						for (Element element : caaml) {
+							if (element != null)
+								observations.appendChild(element);
 						}
 				}
 				rootElement.appendChild(observations);
