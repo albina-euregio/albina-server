@@ -599,7 +599,7 @@ public class EmailUtil {
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
-		dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/level_"
+		dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
 				+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency()) + ".png");
 		// dangerRating.put("symbol", "cid:warning_picto/" +
 		// getWarningLevelId(daytimeBulletin,

@@ -531,8 +531,15 @@ public class PdfUtil {
 
 		Paragraph firstRow = new Paragraph("").setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 
-		Image regionImg = getImage("warning_pictos/level_"
-				+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency()) + ".png");
+		Image regionImg;
+		if (grayscale)
+			regionImg = getImage("warning_pictos/grey/level_"
+					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
+					+ ".png");
+		else
+			regionImg = getImage("warning_pictos/color/level_"
+					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
+					+ ".png");
 		if (regionImg != null) {
 			regionImg.scaleToFit(70, 30);
 			firstRow.add(regionImg);
