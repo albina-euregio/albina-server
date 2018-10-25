@@ -84,12 +84,12 @@ public class PdfUtil {
 
 	// TODO bw
 	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
-	public static final Color dangerLevel1ColorBw = new DeviceRgb(197, 255, 118);
-	public static final Color dangerLevel2ColorBw = new DeviceRgb(255, 255, 70);
-	public static final Color dangerLevel3ColorBw = new DeviceRgb(255, 152, 44);
-	public static final Color dangerLevel4ColorBw = new DeviceRgb(255, 0, 23);
-	public static final Color dangerLevel5ColorRedBw = new DeviceRgb(255, 0, 23);
-	public static final Color dangerLevel5ColorBlackBw = new DeviceRgb(0, 0, 0);
+	public static final Color dangerLevel1ColorBw = new DeviceRgb(239, 239, 239);
+	public static final Color dangerLevel2ColorBw = new DeviceRgb(216, 216, 216);
+	public static final Color dangerLevel3ColorBw = new DeviceRgb(177, 177, 177);
+	public static final Color dangerLevel4ColorBw = new DeviceRgb(136, 136, 136);
+	public static final Color dangerLevel5ColorRedBw = new DeviceRgb(136, 136, 136);
+	public static final Color dangerLevel5ColorBlackBw = new DeviceRgb(70, 70, 70);
 	public static final Color greyVeryVeryLightColorBw = new DeviceRgb(246, 246, 246);
 
 	private static PdfFont openSansRegularFont;
