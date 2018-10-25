@@ -107,8 +107,11 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			pdfCanvas.setLineWidth(1).setStrokeColor(blue).moveTo(0, 48).lineTo(pageSize.getWidth(), 48).stroke();
 
 			// Add CI
-			// TODO bw
-			Image ciImg = PdfUtil.getInstance().getImage("Colorbar.gif");
+			Image ciImg;
+			if (grayscale)
+				ciImg = PdfUtil.getInstance().getImage("logo/grey/colorbar.gif");
+			else
+				ciImg = PdfUtil.getInstance().getImage("logo/color/colorbar.gif");
 			ciImg.scaleAbsolute(pageSize.getWidth(), 4);
 			ciImg.setFixedPosition(0, pageSize.getHeight() - 4);
 			canvas.add(ciImg);

@@ -101,8 +101,9 @@ public class StaticWidgetUtil {
 			ig2.setPaint(greyLightColor);
 			ig2.fill(new Rectangle2D.Double(0, 569, 600, 1));
 
-			BufferedImage ci = resize(loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "Colorbar.gif"),
-					600, 15);
+			BufferedImage ci = resize(
+					loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/color/colorbar.gif"), 600,
+					15);
 
 			// TODO use thumbnail map with highest danger rating
 			BufferedImage overviewThumbnail;
