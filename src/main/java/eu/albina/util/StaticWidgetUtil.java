@@ -295,12 +295,15 @@ public class StaticWidgetUtil {
 			ig2.drawImage(interregLogo, 350, 45, null);
 
 			// TODO add directory structure on production server
-			ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDate(bulletins)
-					+ "/" + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
+			String filename = GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDate(bulletins) + "/"
+					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
+			ImageIO.write(bi, "PNG", new File(filename));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
 			// ImageIO.write(bi, "gif", new File("c:\\yourImageName.GIF"));
 			// ImageIO.write(bi, "BMP", new File("c:\\yourImageName.BMP"));
+
+			AlbinaUtil.setFilePermissions(filename);
 		} catch (IOException ie) {
 			ie.printStackTrace();
 		}

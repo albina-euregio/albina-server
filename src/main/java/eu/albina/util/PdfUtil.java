@@ -134,21 +134,29 @@ public class PdfUtil {
 		String validityDateString = AlbinaUtil.getValidityDate(bulletins);
 
 		try {
+			String filename;
+
 			// TODO use correct region string
 			if (region != null) {
-				if (grayscale)
-					writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/"
-							+ validityDateString + "_" + region + "_" + lang.toString() + "_bw.pdf");
-				else
-					writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/"
-							+ validityDateString + "_" + region + "_" + lang.toString() + ".pdf");
+				if (grayscale) {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ region + "_" + lang.toString() + "_bw.pdf";
+					writer = new PdfWriter(filename);
+				} else {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ region + "_" + lang.toString() + ".pdf";
+					writer = new PdfWriter(filename);
+				}
 			} else {
-				if (grayscale)
-					writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/"
-							+ validityDateString + "_" + lang.toString() + "_bw.pdf");
-				else
-					writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/"
-							+ validityDateString + "_" + lang.toString() + ".pdf");
+				if (grayscale) {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ lang.toString() + "_bw.pdf";
+					writer = new PdfWriter(filename);
+				} else {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ lang.toString() + ".pdf";
+					writer = new PdfWriter(filename);
+				}
 			}
 
 			pdf = new PdfDocument(writer);
@@ -180,6 +188,8 @@ public class PdfUtil {
 			}
 
 			document.close();
+
+			AlbinaUtil.setFilePermissions(filename);
 			return true;
 		} catch (com.itextpdf.io.IOException e) {
 			logger.error("PDF could not be created: " + e.getMessage());

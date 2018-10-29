@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
@@ -368,5 +373,20 @@ public class AlbinaUtil {
 				return true;
 		}
 		return false;
+	}
+
+	public static void setFilePermissions(String fileName) throws IOException {
+		// using PosixFilePermission to set file permissions 755
+		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+		// add owners permission
+		perms.add(PosixFilePermission.OWNER_READ);
+		perms.add(PosixFilePermission.OWNER_WRITE);
+		perms.add(PosixFilePermission.OWNER_EXECUTE);
+		// add group permissions
+		perms.add(PosixFilePermission.GROUP_READ);
+		// add others permissions
+		perms.add(PosixFilePermission.OTHERS_READ);
+
+		Files.setPosixFilePermissions(Paths.get(fileName), perms);
 	}
 }
