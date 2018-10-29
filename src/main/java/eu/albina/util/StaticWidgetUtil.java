@@ -101,8 +101,9 @@ public class StaticWidgetUtil {
 			ig2.setPaint(greyLightColor);
 			ig2.fill(new Rectangle2D.Double(0, 569, 600, 1));
 
-			BufferedImage ci = resize(loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "Colorbar.gif"),
-					600, 15);
+			BufferedImage ci = resize(
+					loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/color/colorbar.gif"), 600,
+					15);
 
 			// TODO use thumbnail map with highest danger rating or show both maps beside
 			BufferedImage overviewThumbnail;
@@ -294,12 +295,15 @@ public class StaticWidgetUtil {
 			ig2.drawImage(interregLogo, 350, 45, null);
 
 			// TODO add directory structure on production server
-			ImageIO.write(bi, "PNG", new File(GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDate(bulletins)
-					+ "/" + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png"));
+			String filename = GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDate(bulletins) + "/"
+					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
+			ImageIO.write(bi, "PNG", new File(filename));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
 			// ImageIO.write(bi, "gif", new File("c:\\yourImageName.GIF"));
 			// ImageIO.write(bi, "BMP", new File("c:\\yourImageName.BMP"));
+
+			AlbinaUtil.setFilePermissions(filename);
 		} catch (IOException ie) {
 			ie.printStackTrace();
 		}

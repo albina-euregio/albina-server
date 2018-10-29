@@ -242,7 +242,7 @@ public class EmailUtil {
 				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
 				break;
 			}
-			image.put("ci", GlobalVariables.getServerImagesUrl() + "Colorbar.gif");
+			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
 			socialMediaImages.put("twitter", GlobalVariables.getServerImagesUrl() + "social_media/twitter.png");
@@ -606,7 +606,7 @@ public class EmailUtil {
 						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.no_rating)) {
 			dangerRating.put("symbol", "");
 		} else {
-			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/level_"
+			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
 					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
 					+ ".png");
 		}

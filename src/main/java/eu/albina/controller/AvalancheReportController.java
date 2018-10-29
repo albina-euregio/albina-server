@@ -66,27 +66,19 @@ public class AvalancheReportController {
 			transaction.begin();
 
 			Map<DateTime, BulletinStatus> result = new HashMap<DateTime, BulletinStatus>();
-			DateTime date = startDate;
 
-			while (date.isBefore(endDate) || date.isEqual(endDate)) {
-				// get report
-				List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-				if (region == null || region == "")
-					reports = entityManager.createQuery(HibernateUtil.queryGetReports).setParameter("date", date)
-							.getResultList();
-				else
-					reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
-							.setParameter("date", date).setParameter("region", region).getResultList();
+			// get reports
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+			if (region == null || region == "")
+				reports = entityManager.createQuery(HibernateUtil.queryGetReports).setParameter("startDate", startDate)
+						.setParameter("endDate", endDate).getResultList();
+			else
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
+						.setParameter("startDate", startDate).setParameter("endDate", endDate)
+						.setParameter("region", region).getResultList();
 
-				BulletinStatus status = BulletinStatus.missing;
-				if (reports.size() == 1)
-					status = reports.get(0).getStatus();
-				else if (reports.size() > 1)
-					throw new AlbinaException("Report error!");
-
-				result.put(date, status);
-				date = date.plusDays(1);
-			}
+			for (AvalancheReport report : reports)
+				result.put(report.getDate(), report.getStatus());
 
 			transaction.commit();
 
@@ -111,21 +103,19 @@ public class AvalancheReportController {
 			Map<DateTime, AvalancheReport> result = new HashMap<DateTime, AvalancheReport>();
 			DateTime date = startDate;
 
-			while (date.isBefore(endDate) || date.isEqual(endDate)) {
-				// get report
-				List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-				if (region != null && region != "")
-					reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
-							.setParameter("date", date).setParameter("region", region).getResultList();
-				for (AvalancheReport avalancheReport : reports) {
-					if (avalancheReport.getStatus() == BulletinStatus.published
-							|| avalancheReport.getStatus() == BulletinStatus.republished) {
-						initializeAndUnproxy(avalancheReport);
-						initializeAndUnproxy(avalancheReport.getUser());
-						result.put(date, avalancheReport);
-					}
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+			if (region != null && region != "") {
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
+						.setParameter("startDate", startDate).setParameter("endDate", endDate)
+						.setParameter("region", region).getResultList();
+			}
+			for (AvalancheReport avalancheReport : reports) {
+				if (avalancheReport.getStatus() == BulletinStatus.published
+						|| avalancheReport.getStatus() == BulletinStatus.republished) {
+					initializeAndUnproxy(avalancheReport);
+					initializeAndUnproxy(avalancheReport.getUser());
+					result.put(date, avalancheReport);
 				}
-				date = date.plusDays(1);
 			}
 
 			transaction.commit();
@@ -149,7 +139,8 @@ public class AvalancheReportController {
 
 			// get report
 			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
-					.setParameter("date", startDate).setParameter("region", region).getResultList();
+					.setParameter("startDate", startDate).setParameter("endDate", startDate)
+					.setParameter("region", region).getResultList();
 
 			// get revision number
 			AuditReader reader = AuditReaderFactory.get(entityManager);
@@ -226,7 +217,8 @@ public class AvalancheReportController {
 
 			// get report
 			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
-					.setParameter("date", startDate).setParameter("region", region).getResultList();
+					.setParameter("startDate", startDate).setParameter("endDate", startDate)
+					.setParameter("region", region).getResultList();
 
 			// get revision number
 			AuditReader reader = AuditReaderFactory.get(entityManager);
@@ -278,7 +270,8 @@ public class AvalancheReportController {
 
 			// get report
 			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
-					.setParameter("date", startDate).setParameter("region", region).getResultList();
+					.setParameter("startDate", startDate).setParameter("endDate", startDate)
+					.setParameter("region", region).getResultList();
 
 			// get revision number
 			AuditReader reader = AuditReaderFactory.get(entityManager);
@@ -375,7 +368,8 @@ public class AvalancheReportController {
 
 			// get report
 			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
-					.setParameter("date", startDate).setParameter("region", region).getResultList();
+					.setParameter("startDate", startDate).setParameter("endDate", startDate)
+					.setParameter("region", region).getResultList();
 
 			// get revision number
 			AuditReader reader = AuditReaderFactory.get(entityManager);
@@ -520,8 +514,10 @@ public class AvalancheReportController {
 		try {
 			// get report for date and region
 			transaction.begin();
+
 			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
-					.setParameter("date", startDate).setParameter("region", region).getResultList();
+					.setParameter("startDate", startDate).setParameter("endDate", endDate)
+					.setParameter("region", region).getResultList();
 			transaction.commit();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();

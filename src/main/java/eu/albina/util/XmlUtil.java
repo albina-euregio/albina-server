@@ -5,7 +5,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,25 +40,48 @@ public class XmlUtil {
 		String validityDateString = AlbinaUtil.getValidityDate(bulletins);
 		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString;
 		new File(dirPath).mkdirs();
+
+		// using PosixFilePermission to set file permissions 755
+		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+		// add owners permission
+		perms.add(PosixFilePermission.OWNER_READ);
+		perms.add(PosixFilePermission.OWNER_WRITE);
+		perms.add(PosixFilePermission.OWNER_EXECUTE);
+		// add group permissions
+		perms.add(PosixFilePermission.GROUP_READ);
+		perms.add(PosixFilePermission.GROUP_EXECUTE);
+		// add others permissions
+		perms.add(PosixFilePermission.OTHERS_READ);
+		perms.add(PosixFilePermission.OTHERS_EXECUTE);
+
+		Files.setPosixFilePermissions(Paths.get(dirPath), perms);
+
 		BufferedWriter writer;
+		String fileName;
 
 		Document docDe = XmlUtil.createCaaml(bulletins, LanguageCode.de);
 		String caamlStringDe = XmlUtil.convertDocToString(docDe);
-		writer = new BufferedWriter(new FileWriter(dirPath + "/" + validityDateString + "_de.xml"));
+		fileName = dirPath + "/" + validityDateString + "_de.xml";
+		writer = new BufferedWriter(new FileWriter(fileName));
 		writer.write(caamlStringDe);
 		writer.close();
+		AlbinaUtil.setFilePermissions(fileName);
 
 		Document docIt = XmlUtil.createCaaml(bulletins, LanguageCode.it);
 		String caamlStringIt = XmlUtil.convertDocToString(docIt);
+		fileName = dirPath + "/" + validityDateString + "_it.xml";
 		writer = new BufferedWriter(new FileWriter(dirPath + "/" + validityDateString + "_it.xml"));
 		writer.write(caamlStringIt);
 		writer.close();
+		AlbinaUtil.setFilePermissions(fileName);
 
 		Document docEn = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 		String caamlStringEn = XmlUtil.convertDocToString(docEn);
+		fileName = dirPath + "/" + validityDateString + "_en.xml";
 		writer = new BufferedWriter(new FileWriter(dirPath + "/" + validityDateString + "_en.xml"));
 		writer.write(caamlStringEn);
 		writer.close();
+		AlbinaUtil.setFilePermissions(fileName);
 	}
 
 	public static Document createCaaml(List<AvalancheBulletin> bulletins, LanguageCode language) {
@@ -92,9 +120,12 @@ public class XmlUtil {
 				Element observations = doc.createElement("observations");
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					for (Element element : bulletin.toCAAML(doc, language)) {
-						observations.appendChild(element);
-					}
+					List<Element> caaml = bulletin.toCAAML(doc, language);
+					if (caaml != null)
+						for (Element element : caaml) {
+							if (element != null)
+								observations.appendChild(element);
+						}
 				}
 				rootElement.appendChild(observations);
 

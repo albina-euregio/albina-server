@@ -82,14 +82,13 @@ public class PdfUtil {
 	public static final Color dangerLevel5ColorRed = new DeviceRgb(255, 0, 23);
 	public static final Color dangerLevel5ColorBlack = new DeviceRgb(0, 0, 0);
 
-	// TODO bw
 	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
-	public static final Color dangerLevel1ColorBw = new DeviceRgb(197, 255, 118);
-	public static final Color dangerLevel2ColorBw = new DeviceRgb(255, 255, 70);
-	public static final Color dangerLevel3ColorBw = new DeviceRgb(255, 152, 44);
-	public static final Color dangerLevel4ColorBw = new DeviceRgb(255, 0, 23);
-	public static final Color dangerLevel5ColorRedBw = new DeviceRgb(255, 0, 23);
-	public static final Color dangerLevel5ColorBlackBw = new DeviceRgb(0, 0, 0);
+	public static final Color dangerLevel1ColorBw = new DeviceRgb(239, 239, 239);
+	public static final Color dangerLevel2ColorBw = new DeviceRgb(216, 216, 216);
+	public static final Color dangerLevel3ColorBw = new DeviceRgb(176, 176, 176);
+	public static final Color dangerLevel4ColorBw = new DeviceRgb(136, 136, 136);
+	public static final Color dangerLevel5ColorRedBw = new DeviceRgb(136, 136, 136);
+	public static final Color dangerLevel5ColorBlackBw = new DeviceRgb(70, 70, 70);
 	public static final Color greyVeryVeryLightColorBw = new DeviceRgb(246, 246, 246);
 
 	private static PdfFont openSansRegularFont;
@@ -135,21 +134,29 @@ public class PdfUtil {
 		String validityDateString = AlbinaUtil.getValidityDate(bulletins);
 
 		try {
+			String filename;
+
 			// TODO use correct region string
 			if (region != null) {
-				if (grayscale)
-					writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/"
-							+ validityDateString + "_" + region + "_" + lang.toString() + "_bw.pdf");
-				else
-					writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/"
-							+ validityDateString + "_" + region + "_" + lang.toString() + ".pdf");
+				if (grayscale) {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ region + "_" + lang.toString() + "_bw.pdf";
+					writer = new PdfWriter(filename);
+				} else {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ region + "_" + lang.toString() + ".pdf";
+					writer = new PdfWriter(filename);
+				}
 			} else {
-				if (grayscale)
-					writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/"
-							+ validityDateString + "_" + lang.toString() + "_bw.pdf");
-				else
-					writer = new PdfWriter(GlobalVariables.getPdfDirectory() + validityDateString + "/"
-							+ validityDateString + "_" + lang.toString() + ".pdf");
+				if (grayscale) {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ lang.toString() + "_bw.pdf";
+					writer = new PdfWriter(filename);
+				} else {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ lang.toString() + ".pdf";
+					writer = new PdfWriter(filename);
+				}
 			}
 
 			pdf = new PdfDocument(writer);
@@ -181,6 +188,8 @@ public class PdfUtil {
 			}
 
 			document.close();
+
+			AlbinaUtil.setFilePermissions(filename);
 			return true;
 		} catch (com.itextpdf.io.IOException e) {
 			logger.error("PDF could not be created: " + e.getMessage());
@@ -532,8 +541,15 @@ public class PdfUtil {
 
 		Paragraph firstRow = new Paragraph("").setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 
-		Image regionImg = getImage("warning_pictos/level_"
-				+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency()) + ".png");
+		Image regionImg;
+		if (grayscale)
+			regionImg = getImage("warning_pictos/grey/level_"
+					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
+					+ ".png");
+		else
+			regionImg = getImage("warning_pictos/color/level_"
+					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
+					+ ".png");
 		if (regionImg != null) {
 			regionImg.scaleToFit(70, 30);
 			firstRow.add(regionImg);
