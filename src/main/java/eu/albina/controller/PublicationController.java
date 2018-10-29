@@ -224,6 +224,32 @@ public class PublicationController {
 		}).start();
 	}
 
+	public void startChangeThread(DateTime startDate, DateTime endDate, List<String> avalancheReportIds) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
+							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+
+					// TODO what if there is no bulletin? Delete all products?
+
+					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+					for (AvalancheBulletin avalancheBulletin : bulletins) {
+						if (avalancheBulletin.getPublishedRegions() != null
+								&& !avalancheBulletin.getPublishedRegions().isEmpty())
+							result.add(avalancheBulletin);
+					}
+					if (result != null && !result.isEmpty())
+						PublicationController.getInstance().change(avalancheReportIds, result);
+
+				} catch (AlbinaException e) {
+					logger.warn("Error loading bulletins - " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+
 	// LANG
 	private void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		try {

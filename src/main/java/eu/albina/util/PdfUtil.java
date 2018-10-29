@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,16 +116,18 @@ public class PdfUtil {
 	 */
 	public boolean createOverviewPdfs(List<AvalancheBulletin> bulletins) {
 		boolean result = true;
+		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
-			if (!createPdf(bulletins, lang, null, false))
+			if (!createPdf(bulletins, lang, null, false, daytimeDependency))
 				result = false;
-			if (!createPdf(bulletins, lang, null, true))
+			if (!createPdf(bulletins, lang, null, true, daytimeDependency))
 				result = false;
 		}
 		return result;
 	}
 
-	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale) {
+	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
+			boolean daytimeDependency) {
 		PdfDocument pdf;
 		PdfWriter writer;
 
@@ -180,7 +181,7 @@ public class PdfUtil {
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 
-			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale);
+			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency);
 
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
@@ -216,6 +217,7 @@ public class PdfUtil {
 	 *            The region to create the PDFs for.
 	 */
 	public boolean createRegionPdfs(List<AvalancheBulletin> bulletins, String region) {
+		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		boolean result = true;
 		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
@@ -225,9 +227,9 @@ public class PdfUtil {
 
 		if (!regionBulletins.isEmpty())
 			for (LanguageCode lang : GlobalVariables.languages) {
-				if (!createPdf(regionBulletins, lang, region, false))
+				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency))
 					result = false;
-				if (!createPdf(regionBulletins, lang, region, true))
+				if (!createPdf(regionBulletins, lang, region, true, daytimeDependency))
 					result = false;
 			}
 		return result;
@@ -653,9 +655,7 @@ public class PdfUtil {
 
 	public Image getImage(String path) {
 		try {
-			String name = GlobalVariables.getLocalImagesPath() + path;
-			ImageData imageData = ImageDataFactory
-					.create(IOUtils.toByteArray(this.getClass().getClassLoader().getResourceAsStream(name)));
+			ImageData imageData = ImageDataFactory.create(GlobalVariables.getServerImagesUrlLocalhost() + path);
 			return new Image(imageData);
 		} catch (IOException e) {
 			logger.warn("Image could not be loaded: " + e.getMessage());
@@ -1071,7 +1071,7 @@ public class PdfUtil {
 	}
 
 	private void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
-			PdfDocument pdf, String region, boolean grayscale) throws MalformedURLException {
+			PdfDocument pdf, String region, boolean grayscale, boolean daytimeDependency) throws MalformedURLException {
 		PdfPage page = pdf.addNewPage();
 		Rectangle pageSize = page.getPageSize();
 		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdf);
@@ -1101,7 +1101,7 @@ public class PdfUtil {
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory
 					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
-							+ getOverviewMapFilename(region, false, false, grayscale));
+							+ getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			if (region != null) {
 				overviewMapImg.scaleToFit(350, 500);

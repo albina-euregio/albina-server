@@ -504,14 +504,7 @@ public class AvalancheBulletinService {
 			String avalancheReportId = AvalancheReportController.getInstance().changeReport(startDate, region, user);
 			avalancheReportIds.add(avalancheReportId);
 
-			List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin avalancheBulletin : bulletins) {
-				if (avalancheBulletin.getPublishedRegions() != null
-						&& !avalancheBulletin.getPublishedRegions().isEmpty())
-					result.add(avalancheBulletin);
-			}
-			if (result != null && !result.isEmpty())
-				PublicationController.getInstance().change(avalancheReportIds, result);
+			PublicationController.getInstance().startChangeThread(startDate, endDate, avalancheReportIds);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {

@@ -230,16 +230,16 @@ public class EmailUtil {
 			Map<String, Object> image = new HashMap<>();
 			switch (lang) {
 			case de:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/lawinen_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lawinen_report.png");
 				break;
 			case it:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/valanghe_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/valanghe_report.png");
 				break;
 			case en:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			default:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			}
 			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
@@ -352,20 +352,20 @@ public class EmailUtil {
 			Map<String, Object> image = new HashMap<>();
 			switch (lang) {
 			case de:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/lawinen_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lawinen_report.png");
 				break;
 			case it:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/valanghe_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/valanghe_report.png");
 				break;
 			case en:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			default:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			}
 			image.put("dangerLevel5Style", getDangerLevel5Style());
-			image.put("ci", GlobalVariables.getServerImagesUrl() + "Colorbar.gif");
+			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
 			socialMediaImages.put("twitter", GlobalVariables.getServerImagesUrl() + "social_media/twitter.png");
