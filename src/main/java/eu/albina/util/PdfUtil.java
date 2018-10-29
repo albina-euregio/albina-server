@@ -85,7 +85,7 @@ public class PdfUtil {
 	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
 	public static final Color dangerLevel1ColorBw = new DeviceRgb(239, 239, 239);
 	public static final Color dangerLevel2ColorBw = new DeviceRgb(216, 216, 216);
-	public static final Color dangerLevel3ColorBw = new DeviceRgb(177, 177, 177);
+	public static final Color dangerLevel3ColorBw = new DeviceRgb(176, 176, 176);
 	public static final Color dangerLevel4ColorBw = new DeviceRgb(136, 136, 136);
 	public static final Color dangerLevel5ColorRedBw = new DeviceRgb(136, 136, 136);
 	public static final Color dangerLevel5ColorBlackBw = new DeviceRgb(70, 70, 70);
