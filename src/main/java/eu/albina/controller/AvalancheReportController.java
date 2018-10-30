@@ -515,9 +515,8 @@ public class AvalancheReportController {
 			// get report for date and region
 			transaction.begin();
 
-			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate)
-					.setParameter("region", region).getResultList();
+			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegionStartDate)
+					.setParameter("startDate", startDate).setParameter("region", region).getResultList();
 			transaction.commit();
 
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
