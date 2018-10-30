@@ -101,9 +101,7 @@ public class StaticWidgetUtil {
 			ig2.setPaint(greyLightColor);
 			ig2.fill(new Rectangle2D.Double(0, 569, 600, 1));
 
-			BufferedImage ci = resize(
-					loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/color/colorbar.gif"), 600,
-					15);
+			BufferedImage ci = resize(loadImageFromFile("logo/color/colorbar.gif"), 600, 15);
 
 			// TODO use thumbnail map with highest danger rating or show both maps beside
 			BufferedImage overviewThumbnail;
@@ -149,7 +147,7 @@ public class StaticWidgetUtil {
 			AttributedString asFourthLine;
 			switch (lang) {
 			case de:
-				logo = loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/lawinen_report.png");
+				logo = loadImageFromFile("logo/color/lawinen_report.png");
 
 				firstLine = "Für " + date + " maximal";
 				asFirstLine = new AttributedString(firstLine);
@@ -173,7 +171,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			case it:
-				logo = loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/valanghe_report.png");
+				logo = loadImageFromFile("logo/color/valanghe_report.png");
 
 				firstLine = "Per " + date + " al massimo";
 				asFirstLine = new AttributedString(firstLine);
@@ -197,7 +195,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			case en:
-				logo = loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/avalanche_report.png");
+				logo = loadImageFromFile("logo/color/avalanche_report.png");
 
 				firstLine = "On " + date + " at maximum";
 				asFirstLine = new AttributedString(firstLine);
@@ -221,7 +219,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			default:
-				logo = loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/avalanche_report.png");
+				logo = loadImageFromFile("logo/color/avalanche_report.png");
 
 				firstLine = "On " + date + " at maximum";
 				asFirstLine = new AttributedString(firstLine);
@@ -286,10 +284,9 @@ public class StaticWidgetUtil {
 			ig2.drawImage(logo, 70, 35, null);
 			ig2.drawImage(overviewThumbnail, 100, 170, null);
 
-			BufferedImage interregLogo = loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost()
-					+ "logo/interreg_italia-oesterreich_02_GRAYSCALE.png");
+			BufferedImage interregLogo = loadImageFromFile("logo/color/interreg.png");
 			// BufferedImage interregLogo =
-			// loadImage(GlobalVariables.getServerImagesUrlLocalhost() +
+			// loadImage(GlobalVariables.getServerImagesUrl() +
 			// "logo/interreg_italia-oesterreich_02_RGB.png");
 			interregLogo = resizeHeight(interregLogo, 110);
 			ig2.drawImage(interregLogo, 350, 45, null);
@@ -358,7 +355,7 @@ public class StaticWidgetUtil {
 	private BufferedImage loadImageFromUrl(String path) {
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new URL(path));
+			img = ImageIO.read(new URL(path).openStream());
 		} catch (IOException e) {
 			logger.error("Error loading image: " + path);
 			e.printStackTrace();
@@ -366,16 +363,16 @@ public class StaticWidgetUtil {
 		return img;
 	}
 
-	// private BufferedImage loadImageFromFile(String path) {
-	// BufferedImage img = null;
-	// try {
-	// img = ImageIO.read(new File(path));
-	// } catch (IOException e) {
-	// logger.error("Error loading image: " + path);
-	// e.printStackTrace();
-	// }
-	// return img;
-	// }
+	private BufferedImage loadImageFromFile(String path) {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(getClass().getResource(GlobalVariables.getLocalImagesPath() + path));
+		} catch (IOException e) {
+			logger.error("Error loading image: " + GlobalVariables.getLocalImagesPath() + path);
+			e.printStackTrace();
+		}
+		return img;
+	}
 
 	private Color getDangerRatingColor(DangerRating dangerRating) {
 		switch (dangerRating) {
