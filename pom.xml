@@ -35,7 +35,7 @@
 	<dependency>
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
-      <version>2.2.1</version>
+      <version>2.2.2</version>
 	  <exclusions>
         <exclusion>
           <artifactId>c3p0</artifactId>
@@ -161,7 +161,7 @@
 	<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
-		<version>6.0.6</version>
+		<version>8.0.12</version>
 	</dependency>
 
 	<dependency>
@@ -226,6 +226,32 @@
 	    <artifactId>commons-beanutils</artifactId>
 	    <version>1.9.3</version>
 	</dependency>
+
+<!--  twitter  -->
+	  <dependency>
+		  <groupId>org.twitter4j</groupId>
+		  <artifactId>twitter4j-stream</artifactId>
+		  <version>4.0.7</version>
+	  </dependency>
+<!--  json  -->
+	  <!--need 2.9.7 minimun to solve-->
+	  <!--https://github.com/FasterXML/jackson-databind/commit/ca990655cf91c1061ffbc5afaabe42bb3333ba6a-->
+	  <dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-databind</artifactId>
+		  <version>2.9.7</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>com.bedatadriven</groupId>
+		  <artifactId>jackson-datatype-jts</artifactId>
+		  <version>2.2</version>
+	  </dependency>
+	  <!--  http  -->
+	  <dependency>
+		  <groupId>org.apache.httpcomponents</groupId>
+		  <artifactId>fluent-hc</artifactId>
+		  <version>4.5.6</version>
+	  </dependency>
   </dependencies>
 
   <build>
@@ -248,6 +274,18 @@
 	            <rules><dependencyConvergence/></rules>
 	        </configuration>
 	    </plugin>
+		<plugin>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-maven-plugin</artifactId>
+			<version>9.4.12.v20180830</version>
+			<configuration>
+				<scanIntervalSeconds>10</scanIntervalSeconds>
+				<webApp>
+					<contextPath>/albina</contextPath>
+				</webApp>
+			</configuration>
+		</plugin>
+
 	</plugins>
   </build>
 </project>

@@ -52,12 +52,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 				logger.warn(String.format("Error deregistering driver %s", d), ex);
 			}
 		}
-		try {
-			AbandonedConnectionCleanupThread.shutdown();
-		} catch (InterruptedException e) {
-			logger.warn("SEVERE problem cleaning up: " + e.getMessage());
-			e.printStackTrace();
-		}
+		AbandonedConnectionCleanupThread.shutdown();
 
 		SocketIOController.getInstance().startSocketIO();
 

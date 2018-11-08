@@ -12,15 +12,23 @@
       <class>eu.albina.model.AvalancheBulletinDaytimeDescription</class>
       <class>eu.albina.model.AvalancheBulletin</class>
       <class>eu.albina.model.ChatMessage</class>
-      
+      <class>eu.albina.model.socialmedia.Channel</class>
+      <class>eu.albina.model.socialmedia.MessengerPeopleConfig</class>
+      <class>eu.albina.model.socialmedia.Provider</class>
+      <class>eu.albina.model.socialmedia.RapidMailConfig</class>
+      <class>eu.albina.model.socialmedia.RapidMailRecipient</class>
+      <class>eu.albina.model.socialmedia.RegionConfiguration</class>
+      <class>eu.albina.model.socialmedia.Shipment</class>
+      <class>eu.albina.model.socialmedia.TwitterConfig</class>
+
       <properties>        
 
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
-	    <!-- <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/> -->
-	    <property name="hibernate.connection.url" value="jdbc:mysql://albinadb1rz:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
-	    <property name="hibernate.connection.username" value="ais"/>
-        <property name="hibernate.connection.password" value="MD>5:X*n%)1V"/>
+	    <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+	    <!--<property name="hibernate.connection.url" value="jdbc:mysql://albinadb1rz:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>-->
+	    <property name="hibernate.connection.username" value="root"/>
+        <property name="hibernate.connection.password" value="clesio"/>
 
         <!-- Hibernate ENVERS Configuration -->
         <property name="org.hibernate.envers.audit_table_suffix" value="_audit"/>
@@ -46,14 +54,14 @@
         <property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>
 
         <!-- Echo all executed SQL to stdout -->
-        <property name="show_sql" value="false"/>
+        <property name="show_sql" value="true"/>
 
         <!-- Set time zone -->
         <property name="hibernate.jdbc.time_zone" value="UTC"/>
 
         <!-- Drop and re-create the database schema on startup -->
-        <!-- <property name="hibernate.hbm2ddl.auto" value="create"/> -->
-        <!-- <property name="hibernate.hbm2ddl.auto" value="update"/> -->
+        <!--<property name="hibernate.hbm2ddl.auto" value="create"/>-->
+        <!--<property name="hibernate.hbm2ddl.auto" value="update"/>-->
 
         <!-- Generate SQL scripts -->
         <property name="javax.persistence.schema-generation.scripts.action" value="drop-and-create"/>

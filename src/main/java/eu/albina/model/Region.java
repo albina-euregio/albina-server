@@ -3,16 +3,15 @@ package eu.albina.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
+import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
+import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.albina.model.socialmedia.Channel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -31,6 +30,7 @@ import eu.albina.util.GlobalVariables;
  */
 @Entity
 @Table(name = "regions")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id",scope = Region.class)
 public class Region implements AvalancheInformationObject {
 
 	@Id
@@ -50,6 +50,8 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "NAME_EN")
 	private String nameEn;
 
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(contentUsing = GeometryDeserializer.class)
 	@Column(name = "POLYGON")
 	private Polygon polygon;
 
@@ -57,7 +59,7 @@ public class Region implements AvalancheInformationObject {
 	@JoinColumn(name = "PARENTREGION_ID")
 	private Region parentRegion;
 
-	@OneToMany(mappedBy = "parentRegion")
+	@OneToMany(mappedBy = "parentRegion",fetch = FetchType.EAGER)
 	private Set<Region> subregions;
 
 	@ManyToOne(cascade = { CascadeType.ALL })
