@@ -266,6 +266,46 @@ public class AvalancheBulletinController {
 		return XmlUtil.convertDocToString(doc);
 	}
 
+	public String getAinevaBulletinsCaaml(DateTime startDate, DateTime endDate, List<String> regions,
+			LanguageCode language) throws TransformerException, AlbinaException, ParserConfigurationException {
+		List<AvalancheBulletin> bulletins = getBulletins(startDate, endDate, regions);
+
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		docBuilder = docFactory.newDocumentBuilder();
+
+		Document doc = docBuilder.newDocument();
+		Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
+
+		if (bulletins != null && !bulletins.isEmpty()) {
+			Element observations = doc.createElement("observations");
+			for (AvalancheBulletin bulletin : bulletins) {
+				Set<String> tmpRegions = new HashSet<String>();
+				for (String desiredRegion : regions) {
+					for (String region : bulletin.getSavedRegions()) {
+						if (region.startsWith(desiredRegion))
+							tmpRegions.add(region);
+					}
+					for (String region : bulletin.getPublishedRegions()) {
+						if (region.startsWith(desiredRegion))
+							tmpRegions.add(region);
+					}
+				}
+				if (!tmpRegions.isEmpty()) {
+					bulletin.setPublishedRegions(tmpRegions);
+					for (Element element : bulletin.toCAAML(doc, language)) {
+						observations.appendChild(element);
+					}
+				}
+			}
+			rootElement.appendChild(observations);
+		}
+
+		doc.appendChild(rootElement);
+
+		return XmlUtil.convertDocToString(doc);
+	}
+
 	public Collection<AvalancheBulletin> getPublishedBulletinsJson(DateTime startDate, DateTime endDate,
 			List<String> regions) throws AlbinaException {
 		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,

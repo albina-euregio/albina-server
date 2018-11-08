@@ -170,6 +170,61 @@ public class AvalancheBulletinService {
 		}
 	}
 
+	// TODO enable authentication
+	@GET
+	@Path("/aineva")
+	// @Secured({ Role.ADMIN, Role.FORECASTER })
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
+	public Response getAinevaXMLBulletins(
+			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
+		logger.debug("GET published XML bulletins");
+
+		DateTime startDate = null;
+		DateTime endDate = null;
+
+		if (regions.isEmpty()) {
+			logger.warn("No region defined.");
+			return Response.noContent().build();
+		}
+
+		try {
+			if (date != null)
+				startDate = DateTime
+						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+						.toDateTime(DateTimeZone.UTC);
+			else
+				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+			endDate = startDate.plusDays(1);
+
+			String caaml = AvalancheBulletinController.getInstance().getAinevaBulletinsCaaml(startDate, endDate,
+					regions, language);
+			if (caaml != null) {
+				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
+			} else {
+				logger.debug("No bulletins found.");
+				return Response.noContent().build();
+			}
+		} catch (AlbinaException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			try {
+				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
+			} catch (Exception ex) {
+				return Response.status(400).type(MediaType.APPLICATION_XML).build();
+			}
+		} catch (TransformerException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).build();
+		} catch (ParserConfigurationException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).build();
+		} catch (UnsupportedEncodingException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
+		}
+	}
+
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
