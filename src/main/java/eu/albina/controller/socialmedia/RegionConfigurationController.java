@@ -74,8 +74,10 @@ public class RegionConfigurationController {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            RegionConfiguration attachedObj = entityManager.merge(regionConfiguration);
-            entityManager.persist(attachedObj);
+            entityManager.merge(regionConfiguration.getMessengerPeopleConfig());
+            entityManager.merge(regionConfiguration.getRapidMailConfig());
+            entityManager.merge(regionConfiguration.getTwitterConfig());
+            entityManager.merge(regionConfiguration);
             transaction.commit();
             return regionConfiguration.getId();
         } catch (HibernateException he) {
