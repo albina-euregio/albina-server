@@ -493,11 +493,9 @@ public class AvalancheBulletinService {
 			JSONArray bulletinsJson = new JSONArray(bulletinsString);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (int i = 0; i < bulletinsJson.length(); i++) {
-				// TODO validate
 				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
 				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
-				if (bulletin.affectsRegion(region))
-					bulletins.add(bulletin);
+				bulletins.add(bulletin);
 			}
 
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, null);

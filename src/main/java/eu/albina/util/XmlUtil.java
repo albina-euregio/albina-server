@@ -54,7 +54,13 @@ public class XmlUtil {
 		perms.add(PosixFilePermission.OTHERS_READ);
 		perms.add(PosixFilePermission.OTHERS_EXECUTE);
 
-		Files.setPosixFilePermissions(Paths.get(dirPath), perms);
+		try {
+			Files.setPosixFilePermissions(Paths.get(dirPath), perms);
+		} catch (IOException e) {
+			logger.warn("File permissions could not be set!");
+		} catch (UnsupportedOperationException e) {
+			logger.warn("File permissions could not be set!");
+		}
 
 		BufferedWriter writer;
 		String fileName;
