@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
 @Generated("com.robohorse.robopojogenerator")
-public class GetRecipientsResponseLast {
+public class GetRecipientsResponseHref {
 
 	@JsonProperty("href")
 	private String href;
@@ -20,7 +20,7 @@ public class GetRecipientsResponseLast {
 	@Override
  	public String toString(){
 		return 
-			"Last{" + 
+			"Self{" + 
 			"href = '" + href + '\'' + 
 			"}";
 		}

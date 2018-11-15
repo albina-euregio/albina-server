@@ -7,11 +7,13 @@ import eu.albina.model.messengerpeople.MessengerPeopleNewsLetter;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
 import eu.albina.model.rapidmail.mailings.PostMailingsResponse;
 import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponse;
+import eu.albina.model.rapidmail.recipients.get.GetRecipientsResponse;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsResponse;
 import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.Shipment;
 import io.swagger.annotations.*;
+import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
@@ -23,6 +25,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.List;
 
 @Path("/social-media")
@@ -106,13 +112,17 @@ public class SocialMediaService {
 			String language,
 			@ApiParam("Send message content")
 			String content
-	) throws IOException, AlbinaException {
+	) throws IOException, AlbinaException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
 		PostMailingsRequest mailingsPost= ctRm.fromJson(content, PostMailingsRequest.class);
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
 		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
-		PostMailingsResponse response=ctRm.sendMessage(rc.getRapidMailConfig(),language, mailingsPost);
-		return Response.ok(ctRm.toJson(response), MediaType.APPLICATION_JSON).build();
+		HttpResponse response=ctRm.sendMessage(rc.getRapidMailConfig(),language, mailingsPost);
+		return Response
+				.status(response.getStatusLine().getStatusCode())
+				.entity(response.getEntity().getContent())
+				.header("Content-Type",response.getEntity().getContentType())
+				.build();
 	}
 
 	@GET
@@ -122,12 +132,16 @@ public class SocialMediaService {
 	public Response getRecipientList(
 			@PathParam("region-id") @ApiParam("Region id")
 			String regionId
-	) throws AlbinaException, IOException {
+	) throws AlbinaException, IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
 		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
 		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
-		RapidMailRecipientListResponse response=ctRm.getRecipientsList(rc.getRapidMailConfig());
-		return Response.ok(ctRm.toJson(response), MediaType.APPLICATION_JSON).build();
+		HttpResponse response=ctRm.getRecipientsList(rc.getRapidMailConfig());
+		return Response
+				.status(response.getStatusLine().getStatusCode())
+				.entity(response.getEntity().getContent())
+				.header("Content-Type",response.getEntity().getContentType())
+				.build();
 	}
 
 	@POST
@@ -139,12 +153,16 @@ public class SocialMediaService {
 			String regionId,
 			@ApiParam("Recipient data")
 			String content
-	) throws AlbinaException, IOException {
+	) throws AlbinaException, IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
 		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
 		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
-		PostRecipientsResponse response=ctRm.createRecipient(rc.getRapidMailConfig(),ctRm.fromJson(content, PostRecipientsRequest.class));
-		return Response.ok(ctRm.toJson(response), MediaType.APPLICATION_JSON).build();
+		HttpResponse response=ctRm.createRecipient(rc.getRapidMailConfig(),ctRm.fromJson(content, PostRecipientsRequest.class));
+		return Response
+				.status(response.getStatusLine().getStatusCode())
+				.entity(response.getEntity().getContent())
+				.header("Content-Type",response.getEntity().getContentType())
+				.build();
 	}
 
 	@DELETE
@@ -153,17 +171,44 @@ public class SocialMediaService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response deleteRecipient(
 			@PathParam("region-id") @ApiParam("Region id")
-			String regionId,
+					String regionId,
 			@PathParam("recipient-id") @ApiParam("Recipient id")
-			Integer recipientId,
+					Integer recipientId,
 			@ApiParam("Send message content")
-			String content
-	) throws AlbinaException, IOException {
+					String content
+	) throws AlbinaException, IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
 		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
 		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
-		int response=ctRm.deleteRecipient(rc.getRapidMailConfig(),recipientId);
-		return Response.ok(response, MediaType.APPLICATION_JSON).build();
+		HttpResponse response=ctRm.deleteRecipient(rc.getRapidMailConfig(),recipientId);
+		return Response
+				.status(response.getStatusLine().getStatusCode())
+				.entity(response.getEntity().getContent())
+				.header("Content-Type",response.getEntity().getContentType())
+				.build();
+	}
+
+	@GET
+	@Path("/rapidmail/recipients/{region-id}/{recipient-list-id}")
+//	@Secured({ Role.ADMIN })
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getRecipients(
+			@PathParam("region-id") @ApiParam("Region id")
+					String regionId,
+			@PathParam("recipient-list-id") @ApiParam("Recipient id")
+					String recipientListId,
+			@ApiParam("Send message content")
+					String content
+	) throws AlbinaException, IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
+		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
+		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
+		HttpResponse response=ctRm.getRecipients(rc.getRapidMailConfig(),recipientListId);
+		return Response
+				.status(response.getStatusLine().getStatusCode())
+				.entity(response.getEntity().getContent())
+				.header("Content-Type",response.getEntity().getContentType())
+				.build();
 	}
 
 

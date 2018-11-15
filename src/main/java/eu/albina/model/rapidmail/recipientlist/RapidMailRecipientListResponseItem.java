@@ -22,7 +22,7 @@ public class RapidMailRecipientListResponseItem {
 	private String unsubscribeConfirmationGoodbyeEmailBody;
 
 	@JsonProperty("description")
-	private Object description;
+	private String description;
 
 	@JsonProperty("subscribe_confirmation_welcome_email_subject")
 	private String subscribeConfirmationWelcomeEmailSubject;
@@ -40,10 +40,10 @@ public class RapidMailRecipientListResponseItem {
 	private String id;
 
 	@JsonProperty("unsubscribe_confirmation_goodbye_email_from_name")
-	private Object unsubscribeConfirmationGoodbyeEmailFromName;
+	private String unsubscribeConfirmationGoodbyeEmailFromName;
 
 	@JsonProperty("unsubscribe_confirmation_email_from_name")
-	private Object unsubscribeConfirmationEmailFromName;
+	private String unsubscribeConfirmationEmailFromName;
 
 	@JsonProperty("unsubscribe_confirmation_goodbye_email_from")
 	private String unsubscribeConfirmationGoodbyeEmailFrom;
@@ -64,7 +64,7 @@ public class RapidMailRecipientListResponseItem {
 	private String unsubscribeBlacklist;
 
 	@JsonProperty("subscribe_confirmation_email_from_name")
-	private Object subscribeConfirmationEmailFromName;
+	private String subscribeConfirmationEmailFromName;
 
 	@JsonProperty("subscribe_form_url")
 	private String subscribeFormUrl;
@@ -73,7 +73,7 @@ public class RapidMailRecipientListResponseItem {
 	private String subscribeConfirmationWelcomeEmailFrom;
 
 	@JsonProperty("subscribe_confirmation_welcome_email_from_name")
-	private Object subscribeConfirmationWelcomeEmailFromName;
+	private String subscribeConfirmationWelcomeEmailFromName;
 
 	@JsonProperty("unsubscribe_confirmation_email_body")
 	private String unsubscribeConfirmationEmailBody;
@@ -142,11 +142,11 @@ public class RapidMailRecipientListResponseItem {
 		return unsubscribeConfirmationGoodbyeEmailBody;
 	}
 
-	public void setDescription(Object description){
+	public void setDescription(String description){
 		this.description = description;
 	}
 
-	public Object getDescription(){
+	public String getDescription(){
 		return description;
 	}
 
@@ -190,19 +190,19 @@ public class RapidMailRecipientListResponseItem {
 		return id;
 	}
 
-	public void setUnsubscribeConfirmationGoodbyeEmailFromName(Object unsubscribeConfirmationGoodbyeEmailFromName){
+	public void setUnsubscribeConfirmationGoodbyeEmailFromName(String unsubscribeConfirmationGoodbyeEmailFromName){
 		this.unsubscribeConfirmationGoodbyeEmailFromName = unsubscribeConfirmationGoodbyeEmailFromName;
 	}
 
-	public Object getUnsubscribeConfirmationGoodbyeEmailFromName(){
+	public String getUnsubscribeConfirmationGoodbyeEmailFromName(){
 		return unsubscribeConfirmationGoodbyeEmailFromName;
 	}
 
-	public void setUnsubscribeConfirmationEmailFromName(Object unsubscribeConfirmationEmailFromName){
+	public void setUnsubscribeConfirmationEmailFromName(String unsubscribeConfirmationEmailFromName){
 		this.unsubscribeConfirmationEmailFromName = unsubscribeConfirmationEmailFromName;
 	}
 
-	public Object getUnsubscribeConfirmationEmailFromName(){
+	public String getUnsubscribeConfirmationEmailFromName(){
 		return unsubscribeConfirmationEmailFromName;
 	}
 
@@ -254,11 +254,11 @@ public class RapidMailRecipientListResponseItem {
 		return unsubscribeBlacklist;
 	}
 
-	public void setSubscribeConfirmationEmailFromName(Object subscribeConfirmationEmailFromName){
+	public void setSubscribeConfirmationEmailFromName(String subscribeConfirmationEmailFromName){
 		this.subscribeConfirmationEmailFromName = subscribeConfirmationEmailFromName;
 	}
 
-	public Object getSubscribeConfirmationEmailFromName(){
+	public String getSubscribeConfirmationEmailFromName(){
 		return subscribeConfirmationEmailFromName;
 	}
 
@@ -278,11 +278,11 @@ public class RapidMailRecipientListResponseItem {
 		return subscribeConfirmationWelcomeEmailFrom;
 	}
 
-	public void setSubscribeConfirmationWelcomeEmailFromName(Object subscribeConfirmationWelcomeEmailFromName){
+	public void setSubscribeConfirmationWelcomeEmailFromName(String subscribeConfirmationWelcomeEmailFromName){
 		this.subscribeConfirmationWelcomeEmailFromName = subscribeConfirmationWelcomeEmailFromName;
 	}
 
-	public Object getSubscribeConfirmationWelcomeEmailFromName(){
+	public String getSubscribeConfirmationWelcomeEmailFromName(){
 		return subscribeConfirmationWelcomeEmailFromName;
 	}
 

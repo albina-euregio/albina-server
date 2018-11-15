@@ -102,7 +102,7 @@ public class ConfigurationService {
 	@Path("/channels")
 //	@Secured({ Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getProviders() throws AlbinaException, JsonProcessingException {
+	public Response getChannels() throws AlbinaException, JsonProcessingException {
 		RegionConfigurationController ct=RegionConfigurationController.getInstance();
 		List<Channel> channelList=ct.getChannels();
 		return Response.ok(ct.toJson(channelList), MediaType.APPLICATION_JSON).build();

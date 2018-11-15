@@ -7,21 +7,43 @@ import javax.annotation.Generated;
 public class RapidMailRecipientListResponseLinks {
 
 	@JsonProperty("self")
-	private RapidMailRecipientListResponseSelf self;
+	private RapidMailRecipientListResponseHref self;
 
-	public void setSelf(RapidMailRecipientListResponseSelf self){
+	@JsonProperty("first")
+	private RapidMailRecipientListResponseHref first;
+
+	@JsonProperty("last")
+	private RapidMailRecipientListResponseHref last;
+
+
+	public void setSelf(RapidMailRecipientListResponseHref self){
 		this.self = self;
 	}
-
-	public RapidMailRecipientListResponseSelf getSelf(){
+	public RapidMailRecipientListResponseHref getSelf(){
 		return self;
+	}
+
+	public void setFirst(RapidMailRecipientListResponseHref self){
+		this.first = first;
+	}
+	public RapidMailRecipientListResponseHref getFirst(){
+		return first;
+	}
+
+	public void setLast(RapidMailRecipientListResponseHref self){
+		this.last = last;
+	}
+	public RapidMailRecipientListResponseHref getLast(){
+		return last;
 	}
 
 	@Override
  	public String toString(){
 		return 
 			"Links{" + 
-			"self = '" + self + '\'' + 
+			"self = '" + self + '\'' +
+			"first = '" + first + '\'' +
+			"last = '" + last + '\'' +
 			"}";
 		}
 }

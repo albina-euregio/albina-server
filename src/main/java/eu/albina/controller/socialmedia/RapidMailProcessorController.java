@@ -10,16 +10,28 @@ import eu.albina.model.rapidmail.mailings.PostMailingsResponse;
 import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponse;
 import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponseItem;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
-import eu.albina.model.rapidmail.recipients.get.GetRecipientsResponse;
-import eu.albina.model.rapidmail.recipients.post.PostRecipientsResponse;
 import eu.albina.model.socialmedia.RapidMailConfig;
 import eu.albina.model.socialmedia.Shipment;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
 
+import javax.net.ssl.SSLContext;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Collections;
@@ -30,17 +42,42 @@ public class RapidMailProcessorController extends CommonProcessor {
     private static RapidMailProcessorController instance = null;
     private String baseUrl="https://apiv3.emailsys.net";
     private ObjectMapper objectMapper=new ObjectMapper();
+    private Executor executor;
 
-    public static RapidMailProcessorController getInstance() {
+    public static RapidMailProcessorController getInstance() throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, KeyManagementException {
         if (instance == null) {
             instance = new RapidMailProcessorController();
         }
         return instance;
     }
 
-    public RapidMailProcessorController(){
+    public RapidMailProcessorController() {
         objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
         objectMapper.registerModule(new JtsModule());
+        executor = Executor.newInstance(sslHttpClient());
+    }
+
+    public CloseableHttpClient sslHttpClient() {
+        // Trust own CA and all self-signed certs
+        SSLContext sslcontext = null;
+        try {
+            File f= new File(this.getClass().getResource("/certificates/emailsys.jks").getFile());
+            sslcontext = SSLContexts.custom()
+                    .loadTrustMaterial(f, "".toCharArray(), new TrustSelfSignedStrategy())
+                    .build();
+            // Allow TLSv1 protocol only
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                    sslcontext,
+                    new String[] { "TLSv1" },
+                    null,
+                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+            return HttpClients.custom()
+                    .setSSLSocketFactory(sslsf)
+                    .build();
+        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException | CertificateException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String calcBasicAuth(String user, String pass) {
@@ -51,52 +88,70 @@ public class RapidMailProcessorController extends CommonProcessor {
         }
     }
 
-    public RapidMailRecipientListResponse getRecipientsList(RapidMailConfig config) throws IOException {
-        String json=Request.Get(baseUrl+"/recipientlists")
-                .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
-                .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
-                .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
-                .execute()
-                .returnContent().asString();
-        RapidMailRecipientListResponse targets = objectMapper.readValue(json, RapidMailRecipientListResponse.class);
-        return targets;
+    public HttpResponse getRecipientsList(RapidMailConfig config) throws IOException {
+        HttpResponse response=
+                executor.execute(
+                    Request.Get(baseUrl+"/recipientlists")
+                    .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
+                    .addHeader("Accept", "application/json")
+                    .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
+                    .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
+                ).
+                returnResponse();
+        return response;
+//        RapidMailRecipientListResponse response = objectMapper.readValue(json, RapidMailRecipientListResponse.class);
+//        return response;
     }
 
-    public GetRecipientsResponse getRecipients(RapidMailConfig config, String recipientListId) throws IOException {
-        String json=Request.Get(baseUrl+"/recipients?recipientlist_id="+recipientListId)
-                .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
-                .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
-                .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
-                .execute().returnContent().asString();
-        GetRecipientsResponse targets = objectMapper.readValue(json, GetRecipientsResponse.class);
-        return targets;
+    public HttpResponse getRecipients(RapidMailConfig config, String recipientListId) throws IOException {
+        HttpResponse response=
+                executor.execute(
+                    Request.Get(baseUrl+"/recipients?recipientlist_id="+recipientListId)
+                    .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
+                    .addHeader("Accept", "application/json")
+                    .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
+                    .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
+                ).
+                returnResponse();
+        return response;
+
+//        GetRecipientsResponse response = objectMapper.readValue(json, GetRecipientsResponse.class);
+//        return response;
     }
 
-    public PostRecipientsResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient) throws IOException {
-        String json=Request.Post(baseUrl+"/recipients")
-                .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
-                .bodyString(toJson(recipient), ContentType.APPLICATION_JSON)
-                .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
-                .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
-                .execute().returnContent().asString();
-        PostRecipientsResponse targets = objectMapper.readValue(json, PostRecipientsResponse.class);
-        return targets;
+    public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient) throws IOException {
+        HttpResponse response =
+                executor.execute(
+                    Request.Post(baseUrl+"/recipients")
+                    .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
+                    .addHeader("Content-Type", "application/json")
+                    .bodyString(toJson(recipient), ContentType.APPLICATION_JSON)
+                    .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
+                    .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
+                    .viaProxy("127.0.0.1:8888")
+                ).returnResponse();
+        return response;
+//        return objectMapper.readValue(response.getEntity().getContent().toString(), PostRecipientsResponse.class);
     }
 
-    public int deleteRecipient(RapidMailConfig config, Integer recipientId) throws IOException {
-        int code=Request.Delete(baseUrl+"/recipients/recipientId")
-                .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
-                .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
-                .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
-                .execute().returnResponse().getStatusLine().getStatusCode();
-        return code;
+    public HttpResponse deleteRecipient(RapidMailConfig config, Integer recipientId) throws IOException {
+        HttpResponse response=
+                executor.execute(
+                    Request.Delete(baseUrl+"/recipients/recipientId")
+                    .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
+                    .addHeader("Accept", "application/json")
+                    .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
+                    .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
+                )
+                .returnResponse();
+        return response;
     }
-    //TODO: Add post put delete ????
 
-    public PostMailingsResponse sendMessage(RapidMailConfig config, String language, PostMailingsRequest mailingsPost) throws IOException, AlbinaException {
+    public HttpResponse sendMessage(RapidMailConfig config, String language, PostMailingsRequest mailingsPost) throws IOException, AlbinaException {
         //Set destination to right get i.e. IT-32-TN_IT. Resolve id by name via api
         String recipientName=config.getRegionConfiguration().getRegion().getId()+"_"+language.toUpperCase();
-        RapidMailRecipientListResponse recipientListResponse=getRecipientsList(config);
+        HttpResponse resp=getRecipientsList(config);
+        RapidMailRecipientListResponse recipientListResponse= objectMapper.readValue(getResponseContent(resp), RapidMailRecipientListResponse .class);
         String recipientId=recipientListResponse.getEmbedded().getRecipientlists()
                 .stream()
                 .filter(x-> StringUtils.equalsIgnoreCase(x.getName(),recipientName))
@@ -107,14 +162,19 @@ public class RapidMailProcessorController extends CommonProcessor {
                 new PostMailingsRequestDestination()
                         .id(recipientId)
         ));
-        String json= Request.Post(baseUrl+"/apiusers")
-                .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
-                .bodyString(toJson(mailingsPost), ContentType.APPLICATION_JSON)
-                .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
-                .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
-                .execute().returnContent().asString();
-        PostMailingsResponse response = objectMapper.readValue(json, PostMailingsResponse.class);
-        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,toJson(mailingsPost),toJson(response),""+response.getId()));
+        HttpResponse response=  executor.execute(
+                    Request.Post(baseUrl+"/apiusers")
+                    .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
+                    .addHeader("Content-Type", "application/json")
+                    .bodyString(toJson(mailingsPost), ContentType.APPLICATION_JSON)
+                    .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
+                    .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
+                )
+                .returnResponse();
+        String body=IOUtils.toString(response.getEntity().getContent(),"UTF-8");
+        response.getEntity().getContent().reset();
+        PostMailingsResponse bodyObject = objectMapper.readValue(body, PostMailingsResponse.class);
+        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,toJson(mailingsPost),toJson(response),""+bodyObject.getId()));
         return response;
     }
 
@@ -130,6 +190,10 @@ public class RapidMailProcessorController extends CommonProcessor {
                 .response(response)
                 .region(config.getRegionConfiguration())
                 .provider(config.getProvider());
+    }
+
+    private String getResponseContent(HttpResponse response) throws IOException {
+        return IOUtils.toString(response.getEntity().getContent(),"UTF-8");
     }
 
 }

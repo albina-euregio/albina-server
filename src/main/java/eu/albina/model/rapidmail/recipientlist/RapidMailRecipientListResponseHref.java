@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
 @Generated("com.robohorse.robopojogenerator")
-public class RapidMailRecipientListResponseSelf {
+public class RapidMailRecipientListResponseHref {
 
 	@JsonProperty("href")
 	private String href;
@@ -20,7 +20,7 @@ public class RapidMailRecipientListResponseSelf {
 	@Override
  	public String toString(){
 		return 
-			"Self{" + 
+			"{" +
 			"href = '" + href + '\'' + 
 			"}";
 		}
