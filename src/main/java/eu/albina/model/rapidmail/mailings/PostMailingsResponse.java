@@ -266,12 +266,12 @@ public class PostMailingsResponse {
 			"MailingPostResponse{" + 
 			"paused = '" + paused + '\'' + 
 			",from_email = '" + fromEmail + '\'' + 
-			",attachments = '" + attachments + '\'' + 
+			",attachments = '" + attachments + '\'' +
 			",subject = '" + subject + '\'' + 
 			",created = '" + created + '\'' + 
 			",destinations = '" + destinations + '\'' + 
 			",send_at = '" + sendAt + '\'' + 
-			",feature_mailingsplit = '" + featureMailingsplit + '\'' + 
+			",feature_mailingsplit = '" + featureMailingsplit + '\'' +
 			",from_name = '" + fromName + '\'' + 
 			",title = '" + title + '\'' + 
 			",sent = '" + sent + '\'' + 

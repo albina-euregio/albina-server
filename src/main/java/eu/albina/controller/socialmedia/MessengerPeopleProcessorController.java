@@ -92,12 +92,15 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
         else if (StringUtils.equalsIgnoreCase(language,"IT")){
             categoryId=3;
         }
-        String json=Request.Post(baseUrl+"/newsletter"+
-                //TODO: remove target and add category
-                String.format("?apikey=%s&message=%s&attachment=%s&category_id=%s",config.getApiKey(),message,attachmentUrl,categoryId))
+        String params=String.format("apikey=%s&message=%s&category=%s",config.getApiKey(),message,categoryId);
+//        if (attachmentUrl!=null){
+//            params+="&attachment="+URLEncoder.encode(attachmentUrl, "UTF-8");
+//        }
+        String json=Request.Post(baseUrl+"/newsletter?"+params)
                 .connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT)
                 .socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT)
-                .execute().returnContent().asString();
+                .execute()
+                .returnContent().asString();
         MessengerPeopleNewsLetter response = objectMapper.readValue(json, MessengerPeopleNewsLetter.class);
         ShipmentController.getInstance().saveShipment(createActivityRow(config,language,"message="+message+", attachmentUrl="+attachmentUrl,toJson(response),""+response.getBroadcastId()));
         return response;

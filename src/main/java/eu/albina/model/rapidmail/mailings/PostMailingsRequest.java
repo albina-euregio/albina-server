@@ -13,8 +13,8 @@ public class PostMailingsRequest {
 	@JsonProperty("from_email")
 	private String fromEmail;
 
-	@JsonProperty("attachments")
-	private String attachments;
+//	@JsonProperty("attachments")
+//	private Integer attachments;
 
 	@JsonProperty("file")
 	private PostMailingsRequestPostFile file;
@@ -34,8 +34,8 @@ public class PostMailingsRequest {
 	@JsonProperty("send_at")
 	private String sendAt;
 
-	@JsonProperty("feature_mailingsplit")
-	private String featureMailingsplit;
+//	@JsonProperty("feature_mailingsplit")
+//	private String featureMailingsplit;
 
 	@JsonProperty("from_name")
 	private String fromName;
@@ -59,13 +59,13 @@ public class PostMailingsRequest {
 		return fromEmail;
 	}
 
-	public void setAttachments(String attachments){
-		this.attachments = attachments;
-	}
-
-	public String getAttachments(){
-		return attachments;
-	}
+//	public void setAttachments(Integer attachments){
+//		this.attachments = attachments;
+//	}
+//
+//	public Integer getAttachments(){
+//		return attachments;
+//	}
 
 	public void setFile(PostMailingsRequestPostFile file){
 		this.file = file;
@@ -115,13 +115,13 @@ public class PostMailingsRequest {
 		return sendAt;
 	}
 
-	public void setFeatureMailingsplit(String featureMailingsplit){
-		this.featureMailingsplit = featureMailingsplit;
-	}
-
-	public String getFeatureMailingsplit(){
-		return featureMailingsplit;
-	}
+//	public void setFeatureMailingsplit(String featureMailingsplit){
+//		this.featureMailingsplit = featureMailingsplit;
+//	}
+//
+//	public String getFeatureMailingsplit(){
+//		return featureMailingsplit;
+//	}
 
 	public void setFromName(String fromName){
 		this.fromName = fromName;
@@ -145,14 +145,14 @@ public class PostMailingsRequest {
 			"SendMail{" + 
 			"check_robinson = '" + checkRobinson + '\'' + 
 			",from_email = '" + fromEmail + '\'' + 
-			",attachments = '" + attachments + '\'' + 
+//			",attachments = '" + attachments + '\'' +
 			",file = '" + file + '\'' + 
 			",check_ecg = '" + checkEcg + '\'' + 
 			",subject = '" + subject + '\'' + 
 			",destinations = '" + destinations + '\'' + 
 			",host = '" + host + '\'' + 
 			",send_at = '" + sendAt + '\'' + 
-			",feature_mailingsplit = '" + featureMailingsplit + '\'' + 
+//			",feature_mailingsplit = '" + featureMailingsplit + '\'' +
 			",from_name = '" + fromName + '\'' + 
 			",status = '" + status + '\'' + 
 			"}";
@@ -169,10 +169,10 @@ public class PostMailingsRequest {
 		return this;
 	}
 
-	public PostMailingsRequest attachments(String attachments) {
-		this.attachments = attachments;
-		return this;
-	}
+//	public PostMailingsRequest attachments(Integer attachments) {
+//		this.attachments = attachments;
+//		return this;
+//	}
 
 	public PostMailingsRequest file(PostMailingsRequestPostFile file) {
 		this.file = file;
@@ -204,10 +204,10 @@ public class PostMailingsRequest {
 		return this;
 	}
 
-	public PostMailingsRequest featureMailingsplit(String featureMailingsplit) {
-		this.featureMailingsplit = featureMailingsplit;
-		return this;
-	}
+//	public PostMailingsRequest featureMailingsplit(String featureMailingsplit) {
+//		this.featureMailingsplit = featureMailingsplit;
+//		return this;
+//	}
 
 	public PostMailingsRequest fromName(String fromName) {
 		this.fromName = fromName;

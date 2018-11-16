@@ -54,11 +54,8 @@ public class PostRecipientsRequest {
 	@JsonProperty("email")
 	private String email;
 
-	@JsonProperty("created_hostname")
-	private String createdHostname;
-
 	@JsonProperty("zip")
-	private int zip;
+	private String zip;
 
 	@JsonProperty("extrabig9")
 	private String extrabig9;
@@ -91,7 +88,7 @@ public class PostRecipientsRequest {
 	private String extrabig2;
 
 	@JsonProperty("foreign_id")
-	private int foreignId;
+	private String foreignId;
 
 	@JsonProperty("recipientlist_id")
 	private int recipientlistId;
@@ -233,19 +230,11 @@ public class PostRecipientsRequest {
 		return email;
 	}
 
-	public void setCreatedHostname(String createdHostname){
-		this.createdHostname = createdHostname;
-	}
-
-	public String getCreatedHostname(){
-		return createdHostname;
-	}
-
-	public void setZip(int zip){
+	public void setZip(String zip){
 		this.zip = zip;
 	}
 
-	public int getZip(){
+	public String getZip(){
 		return zip;
 	}
 
@@ -329,11 +318,11 @@ public class PostRecipientsRequest {
 		return extrabig2;
 	}
 
-	public void setForeignId(int foreignId){
+	public void setForeignId(String foreignId){
 		this.foreignId = foreignId;
 	}
 
-	public int getForeignId(){
+	public String getForeignId(){
 		return foreignId;
 	}
 
@@ -389,8 +378,7 @@ public class PostRecipientsRequest {
 			",extra5 = '" + extra5 + '\'' + 
 			",extra10 = '" + extra10 + '\'' + 
 			",email = '" + email + '\'' + 
-			",created_hostname = '" + createdHostname + '\'' + 
-			",zip = '" + zip + '\'' + 
+			",zip = '" + zip + '\'' +
 			",extrabig9 = '" + extrabig9 + '\'' + 
 			",extrabig8 = '" + extrabig8 + '\'' + 
 			",extrabig5 = '" + extrabig5 + '\'' + 

@@ -112,7 +112,7 @@ public class SocialMediaService {
 			String language,
 			@ApiParam("Send message content")
 			String content
-	) throws IOException, AlbinaException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+	) throws Exception {
 		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
 		PostMailingsRequest mailingsPost= ctRm.fromJson(content, PostMailingsRequest.class);
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
@@ -121,14 +121,14 @@ public class SocialMediaService {
 		return Response
 				.status(response.getStatusLine().getStatusCode())
 				.entity(response.getEntity().getContent())
-				.header("Content-Type",response.getEntity().getContentType())
+				.header(response.getEntity().getContentType().getName(),response.getEntity().getContentType().getValue())
 				.build();
 	}
 
 	@GET
 	@Path("/rapidmail/recipient-list/{region-id}")
 //	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/hal+json")
 	public Response getRecipientList(
 			@PathParam("region-id") @ApiParam("Region id")
 			String regionId
@@ -140,35 +140,37 @@ public class SocialMediaService {
 		return Response
 				.status(response.getStatusLine().getStatusCode())
 				.entity(response.getEntity().getContent())
-				.header("Content-Type",response.getEntity().getContentType())
+				.header(response.getEntity().getContentType().getName(),response.getEntity().getContentType().getValue())
 				.build();
 	}
 
 	@POST
 	@Path("/rapidmail/recipients/{region-id}")
 //	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/hal+json")
 	public Response addRecipient(
 			@PathParam("region-id") @ApiParam("Region id")
 			String regionId,
+			@QueryParam("send_activationmail")
+			String sendActivationmail,
 			@ApiParam("Recipient data")
 			String content
 	) throws AlbinaException, IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
 		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
 		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
-		HttpResponse response=ctRm.createRecipient(rc.getRapidMailConfig(),ctRm.fromJson(content, PostRecipientsRequest.class));
+		HttpResponse response=ctRm.createRecipient(rc.getRapidMailConfig(),ctRm.fromJson(content, PostRecipientsRequest.class),sendActivationmail);
 		return Response
 				.status(response.getStatusLine().getStatusCode())
 				.entity(response.getEntity().getContent())
-				.header("Content-Type",response.getEntity().getContentType())
+				.header(response.getEntity().getContentType().getName(),response.getEntity().getContentType().getValue())
 				.build();
 	}
 
 	@DELETE
 	@Path("/rapidmail/recipients/{region-id}/{recipient-id}")
 //	@Secured({ Role.ADMIN })
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces("application/hal+json")
 	public Response deleteRecipient(
 			@PathParam("region-id") @ApiParam("Region id")
 					String regionId,
@@ -184,14 +186,14 @@ public class SocialMediaService {
 		return Response
 				.status(response.getStatusLine().getStatusCode())
 				.entity(response.getEntity().getContent())
-				.header("Content-Type",response.getEntity().getContentType())
+				.header(response.getEntity().getContentType().getName(),response.getEntity().getContentType().getValue())
 				.build();
 	}
 
 	@GET
 	@Path("/rapidmail/recipients/{region-id}/{recipient-list-id}")
 //	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/hal+json")
 	public Response getRecipients(
 			@PathParam("region-id") @ApiParam("Region id")
 					String regionId,
@@ -207,7 +209,7 @@ public class SocialMediaService {
 		return Response
 				.status(response.getStatusLine().getStatusCode())
 				.entity(response.getEntity().getContent())
-				.header("Content-Type",response.getEntity().getContentType())
+				.header(response.getEntity().getContentType().getName(),response.getEntity().getContentType().getValue())
 				.build();
 	}
 
@@ -247,7 +249,7 @@ public class SocialMediaService {
 			@QueryParam("message")
 			String message,
 			@ApiParam("Send message content")
-			@QueryParam("attachmentUrl")
+			@QueryParam("attachment")
 			String attachmentUrl
 	) throws IOException, AlbinaException{
 		MessengerPeopleProcessorController ctMp=MessengerPeopleProcessorController.getInstance();

@@ -24,11 +24,18 @@ public class TwitterProcessorController extends CommonProcessor {
     private Twitter getTwitterContext(TwitterConfig config) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(config.getConsumerKey())
-                .setOAuthConsumerSecret(config.getConsumerSecret())
-                .setOAuthAccessToken(config.getAccessKey())
-                .setOAuthAccessTokenSecret(config.getAccessSecret());
+                .setOAuthConsumerKey("OoOQKo27S406KlTsV5zf376Wi")
+                .setOAuthConsumerSecret("tA0KBR6lXn8i9A8FqGc0dSrGly8m3EqLFZlsO1M069bgk2SYlj")
+                .setOAuthAccessToken("3291224583-O8oSA5e7ywcS0EeCGjkC0Yozx2GZ2fJjspB0EWC")
+                .setOAuthAccessTokenSecret("5mTVC9eCCTyqEYEuKoMGddkNdV1HtWSdFLf5w8sY03Jc5");
+//                .setOAuthConsumerKey(config.getConsumerKey())
+//                .setOAuthConsumerSecret(config.getConsumerSecret())
+//                .setOAuthAccessToken(config.getAccessKey())
+//                .setOAuthAccessTokenSecret(config.getAccessSecret());
         TwitterFactory tf = new TwitterFactory(cb.build());
+
+//        https://apps.twitter.com/app/8335738/show
+//        https://twitter.com/DevClesius
         return tf.getInstance();
     }
 
