@@ -27,7 +27,7 @@ public class RegionConfiguration implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "REGION_ID", updatable = false, insertable = false)
-    @JsonIgnoreProperties("polygon,parentRegion,subregions,aggregatedRegion")
+    @JsonIgnoreProperties({"polygon","parentRegion","subregions","aggregatedRegion"})
     private Region region;
 
     @OneToOne(mappedBy = "regionConfiguration")

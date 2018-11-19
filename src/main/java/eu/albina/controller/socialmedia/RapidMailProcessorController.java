@@ -124,10 +124,9 @@ public class RapidMailProcessorController extends CommonProcessor {
 
     public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient, String sendActivationmail) throws IOException {
         String url=baseUrl + "/recipients";
-        if (sendActivationmail!=null) {
-            url+="?send_activationmail=" + sendActivationmail;
-
-        }
+        if (sendActivationmail==null)
+            sendActivationmail="yes";
+        url+="?send_activationmail=" + sendActivationmail;
         HttpResponse response =
                 executor.execute(
                     Request.Post(url)

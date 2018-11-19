@@ -300,10 +300,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"mailtype\": \"html\",\r\n    \"birthdate\": null,\r\n    \"gender\": \"male\",\r\n    \"title\": \"Dr.\",\r\n    \"email\": \"denis.miorandi@gmail.com\",\r\n    \"zip\": null,\r\n    \"lastname\": \"\",\r\n    \"foreign_id\": null,\r\n    \"recipientlist_id\": \"2199\"\r\n}"
+					"raw": "{\r\n    \"mailtype\": \"html\",\r\n    \"birthdate\": null,\r\n    \"gender\": \"male\",\r\n    \"title\": \"Dr.\",\r\n    \"email\": \"miorandi@clesius.it\",\r\n    \"zip\": null,\r\n    \"lastname\": \"\",\r\n    \"foreign_id\": null,\r\n    \"recipientlist_id\": \"2207\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/albina/api/social-media/rapidmail/recipients/IT-32-TN",
+					"raw": "http://localhost:8080/albina/api/social-media/rapidmail/recipients/IT-32-TN?send_activationmail=yes",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -316,6 +316,12 @@
 						"rapidmail",
 						"recipients",
 						"IT-32-TN"
+					],
+					"query": [
+						{
+							"key": "send_activationmail",
+							"value": "yes"
+						}
 					]
 				}
 			},
