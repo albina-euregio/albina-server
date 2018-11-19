@@ -40,8 +40,8 @@ import java.util.Base64;
 import java.util.Collections;
 
 public class RapidMailProcessorController extends CommonProcessor {
-    private static final int RAPIDMAIL_SOCKET_TIMEOUT = 1000;
-    private static final int RAPIDMAIL_CONNECTION_TIMEOUT = 1000;
+    private static final int RAPIDMAIL_SOCKET_TIMEOUT = 10000;
+    private static final int RAPIDMAIL_CONNECTION_TIMEOUT = 10000;
     private static RapidMailProcessorController instance = null;
     private String baseUrl="https://apiv3.emailsys.net";
     private ObjectMapper objectMapper=new ObjectMapper();
@@ -124,10 +124,9 @@ public class RapidMailProcessorController extends CommonProcessor {
 
     public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient, String sendActivationmail) throws IOException {
         String url=baseUrl + "/recipients";
-        if (sendActivationmail!=null) {
-            url+="?send_activationmail=" + sendActivationmail;
-
-        }
+        if (sendActivationmail==null)
+            sendActivationmail="yes";
+        url+="?send_activationmail=" + sendActivationmail;
         HttpResponse response =
                 executor.execute(
                     Request.Post(url)
@@ -137,7 +136,7 @@ public class RapidMailProcessorController extends CommonProcessor {
                     .bodyString(toJson(recipient), ContentType.APPLICATION_JSON)
                     .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
                     .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
-                  .viaProxy("127.0.0.1:8888") //FIDDLER DEBUG
+//                  .viaProxy("127.0.0.1:8888") //FIDDLER DEBUG
                 ).returnResponse();
         return response;
 //        return objectMapper.readValue(response.getEntity().getContent().toString(), PostRecipientsResponse.class);
@@ -173,23 +172,31 @@ public class RapidMailProcessorController extends CommonProcessor {
                         .type("recipientlist")
                         .action("include")
         ));
-//        if (mailingsPost.getAttachments()==null){
-//            mailingsPost.setAttachments(0);
-//        }
+        if (mailingsPost.getSendAt()==null){
+            mailingsPost.setSendAt(OffsetDateTime.now().toString());
+        }
+        if (mailingsPost.getStatus()==null) {
+            mailingsPost.setStatus("scheduled");
+        }
 
         HttpResponse response=  executor.execute(
                     Request.Post(baseUrl+"/mailings")
                     .addHeader("Authorization", calcBasicAuth(config.getUsername(),config.getPassword()))
                     .addHeader("Content-Type", "application/json")
+                    .addHeader("Accept", "application/hal+json")
                     .bodyString(toJson(mailingsPost), ContentType.APPLICATION_JSON)
                     .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
                     .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
                 )
                 .returnResponse();
+        // Go ahead only if success
+        if (response.getStatusLine().getStatusCode()!=201){
+            return response;
+        }
         String body=IOUtils.toString(response.getEntity().getContent(),"UTF-8");
         response.getEntity().getContent().reset();
         PostMailingsResponse bodyObject = objectMapper.readValue(body, PostMailingsResponse.class);
-        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,toJson(mailingsPost),toJson(response),""+bodyObject.getId()));
+        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,toJson(mailingsPost),body,""+bodyObject.getId()));
         return response;
     }
 

@@ -76,6 +76,11 @@ public class PostMailingsResponse {
 	@JsonProperty("status")
 	private String status;
 
+	@JsonProperty("_links")
+	private RapidMailMailingsResponseLinks links;
+
+
+
 	public void setPaused(String paused){
 		this.paused = paused;
 	}
@@ -259,7 +264,13 @@ public class PostMailingsResponse {
 	public String getStatus(){
 		return status;
 	}
+	public RapidMailMailingsResponseLinks getLinks() {
+		return links;
+	}
 
+	public void setLinks(RapidMailMailingsResponseLinks links) {
+		this.links = links;
+	}
 	@Override
  	public String toString(){
 		return 
@@ -286,7 +297,8 @@ public class PostMailingsResponse {
 			",host = '" + host + '\'' + 
 			",id = '" + id + '\'' + 
 			",updated = '" + updated + '\'' + 
-			",status = '" + status + '\'' + 
+			",status = '" + status + '\'' +
+			",_links= '" + links + '\'' +
 			"}";
 		}
 }

@@ -32,8 +32,8 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 //    private static String apikey="a1e6d5387c979b039040447af4a4d20a_11513_9fc5a49fc674b5b2750ad90a7";
     private final String baseUrl="https://rest.messengerpeople.com/api/v1";
     ObjectMapper objectMapper = new ObjectMapper();
-    int MESSENGER_PEOPLE_CONNECTION_TIMEOUT=1000;
-    int MESSENGER_PEOPLE_SOCKET_TIMEOUT=1000;
+    int MESSENGER_PEOPLE_CONNECTION_TIMEOUT=10000;
+    int MESSENGER_PEOPLE_SOCKET_TIMEOUT=10000;
 
 
 
@@ -93,9 +93,9 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
             categoryId=3;
         }
         String params=String.format("apikey=%s&message=%s&category=%s",config.getApiKey(),message,categoryId);
-//        if (attachmentUrl!=null){
-//            params+="&attachment="+URLEncoder.encode(attachmentUrl, "UTF-8");
-//        }
+        if (attachmentUrl!=null){
+            params+="&attachment="+URLEncoder.encode(attachmentUrl, "UTF-8");
+        }
         String json=Request.Post(baseUrl+"/newsletter?"+params)
                 .connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT)
                 .socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT)

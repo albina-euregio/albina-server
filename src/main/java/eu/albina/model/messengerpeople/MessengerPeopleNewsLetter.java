@@ -13,6 +13,10 @@ public class MessengerPeopleNewsLetter {
 	@JsonProperty("broadcast_id")
 	private int broadcastId;
 
+	@JsonProperty("reusable_attachment")
+	private String reusableAttachment;
+
+
 	public void setCode(int code){
 		this.code = code;
 	}
@@ -28,13 +32,22 @@ public class MessengerPeopleNewsLetter {
 	public int getBroadcastId(){
 		return broadcastId;
 	}
+	public String getReusableAttachment() {
+		return reusableAttachment;
+	}
+
+	public void setReusableAttachment(String reusableAttachment) {
+		this.reusableAttachment = reusableAttachment;
+	}
+
 
 	@Override
  	public String toString(){
 		return 
 			"NewsletterId{" + 
 			"code = '" + code + '\'' + 
-			",broadcast_id = '" + broadcastId + '\'' + 
+			",broadcast_id = '" + broadcastId + '\'' +
+			",reusable_attachment = '" + reusableAttachment + '\'' +
 			"}";
 		}
 }

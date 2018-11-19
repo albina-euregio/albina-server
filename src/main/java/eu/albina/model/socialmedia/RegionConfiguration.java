@@ -2,6 +2,7 @@ package eu.albina.model.socialmedia;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import eu.albina.model.Region;
 
@@ -25,7 +26,8 @@ public class RegionConfiguration implements Serializable {
     private Long id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "REGION_ID", updatable=false, insertable=false)
+    @JoinColumn(name = "REGION_ID", updatable = false, insertable = false)
+    @JsonIgnoreProperties({"polygon","parentRegion","subregions","aggregatedRegion"})
     private Region region;
 
     @OneToOne(mappedBy = "regionConfiguration")
@@ -63,6 +65,7 @@ public class RegionConfiguration implements Serializable {
     public void setRegion(Region region) {
         this.region = region;
     }
+
     public RegionConfiguration region(Region region) {
         this.region = region;
         return this;
@@ -182,8 +185,8 @@ public class RegionConfiguration implements Serializable {
     @Override
     public String toString() {
         return "Region{" +
-            "id=" + getId() +
-            "}";
+                "id=" + getId() +
+                "}";
     }
 
 }

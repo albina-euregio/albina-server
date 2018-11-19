@@ -16,7 +16,6 @@
       <class>eu.albina.model.socialmedia.MessengerPeopleConfig</class>
       <class>eu.albina.model.socialmedia.Provider</class>
       <class>eu.albina.model.socialmedia.RapidMailConfig</class>
-      <class>eu.albina.model.socialmedia.RapidMailRecipient</class>
       <class>eu.albina.model.socialmedia.RegionConfiguration</class>
       <class>eu.albina.model.socialmedia.Shipment</class>
       <class>eu.albina.model.socialmedia.TwitterConfig</class>

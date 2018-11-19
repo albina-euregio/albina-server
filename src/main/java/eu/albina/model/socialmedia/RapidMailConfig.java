@@ -33,9 +33,6 @@ public class RapidMailConfig implements Serializable {
     private String password;
 
 
-    @OneToMany(mappedBy = "rapidMailConfig",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
-    private Set<RapidMailRecipient> rapidMailRecipients = new HashSet<>();
-
     @ManyToOne
     @JoinColumn(name = "PROVIDER_ID")
     private Provider provider;
@@ -102,31 +99,6 @@ public class RapidMailConfig implements Serializable {
 
     public void setProvider(Provider provider) {
         this.provider = provider;
-    }
-
-    public Set<RapidMailRecipient> getRapidMailRecipients() {
-        return rapidMailRecipients;
-    }
-
-    public RapidMailConfig rapidMailRecipients(Set<RapidMailRecipient> rapidMailRecipients) {
-        this.rapidMailRecipients = rapidMailRecipients;
-        return this;
-    }
-
-    public RapidMailConfig addRapidMailRecipients(RapidMailRecipient rapidMailRecipients) {
-        this.rapidMailRecipients.add(rapidMailRecipients);
-        rapidMailRecipients.setRapidMailConfig(this);
-        return this;
-    }
-
-    public RapidMailConfig removeRapidMailRecipients(RapidMailRecipient rapidMailRecipients) {
-        this.rapidMailRecipients.remove(rapidMailRecipients);
-        rapidMailRecipients.setRapidMailConfig(null);
-        return this;
-    }
-
-    public void setRapidMailRecipients(Set<RapidMailRecipient> rapidMailRecipients) {
-        this.rapidMailRecipients = rapidMailRecipients;
     }
 
     @Override
