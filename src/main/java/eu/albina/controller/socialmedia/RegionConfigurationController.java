@@ -4,22 +4,14 @@ import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.socialmedia.MessengerPeopleConfig;
-import eu.albina.model.socialmedia.RapidMailConfig;
-import eu.albina.model.socialmedia.RegionConfiguration;
-import eu.albina.model.socialmedia.TwitterConfig;
+import eu.albina.model.socialmedia.*;
 import eu.albina.util.HibernateUtil;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.engine.internal.StatefulPersistenceContext;
-import org.hibernate.engine.spi.PersistenceContext;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.internal.util.collections.IdentityMap;
 
 import javax.persistence.*;
-import java.lang.reflect.Field;
+import java.util.List;
 
-public class RegionConfigurationController {
+public class RegionConfigurationController extends CommonProcessor{
     ObjectMapper objectMapper = new ObjectMapper();
 
     private static RegionConfigurationController instance = null;
@@ -88,4 +80,25 @@ public class RegionConfigurationController {
             entityManager.close();
         }
     }
+
+
+    public List<Channel> getChannels() throws AlbinaException {
+        EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            TypedQuery<Channel> query =
+                    entityManager.createQuery("SELECT c FROM Channel c", Channel.class);
+            List<Channel> channelList=query.getResultList();
+            transaction.commit();
+            return channelList;
+        } catch (HibernateException he) {
+            if (transaction != null)
+                transaction.rollback();
+            throw new AlbinaException(he.getMessage());
+        } finally {
+            entityManager.close();
+        }
+    }
+
 }

@@ -28,6 +28,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 @Path("/configuration")
 @Api(value = "/configuration")
@@ -98,12 +99,13 @@ public class ConfigurationService {
 	}
 
 	@GET
-	@Path("/providers")
+	@Path("/channels")
 //	@Secured({ Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getProviders() {
-		MessengerPeopleProcessorController ct=MessengerPeopleProcessorController.getInstance();
-		return Response.ok("", MediaType.APPLICATION_JSON).build();
+	public Response getChannels() throws AlbinaException, JsonProcessingException {
+		RegionConfigurationController ct=RegionConfigurationController.getInstance();
+		List<Channel> channelList=ct.getChannels();
+		return Response.ok(ct.toJson(channelList), MediaType.APPLICATION_JSON).build();
 	}
+
 }

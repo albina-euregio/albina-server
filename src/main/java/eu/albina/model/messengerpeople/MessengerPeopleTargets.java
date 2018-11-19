@@ -10,7 +10,7 @@ public class MessengerPeopleTargets{
 	@JsonProperty("code")
 	private int code;
 
-	@JsonProperty("list")
+	@JsonProperty("get")
 	private MessengerPeopleTargetsList list;
 
 	public void setCode(int code){
@@ -34,7 +34,7 @@ public class MessengerPeopleTargets{
 		return 
 			"MessengerPeopleTargets{" + 
 			"code = '" + code + '\'' + 
-			",list = '" + list + '\'' + 
+			",get = '" + list + '\'' +
 			"}";
 		}
 }

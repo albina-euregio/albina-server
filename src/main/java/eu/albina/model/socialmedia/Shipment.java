@@ -42,8 +42,12 @@ public class Shipment implements Serializable {
     private String idTw;
 
     @Lob
-    @Column(name = "CONTENT")
-    private String content;
+    @Column(name = "REQUEST")
+    private String request;
+
+    @Lob
+    @Column(name = "RESPONSE")
+    private String response;
 
     @ManyToOne
     @JsonIgnoreProperties("shipments")
@@ -141,18 +145,32 @@ public class Shipment implements Serializable {
         this.idTw = idTw;
     }
 
-    public String getContent() {
-        return content;
+    public String getRequest() {
+        return request;
     }
 
-    public Shipment content(String content) {
-        this.content = content;
+    public Shipment request(String request) {
+        this.request = request;
         return this;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setRequest(String request) {
+        this.request = request;
     }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public Shipment response(String response) {
+        this.response = response;
+        return this;
+    }
+
 
     public RegionConfiguration getRegion() {
         return region;
@@ -209,7 +227,8 @@ public class Shipment implements Serializable {
             ", idMp='" + getIdMp() + "'" +
             ", idRm='" + getIdRm() + "'" +
             ", idTw='" + getIdTw() + "'" +
-            ", content='" + getContent() + "'" +
+            ", request='" + getRequest() + "'" +
+            ", response='" + getResponse() + "'" +
             "}";
     }
 }
