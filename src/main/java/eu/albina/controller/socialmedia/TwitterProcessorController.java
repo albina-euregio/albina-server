@@ -35,8 +35,11 @@ public class TwitterProcessorController extends CommonProcessor {
         return tf.getInstance();
     }
 
-    public Status createTweet(TwitterConfig config, String language,String tweet) throws TwitterException, AlbinaException {
+    public Status createTweet(TwitterConfig config, String language, String tweet, Long previousId) throws TwitterException, AlbinaException {
         Twitter twitter= getTwitterContext(config);
+        if (previousId!=null){
+            twitter.destroyStatus(previousId);
+        }
         Status response = twitter.updateStatus(tweet);
         ShipmentController.getInstance().saveShipment(createActivityRow(config,language,tweet,response.getSource(),""+response.getId()));
         return response;

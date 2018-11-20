@@ -5,14 +5,11 @@ import eu.albina.controller.socialmedia.*;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.messengerpeople.MessengerPeopleNewsLetter;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
-import eu.albina.model.rapidmail.mailings.PostMailingsResponse;
-import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponse;
-import eu.albina.model.rapidmail.recipients.get.GetRecipientsResponse;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
-import eu.albina.model.rapidmail.recipients.post.PostRecipientsResponse;
 import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.Shipment;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,68 +31,10 @@ import java.util.List;
 @Path("/social-media")
 @Api(value = "/social-media")
 public class SocialMediaService {
-
 	private static Logger logger = LoggerFactory.getLogger(SocialMediaService.class);
 
 	@Context
 	UriInfo uri;
-
-//	// --------------------------------------
-//	// MESSAGE PEOPLE CALLS - BEGIN
-//	// --------------------------------------
-//	@GET
-//	@Path("/messenger-people/targets")
-////	@Secured({ Role.ADMIN })
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	public Response targets() throws IOException {
-//		MessengerPeopleProcessorController ct=MessengerPeopleProcessorController.getInstance();
-//		MessengerPeopleTargets targets=ct.getTargets();
-//		return Response.ok(ct.toJson(targets), MediaType.APPLICATION_JSON).build();
-//	}
-//
-//	@GET
-//	@Path("/messenger-people/newsletter-history")
-////	@Secured({ Role.ADMIN })
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response newsLetterHistory() throws IOException {
-//		MessengerPeopleProcessorController ct=MessengerPeopleProcessorController.getInstance();
-//		MessengerPeopleNewsletterHistory newsletterHistory=ct.getNewsLetterHistory(50);
-//		return Response.ok(ct.toJson(newsletterHistory), MediaType.APPLICATION_JSON).build();
-//
-//	}
-//
-//	@POST
-//	@Path("/messenger-people/newsletter")
-////	@Secured({ Role.ADMIN })
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	public Response newsLetterSend(
-//			@PathParam("content") @ApiParam("Message content")
-//			String content,
-//			@PathParam("attachmentUrl") @ApiParam("Attachment url")
-//			String attachmentUrl,
-//			@PathParam("targetId") @ApiParam("targetId on Messenger People")
-//			String targetId) throws IOException {
-//		MessengerPeopleProcessorController ct=MessengerPeopleProcessorController.getInstance();
-//		MessengerPeopleNewsLetter sendResult=ct.sendNewsLetter(targetId,content,attachmentUrl);
-//		return Response.ok(ct.toJson(sendResult), MediaType.APPLICATION_JSON).build();
-//
-//	}
-//
-//	@GET
-//	@Path("/messenger-people/users")
-////	@Secured({ Role.ADMIN })
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response users() throws IOException {
-//		MessengerPeopleProcessorController ct=MessengerPeopleProcessorController.getInstance();
-//		List<MessengerPeopleUser> targets=ct.getUsers(50,0);
-//		return Response.ok(ct.toJson(targets), MediaType.APPLICATION_JSON).build();
-//	}
-////
-////	 --------------------------------------
-////	 MESSAGE PEOPLE CALLS - END
-////	 --------------------------------------
 
 	// --------------------------------------
 	// COMMON USAGE - BEGIN
@@ -224,13 +163,16 @@ public class SocialMediaService {
 			String regionId,
 			@PathParam("language") @ApiParam("Language id")
 			String language,
+			@QueryParam("previous_id")
+			Long previousId,
 			@ApiParam("Send message content")
-			String content
+			String status
 	) throws IOException, AlbinaException, TwitterException {
+
 		TwitterProcessorController ctTw=TwitterProcessorController.getInstance();
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
 		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
-		Status response=ctTw.createTweet(rc.getTwitterConfig(),language,content);
+		Status response=ctTw.createTweet(rc.getTwitterConfig(),language,status,previousId);
 		return Response.ok(ctTw.toJson(response), MediaType.TEXT_HTML).build();
 	}
 
