@@ -191,10 +191,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "<b>Albina Twitter test message</b>"
+					"raw": "<b>\n  Albina Twitter test message (patch)\n  <a>http://www.pdf995.com/samples/pdf.pdf</a>\n</b>"
 				},
 				"url": {
-					"raw": "http://localhost:8080/albina/api/social-media/twitter/send-message/IT-32-TN/IT",
+					"raw": "http://localhost:8080/albina/api/social-media/twitter/send-message/IT-32-TN/IT?previous_id=1064884755521564674",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -208,6 +208,12 @@
 						"send-message",
 						"IT-32-TN",
 						"IT"
+					],
+					"query": [
+						{
+							"key": "previous_id",
+							"value": "1064884755521564674"
+						}
 					]
 				}
 			},
