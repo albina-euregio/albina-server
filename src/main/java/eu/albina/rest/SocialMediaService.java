@@ -136,7 +136,7 @@ public class SocialMediaService {
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
 		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
 		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
-		HttpResponse response=ctRm.getRecipientsList(rc.getRapidMailConfig());
+		HttpResponse response=ctRm.getRecipientsList(rc.getRapidMailConfig(),regionId);
 		return Response
 				.status(response.getStatusLine().getStatusCode())
 				.entity(response.getEntity().getContent())
