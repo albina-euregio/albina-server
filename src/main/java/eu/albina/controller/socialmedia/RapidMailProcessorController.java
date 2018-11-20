@@ -3,7 +3,6 @@ package eu.albina.controller.socialmedia;
 import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequestDestination;
 import eu.albina.model.rapidmail.mailings.PostMailingsResponse;
@@ -14,18 +13,20 @@ import eu.albina.model.socialmedia.RapidMailConfig;
 import eu.albina.model.socialmedia.Shipment;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.ssl.SSLContexts;
 
 import javax.net.ssl.SSLContext;
-import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -33,11 +34,12 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RapidMailProcessorController extends CommonProcessor {
     private static final int RAPIDMAIL_SOCKET_TIMEOUT = 10000;
@@ -91,7 +93,7 @@ public class RapidMailProcessorController extends CommonProcessor {
         }
     }
 
-    public HttpResponse getRecipientsList(RapidMailConfig config) throws IOException {
+    public HttpResponse getRecipientsList(RapidMailConfig config, String regionId) throws IOException {
         HttpResponse response=
                 executor.execute(
                     Request.Get(baseUrl+"/recipientlists")
@@ -101,9 +103,19 @@ public class RapidMailProcessorController extends CommonProcessor {
                     .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
                 ).
                 returnResponse();
+        if (regionId!=null && response.getStatusLine().getStatusCode()==200){
+            RapidMailRecipientListResponse recipientListResponse= objectMapper.readValue(getResponseContent(response), RapidMailRecipientListResponse .class);
+            List<RapidMailRecipientListResponseItem> list=recipientListResponse.getEmbedded().getRecipientlists();
+            recipientListResponse.getEmbedded().setRecipientlists(list
+                    .stream()
+                    .filter(x->x.getName().startsWith(regionId+"_"))
+                    .collect(Collectors.toList()));
+            BasicHttpResponse newResp=new BasicHttpResponse(response.getStatusLine());
+            newResp.setEntity(new StringEntity(toJson(recipientListResponse)));
+            newResp.setHeaders(response.getAllHeaders());
+            response=newResp;
+        }
         return response;
-//        RapidMailRecipientListResponse response = objectMapper.readValue(json, RapidMailRecipientListResponse.class);
-//        return response;
     }
 
     public HttpResponse getRecipients(RapidMailConfig config, String recipientListId) throws IOException {
@@ -117,9 +129,6 @@ public class RapidMailProcessorController extends CommonProcessor {
                 ).
                 returnResponse();
         return response;
-
-//        GetRecipientsResponse response = objectMapper.readValue(json, GetRecipientsResponse.class);
-//        return response;
     }
 
     public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient, String sendActivationmail) throws IOException {
@@ -136,10 +145,8 @@ public class RapidMailProcessorController extends CommonProcessor {
                     .bodyString(toJson(recipient), ContentType.APPLICATION_JSON)
                     .connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
                     .socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)
-//                  .viaProxy("127.0.0.1:8888") //FIDDLER DEBUG
                 ).returnResponse();
         return response;
-//        return objectMapper.readValue(response.getEntity().getContent().toString(), PostRecipientsResponse.class);
     }
 
     public HttpResponse deleteRecipient(RapidMailConfig config, Integer recipientId) throws IOException {
@@ -158,7 +165,7 @@ public class RapidMailProcessorController extends CommonProcessor {
     public HttpResponse sendMessage(RapidMailConfig config, String language, PostMailingsRequest mailingsPost) throws Exception {
         //Set destination to right get i.e. IT-32-TN_IT. Resolve id by name via api
         String recipientName=config.getRegionConfiguration().getRegion().getId()+"_"+language.toUpperCase();
-        HttpResponse resp=getRecipientsList(config);
+        HttpResponse resp=getRecipientsList(config, null);
         RapidMailRecipientListResponse recipientListResponse= objectMapper.readValue(getResponseContent(resp), RapidMailRecipientListResponse .class);
         String recipientId=recipientListResponse.getEmbedded().getRecipientlists()
                 .stream()
