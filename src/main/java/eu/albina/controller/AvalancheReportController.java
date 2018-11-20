@@ -316,7 +316,7 @@ public class AvalancheReportController {
 				avalancheReport.setUser(user);
 				avalancheReport.setDate(startDate);
 				avalancheReport.setRegion(region);
-				avalancheReport.setStatus(BulletinStatus.published);
+				avalancheReport.setStatus(BulletinStatus.missing);
 				avalancheReport.setRevision(revision);
 				entityManager.persist(avalancheReport);
 				bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
@@ -328,7 +328,7 @@ public class AvalancheReportController {
 				switch (avalancheReport.getStatus()) {
 				case missing:
 					logger.warn("Bulletins have to be created first!");
-					avalancheReport.setStatus(BulletinStatus.published);
+					// avalancheReport.setStatus(BulletinStatus.published);
 					break;
 				case draft:
 					logger.warn("Bulletins have to be submitted first!");
