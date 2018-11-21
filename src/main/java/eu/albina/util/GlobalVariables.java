@@ -29,7 +29,7 @@ public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
-	private static boolean createMaps = false;
+	private static boolean createMaps = true;
 	private static boolean createPdf = true;
 	private static boolean createStaticWidget = true;
 	private static boolean sendEmails = true;
