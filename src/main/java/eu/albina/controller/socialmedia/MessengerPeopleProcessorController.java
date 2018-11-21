@@ -92,6 +92,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
         else if (StringUtils.equalsIgnoreCase(language,"IT")){
             categoryId=3;
         }
+//        message=URLEncoder.encode(message, "UTF-8");
         String params=String.format("apikey=%s&message=%s&category=%s",config.getApiKey(),message,categoryId);
         if (attachmentUrl!=null){
             params+="&attachment="+URLEncoder.encode(attachmentUrl, "UTF-8");

@@ -1,12 +1,12 @@
-drop table avalanche_reports;
-create table avalanche_reports (ID varchar(255) not null, CAAML_CREATED bit, DATE datetime, EMAIL_CREATED bit, MAP_CREATED bit, PDF_CREATED bit, REGION varchar(255), REVISION integer, STATIC_WIDGET_CREATED bit, STATUS integer, TELEGRAM_SENT bit, TIMESTAMP datetime, WHATSAPP_SENT bit, USER_ID varchar(255), primary key (ID)) engine=InnoDB;
+-- drop table avalanche_reports;
+-- create table avalanche_reports (ID varchar(255) not null, CAAML_CREATED bit, DATE datetime, EMAIL_CREATED bit, MAP_CREATED bit, PDF_CREATED bit, REGION varchar(255), REVISION integer, STATIC_WIDGET_CREATED bit, STATUS integer, TELEGRAM_SENT bit, TIMESTAMP datetime, WHATSAPP_SENT bit, USER_ID varchar(255), primary key (ID)) engine=InnoDB;
 
-insert into users (EMAIL, PASSWORD, NAME, ORGANIZATION, IMAGE) values ('miorandi@clesius.it', '$2a$10$dlBsNKPsLEMgOZIxVlpw0uqmz.E/aPZTEn04tslFNtsgGuyyjXPOi', 'Denis Miorandi', 'xxxx', '');
-insert into user_role (USER_EMAIL, USER_ROLE) values ('miorandi@clesius.it', 'ADMIN');
-insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it', 'AT-07');
-insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it', 'IT-32-TN');
-insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it', 'IT-32-BZ');
-insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it', 'AT-06');
+-- insert into users (EMAIL, PASSWORD, NAME, ORGANIZATION, IMAGE) values ('miorandi@clesius.it', '$2a$10$dlBsNKPsLEMgOZIxVlpw0uqmz.E/aPZTEn04tslFNtsgGuyyjXPOi', 'Denis Miorandi', 'xxxx', '');
+-- insert into user_role (USER_EMAIL, USER_ROLE) values ('miorandi@clesius.it', 'ADMIN');
+-- insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it', 'AT-07');
+-- insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it', 'IT-32-TN');
+-- insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it', 'IT-32-BZ');
+-- insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it', 'AT-06');
 
 create table socialmedia_channel (ID bigint not null auto_increment, NAME varchar(255), PROVIDER_ID bigint, primary key (ID)) engine=InnoDB;
 create table socialmedia_channel_region (REGION_ID bigint not null, CHANNEL_ID bigint not null, primary key (REGION_ID, CHANNEL_ID)) engine=InnoDB;
