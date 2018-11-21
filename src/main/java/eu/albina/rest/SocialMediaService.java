@@ -196,9 +196,7 @@ public class SocialMediaService {
 	) throws IOException, AlbinaException{
 		MessengerPeopleProcessorController ctMp=MessengerPeopleProcessorController.getInstance();
 		RegionConfiguration rc=RegionConfigurationController.getInstance().getRegionConfiguration(regionId);
-		// TODO: how to manage target here???
 		MessengerPeopleNewsLetter response=ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(),language,message,attachmentUrl);
-		// TODO: save into table of activity here
 		return Response.ok(ctMp.toJson(response), MediaType.APPLICATION_JSON).build();
 	}
 

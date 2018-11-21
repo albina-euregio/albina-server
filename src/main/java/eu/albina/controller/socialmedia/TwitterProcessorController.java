@@ -20,7 +20,6 @@ public class TwitterProcessorController extends CommonProcessor {
         return instance;
     }
 
-    //TODO: load a configuration from db here!!!
     private Twitter getTwitterContext(TwitterConfig config) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
