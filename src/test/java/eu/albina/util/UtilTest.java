@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,6 @@ import org.junit.runners.MethodSorters;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.layout.element.Image;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
@@ -76,6 +71,7 @@ public class UtilTest {
 		names.add("Alfred Ortner");
 		names.add("Jonathan Flunger");
 		names.add("Felix Mast");
+		names.add("Andreas Riegler");
 
 		passwords.add("Alberto");
 		passwords.add("Sergio");
@@ -107,6 +103,7 @@ public class UtilTest {
 		passwords.add("Alfred");
 		passwords.add("Jonathan");
 		passwords.add("Felix");
+		passwords.add("Andreas");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -220,14 +217,6 @@ public class UtilTest {
 
 	@Ignore
 	@Test
-	public void loadImage() throws MalformedURLException {
-		String string = GlobalVariables.getMapsPath() + "2030-02-16/" + "fd_albina_map.jpg";
-		ImageData overviewMapAMImageData = ImageDataFactory.create(string);
-		Image overviewMapAMImg = new Image(overviewMapAMImageData);
-	}
-
-	@Ignore
-	@Test
 	public void createSpecificPdfs() throws IOException, URISyntaxException {
 		String filename = "2030-02-16";
 		int count = 5;
@@ -238,7 +227,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 0; i < 30; i++) {
+		for (int i = 0; i < 31; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());

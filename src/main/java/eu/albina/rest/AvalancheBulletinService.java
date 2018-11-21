@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.mail.MessagingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -171,6 +170,61 @@ public class AvalancheBulletinService {
 		}
 	}
 
+	// TODO enable authentication
+	@GET
+	@Path("/aineva")
+	// @Secured({ Role.ADMIN, Role.FORECASTER })
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
+	public Response getAinevaXMLBulletins(
+			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
+		logger.debug("GET published XML bulletins");
+
+		DateTime startDate = null;
+		DateTime endDate = null;
+
+		if (regions.isEmpty()) {
+			logger.warn("No region defined.");
+			return Response.noContent().build();
+		}
+
+		try {
+			if (date != null)
+				startDate = DateTime
+						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+						.toDateTime(DateTimeZone.UTC);
+			else
+				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+			endDate = startDate.plusDays(1);
+
+			String caaml = AvalancheBulletinController.getInstance().getAinevaBulletinsCaaml(startDate, endDate,
+					regions, language);
+			if (caaml != null) {
+				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
+			} else {
+				logger.debug("No bulletins found.");
+				return Response.noContent().build();
+			}
+		} catch (AlbinaException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			try {
+				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
+			} catch (Exception ex) {
+				return Response.status(400).type(MediaType.APPLICATION_XML).build();
+			}
+		} catch (TransformerException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).build();
+		} catch (ParserConfigurationException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).build();
+		} catch (UnsupportedEncodingException e) {
+			logger.warn("Error loading bulletins - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
+		}
+	}
+
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -305,10 +359,10 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
-	@Path("/status/publication")
+	@Path("/status/publications")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPublicationStatus(@QueryParam("region") String region,
+	public Response getPublicationsStatus(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
 		DateTime startDate = null;
@@ -339,6 +393,49 @@ public class AvalancheBulletinService {
 			}
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading status - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (UnsupportedEncodingException e) {
+			logger.warn("Error loading status - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Path("/status/publication")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPublicationStatus(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
+		DateTime startDate = null;
+		DateTime endDate = null;
+
+		try {
+			if (date != null)
+				startDate = DateTime
+						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+						.toDateTime(DateTimeZone.UTC);
+			else
+				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+
+			endDate = startDate;
+
+			Map<DateTime, AvalancheReport> status = AvalancheReportController.getInstance()
+					.getPublicationStatus(startDate, endDate, region);
+
+			if (status.size() > 1)
+				logger.warn("More than one report found!");
+			else if (status.isEmpty())
+				throw new AlbinaException("No publication found!");
+
+			Map.Entry<DateTime, AvalancheReport> entry = status.entrySet().iterator().next();
+			JSONObject json = new JSONObject();
+			json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
+			json.put("report", entry.getValue().toJSON());
+
+			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -396,11 +493,9 @@ public class AvalancheBulletinService {
 			JSONArray bulletinsJson = new JSONArray(bulletinsString);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (int i = 0; i < bulletinsJson.length(); i++) {
-				// TODO validate
 				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
 				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
-				if (bulletin.affectsRegion(region))
-					bulletins.add(bulletin);
+				bulletins.add(bulletin);
 			}
 
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, null);
@@ -462,7 +557,7 @@ public class AvalancheBulletinService {
 			String avalancheReportId = AvalancheReportController.getInstance().changeReport(startDate, region, user);
 			avalancheReportIds.add(avalancheReportId);
 
-			PublicationController.getInstance().change(avalancheReportIds, bulletins);
+			PublicationController.getInstance().startChangeThread(startDate, endDate, avalancheReportIds);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -651,17 +746,7 @@ public class AvalancheBulletinService {
 				List<String> regions = new ArrayList<String>();
 				regions.add(region);
 
-				try {
-					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
-							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
-					PublicationController.getInstance().update(avalancheReportIds, bulletins, regions);
-				} catch (AlbinaException e) {
-					logger.warn("Error loading bulletins - " + e.getMessage());
-					throw new AlbinaException(e.getMessage());
-				} catch (MessagingException e) {
-					logger.warn("Error sending emails - " + e.getMessage());
-					throw new AlbinaException(e.getMessage());
-				}
+				PublicationController.getInstance().startUpdateThread(startDate, endDate, regions, avalancheReportIds);
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();
 			} else

@@ -3,6 +3,7 @@ package eu.albina.rest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -23,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.ChatController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.ChatMessage;
-import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
@@ -77,10 +77,11 @@ public class ChatService {
 	public Response getActiveUsers() {
 		logger.debug("GET JSON active users");
 
-		List<User> activeUsers = ChatController.getInstance().getActiveUsers();
+		// List<User> activeUsers = ChatController.getInstance().getActiveUsers();
+		Collection<String> activeUsers = ChatEndpoint.getActiveUsers();
 		JSONArray json = new JSONArray();
-		for (User entry : activeUsers)
-			json.put(entry.toJSON());
+		for (String entry : activeUsers)
+			json.put(entry);
 
 		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 	}

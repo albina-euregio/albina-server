@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.color.Color;
-import com.itextpdf.kernel.color.DeviceCmyk;
+import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.events.Event;
 import com.itextpdf.kernel.events.IEventHandler;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
@@ -26,18 +26,23 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 	private List<AvalancheBulletin> bulletins;
 	private LanguageCode lang;
+	private boolean grayscale;
 
 	public static final String OPEN_SANS_REGULAR = "./src/main/resources/fonts/open-sans/OpenSans-Regular.ttf";
 	public static final String OPEN_SANS_BOLD = "./src/main/resources/fonts/open-sans/OpenSans-Bold.ttf";
 	public static final String OPEN_SANS_LIGHT = "./src/main/resources/fonts/open-sans/OpenSans-Light.ttf";
 
-	public static final Color blueColor = new DeviceCmyk(0.63f, 0.22f, 0.f, 0.f);
-	public static final Color greyDarkColor = new DeviceCmyk(0.66f, 0.52f, 0.52f, 0.25f);
-	public static final Color whiteColor = new DeviceCmyk(0.f, 0.f, 0.f, 0.f);
+	public static final Color blueColor = new DeviceRgb(0, 172, 251);
+	// TODO add correct bw color value
+	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
+	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
+	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
+	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
 
-	public AvalancheBulletinEventHandler(LanguageCode lang, List<AvalancheBulletin> bulletins) {
+	public AvalancheBulletinEventHandler(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean grayscale) {
 		this.lang = lang;
 		this.bulletins = bulletins;
+		this.grayscale = grayscale;
 	}
 
 	public void handleEvent(Event event) {
@@ -47,6 +52,12 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			PdfPage page = docEvent.getPage();
 			Rectangle pageSize = page.getPageSize();
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
+
+			Color blue;
+			if (grayscale)
+				blue = blueColorBw;
+			else
+				blue = blueColor;
 
 			PdfFontFactory.registerDirectory(GlobalVariables.getLocalFontsPath());
 			PdfFont openSansRegularFont;
@@ -68,7 +79,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 					.setColor(greyDarkColor, true).showText(headline);
 			String date = AlbinaUtil.getDate(bulletins, lang);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
-					.setColor(blueColor, true).showText(date);
+					.setColor(blue, true).showText(date);
 
 			String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
 			if (!publicationDate.isEmpty())
@@ -80,32 +91,42 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 			// Add copyright
 			String copyright = GlobalVariables.getCopyrightText(lang);
-			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blueColor, true)
+			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
 					.showText(copyright);
 
 			String urlString = GlobalVariables.getCapitalUrl(lang);
 			Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
-			pdfCanvas.rectangle(buttonRectangle).setColor(blueColor, true).fill();
+			pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)
 					.moveText(buttonRectangle.getLeft() + 15, buttonRectangle.getBottom() + 9)
 					.setColor(whiteColor, true).showText(urlString);
 
 			// Draw lines
-			pdfCanvas.setLineWidth(1).setStrokeColor(blueColor).moveTo(0, pageSize.getHeight() - 90)
+			pdfCanvas.setLineWidth(1).setStrokeColor(blue).moveTo(0, pageSize.getHeight() - 90)
 					.lineTo(pageSize.getWidth(), pageSize.getHeight() - 90).stroke();
-			pdfCanvas.setLineWidth(1).setStrokeColor(blueColor).moveTo(0, 48).lineTo(pageSize.getWidth(), 48).stroke();
+			pdfCanvas.setLineWidth(1).setStrokeColor(blue).moveTo(0, 48).lineTo(pageSize.getWidth(), 48).stroke();
 
 			// Add CI
-			Image ciImg = PdfUtil.getInstance().getImage("Colorbar.gif");
+			Image ciImg;
+			if (grayscale)
+				ciImg = PdfUtil.getInstance().getImage("logo/grey/colorbar.gif");
+			else
+				ciImg = PdfUtil.getInstance().getImage("logo/color/colorbar.gif");
 			ciImg.scaleAbsolute(pageSize.getWidth(), 4);
 			ciImg.setFixedPosition(0, pageSize.getHeight() - 4);
 			canvas.add(ciImg);
 
 			// Add logo
-			Image logoImg = PdfUtil.getInstance().getImage(GlobalVariables.getLogoPath(lang));
+			Image logoImg = PdfUtil.getInstance().getImage(GlobalVariables.getLogoPath(lang, grayscale));
 			logoImg.scaleToFit(130, 55);
 			logoImg.setFixedPosition(pageSize.getWidth() - 100, pageSize.getHeight() - 72);
 			canvas.add(logoImg);
+
+			// Add INTERREG logo
+			Image interregImg = PdfUtil.getInstance().getImage(GlobalVariables.getInterregLogoPath(grayscale));
+			interregImg.scaleToFit(130, 45);
+			interregImg.setFixedPosition(20, 0);
+			canvas.add(interregImg);
 
 			canvas.close();
 

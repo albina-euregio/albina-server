@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -72,6 +73,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "TELEGRAM_SENT")
 	private boolean telegramSent;
 
+	@Lob
+	@Column(name = "JSON_STRING")
+	private String jsonString;
+
 	/**
 	 * Standard constructor for an avalanche report.
 	 */
@@ -122,6 +127,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			this.whatsappSent = json.getBoolean("whatsappSent");
 		if (json.has("telegramSent"))
 			this.telegramSent = json.getBoolean("telegramSent");
+
+		if (json.has("jsonString"))
+			this.jsonString = json.getString("jsonString");
 	}
 
 	public User getUser() {
@@ -228,6 +236,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.telegramSent = telegram;
 	}
 
+	public String getJsonString() {
+		return jsonString;
+	}
+
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -282,6 +298,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			json.put("telegramSent", true);
 		else
 			json.put("telegramSent", false);
+
+		if (jsonString != null)
+			json.put("jsonString", jsonString);
 
 		return json;
 	}
