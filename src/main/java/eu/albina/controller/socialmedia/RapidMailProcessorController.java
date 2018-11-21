@@ -65,24 +65,24 @@ public class RapidMailProcessorController extends CommonProcessor {
     public CloseableHttpClient sslHttpClient() {
         // Trust own CA and all self-signed certs
         SSLContext sslcontext = null;
-        try {
-            File f= new File(this.getClass().getResource("/certificates/emailsys.jks").getFile());
-            sslcontext = SSLContexts.custom()
-                    .loadTrustMaterial(f, "".toCharArray(), new TrustSelfSignedStrategy())
-                    .build();
-            // Allow TLSv1 protocol only
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                    sslcontext,
-                    new String[] { "TLSv1" },
-                    null,
-                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+//        try {
+//            File f= new File(this.getClass().getResource("/certificates/emailsys.jks").getFile());
+//            sslcontext = SSLContexts.custom()
+//                    .loadTrustMaterial(f, "".toCharArray(), new TrustSelfSignedStrategy())
+//                    .build();
+//            // Allow TLSv1 protocol only
+//            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+//                    sslcontext,
+//                    new String[] { "TLSv1" },
+//                    null,
+//                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
             return HttpClients.custom()
-                    .setSSLSocketFactory(sslsf)
+//                    .setSSLSocketFactory(sslsf)
                     .build();
-        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException | CertificateException | IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+//        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException | CertificateException | IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
     }
 
     private String calcBasicAuth(String user, String pass) {
