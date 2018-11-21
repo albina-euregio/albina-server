@@ -204,8 +204,6 @@ public class EmailUtil {
 				messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
 				multipart.addBodyPart(messageBodyPart);
 
-				// TODO add maps
-
 				message.setContent(multipart, GlobalVariables.getEmailEncoding());
 				Transport.send(message);
 
@@ -232,19 +230,19 @@ public class EmailUtil {
 			Map<String, Object> image = new HashMap<>();
 			switch (lang) {
 			case de:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/lawinen_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lawinen_report.png");
 				break;
 			case it:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/valanghe_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/valanghe_report.png");
 				break;
 			case en:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			default:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			}
-			image.put("ci", GlobalVariables.getServerImagesUrl() + "Colorbar.gif");
+			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
 			socialMediaImages.put("twitter", GlobalVariables.getServerImagesUrl() + "social_media/twitter.png");
@@ -354,20 +352,20 @@ public class EmailUtil {
 			Map<String, Object> image = new HashMap<>();
 			switch (lang) {
 			case de:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/lawinen_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lawinen_report.png");
 				break;
 			case it:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/valanghe_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/valanghe_report.png");
 				break;
 			case en:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			default:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			}
 			image.put("dangerLevel5Style", getDangerLevel5Style());
-			image.put("ci", GlobalVariables.getServerImagesUrl() + "Colorbar.gif");
+			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
 			socialMediaImages.put("twitter", GlobalVariables.getServerImagesUrl() + "social_media/twitter.png");
@@ -599,8 +597,19 @@ public class EmailUtil {
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
-		dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/level_"
-				+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency()) + ".png");
+		// TODO test
+		if ((daytimeBulletin.getDangerRatingBelow() == null
+				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.missing
+				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.no_rating)
+				&& (daytimeBulletin.getDangerRatingAbove() == null
+						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.missing
+						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.no_rating)) {
+			dangerRating.put("symbol", "");
+		} else {
+			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
+					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
+					+ ".png");
+		}
 		// dangerRating.put("symbol", "cid:warning_picto/" +
 		// getWarningLevelId(daytimeBulletin,
 		// avalancheBulletin.isHasElevationDependency()));
@@ -671,7 +680,8 @@ public class EmailUtil {
 				if (daytimeBulletin.getAvalancheSituation1().getTreelineLow()
 						|| daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0) {
 					// elevation high and low set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_middle_two.png");
+					elevation.put("symbol",
+							GlobalVariables.getServerImagesUrl() + "elevation/color/levels_middle_two.png");
 					// elevation.put("symbol", "cid:elevation/middle");
 					if (daytimeBulletin.getAvalancheSituation1().getTreelineLow())
 						elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -683,7 +693,7 @@ public class EmailUtil {
 						elevation.put("limitBelow", daytimeBulletin.getAvalancheSituation1().getElevationHigh() + "m");
 				} else {
 					// elevation high set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_below.png");
+					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_below.png");
 					// elevation.put("symbol", "cid:elevation/below");
 					elevation.put("limitAbove", "");
 					if (daytimeBulletin.getAvalancheSituation1().getTreelineHigh())
@@ -694,7 +704,7 @@ public class EmailUtil {
 			} else if (daytimeBulletin.getAvalancheSituation1().getTreelineLow()
 					|| daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0) {
 				// elevation low set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_above.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_above.png");
 				// elevation.put("symbol", "cid:elevation/above");
 				if (daytimeBulletin.getAvalancheSituation1().getTreelineLow())
 					elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -703,7 +713,7 @@ public class EmailUtil {
 				elevation.put("limitBelow", "");
 			} else {
 				// no elevation set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_all.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");
 				elevation.put("limitBelow", "");
@@ -775,7 +785,8 @@ public class EmailUtil {
 				if (daytimeBulletin.getAvalancheSituation2().getTreelineLow()
 						|| daytimeBulletin.getAvalancheSituation2().getElevationLow() > 0) {
 					// elevation high and low set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_middle_two.png");
+					elevation.put("symbol",
+							GlobalVariables.getServerImagesUrl() + "elevation/color/levels_middle_two.png");
 					// elevation.put("symbol", "cid:elevation/middle");
 					if (daytimeBulletin.getAvalancheSituation2().getTreelineLow())
 						elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -787,7 +798,7 @@ public class EmailUtil {
 						elevation.put("limitBelow", daytimeBulletin.getAvalancheSituation2().getElevationHigh() + "m");
 				} else {
 					// elevation high set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_below.png");
+					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_below.png");
 					// elevation.put("symbol", "cid:elevation/below");
 					elevation.put("limitAbove", "");
 					if (daytimeBulletin.getAvalancheSituation2().getTreelineHigh())
@@ -798,7 +809,7 @@ public class EmailUtil {
 			} else if (daytimeBulletin.getAvalancheSituation2().getTreelineLow()
 					|| daytimeBulletin.getAvalancheSituation2().getElevationLow() > 0) {
 				// elevation low set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_above.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_above.png");
 				// elevation.put("symbol", "cid:elevation/above");
 				if (daytimeBulletin.getAvalancheSituation2().getTreelineLow())
 					elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -807,7 +818,7 @@ public class EmailUtil {
 				elevation.put("limitBelow", "");
 			} else {
 				// no elevation set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_all.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");
 				elevation.put("limitBelow", "");

@@ -1,5 +1,6 @@
 package eu.albina.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,10 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.websocket.EncodeException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,7 +23,6 @@ import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -33,13 +33,13 @@ import eu.albina.model.BulletinLock;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.EventName;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.rest.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.AuthorizationUtil;
-import eu.albina.util.XmlUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.XmlUtil;
 
 /**
  * Controller for avalanche bulletins.
@@ -253,6 +253,46 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : result.bulletins) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published
 						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
+					for (Element element : bulletin.toCAAML(doc, language)) {
+						observations.appendChild(element);
+					}
+				}
+			}
+			rootElement.appendChild(observations);
+		}
+
+		doc.appendChild(rootElement);
+
+		return XmlUtil.convertDocToString(doc);
+	}
+
+	public String getAinevaBulletinsCaaml(DateTime startDate, DateTime endDate, List<String> regions,
+			LanguageCode language) throws TransformerException, AlbinaException, ParserConfigurationException {
+		List<AvalancheBulletin> bulletins = getBulletins(startDate, endDate, regions);
+
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		docBuilder = docFactory.newDocumentBuilder();
+
+		Document doc = docBuilder.newDocument();
+		Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
+
+		if (bulletins != null && !bulletins.isEmpty()) {
+			Element observations = doc.createElement("observations");
+			for (AvalancheBulletin bulletin : bulletins) {
+				Set<String> tmpRegions = new HashSet<String>();
+				for (String desiredRegion : regions) {
+					for (String region : bulletin.getSavedRegions()) {
+						if (region.startsWith(desiredRegion))
+							tmpRegions.add(region);
+					}
+					for (String region : bulletin.getPublishedRegions()) {
+						if (region.startsWith(desiredRegion))
+							tmpRegions.add(region);
+					}
+				}
+				if (!tmpRegions.isEmpty()) {
+					bulletin.setPublishedRegions(tmpRegions);
 					for (Element element : bulletin.toCAAML(doc, language)) {
 						observations.appendChild(element);
 					}
@@ -593,6 +633,10 @@ public class AvalancheBulletinController {
 		bulletinLocks.add(lock);
 	}
 
+	public void unlockBulletin(BulletinLock lock) throws AlbinaException {
+		unlockBulletin(lock.getBulletin(), lock.getDate());
+	}
+
 	public void unlockBulletin(String bulletin, DateTime date) throws AlbinaException {
 		date = date.withTimeAtStartOfDay();
 
@@ -608,7 +652,7 @@ public class AvalancheBulletinController {
 			throw new AlbinaException("Bulletin not locked!");
 	}
 
-	public void unlockBulletins(UUID sessionId) {
+	public void unlockBulletins(String sessionId) {
 		List<BulletinLock> hits = new ArrayList<BulletinLock>();
 		for (BulletinLock bulletinLock : bulletinLocks) {
 			if (bulletinLock.getSessionId() == sessionId)
@@ -616,10 +660,12 @@ public class AvalancheBulletinController {
 		}
 		for (BulletinLock bulletinLock : hits) {
 			bulletinLocks.remove(bulletinLock);
-			JSONObject json = new JSONObject();
-			json.put("bulletin", bulletinLock.getBulletin());
-			json.put("date", bulletinLock.getDate().toString(GlobalVariables.formatterDateTime));
-			SocketIOController.getInstance().sendEvent(EventName.unlockBulletin.toString(), json.toString());
+			bulletinLock.setLock(false);
+			try {
+				AvalancheBulletinEndpoint.broadcast(bulletinLock);
+			} catch (IOException | EncodeException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
