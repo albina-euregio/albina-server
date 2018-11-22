@@ -65,7 +65,7 @@ public class SocialMediaService {
 	}
 
 	@GET
-	@Path("/rapidmail/recipient-list/{region-id}")
+	@Path("/rapidmail/recipient-list/{region-id}/{language}")
 //	@Secured({ Role.ADMIN })
 	@Produces("application/hal+json")
 	public Response getRecipientList(
@@ -84,21 +84,23 @@ public class SocialMediaService {
 	}
 
 	@POST
-	@Path("/rapidmail/recipients/{region-id}")
+	@Path("/rapidmail/recipients/{region-id}/{language}")
 //	@Secured({ Role.ADMIN })
 	@Produces("application/hal+json")
 	public Response addRecipient(
 			@PathParam("region-id") @ApiParam("Region id")
 			String regionId,
-			@QueryParam("send_activationmail")
+            @PathParam("language") @ApiParam("Language id")
+            String language,
+            @QueryParam("send_activationmail")
 			String sendActivationmail,
 			@ApiParam("Recipient data")
 			String content
-	) throws AlbinaException, IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+	) throws Exception {
 		RegionConfigurationController ctRc=RegionConfigurationController.getInstance();
 		RegionConfiguration rc=ctRc.getRegionConfiguration(regionId);
 		RapidMailProcessorController ctRm=RapidMailProcessorController.getInstance();
-		HttpResponse response=ctRm.createRecipient(rc.getRapidMailConfig(),ctRm.fromJson(content, PostRecipientsRequest.class),sendActivationmail);
+		HttpResponse response=ctRm.createRecipient(rc.getRapidMailConfig(),ctRm.fromJson(content, PostRecipientsRequest.class),sendActivationmail,language);
 		return Response
 				.status(response.getStatusLine().getStatusCode())
 				.entity(response.getEntity().getContent())

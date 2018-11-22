@@ -91,7 +91,7 @@ public class PostRecipientsRequest {
 	private String foreignId;
 
 	@JsonProperty("recipientlist_id")
-	private int recipientlistId;
+	private Integer recipientlistId;
 
 	@JsonProperty("extrabig10")
 	private String extrabig10;
@@ -326,11 +326,11 @@ public class PostRecipientsRequest {
 		return foreignId;
 	}
 
-	public void setRecipientlistId(int recipientlistId){
+	public void setRecipientlistId(Integer recipientlistId){
 		this.recipientlistId = recipientlistId;
 	}
 
-	public int getRecipientlistId(){
+	public Integer getRecipientlistId(){
 		return recipientlistId;
 	}
 

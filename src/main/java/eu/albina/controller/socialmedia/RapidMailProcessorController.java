@@ -13,21 +13,16 @@ import eu.albina.model.socialmedia.RapidMailConfig;
 import eu.albina.model.socialmedia.Shipment;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHttpResponse;
-import org.apache.http.ssl.SSLContexts;
 
 import javax.net.ssl.SSLContext;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
@@ -36,9 +31,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RapidMailProcessorController extends CommonProcessor {
@@ -131,7 +124,11 @@ public class RapidMailProcessorController extends CommonProcessor {
         return response;
     }
 
-    public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient, String sendActivationmail) throws IOException {
+    public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient, String sendActivationmail, String language) throws Exception {
+        if (recipient.getRecipientlistId()==null) {
+            Integer recipientListId = resolveRecipientListIdByName(config, language);
+            recipient.setRecipientlistId(recipientListId);
+        }
         String url=baseUrl + "/recipients";
         if (sendActivationmail==null)
             sendActivationmail="yes";
@@ -164,21 +161,17 @@ public class RapidMailProcessorController extends CommonProcessor {
 
     public HttpResponse sendMessage(RapidMailConfig config, String language, PostMailingsRequest mailingsPost) throws Exception {
         //Set destination to right get i.e. IT-32-TN_IT. Resolve id by name via api
-        String recipientName=config.getRegionConfiguration().getRegion().getId()+"_"+language.toUpperCase();
-        HttpResponse resp=getRecipientsList(config, null);
-        RapidMailRecipientListResponse recipientListResponse= objectMapper.readValue(getResponseContent(resp), RapidMailRecipientListResponse .class);
-        String recipientId=recipientListResponse.getEmbedded().getRecipientlists()
-                .stream()
-                .filter(x-> StringUtils.equalsIgnoreCase(x.getName(),recipientName))
-                .map(RapidMailRecipientListResponseItem::getId)
-                .findFirst()
-                .orElseThrow(()->new Exception("Invalid recipientList name '"+recipientName+"'. Please check configuration"));
-        mailingsPost.setDestinations(Collections.singletonList(
-                new PostMailingsRequestDestination()
-                        .id(recipientId)
-                        .type("recipientlist")
-                        .action("include")
-        ));
+        // If destinations already specified be transparent (do nothing)
+        if (mailingsPost.getDestinations()==null){
+            int recipientListId= resolveRecipientListIdByName(config,language);
+            mailingsPost.setDestinations(Collections.singletonList(
+                    new PostMailingsRequestDestination()
+                            .id(recipientListId)
+                            .type("recipientlist")
+                            .action("include")
+            ));
+        }
+
         if (mailingsPost.getSendAt()==null){
             mailingsPost.setSendAt(OffsetDateTime.now().toString());
         }
@@ -205,6 +198,20 @@ public class RapidMailProcessorController extends CommonProcessor {
         PostMailingsResponse bodyObject = objectMapper.readValue(body, PostMailingsResponse.class);
         ShipmentController.getInstance().saveShipment(createActivityRow(config,language,toJson(mailingsPost),body,""+bodyObject.getId()));
         return response;
+    }
+
+    private int resolveRecipientListIdByName(RapidMailConfig config, String language) throws Exception {
+        //Set destination to right get i.e. IT-32-TN_IT. Resolve id by name via api
+        String recipientName=config.getRegionConfiguration().getRegion().getId()+"_"+language.toUpperCase();
+        HttpResponse resp=getRecipientsList(config, null);
+        RapidMailRecipientListResponse recipientListResponse= objectMapper.readValue(getResponseContent(resp), RapidMailRecipientListResponse .class);
+        Integer recipientId=recipientListResponse.getEmbedded().getRecipientlists()
+                .stream()
+                .filter(x-> StringUtils.equalsIgnoreCase(x.getName(),recipientName))
+                .map(RapidMailRecipientListResponseItem::getId)
+                .findFirst()
+                .orElseThrow(()->new Exception("Invalid recipientList name '"+recipientName+"'. Please check configuration"));
+        return recipientId;
     }
 
     private Shipment createActivityRow(RapidMailConfig config, String language, String request, String response, String idRm){
