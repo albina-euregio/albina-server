@@ -60,4 +60,10 @@ public class PostMailingsRequestPostFile {
 		this.content = content;
 		return this;
 	}
+
+
+	public PostMailingsRequestPostFile description(String description) {
+		this.description = description;
+		return this;
+	}
 }

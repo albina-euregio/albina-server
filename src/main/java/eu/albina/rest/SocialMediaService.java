@@ -3,11 +3,13 @@ package eu.albina.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.albina.controller.socialmedia.*;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.messengerpeople.MessengerPeopleNewsLetter;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
 import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.Shipment;
+import eu.albina.util.EmailUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.apache.http.HttpResponse;
@@ -22,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -216,5 +219,18 @@ public class SocialMediaService {
 	// --------------------------------------
 	// COMMON USAGE - END
 	// --------------------------------------
+
+
+    // TODO: remove it
+    @GET
+    @Path("/bulletin-email-send")
+//	@Secured({ Role.ADMIN })
+//    @Produces(MediaType.APPLICATION_JSON)
+    public Response bes() throws AlbinaException, IOException, URISyntaxException {
+        EmailUtil emSp=EmailUtil.getInstance();
+        HttpResponse a=emSp.sendBulletinEmail(null, LanguageCode.it,null);
+		ShipmentController ctSp=ShipmentController.getInstance();
+        return Response.ok(ctSp.toJson(a), MediaType.APPLICATION_JSON).build();
+    }
 
 }
