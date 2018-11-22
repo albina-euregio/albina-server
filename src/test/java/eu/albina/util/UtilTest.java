@@ -15,6 +15,7 @@ import javax.mail.MessagingException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
@@ -41,6 +42,8 @@ public class UtilTest {
 
 	@Before
 	public void setUp() {
+		HibernateUtil.getInstance().setUp();
+
 		names.add("Alberto Trenti");
 		names.add("Sergio Benigni");
 		names.add("Paolo Cestari");
@@ -190,6 +193,11 @@ public class UtilTest {
 		// recipients.add("fabrizi@transporter.at");
 	}
 
+	@After
+	public void shutDown() {
+		HibernateUtil.getInstance().shutDown();
+	}
+
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
@@ -199,7 +207,10 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
-		EmailUtil.getInstance().sendBulletinEmail(bulletins, LanguageCode.de, recipients);
+		// TODO test this test
+		ArrayList<String> regions = new ArrayList<String>();
+		regions.add("AT-07");
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
 	}
 
 	@Ignore
@@ -207,7 +218,7 @@ public class UtilTest {
 	public void sendMessengerPeopleNewsletter() throws IOException, URISyntaxException {
 		// TODO test this test
 		List<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTrentino);
+		regions.add(GlobalVariables.codeTyrol);
 		MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions);
 	}
 

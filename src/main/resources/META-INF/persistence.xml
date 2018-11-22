@@ -25,13 +25,13 @@
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
         <!-- LOCALHOST -->
-	    <!-- <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/> -->
+	    <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
 	    <!-- PRODUCTION -->
-	    <property name="hibernate.connection.url" value="jdbc:mysql://albinadb1rz:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+	    <!-- <property name="hibernate.connection.url" value="jdbc:mysql://albinadb1rz:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/> -->
 	    <!-- DEVELOPMENT -->
 	    <!-- <property name="hibernate.connection.url" value="jdbc:mysql://albinadb1rz:3306/ais_tmp?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/> -->
 	    <property name="hibernate.connection.username" value="ais"/>
-        <property name="hibernate.connection.password" value="lawine"/>
+        <property name="hibernate.connection.password" value="MD>5:X*n%)1V"/>
 
         <!-- Hibernate ENVERS Configuration -->
         <property name="org.hibernate.envers.audit_table_suffix" value="_audit"/>

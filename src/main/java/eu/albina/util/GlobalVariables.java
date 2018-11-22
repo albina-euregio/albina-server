@@ -1481,4 +1481,32 @@ public class GlobalVariables {
 		}
 		return result;
 	}
+
+	// LANG
+	public static String getFromEmail(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "info@lawinen.report";
+		case en:
+			return "info@avalanche.report";
+		case it:
+			return "info@valanghe.report";
+		default:
+			return "info@avalanche.report";
+		}
+	}
+
+	// LANG
+	public static String getFromName(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinen.report";
+		case en:
+			return "Avalanche.report";
+		case it:
+			return "Valanghe.report";
+		default:
+			return "Avalanche.report";
+		}
+	}
 }

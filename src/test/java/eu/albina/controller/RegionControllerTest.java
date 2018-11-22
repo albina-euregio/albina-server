@@ -25,7 +25,7 @@ public class RegionControllerTest {
 
 	@After
 	public void shutDown() {
-		// HibernateUtil.getInstance().closeSessionFactory();
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Ignore
