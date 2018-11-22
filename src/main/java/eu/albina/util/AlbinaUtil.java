@@ -340,7 +340,7 @@ public class AlbinaUtil {
 		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
-	private static DateTime getDate(List<AvalancheBulletin> bulletins) {
+	static DateTime getDate(List<AvalancheBulletin> bulletins) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			DateTime bulletinDate = avalancheBulletin.getValidFrom();

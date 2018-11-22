@@ -12,6 +12,7 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -741,6 +742,28 @@ public class GlobalVariables {
 		default:
 			return "No warning signs present. Avalanches can only be triggered in isolated cases, in particular on extremely steep slopes.";
 		}
+	}
+
+	// LANG
+	public static String getMessengerPeopleText(LanguageCode lang, DateTime date) {
+		String dateString = GlobalVariables.getDayName(date.getDayOfWeek(), lang)
+				+ date.toString(GlobalVariables.getShortDateTimeFormatter(lang));
+		switch (lang) {
+		case de:
+			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+		case it:
+			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+		case en:
+			return "Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date);
+		default:
+			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+		}
+	}
+
+	// LANG
+	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
+		return "https://avalanche.report/albina-web/bulletin/" + date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"))
+				+ "&lang=" + lang.toString();
 	}
 
 	// LANG

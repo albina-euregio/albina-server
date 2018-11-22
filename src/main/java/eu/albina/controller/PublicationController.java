@@ -17,6 +17,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
+import eu.albina.util.MessengerPeopleUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.StaticWidgetUtil;
 import eu.albina.util.XmlUtil;
@@ -148,10 +149,12 @@ public class PublicationController {
 
 				// publish on social media
 				if (GlobalVariables.isPublishToSocialMedia()) {
+					triggerMessengerpeople(avalancheReportIds, bulletins, regions);
 
-					// TODO publish on social media only for updated regions
+					// TODO publish on twitter
 
 				}
+
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
 				e.printStackTrace();
@@ -338,6 +341,27 @@ public class PublicationController {
 					e.printStackTrace();
 				} finally {
 					logger.info("Static widget production finished");
+				}
+			}
+		}).start();
+	}
+
+	private void triggerMessengerpeople(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
+			List<String> regions) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					logger.info("Messengerpeople production started");
+					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions);
+					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
+				} catch (IOException e) {
+					logger.error("Error preparing messengerpeople:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error preparing messengerpeople:" + e.getMessage());
+					e.printStackTrace();
+				} finally {
+					logger.info("Messengerpeople production finished");
 				}
 			}
 		}).start();

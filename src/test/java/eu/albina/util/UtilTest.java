@@ -204,6 +204,15 @@ public class UtilTest {
 
 	@Ignore
 	@Test
+	public void sendMessengerPeopleNewsletter() throws IOException, URISyntaxException {
+		// TODO test this test
+		List<String> regions = new ArrayList<String>();
+		regions.add(GlobalVariables.codeTrentino);
+		MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions);
+	}
+
+	@Ignore
+	@Test
 	public void createConfirmationFreemarker() throws IOException, URISyntaxException {
 		EmailUtil.getInstance().createConfirmationEmailHtml("token", LanguageCode.en);
 	}
