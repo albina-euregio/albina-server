@@ -217,7 +217,7 @@ public class RapidMailProcessorController extends CommonProcessor {
     private Shipment createActivityRow(RapidMailConfig config, String language, String request, String response, String idRm){
         return new Shipment()
                 .date(ZonedDateTime.now())
-                .name("name???")
+                .name(config.getRegionConfiguration().getRegion().getNameEn())
                 .language(language)
                 .idMp(null)
                 .idRm(idRm)

@@ -118,7 +118,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
     private Shipment createActivityRow(MessengerPeopleConfig config, String language, String request, String response, String idMp){
         Shipment shipment=new Shipment()
                 .date(ZonedDateTime.now())
-                .name("name???")
+                .name(config.getRegionConfiguration().getRegion().getNameEn())
                 .language(language)
                 .idMp(idMp)
                 .idRm(null)

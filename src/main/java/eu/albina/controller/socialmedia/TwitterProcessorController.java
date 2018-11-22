@@ -76,7 +76,7 @@ public class TwitterProcessorController extends CommonProcessor {
     private Shipment createActivityRow(TwitterConfig config, String language, String request, String response, String idTw){
         Shipment shipment=new Shipment()
         .date(ZonedDateTime.now())
-        .name("name???")
+        .name(config.getRegionConfiguration().getRegion().getNameEn())
         .language(language)
         .idMp(null)
         .idRm(null)
