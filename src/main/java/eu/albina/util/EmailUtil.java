@@ -8,6 +8,10 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,7 +37,8 @@ import org.slf4j.LoggerFactory;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-import eu.albina.controller.SubscriberController;
+import eu.albina.controller.socialmedia.RapidMailProcessorController;
+import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -42,6 +47,8 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
+import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
+import eu.albina.model.socialmedia.RegionConfiguration;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -152,9 +159,7 @@ public class EmailUtil {
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
 		for (LanguageCode lang : GlobalVariables.languages) {
 			try {
-				// get recipients
-				List<String> recipients = SubscriberController.getInstance().getSubscriberEmails(lang, regions);
-				sendBulletinEmail(bulletins, lang, recipients);
+				sendBulletinEmailRapidMail(bulletins, lang, regions);
 			} catch (HibernateException e) {
 				logger.error("Subscribers could not be loaded for " + lang + ": " + e.getMessage());
 				e.printStackTrace();
@@ -177,47 +182,51 @@ public class EmailUtil {
 		});
 	}
 
-	public void sendBulletinEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, List<String> recipients) {
+	private void sendBulletinEmailRapidMail(List<AvalancheBulletin> bulletins, LanguageCode lang,
+			List<String> regions) {
 		logger.debug("Sending bulletin email in " + lang + "...");
 
-		Session session = getEmailSession();
+		// TODO create content
+		String htmlText = createBulletinEmailHtml(bulletins, lang);
 
-		try {
-			MimeMessage message = new MimeMessage(session);
-			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-			message.addHeader("format", "flowed");
-			message.addHeader("Content-Transfer-Encoding", "8bit");
-			message.setSubject(GlobalVariables.getEmailSubject(lang) + AlbinaUtil.getDate(bulletins, lang),
-					GlobalVariables.getEmailEncoding());
-			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
-					GlobalVariables.getEmailFromPersonal(lang)));
-
-			if (recipients != null && !recipients.isEmpty()) {
-				for (String recipient : recipients)
-					message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-
-				MimeMultipart multipart = new MimeMultipart("related");
-
-				// add html
-				MimeBodyPart messageBodyPart = new MimeBodyPart();
-				String htmlText = createBulletinEmailHtml(bulletins, lang);
-				messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
-				multipart.addBodyPart(messageBodyPart);
-
-				message.setContent(multipart, GlobalVariables.getEmailEncoding());
-				Transport.send(message);
-
-				logger.debug("Emails sent in " + lang + ".");
-			} else
-				logger.debug("No recipients for emails in " + lang + ".");
-		} catch (MessagingException e) {
-			logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} catch (UnsupportedEncodingException e) {
-			logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
-			e.printStackTrace();
-			throw new RuntimeException(e);
+		for (String region : regions) {
+			try {
+				RapidMailProcessorController ctRm = RapidMailProcessorController.getInstance();
+				PostMailingsRequest mailingsPost = ctRm.fromJson(htmlText, PostMailingsRequest.class);
+				RegionConfigurationController ctRc = RegionConfigurationController.getInstance();
+				RegionConfiguration rc;
+				rc = ctRc.getRegionConfiguration(region);
+				ctRm.sendMessage(rc.getRapidMailConfig(), lang.toString(), mailingsPost);
+			} catch (AlbinaException e) {
+				logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} catch (KeyManagementException e) {
+				logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} catch (CertificateException e) {
+				logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} catch (NoSuchAlgorithmException e) {
+				logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} catch (KeyStoreException e) {
+				logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} catch (IOException e) {
+				logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			} catch (Exception e) {
+				logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			logger.debug("Emails sent in " + lang + ".");
 		}
 	}
 
