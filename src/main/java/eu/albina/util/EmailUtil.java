@@ -186,8 +186,10 @@ public class EmailUtil {
 			List<String> regions) {
 		logger.debug("Sending bulletin email in " + lang + "...");
 
-		// TODO create content
+		// this is the content
 		String htmlText = createBulletinEmailHtml(bulletins, lang);
+
+		// TODO create htmlText element
 
 		for (String region : regions) {
 			try {
