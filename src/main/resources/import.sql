@@ -199,3 +199,43 @@ insert into user_region (USER_EMAIL, USER_REGION) values ('miorandi@clesius.it',
 /* insert into user_region (USER_EMAIL, USER_REGION) values ('ruesch@slf.ch', 'IT-32-TN'); */
 /* insert into user_region (USER_EMAIL, USER_REGION) values ('arnold.studeregger@zamg.ac.at', 'AT-06'); */
 /* insert into user_region (USER_EMAIL, USER_REGION) values ('alfred.ortner@zamg.ac.at', 'AT-06'); */
+
+/* SOCIAL MEDIA */
+INSERT INTO ais.socialmedia_provider (ID,NAME) VALUES(1,'Rapid Mail');
+INSERT INTO ais.socialmedia_provider (ID,NAME) VALUES(2,'Messenger People');
+INSERT INTO ais.socialmedia_provider (ID,NAME) VALUES(3,'Twitter');
+INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(1,'Email',1);
+INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(2,'Whatsapp',2);
+INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(3,'Telegram',2);
+INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(4,'Insta',2);
+INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(5,'Twitter',3);
+
+INSERT INTO ais.socialmedia_region (ID,REGION_ID) VALUES(1,'IT-32-TN');
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(1, 1);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(2, 1);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(3, 1);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(4, 1);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(5, 1);
+INSERT INTO ais.socialmedia_rapid_mail_config (ID, PASSWORD, USERNAME, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(1, '093e1d3d97fd98ff6eb7879f3d4f7594b6bb6307', 'edc268e5e1a9abb27400ff967f40bdf2e95967d1', 1,1);
+INSERT INTO ais.socialmedia_messenger_people_config (ID, API_KEY, CHANNEL_NAME, MOBILE_NUMBER, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(1, 'e36e6b12460159a9bf71965f507fd400_11826_495b74bd4e34216c66289c468', 'r1_cn1', 'r1_mn1', 2,1);
+INSERT INTO ais.socialmedia_twitter_config (ID, ACCESS_KEY, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(1, 'r1_ak1', 'r1_as1', 'r1_ck1', 'r1_cs1', 3,1);
+
+INSERT INTO ais.socialmedia_region (ID,REGION_ID) VALUES(2,'AT-07');
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(1, 2);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(2, 2);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(3, 2);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(4, 2);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(5, 2);
+INSERT INTO ais.socialmedia_rapid_mail_config (ID, PASSWORD, USERNAME, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(2, '093e1d3d97fd98ff6eb7879f3d4f7594b6bb6307', 'edc268e5e1a9abb27400ff967f40bdf2e95967d1', 1,2);
+INSERT INTO ais.socialmedia_messenger_people_config (ID, API_KEY, CHANNEL_NAME, MOBILE_NUMBER, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(2, '93265424ead3a13f35a18538f0e162da_845_eab4c1b79183a30f8aa31ee4bfa', 'r2_cn', 'r2_mn', 2,2);
+INSERT INTO ais.socialmedia_twitter_config (ID, ACCESS_KEY, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(2, 'r2_ak', 'r2_as', 'r2_ck', 'r2_cs1', 3,2);
+
+INSERT INTO ais.socialmedia_region (ID,REGION_ID) VALUES(3,'IT-32-BZ');
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(1, 3);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(2, 3);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(3, 3);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(4, 3);
+INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(5, 3);
+INSERT INTO ais.socialmedia_rapid_mail_config (ID, PASSWORD, USERNAME, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(3, '093e1d3d97fd98ff6eb7879f3d4f7594b6bb6307', 'edc268e5e1a9abb27400ff967f40bdf2e95967d1', 1,3);
+INSERT INTO ais.socialmedia_messenger_people_config (ID, API_KEY, CHANNEL_NAME, MOBILE_NUMBER, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(3, 'eed49507ab537c0d492dfd1251812e76_11825_e7daebcec98b893ae8d96ace5', 'r3_cn', 'r3_mn', 2,3);
+INSERT INTO ais.socialmedia_twitter_config (ID, ACCESS_KEY, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(3, 'r3_ak', 'r3_as', 'r3_ck', 'r3_cs1', 3,3);
