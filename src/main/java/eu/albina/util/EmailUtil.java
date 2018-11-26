@@ -1,5 +1,6 @@
 package eu.albina.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -8,6 +9,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -26,14 +30,16 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.hibernate.HibernateException;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-import eu.albina.controller.SubscriberController;
+import eu.albina.controller.socialmedia.RapidMailProcessorController;
+import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -42,6 +48,10 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
+import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
+import eu.albina.model.rapidmail.mailings.PostMailingsRequestPostFile;
+import eu.albina.model.socialmedia.RapidMailConfig;
+import eu.albina.model.socialmedia.RegionConfiguration;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -151,14 +161,10 @@ public class EmailUtil {
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
 		for (LanguageCode lang : GlobalVariables.languages) {
-			try {
-				// get recipients
-				List<String> recipients = SubscriberController.getInstance().getSubscriberEmails(lang, regions);
-				sendBulletinEmail(bulletins, lang, recipients);
-			} catch (HibernateException e) {
-				logger.error("Subscribers could not be loaded for " + lang + ": " + e.getMessage());
-				e.printStackTrace();
-			}
+			String emailHtml = createBulletinEmailHtml(bulletins, lang);
+			String subject = GlobalVariables.getEmailSubject(lang) + AlbinaUtil.getDate(bulletins, lang);
+			for (String region : regions)
+				sendBulletinEmailRapidmail(bulletins, lang, region, emailHtml, subject);
 		}
 	}
 
@@ -177,51 +183,95 @@ public class EmailUtil {
 		});
 	}
 
-	public void sendBulletinEmail(List<AvalancheBulletin> bulletins, LanguageCode lang, List<String> recipients) {
-		logger.debug("Sending bulletin email in " + lang + "...");
+	private String createZipFile(String htmlContent, String textContent) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ZipOutputStream out = new ZipOutputStream(baos);
+		if (htmlContent != null) {
+			ZipEntry e = new ZipEntry("content.html");
+			out.putNextEntry(e);
+			byte[] data = htmlContent.getBytes(StandardCharsets.UTF_8);
+			out.write(data, 0, data.length);
+			out.closeEntry();
+		}
+		if (textContent != null) {
+			ZipEntry e = new ZipEntry("content.txt");
+			out.putNextEntry(e);
+			byte[] data = textContent.getBytes(StandardCharsets.UTF_8);
+			out.write(data, 0, data.length);
+			out.closeEntry();
+		}
+		out.close();
+		byte[] zipData = baos.toByteArray();
+		return Base64.encodeBase64String(zipData);
+	}
 
-		Session session = getEmailSession();
-
+	public HttpResponse sendBulletinEmailRapidmail(List<AvalancheBulletin> bulletins, LanguageCode lang, String region,
+			String emailHtml, String subject) {
+		logger.debug("Sending bulletin email in " + lang + " for " + region + "...");
 		try {
-			MimeMessage message = new MimeMessage(session);
-			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-			message.addHeader("format", "flowed");
-			message.addHeader("Content-Transfer-Encoding", "8bit");
-			message.setSubject(GlobalVariables.getEmailSubject(lang) + AlbinaUtil.getDate(bulletins, lang),
-					GlobalVariables.getEmailEncoding());
-			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
-					GlobalVariables.getEmailFromPersonal(lang)));
+			RapidMailProcessorController rmc = RapidMailProcessorController.getInstance();
+			RegionConfigurationController rcc = RegionConfigurationController.getInstance();
+			RegionConfiguration regionConfiguration = rcc.getRegionConfiguration(region);
+			RapidMailConfig rmConfig = regionConfiguration.getRapidMailConfig();
 
-			if (recipients != null && !recipients.isEmpty()) {
-				for (String recipient : recipients)
-					message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-
-				MimeMultipart multipart = new MimeMultipart("related");
-
-				// add html
-				MimeBodyPart messageBodyPart = new MimeBodyPart();
-				String htmlText = createBulletinEmailHtml(bulletins, lang);
-				messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
-				multipart.addBodyPart(messageBodyPart);
-
-				// TODO add maps
-
-				message.setContent(multipart, GlobalVariables.getEmailEncoding());
-				Transport.send(message);
-
-				logger.debug("Emails sent in " + lang + ".");
-			} else
-				logger.debug("No recipients for emails in " + lang + ".");
-		} catch (MessagingException e) {
-			logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} catch (UnsupportedEncodingException e) {
-			logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+			return rmc.sendMessage(rmConfig, lang.name().toUpperCase(),
+					new PostMailingsRequest().fromEmail(GlobalVariables.getFromEmail(lang))
+							.fromName(GlobalVariables.getFromName(lang)).subject(subject)
+							.file(new PostMailingsRequestPostFile().description("mail-content.zip")
+									.type("application/zip").content(createZipFile(emailHtml, null))));
+		} catch (Exception e) {
+			logger.error("Emails could not be sent in " + lang + " for " + region + ": " + e.getMessage());
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
+
+	// public void sendBulletinEmail(List<AvalancheBulletin> bulletins, LanguageCode
+	// lang, List<String> recipients) {
+	// logger.debug("Sending bulletin email in " + lang + "...");
+	//
+	// Session session = getEmailSession();
+	//
+	// try {
+	// MimeMessage message = new MimeMessage(session);
+	// message.addHeader("Content-type", "text/HTML; charset=UTF-8");
+	// message.addHeader("format", "flowed");
+	// message.addHeader("Content-Transfer-Encoding", "8bit");
+	// message.setSubject(GlobalVariables.getEmailSubject(lang) +
+	// AlbinaUtil.getDate(bulletins, lang),
+	// GlobalVariables.getEmailEncoding());
+	// message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
+	// GlobalVariables.getEmailFromPersonal(lang)));
+	//
+	// if (recipients != null && !recipients.isEmpty()) {
+	// for (String recipient : recipients)
+	// message.addRecipient(Message.RecipientType.TO, new
+	// InternetAddress(recipient));
+	//
+	// MimeMultipart multipart = new MimeMultipart("related");
+	//
+	// // add html
+	// MimeBodyPart messageBodyPart = new MimeBodyPart();
+	// String htmlText = createBulletinEmailHtml(bulletins, lang);
+	// messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
+	// multipart.addBodyPart(messageBodyPart);
+	//
+	// message.setContent(multipart, GlobalVariables.getEmailEncoding());
+	// Transport.send(message);
+	//
+	// logger.debug("Emails sent in " + lang + ".");
+	// } else
+	// logger.debug("No recipients for emails in " + lang + ".");
+	// } catch (MessagingException e) {
+	// logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+	// e.printStackTrace();
+	// throw new RuntimeException(e);
+	// } catch (UnsupportedEncodingException e) {
+	// logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
+	// e.printStackTrace();
+	// throw new RuntimeException(e);
+	// }
+	// }
 
 	public String createConfirmationEmailHtml(String token, LanguageCode lang) {
 		try {
@@ -232,19 +282,19 @@ public class EmailUtil {
 			Map<String, Object> image = new HashMap<>();
 			switch (lang) {
 			case de:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/lawinen_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lawinen_report.png");
 				break;
 			case it:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/valanghe_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/valanghe_report.png");
 				break;
 			case en:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			default:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			}
-			image.put("ci", GlobalVariables.getServerImagesUrl() + "Colorbar.gif");
+			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
 			socialMediaImages.put("twitter", GlobalVariables.getServerImagesUrl() + "social_media/twitter.png");
@@ -354,20 +404,20 @@ public class EmailUtil {
 			Map<String, Object> image = new HashMap<>();
 			switch (lang) {
 			case de:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/lawinen_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lawinen_report.png");
 				break;
 			case it:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/valanghe_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/valanghe_report.png");
 				break;
 			case en:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			default:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/avalanche_report.png");
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
 				break;
 			}
 			image.put("dangerLevel5Style", getDangerLevel5Style());
-			image.put("ci", GlobalVariables.getServerImagesUrl() + "Colorbar.gif");
+			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
 			socialMediaImages.put("twitter", GlobalVariables.getServerImagesUrl() + "social_media/twitter.png");
@@ -599,8 +649,19 @@ public class EmailUtil {
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
-		dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/level_"
-				+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency()) + ".png");
+		// TODO test
+		if ((daytimeBulletin.getDangerRatingBelow() == null
+				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.missing
+				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.no_rating)
+				&& (daytimeBulletin.getDangerRatingAbove() == null
+						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.missing
+						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.no_rating)) {
+			dangerRating.put("symbol", "");
+		} else {
+			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
+					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
+					+ ".png");
+		}
 		// dangerRating.put("symbol", "cid:warning_picto/" +
 		// getWarningLevelId(daytimeBulletin,
 		// avalancheBulletin.isHasElevationDependency()));
@@ -671,7 +732,8 @@ public class EmailUtil {
 				if (daytimeBulletin.getAvalancheSituation1().getTreelineLow()
 						|| daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0) {
 					// elevation high and low set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_middle_two.png");
+					elevation.put("symbol",
+							GlobalVariables.getServerImagesUrl() + "elevation/color/levels_middle_two.png");
 					// elevation.put("symbol", "cid:elevation/middle");
 					if (daytimeBulletin.getAvalancheSituation1().getTreelineLow())
 						elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -683,7 +745,7 @@ public class EmailUtil {
 						elevation.put("limitBelow", daytimeBulletin.getAvalancheSituation1().getElevationHigh() + "m");
 				} else {
 					// elevation high set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_below.png");
+					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_below.png");
 					// elevation.put("symbol", "cid:elevation/below");
 					elevation.put("limitAbove", "");
 					if (daytimeBulletin.getAvalancheSituation1().getTreelineHigh())
@@ -694,7 +756,7 @@ public class EmailUtil {
 			} else if (daytimeBulletin.getAvalancheSituation1().getTreelineLow()
 					|| daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0) {
 				// elevation low set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_above.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_above.png");
 				// elevation.put("symbol", "cid:elevation/above");
 				if (daytimeBulletin.getAvalancheSituation1().getTreelineLow())
 					elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -703,7 +765,7 @@ public class EmailUtil {
 				elevation.put("limitBelow", "");
 			} else {
 				// no elevation set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_all.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");
 				elevation.put("limitBelow", "");
@@ -775,7 +837,8 @@ public class EmailUtil {
 				if (daytimeBulletin.getAvalancheSituation2().getTreelineLow()
 						|| daytimeBulletin.getAvalancheSituation2().getElevationLow() > 0) {
 					// elevation high and low set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_middle_two.png");
+					elevation.put("symbol",
+							GlobalVariables.getServerImagesUrl() + "elevation/color/levels_middle_two.png");
 					// elevation.put("symbol", "cid:elevation/middle");
 					if (daytimeBulletin.getAvalancheSituation2().getTreelineLow())
 						elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -787,7 +850,7 @@ public class EmailUtil {
 						elevation.put("limitBelow", daytimeBulletin.getAvalancheSituation2().getElevationHigh() + "m");
 				} else {
 					// elevation high set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_below.png");
+					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_below.png");
 					// elevation.put("symbol", "cid:elevation/below");
 					elevation.put("limitAbove", "");
 					if (daytimeBulletin.getAvalancheSituation2().getTreelineHigh())
@@ -798,7 +861,7 @@ public class EmailUtil {
 			} else if (daytimeBulletin.getAvalancheSituation2().getTreelineLow()
 					|| daytimeBulletin.getAvalancheSituation2().getElevationLow() > 0) {
 				// elevation low set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_above.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_above.png");
 				// elevation.put("symbol", "cid:elevation/above");
 				if (daytimeBulletin.getAvalancheSituation2().getTreelineLow())
 					elevation.put("limitAbove", GlobalVariables.getTreelineString(lang));
@@ -807,7 +870,7 @@ public class EmailUtil {
 				elevation.put("limitBelow", "");
 			} else {
 				// no elevation set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/levels_all.png");
+				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");
 				elevation.put("limitBelow", "");

@@ -10,7 +10,7 @@ public class PostMailingsRequestDestination {
 	private String action;
 
 	@JsonProperty("id")
-	private String id;
+	private Integer id;
 
 	@JsonProperty("type")
 	private String type;
@@ -23,11 +23,11 @@ public class PostMailingsRequestDestination {
 		return action;
 	}
 
-	public void setId(String id){
+	public void setId(Integer id){
 		this.id = id;
 	}
 
-	public String getId(){
+	public Integer getId(){
 		return id;
 	}
 
@@ -55,7 +55,7 @@ public class PostMailingsRequestDestination {
 		return this;
 	}
 
-	public PostMailingsRequestDestination id(String id) {
+	public PostMailingsRequestDestination id(Integer id) {
 		this.id = id;
 		return this;
 	}

@@ -8,8 +8,6 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.messengerpeople.*;
 import eu.albina.model.socialmedia.MessengerPeopleConfig;
 import eu.albina.model.socialmedia.Shipment;
-import eu.albina.model.socialmedia.TwitterConfig;
-import io.netty.util.internal.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.fluent.Request;
 
@@ -119,7 +117,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
     private Shipment createActivityRow(MessengerPeopleConfig config, String language, String request, String response, String idMp){
         Shipment shipment=new Shipment()
                 .date(ZonedDateTime.now())
-                .name("name???")
+                .name(config.getRegionConfiguration().getRegion().getNameEn())
                 .language(language)
                 .idMp(idMp)
                 .idRm(null)

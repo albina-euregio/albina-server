@@ -37,7 +37,7 @@ public class RapidMailRecipientListResponseItem {
 	private String unsubscribeConfirmationGoodbyeEmailBodyHtml;
 
 	@JsonProperty("id")
-	private String id;
+	private Integer id;
 
 	@JsonProperty("unsubscribe_confirmation_goodbye_email_from_name")
 	private String unsubscribeConfirmationGoodbyeEmailFromName;
@@ -182,11 +182,11 @@ public class RapidMailRecipientListResponseItem {
 		return unsubscribeConfirmationGoodbyeEmailBodyHtml;
 	}
 
-	public void setId(String id){
+	public void setId(Integer id){
 		this.id = id;
 	}
 
-	public String getId(){
+	public Integer getId(){
 		return id;
 	}
 

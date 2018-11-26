@@ -2,18 +2,22 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
+import eu.albina.util.MessengerPeopleUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.StaticWidgetUtil;
 import eu.albina.util.XmlUtil;
@@ -145,10 +149,12 @@ public class PublicationController {
 
 				// publish on social media
 				if (GlobalVariables.isPublishToSocialMedia()) {
+					triggerMessengerpeople(avalancheReportIds, bulletins, regions);
 
-					// TODO publish on social media only for updated regions
+					// TODO publish on twitter
 
 				}
+
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
 				e.printStackTrace();
@@ -191,6 +197,62 @@ public class PublicationController {
 		}
 	}
 
+	public void startUpdateThread(DateTime startDate, DateTime endDate, List<String> regions,
+			List<String> avalancheReportIds) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
+							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+
+					// TODO what if there is no bulletin? Delete all products?
+
+					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+					for (AvalancheBulletin avalancheBulletin : bulletins) {
+						if (avalancheBulletin.getPublishedRegions() != null
+								&& !avalancheBulletin.getPublishedRegions().isEmpty())
+							result.add(avalancheBulletin);
+					}
+					if (result != null && !result.isEmpty())
+						PublicationController.getInstance().update(avalancheReportIds, result, regions);
+
+				} catch (AlbinaException e) {
+					logger.warn("Error loading bulletins - " + e.getMessage());
+					e.printStackTrace();
+				} catch (MessagingException e) {
+					logger.warn("Error sending emails - " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+
+	public void startChangeThread(DateTime startDate, DateTime endDate, List<String> avalancheReportIds) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
+							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+
+					// TODO what if there is no bulletin? Delete all products?
+
+					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+					for (AvalancheBulletin avalancheBulletin : bulletins) {
+						if (avalancheBulletin.getPublishedRegions() != null
+								&& !avalancheBulletin.getPublishedRegions().isEmpty())
+							result.add(avalancheBulletin);
+					}
+					if (result != null && !result.isEmpty())
+						PublicationController.getInstance().change(avalancheReportIds, result);
+
+				} catch (AlbinaException e) {
+					logger.warn("Error loading bulletins - " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+
 	// LANG
 	private void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		try {
@@ -202,7 +264,7 @@ public class PublicationController {
 			logger.error("Error producing CAAML: " + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			logger.error("Error producing CAAML: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -243,9 +305,14 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("PDF production started");
-					PdfUtil.getInstance().createOverviewPdfs(bulletins);
-					PdfUtil.getInstance().createRegionPdfs(bulletins);
-					AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
+					boolean result = true;
+					if (!PdfUtil.getInstance().createOverviewPdfs(bulletins))
+						result = false;
+					for (String region : GlobalVariables.regionsEuregio)
+						if (!PdfUtil.getInstance().createRegionPdfs(bulletins, region))
+							result = false;
+					if (result)
+						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
 				} catch (IOException e) {
 					logger.error("Error creating pdfs:" + e.getMessage());
 					e.printStackTrace();
@@ -274,6 +341,27 @@ public class PublicationController {
 					e.printStackTrace();
 				} finally {
 					logger.info("Static widget production finished");
+				}
+			}
+		}).start();
+	}
+
+	private void triggerMessengerpeople(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
+			List<String> regions) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					logger.info("Messengerpeople production started");
+					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions);
+					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
+				} catch (IOException e) {
+					logger.error("Error preparing messengerpeople:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error preparing messengerpeople:" + e.getMessage());
+					e.printStackTrace();
+				} finally {
+					logger.info("Messengerpeople production finished");
 				}
 			}
 		}).start();

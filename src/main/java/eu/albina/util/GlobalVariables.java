@@ -12,6 +12,7 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
@@ -28,7 +30,7 @@ public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
-	private static boolean createMaps = false;
+	private static boolean createMaps = true;
 	private static boolean createPdf = true;
 	private static boolean createStaticWidget = true;
 	private static boolean sendEmails = true;
@@ -51,9 +53,6 @@ public class GlobalVariables {
 	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
-
-	private static String socketIoOrigin = "https://admin.avalanche.report";
-	private static int socketIoPort = 9092;
 
 	private static boolean smtpAuth = true;
 	private static boolean smtpTls = true;
@@ -217,24 +216,6 @@ public class GlobalVariables {
 	public static void setPublishAt8AM(boolean publishAt8AM) throws ConfigurationException {
 		GlobalVariables.publishAt8AM = publishAt8AM;
 		setConfigProperty("publishAt8AM", publishAt8AM);
-	}
-
-	public static String getSocketIoOrigin() {
-		return socketIoOrigin;
-	}
-
-	public static void setSocketIoOrigin(String socketIoOrigin) throws ConfigurationException {
-		GlobalVariables.socketIoOrigin = socketIoOrigin;
-		setConfigProperty("socketIoOrigin", socketIoOrigin);
-	}
-
-	public static int getSocketIoPort() {
-		return socketIoPort;
-	}
-
-	public static void setSocketIoPort(int socketIoPort) throws ConfigurationException {
-		GlobalVariables.socketIoPort = socketIoPort;
-		setConfigProperty("socketIoPort", socketIoPort);
 	}
 
 	public static String getLocalImagesPath() {
@@ -764,6 +745,28 @@ public class GlobalVariables {
 	}
 
 	// LANG
+	public static String getMessengerPeopleText(LanguageCode lang, DateTime date) {
+		String dateString = GlobalVariables.getDayName(date.getDayOfWeek(), lang)
+				+ date.toString(GlobalVariables.getShortDateTimeFormatter(lang));
+		switch (lang) {
+		case de:
+			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+		case it:
+			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+		case en:
+			return "Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date);
+		default:
+			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+		}
+	}
+
+	// LANG
+	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
+		return "https://avalanche.report/albina-web/bulletin/" + date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"))
+				+ "&lang=" + lang.toString();
+	}
+
+	// LANG
 	public static String getDangerRatingVeryHighRecommendationsText(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -892,17 +895,37 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getLogoPath(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "logo/lawinen_report.png";
-		case it:
-			return "logo/valanghe_report.png";
-		case en:
-			return "logo/avalanche_report.png";
-		default:
-			return "logo/avalanche_report.png";
+	public static String getLogoPath(LanguageCode lang, boolean grayscale) {
+		if (grayscale) {
+			switch (lang) {
+			case de:
+				return "logo/grey/lawinen_report.png";
+			case it:
+				return "logo/grey/valanghe_report.png";
+			case en:
+				return "logo/grey/avalanche_report.png";
+			default:
+				return "logo/grey/avalanche_report.png";
+			}
+		} else {
+			switch (lang) {
+			case de:
+				return "logo/color/lawinen_report.png";
+			case it:
+				return "logo/color/valanghe_report.png";
+			case en:
+				return "logo/color/avalanche_report.png";
+			default:
+				return "logo/color/avalanche_report.png";
+			}
 		}
+	}
+
+	public static String getInterregLogoPath(boolean grayscale) {
+		if (grayscale)
+			return "logo/grey/interreg.png";
+		else
+			return "logo/grey/interreg.png";
 	}
 
 	// LANG
@@ -1153,13 +1176,13 @@ public class GlobalVariables {
 		default:
 			switch (lang) {
 			case de:
-				return "Fehlt";
+				return "Keine Beurteilung";
 			case it:
-				return "Mancha";
+				return "Senza Valutazione";
 			case en:
-				return "Missing";
+				return "No Rating";
 			default:
-				return "Missing";
+				return "No Rating";
 			}
 		}
 	}
@@ -1274,8 +1297,6 @@ public class GlobalVariables {
 			createMaps = config.getBoolean("createMaps");
 			createPdf = config.getBoolean("createPdf");
 			createStaticWidget = config.getBoolean("createStaticWidget");
-			socketIoOrigin = config.getString("socketIoOrigin");
-			socketIoPort = config.getInt("socketIoPort");
 			sendEmails = config.getBoolean("sendEmails");
 			publishToSocialMedia = config.getBoolean("publishToSocialMedia");
 			publishAt5PM = config.getBoolean("publishAt5PM");
@@ -1316,9 +1337,6 @@ public class GlobalVariables {
 			json.put("emailUsername", emailUsername);
 		if (emailPassword != null)
 			json.put("emailPassword", emailPassword);
-		if (socketIoOrigin != null)
-			json.put("socketIoOrigin", socketIoOrigin);
-		json.put("socketIoPort", socketIoPort);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createStaticWidget", createStaticWidget);
@@ -1380,10 +1398,6 @@ public class GlobalVariables {
 			setCreateMaps(configuration.getBoolean("createMaps"));
 		if (configuration.has("createPdf"))
 			setCreatePdf(configuration.getBoolean("createPdf"));
-		if (configuration.has("socketIoOrigin"))
-			setSocketIoOrigin(configuration.getString("socketIoOrigin"));
-		if (configuration.has("socketIoPort"))
-			setSocketIoPort(configuration.getInt("socketIoPort"));
 		if (configuration.has("createStaticWidget"))
 			setCreateStaticWidget(configuration.getBoolean("createStaticWidget"));
 		if (configuration.has("sendEmails"))
@@ -1402,6 +1416,46 @@ public class GlobalVariables {
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
 		if (configuration.has("publishBulletinsStyria"))
 			setPublishBulletinsStyria(configuration.getBoolean("publishBulletinsStyria"));
+	}
+
+	public static String getTendencySymbolPath(Tendency tendency, boolean grayscale) {
+		if (grayscale) {
+			switch (tendency) {
+			case increasing:
+				return "tendency/tendency_increasing_black.png";
+			case steady:
+				return "tendency/tendency_steady_black.png";
+			case decreasing:
+				return "tendency/tendency_decreasing_black.png";
+			default:
+				return null;
+			}
+		} else {
+			switch (tendency) {
+			case increasing:
+				return "tendency/tendency_increasing_blue.png";
+			case steady:
+				return "tendency/tendency_steady_blue.png";
+			case decreasing:
+				return "tendency/tendency_decreasing_blue.png";
+			default:
+				return null;
+			}
+		}
+	}
+
+	public static String getAvalancheSituationSymbolPath(AvalancheSituation avalancheSituation, boolean grayscale) {
+		if (grayscale)
+			return "avalanche_situations/grey/" + avalancheSituation.getAvalancheSituation().toStringId() + ".png";
+		else
+			return "avalanche_situations/color/" + avalancheSituation.getAvalancheSituation().toStringId() + ".png";
+	}
+
+	public static String getAspectSymbolPath(int result, boolean grayscale) {
+		if (grayscale)
+			return "aspects/grey/" + new Integer(result).toString() + ".png";
+		else
+			return "aspects/color/" + new Integer(result).toString() + ".png";
 	}
 
 	// LANG
@@ -1426,5 +1480,33 @@ public class GlobalVariables {
 				result = highestDangerRating;
 		}
 		return result;
+	}
+
+	// LANG
+	public static String getFromEmail(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "info@lawinen.report";
+		case en:
+			return "info@avalanche.report";
+		case it:
+			return "info@valanghe.report";
+		default:
+			return "info@avalanche.report";
+		}
+	}
+
+	// LANG
+	public static String getFromName(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinen.report";
+		case en:
+			return "Avalanche.report";
+		case it:
+			return "Valanghe.report";
+		default:
+			return "Avalanche.report";
+		}
 	}
 }

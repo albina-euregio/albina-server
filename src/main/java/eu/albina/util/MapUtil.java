@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import eu.albina.exception.AlbinaException;
@@ -18,7 +20,7 @@ import eu.albina.model.enumerations.LanguageCode;
 
 public class MapUtil {
 
-	// private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
 	/**
 	 * Create images of each map needed for the different products of
@@ -30,16 +32,16 @@ public class MapUtil {
 	 */
 	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) {
 
-		// TODO implement creation of danger rating maps
+		// TODO implement local creation of danger rating maps
 
 		try {
 			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
 		} catch (AlbinaException e) {
-			// TODO Auto-generated catch block
+			logger.error("Error producing maps: " + e.getMessage());
 			e.printStackTrace();
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
+			logger.error("Error producing maps: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
