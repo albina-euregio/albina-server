@@ -46,7 +46,7 @@ public class TwitterProcessorController extends CommonProcessor {
             String aa="";
         }
         Status response = twitter.updateStatus(tweet);
-        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,tweet,response.getSource(),""+response.getId()));
+        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,tweet,"Status:  "+ response.getText() + " Created: "+ response.getCreatedAt().toString() + " Id: " + response.getId(),""+response.getId()));
         return response;
     }
 

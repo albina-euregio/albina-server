@@ -20,6 +20,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import eu.albina.model.messengerpeople.MessengerPeopleUserStats;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +75,7 @@ public class SocialMediaService {
 	}
 
 	@GET
-	@Path("/rapidmail/recipient-list/{region-id}/{language}")
+	@Path("/rapidmail/recipient-list/{region-id}")
 	// @Secured({ Role.ADMIN })
 	@Produces("application/hal+json")
 	public Response getRecipientList(@PathParam("region-id") @ApiParam("Region id") String regionId)
@@ -175,6 +177,23 @@ public class SocialMediaService {
 		MessengerPeopleNewsLetter response = ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), language, message,
 				attachmentUrl);
 		return Response.ok(ctMp.toJson(response), MediaType.APPLICATION_JSON).build();
+	}
+
+	@GET
+	@Path("/messenger-people/stats-user/{region-id}")
+	// @Secured({ Role.ADMIN })
+	@Produces(MediaType.WILDCARD)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getUserStats(@PathParam("region-id") @ApiParam("region-id") String regionId)
+			throws AlbinaException, IOException {
+		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
+		RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(regionId);
+        HttpResponse response = ctMp.getUsersStats(rc.getMessengerPeopleConfig());
+        return Response.status(response.getStatusLine().getStatusCode())
+                .entity(IOUtils.toString(response.getEntity().getContent(),"UTF-8"))
+                .header(response.getEntity().getContentType().getName(),
+                        response.getEntity().getContentType().getValue())
+                .build();
 	}
 
 	@GET

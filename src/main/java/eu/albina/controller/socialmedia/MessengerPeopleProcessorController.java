@@ -9,12 +9,15 @@ import eu.albina.model.messengerpeople.*;
 import eu.albina.model.socialmedia.MessengerPeopleConfig;
 import eu.albina.model.socialmedia.Shipment;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class MessengerPeopleProcessorController extends CommonProcessor {
@@ -113,6 +116,16 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
         MessengerPeopleNewsletterHistory newsletterHistory = objectMapper.readValue(json, MessengerPeopleNewsletterHistory.class);
         return newsletterHistory;
     }
+
+    public HttpResponse getUsersStats(MessengerPeopleConfig config) throws IOException {
+        HttpResponse response=Request.Get(baseUrl+"/stats/user"+
+                String.format("?apikey=%s",config.getApiKey()) + "&days=1&hours=0&start=" + Instant.now().minus(1,ChronoUnit.DAYS).getEpochSecond() + "&end=")
+                .connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT)
+                .socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT)
+                .execute().returnResponse();
+        return response;
+    }
+
 
     private Shipment createActivityRow(MessengerPeopleConfig config, String language, String request, String response, String idMp){
         Shipment shipment=new Shipment()
