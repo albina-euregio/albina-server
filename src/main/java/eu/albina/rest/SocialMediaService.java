@@ -20,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import eu.albina.model.messengerpeople.MessengerPeopleUserStats;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
