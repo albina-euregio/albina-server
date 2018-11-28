@@ -764,7 +764,7 @@ public class GlobalVariables {
 				+ date.toString(GlobalVariables.getShortDateTimeFormatter(lang));
 		switch (lang) {
 		case de:
-			return URLEncoder.encode("Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date),
+			return URLEncoder.encode("Lawinenvorhersage für " + dateString + ": " + getBulletinUrl(lang, date),
 					"UTF-8");
 		case it:
 			return URLEncoder.encode("Previsione valanghe per " + dateString + ": " + getBulletinUrl(lang, date),
@@ -781,7 +781,7 @@ public class GlobalVariables {
 	// LANG
 	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
 		return "https://avalanche.report/albina-web/bulletin/" + date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"))
-				+ "&lang=" + lang.toString();
+				+ "?lang=" + lang.toString();
 	}
 
 	// LANG
