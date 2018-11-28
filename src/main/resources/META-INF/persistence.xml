@@ -31,7 +31,7 @@
 	    <!-- DEVELOPMENT -->
 	    <!-- <property name="hibernate.connection.url" value="jdbc:mysql://albinadb1rz:3306/ais_tmp?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/> -->
 	    <property name="hibernate.connection.username" value="ais"/>
-        <property name="hibernate.connection.password" value="MD>5:X*n%)1V"/>
+        <property name="hibernate.connection.password" value="lawine"/>
 
         <!-- Hibernate ENVERS Configuration -->
         <property name="org.hibernate.envers.audit_table_suffix" value="_audit"/>

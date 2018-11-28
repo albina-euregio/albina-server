@@ -49,7 +49,7 @@ public class ShipmentController extends CommonProcessor{
             transaction.begin();
             TypedQuery<Shipment> query =
                     entityManager.createQuery("SELECT s " +
-                            "FROM Shipment s ", Shipment.class);
+                            "FROM Shipment s order by DATE DESC", Shipment.class);
             List<Shipment> shipmentsList=query.getResultList();
             transaction.commit();
             return shipmentsList;

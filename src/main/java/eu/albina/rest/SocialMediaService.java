@@ -20,7 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.message.BasicHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +75,7 @@ public class SocialMediaService {
 	}
 
 	@GET
-	@Path("/rapidmail/recipient-list/{region-id}/{language}")
+	@Path("/rapidmail/recipient-list/{region-id}")
 	// @Secured({ Role.ADMIN })
 	@Produces("application/hal+json")
 	public Response getRecipientList(@PathParam("region-id") @ApiParam("Region id") String regionId)
@@ -147,23 +149,26 @@ public class SocialMediaService {
 	@POST
 	@Path("/twitter/send-message/{region-id}/{language}")
 	// @Secured({ Role.ADMIN })
-	@Produces(MediaType.TEXT_HTML)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.TEXT_HTML)
 	public Response sendTwitter(@PathParam("region-id") @ApiParam("Region id") String regionId,
 			@PathParam("language") @ApiParam("Language id") String language, @QueryParam("previous_id") Long previousId,
-			@ApiParam("Send message content") String status) throws IOException, AlbinaException, TwitterException {
+			@ApiParam("Send message content") String status) throws IOException, AlbinaException, IllegalAccessException {
 
 		TwitterProcessorController ctTw = TwitterProcessorController.getInstance();
 		RegionConfigurationController ctRc = RegionConfigurationController.getInstance();
 		RegionConfiguration rc = ctRc.getRegionConfiguration(regionId);
-		Status response = ctTw.createTweet(rc.getTwitterConfig(), language, status, previousId);
-		return Response.ok(ctTw.toJson(response), MediaType.TEXT_HTML).build();
+		BasicHttpResponse response = ctTw.createTweet(rc.getTwitterConfig(), language, status, previousId);
+		return Response.status(response.getStatusLine().getStatusCode())
+				.entity(response.getEntity().getContent())
+				.header(response.getEntity().getContentType().getName(),response.getEntity().getContentType().getValue())
+				.build();
 	}
 
 	@POST
 	@Path("/messenger-people/send-message/{region-id}/{language}")
 	// @Secured({ Role.ADMIN })
-	@Produces(MediaType.WILDCARD)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response sendMessengerPeople(@PathParam("region-id") @ApiParam("Region id") String regionId,
 			@PathParam("language") @ApiParam("Language id") String language,
@@ -172,9 +177,30 @@ public class SocialMediaService {
 			throws IOException, AlbinaException {
 		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
 		RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(regionId);
-		MessengerPeopleNewsLetter response = ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), language, message,
+		HttpResponse response = ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), language, message,
 				attachmentUrl);
-		return Response.ok(ctMp.toJson(response), MediaType.APPLICATION_JSON).build();
+		return Response.status(response.getStatusLine().getStatusCode())
+				.entity(IOUtils.toString(response.getEntity().getContent(),"UTF-8"))
+				.header(response.getEntity().getContentType().getName(),
+						response.getEntity().getContentType().getValue())
+				.build();
+	}
+
+	@GET
+	@Path("/messenger-people/stats-user/{region-id}")
+	// @Secured({ Role.ADMIN })
+	@Produces(MediaType.WILDCARD)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getUserStats(@PathParam("region-id") @ApiParam("region-id") String regionId)
+			throws AlbinaException, IOException {
+		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
+		RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(regionId);
+        HttpResponse response = ctMp.getUsersStats(rc.getMessengerPeopleConfig());
+        return Response.status(response.getStatusLine().getStatusCode())
+                .entity(IOUtils.toString(response.getEntity().getContent(),"UTF-8"))
+                .header(response.getEntity().getContentType().getName(),
+                        response.getEntity().getContentType().getValue())
+                .build();
 	}
 
 	@GET
