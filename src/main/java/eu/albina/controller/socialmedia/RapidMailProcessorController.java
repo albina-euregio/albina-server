@@ -177,13 +177,14 @@ public class RapidMailProcessorController extends CommonProcessor {
 				.returnResponse();
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
+			String body = response.getEntity()!=null?IOUtils.toString(response.getEntity().getContent(), "UTF-8"):null;
+			ShipmentController.getInstance().saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, null));
 			return response;
 		}
 		String body = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
 		response.getEntity().getContent().reset();
 		PostMailingsResponse bodyObject = objectMapper.readValue(body, PostMailingsResponse.class);
-		ShipmentController.getInstance()
-				.saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, "" + bodyObject.getId()));
+		ShipmentController.getInstance().saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, "" + bodyObject.getId()));
 		return response;
 	}
 

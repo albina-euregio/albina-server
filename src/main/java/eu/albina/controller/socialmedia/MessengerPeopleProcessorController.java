@@ -8,6 +8,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.messengerpeople.*;
 import eu.albina.model.socialmedia.MessengerPeopleConfig;
 import eu.albina.model.socialmedia.Shipment;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
@@ -19,6 +20,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 public class MessengerPeopleProcessorController extends CommonProcessor {
     private static MessengerPeopleProcessorController instance = null;
@@ -82,7 +84,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
         return targets;
     }
 
-    public MessengerPeopleNewsLetter sendNewsLetter(MessengerPeopleConfig config, String language, String message, String attachmentUrl) throws IOException, AlbinaException {
+    public HttpResponse sendNewsLetter(MessengerPeopleConfig config, String language, String message, String attachmentUrl) throws IOException, AlbinaException {
         Integer categoryId=null;
         if (StringUtils.equalsIgnoreCase(language,"EN")){
             categoryId=1;
@@ -97,13 +99,21 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
         if (attachmentUrl!=null){
             params+="&attachment="+URLEncoder.encode(attachmentUrl, "UTF-8");
         }
-        String json=Request.Post(baseUrl+"/newsletter?"+params)
+        HttpResponse response=Request.Post(baseUrl+"/newsletter?"+params)
                 .connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT)
                 .socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT)
                 .execute()
-                .returnContent().asString();
-        MessengerPeopleNewsLetter response = objectMapper.readValue(json, MessengerPeopleNewsLetter.class);
-        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,"message="+message+", attachmentUrl="+attachmentUrl,toJson(response),""+response.getBroadcastId()));
+                .returnResponse();
+        // Go ahead only if success
+        if (response.getStatusLine().getStatusCode() != 200) {
+            String body = response.getEntity()!=null?IOUtils.toString(response.getEntity().getContent(), "UTF-8"):null;
+            ShipmentController.getInstance().saveShipment(createActivityRow(config,language,"message="+message+", attachmentUrl="+attachmentUrl,body, null));
+            return response;
+        }
+        String body = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
+        response.getEntity().getContent().reset();
+        MessengerPeopleNewsLetter bodyObject = objectMapper.readValue(body, MessengerPeopleNewsLetter.class);
+        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,"message="+message+", attachmentUrl="+attachmentUrl,body, ""+bodyObject.getBroadcastId()));
         return response;
     }
 

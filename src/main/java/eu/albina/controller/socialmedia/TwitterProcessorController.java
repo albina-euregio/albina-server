@@ -1,12 +1,23 @@
 package eu.albina.controller.socialmedia;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.socialmedia.Shipment;
 import eu.albina.model.socialmedia.TwitterConfig;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.http.ProtocolVersion;
+import org.apache.http.StatusLine;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.message.BasicStatusLine;
 import twitter4j.*;
 import twitter4j.Query;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,20 +45,36 @@ public class TwitterProcessorController extends CommonProcessor {
         return tf.getInstance();
     }
 
-    public Status createTweet(TwitterConfig config, String language, String tweet, Long previousId) throws TwitterException, AlbinaException {
-
+    public BasicHttpResponse createTweet(TwitterConfig config, String language, String tweet, Long previousId) throws AlbinaException, IOException, IllegalAccessException {
+        ProtocolVersion protocolVersion = new ProtocolVersion("HTTP", 1, 1);
         Twitter twitter= getTwitterContext(config);
         try {
             if (previousId!=null){
                 twitter.destroyStatus(previousId);
             }
+            Status response = twitter.updateStatus(tweet);
+            StatusLine statusLine = new BasicStatusLine(protocolVersion, 200, "OK");
+            BasicHttpResponse respHttp=new BasicHttpResponse(statusLine);
+            String respJson=toJson(response);
+            respHttp.setEntity(new StringEntity(respJson));
+            respHttp.setHeaders(new BasicHeader[]{
+                    new BasicHeader("","")}
+            );
+            ShipmentController.getInstance().saveShipment(createActivityRow(config,language,tweet,respJson,""+response.getId()));
+            return respHttp;
         }
         catch (TwitterException e) {
-            String aa="";
+            twitter4j.HttpResponse respTwHttp= (HttpResponse) FieldUtils.readField(e, "response", true);
+            StatusLine statusLine = new BasicStatusLine(protocolVersion, respTwHttp.getStatusCode(), "OK");
+            String respJson = (String) FieldUtils.readField(respTwHttp, "responseAsString", true);
+            BasicHttpResponse respHttp=new BasicHttpResponse(statusLine);
+            respHttp.setEntity(new StringEntity(respJson));
+            respHttp.setHeaders(new BasicHeader[]{
+                    new BasicHeader("","")}
+            );
+            ShipmentController.getInstance().saveShipment(createActivityRow(config,language,tweet,respJson,null));
+            return respHttp;
         }
-        Status response = twitter.updateStatus(tweet);
-        ShipmentController.getInstance().saveShipment(createActivityRow(config,language,tweet,"Status:  "+ response.getText() + " Created: "+ response.getCreatedAt().toString() + " Id: " + response.getId(),""+response.getId()));
-        return response;
     }
 
     public List<String> getTimeLine(TwitterConfig config) throws TwitterException {
