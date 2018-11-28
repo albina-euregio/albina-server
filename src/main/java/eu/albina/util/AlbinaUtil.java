@@ -254,7 +254,7 @@ public class AlbinaUtil {
 			StringBuilder result = new StringBuilder();
 			result.append(GlobalVariables.getTendencyBindingWord(lang));
 			result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
-			result.append(date.toString(GlobalVariables.getDateTimeFormatter(lang)));
+			result.append(date.toString(GlobalVariables.getTendencyDateTimeFormatter(lang)));
 			return result.toString();
 		} else {
 			return "";

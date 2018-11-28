@@ -95,10 +95,11 @@ public class RapidMailProcessorController extends CommonProcessor {
 	}
 
 	public HttpResponse getRecipientsList(RapidMailConfig config, String regionId) throws IOException {
-		HttpResponse response = executor.execute(Request.Get(baseUrl + "/recipientlists")
+		Request request = Request.Get(baseUrl + "/recipientlists")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 				.addHeader("Accept", "application/hal+json").connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
-				.socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)).returnResponse();
+				.socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT);
+		HttpResponse response = executor.execute(request).returnResponse();
 		if (regionId != null && response.getStatusLine().getStatusCode() == 200) {
 			RapidMailRecipientListResponse recipientListResponse = objectMapper.readValue(getResponseContent(response),
 					RapidMailRecipientListResponse.class);
@@ -168,13 +169,15 @@ public class RapidMailProcessorController extends CommonProcessor {
 			mailingsPost.setStatus("scheduled");
 		}
 
-		HttpResponse response = executor
-				.execute(Request.Post(baseUrl + "/mailings")
-						.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
-						.addHeader("Content-Type", "application/json").addHeader("Accept", "application/hal+json")
-						.bodyString(toJson(mailingsPost), ContentType.APPLICATION_JSON)
-						.connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT).socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT))
-				.returnResponse();
+		String json = toJson(mailingsPost);
+		System.out.println(json);
+
+		Request request = Request.Post(baseUrl + "/mailings")
+				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
+				.addHeader("Content-Type", "application/json").addHeader("Accept", "application/hal+json")
+				.bodyString(toJson(mailingsPost), ContentType.APPLICATION_JSON)
+				.connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT).socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT);
+		HttpResponse response = executor.execute(request).returnResponse();
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
 			return response;

@@ -161,10 +161,11 @@ public class EmailUtil {
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
 		for (LanguageCode lang : GlobalVariables.languages) {
-			String emailHtml = createBulletinEmailHtml(bulletins, lang);
 			String subject = GlobalVariables.getEmailSubject(lang) + AlbinaUtil.getDate(bulletins, lang);
-			for (String region : regions)
-				sendBulletinEmailRapidmail(bulletins, lang, region, emailHtml, subject);
+			for (String region : regions) {
+				String emailHtml = createBulletinEmailHtml(bulletins, lang, region);
+				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
+			}
 		}
 	}
 
@@ -205,8 +206,7 @@ public class EmailUtil {
 		return Base64.encodeBase64String(zipData);
 	}
 
-	public HttpResponse sendBulletinEmailRapidmail(List<AvalancheBulletin> bulletins, LanguageCode lang, String region,
-			String emailHtml, String subject) {
+	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
 		logger.debug("Sending bulletin email in " + lang + " for " + region + "...");
 		try {
 			RapidMailProcessorController rmc = RapidMailProcessorController.getInstance();
@@ -396,7 +396,7 @@ public class EmailUtil {
 		}
 	}
 
-	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		try {
 			// Create data model
 			Map<String, Object> root = new HashMap<>();
@@ -420,10 +420,8 @@ public class EmailUtil {
 			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
-			socialMediaImages.put("twitter", GlobalVariables.getServerImagesUrl() + "social_media/twitter.png");
 			socialMediaImages.put("instagram", GlobalVariables.getServerImagesUrl() + "social_media/instagram.png");
 			socialMediaImages.put("youtube", GlobalVariables.getServerImagesUrl() + "social_media/youtube.png");
-			socialMediaImages.put("whatsapp", GlobalVariables.getServerImagesUrl() + "social_media/whatsapp.png");
 			image.put("socialmedia", socialMediaImages);
 			Map<String, Object> mapImage = new HashMap<>();
 
@@ -609,13 +607,14 @@ public class EmailUtil {
 
 			Map<String, Object> links = new HashMap<>();
 			links.put("website", "https://avalanche.report");
-			links.put("unsubscribe", "https://avalanche.report/unsubscribe");
+			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
-			socialMediaLinks.put("facebook", "https://avalanche.report/facebook");
-			socialMediaLinks.put("twitter", "https://avalanche.report/twitter");
-			socialMediaLinks.put("instagram", "https://avalanche.report/instagram");
-			socialMediaLinks.put("youtube", "https://avalanche.report/youtube");
-			socialMediaLinks.put("whatsapp", "https://avalanche.report/whatsapp");
+			socialMediaLinks.put("facebook",
+					"https://avalanche.report/albina-web/bulletin/2018-11-23?lang=en#followDialog");
+			socialMediaLinks.put("instagram",
+					"https://avalanche.report/albina-web/bulletin/2018-11-23?lang=en#followDialog");
+			socialMediaLinks.put("youtube",
+					"https://avalanche.report/albina-web/bulletin/2018-11-23?lang=en#followDialog");
 			links.put("socialmedia", socialMediaLinks);
 			root.put("link", links);
 

@@ -3,6 +3,10 @@ package eu.albina.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +16,13 @@ import javax.persistence.EntityTransaction;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 
+import eu.albina.controller.socialmedia.RapidMailProcessorController;
+import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
+import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 
@@ -185,5 +193,21 @@ public class SubscriberController {
 		Hibernate.initialize(subscriber.getLanguage());
 		Hibernate.initialize(subscriber.getPdfAttachment());
 		Hibernate.initialize(subscriber.getRegions());
+	}
+
+	public void createSubscriberRapidmail(Subscriber subscriber) throws AlbinaException, KeyManagementException,
+			CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, Exception {
+		if (subscriber.getLanguage() == null)
+			throw new AlbinaException("No language defined!");
+		for (String region : subscriber.getRegions()) {
+			RegionConfigurationController ctRc = RegionConfigurationController.getInstance();
+			RegionConfiguration rc = ctRc.getRegionConfiguration(region);
+			RapidMailProcessorController ctRm = RapidMailProcessorController.getInstance();
+
+			PostRecipientsRequest recipient = new PostRecipientsRequest();
+			recipient.setEmail(subscriber.getEmail());
+
+			ctRm.createRecipient(rc.getRapidMailConfig(), recipient, null, subscriber.getLanguage().toString());
+		}
 	}
 }

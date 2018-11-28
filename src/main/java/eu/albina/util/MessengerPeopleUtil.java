@@ -1,6 +1,7 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -30,21 +31,18 @@ public class MessengerPeopleUtil {
 
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions) {
 		for (LanguageCode lang : GlobalVariables.languages) {
-			DateTime date = AlbinaUtil.getDate(bulletins);
-			String message = GlobalVariables.getMessengerPeopleText(lang, date);
+			try {
+				DateTime date = AlbinaUtil.getDate(bulletins);
+				String message = GlobalVariables.getMessengerPeopleText(lang, date);
 
-			String attachmentUrl = "";
-			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-				// TODO combine am/pm maps in one image
-				attachmentUrl = GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins)
-						+ "/am_albina_map.jpg";
-			} else {
+				String attachmentUrl = "";
 				attachmentUrl = GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins)
 						+ "/fd_albina_map.jpg";
-			}
 
-			try {
 				sendBulletinNewsletter(message, attachmentUrl, lang, regions);
+			} catch (UnsupportedEncodingException e) {
+				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());
+				e.printStackTrace();
 			} catch (AlbinaException e) {
 				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());
 				e.printStackTrace();

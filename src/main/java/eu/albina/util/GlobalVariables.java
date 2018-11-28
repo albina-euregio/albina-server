@@ -2,7 +2,9 @@ package eu.albina.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -60,6 +62,18 @@ public class GlobalVariables {
 	private static String smtpPort = "587";
 	private static String emailUsername = "norbert.lanzanasto@gmail.com";
 	private static String emailPassword = "Go6Zaithee";
+
+	// LANG
+	// REGION
+	private static String unsubscribeLinkTyrolDe = "https://t271d3041.emailsys1a.net/38/2221/61ad34fba0/unsubscribe/form.html";
+	private static String unsubscribeLinkTyrolIt = "https://t271d3041.emailsys1a.net/38/2219/5b3f174f66/unsubscribe/form.html";
+	private static String unsubscribeLinkTyrolEn = "https://t271d3041.emailsys1a.net/38/2223/bc01e461f6/unsubscribe/form.html";
+	private static String unsubscribeLinkSouthTyrolDe = "https://t271d3041.emailsys1a.net/38/2215/da5e036304/unsubscribe/form.html";
+	private static String unsubscribeLinkSouthTyrolIt = "https://t271d3041.emailsys1a.net/38/2213/e8b5e15ee4/unsubscribe/form.html";
+	private static String unsubscribeLinkSouthTyrolEn = "https://t271d3041.emailsys1a.net/38/2217/2fce2c512f/unsubscribe/form.html";
+	private static String unsubscribeLinkTrentinoDe = "https://t271d3041.emailsys1a.net/38/2209/3a7fe947b4/unsubscribe/form.html";
+	private static String unsubscribeLinkTrentinoIt = "https://t271d3041.emailsys1a.net/38/2207/bc2b53964c/unsubscribe/form.html";
+	private static String unsubscribeLinkTrentinoEn = "https://t271d3041.emailsys1a.net/38/2211/361ad0a282/unsubscribe/form.html";
 
 	// LANG
 	public static String[] daysDe = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" };
@@ -745,18 +759,22 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getMessengerPeopleText(LanguageCode lang, DateTime date) {
+	public static String getMessengerPeopleText(LanguageCode lang, DateTime date) throws UnsupportedEncodingException {
 		String dateString = GlobalVariables.getDayName(date.getDayOfWeek(), lang)
 				+ date.toString(GlobalVariables.getShortDateTimeFormatter(lang));
 		switch (lang) {
 		case de:
-			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+			return URLEncoder.encode("Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date),
+					"UTF-8");
 		case it:
-			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+			return URLEncoder.encode("Previsione valanghe per " + dateString + ": " + getBulletinUrl(lang, date),
+					"UTF-8");
 		case en:
-			return "Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date);
+			return URLEncoder.encode("Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date),
+					"UTF-8");
 		default:
-			return "Lawinenvorhersage für den " + dateString + ": " + getBulletinUrl(lang, date);
+			return URLEncoder.encode("Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date),
+					"UTF-8");
 		}
 	}
 
@@ -1022,6 +1040,20 @@ public class GlobalVariables {
 
 	// LANG
 	public static DateTimeFormatter getDateTimeFormatter(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return dateTimeDe;
+		case it:
+			return dateTimeIt;
+		case en:
+			return dateTimeEn;
+		default:
+			return dateTimeEn;
+		}
+	}
+
+	// LANG
+	public static DateTimeFormatter getTendencyDateTimeFormatter(LanguageCode lang) {
 		switch (lang) {
 		case de:
 			return tendencyDateTimeDe;
@@ -1507,6 +1539,55 @@ public class GlobalVariables {
 			return "Valanghe.report";
 		default:
 			return "Avalanche.report";
+		}
+	}
+
+	public static String getUnsubscribeLink(LanguageCode lang, String region) {
+		switch (lang) {
+		case de:
+			switch (region) {
+			case "AT-07":
+				return unsubscribeLinkTyrolDe;
+			case "IT-32-BZ":
+				return unsubscribeLinkSouthTyrolDe;
+			case "IT-32-TN":
+				return unsubscribeLinkTrentinoDe;
+			default:
+				return "";
+			}
+		case it:
+			switch (region) {
+			case "AT-07":
+				return unsubscribeLinkTyrolIt;
+			case "IT-32-BZ":
+				return unsubscribeLinkSouthTyrolIt;
+			case "IT-32-TN":
+				return unsubscribeLinkTrentinoIt;
+			default:
+				return "";
+			}
+		case en:
+			switch (region) {
+			case "AT-07":
+				return unsubscribeLinkTyrolEn;
+			case "IT-32-BZ":
+				return unsubscribeLinkSouthTyrolEn;
+			case "IT-32-TN":
+				return unsubscribeLinkTrentinoEn;
+			default:
+				return "";
+			}
+		default:
+			switch (region) {
+			case "AT-07":
+				return unsubscribeLinkTyrolEn;
+			case "IT-32-BZ":
+				return unsubscribeLinkSouthTyrolEn;
+			case "IT-32-TN":
+				return unsubscribeLinkTrentinoEn;
+			default:
+				return "";
+			}
 		}
 	}
 }

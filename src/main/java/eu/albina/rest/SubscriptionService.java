@@ -1,13 +1,14 @@
 package eu.albina.rest;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.Date;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -46,30 +47,36 @@ public class SubscriptionService {
 		logger.debug("POST JSON subscribe");
 
 		try {
-			SubscriberController.getInstance().createSubscriber(subscriber);
+			SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 			return Response.ok().build();
-		} catch (HibernateException e) {
+		} catch (KeyManagementException e) {
 			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		} catch (JSONException e) {
+			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+		} catch (CertificateException e) {
+			logger.warn("Error unsubscribe - " + e.getMessage());
+			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+		} catch (NoSuchAlgorithmException e) {
 			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		} catch (URISyntaxException e) {
+			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+		} catch (KeyStoreException e) {
 			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		} catch (IOException e) {
-			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+		} catch (IOException e) {
+			logger.warn("Error subscribe - " + e.getMessage());
+			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			logger.warn("Error subscribe - " + e.getMessage());
+			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		}
 	}
 
-	@DELETE
-	@Path("/unsubscribe")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	// @DELETE
+	// @Path("/unsubscribe")
+	// @Produces(MediaType.APPLICATION_JSON)
+	// @Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteSubscriber(String email) {
 		JSONObject json = new JSONObject(email);
 		logger.debug("DELETE JSON subscriber: " + json.getString("email"));
@@ -89,10 +96,10 @@ public class SubscriptionService {
 		}
 	}
 
-	@PUT
-	@Path("/confirm")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	// @PUT
+	// @Path("/confirm")
+	// @Consumes(MediaType.APPLICATION_JSON)
+	// @Produces(MediaType.APPLICATION_JSON)
 	public Response confirmSubscription(String token) {
 		try {
 			JSONObject json = new JSONObject(token);

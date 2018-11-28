@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +29,10 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.SubscriberController;
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -201,7 +208,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de);
+		EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07");
 	}
 
 	@Ignore
@@ -215,17 +222,33 @@ public class UtilTest {
 
 	@Ignore
 	@Test
+	public void addSubscriber() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
+			KeyStoreException, AlbinaException, IOException, Exception {
+		ArrayList<String> regions = new ArrayList<String>();
+		regions.add("AT-07");
+
+		Subscriber subscriber = new Subscriber();
+		subscriber.setEmail("n.lanzanasto@gmail.com");
+		subscriber.setLanguage(LanguageCode.it);
+		subscriber.setRegions(regions);
+
+		SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
+	}
+
+	@Test
 	public void sendMessengerPeopleNewsletter() throws IOException, URISyntaxException {
 		// TODO test this test
 		List<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTyrol);
+		regions.add(GlobalVariables.codeTrentino);
 		MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions);
 	}
 
 	@Ignore
 	@Test
 	public void createConfirmationFreemarker() throws IOException, URISyntaxException {
-		EmailUtil.getInstance().createConfirmationEmailHtml("token", LanguageCode.en);
+		String createConfirmationEmailHtml = EmailUtil.getInstance().createConfirmationEmailHtml("token",
+				LanguageCode.en);
+		System.out.println(createConfirmationEmailHtml);
 	}
 
 	@Ignore
