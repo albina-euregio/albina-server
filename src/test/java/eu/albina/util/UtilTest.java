@@ -235,6 +235,7 @@ public class UtilTest {
 		SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 	}
 
+	@Ignore
 	@Test
 	public void sendMessengerPeopleNewsletter() throws IOException, URISyntaxException {
 		// TODO test this test
