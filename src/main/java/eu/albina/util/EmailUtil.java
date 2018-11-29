@@ -453,6 +453,7 @@ public class EmailUtil {
 			text.put("headline", GlobalVariables.getHeadline(lang));
 			text.put("follow", GlobalVariables.getFollowUs(lang));
 			text.put("unsubscribe", GlobalVariables.getUnsubscribe(lang));
+			text.put("imprint", GlobalVariables.getImprint(lang));
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
 				text.put("am", GlobalVariables.getAMText(lang));
 				text.put("pm", GlobalVariables.getPMText(lang));
@@ -607,9 +608,10 @@ public class EmailUtil {
 			root.put("bulletins", arrayList);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("website",
-					GlobalVariables.avalancheReportBaseUrl + "bulletin/" + AlbinaUtil.getValidityDate(bulletins) + "?lang=" + lang.toString());
+			links.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
+					+ AlbinaUtil.getValidityDate(bulletins) + "?lang=" + lang.toString());
 			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
+			links.put("imprint", GlobalVariables.getImprintLink(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook",
 					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");

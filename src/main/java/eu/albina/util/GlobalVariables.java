@@ -1599,4 +1599,29 @@ public class GlobalVariables {
 			}
 		}
 	}
+
+	public static String getImprintLink(LanguageCode lang) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(GlobalVariables.avalancheReportBaseUrl);
+		sb.append("imprint?lang=");
+		if (lang != null)
+			sb.append(lang.toString());
+		else
+			sb.append("en");
+		return sb.toString();
+	}
+
+	// LANG
+	public static String getImprint(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Impressum";
+		case it:
+			return "Impressum";
+		case en:
+			return "Imprint";
+		default:
+			return "Imprint";
+		}
+	}
 }
