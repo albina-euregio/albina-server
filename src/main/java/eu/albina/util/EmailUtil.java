@@ -607,15 +607,16 @@ public class EmailUtil {
 			root.put("bulletins", arrayList);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("website", GlobalVariables.avalancheReportBaseUrl);
+			links.put("website",
+					GlobalVariables.avalancheReportBaseUrl + "bulletin/" + AlbinaUtil.getValidityDate(bulletins) + "?lang=" + lang.toString());
 			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook",
-					GlobalVariables.avalancheReportBaseUrl + "bulletin/?lang=" + lang.toString() + "#followDialog");
+					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
 			socialMediaLinks.put("instagram",
-					GlobalVariables.avalancheReportBaseUrl + "bulletin/?lang=" + lang.toString() + "#followDialog");
+					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
 			socialMediaLinks.put("youtube",
-					GlobalVariables.avalancheReportBaseUrl + "bulletin/?lang=" + lang.toString() + "#followDialog");
+					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
 			links.put("socialmedia", socialMediaLinks);
 			root.put("link", links);
 

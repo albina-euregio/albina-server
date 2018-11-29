@@ -56,7 +56,7 @@ public class GlobalVariables {
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 
-	public static String avalancheReportBaseUrl = "https://avalanche.report/albina_web/";
+	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
 
 	private static boolean smtpAuth = true;
 	private static boolean smtpTls = true;
