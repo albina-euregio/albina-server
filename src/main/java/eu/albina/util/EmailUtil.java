@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -339,8 +340,8 @@ public class EmailUtil {
 			root.put("text", text);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("confirm", "https://avalanche.report/subscribe/" + token);
-			links.put("website", "https://avalanche.report");
+			links.put("confirm", GlobalVariables.avalancheReportBaseUrl + "subscribe/" + token);
+			links.put("website", GlobalVariables.avalancheReportBaseUrl);
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook", "https://avalanche.report/facebook");
 			socialMediaLinks.put("twitter", "https://avalanche.report/twitter");
@@ -434,7 +435,7 @@ public class EmailUtil {
 			} else {
 				mapImage.put("overview",
 						GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_map.jpg");
-				mapImage.put("overviewPM", "");
+				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.jpg");
 			}
 
 			image.put("map", mapImage);
@@ -606,15 +607,15 @@ public class EmailUtil {
 			root.put("bulletins", arrayList);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("website", "https://avalanche.report");
+			links.put("website", GlobalVariables.avalancheReportBaseUrl);
 			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook",
-					"https://avalanche.report/albina-web/bulletin/2018-11-23?lang=en#followDialog");
+					GlobalVariables.avalancheReportBaseUrl + "bulletin/?lang=" + lang.toString() + "#followDialog");
 			socialMediaLinks.put("instagram",
-					"https://avalanche.report/albina-web/bulletin/2018-11-23?lang=en#followDialog");
+					GlobalVariables.avalancheReportBaseUrl + "bulletin/?lang=" + lang.toString() + "#followDialog");
 			socialMediaLinks.put("youtube",
-					"https://avalanche.report/albina-web/bulletin/2018-11-23?lang=en#followDialog");
+					GlobalVariables.avalancheReportBaseUrl + "bulletin/?lang=" + lang.toString() + "#followDialog");
 			links.put("socialmedia", socialMediaLinks);
 			root.put("link", links);
 
@@ -648,7 +649,6 @@ public class EmailUtil {
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
-		// TODO test
 		if ((daytimeBulletin.getDangerRatingBelow() == null
 				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.missing
 				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.no_rating)
@@ -696,35 +696,14 @@ public class EmailUtil {
 				avalancheSituation1.put("text",
 						daytimeBulletin.getAvalancheSituation1().getAvalancheSituation().toString(lang));
 			} else {
-				avalancheSituation1.put("symbol", "");
+				avalancheSituation1.put("symbol",
+						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
 				avalancheSituation1.put("text", "");
 			}
-			avalancheSituation1.put("aspectBg", GlobalVariables.getServerImagesUrl() + "aspects/exposition_bg.png");
-			// avalancheSituation1.put("aspectBg", "cid:aspect/bg");
-			if (daytimeBulletin.getAvalancheSituation1().getAspects() != null
-					&& !daytimeBulletin.getAvalancheSituation1().getAspects().isEmpty()) {
-				Set<Aspect> aspects = daytimeBulletin.getAvalancheSituation1().getAspects();
-				for (Aspect aspect : Aspect.values()) {
-					if (aspects.contains(aspect)) {
-						avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
-								GlobalVariables.getServerImagesUrl() + "aspects/exposition_" + aspect.toString()
-										+ ".png");
-						// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(), "cid:aspect/"
-						// + aspect.toString());
-					} else {
-						avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
-								GlobalVariables.getServerImagesUrl() + "aspects/exposition_empty.png");
-						// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
-						// "cid:aspect/empty");
-					}
-				}
-			} else
-				for (Aspect aspect : Aspect.values()) {
-					avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
-							GlobalVariables.getServerImagesUrl() + "aspects/exposition_empty.png");
-					// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
-					// "cid:aspect/empty");
-				}
+
+			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+			avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+
 			Map<String, Object> elevation = new HashMap<>();
 			if (daytimeBulletin.getAvalancheSituation1().getTreelineHigh()
 					|| daytimeBulletin.getAvalancheSituation1().getElevationHigh() > 0) {
@@ -771,17 +750,15 @@ public class EmailUtil {
 			}
 			avalancheSituation1.put("elevation", elevation);
 		} else {
-			avalancheSituation1.put("symbol", "");
+			avalancheSituation1.put("symbol",
+					GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
 			avalancheSituation1.put("text", "");
-			avalancheSituation1.put("aspectBg", "");
-			// avalancheSituation1.put("aspectBg", "cid:aspect/bg");
-			for (Aspect aspect : Aspect.values()) {
-				avalancheSituation1.put("aspect" + aspect.toUpperCaseString(), "");
-				// avalancheSituation1.put("aspect" + aspect.toUpperCaseString(),
-				// "cid:aspect/empty");
-			}
+
+			String path = getAspectsImagePath(null);
+			avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+
 			Map<String, Object> elevation = new HashMap<>();
-			elevation.put("symbol", "");
+			elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/empty.png");
 			elevation.put("limitAbove", "");
 			elevation.put("limitBelow", "");
 			avalancheSituation1.put("elevation", elevation);
@@ -801,35 +778,14 @@ public class EmailUtil {
 				avalancheSituation2.put("text",
 						daytimeBulletin.getAvalancheSituation2().getAvalancheSituation().toString(lang));
 			} else {
-				avalancheSituation2.put("symbol", "");
+				avalancheSituation2.put("symbol",
+						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
 				avalancheSituation2.put("text", "");
 			}
-			avalancheSituation2.put("aspectBg", GlobalVariables.getServerImagesUrl() + "aspects/exposition_bg.png");
-			// avalancheSituation2.put("aspectBg", "cid:aspect/bg");
-			if (daytimeBulletin.getAvalancheSituation2().getAspects() != null
-					&& !daytimeBulletin.getAvalancheSituation2().getAspects().isEmpty()) {
-				Set<Aspect> aspects = daytimeBulletin.getAvalancheSituation2().getAspects();
-				for (Aspect aspect : Aspect.values()) {
-					if (aspects.contains(aspect)) {
-						avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
-								GlobalVariables.getServerImagesUrl() + "aspects/exposition_" + aspect.toString()
-										+ ".png");
-						// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(), "cid:aspect/"
-						// + aspect.toString());
-					} else {
-						avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
-								GlobalVariables.getServerImagesUrl() + "aspects/exposition_empty.png");
-						// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
-						// "cid:aspect/empty");
-					}
-				}
-			} else
-				for (Aspect aspect : Aspect.values()) {
-					avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
-							GlobalVariables.getServerImagesUrl() + "aspects/exposition_empty.png");
-					// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
-					// "cid:aspect/empty");
-				}
+
+			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+
 			Map<String, Object> elevation = new HashMap<>();
 			if (daytimeBulletin.getAvalancheSituation2().getTreelineHigh()
 					|| daytimeBulletin.getAvalancheSituation2().getElevationHigh() > 0) {
@@ -876,22 +832,61 @@ public class EmailUtil {
 			}
 			avalancheSituation2.put("elevation", elevation);
 		} else {
-			avalancheSituation2.put("symbol", "");
+			avalancheSituation2.put("symbol",
+					GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
 			avalancheSituation2.put("text", "");
-			avalancheSituation2.put("aspectBg", "");
-			// avalancheSituation2.put("aspectBg", "cid:aspect/bg");
-			for (Aspect aspect : Aspect.values()) {
-				avalancheSituation2.put("aspect" + aspect.toUpperCaseString(), "");
-				// avalancheSituation2.put("aspect" + aspect.toUpperCaseString(),
-				// "cid:aspect/empty");
-			}
+
+			String path = getAspectsImagePath(null);
+			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+
 			Map<String, Object> elevation = new HashMap<>();
-			elevation.put("symbol", "");
+			elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/empty.png");
 			elevation.put("limitAbove", "");
 			elevation.put("limitBelow", "");
 			avalancheSituation2.put("elevation", elevation);
 		}
 		bulletin.put("avalancheSituation2", avalancheSituation2);
+	}
+
+	private String getAspectsImagePath(Set<Aspect> aspects) {
+		int result = 0b00000000;
+		if (aspects != null && !aspects.isEmpty()) {
+			Iterator<Aspect> iterator = aspects.iterator();
+			while (iterator.hasNext()) {
+				switch (iterator.next()) {
+				case N:
+					result = result | 0b10000000;
+					break;
+				case NE:
+					result = result | 0b01000000;
+					break;
+				case E:
+					result = result | 0b00100000;
+					break;
+				case SE:
+					result = result | 0b00010000;
+					break;
+				case S:
+					result = result | 0b00001000;
+					break;
+				case SW:
+					result = result | 0b00000100;
+					break;
+				case W:
+					result = result | 0b00000010;
+					break;
+				case NW:
+					result = result | 0b00000001;
+					break;
+
+				default:
+					break;
+				}
+			}
+			return GlobalVariables.getAspectSymbolPath(result, false);
+		} else {
+			return GlobalVariables.getAspectSymbolPath(-1, false);
+		}
 	}
 
 	private String getDangerRatingColorStyle(DangerRating dangerRating) {

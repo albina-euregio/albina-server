@@ -56,6 +56,8 @@ public class GlobalVariables {
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 
+	public static String avalancheReportBaseUrl = "https://avalanche.report/albina_web/";
+
 	private static boolean smtpAuth = true;
 	private static boolean smtpTls = true;
 	private static String smtpHost = "smtp.gmail.com";
@@ -1484,10 +1486,17 @@ public class GlobalVariables {
 	}
 
 	public static String getAspectSymbolPath(int result, boolean grayscale) {
-		if (grayscale)
-			return "aspects/grey/" + new Integer(result).toString() + ".png";
-		else
-			return "aspects/color/" + new Integer(result).toString() + ".png";
+		if (result > -1) {
+			if (grayscale)
+				return "aspects/grey/" + new Integer(result).toString() + ".png";
+			else
+				return "aspects/color/" + new Integer(result).toString() + ".png";
+		} else {
+			if (grayscale)
+				return "aspects/grey/empty.png";
+			else
+				return "aspects/color/empty.png";
+		}
 	}
 
 	// LANG
