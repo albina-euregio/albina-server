@@ -435,7 +435,7 @@ public class EmailUtil {
 			} else {
 				mapImage.put("overview",
 						GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_map.jpg");
-				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.jpg");
+				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
 			}
 
 			image.put("map", mapImage);
