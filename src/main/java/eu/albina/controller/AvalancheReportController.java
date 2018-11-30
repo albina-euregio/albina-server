@@ -167,6 +167,9 @@ public class AvalancheReportController {
 				avalancheReport.setUser(user);
 				avalancheReport.setRevision(revision);
 				switch (avalancheReport.getStatus()) {
+				case missing:
+					avalancheReport.setStatus(BulletinStatus.updated);
+					break;
 				case draft:
 					break;
 				case submitted:
