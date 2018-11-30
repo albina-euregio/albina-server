@@ -586,7 +586,7 @@ public class EmailUtil {
 							GlobalVariables.getServerImagesUrl() + "tendency/tendency_increasing_blue.png");
 					tendency.put("date", AlbinaUtil.getTendencyDate(bulletins, lang));
 				} else {
-					tendency.put("symbol", "tendency/empty.png");
+					tendency.put("symbol", GlobalVariables.getServerImagesUrl() + "tendency/empty.png");
 					tendency.put("date", "");
 				}
 				bulletin.put("tendency", tendency);
