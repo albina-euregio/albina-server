@@ -47,6 +47,7 @@ public class SubscriptionService {
 		logger.debug("POST JSON subscribe");
 
 		try {
+			SubscriberController.getInstance().createSubscriber(subscriber);
 			SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 			return Response.ok().build();
 		} catch (KeyManagementException e) {

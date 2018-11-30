@@ -23,7 +23,6 @@ import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
 import eu.albina.model.socialmedia.RegionConfiguration;
-import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -85,21 +84,11 @@ public class SubscriberController {
 			transaction.begin();
 			entityManager.persist(subscriber);
 			transaction.commit();
-
-			// TODO enable
-			EmailUtil.getInstance().sendConfirmationEmail(subscriber);
-
 			return subscriber.getEmail();
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
 			throw he;
-			// } catch (IOException e) {
-			// logger.error("Confirmation email could not be send!");
-			// throw e;
-			// } catch (URISyntaxException e) {
-			// logger.error("Confirmation email could not be send!");
-			// throw e;
 		} finally {
 			entityManager.close();
 		}
