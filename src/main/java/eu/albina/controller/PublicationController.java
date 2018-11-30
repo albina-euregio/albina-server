@@ -60,7 +60,8 @@ public class PublicationController {
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 
 		// create CAAML
-		createCaaml(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateCaaml())
+			createCaaml(avalancheReportIds, bulletins);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -126,7 +127,8 @@ public class PublicationController {
 			throws MessagingException {
 
 		// create CAAML
-		createCaaml(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateCaaml())
+			createCaaml(avalancheReportIds, bulletins);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -173,7 +175,8 @@ public class PublicationController {
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 
 		// create CAAML
-		createCaaml(avalancheReportIds, bulletins);
+		if (GlobalVariables.isCreateCaaml())
+			createCaaml(avalancheReportIds, bulletins);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
