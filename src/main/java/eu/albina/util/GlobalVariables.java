@@ -36,7 +36,7 @@ public class GlobalVariables {
 	private static boolean createPdf = true;
 	private static boolean createStaticWidget = true;
 	private static boolean sendEmails = true;
-	private static boolean publishToSocialMedia = false;
+	private static boolean publishToSocialMedia = true;
 	private static boolean publishAt5PM = true;
 	private static boolean publishAt8AM = true;
 
