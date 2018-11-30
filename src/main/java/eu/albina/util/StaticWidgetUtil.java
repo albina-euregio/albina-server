@@ -101,13 +101,14 @@ public class StaticWidgetUtil {
 			ig2.setPaint(greyLightColor);
 			ig2.fill(new Rectangle2D.Double(0, 569, 600, 1));
 
-			BufferedImage ci = resize(loadImageFromFile("logo/color/colorbar.gif"), 600, 15);
+			BufferedImage ci = resize(
+					loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/color/colorbar.gif"), 600,
+					15);
 
-			// TODO use thumbnail map with highest danger rating or show both maps beside
 			BufferedImage overviewThumbnail;
 			if (AlbinaUtil.hasDaytimeDependency(bulletins))
-				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()
-						+ AlbinaUtil.getValidityDate(bulletins) + "/am_albina_thumbnail.jpg"), 400);
+				overviewThumbnail = resizeWidth(loadImageFromUrl(GlobalVariables.getMapsPath()
+						+ AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_thumbnail.jpg"), 600);
 			else
 				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()
 						+ AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_thumbnail.jpg"), 400);
@@ -282,7 +283,11 @@ public class StaticWidgetUtil {
 			logo = resizeHeight(logo, 110);
 			ig2.drawImage(ci, 0, 0, null);
 			ig2.drawImage(logo, 70, 35, null);
-			ig2.drawImage(overviewThumbnail, 100, 170, null);
+
+			if (AlbinaUtil.hasDaytimeDependency(bulletins))
+				ig2.drawImage(overviewThumbnail, 0, 220, null);
+			else
+				ig2.drawImage(overviewThumbnail, 100, 170, null);
 
 			BufferedImage interregLogo = loadImageFromFile("logo/color/interreg.png");
 			// BufferedImage interregLogo =
@@ -291,7 +296,6 @@ public class StaticWidgetUtil {
 			interregLogo = resizeHeight(interregLogo, 110);
 			ig2.drawImage(interregLogo, 350, 45, null);
 
-			// TODO add directory structure on production server
 			String filename = GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDate(bulletins) + "/"
 					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
@@ -317,23 +321,22 @@ public class StaticWidgetUtil {
 		return dimg;
 	}
 
-	// private static BufferedImage resizeWidth(BufferedImage img, int newW) {
-	// double oldW = img.getWidth();
-	// double oldH = img.getHeight();
-	// double factor = (oldH / oldW);
-	// double newHDouble = factor * newW;
-	// int newH = (int) newHDouble;
-	//
-	// Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
-	// BufferedImage dimg = new BufferedImage(newW, newH,
-	// BufferedImage.TYPE_INT_ARGB);
-	//
-	// Graphics2D g2d = dimg.createGraphics();
-	// g2d.drawImage(tmp, 0, 0, null);
-	// g2d.dispose();
-	//
-	// return dimg;
-	// }
+	private static BufferedImage resizeWidth(BufferedImage img, int newW) {
+		double oldW = img.getWidth();
+		double oldH = img.getHeight();
+		double factor = (oldH / oldW);
+		double newHDouble = factor * newW;
+		int newH = (int) newHDouble;
+
+		Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+		BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D g2d = dimg.createGraphics();
+		g2d.drawImage(tmp, 0, 0, null);
+		g2d.dispose();
+
+		return dimg;
+	}
 
 	private static BufferedImage resizeHeight(BufferedImage img, int newH) {
 		double oldW = img.getWidth();
