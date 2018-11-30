@@ -32,6 +32,7 @@ public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
+	private static boolean createCaaml = true;
 	private static boolean createMaps = true;
 	private static boolean createPdf = true;
 	private static boolean createStaticWidget = true;
@@ -170,6 +171,15 @@ public class GlobalVariables {
 	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
 
 	private static String emailEncoding = "UTF-8";
+
+	public static boolean isCreateCaaml() {
+		return createCaaml;
+	}
+
+	public static void setCreateCaaml(boolean createCaaml) throws ConfigurationException {
+		GlobalVariables.createCaaml = createCaaml;
+		setConfigProperty("createCaaml", createCaaml);
+	}
 
 	public static boolean isCreateMaps() {
 		return createMaps;
@@ -1428,6 +1438,8 @@ public class GlobalVariables {
 			setEmailUsername(configuration.getString("emailUsername"));
 		if (configuration.has("emailPassword"))
 			setEmailPassword(configuration.getString("emailPassword"));
+		if (configuration.has("createCaaml"))
+			setCreateMaps(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))
 			setCreateMaps(configuration.getBoolean("createMaps"));
 		if (configuration.has("createPdf"))
