@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import eu.albina.util.GlobalVariables;
 
 @Entity
-@Table(name = "CHAT_MESSAGE")
+@Table(name = "chat_message")
 public class ChatMessage extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@Column(name = "TEXT")
@@ -22,6 +22,9 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 	@Column(name = "DATETIME")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private org.joda.time.DateTime dateTime;
+
+	@Column(name = "CHAT_ID")
+	private int chatId;
 
 	/**
 	 * Standard constructor for chat message.
@@ -38,6 +41,9 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 
 		if (json.has("time"))
 			this.dateTime = new org.joda.time.DateTime(json.getString("time"));
+
+		if (json.has("chatId"))
+			this.chatId = json.getInt("chatId");
 	}
 
 	public String getText() {
@@ -64,6 +70,14 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 		this.dateTime = dateTime;
 	}
 
+	public int getChatId() {
+		return this.chatId;
+	}
+
+	public void setChatId(int chatId) {
+		this.chatId = chatId;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -74,6 +88,8 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 			json.put("username", username);
 		if (dateTime != null)
 			json.put("time", dateTime.toString(GlobalVariables.formatterDateTime));
+		if (chatId > -1)
+			json.put("chatId", chatId);
 
 		return json;
 	}

@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -26,7 +27,7 @@ import eu.albina.util.GlobalVariables;
  */
 @Audited
 @Entity
-@Table(name = "AVALANCHE_REPORTS")
+@Table(name = "avalanche_reports")
 public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	/** Information about the author of the avalanche bulletin */
@@ -50,6 +51,31 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	@Column(name = "REVISION")
 	private int revision;
+
+	@Column(name = "CAAML_CREATED")
+	private boolean caamlCreated;
+
+	@Column(name = "PDF_CREATED")
+	private boolean pdfCreated;
+
+	@Column(name = "STATIC_WIDGET_CREATED")
+	private boolean staticWidgetCreated;
+
+	@Column(name = "MAP_CREATED")
+	private boolean mapCreated;
+
+	@Column(name = "EMAIL_CREATED")
+	private boolean emailCreated;
+
+	@Column(name = "WHATSAPP_SENT")
+	private boolean whatsappSent;
+
+	@Column(name = "TELEGRAM_SENT")
+	private boolean telegramSent;
+
+	@Lob
+	@Column(name = "JSON_STRING")
+	private String jsonString;
 
 	/**
 	 * Standard constructor for an avalanche report.
@@ -88,6 +114,22 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 		if (json.has("revision"))
 			this.revision = json.getInt("revision");
+
+		if (json.has("caamlCreated"))
+			this.caamlCreated = json.getBoolean("caamlCreated");
+		if (json.has("pdfCreated"))
+			this.pdfCreated = json.getBoolean("pdfCreated");
+		if (json.has("emailCreated"))
+			this.emailCreated = json.getBoolean("emailCreated");
+		if (json.has("mapCreated"))
+			this.mapCreated = json.getBoolean("mapCreated");
+		if (json.has("whatsappSent"))
+			this.whatsappSent = json.getBoolean("whatsappSent");
+		if (json.has("telegramSent"))
+			this.telegramSent = json.getBoolean("telegramSent");
+
+		if (json.has("jsonString"))
+			this.jsonString = json.getString("jsonString");
 	}
 
 	public User getUser() {
@@ -138,6 +180,70 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.revision = revision;
 	}
 
+	public boolean isCaamlCreated() {
+		return caamlCreated;
+	}
+
+	public void setCaamlCreated(boolean caaml) {
+		this.caamlCreated = caaml;
+	}
+
+	public boolean isPdfCreated() {
+		return pdfCreated;
+	}
+
+	public void setPdfCreated(boolean pdf) {
+		this.pdfCreated = pdf;
+	}
+
+	public boolean isStaticWidgetCreated() {
+		return staticWidgetCreated;
+	}
+
+	public void setStaticWidgetCreated(boolean staticWidget) {
+		this.staticWidgetCreated = staticWidget;
+	}
+
+	public boolean isMapCreated() {
+		return mapCreated;
+	}
+
+	public void setMapCreated(boolean mapCreated) {
+		this.mapCreated = mapCreated;
+	}
+
+	public boolean isEmailCreated() {
+		return emailCreated;
+	}
+
+	public void setEmailCreated(boolean email) {
+		this.emailCreated = email;
+	}
+
+	public boolean isWhatsappSent() {
+		return whatsappSent;
+	}
+
+	public void setWhatsappSent(boolean whatsapp) {
+		this.whatsappSent = whatsapp;
+	}
+
+	public boolean isTelegramSent() {
+		return telegramSent;
+	}
+
+	public void setTelegramSent(boolean telegram) {
+		this.telegramSent = telegram;
+	}
+
+	public String getJsonString() {
+		return jsonString;
+	}
+
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -163,11 +269,43 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (revision > 0)
 			json.put("revision", revision);
 
+		if (caamlCreated)
+			json.put("caamlCreated", true);
+		else
+			json.put("caamlCreated", false);
+
+		if (pdfCreated)
+			json.put("pdfCreated", true);
+		else
+			json.put("pdfCreated", false);
+
+		if (mapCreated)
+			json.put("mapCreated", true);
+		else
+			json.put("mapCreated", false);
+
+		if (emailCreated)
+			json.put("emailCreated", true);
+		else
+			json.put("emailCreated", false);
+
+		if (whatsappSent)
+			json.put("whatsappSent", true);
+		else
+			json.put("whatsappSent", false);
+
+		if (telegramSent)
+			json.put("telegramSent", true);
+		else
+			json.put("telegramSent", false);
+
+		if (jsonString != null)
+			json.put("jsonString", jsonString);
+
 		return json;
 	}
 
 	public Element toCAAML(Document doc, LanguageCode languageCode) {
-		// TODO implement
 		return null;
 	}
 }

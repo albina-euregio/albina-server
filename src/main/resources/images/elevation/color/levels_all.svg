@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="80px" height="48px" viewBox="0 0 80 48" enable-background="new 0 0 80 48" xml:space="preserve">
+<title>levels_all</title>
+<desc>Created with Sketch.</desc>
+<g id="Picto-Export">
+	<g id="Levels" transform="translate(-20.000000, -224.000000)">
+		<g id="Blues" transform="translate(20.000000, 20.000000)">
+			<g id="levels_all" transform="translate(0.000000, 204.000000)">
+				<polygon id="Bottom" fill="#19ABFF" points="1.001,47 10.001,32 54.001,32 63.001,47 				"/>
+				<polygon id="Middle" fill="#19ABFF" points="9.001,33 19.001,16 45.001,16 55.001,33 				"/>
+				<polygon id="Top" fill="#19ABFF" points="19.001,17 26.001,5 30.001,11 36.001,1 45.001,17 				"/>
+				<path id="Mountain" fill="none" stroke="#222222" d="M63.001,47.5l-27-47l-6,11l-4-7l-25,43H63.001z"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>

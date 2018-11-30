@@ -1,5 +1,9 @@
 package eu.albina.rest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -36,7 +40,7 @@ public class ChatService {
 	UriInfo uri;
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getJsonChatMessages(
@@ -45,10 +49,11 @@ public class ChatService {
 
 		DateTime dateTime = null;
 
-		if (date != null)
-			dateTime = DateTime.parse(date, GlobalVariables.parserDateTime);
-
 		try {
+			if (date != null)
+				dateTime = DateTime.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()),
+						GlobalVariables.parserDateTime);
+
 			List<ChatMessage> chatMessages = ChatController.getInstance().getChatMessages(dateTime);
 			JSONArray json = new JSONArray();
 			for (ChatMessage entry : chatMessages) {
@@ -58,6 +63,26 @@ public class ChatService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading chat messages - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		} catch (UnsupportedEncodingException e) {
+			logger.warn("Error loading chat messages - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@Path("/users")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getActiveUsers() {
+		logger.debug("GET JSON active users");
+
+		// List<User> activeUsers = ChatController.getInstance().getActiveUsers();
+		Collection<String> activeUsers = ChatEndpoint.getActiveUsers();
+		JSONArray json = new JSONArray();
+		for (String entry : activeUsers)
+			json.put(entry);
+
+		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 	}
 }

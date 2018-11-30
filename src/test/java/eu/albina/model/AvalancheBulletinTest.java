@@ -76,7 +76,7 @@ public class AvalancheBulletinTest {
 	@Test
 	public void testCreateObjectFromJSONAndBack() {
 		JSONObject data = new JSONObject(bulletinJsonString);
-		AvalancheBulletin b = new AvalancheBulletin(data, "n.lanzanasto@gmail.com");
+		AvalancheBulletin b = new AvalancheBulletin(data);
 		JSONAssert.assertEquals(bulletinJsonString, b.toJSON(), JSONCompareMode.NON_EXTENSIBLE);
 	}
 }

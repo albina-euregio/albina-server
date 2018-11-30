@@ -3,16 +3,15 @@ package eu.albina.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
+import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
+import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.albina.model.socialmedia.Channel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -30,7 +29,8 @@ import eu.albina.util.GlobalVariables;
  *
  */
 @Entity
-@Table(name = "REGIONS")
+@Table(name = "regions")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id",scope = Region.class)
 public class Region implements AvalancheInformationObject {
 
 	@Id
@@ -41,9 +41,17 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "VERSION")
 	private Integer version;
 
-	@Column(name = "NAME")
-	private String name;
+	@Column(name = "NAME_DE")
+	private String nameDe;
 
+	@Column(name = "NAME_IT")
+	private String nameIt;
+
+	@Column(name = "NAME_EN")
+	private String nameEn;
+
+	@JsonSerialize(using = GeometrySerializer.class)
+	@JsonDeserialize(contentUsing = GeometryDeserializer.class)
 	@Column(name = "POLYGON")
 	private Polygon polygon;
 
@@ -51,7 +59,7 @@ public class Region implements AvalancheInformationObject {
 	@JoinColumn(name = "PARENTREGION_ID")
 	private Region parentRegion;
 
-	@OneToMany(mappedBy = "parentRegion")
+	@OneToMany(mappedBy = "parentRegion",fetch = FetchType.EAGER)
 	private Set<Region> subregions;
 
 	@ManyToOne(cascade = { CascadeType.ALL })
@@ -81,12 +89,28 @@ public class Region implements AvalancheInformationObject {
 		this.version = version;
 	}
 
-	public String getName() {
-		return name;
+	public String getNameDe() {
+		return nameDe;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNameDe(String name) {
+		this.nameDe = name;
+	}
+
+	public String getNameIt() {
+		return nameIt;
+	}
+
+	public void setNameIt(String name) {
+		this.nameIt = name;
+	}
+
+	public String getNameEn() {
+		return nameEn;
+	}
+
+	public void setNameEn(String name) {
+		this.nameEn = name;
 	}
 
 	public Polygon getPolygon() {
@@ -124,9 +148,13 @@ public class Region implements AvalancheInformationObject {
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
-		Element regionname = doc.createElement("name");
-		regionname.appendChild(doc.createTextNode(name));
-		region.appendChild(regionname);
+		Element regionNameDe = doc.createElement("nameDe");
+		regionNameDe.appendChild(doc.createTextNode(nameDe));
+		Element regionNameIt = doc.createElement("nameIt");
+		regionNameIt.appendChild(doc.createTextNode(nameIt));
+		Element regionNameEn = doc.createElement("nameEn");
+		regionNameEn.appendChild(doc.createTextNode(nameEn));
+		region.appendChild(regionNameDe);
 		Element regionSubType = doc.createElement("regionSubType");
 		region.appendChild(regionSubType);
 		Element outline = doc.createElement("outline");
@@ -159,7 +187,9 @@ public class Region implements AvalancheInformationObject {
 
 		feature.put("type", "Feature");
 		JSONObject featureProperties = new JSONObject();
-		featureProperties.put("name", name);
+		featureProperties.put("nameDe", nameDe);
+		featureProperties.put("nameIt", nameIt);
+		featureProperties.put("nameEn", nameEn);
 		featureProperties.put("id", getId());
 		if (getParentRegion() != null)
 			featureProperties.put("parentRegion", getParentRegion().getId());

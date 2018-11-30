@@ -1,6 +1,7 @@
 package eu.albina.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.ChatMessage;
+import eu.albina.model.User;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -25,8 +27,10 @@ public class ChatController {
 	// LoggerFactory.getLogger(ChatController.class);
 
 	private static ChatController instance = null;
+	private List<User> activeUsers;
 
 	private ChatController() {
+		activeUsers = new ArrayList<User>();
 	}
 
 	public static ChatController getInstance() {
@@ -34,6 +38,10 @@ public class ChatController {
 			instance = new ChatController();
 		}
 		return instance;
+	}
+
+	public List<User> getActiveUsers() {
+		return activeUsers;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -76,5 +84,27 @@ public class ChatController {
 		} finally {
 			entityManager.close();
 		}
+	}
+
+	public synchronized void addActiveUser(User user) throws AlbinaException {
+		boolean found = false;
+		for (User u : activeUsers) {
+			if (u.getEmail().equals(user.getEmail())) {
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+			activeUsers.add(user);
+	}
+
+	public void deleteActiveUser(User user) throws AlbinaException {
+		List<User> remove = new ArrayList<User>();
+		for (User u : activeUsers) {
+			if (u.getEmail().equals(user.getEmail()))
+				remove.add(u);
+		}
+		for (User u2 : remove)
+			activeUsers.remove(u2);
 	}
 }

@@ -10,13 +10,9 @@
 
 		"status" : {
 			"type" : "string",
-			"enum" : [ "published", "draft", "missing", "obsolete" ]
+			"enum" : [ "republished", "resubmitted", "updated", "published", "submitted", "draft", "missing" ]
 		},
 		
-		"aggregatedRegionId" : {
-			"type" : "string"
-		},
-	
 		"creator" : {
 			"type" : "string"
 		},
@@ -25,6 +21,12 @@
 		},
 
 		"author" : { "$ref" : "#/definitions/author" },
+		
+		"avActivityHighlightsTextcat" : { "type" : "string" },
+		"avActivityCommentTextcat" : { "type" : "string" },
+		"snowpackStructureHighlightsTextcat" : { "type" : "string" },
+		"snowpackStructureCommentTextcat" : { "type" : "string" },
+		"tendencyCommentTextcat" : { "type" : "string" },
 
 		"avActivityHighlights" : { "$ref" : "#/definitions/textPart" },
 		"avActivityComment" : { "$ref" : "#/definitions/textPart" },
@@ -52,10 +54,21 @@
 		"publishedRegions" : { "$ref" : "#/definitions/region" },
 		"obsoleteRegions" : { "$ref" : "#/definitions/region" },
 		
-		"elevation" : { "type" : "integer" },
+		"tendency" : {
+			"type" : "string",
+			"enum" : [ "decreasing", "steady", "increasing" ]
+		},
 		
-		"above" : { "$ref" : "#/definitions/elevationDescription" },
-		"below" : { "$ref" : "#/definitions/elevationDescription" }
+		"elevation" : { "type" : "integer" },
+		"treeline" : { "type" : "boolean" },
+		"hasDaytimeDependency" : { "type" : "boolean" },
+		"hasElevationDependency" : { "type" : "boolean" },
+		
+		"forenoon" : { "$ref" : "#/definitions/daytimeDescription" },
+		"afternoon" : { "$ref" : "#/definitions/daytimeDescription" },
+		
+		"dangerPattern1" : { "$ref" : "#/definitions/dangerPattern" },
+		"dangerPattern2" : { "$ref" : "#/definitions/dangerPattern" }
 	},
 
 	"additionalProperties" : false,
@@ -89,18 +102,16 @@
 			},
 			"additionalProperties" : false
 		},
-		"elevationDescription" : {
-			"id" : "#elevationDescription",
+		"daytimeDescription" : {
+			"id" : "#daytimeDescription",
 			"type" : "object",
 			"properties" : {
-				"dangerRating" : { "$ref" : "#/definitions/dangerRating" },
-				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
-				"aspects" : {
-					"type" : "array",
-					"uniqueItems": true,
-					"items" : { "$ref" : "#/definitions/aspect" },
-					"additionalProperties" : false
-				}
+				"dangerRatingAbove" : { "$ref" : "#/definitions/dangerRating" },
+				"matrixInformationAbove" : { "$ref" : "#/definitions/matrixInformation" },
+				"dangerRatingBelow" : { "$ref" : "#/definitions/dangerRating" },
+				"matrixInformationBelow" : { "$ref" : "#/definitions/matrixInformation" },
+				"avalancheSituation1" : { "$ref" : "#/definitions/avalancheSituationObject" },
+				"avalancheSituation2" : { "$ref" : "#/definitions/avalancheSituationObject" }
 			},
 			"additionalProperties" : false						
 		},
@@ -143,13 +154,88 @@
 			"type" : "string",
 			"enum" : [ "missing", "no_rating", "low", "moderate", "considerable", "high", "very_high"]
 		},
-		"avalancheProblem" : {
-			"id" : "#avalancheProblem",
+		"avalancheSituationObject" : {
+			"id" : "#avalancheSituation",
 			"$schema" : "http://json-schema.org/draft-04/schema#",
-			"title" : "Avalanche Problem",
-			"description" : "The five avalanche problems.",
+			"title" : "Avalanche Situation",
+			"description" : "The five avalanche situations.",
+			"type" : "object",
+			"properties" : {
+				"avalancheSituation" : { "$ref" : "#/definitions/avalancheSituation" },
+				"aspects" : {
+					"type" : "array",
+					"uniqueItems": true,
+					"items" : { "$ref" : "#/definitions/aspect" },
+					"additionalProperties" : false
+				},
+				"elevationHigh" : { "type": "integer" },
+				"elevationLow" : { "type": "integer" }
+			}
+		},
+		"avalancheSituation" : {
+			"id" : "#avalancheSituation",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Avalanche Situation",
+			"description" : "The five avalanche situations.",
 			"type" : "string",
-			"enum" : [ "new_snow", "wind_drifted_snow", "old_snow", "wet_snow", "gliding_snow", "favourable_situation" ]
+			"enum" : [ "new_snow", "wind_drifted_snow", "weak_persistent_layer", "wet_snow", "gliding_snow", "favourable_situation" ]
+		},
+		"matrixInformation" : {
+			"id" : "#matrixInformation",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Matrix Information",
+			"description" : "Specification of the used field in the matrix.",
+			"type" : "object",
+			"properties" : {
+				"artificialDangerRating" : { "$ref" : "#/definitions/dangerRating" },
+				"artificialAvalancheSize" : { "$ref" : "#/definitions/avalancheSize" },
+				"artificialAvalancheReleaseProbability" : { "$ref" : "#/definitions/avalancheReleaseProbability" },
+				"artificialHazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" },
+				"naturalDangerRating" : { "$ref" : "#/definitions/dangerRating" },
+				"naturalAvalancheReleaseProbability" : { "$ref" : "#/definitions/naturalAvalancheReleaseProbability" },
+				"naturalHazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" }
+			},
+			"additionalProperties" : false						
+		},
+		"dangerPattern" : {
+			"id" : "#dangerPattern",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Danger pattern",
+			"description" : "The ten danger patterns.",
+			"type" : "string",
+			"enum" : [ "dp1", "dp2", "dp3", "dp4", "dp5", "dp6", "dp7", "dp8", "dp9", "dp10" ]
+		},
+		"avalancheSize" : {
+			"id" : "#avalancheSize",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Avalanche Size",
+			"description" : "Size of an avalanche.",
+			"type" : "string",
+			"enum" : [ "small", "medium", "large", "very_large", "extreme" ]
+		},
+		"artificialAvalancheReleaseProbability" : {
+			"id" : "#artificialAvalancheReleaseProbability",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Artificial Avalanche Release Probability",
+			"description" : "The probability of an artificial avalanche release.",
+			"type" : "string",
+			"enum" : [ "one", "two", "three", "four" ]
+		},
+		"hazardSiteDistribution" : {
+			"id" : "#hazardSiteDistribution",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Hazard Site Distribution",
+			"description" : "Distribution of hazardous sites.",
+			"type" : "string",
+			"enum" : [ "single", "some", "many", "many_most", "moderately_steep" ]
+		},
+		"naturalAvalancheReleaseProbability" : {
+			"id" : "#naturalAvalancheReleaseProbability",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Natural Avalanche Release Probability",
+			"description" : "The probability of a natural avalanche release.",
+			"type" : "string",
+			"enum" : [ "one", "two", "three", "four" ]
 		}
 	}
 }

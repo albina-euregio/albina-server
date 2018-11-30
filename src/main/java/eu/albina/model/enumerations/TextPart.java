@@ -1,7 +1,7 @@
 package eu.albina.model.enumerations;
 
 public enum TextPart {
-	synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment;
+	synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment, tendencyComment;
 
 	public static TextPart fromString(String text) {
 		if (text != null) {
@@ -31,6 +31,8 @@ public enum TextPart {
 			return "travelAdvisoryHighlights";
 		case travelAdvisoryComment:
 			return "travelAdvisoryComment";
+		case tendencyComment:
+			return "tendencyComment";
 
 		default:
 			return null;

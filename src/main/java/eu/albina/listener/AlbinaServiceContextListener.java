@@ -14,8 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 
-import eu.albina.controller.SocketIOController;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.SchedulerUtil;
 
 @WebListener
 public class AlbinaServiceContextListener implements ServletContextListener {
@@ -25,13 +26,15 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		HibernateUtil.getInstance().shutDown();
-		SocketIOController.getInstance().stopSocketIO();
+		SchedulerUtil.getInstance().shutDown();
 		logger.debug("ServletContextListener destroyed");
 	}
 
 	// Run this before web application is started
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
+		GlobalVariables.loadConfigProperties();
+
 		HibernateUtil.getInstance().setUp();
 
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
@@ -45,14 +48,10 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 				logger.warn(String.format("Error deregistering driver %s", d), ex);
 			}
 		}
-		try {
-			AbandonedConnectionCleanupThread.shutdown();
-		} catch (InterruptedException e) {
-			logger.warn("SEVERE problem cleaning up: " + e.getMessage());
-			e.printStackTrace();
-		}
+		AbandonedConnectionCleanupThread.shutdown();
 
-		SocketIOController.getInstance().startSocketIO();
+		SchedulerUtil.getInstance().setUp();
+		SchedulerUtil.getInstance().start();
 
 		logger.debug("ServletContextListener started");
 	}

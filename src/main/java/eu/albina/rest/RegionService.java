@@ -30,8 +30,9 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.AlbinaUtil;
+import eu.albina.util.XmlUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.JsonUtil;
 import io.swagger.annotations.Api;
 
 @Path("/regions")
@@ -56,7 +57,7 @@ public class RegionService {
 				jsonObject.append("message", "No regions found!");
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = AlbinaUtil.createRegionHeaderJson();
+				JSONObject json = JsonUtil.createRegionHeaderJson();
 				JSONArray features = new JSONArray();
 				for (Region entry : regions) {
 					features.put(entry.toJSON());
@@ -71,7 +72,7 @@ public class RegionService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN, Role.TRENTINO, Role.TYROL, Role.SOUTH_TYROL, Role.EVTZ, Role.VIENNA })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@Path("/locked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -94,15 +95,15 @@ public class RegionService {
 			try {
 				List<Region> regions = RegionController.getInstance().getRegions();
 				if (regions == null) {
-					Document doc = AlbinaUtil.createXmlError("message", "No regions found!");
-					return Response.status(Response.Status.NOT_FOUND).entity(AlbinaUtil.convertDocToString(doc))
+					Document doc = XmlUtil.createXmlError("message", "No regions found!");
+					return Response.status(Response.Status.NOT_FOUND).entity(XmlUtil.convertDocToString(doc))
 							.build();
 				} else {
 					DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 					DocumentBuilder docBuilder;
 					docBuilder = docFactory.newDocumentBuilder();
 					Document doc = docBuilder.newDocument();
-					Element rootElement = AlbinaUtil.createRegionHeaderCaaml(doc);
+					Element rootElement = XmlUtil.createRegionHeaderCaaml(doc);
 					Element locations = doc.createElement("locations");
 
 					for (Region entry : regions)
@@ -110,7 +111,7 @@ public class RegionService {
 
 					rootElement.appendChild(locations);
 
-					return Response.ok(AlbinaUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
+					return Response.ok(XmlUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
 				}
 			} catch (AlbinaException e) {
 				logger.warn("Error loading region: " + e.getMessage());
@@ -139,7 +140,7 @@ public class RegionService {
 				jsonObject.append("message", "Region not found for ID: " + regionId);
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = AlbinaUtil.createRegionHeaderJson();
+				JSONObject json = JsonUtil.createRegionHeaderJson();
 				JSONArray features = new JSONArray();
 				features.put(region.toJSON());
 				json.put("features", features);
@@ -162,22 +163,22 @@ public class RegionService {
 			try {
 				Region region = RegionController.getInstance().getRegion(regionId);
 				if (region == null) {
-					Document doc = AlbinaUtil.createXmlError("message", "Region not found for ID: " + regionId);
-					return Response.status(Response.Status.NOT_FOUND).entity(AlbinaUtil.convertDocToString(doc))
+					Document doc = XmlUtil.createXmlError("message", "Region not found for ID: " + regionId);
+					return Response.status(Response.Status.NOT_FOUND).entity(XmlUtil.convertDocToString(doc))
 							.build();
 				} else {
 					DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 					DocumentBuilder docBuilder;
 					docBuilder = docFactory.newDocumentBuilder();
 					Document doc = docBuilder.newDocument();
-					Element rootElement = AlbinaUtil.createRegionHeaderCaaml(doc);
+					Element rootElement = XmlUtil.createRegionHeaderCaaml(doc);
 					Element locations = doc.createElement("locations");
 
 					locations.appendChild(region.toCAAML(doc));
 
 					rootElement.appendChild(locations);
 
-					return Response.ok(AlbinaUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
+					return Response.ok(XmlUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
 				}
 			} catch (AlbinaException e) {
 				logger.warn("Error loading region: " + e.getMessage());
@@ -206,7 +207,7 @@ public class RegionService {
 				jsonObject.append("message", "No subregions found for region: " + regionId);
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = AlbinaUtil.createRegionHeaderJson();
+				JSONObject json = JsonUtil.createRegionHeaderJson();
 				JSONArray features = new JSONArray();
 				for (Region entry : regions) {
 					features.put(entry.toJSON());
@@ -231,15 +232,15 @@ public class RegionService {
 			try {
 				List<Region> regions = RegionController.getInstance().getRegions(regionId);
 				if (regions == null) {
-					Document doc = AlbinaUtil.createXmlError("message", "No subregions found for region: " + regionId);
-					return Response.status(Response.Status.NOT_FOUND).entity(AlbinaUtil.convertDocToString(doc))
+					Document doc = XmlUtil.createXmlError("message", "No subregions found for region: " + regionId);
+					return Response.status(Response.Status.NOT_FOUND).entity(XmlUtil.convertDocToString(doc))
 							.build();
 				} else {
 					DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 					DocumentBuilder docBuilder;
 					docBuilder = docFactory.newDocumentBuilder();
 					Document doc = docBuilder.newDocument();
-					Element rootElement = AlbinaUtil.createRegionHeaderCaaml(doc);
+					Element rootElement = XmlUtil.createRegionHeaderCaaml(doc);
 					Element locations = doc.createElement("locations");
 
 					for (Region entry : regions)
@@ -247,7 +248,7 @@ public class RegionService {
 
 					rootElement.appendChild(locations);
 
-					return Response.ok(AlbinaUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
+					return Response.ok(XmlUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
 				}
 			} catch (AlbinaException e) {
 				logger.warn("Error loading region: " + e.getMessage());
