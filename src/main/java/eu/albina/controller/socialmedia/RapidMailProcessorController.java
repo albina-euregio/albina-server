@@ -170,7 +170,6 @@ public class RapidMailProcessorController extends CommonProcessor {
 		}
 
 		String json = toJson(mailingsPost);
-		System.out.println(json);
 
 		Request request = Request.Post(baseUrl + "/mailings")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
@@ -180,14 +179,17 @@ public class RapidMailProcessorController extends CommonProcessor {
 		HttpResponse response = executor.execute(request).returnResponse();
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
-			String body = response.getEntity()!=null?IOUtils.toString(response.getEntity().getContent(), "UTF-8"):null;
-			ShipmentController.getInstance().saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, null));
+			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), "UTF-8")
+					: null;
+			ShipmentController.getInstance()
+					.saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, null));
 			return response;
 		}
 		String body = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
 		response.getEntity().getContent().reset();
 		PostMailingsResponse bodyObject = objectMapper.readValue(body, PostMailingsResponse.class);
-		ShipmentController.getInstance().saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, "" + bodyObject.getId()));
+		ShipmentController.getInstance()
+				.saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, "" + bodyObject.getId()));
 		return response;
 	}
 
