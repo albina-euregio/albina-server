@@ -222,8 +222,7 @@ public class EmailUtil {
 									.type("application/zip").content(createZipFile(emailHtml, null))));
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region + ": " + e.getMessage());
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 	}
 
