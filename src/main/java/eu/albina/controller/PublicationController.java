@@ -84,6 +84,7 @@ public class PublicationController {
 
 				// publish on social media
 				if (GlobalVariables.isPublishToSocialMedia()) {
+					triggerMessengerpeople(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio);
 
 					// TODO publish on social media
 
