@@ -83,12 +83,8 @@ public class PublicationController {
 					sendEmails(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio);
 
 				// publish on social media
-				if (GlobalVariables.isPublishToSocialMedia()) {
+				if (GlobalVariables.isPublishToSocialMedia())
 					triggerMessengerpeople(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio);
-
-					// TODO publish on social media
-
-				}
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
@@ -151,12 +147,8 @@ public class PublicationController {
 					sendEmails(avalancheReportIds, bulletins, regions);
 
 				// publish on social media
-				if (GlobalVariables.isPublishToSocialMedia()) {
+				if (GlobalVariables.isPublishToSocialMedia())
 					triggerMessengerpeople(avalancheReportIds, bulletins, regions);
-
-					// TODO publish on twitter
-
-				}
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
