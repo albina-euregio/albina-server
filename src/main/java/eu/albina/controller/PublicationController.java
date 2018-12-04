@@ -80,7 +80,7 @@ public class PublicationController {
 
 				// send emails
 				if (GlobalVariables.isSendEmails())
-					sendEmails(avalancheReportIds, bulletins, GlobalVariables.regions);
+					sendEmails(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio);
 
 				// publish on social media
 				if (GlobalVariables.isPublishToSocialMedia()) {
