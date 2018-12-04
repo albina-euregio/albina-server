@@ -1161,6 +1161,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		setHasDaytimeDependency(bulletin.isHasDaytimeDependency());
 		setHasElevationDependency(bulletin.isHasElevationDependency());
 		setTreeline(bulletin.getTreeline());
+		setTendency(bulletin.getTendency());
+		setDangerPattern1(bulletin.getDangerPattern1());
+		setDangerPattern2(bulletin.getDangerPattern2());
 
 		if (bulletin.getForenoon() != null) {
 			if (forenoon == null)
