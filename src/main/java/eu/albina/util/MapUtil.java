@@ -38,25 +38,13 @@ public class MapUtil {
 		try {
 			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
-			runCopyScript(AlbinaUtil.getValidityDate(bulletins));
+			AlbinaUtil.runCopyMapsScript(AlbinaUtil.getValidityDate(bulletins));
 		} catch (AlbinaException e) {
 			logger.error("Error producing maps: " + e.getMessage());
 			e.printStackTrace();
 		} catch (TransformerException e) {
 			logger.error("Error producing maps: " + e.getMessage());
 			e.printStackTrace();
-		}
-	}
-
-	private static void runCopyScript(String date) {
-		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyMaps.sh", date);
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("Maps copied to local directory.");
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Maps could not be copied to local directory!");
 		}
 	}
 

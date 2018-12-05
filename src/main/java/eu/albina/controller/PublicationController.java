@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
@@ -59,6 +60,8 @@ public class PublicationController {
 
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 
+		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
+
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
@@ -91,6 +94,9 @@ public class PublicationController {
 				e.printStackTrace();
 			}
 		}
+
+		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			AlbinaUtil.runCopyLatestScript(AlbinaUtil.getValidityDate(bulletins));
 	}
 
 	/**
@@ -122,6 +128,8 @@ public class PublicationController {
 	 */
 	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions)
 			throws MessagingException {
+
+		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
@@ -155,6 +163,9 @@ public class PublicationController {
 				e.printStackTrace();
 			}
 		}
+
+		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			AlbinaUtil.runCopyLatestScript(AlbinaUtil.getValidityDate(bulletins));
 	}
 
 	/**
@@ -166,6 +177,8 @@ public class PublicationController {
 	 *            The bulletins that were changed.
 	 */
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+
+		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
@@ -191,6 +204,9 @@ public class PublicationController {
 				e.printStackTrace();
 			}
 		}
+
+		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			AlbinaUtil.runCopyLatestScript(AlbinaUtil.getValidityDate(bulletins));
 	}
 
 	public void startUpdateThread(DateTime startDate, DateTime endDate, List<String> regions,

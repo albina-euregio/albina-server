@@ -18,6 +18,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -208,7 +209,8 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07");
+		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07");
+		System.out.println(html);
 	}
 
 	@Ignore
@@ -285,6 +287,13 @@ public class UtilTest {
 			logger.warn("Image: " + encodstring);
 			logger.warn("Password: " + pwd);
 		}
+	}
+
+	@Ignore
+	@Test
+	public void testIsLatest() {
+		DateTime dateTime = (new DateTime()).minusDays(0);
+		System.out.println(AlbinaUtil.isLatest(dateTime));
 	}
 
 	@Ignore

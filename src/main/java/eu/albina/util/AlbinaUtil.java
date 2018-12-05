@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -340,7 +341,7 @@ public class AlbinaUtil {
 		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
-	static DateTime getDate(List<AvalancheBulletin> bulletins) {
+	public static DateTime getDate(List<AvalancheBulletin> bulletins) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			DateTime bulletinDate = avalancheBulletin.getValidFrom();
@@ -388,5 +389,56 @@ public class AlbinaUtil {
 		perms.add(PosixFilePermission.OTHERS_READ);
 
 		Files.setPosixFilePermissions(Paths.get(fileName), perms);
+	}
+
+	public static boolean isLatest(DateTime date) {
+		DateTime now = new DateTime();
+
+		if (now.getHourOfDay() >= 17) {
+			if ((new LocalDate()).plusDays(1).equals(date.toLocalDate())) {
+				return true;
+			}
+		} else {
+			if (date.toLocalDate().equals(new LocalDate())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static void runCopyMapsScript(String date) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyMaps.sh", date);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("Maps copied to local directory for " + date + ".");
+		} catch (Exception e) {
+			logger.error("Maps could not be copied to local directory for " + date + "!");
+			e.printStackTrace();
+		}
+	}
+
+	public static void runDeleteFilesScript(String date) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/deleteFiles.sh", date);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("Files deleted for " + date + ".");
+		} catch (Exception e) {
+			logger.error("Files could not be deleted for " + date + "!");
+			e.printStackTrace();
+		}
+	}
+
+	public static void runCopyLatestScript(String date) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatest.sh", date);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("Files for " + date + " copied to latest.");
+		} catch (Exception e) {
+			logger.error("Files for " + date + " could not be copied to latest!");
+			e.printStackTrace();
+		}
 	}
 }
