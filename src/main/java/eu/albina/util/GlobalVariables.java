@@ -50,14 +50,19 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTrentino = true;
 	private static boolean publishBulletinsStyria = true;
 
+	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
 	// TODO set correct directory for all files
-	// private static String pdfDirectory = "D:\\";
 	private static String pdfDirectory = "/mnt/albina_files/";
 	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 
-	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
+	// Just for testing
+	// private static String pdfDirectory = "D:\\";
+	// private static String mapsPath =
+	// "https://admin.avalanche.report/images/maps/";
+	// private static String serverImagesUrlLocalhost =
+	// "https://admin.avalanche.report/images/";
 
 	private static boolean smtpAuth = true;
 	private static boolean smtpTls = true;
