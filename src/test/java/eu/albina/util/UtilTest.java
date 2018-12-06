@@ -198,7 +198,6 @@ public class UtilTest {
 		recipients.add("norbert.lanzanasto@tirol.gv.at");
 		// recipients.add("mitterer.chris@gmail.com");
 		// recipients.add("chris.mitterer@tirol.gv.at");
-		// recipients.add("fabrizi@transporter.at");
 	}
 
 	@After
