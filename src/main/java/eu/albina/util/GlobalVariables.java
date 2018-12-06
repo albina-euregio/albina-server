@@ -480,7 +480,7 @@ public class GlobalVariables {
 		case de:
 			return "Veröffentlicht am ";
 		case it:
-			return "Pubbliccato il ";
+			return "Pubblicato il ";
 		case en:
 			return "Published ";
 		default:
@@ -533,7 +533,7 @@ public class GlobalVariables {
 				case de:
 					return "Tendenz: Lawinengefahr nimmt ab";
 				case it:
-					return "Tendenza: Pericolo valanghe in diminuazione";
+					return "Tendenza: Pericolo valanghe in diminuzione";
 				case en:
 					return "Tendency: Decreasing avalanche danger";
 				default:
@@ -982,7 +982,7 @@ public class GlobalVariables {
 		case de:
 			return "Lawinenvorhersage";
 		case it:
-			return "Provisione Valanghe";
+			return "Previsione Valanghe";
 		case en:
 			return "Avalanche Forecast";
 		default:
@@ -996,7 +996,7 @@ public class GlobalVariables {
 		case de:
 			return "Lawinenvorhersage, ";
 		case it:
-			return "Provisione Valanghe, ";
+			return "Previsione Valanghe, ";
 		case en:
 			return "Avalanche Forecast, ";
 		default:
