@@ -42,6 +42,7 @@ public class UtilTest {
 	private static Logger logger = LoggerFactory.getLogger(UtilTest.class);
 
 	private List<AvalancheBulletin> bulletins;
+	private List<AvalancheBulletin> bulletinsAmPm;
 
 	private String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
 	private List<String> names = new ArrayList<String>();
@@ -118,6 +119,7 @@ public class UtilTest {
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
+		bulletinsAmPm = new ArrayList<AvalancheBulletin>();
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 		InputStream is = classloader.getResourceAsStream("2030-02-16_1.json");
 		StringBuilder bulletinStringBuilder = new StringBuilder();
@@ -194,6 +196,36 @@ public class UtilTest {
 		AvalancheBulletin bulletin5 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 		bulletins.add(bulletin5);
 
+		is = classloader.getResourceAsStream("2030-02-16_6.json");
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		validBulletinStringFromResource = bulletinStringBuilder.toString();
+		AvalancheBulletin bulletin6 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+		bulletinsAmPm.add(bulletin6);
+
+		is = classloader.getResourceAsStream("2030-02-16_7.json");
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		validBulletinStringFromResource = bulletinStringBuilder.toString();
+		AvalancheBulletin bulletin7 = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+		bulletinsAmPm.add(bulletin7);
+
 		recipients.add("n.lanzanasto@gmail.com");
 		recipients.add("norbert.lanzanasto@tirol.gv.at");
 		// recipients.add("mitterer.chris@gmail.com");
@@ -262,8 +294,10 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createPdf() throws IOException, URISyntaxException {
-		// PdfUtil.createOverviewPdf(bulletins, LanguageCode.it);
-		PdfUtil.getInstance().createOverviewPdfs(bulletins);
+		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
+		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
+		// PdfUtil.getInstance().createRegionPdfs(bulletins, "AT-07");#
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false);
 	}
 
 	@Ignore

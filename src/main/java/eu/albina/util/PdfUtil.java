@@ -131,7 +131,6 @@ public class PdfUtil {
 		PdfDocument pdf;
 		PdfWriter writer;
 
-		// TODO add directory structure on production server
 		String validityDateString = AlbinaUtil.getValidityDate(bulletins);
 
 		try {
@@ -1081,67 +1080,87 @@ public class PdfUtil {
 		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdf);
 		Canvas canvas = new Canvas(pdfCanvas, pdf, page.getPageSize());
 
+		int mapY;
+		int mapWidth;
+		int mapHeight;
+
 		// Add overview maps
 		if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
+			if (region != null) {
+				mapY = 130;
+				mapWidth = 400;
+				mapHeight = mapWidth / 3 * 2;
+			} else {
+				mapY = 130;
+				mapWidth = 270;
+				mapHeight = mapWidth;
+			}
+
 			ImageData overviewMapAMImageData = ImageDataFactory
 					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
 							+ getOverviewMapFilename(region, false, true, grayscale));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
-			overviewMapAMImg.scaleToFit(220, 500);
-			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - 230, 500);
+			overviewMapAMImg.scaleToFit(mapWidth, 500);
+			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY + mapHeight + 40);
 			canvas.add(overviewMapAMImg);
-			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14).moveText(pageSize.getWidth() / 2 - 226, 714)
-					.setColor(greyDarkColor, true).showText(GlobalVariables.getAMText(lang)).endText();
+			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
+					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(greyDarkColor, true)
+					.showText(GlobalVariables.getAMText(lang)).endText();
 
 			ImageData overviewMapPMImageData = ImageDataFactory
 					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
 							+ getOverviewMapFilename(region, true, true, grayscale));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
-			overviewMapPMImg.scaleToFit(220, 500);
-			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 + 10, 500);
+			overviewMapPMImg.scaleToFit(mapWidth, 500);
+			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY);
 			canvas.add(overviewMapPMImg);
-			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14).moveText(pageSize.getWidth() / 2 + 14, 714)
-					.setColor(greyDarkColor, true).showText(GlobalVariables.getPMText(lang)).endText();
+			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
+					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(greyDarkColor, true)
+					.showText(GlobalVariables.getPMText(lang)).endText();
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory
 					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
 							+ getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			if (region != null) {
-				overviewMapImg.scaleToFit(350, 500);
-				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 175, 500);
+				mapY = 290;
+				overviewMapImg.scaleToFit(500, 500);
+				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 250, mapY);
 			} else {
-				overviewMapImg.scaleToFit(220, 500);
-				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 110, 500);
+				mapY = 250;
+				overviewMapImg.scaleToFit(420, 500);
+				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 210, mapY);
 			}
 			canvas.add(overviewMapImg);
 		}
 
+		int legendY = mapY - 40;
+
 		// add legend
 		int legendEntryWidth = 50;
 		int legendEntryHeight = 8;
-		int y = 478;
 
 		if (grayscale) {
 			Rectangle dangerLevel1Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
+					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, legendY, legendEntryWidth,
 					legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel1Rectangle).setColor(dangerLevel1ColorBw, true).fill();
 			Rectangle dangerLevel2Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
+					pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, legendY, legendEntryWidth,
 					legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel2Rectangle).setColor(dangerLevel2ColorBw, true).fill();
-			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, y,
+			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, legendY,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel3Rectangle).setColor(dangerLevel3ColorBw, true).fill();
-			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, y,
+			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, legendY,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel4Rectangle).setColor(dangerLevel4ColorBw, true).fill();
 
 			for (int j = 0; j < 2; j++) {
 				for (int i = 0; i < 12; i++) {
 					Rectangle dangerLevel5Rectangle = new Rectangle(
-							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, y + j * 4, 4, 4);
+							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, legendY + j * 4,
+							4, 4);
 					if ((i + j) % 2 == 0)
 						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorRedBw, true).fill();
 					else
@@ -1150,24 +1169,25 @@ public class PdfUtil {
 			}
 		} else {
 			Rectangle dangerLevel1Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
+					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, legendY, legendEntryWidth,
 					legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel1Rectangle).setColor(dangerLevel1Color, true).fill();
 			Rectangle dangerLevel2Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, y, legendEntryWidth,
+					pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, legendY, legendEntryWidth,
 					legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel2Rectangle).setColor(dangerLevel2Color, true).fill();
-			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, y,
+			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, legendY,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel3Rectangle).setColor(dangerLevel3Color, true).fill();
-			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, y,
+			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, legendY,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel4Rectangle).setColor(dangerLevel4Color, true).fill();
 
 			for (int j = 0; j < 2; j++) {
 				for (int i = 0; i < 12; i++) {
 					Rectangle dangerLevel5Rectangle = new Rectangle(
-							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, y + j * 4, 4, 4);
+							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, legendY + j * 4,
+							4, 4);
 					if ((i + j) % 2 == 0)
 						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorRed, true).fill();
 					else
@@ -1178,7 +1198,7 @@ public class PdfUtil {
 
 		float width;
 		float fontSize = 8;
-		y = 468;
+		int y = legendY - 10;
 		width = openSansBoldFont.getContentWidth(new PdfString("1")) * 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
@@ -1199,7 +1219,7 @@ public class PdfUtil {
 				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
 				.showText("5").endText();
 
-		y = 459;
+		y = y - 9;
 		width = openSansRegularFont
 				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang)))
 				* 0.001f * fontSize / 2;
@@ -1231,219 +1251,149 @@ public class PdfUtil {
 				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
 				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang)).endText();
 
-		// Add avalanche danger scale
-		float marginRight = 10.f;
-		float marginLeft = 0.f;
-		int tableFontSize = 7;
-		int dangerRatingFontSize = 12;
-
-		float[] columnWidths = { 1, 1, 1 };
-		Table table = new Table(columnWidths).setAutoLayout().setBorder(Border.NO_BORDER).setMarginTop(290)
-				.setMarginLeft(marginLeft).setMarginRight(marginRight).setWidthPercent(100);
-
-		Paragraph symbolHeadline = new Paragraph(GlobalVariables.getDangerRatingHeadline(lang))
-				.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		Cell cell = new Cell(1, 1).add(symbolHeadline);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		Paragraph characteristicsHeadline = new Paragraph(GlobalVariables.getCharacteristicsHeadline(lang))
-				.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(characteristicsHeadline);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		Paragraph recommendationsHeadline = new Paragraph(GlobalVariables.getRecommendationsHeadline(lang))
-				.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(recommendationsHeadline);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		Paragraph dangerRatingText = new Paragraph("5").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-				.setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(dangerRatingText);
-		dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(dangerRatingText);
-		cell.setTextAlignment(TextAlignment.CENTER);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		Paragraph characteristicsText = new Paragraph(
-				GlobalVariables.getDangerRatingVeryHighCharacteristicsTextBold(lang)).setFont(openSansBoldFont)
-						.setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(characteristicsText);
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingVeryHighCharacteristicsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(characteristicsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		Paragraph recommendationsText = new Paragraph(GlobalVariables.getDangerRatingVeryHighRecommendationsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(recommendationsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		dangerRatingText = new Paragraph("4").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-				.setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(dangerRatingText);
-		dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(dangerRatingText);
-		cell.setTextAlignment(TextAlignment.CENTER);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsTextBold(lang))
-				.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(characteristicsText);
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(characteristicsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		recommendationsText = new Paragraph(GlobalVariables.getDangerRatingHighRecommendationsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(recommendationsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		dangerRatingText = new Paragraph("3").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-				.setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(dangerRatingText);
-		dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(dangerRatingText);
-		cell.setTextAlignment(TextAlignment.CENTER);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingConsiderableCharacteristicsTextBold(lang))
-				.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(characteristicsText);
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingConsiderableCharacteristicsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(characteristicsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		recommendationsText = new Paragraph(GlobalVariables.getDangerRatingConsiderableRecommendationsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(recommendationsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		dangerRatingText = new Paragraph("2").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-				.setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(dangerRatingText);
-		dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(dangerRatingText);
-		cell.setTextAlignment(TextAlignment.CENTER);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsTextBold(lang))
-				.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(characteristicsText);
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(characteristicsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		recommendationsText = new Paragraph(GlobalVariables.getDangerRatingModerateRecommendationsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(recommendationsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		dangerRatingText = new Paragraph("1").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-				.setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(dangerRatingText);
-		dangerRatingText = new Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(dangerRatingText);
-		cell.setTextAlignment(TextAlignment.CENTER);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsTextBold(lang))
-				.setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(characteristicsText);
-		characteristicsText = new Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell.add(characteristicsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		recommendationsText = new Paragraph(GlobalVariables.getDangerRatingLowRecommendationsText(lang))
-				.setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		cell = new Cell(1, 1).add(recommendationsText);
-		cell.setPaddingLeft(5);
-		cell.setPaddingRight(5);
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-		cell.setBorder(new SolidBorder(greyDarkColor, 0.5f));
-		table.addCell(cell);
-
-		document.add(table);
-
+		/*
+		 * // Add avalanche danger scale float marginRight = 25.f; float marginLeft =
+		 * 15.f; int tableFontSize = 7; int dangerRatingFontSize = 12;
+		 * 
+		 * float[] columnWidths = { 1, 1 }; Table table = new
+		 * Table(columnWidths).setAutoLayout().setBorder(Border.NO_BORDER).setMarginTop(
+		 * 290)
+		 * .setMarginLeft(marginLeft).setMarginRight(marginRight).setWidthPercent(100);
+		 * 
+		 * Paragraph symbolHeadline = new
+		 * Paragraph(GlobalVariables.getDangerRatingHeadline(lang))
+		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); Cell cell = new Cell(1, 1).add(symbolHeadline);
+		 * cell.setPaddingLeft(5); cell.setPaddingRight(5);
+		 * cell.setTextAlignment(TextAlignment.LEFT);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * Paragraph characteristicsHeadline = new
+		 * Paragraph(GlobalVariables.getCharacteristicsHeadline(lang))
+		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsHeadline);
+		 * cell.setPaddingLeft(5); cell.setPaddingRight(5);
+		 * cell.setTextAlignment(TextAlignment.LEFT);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * Paragraph dangerRatingText = new
+		 * Paragraph("5").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
+		 * dangerRatingText = new
+		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high,
+		 * lang)) .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(dangerRatingText);
+		 * cell.setTextAlignment(TextAlignment.CENTER);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * Paragraph characteristicsText = new Paragraph(
+		 * GlobalVariables.getDangerRatingVeryHighCharacteristicsTextBold(lang)).setFont
+		 * (openSansBoldFont) .setFontSize(tableFontSize).setFontColor(greyDarkColor);
+		 * cell = new Cell(1, 1).add(characteristicsText); characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingVeryHighCharacteristicsText(lang))
+		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
+		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * dangerRatingText = new
+		 * Paragraph("4").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
+		 * dangerRatingText = new
+		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang))
+		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(dangerRatingText);
+		 * cell.setTextAlignment(TextAlignment.CENTER);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsTextBold(lang))
+		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsText);
+		 * characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsText(lang))
+		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
+		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * dangerRatingText = new
+		 * Paragraph("3").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
+		 * dangerRatingText = new
+		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable,
+		 * lang)) .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(dangerRatingText);
+		 * cell.setTextAlignment(TextAlignment.CENTER);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingConsiderableCharacteristicsTextBold(
+		 * lang)) .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsText);
+		 * characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingConsiderableCharacteristicsText(lang
+		 * )) .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
+		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * dangerRatingText = new
+		 * Paragraph("2").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
+		 * dangerRatingText = new
+		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate,
+		 * lang)) .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(dangerRatingText);
+		 * cell.setTextAlignment(TextAlignment.CENTER);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsTextBold(lang
+		 * )) .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsText);
+		 * characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsText(lang))
+		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
+		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * dangerRatingText = new
+		 * Paragraph("1").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
+		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
+		 * dangerRatingText = new
+		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang))
+		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(dangerRatingText);
+		 * cell.setTextAlignment(TextAlignment.CENTER);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsTextBold(lang))
+		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsText);
+		 * characteristicsText = new
+		 * Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsText(lang))
+		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
+		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
+		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
+		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
+		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
+		 * 
+		 * document.add(table);
+		 */
 		canvas.close();
 		pdfCanvas.release();
 	}
