@@ -365,7 +365,8 @@ public class PublicationController {
 				try {
 					logger.info("Messengerpeople production started");
 					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions);
-					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
+					AvalancheReportController.getInstance().setAvalancheReportWhatsappFlag(avalancheReportIds);
+					AvalancheReportController.getInstance().setAvalancheReportTelegramFlag(avalancheReportIds);
 				} catch (IOException e) {
 					logger.error("Error preparing messengerpeople:" + e.getMessage());
 					e.printStackTrace();

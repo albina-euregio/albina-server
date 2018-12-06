@@ -837,13 +837,15 @@ public class AvalancheReportController {
 		}
 	}
 
-	public void setAvalancheReportWhatsappFlag(String avalancheReportId) {
+	public void setAvalancheReportWhatsappFlag(List<String> avalancheReportIds) {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			transaction.begin();
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setWhatsappSent(true);
+			for (String avalancheReportId : avalancheReportIds) {
+				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+				avalancheReport.setWhatsappSent(true);
+			}
 			entityManager.flush();
 			transaction.commit();
 		} catch (HibernateException he) {
@@ -855,13 +857,15 @@ public class AvalancheReportController {
 		}
 	}
 
-	public void setAvalancheReportTelegramFlag(String avalancheReportId) {
+	public void setAvalancheReportTelegramFlag(List<String> avalancheReportIds) {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			transaction.begin();
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setTelegramSent(true);
+			for (String avalancheReportId : avalancheReportIds) {
+				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+				avalancheReport.setTelegramSent(true);
+			}
 			entityManager.flush();
 			transaction.commit();
 		} catch (HibernateException he) {
