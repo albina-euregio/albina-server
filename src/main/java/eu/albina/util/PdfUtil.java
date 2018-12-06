@@ -190,7 +190,11 @@ public class PdfUtil {
 
 			document.close();
 
-			AlbinaUtil.setFilePermissions(filename);
+			try {
+				AlbinaUtil.setFilePermissions(filename);
+			} catch (Exception e) {
+				logger.warn("File permission could not be set!");
+			}
 			return true;
 		} catch (com.itextpdf.io.IOException e) {
 			logger.error("PDF could not be created: " + e.getMessage());
