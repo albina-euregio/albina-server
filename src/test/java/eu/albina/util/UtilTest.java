@@ -13,6 +13,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -30,6 +31,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
@@ -333,6 +335,19 @@ public class UtilTest {
 	@Test
 	public void createStaticWidget() throws IOException, URISyntaxException {
 		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en);
+	}
+
+	@Ignore
+	@Test
+	public void sortBulletinsTest() {
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			System.out.println(avalancheBulletin.getHighestDangerRating());
+		}
+		System.out.println("Sorting ...");
+		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			System.out.println(avalancheBulletin.getHighestDangerRating());
+		}
 	}
 
 	private static String encodeFileToBase64Binary(File file) {
