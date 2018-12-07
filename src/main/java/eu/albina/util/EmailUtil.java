@@ -472,6 +472,8 @@ public class EmailUtil {
 
 			root.put("text", text);
 
+			// TODO sort bulletins by danger rating
+
 			ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				Map<String, Object> bulletin = new HashMap<>();

@@ -182,6 +182,8 @@ public class PdfUtil {
 
 			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency);
 
+			// TODO sort bulletins by danger rating
+
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
 						AlbinaUtil.getTendencyDate(bulletins, lang), writer, grayscale);
