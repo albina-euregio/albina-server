@@ -62,6 +62,9 @@ public class PublicationController {
 
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
 
+		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDate(bulletins));
+
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
@@ -128,6 +131,9 @@ public class PublicationController {
 
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
 
+		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDate(bulletins));
+
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
@@ -173,6 +179,9 @@ public class PublicationController {
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
+
+		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDate(bulletins));
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
