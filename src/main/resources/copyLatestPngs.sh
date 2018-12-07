@@ -1,4 +1,3 @@
-rm /mnt/albina_files/latest/*
 cp /mnt/albina_files/$1/*.png /mnt/albina_files/latest/
 mv /mnt/albina_files/latest/$1_de.png /mnt/albina_files/latest/de.png
 mv /mnt/albina_files/latest/$1_it.png /mnt/albina_files/latest/it.png

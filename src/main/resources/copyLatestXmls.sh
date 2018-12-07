@@ -1,4 +1,3 @@
-rm /mnt/albina_files/latest/*
 cp /mnt/albina_files/$1/*.xml /mnt/albina_files/latest/
 mv /mnt/albina_files/latest/$1_de.xml /mnt/albina_files/latest/de.xml
 mv /mnt/albina_files/latest/$1_it.xml /mnt/albina_files/latest/it.xml

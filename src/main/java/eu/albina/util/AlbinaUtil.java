@@ -479,7 +479,7 @@ public class AlbinaUtil {
 
 	public static void runDeleteLatestFilesScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/deleteLatestFiles.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/deleteLatestFiles.sh");
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Latest files deleted.");
