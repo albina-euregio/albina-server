@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +43,7 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import com.itextpdf.layout.renderer.DocumentRenderer;
 
+import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
@@ -182,8 +184,7 @@ public class PdfUtil {
 
 			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency);
 
-			// TODO sort bulletins by danger rating
-
+			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
 						AlbinaUtil.getTendencyDate(bulletins, lang), writer, grayscale);
