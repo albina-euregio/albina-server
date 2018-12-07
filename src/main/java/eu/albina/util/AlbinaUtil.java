@@ -430,14 +430,50 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static void runCopyLatestScript(String date) {
+	public static void runCopyLatestPdfsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatest.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatestPdfs.sh", date);
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Files for " + date + " copied to latest.");
+			logger.info("PDFs for " + date + " copied to latest.");
 		} catch (Exception e) {
-			logger.error("Files for " + date + " could not be copied to latest!");
+			logger.error("PDFs for " + date + " could not be copied to latest!");
+			e.printStackTrace();
+		}
+	}
+
+	public static void runCopyLatestXmlsScript(String date) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatestXmls.sh", date);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("XMLs for " + date + " copied to latest.");
+		} catch (Exception e) {
+			logger.error("XMLs for " + date + " could not be copied to latest!");
+			e.printStackTrace();
+		}
+	}
+
+	public static void runCopyLatestPngsScript(String date) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatestPngs.sh", date);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("PNGs for " + date + " copied to latest.");
+		} catch (Exception e) {
+			logger.error("PNGs for " + date + " could not be copied to latest!");
+			e.printStackTrace();
+		}
+	}
+
+	public static void runCopyLatestMapsScript(String date) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatestMaps.sh", date);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("Maps for " + date + " copied to latest.");
+		} catch (Exception e) {
+			logger.error("Maps for " + date + " could not be copied to latest!");
 			e.printStackTrace();
 		}
 	}

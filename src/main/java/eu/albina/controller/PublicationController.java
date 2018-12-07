@@ -94,9 +94,6 @@ public class PublicationController {
 				e.printStackTrace();
 			}
 		}
-
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runCopyLatestScript(AlbinaUtil.getValidityDate(bulletins));
 	}
 
 	/**
@@ -163,9 +160,6 @@ public class PublicationController {
 				e.printStackTrace();
 			}
 		}
-
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runCopyLatestScript(AlbinaUtil.getValidityDate(bulletins));
 	}
 
 	/**
@@ -204,9 +198,6 @@ public class PublicationController {
 				e.printStackTrace();
 			}
 		}
-
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runCopyLatestScript(AlbinaUtil.getValidityDate(bulletins));
 	}
 
 	public void startUpdateThread(DateTime startDate, DateTime endDate, List<String> regions,
@@ -269,8 +260,10 @@ public class PublicationController {
 	private void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		try {
 			logger.info("CAAML production started");
-			XmlUtil.createCaamlFiles(bulletins);
 			AvalancheReportController.getInstance().setAvalancheReportCaamlFlag(avalancheReportIds);
+			XmlUtil.createCaamlFiles(bulletins);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runCopyLatestXmlsScript(AlbinaUtil.getValidityDate(bulletins));
 			logger.info("CAAML production finished");
 		} catch (TransformerException e) {
 			logger.error("Error producing CAAML: " + e.getMessage());
@@ -286,30 +279,12 @@ public class PublicationController {
 			public void run() {
 				logger.info("Map production started");
 				MapUtil.createDangerRatingMaps(bulletins);
+				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+					AlbinaUtil.runCopyLatestMapsScript(AlbinaUtil.getValidityDate(bulletins));
 				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportIds);
 				logger.info("Map production finished");
 			}
 		});
-	}
-
-	private void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					logger.info("Email production started");
-					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
-					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error preparing emails:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
-					logger.error("Error preparing emails:" + e.getMessage());
-					e.printStackTrace();
-				} finally {
-					logger.info("Email production finished");
-				}
-			}
-		}).start();
 	}
 
 	private void createPdf(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
@@ -323,6 +298,8 @@ public class PublicationController {
 					for (String region : GlobalVariables.regionsEuregio)
 						if (!PdfUtil.getInstance().createRegionPdfs(bulletins, region))
 							result = false;
+					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+						AlbinaUtil.runCopyLatestPdfsScript(AlbinaUtil.getValidityDate(bulletins));
 					if (result)
 						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
 				} catch (IOException e) {
@@ -344,6 +321,8 @@ public class PublicationController {
 				try {
 					logger.info("Static widget production started");
 					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins);
+					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+						AlbinaUtil.runCopyLatestPngsScript(AlbinaUtil.getValidityDate(bulletins));
 					AvalancheReportController.getInstance().setAvalancheReportStaticWidgetFlag(avalancheReportIds);
 				} catch (IOException e) {
 					logger.error("Error creating static widgets:" + e.getMessage());
@@ -353,6 +332,26 @@ public class PublicationController {
 					e.printStackTrace();
 				} finally {
 					logger.info("Static widget production finished");
+				}
+			}
+		}).start();
+	}
+
+	private void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					logger.info("Email production started");
+					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
+					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
+				} catch (IOException e) {
+					logger.error("Error preparing emails:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error preparing emails:" + e.getMessage());
+					e.printStackTrace();
+				} finally {
+					logger.info("Email production finished");
 				}
 			}
 		}).start();
