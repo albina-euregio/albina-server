@@ -251,7 +251,6 @@ public class AlbinaUtil {
 		}
 
 		if (date != null) {
-			date = date.plusDays(1);
 			StringBuilder result = new StringBuilder();
 			result.append(GlobalVariables.getTendencyBindingWord(lang));
 			result.append(GlobalVariables.getDayName(date.getDayOfWeek(), lang));
