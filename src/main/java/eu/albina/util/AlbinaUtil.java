@@ -387,7 +387,13 @@ public class AlbinaUtil {
 		// add others permissions
 		perms.add(PosixFilePermission.OTHERS_READ);
 
-		Files.setPosixFilePermissions(Paths.get(fileName), perms);
+		try {
+			Files.setPosixFilePermissions(Paths.get(fileName), perms);
+		} catch (UnsupportedOperationException e) {
+			logger.debug("File permission could not be set!");
+		} catch (IOException e) {
+			logger.debug("File permission could not be set!");
+		}
 	}
 
 	public static boolean isLatest(DateTime date) {
