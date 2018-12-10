@@ -189,23 +189,23 @@ public class PublicationController {
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
-			createMapsThread.start();
-			try {
-				createMapsThread.join();
+			// Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			// createMapsThread.start();
+			// try {
+			// createMapsThread.join();
 
-				// create pdfs
-				if (GlobalVariables.isCreatePdf())
-					createPdf(avalancheReportIds, bulletins);
+			// create pdfs
+			if (GlobalVariables.isCreatePdf())
+				createPdf(avalancheReportIds, bulletins);
 
-				// create static widgets
-				if (GlobalVariables.isCreateStaticWidget())
-					createStaticWidgets(avalancheReportIds, bulletins);
+			// create static widgets
+			if (GlobalVariables.isCreateStaticWidget())
+				createStaticWidgets(avalancheReportIds, bulletins);
 
-			} catch (InterruptedException e) {
-				logger.error("Map production interrupted: " + e.getMessage());
-				e.printStackTrace();
-			}
+			// } catch (InterruptedException e) {
+			// logger.error("Map production interrupted: " + e.getMessage());
+			// e.printStackTrace();
+			// }
 		}
 	}
 

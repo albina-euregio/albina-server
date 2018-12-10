@@ -21,8 +21,6 @@ import javax.mail.MessagingException;
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,7 +49,6 @@ public class UtilTest {
 	private List<String> passwords = new ArrayList<String>();
 	private List<String> recipients = new ArrayList<String>();
 
-	@Before
 	public void setUp() {
 		HibernateUtil.getInstance().setUp();
 
@@ -234,7 +231,6 @@ public class UtilTest {
 		// recipients.add("chris.mitterer@tirol.gv.at");
 	}
 
-	@After
 	public void shutDown() {
 		HibernateUtil.getInstance().shutDown();
 	}
@@ -349,6 +345,24 @@ public class UtilTest {
 			System.out.println(avalancheBulletin.getHighestDangerRating());
 		}
 	}
+
+	// @Test
+	// public void rssFeedTest() throws IllegalArgumentException, FeedException,
+	// IOException,
+	// com.sun.syndication.io.FeedException, FetcherException {
+	// URL feedUrl = new
+	// URL("https://lawinenwarndienst.blogspot.com/feeds/posts/default");
+	//
+	// FeedFetcherCache feedInfoCache = HashMapFeedInfoCache.getInstance();
+	// FeedFetcher feedFetcher = new HttpURLFeedFetcher(feedInfoCache);
+	// SyndFeed feed = feedFetcher.retrieveFeed(feedUrl);
+	//
+	// System.out.println("Test");
+	//
+	// feed = feedFetcher.retrieveFeed(feedUrl);
+	//
+	// System.out.println("Test");
+	// }
 
 	private static String encodeFileToBase64Binary(File file) {
 		String encodedfile = null;
