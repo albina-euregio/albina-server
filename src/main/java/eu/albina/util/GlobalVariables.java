@@ -51,18 +51,22 @@ public class GlobalVariables {
 	private static boolean publishBulletinsStyria = true;
 
 	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
-	// TODO set correct directory for all files
-	private static String pdfDirectory = "/mnt/albina_files/";
-	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 
-	// Just for testing
+	// PRODUCTION
+	private static String pdfDirectory = "/mnt/albina_files/";
+	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
+	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
+
+	// DEVELOPMENT
 	// private static String pdfDirectory = "D:\\";
 	// private static String mapsPath =
 	// "https://admin.avalanche.report/images/maps/";
 	// private static String serverImagesUrlLocalhost =
 	// "https://admin.avalanche.report/images/";
+	// public static String univieMapProductionUrl =
+	// "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php"
 
 	private static boolean smtpAuth = true;
 	private static boolean smtpTls = true;
@@ -170,10 +174,6 @@ public class GlobalVariables {
 	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
-
-	// public static String univieMapProductionUrl =
-	// "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps.php";
-	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
 
 	private static String emailEncoding = "UTF-8";
 
