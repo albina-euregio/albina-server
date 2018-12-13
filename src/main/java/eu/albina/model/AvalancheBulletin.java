@@ -788,17 +788,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (id != null && id != "")
 			json.put("id", id);
 
-		if (user != null && user.getName() != null && user.getName() != "")
-			json.put("author", user.toSmallJSON());
-
-		if (additionalAuthors != null && additionalAuthors.size() > 0) {
-			JSONArray users = new JSONArray();
-			for (String user : additionalAuthors) {
-				users.put(user);
-			}
-			json.put("additionalAuthors", users);
-		}
-
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
 		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
