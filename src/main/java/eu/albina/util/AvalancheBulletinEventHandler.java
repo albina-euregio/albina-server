@@ -15,6 +15,7 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfString;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Image;
@@ -127,6 +128,14 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			interregImg.scaleToFit(130, 45);
 			interregImg.setFixedPosition(20, 0);
 			canvas.add(interregImg);
+
+			// Add page number
+			int pageNumber = docEvent.getDocument().getPageNumber(page);
+			String pageText = String.format(GlobalVariables.getPageNumberText(lang), pageNumber);
+			double width = openSansRegularFont.getContentWidth(new PdfString(pageText)) * 0.001f * 12 / 2;
+			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 12)
+					.moveText(pageSize.getWidth() / 2 - width / 2, 20).setColor(greyDarkColor, true).showText(pageText)
+					.endText();
 
 			canvas.close();
 
