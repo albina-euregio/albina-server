@@ -52,19 +52,19 @@ public class GlobalVariables {
 
 	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
-	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 
 	// PRODUCTION
 	private static String pdfDirectory = "/mnt/albina_files/";
+	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
 	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
 	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
 
 	// DEVELOPMENT
 	// private static String pdfDirectory = "D:\\";
-	// private static String mapsPath =
-	// "https://admin.avalanche.report/images/maps/";
 	// private static String serverImagesUrlLocalhost =
 	// "https://admin.avalanche.report/images/";
+	// private static String mapsPath =
+	// "https://admin.avalanche.report/images/maps/";
 	// public static String univieMapProductionUrl =
 	// "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php"
 
@@ -1639,6 +1639,20 @@ public class GlobalVariables {
 			return "Imprint";
 		default:
 			return "Imprint";
+		}
+	}
+
+	// LANG
+	public static String getPageNumberText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Seite %d";
+		case it:
+			return "Pagina %d";
+		case en:
+			return "Page %d";
+		default:
+			return "Page %d";
 		}
 	}
 }
