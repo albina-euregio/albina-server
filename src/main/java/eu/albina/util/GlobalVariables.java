@@ -48,25 +48,27 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
 	private static boolean publishBulletinsTrentino = true;
-	private static boolean publishBulletinsStyria = true;
+	private static boolean publishBulletinsStyria = false;
 
 	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 
 	// PRODUCTION
-	private static String pdfDirectory = "/mnt/albina_files/";
-	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
-	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
-	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
+	// private static String pdfDirectory = "/mnt/albina_files/";
+	// private static String serverImagesUrlLocalhost =
+	// "http://localhost:8080/images/";
+	// private static String mapsPath =
+	// "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
+	// public static String univieMapProductionUrl =
+	// "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
+	// public static String scriptsPath = "/opt/";
 
 	// DEVELOPMENT
-	// private static String pdfDirectory = "D:\\";
-	// private static String serverImagesUrlLocalhost =
-	// "https://admin.avalanche.report/images/";
-	// private static String mapsPath =
-	// "https://admin.avalanche.report/images/maps/";
-	// public static String univieMapProductionUrl =
-	// "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php"
+	private static String pdfDirectory = "/mnt/albina_files_dev/";
+	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
+	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
+	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
+	public static String scriptsPath = "/opt/dev/";
 
 	private static boolean smtpAuth = true;
 	private static boolean smtpTls = true;
