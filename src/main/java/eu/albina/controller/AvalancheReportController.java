@@ -624,7 +624,8 @@ public class AvalancheReportController {
 				if (revision > -1) {
 					transaction.begin();
 					AuditReader reader = AuditReaderFactory.get(entityManager);
-					AuditQuery q2 = reader.createQuery().forEntitiesAtRevision(AvalancheBulletin.class, revision);
+					AuditQuery q2 = reader.createQuery().forEntitiesModifiedAtRevision(AvalancheBulletin.class,
+							revision);
 					bulletins = q2.getResultList();
 
 					// just used to initialize all necessary fields
