@@ -54,21 +54,21 @@ public class GlobalVariables {
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 
 	// PRODUCTION
-	// private static String pdfDirectory = "/mnt/albina_files/";
+	private static String pdfDirectory = "/mnt/albina_files/";
+	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
+	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
+	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
+	public static String scriptsPath = "/opt/";
+
+	// DEVELOPMENT
+	// private static String pdfDirectory = "/mnt/albina_files_dev/";
 	// private static String serverImagesUrlLocalhost =
 	// "http://localhost:8080/images/";
 	// private static String mapsPath =
-	// "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
+	// "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
 	// public static String univieMapProductionUrl =
-	// "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
-	// public static String scriptsPath = "/opt/";
-
-	// DEVELOPMENT
-	private static String pdfDirectory = "/mnt/albina_files_dev/";
-	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
-	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
-	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
-	public static String scriptsPath = "/opt/dev/";
+	// "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
+	// public static String scriptsPath = "/opt/dev/";
 
 	private static boolean smtpAuth = true;
 	private static boolean smtpTls = true;
