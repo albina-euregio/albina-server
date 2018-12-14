@@ -356,10 +356,12 @@ public class AlbinaUtil {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			DateTime bulletinDate = avalancheBulletin.getPublicationDate();
-			if (date == null)
-				date = bulletinDate;
-			else if (bulletinDate.isAfter(date))
-				date = bulletinDate;
+			if (bulletinDate != null) {
+				if (date == null)
+					date = bulletinDate;
+				else if (bulletinDate.isAfter(date))
+					date = bulletinDate;
+			}
 		}
 		if (date != null)
 			return date.toString(GlobalVariables.getPublicationDateTimeFormatter(lang));
