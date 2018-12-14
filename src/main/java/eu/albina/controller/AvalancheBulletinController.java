@@ -151,7 +151,41 @@ public class AvalancheBulletinController {
 				// bulletin already exists
 				if (results.containsKey(bulletin.getId())) {
 					AvalancheBulletin b = results.get(bulletin.getId());
-					b.copy(bulletin);
+					// own bulletin - save the bulletin
+					if (results.get(bulletin.getId()).getOwnerRegion().startsWith(region)) {
+						Set<String> savedRegions = b.getSavedRegions();
+						b.copy(bulletin);
+						for (String r : savedRegions) {
+							if (!r.startsWith(region)) {
+								if (!b.getSavedRegions().contains(r))
+									b.addSavedRegion(r);
+							}
+						}
+						Set<String> tmpRegions = new HashSet<String>();
+						for (String r : b.getSuggestedRegions()) {
+							if (bulletin.getSavedRegions().contains(r))
+								tmpRegions.add(r);
+						}
+						for (String r : tmpRegions)
+							b.getSuggestedRegions().remove(r);
+						// foreign bulletin
+					} else {
+						for (String r : bulletin.getSavedRegions()) {
+							if (r.startsWith(region)) {
+								if (!b.getSavedRegions().contains(r))
+									b.addSavedRegion(r);
+							}
+						}
+						Set<String> tmpRegions = new HashSet<String>();
+						for (String r : b.getSuggestedRegions()) {
+							if (r.startsWith(region)) {
+								if (!bulletin.getSuggestedRegions().contains(r))
+									tmpRegions.add(r);
+							}
+						}
+						for (String r : tmpRegions)
+							b.getSuggestedRegions().remove(r);
+					}
 					// bulletin has to be created
 				} else {
 					entityManager.persist(bulletin);
