@@ -1,0 +1,1 @@
+rm /mnt/albina_files_dev/latest/*
