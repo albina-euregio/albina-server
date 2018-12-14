@@ -312,8 +312,6 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
-	// @Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN,
-	// Role.OBSERVER })
 	@Path("/status")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -338,6 +336,51 @@ public class AvalancheBulletinService {
 
 			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getStatus(startDate, endDate,
 					region);
+			JSONArray jsonResult = new JSONArray();
+
+			for (Entry<DateTime, BulletinStatus> entry : status.entrySet()) {
+				JSONObject json = new JSONObject();
+				json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
+				json.put("status", entry.getValue().toString());
+				jsonResult.put(json);
+			}
+
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading status - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (UnsupportedEncodingException e) {
+			logger.warn("Error loading status - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Path("/status/internal")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getInternalStatus(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
+		DateTime startDate = null;
+		DateTime endDate = null;
+
+		try {
+			if (start != null)
+				startDate = DateTime
+						.parse(URLDecoder.decode(start, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+						.toDateTime(DateTimeZone.UTC);
+			else
+				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+
+			if (end != null)
+				endDate = DateTime
+						.parse(URLDecoder.decode(end, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+						.toDateTime(DateTimeZone.UTC);
+
+			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
+					endDate, region);
 			JSONArray jsonResult = new JSONArray();
 
 			for (Entry<DateTime, BulletinStatus> entry : status.entrySet()) {

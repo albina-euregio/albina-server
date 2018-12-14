@@ -60,8 +60,9 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<DateTime, BulletinStatus> getStatus(DateTime startDate, DateTime endDate, String region)
+	public Map<DateTime, BulletinStatus> getInternalStatus(DateTime startDate, DateTime endDate, String region)
 			throws AlbinaException {
+
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -79,10 +80,64 @@ public class AvalancheReportController {
 						.setParameter("startDate", startDate).setParameter("endDate", endDate)
 						.setParameter("region", region).getResultList();
 
-			for (AvalancheReport report : reports)
+			Map<DateTime, AvalancheReport> tmpReports = new HashMap<DateTime, AvalancheReport>();
+			for (AvalancheReport report : reports) {
+				if (tmpReports.containsKey(report.getDate())) {
+					if (tmpReports.get(report.getDate()).getRevision().intValue() < report.getRevision().intValue())
+						tmpReports.put(report.getDate(), report);
+				} else {
+					tmpReports.put(report.getDate(), report);
+				}
+			}
+
+			for (AvalancheReport report : tmpReports.values())
 				result.put(report.getDate(), report.getStatus());
 
 			transaction.commit();
+
+			return result;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<DateTime, BulletinStatus> getStatus(DateTime startDate, DateTime endDate, String region)
+			throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+
+		try {
+			transaction.begin();
+
+			Map<DateTime, BulletinStatus> result = new HashMap<DateTime, BulletinStatus>();
+
+			List<AvalancheReport> reports;
+			if (region == null || region == "")
+				reports = entityManager.createQuery(HibernateUtil.queryGetReports).setParameter("startDate", startDate)
+						.setParameter("endDate", endDate).getResultList();
+			else
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
+						.setParameter("startDate", startDate).setParameter("endDate", endDate)
+						.setParameter("region", region).getResultList();
+			transaction.commit();
+
+			for (AvalancheReport report : reports) {
+
+				// TODO test or change
+
+				if (result.containsKey(report.getDate())) {
+					if (result.get(report.getDate()).equals(BulletinStatus.published)
+							&& report.getStatus().equals(BulletinStatus.republished))
+						result.put(report.getDate(), report.getStatus());
+				} else {
+					result.put(report.getDate(), report.getStatus());
+				}
+			}
 
 			return result;
 		} catch (HibernateException he) {

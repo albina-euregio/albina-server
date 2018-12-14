@@ -264,7 +264,7 @@ public class AlbinaUtil {
 	public static boolean hasBulletinChanged(DateTime startDate, String region) {
 		boolean result = false;
 		try {
-			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getStatus(startDate,
+			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 					startDate, region);
 			if (status.size() == 1 && status.get(startDate) != BulletinStatus.published
 					&& status.get(startDate) != BulletinStatus.republished)
