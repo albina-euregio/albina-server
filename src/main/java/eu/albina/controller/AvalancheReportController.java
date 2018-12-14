@@ -127,13 +127,16 @@ public class AvalancheReportController {
 			transaction.commit();
 
 			for (AvalancheReport report : reports) {
-
-				// TODO test or change
-
 				if (result.containsKey(report.getDate())) {
-					if (result.get(report.getDate()).equals(BulletinStatus.published)
-							&& report.getStatus().equals(BulletinStatus.republished))
+					if (result.get(report.getDate()).equals(BulletinStatus.republished)) {
+						// do nothing
+					} else if (result.get(report.getDate()).equals(BulletinStatus.published)) {
+						if (report.getStatus().equals(BulletinStatus.republished)) {
+							result.put(report.getDate(), report.getStatus());
+						}
+					} else if (report.getStatus().compareTo(result.get(report.getDate())) < 0) {
 						result.put(report.getDate(), report.getStatus());
+					}
 				} else {
 					result.put(report.getDate(), report.getStatus());
 				}
