@@ -67,7 +67,7 @@ public class PublicationJob implements org.quartz.Job {
 								result.add(avalancheBulletin);
 						}
 						if (result != null && !result.isEmpty())
-							PublicationController.getInstance().publishAutomatically(avalancheReportIds, bulletins);
+							PublicationController.getInstance().publishAutomatically(avalancheReportIds, result);
 					}
 				} catch (AlbinaException e) {
 					logger.warn("Error loading bulletins - " + e.getMessage());
