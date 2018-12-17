@@ -788,7 +788,7 @@ public class EmailUtil {
 				avalancheSituation2.put("text", "");
 			}
 
-			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation2().getAspects());
 			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
 
 			Map<String, Object> elevation = new HashMap<>();
