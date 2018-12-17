@@ -521,7 +521,7 @@ public class AvalancheBulletinController {
 
 			// select bulletins within the region
 			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegion(region))
+				if (bulletin.affectsRegionWithoutSuggestions(region))
 					results.add(bulletin);
 
 			for (AvalancheBulletin bulletin : results) {

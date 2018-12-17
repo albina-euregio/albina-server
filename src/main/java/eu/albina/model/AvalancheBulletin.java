@@ -870,11 +870,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
 			metaData.appendChild(dateTimeReport);
 		}
-		if (user != null) {
-			Element srcRef = doc.createElement("srcRef");
-			srcRef.appendChild(user.toCAAML(doc));
-			metaData.appendChild(srcRef);
-		}
 
 		metaDataProperty.appendChild(metaData);
 		rootElement.appendChild(metaDataProperty);
