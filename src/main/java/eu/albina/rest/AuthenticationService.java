@@ -110,7 +110,7 @@ public class AuthenticationService {
 	}
 
 	@PUT
-	@Secured({ Role.ADMIN })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Path("/change")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
