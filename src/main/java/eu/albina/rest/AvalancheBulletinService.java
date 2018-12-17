@@ -595,14 +595,21 @@ public class AvalancheBulletinService {
 					new DateTime());
 			DateTime publicationDate = new DateTime();
 			AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
-			List<AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
-					.publishBulletins(startDate, endDate, region, publicationDate, user);
+			List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().publishBulletins(startDate,
+					endDate, region, publicationDate, user);
+
+			// select bulletins within the region
+			List<AvalancheBulletin> publishedBulletins = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin bulletin : allBulletins)
+				if (bulletin.affectsRegionWithoutSuggestions(region))
+					publishedBulletins.add(bulletin);
+
 			List<String> avalancheReportIds = new ArrayList<String>();
 			String avalancheReportId = AvalancheReportController.getInstance().changeReport(publishedBulletins,
 					startDate, region, user);
 			avalancheReportIds.add(avalancheReportId);
 
-			PublicationController.getInstance().startChangeThread(publishedBulletins, avalancheReportIds);
+			PublicationController.getInstance().startChangeThread(allBulletins, avalancheReportIds);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -781,8 +788,15 @@ public class AvalancheBulletinService {
 
 				DateTime publicationDate = new DateTime();
 
-				List<AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
+				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance()
 						.publishBulletins(startDate, endDate, region, publicationDate, user);
+
+				// select bulletins within the region
+				List<AvalancheBulletin> publishedBulletins = new ArrayList<AvalancheBulletin>();
+				for (AvalancheBulletin bulletin : allBulletins)
+					if (bulletin.affectsRegionWithoutSuggestions(region))
+						publishedBulletins.add(bulletin);
+
 				List<String> avalancheReportIds = new ArrayList<String>();
 				String avalancheReportId = AvalancheReportController.getInstance().publishReport(publishedBulletins,
 						startDate, region, user, publicationDate);
@@ -791,7 +805,7 @@ public class AvalancheBulletinService {
 				List<String> regions = new ArrayList<String>();
 				regions.add(region);
 
-				PublicationController.getInstance().startUpdateThread(publishedBulletins, regions, avalancheReportIds);
+				PublicationController.getInstance().startUpdateThread(allBulletins, regions, avalancheReportIds);
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();
 			} else

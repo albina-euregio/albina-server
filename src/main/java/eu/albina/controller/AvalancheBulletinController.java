@@ -568,12 +568,12 @@ public class AvalancheBulletinController {
 				entityManager.merge(bulletin);
 			}
 
-			for (AvalancheBulletin avalancheBulletin : results)
+			for (AvalancheBulletin avalancheBulletin : bulletins)
 				initializeBulletin(avalancheBulletin);
 
 			transaction.commit();
 
-			return results;
+			return bulletins;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
