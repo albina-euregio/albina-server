@@ -8,11 +8,9 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
@@ -110,7 +108,7 @@ public class PublicationController {
 	 * @throws MessagingException
 	 */
 	public void updateAutomatically(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
-			List<String> regions) throws MessagingException {
+			List<String> regions) {
 		if (GlobalVariables.isPublishAt8AM())
 			update(avalancheReportIds, bulletins, regions);
 	}
@@ -126,8 +124,7 @@ public class PublicationController {
 	 *            The region that was updated.
 	 * @throws MessagingException
 	 */
-	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions)
-			throws MessagingException {
+	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
 
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
 
@@ -209,58 +206,35 @@ public class PublicationController {
 		}
 	}
 
-	public void startUpdateThread(DateTime startDate, DateTime endDate, List<String> regions,
+	public void startUpdateThread(List<AvalancheBulletin> publishedBulletins, List<String> regions,
 			List<String> avalancheReportIds) {
 		new Thread(new Runnable() {
 			public void run() {
-				try {
-					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
-							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
-
-					// TODO what if there is no bulletin? Delete all products?
-
-					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-					for (AvalancheBulletin avalancheBulletin : bulletins) {
-						if (avalancheBulletin.getPublishedRegions() != null
-								&& !avalancheBulletin.getPublishedRegions().isEmpty())
-							result.add(avalancheBulletin);
-					}
-					if (result != null && !result.isEmpty())
-						PublicationController.getInstance().update(avalancheReportIds, result, regions);
-
-				} catch (AlbinaException e) {
-					logger.warn("Error loading bulletins - " + e.getMessage());
-					e.printStackTrace();
-				} catch (MessagingException e) {
-					logger.warn("Error sending emails - " + e.getMessage());
-					e.printStackTrace();
+				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+				for (AvalancheBulletin avalancheBulletin : publishedBulletins) {
+					if (avalancheBulletin.getPublishedRegions() != null
+							&& !avalancheBulletin.getPublishedRegions().isEmpty())
+						result.add(avalancheBulletin);
 				}
+				if (result != null && !result.isEmpty())
+					PublicationController.getInstance().update(avalancheReportIds, result, regions);
+
 			}
 		}).start();
 	}
 
-	public void startChangeThread(DateTime startDate, DateTime endDate, List<String> avalancheReportIds) {
+	public void startChangeThread(List<AvalancheBulletin> publishedBulletins, List<String> avalancheReportIds) {
 		new Thread(new Runnable() {
 			public void run() {
-				try {
-					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
-							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
-
-					// TODO what if there is no bulletin? Delete all products?
-
-					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-					for (AvalancheBulletin avalancheBulletin : bulletins) {
-						if (avalancheBulletin.getPublishedRegions() != null
-								&& !avalancheBulletin.getPublishedRegions().isEmpty())
-							result.add(avalancheBulletin);
-					}
-					if (result != null && !result.isEmpty())
-						PublicationController.getInstance().change(avalancheReportIds, result);
-
-				} catch (AlbinaException e) {
-					logger.warn("Error loading bulletins - " + e.getMessage());
-					e.printStackTrace();
+				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+				for (AvalancheBulletin avalancheBulletin : publishedBulletins) {
+					if (avalancheBulletin.getPublishedRegions() != null
+							&& !avalancheBulletin.getPublishedRegions().isEmpty())
+						result.add(avalancheBulletin);
 				}
+				if (result != null && !result.isEmpty())
+					PublicationController.getInstance().change(avalancheReportIds, result);
+
 			}
 		}).start();
 	}
