@@ -211,6 +211,7 @@ public class AvalancheBulletinController {
 					entityManager.merge(b);
 				} else {
 					// Bulletin has to be created
+					bulletin.setId(null);
 					entityManager.persist(bulletin);
 				}
 			}
