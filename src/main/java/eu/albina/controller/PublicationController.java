@@ -3,6 +3,7 @@ package eu.albina.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -57,6 +58,8 @@ public class PublicationController {
 	}
 
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+
+		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
 
@@ -126,6 +129,8 @@ public class PublicationController {
 	 */
 	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
 
+		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
@@ -174,6 +179,8 @@ public class PublicationController {
 	 *            The bulletins that were changed.
 	 */
 	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+
+		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
 

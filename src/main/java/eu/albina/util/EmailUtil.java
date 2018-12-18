@@ -11,7 +11,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +39,6 @@ import org.slf4j.LoggerFactory;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.controller.socialmedia.RapidMailProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.exception.AlbinaException;
@@ -474,7 +472,6 @@ public class EmailUtil {
 
 			root.put("text", text);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 			ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				Map<String, Object> bulletin = new HashMap<>();
