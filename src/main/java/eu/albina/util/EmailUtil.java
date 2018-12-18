@@ -392,20 +392,26 @@ public class EmailUtil {
 						if (avalancheBulletin.getDangerPattern1() != null
 								|| avalancheBulletin.getDangerPattern2() != null) {
 							bulletin.put("dangerPatternsHeadline", GlobalVariables.getDangerPatternsHeadline(lang));
-							bulletin.put("dangerpatternstyle", getDangerPatternStyle(true));
-							if (avalancheBulletin.getDangerPattern1() != null)
+							if (avalancheBulletin.getDangerPattern1() != null) {
 								bulletin.put("dangerPattern1",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
-							else
+								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
+							} else {
 								bulletin.put("dangerPattern1", "");
-							if (avalancheBulletin.getDangerPattern2() != null)
+								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
+							}
+							if (avalancheBulletin.getDangerPattern2() != null) {
 								bulletin.put("dangerPattern2",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
-							else
+								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
+							} else {
 								bulletin.put("dangerPattern2", "");
+								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
+							}
 						} else {
 							bulletin.put("dangerPatternsHeadline", "");
-							bulletin.put("dangerpatternstyle", getDangerPatternStyle(false));
+							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
+							bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 							bulletin.put("dangerPattern1", "");
 							bulletin.put("dangerPattern2", "");
 						}
@@ -416,7 +422,8 @@ public class EmailUtil {
 						bulletin.put("dangerPatternsHeadline", "");
 						bulletin.put("dangerPattern1", "");
 						bulletin.put("dangerPattern2", "");
-						bulletin.put("dangerpatternstyle", getDangerPatternStyle(false));
+						bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
+						bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 					}
 
 					// tendency
@@ -435,7 +442,8 @@ public class EmailUtil {
 					bulletin.put("dangerPatternsHeadline", "");
 					bulletin.put("dangerPattern1", "");
 					bulletin.put("dangerPattern2", "");
-					bulletin.put("dangerpatternstyle", getDangerPatternStyle(false));
+					bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
+					bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 					bulletin.put("tendencyHeadline", "");
 					bulletin.put("tendencyComment", "");
 				}
