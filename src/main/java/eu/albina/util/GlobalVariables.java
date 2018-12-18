@@ -70,13 +70,6 @@ public class GlobalVariables {
 	// "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
 	// public static String scriptsPath = "/opt/dev/";
 
-	private static boolean smtpAuth = true;
-	private static boolean smtpTls = true;
-	private static String smtpHost = "smtp.gmail.com";
-	private static String smtpPort = "587";
-	private static String emailUsername = "norbert.lanzanasto@gmail.com";
-	private static String emailPassword = "Go6Zaithee";
-
 	// LANG
 	// REGION
 	private static String unsubscribeLinkTyrolDe = "https://t271d3041.emailsys1a.net/38/2221/61ad34fba0/unsubscribe/form.html";
@@ -339,60 +332,6 @@ public class GlobalVariables {
 	public static void setMapsPath(String mapsPath) throws ConfigurationException {
 		GlobalVariables.mapsPath = mapsPath;
 		setConfigProperty("mapsPath", mapsPath);
-	}
-
-	public static boolean getSmtpAuth() {
-		return smtpAuth;
-	}
-
-	public static void setSmtpAuth(boolean smtpAuth) throws ConfigurationException {
-		GlobalVariables.smtpAuth = smtpAuth;
-		setConfigProperty("smtpAuth", smtpAuth);
-	}
-
-	public static boolean getSmtpTls() {
-		return smtpTls;
-	}
-
-	public static void setSmtpTls(boolean smtpTls) throws ConfigurationException {
-		GlobalVariables.smtpTls = smtpTls;
-		setConfigProperty("smtpTls", smtpTls);
-	}
-
-	public static String getSmtpHost() {
-		return smtpHost;
-	}
-
-	public static void setSmtpHost(String smtpHost) throws ConfigurationException {
-		GlobalVariables.smtpHost = smtpHost;
-		setConfigProperty("smtpHost", smtpHost);
-	}
-
-	public static String getSmtpPort() {
-		return smtpPort;
-	}
-
-	public static void setSmtpPort(String smtpPort) throws ConfigurationException {
-		GlobalVariables.smtpPort = smtpPort;
-		setConfigProperty("smtpPort", smtpPort);
-	}
-
-	public static String getEmailUsername() {
-		return emailUsername;
-	}
-
-	public static void setEmailUsername(String emailUsername) throws ConfigurationException {
-		GlobalVariables.emailUsername = emailUsername;
-		setConfigProperty("emailUsername", emailUsername);
-	}
-
-	public static String getEmailPassword() {
-		return emailPassword;
-	}
-
-	public static void setEmailPassword(String emailPassword) throws ConfigurationException {
-		GlobalVariables.emailPassword = emailPassword;
-		setConfigProperty("emailPassword", emailPassword);
 	}
 
 	public static String getAvalancheReportUsername() {
@@ -1343,8 +1282,6 @@ public class GlobalVariables {
 			serverImagesUrl = config.getString("serverImagesUrl");
 			serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
 			mapsPath = config.getString("mapsPath");
-			emailUsername = config.getString("emailUsername");
-			emailPassword = config.getString("emailPassword");
 			createMaps = config.getBoolean("createMaps");
 			createPdf = config.getBoolean("createPdf");
 			createStaticWidget = config.getBoolean("createStaticWidget");
@@ -1378,16 +1315,6 @@ public class GlobalVariables {
 			json.put("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
 		if (mapsPath != null)
 			json.put("mapsPath", mapsPath);
-		json.put("smtpAuth", smtpAuth);
-		json.put("smtpTls", smtpTls);
-		if (smtpHost != null)
-			json.put("smtpHost", smtpHost);
-		if (smtpPort != null)
-			json.put("smtpPort", smtpPort);
-		if (emailUsername != null)
-			json.put("emailUsername", emailUsername);
-		if (emailPassword != null)
-			json.put("emailPassword", emailPassword);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createStaticWidget", createStaticWidget);
@@ -1433,18 +1360,6 @@ public class GlobalVariables {
 			setServerImagesUrlLocalhost(configuration.getString("serverImagesUrlLocalhost"));
 		if (configuration.has("mapsPath"))
 			setMapsPath(configuration.getString("mapsPath"));
-		if (configuration.has("smtpAuth"))
-			setSmtpAuth(configuration.getBoolean("smtpAuth"));
-		if (configuration.has("smtpTls"))
-			setSmtpTls(configuration.getBoolean("smtpTls"));
-		if (configuration.has("smtpHost"))
-			setSmtpHost(configuration.getString("smtpHost"));
-		if (configuration.has("smtpPort"))
-			setSmtpPort(configuration.getString("smtpPort"));
-		if (configuration.has("emailUsername"))
-			setEmailUsername(configuration.getString("emailUsername"));
-		if (configuration.has("emailPassword"))
-			setEmailPassword(configuration.getString("emailPassword"));
 		if (configuration.has("createCaaml"))
 			setCreateMaps(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))

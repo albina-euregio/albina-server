@@ -4,47 +4,29 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-
 import eu.albina.controller.socialmedia.RapidMailProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -109,57 +91,6 @@ public class EmailUtil {
 		return cfg;
 	}
 
-	public void sendConfirmationEmail(Subscriber subscriber)
-			throws IllegalArgumentException, UnsupportedEncodingException, AlbinaException {
-		logger.debug("Sending confirmation email to " + subscriber.getEmail());
-		String token = issueConfirmationToken(subscriber.getEmail());
-		Session session = getEmailSession();
-
-		try {
-			MimeMessage message = new MimeMessage(session);
-			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-			message.addHeader("format", "flowed");
-			message.addHeader("Content-Transfer-Encoding", "8bit");
-
-			message.setSubject(GlobalVariables.getConfirmationEmailSubject(subscriber.getLanguage()),
-					GlobalVariables.getEmailEncoding());
-			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
-					GlobalVariables.getEmailFromPersonal(subscriber.getLanguage())));
-
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(subscriber.getEmail()));
-
-			MimeMultipart multipart = new MimeMultipart("related");
-
-			// add html
-			MimeBodyPart messageBodyPart = new MimeBodyPart();
-			String htmlText = createConfirmationEmailHtml(token, subscriber.getLanguage());
-			messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
-			multipart.addBodyPart(messageBodyPart);
-			message.setContent(multipart, GlobalVariables.getEmailEncoding());
-			Transport.send(message);
-
-			logger.debug("Confirmation email sent to " + subscriber.getEmail());
-		} catch (MessagingException e) {
-			logger.error("Confirmation email could not be sent to " + subscriber.getEmail() + ": " + e.getMessage());
-			e.printStackTrace();
-			throw new AlbinaException(e.getMessage());
-		} catch (UnsupportedEncodingException e) {
-			logger.error("Confirmation email could not be sent to " + subscriber.getEmail() + ": " + e.getMessage());
-			e.printStackTrace();
-			throw new AlbinaException(e.getMessage());
-		}
-	}
-
-	private String issueConfirmationToken(String email) throws IllegalArgumentException, UnsupportedEncodingException {
-		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
-		long time = System.currentTimeMillis() + GlobalVariables.confirmationTokenExpirationDuration;
-		Date expirationTime = new Date(time);
-		Date issuedAt = new Date();
-		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(email)
-				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
-		return token;
-	}
-
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
 		for (LanguageCode lang : GlobalVariables.languages) {
 			String subject = GlobalVariables.getEmailSubject(lang) + AlbinaUtil.getDate(bulletins, lang);
@@ -168,21 +99,6 @@ public class EmailUtil {
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
 			}
 		}
-	}
-
-	private Session getEmailSession() {
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", GlobalVariables.getSmtpAuth());
-		props.put("mail.smtp.starttls.enable", GlobalVariables.getSmtpTls());
-		props.put("mail.smtp.host", GlobalVariables.getSmtpHost());
-		props.put("mail.smtp.port", GlobalVariables.getSmtpPort());
-
-		return Session.getInstance(props, new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(GlobalVariables.getEmailUsername(),
-						GlobalVariables.getEmailPassword());
-			}
-		});
 	}
 
 	private String createZipFile(String htmlContent, String textContent) throws IOException {
