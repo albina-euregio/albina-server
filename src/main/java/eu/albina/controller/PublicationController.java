@@ -247,7 +247,7 @@ public class PublicationController {
 	}
 
 	// LANG
-	private void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	public void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		try {
 			logger.info("CAAML production started");
 			AvalancheReportController.getInstance().setAvalancheReportCaamlFlag(avalancheReportIds);
@@ -264,7 +264,7 @@ public class PublicationController {
 		}
 	}
 
-	private Thread createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	public Thread createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		return new Thread(new Runnable() {
 			public void run() {
 				logger.info("Map production started");
@@ -277,7 +277,7 @@ public class PublicationController {
 		});
 	}
 
-	private void createPdf(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	public void createPdf(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -305,7 +305,7 @@ public class PublicationController {
 		}).start();
 	}
 
-	private void createStaticWidgets(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	public void createStaticWidgets(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -327,7 +327,7 @@ public class PublicationController {
 		}).start();
 	}
 
-	private void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
+	public void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -347,7 +347,7 @@ public class PublicationController {
 		}).start();
 	}
 
-	private void triggerMessengerpeople(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
+	public void triggerMessengerpeople(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
 			List<String> regions) {
 		new Thread(new Runnable() {
 			public void run() {

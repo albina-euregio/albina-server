@@ -608,6 +608,65 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<String> getPublishedReportIds(DateTime startDate, DateTime endDate, List<String> regions)
+			throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+
+		Number revision = -1;
+
+		try {
+			List<String> ids = new ArrayList<String>();
+
+			for (String region : regions) {
+
+				transaction.begin();
+				List<AvalancheReport> reports = entityManager
+						.createQuery(HibernateUtil.queryGetReportsForRegionStartDate)
+						.setParameter("startDate", startDate).setParameter("region", region).getResultList();
+				transaction.commit();
+
+				AvalancheReport latest = null;
+
+				if (reports != null && !reports.isEmpty()) {
+					// get report history
+					transaction.begin();
+					AuditReader reader = AuditReaderFactory.get(entityManager);
+					AuditQuery q = reader.createQuery().forRevisionsOfEntity(AvalancheReport.class, true, true);
+					q.add(AuditEntity.id().eq(reports.get(0).getId()));
+					List<AvalancheReport> audit = q.getResultList();
+					transaction.commit();
+
+					revision = -1;
+
+					// get latest report with status published or republished
+					for (AvalancheReport avalancheReport : audit) {
+						if ((avalancheReport.getRegion().startsWith(region)
+								|| region.startsWith(avalancheReport.getRegion()))
+								&& (avalancheReport.getStatus() == BulletinStatus.published
+										|| avalancheReport.getStatus() == BulletinStatus.republished)) {
+							if (avalancheReport.getRevision().intValue() > revision.intValue()) {
+								latest = avalancheReport;
+								revision = avalancheReport.getRevision();
+							}
+						}
+					}
+					if (latest != null && latest.getId() != null)
+						ids.add(latest.getId());
+				}
+			}
+
+			return ids;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	private AvalancheBulletinVersionTuple getPublishedReportForRegion(DateTime startDate, DateTime endDate,
 			String region) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
