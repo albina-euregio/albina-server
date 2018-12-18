@@ -142,53 +142,6 @@ public class EmailUtil {
 		}
 	}
 
-	// public void sendBulletinEmail(List<AvalancheBulletin> bulletins, LanguageCode
-	// lang, List<String> recipients) {
-	// logger.debug("Sending bulletin email in " + lang + "...");
-	//
-	// Session session = getEmailSession();
-	//
-	// try {
-	// MimeMessage message = new MimeMessage(session);
-	// message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-	// message.addHeader("format", "flowed");
-	// message.addHeader("Content-Transfer-Encoding", "8bit");
-	// message.setSubject(GlobalVariables.getEmailSubject(lang) +
-	// AlbinaUtil.getDate(bulletins, lang),
-	// GlobalVariables.getEmailEncoding());
-	// message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
-	// GlobalVariables.getEmailFromPersonal(lang)));
-	//
-	// if (recipients != null && !recipients.isEmpty()) {
-	// for (String recipient : recipients)
-	// message.addRecipient(Message.RecipientType.TO, new
-	// InternetAddress(recipient));
-	//
-	// MimeMultipart multipart = new MimeMultipart("related");
-	//
-	// // add html
-	// MimeBodyPart messageBodyPart = new MimeBodyPart();
-	// String htmlText = createBulletinEmailHtml(bulletins, lang);
-	// messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
-	// multipart.addBodyPart(messageBodyPart);
-	//
-	// message.setContent(multipart, GlobalVariables.getEmailEncoding());
-	// Transport.send(message);
-	//
-	// logger.debug("Emails sent in " + lang + ".");
-	// } else
-	// logger.debug("No recipients for emails in " + lang + ".");
-	// } catch (MessagingException e) {
-	// logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
-	// e.printStackTrace();
-	// throw new RuntimeException(e);
-	// } catch (UnsupportedEncodingException e) {
-	// logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
-	// e.printStackTrace();
-	// throw new RuntimeException(e);
-	// }
-	// }
-
 	public String createConfirmationEmailHtml(String token, LanguageCode lang) {
 		try {
 			// Create data model
