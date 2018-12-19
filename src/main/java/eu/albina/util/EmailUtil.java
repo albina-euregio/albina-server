@@ -347,6 +347,8 @@ public class EmailUtil {
 				Map<String, Object> bulletin = new HashMap<>();
 
 				bulletin.put("stylepm", getPMStyle(avalancheBulletin.isHasDaytimeDependency()));
+				bulletin.put("stylepmtable", getPMStyleTable(avalancheBulletin.isHasDaytimeDependency()));
+
 				if (avalancheBulletin.isHasDaytimeDependency()) {
 					bulletin.put("textam", GlobalVariables.getAMText(lang));
 					bulletin.put("textpm", GlobalVariables.getPMText(lang));
@@ -823,8 +825,15 @@ public class EmailUtil {
 
 	private String getPMStyle(boolean daytimeDependency) {
 		if (!daytimeDependency)
-			return "style=\"display: none; overflow: hidden; height: 0px;\"";
+			return "style=\"display:none;width:0px;max-height:0px;overflow:hidden;mso-hide:all;height:0;font-size:0;max-height:0;line-height:0;margin:0 auto;\"";
 		else
 			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px; border-top: 1px solid #e6eef2; padding-top: 10px;\"";
+	}
+
+	private String getPMStyleTable(boolean daytimeDependency) {
+		if (!daytimeDependency)
+			return "style=\"mso-hide: all;\"";
+		else
+			return "";
 	}
 }

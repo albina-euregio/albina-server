@@ -428,11 +428,11 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 						<table style="padding: 15px 0;">
 							<tr>
 								<td>
-									<table bgcolor="#1aabff" style="margin: 15px 0;">
+									<table bgcolor="#1aabff" style="Margin: 15px 0;">
 										<tr>
 											<td align="center">
 												<a href="${link.pdf}">
-													<p style="color: #ffffff; margin: 5px 0; font-weight: bold; font-size: 16px;">PDF</p>
+													<p style="color: #ffffff; Margin: 5px 0; font-weight: bold; font-size: 16px;">PDF</p>
 												</a>
 											</td>
 										</tr>
@@ -668,7 +668,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 											</tr>
 										</table>
 										<div ${bulletin.stylepm}>
-											<table style="padding-left: 15px;">
+											<table style="padding-left: 15px;" ${bulletin.stylepmtable}>
 												<tr>
 													<td class="daytime-text-div">
 														<h2 class="daytime-text">${bulletin.textpm}</h2>
@@ -679,10 +679,10 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 														<img width="150" class="detail-map" src="${bulletin.pm.map}"/>
 													</td>
 													<td>
-														<table style="border-bottom: 1px solid #e6eef2; padding-bottom: 5px;">
+														<table style="border-bottom: 1px solid #e6eef2; padding-bottom: 5px;" ${bulletin.stylepmtable}>
 															<tr>
 																<td>
-																	<table style="width: 0;">
+																	<table style="width: 0;" ${bulletin.stylepmtable}>
 																		<tr>
 																		<td>
 																			<div style="height: 48px;">
@@ -699,7 +699,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 																			</div>
 																		</td>
 																			<td class="tendency">
-																				<table>
+																				<table ${bulletin.stylepmtable}>
 																					<tr>
 																						<td>
 																							<h5 style="text-align: left; margin-bottom: 10px;">${bulletin.tendency.text}</h5>
@@ -716,7 +716,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 																</td>
 															</tr>
 														</table>
-														<table style="margin: 5px 5px 0 5px; width: 0;">
+														<table style="margin: 5px 5px 0 5px; width: 0;" ${bulletin.stylepmtable}>
 															<tr>
 																<td style="margin: 0 5px; width: 70px; text-align: center;">
 																	<img width="50" class="avalanche-situation" src="${bulletin.pm.avalancheSituation1.symbol}"/>
@@ -752,7 +752,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 																</td>
 															</tr>
 														</table>
-														<table style="margin-left: 5px; margin-top: 0px; width: 0;">
+														<table style="margin-left: 5px; margin-top: 0px; width: 0;" ${bulletin.stylepmtable}>
 															<tr>
 																<td style="margin: 0 5px; width: 70px; text-align: center;">
 																	<img width="50" class="avalanche-situation" src="${bulletin.pm.avalancheSituation2.symbol}"/>
