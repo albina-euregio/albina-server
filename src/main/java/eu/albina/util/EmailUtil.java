@@ -534,7 +534,7 @@ public class EmailUtil {
 				&& (daytimeBulletin.getDangerRatingAbove() == null
 						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.missing
 						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.no_rating)) {
-			dangerRating.put("symbol", "");
+			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_0_0.png");
 		} else {
 			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
 					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
