@@ -775,7 +775,7 @@ public class PdfUtil {
 						cell.add(img);
 						table.addCell(cell);
 					}
-					if (avalancheSituation.getTreelineLow()) {
+					if (avalancheSituation.getTreelineHigh()) {
 						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
@@ -786,8 +786,8 @@ public class PdfUtil {
 						cell.setPadding(padding);
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
-					} else if (avalancheSituation.getElevationLow() > 0) {
-						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationLow() + "m")
+					} else if (avalancheSituation.getElevationHigh() > 0) {
+						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationHigh() + "m")
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
 						cell = new Cell(1, 1);
@@ -798,7 +798,7 @@ public class PdfUtil {
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
 					}
-					if (avalancheSituation.getTreelineHigh()) {
+					if (avalancheSituation.getTreelineLow()) {
 						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
@@ -809,8 +809,8 @@ public class PdfUtil {
 						cell.setPadding(padding);
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
-					} else if (avalancheSituation.getElevationHigh() > 0) {
-						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationHigh() + "m")
+					} else if (avalancheSituation.getElevationLow() > 0) {
+						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationLow() + "m")
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
 						cell = new Cell(1, 1);
