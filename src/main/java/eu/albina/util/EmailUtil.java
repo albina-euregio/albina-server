@@ -28,6 +28,7 @@ import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheSituation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
@@ -487,6 +488,7 @@ public class EmailUtil {
 			links.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
 					+ AlbinaUtil.getValidityDate(bulletins) + "?lang=" + lang.toString());
 			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
+			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDate(bulletins), lang, region));
 			links.put("imprint", GlobalVariables.getImprintLink(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook",
@@ -580,12 +582,13 @@ public class EmailUtil {
 				avalancheSituation1.put("text", "");
 			}
 
-			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
-			avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
-
 			Map<String, Object> elevation = new HashMap<>();
 			if (daytimeBulletin.getAvalancheSituation1().getTreelineHigh()
 					|| daytimeBulletin.getAvalancheSituation1().getElevationHigh() > 0) {
+
+				String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+				avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+
 				if (daytimeBulletin.getAvalancheSituation1().getTreelineLow()
 						|| daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0) {
 					// elevation high and low set
@@ -620,8 +623,19 @@ public class EmailUtil {
 				else if (daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0)
 					elevation.put("limitAbove", daytimeBulletin.getAvalancheSituation1().getElevationLow() + "m");
 				elevation.put("limitBelow", "");
+
+				String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+				avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
 			} else {
 				// no elevation set
+				if (daytimeBulletin.getAvalancheSituation1()
+						.getAvalancheSituation() == AvalancheSituation.favourable_situation) {
+					String path = GlobalVariables.getAspectSymbolPath(255, false);
+					avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+				} else {
+					String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+					avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+				}
 				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");

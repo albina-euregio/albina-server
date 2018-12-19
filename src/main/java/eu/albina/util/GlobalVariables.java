@@ -1534,6 +1534,50 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
+	// REGION
+	public static String getPdfLink(String date, LanguageCode lang, String region) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("https://avalanche.report/albina_files/");
+		sb.append(date);
+		sb.append("/");
+		sb.append(date);
+		sb.append("_");
+		switch (region) {
+		case "AT-07":
+			sb.append(GlobalVariables.codeTyrol);
+			break;
+		case "IT-32-BZ":
+			sb.append(GlobalVariables.codeSouthTyrol);
+			break;
+		case "IT-32-TN":
+			sb.append(GlobalVariables.codeTrentino);
+			break;
+		case "AT-06":
+			sb.append(GlobalVariables.codeStyria);
+			break;
+		default:
+			break;
+		}
+		sb.append("_");
+		switch (lang) {
+		case de:
+			sb.append(LanguageCode.de);
+			break;
+		case it:
+			sb.append(LanguageCode.it);
+			break;
+		case en:
+			sb.append(LanguageCode.en);
+			break;
+		default:
+			sb.append(LanguageCode.en);
+			break;
+		}
+		sb.append(".pdf");
+		return sb.toString();
+	}
+
 	public static String getImprintLink(LanguageCode lang) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(GlobalVariables.avalancheReportBaseUrl);
