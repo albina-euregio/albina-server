@@ -529,10 +529,15 @@ public class AvalancheBulletinController {
 		Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
 
 		for (String region : regions) {
-			List<AvalancheBulletin> bulletins = this.publishBulletins(startDate, endDate, region, publicationDate,
-					user);
-			for (AvalancheBulletin avalancheBulletin : bulletins)
-				results.put(avalancheBulletin.getId(), avalancheBulletin);
+			BulletinStatus internalStatus = AvalancheReportController.getInstance().getInternalStatusForDay(startDate,
+					region);
+
+			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
+				List<AvalancheBulletin> bulletins = this.publishBulletins(startDate, endDate, region, publicationDate,
+						user);
+				for (AvalancheBulletin avalancheBulletin : bulletins)
+					results.put(avalancheBulletin.getId(), avalancheBulletin);
+			}
 		}
 
 		return results;

@@ -105,6 +105,39 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
+	public BulletinStatus getInternalStatusForDay(DateTime date, String region) throws AlbinaException {
+
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+
+			if (region == null || region == "")
+				throw new AlbinaException("No region defined!");
+
+			// get reports
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegionStartDate)
+					.setParameter("startDate", date).setParameter("region", region).getResultList();
+
+			transaction.commit();
+
+			if (reports == null || reports.size() == 0)
+				return BulletinStatus.missing;
+			else if (reports.size() > 1)
+				throw new AlbinaException("Multiple reports found!");
+			else
+				return reports.get(0).getStatus();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	public Map<DateTime, BulletinStatus> getStatus(DateTime startDate, DateTime endDate, String region)
 			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
