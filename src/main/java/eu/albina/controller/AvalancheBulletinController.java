@@ -182,13 +182,23 @@ public class AvalancheBulletinController {
 							b.getPublishedRegions().remove(r);
 					} else {
 						// foreign bulletin
+						Set<String> tmpRegions = new HashSet<String>();
+						for (String r : b.getSavedRegions()) {
+							if (r.startsWith(region)) {
+								if (!bulletin.getSavedRegions().contains(r))
+									tmpRegions.add(r);
+							}
+						}
+						for (String r : tmpRegions)
+							b.getSavedRegions().remove(r);
+
 						for (String r : bulletin.getSavedRegions()) {
 							if (r.startsWith(region)) {
 								if (!b.getSavedRegions().contains(r))
 									b.addSavedRegion(r);
 							}
 						}
-						Set<String> tmpRegions = new HashSet<String>();
+						tmpRegions = new HashSet<String>();
 						for (String r : b.getSuggestedRegions()) {
 							if (r.startsWith(region)) {
 								if (!bulletin.getSuggestedRegions().contains(r))
