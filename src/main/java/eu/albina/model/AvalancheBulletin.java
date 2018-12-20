@@ -685,12 +685,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (forenoon != null && forenoon.getDangerRatingBelow() != null
 				&& result.compareTo(forenoon.getDangerRatingBelow()) < 0)
 			result = forenoon.getDangerRatingBelow();
-		if (afternoon != null && afternoon.getDangerRatingAbove() != null
-				&& result.compareTo(afternoon.getDangerRatingAbove()) < 0)
-			result = afternoon.getDangerRatingAbove();
-		if (afternoon != null && afternoon.getDangerRatingBelow() != null
-				&& result.compareTo(afternoon.getDangerRatingBelow()) < 0)
-			result = afternoon.getDangerRatingBelow();
+		if (hasDaytimeDependency) {
+			if (afternoon != null && afternoon.getDangerRatingAbove() != null
+					&& result.compareTo(afternoon.getDangerRatingAbove()) < 0)
+				result = afternoon.getDangerRatingAbove();
+			if (afternoon != null && afternoon.getDangerRatingBelow() != null
+					&& result.compareTo(afternoon.getDangerRatingBelow()) < 0)
+				result = afternoon.getDangerRatingBelow();
+		}
 		return result;
 	}
 
