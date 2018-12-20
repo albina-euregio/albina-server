@@ -40,7 +40,7 @@ public class AuthenticationService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(Credentials credentials) {
-		String username = credentials.getUsername();
+		String username = credentials.getUsername().toLowerCase();
 		String password = credentials.getPassword();
 
 		try {
