@@ -33,13 +33,13 @@ public class GlobalVariables {
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
 	private static boolean createCaaml = true;
-	private static boolean createMaps = true;
-	private static boolean createPdf = true;
-	private static boolean createStaticWidget = true;
-	private static boolean sendEmails = true;
-	private static boolean publishToSocialMedia = true;
-	private static boolean publishAt5PM = true;
-	private static boolean publishAt8AM = true;
+	private static boolean createMaps = false;
+	private static boolean createPdf = false;
+	private static boolean createStaticWidget = false;
+	private static boolean sendEmails = false;
+	private static boolean publishToSocialMedia = false;
+	private static boolean publishAt5PM = false;
+	private static boolean publishAt8AM = false;
 
 	private static String localImagesPath = "images/";
 	private static String localFontsPath = "fonts/open-sans";
@@ -52,23 +52,11 @@ public class GlobalVariables {
 
 	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
-
-	// PRODUCTION
-	private static String pdfDirectory = "/mnt/albina_files/";
-	private static String serverImagesUrlLocalhost = "http://localhost:8080/images/";
-	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
-	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
-	public static String scriptsPath = "/opt/";
-
-	// DEVELOPMENT
-	// private static String pdfDirectory = "/mnt/albina_files_dev/";
-	// private static String serverImagesUrlLocalhost =
-	// "http://localhost:8080/images/";
-	// private static String mapsPath =
-	// "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
-	// public static String univieMapProductionUrl =
-	// "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
-	// public static String scriptsPath = "/opt/dev/";
+	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
+	private static String pdfDirectory = "/mnt/albina_files_local/";
+	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
+	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
+	public static String scriptsPath = "/opt/local/";
 
 	// LANG
 	// REGION
@@ -298,6 +286,15 @@ public class GlobalVariables {
 		setConfigProperty("publishBulletinsStyria", publishBulletinsStyria);
 	}
 
+	public static String getScriptsPath() {
+		return scriptsPath;
+	}
+
+	public static void setScriptsPath(String scriptsPath) throws ConfigurationException {
+		GlobalVariables.scriptsPath = scriptsPath;
+		setConfigProperty("scriptsPath", scriptsPath);
+	}
+
 	public static String getPdfDirectory() {
 		return pdfDirectory;
 	}
@@ -332,6 +329,15 @@ public class GlobalVariables {
 	public static void setMapsPath(String mapsPath) throws ConfigurationException {
 		GlobalVariables.mapsPath = mapsPath;
 		setConfigProperty("mapsPath", mapsPath);
+	}
+
+	public static String getUnivieMapProductionUrl() {
+		return univieMapProductionUrl;
+	}
+
+	public static void setUnivieMapProductionUrl(String univieMapProductionUrl) throws ConfigurationException {
+		GlobalVariables.univieMapProductionUrl = univieMapProductionUrl;
+		setConfigProperty("univieMapProductionUrl", univieMapProductionUrl);
 	}
 
 	public static String getAvalancheReportUsername() {
@@ -1088,7 +1094,7 @@ public class GlobalVariables {
 		case de:
 			return "Nachmittag";
 		case it:
-			return "Pommeriggio";
+			return "Pomeriggio";
 		default:
 			return "PM";
 		}
@@ -1315,6 +1321,11 @@ public class GlobalVariables {
 			json.put("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
 		if (mapsPath != null)
 			json.put("mapsPath", mapsPath);
+		if (univieMapProductionUrl != null)
+			json.put("univieMapProductionUrl", univieMapProductionUrl);
+		if (scriptsPath != null)
+			json.put("scriptsPath", scriptsPath);
+		json.put("createCaaml", createCaaml);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createStaticWidget", createStaticWidget);
@@ -1360,6 +1371,8 @@ public class GlobalVariables {
 			setServerImagesUrlLocalhost(configuration.getString("serverImagesUrlLocalhost"));
 		if (configuration.has("mapsPath"))
 			setMapsPath(configuration.getString("mapsPath"));
+		if (configuration.has("univieMapProductionUrl"))
+			setUnivieMapProductionUrl(configuration.getString("univieMapProductionUrl"));
 		if (configuration.has("createCaaml"))
 			setCreateMaps(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))
@@ -1384,6 +1397,8 @@ public class GlobalVariables {
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
 		if (configuration.has("publishBulletinsStyria"))
 			setPublishBulletinsStyria(configuration.getBoolean("publishBulletinsStyria"));
+		if (configuration.has("scriptsPath"))
+			setScriptsPath(configuration.getString("scriptsPath"));
 	}
 
 	public static String getTendencySymbolPath(Tendency tendency, boolean grayscale) {
