@@ -18,6 +18,7 @@ public class HibernateUtil {
 	public static String queryGetReports = "from AvalancheReport as r where r.date between :startDate and :endDate";
 	public static String queryGetReportsForRegion = "from AvalancheReport as r where r.date between :startDate and :endDate and :region = r.region";
 	public static String queryGetReportsForRegionStartDate = "from AvalancheReport as r where r.date = :startDate and :region = r.region";
+	public static String queryGetReportsStartDate = "from AvalancheReport as r where r.date = :startDate";
 	public static String queryGetSubscribersForLanguage = "from Subscriber as s where :language = s.language";
 	public static String queryGetTopLevelRegions = "from Region as r where r.parentRegion is null";
 	public static String queryGetSubregions = "from Region as r where r.parentRegion.id = :regionId";

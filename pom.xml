@@ -17,6 +17,123 @@
     <itextpdf.version>7.0.4</itextpdf.version>
   </properties>
   
+  <profiles>
+    <profile>
+      <id>env-local</id>
+      <activation>
+      	<activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+      	<hibernate.connection.url>jdbc:mysql://localhost:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</hibernate.connection.url>
+      	<hibernate.connection.username>ais</hibernate.connection.username>
+      	<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
+      	<hibernate.show-sql>true</hibernate.show-sql>
+      	<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
+      	<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+      	<albina.conf.create-caaml>false</albina.conf.create-caaml>
+      	<albina.conf.create-maps>false</albina.conf.create-maps>
+      	<albina.conf.create-pdf>false</albina.conf.create-pdf>
+      	<albina.conf.create-static-widget>false</albina.conf.create-static-widget>
+      	<albina.conf.publish-to-social-media>false</albina.conf.publish-to-social-media>
+      	<albina.conf.send-emails>false</albina.conf.send-emails>
+   		<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
+      	<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
+      	<albina.conf.server-images-url-localhost>http://admin.avalanche.report/images/</albina.conf.server-images-url-localhost>
+      	<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
+      	<albina.conf.maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/</albina.conf.maps-path>
+      	<albina.conf.univie-map-production-url></albina.conf.univie-map-production-url>
+      	<albina.conf.pdf-directory>/mnt/albina_files_local/</albina.conf.pdf-directory>
+      	<albina.conf.publish-at-5-pm>false</albina.conf.publish-at-5-pm>
+      	<albina.conf.publish-at-8-am>false</albina.conf.publish-at-8-am>
+      	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
+      	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
+      	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
+      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
+      	<albina.conf.scripts-path>/opt/local/</albina.conf.scripts-path>
+      	<albina.log.prefix>LOCAL</albina.log.prefix>
+      	<albina.log.level>DEBUG</albina.log.level>
+      	<albina.log.level.c3p0>SEVERE</albina.log.level.c3p0>
+      	<albina.log.level.sql>INFO</albina.log.level.sql>
+      	<albina.log.filename>albina_local.log</albina.log.filename>
+      	<albina.log.dest>stdout</albina.log.dest>
+      </properties>
+    </profile>
+    <profile>
+      <id>env-dev</id>
+      <properties>
+      	<hibernate.connection.url>jdbc:mysql://albinadb1rz:3306/ais_tmp?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</hibernate.connection.url>
+      	<hibernate.connection.username>ais</hibernate.connection.username>
+      	<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
+      	<hibernate.show-sql>false</hibernate.show-sql>
+      	<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina_dev/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
+      	<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina_dev/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+      	<albina.conf.create-caaml>true</albina.conf.create-caaml>
+      	<albina.conf.create-maps>true</albina.conf.create-maps>
+      	<albina.conf.create-pdf>true</albina.conf.create-pdf>
+      	<albina.conf.create-static-widget>true</albina.conf.create-static-widget>
+      	<albina.conf.publish-to-social-media>false</albina.conf.publish-to-social-media>
+      	<albina.conf.send-emails>false</albina.conf.send-emails>
+   		<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
+      	<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
+      	<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
+      	<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
+      	<albina.conf.maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/</albina.conf.maps-path>
+      	<albina.conf.univie-map-production-url>http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php</albina.conf.univie-map-production-url>
+      	<albina.conf.pdf-directory>/mnt/albina_files_dev/</albina.conf.pdf-directory>
+      	<albina.conf.publish-at-5-pm>true</albina.conf.publish-at-5-pm>
+      	<albina.conf.publish-at-8-am>true</albina.conf.publish-at-8-am>
+      	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
+      	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
+      	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
+      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
+      	<albina.conf.scripts-path>/opt/dev/</albina.conf.scripts-path>
+       	<albina.log.prefix>DEV</albina.log.prefix>
+      	<albina.log.level>DEBUG</albina.log.level>
+      	<albina.log.level.c3p0>INFO</albina.log.level.c3p0>
+      	<albina.log.level.sql>SEVERE</albina.log.level.sql>
+      	<albina.log.filename>albina_dev.log</albina.log.filename>
+      	<albina.log.dest>file</albina.log.dest>
+      </properties>
+    </profile>
+    <profile>
+      <id>env-prod</id>
+      <properties>
+      	<hibernate.connection.url>jdbc:mysql://albinadb1rz:3306/ais?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</hibernate.connection.url>
+      	<hibernate.connection.username>ais</hibernate.connection.username>
+      	<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
+      	<hibernate.show-sql>false</hibernate.show-sql>
+      	<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
+      	<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+      	<albina.conf.create-caaml>true</albina.conf.create-caaml>
+      	<albina.conf.create-maps>true</albina.conf.create-maps>
+      	<albina.conf.create-pdf>true</albina.conf.create-pdf>
+      	<albina.conf.create-static-widget>true</albina.conf.create-static-widget>
+      	<albina.conf.publish-to-social-media>true</albina.conf.publish-to-social-media>
+      	<albina.conf.send-emails>true</albina.conf.send-emails>
+      	<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
+      	<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
+      	<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
+      	<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
+      	<albina.conf.maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm/</albina.conf.maps-path>
+      	<albina.conf.univie-map-production-url>http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php</albina.conf.univie-map-production-url>
+      	<albina.conf.pdf-directory>/mnt/albina_files/</albina.conf.pdf-directory>
+      	<albina.conf.publish-at-5-pm>true</albina.conf.publish-at-5-pm>
+      	<albina.conf.publish-at-8-am>true</albina.conf.publish-at-8-am>
+      	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
+      	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
+      	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
+      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
+      	<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
+     	<albina.log.prefix></albina.log.prefix>
+      	<albina.log.level>INFO</albina.log.level>
+      	<albina.log.level.c3p0>SEVERE</albina.log.level.c3p0>
+      	<albina.log.level.sql>WARN</albina.log.level.sql>
+      	<albina.log.filename>albina.log</albina.log.filename>
+      	<albina.log.dest>file</albina.log.dest>
+      </properties>
+    </profile>
+  </profiles>
+  
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -303,7 +420,14 @@
 				</webApp>
 			</configuration>
 		</plugin>
-
 	</plugins>
+	
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    
   </build>
 </project>

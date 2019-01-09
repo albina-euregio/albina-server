@@ -685,12 +685,14 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (forenoon != null && forenoon.getDangerRatingBelow() != null
 				&& result.compareTo(forenoon.getDangerRatingBelow()) < 0)
 			result = forenoon.getDangerRatingBelow();
-		if (afternoon != null && afternoon.getDangerRatingAbove() != null
-				&& result.compareTo(afternoon.getDangerRatingAbove()) < 0)
-			result = afternoon.getDangerRatingAbove();
-		if (afternoon != null && afternoon.getDangerRatingBelow() != null
-				&& result.compareTo(afternoon.getDangerRatingBelow()) < 0)
-			result = afternoon.getDangerRatingBelow();
+		if (hasDaytimeDependency) {
+			if (afternoon != null && afternoon.getDangerRatingAbove() != null
+					&& result.compareTo(afternoon.getDangerRatingAbove()) < 0)
+				result = afternoon.getDangerRatingAbove();
+			if (afternoon != null && afternoon.getDangerRatingBelow() != null
+					&& result.compareTo(afternoon.getDangerRatingBelow()) < 0)
+				result = afternoon.getDangerRatingBelow();
+		}
 		return result;
 	}
 
@@ -788,17 +790,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (id != null && id != "")
 			json.put("id", id);
 
-		if (user != null && user.getName() != null && user.getName() != "")
-			json.put("author", user.toSmallJSON());
-
-		if (additionalAuthors != null && additionalAuthors.size() > 0) {
-			JSONArray users = new JSONArray();
-			for (String user : additionalAuthors) {
-				users.put(user);
-			}
-			json.put("additionalAuthors", users);
-		}
-
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
 		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
@@ -880,11 +871,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			dateTimeReport.appendChild(doc.createTextNode(
 					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
 			metaData.appendChild(dateTimeReport);
-		}
-		if (user != null) {
-			Element srcRef = doc.createElement("srcRef");
-			srcRef.appendChild(user.toCAAML(doc));
-			metaData.appendChild(srcRef);
 		}
 
 		metaDataProperty.appendChild(metaData);

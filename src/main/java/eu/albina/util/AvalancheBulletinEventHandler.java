@@ -15,6 +15,7 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfPage;
+import com.itextpdf.kernel.pdf.PdfString;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Image;
@@ -76,30 +77,30 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add headline
 			String headline = GlobalVariables.getHeadlineText(lang);
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
-					.setColor(greyDarkColor, true).showText(headline);
+					.setColor(greyDarkColor, true).showText(headline).endText();
 			String date = AlbinaUtil.getDate(bulletins, lang);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
-					.setColor(blue, true).showText(date);
+					.setColor(blue, true).showText(date).endText();
 
 			String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
 			if (!publicationDate.isEmpty())
 				pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
 						.setColor(greyDarkColor, true)
-						.showText(GlobalVariables.getPublishedText(lang) + publicationDate);
+						.showText(GlobalVariables.getPublishedText(lang) + publicationDate).endText();
 
 			Canvas canvas = new Canvas(pdfCanvas, pdfDoc, page.getPageSize());
 
 			// Add copyright
 			String copyright = GlobalVariables.getCopyrightText(lang);
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
-					.showText(copyright);
+					.showText(copyright).endText();
 
 			String urlString = GlobalVariables.getCapitalUrl(lang);
 			Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
 			pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)
 					.moveText(buttonRectangle.getLeft() + 15, buttonRectangle.getBottom() + 9)
-					.setColor(whiteColor, true).showText(urlString);
+					.setColor(whiteColor, true).showText(urlString).endText();
 
 			// Draw lines
 			pdfCanvas.setLineWidth(1).setStrokeColor(blue).moveTo(0, pageSize.getHeight() - 90)
@@ -127,6 +128,14 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			interregImg.scaleToFit(130, 45);
 			interregImg.setFixedPosition(20, 0);
 			canvas.add(interregImg);
+
+			// Add page number
+			int pageNumber = docEvent.getDocument().getPageNumber(page);
+			String pageText = String.format(GlobalVariables.getPageNumberText(lang), pageNumber);
+			double width = openSansRegularFont.getContentWidth(new PdfString(pageText)) * 0.001f * 12 / 2;
+			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 12)
+					.moveText(pageSize.getWidth() / 2 - width / 2, 20).setColor(greyDarkColor, true).showText(pageText)
+					.endText();
 
 			canvas.close();
 

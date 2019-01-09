@@ -2,6 +2,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +21,6 @@ import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.proxy.HibernateProxy;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,7 +31,6 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.BulletinUpdate;
-import eu.albina.model.Texts;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.rest.AvalancheBulletinUpdateEndpoint;
@@ -60,8 +59,9 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<DateTime, BulletinStatus> getStatus(DateTime startDate, DateTime endDate, String region)
+	public Map<DateTime, BulletinStatus> getInternalStatus(DateTime startDate, DateTime endDate, String region)
 			throws AlbinaException {
+
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -79,10 +79,100 @@ public class AvalancheReportController {
 						.setParameter("startDate", startDate).setParameter("endDate", endDate)
 						.setParameter("region", region).getResultList();
 
-			for (AvalancheReport report : reports)
+			Map<DateTime, AvalancheReport> tmpReports = new HashMap<DateTime, AvalancheReport>();
+			for (AvalancheReport report : reports) {
+				if (tmpReports.containsKey(report.getDate())) {
+					if (tmpReports.get(report.getDate()).getRevision().intValue() < report.getRevision().intValue())
+						tmpReports.put(report.getDate(), report);
+				} else {
+					tmpReports.put(report.getDate(), report);
+				}
+			}
+
+			for (AvalancheReport report : tmpReports.values())
 				result.put(report.getDate(), report.getStatus());
 
 			transaction.commit();
+
+			return result;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public BulletinStatus getInternalStatusForDay(DateTime date, String region) throws AlbinaException {
+
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+
+			if (region == null || region == "")
+				throw new AlbinaException("No region defined!");
+
+			// get reports
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegionStartDate)
+					.setParameter("startDate", date).setParameter("region", region).getResultList();
+
+			transaction.commit();
+
+			if (reports == null || reports.size() == 0)
+				return BulletinStatus.missing;
+			else if (reports.size() > 1)
+				throw new AlbinaException("Multiple reports found!");
+			else
+				return reports.get(0).getStatus();
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<DateTime, BulletinStatus> getStatus(DateTime startDate, DateTime endDate, String region)
+			throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+
+		try {
+			transaction.begin();
+
+			Map<DateTime, BulletinStatus> result = new HashMap<DateTime, BulletinStatus>();
+
+			List<AvalancheReport> reports;
+			if (region == null || region == "")
+				reports = entityManager.createQuery(HibernateUtil.queryGetReports).setParameter("startDate", startDate)
+						.setParameter("endDate", endDate).getResultList();
+			else
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegion)
+						.setParameter("startDate", startDate).setParameter("endDate", endDate)
+						.setParameter("region", region).getResultList();
+			transaction.commit();
+
+			for (AvalancheReport report : reports) {
+				if (result.containsKey(report.getDate())) {
+					if (result.get(report.getDate()).equals(BulletinStatus.republished)) {
+						// do nothing
+					} else if (result.get(report.getDate()).equals(BulletinStatus.published)) {
+						if (report.getStatus().equals(BulletinStatus.republished)) {
+							result.put(report.getDate(), report.getStatus());
+						}
+					} else if (report.getStatus().compareTo(result.get(report.getDate())) < 0) {
+						result.put(report.getDate(), report.getStatus());
+					}
+				} else {
+					result.put(report.getDate(), report.getStatus());
+				}
+			}
 
 			return result;
 		} catch (HibernateException he) {
@@ -214,7 +304,8 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String changeReport(DateTime startDate, String region, User user) throws AlbinaException {
+	public String changeReport(List<AvalancheBulletin> publishedBulletins, DateTime startDate, String region, User user)
+			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -243,17 +334,10 @@ public class AvalancheReportController {
 			transaction.commit();
 
 			transaction.begin();
-
-			// set json string after status is published/republished
-			AvalancheBulletinVersionTuple bulletins = getPublishedBulletinsForRegion(startDate, startDate.plusDays(1),
-					region, revision);
-
 			JSONArray jsonResult = new JSONArray();
-			if (bulletins.bulletins != null) {
-				for (AvalancheBulletin bulletin : bulletins.bulletins) {
+			if (publishedBulletins != null)
+				for (AvalancheBulletin bulletin : publishedBulletins)
 					jsonResult.put(bulletin.toJSON());
-				}
-			}
 
 			revision += 1;
 			avalancheReport.setJsonString(jsonResult.toString());
@@ -271,19 +355,19 @@ public class AvalancheReportController {
 		}
 	}
 
-	public List<String> publishReport(DateTime startDate, List<String> regions, User user, DateTime publicationDate)
-			throws AlbinaException {
+	public List<String> publishReport(Collection<AvalancheBulletin> bulletins, DateTime startDate, List<String> regions,
+			User user, DateTime publicationDate) throws AlbinaException {
 		List<String> avalancheReportIds = new ArrayList<String>();
 		for (String region : regions) {
-			String avalancheReportId = publishReport(startDate, region, user, publicationDate);
+			String avalancheReportId = publishReport(bulletins, startDate, region, user, publicationDate);
 			avalancheReportIds.add(avalancheReportId);
 		}
 		return avalancheReportIds;
 	}
 
 	@SuppressWarnings("unchecked")
-	public String publishReport(DateTime startDate, String region, User user, DateTime publicationDate)
-			throws AlbinaException {
+	public String publishReport(Collection<AvalancheBulletin> bulletins, DateTime startDate, String region, User user,
+			DateTime publicationDate) throws AlbinaException {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -360,18 +444,28 @@ public class AvalancheReportController {
 				throw new AlbinaException("Report error!");
 			}
 
-			transaction.commit();
-
-			transaction.begin();
-
 			// set json string after status is published/republished
-			AvalancheBulletinVersionTuple bulletins = getPublishedBulletinsForRegion(startDate, startDate.plusDays(1),
-					region, revision);
-
 			JSONArray jsonResult = new JSONArray();
-			if (bulletins.bulletins != null) {
-				for (AvalancheBulletin bulletin : bulletins.bulletins) {
-					jsonResult.put(bulletin.toJSON());
+			if (bulletins != null) {
+
+				AvalancheBulletin b;
+				for (AvalancheBulletin bulletin : bulletins) {
+					b = new AvalancheBulletin();
+					b.copy(bulletin);
+					b.setId(bulletin.getId());
+					Set<String> newPublishedRegions = new HashSet<String>();
+
+					// delete all published regions which are foreign
+					if (b.getPublishedRegions() != null) {
+						for (String publishedRegion : b.getPublishedRegions()) {
+							if (publishedRegion.startsWith(region))
+								newPublishedRegions.add(publishedRegion);
+						}
+						if (newPublishedRegions.size() != 0) {
+							b.setPublishedRegions(newPublishedRegions);
+							jsonResult.put(b.toJSON());
+						}
+					}
 				}
 			}
 
@@ -547,65 +641,55 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
-	private AvalancheBulletinVersionTuple getPublishedBulletinsForRegion(DateTime startDate, DateTime endDate,
-			String region, int revision) throws AlbinaException {
+	public List<String> getPublishedReportIds(DateTime startDate, DateTime endDate, List<String> regions)
+			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 
+		Number revision = -1;
+
 		try {
-			// get report for date and region
-			transaction.begin();
+			List<String> ids = new ArrayList<String>();
 
-			List<AvalancheReport> reports = entityManager.createQuery(HibernateUtil.queryGetReportsForRegionStartDate)
-					.setParameter("startDate", startDate).setParameter("region", region).getResultList();
-			transaction.commit();
+			for (String region : regions) {
 
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+				transaction.begin();
+				List<AvalancheReport> reports = entityManager
+						.createQuery(HibernateUtil.queryGetReportsForRegionStartDate)
+						.setParameter("startDate", startDate).setParameter("region", region).getResultList();
+				transaction.commit();
 
-			if (reports != null && !reports.isEmpty()) {
+				AvalancheReport latest = null;
 
-				List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-
-				if (revision > -1) {
+				if (reports != null && !reports.isEmpty()) {
+					// get report history
 					transaction.begin();
 					AuditReader reader = AuditReaderFactory.get(entityManager);
-					AuditQuery q2 = reader.createQuery().forEntitiesAtRevision(AvalancheBulletin.class, revision);
-					bulletins = q2.getResultList();
-
-					// just used to initialize all necessary fields
-					for (AvalancheBulletin avalancheBulletin : bulletins)
-						initializeBulletin(avalancheBulletin);
-
+					AuditQuery q = reader.createQuery().forRevisionsOfEntity(AvalancheReport.class, true, true);
+					q.add(AuditEntity.id().eq(reports.get(0).getId()));
+					List<AvalancheReport> audit = q.getResultList();
 					transaction.commit();
-				}
 
-				AvalancheBulletin b;
-				for (AvalancheBulletin bulletin : bulletins) {
-					b = new AvalancheBulletin();
-					b.copy(bulletin);
-					b.setId(bulletin.getId());
-					if (b.getValidFrom().toDateTime(DateTimeZone.UTC).equals(startDate.toDateTime(DateTimeZone.UTC))
-							|| b.getValidUntil().toDateTime(DateTimeZone.UTC)
-									.equals(endDate.toDateTime(DateTimeZone.UTC))) {
-						Set<String> newPublishedRegions = new HashSet<String>();
+					revision = -1;
 
-						// delete all published regions which are foreign
-						if (b.getPublishedRegions() != null) {
-							for (String publishedRegion : b.getPublishedRegions()) {
-								if (publishedRegion.startsWith(region))
-									newPublishedRegions.add(publishedRegion);
-							}
-							if (newPublishedRegions.size() != 0) {
-								b.setPublishedRegions(newPublishedRegions);
-								results.add(b);
+					// get latest report with status published or republished
+					for (AvalancheReport avalancheReport : audit) {
+						if ((avalancheReport.getRegion().startsWith(region)
+								|| region.startsWith(avalancheReport.getRegion()))
+								&& (avalancheReport.getStatus() == BulletinStatus.published
+										|| avalancheReport.getStatus() == BulletinStatus.republished)) {
+							if (avalancheReport.getRevision().intValue() > revision.intValue()) {
+								latest = avalancheReport;
+								revision = avalancheReport.getRevision();
 							}
 						}
 					}
+					if (latest != null && latest.getId() != null)
+						ids.add(latest.getId());
 				}
 			}
 
-			return new AvalancheBulletinVersionTuple(revision, results);
-
+			return ids;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
@@ -672,55 +756,6 @@ public class AvalancheReportController {
 			throw new AlbinaException(he.getMessage());
 		} finally {
 			entityManager.close();
-		}
-	}
-
-	private void initializeBulletin(AvalancheBulletin bulletin) {
-		if (bulletin.getUser() != null) {
-			bulletin.setUser(initializeAndUnproxy(bulletin.getUser()));
-			if (bulletin.getUser().getRegions() != null)
-				bulletin.getUser().getRegions().size();
-			if (bulletin.getUser().getRoles() != null)
-				bulletin.getUser().getRoles().size();
-		}
-		if (bulletin.getForenoon() != null) {
-			bulletin.setForenoon(initializeAndUnproxy(bulletin.getForenoon()));
-			if (bulletin.getForenoon().getAvalancheSituation1() != null) {
-				bulletin.getForenoon()
-						.setAvalancheSituation1(initializeAndUnproxy(bulletin.getForenoon().getAvalancheSituation1()));
-				bulletin.getForenoon().getAvalancheSituation1().getAspects().size();
-			}
-			if (bulletin.getForenoon().getAvalancheSituation2() != null) {
-				bulletin.getForenoon()
-						.setAvalancheSituation2(initializeAndUnproxy(bulletin.getForenoon().getAvalancheSituation2()));
-				bulletin.getForenoon().getAvalancheSituation2().getAspects().size();
-			}
-		}
-		if (bulletin.getAfternoon() != null) {
-			bulletin.setAfternoon(initializeAndUnproxy(bulletin.getAfternoon()));
-			if (bulletin.getAfternoon().getAvalancheSituation1() != null) {
-				bulletin.getAfternoon()
-						.setAvalancheSituation1(initializeAndUnproxy(bulletin.getAfternoon().getAvalancheSituation1()));
-				bulletin.getAfternoon().getAvalancheSituation1().getAspects().size();
-			}
-			if (bulletin.getAfternoon().getAvalancheSituation2() != null) {
-				bulletin.getAfternoon()
-						.setAvalancheSituation2(initializeAndUnproxy(bulletin.getAfternoon().getAvalancheSituation2()));
-				bulletin.getAfternoon().getAvalancheSituation2().getAspects().size();
-			}
-		}
-		if (bulletin.getAdditionalAuthors() != null)
-			bulletin.getAdditionalAuthors().size();
-		if (bulletin.getPublishedRegions() != null)
-			bulletin.getPublishedRegions().size();
-		if (bulletin.getSuggestedRegions() != null)
-			bulletin.getSuggestedRegions().size();
-		if (bulletin.getSavedRegions() != null)
-			bulletin.getSavedRegions().size();
-		if (bulletin.getTextPartsMap() != null) {
-			bulletin.getTextPartsMap().size();
-			for (Texts element : bulletin.getTextPartsMap().values())
-				element.getTexts().size();
 		}
 	}
 

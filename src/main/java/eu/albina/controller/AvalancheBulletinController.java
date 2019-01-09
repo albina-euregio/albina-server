@@ -146,18 +146,87 @@ public class AvalancheBulletinController {
 			List<String> ids = new ArrayList<String>();
 			for (AvalancheBulletin bulletin : bulletins) {
 				ids.add(bulletin.getId());
+
 				if (publicationDate != null)
 					bulletin.setPublicationDate(publicationDate);
-				// bulletin already exists
+
 				if (results.containsKey(bulletin.getId())) {
+					// Bulletin already exists
 					AvalancheBulletin b = results.get(bulletin.getId());
-					b.copy(bulletin);
-					// bulletin has to be created
+					if (results.get(bulletin.getId()).getOwnerRegion().startsWith(region)) {
+						// Own bulletin - save the bulletin
+						Set<String> savedRegions = b.getSavedRegions();
+						b.copy(bulletin);
+						for (String r : savedRegions) {
+							if (!r.startsWith(region)) {
+								if (!b.getSavedRegions().contains(r))
+									b.addSavedRegion(r);
+							}
+						}
+						Set<String> tmpRegions = new HashSet<String>();
+						for (String r : b.getSuggestedRegions()) {
+							if (bulletin.getSavedRegions().contains(r))
+								tmpRegions.add(r);
+						}
+						for (String r : tmpRegions)
+							b.getSuggestedRegions().remove(r);
+
+						tmpRegions = new HashSet<String>();
+						for (String r : b.getPublishedRegions()) {
+							if (!r.startsWith(region)) {
+								if (bulletin.getSavedRegions().contains(r))
+									tmpRegions.add(r);
+							}
+						}
+						for (String r : tmpRegions)
+							b.getPublishedRegions().remove(r);
+					} else {
+						// foreign bulletin
+						Set<String> tmpRegions = new HashSet<String>();
+						for (String r : b.getSavedRegions()) {
+							if (r.startsWith(region)) {
+								if (!bulletin.getSavedRegions().contains(r))
+									tmpRegions.add(r);
+							}
+						}
+						for (String r : tmpRegions)
+							b.getSavedRegions().remove(r);
+
+						for (String r : bulletin.getSavedRegions()) {
+							if (r.startsWith(region)) {
+								if (!b.getSavedRegions().contains(r))
+									b.addSavedRegion(r);
+							}
+						}
+						tmpRegions = new HashSet<String>();
+						for (String r : b.getSuggestedRegions()) {
+							if (r.startsWith(region)) {
+								if (!bulletin.getSuggestedRegions().contains(r))
+									tmpRegions.add(r);
+							}
+						}
+						for (String r : tmpRegions)
+							b.getSuggestedRegions().remove(r);
+
+						tmpRegions = new HashSet<String>();
+						for (String r : b.getPublishedRegions()) {
+							if (r.startsWith(region)) {
+								if (bulletin.getSavedRegions().contains(r))
+									tmpRegions.add(r);
+							}
+						}
+						for (String r : tmpRegions)
+							b.getPublishedRegions().remove(r);
+					}
+					entityManager.merge(b);
 				} else {
+					// Bulletin has to be created
+					bulletin.setId(null);
 					entityManager.persist(bulletin);
 				}
 			}
 
+			// Delete obsolete bulletins
 			for (AvalancheBulletin avalancheBulletin : results.values()) {
 				// bulletin has to be removed
 				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId())
@@ -429,17 +498,9 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : results) {
 
 				// set author
+				if (!bulletin.getAdditionalAuthors().contains(user.getName()))
+					bulletin.addAdditionalAuthor(user.getName());
 				bulletin.setUser(user);
-
-				// publish all saved regions
-				result = new HashSet<String>();
-				for (String entry : bulletin.getSavedRegions())
-					if (entry.startsWith(region))
-						result.add(entry);
-				for (String entry : result) {
-					bulletin.getSavedRegions().remove(entry);
-					bulletin.getPublishedRegions().add(entry);
-				}
 
 				// delete suggestions within the region
 				result = new HashSet<String>();
@@ -463,15 +524,29 @@ public class AvalancheBulletinController {
 		}
 	}
 
-	public void publishBulletins(DateTime startDate, DateTime endDate, List<String> regions, DateTime publicationDate)
-			throws AlbinaException {
-		for (String region : regions)
-			this.publishBulletins(startDate, endDate, region, publicationDate);
+	public Map<String, AvalancheBulletin> publishBulletins(DateTime startDate, DateTime endDate, List<String> regions,
+			DateTime publicationDate, User user) throws AlbinaException {
+		Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
+
+		for (String region : regions) {
+			BulletinStatus internalStatus = AvalancheReportController.getInstance().getInternalStatusForDay(startDate,
+					region);
+
+			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
+				List<AvalancheBulletin> bulletins = this.publishBulletins(startDate, endDate, region, publicationDate,
+						user);
+				for (AvalancheBulletin avalancheBulletin : bulletins)
+					results.put(avalancheBulletin.getId(), avalancheBulletin);
+			}
+		}
+
+		return results;
 	}
 
 	@SuppressWarnings("unchecked")
-	public void publishBulletins(DateTime startDate, DateTime endDate, String region, DateTime publicationDate)
-			throws AlbinaException {
+	public List<AvalancheBulletin> publishBulletins(DateTime startDate, DateTime endDate, String region,
+			DateTime publicationDate, User user) throws AlbinaException {
+		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -479,18 +554,42 @@ public class AvalancheBulletinController {
 			transaction.begin();
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
 			// select bulletins within the region
 			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegion(region))
+				if (bulletin.affectsRegionWithoutSuggestions(region))
 					results.add(bulletin);
 
+			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
+
+				// set author
+				if (user.getEmail() != GlobalVariables.avalancheReportUsername) {
+					if (!bulletin.getAdditionalAuthors().contains(user.getName()))
+						bulletin.addAdditionalAuthor(user.getName());
+					bulletin.setUser(user);
+				}
+
+				// publish all saved regions
+				result = new HashSet<String>();
+				for (String entry : bulletin.getSavedRegions())
+					if (entry.startsWith(region))
+						result.add(entry);
+				for (String entry : result) {
+					bulletin.getSavedRegions().remove(entry);
+					bulletin.getPublishedRegions().add(entry);
+				}
+
 				bulletin.setPublicationDate(publicationDate);
 				entityManager.merge(bulletin);
 			}
+
+			for (AvalancheBulletin avalancheBulletin : bulletins)
+				initializeBulletin(avalancheBulletin);
+
 			transaction.commit();
+
+			return bulletins;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();

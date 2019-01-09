@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +42,6 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import com.itextpdf.layout.renderer.DocumentRenderer;
 
-import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
@@ -184,7 +182,6 @@ public class PdfUtil {
 
 			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
 						AlbinaUtil.getTendencyDate(bulletins, lang), writer, grayscale);
@@ -778,7 +775,7 @@ public class PdfUtil {
 						cell.add(img);
 						table.addCell(cell);
 					}
-					if (avalancheSituation.getTreelineLow()) {
+					if (avalancheSituation.getTreelineHigh()) {
 						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
@@ -789,8 +786,8 @@ public class PdfUtil {
 						cell.setPadding(padding);
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
-					} else if (avalancheSituation.getElevationLow() > 0) {
-						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationLow() + "m")
+					} else if (avalancheSituation.getElevationHigh() > 0) {
+						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationHigh() + "m")
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
 						cell = new Cell(1, 1);
@@ -801,7 +798,7 @@ public class PdfUtil {
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
 					}
-					if (avalancheSituation.getTreelineHigh()) {
+					if (avalancheSituation.getTreelineLow()) {
 						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
@@ -812,8 +809,8 @@ public class PdfUtil {
 						cell.setPadding(padding);
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
-					} else if (avalancheSituation.getElevationHigh() > 0) {
-						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationHigh() + "m")
+					} else if (avalancheSituation.getElevationLow() > 0) {
+						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationLow() + "m")
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
 						cell = new Cell(1, 1);

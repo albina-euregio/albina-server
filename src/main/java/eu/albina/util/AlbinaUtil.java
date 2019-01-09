@@ -264,7 +264,7 @@ public class AlbinaUtil {
 	public static boolean hasBulletinChanged(DateTime startDate, String region) {
 		boolean result = false;
 		try {
-			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getStatus(startDate,
+			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 					startDate, region);
 			if (status.size() == 1 && status.get(startDate) != BulletinStatus.published
 					&& status.get(startDate) != BulletinStatus.republished)
@@ -356,10 +356,12 @@ public class AlbinaUtil {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			DateTime bulletinDate = avalancheBulletin.getPublicationDate();
-			if (date == null)
-				date = bulletinDate;
-			else if (bulletinDate.isAfter(date))
-				date = bulletinDate;
+			if (bulletinDate != null) {
+				if (date == null)
+					date = bulletinDate;
+				else if (bulletinDate.isAfter(date))
+					date = bulletinDate;
+			}
 		}
 		if (date != null)
 			return date.toString(GlobalVariables.getPublicationDateTimeFormatter(lang));
@@ -413,7 +415,7 @@ public class AlbinaUtil {
 
 	public static void runCopyMapsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyMaps.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyMaps.sh", date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps copied to local directory for " + date + ".");
@@ -425,7 +427,7 @@ public class AlbinaUtil {
 
 	public static void runDeleteFilesScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/deleteFiles.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteFiles.sh", date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Files deleted for " + date + ".");
@@ -437,7 +439,7 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestPdfsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatestPdfs.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestPdfs.sh", date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PDFs for " + date + " copied to latest.");
@@ -449,7 +451,7 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestXmlsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatestXmls.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestXmls.sh", date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("XMLs for " + date + " copied to latest.");
@@ -461,7 +463,7 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestPngsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatestPngs.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestPngs.sh", date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PNGs for " + date + " copied to latest.");
@@ -473,7 +475,7 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestMapsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/copyLatestMaps.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestMaps.sh", date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps for " + date + " copied to latest.");
@@ -485,7 +487,7 @@ public class AlbinaUtil {
 
 	public static void runDeleteLatestFilesScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", "/opt/deleteLatestFiles.sh");
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteLatestFiles.sh");
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Latest files deleted.");

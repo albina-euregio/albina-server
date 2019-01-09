@@ -4,50 +4,31 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-
-import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.controller.socialmedia.RapidMailProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheSituation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
@@ -111,57 +92,6 @@ public class EmailUtil {
 		return cfg;
 	}
 
-	public void sendConfirmationEmail(Subscriber subscriber)
-			throws IllegalArgumentException, UnsupportedEncodingException, AlbinaException {
-		logger.debug("Sending confirmation email to " + subscriber.getEmail());
-		String token = issueConfirmationToken(subscriber.getEmail());
-		Session session = getEmailSession();
-
-		try {
-			MimeMessage message = new MimeMessage(session);
-			message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-			message.addHeader("format", "flowed");
-			message.addHeader("Content-Transfer-Encoding", "8bit");
-
-			message.setSubject(GlobalVariables.getConfirmationEmailSubject(subscriber.getLanguage()),
-					GlobalVariables.getEmailEncoding());
-			message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
-					GlobalVariables.getEmailFromPersonal(subscriber.getLanguage())));
-
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(subscriber.getEmail()));
-
-			MimeMultipart multipart = new MimeMultipart("related");
-
-			// add html
-			MimeBodyPart messageBodyPart = new MimeBodyPart();
-			String htmlText = createConfirmationEmailHtml(token, subscriber.getLanguage());
-			messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
-			multipart.addBodyPart(messageBodyPart);
-			message.setContent(multipart, GlobalVariables.getEmailEncoding());
-			Transport.send(message);
-
-			logger.debug("Confirmation email sent to " + subscriber.getEmail());
-		} catch (MessagingException e) {
-			logger.error("Confirmation email could not be sent to " + subscriber.getEmail() + ": " + e.getMessage());
-			e.printStackTrace();
-			throw new AlbinaException(e.getMessage());
-		} catch (UnsupportedEncodingException e) {
-			logger.error("Confirmation email could not be sent to " + subscriber.getEmail() + ": " + e.getMessage());
-			e.printStackTrace();
-			throw new AlbinaException(e.getMessage());
-		}
-	}
-
-	private String issueConfirmationToken(String email) throws IllegalArgumentException, UnsupportedEncodingException {
-		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
-		long time = System.currentTimeMillis() + GlobalVariables.confirmationTokenExpirationDuration;
-		Date expirationTime = new Date(time);
-		Date issuedAt = new Date();
-		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(email)
-				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
-		return token;
-	}
-
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
 		for (LanguageCode lang : GlobalVariables.languages) {
 			String subject = GlobalVariables.getEmailSubject(lang) + AlbinaUtil.getDate(bulletins, lang);
@@ -170,21 +100,6 @@ public class EmailUtil {
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
 			}
 		}
-	}
-
-	private Session getEmailSession() {
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", GlobalVariables.getSmtpAuth());
-		props.put("mail.smtp.starttls.enable", GlobalVariables.getSmtpTls());
-		props.put("mail.smtp.host", GlobalVariables.getSmtpHost());
-		props.put("mail.smtp.port", GlobalVariables.getSmtpPort());
-
-		return Session.getInstance(props, new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(GlobalVariables.getEmailUsername(),
-						GlobalVariables.getEmailPassword());
-			}
-		});
 	}
 
 	private String createZipFile(String htmlContent, String textContent) throws IOException {
@@ -227,53 +142,6 @@ public class EmailUtil {
 			return null;
 		}
 	}
-
-	// public void sendBulletinEmail(List<AvalancheBulletin> bulletins, LanguageCode
-	// lang, List<String> recipients) {
-	// logger.debug("Sending bulletin email in " + lang + "...");
-	//
-	// Session session = getEmailSession();
-	//
-	// try {
-	// MimeMessage message = new MimeMessage(session);
-	// message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-	// message.addHeader("format", "flowed");
-	// message.addHeader("Content-Transfer-Encoding", "8bit");
-	// message.setSubject(GlobalVariables.getEmailSubject(lang) +
-	// AlbinaUtil.getDate(bulletins, lang),
-	// GlobalVariables.getEmailEncoding());
-	// message.setFrom(new InternetAddress(GlobalVariables.avalancheReportUsername,
-	// GlobalVariables.getEmailFromPersonal(lang)));
-	//
-	// if (recipients != null && !recipients.isEmpty()) {
-	// for (String recipient : recipients)
-	// message.addRecipient(Message.RecipientType.TO, new
-	// InternetAddress(recipient));
-	//
-	// MimeMultipart multipart = new MimeMultipart("related");
-	//
-	// // add html
-	// MimeBodyPart messageBodyPart = new MimeBodyPart();
-	// String htmlText = createBulletinEmailHtml(bulletins, lang);
-	// messageBodyPart.setContent(htmlText, "text/html; charset=utf-8");
-	// multipart.addBodyPart(messageBodyPart);
-	//
-	// message.setContent(multipart, GlobalVariables.getEmailEncoding());
-	// Transport.send(message);
-	//
-	// logger.debug("Emails sent in " + lang + ".");
-	// } else
-	// logger.debug("No recipients for emails in " + lang + ".");
-	// } catch (MessagingException e) {
-	// logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
-	// e.printStackTrace();
-	// throw new RuntimeException(e);
-	// } catch (UnsupportedEncodingException e) {
-	// logger.error("Emails could not be sent in " + lang + ": " + e.getMessage());
-	// e.printStackTrace();
-	// throw new RuntimeException(e);
-	// }
-	// }
 
 	public String createConfirmationEmailHtml(String token, LanguageCode lang) {
 		try {
@@ -474,12 +342,13 @@ public class EmailUtil {
 
 			root.put("text", text);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 			ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				Map<String, Object> bulletin = new HashMap<>();
 
 				bulletin.put("stylepm", getPMStyle(avalancheBulletin.isHasDaytimeDependency()));
+				bulletin.put("stylepmtable", getPMStyleTable(avalancheBulletin.isHasDaytimeDependency()));
+
 				if (avalancheBulletin.isHasDaytimeDependency()) {
 					bulletin.put("textam", GlobalVariables.getAMText(lang));
 					bulletin.put("textpm", GlobalVariables.getPMText(lang));
@@ -526,20 +395,26 @@ public class EmailUtil {
 						if (avalancheBulletin.getDangerPattern1() != null
 								|| avalancheBulletin.getDangerPattern2() != null) {
 							bulletin.put("dangerPatternsHeadline", GlobalVariables.getDangerPatternsHeadline(lang));
-							bulletin.put("dangerpatternstyle", getDangerPatternStyle(true));
-							if (avalancheBulletin.getDangerPattern1() != null)
+							if (avalancheBulletin.getDangerPattern1() != null) {
 								bulletin.put("dangerPattern1",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
-							else
+								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
+							} else {
 								bulletin.put("dangerPattern1", "");
-							if (avalancheBulletin.getDangerPattern2() != null)
+								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
+							}
+							if (avalancheBulletin.getDangerPattern2() != null) {
 								bulletin.put("dangerPattern2",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
-							else
+								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
+							} else {
 								bulletin.put("dangerPattern2", "");
+								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
+							}
 						} else {
 							bulletin.put("dangerPatternsHeadline", "");
-							bulletin.put("dangerpatternstyle", getDangerPatternStyle(false));
+							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
+							bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 							bulletin.put("dangerPattern1", "");
 							bulletin.put("dangerPattern2", "");
 						}
@@ -550,7 +425,8 @@ public class EmailUtil {
 						bulletin.put("dangerPatternsHeadline", "");
 						bulletin.put("dangerPattern1", "");
 						bulletin.put("dangerPattern2", "");
-						bulletin.put("dangerpatternstyle", getDangerPatternStyle(false));
+						bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
+						bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 					}
 
 					// tendency
@@ -569,7 +445,8 @@ public class EmailUtil {
 					bulletin.put("dangerPatternsHeadline", "");
 					bulletin.put("dangerPattern1", "");
 					bulletin.put("dangerPattern2", "");
-					bulletin.put("dangerpatternstyle", getDangerPatternStyle(false));
+					bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
+					bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 					bulletin.put("tendencyHeadline", "");
 					bulletin.put("tendencyComment", "");
 				}
@@ -613,6 +490,7 @@ public class EmailUtil {
 			links.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
 					+ AlbinaUtil.getValidityDate(bulletins) + "?lang=" + lang.toString());
 			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
+			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDate(bulletins), lang, region));
 			links.put("imprint", GlobalVariables.getImprintLink(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook",
@@ -660,7 +538,7 @@ public class EmailUtil {
 				&& (daytimeBulletin.getDangerRatingAbove() == null
 						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.missing
 						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.no_rating)) {
-			dangerRating.put("symbol", "");
+			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_0_0.png");
 		} else {
 			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
 					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
@@ -706,12 +584,13 @@ public class EmailUtil {
 				avalancheSituation1.put("text", "");
 			}
 
-			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
-			avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
-
 			Map<String, Object> elevation = new HashMap<>();
 			if (daytimeBulletin.getAvalancheSituation1().getTreelineHigh()
 					|| daytimeBulletin.getAvalancheSituation1().getElevationHigh() > 0) {
+
+				String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+				avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+
 				if (daytimeBulletin.getAvalancheSituation1().getTreelineLow()
 						|| daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0) {
 					// elevation high and low set
@@ -746,8 +625,19 @@ public class EmailUtil {
 				else if (daytimeBulletin.getAvalancheSituation1().getElevationLow() > 0)
 					elevation.put("limitAbove", daytimeBulletin.getAvalancheSituation1().getElevationLow() + "m");
 				elevation.put("limitBelow", "");
+
+				String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+				avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
 			} else {
 				// no elevation set
+				if (daytimeBulletin.getAvalancheSituation1()
+						.getAvalancheSituation() == AvalancheSituation.favourable_situation) {
+					String path = GlobalVariables.getAspectSymbolPath(255, false);
+					avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+				} else {
+					String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+					avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+				}
 				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");
@@ -788,7 +678,7 @@ public class EmailUtil {
 				avalancheSituation2.put("text", "");
 			}
 
-			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation1().getAspects());
+			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation2().getAspects());
 			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
 
 			Map<String, Object> elevation = new HashMap<>();
@@ -935,8 +825,15 @@ public class EmailUtil {
 
 	private String getPMStyle(boolean daytimeDependency) {
 		if (!daytimeDependency)
-			return "style=\"display: none; overflow: hidden; height: 0px;\"";
+			return "style=\"display:none;width:0px;max-height:0px;overflow:hidden;mso-hide:all;height:0;font-size:0;max-height:0;line-height:0;margin:0 auto;\"";
 		else
 			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px; border-top: 1px solid #e6eef2; padding-top: 10px;\"";
+	}
+
+	private String getPMStyleTable(boolean daytimeDependency) {
+		if (!daytimeDependency)
+			return "style=\"mso-hide: all;\"";
+		else
+			return "";
 	}
 }

@@ -33,13 +33,13 @@ public class GlobalVariables {
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
 	private static boolean createCaaml = true;
-	private static boolean createMaps = true;
-	private static boolean createPdf = true;
-	private static boolean createStaticWidget = true;
-	private static boolean sendEmails = true;
-	private static boolean publishToSocialMedia = true;
-	private static boolean publishAt5PM = true;
-	private static boolean publishAt8AM = true;
+	private static boolean createMaps = false;
+	private static boolean createPdf = false;
+	private static boolean createStaticWidget = false;
+	private static boolean sendEmails = false;
+	private static boolean publishToSocialMedia = false;
+	private static boolean publishAt5PM = false;
+	private static boolean publishAt8AM = false;
 
 	private static String localImagesPath = "images/";
 	private static String localFontsPath = "fonts/open-sans";
@@ -48,35 +48,15 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
 	private static boolean publishBulletinsTrentino = true;
-	private static boolean publishBulletinsStyria = true;
+	private static boolean publishBulletinsStyria = false;
 
 	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
-	// TODO set correct directory for all files
-	private static String pdfDirectory = "/mnt/albina_files/";
-	// private static String mapsPath =
-	// "http://data1.geo.univie.ac.at/exchange/albina2/awm/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
-	// private static String serverImagesUrlLocalhost =
-	// "http://localhost:8080/images/";
-
-	// Just for testing
-	// private static String pdfDirectory = "D:\\";
-	// private static String mapsPath =
-	// "https://admin.avalanche.report/images/maps/";
-	// private static String serverImagesUrlLocalhost =
-	// "https://admin.avalanche.report/images/";
-
-	// Just for testing
-	// private static String pdfDirectory = "D:\\";
-	private static String mapsPath = "https://admin.avalanche.report/images/maps/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
-
-	private static boolean smtpAuth = true;
-	private static boolean smtpTls = true;
-	private static String smtpHost = "smtp.gmail.com";
-	private static String smtpPort = "587";
-	private static String emailUsername = "norbert.lanzanasto@gmail.com";
-	private static String emailPassword = "Go6Zaithee";
+	private static String pdfDirectory = "/mnt/albina_files_local/";
+	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
+	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
+	public static String scriptsPath = "/opt/local/";
 
 	// LANG
 	// REGION
@@ -177,10 +157,6 @@ public class GlobalVariables {
 	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
-
-	// public static String univieMapProductionUrl =
-	// "http://data1.geo.univie.ac.at/projects/albina/tools/create_trentino_maps/create_trentino_maps.php";
-	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php";
 
 	private static String emailEncoding = "UTF-8";
 
@@ -310,6 +286,15 @@ public class GlobalVariables {
 		setConfigProperty("publishBulletinsStyria", publishBulletinsStyria);
 	}
 
+	public static String getScriptsPath() {
+		return scriptsPath;
+	}
+
+	public static void setScriptsPath(String scriptsPath) throws ConfigurationException {
+		GlobalVariables.scriptsPath = scriptsPath;
+		setConfigProperty("scriptsPath", scriptsPath);
+	}
+
 	public static String getPdfDirectory() {
 		return pdfDirectory;
 	}
@@ -346,58 +331,13 @@ public class GlobalVariables {
 		setConfigProperty("mapsPath", mapsPath);
 	}
 
-	public static boolean getSmtpAuth() {
-		return smtpAuth;
+	public static String getUnivieMapProductionUrl() {
+		return univieMapProductionUrl;
 	}
 
-	public static void setSmtpAuth(boolean smtpAuth) throws ConfigurationException {
-		GlobalVariables.smtpAuth = smtpAuth;
-		setConfigProperty("smtpAuth", smtpAuth);
-	}
-
-	public static boolean getSmtpTls() {
-		return smtpTls;
-	}
-
-	public static void setSmtpTls(boolean smtpTls) throws ConfigurationException {
-		GlobalVariables.smtpTls = smtpTls;
-		setConfigProperty("smtpTls", smtpTls);
-	}
-
-	public static String getSmtpHost() {
-		return smtpHost;
-	}
-
-	public static void setSmtpHost(String smtpHost) throws ConfigurationException {
-		GlobalVariables.smtpHost = smtpHost;
-		setConfigProperty("smtpHost", smtpHost);
-	}
-
-	public static String getSmtpPort() {
-		return smtpPort;
-	}
-
-	public static void setSmtpPort(String smtpPort) throws ConfigurationException {
-		GlobalVariables.smtpPort = smtpPort;
-		setConfigProperty("smtpPort", smtpPort);
-	}
-
-	public static String getEmailUsername() {
-		return emailUsername;
-	}
-
-	public static void setEmailUsername(String emailUsername) throws ConfigurationException {
-		GlobalVariables.emailUsername = emailUsername;
-		setConfigProperty("emailUsername", emailUsername);
-	}
-
-	public static String getEmailPassword() {
-		return emailPassword;
-	}
-
-	public static void setEmailPassword(String emailPassword) throws ConfigurationException {
-		GlobalVariables.emailPassword = emailPassword;
-		setConfigProperty("emailPassword", emailPassword);
+	public static void setUnivieMapProductionUrl(String univieMapProductionUrl) throws ConfigurationException {
+		GlobalVariables.univieMapProductionUrl = univieMapProductionUrl;
+		setConfigProperty("univieMapProductionUrl", univieMapProductionUrl);
 	}
 
 	public static String getAvalancheReportUsername() {
@@ -1154,7 +1094,7 @@ public class GlobalVariables {
 		case de:
 			return "Nachmittag";
 		case it:
-			return "Pommeriggio";
+			return "Pomeriggio";
 		default:
 			return "PM";
 		}
@@ -1348,8 +1288,6 @@ public class GlobalVariables {
 			serverImagesUrl = config.getString("serverImagesUrl");
 			serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
 			mapsPath = config.getString("mapsPath");
-			emailUsername = config.getString("emailUsername");
-			emailPassword = config.getString("emailPassword");
 			createMaps = config.getBoolean("createMaps");
 			createPdf = config.getBoolean("createPdf");
 			createStaticWidget = config.getBoolean("createStaticWidget");
@@ -1383,16 +1321,11 @@ public class GlobalVariables {
 			json.put("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
 		if (mapsPath != null)
 			json.put("mapsPath", mapsPath);
-		json.put("smtpAuth", smtpAuth);
-		json.put("smtpTls", smtpTls);
-		if (smtpHost != null)
-			json.put("smtpHost", smtpHost);
-		if (smtpPort != null)
-			json.put("smtpPort", smtpPort);
-		if (emailUsername != null)
-			json.put("emailUsername", emailUsername);
-		if (emailPassword != null)
-			json.put("emailPassword", emailPassword);
+		if (univieMapProductionUrl != null)
+			json.put("univieMapProductionUrl", univieMapProductionUrl);
+		if (scriptsPath != null)
+			json.put("scriptsPath", scriptsPath);
+		json.put("createCaaml", createCaaml);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createStaticWidget", createStaticWidget);
@@ -1438,18 +1371,8 @@ public class GlobalVariables {
 			setServerImagesUrlLocalhost(configuration.getString("serverImagesUrlLocalhost"));
 		if (configuration.has("mapsPath"))
 			setMapsPath(configuration.getString("mapsPath"));
-		if (configuration.has("smtpAuth"))
-			setSmtpAuth(configuration.getBoolean("smtpAuth"));
-		if (configuration.has("smtpTls"))
-			setSmtpTls(configuration.getBoolean("smtpTls"));
-		if (configuration.has("smtpHost"))
-			setSmtpHost(configuration.getString("smtpHost"));
-		if (configuration.has("smtpPort"))
-			setSmtpPort(configuration.getString("smtpPort"));
-		if (configuration.has("emailUsername"))
-			setEmailUsername(configuration.getString("emailUsername"));
-		if (configuration.has("emailPassword"))
-			setEmailPassword(configuration.getString("emailPassword"));
+		if (configuration.has("univieMapProductionUrl"))
+			setUnivieMapProductionUrl(configuration.getString("univieMapProductionUrl"));
 		if (configuration.has("createCaaml"))
 			setCreateMaps(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))
@@ -1474,6 +1397,8 @@ public class GlobalVariables {
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
 		if (configuration.has("publishBulletinsStyria"))
 			setPublishBulletinsStyria(configuration.getBoolean("publishBulletinsStyria"));
+		if (configuration.has("scriptsPath"))
+			setScriptsPath(configuration.getString("scriptsPath"));
 	}
 
 	public static String getTendencySymbolPath(Tendency tendency, boolean grayscale) {
@@ -1624,6 +1549,50 @@ public class GlobalVariables {
 		}
 	}
 
+	// LANG
+	// REGION
+	public static String getPdfLink(String date, LanguageCode lang, String region) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("https://avalanche.report/albina_files/");
+		sb.append(date);
+		sb.append("/");
+		sb.append(date);
+		sb.append("_");
+		switch (region) {
+		case "AT-07":
+			sb.append(GlobalVariables.codeTyrol);
+			break;
+		case "IT-32-BZ":
+			sb.append(GlobalVariables.codeSouthTyrol);
+			break;
+		case "IT-32-TN":
+			sb.append(GlobalVariables.codeTrentino);
+			break;
+		case "AT-06":
+			sb.append(GlobalVariables.codeStyria);
+			break;
+		default:
+			break;
+		}
+		sb.append("_");
+		switch (lang) {
+		case de:
+			sb.append(LanguageCode.de);
+			break;
+		case it:
+			sb.append(LanguageCode.it);
+			break;
+		case en:
+			sb.append(LanguageCode.en);
+			break;
+		default:
+			sb.append(LanguageCode.en);
+			break;
+		}
+		sb.append(".pdf");
+		return sb.toString();
+	}
+
 	public static String getImprintLink(LanguageCode lang) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(GlobalVariables.avalancheReportBaseUrl);
@@ -1646,6 +1615,20 @@ public class GlobalVariables {
 			return "Imprint";
 		default:
 			return "Imprint";
+		}
+	}
+
+	// LANG
+	public static String getPageNumberText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Seite %d";
+		case it:
+			return "Pagina %d";
+		case en:
+			return "Page %d";
+		default:
+			return "Page %d";
 		}
 	}
 }

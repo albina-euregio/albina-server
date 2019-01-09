@@ -2,8 +2,7 @@ package eu.albina.jobs;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.mail.MessagingException;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.quartz.JobExecutionContext;
@@ -49,32 +48,21 @@ public class UpdateJob implements org.quartz.Job {
 			DateTime publicationDate = new DateTime();
 
 			if (!changedRegions.isEmpty()) {
-				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, changedRegions,
-						publicationDate);
-				List<String> avalancheReportIds = AvalancheReportController.getInstance().publishReport(startDate,
-						changedRegions, user, publicationDate);
+				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
+						.publishBulletins(startDate, endDate, changedRegions, publicationDate, user);
+				List<String> avalancheReportIds = AvalancheReportController.getInstance()
+						.publishReport(publishedBulletins.values(), startDate, changedRegions, user, publicationDate);
 
-				try {
-					List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
-							.getBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
-
-					if (bulletins != null && !bulletins.isEmpty()) {
-						List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-						for (AvalancheBulletin avalancheBulletin : bulletins) {
-							if (avalancheBulletin.getPublishedRegions() != null
-									&& !avalancheBulletin.getPublishedRegions().isEmpty())
-								result.add(avalancheBulletin);
-						}
-						if (result != null && !result.isEmpty())
-							PublicationController.getInstance().updateAutomatically(avalancheReportIds, result,
-									changedRegions);
+				if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
+					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
+					for (AvalancheBulletin avalancheBulletin : publishedBulletins.values()) {
+						if (avalancheBulletin.getPublishedRegions() != null
+								&& !avalancheBulletin.getPublishedRegions().isEmpty())
+							result.add(avalancheBulletin);
 					}
-				} catch (AlbinaException e) {
-					logger.warn("Error loading bulletins - " + e.getMessage());
-					throw new AlbinaException(e.getMessage());
-				} catch (MessagingException e) {
-					logger.warn("Error sending emails - " + e.getMessage());
-					throw new AlbinaException(e.getMessage());
+					if (result != null && !result.isEmpty())
+						PublicationController.getInstance().updateAutomatically(avalancheReportIds, result,
+								changedRegions);
 				}
 			} else {
 				logger.info("No bulletins to update.");
