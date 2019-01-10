@@ -375,7 +375,6 @@ public class UtilTest {
 
 		feed = feedFetcher.retrieveFeed(feedUrl);
 		System.out.println(feed.getPublishedDate());
-		feed.
 	}
 
 	private static String encodeFileToBase64Binary(File file) {
