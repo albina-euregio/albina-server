@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -15,14 +16,13 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,6 +30,14 @@ import org.junit.runners.MethodSorters;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.rometools.rome.io.FeedException;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.fetcher.FeedFetcher;
+import com.sun.syndication.fetcher.FetcherException;
+import com.sun.syndication.fetcher.impl.FeedFetcherCache;
+import com.sun.syndication.fetcher.impl.HashMapFeedInfoCache;
+import com.sun.syndication.fetcher.impl.HttpURLFeedFetcher;
 
 import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.controller.SubscriberController;
@@ -51,7 +59,6 @@ public class UtilTest {
 	private List<String> passwords = new ArrayList<String>();
 	private List<String> recipients = new ArrayList<String>();
 
-	@Before
 	public void setUp() {
 		HibernateUtil.getInstance().setUp();
 
@@ -234,7 +241,6 @@ public class UtilTest {
 		// recipients.add("chris.mitterer@tirol.gv.at");
 	}
 
-	@After
 	public void shutDown() {
 		HibernateUtil.getInstance().shutDown();
 	}
@@ -348,6 +354,27 @@ public class UtilTest {
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			System.out.println(avalancheBulletin.getHighestDangerRating());
 		}
+	}
+
+	@Test
+	public void rssFeedTest() throws IllegalArgumentException, FeedException, IOException,
+			com.sun.syndication.io.FeedException, FetcherException {
+		URL feedUrl = new URL("https://lawinenwarndienst.blogspot.com/feeds/posts/default");
+
+		FeedFetcherCache feedInfoCache = HashMapFeedInfoCache.getInstance();
+		FeedFetcher feedFetcher = new HttpURLFeedFetcher(feedInfoCache);
+		SyndFeed feed = feedFetcher.retrieveFeed(feedUrl);
+		System.out.println(feed.getPublishedDate());
+
+		try {
+			TimeUnit.SECONDS.sleep(3);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		feed = feedFetcher.retrieveFeed(feedUrl);
+		System.out.println(feed.getPublishedDate());
 	}
 
 	private static String encodeFileToBase64Binary(File file) {
