@@ -8,6 +8,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,20 +94,35 @@ public class SimpleHtmlUtil {
 		return instance;
 	}
 
-	/**
-	 * Create static widgets containing overview information for the EUREGIO for
-	 * print media.
-	 * 
-	 * @param bulletins
-	 *            The bulletins to create the PDF of.
-	 */
-	public void createSimpleHtml(List<AvalancheBulletin> bulletins) {
-		for (LanguageCode lang : GlobalVariables.languages)
-			createSimpleHtml(bulletins, lang);
+	public boolean createOverviewSimpleHtml(List<AvalancheBulletin> bulletins) {
+		boolean result = true;
+		for (LanguageCode lang : GlobalVariables.languages) {
+			if (!createSimpleHtml(bulletins, lang, ""))
+				result = false;
+		}
+		return result;
+	}
+
+	public boolean createRegionSimpleHtml(List<AvalancheBulletin> bulletins, String region) {
+		boolean result = true;
+		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			if (avalancheBulletin.affectsRegionOnlyPublished(region))
+				regionBulletins.add(avalancheBulletin);
+		}
+
+		if (!regionBulletins.isEmpty())
+			for (LanguageCode lang : GlobalVariables.languages) {
+				if (!createSimpleHtml(regionBulletins, lang, region))
+					result = false;
+				if (!createSimpleHtml(regionBulletins, lang, region))
+					result = false;
+			}
+		return result;
 	}
 
 	// LANG
-	public String createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		try {
 			if (bulletins != null && !bulletins.isEmpty()) {
 				// Create data model
@@ -139,8 +156,8 @@ public class SimpleHtmlUtil {
 					if (avalancheBulletin.getPublishedRegions() != null
 							&& !avalancheBulletin.getPublishedRegions().isEmpty()) {
 						StringBuilder sb = new StringBuilder();
-						for (String region : avalancheBulletin.getPublishedRegions()) {
-							sb.append(region);
+						for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
+							sb.append(publishedRegion);
 							sb.append(", ");
 						}
 						sb.delete(sb.length() - 2, sb.length());
@@ -149,8 +166,8 @@ public class SimpleHtmlUtil {
 						bulletin.put("forenoon", getDaytime(avalancheBulletin, false, lang));
 						if (avalancheBulletin.isHasDaytimeDependency()) {
 							bulletin.put("afternoon", getDaytime(avalancheBulletin, true, lang));
-							bulletin.put("am", GlobalVariables.getAMText(lang));
-							bulletin.put("pm", GlobalVariables.getPMText(lang));
+							bulletin.put("am", "<b>" + GlobalVariables.getAMText(lang).toUpperCase() + "</b><br>");
+							bulletin.put("pm", "<b>" + GlobalVariables.getPMText(lang).toUpperCase() + "</b><br>");
 						} else {
 							bulletin.put("afternoon", getEmptyDaytime());
 							bulletin.put("am", "");
@@ -190,18 +207,30 @@ public class SimpleHtmlUtil {
 				// Writer out = new OutputStreamWriter(System.out);
 				temp.process(root, out);
 
-				return out.toString();
+				String filename;
+				String validityDateString = AlbinaUtil.getValidityDate(bulletins);
+
+				if (region != null) {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ region + "_" + lang.toString() + ".html";
+				} else {
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
+							+ lang.toString() + ".html";
+				}
+				File newHtmlFile = new File(filename);
+				FileUtils.writeStringToFile(newHtmlFile, out.toString(), StandardCharsets.UTF_8);
+				return true;
 			} else
-				return null;
+				return false;
 		} catch (IOException e) {
-			logger.error("Confirmation email could not be created: " + e.getMessage());
+			logger.error("Simple html could not be created: " + e.getMessage());
 			e.printStackTrace();
 		} catch (TemplateException e) {
-			logger.error("Confirmation email could not be created: " + e.getMessage());
+			logger.error("Simple html could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
 
-		return null;
+		return false;
 	}
 
 	private Map<String, Object> getEmptyDaytime() {
@@ -232,7 +261,10 @@ public class SimpleHtmlUtil {
 		else
 			daytimeDescription = avalancheBulletin.getForenoon();
 
-		if (daytimeDescription.getAvalancheSituation1() != null || daytimeDescription.getAvalancheSituation2() != null)
+		if ((daytimeDescription.getAvalancheSituation1() != null
+				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null)
+				|| (daytimeDescription.getAvalancheSituation2() != null
+						&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null))
 			text.put("avalancheProblem", "<b>" + GlobalVariables.getAvalancheProblemsHeadline(lang) + "</b><br>");
 		else
 			text.put("avalancheProblem", "");

@@ -449,6 +449,18 @@ public class AlbinaUtil {
 		}
 	}
 
+	public static void runCopyLatestHtmlsScript(String date) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestHtmls.sh", date);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("HTMLs for " + date + " copied to latest.");
+		} catch (Exception e) {
+			logger.error("HTMLs for " + date + " could not be copied to latest!");
+			e.printStackTrace();
+		}
+	}
+
 	public static void runCopyLatestXmlsScript(String date) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestXmls.sh", date);

@@ -304,8 +304,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException {
-		String simpleHtml = SimpleHtmlUtil.getInstance().createSimpleHtml(bulletins, LanguageCode.de);
-		System.out.println(simpleHtml);
+		SimpleHtmlUtil.getInstance().createSimpleHtml(bulletins, LanguageCode.de, null);
 	}
 
 	@Ignore

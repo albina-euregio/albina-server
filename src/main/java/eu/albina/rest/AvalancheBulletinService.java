@@ -955,6 +955,51 @@ public class AvalancheBulletinService {
 
 	@POST
 	@Secured({ Role.ADMIN })
+	@Path("/publish/html")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createHtml(
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@Context SecurityContext securityContext) {
+		logger.debug("POST create HTML [" + date + "]");
+
+		try {
+			DateTime startDate = null;
+			DateTime endDate = null;
+
+			if (date != null)
+				startDate = DateTime
+						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+						.toDateTime(DateTimeZone.UTC);
+			else
+				throw new AlbinaException("No date!");
+			endDate = startDate.plusDays(1);
+
+			AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
+					endDate, GlobalVariables.regionsEuregio);
+
+			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin b : result.bulletins)
+				bulletins.add(b);
+
+			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+
+			PublicationController.getInstance().createSimpleHtml(publishedReportIds, bulletins);
+
+			return Response.ok(MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error creating HTMLs - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (UnsupportedEncodingException e1) {
+			logger.warn("Error creating HTMLs - " + e1.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
 	@Path("/publish/staticwidget")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

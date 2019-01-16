@@ -36,6 +36,7 @@ public class GlobalVariables {
 	private static boolean createMaps = false;
 	private static boolean createPdf = false;
 	private static boolean createStaticWidget = false;
+	private static boolean createSimpleHtml = false;
 	private static boolean sendEmails = false;
 	private static boolean publishToSocialMedia = false;
 	private static boolean publishAt5PM = false;
@@ -230,6 +231,15 @@ public class GlobalVariables {
 	public static void setPublishAt8AM(boolean publishAt8AM) throws ConfigurationException {
 		GlobalVariables.publishAt8AM = publishAt8AM;
 		setConfigProperty("publishAt8AM", publishAt8AM);
+	}
+
+	public static boolean isCreateSimpleHtml() {
+		return createSimpleHtml;
+	}
+
+	public static void setCreateSimpleHtml(boolean createSimpleHtml) throws ConfigurationException {
+		GlobalVariables.createSimpleHtml = createSimpleHtml;
+		setConfigProperty("createSimpleHtml", createSimpleHtml);
 	}
 
 	public static String getLocalImagesPath() {

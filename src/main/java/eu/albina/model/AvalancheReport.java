@@ -58,6 +58,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "PDF_CREATED")
 	private boolean pdfCreated;
 
+	@Column(name = "HTML_CREATED")
+	private boolean htmlCreated;
+
 	@Column(name = "STATIC_WIDGET_CREATED")
 	private boolean staticWidgetCreated;
 
@@ -194,6 +197,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setPdfCreated(boolean pdf) {
 		this.pdfCreated = pdf;
+	}
+
+	public boolean isHtmlCreated() {
+		return htmlCreated;
+	}
+
+	public void setHtmlCreated(boolean html) {
+		this.htmlCreated = html;
 	}
 
 	public boolean isStaticWidgetCreated() {

@@ -19,6 +19,7 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
 import eu.albina.util.MessengerPeopleUtil;
 import eu.albina.util.PdfUtil;
+import eu.albina.util.SimpleHtmlUtil;
 import eu.albina.util.StaticWidgetUtil;
 import eu.albina.util.XmlUtil;
 
@@ -69,6 +70,10 @@ public class PublicationController {
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
+
+		// create HTML
+		if (GlobalVariables.isCreateSimpleHtml())
+			createSimpleHtml(avalancheReportIds, bulletins);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -140,6 +145,10 @@ public class PublicationController {
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
 
+		// create HTML
+		if (GlobalVariables.isCreateSimpleHtml())
+			createSimpleHtml(avalancheReportIds, bulletins);
+
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
 			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
@@ -191,25 +200,29 @@ public class PublicationController {
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
 
+		// create HTML
+		if (GlobalVariables.isCreateSimpleHtml())
+			createSimpleHtml(avalancheReportIds, bulletins);
+
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			// Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
-			// createMapsThread.start();
-			// try {
-			// createMapsThread.join();
+			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			createMapsThread.start();
+			try {
+				createMapsThread.join();
 
-			// create pdfs
-			if (GlobalVariables.isCreatePdf())
-				createPdf(avalancheReportIds, bulletins);
+				// create pdfs
+				if (GlobalVariables.isCreatePdf())
+					createPdf(avalancheReportIds, bulletins);
 
-			// create static widgets
-			if (GlobalVariables.isCreateStaticWidget())
-				createStaticWidgets(avalancheReportIds, bulletins);
+				// create static widgets
+				if (GlobalVariables.isCreateStaticWidget())
+					createStaticWidgets(avalancheReportIds, bulletins);
 
-			// } catch (InterruptedException e) {
-			// logger.error("Map production interrupted: " + e.getMessage());
-			// e.printStackTrace();
-			// }
+			} catch (InterruptedException e) {
+				logger.error("Map production interrupted: " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -300,6 +313,34 @@ public class PublicationController {
 					e.printStackTrace();
 				} finally {
 					logger.info("PDF production finished");
+				}
+			}
+		}).start();
+	}
+
+	public void createSimpleHtml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					logger.info("Simple HTML production started");
+					boolean result = true;
+					if (!SimpleHtmlUtil.getInstance().createOverviewSimpleHtml(bulletins))
+						result = false;
+					for (String region : GlobalVariables.regionsEuregio)
+						if (!SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region))
+							result = false;
+					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+						AlbinaUtil.runCopyLatestHtmlsScript(AlbinaUtil.getValidityDate(bulletins));
+					if (result)
+						AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReportIds);
+				} catch (IOException e) {
+					logger.error("Error creating simple HTML:" + e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					logger.error("Error creating simple HTML:" + e.getMessage());
+					e.printStackTrace();
+				} finally {
+					logger.info("Simple HTML production finished");
 				}
 			}
 		}).start();
