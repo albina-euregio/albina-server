@@ -23,6 +23,7 @@ import javax.mail.MessagingException;
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -59,6 +60,7 @@ public class UtilTest {
 	private List<String> passwords = new ArrayList<String>();
 	private List<String> recipients = new ArrayList<String>();
 
+	@Before
 	public void setUp() {
 		HibernateUtil.getInstance().setUp();
 
@@ -297,6 +299,13 @@ public class UtilTest {
 		String createConfirmationEmailHtml = EmailUtil.getInstance().createConfirmationEmailHtml("token",
 				LanguageCode.en);
 		System.out.println(createConfirmationEmailHtml);
+	}
+
+	@Ignore
+	@Test
+	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException {
+		String simpleHtml = SimpleHtmlUtil.getInstance().createSimpleHtml(bulletins, LanguageCode.de);
+		System.out.println(simpleHtml);
 	}
 
 	@Ignore

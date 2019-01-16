@@ -427,6 +427,74 @@ public class GlobalVariables {
 	}
 
 	// LANG
+	public static String getTreelineStringLowercase(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Waldgrenze";
+		case it:
+			return "linea del bosco";
+		case en:
+			return "treeline";
+		default:
+			return "treeline";
+		}
+	}
+
+	// LANG
+	public static String getTreelinePreString(boolean above, LanguageCode lang) {
+		if (above) {
+			switch (lang) {
+			case de:
+				return " über der ";
+			case it:
+				return " sopra la ";
+			case en:
+				return " above the ";
+			default:
+				return " above the ";
+			}
+		} else {
+			switch (lang) {
+			case de:
+				return " unter der ";
+			case it:
+				return " sotto la ";
+			case en:
+				return " above the ";
+			default:
+				return " below the ";
+			}
+		}
+	}
+
+	// LANG
+	public static String getElevationPreString(boolean above, LanguageCode lang) {
+		if (above) {
+			switch (lang) {
+			case de:
+				return " über ";
+			case it:
+				return " sopra i ";
+			case en:
+				return " above ";
+			default:
+				return " above ";
+			}
+		} else {
+			switch (lang) {
+			case de:
+				return " unter ";
+			case it:
+				return " sotto i ";
+			case en:
+				return " above ";
+			default:
+				return " below ";
+			}
+		}
+	}
+
+	// LANG
 	public static String getPublishedText(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -451,6 +519,34 @@ public class GlobalVariables {
 			return "Tendency";
 		default:
 			return "Tendency";
+		}
+	}
+
+	// LANG
+	public static String getRegionsHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Regionen";
+		case it:
+			return "Regioni";
+		case en:
+			return "Regions";
+		default:
+			return "Regions";
+		}
+	}
+
+	// LANG
+	public static String getAvalancheProblemsHeadline(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinenproblem";
+		case it:
+			return "Problema Valanghe";
+		case en:
+			return "Avalanche Problem";
+		default:
+			return "Avalanche Problem";
 		}
 	}
 
@@ -957,6 +1053,20 @@ public class GlobalVariables {
 	}
 
 	// LANG
+	public static String getSimpleHtmlTitle(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Lawinen.report ";
+		case it:
+			return "Valanghe.report ";
+		case en:
+			return "Avalanche.report ";
+		default:
+			return "Avalanche.report ";
+		}
+	}
+
+	// LANG
 	public static String getEmailFromPersonal(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -1102,6 +1212,23 @@ public class GlobalVariables {
 
 	// LANG
 	public static String getDangerRatingTextLong(DangerRating dangerRating, LanguageCode lang) {
+		StringBuilder sb = new StringBuilder();
+		switch (lang) {
+		case de:
+			sb.append("Gefahrenstufe ");
+		case it:
+			sb.append("Grado Pericolo ");
+		case en:
+			sb.append("Danger Level ");
+		default:
+			sb.append("Danger Level ");
+		}
+		sb.append(getDangerRatingTextMiddle(dangerRating, lang));
+		return sb.toString();
+	}
+
+	// LANG
+	public static String getDangerRatingTextMiddle(DangerRating dangerRating, LanguageCode lang) {
 		switch (dangerRating) {
 		case low:
 			switch (lang) {
