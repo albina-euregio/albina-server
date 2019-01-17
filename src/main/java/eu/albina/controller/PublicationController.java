@@ -329,8 +329,6 @@ public class PublicationController {
 					for (String region : GlobalVariables.regionsEuregio)
 						if (!SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region))
 							result = false;
-					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestHtmlsScript(AlbinaUtil.getValidityDate(bulletins));
 					if (result)
 						AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReportIds);
 				} catch (IOException e) {

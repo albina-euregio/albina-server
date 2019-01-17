@@ -9,9 +9,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -144,10 +149,10 @@ public class SimpleHtmlUtil {
 				text.put("tendency", GlobalVariables.getTendencyHeadline(lang));
 				root.put("text", text);
 
-				Map<String, Object> link = new HashMap<>();
-				link.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
+				Map<String, Object> websiteLink = new HashMap<>();
+				websiteLink.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
 						+ AlbinaUtil.getValidityDate(bulletins) + "?lang=" + lang.toString());
-				root.put("link", link);
+				root.put("link", websiteLink);
 
 				ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
 				for (AvalancheBulletin avalancheBulletin : bulletins) {
@@ -210,15 +215,47 @@ public class SimpleHtmlUtil {
 				String filename;
 				String validityDateString = AlbinaUtil.getValidityDate(bulletins);
 
-				if (region != null) {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
-							+ region + "_" + lang.toString() + ".html";
-				} else {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
-							+ lang.toString() + ".html";
+				if (region != null && !region.isEmpty())
+					filename = region + "_" + lang.toString() + ".html";
+				else
+					filename = lang.toString() + ".html";
+
+				String dirPath = GlobalVariables.getHtmlDirectory() + validityDateString;
+				new File(dirPath).mkdirs();
+
+				// using PosixFilePermission to set file permissions 755
+				Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+				// add owners permission
+				perms.add(PosixFilePermission.OWNER_READ);
+				perms.add(PosixFilePermission.OWNER_WRITE);
+				perms.add(PosixFilePermission.OWNER_EXECUTE);
+				// add group permissions
+				perms.add(PosixFilePermission.GROUP_READ);
+				perms.add(PosixFilePermission.GROUP_EXECUTE);
+				// add others permissions
+				perms.add(PosixFilePermission.OTHERS_READ);
+				perms.add(PosixFilePermission.OTHERS_EXECUTE);
+
+				try {
+					Files.setPosixFilePermissions(Paths.get(dirPath), perms);
+				} catch (IOException e) {
+					logger.warn("File permissions could not be set!");
+				} catch (UnsupportedOperationException e) {
+					logger.warn("File permissions could not be set!");
 				}
-				File newHtmlFile = new File(filename);
+
+				File newHtmlFile = new File(dirPath + "/" + filename);
 				FileUtils.writeStringToFile(newHtmlFile, out.toString(), StandardCharsets.UTF_8);
+				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
+
+				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins))) {
+					Path link = Paths.get(GlobalVariables.getHtmlDirectory() + filename);
+					if (Files.exists(link))
+						Files.delete(link);
+					Files.createSymbolicLink(link, newHtmlFile.toPath());
+					AlbinaUtil.setFilePermissions(GlobalVariables.getHtmlDirectory() + filename);
+				}
+
 				return true;
 			} else
 				return false;
