@@ -55,6 +55,7 @@ public class GlobalVariables {
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local/";
+	private static String htmlDirectory = "/mnt/simple_local/";
 	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
 	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
 	public static String scriptsPath = "/opt/local/";
@@ -312,6 +313,15 @@ public class GlobalVariables {
 	public static void setPdfDirectory(String pdfDirectory) throws ConfigurationException {
 		GlobalVariables.pdfDirectory = pdfDirectory;
 		setConfigProperty("pdfDirectory", pdfDirectory);
+	}
+
+	public static String getHtmlDirectory() {
+		return htmlDirectory;
+	}
+
+	public static void setHtmlDirectory(String htmlDirectory) throws ConfigurationException {
+		GlobalVariables.htmlDirectory = htmlDirectory;
+		setConfigProperty("htmlDirectory", htmlDirectory);
 	}
 
 	public static String getServerImagesUrl() {
@@ -1422,6 +1432,7 @@ public class GlobalVariables {
 			localImagesPath = config.getString("localImagesPath");
 			localFontsPath = config.getString("localFontsPath");
 			pdfDirectory = config.getString("pdfDirectory");
+			htmlDirectory = config.getString("htmlDirectory");
 			serverImagesUrl = config.getString("serverImagesUrl");
 			serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
 			mapsPath = config.getString("mapsPath");
@@ -1454,6 +1465,8 @@ public class GlobalVariables {
 			json.put("localFontsPath", localFontsPath);
 		if (pdfDirectory != null)
 			json.put("pdfDirectory", pdfDirectory);
+		if (htmlDirectory != null)
+			json.put("htmlDirectory", htmlDirectory);
 		if (serverImagesUrl != null)
 			json.put("serverImagesUrl", serverImagesUrl);
 		if (serverImagesUrlLocalhost != null)
@@ -1490,7 +1503,7 @@ public class GlobalVariables {
 			configuration = propertiesBuilder.getConfiguration();
 			configuration.setProperty(key, value);
 			propertiesBuilder.save();
-			logger.info("Configuration saved!");
+			logger.info("[Configuration saved] " + key + ": " + value);
 		} catch (ConfigurationException e) {
 			logger.error("Configuration could not be saved!");
 			e.printStackTrace();
@@ -1505,6 +1518,8 @@ public class GlobalVariables {
 			setLocalFontsPath(configuration.getString("localFontsPath"));
 		if (configuration.has("pdfDirectory"))
 			setPdfDirectory(configuration.getString("pdfDirectory"));
+		if (configuration.has("htmlDirectory"))
+			setHtmlDirectory(configuration.getString("htmlDirectory"));
 		if (configuration.has("serverImagesUrl"))
 			setServerImagesUrl(configuration.getString("serverImagesUrl"));
 		if (configuration.has("serverImagesUrlLocalhost"))
