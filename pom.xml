@@ -92,7 +92,7 @@
       	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
       	<albina.conf.scripts-path>/opt/dev/</albina.conf.scripts-path>
        	<albina.log.prefix>DEV</albina.log.prefix>
-      	<albina.log.level>DEBUG</albina.log.level>
+      	<albina.log.level>INFO</albina.log.level>
       	<albina.log.level.c3p0>INFO</albina.log.level.c3p0>
       	<albina.log.level.sql>SEVERE</albina.log.level.sql>
       	<albina.log.filename>albina_dev.log</albina.log.filename>
