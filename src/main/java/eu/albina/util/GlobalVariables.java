@@ -32,7 +32,7 @@ public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
-	private static boolean createCaaml = true;
+	private static boolean createCaaml = false;
 	private static boolean createMaps = false;
 	private static boolean createPdf = false;
 	private static boolean createStaticWidget = false;
@@ -1425,8 +1425,10 @@ public class GlobalVariables {
 			serverImagesUrl = config.getString("serverImagesUrl");
 			serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
 			mapsPath = config.getString("mapsPath");
+			createCaaml = config.getBoolean("createCaaml");
 			createMaps = config.getBoolean("createMaps");
 			createPdf = config.getBoolean("createPdf");
+			createSimpleHtml = config.getBoolean("createSimpleHtml");
 			createStaticWidget = config.getBoolean("createStaticWidget");
 			sendEmails = config.getBoolean("sendEmails");
 			publishToSocialMedia = config.getBoolean("publishToSocialMedia");
@@ -1465,6 +1467,7 @@ public class GlobalVariables {
 		json.put("createCaaml", createCaaml);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
+		json.put("createSimpleHtml", createSimpleHtml);
 		json.put("createStaticWidget", createStaticWidget);
 		json.put("sendEmails", sendEmails);
 		json.put("publishToSocialMedia", publishToSocialMedia);
@@ -1511,11 +1514,13 @@ public class GlobalVariables {
 		if (configuration.has("univieMapProductionUrl"))
 			setUnivieMapProductionUrl(configuration.getString("univieMapProductionUrl"));
 		if (configuration.has("createCaaml"))
-			setCreateMaps(configuration.getBoolean("createCaaml"));
+			setCreateCaaml(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))
 			setCreateMaps(configuration.getBoolean("createMaps"));
 		if (configuration.has("createPdf"))
 			setCreatePdf(configuration.getBoolean("createPdf"));
+		if (configuration.has("createSimpleHtml"))
+			setCreateSimpleHtml(configuration.getBoolean("createSimpleHtml"));
 		if (configuration.has("createStaticWidget"))
 			setCreateStaticWidget(configuration.getBoolean("createStaticWidget"));
 		if (configuration.has("sendEmails"))
