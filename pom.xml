@@ -84,8 +84,8 @@
       	<albina.conf.univie-map-production-url>http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php</albina.conf.univie-map-production-url>
       	<albina.conf.pdf-directory>/mnt/albina_files_dev/</albina.conf.pdf-directory>
       	<albina.conf.html-directory>/mnt/simple_dev/</albina.conf.html-directory>
-      	<albina.conf.publish-at-5-pm>true</albina.conf.publish-at-5-pm>
-      	<albina.conf.publish-at-8-am>true</albina.conf.publish-at-8-am>
+      	<albina.conf.publish-at-5-pm>false</albina.conf.publish-at-5-pm>
+      	<albina.conf.publish-at-8-am>false</albina.conf.publish-at-8-am>
       	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
       	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
       	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
