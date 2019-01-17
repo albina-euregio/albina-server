@@ -1436,6 +1436,7 @@ public class GlobalVariables {
 			serverImagesUrl = config.getString("serverImagesUrl");
 			serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
 			mapsPath = config.getString("mapsPath");
+			scriptsPath = config.getString("scriptsPath");
 			createCaaml = config.getBoolean("createCaaml");
 			createMaps = config.getBoolean("createMaps");
 			createPdf = config.getBoolean("createPdf");
