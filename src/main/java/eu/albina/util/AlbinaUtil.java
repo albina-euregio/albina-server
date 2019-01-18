@@ -232,10 +232,15 @@ public class AlbinaUtil {
 
 	public static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription,
 			boolean elevationDependency) {
-		if (elevationDependency)
-			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
-					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
-		else
+		if (elevationDependency) {
+			if (avalancheBulletinDaytimeDescription.getDangerRatingBelow()
+					.equals(avalancheBulletinDaytimeDescription.getDangerRatingAbove()))
+				return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
+						+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove()) + "_b";
+			else
+				return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
+						+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
+		} else
 			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove()) + "_"
 					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 	}
