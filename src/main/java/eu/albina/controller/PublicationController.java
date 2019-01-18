@@ -324,6 +324,8 @@ public class PublicationController {
 				try {
 					logger.info("Simple HTML production started");
 					boolean result = true;
+					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+						AlbinaUtil.runDeleteLatestHtmlsScript();
 					if (!SimpleHtmlUtil.getInstance().createOverviewSimpleHtml(bulletins))
 						result = false;
 					for (String region : GlobalVariables.regionsEuregio)

@@ -508,4 +508,16 @@ public class AlbinaUtil {
 			e.printStackTrace();
 		}
 	}
+
+	public static void runDeleteLatestHtmlsScript() {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteLatestHtmls.sh");
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("Latest htmls deleted.");
+		} catch (Exception e) {
+			logger.error("Latest htmls could not be deleted!");
+			e.printStackTrace();
+		}
+	}
 }

@@ -179,8 +179,16 @@ public class SimpleHtmlUtil {
 							bulletin.put("pm", "");
 						}
 
-						bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
-						bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang));
+						if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null
+								&& !avalancheBulletin.getAvActivityHighlightsIn(lang).isEmpty())
+							bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
+						else
+							bulletin.put("avAvalancheHighlights", "");
+						if (avalancheBulletin.getAvActivityCommentIn(lang) != null
+								&& !avalancheBulletin.getAvActivityCommentIn(lang).isEmpty())
+							bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang));
+						else
+							bulletin.put("avAvalancheComment", "");
 						if (avalancheBulletin.getDangerPattern1() != null)
 							bulletin.put("dangerPattern1",
 									AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang)
@@ -193,12 +201,17 @@ public class SimpleHtmlUtil {
 											+ "<br>");
 						else
 							bulletin.put("dangerPattern2", "");
-						if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
+						if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
+								&& !avalancheBulletin.getSnowpackStructureCommentIn(lang).isEmpty())
 							bulletin.put("snowpackStructureComment",
 									avalancheBulletin.getSnowpackStructureCommentIn(lang));
 						else
 							bulletin.put("snowpackStructureComment", "");
-						bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
+						if (avalancheBulletin.getTendencyCommentIn(lang) != null
+								&& !avalancheBulletin.getTendencyCommentIn(lang).isEmpty())
+							bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
+						else
+							bulletin.put("tendencyComment", "");
 						arrayList.add(bulletin);
 					}
 				}
@@ -252,7 +265,7 @@ public class SimpleHtmlUtil {
 					Path link = Paths.get(GlobalVariables.getHtmlDirectory() + filename);
 					if (Files.exists(link))
 						Files.delete(link);
-					Files.createSymbolicLink(link, newHtmlFile.toPath());
+					Files.createLink(link, newHtmlFile.toPath());
 					AlbinaUtil.setFilePermissions(GlobalVariables.getHtmlDirectory() + filename);
 				}
 
