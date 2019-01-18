@@ -29,11 +29,11 @@ public class MessengerPeopleUtil {
 		return instance;
 	}
 
-	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions) {
+	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.languages) {
 			try {
 				DateTime date = AlbinaUtil.getDate(bulletins);
-				String message = GlobalVariables.getMessengerPeopleText(lang, date);
+				String message = GlobalVariables.getMessengerPeopleText(lang, date, update);
 
 				String attachmentUrl = "";
 				attachmentUrl = GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins)

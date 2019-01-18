@@ -839,22 +839,41 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getMessengerPeopleText(LanguageCode lang, DateTime date) throws UnsupportedEncodingException {
+	public static String getMessengerPeopleText(LanguageCode lang, DateTime date, boolean update)
+			throws UnsupportedEncodingException {
 		String dateString = GlobalVariables.getDayName(date.getDayOfWeek(), lang)
 				+ date.toString(GlobalVariables.getShortDateTimeFormatter(lang));
-		switch (lang) {
-		case de:
-			return URLEncoder.encode("Lawinenvorhersage für " + dateString + ": " + getBulletinUrl(lang, date),
-					"UTF-8");
-		case it:
-			return URLEncoder.encode("Previsione valanghe per " + dateString + ": " + getBulletinUrl(lang, date),
-					"UTF-8");
-		case en:
-			return URLEncoder.encode("Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date),
-					"UTF-8");
-		default:
-			return URLEncoder.encode("Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date),
-					"UTF-8");
+		if (update) {
+			switch (lang) {
+			case de:
+				return URLEncoder.encode(
+						"UPDATE zur Lawinenvorhersage für " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+			case it:
+				return URLEncoder.encode(
+						"AGGIORNAMENTO sulla previsione valanghe per " + dateString + ": " + getBulletinUrl(lang, date),
+						"UTF-8");
+			case en:
+				return URLEncoder.encode(
+						"UDPATE on avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+			default:
+				return URLEncoder.encode(
+						"UPDATE on valanche forecast for " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+			}
+		} else {
+			switch (lang) {
+			case de:
+				return URLEncoder.encode("Lawinenvorhersage für " + dateString + ": " + getBulletinUrl(lang, date),
+						"UTF-8");
+			case it:
+				return URLEncoder.encode("Previsione valanghe per " + dateString + ": " + getBulletinUrl(lang, date),
+						"UTF-8");
+			case en:
+				return URLEncoder.encode("Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date),
+						"UTF-8");
+			default:
+				return URLEncoder.encode("Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date),
+						"UTF-8");
+			}
 		}
 	}
 
@@ -951,16 +970,29 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinenvorhersage";
-		case it:
-			return "Previsione Valanghe";
-		case en:
-			return "Avalanche Forecast";
-		default:
-			return "Avalanche Forecast";
+	public static String getHeadline(LanguageCode lang, boolean update) {
+		if (update) {
+			switch (lang) {
+			case de:
+				return "Lawinenvorhersage";
+			case it:
+				return "Previsione Valanghe";
+			case en:
+				return "Avalanche Forecast";
+			default:
+				return "Avalanche Forecast";
+			}
+		} else {
+			switch (lang) {
+			case de:
+				return "UPDATE zur Lawinenvorhersage";
+			case it:
+				return "AGGIORNAMENTO sulla Previsione Valanghe";
+			case en:
+				return "UPDATE on Avalanche Forecast";
+			default:
+				return "UPDATE on Avalanche Forecast";
+			}
 		}
 	}
 
@@ -1059,16 +1091,29 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getEmailSubject(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinenvorhersage, ";
-		case it:
-			return "Previsione Valanghe, ";
-		case en:
-			return "Avalanche Forecast, ";
-		default:
-			return "Avalanche Forecast, ";
+	public static String getEmailSubject(LanguageCode lang, boolean update) {
+		if (update) {
+			switch (lang) {
+			case de:
+				return "UPDATE zur Lawinenvorhersage, ";
+			case it:
+				return "AGGIORNAMENTO sulla Previsione Valanghe, ";
+			case en:
+				return "UPDATE on Avalanche Forecast, ";
+			default:
+				return "UPDATE on Avalanche Forecast, ";
+			}
+		} else {
+			switch (lang) {
+			case de:
+				return "Lawinenvorhersage, ";
+			case it:
+				return "Previsione Valanghe, ";
+			case en:
+				return "Avalanche Forecast, ";
+			default:
+				return "Avalanche Forecast, ";
+			}
 		}
 	}
 

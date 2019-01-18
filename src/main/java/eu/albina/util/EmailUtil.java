@@ -92,11 +92,11 @@ public class EmailUtil {
 		return cfg;
 	}
 
-	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions) {
+	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.languages) {
-			String subject = GlobalVariables.getEmailSubject(lang) + AlbinaUtil.getDate(bulletins, lang);
+			String subject = GlobalVariables.getEmailSubject(lang, update) + AlbinaUtil.getDate(bulletins, lang);
 			for (String region : regions) {
-				String emailHtml = createBulletinEmailHtml(bulletins, lang, region);
+				String emailHtml = createBulletinEmailHtml(bulletins, lang, region, update);
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
 			}
 		}
@@ -266,7 +266,8 @@ public class EmailUtil {
 		}
 	}
 
-	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
+	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region,
+			boolean update) {
 		try {
 			// Create data model
 			Map<String, Object> root = new HashMap<>();
@@ -319,7 +320,7 @@ public class EmailUtil {
 				text.put("publishedAt", GlobalVariables.getPublishedText(lang));
 			text.put("date", AlbinaUtil.getDate(bulletins, lang));
 			text.put("title", GlobalVariables.getTitle(lang));
-			text.put("headline", GlobalVariables.getHeadline(lang));
+			text.put("headline", GlobalVariables.getHeadline(lang, update));
 			text.put("follow", GlobalVariables.getFollowUs(lang));
 			text.put("unsubscribe", GlobalVariables.getUnsubscribe(lang));
 			text.put("imprint", GlobalVariables.getImprint(lang));

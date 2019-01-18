@@ -248,7 +248,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07");
+		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07", false);
 		System.out.println(html);
 	}
 
@@ -258,7 +258,7 @@ public class UtilTest {
 		// TODO test this test
 		ArrayList<String> regions = new ArrayList<String>();
 		regions.add("AT-07");
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false);
 	}
 
 	@Ignore
@@ -288,7 +288,7 @@ public class UtilTest {
 		// TODO test this test
 		List<String> regions = new ArrayList<String>();
 		regions.add(GlobalVariables.codeTrentino);
-		MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions);
+		MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, false);
 	}
 
 	@Ignore

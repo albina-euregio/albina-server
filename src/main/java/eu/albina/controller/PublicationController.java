@@ -92,11 +92,11 @@ public class PublicationController {
 
 				// send emails
 				if (GlobalVariables.isSendEmails())
-					sendEmails(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio);
+					sendEmails(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio, false);
 
 				// publish on social media
 				if (GlobalVariables.isPublishToSocialMedia())
-					triggerMessengerpeople(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio);
+					triggerMessengerpeople(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio, false);
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
@@ -166,11 +166,11 @@ public class PublicationController {
 
 				// send emails to regions
 				if (GlobalVariables.isSendEmails())
-					sendEmails(avalancheReportIds, bulletins, regions);
+					sendEmails(avalancheReportIds, bulletins, regions, true);
 
 				// publish on social media
 				if (GlobalVariables.isPublishToSocialMedia())
-					triggerMessengerpeople(avalancheReportIds, bulletins, regions);
+					triggerMessengerpeople(avalancheReportIds, bulletins, regions, true);
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
@@ -368,12 +368,13 @@ public class PublicationController {
 		}).start();
 	}
 
-	public void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
+	public void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions,
+			boolean update) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("Email production started");
-					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions);
+					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update);
 					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
 				} catch (IOException e) {
 					logger.error("Error preparing emails:" + e.getMessage());
@@ -389,12 +390,12 @@ public class PublicationController {
 	}
 
 	public void triggerMessengerpeople(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
-			List<String> regions) {
+			List<String> regions, boolean update) {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("Messengerpeople production started");
-					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions);
+					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
 					AvalancheReportController.getInstance().setAvalancheReportWhatsappFlag(avalancheReportIds);
 					AvalancheReportController.getInstance().setAvalancheReportTelegramFlag(avalancheReportIds);
 				} catch (IOException e) {

@@ -1172,7 +1172,7 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().sendEmails(publishedReportIds, bulletins, regions);
+			PublicationController.getInstance().sendEmails(publishedReportIds, bulletins, regions, false);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -1223,7 +1223,7 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().triggerMessengerpeople(publishedReportIds, bulletins, regions);
+			PublicationController.getInstance().triggerMessengerpeople(publishedReportIds, bulletins, regions, false);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
