@@ -1474,27 +1474,48 @@ public class GlobalVariables {
 		Configuration config;
 		try {
 			config = configs.properties(propertiesFilePath);
-			localImagesPath = config.getString("localImagesPath");
-			localFontsPath = config.getString("localFontsPath");
-			pdfDirectory = config.getString("pdfDirectory");
-			htmlDirectory = config.getString("htmlDirectory");
-			serverImagesUrl = config.getString("serverImagesUrl");
-			serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
-			mapsPath = config.getString("mapsPath");
-			scriptsPath = config.getString("scriptsPath");
-			createCaaml = config.getBoolean("createCaaml");
-			createMaps = config.getBoolean("createMaps");
-			createPdf = config.getBoolean("createPdf");
-			createSimpleHtml = config.getBoolean("createSimpleHtml");
-			createStaticWidget = config.getBoolean("createStaticWidget");
-			sendEmails = config.getBoolean("sendEmails");
-			publishToSocialMedia = config.getBoolean("publishToSocialMedia");
-			publishAt5PM = config.getBoolean("publishAt5PM");
-			publishAt8AM = config.getBoolean("publishAt8AM");
-			publishBulletinsTyrol = config.getBoolean("publishBulletinsTyrol");
-			publishBulletinsSouthTyrol = config.getBoolean("publishBulletinsSouthTyrol");
-			publishBulletinsTrentino = config.getBoolean("publishBulletinsTrentino");
-			publishBulletinsStyria = config.getBoolean("publishBulletinsStyria");
+			if (config.containsKey("localImagesPath"))
+				localImagesPath = config.getString("localImagesPath");
+			if (config.containsKey("localFontsPath"))
+				localFontsPath = config.getString("localFontsPath");
+			if (config.containsKey("pdfDirectory"))
+				pdfDirectory = config.getString("pdfDirectory");
+			if (config.containsKey("htmlDirectory"))
+				htmlDirectory = config.getString("htmlDirectory");
+			if (config.containsKey("serverImagesUrl"))
+				serverImagesUrl = config.getString("serverImagesUrl");
+			if (config.containsKey("serverImagesUrlLocalhost"))
+				serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
+			if (config.containsKey("mapsPath"))
+				mapsPath = config.getString("mapsPath");
+			if (config.containsKey("scriptsPath"))
+				scriptsPath = config.getString("scriptsPath");
+			if (config.containsKey("createCaaml"))
+				createCaaml = config.getBoolean("createCaaml");
+			if (config.containsKey("createMaps"))
+				createMaps = config.getBoolean("createMaps");
+			if (config.containsKey("createPdf"))
+				createPdf = config.getBoolean("createPdf");
+			if (config.containsKey("createSimpleHtml"))
+				createSimpleHtml = config.getBoolean("createSimpleHtml");
+			if (config.containsKey("createStaticWidget"))
+				createStaticWidget = config.getBoolean("createStaticWidget");
+			if (config.containsKey("sendEmails"))
+				sendEmails = config.getBoolean("sendEmails");
+			if (config.containsKey("publishToSocialMedia"))
+				publishToSocialMedia = config.getBoolean("publishToSocialMedia");
+			if (config.containsKey("publishAt5PM"))
+				publishAt5PM = config.getBoolean("publishAt5PM");
+			if (config.containsKey("publishAt8AM"))
+				publishAt8AM = config.getBoolean("publishAt8AM");
+			if (config.containsKey("publishBulletinsTyrol"))
+				publishBulletinsTyrol = config.getBoolean("publishBulletinsTyrol");
+			if (config.containsKey("publishBulletinsSouthTyrol"))
+				publishBulletinsSouthTyrol = config.getBoolean("publishBulletinsSouthTyrol");
+			if (config.containsKey("publishBulletinsTrentino"))
+				publishBulletinsTrentino = config.getBoolean("publishBulletinsTrentino");
+			if (config.containsKey("publishBulletinsStyria"))
+				publishBulletinsStyria = config.getBoolean("publishBulletinsStyria");
 			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration file could not be loaded!");
