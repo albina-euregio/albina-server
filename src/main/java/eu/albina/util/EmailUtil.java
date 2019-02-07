@@ -96,7 +96,12 @@ public class EmailUtil {
 		for (LanguageCode lang : GlobalVariables.languages) {
 			String subject = GlobalVariables.getEmailSubject(lang, update) + AlbinaUtil.getDate(bulletins, lang);
 			for (String region : regions) {
-				String emailHtml = createBulletinEmailHtml(bulletins, lang, region, update);
+				ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+				for (AvalancheBulletin avalancheBulletin : bulletins) {
+					if (avalancheBulletin.affectsRegionOnlyPublished(region))
+						regionBulletins.add(avalancheBulletin);
+				}
+				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update);
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
 			}
 		}
@@ -298,13 +303,13 @@ public class EmailUtil {
 
 			// maps
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-				mapImage.put("overview",
-						GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/am_albina_map.jpg");
-				mapImage.put("overviewPM",
-						GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/pm_albina_map.jpg");
+				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+						+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
+				mapImage.put("overviewPM", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+						+ AlbinaUtil.getRegionOverviewMapFilename(region, true));
 			} else {
-				mapImage.put("overview",
-						GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_map.jpg");
+				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+						+ AlbinaUtil.getRegionOverviewMapFilename(region));
 				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
 			}
 

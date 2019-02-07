@@ -345,6 +345,44 @@ public class AlbinaUtil {
 		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
+	public static String getRegionOverviewMapFilename(String region, boolean isAfternoon) {
+		StringBuilder sb = new StringBuilder();
+		if (isAfternoon)
+			sb.append("pm_");
+		else
+			sb.append("am_");
+		sb.append(getMapFilename(region));
+		return sb.toString();
+	}
+
+	public static String getRegionOverviewMapFilename(String region) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("fd_");
+		sb.append(getMapFilename(region));
+		return sb.toString();
+	}
+
+	// REGION
+	private static String getMapFilename(String region) {
+		StringBuilder sb = new StringBuilder();
+		switch (region) {
+		case "AT-07":
+			sb.append("tyrol");
+			break;
+		case "IT-32-BZ":
+			sb.append("southtyrol");
+			break;
+		case "IT-32-TN":
+			sb.append("trentino");
+			break;
+		default:
+			sb.append("albina");
+			break;
+		}
+		sb.append("_map.jpg");
+		return sb.toString();
+	}
+
 	public static DateTime getDate(List<AvalancheBulletin> bulletins) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
