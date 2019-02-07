@@ -27,7 +27,7 @@
       	<hibernate.connection.url>jdbc:mysql://localhost:3306/ais?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
       	<hibernate.connection.username>ais</hibernate.connection.username>
       	<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
-      	<hibernate.show-sql>true</hibernate.show-sql>
+      	<hibernate.show-sql>false</hibernate.show-sql>
       	<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
       	<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
       	<albina.conf.create-caaml>false</albina.conf.create-caaml>
