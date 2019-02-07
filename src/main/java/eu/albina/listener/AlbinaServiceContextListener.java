@@ -48,7 +48,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 				logger.warn(String.format("Error deregistering driver %s", d), ex);
 			}
 		}
-		AbandonedConnectionCleanupThread.shutdown();
+		AbandonedConnectionCleanupThread.checkedShutdown();
 
 		SchedulerUtil.getInstance().setUp();
 		SchedulerUtil.getInstance().start();
