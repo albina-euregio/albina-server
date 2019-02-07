@@ -1,8 +1,8 @@
 package eu.albina.model.rapidmail.mailings;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
 public class RapidMailMailingsResponseLinks {
@@ -16,35 +16,32 @@ public class RapidMailMailingsResponseLinks {
 	@JsonProperty("last")
 	private RapidMailMailingsResponseHref last;
 
-
-	public void setSelf(RapidMailMailingsResponseHref self){
+	public void setSelf(RapidMailMailingsResponseHref self) {
 		this.self = self;
 	}
-	public RapidMailMailingsResponseHref getSelf(){
+
+	public RapidMailMailingsResponseHref getSelf() {
 		return self;
 	}
 
-	public void setFirst(RapidMailMailingsResponseHref self){
+	public void setFirst(RapidMailMailingsResponseHref first) {
 		this.first = first;
 	}
-	public RapidMailMailingsResponseHref getFirst(){
+
+	public RapidMailMailingsResponseHref getFirst() {
 		return first;
 	}
 
-	public void setLast(RapidMailMailingsResponseHref self){
+	public void setLast(RapidMailMailingsResponseHref last) {
 		this.last = last;
 	}
-	public RapidMailMailingsResponseHref getLast(){
+
+	public RapidMailMailingsResponseHref getLast() {
 		return last;
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"Links{" + 
-			"self = '" + self + '\'' +
-			"first = '" + first + '\'' +
-			"last = '" + last + '\'' +
-			"}";
-		}
+	public String toString() {
+		return "Links{" + "self = '" + self + '\'' + "first = '" + first + '\'' + "last = '" + last + '\'' + "}";
+	}
 }

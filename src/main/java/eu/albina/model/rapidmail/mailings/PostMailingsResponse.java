@@ -1,8 +1,10 @@
 package eu.albina.model.rapidmail.mailings;
 
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
 public class PostMailingsResponse {
@@ -79,191 +81,190 @@ public class PostMailingsResponse {
 	@JsonProperty("_links")
 	private RapidMailMailingsResponseLinks links;
 
-
-
-	public void setPaused(String paused){
+	public void setPaused(String paused) {
 		this.paused = paused;
 	}
 
-	public String getPaused(){
+	public String getPaused() {
 		return paused;
 	}
 
-	public void setFromEmail(String fromEmail){
+	public void setFromEmail(String fromEmail) {
 		this.fromEmail = fromEmail;
 	}
 
-	public String getFromEmail(){
+	public String getFromEmail() {
 		return fromEmail;
 	}
 
-	public void setAttachments(String attachments){
+	public void setAttachments(String attachments) {
 		this.attachments = attachments;
 	}
 
-	public String getAttachments(){
+	public String getAttachments() {
 		return attachments;
 	}
 
-	public void setSubject(String subject){
+	public void setSubject(String subject) {
 		this.subject = subject;
 	}
 
-	public String getSubject(){
+	public String getSubject() {
 		return subject;
 	}
 
-	public void setCreated(String created){
+	public void setCreated(String created) {
 		this.created = created;
 	}
 
-	public String getCreated(){
+	public String getCreated() {
 		return created;
 	}
 
-	public void setDestinations(List<PostMailingsRequestDestination> destinations){
+	public void setDestinations(List<PostMailingsRequestDestination> destinations) {
 		this.destinations = destinations;
 	}
 
-	public List<PostMailingsRequestDestination> getDestinations(){
+	public List<PostMailingsRequestDestination> getDestinations() {
 		return destinations;
 	}
 
-	public void setSendAt(String sendAt){
+	public void setSendAt(String sendAt) {
 		this.sendAt = sendAt;
 	}
 
-	public String getSendAt(){
+	public String getSendAt() {
 		return sendAt;
 	}
 
-	public void setFeatureMailingsplit(String featureMailingsplit){
+	public void setFeatureMailingsplit(String featureMailingsplit) {
 		this.featureMailingsplit = featureMailingsplit;
 	}
 
-	public String getFeatureMailingsplit(){
+	public String getFeatureMailingsplit() {
 		return featureMailingsplit;
 	}
 
-	public void setFromName(String fromName){
+	public void setFromName(String fromName) {
 		this.fromName = fromName;
 	}
 
-	public String getFromName(){
+	public String getFromName() {
 		return fromName;
 	}
 
-	public void setTitle(String title){
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public String getTitle(){
+	public String getTitle() {
 		return title;
 	}
 
-	public void setSent(String sent){
+	public void setSent(String sent) {
 		this.sent = sent;
 	}
 
-	public String getSent(){
+	public String getSent() {
 		return sent;
 	}
 
-	public void setTrackingDomain(String trackingDomain){
+	public void setTrackingDomain(String trackingDomain) {
 		this.trackingDomain = trackingDomain;
 	}
 
-	public String getTrackingDomain(){
+	public String getTrackingDomain() {
 		return trackingDomain;
 	}
 
-	public void setCanceled(String canceled){
+	public void setCanceled(String canceled) {
 		this.canceled = canceled;
 	}
 
-	public String getCanceled(){
+	public String getCanceled() {
 		return canceled;
 	}
 
-	public void setCheckRobinson(String checkRobinson){
+	public void setCheckRobinson(String checkRobinson) {
 		this.checkRobinson = checkRobinson;
 	}
 
-	public String getCheckRobinson(){
+	public String getCheckRobinson() {
 		return checkRobinson;
 	}
 
-	public void setTrackingParam(String trackingParam){
+	public void setTrackingParam(String trackingParam) {
 		this.trackingParam = trackingParam;
 	}
 
-	public String getTrackingParam(){
+	public String getTrackingParam() {
 		return trackingParam;
 	}
 
-	public void setDeleted(String deleted){
+	public void setDeleted(String deleted) {
 		this.deleted = deleted;
 	}
 
-	public String getDeleted(){
+	public String getDeleted() {
 		return deleted;
 	}
 
-	public void setSize(String size){
+	public void setSize(String size) {
 		this.size = size;
 	}
 
-	public String getSize(){
+	public String getSize() {
 		return size;
 	}
 
-	public void setCheckEcg(String checkEcg){
+	public void setCheckEcg(String checkEcg) {
 		this.checkEcg = checkEcg;
 	}
 
-	public String getCheckEcg(){
+	public String getCheckEcg() {
 		return checkEcg;
 	}
 
-	public void setRecipients(String recipients){
+	public void setRecipients(String recipients) {
 		this.recipients = recipients;
 	}
 
-	public String getRecipients(){
+	public String getRecipients() {
 		return recipients;
 	}
 
-	public void setHost(String host){
+	public void setHost(String host) {
 		this.host = host;
 	}
 
-	public String getHost(){
+	public String getHost() {
 		return host;
 	}
 
-	public void setId(String id){
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getId(){
+	public String getId() {
 		return id;
 	}
 
-	public void setUpdated(String updated){
+	public void setUpdated(String updated) {
 		this.updated = updated;
 	}
 
-	public String getUpdated(){
+	public String getUpdated() {
 		return updated;
 	}
 
-	public void setStatus(String status){
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public String getStatus(){
+	public String getStatus() {
 		return status;
 	}
+
 	public RapidMailMailingsResponseLinks getLinks() {
 		return links;
 	}
@@ -271,34 +272,18 @@ public class PostMailingsResponse {
 	public void setLinks(RapidMailMailingsResponseLinks links) {
 		this.links = links;
 	}
+
 	@Override
- 	public String toString(){
-		return 
-			"MailingPostResponse{" + 
-			"paused = '" + paused + '\'' + 
-			",from_email = '" + fromEmail + '\'' + 
-			",attachments = '" + attachments + '\'' +
-			",subject = '" + subject + '\'' + 
-			",created = '" + created + '\'' + 
-			",destinations = '" + destinations + '\'' + 
-			",send_at = '" + sendAt + '\'' + 
-			",feature_mailingsplit = '" + featureMailingsplit + '\'' +
-			",from_name = '" + fromName + '\'' + 
-			",title = '" + title + '\'' + 
-			",sent = '" + sent + '\'' + 
-			",tracking_domain = '" + trackingDomain + '\'' + 
-			",canceled = '" + canceled + '\'' + 
-			",check_robinson = '" + checkRobinson + '\'' + 
-			",tracking_param = '" + trackingParam + '\'' + 
-			",deleted = '" + deleted + '\'' + 
-			",size = '" + size + '\'' + 
-			",check_ecg = '" + checkEcg + '\'' + 
-			",recipients = '" + recipients + '\'' + 
-			",host = '" + host + '\'' + 
-			",id = '" + id + '\'' + 
-			",updated = '" + updated + '\'' + 
-			",status = '" + status + '\'' +
-			",_links= '" + links + '\'' +
-			"}";
-		}
+	public String toString() {
+		return "MailingPostResponse{" + "paused = '" + paused + '\'' + ",from_email = '" + fromEmail + '\''
+				+ ",attachments = '" + attachments + '\'' + ",subject = '" + subject + '\'' + ",created = '" + created
+				+ '\'' + ",destinations = '" + destinations + '\'' + ",send_at = '" + sendAt + '\''
+				+ ",feature_mailingsplit = '" + featureMailingsplit + '\'' + ",from_name = '" + fromName + '\''
+				+ ",title = '" + title + '\'' + ",sent = '" + sent + '\'' + ",tracking_domain = '" + trackingDomain
+				+ '\'' + ",canceled = '" + canceled + '\'' + ",check_robinson = '" + checkRobinson + '\''
+				+ ",tracking_param = '" + trackingParam + '\'' + ",deleted = '" + deleted + '\'' + ",size = '" + size
+				+ '\'' + ",check_ecg = '" + checkEcg + '\'' + ",recipients = '" + recipients + '\'' + ",host = '" + host
+				+ '\'' + ",id = '" + id + '\'' + ",updated = '" + updated + '\'' + ",status = '" + status + '\''
+				+ ",_links= '" + links + '\'' + "}";
+	}
 }

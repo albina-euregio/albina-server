@@ -1,7 +1,8 @@
 package eu.albina.model.rapidmail.recipients.get;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
 public class GetRecipientsResponseItem {
@@ -87,253 +88,233 @@ public class GetRecipientsResponseItem {
 	@JsonProperty("status")
 	private String status;
 
-	public void setMailtype(String mailtype){
+	public void setMailtype(String mailtype) {
 		this.mailtype = mailtype;
 	}
 
-	public String getMailtype(){
+	public String getMailtype() {
 		return mailtype;
 	}
 
-	public void setFirstname(String firstname){
+	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
 
-	public String getFirstname(){
+	public String getFirstname() {
 		return firstname;
 	}
 
-	public void setExtra8(String extra8){
+	public void setExtra8(String extra8) {
 		this.extra8 = extra8;
 	}
 
-	public String getExtra8(){
+	public String getExtra8() {
 		return extra8;
 	}
 
-	public void setBirthdate(Object birthdate){
+	public void setBirthdate(Object birthdate) {
 		this.birthdate = birthdate;
 	}
 
-	public Object getBirthdate(){
+	public Object getBirthdate() {
 		return birthdate;
 	}
 
-	public void setExtra9(String extra9){
+	public void setExtra9(String extra9) {
 		this.extra9 = extra9;
 	}
 
-	public String getExtra9(){
+	public String getExtra9() {
 		return extra9;
 	}
 
-	public void setGender(String gender){
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
-	public String getGender(){
+	public String getGender() {
 		return gender;
 	}
 
-	public void setLinks(GetRecipientsResponseLinks links){
+	public void setLinks(GetRecipientsResponseLinks links) {
 		this.links = links;
 	}
 
-	public GetRecipientsResponseLinks getLinks(){
+	public GetRecipientsResponseLinks getLinks() {
 		return links;
 	}
 
-	public void setExtra2(String extra2){
+	public void setExtra2(String extra2) {
 		this.extra2 = extra2;
 	}
 
-	public String getExtra2(){
+	public String getExtra2() {
 		return extra2;
 	}
 
-	public void setExtra3(String extra3){
+	public void setExtra3(String extra3) {
 		this.extra3 = extra3;
 	}
 
-	public String getExtra3(){
+	public String getExtra3() {
 		return extra3;
 	}
 
-	public void setExtra1(String extra1){
+	public void setExtra1(String extra1) {
 		this.extra1 = extra1;
 	}
 
-	public String getExtra1(){
+	public String getExtra1() {
 		return extra1;
 	}
 
-	public void setTitle(String title){
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public String getTitle(){
+	public String getTitle() {
 		return title;
 	}
 
-	public void setExtra6(String extra6){
+	public void setExtra6(String extra6) {
 		this.extra6 = extra6;
 	}
 
-	public String getExtra6(){
+	public String getExtra6() {
 		return extra6;
 	}
 
-	public void setExtra7(String extra7){
+	public void setExtra7(String extra7) {
 		this.extra7 = extra7;
 	}
 
-	public String getExtra7(){
+	public String getExtra7() {
 		return extra7;
 	}
 
-	public void setExtra4(String extra4){
+	public void setExtra4(String extra4) {
 		this.extra4 = extra4;
 	}
 
-	public String getExtra4(){
+	public String getExtra4() {
 		return extra4;
 	}
 
-	public void setExtra5(String extra5){
+	public void setExtra5(String extra5) {
 		this.extra5 = extra5;
 	}
 
-	public String getExtra5(){
+	public String getExtra5() {
 		return extra5;
 	}
 
-	public void setId(String id){
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getId(){
+	public String getId() {
 		return id;
 	}
 
-	public void setExtra10(String extra10){
+	public void setExtra10(String extra10) {
 		this.extra10 = extra10;
 	}
 
-	public String getExtra10(){
+	public String getExtra10() {
 		return extra10;
 	}
 
-	public void setEmail(String email){
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	public String getEmail(){
+	public String getEmail() {
 		return email;
 	}
 
-	public void setZip(String zip){
+	public void setZip(String zip) {
 		this.zip = zip;
 	}
 
-	public String getZip(){
+	public String getZip() {
 		return zip;
 	}
 
-	public void setCreated(String created){
+	public void setCreated(String created) {
 		this.created = created;
 	}
 
-	public String getCreated(){
+	public String getCreated() {
 		return created;
 	}
 
-	public void setLastname(String lastname){
+	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
 
-	public String getLastname(){
+	public String getLastname() {
 		return lastname;
 	}
 
-	public void setForeignId(String foreignId){
+	public void setForeignId(String foreignId) {
 		this.foreignId = foreignId;
 	}
 
-	public String getForeignId(){
+	public String getForeignId() {
 		return foreignId;
 	}
 
-	public void setRecipientlistId(String recipientlistId){
+	public void setRecipientlistId(String recipientlistId) {
 		this.recipientlistId = recipientlistId;
 	}
 
-	public String getRecipientlistId(){
+	public String getRecipientlistId() {
 		return recipientlistId;
 	}
 
-	public void setCreatedIp(String createdIp){
+	public void setCreatedIp(String createdIp) {
 		this.createdIp = createdIp;
 	}
 
-	public String getCreatedIp(){
+	public String getCreatedIp() {
 		return createdIp;
 	}
 
-	public void setUpdated(String updated){
+	public void setUpdated(String updated) {
 		this.updated = updated;
 	}
 
-	public String getUpdated(){
+	public String getUpdated() {
 		return updated;
 	}
 
-	public void setCreatedHost(String createdHost){
+	public void setCreatedHost(String createdHost) {
 		this.createdHost = createdHost;
 	}
 
-	public String getCreatedHost(){
+	public String getCreatedHost() {
 		return createdHost;
 	}
 
-	public void setStatus(String status){
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public String getStatus(){
+	public String getStatus() {
 		return status;
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"RecipientsItem{" + 
-			"mailtype = '" + mailtype + '\'' + 
-			",firstname = '" + firstname + '\'' + 
-			",extra8 = '" + extra8 + '\'' + 
-			",birthdate = '" + birthdate + '\'' + 
-			",extra9 = '" + extra9 + '\'' + 
-			",gender = '" + gender + '\'' + 
-			",_links = '" + links + '\'' + 
-			",extra2 = '" + extra2 + '\'' + 
-			",extra3 = '" + extra3 + '\'' + 
-			",extra1 = '" + extra1 + '\'' + 
-			",title = '" + title + '\'' + 
-			",extra6 = '" + extra6 + '\'' + 
-			",extra7 = '" + extra7 + '\'' + 
-			",extra4 = '" + extra4 + '\'' + 
-			",extra5 = '" + extra5 + '\'' + 
-			",id = '" + id + '\'' + 
-			",extra10 = '" + extra10 + '\'' + 
-			",email = '" + email + '\'' + 
-			",zip = '" + zip + '\'' + 
-			",created = '" + created + '\'' + 
-			",lastname = '" + lastname + '\'' + 
-			",foreign_id = '" + foreignId + '\'' + 
-			",recipientlist_id = '" + recipientlistId + '\'' + 
-			",created_ip = '" + createdIp + '\'' + 
-			",updated = '" + updated + '\'' + 
-			",created_host = '" + createdHost + '\'' + 
-			",status = '" + status + '\'' + 
-			"}";
-		}
+	public String toString() {
+		return "RecipientsItem{" + "mailtype = '" + mailtype + '\'' + ",firstname = '" + firstname + '\''
+				+ ",extra8 = '" + extra8 + '\'' + ",birthdate = '" + birthdate + '\'' + ",extra9 = '" + extra9 + '\''
+				+ ",gender = '" + gender + '\'' + ",_links = '" + links + '\'' + ",extra2 = '" + extra2 + '\''
+				+ ",extra3 = '" + extra3 + '\'' + ",extra1 = '" + extra1 + '\'' + ",title = '" + title + '\''
+				+ ",extra6 = '" + extra6 + '\'' + ",extra7 = '" + extra7 + '\'' + ",extra4 = '" + extra4 + '\''
+				+ ",extra5 = '" + extra5 + '\'' + ",id = '" + id + '\'' + ",extra10 = '" + extra10 + '\'' + ",email = '"
+				+ email + '\'' + ",zip = '" + zip + '\'' + ",created = '" + created + '\'' + ",lastname = '" + lastname
+				+ '\'' + ",foreign_id = '" + foreignId + '\'' + ",recipientlist_id = '" + recipientlistId + '\''
+				+ ",created_ip = '" + createdIp + '\'' + ",updated = '" + updated + '\'' + ",created_host = '"
+				+ createdHost + '\'' + ",status = '" + status + '\'' + "}";
+	}
 }

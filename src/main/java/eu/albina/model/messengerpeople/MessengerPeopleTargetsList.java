@@ -1,12 +1,12 @@
 package eu.albina.model.messengerpeople;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.annotation.Generated;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 @Generated("com.robohorse.robopojogenerator")
 public class MessengerPeopleTargetsList {
@@ -17,16 +17,14 @@ public class MessengerPeopleTargetsList {
 	public Map<String, String> any() {
 		return items;
 	}
+
 	@JsonAnySetter
 	public void any(String name, String value) {
 		this.items.put(name, value);
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"List{" + 
-			"items = '" + items + '\'' +
-			"}";
-		}
+	public String toString() {
+		return "List{" + "items = '" + items + '\'' + "}";
+	}
 }

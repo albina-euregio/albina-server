@@ -1,11 +1,12 @@
 package eu.albina.model.messengerpeople;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.annotation.Generated;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 @Generated("com.robohorse.robopojogenerator")
 public class Recipients {
@@ -23,10 +24,7 @@ public class Recipients {
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"Recipients{" +
-			"item = '" + items + '\'' +
-			"}";
+	public String toString() {
+		return "Recipients{" + "item = '" + items + '\'' + "}";
 	}
 }

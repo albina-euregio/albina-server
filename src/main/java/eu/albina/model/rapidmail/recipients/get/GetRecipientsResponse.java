@@ -1,7 +1,8 @@
 package eu.albina.model.rapidmail.recipients.get;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
 public class GetRecipientsResponse {
@@ -24,64 +25,58 @@ public class GetRecipientsResponse {
 	@JsonProperty("page_size")
 	private int pageSize;
 
-	public void setLinks(GetRecipientsResponseLinks links){
+	public void setLinks(GetRecipientsResponseLinks links) {
 		this.links = links;
 	}
 
-	public GetRecipientsResponseLinks getLinks(){
+	public GetRecipientsResponseLinks getLinks() {
 		return links;
 	}
 
-	public void setEmbedded(GetRecipientsResponseEmbedded embedded){
+	public void setEmbedded(GetRecipientsResponseEmbedded embedded) {
 		this.embedded = embedded;
 	}
 
-	public GetRecipientsResponseEmbedded getEmbedded(){
+	public GetRecipientsResponseEmbedded getEmbedded() {
 		return embedded;
 	}
 
-	public void setPage(int page){
+	public void setPage(int page) {
 		this.page = page;
 	}
 
-	public int getPage(){
+	public int getPage() {
 		return page;
 	}
 
-	public void setTotalItems(int totalItems){
+	public void setTotalItems(int totalItems) {
 		this.totalItems = totalItems;
 	}
 
-	public int getTotalItems(){
+	public int getTotalItems() {
 		return totalItems;
 	}
 
-	public void setPageCount(int pageCount){
+	public void setPageCount(int pageCount) {
 		this.pageCount = pageCount;
 	}
 
-	public int getPageCount(){
+	public int getPageCount() {
 		return pageCount;
 	}
 
-	public void setPageSize(int pageSize){
+	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
 
-	public int getPageSize(){
+	public int getPageSize() {
 		return pageSize;
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"RapidMailRecipients{" + 
-			"_links = '" + links + '\'' + 
-			",_embedded = '" + embedded + '\'' + 
-			",page = '" + page + '\'' + 
-			",total_items = '" + totalItems + '\'' + 
-			",page_count = '" + pageCount + '\'' + 
-			",page_size = '" + pageSize + '\'' + 
-			"}";
-		}
+	public String toString() {
+		return "RapidMailRecipients{" + "_links = '" + links + '\'' + ",_embedded = '" + embedded + '\'' + ",page = '"
+				+ page + '\'' + ",total_items = '" + totalItems + '\'' + ",page_count = '" + pageCount + '\''
+				+ ",page_size = '" + pageSize + '\'' + "}";
+	}
 }

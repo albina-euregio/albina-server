@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.net.ssl.SSLContext;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
@@ -63,27 +61,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 
 	public CloseableHttpClient sslHttpClient() {
 		// Trust own CA and all self-signed certs
-		SSLContext sslcontext = null;
-		// try {
-		// File f= new
-		// File(this.getClass().getResource("/certificates/emailsys.jks").getFile());
-		// sslcontext = SSLContexts.custom()
-		// .loadTrustMaterial(f, "".toCharArray(), new TrustSelfSignedStrategy())
-		// .build();
-		// // Allow TLSv1 protocol only
-		// SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-		// sslcontext,
-		// new String[] { "TLSv1" },
-		// null,
-		// SSLConnectionSocketFactory.getDefaultHostnameVerifier());
-		return HttpClients.custom()
-				// .setSSLSocketFactory(sslsf)
-				.build();
-		// } catch (NoSuchAlgorithmException | KeyManagementException |
-		// KeyStoreException | CertificateException | IOException e) {
-		// e.printStackTrace();
-		// return null;
-		// }
+		return HttpClients.custom().build();
 	}
 
 	private String calcBasicAuth(String user, String pass) {
@@ -168,8 +146,6 @@ public class RapidMailProcessorController extends CommonProcessor {
 		if (mailingsPost.getStatus() == null) {
 			mailingsPost.setStatus("scheduled");
 		}
-
-		String json = toJson(mailingsPost);
 
 		Request request = Request.Post(baseUrl + "/mailings")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))

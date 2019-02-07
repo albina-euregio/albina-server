@@ -1,8 +1,8 @@
 package eu.albina.model.rapidmail.mailings;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
 public class RapidMailMailingsResponseHref {
@@ -10,19 +10,16 @@ public class RapidMailMailingsResponseHref {
 	@JsonProperty("href")
 	private String href;
 
-	public void setHref(String href){
+	public void setHref(String href) {
 		this.href = href;
 	}
 
-	public String getHref(){
+	public String getHref() {
 		return href;
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"{" +
-			"href = '" + href + '\'' + 
-			"}";
-		}
+	public String toString() {
+		return "{" + "href = '" + href + '\'' + "}";
+	}
 }

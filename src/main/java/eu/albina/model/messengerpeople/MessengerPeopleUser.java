@@ -1,8 +1,8 @@
 package eu.albina.model.messengerpeople;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
 public class MessengerPeopleUser {
@@ -25,64 +25,57 @@ public class MessengerPeopleUser {
 	@JsonProperty("status")
 	private String status;
 
-	public void setImage(String image){
+	public void setImage(String image) {
 		this.image = image;
 	}
 
-	public String getImage(){
+	public String getImage() {
 		return image;
 	}
 
-	public void setMessenger(String messenger){
+	public void setMessenger(String messenger) {
 		this.messenger = messenger;
 	}
 
-	public String getMessenger(){
+	public String getMessenger() {
 		return messenger;
 	}
 
-	public void setCreated(String created){
+	public void setCreated(String created) {
 		this.created = created;
 	}
 
-	public String getCreated(){
+	public String getCreated() {
 		return created;
 	}
 
-	public void setName(String name){
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 
-	public void setId(String id){
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getId(){
+	public String getId() {
 		return id;
 	}
 
-	public void setStatus(String status){
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public String getStatus(){
+	public String getStatus() {
 		return status;
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"Response{" + 
-			"image = '" + image + '\'' + 
-			",messenger = '" + messenger + '\'' + 
-			",created = '" + created + '\'' + 
-			",name = '" + name + '\'' + 
-			",id = '" + id + '\'' + 
-			",status = '" + status + '\'' + 
-			"}";
-		}
+	public String toString() {
+		return "Response{" + "image = '" + image + '\'' + ",messenger = '" + messenger + '\'' + ",created = '" + created
+				+ '\'' + ",name = '" + name + '\'' + ",id = '" + id + '\'' + ",status = '" + status + '\'' + "}";
+	}
 }

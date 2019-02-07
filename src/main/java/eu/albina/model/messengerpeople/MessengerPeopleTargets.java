@@ -1,11 +1,11 @@
 package eu.albina.model.messengerpeople;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.annotation.Generated;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Generated("com.robohorse.robopojogenerator")
-public class MessengerPeopleTargets{
+public class MessengerPeopleTargets {
 
 	@JsonProperty("code")
 	private int code;
@@ -13,28 +13,24 @@ public class MessengerPeopleTargets{
 	@JsonProperty("get")
 	private MessengerPeopleTargetsList list;
 
-	public void setCode(int code){
+	public void setCode(int code) {
 		this.code = code;
 	}
 
-	public int getCode(){
+	public int getCode() {
 		return code;
 	}
 
-	public void setList(MessengerPeopleTargetsList list){
+	public void setList(MessengerPeopleTargetsList list) {
 		this.list = list;
 	}
 
-	public MessengerPeopleTargetsList getList(){
+	public MessengerPeopleTargetsList getList() {
 		return list;
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"MessengerPeopleTargets{" + 
-			"code = '" + code + '\'' + 
-			",get = '" + list + '\'' +
-			"}";
-		}
+	public String toString() {
+		return "MessengerPeopleTargets{" + "code = '" + code + '\'' + ",get = '" + list + '\'' + "}";
+	}
 }

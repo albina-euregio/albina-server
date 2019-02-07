@@ -1,7 +1,8 @@
 package eu.albina.model.rapidmail.mailings;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
 public class PostMailingsRequestDestination {
@@ -15,40 +16,35 @@ public class PostMailingsRequestDestination {
 	@JsonProperty("type")
 	private String type;
 
-	public void setAction(String action){
+	public void setAction(String action) {
 		this.action = action;
 	}
 
-	public String getAction(){
+	public String getAction() {
 		return action;
 	}
 
-	public void setId(Integer id){
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public Integer getId(){
+	public Integer getId() {
 		return id;
 	}
 
-	public void setType(String type){
+	public void setType(String type) {
 		this.type = type;
 	}
 
-	public String getType(){
+	public String getType() {
 		return type;
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"DestinationsItem{" + 
-			"action = '" + action + '\'' + 
-			",id = '" + id + '\'' + 
-			",type = '" + type + '\'' + 
-			"}";
-		}
-
+	public String toString() {
+		return "DestinationsItem{" + "action = '" + action + '\'' + ",id = '" + id + '\'' + ",type = '" + type + '\''
+				+ "}";
+	}
 
 	public PostMailingsRequestDestination action(String action) {
 		this.action = action;
