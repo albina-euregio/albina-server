@@ -1281,12 +1281,16 @@ public class GlobalVariables {
 		switch (lang) {
 		case de:
 			sb.append("Gefahrenstufe ");
+			break;
 		case it:
 			sb.append("Grado Pericolo ");
+			break;
 		case en:
 			sb.append("Danger Level ");
+			break;
 		default:
 			sb.append("Danger Level ");
+			break;
 		}
 		sb.append(getDangerRatingTextMiddle(dangerRating, lang));
 		return sb.toString();
