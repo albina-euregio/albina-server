@@ -369,9 +369,9 @@ public class PdfUtil {
 
 		// avalanche activity
 		if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null) {
-			Paragraph avActivityHighlights = new Paragraph(avalancheBulletin.getAvActivityHighlightsIn(lang))
-					.setFont(openSansRegularFont).setFontSize(14).setFontColor(greyDarkColor)
-					.setMultipliedLeading(leadingHeadline);
+			Paragraph avActivityHighlights = new Paragraph(
+					replaceLinebreaks(avalancheBulletin.getAvActivityHighlightsIn(lang))).setFont(openSansRegularFont)
+							.setFontSize(14).setFontColor(greyDarkColor).setMultipliedLeading(leadingHeadline);
 			cell = new Cell(1, 10).add(avActivityHighlights);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			cell.setPaddingLeft(paddingLeft);
@@ -382,9 +382,10 @@ public class PdfUtil {
 		}
 
 		if (avalancheBulletin.getAvActivityCommentIn(lang) != null) {
-			Paragraph avActivityComment = new Paragraph(avalancheBulletin.getAvActivityCommentIn(lang))
-					.setFont(openSansRegularFont).setFontSize(10).setFontColor(greyDarkColor)
-					.setMultipliedLeading(leadingText).setMarginBottom(5);
+			Paragraph avActivityComment = new Paragraph(
+					replaceLinebreaks(avalancheBulletin.getAvActivityCommentIn(lang))).setFont(openSansRegularFont)
+							.setFontSize(10).setFontColor(greyDarkColor).setMultipliedLeading(leadingText)
+							.setMarginBottom(5);
 			cell = new Cell(1, 10).add(avActivityComment);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			cell.setPaddingLeft(paddingLeft);
@@ -468,8 +469,9 @@ public class PdfUtil {
 
 				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null) {
 					Paragraph snowpackStructureComment = new Paragraph(
-							avalancheBulletin.getSnowpackStructureCommentIn(lang)).setFont(openSansRegularFont)
-									.setFontSize(10).setFontColor(greyDarkColor).setMultipliedLeading(leadingText);
+							replaceLinebreaks(avalancheBulletin.getSnowpackStructureCommentIn(lang)))
+									.setFont(openSansRegularFont).setFontSize(10).setFontColor(greyDarkColor)
+									.setMultipliedLeading(leadingText);
 					cell = new Cell(1, 10).add(snowpackStructureComment);
 					cell.setTextAlignment(TextAlignment.LEFT);
 					cell.setPaddingLeft(paddingLeft);
@@ -502,9 +504,10 @@ public class PdfUtil {
 				}
 				table.addCell(cell);
 
-				Paragraph tendencyComment = new Paragraph(avalancheBulletin.getTendencyCommentIn(lang))
-						.setFont(openSansRegularFont).setFontSize(10).setFontColor(greyDarkColor)
-						.setMultipliedLeading(leadingText).setMarginBottom(5);
+				Paragraph tendencyComment = new Paragraph(
+						replaceLinebreaks(avalancheBulletin.getTendencyCommentIn(lang))).setFont(openSansRegularFont)
+								.setFontSize(10).setFontColor(greyDarkColor).setMultipliedLeading(leadingText)
+								.setMarginBottom(5);
 				cell = new Cell(1, 10).add(tendencyComment);
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
@@ -1392,5 +1395,14 @@ public class PdfUtil {
 		 */
 		canvas.close();
 		pdfCanvas.release();
+	}
+
+	private String replaceLinebreaks(String text) {
+		return text.replaceAll("[ ]*<br\\/>[ ]*", "\n");
+	}
+
+	private String replaceLinks(String text) {
+		// TODO implement
+		return null;
 	}
 }
