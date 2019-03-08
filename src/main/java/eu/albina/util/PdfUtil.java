@@ -16,7 +16,6 @@ import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
-import com.itextpdf.kernel.color.DeviceCmyk;
 import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
@@ -59,17 +58,8 @@ public class PdfUtil {
 	public static final String OPEN_SANS_BOLD = "/src/main/resources/fonts/open-sans/OpenSans-Bold.ttf";
 	public static final String OPEN_SANS_LIGHT = "/src/main/resources/fonts/open-sans/OpenSans-Light.ttf";
 
-	public static final Color blueColorCmyk = new DeviceCmyk(0.63f, 0.22f, 0.f, 0.f);
-	public static final Color greyDarkColorCmyk = new DeviceCmyk(0.66f, 0.52f, 0.52f, 0.25f);
-	public static final Color whiteColorCmyk = new DeviceCmyk(0.f, 0.f, 0.f, 0.f);
-	public static final Color greyVeryVeryLightColorCmyk = new DeviceCmyk(0.4f, 0.1f, 0.1f, 0.f);
-	public static final Color dangerLevel1ColorCmyk = new DeviceCmyk(0.23f, 0.f, 0.78f, 0.f);
-	public static final Color dangerLevel2ColorCmyk = new DeviceCmyk(0.6f, 0.f, 0.96f, 0.f);
-	public static final Color dangerLevel3ColorCmyk = new DeviceCmyk(0.f, 0.47f, 1.f, 0.f);
-	public static final Color dangerLevel4ColorCmyk = new DeviceCmyk(0.f, 1.f, 1.f, 0.f);
-	public static final Color dangerLevel5ColorCmyk = new DeviceCmyk(0.f, 1.f, 1.f, 0.f);
-
 	public static final Color blueColor = new DeviceRgb(0, 172, 251);
+	public static final Color blackColor = new DeviceRgb(0, 0, 0);
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
 	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
 	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
@@ -265,7 +255,7 @@ public class PdfUtil {
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			float[] secondColumnWidths = { 1, 1, 1 };
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
-			Paragraph am = new Paragraph("AM:").setFont(openSansBoldFont).setFontSize(14).setFontColor(greyDarkColor);
+			Paragraph am = new Paragraph("AM:").setFont(openSansBoldFont).setFontSize(14).setFontColor(blackColor);
 			cell = new Cell(1, 1).add(am);
 			cell.setBorder(Border.NO_BORDER);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -300,8 +290,8 @@ public class PdfUtil {
 			table.addCell(cell);
 
 			secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
-			secondTable.setBorderTop(new SolidBorder(greyDarkColor, 1));
-			Paragraph pm = new Paragraph("PM:").setFont(openSansBoldFont).setFontSize(14).setFontColor(greyDarkColor);
+			secondTable.setBorderTop(new SolidBorder(blackColor, 1));
+			Paragraph pm = new Paragraph("PM:").setFont(openSansBoldFont).setFontSize(14).setFontColor(blackColor);
 			cell = new Cell(1, 1).add(pm);
 			cell.setBorder(Border.NO_BORDER);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -371,7 +361,7 @@ public class PdfUtil {
 		if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null) {
 			Paragraph avActivityHighlights = new Paragraph(
 					replaceLinebreaks(avalancheBulletin.getAvActivityHighlightsIn(lang))).setFont(openSansRegularFont)
-							.setFontSize(14).setFontColor(greyDarkColor).setMultipliedLeading(leadingHeadline);
+							.setFontSize(14).setFontColor(blackColor).setMultipliedLeading(leadingHeadline);
 			cell = new Cell(1, 10).add(avActivityHighlights);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			cell.setPaddingLeft(paddingLeft);
@@ -384,7 +374,7 @@ public class PdfUtil {
 		if (avalancheBulletin.getAvActivityCommentIn(lang) != null) {
 			Paragraph avActivityComment = new Paragraph(
 					replaceLinebreaks(avalancheBulletin.getAvActivityCommentIn(lang))).setFont(openSansRegularFont)
-							.setFontSize(10).setFontColor(greyDarkColor).setMultipliedLeading(leadingText)
+							.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
 							.setMarginBottom(5);
 			cell = new Cell(1, 10).add(avActivityComment);
 			cell.setTextAlignment(TextAlignment.LEFT);
@@ -405,7 +395,7 @@ public class PdfUtil {
 					|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
 					|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null) {
 				cell = new Cell(1, 10).add(new Paragraph(GlobalVariables.getSnowpackHeadline(lang))
-						.setFont(openSansRegularFont).setFontSize(14).setFontColor(greyDarkColor).setMarginTop(5)
+						.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(5)
 						.setMultipliedLeading(leadingHeadline));
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
@@ -424,7 +414,7 @@ public class PdfUtil {
 					float[] dangerPatternColumnWidths = { 1, 1, 1 };
 					Table dangerPatternTable = new Table(dangerPatternColumnWidths);
 					Paragraph dangerPatternHeadline = new Paragraph(GlobalVariables.getDangerPatternsHeadline(lang))
-							.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
+							.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					cell = new Cell(1, 1).add(dangerPatternHeadline);
 					cell.setTextAlignment(TextAlignment.LEFT);
 					cell.setBorder(Border.NO_BORDER);
@@ -433,7 +423,7 @@ public class PdfUtil {
 					if (avalancheBulletin.getDangerPattern1() != null) {
 						Paragraph paragraph = new Paragraph(
 								AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang))
-										.setFont(openSansRegularFont).setFontSize(8).setFontColor(greyDarkColor);
+										.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 						;
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -444,7 +434,7 @@ public class PdfUtil {
 					if (avalancheBulletin.getDangerPattern2() != null) {
 						Paragraph paragraph = new Paragraph(
 								AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang))
-										.setFont(openSansRegularFont).setFontSize(8).setFontColor(greyDarkColor);
+										.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 						;
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -470,7 +460,7 @@ public class PdfUtil {
 				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null) {
 					Paragraph snowpackStructureComment = new Paragraph(
 							replaceLinebreaks(avalancheBulletin.getSnowpackStructureCommentIn(lang)))
-									.setFont(openSansRegularFont).setFontSize(10).setFontColor(greyDarkColor)
+									.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor)
 									.setMultipliedLeading(leadingText);
 					cell = new Cell(1, 10).add(snowpackStructureComment);
 					cell.setTextAlignment(TextAlignment.LEFT);
@@ -489,7 +479,7 @@ public class PdfUtil {
 
 			if (avalancheBulletin.getTendencyCommentIn(lang) != null) {
 				Paragraph tendencyHeadline = new Paragraph(GlobalVariables.getTendencyHeadline(lang))
-						.setFont(openSansRegularFont).setFontSize(14).setFontColor(greyDarkColor).setMarginTop(10)
+						.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 						.setMultipliedLeading(leadingHeadline);
 				cell = new Cell(1, 10).add(tendencyHeadline);
 				cell.setTextAlignment(TextAlignment.LEFT);
@@ -506,7 +496,7 @@ public class PdfUtil {
 
 				Paragraph tendencyComment = new Paragraph(
 						replaceLinebreaks(avalancheBulletin.getTendencyCommentIn(lang))).setFont(openSansRegularFont)
-								.setFontSize(10).setFontColor(greyDarkColor).setMultipliedLeading(leadingText)
+								.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
 								.setMarginBottom(5);
 				cell = new Cell(1, 10).add(tendencyComment);
 				cell.setTextAlignment(TextAlignment.LEFT);
@@ -543,7 +533,7 @@ public class PdfUtil {
 		float[] firstRowColumnWidths = { 1, 1, 1, 1 };
 		Table firstRowTable = new Table(firstRowColumnWidths);
 
-		Paragraph firstRow = new Paragraph("").setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
+		Paragraph firstRow = new Paragraph("").setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 
 		Image regionImg;
 		if (grayscale)
@@ -574,12 +564,12 @@ public class PdfUtil {
 		cell.setPaddingRight(10);
 		if (avalancheBulletin.isHasElevationDependency()) {
 			if (avalancheBulletin.getTreeline()) {
-				Paragraph paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFontColor(greyDarkColor)
+				Paragraph paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFontColor(blackColor)
 						.setFontSize(8).setFont(openSansBoldFont);
 				paragraph.setRelativePosition(-2, 2, 0, 0);
 				cell.add(paragraph);
 			} else if (avalancheBulletin.getElevation() > 0) {
-				Paragraph paragraph = new Paragraph(avalancheBulletin.getElevation() + "m").setFontColor(greyDarkColor)
+				Paragraph paragraph = new Paragraph(avalancheBulletin.getElevation() + "m").setFontColor(blackColor)
 						.setFontSize(8).setFont(openSansBoldFont);
 				paragraph.setRelativePosition(-2, 2, 0, 0);
 				cell.add(paragraph);
@@ -593,9 +583,9 @@ public class PdfUtil {
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			cell.setHeight(height);
 			cell.setBorder(Border.NO_BORDER);
-			cell.setBorderLeft(new SolidBorder(greyDarkColor, 0.5f));
+			cell.setBorderLeft(new SolidBorder(blackColor, 0.5f));
 
-			Paragraph paragraph = new Paragraph().setFontSize(8).setFontColor(greyDarkColor).setMarginLeft(10)
+			Paragraph paragraph = new Paragraph().setFontSize(8).setFontColor(blackColor).setMarginLeft(10)
 					.setMultipliedLeading(1.0f);
 			paragraph.add(new Text(GlobalVariables.getTendencyText(avalancheBulletin.getTendency(), lang))
 					.setFont(openSansBoldFont));
@@ -641,7 +631,7 @@ public class PdfUtil {
 		float[] columnWidths = { 1, 1, 1, 1, 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
 
-		table.setBorderTop(new SolidBorder(greyDarkColor, 0.5f));
+		table.setBorderTop(new SolidBorder(blackColor, 0.5f));
 
 		if (daytimeBulletin.getAvalancheSituation1() != null
 				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null)
@@ -694,9 +684,9 @@ public class PdfUtil {
 					avalancheSituationTable.addCell(cell);
 				}
 				if (isSecond)
-					avalancheSituationTable.setBorderLeft(new SolidBorder(greyDarkColor, 0.5f));
+					avalancheSituationTable.setBorderLeft(new SolidBorder(blackColor, 0.5f));
 				paragraph = new Paragraph(avalancheSituation.getAvalancheSituation().toString(lang))
-						.setFont(openSansRegularFont).setFontSize(8).setFontColor(greyDarkColor)
+						.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor)
 						.setMultipliedLeading(1.0f);
 				if (isSecond)
 					paragraph.setMarginLeft(5);
@@ -780,7 +770,7 @@ public class PdfUtil {
 					}
 					if (avalancheSituation.getTreelineHigh()) {
 						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
+								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -791,7 +781,7 @@ public class PdfUtil {
 						elevationTable.addCell(cell);
 					} else if (avalancheSituation.getElevationHigh() > 0) {
 						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationHigh() + "m")
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
+								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -803,7 +793,7 @@ public class PdfUtil {
 					}
 					if (avalancheSituation.getTreelineLow()) {
 						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
+								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -814,7 +804,7 @@ public class PdfUtil {
 						elevationTable.addCell(cell);
 					} else if (avalancheSituation.getElevationLow() > 0) {
 						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationLow() + "m")
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(greyDarkColor);
+								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -843,7 +833,7 @@ public class PdfUtil {
 
 					if (avalancheSituation.getTreelineHigh()) {
 						paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFont(openSansBoldFont)
-								.setFontSize(8).setFontColor(greyDarkColor);
+								.setFontSize(8).setFontColor(blackColor);
 						paragraph.setRelativePosition(-6, -4, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -853,7 +843,7 @@ public class PdfUtil {
 						elevationTable.addCell(cell);
 					} else if (avalancheSituation.getElevationHigh() > 0) {
 						paragraph = new Paragraph(avalancheSituation.getElevationHigh() + "m").setFont(openSansBoldFont)
-								.setFontSize(8).setFontColor(greyDarkColor);
+								.setFontSize(8).setFontColor(blackColor);
 						paragraph.setRelativePosition(-6, -4, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -883,7 +873,7 @@ public class PdfUtil {
 
 				if (avalancheSituation.getTreelineLow()) {
 					paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFont(openSansBoldFont)
-							.setFontSize(8).setFontColor(greyDarkColor);
+							.setFontSize(8).setFontColor(blackColor);
 					paragraph.setRelativePosition(-6, 4, 0, 0);
 					cell = new Cell(1, 1);
 					cell.setTextAlignment(TextAlignment.LEFT);
@@ -893,7 +883,7 @@ public class PdfUtil {
 					elevationTable.addCell(cell);
 				} else if (avalancheSituation.getElevationLow() > 0) {
 					paragraph = new Paragraph(avalancheSituation.getElevationLow() + "m").setFont(openSansBoldFont)
-							.setFontSize(8).setFontColor(greyDarkColor);
+							.setFontSize(8).setFontColor(blackColor);
 					paragraph.setRelativePosition(-6, 4, 0, 0);
 					cell = new Cell(1, 1);
 					cell.setTextAlignment(TextAlignment.LEFT);
@@ -1003,9 +993,9 @@ public class PdfUtil {
 		if (grayscale) {
 			switch (dangerRating) {
 			case low:
-				return greyDarkColor;
+				return blackColor;
 			case moderate:
-				return greyDarkColor;
+				return blackColor;
 			case considerable:
 				return dangerLevel3ColorBw;
 			case high:
@@ -1013,14 +1003,14 @@ public class PdfUtil {
 			case very_high:
 				return dangerLevel5ColorRedBw;
 			default:
-				return greyDarkColor;
+				return blackColor;
 			}
 		} else {
 			switch (dangerRating) {
 			case low:
-				return greyDarkColor;
+				return blackColor;
 			case moderate:
-				return greyDarkColor;
+				return blackColor;
 			case considerable:
 				return dangerLevel3Color;
 			case high:
@@ -1028,7 +1018,7 @@ public class PdfUtil {
 			case very_high:
 				return dangerLevel5ColorRed;
 			default:
-				return greyDarkColor;
+				return blackColor;
 			}
 		}
 	}
@@ -1103,7 +1093,7 @@ public class PdfUtil {
 			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY + mapHeight + 40);
 			canvas.add(overviewMapAMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
-					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(greyDarkColor, true)
+					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
 					.showText(GlobalVariables.getAMText(lang)).endText();
 
 			ImageData overviewMapPMImageData = ImageDataFactory
@@ -1114,7 +1104,7 @@ public class PdfUtil {
 			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY);
 			canvas.add(overviewMapPMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
-					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(greyDarkColor, true)
+					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(blackColor, true)
 					.showText(GlobalVariables.getPMText(lang)).endText();
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory
@@ -1200,22 +1190,22 @@ public class PdfUtil {
 		int y = legendY - 10;
 		width = openSansBoldFont.getContentWidth(new PdfString("1")) * 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
+				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText("1").endText();
 		width = openSansBoldFont.getContentWidth(new PdfString("2")) * 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(greyDarkColor, true)
+				.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText("2").endText();
 		width = openSansBoldFont.getContentWidth(new PdfString("3")) * 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize).moveText(pageSize.getWidth() / 2 - width, y)
-				.setColor(greyDarkColor, true).showText("3").endText();
+				.setColor(blackColor, true).showText("3").endText();
 		width = openSansBoldFont.getContentWidth(new PdfString("4")) * 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(greyDarkColor, true)
+				.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText("4").endText();
 		width = openSansBoldFont.getContentWidth(new PdfString("5")) * 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
+				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText("5").endText();
 
 		y = y - 9;
@@ -1223,31 +1213,31 @@ public class PdfUtil {
 				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang)))
 				* 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
+				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang)).endText();
 		width = openSansRegularFont
 				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang)))
 				* 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(greyDarkColor, true)
+				.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang)).endText();
 		width = openSansRegularFont.getContentWidth(
 				new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang))) * 0.001f
 				* fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize).moveText(pageSize.getWidth() / 2 - width, y)
-				.setColor(greyDarkColor, true)
+				.setColor(blackColor, true)
 				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang)).endText();
 		width = openSansRegularFont
 				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang)))
 				* 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(greyDarkColor, true)
+				.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang)).endText();
 		width = openSansRegularFont
 				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang)))
 				* 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(greyDarkColor, true)
+				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang)).endText();
 
 		/*
