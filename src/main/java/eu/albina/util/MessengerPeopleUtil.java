@@ -3,6 +3,7 @@ package eu.albina.util;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -34,12 +35,8 @@ public class MessengerPeopleUtil {
 			try {
 				DateTime date = AlbinaUtil.getDate(bulletins);
 				String message = GlobalVariables.getMessengerPeopleText(lang, date, update);
-
-				String attachmentUrl = "";
-				attachmentUrl = GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins)
-						+ "/fd_albina_map.jpg";
-
-				sendBulletinNewsletter(message, attachmentUrl, lang, regions);
+				String validityDate = AlbinaUtil.getValidityDate(bulletins);
+				sendBulletinNewsletter(message, bulletins, validityDate, lang, regions);
 			} catch (UnsupportedEncodingException e) {
 				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());
 				e.printStackTrace();
@@ -53,10 +50,22 @@ public class MessengerPeopleUtil {
 		}
 	}
 
-	private void sendBulletinNewsletter(String message, String attachmentUrl, LanguageCode lang, List<String> regions)
-			throws AlbinaException, IOException {
+	private void sendBulletinNewsletter(String message, List<AvalancheBulletin> bulletins, String validityDate,
+			LanguageCode lang, List<String> regions) throws AlbinaException, IOException {
 		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
 		for (String region : regions) {
+			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin avalancheBulletin : bulletins) {
+				if (avalancheBulletin.affectsRegionOnlyPublished(region))
+					regionBulletins.add(avalancheBulletin);
+			}
+			String attachmentUrl;
+			if (AlbinaUtil.hasDaytimeDependency(bulletins) && !AlbinaUtil.hasDaytimeDependency(regionBulletins))
+				attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
+						+ AlbinaUtil.getRegionOverviewMapFilename(region, false);
+			else
+				attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
+						+ AlbinaUtil.getRegionOverviewMapFilename(region);
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 			ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang.toString(), message, attachmentUrl);
 		}
