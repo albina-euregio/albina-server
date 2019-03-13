@@ -6,6 +6,6 @@ import eu.albina.model.AvalancheBulletin;
 
 public class AvalancheBulletinSortByDangerRating implements Comparator<AvalancheBulletin> {
 	public int compare(AvalancheBulletin a, AvalancheBulletin b) {
-		return b.getHighestDangerRating().compareTo(a.getHighestDangerRating());
+		return b.getHighestDangerRatingDouble().compareTo(a.getHighestDangerRatingDouble());
 	}
 }

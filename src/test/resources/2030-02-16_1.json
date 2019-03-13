@@ -22,7 +22,7 @@
 	],
 	"tendency": "increasing",
 	"forenoon": {
-		"dangerRatingBelow": "moderate",
+		"dangerRatingBelow": "low",
 		"avalancheSituation2": {
 			"treelineLow": true,
 			"aspects": [

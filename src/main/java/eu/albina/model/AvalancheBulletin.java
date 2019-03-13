@@ -43,6 +43,7 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.XmlUtil;
 
@@ -693,6 +694,26 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					&& result.compareTo(afternoon.getDangerRatingBelow()) < 0)
 				result = afternoon.getDangerRatingBelow();
 		}
+		return result;
+	}
+
+	public Double getHighestDangerRatingDouble() {
+		int highestDangerRating = getHighestDangerRating().ordinal();
+
+		Double result = new Double(.0) + highestDangerRating;
+		if (forenoon != null) {
+			if (forenoon.getDangerRatingAbove() != null)
+				result += AlbinaUtil.getDangerRatingDouble(forenoon.getDangerRatingAbove());
+			if (forenoon.getDangerRatingBelow() != null)
+				result += AlbinaUtil.getDangerRatingDouble(forenoon.getDangerRatingBelow());
+		}
+		if (afternoon != null) {
+			if (afternoon.getDangerRatingAbove() != null)
+				result += AlbinaUtil.getDangerRatingDouble(afternoon.getDangerRatingAbove());
+			if (afternoon.getDangerRatingBelow() != null)
+				result += AlbinaUtil.getDangerRatingDouble(afternoon.getDangerRatingBelow());
+		}
+
 		return result;
 	}
 
