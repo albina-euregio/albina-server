@@ -145,6 +145,7 @@ public class AvalancheBulletinController {
 
 			List<String> ids = new ArrayList<String>();
 			for (AvalancheBulletin bulletin : bulletins) {
+
 				ids.add(bulletin.getId());
 
 				if (publicationDate != null)
@@ -154,7 +155,7 @@ public class AvalancheBulletinController {
 					// Bulletin already exists
 					AvalancheBulletin b = results.get(bulletin.getId());
 					if (results.get(bulletin.getId()).getOwnerRegion().startsWith(region)) {
-						// Own bulletin - save the bulletin
+						// own bulletin - save the bulletin
 						Set<String> savedRegions = b.getSavedRegions();
 						b.copy(bulletin);
 						for (String r : savedRegions) {
@@ -220,9 +221,15 @@ public class AvalancheBulletinController {
 					}
 					entityManager.merge(b);
 				} else {
-					// Bulletin has to be created
-					bulletin.setId(null);
-					entityManager.persist(bulletin);
+					if (bulletin.getOwnerRegion().startsWith(region)) {
+						// own bulletin
+						// Bulletin has to be created
+						bulletin.setId(null);
+						entityManager.persist(bulletin);
+					} else {
+						// foreign bulletin
+						// do not create the bulletin (it was removed by another user)
+					}
 				}
 			}
 
