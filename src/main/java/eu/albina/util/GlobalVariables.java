@@ -971,7 +971,7 @@ public class GlobalVariables {
 
 	// LANG
 	public static String getHeadline(LanguageCode lang, boolean update) {
-		if (update) {
+		if (!update) {
 			switch (lang) {
 			case de:
 				return "Lawinenvorhersage";
