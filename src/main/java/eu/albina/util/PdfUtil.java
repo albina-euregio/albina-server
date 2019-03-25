@@ -239,7 +239,7 @@ public class PdfUtil {
 		Cell cell;
 
 		Paragraph dangerRatingHeadline = new Paragraph(
-				GlobalVariables.getDangerRatingTextLong(avalancheBulletin.getHighestDangerRating(), lang))
+				GlobalVariables.getDangerRatingTextMiddle(avalancheBulletin.getHighestDangerRating(), lang))
 						.setFont(openSansBoldFont).setFontSize(14)
 						.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating(), grayscale))
 						.setMultipliedLeading(leadingHeadline);

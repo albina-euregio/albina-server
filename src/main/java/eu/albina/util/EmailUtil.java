@@ -364,7 +364,7 @@ public class EmailUtil {
 				}
 
 				bulletin.put("warningLevelText",
-						GlobalVariables.getDangerRatingTextLong(avalancheBulletin.getHighestDangerRating(), lang));
+						GlobalVariables.getDangerRatingTextMiddle(avalancheBulletin.getHighestDangerRating(), lang));
 
 				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
