@@ -563,16 +563,21 @@ public class PdfUtil {
 		cell.setHeight(height);
 		cell.setPaddingRight(10);
 		if (avalancheBulletin.isHasElevationDependency()) {
-			if (avalancheBulletin.getTreeline()) {
-				Paragraph paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFontColor(blackColor)
-						.setFontSize(8).setFont(openSansBoldFont);
-				paragraph.setRelativePosition(-2, 2, 0, 0);
-				cell.add(paragraph);
-			} else if (avalancheBulletin.getElevation() > 0) {
-				Paragraph paragraph = new Paragraph(avalancheBulletin.getElevation() + "m").setFontColor(blackColor)
-						.setFontSize(8).setFont(openSansBoldFont);
-				paragraph.setRelativePosition(-2, 2, 0, 0);
-				cell.add(paragraph);
+			if (!(isAfternoon && avalancheBulletin.getAfternoon().getDangerRatingAbove()
+					.equals(avalancheBulletin.getAfternoon().getDangerRatingBelow()))
+					&& !(!isAfternoon && avalancheBulletin.getForenoon().getDangerRatingAbove()
+							.equals(avalancheBulletin.getForenoon().getDangerRatingBelow()))) {
+				if (avalancheBulletin.getTreeline()) {
+					Paragraph paragraph = new Paragraph(GlobalVariables.getTreelineString(lang))
+							.setFontColor(blackColor).setFontSize(8).setFont(openSansBoldFont);
+					paragraph.setRelativePosition(-2, 2, 0, 0);
+					cell.add(paragraph);
+				} else if (avalancheBulletin.getElevation() > 0) {
+					Paragraph paragraph = new Paragraph(avalancheBulletin.getElevation() + "m").setFontColor(blackColor)
+							.setFontSize(8).setFont(openSansBoldFont);
+					paragraph.setRelativePosition(-2, 2, 0, 0);
+					cell.add(paragraph);
+				}
 			}
 		}
 		firstRowTable.addCell(cell);
