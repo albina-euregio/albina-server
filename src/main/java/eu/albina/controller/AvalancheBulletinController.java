@@ -702,30 +702,42 @@ public class AvalancheBulletinController {
 						missingDangerRating = true;
 					}
 
-					if (bulletin
-							.getAvActivityHighlightsIn(LanguageCode.de) == GlobalVariables.incompleteTranslationTextDe
-							|| bulletin.getAvActivityHighlightsIn(
-									LanguageCode.it) == GlobalVariables.incompleteTranslationTextIt
-							|| bulletin.getAvActivityHighlightsIn(
-									LanguageCode.en) == GlobalVariables.incompleteTranslationTextEn
-							|| bulletin.getAvActivityCommentIn(
-									LanguageCode.de) == GlobalVariables.incompleteTranslationTextDe
-							|| bulletin.getAvActivityCommentIn(
-									LanguageCode.it) == GlobalVariables.incompleteTranslationTextIt
-							|| bulletin.getAvActivityCommentIn(
-									LanguageCode.en) == GlobalVariables.incompleteTranslationTextEn
-							|| bulletin.getSnowpackStructureCommentIn(
-									LanguageCode.de) == GlobalVariables.incompleteTranslationTextDe
-							|| bulletin.getSnowpackStructureCommentIn(
-									LanguageCode.it) == GlobalVariables.incompleteTranslationTextIt
-							|| bulletin.getSnowpackStructureCommentIn(
-									LanguageCode.en) == GlobalVariables.incompleteTranslationTextEn
-							|| bulletin.getTendencyCommentIn(
-									LanguageCode.de) == GlobalVariables.incompleteTranslationTextDe
-							|| bulletin.getTendencyCommentIn(
-									LanguageCode.it) == GlobalVariables.incompleteTranslationTextIt
-							|| bulletin.getTendencyCommentIn(
-									LanguageCode.en) == GlobalVariables.incompleteTranslationTextEn) {
+					if ((bulletin.getAvActivityHighlightsIn(LanguageCode.de) != null
+							&& bulletin.getAvActivityHighlightsIn(LanguageCode.de)
+									.equals(GlobalVariables.incompleteTranslationTextDe))
+							|| (bulletin.getAvActivityHighlightsIn(LanguageCode.it) != null
+									&& bulletin.getAvActivityHighlightsIn(LanguageCode.it)
+											.equals(GlobalVariables.incompleteTranslationTextIt))
+							|| (bulletin.getAvActivityHighlightsIn(LanguageCode.en) != null
+									&& bulletin.getAvActivityHighlightsIn(LanguageCode.en)
+											.equals(GlobalVariables.incompleteTranslationTextEn))
+							|| (bulletin.getAvActivityCommentIn(LanguageCode.de) != null
+									&& bulletin.getAvActivityCommentIn(LanguageCode.de)
+											.equals(GlobalVariables.incompleteTranslationTextDe))
+							|| (bulletin.getAvActivityCommentIn(LanguageCode.it) != null
+									&& bulletin.getAvActivityCommentIn(LanguageCode.it)
+											.equals(GlobalVariables.incompleteTranslationTextIt))
+							|| (bulletin.getAvActivityCommentIn(LanguageCode.en) != null
+									&& bulletin.getAvActivityCommentIn(LanguageCode.en)
+											.equals(GlobalVariables.incompleteTranslationTextEn))
+							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.de) != null
+									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.de)
+											.equals(GlobalVariables.incompleteTranslationTextDe))
+							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.it) != null
+									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.it)
+											.equals(GlobalVariables.incompleteTranslationTextIt))
+							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.en) != null
+									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.en)
+											.equals(GlobalVariables.incompleteTranslationTextEn))
+							|| (bulletin.getTendencyCommentIn(LanguageCode.de) != null
+									&& bulletin.getTendencyCommentIn(LanguageCode.de)
+											.equals(GlobalVariables.incompleteTranslationTextDe))
+							|| (bulletin.getTendencyCommentIn(LanguageCode.it) != null
+									&& bulletin.getTendencyCommentIn(LanguageCode.it)
+											.equals(GlobalVariables.incompleteTranslationTextIt))
+							|| (bulletin.getTendencyCommentIn(LanguageCode.en) != null
+									&& bulletin.getTendencyCommentIn(LanguageCode.en)
+											.equals(GlobalVariables.incompleteTranslationTextEn))) {
 						incompleteTranslation = true;
 					}
 				}
