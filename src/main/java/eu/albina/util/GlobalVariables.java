@@ -77,6 +77,11 @@ public class GlobalVariables {
 	public static String[] daysIt = { "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica" };
 	public static String[] daysEn = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
+	// LANG
+	public static String incompleteTranslationTextDe = "Warte auf laufende Übersetzung ....";
+	public static String incompleteTranslationTextIt = "Attendere traduzione in corso....";
+	public static String incompleteTranslationTextEn = "Wait for translation in progress ....";
+
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();

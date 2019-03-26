@@ -640,6 +640,7 @@ public class AvalancheBulletinController {
 		boolean missingSnowpackStructureComment = false;
 		boolean pendingSuggestions = false;
 		boolean missingDangerRating = false;
+		boolean incompleteTranslation = false;
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -700,6 +701,33 @@ public class AvalancheBulletinController {
 									&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
 						missingDangerRating = true;
 					}
+
+					if (bulletin
+							.getAvActivityHighlightsIn(LanguageCode.de) == GlobalVariables.incompleteTranslationTextDe
+							|| bulletin.getAvActivityHighlightsIn(
+									LanguageCode.it) == GlobalVariables.incompleteTranslationTextIt
+							|| bulletin.getAvActivityHighlightsIn(
+									LanguageCode.en) == GlobalVariables.incompleteTranslationTextEn
+							|| bulletin.getAvActivityCommentIn(
+									LanguageCode.de) == GlobalVariables.incompleteTranslationTextDe
+							|| bulletin.getAvActivityCommentIn(
+									LanguageCode.it) == GlobalVariables.incompleteTranslationTextIt
+							|| bulletin.getAvActivityCommentIn(
+									LanguageCode.en) == GlobalVariables.incompleteTranslationTextEn
+							|| bulletin.getSnowpackStructureCommentIn(
+									LanguageCode.de) == GlobalVariables.incompleteTranslationTextDe
+							|| bulletin.getSnowpackStructureCommentIn(
+									LanguageCode.it) == GlobalVariables.incompleteTranslationTextIt
+							|| bulletin.getSnowpackStructureCommentIn(
+									LanguageCode.en) == GlobalVariables.incompleteTranslationTextEn
+							|| bulletin.getTendencyCommentIn(
+									LanguageCode.de) == GlobalVariables.incompleteTranslationTextDe
+							|| bulletin.getTendencyCommentIn(
+									LanguageCode.it) == GlobalVariables.incompleteTranslationTextIt
+							|| bulletin.getTendencyCommentIn(
+									LanguageCode.en) == GlobalVariables.incompleteTranslationTextEn) {
+						incompleteTranslation = true;
+					}
 				}
 			}
 
@@ -717,6 +745,8 @@ public class AvalancheBulletinController {
 				json.put("pendingSuggestions");
 			if (missingDangerRating)
 				json.put("missingDangerRating");
+			if (incompleteTranslation)
+				json.put("incompleteTranslation");
 
 			transaction.commit();
 
