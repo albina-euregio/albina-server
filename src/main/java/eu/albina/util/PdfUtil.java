@@ -636,16 +636,18 @@ public class PdfUtil {
 		float[] columnWidths = { 1, 1, 1, 1, 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
 
-		table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-
 		if (daytimeBulletin.getAvalancheSituation1() != null
-				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null)
+				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
+			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
 			createAvalancheSituation(daytimeBulletin.getAvalancheSituation1(), lang, table, false, document, writer,
 					isAfternoon, hasDaytime, grayscale);
+		}
 		if (daytimeBulletin.getAvalancheSituation2() != null
-				&& daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null)
+				&& daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
+			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
 			createAvalancheSituation(daytimeBulletin.getAvalancheSituation2(), lang, table, true, document, writer,
 					isAfternoon, hasDaytime, grayscale);
+		}
 
 		return table;
 	}
