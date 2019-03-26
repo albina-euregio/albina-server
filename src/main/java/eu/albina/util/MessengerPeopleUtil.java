@@ -62,10 +62,10 @@ public class MessengerPeopleUtil {
 			String attachmentUrl;
 			if (AlbinaUtil.hasDaytimeDependency(bulletins) && !AlbinaUtil.hasDaytimeDependency(regionBulletins))
 				attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
-						+ AlbinaUtil.getRegionOverviewMapFilename(region, false);
+						+ AlbinaUtil.getRegionOverviewMapFilename("", false);
 			else
 				attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
-						+ AlbinaUtil.getRegionOverviewMapFilename(region);
+						+ AlbinaUtil.getRegionOverviewMapFilename("");
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 			ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang.toString(), message, attachmentUrl);
 		}
