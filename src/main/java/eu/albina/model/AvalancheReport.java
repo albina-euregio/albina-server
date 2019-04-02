@@ -122,6 +122,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			this.caamlCreated = json.getBoolean("caamlCreated");
 		if (json.has("pdfCreated"))
 			this.pdfCreated = json.getBoolean("pdfCreated");
+		if (json.has("htmlCreated"))
+			this.htmlCreated = json.getBoolean("htmlCreated");
+		if (json.has("staticWidgetCreated"))
+			this.staticWidgetCreated = json.getBoolean("staticWidgetCreated");
 		if (json.has("emailCreated"))
 			this.emailCreated = json.getBoolean("emailCreated");
 		if (json.has("mapCreated"))
@@ -289,6 +293,16 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			json.put("pdfCreated", true);
 		else
 			json.put("pdfCreated", false);
+
+		if (htmlCreated)
+			json.put("htmlCreated", true);
+		else
+			json.put("htmlCreated", false);
+
+		if (staticWidgetCreated)
+			json.put("staticWidgetCreated", true);
+		else
+			json.put("staticWidgetCreated", false);
 
 		if (mapCreated)
 			json.put("mapCreated", true);
