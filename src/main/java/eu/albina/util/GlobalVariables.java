@@ -1497,6 +1497,8 @@ public class GlobalVariables {
 				serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
 			if (config.containsKey("mapsPath"))
 				mapsPath = config.getString("mapsPath");
+			if (config.containsKey("univieMapProductionUrl"))
+				univieMapProductionUrl = config.getString("univieMapProductionUrl");
 			if (config.containsKey("scriptsPath"))
 				scriptsPath = config.getString("scriptsPath");
 			if (config.containsKey("createCaaml"))
