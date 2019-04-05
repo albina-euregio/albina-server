@@ -307,10 +307,12 @@ public class EmailUtil {
 						+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
 				mapImage.put("overviewPM", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
 						+ AlbinaUtil.getRegionOverviewMapFilename(region, true));
+				mapImage.put("widthPM", "width=\"600\"");
 			} else {
 				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
 						+ AlbinaUtil.getRegionOverviewMapFilename(region));
 				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
+				mapImage.put("widthPM", "");
 			}
 
 			image.put("map", mapImage);
