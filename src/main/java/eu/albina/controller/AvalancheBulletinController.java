@@ -211,10 +211,8 @@ public class AvalancheBulletinController {
 
 						tmpRegions = new HashSet<String>();
 						for (String r : b.getPublishedRegions()) {
-							if (r.startsWith(region)) {
-								if (bulletin.getSavedRegions().contains(r))
-									tmpRegions.add(r);
-							}
+							if (r.startsWith(region))
+								tmpRegions.add(r);
 						}
 						for (String r : tmpRegions)
 							b.getPublishedRegions().remove(r);
