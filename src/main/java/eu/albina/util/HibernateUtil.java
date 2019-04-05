@@ -25,6 +25,26 @@ public class HibernateUtil {
 	public static String queryGetChatMessages = "from ChatMessage as cm";
 	public static String queryGetChatMessagesDate = "from ChatMessage as cm where cm.dateTime >= :date";
 
+	public static String queryGetLatestReports = ""
+			+ "from "
+			+ "		AvalancheReport as report"
+			+ "where "
+			+ "		report.id = some ("
+			+ "			select "
+			+ "				AvalancheReport.id, "
+			+ "				AvalancheReport.date, "
+			+ "				AvalancheReport.region, "
+			+ "				MAX(date) as MaxDate "
+			+ "			from "
+			+ "				AvalancheReport "
+			+ "			where "
+			+ "				(status=3 or status=6) and date between :startDate and :endDate "
+			+ "			group by "
+			+ "				date, "
+			+ "				region"
+			+ "		)"
+			+ ";";
+
 	public static HibernateUtil getInstance() {
 		if (instance == null) {
 			instance = new HibernateUtil();

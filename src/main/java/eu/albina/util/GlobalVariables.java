@@ -106,8 +106,9 @@ public class GlobalVariables {
 	public static String codeStyria = "AT-06";
 
 	public static String propertiesFilePath = "META-INF/config.properties";
-
 	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
+	public static String csvDeliminator = ";";
+	public static String csvLineBreak = "\n";
 
 	// REGION
 	public static List<String> regions = new ArrayList<String>() {
