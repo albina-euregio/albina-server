@@ -3,7 +3,6 @@ package eu.albina.util;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -54,18 +53,22 @@ public class MessengerPeopleUtil {
 			LanguageCode lang, List<String> regions) throws AlbinaException, IOException {
 		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
 		for (String region : regions) {
-			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin avalancheBulletin : bulletins) {
-				if (avalancheBulletin.affectsRegionOnlyPublished(region))
-					regionBulletins.add(avalancheBulletin);
-			}
-			String attachmentUrl;
-			if (AlbinaUtil.hasDaytimeDependency(bulletins) && !AlbinaUtil.hasDaytimeDependency(regionBulletins))
-				attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
-						+ AlbinaUtil.getRegionOverviewMapFilename("", false);
-			else
-				attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
-						+ AlbinaUtil.getRegionOverviewMapFilename("");
+			// ArrayList<AvalancheBulletin> regionBulletins = new
+			// ArrayList<AvalancheBulletin>();
+			// for (AvalancheBulletin avalancheBulletin : bulletins) {
+			// if (avalancheBulletin.affectsRegionOnlyPublished(region))
+			// regionBulletins.add(avalancheBulletin);
+			// }
+			// String attachmentUrl;
+			// if (AlbinaUtil.hasDaytimeDependency(bulletins) &&
+			// !AlbinaUtil.hasDaytimeDependency(regionBulletins))
+			// attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
+			// + AlbinaUtil.getRegionOverviewMapFilename("", false);
+			// else
+			// attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
+			// + AlbinaUtil.getRegionOverviewMapFilename("");
+			String attachmentUrl = GlobalVariables.getMapsPath() + validityDate + "/"
+					+ AlbinaUtil.getRegionOverviewMapFilename("");
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 			ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang.toString(), message, attachmentUrl);
 		}
