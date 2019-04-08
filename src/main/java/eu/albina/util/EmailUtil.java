@@ -93,6 +93,7 @@ public class EmailUtil {
 	}
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
 			String subject = GlobalVariables.getEmailSubject(lang, update) + AlbinaUtil.getDate(bulletins, lang);
 			for (String region : regions) {
@@ -101,7 +102,7 @@ public class EmailUtil {
 					if (avalancheBulletin.affectsRegionOnlyPublished(region))
 						regionBulletins.add(avalancheBulletin);
 				}
-				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update);
+				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
 			}
 		}
@@ -272,7 +273,7 @@ public class EmailUtil {
 	}
 
 	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region,
-			boolean update) {
+			boolean update, boolean daytimeDependency) {
 		try {
 			// Create data model
 			Map<String, Object> root = new HashMap<>();
@@ -301,7 +302,7 @@ public class EmailUtil {
 			image.put("socialmedia", socialMediaImages);
 			Map<String, Object> mapImage = new HashMap<>();
 
-			// maps
+			// overview maps
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
 				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
 						+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
@@ -309,8 +310,12 @@ public class EmailUtil {
 						+ AlbinaUtil.getRegionOverviewMapFilename(region, true));
 				mapImage.put("widthPM", "width=\"600\"");
 			} else {
-				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
-						+ AlbinaUtil.getRegionOverviewMapFilename(region));
+				if (daytimeDependency)
+					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+							+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
+				else
+					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+							+ AlbinaUtil.getRegionOverviewMapFilename(region));
 				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
 				mapImage.put("widthPM", "");
 			}
