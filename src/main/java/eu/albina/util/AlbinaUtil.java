@@ -333,11 +333,40 @@ public class AlbinaUtil {
 			return "_" + lang.toString();
 	}
 
-	public static String getValidityDate(List<AvalancheBulletin> bulletins) {
+	public static String getValidityDateString(List<AvalancheBulletin> bulletins) {
+		DateTime date = getValidityDate(bulletins);
+		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+	}
+
+	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins) {
+		DateTime date = getValidityDate(bulletins);
+		date = date.minusDays(1);
+		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+	}
+
+	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins) {
+		DateTime date = getValidityDate(bulletins);
+		date = date.plusDays(1);
+		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+	}
+
+	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = getValidityDate(bulletins);
+		date = date.minusDays(1);
+		return date.toString(GlobalVariables.getPublicationDateTimeFormatter(lang));
+	}
+
+	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = getValidityDate(bulletins);
+		date = date.plusDays(1);
+		return date.toString(GlobalVariables.getPublicationDateTimeFormatter(lang));
+	}
+
+	private static DateTime getValidityDate(List<AvalancheBulletin> bulletins) {
 		DateTime date = getDate(bulletins);
 		if (date.getHourOfDay() > 12)
 			date = date.plusDays(1);
-		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+		return date;
 	}
 
 	public static String getRegionOverviewMapFilename(String region, boolean isAfternoon) {

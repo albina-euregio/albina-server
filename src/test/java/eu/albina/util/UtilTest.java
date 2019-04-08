@@ -21,6 +21,8 @@ import javax.mail.MessagingException;
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,6 +37,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
+import freemarker.template.TemplateException;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UtilTest {
@@ -49,8 +52,9 @@ public class UtilTest {
 	private List<String> passwords = new ArrayList<String>();
 	private List<String> recipients = new ArrayList<String>();
 
+	@Before
 	public void setUp() {
-		HibernateUtil.getInstance().setUp();
+		// HibernateUtil.getInstance().setUp();
 
 		names.add("Alberto Trenti");
 		names.add("Sergio Benigni");
@@ -231,8 +235,9 @@ public class UtilTest {
 		// recipients.add("chris.mitterer@tirol.gv.at");
 	}
 
+	@After
 	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
+		// HibernateUtil.getInstance().shutDown();
 	}
 
 	@Ignore
@@ -292,8 +297,9 @@ public class UtilTest {
 
 	@Ignore
 	@Test
-	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException {
-		SimpleHtmlUtil.getInstance().createSimpleHtml(bulletins, LanguageCode.de, null);
+	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException, TemplateException {
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletinsAmPm, LanguageCode.de);
+		System.out.println(htmlString);
 	}
 
 	@Ignore

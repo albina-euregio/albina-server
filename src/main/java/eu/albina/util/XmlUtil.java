@@ -37,7 +37,7 @@ public class XmlUtil {
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
 
 	public static void createCaamlFiles(List<AvalancheBulletin> bulletins) throws TransformerException, IOException {
-		String validityDateString = AlbinaUtil.getValidityDate(bulletins);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString;
 		new File(dirPath).mkdirs();
 

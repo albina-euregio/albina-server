@@ -79,6 +79,21 @@ rating5 {
   font-weight: bold;
 }
 
+.day-link {
+  font-size: large;
+  font-weight: normal;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.previous-day {
+	float: left;
+}
+
+.next-day {
+	float: right;
+}
+
 section:after {
   content: "";
   display: table;
@@ -92,6 +107,9 @@ section:after {
   <h4><a href="${link.website}">${text.title}</a></h4>
   <h3>${text.subtitle}</h3>
   <h5>${text.publishedAt}<b>${text.publicationDate}</b></h5>
+  <p class="day-link">
+  	<a class="previous-day" href="${link.previousDay}">${text.previousDay}</a><a class="next-day" href="${link.nextDay}">${text.nextDay}</a>
+  </p>
 </header>
 
 <section>
@@ -102,6 +120,7 @@ section:after {
 			${bulletin.regions}<br>
 			<p>
 				${bulletin.am}
+				<img width="150" style="margin-right: 10px;" src="${bulletin.mapAM}"/><br>
 				${bulletin.forenoon.text.dangerLevel}
 				${bulletin.forenoon.dangerLevel.above}
 				${bulletin.forenoon.dangerLevel.below}
@@ -111,6 +130,7 @@ section:after {
 			</p>
 			<p>
 				${bulletin.pm}
+				<img ${bulletin.widthPM} src="${bulletin.mapPM}"/><br>
 				${bulletin.afternoon.text.dangerLevel}
 				${bulletin.afternoon.dangerLevel.above}
 				${bulletin.afternoon.dangerLevel.below}

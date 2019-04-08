@@ -304,17 +304,17 @@ public class EmailUtil {
 
 			// overview maps
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
 						+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
-				mapImage.put("overviewPM", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+				mapImage.put("overviewPM", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
 						+ AlbinaUtil.getRegionOverviewMapFilename(region, true));
 				mapImage.put("widthPM", "width=\"600\"");
 			} else {
 				if (daytimeDependency)
-					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
 							+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
 				else
-					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
 							+ AlbinaUtil.getRegionOverviewMapFilename(region));
 				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
 				mapImage.put("widthPM", "");
@@ -501,9 +501,9 @@ public class EmailUtil {
 
 			Map<String, Object> links = new HashMap<>();
 			links.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
-					+ AlbinaUtil.getValidityDate(bulletins) + "?lang=" + lang.toString());
+					+ AlbinaUtil.getValidityDateString(bulletins) + "?lang=" + lang.toString());
 			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
-			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDate(bulletins), lang, region));
+			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region));
 			links.put("imprint", GlobalVariables.getImprintLink(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook",

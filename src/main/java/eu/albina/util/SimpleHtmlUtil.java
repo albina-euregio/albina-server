@@ -31,10 +31,13 @@ import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
+import freemarker.core.ParseException;
 import freemarker.template.Configuration;
+import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.TemplateNotFoundException;
 
 public class SimpleHtmlUtil {
 
@@ -130,103 +133,10 @@ public class SimpleHtmlUtil {
 	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		try {
 			if (bulletins != null && !bulletins.isEmpty()) {
-				// Create data model
-				Map<String, Object> root = new HashMap<>();
-
-				Map<String, Object> text = new HashMap<>();
-				text.put("tabtitle",
-						GlobalVariables.getSimpleHtmlTitle(lang) + AlbinaUtil.getShortDate(bulletins, lang));
-				text.put("title", GlobalVariables.getTitle(lang));
-				text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
-				String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
-				text.put("publicationDate", publicationDate);
-				if (publicationDate.isEmpty())
-					text.put("publishedAt", "");
-				else
-					text.put("publishedAt", GlobalVariables.getPublishedText(lang));
-				text.put("regions", GlobalVariables.getRegionsHeadline(lang));
-				text.put("snowpack", GlobalVariables.getSnowpackHeadline(lang));
-				text.put("tendency", GlobalVariables.getTendencyHeadline(lang));
-				root.put("text", text);
-
-				Map<String, Object> websiteLink = new HashMap<>();
-				websiteLink.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
-						+ AlbinaUtil.getValidityDate(bulletins) + "?lang=" + lang.toString());
-				root.put("link", websiteLink);
-
-				ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
-				for (AvalancheBulletin avalancheBulletin : bulletins) {
-					Map<String, Object> bulletin = new HashMap<>();
-
-					if (avalancheBulletin.getPublishedRegions() != null
-							&& !avalancheBulletin.getPublishedRegions().isEmpty()) {
-						StringBuilder sb = new StringBuilder();
-						for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
-							sb.append(publishedRegion);
-							sb.append(", ");
-						}
-						sb.delete(sb.length() - 2, sb.length());
-						bulletin.put("regions", sb.toString());
-
-						bulletin.put("forenoon", getDaytime(avalancheBulletin, false, lang));
-						if (avalancheBulletin.isHasDaytimeDependency()) {
-							bulletin.put("afternoon", getDaytime(avalancheBulletin, true, lang));
-							bulletin.put("am", "<b>" + GlobalVariables.getAMText(lang).toUpperCase() + "</b><br>");
-							bulletin.put("pm", "<b>" + GlobalVariables.getPMText(lang).toUpperCase() + "</b><br>");
-						} else {
-							bulletin.put("afternoon", getEmptyDaytime());
-							bulletin.put("am", "");
-							bulletin.put("pm", "");
-						}
-
-						if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null
-								&& !avalancheBulletin.getAvActivityHighlightsIn(lang).isEmpty())
-							bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
-						else
-							bulletin.put("avAvalancheHighlights", "");
-						if (avalancheBulletin.getAvActivityCommentIn(lang) != null
-								&& !avalancheBulletin.getAvActivityCommentIn(lang).isEmpty())
-							bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang));
-						else
-							bulletin.put("avAvalancheComment", "");
-						if (avalancheBulletin.getDangerPattern1() != null)
-							bulletin.put("dangerPattern1",
-									AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang)
-											+ "<br>");
-						else
-							bulletin.put("dangerPattern1", "");
-						if (avalancheBulletin.getDangerPattern2() != null)
-							bulletin.put("dangerPattern2",
-									AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang)
-											+ "<br>");
-						else
-							bulletin.put("dangerPattern2", "");
-						if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
-								&& !avalancheBulletin.getSnowpackStructureCommentIn(lang).isEmpty())
-							bulletin.put("snowpackStructureComment",
-									avalancheBulletin.getSnowpackStructureCommentIn(lang));
-						else
-							bulletin.put("snowpackStructureComment", "");
-						if (avalancheBulletin.getTendencyCommentIn(lang) != null
-								&& !avalancheBulletin.getTendencyCommentIn(lang).isEmpty())
-							bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
-						else
-							bulletin.put("tendencyComment", "");
-						arrayList.add(bulletin);
-					}
-				}
-				root.put("bulletins", arrayList);
-
-				// Get template
-				Template temp = cfg.getTemplate("simple-bulletin.min.html");
-
-				// Merge template and model
-				Writer out = new StringWriter();
-				// Writer out = new OutputStreamWriter(System.out);
-				temp.process(root, out);
+				String simpleHtmlString = createSimpleHtmlString(bulletins, lang);
 
 				String filename;
-				String validityDateString = AlbinaUtil.getValidityDate(bulletins);
+				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 
 				if (region != null && !region.isEmpty())
 					filename = region + "_" + lang.toString() + ".html";
@@ -258,7 +168,7 @@ public class SimpleHtmlUtil {
 				}
 
 				File newHtmlFile = new File(dirPath + "/" + filename);
-				FileUtils.writeStringToFile(newHtmlFile, out.toString(), StandardCharsets.UTF_8);
+				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
 				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
 
 				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins))) {
@@ -281,6 +191,127 @@ public class SimpleHtmlUtil {
 		}
 
 		return false;
+	}
+
+	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang)
+			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
+			TemplateException {
+		// Create data model
+		Map<String, Object> root = new HashMap<>();
+
+		Map<String, Object> text = new HashMap<>();
+		text.put("tabtitle", GlobalVariables.getSimpleHtmlTitle(lang) + AlbinaUtil.getShortDate(bulletins, lang));
+		text.put("title", GlobalVariables.getTitle(lang));
+		text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
+		String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
+		text.put("publicationDate", publicationDate);
+
+		text.put("previousDay", " &#8592; " + AlbinaUtil.getPreviousValidityDateString(bulletins, lang));
+		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			text.put("nextDay", "");
+		else
+			text.put("nextDay", AlbinaUtil.getNextValidityDateString(bulletins, lang) + " &#8594;");
+
+		if (publicationDate.isEmpty())
+			text.put("publishedAt", "");
+		else
+			text.put("publishedAt", GlobalVariables.getPublishedText(lang));
+		text.put("regions", GlobalVariables.getRegionsHeadline(lang));
+		text.put("snowpack", GlobalVariables.getSnowpackHeadline(lang));
+		text.put("tendency", GlobalVariables.getTendencyHeadline(lang));
+		root.put("text", text);
+
+		Map<String, Object> link = new HashMap<>();
+		link.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
+				+ AlbinaUtil.getValidityDateString(bulletins) + "?lang=" + lang.toString());
+		link.put("previousDay", GlobalVariables.simpleBulletinBaseUrl
+				+ AlbinaUtil.getPreviousValidityDateString(bulletins) + "/" + lang.toString() + ".html");
+		link.put("nextDay", GlobalVariables.simpleBulletinBaseUrl + AlbinaUtil.getNextValidityDateString(bulletins)
+				+ "/" + lang.toString() + ".html");
+		root.put("link", link);
+
+		ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			Map<String, Object> bulletin = new HashMap<>();
+
+			if (avalancheBulletin.getPublishedRegions() != null && !avalancheBulletin.getPublishedRegions().isEmpty()) {
+
+				// maps
+				if (avalancheBulletin.isHasDaytimeDependency()) {
+					bulletin.put("mapAM", GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString()
+							+ "/" + avalancheBulletin.getId() + "_AM.jpg");
+					bulletin.put("mapPM", GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString()
+							+ "/" + avalancheBulletin.getId() + "_PM.jpg");
+					bulletin.put("widthPM", "width=\"150\"");
+				} else {
+					bulletin.put("mapAM", GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString()
+							+ "/" + avalancheBulletin.getId() + ".jpg");
+					bulletin.put("mapPM", GlobalVariables.getServerImagesUrl() + "empty.png");
+					bulletin.put("widthPM", "");
+				}
+
+				StringBuilder sb = new StringBuilder();
+				for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
+					sb.append(publishedRegion);
+					sb.append(", ");
+				}
+				sb.delete(sb.length() - 2, sb.length());
+				bulletin.put("regions", sb.toString());
+
+				bulletin.put("forenoon", getDaytime(avalancheBulletin, false, lang));
+				if (avalancheBulletin.isHasDaytimeDependency()) {
+					bulletin.put("afternoon", getDaytime(avalancheBulletin, true, lang));
+					bulletin.put("am", "<b>" + GlobalVariables.getAMText(lang).toUpperCase() + "</b><br>");
+					bulletin.put("pm", "<b>" + GlobalVariables.getPMText(lang).toUpperCase() + "</b><br>");
+				} else {
+					bulletin.put("afternoon", getEmptyDaytime());
+					bulletin.put("am", "");
+					bulletin.put("pm", "");
+				}
+
+				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null
+						&& !avalancheBulletin.getAvActivityHighlightsIn(lang).isEmpty())
+					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
+				else
+					bulletin.put("avAvalancheHighlights", "");
+				if (avalancheBulletin.getAvActivityCommentIn(lang) != null
+						&& !avalancheBulletin.getAvActivityCommentIn(lang).isEmpty())
+					bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang));
+				else
+					bulletin.put("avAvalancheComment", "");
+				if (avalancheBulletin.getDangerPattern1() != null)
+					bulletin.put("dangerPattern1",
+							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang) + "<br>");
+				else
+					bulletin.put("dangerPattern1", "");
+				if (avalancheBulletin.getDangerPattern2() != null)
+					bulletin.put("dangerPattern2",
+							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang) + "<br>");
+				else
+					bulletin.put("dangerPattern2", "");
+				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
+						&& !avalancheBulletin.getSnowpackStructureCommentIn(lang).isEmpty())
+					bulletin.put("snowpackStructureComment", avalancheBulletin.getSnowpackStructureCommentIn(lang));
+				else
+					bulletin.put("snowpackStructureComment", "");
+				if (avalancheBulletin.getTendencyCommentIn(lang) != null
+						&& !avalancheBulletin.getTendencyCommentIn(lang).isEmpty())
+					bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
+				else
+					bulletin.put("tendencyComment", "");
+				arrayList.add(bulletin);
+			}
+		}
+		root.put("bulletins", arrayList);
+
+		// Get template
+		Template temp = cfg.getTemplate("simple-bulletin.min.html");
+
+		// Merge template and model
+		Writer out = new StringWriter();
+		// Writer out = new OutputStreamWriter(System.out);
+		temp.process(root, out);
+		return out.toString();
 	}
 
 	private Map<String, Object> getEmptyDaytime() {

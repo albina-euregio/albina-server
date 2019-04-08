@@ -108,10 +108,10 @@ public class StaticWidgetUtil {
 			BufferedImage overviewThumbnail;
 			if (AlbinaUtil.hasDaytimeDependency(bulletins))
 				overviewThumbnail = resizeWidth(loadImageFromUrl(GlobalVariables.getMapsPath()
-						+ AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_thumbnail.jpg"), 600);
+						+ AlbinaUtil.getValidityDateString(bulletins) + "/fd_albina_thumbnail.jpg"), 600);
 			else
 				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()
-						+ AlbinaUtil.getValidityDate(bulletins) + "/fd_albina_thumbnail.jpg"), 400);
+						+ AlbinaUtil.getValidityDateString(bulletins) + "/fd_albina_thumbnail.jpg"), 400);
 
 			if (highestDangerRating != DangerRating.very_high) {
 				ig2.setPaint(getDangerRatingColor(highestDangerRating));
@@ -296,7 +296,7 @@ public class StaticWidgetUtil {
 			interregLogo = resizeHeight(interregLogo, 110);
 			ig2.drawImage(interregLogo, 350, 45, null);
 
-			String filename = GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDate(bulletins) + "/"
+			String filename = GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDateString(bulletins) + "/"
 					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));

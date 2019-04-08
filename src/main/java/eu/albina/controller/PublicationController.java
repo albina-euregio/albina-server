@@ -62,10 +62,10 @@ public class PublicationController {
 
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
+		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDate(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
@@ -136,10 +136,10 @@ public class PublicationController {
 
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
+		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDate(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
@@ -191,10 +191,10 @@ public class PublicationController {
 
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDate(bulletins));
+		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDate(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
@@ -266,7 +266,7 @@ public class PublicationController {
 			AvalancheReportController.getInstance().setAvalancheReportCaamlFlag(avalancheReportIds);
 			XmlUtil.createCaamlFiles(bulletins);
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-				AlbinaUtil.runCopyLatestXmlsScript(AlbinaUtil.getValidityDate(bulletins));
+				AlbinaUtil.runCopyLatestXmlsScript(AlbinaUtil.getValidityDateString(bulletins));
 			logger.info("CAAML production finished");
 		} catch (TransformerException e) {
 			logger.error("Error producing CAAML: " + e.getMessage());
@@ -283,7 +283,7 @@ public class PublicationController {
 				logger.info("Map production started");
 				MapUtil.createDangerRatingMaps(bulletins);
 				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-					AlbinaUtil.runCopyLatestMapsScript(AlbinaUtil.getValidityDate(bulletins));
+					AlbinaUtil.runCopyLatestMapsScript(AlbinaUtil.getValidityDateString(bulletins));
 				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportIds);
 				logger.info("Map production finished");
 			}
@@ -302,7 +302,7 @@ public class PublicationController {
 						if (!PdfUtil.getInstance().createRegionPdfs(bulletins, region))
 							result = false;
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestPdfsScript(AlbinaUtil.getValidityDate(bulletins));
+						AlbinaUtil.runCopyLatestPdfsScript(AlbinaUtil.getValidityDateString(bulletins));
 					if (result)
 						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
 				} catch (IOException e) {
@@ -353,7 +353,7 @@ public class PublicationController {
 					logger.info("Static widget production started");
 					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins);
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestPngsScript(AlbinaUtil.getValidityDate(bulletins));
+						AlbinaUtil.runCopyLatestPngsScript(AlbinaUtil.getValidityDateString(bulletins));
 					AvalancheReportController.getInstance().setAvalancheReportStaticWidgetFlag(avalancheReportIds);
 				} catch (IOException e) {
 					logger.error("Error creating static widgets:" + e.getMessage());

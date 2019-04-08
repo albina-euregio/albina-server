@@ -121,7 +121,7 @@ public class PdfUtil {
 		PdfDocument pdf;
 		PdfWriter writer;
 
-		String validityDateString = AlbinaUtil.getValidityDate(bulletins);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 
 		try {
 			String filename;
@@ -1093,7 +1093,7 @@ public class PdfUtil {
 			}
 
 			ImageData overviewMapAMImageData = ImageDataFactory
-					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
 							+ getOverviewMapFilename(region, false, true, grayscale));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
@@ -1104,7 +1104,7 @@ public class PdfUtil {
 					.showText(GlobalVariables.getAMText(lang)).endText();
 
 			ImageData overviewMapPMImageData = ImageDataFactory
-					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
 							+ getOverviewMapFilename(region, true, true, grayscale));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
@@ -1115,7 +1115,7 @@ public class PdfUtil {
 					.showText(GlobalVariables.getPMText(lang)).endText();
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory
-					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDate(bulletins) + "/"
+					.create(GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
 							+ getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			if (region != null) {

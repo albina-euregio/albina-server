@@ -51,6 +51,7 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTrentino = true;
 	private static boolean publishBulletinsStyria = false;
 
+	public static String simpleBulletinBaseUrl = "https://avalanche.report/simple/";
 	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";

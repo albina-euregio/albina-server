@@ -35,7 +35,7 @@ public class MessengerPeopleUtil {
 			try {
 				DateTime date = AlbinaUtil.getDate(bulletins);
 				String message = GlobalVariables.getMessengerPeopleText(lang, date, update);
-				String validityDate = AlbinaUtil.getValidityDate(bulletins);
+				String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 				sendBulletinNewsletter(message, bulletins, validityDate, lang, regions);
 			} catch (UnsupportedEncodingException e) {
 				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());

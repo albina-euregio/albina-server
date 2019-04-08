@@ -38,7 +38,7 @@ public class MapUtil {
 		try {
 			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
-			AlbinaUtil.runCopyMapsScript(AlbinaUtil.getValidityDate(bulletins));
+			AlbinaUtil.runCopyMapsScript(AlbinaUtil.getValidityDateString(bulletins));
 		} catch (AlbinaException e) {
 			logger.error("Error producing maps: " + e.getMessage());
 			e.printStackTrace();
