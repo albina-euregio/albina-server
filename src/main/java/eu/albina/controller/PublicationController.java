@@ -71,16 +71,16 @@ public class PublicationController {
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
 
-		// create HTML
-		if (GlobalVariables.isCreateSimpleHtml())
-			createSimpleHtml(avalancheReportIds, bulletins);
-
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
 			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
+
+				// create HTML
+				if (GlobalVariables.isCreateSimpleHtml())
+					createSimpleHtml(avalancheReportIds, bulletins);
 
 				// create pdfs
 				if (GlobalVariables.isCreatePdf())
@@ -145,16 +145,16 @@ public class PublicationController {
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
 
-		// create HTML
-		if (GlobalVariables.isCreateSimpleHtml())
-			createSimpleHtml(avalancheReportIds, bulletins);
-
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
 			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
+
+				// create HTML
+				if (GlobalVariables.isCreateSimpleHtml())
+					createSimpleHtml(avalancheReportIds, bulletins);
 
 				// create pdf
 				if (GlobalVariables.isCreatePdf())
@@ -200,16 +200,16 @@ public class PublicationController {
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(avalancheReportIds, bulletins);
 
-		// create HTML
-		if (GlobalVariables.isCreateSimpleHtml())
-			createSimpleHtml(avalancheReportIds, bulletins);
-
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
 			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
+
+				// create HTML
+				if (GlobalVariables.isCreateSimpleHtml())
+					createSimpleHtml(avalancheReportIds, bulletins);
 
 				// create pdfs
 				if (GlobalVariables.isCreatePdf())
