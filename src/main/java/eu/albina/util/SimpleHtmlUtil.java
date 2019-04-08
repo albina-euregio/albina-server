@@ -133,7 +133,7 @@ public class SimpleHtmlUtil {
 	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		try {
 			if (bulletins != null && !bulletins.isEmpty()) {
-				String simpleHtmlString = createSimpleHtmlString(bulletins, lang);
+				String simpleHtmlString = createSimpleHtmlString(bulletins, lang, region);
 
 				String filename;
 				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
@@ -193,7 +193,7 @@ public class SimpleHtmlUtil {
 		return false;
 	}
 
-	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang)
+	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
 		// Create data model
@@ -224,10 +224,9 @@ public class SimpleHtmlUtil {
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "?lang=" + lang.toString());
-		link.put("previousDay", GlobalVariables.simpleBulletinBaseUrl
-				+ AlbinaUtil.getPreviousValidityDateString(bulletins) + "/" + lang.toString() + ".html");
-		link.put("nextDay", GlobalVariables.simpleBulletinBaseUrl + AlbinaUtil.getNextValidityDateString(bulletins)
-				+ "/" + lang.toString() + ".html");
+		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region));
+		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region));
+
 		root.put("link", link);
 
 		ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
