@@ -854,31 +854,31 @@ public class GlobalVariables {
 			switch (lang) {
 			case de:
 				return URLEncoder.encode(
-						"UPDATE zur Lawinenvorhersage für " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+						"UPDATE zum Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
 			case it:
 				return URLEncoder.encode(
-						"AGGIORNAMENTO sulla previsione valanghe per " + dateString + ": " + getBulletinUrl(lang, date),
+						"AGGIORNAMENTO sulla Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date),
 						"UTF-8");
 			case en:
 				return URLEncoder.encode(
-						"UDPATE on avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+						"UDPATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
 			default:
 				return URLEncoder.encode(
-						"UPDATE on valanche forecast for " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+						"UPDATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
 			}
 		} else {
 			switch (lang) {
 			case de:
-				return URLEncoder.encode("Lawinenvorhersage für " + dateString + ": " + getBulletinUrl(lang, date),
+				return URLEncoder.encode("Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date),
 						"UTF-8");
 			case it:
-				return URLEncoder.encode("Previsione valanghe per " + dateString + ": " + getBulletinUrl(lang, date),
+				return URLEncoder.encode("Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date),
 						"UTF-8");
 			case en:
-				return URLEncoder.encode("Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date),
+				return URLEncoder.encode("Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date),
 						"UTF-8");
 			default:
-				return URLEncoder.encode("Avalanche forecast for " + dateString + ": " + getBulletinUrl(lang, date),
+				return URLEncoder.encode("Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date),
 						"UTF-8");
 			}
 		}
