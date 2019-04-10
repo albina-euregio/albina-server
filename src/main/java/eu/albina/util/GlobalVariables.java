@@ -1102,24 +1102,24 @@ public class GlobalVariables {
 		if (update) {
 			switch (lang) {
 			case de:
-				return "UPDATE zur Lawinenvorhersage, ";
+				return "UPDATE zum Lawinen.report, ";
 			case it:
-				return "AGGIORNAMENTO sulla Previsione Valanghe, ";
+				return "AGGIORNAMENTO sulla Valanghe.report, ";
 			case en:
-				return "UPDATE on Avalanche Forecast, ";
+				return "UPDATE on Avalanche.report, ";
 			default:
-				return "UPDATE on Avalanche Forecast, ";
+				return "UPDATE on Avalanche.report, ";
 			}
 		} else {
 			switch (lang) {
 			case de:
-				return "Lawinenvorhersage, ";
+				return "Lawinen.report, ";
 			case it:
-				return "Previsione Valanghe, ";
+				return "Valanghe.report, ";
 			case en:
-				return "Avalanche Forecast, ";
+				return "Avalanche.report, ";
 			default:
-				return "Avalanche Forecast, ";
+				return "Avalanche.report, ";
 			}
 		}
 	}
