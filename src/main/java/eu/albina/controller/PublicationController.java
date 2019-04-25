@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
 import org.slf4j.Logger;
@@ -51,9 +50,19 @@ public class PublicationController {
 
 	private static PublicationController instance = null;
 
+	/**
+	 * Private constructor.
+	 */
 	private PublicationController() {
 	}
 
+	/**
+	 * Returns the {@code PublicationController} object associated with the current
+	 * Java application.
+	 * 
+	 * @return the {@code PublicationController} object associated with the current
+	 *         Java application.
+	 */
 	public static PublicationController getInstance() {
 		if (instance == null) {
 			instance = new PublicationController();
@@ -63,11 +72,13 @@ public class PublicationController {
 
 	/**
 	 * Trigger all tasks that have to take place after an avalanche bulletin has
-	 * been published. This happens at 17:00 PM and 08:00 AM (if needed).
+	 * been published automatically. This happens at 17:00 PM if this is defined in
+	 * the settings.
 	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set necessary flags
 	 * @param bulletins
 	 *            The bulletins that were published.
-	 * @throws MessagingException
 	 */
 	public void publishAutomatically(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		if (GlobalVariables.isPublishAt5PM())
@@ -75,7 +86,6 @@ public class PublicationController {
 	}
 
 	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
-
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
@@ -123,13 +133,15 @@ public class PublicationController {
 
 	/**
 	 * Trigger all tasks that have to take place after an avalanche bulletin has
-	 * been published. This happens at 17:00 PM and 08:00 AM (if needed).
+	 * been updated automatically. This happens at 08:00 AM (if needed) if this is
+	 * defined in the settings.
 	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set necessary flags
 	 * @param bulletins
 	 *            The bulletins that were published.
 	 * @param regions
 	 *            The regions that were updated.
-	 * @throws MessagingException
 	 */
 	public void updateAutomatically(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
 			List<String> regions) {
@@ -141,15 +153,14 @@ public class PublicationController {
 	 * Triggers all tasks that have to take place after an update has been published
 	 * (this can be at any time, triggered by one province).
 	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set necessary flags
 	 * @param bulletins
 	 *            The bulletins that were updated.
-	 * @param reportId
-	 * @param region
+	 * @param regions
 	 *            The region that was updated.
-	 * @throws MessagingException
 	 */
 	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
-
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
 		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
@@ -200,6 +211,8 @@ public class PublicationController {
 	 * bulletin has been published. This does not trigger the whole publication
 	 * process.
 	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set necessary flags
 	 * @param bulletins
 	 *            The bulletins that were changed.
 	 */
@@ -242,6 +255,17 @@ public class PublicationController {
 		}
 	}
 
+	/**
+	 * Start an own thread to trigger all tasks that have to take place after an
+	 * update has been published.
+	 * 
+	 * @param publishedBulletins
+	 *            The bulletins that were updated.
+	 * @param regions
+	 *            The regions that were updated.
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set necessary flags
+	 */
 	public void startUpdateThread(List<AvalancheBulletin> publishedBulletins, List<String> regions,
 			List<String> avalancheReportIds) {
 		new Thread(new Runnable() {
@@ -259,6 +283,15 @@ public class PublicationController {
 		}).start();
 	}
 
+	/**
+	 * Start an own thread to trigger all tasks that have to take place after a
+	 * change has been published.
+	 * 
+	 * @param publishedBulletins
+	 *            The bulletins that were updated.
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set necessary flags
+	 */
 	public void startChangeThread(List<AvalancheBulletin> publishedBulletins, List<String> avalancheReportIds) {
 		new Thread(new Runnable() {
 			public void run() {
@@ -275,7 +308,14 @@ public class PublicationController {
 		}).start();
 	}
 
-	// LANG
+	/**
+	 * Trigger the creation of the CAAML (XML) files.
+	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set the necessary flag
+	 * @param bulletins
+	 *            the bulletins contained in the CAAML file
+	 */
 	public void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		try {
 			logger.info("CAAML production started");
@@ -293,6 +333,14 @@ public class PublicationController {
 		}
 	}
 
+	/**
+	 * Trigger the creation of the maps.
+	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set the necessary flag
+	 * @param bulletins
+	 *            the bulletins contained in the maps
+	 */
 	public Thread createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		return new Thread(new Runnable() {
 			public void run() {
@@ -306,6 +354,14 @@ public class PublicationController {
 		});
 	}
 
+	/**
+	 * Trigger the creation of the pdfs.
+	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set the necessary flag
+	 * @param bulletins
+	 *            the bulletins contained in the pdfs
+	 */
 	public void createPdf(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		new Thread(new Runnable() {
 			public void run() {
@@ -334,6 +390,14 @@ public class PublicationController {
 		}).start();
 	}
 
+	/**
+	 * Trigger the creation of the simple html files.
+	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set the necessary flag
+	 * @param bulletins
+	 *            the bulletins contained in the html files
+	 */
 	public void createSimpleHtml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		new Thread(new Runnable() {
 			public void run() {
@@ -362,6 +426,14 @@ public class PublicationController {
 		}).start();
 	}
 
+	/**
+	 * Trigger the creation of the static widgets.
+	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set the necessary flag
+	 * @param bulletins
+	 *            the bulletins contained in the static widgets
+	 */
 	public void createStaticWidgets(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
 		new Thread(new Runnable() {
 			public void run() {
@@ -384,6 +456,14 @@ public class PublicationController {
 		}).start();
 	}
 
+	/**
+	 * Trigger the sending of the emails.
+	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set the necessary flag
+	 * @param bulletins
+	 *            the bulletins contained in the emails
+	 */
 	public void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions,
 			boolean update) {
 		new Thread(new Runnable() {
@@ -405,6 +485,14 @@ public class PublicationController {
 		}).start();
 	}
 
+	/**
+	 * Trigger the sending of the messages via messengerpeople.
+	 * 
+	 * @param avalancheReportIds
+	 *            the ids of the corresponding reports to set the necessary flag
+	 * @param bulletins
+	 *            the bulletins contained in the messages
+	 */
 	public void triggerMessengerpeople(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
 			List<String> regions, boolean update) {
 		new Thread(new Runnable() {
