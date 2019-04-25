@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -279,16 +278,11 @@ public class AlbinaUtil {
 
 	public static boolean hasBulletinChanged(DateTime startDate, String region) {
 		boolean result = false;
-		try {
-			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
-					startDate, region);
-			if (status.size() == 1 && status.get(startDate) != BulletinStatus.published
-					&& status.get(startDate) != BulletinStatus.republished)
-				result = true;
-		} catch (AlbinaException e) {
-			logger.error("Change detection of bulletin failed: " + e.getMessage());
-			e.printStackTrace();
-		}
+		Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
+				startDate, region);
+		if (status.size() == 1 && status.get(startDate) != BulletinStatus.published
+				&& status.get(startDate) != BulletinStatus.republished)
+			result = true;
 		return result;
 	}
 

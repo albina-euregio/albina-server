@@ -336,9 +336,6 @@ public class AvalancheBulletinService {
 			}
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading status - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
 			logger.warn("Error loading status - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -381,9 +378,6 @@ public class AvalancheBulletinService {
 			}
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading status - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
 			logger.warn("Error loading status - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -426,9 +420,6 @@ public class AvalancheBulletinService {
 			}
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading status - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
 			logger.warn("Error loading status - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
