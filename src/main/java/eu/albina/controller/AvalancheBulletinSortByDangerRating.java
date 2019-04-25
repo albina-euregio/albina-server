@@ -20,6 +20,13 @@ import java.util.Comparator;
 
 import eu.albina.model.AvalancheBulletin;
 
+/**
+ * Sort {@code AvalancheBulletin} by highest danger rating (descending) with
+ * regard to daytime and elevation dependency.
+ * 
+ * @author Norbert Lanzanasto
+ *
+ */
 public class AvalancheBulletinSortByDangerRating implements Comparator<AvalancheBulletin> {
 	public int compare(AvalancheBulletin a, AvalancheBulletin b) {
 		return b.getHighestDangerRatingDouble().compareTo(a.getHighestDangerRatingDouble());
