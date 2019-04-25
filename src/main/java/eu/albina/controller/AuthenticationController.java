@@ -37,7 +37,7 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
- * Controller for authentication.
+ * Controller handling the authentication and authorization.
  * 
  * @author Norbert Lanzanasto
  *
@@ -48,6 +48,9 @@ public class AuthenticationController {
 	private static AuthenticationController instance = null;
 	private JWTVerifier verifier;
 
+	/**
+	 * Private constructor. Initializing the used algorithm.
+	 */
 	private AuthenticationController() {
 		Algorithm algorithm;
 		try {
@@ -60,6 +63,13 @@ public class AuthenticationController {
 		}
 	}
 
+	/**
+	 * Returns the AuthenticationController object associated with the current Java
+	 * application.
+	 * 
+	 * @return the <code>AuthenticationController</code> object associated with the
+	 *         current Java application.
+	 */
 	public static AuthenticationController getInstance() {
 		if (instance == null) {
 			instance = new AuthenticationController();
@@ -67,12 +77,33 @@ public class AuthenticationController {
 		return instance;
 	}
 
+	/**
+	 * Checks if the credentials belong to a registered user.
+	 * 
+	 * @param username
+	 *            the username
+	 * @param password
+	 *            the password
+	 * @throws AlbinaException
+	 *             if the credentials are not valid
+	 */
 	public void authenticate(String username, String password) throws Exception {
 		User user = UserController.getInstance().getUser(username);
 		if (!BCrypt.checkpw(password, user.getPassword()))
 			throw new AlbinaException("Password not correct!");
 	}
 
+	/**
+	 * Creates an access token for the given user.
+	 * 
+	 * @param username
+	 *            the username the token should be generated for
+	 * @return the access token for the given user
+	 * @throws IllegalArgumentException
+	 *             if the sign process fails
+	 * @throws UnsupportedEncodingException
+	 *             if the sign process fails
+	 */
 	public String issueAccessToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
 		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
 		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
@@ -83,6 +114,17 @@ public class AuthenticationController {
 		return token;
 	}
 
+	/**
+	 * Creates a refresh token for the given user.
+	 * 
+	 * @param username
+	 *            the username the token should be generated for
+	 * @return the refresh token for the given user
+	 * @throws IllegalArgumentException
+	 *             if the sign process fails
+	 * @throws UnsupportedEncodingException
+	 *             if the sign process fails
+	 */
 	public String issueRefreshToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
 		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
 		long time = System.currentTimeMillis() + GlobalVariables.refreshTokenExpirationDuration;
@@ -93,6 +135,15 @@ public class AuthenticationController {
 		return token;
 	}
 
+	/**
+	 * Decode a given token with JWT.
+	 * 
+	 * @param token
+	 *            the encoded token
+	 * @return the decoded token
+	 * @throws AlbinaException
+	 *             if the verfication of the token fails
+	 */
 	public DecodedJWT decodeToken(String token) throws AlbinaException {
 		try {
 			return verifier.verify(token);
@@ -101,6 +152,17 @@ public class AuthenticationController {
 		}
 	}
 
+	/**
+	 * Refresh the token for a given user.
+	 * 
+	 * @param username
+	 *            the username
+	 * @return the refreshed access token for the given user
+	 * @throws IllegalArgumentException
+	 *             if the sign process fails
+	 * @throws UnsupportedEncodingException
+	 *             if the sign process fails
+	 */
 	public String refreshToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
 		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
 		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
@@ -111,6 +173,15 @@ public class AuthenticationController {
 		return token;
 	}
 
+	/**
+	 * Checks if a user in a given role.
+	 * 
+	 * @param role
+	 *            the role to be checked if the user is in
+	 * @param username
+	 *            the user to be checked
+	 * @return <code>true</code> if the user is in the given role
+	 */
 	public boolean isUserInRole(String role, String username) {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();

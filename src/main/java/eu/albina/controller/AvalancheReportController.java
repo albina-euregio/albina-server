@@ -371,6 +371,27 @@ public class AvalancheReportController {
 		}
 	}
 
+	/**
+	 * Change status of reports with a given validity time and region to
+	 * <code>published</code> (if the previous status was <code>submitted</code>) or
+	 * <code>republished</code> (if the previous status was
+	 * <code>resubmitted</code>) and set the json string of the bulletins. If there
+	 * was not report a new report with status <code>missing</code> is created.
+	 * 
+	 * @param bulletins
+	 *            the bulletins which are affected by the publication
+	 * @param startDate
+	 *            the start date of the time period
+	 * @param regions
+	 *            the region that should be published
+	 * @param user
+	 *            the user who publishes the report
+	 * @param publicationDate
+	 *            the timestamp when the report was published
+	 * @return a list of the ids of the published reports
+	 * @throws AlbinaException
+	 *             if more than one report was found
+	 */
 	public List<String> publishReport(Collection<AvalancheBulletin> bulletins, DateTime startDate, List<String> regions,
 			User user, DateTime publicationDate) throws AlbinaException {
 		List<String> avalancheReportIds = new ArrayList<String>();
@@ -381,6 +402,27 @@ public class AvalancheReportController {
 		return avalancheReportIds;
 	}
 
+	/**
+	 * Change status of a report with a given validity time and region to
+	 * <code>published</code> (if the previous status was <code>submitted</code>) or
+	 * <code>republished</code> (if the previous status was
+	 * <code>resubmitted</code>) and set the json string of the bulletins. If there
+	 * was not report a new report with status <code>missing</code> is created.
+	 * 
+	 * @param bulletins
+	 *            the bulletins which are affected by the publication
+	 * @param startDate
+	 *            the start date of the time period
+	 * @param region
+	 *            the region that should be published
+	 * @param user
+	 *            the user who publishes the report
+	 * @param publicationDate
+	 *            the timestamp when the report was published
+	 * @return a list of the ids of the published reports
+	 * @throws AlbinaException
+	 *             if more than one report was found
+	 */
 	@SuppressWarnings("unchecked")
 	public String publishReport(Collection<AvalancheBulletin> bulletins, DateTime startDate, String region, User user,
 			DateTime publicationDate) throws AlbinaException {
@@ -511,6 +553,22 @@ public class AvalancheReportController {
 		}
 	}
 
+	/**
+	 * Change status of report with a given validity time and region to
+	 * <code>submitted</code> (if the previous status was <code>draft</code>) or
+	 * <code>resubmitted</code> (if the previous status was <code>updated</code>)
+	 * and set the user. If there was not report a new report with status
+	 * <code>missing</code> is created.
+	 * 
+	 * @param startDate
+	 *            the start date of the time period
+	 * @param region
+	 *            the region that should be submitted
+	 * @param user
+	 *            the user who submits the report
+	 * @throws AlbinaException
+	 *             if more than one report was found
+	 */
 	@SuppressWarnings("unchecked")
 	public void submitReport(DateTime startDate, String region, User user) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();

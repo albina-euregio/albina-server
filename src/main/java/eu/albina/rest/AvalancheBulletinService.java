@@ -20,7 +20,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -114,26 +113,10 @@ public class AvalancheBulletinService {
 				}
 			}
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
-	}
-
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
-	@Path("/locked")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getLockedBulletins(@QueryParam("region") String bulletin) {
-		logger.debug("GET JSON locked bulletins");
-		JSONArray json = new JSONArray();
-		for (DateTime date : AvalancheBulletinController.getInstance().getLockedBulletins(bulletin))
-			json.put(date.toString(GlobalVariables.formatterDateTime));
-		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET
@@ -225,13 +208,6 @@ public class AvalancheBulletinService {
 				logger.debug("No bulletins found.");
 				return Response.noContent().build();
 			}
-		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
-			try {
-				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
-			} catch (Exception ex) {
-				return Response.status(400).type(MediaType.APPLICATION_XML).build();
-			}
 		} catch (TransformerException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
@@ -270,14 +246,9 @@ public class AvalancheBulletinService {
 				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
 			endDate = startDate.plusDays(1);
 
-			Collection<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance()
-					.getPublishedBulletinsJson(startDate, endDate, regions);
-			JSONArray jsonResult = new JSONArray();
-			if (bulletins != null) {
-				for (AvalancheBulletin bulletin : bulletins) {
-					jsonResult.put(bulletin.toSmallJSON());
-				}
-			}
+			JSONArray jsonResult = AvalancheBulletinController.getInstance().getPublishedBulletinsJson(startDate,
+					endDate, regions);
+
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
