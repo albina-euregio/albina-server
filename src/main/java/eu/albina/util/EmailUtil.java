@@ -304,18 +304,18 @@ public class EmailUtil {
 
 			// overview maps
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
-						+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
-				mapImage.put("overviewPM", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
-						+ AlbinaUtil.getRegionOverviewMapFilename(region, true));
+				mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins)
+						+ "/" + AlbinaUtil.getRegionOverviewMapFilename(region, false));
+				mapImage.put("overviewPM", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins)
+						+ "/" + AlbinaUtil.getRegionOverviewMapFilename(region, true));
 				mapImage.put("widthPM", "width=\"600\"");
 			} else {
 				if (daytimeDependency)
-					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
-							+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
+					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins)
+							+ "/" + AlbinaUtil.getRegionOverviewMapFilename(region, false));
 				else
-					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins) + "/"
-							+ AlbinaUtil.getRegionOverviewMapFilename(region));
+					mapImage.put("overview", GlobalVariables.getMapsPath() + AlbinaUtil.getValidityDateString(bulletins)
+							+ "/" + AlbinaUtil.getRegionOverviewMapFilename(region));
 				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
 				mapImage.put("widthPM", "");
 			}
@@ -560,7 +560,8 @@ public class EmailUtil {
 		// dangerRating.put("symbol", "cid:warning_picto/" +
 		// getWarningLevelId(daytimeBulletin,
 		// avalancheBulletin.isHasElevationDependency()));
-		if (avalancheBulletin.isHasElevationDependency()) {
+		if (avalancheBulletin.isHasElevationDependency()
+				&& (daytimeBulletin.getDangerRatingAbove() != daytimeBulletin.getDangerRatingBelow())) {
 			if (avalancheBulletin.getTreeline())
 				dangerRating.put("elevation", GlobalVariables.getTreelineString(lang));
 			else if (avalancheBulletin.getElevation() > 0)
