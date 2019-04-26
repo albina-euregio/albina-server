@@ -34,19 +34,24 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.SchedulerUtil;
 
+/**
+ * A {@code ServletContextListener} used to initialize the application.
+ * 
+ * @author Norbert Lanzanasto
+ *
+ */
 @WebListener
 public class AlbinaServiceContextListener implements ServletContextListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaServiceContextListener.class);
 
-	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
-		HibernateUtil.getInstance().shutDown();
-		SchedulerUtil.getInstance().shutDown();
-		logger.debug("ServletContextListener destroyed");
-	}
-
-	// Run this before web application is started
+	/**
+	 * Starting point of the application. Contains all necessary steps that have to
+	 * be performed when the servlet is initialized. This runs before the
+	 * application is started.
+	 * 
+	 * @param arg0
+	 */
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		GlobalVariables.loadConfigProperties();
@@ -70,5 +75,18 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		SchedulerUtil.getInstance().start();
 
 		logger.debug("ServletContextListener started");
+	}
+
+	/**
+	 * Contains all necessary steps that have to be performed when the servlet is
+	 * destroyed.
+	 * 
+	 * @param arg0
+	 */
+	@Override
+	public void contextDestroyed(ServletContextEvent arg0) {
+		HibernateUtil.getInstance().shutDown();
+		SchedulerUtil.getInstance().shutDown();
+		logger.debug("ServletContextListener destroyed");
 	}
 }
