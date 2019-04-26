@@ -34,6 +34,12 @@ import org.w3c.dom.Element;
 
 import eu.albina.model.AvalancheInformationObject;
 
+/**
+ * Custom exception for the ALBINA project.
+ * 
+ * @author Norbert Lanzanasto
+ *
+ */
 public class AlbinaException extends Exception implements AvalancheInformationObject {
 
 	/**
@@ -41,10 +47,27 @@ public class AlbinaException extends Exception implements AvalancheInformationOb
 	 */
 	private static final long serialVersionUID = 3770001034138464030L;
 
+	/**
+	 * Constructor with a custom {@code message} text.
+	 * 
+	 * @param message
+	 *            the message text for the exception.
+	 */
 	public AlbinaException(String message) {
 		super(message);
 	}
 
+	/**
+	 * Return a XML string of the exception.
+	 * 
+	 * @return a XML string of the exception
+	 * @throws ParserConfigurationException
+	 *             if the XML builder could not be created
+	 * @throws TransformerFactoryConfigurationError
+	 *             if the XML transformer could be created
+	 * @throws TransformerException
+	 *             if the exception could not be transformed to XML
+	 */
 	public String toXML()
 			throws ParserConfigurationException, TransformerFactoryConfigurationError, TransformerException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -60,6 +83,13 @@ public class AlbinaException extends Exception implements AvalancheInformationOb
 		return result.getWriter().toString();
 	}
 
+	/**
+	 * Return a {@code JSONObject} representing the exception (only containing the
+	 * message).
+	 * 
+	 * @return a {@code JSONObject} representing the exception (only containing the
+	 *         message)
+	 */
 	@Override
 	public JSONObject toJSON() {
 		JSONObject result = new JSONObject();
