@@ -36,6 +36,13 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
 import eu.albina.util.GlobalVariables;
 
+/**
+ * Provide static helper methods to validate against different JSON schema
+ * files.
+ * 
+ * @author Norbert Lanzanasto
+ *
+ */
 public class JsonValidator {
 
 	private static Logger logger = LoggerFactory.getLogger(JsonValidator.class);
