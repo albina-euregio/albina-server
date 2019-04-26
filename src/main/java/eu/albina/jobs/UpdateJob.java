@@ -36,10 +36,23 @@ import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 
+/**
+ * A {@code org.quartz.Job} handling all the tasks and logic necessary to
+ * automatically update the Avalanche.report at 8AM.
+ * 
+ * @author Norbert Lanzanasto
+ *
+ */
 public class UpdateJob implements org.quartz.Job {
 
 	private static final Logger logger = LoggerFactory.getLogger(UpdateJob.class);
 
+	/**
+	 * Execute all necessary tasks to update the Avalanche.report at 8AM, depending
+	 * on the current settings.
+	 * 
+	 * @param arg0
+	 */
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		logger.info("Update job triggered!");

@@ -35,10 +35,23 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.User;
 import eu.albina.util.GlobalVariables;
 
+/**
+ * A {@code org.quartz.Job} handling all the tasks and logic necessary to
+ * automatically publish the Avalanche.report at 5PM.
+ * 
+ * @author Norbert Lanzanasto
+ *
+ */
 public class PublicationJob implements org.quartz.Job {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
 
+	/**
+	 * Execute all necessary tasks to publish the Avalanche.report at 5PM, depending
+	 * on the current settings.
+	 * 
+	 * @param arg0
+	 */
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		logger.info("Publication job triggered!");
