@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.StatisticsController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
@@ -80,9 +79,6 @@ public class StatisticsService {
 		} catch (UnsupportedEncodingException e) {
 			logger.warn("Error creating CSV - " + e.getMessage());
 			return Response.status(400).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error creating CSV - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
 }

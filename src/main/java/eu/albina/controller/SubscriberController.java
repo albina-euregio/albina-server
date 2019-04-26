@@ -18,7 +18,6 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -42,7 +41,10 @@ import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.util.HibernateUtil;
 
 /**
- * Controller for subscribers.
+ * Controller for email subscribers. The sending of emails is handled by
+ * rapidmail, but in order to apply to GDPR regulations the subscription to the
+ * email newsletter is done by this controller and the confirmation of the user
+ * is stored in our database.
  * 
  * @author Norbert Lanzanasto
  *
@@ -52,9 +54,19 @@ public class SubscriberController {
 	// LoggerFactory.getLogger(SubscriberController.class);
 	private static SubscriberController instance = null;
 
+	/**
+	 * Private constructor.
+	 */
 	private SubscriberController() {
 	}
 
+	/**
+	 * Returns the {@code SubscriberController} object associated with the current
+	 * Java application.
+	 * 
+	 * @return the {@code SubscriberController} object associated with the current
+	 *         Java application.
+	 */
 	public static SubscriberController getInstance() {
 		if (instance == null) {
 			instance = new SubscriberController();
@@ -62,6 +74,15 @@ public class SubscriberController {
 		return instance;
 	}
 
+	/**
+	 * Return the {@code Subscriber} object with {@code email} as primary key.
+	 * 
+	 * @param email
+	 *            the email address of the desired subscriber
+	 * @return the {@code Subscriber} object with {@code email} as primary key
+	 * @throws AlbinaException
+	 *             if the subscriber could not be found
+	 */
 	public Subscriber getSubscriber(String email) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -84,14 +105,23 @@ public class SubscriberController {
 		}
 	}
 
-	public Serializable createSubscriber(Subscriber subscriber)
-			throws HibernateException, URISyntaxException, IOException, AlbinaException {
+	/**
+	 * Save a {@code Subscriber} to the database. If a {@code Subscriber} with the
+	 * same email address already exists it will be deleted first and newly created.
+	 * 
+	 * @param subscriber
+	 *            the {@code Subscriber} to be saved in the database
+	 * @return the email address of the saved subscriber
+	 * @throws HibernateException
+	 *             if the {@code Subscriber} could not be saved
+	 */
+	public Serializable createSubscriber(Subscriber subscriber) throws HibernateException {
 
 		try {
 			Subscriber s = getSubscriber(subscriber.getEmail());
 			if (s != null)
 				deleteSubscriber(subscriber.getEmail());
-		} catch (AlbinaException e) {
+		} catch (Exception e) {
 		}
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -110,6 +140,17 @@ public class SubscriberController {
 		}
 	}
 
+	/**
+	 * Delete the {@code Subscriber} with {@code email} from the database.
+	 * 
+	 * @param email
+	 *            the email address of the {@code Subscriber} who should be deleted
+	 * @return the email address of the deleted subscriber
+	 * @throws AlbinaException
+	 *             if the no {@code Subscriber} with {@code email} could be found
+	 * @throws HibernateException
+	 *             if the {@code Subscriber} could not be deleted
+	 */
 	public Serializable deleteSubscriber(String email) throws AlbinaException, HibernateException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -132,57 +173,76 @@ public class SubscriberController {
 		}
 	}
 
-	public void confirmSubscriber(String email) throws AlbinaException, HibernateException {
+	/**
+	 * Set the confirmation flag for the {@code Subscriber} with the specified
+	 * {@code email}.
+	 * 
+	 * @param email
+	 *            the email address of the subscriber to be confirmed
+	 * @throws AlbinaException
+	 *             if the subscriber could not be found
+	 */
+	public void confirmSubscriber(String email) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
-			Subscriber subscriber = getSubscriber(email);
-			subscriber.setConfirmed(true);
-			entityManager.merge(subscriber);
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw he;
-		} finally {
-			entityManager.close();
-		}
+		transaction.begin();
+		Subscriber subscriber = getSubscriber(email);
+		subscriber.setConfirmed(true);
+		entityManager.merge(subscriber);
+		transaction.commit();
+		entityManager.close();
 	}
 
+	/**
+	 * Return all subscribers for the language {@code lang} and the specified
+	 * {@code regions}.
+	 * 
+	 * @param lang
+	 *            the returned subscribers have to subscribed for this language
+	 * @param regions
+	 *            the returned subscribers have to be subscribed for at least one of
+	 *            these regions
+	 * @return all subscribers for the language {@code lang} and the specified
+	 *         {@code regions}
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Subscriber> getSubscribers(LanguageCode lang, List<String> regions) throws HibernateException {
+	public List<Subscriber> getSubscribers(LanguageCode lang, List<String> regions) {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		transaction.begin();
 
-			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage)
-					.setParameter("language", lang).getResultList();
-			List<Subscriber> results = new ArrayList<Subscriber>();
-			for (Subscriber subscriber : subscribers) {
-				for (String region : regions)
-					if (subscriber.affectsRegion(region)) {
-						results.add(subscriber);
-						break;
-					}
-			}
-
-			for (Subscriber subscriber : results)
-				initializeSubscriber(subscriber);
-
-			transaction.commit();
-			return results;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw he;
-		} finally {
-			entityManager.close();
+		List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage)
+				.setParameter("language", lang).getResultList();
+		List<Subscriber> results = new ArrayList<Subscriber>();
+		for (Subscriber subscriber : subscribers) {
+			for (String region : regions)
+				if (subscriber.affectsRegion(region)) {
+					results.add(subscriber);
+					break;
+				}
 		}
+
+		for (Subscriber subscriber : results)
+			initializeSubscriber(subscriber);
+
+		transaction.commit();
+		entityManager.close();
+		return results;
 	}
 
-	public List<String> getSubscriberEmails(LanguageCode lang, List<String> regions) throws HibernateException {
+	/**
+	 * Return the email address of all subscribers for the language {@code lang} and
+	 * the specified {@code regions}.
+	 * 
+	 * @param lang
+	 *            the returned subscribers have to subscribed for this language
+	 * @param regions
+	 *            the returned subscribers have to be subscribed for at least one of
+	 *            these regions
+	 * @return the email address of all subscribers for the language {@code lang}
+	 *         and the specified {@code regions}
+	 */
+	public List<String> getSubscriberEmails(LanguageCode lang, List<String> regions) {
 		List<String> result = new ArrayList<String>();
 		List<Subscriber> subscribers = getSubscribers(lang, regions);
 
@@ -192,6 +252,13 @@ public class SubscriberController {
 		return result;
 	}
 
+	/**
+	 * Initialize all fields of the {@code subscriber} to be able to access it after
+	 * the DB transaction was closed.
+	 * 
+	 * @param subscriber
+	 *            the subscriber that should be initialized
+	 */
 	private void initializeSubscriber(Subscriber subscriber) {
 		Hibernate.initialize(subscriber.getEmail());
 		Hibernate.initialize(subscriber.getConfirmed());
@@ -200,6 +267,19 @@ public class SubscriberController {
 		Hibernate.initialize(subscriber.getRegions());
 	}
 
+	/**
+	 * Create a subscriber on rapidmail.
+	 * 
+	 * @param subscriber
+	 *            the subscriber that should be created
+	 * @throws AlbinaException
+	 * @throws KeyManagementException
+	 * @throws CertificateException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyStoreException
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	public void createSubscriberRapidmail(Subscriber subscriber) throws AlbinaException, KeyManagementException,
 			CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, Exception {
 		if (subscriber.getLanguage() == null)

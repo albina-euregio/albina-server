@@ -23,12 +23,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheReport;
@@ -51,9 +49,19 @@ public class StatisticsController {
 
 	private static StatisticsController instance = null;
 
+	/**
+	 * Private constructor.
+	 */
 	private StatisticsController() {
 	}
 
+	/**
+	 * Returns the {@code RegionController} object associated with the current Java
+	 * application.
+	 * 
+	 * @return the {@code RegionController} object associated with the current Java
+	 *         application.
+	 */
 	public static StatisticsController getInstance() {
 		if (instance == null) {
 			instance = new StatisticsController();
@@ -61,43 +69,57 @@ public class StatisticsController {
 		return instance;
 	}
 
+	/**
+	 * Return a CSV string with all bulletin information from {@code startDate}
+	 * until {@code endDate} in {@code lang}.
+	 * 
+	 * @param startDate
+	 *            the start date of the desired time period
+	 * @param endDate
+	 *            the end date of the desired time period
+	 * @param lang
+	 *            the desired language
+	 * @return a CSV string with all bulletin information from {@code startDate}
+	 *         until {@code endDate} in {@code lang}
+	 */
 	@SuppressWarnings("unchecked")
-	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang)
-			throws AlbinaException {
+	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		transaction.begin();
 
-			// get latest reports
-			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-			reports = entityManager.createQuery(HibernateUtil.queryGetLatestReports)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
+		// get latest reports
+		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+		reports = entityManager.createQuery(HibernateUtil.queryGetLatestReports).setParameter("startDate", startDate)
+				.setParameter("endDate", endDate).getResultList();
 
-			// get bulletins from report json
-			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheReport avalancheReport : reports) {
-				JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
-				for (Object object : jsonArray) {
-					if (object instanceof JSONObject) {
-						bulletins.add(new AvalancheBulletin((JSONObject) object));
-					}
+		// get bulletins from report json
+		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
+		for (AvalancheReport avalancheReport : reports) {
+			JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
+			for (Object object : jsonArray) {
+				if (object instanceof JSONObject) {
+					bulletins.add(new AvalancheBulletin((JSONObject) object));
 				}
 			}
-
-			transaction.commit();
-
-			return getCsvString(lang, bulletins);
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
 		}
+
+		transaction.commit();
+		entityManager.close();
+
+		return getCsvString(lang, bulletins);
 	}
 
+	/**
+	 * Return a CSV string representing all {@code bulletins} in {@code lang}.
+	 * 
+	 * @param lang
+	 *            the desired language
+	 * @param bulletins
+	 *            the bulletins that should be included in the CSV string
+	 * @return a CSV string representing all {@code bulletins} in {@code lang}
+	 */
 	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins) {
 		// sort bulletins by validity
 		Collections.sort(bulletins, new AvalancheBulletinSortByValidity());
@@ -186,6 +208,21 @@ public class StatisticsController {
 		return sb.toString();
 	}
 
+	/**
+	 * Add a CSV string to a {@code StringBuilder} instance representing the
+	 * {@code avalancheBulletin} in {@code lang}.
+	 * 
+	 * @param sb
+	 *            the string builder instance the new string should be added to
+	 * @param avalancheBulletin
+	 *            the bulletin that should be added to the {@code StringBuilder}
+	 *            instance
+	 * @param isAfternoon
+	 *            true if the afternoon information of the {@code avalancheBulletin}
+	 *            should be used
+	 * @param lang
+	 *            the desired language
+	 */
 	private void addCsvLines(StringBuilder sb, AvalancheBulletin avalancheBulletin, boolean isAfternoon,
 			LanguageCode lang) {
 		AvalancheBulletinDaytimeDescription daytimeDescription;
@@ -249,52 +286,62 @@ public class StatisticsController {
 		}
 	}
 
-	private void addCsvAvalancheSituation(StringBuilder sb, AvalancheSituation avalancheSituation1) {
-		if (avalancheSituation1 != null) {
-			if (avalancheSituation1.getAvalancheSituation() != null)
-				sb.append(avalancheSituation1.getAvalancheSituation().toStringId());
+	/**
+	 * Add a CSV string to a {@code StringBuilder} instance representing the
+	 * {@code avalancheSituation}.
+	 * 
+	 * @param sb
+	 *            the string builder instance the new string should be added to
+	 * @param avalancheSituation
+	 *            the {@code AvalancheSituation} that should be added to the
+	 *            {@code StringBuilder} instance
+	 */
+	private void addCsvAvalancheSituation(StringBuilder sb, AvalancheSituation avalancheSituation) {
+		if (avalancheSituation != null) {
+			if (avalancheSituation.getAvalancheSituation() != null)
+				sb.append(avalancheSituation.getAvalancheSituation().toStringId());
 			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(avalancheSituation1.getElevationLow());
+			sb.append(avalancheSituation.getElevationLow());
 			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(avalancheSituation1.getElevationHigh());
+			sb.append(avalancheSituation.getElevationHigh());
 			sb.append(GlobalVariables.csvDeliminator);
-			if (avalancheSituation1.getAspects() != null && !avalancheSituation1.getAspects().isEmpty()) {
-				if (avalancheSituation1.getAspects().contains(Aspect.N))
+			if (avalancheSituation.getAspects() != null && !avalancheSituation.getAspects().isEmpty()) {
+				if (avalancheSituation.getAspects().contains(Aspect.N))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation1.getAspects().contains(Aspect.NE))
+				if (avalancheSituation.getAspects().contains(Aspect.NE))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation1.getAspects().contains(Aspect.E))
+				if (avalancheSituation.getAspects().contains(Aspect.E))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation1.getAspects().contains(Aspect.SE))
+				if (avalancheSituation.getAspects().contains(Aspect.SE))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation1.getAspects().contains(Aspect.S))
+				if (avalancheSituation.getAspects().contains(Aspect.S))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation1.getAspects().contains(Aspect.SW))
+				if (avalancheSituation.getAspects().contains(Aspect.SW))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation1.getAspects().contains(Aspect.W))
+				if (avalancheSituation.getAspects().contains(Aspect.W))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation1.getAspects().contains(Aspect.NW))
+				if (avalancheSituation.getAspects().contains(Aspect.NW))
 					sb.append("1");
 				else
 					sb.append("0");

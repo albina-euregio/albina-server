@@ -49,10 +49,20 @@ public class RegionController {
 	private static RegionController instance = null;
 	private List<RegionLock> regionLocks;
 
+	/**
+	 * Private constructor.
+	 */
 	private RegionController() {
 		regionLocks = new ArrayList<RegionLock>();
 	}
 
+	/**
+	 * Returns the {@code RegionController} object associated with the current Java
+	 * application.
+	 * 
+	 * @return the {@code RegionController} object associated with the current Java
+	 *         application.
+	 */
 	public static RegionController getInstance() {
 		if (instance == null) {
 			instance = new RegionController();
@@ -64,9 +74,10 @@ public class RegionController {
 	 * Retrieve a region from the database by ID.
 	 * 
 	 * @param regionId
-	 *            The ID of the desired region.
-	 * @return The region with the given ID.
+	 *            the ID of the desired region
+	 * @return the region with the given ID.
 	 * @throws AlbinaException
+	 *             if the {@code Region} object could not be initialized
 	 */
 	public Region getRegion(String regionId) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -90,10 +101,26 @@ public class RegionController {
 		}
 	}
 
+	/**
+	 * Return all top-level regions (no parent region is available).
+	 * 
+	 * @return all top-level regions
+	 * @throws AlbinaException
+	 *             if the {@code Region} objects could not be initialized
+	 */
 	public List<Region> getRegions() throws AlbinaException {
 		return getRegions(null);
 	}
 
+	/**
+	 * Return all sub-regions that have {@code regionId} as parent.
+	 * 
+	 * @param regionId
+	 *            the id of the parent region of all desired regions
+	 * @return all sub-regions that have {@code regionId} as parent
+	 * @throws AlbinaException
+	 *             if the {@code Region} objects could not be initialized
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Region> getRegions(String regionId) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -120,6 +147,14 @@ public class RegionController {
 		}
 	}
 
+	/**
+	 * Lock a specific region due to current modification.
+	 * 
+	 * @param lock
+	 *            the bulletin lock
+	 * @throws AlbinaException
+	 *             if the region was already locked
+	 */
 	public void lockRegion(RegionLock lock) throws AlbinaException {
 		for (RegionLock regionLock : regionLocks) {
 			if (regionLock.getDate().getMillis() == lock.getDate().getMillis()
@@ -129,6 +164,14 @@ public class RegionController {
 		regionLocks.add(lock);
 	}
 
+	/**
+	 * Unlock a specific region.
+	 * 
+	 * @param lock
+	 *            the bulletin lock
+	 * @throws AlbinaException
+	 *             if the region was not locked
+	 */
 	public void unlockRegion(RegionLock lock) throws AlbinaException {
 		RegionLock hit = null;
 		for (RegionLock regionLock : regionLocks)
@@ -142,6 +185,12 @@ public class RegionController {
 			throw new AlbinaException("Region not locked!");
 	}
 
+	/**
+	 * Unlock all regions locked by a specific {@code sessionId}.
+	 * 
+	 * @param sessionId
+	 *            the session id
+	 */
 	public void unlockRegions(String sessionId) {
 		List<RegionLock> hits = new ArrayList<RegionLock>();
 		for (RegionLock regionLock : regionLocks) {
@@ -160,6 +209,13 @@ public class RegionController {
 		}
 	}
 
+	/**
+	 * Return all dates that are locked for {@code region}.
+	 * 
+	 * @param region
+	 *            the region of interest
+	 * @return all dates that are locked for {@code region}
+	 */
 	public List<DateTime> getLockedRegions(String region) {
 		List<DateTime> result = new ArrayList<DateTime>();
 		for (RegionLock regionLock : regionLocks) {

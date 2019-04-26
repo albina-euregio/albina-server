@@ -963,7 +963,7 @@ public class AvalancheBulletinController {
 	}
 
 	/**
-	 * Unlock a specific bulletin
+	 * Unlock a specific bulletin.
 	 * 
 	 * @param lock
 	 *            the bulletin lock

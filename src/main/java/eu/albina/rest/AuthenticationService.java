@@ -102,26 +102,21 @@ public class AuthenticationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createUser(String userString, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON user");
-		try {
-			JSONObject userJson = new JSONObject(userString);
-			User user = new User(userJson);
+		JSONObject userJson = new JSONObject(userString);
+		User user = new User(userJson);
 
-			// check if email already exists
-			if (!UserController.getInstance().userExists(user.getEmail())) {
-				UserController.getInstance().createUser(user);
-				JSONObject jsonObject = new JSONObject();
-				// TODO return some meaningful path
-				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-						.entity(jsonObject.toString()).build();
-			} else {
-				logger.warn("Error creating user - User already exists");
-				JSONObject json = new JSONObject();
-				json.append("message", "Error creating user - User already exists");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
-			}
-		} catch (AlbinaException e) {
-			logger.warn("Error creating user - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		// check if email already exists
+		if (!UserController.getInstance().userExists(user.getEmail())) {
+			UserController.getInstance().createUser(user);
+			JSONObject jsonObject = new JSONObject();
+			// TODO return some meaningful path
+			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
+					.entity(jsonObject.toString()).build();
+		} else {
+			logger.warn("Error creating user - User already exists");
+			JSONObject json = new JSONObject();
+			json.append("message", "Error creating user - User already exists");
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
 		}
 	}
 
