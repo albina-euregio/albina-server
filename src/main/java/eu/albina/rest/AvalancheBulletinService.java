@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,6 @@ import eu.albina.controller.PublicationController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -128,7 +128,6 @@ public class AvalancheBulletinService {
 		logger.debug("GET published XML bulletins");
 
 		DateTime startDate = null;
-		DateTime endDate = null;
 
 		if (regions.isEmpty()) {
 			regions.add(GlobalVariables.codeTrentino);
@@ -143,10 +142,9 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
-			endDate = startDate.plusDays(1);
 
-			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, endDate,
-					regions, language);
+			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, regions,
+					language);
 			if (caaml != null) {
 				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 			} else {
@@ -229,7 +227,6 @@ public class AvalancheBulletinService {
 		logger.debug("GET published JSON bulletins");
 
 		DateTime startDate = null;
-		DateTime endDate = null;
 
 		if (regions.isEmpty()) {
 			regions.add(GlobalVariables.codeTrentino);
@@ -244,10 +241,9 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
-			endDate = startDate.plusDays(1);
 
 			JSONArray jsonResult = AvalancheBulletinController.getInstance().getPublishedBulletinsJson(startDate,
-					endDate, regions);
+					regions);
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -269,7 +265,6 @@ public class AvalancheBulletinService {
 		logger.debug("GET highest danger rating");
 
 		DateTime startDate = null;
-		DateTime endDate = null;
 
 		if (regions.isEmpty()) {
 			regions.add(GlobalVariables.codeTrentino);
@@ -284,10 +279,9 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
-			endDate = startDate.plusDays(1);
 
 			DangerRating highestDangerRating = AvalancheBulletinController.getInstance()
-					.getHighestDangerRating(startDate, endDate, regions);
+					.getHighestDangerRating(startDate, regions);
 
 			JSONObject jsonResult = new JSONObject();
 			jsonResult.put("dangerRating", highestDangerRating);
@@ -324,8 +318,14 @@ public class AvalancheBulletinService {
 						.parse(URLDecoder.decode(end, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
 						.toDateTime(DateTimeZone.UTC);
 
-			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getStatus(startDate, endDate,
-					region);
+			Map<DateTime, BulletinStatus> status;
+			// if no region is defined, get status for EUREGIO
+			if (region == null || region.isEmpty())
+				status = AvalancheReportController.getInstance().getStatus(startDate, endDate,
+						GlobalVariables.regionsEuregio);
+			else
+				status = AvalancheReportController.getInstance().getStatus(startDate, endDate, region);
+
 			JSONArray jsonResult = new JSONArray();
 
 			for (Entry<DateTime, BulletinStatus> entry : status.entrySet()) {
@@ -337,6 +337,9 @@ public class AvalancheBulletinService {
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (UnsupportedEncodingException e) {
+			logger.warn("Error loading status - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		} catch (AlbinaException e) {
 			logger.warn("Error loading status - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
@@ -379,6 +382,9 @@ public class AvalancheBulletinService {
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (UnsupportedEncodingException e) {
+			logger.warn("Error loading status - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		} catch (AlbinaException e) {
 			logger.warn("Error loading status - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
@@ -898,7 +904,6 @@ public class AvalancheBulletinService {
 
 		try {
 			DateTime startDate = null;
-			DateTime endDate = null;
 
 			if (date != null)
 				startDate = DateTime
@@ -906,15 +911,14 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
-			endDate = startDate.plusDays(1);
 
-			AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					endDate, GlobalVariables.regionsEuregio);
+					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin b : result.bulletins)
+			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
@@ -943,7 +947,6 @@ public class AvalancheBulletinService {
 
 		try {
 			DateTime startDate = null;
-			DateTime endDate = null;
 
 			if (date != null)
 				startDate = DateTime
@@ -951,15 +954,14 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
-			endDate = startDate.plusDays(1);
 
-			AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					endDate, GlobalVariables.regionsEuregio);
+					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin b : result.bulletins)
+			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
@@ -988,7 +990,6 @@ public class AvalancheBulletinService {
 
 		try {
 			DateTime startDate = null;
-			DateTime endDate = null;
 
 			if (date != null)
 				startDate = DateTime
@@ -996,15 +997,14 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
-			endDate = startDate.plusDays(1);
 
-			AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					endDate, GlobalVariables.regionsEuregio);
+					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin b : result.bulletins)
+			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
@@ -1033,7 +1033,6 @@ public class AvalancheBulletinService {
 
 		try {
 			DateTime startDate = null;
-			DateTime endDate = null;
 
 			if (date != null)
 				startDate = DateTime
@@ -1041,15 +1040,14 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
-			endDate = startDate.plusDays(1);
 
-			AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					endDate, GlobalVariables.regionsEuregio);
+					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin b : result.bulletins)
+			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
@@ -1078,7 +1076,6 @@ public class AvalancheBulletinService {
 
 		try {
 			DateTime startDate = null;
-			DateTime endDate = null;
 
 			if (date != null)
 				startDate = DateTime
@@ -1086,15 +1083,14 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
-			endDate = startDate.plusDays(1);
 
-			AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					endDate, GlobalVariables.regionsEuregio);
+					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin b : result.bulletins)
+			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
@@ -1129,7 +1125,6 @@ public class AvalancheBulletinService {
 			regions.add(region);
 
 			DateTime startDate = null;
-			DateTime endDate = null;
 
 			if (date != null)
 				startDate = DateTime
@@ -1137,15 +1132,14 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
-			endDate = startDate.plusDays(1);
 
-			AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					endDate, GlobalVariables.regionsEuregio);
+					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin b : result.bulletins)
+			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
@@ -1180,7 +1174,6 @@ public class AvalancheBulletinService {
 			regions.add(region);
 
 			DateTime startDate = null;
-			DateTime endDate = null;
 
 			if (date != null)
 				startDate = DateTime
@@ -1188,15 +1181,14 @@ public class AvalancheBulletinService {
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
-			endDate = startDate.plusDays(1);
 
-			AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, endDate, GlobalVariables.regionsEuregio);
+			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					endDate, GlobalVariables.regionsEuregio);
+					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin b : result.bulletins)
+			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());

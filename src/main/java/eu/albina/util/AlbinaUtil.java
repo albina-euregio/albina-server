@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -276,7 +277,7 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static boolean hasBulletinChanged(DateTime startDate, String region) {
+	public static boolean hasBulletinChanged(DateTime startDate, String region) throws AlbinaException {
 		boolean result = false;
 		Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 				startDate, region);

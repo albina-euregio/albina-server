@@ -42,7 +42,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -69,7 +68,6 @@ import eu.albina.util.XmlUtil;
  * @author Norbert Lanzanasto
  *
  */
-@Audited
 @Entity
 @Table(name = "avalanche_bulletins")
 public class AvalancheBulletin extends AbstractPersistentObject implements AvalancheInformationObject {
@@ -750,6 +748,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (id != null && id != "")
 			json.put("id", id);
+
+		// TODO do not add user image to JSON
 
 		if (user != null && user.getName() != null && user.getName() != "")
 			json.put("author", user.toJSON());

@@ -25,7 +25,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.envers.Audited;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,7 +40,6 @@ import eu.albina.util.GlobalVariables;
  * @author Norbert Lanzanasto
  *
  */
-@Audited
 @Entity
 @Table(name = "avalanche_reports")
 public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject {
@@ -64,9 +62,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	@Column(name = "STATUS")
 	private BulletinStatus status;
-
-	@Column(name = "REVISION")
-	private int revision;
 
 	@Column(name = "CAAML_CREATED")
 	private boolean caamlCreated;
@@ -131,9 +126,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (json.has("status"))
 			this.status = BulletinStatus.fromString(json.getString("status"));
 
-		if (json.has("revision"))
-			this.revision = json.getInt("revision");
-
 		if (json.has("caamlCreated"))
 			this.caamlCreated = json.getBoolean("caamlCreated");
 		if (json.has("pdfCreated"))
@@ -193,14 +185,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setStatus(BulletinStatus status) {
 		this.status = status;
-	}
-
-	public Number getRevision() {
-		return revision;
-	}
-
-	public void setRevision(int revision) {
-		this.revision = revision;
 	}
 
 	public boolean isCaamlCreated() {
@@ -296,9 +280,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 		if (status != null)
 			json.put("status", status.toString());
-
-		if (revision > 0)
-			json.put("revision", revision);
 
 		if (caamlCreated)
 			json.put("caamlCreated", true);

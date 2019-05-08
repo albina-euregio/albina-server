@@ -17,6 +17,7 @@
 package eu.albina.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +26,10 @@ import javax.persistence.EntityTransaction;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -44,8 +48,7 @@ import eu.albina.util.HibernateUtil;
  */
 public class StatisticsController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(StatisticsController.class);
+	private static Logger logger = LoggerFactory.getLogger(StatisticsController.class);
 
 	private static StatisticsController instance = null;
 
@@ -71,7 +74,50 @@ public class StatisticsController {
 
 	/**
 	 * Return a CSV string with all bulletin information from {@code startDate}
-	 * until {@code endDate} in {@code lang}.
+	 * until {@code endDate} in {@code lang} for {@code region}.
+	 * 
+	 * @param startDate
+	 *            the start date of the desired time period
+	 * @param endDate
+	 *            the end date of the desired time period
+	 * @param lang
+	 *            the desired language
+	 * @param region
+	 *            the desired region
+	 * @return a CSV string with all bulletin information from {@code startDate}
+	 *         until {@code endDate} in {@code lang}
+	 */
+	@SuppressWarnings("unchecked")
+	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, String region) {
+
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+
+		// get latest reports
+		Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
+				endDate, region);
+		reports = entityManager.createQuery(HibernateUtil.queryGetLatestReports).setParameter("startDate", startDate)
+				.setParameter("endDate", endDate).getResultList();
+
+		// get bulletins from report json
+		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
+		for (AvalancheReport avalancheReport : reports) {
+			JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
+			for (Object object : jsonArray)
+				if (object instanceof JSONObject)
+					bulletins.add(new AvalancheBulletin((JSONObject) object));
+		}
+
+		transaction.commit();
+		entityManager.close();
+
+		return getCsvString(lang, bulletins);
+	}
+
+	/**
+	 * Return a CSV string with all bulletin information from {@code startDate}
+	 * until {@code endDate} in {@code lang} for whole EUREGIO.
 	 * 
 	 * @param startDate
 	 *            the start date of the desired time period
@@ -82,25 +128,27 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	@SuppressWarnings("unchecked")
 	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 
-		// get latest reports
-		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-		reports = entityManager.createQuery(HibernateUtil.queryGetLatestReports).setParameter("startDate", startDate)
-				.setParameter("endDate", endDate).getResultList();
-
-		// get bulletins from report json
 		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-		for (AvalancheReport avalancheReport : reports) {
-			JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
-			for (Object object : jsonArray) {
-				if (object instanceof JSONObject) {
-					bulletins.add(new AvalancheBulletin((JSONObject) object));
+		for (String region : GlobalVariables.regionsEuregio) {
+			// get latest reports
+			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
+					endDate, region);
+
+			// get bulletins from report json
+			for (AvalancheReport avalancheReport : reports) {
+				try {
+					JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
+					for (Object object : jsonArray)
+						if (object instanceof JSONObject)
+							bulletins.add(new AvalancheBulletin((JSONObject) object));
+				} catch (JSONException e) {
+					logger.warn("Error parsing report JSON.");
 				}
 			}
 		}

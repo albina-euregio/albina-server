@@ -18,6 +18,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +43,6 @@ import org.w3c.dom.Element;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheBulletinVersionTuple;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -302,12 +302,10 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Returns a XML (CAAML) string of all bulletins with status {@code published}
-	 * for a given time period and {@code regions} in a given {@code language}.
+	 * for a given {@code date} and {@code regions} in a given {@code language}.
 	 * 
-	 * @param startDate
-	 *            the start date the bulletins should be valid from
-	 * @param endDate
-	 *            the end date the bulletins should be valid until
+	 * @param date
+	 *            the date the bulletins should be valid from
 	 * @param regions
 	 *            the regions of the bulletins
 	 * @param language
@@ -322,10 +320,10 @@ public class AvalancheBulletinController {
 	 * @throws ParserConfigurationException
 	 *             if the XML document can not be initialized
 	 */
-	public String getPublishedBulletinsCaaml(DateTime startDate, DateTime endDate, List<String> regions,
-			LanguageCode language) throws TransformerException, AlbinaException, ParserConfigurationException {
-		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
-				endDate, regions);
+	public String getPublishedBulletinsCaaml(DateTime date, List<String> regions, LanguageCode language)
+			throws TransformerException, AlbinaException, ParserConfigurationException {
+		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
+				regions);
 
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
@@ -336,8 +334,8 @@ public class AvalancheBulletinController {
 
 		// create meta data
 		DateTime publicationDate = null;
-		if (result.bulletins != null && !result.bulletins.isEmpty()) {
-			for (AvalancheBulletin bulletin : result.bulletins) {
+		if (result != null && !result.isEmpty()) {
+			for (AvalancheBulletin bulletin : result) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published
 						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
 					if (bulletin.getPublicationDate() != null) {
@@ -363,7 +361,7 @@ public class AvalancheBulletinController {
 
 			Element observations = doc.createElement("observations");
 
-			for (AvalancheBulletin bulletin : result.bulletins) {
+			for (AvalancheBulletin bulletin : result) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published
 						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
 					for (Element element : bulletin.toCAAML(doc, language)) {
@@ -443,12 +441,10 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Returns a JSON array of all bulletins with status {@code published} for a
-	 * given time period and {@code regions} in a given {@code language}.
+	 * given {@code date} and {@code regions} in a given {@code language}.
 	 * 
-	 * @param startDate
-	 *            the start date the bulletins should be valid from
-	 * @param endDate
-	 *            the end date the bulletins should be valid until
+	 * @param date
+	 *            the date the bulletins should be valid from
 	 * @param regions
 	 *            the regions of the bulletins
 	 * @param language
@@ -459,14 +455,13 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 *             if the published bulletins can not be loaded from DB
 	 */
-	public JSONArray getPublishedBulletinsJson(DateTime startDate, DateTime endDate, List<String> regions)
-			throws AlbinaException {
-		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
-				endDate, regions);
+	public JSONArray getPublishedBulletinsJson(DateTime date, List<String> regions) throws AlbinaException {
+		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
+				regions);
 
 		if (result != null) {
 			JSONArray jsonResult = new JSONArray();
-			for (AvalancheBulletin bulletin : result.bulletins)
+			for (AvalancheBulletin bulletin : result)
 				jsonResult.put(bulletin.toSmallJSON());
 
 			return jsonResult;
@@ -476,12 +471,10 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Returns the highest {@code DangerRating} of all bulletins with status
-	 * {@code published} for a given time period and in a specific {@code regions}.
+	 * {@code published} for a given {@code date} and in a specific {@code regions}.
 	 * 
-	 * @param startDate
-	 *            the start date of the time period of interest
-	 * @param endDate
-	 *            the end date of the time period of interest
+	 * @param date
+	 *            the date of the time period of interest
 	 * @param regions
 	 *            the regions of interest
 	 * @return the highest {@code DangerRating} for the given time period and in the
@@ -490,14 +483,13 @@ public class AvalancheBulletinController {
 	 *             if the published bulletins for this time period and in this
 	 *             region could not be loaded
 	 */
-	public DangerRating getHighestDangerRating(DateTime startDate, DateTime endDate, List<String> regions)
-			throws AlbinaException {
-		AvalancheBulletinVersionTuple result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
-				endDate, regions);
+	public DangerRating getHighestDangerRating(DateTime date, List<String> regions) throws AlbinaException {
+		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
+				regions);
 
 		if (result != null) {
 			DangerRating dangerRating = DangerRating.missing;
-			for (AvalancheBulletin bulletin : result.bulletins) {
+			for (AvalancheBulletin bulletin : result) {
 				if (bulletin.getHighestDangerRating().compareTo(dangerRating) <= 0)
 					dangerRating = bulletin.getHighestDangerRating();
 			}

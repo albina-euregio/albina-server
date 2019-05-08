@@ -33,7 +33,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.envers.Audited;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -41,7 +40,6 @@ import org.w3c.dom.Element;
 
 import eu.albina.model.enumerations.Role;
 
-@Audited
 @Entity
 @Table(name = "users")
 public class User {
