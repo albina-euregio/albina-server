@@ -191,9 +191,9 @@ public class StatisticsController {
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvalancheProblem1");
 		sb.append(GlobalVariables.csvDeliminator);
-		sb.append("AvalancheProblem1ElevationLow");
+		sb.append("AvalancheProblem1ElevationAbove");
 		sb.append(GlobalVariables.csvDeliminator);
-		sb.append("AvalancheProblem1ElevationHigh");
+		sb.append("AvalancheProblem1ElevationBelow");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvalancheProblem1AspectN");
 		sb.append(GlobalVariables.csvDeliminator);
@@ -213,9 +213,9 @@ public class StatisticsController {
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvalancheProblem2");
 		sb.append(GlobalVariables.csvDeliminator);
-		sb.append("AvalancheProblem2ElevationLow");
+		sb.append("AvalancheProblem2ElevationAbove");
 		sb.append(GlobalVariables.csvDeliminator);
-		sb.append("AvalancheProblem2ElevationHigh");
+		sb.append("AvalancheProblem2ElevationBelow");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvalancheProblem2AspectN");
 		sb.append(GlobalVariables.csvDeliminator);
@@ -300,9 +300,13 @@ public class StatisticsController {
 			sb.append(daytimeDescription.getDangerRatingAbove().toString());
 			sb.append(GlobalVariables.csvDeliminator);
 			if (!avalancheBulletin.isHasElevationDependency())
-				sb.append("0");
-			else
-				sb.append(avalancheBulletin.getElevation());
+				sb.append(GlobalVariables.notAvailableString);
+			else {
+				if (avalancheBulletin.getTreeline())
+					sb.append(GlobalVariables.getTreelineString(LanguageCode.en));
+				else
+					sb.append(avalancheBulletin.getElevation());
+			}
 			sb.append(GlobalVariables.csvDeliminator);
 
 			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation1());
@@ -310,26 +314,40 @@ public class StatisticsController {
 
 			if (avalancheBulletin.getTendency() != null)
 				sb.append(avalancheBulletin.getTendency().toString());
+			else
+				sb.append(GlobalVariables.notAvailableString);
 			sb.append(GlobalVariables.csvDeliminator);
 
 			if (avalancheBulletin.getDangerPattern1() != null)
 				sb.append(avalancheBulletin.getDangerPattern1().toString());
+			else
+				sb.append(GlobalVariables.notAvailableString);
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getDangerPattern2() != null)
 				sb.append(avalancheBulletin.getDangerPattern2().toString());
+			else
+				sb.append(GlobalVariables.notAvailableString);
 			sb.append(GlobalVariables.csvDeliminator);
 
 			if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 				sb.append(avalancheBulletin.getAvActivityHighlightsIn(lang));
+			else
+				sb.append(GlobalVariables.notAvailableString);
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getAvActivityCommentIn(lang) != null)
 				sb.append(avalancheBulletin.getAvActivityCommentIn(lang));
+			else
+				sb.append(GlobalVariables.notAvailableString);
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
 				sb.append(avalancheBulletin.getSnowpackStructureCommentIn(lang));
+			else
+				sb.append(GlobalVariables.notAvailableString);
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getTendencyCommentIn(lang) != null)
 				sb.append(avalancheBulletin.getTendencyCommentIn(lang));
+			else
+				sb.append(GlobalVariables.notAvailableString);
 			sb.append(GlobalVariables.csvLineBreak);
 		}
 	}
@@ -345,13 +363,26 @@ public class StatisticsController {
 	 *            {@code StringBuilder} instance
 	 */
 	private void addCsvAvalancheSituation(StringBuilder sb, AvalancheSituation avalancheSituation) {
-		if (avalancheSituation != null) {
-			if (avalancheSituation.getAvalancheSituation() != null)
-				sb.append(avalancheSituation.getAvalancheSituation().toStringId());
+		if (avalancheSituation != null && avalancheSituation.getAvalancheSituation() != null) {
+			sb.append(avalancheSituation.getAvalancheSituation().toStringId());
 			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(avalancheSituation.getElevationLow());
+			if (avalancheSituation.getTreelineLow())
+				sb.append(GlobalVariables.getTreelineString(LanguageCode.en));
+			else {
+				if (avalancheSituation.getElevationLow() <= 0)
+					sb.append(GlobalVariables.notAvailableString);
+				else
+					sb.append(avalancheSituation.getElevationLow());
+			}
 			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(avalancheSituation.getElevationHigh());
+			if (avalancheSituation.getTreelineHigh())
+				sb.append(GlobalVariables.getTreelineString(LanguageCode.en));
+			else {
+				if (avalancheSituation.getElevationHigh() <= 0)
+					sb.append(GlobalVariables.notAvailableString);
+				else
+					sb.append(avalancheSituation.getElevationHigh());
+			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheSituation.getAspects() != null && !avalancheSituation.getAspects().isEmpty()) {
 				if (avalancheSituation.getAspects().contains(Aspect.N))
@@ -400,6 +431,7 @@ public class StatisticsController {
 			}
 		} else {
 			for (int i = 0; i < 11; i++) {
+				sb.append(GlobalVariables.notAvailableString);
 				sb.append(GlobalVariables.csvDeliminator);
 			}
 		}
