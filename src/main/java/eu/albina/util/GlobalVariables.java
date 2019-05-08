@@ -185,6 +185,8 @@ public class GlobalVariables {
 
 	private static String emailEncoding = "UTF-8";
 
+	public static String notAvailableString = "N/A";
+
 	public static boolean isCreateCaaml() {
 		return createCaaml;
 	}
