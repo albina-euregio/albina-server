@@ -68,7 +68,7 @@ public class GlobalVariables {
 	private static boolean publishBulletinsStyria = false;
 
 	public static String simpleBulletinBaseUrl = "https://avalanche.report/simple/";
-	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
+	public static String avalancheReportBaseUrl = "https://avalanche.report/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local/";
@@ -904,8 +904,8 @@ public class GlobalVariables {
 
 	// LANG
 	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
-		return "https://avalanche.report/albina-web/bulletin/" + date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"))
-				+ "?lang=" + lang.toString();
+		return avalancheReportBaseUrl + "bulletin/" + date.toString(DateTimeFormat.forPattern("yyyy-MM-dd")) + "?lang="
+				+ lang.toString();
 	}
 
 	// LANG
