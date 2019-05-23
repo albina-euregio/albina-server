@@ -305,14 +305,6 @@ public class UtilTest {
 
 	@Ignore
 	@Test
-	public void createConfirmationFreemarker() throws IOException, URISyntaxException {
-		String createConfirmationEmailHtml = EmailUtil.getInstance().createConfirmationEmailHtml("token",
-				LanguageCode.en);
-		System.out.println(createConfirmationEmailHtml);
-	}
-
-	@Ignore
-	@Test
 	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException, TemplateException {
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletinsAmPm, LanguageCode.de, "");
 		System.out.println(htmlString);
