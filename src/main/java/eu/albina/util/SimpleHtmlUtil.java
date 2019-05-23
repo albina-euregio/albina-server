@@ -238,8 +238,8 @@ public class SimpleHtmlUtil {
 		root.put("text", text);
 
 		Map<String, Object> link = new HashMap<>();
-		link.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "?lang=" + lang.toString());
+		link.put("website", GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/"
+				+ AlbinaUtil.getValidityDateString(bulletins));
 		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region));
 		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region));
 
