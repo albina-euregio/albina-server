@@ -1035,13 +1035,13 @@ public class GlobalVariables {
 	public static String getHeadlineText(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Lawinenvorhersage";
+			return "Lawinen.report";
 		case it:
-			return "Previsione Valanghe";
+			return "Valanghe.report";
 		case en:
-			return "Avalanche Forecast";
+			return "Avalanche.report";
 		default:
-			return "Avalanche Forecast";
+			return "Avalanche.report";
 		}
 	}
 
