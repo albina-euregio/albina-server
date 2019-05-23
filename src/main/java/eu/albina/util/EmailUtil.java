@@ -231,8 +231,8 @@ public class EmailUtil {
 			root.put("text", text);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("confirm", GlobalVariables.avalancheReportBaseUrl + "subscribe/" + token);
-			links.put("website", GlobalVariables.avalancheReportBaseUrl);
+			links.put("confirm", GlobalVariables.getAvalancheReportBaseUrl(lang) + "subscribe/" + token);
+			links.put("website", GlobalVariables.getAvalancheReportBaseUrl(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook", "https://avalanche.report/facebook");
 			socialMediaLinks.put("twitter", "https://avalanche.report/twitter");
@@ -516,18 +516,15 @@ public class EmailUtil {
 			root.put("bulletins", arrayList);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
-					+ AlbinaUtil.getValidityDateString(bulletins) + "?lang=" + lang.toString());
+			links.put("website", GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/"
+					+ AlbinaUtil.getValidityDateString(bulletins));
 			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
 			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region));
 			links.put("imprint", GlobalVariables.getImprintLink(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
-			socialMediaLinks.put("facebook",
-					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
-			socialMediaLinks.put("instagram",
-					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
-			socialMediaLinks.put("youtube",
-					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
+			socialMediaLinks.put("facebook", GlobalVariables.getAvalancheReportBaseUrl(lang) + "#followDialog");
+			socialMediaLinks.put("instagram", GlobalVariables.getAvalancheReportBaseUrl(lang) + "#followDialog");
+			socialMediaLinks.put("youtube", GlobalVariables.getAvalancheReportBaseUrl(lang) + "#followDialog");
 			links.put("socialmedia", socialMediaLinks);
 			root.put("link", links);
 

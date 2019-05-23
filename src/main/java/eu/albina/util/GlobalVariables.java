@@ -68,7 +68,9 @@ public class GlobalVariables {
 	private static boolean publishBulletinsStyria = false;
 
 	public static String simpleBulletinBaseUrl = "https://avalanche.report/simple/";
-	public static String avalancheReportBaseUrl = "https://avalanche.report/";
+	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
+	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
+	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local/";
@@ -186,6 +188,20 @@ public class GlobalVariables {
 	private static String emailEncoding = "UTF-8";
 
 	public static String notAvailableString = "N/A";
+
+	// LANG
+	public static String getAvalancheReportBaseUrl(LanguageCode lang) {
+		switch (lang) {
+		case en:
+			return avalancheReportBaseUrlEn;
+		case de:
+			return avalancheReportBaseUrlDe;
+		case it:
+			return avalancheReportBaseUrlIt;
+		default:
+			return avalancheReportBaseUrlEn;
+		}
+	}
 
 	public static boolean isCreateCaaml() {
 		return createCaaml;
@@ -904,8 +920,8 @@ public class GlobalVariables {
 
 	// LANG
 	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
-		return avalancheReportBaseUrl + "bulletin/" + date.toString(DateTimeFormat.forPattern("yyyy-MM-dd")) + "?lang="
-				+ lang.toString();
+		return GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/"
+				+ date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
 	// LANG
@@ -1850,12 +1866,8 @@ public class GlobalVariables {
 
 	public static String getImprintLink(LanguageCode lang) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(GlobalVariables.avalancheReportBaseUrl);
-		sb.append("imprint?lang=");
-		if (lang != null)
-			sb.append(lang.toString());
-		else
-			sb.append("en");
+		sb.append(GlobalVariables.getAvalancheReportBaseUrl(lang));
+		sb.append("imprint");
 		return sb.toString();
 	}
 
