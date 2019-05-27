@@ -50,7 +50,6 @@
       	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
       	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
       	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
       	<albina.conf.scripts-path>/opt/local/</albina.conf.scripts-path>
       	<albina.log.prefix>LOCAL</albina.log.prefix>
       	<albina.log.level>DEBUG</albina.log.level>
@@ -90,7 +89,6 @@
       	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
       	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
       	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
       	<albina.conf.scripts-path>/opt/dev/</albina.conf.scripts-path>
        	<albina.log.prefix>DEV</albina.log.prefix>
       	<albina.log.level>INFO</albina.log.level>
@@ -130,7 +128,6 @@
       	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
       	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
       	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
       	<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
      	<albina.log.prefix></albina.log.prefix>
       	<albina.log.level>INFO</albina.log.level>

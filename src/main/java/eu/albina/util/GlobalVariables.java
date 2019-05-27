@@ -65,7 +65,6 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
 	private static boolean publishBulletinsTrentino = true;
-	private static boolean publishBulletinsStyria = false;
 
 	public static String simpleBulletinBaseUrl = "https://avalanche.report/simple/";
 	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
@@ -122,7 +121,6 @@ public class GlobalVariables {
 	public static String codeTrentino = "IT-32-TN";
 	public static String codeSouthTyrol = "IT-32-BZ";
 	public static String codeTyrol = "AT-07";
-	public static String codeStyria = "AT-06";
 
 	public static String propertiesFilePath = "META-INF/config.properties";
 	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
@@ -140,7 +138,6 @@ public class GlobalVariables {
 			add(codeTyrol);
 			add(codeSouthTyrol);
 			add(codeTrentino);
-			add(codeStyria);
 		}
 	};
 
@@ -327,15 +324,6 @@ public class GlobalVariables {
 	public static void setPublishBulletinsTrentino(boolean publishBulletinsTrentino) throws ConfigurationException {
 		GlobalVariables.publishBulletinsTrentino = publishBulletinsTrentino;
 		setConfigProperty("publishBulletinsTrentino", publishBulletinsTrentino);
-	}
-
-	public static boolean isPublishBulletinsStyria() {
-		return publishBulletinsStyria;
-	}
-
-	public static void setPublishBulletinsStyria(boolean publishBulletinsStyria) throws ConfigurationException {
-		GlobalVariables.publishBulletinsStyria = publishBulletinsStyria;
-		setConfigProperty("publishBulletinsStyria", publishBulletinsStyria);
 	}
 
 	public static String getScriptsPath() {
@@ -1475,8 +1463,6 @@ public class GlobalVariables {
 				publishBulletinsSouthTyrol = config.getBoolean("publishBulletinsSouthTyrol");
 			if (config.containsKey("publishBulletinsTrentino"))
 				publishBulletinsTrentino = config.getBoolean("publishBulletinsTrentino");
-			if (config.containsKey("publishBulletinsStyria"))
-				publishBulletinsStyria = config.getBoolean("publishBulletinsStyria");
 			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration file could not be loaded!");
@@ -1517,7 +1503,6 @@ public class GlobalVariables {
 		json.put("publishBulletinsTyrol", publishBulletinsTyrol);
 		json.put("publishBulletinsSouthTyrol", publishBulletinsSouthTyrol);
 		json.put("publishBulletinsTrentino", publishBulletinsTrentino);
-		json.put("publishBulletinsStyria", publishBulletinsStyria);
 
 		return json;
 	}
@@ -1580,8 +1565,6 @@ public class GlobalVariables {
 			setPublishBulletinsSouthTyrol(configuration.getBoolean("publishBulletinsSouthTyrol"));
 		if (configuration.has("publishBulletinsTrentino"))
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
-		if (configuration.has("publishBulletinsStyria"))
-			setPublishBulletinsStyria(configuration.getBoolean("publishBulletinsStyria"));
 		if (configuration.has("scriptsPath"))
 			setScriptsPath(configuration.getString("scriptsPath"));
 	}
@@ -1752,9 +1735,6 @@ public class GlobalVariables {
 			break;
 		case "IT-32-TN":
 			sb.append(GlobalVariables.codeTrentino);
-			break;
-		case "AT-06":
-			sb.append(GlobalVariables.codeStyria);
 			break;
 		default:
 			break;
