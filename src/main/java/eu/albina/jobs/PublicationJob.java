@@ -64,8 +64,6 @@ public class PublicationJob implements org.quartz.Job {
 			regions.add(GlobalVariables.codeSouthTyrol);
 		if (GlobalVariables.isPublishBulletinsTrentino())
 			regions.add(GlobalVariables.codeTrentino);
-		if (GlobalVariables.isPublishBulletinsStyria())
-			regions.add(GlobalVariables.codeStyria);
 
 		if (!regions.isEmpty()) {
 			try {

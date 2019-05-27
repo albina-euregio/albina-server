@@ -829,8 +829,6 @@ public class AvalancheBulletinService {
 				regions.add(GlobalVariables.codeSouthTyrol);
 			if (GlobalVariables.isPublishBulletinsTrentino())
 				regions.add(GlobalVariables.codeTrentino);
-			if (GlobalVariables.isPublishBulletinsStyria())
-				regions.add(GlobalVariables.codeStyria);
 
 			if (!regions.isEmpty()) {
 				try {
