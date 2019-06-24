@@ -219,6 +219,22 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
+	@Path("/latest")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLatest() {
+		logger.debug("GET latest date");
+		DateTime date;
+		try {
+			date = AvalancheReportController.getInstance().getLatestDate();
+			return Response.ok(date.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading latest date - " + e.getMessage());
+			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
+		}
+	}
+
+	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublishedJSONBulletins(

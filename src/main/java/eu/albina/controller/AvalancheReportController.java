@@ -1090,4 +1090,27 @@ public class AvalancheReportController {
 			entityManager.close();
 		}
 	}
+
+	/**
+	 * Returns the date of the latest published bulletin.
+	 * 
+	 * @return the date of the latest published bulletin
+	 * @throws AlbinaException
+	 *             if no report was found
+	 */
+	public DateTime getLatestDate() throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+
+		transaction.begin();
+		AvalancheReport report = (AvalancheReport) entityManager.createQuery(HibernateUtil.queryGetLatestDate)
+				.setMaxResults(1).getSingleResult();
+		transaction.commit();
+		entityManager.close();
+
+		if (report != null)
+			return report.getDate();
+		else
+			throw new AlbinaException("No report found!");
+	}
 }

@@ -46,6 +46,8 @@ public class HibernateUtil {
 	public static String queryGetReportsForDayAndRegion = "from AvalancheReport as r where r.date = :date and r.region = :region)";
 	public static String queryGetReportsForTimePeriodAndRegion = "from AvalancheReport as r where r.date between :startDate and :endDate and r.region = :region)";
 
+	public static String queryGetLatestDate = "from AvalancheReport as r where r.status = 3 or r.status = 6 order by r.date desc";
+
 	public static HibernateUtil getInstance() {
 		if (instance == null) {
 			instance = new HibernateUtil();
