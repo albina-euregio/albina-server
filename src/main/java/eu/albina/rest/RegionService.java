@@ -133,12 +133,9 @@ public class RegionService {
 				logger.warn("Error loading region: " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
-		} catch (TransformerException ex) {
+		} catch (TransformerException | ParserConfigurationException ex) {
 			ex.printStackTrace();
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.getMessage().toString()).build();
 		}
 	}
 
@@ -200,12 +197,9 @@ public class RegionService {
 				logger.warn("Error loading region: " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
-		} catch (TransformerException ex) {
+		} catch (TransformerException | ParserConfigurationException ex) {
 			ex.printStackTrace();
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.getMessage().toString()).build();
 		}
 	}
 
@@ -270,12 +264,9 @@ public class RegionService {
 				logger.warn("Error loading region: " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
-		} catch (TransformerException ex) {
+		} catch (TransformerException | ParserConfigurationException ex) {
 			ex.printStackTrace();
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.getMessage().toString()).build();
 		}
 	}
 }

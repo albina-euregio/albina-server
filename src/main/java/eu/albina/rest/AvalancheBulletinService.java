@@ -160,10 +160,7 @@ public class AvalancheBulletinService {
 			} catch (Exception ex) {
 				return Response.status(400).type(MediaType.APPLICATION_XML).build();
 			}
-		} catch (TransformerException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_XML).build();
-		} catch (ParserConfigurationException e) {
+		} catch (TransformerException | ParserConfigurationException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		} catch (UnsupportedEncodingException e) {
@@ -208,10 +205,7 @@ public class AvalancheBulletinService {
 				logger.debug("No bulletins found.");
 				return Response.noContent().build();
 			}
-		} catch (TransformerException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_XML).build();
-		} catch (ParserConfigurationException e) {
+		} catch (TransformerException | ParserConfigurationException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		} catch (UnsupportedEncodingException e) {

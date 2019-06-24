@@ -324,10 +324,7 @@ public class PublicationController {
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 				AlbinaUtil.runCopyLatestXmlsScript(AlbinaUtil.getValidityDateString(bulletins));
 			logger.info("CAAML production finished");
-		} catch (TransformerException e) {
-			logger.error("Error producing CAAML: " + e.getMessage());
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (TransformerException | IOException e) {
 			logger.error("Error producing CAAML: " + e.getMessage());
 			e.printStackTrace();
 		}
@@ -377,10 +374,7 @@ public class PublicationController {
 						AlbinaUtil.runCopyLatestPdfsScript(AlbinaUtil.getValidityDateString(bulletins));
 					if (result)
 						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error creating pdfs:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating pdfs:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
@@ -413,10 +407,7 @@ public class PublicationController {
 							result = false;
 					if (result)
 						AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error creating simple HTML:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating simple HTML:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
@@ -443,10 +434,7 @@ public class PublicationController {
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 						AlbinaUtil.runCopyLatestPngsScript(AlbinaUtil.getValidityDateString(bulletins));
 					AvalancheReportController.getInstance().setAvalancheReportStaticWidgetFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error creating static widgets:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating static widgets:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
@@ -472,10 +460,7 @@ public class PublicationController {
 					logger.info("Email production started");
 					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update);
 					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error preparing emails:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing emails:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
@@ -502,10 +487,7 @@ public class PublicationController {
 					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
 					AvalancheReportController.getInstance().setAvalancheReportWhatsappFlag(avalancheReportIds);
 					AvalancheReportController.getInstance().setAvalancheReportTelegramFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error preparing messengerpeople:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing messengerpeople:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
