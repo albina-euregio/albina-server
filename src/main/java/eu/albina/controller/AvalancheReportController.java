@@ -427,6 +427,7 @@ public class AvalancheReportController {
 					avalancheReport.setStatus(BulletinStatus.updated);
 					break;
 				case draft:
+					avalancheReport.setStatus(BulletinStatus.draft);
 					break;
 				case submitted:
 					avalancheReport.setStatus(BulletinStatus.draft);
