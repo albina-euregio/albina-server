@@ -103,8 +103,10 @@ public class AvalancheReportController {
 
 		Collection<AvalancheReport> reports = getInternalReports(startDate, endDate, region);
 
-		for (AvalancheReport report : reports)
-			result.put(report.getDate(), report.getStatus());
+		for (AvalancheReport report : reports) {
+			if (report.getStatus() != null)
+				result.put(report.getDate(), report.getStatus());
+		}
 
 		return result;
 	}
