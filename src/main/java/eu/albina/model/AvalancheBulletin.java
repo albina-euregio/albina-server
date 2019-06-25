@@ -749,7 +749,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		if (id != null && id != "")
 			json.put("id", id);
 
-		// TODO do not add user image to JSON
+		// TODO do not add user image to JSON, use user.toSmallJSON()?
 
 		if (user != null && user.getName() != null && user.getName() != "")
 			json.put("author", user.toJSON());
