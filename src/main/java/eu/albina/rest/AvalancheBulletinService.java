@@ -607,12 +607,12 @@ public class AvalancheBulletinService {
 				if (bulletin.affectsRegionWithoutSuggestions(region))
 					publishedBulletins.add(bulletin);
 
+			PublicationController.getInstance().startChangeThread(allBulletins);
+
 			List<String> avalancheReportIds = new ArrayList<String>();
 			String avalancheReportId = AvalancheReportController.getInstance().changeReport(publishedBulletins,
 					startDate, region, user);
 			avalancheReportIds.add(avalancheReportId);
-
-			PublicationController.getInstance().startChangeThread(allBulletins, avalancheReportIds);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -800,15 +800,15 @@ public class AvalancheBulletinService {
 					if (bulletin.affectsRegionWithoutSuggestions(region))
 						publishedBulletins.add(bulletin);
 
+				List<String> regions = new ArrayList<String>();
+				regions.add(region);
+
+				PublicationController.getInstance().startUpdateThread(allBulletins, regions);
+
 				List<String> avalancheReportIds = new ArrayList<String>();
 				String avalancheReportId = AvalancheReportController.getInstance().publishReport(publishedBulletins,
 						startDate, region, user, publicationDate);
 				avalancheReportIds.add(avalancheReportId);
-
-				List<String> regions = new ArrayList<String>();
-				regions.add(region);
-
-				PublicationController.getInstance().startUpdateThread(allBulletins, regions, avalancheReportIds);
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();
 			} else
@@ -872,13 +872,6 @@ public class AvalancheBulletinService {
 					Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
 							.publishBulletins(startDate, endDate, regions, publicationDate, user);
 
-					List<String> avalancheReportIds = new ArrayList<String>();
-					for (String region : regions) {
-						String avalancheReportId = AvalancheReportController.getInstance()
-								.publishReport(publishedBulletins.values(), startDate, region, user, publicationDate);
-						avalancheReportIds.add(avalancheReportId);
-					}
-
 					if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
 						List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
 						for (AvalancheBulletin avalancheBulletin : publishedBulletins.values()) {
@@ -887,7 +880,14 @@ public class AvalancheBulletinService {
 								result.add(avalancheBulletin);
 						}
 						if (result != null && !result.isEmpty())
-							PublicationController.getInstance().publishAutomatically(avalancheReportIds, result);
+							PublicationController.getInstance().publishAutomatically(result);
+					}
+
+					List<String> avalancheReportIds = new ArrayList<String>();
+					for (String region : regions) {
+						String avalancheReportId = AvalancheReportController.getInstance()
+								.publishReport(publishedBulletins.values(), startDate, region, user, publicationDate);
+						avalancheReportIds.add(avalancheReportId);
 					}
 				} catch (AlbinaException e) {
 					logger.error("Error publishing bulletins - " + e.getMessage());
@@ -928,8 +928,6 @@ public class AvalancheBulletinService {
 
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
-			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result)
@@ -937,7 +935,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().createPdf(publishedReportIds, bulletins);
+			Thread createPdfThread = PublicationController.getInstance().createPdf(bulletins);
+			createPdfThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -971,8 +970,6 @@ public class AvalancheBulletinService {
 
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
-			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result)
@@ -980,7 +977,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().createSimpleHtml(publishedReportIds, bulletins);
+			Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(bulletins);
+			createSimpleHtmlThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -1014,8 +1012,6 @@ public class AvalancheBulletinService {
 
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
-			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result)
@@ -1023,7 +1019,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().createStaticWidgets(publishedReportIds, bulletins);
+			Thread createStaticWidgetsThread = PublicationController.getInstance().createStaticWidgets(bulletins);
+			createStaticWidgetsThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -1057,8 +1054,6 @@ public class AvalancheBulletinService {
 
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
-			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result)
@@ -1066,7 +1061,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().createMaps(publishedReportIds, bulletins);
+			Thread createMapsThread = PublicationController.getInstance().createMaps(bulletins);
+			createMapsThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -1100,8 +1096,6 @@ public class AvalancheBulletinService {
 
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
-			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result)
@@ -1109,7 +1103,7 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().createCaaml(publishedReportIds, bulletins);
+			PublicationController.getInstance().createCaaml(bulletins);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -1149,8 +1143,6 @@ public class AvalancheBulletinService {
 
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
-			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result)
@@ -1158,7 +1150,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().sendEmails(publishedReportIds, bulletins, regions, false);
+			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false);
+			sendEmailsThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -1198,8 +1191,6 @@ public class AvalancheBulletinService {
 
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
-			List<String> publishedReportIds = AvalancheReportController.getInstance().getPublishedReportIds(startDate,
-					GlobalVariables.regionsEuregio);
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result)
@@ -1207,7 +1198,9 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().triggerMessengerpeople(publishedReportIds, bulletins, regions, false);
+			Thread triggerMessengerpeopleThread = PublicationController.getInstance().triggerMessengerpeople(bulletins,
+					regions, false);
+			triggerMessengerpeopleThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
