@@ -224,9 +224,8 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getLatest() {
 		logger.debug("GET latest date");
-		DateTime date;
 		try {
-			date = AvalancheReportController.getInstance().getLatestDate();
+			DateTime date = AvalancheReportController.getInstance().getLatestDate();
 			return Response.ok(date.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading latest date - " + e.getMessage());
