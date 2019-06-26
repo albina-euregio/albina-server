@@ -543,9 +543,10 @@ public class AvalancheBulletinService {
 				bulletins.add(bulletin);
 			}
 
-			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, null);
+			Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
+					.saveBulletins(bulletins, startDate, endDate, region, null);
 
-			AvalancheReportController.getInstance().saveReport(startDate, region, user);
+			AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
 
 			JSONObject jsonObject = new JSONObject();
 			// TODO return some meaningful path
@@ -623,98 +624,6 @@ public class AvalancheBulletinService {
 		}
 	}
 
-	/*
-	 * @POST
-	 * 
-	 * @Secured({ Role.FORECASTER, Role.FOREMAN })
-	 * 
-	 * @Consumes(MediaType.APPLICATION_JSON)
-	 * 
-	 * @Produces(MediaType.APPLICATION_JSON) public Response
-	 * createJSONBulletin(String bulletinString, @Context SecurityContext
-	 * securityContext) { logger.debug("POST JSON bulletin");
-	 * 
-	 * JSONObject bulletinJson = new JSONObject(bulletinString);
-	 * 
-	 * JSONObject validationResult =
-	 * eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString); if
-	 * (validationResult.length() == 0) { String username =
-	 * securityContext.getUserPrincipal().getName(); AvalancheBulletin bulletin =
-	 * new AvalancheBulletin(bulletinJson, username); try { Serializable bulletinId
-	 * = AvalancheBulletinController.getInstance().saveBulletin(bulletin); if
-	 * (bulletinId == null) { JSONObject jsonObject = new JSONObject();
-	 * jsonObject.append("message", "Bulletin not saved!"); return
-	 * Response.status(400).type(MediaType.APPLICATION_JSON).entity(jsonObject.
-	 * toString()).build(); } else { JSONObject jsonObject = new JSONObject();
-	 * jsonObject.put("bulletinId", bulletinId); return
-	 * Response.created(uri.getAbsolutePathBuilder().path(String.valueOf(bulletinId)
-	 * ).build())
-	 * .type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build(); } }
-	 * catch (AlbinaException e) { logger.warn("Error creating bulletin - " +
-	 * e.getMessage()); return
-	 * Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).
-	 * build(); } } else return
-	 * Response.status(400).type(MediaType.APPLICATION_JSON).entity(validationResult
-	 * .toString()).build(); }
-	 * 
-	 * @PUT
-	 * 
-	 * @Secured({ Role.FORECASTER, Role.FOREMAN })
-	 * 
-	 * @Path("/{bulletinId}")
-	 * 
-	 * @Consumes(MediaType.APPLICATION_JSON)
-	 * 
-	 * @Produces(MediaType.APPLICATION_JSON) public Response
-	 * updateJSONBulletin(@PathParam("bulletinId") String bulletinId, String
-	 * bulletinString,
-	 * 
-	 * @Context SecurityContext securityContext) {
-	 * logger.debug("PUT JSON bulletin");
-	 * 
-	 * JSONObject bulletinJson = new JSONObject(bulletinString);
-	 * 
-	 * JSONObject validationResult =
-	 * eu.albina.json.JsonValidator.validateAvalancheBulletin(bulletinString); if
-	 * (validationResult.length() == 0) { AvalancheBulletin bulletin = new
-	 * AvalancheBulletin(bulletinJson, null);
-	 * bulletin.setCreator(bulletinJson.getString("creator"));
-	 * bulletin.setId(bulletinJson.getString("id")); try {
-	 * AvalancheBulletinController.getInstance().updateBulletin(bulletin); return
-	 * Response.ok().type(MediaType.APPLICATION_JSON).build(); } catch
-	 * (AlbinaException e) { logger.warn("Error updating bulletin - " +
-	 * e.getMessage()); return
-	 * Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().
-	 * toString()).build(); } } else return
-	 * Response.status(400).type(MediaType.APPLICATION_JSON).entity(validationResult
-	 * .toString()).build(); }
-	 * 
-	 * @DELETE
-	 * 
-	 * @Secured({ Role.FORECASTER, Role.FOREMAN })
-	 * 
-	 * @Path("/{bulletinId}")
-	 * 
-	 * @Produces(MediaType.APPLICATION_JSON)
-	 * 
-	 * @Consumes(MediaType.APPLICATION_JSON) public Response
-	 * deleteJSONBulletin(@PathParam("bulletinId") String bulletinId,
-	 * 
-	 * @Context SecurityContext securityContext) {
-	 * logger.debug("DELETE JSON bulletin: " + bulletinId);
-	 * 
-	 * try { User user =
-	 * UserController.getInstance().getUser(securityContext.getUserPrincipal().
-	 * getName());
-	 * AvalancheBulletinController.getInstance().deleteBulletin(bulletinId,
-	 * user.getRole()); return
-	 * Response.ok(uri.getAbsolutePathBuilder().path(String.valueOf(bulletinId)).
-	 * build()) .type(MediaType.APPLICATION_JSON).build(); } catch (AlbinaException
-	 * e) { logger.warn("Error deleting bulletin - " + e.getMessage()); return
-	 * Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().
-	 * toString()).build(); } }
-	 */
-
 	@POST
 	@Secured({ Role.FORECASTER })
 	@Path("/submit")
@@ -739,8 +648,9 @@ public class AvalancheBulletinService {
 					throw new AlbinaException("No date!");
 				endDate = startDate.plusDays(1);
 
-				AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
-				AvalancheReportController.getInstance().submitReport(startDate, region, user);
+				List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
+						endDate, region, user);
+				AvalancheReportController.getInstance().submitReport(bulletins, startDate, region, user);
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();
 			} else

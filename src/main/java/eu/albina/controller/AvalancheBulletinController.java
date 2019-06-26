@@ -50,7 +50,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.XmlUtil;
@@ -171,13 +170,15 @@ public class AvalancheBulletinController {
 	 *            the active region of the user who is saving the bulletins
 	 * @param publicationDate
 	 *            the publication date of the bulletins
+	 * @return a map of all affected bulletin ids and bulletins
 	 * @throws AlbinaException
 	 *             if a micro region is defined twice in the bulletins or if there
 	 *             is an error saving the bulletins
 	 */
 	@SuppressWarnings("unchecked")
-	public void saveBulletins(List<AvalancheBulletin> bulletins, DateTime startDate, DateTime endDate, String region,
-			DateTime publicationDate) throws AlbinaException {
+	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> bulletins, DateTime startDate,
+			DateTime endDate, String region, DateTime publicationDate) throws AlbinaException {
+		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
 		if (checkBulletinsForDuplicateRegion(bulletins, region))
 			throw new AlbinaException("duplicateRegion");
@@ -269,12 +270,14 @@ public class AvalancheBulletinController {
 							b.getPublishedRegions().remove(r);
 					}
 					entityManager.merge(b);
+					resultBulletins.put(b.getId(), b);
 				} else {
 					if (bulletin.getOwnerRegion().startsWith(region)) {
 						// own bulletin
 						// Bulletin has to be created
 						bulletin.setId(null);
 						entityManager.persist(bulletin);
+						resultBulletins.put(bulletin.getId(), bulletin);
 					} else {
 						// foreign bulletin
 						// do not create the bulletin (it was removed by another user)
@@ -286,11 +289,15 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin avalancheBulletin : results.values()) {
 				// bulletin has to be removed
 				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId())
-						&& avalancheBulletin.getOwnerRegion().startsWith(region))
+						&& avalancheBulletin.getOwnerRegion().startsWith(region)) {
 					entityManager.remove(avalancheBulletin);
+					if (resultBulletins.containsKey(avalancheBulletin.getId()))
+						resultBulletins.remove(avalancheBulletin.getId());
+				}
 			}
 
 			transaction.commit();
+			return resultBulletins;
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
@@ -537,52 +544,6 @@ public class AvalancheBulletinController {
 	}
 
 	/**
-	 * Delete the bulletin with the given {@code bulletinId} from DB (currently not
-	 * used).
-	 * 
-	 * @param bulletinId
-	 *            the id of the bulletin to be deleted
-	 * @param user
-	 *            the user who wants to delete the bulletin
-	 */
-	public void deleteBulletin(String bulletinId, User user) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-
-		transaction.begin();
-		AvalancheBulletin avalancheBulletin = entityManager.find(AvalancheBulletin.class, bulletinId);
-		if (avalancheBulletin == null) {
-			transaction.rollback();
-			throw new AlbinaException("No bulletin with ID: " + bulletinId);
-		}
-
-		Set<String> regions = avalancheBulletin.getSavedRegions();
-		Set<String> result = new HashSet<String>();
-		for (String region : regions) {
-			if (!AuthorizationUtil.hasPermissionForRegion(user, region))
-				result.add(region);
-		}
-		avalancheBulletin.setSavedRegions(result);
-
-		regions = avalancheBulletin.getSuggestedRegions();
-		result = new HashSet<String>();
-		for (String region : regions) {
-			if (!AuthorizationUtil.hasPermissionForRegion(user, region))
-				result.add(region);
-		}
-		avalancheBulletin.setSuggestedRegions(result);
-
-		if (avalancheBulletin.getSavedRegions().isEmpty() && avalancheBulletin.getPublishedRegions().isEmpty())
-			entityManager.remove(avalancheBulletin);
-		else {
-			entityManager.merge(avalancheBulletin);
-		}
-
-		transaction.commit();
-		entityManager.close();
-	}
-
-	/**
 	 * Set the author for the bulletins affected by the submission. Delete all
 	 * suggested regions, because they are not valid anymore after the bulletin has
 	 * been submitted.
@@ -595,9 +556,10 @@ public class AvalancheBulletinController {
 	 *            the region that should be submitted
 	 * @param user
 	 *            the user who submits the bulletins
+	 * @return a list of all affected bulletins
 	 */
 	@SuppressWarnings("unchecked")
-	public void submitBulletins(DateTime startDate, DateTime endDate, String region, User user) {
+	public List<AvalancheBulletin> submitBulletins(DateTime startDate, DateTime endDate, String region, User user) {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 
@@ -632,8 +594,13 @@ public class AvalancheBulletinController {
 			entityManager.merge(bulletin);
 		}
 
+		for (AvalancheBulletin avalancheBulletin : bulletins)
+			initializeBulletin(avalancheBulletin);
+
 		transaction.commit();
 		entityManager.close();
+
+		return results;
 	}
 
 	/**
@@ -687,7 +654,7 @@ public class AvalancheBulletinController {
 	 *            the timestamp of the publication
 	 * @param user
 	 *            the user who publishes the bulletins
-	 * @return a map of all affected bulletin ids and bulletins
+	 * @return a list of all affected bulletins
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> publishBulletins(DateTime startDate, DateTime endDate, String region,

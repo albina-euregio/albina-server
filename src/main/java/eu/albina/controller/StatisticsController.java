@@ -98,13 +98,7 @@ public class StatisticsController {
 				endDate, region);
 
 		// get bulletins from report json
-		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-		for (AvalancheReport avalancheReport : reports) {
-			JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
-			for (Object object : jsonArray)
-				if (object instanceof JSONObject)
-					bulletins.add(new AvalancheBulletin((JSONObject) object));
-		}
+		List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports);
 
 		transaction.commit();
 		entityManager.close();
@@ -136,24 +130,34 @@ public class StatisticsController {
 			// get latest reports
 			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
 					endDate, region);
-
 			// get bulletins from report json
-			for (AvalancheReport avalancheReport : reports) {
-				try {
-					JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
-					for (Object object : jsonArray)
-						if (object instanceof JSONObject)
-							bulletins.add(new AvalancheBulletin((JSONObject) object));
-				} catch (JSONException e) {
-					logger.warn("Error parsing report JSON.");
-				}
-			}
+			bulletins.addAll(getPublishedBulletinsFromReports(reports));
 		}
 
 		transaction.commit();
 		entityManager.close();
 
 		return getCsvString(lang, bulletins);
+	}
+
+	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports) {
+		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
+		for (AvalancheReport avalancheReport : reports) {
+			try {
+				JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
+				for (Object object : jsonArray) {
+					if (object instanceof JSONObject) {
+						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+						// only add bulletins with published regions
+						if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
+							bulletins.add(bulletin);
+					}
+				}
+			} catch (JSONException e) {
+				logger.warn("Error parsing report JSON.");
+			}
+		}
+		return bulletins;
 	}
 
 	/**

@@ -90,8 +90,8 @@ public class UpdateJob implements org.quartz.Job {
 						PublicationController.getInstance().updateAutomatically(result, changedRegions);
 				}
 
-				List<String> avalancheReportIds = AvalancheReportController.getInstance()
-						.publishReport(publishedBulletins.values(), startDate, changedRegions, user, publicationDate);
+				AvalancheReportController.getInstance().publishReport(publishedBulletins.values(), startDate,
+						changedRegions, user, publicationDate);
 			} else {
 				logger.info("No bulletins to update.");
 			}

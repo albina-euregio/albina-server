@@ -398,6 +398,8 @@ public class AvalancheReportController {
 	 * {@code republished} to {@code updated}. A broacast message about the changes
 	 * is sent.
 	 * 
+	 * @param avalancheBulletins
+	 *            the affected bulletins
 	 * @param date
 	 *            the start date of the report
 	 * @param region
@@ -407,7 +409,8 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if more than one report was found for the given day
 	 */
-	public void saveReport(DateTime date, String region, User user) throws AlbinaException {
+	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, DateTime date, String region, User user)
+			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -448,6 +451,9 @@ public class AvalancheReportController {
 				}
 			else
 				avalancheReport.setStatus(BulletinStatus.draft);
+
+			// set json string after status is published/republished
+			avalancheReport.setJsonString(createJSONString(avalancheBulletins.values(), region).toString());
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, date, avalancheReport.getStatus());
@@ -628,31 +634,8 @@ public class AvalancheReportController {
 			}
 
 			// set json string after status is published/republished
-			JSONArray jsonResult = new JSONArray();
-			if (bulletins != null) {
+			avalancheReport.setJsonString(createJSONString(bulletins, region).toString());
 
-				AvalancheBulletin b;
-				for (AvalancheBulletin bulletin : bulletins) {
-					b = new AvalancheBulletin();
-					b.copy(bulletin);
-					b.setId(bulletin.getId());
-					Set<String> newPublishedRegions = new HashSet<String>();
-
-					// delete all published regions which are foreign
-					if (b.getPublishedRegions() != null) {
-						for (String publishedRegion : b.getPublishedRegions()) {
-							if (publishedRegion.startsWith(region))
-								newPublishedRegions.add(publishedRegion);
-						}
-						if (newPublishedRegions.size() != 0) {
-							b.setPublishedRegions(newPublishedRegions);
-							jsonResult.put(b.toJSON());
-						}
-					}
-				}
-			}
-
-			avalancheReport.setJsonString(jsonResult.toString());
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 
@@ -677,6 +660,51 @@ public class AvalancheReportController {
 		}
 	}
 
+	private JSONArray createJSONString(Collection<AvalancheBulletin> bulletins, String region) {
+		JSONArray jsonResult = new JSONArray();
+		if (bulletins != null) {
+			AvalancheBulletin b;
+			for (AvalancheBulletin bulletin : bulletins) {
+				b = new AvalancheBulletin();
+				b.copy(bulletin);
+				b.setId(bulletin.getId());
+
+				// delete all published regions which are foreign
+				Set<String> newPublishedRegions = new HashSet<String>();
+				if (b.getPublishedRegions() != null) {
+					for (String publishedRegion : b.getPublishedRegions()) {
+						if (publishedRegion.startsWith(region))
+							newPublishedRegions.add(publishedRegion);
+					}
+					b.setPublishedRegions(newPublishedRegions);
+				}
+
+				// delete all saved regions which are foreign
+				Set<String> newSavedRegions = new HashSet<String>();
+				if (b.getSavedRegions() != null) {
+					for (String savedRegion : b.getSavedRegions()) {
+						if (savedRegion.startsWith(region))
+							newSavedRegions.add(savedRegion);
+					}
+					b.setSavedRegions(newSavedRegions);
+				}
+
+				// delete all suggested regions which are foreign
+				Set<String> newSuggestedRegions = new HashSet<String>();
+				if (b.getSuggestedRegions() != null) {
+					for (String suggestedRegion : b.getSuggestedRegions()) {
+						if (suggestedRegion.startsWith(region))
+							newSuggestedRegions.add(suggestedRegion);
+					}
+					b.setSuggestedRegions(newSuggestedRegions);
+				}
+
+				jsonResult.put(b.toJSON());
+			}
+		}
+		return jsonResult;
+	}
+
 	/**
 	 * Change status of report with a given validity time and region to
 	 * <code>submitted</code> (if the previous status was <code>draft</code>) or
@@ -684,6 +712,8 @@ public class AvalancheReportController {
 	 * and set the user. If there was not report a new report with status
 	 * <code>missing</code> is created.
 	 * 
+	 * @param bulletins
+	 *            the affected bulletins
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param region
@@ -693,7 +723,8 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if more than one report was found
 	 */
-	public void submitReport(DateTime startDate, String region, User user) throws AlbinaException {
+	public void submitReport(List<AvalancheBulletin> bulletins, DateTime startDate, String region, User user)
+			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -735,6 +766,10 @@ public class AvalancheReportController {
 					break;
 				}
 			}
+
+			// set json string after status is published/republished
+			avalancheReport.setJsonString(createJSONString(bulletins, region).toString());
+
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 
@@ -778,19 +813,27 @@ public class AvalancheReportController {
 
 		for (String region : regions) {
 			// get bulletins for this region
-			List<AvalancheBulletin> publishedBulletinsForRegion = getPublishedReportForRegion(date, region);
+			List<AvalancheBulletin> publishedBulletinsForRegion = getPublishedBulletinsForRegion(date, region);
 			for (AvalancheBulletin bulletin : publishedBulletinsForRegion) {
 				if (resultMap.containsKey(bulletin.getId())) {
 					// merge bulletins with same id
 					if (resultMap.get(bulletin.getId()).equals(bulletin)) {
 						for (String publishedRegion : bulletin.getPublishedRegions())
 							resultMap.get(bulletin.getId()).addPublishedRegion(publishedRegion);
+						for (String savedRegion : bulletin.getSavedRegions())
+							resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
+						for (String suggestedRegion : bulletin.getSuggestedRegions())
+							resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
 					} else {
 						for (String bulletinId : resultMap.keySet()) {
 							if (bulletinId.startsWith(bulletin.getId())) {
 								if (resultMap.get(bulletinId).equals(bulletin)) {
 									for (String publishedRegion : bulletin.getPublishedRegions())
 										resultMap.get(bulletinId).addPublishedRegion(publishedRegion);
+									for (String savedRegion : bulletin.getSavedRegions())
+										resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
+									for (String suggestedRegion : bulletin.getSuggestedRegions())
+										resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
 								} else {
 									bulletin.setId(bulletin.getId() + "_" + revision);
 									revision++;
@@ -840,7 +883,7 @@ public class AvalancheReportController {
 	 *            the region of interest
 	 * @return all published bulletins for a specific time period and region
 	 */
-	private List<AvalancheBulletin> getPublishedReportForRegion(DateTime date, String region) {
+	private List<AvalancheBulletin> getPublishedBulletinsForRegion(DateTime date, String region) {
 		// get report for date and region
 		AvalancheReport report = getPublicReport(date, region);
 
@@ -850,8 +893,12 @@ public class AvalancheReportController {
 				&& report.getJsonString() != null) {
 			JSONArray jsonArray = new JSONArray(report.getJsonString());
 			for (Object object : jsonArray)
-				if (object instanceof JSONObject)
-					results.add(new AvalancheBulletin((JSONObject) object));
+				if (object instanceof JSONObject) {
+					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+					// only add bulletins with published regions
+					if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
+						results.add(bulletin);
+				}
 		}
 
 		return results;
