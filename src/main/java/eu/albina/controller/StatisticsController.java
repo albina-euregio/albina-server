@@ -87,7 +87,6 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	@SuppressWarnings("unchecked")
 	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, String region) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -97,8 +96,6 @@ public class StatisticsController {
 		// get latest reports
 		Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
 				endDate, region);
-		reports = entityManager.createQuery(HibernateUtil.queryGetLatestReports).setParameter("startDate", startDate)
-				.setParameter("endDate", endDate).getResultList();
 
 		// get bulletins from report json
 		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
