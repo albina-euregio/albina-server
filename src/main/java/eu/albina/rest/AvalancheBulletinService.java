@@ -62,7 +62,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -723,7 +722,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
+			if (region != null && user.hasPermissionForRegion(region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
@@ -772,7 +771,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
+			if (region != null && user.hasPermissionForRegion(region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
@@ -1240,7 +1239,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
+			if (region != null && user.hasPermissionForRegion(region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 

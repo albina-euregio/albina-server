@@ -50,7 +50,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.XmlUtil;
@@ -567,7 +566,7 @@ public class AvalancheBulletinController {
 		Set<String> regions = avalancheBulletin.getSavedRegions();
 		Set<String> result = new HashSet<String>();
 		for (String region : regions) {
-			if (!AuthorizationUtil.hasPermissionForRegion(user, region))
+			if (!user.hasPermissionForRegion(region))
 				result.add(region);
 		}
 		avalancheBulletin.setSavedRegions(result);
@@ -575,7 +574,7 @@ public class AvalancheBulletinController {
 		regions = avalancheBulletin.getSuggestedRegions();
 		result = new HashSet<String>();
 		for (String region : regions) {
-			if (!AuthorizationUtil.hasPermissionForRegion(user, region))
+			if (!user.hasPermissionForRegion(region))
 				result.add(region);
 		}
 		avalancheBulletin.setSuggestedRegions(result);
