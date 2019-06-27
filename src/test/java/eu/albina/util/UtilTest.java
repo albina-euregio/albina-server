@@ -375,8 +375,6 @@ public class UtilTest {
 			fileInputStreamReader.read(bytes);
 			encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
 			fileInputStreamReader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

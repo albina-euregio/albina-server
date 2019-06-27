@@ -197,15 +197,7 @@ public class PdfUtil {
 
 			AlbinaUtil.setFilePermissions(filename);
 			return true;
-		} catch (com.itextpdf.io.IOException e) {
-			logger.error("PDF could not be created: " + e.getMessage());
-			e.printStackTrace();
-			return false;
-		} catch (FileNotFoundException e) {
-			logger.error("PDF could not be created: " + e.getMessage());
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
+		} catch (com.itextpdf.io.IOException | IOException e) {
 			logger.error("PDF could not be created: " + e.getMessage());
 			e.printStackTrace();
 			return false;

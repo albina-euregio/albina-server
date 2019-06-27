@@ -72,9 +72,7 @@ public class XmlUtil {
 
 		try {
 			Files.setPosixFilePermissions(Paths.get(dirPath), perms);
-		} catch (IOException e) {
-			logger.warn("File permissions could not be set!");
-		} catch (UnsupportedOperationException e) {
+		} catch (IOException | UnsupportedOperationException e) {
 			logger.warn("File permissions could not be set!");
 		}
 

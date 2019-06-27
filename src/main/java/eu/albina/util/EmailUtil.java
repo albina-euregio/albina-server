@@ -414,10 +414,7 @@ public class EmailUtil {
 			temp.process(root, out);
 
 			return out.toString();
-		} catch (IOException e) {
-			logger.error("Bulletin email could not be created: " + e.getMessage());
-			e.printStackTrace();
-		} catch (TemplateException e) {
+		} catch (IOException | TemplateException e) {
 			logger.error("Bulletin email could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}

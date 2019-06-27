@@ -177,9 +177,7 @@ public class SimpleHtmlUtil {
 
 				try {
 					Files.setPosixFilePermissions(Paths.get(dirPath), perms);
-				} catch (IOException e) {
-					logger.warn("File permissions could not be set!");
-				} catch (UnsupportedOperationException e) {
+				} catch (IOException | UnsupportedOperationException e) {
 					logger.warn("File permissions could not be set!");
 				}
 
@@ -198,10 +196,7 @@ public class SimpleHtmlUtil {
 				return true;
 			} else
 				return false;
-		} catch (IOException e) {
-			logger.error("Simple html could not be created: " + e.getMessage());
-			e.printStackTrace();
-		} catch (TemplateException e) {
+		} catch (IOException | TemplateException e) {
 			logger.error("Simple html could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
