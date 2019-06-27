@@ -238,4 +238,8 @@ public class User {
 		operation.appendChild(contactPerson);
 		return operation;
 	}
+
+	public boolean hasPermissionForRegion(String region) {
+		return getRegions().contains(region);
+	}
 }

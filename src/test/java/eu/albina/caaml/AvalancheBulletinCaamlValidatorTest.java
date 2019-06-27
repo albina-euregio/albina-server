@@ -93,9 +93,7 @@ public class AvalancheBulletinCaamlValidatorTest {
 	public void testValidateAvalancheBulletinCaamlValid() {
 		try {
 			CaamlValidator.validateCaamlBulletin(validBulletinStringFromResource);
-		} catch (SAXException e) {
-			Assert.fail();
-		} catch (IOException e) {
+		} catch (SAXException | IOException e) {
 			Assert.fail();
 		}
 	}
@@ -109,9 +107,7 @@ public class AvalancheBulletinCaamlValidatorTest {
 	public void testValidateAvalancheBulletinCaamlUnclear() {
 		try {
 			CaamlValidator.validateCaamlBulletin(unclearBulletinStringFromResource);
-		} catch (SAXException e) {
-			Assert.fail();
-		} catch (IOException e) {
+		} catch (SAXException | IOException e) {
 			Assert.fail();
 		}
 	}

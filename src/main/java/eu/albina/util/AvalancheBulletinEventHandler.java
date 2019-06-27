@@ -156,9 +156,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			canvas.close();
 
 			pdfCanvas.release();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
+		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
 	}

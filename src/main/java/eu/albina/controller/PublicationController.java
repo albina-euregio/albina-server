@@ -377,10 +377,7 @@ public class PublicationController {
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 				AlbinaUtil.runCopyLatestXmlsScript(AlbinaUtil.getValidityDateString(bulletins));
 			logger.info("CAAML production finished");
-		} catch (TransformerException e) {
-			logger.error("Error producing CAAML: " + e.getMessage());
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (TransformerException | IOException e) {
 			logger.error("Error producing CAAML: " + e.getMessage());
 			e.printStackTrace();
 		}
@@ -420,10 +417,7 @@ public class PublicationController {
 						PdfUtil.getInstance().createRegionPdfs(bulletins, region);
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 						AlbinaUtil.runCopyLatestPdfsScript(AlbinaUtil.getValidityDateString(bulletins));
-				} catch (IOException e) {
-					logger.error("Error creating pdfs:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating pdfs:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
@@ -449,10 +443,7 @@ public class PublicationController {
 					SimpleHtmlUtil.getInstance().createOverviewSimpleHtml(bulletins);
 					for (String region : GlobalVariables.regionsEuregio)
 						SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
-				} catch (IOException e) {
-					logger.error("Error creating simple HTML:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating simple HTML:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
@@ -476,10 +467,7 @@ public class PublicationController {
 					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins);
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 						AlbinaUtil.runCopyLatestPngsScript(AlbinaUtil.getValidityDateString(bulletins));
-				} catch (IOException e) {
-					logger.error("Error creating static widgets:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating static widgets:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
@@ -501,10 +489,7 @@ public class PublicationController {
 				try {
 					logger.info("Email production started");
 					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update);
-				} catch (IOException e) {
-					logger.error("Error preparing emails:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing emails:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
@@ -526,10 +511,7 @@ public class PublicationController {
 				try {
 					logger.info("Messengerpeople production started");
 					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
-				} catch (IOException e) {
-					logger.error("Error preparing messengerpeople:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing messengerpeople:" + e.getMessage());
 					e.printStackTrace();
 				} finally {

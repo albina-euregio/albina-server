@@ -62,7 +62,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.AuthorizationUtil;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -123,7 +122,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getPublishedXMLBulletins(
-			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published XML bulletins");
 
@@ -158,10 +157,7 @@ public class AvalancheBulletinService {
 			} catch (Exception ex) {
 				return Response.status(400).type(MediaType.APPLICATION_XML).build();
 			}
-		} catch (TransformerException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_XML).build();
-		} catch (ParserConfigurationException e) {
+		} catch (TransformerException | ParserConfigurationException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		} catch (UnsupportedEncodingException e) {
@@ -177,7 +173,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getAinevaXMLBulletins(
-			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published XML bulletins");
 
@@ -206,10 +202,7 @@ public class AvalancheBulletinService {
 				logger.debug("No bulletins found.");
 				return Response.noContent().build();
 			}
-		} catch (TransformerException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_XML).build();
-		} catch (ParserConfigurationException e) {
+		} catch (TransformerException | ParserConfigurationException e) {
 			logger.warn("Error loading bulletins - " + e.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		} catch (UnsupportedEncodingException e) {
@@ -237,7 +230,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublishedJSONBulletins(
-			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published JSON bulletins");
 
@@ -275,7 +268,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getHighestDangerRating(
-			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions) {
 		logger.debug("GET highest danger rating");
 
@@ -637,7 +630,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
+			if (region != null && user.hasPermissionForRegion(region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
@@ -687,7 +680,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
+			if (region != null && user.hasPermissionForRegion(region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 
@@ -1134,7 +1127,7 @@ public class AvalancheBulletinService {
 		try {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-			if (region != null && AuthorizationUtil.hasPermissionForRegion(user, region)) {
+			if (region != null && user.hasPermissionForRegion(region)) {
 				DateTime startDate = null;
 				DateTime endDate = null;
 

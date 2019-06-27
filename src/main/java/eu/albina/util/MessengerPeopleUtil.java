@@ -52,13 +52,7 @@ public class MessengerPeopleUtil {
 				String message = GlobalVariables.getMessengerPeopleText(lang, date, update);
 				String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 				sendBulletinNewsletter(message, bulletins, validityDate, lang, regions);
-			} catch (UnsupportedEncodingException e) {
-				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());
-				e.printStackTrace();
-			} catch (AlbinaException e) {
-				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());
-				e.printStackTrace();
-			} catch (IOException e) {
+			} catch (IOException | AlbinaException e) {
 				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());
 				e.printStackTrace();
 			}

@@ -48,7 +48,6 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.XmlUtil;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.JsonUtil;
 import io.swagger.annotations.Api;
 
 @Path("/regions")
@@ -73,7 +72,7 @@ public class RegionService {
 				jsonObject.append("message", "No regions found!");
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = JsonUtil.createRegionHeaderJson();
+				JSONObject json = createRegionHeaderJson();
 				JSONArray features = new JSONArray();
 				for (Region entry : regions) {
 					features.put(entry.toJSON());
@@ -133,12 +132,9 @@ public class RegionService {
 				logger.warn("Error loading region: " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
-		} catch (TransformerException ex) {
+		} catch (TransformerException | ParserConfigurationException ex) {
 			ex.printStackTrace();
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.getMessage().toString()).build();
 		}
 	}
 
@@ -156,7 +152,7 @@ public class RegionService {
 				jsonObject.append("message", "Region not found for ID: " + regionId);
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = JsonUtil.createRegionHeaderJson();
+				JSONObject json = createRegionHeaderJson();
 				JSONArray features = new JSONArray();
 				features.put(region.toJSON());
 				json.put("features", features);
@@ -200,12 +196,9 @@ public class RegionService {
 				logger.warn("Error loading region: " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
-		} catch (TransformerException ex) {
+		} catch (TransformerException | ParserConfigurationException ex) {
 			ex.printStackTrace();
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.getMessage().toString()).build();
 		}
 	}
 
@@ -223,7 +216,7 @@ public class RegionService {
 				jsonObject.append("message", "No subregions found for region: " + regionId);
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = JsonUtil.createRegionHeaderJson();
+				JSONObject json = createRegionHeaderJson();
 				JSONArray features = new JSONArray();
 				for (Region entry : regions) {
 					features.put(entry.toJSON());
@@ -270,12 +263,21 @@ public class RegionService {
 				logger.warn("Error loading region: " + e.getMessage());
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
-		} catch (TransformerException ex) {
+		} catch (TransformerException | ParserConfigurationException ex) {
 			ex.printStackTrace();
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.getMessage().toString()).build();
 		}
+	}
+
+	private static JSONObject createRegionHeaderJson() {
+		JSONObject json = new JSONObject();
+		json.put("type", "FeatureCollection");
+		JSONObject crs = new JSONObject();
+		crs.put("type", "name");
+		JSONObject properties = new JSONObject();
+		properties.put("name", GlobalVariables.referenceSystemUrn);
+		crs.put("properties", properties);
+		json.put("crs", crs);
+		return json;
 	}
 }

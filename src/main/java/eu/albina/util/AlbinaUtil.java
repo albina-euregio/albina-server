@@ -295,8 +295,6 @@ public class AlbinaUtil {
 			fileInputStreamReader.read(bytes);
 			encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
 			fileInputStreamReader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -487,9 +485,7 @@ public class AlbinaUtil {
 
 		try {
 			Files.setPosixFilePermissions(Paths.get(fileName), perms);
-		} catch (UnsupportedOperationException e) {
-			logger.debug("File permission could not be set!");
-		} catch (IOException e) {
+		} catch (UnsupportedOperationException | IOException e) {
 			logger.debug("File permission could not be set!");
 		}
 	}

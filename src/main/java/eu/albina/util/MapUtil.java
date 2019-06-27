@@ -55,10 +55,7 @@ public class MapUtil {
 			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
 			AlbinaUtil.runCopyMapsScript(AlbinaUtil.getValidityDateString(bulletins));
-		} catch (AlbinaException e) {
-			logger.error("Error producing maps: " + e.getMessage());
-			e.printStackTrace();
-		} catch (TransformerException e) {
+		} catch (AlbinaException | TransformerException e) {
 			logger.error("Error producing maps: " + e.getMessage());
 			e.printStackTrace();
 		}

@@ -56,9 +56,7 @@ public class AuthenticationController {
 		try {
 			algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
 			verifier = JWT.require(algorithm).withIssuer(GlobalVariables.tokenEncodingIssuer).build();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (IllegalArgumentException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}
