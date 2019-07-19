@@ -296,6 +296,9 @@ public class AvalancheBulletinController {
 				}
 			}
 
+			for (AvalancheBulletin bulletin : resultBulletins.values())
+				initializeBulletin(bulletin);
+
 			transaction.commit();
 			return resultBulletins;
 		} catch (HibernateException he) {
