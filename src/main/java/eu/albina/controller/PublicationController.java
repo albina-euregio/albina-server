@@ -326,8 +326,8 @@ public class PublicationController {
 	 * @param regions
 	 *            The regions that were updated.
 	 */
-	public Thread startUpdateThread(List<AvalancheBulletin> publishedBulletins, List<String> regions) {
-		return new Thread(new Runnable() {
+	public void startUpdateThread(List<AvalancheBulletin> publishedBulletins, List<String> regions) {
+		new Thread(new Runnable() {
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
 				for (AvalancheBulletin avalancheBulletin : publishedBulletins) {
@@ -338,7 +338,7 @@ public class PublicationController {
 				if (result != null && !result.isEmpty())
 					PublicationController.getInstance().update(result, regions);
 			}
-		});
+		}).start();
 	}
 
 	/**
@@ -348,8 +348,8 @@ public class PublicationController {
 	 * @param publishedBulletins
 	 *            The bulletins that were updated.
 	 */
-	public Thread startChangeThread(List<AvalancheBulletin> publishedBulletins) {
-		return new Thread(new Runnable() {
+	public void startChangeThread(List<AvalancheBulletin> publishedBulletins) {
+		new Thread(new Runnable() {
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
 				for (AvalancheBulletin avalancheBulletin : publishedBulletins) {
@@ -361,7 +361,7 @@ public class PublicationController {
 					PublicationController.getInstance().change(result);
 
 			}
-		});
+		}).start();
 	}
 
 	/**
