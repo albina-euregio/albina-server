@@ -91,9 +91,9 @@
       	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
       	<albina.conf.scripts-path>/opt/dev/</albina.conf.scripts-path>
        	<albina.log.prefix>DEV</albina.log.prefix>
-      	<albina.log.level>INFO</albina.log.level>
-      	<albina.log.level.c3p0>INFO</albina.log.level.c3p0>
-      	<albina.log.level.sql>SEVERE</albina.log.level.sql>
+      	<albina.log.level>DEBUG</albina.log.level>
+      	<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
+      	<albina.log.level.sql>ERROR</albina.log.level.sql>
       	<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
       	<albina.log.filename>albina_dev.log</albina.log.filename>
       	<albina.log.dest>file</albina.log.dest>
@@ -131,7 +131,7 @@
       	<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
      	<albina.log.prefix></albina.log.prefix>
       	<albina.log.level>INFO</albina.log.level>
-      	<albina.log.level.c3p0>SEVERE</albina.log.level.c3p0>
+      	<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
       	<albina.log.level.sql>WARN</albina.log.level.sql>
       	<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
       	<albina.log.filename>albina.log</albina.log.filename>
