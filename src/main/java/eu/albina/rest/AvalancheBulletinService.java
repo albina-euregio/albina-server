@@ -600,12 +600,8 @@ public class AvalancheBulletinService {
 				if (bulletin.affectsRegionWithoutSuggestions(region))
 					publishedBulletins.add(bulletin);
 
-			PublicationController.getInstance().startChangeThread(allBulletins);
-
-			List<String> avalancheReportIds = new ArrayList<String>();
-			String avalancheReportId = AvalancheReportController.getInstance().changeReport(publishedBulletins,
-					startDate, region, user);
-			avalancheReportIds.add(avalancheReportId);
+			PublicationController.getInstance().startChangeThread(allBulletins, publishedBulletins, startDate, region,
+					user);
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -705,12 +701,8 @@ public class AvalancheBulletinService {
 				List<String> regions = new ArrayList<String>();
 				regions.add(region);
 
-				PublicationController.getInstance().startUpdateThread(allBulletins, regions);
-
-				List<String> avalancheReportIds = new ArrayList<String>();
-				String avalancheReportId = AvalancheReportController.getInstance().publishReport(publishedBulletins,
+				PublicationController.getInstance().startUpdateThread(allBulletins, regions, publishedBulletins,
 						startDate, region, user, publicationDate);
-				avalancheReportIds.add(avalancheReportId);
 
 				return Response.ok(MediaType.APPLICATION_JSON).build();
 			} else

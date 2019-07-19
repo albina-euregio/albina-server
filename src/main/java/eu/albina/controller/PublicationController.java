@@ -26,10 +26,13 @@ import java.util.Map;
 
 import javax.xml.transform.TransformerException;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
@@ -321,22 +324,38 @@ public class PublicationController {
 	 * Start an own thread to trigger all tasks that have to take place after an
 	 * update has been published.
 	 * 
-	 * @param publishedBulletins
+	 * @param allBulletins
 	 *            The bulletins that were updated.
 	 * @param regions
 	 *            The regions that were updated.
+	 * @param publishedBulletins
+	 * @param publicationDate
+	 * @param user
+	 * @param region
+	 * @param startDate
 	 */
-	public void startUpdateThread(List<AvalancheBulletin> publishedBulletins, List<String> regions) {
+	public void startUpdateThread(List<AvalancheBulletin> allBulletins, List<String> regions,
+			List<AvalancheBulletin> publishedBulletins, DateTime startDate, String region, User user,
+			DateTime publicationDate) {
 		new Thread(new Runnable() {
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : publishedBulletins) {
+				for (AvalancheBulletin avalancheBulletin : allBulletins) {
 					if (avalancheBulletin.getPublishedRegions() != null
 							&& !avalancheBulletin.getPublishedRegions().isEmpty())
 						result.add(avalancheBulletin);
 				}
 				if (result != null && !result.isEmpty())
 					PublicationController.getInstance().update(result, regions);
+
+				List<String> avalancheReportIds = new ArrayList<String>();
+				try {
+					String avalancheReportId = AvalancheReportController.getInstance().publishReport(publishedBulletins,
+							startDate, region, user, publicationDate);
+					avalancheReportIds.add(avalancheReportId);
+				} catch (AlbinaException e) {
+					logger.warn("Error updating bulletins - " + e.getMessage());
+				}
 			}
 		}).start();
 	}
@@ -345,14 +364,19 @@ public class PublicationController {
 	 * Start an own thread to trigger all tasks that have to take place after a
 	 * change has been published.
 	 * 
-	 * @param publishedBulletins
+	 * @param allBulletins
 	 *            The bulletins that were updated.
+	 * @param user
+	 * @param region
+	 * @param startDate
+	 * @param publishedBulletins
 	 */
-	public void startChangeThread(List<AvalancheBulletin> publishedBulletins) {
+	public void startChangeThread(List<AvalancheBulletin> allBulletins, List<AvalancheBulletin> publishedBulletins,
+			DateTime startDate, String region, User user) {
 		new Thread(new Runnable() {
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : publishedBulletins) {
+				for (AvalancheBulletin avalancheBulletin : allBulletins) {
 					if (avalancheBulletin.getPublishedRegions() != null
 							&& !avalancheBulletin.getPublishedRegions().isEmpty())
 						result.add(avalancheBulletin);
@@ -360,6 +384,14 @@ public class PublicationController {
 				if (result != null && !result.isEmpty())
 					PublicationController.getInstance().change(result);
 
+				try {
+					List<String> avalancheReportIds = new ArrayList<String>();
+					String avalancheReportId = AvalancheReportController.getInstance().changeReport(publishedBulletins,
+							startDate, region, user);
+					avalancheReportIds.add(avalancheReportId);
+				} catch (AlbinaException e) {
+					logger.warn("Error changing bulletins - " + e.getMessage());
+				}
 			}
 		}).start();
 	}
