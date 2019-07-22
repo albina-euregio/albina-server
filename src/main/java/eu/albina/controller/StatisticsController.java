@@ -35,6 +35,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.AvalancheSituation;
+import eu.albina.model.MatrixInformation;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
@@ -84,10 +85,13 @@ public class StatisticsController {
 	 *            the desired language
 	 * @param region
 	 *            the desired region
+	 * @param extended
+	 *            add matrix information and author if {@code true}
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, String region) {
+	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, String region,
+			boolean extended) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -103,7 +107,7 @@ public class StatisticsController {
 		transaction.commit();
 		entityManager.close();
 
-		return getCsvString(lang, bulletins);
+		return getCsvString(lang, bulletins, extended);
 	}
 
 	/**
@@ -116,10 +120,12 @@ public class StatisticsController {
 	 *            the end date of the desired time period
 	 * @param lang
 	 *            the desired language
+	 * @param extended
+	 *            add matrix information and author if {@code true}
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang) {
+	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, boolean extended) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -137,13 +143,24 @@ public class StatisticsController {
 		transaction.commit();
 		entityManager.close();
 
-		return getCsvString(lang, bulletins);
+		return getCsvString(lang, bulletins, extended);
 	}
 
 	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports) {
 		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 		for (AvalancheReport avalancheReport : reports) {
 			try {
+				if (avalancheReport.getJsonString() == null || avalancheReport.getJsonString().isEmpty()) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("JSON string empty: ");
+					if (avalancheReport.getDate() != null) {
+						sb.append(avalancheReport.getDate()
+								.toString(GlobalVariables.getPublicationDateTimeFormatter(LanguageCode.en)));
+						sb.append(", ");
+					}
+					sb.append(avalancheReport.getRegion());
+					logger.warn(sb.toString());
+				}
 				JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
 				for (Object object : jsonArray) {
 					if (object instanceof JSONObject) {
@@ -154,7 +171,15 @@ public class StatisticsController {
 					}
 				}
 			} catch (JSONException e) {
-				logger.warn("Error parsing report JSON.");
+				StringBuilder sb = new StringBuilder();
+				sb.append("Error parsing report JSON: ");
+				if (avalancheReport.getDate() != null) {
+					sb.append(avalancheReport.getDate()
+							.toString(GlobalVariables.getPublicationDateTimeFormatter(LanguageCode.en)));
+					sb.append(", ");
+				}
+				sb.append(avalancheReport.getRegion());
+				logger.warn(sb.toString());
 			}
 		}
 		return bulletins;
@@ -167,9 +192,11 @@ public class StatisticsController {
 	 *            the desired language
 	 * @param bulletins
 	 *            the bulletins that should be included in the CSV string
+	 * @param extended
+	 *            add matrix information and author if {@code true}
 	 * @return a CSV string representing all {@code bulletins} in {@code lang}
 	 */
-	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins) {
+	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended) {
 		// sort bulletins by validity
 		Collections.sort(bulletins, new AvalancheBulletinSortByValidity());
 
@@ -185,8 +212,40 @@ public class StatisticsController {
 		sb.append("Subregion");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("DangerRatingBelow");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingBelowArtificialDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingBelowArtificialAvalancheSize");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingBelowArtificialAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingBelowArtificialHazardSiteDistribution");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingBelowNaturalDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingBelowNaturalAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingBelowNaturalHazardSiteDistribution");
+		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("DangerRatingAbove");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingAboveArtificialDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingAboveArtificialAvalancheSize");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingAboveArtificialAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingAboveArtificialHazardSiteDistribution");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingAboveNaturalDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingAboveNaturalAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("DangerRatingAboveNaturalHazardSiteDistribution");
+		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("DangerRatingElevation");
 		sb.append(GlobalVariables.csvDeliminator);
@@ -247,11 +306,15 @@ public class StatisticsController {
 		sb.append("SnowpackStructureComment");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("TendencyComment");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("Author");
+		}
 		sb.append(GlobalVariables.csvLineBreak);
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			addCsvLines(sb, avalancheBulletin, false, lang);
+			addCsvLines(sb, avalancheBulletin, false, lang, extended);
 			if (avalancheBulletin.isHasDaytimeDependency())
-				addCsvLines(sb, avalancheBulletin, true, lang);
+				addCsvLines(sb, avalancheBulletin, true, lang, extended);
 		}
 
 		return sb.toString();
@@ -269,11 +332,13 @@ public class StatisticsController {
 	 * @param isAfternoon
 	 *            true if the afternoon information of the {@code avalancheBulletin}
 	 *            should be used
+	 * @param extended
+	 *            add matrix information and author if {@code true}
 	 * @param lang
 	 *            the desired language
 	 */
 	private void addCsvLines(StringBuilder sb, AvalancheBulletin avalancheBulletin, boolean isAfternoon,
-			LanguageCode lang) {
+			LanguageCode lang, boolean extended) {
 		AvalancheBulletinDaytimeDescription daytimeDescription;
 		if (!isAfternoon)
 			daytimeDescription = avalancheBulletin.getForenoon();
@@ -293,12 +358,19 @@ public class StatisticsController {
 			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(r[1]);
 			sb.append(GlobalVariables.csvDeliminator);
-			if (!avalancheBulletin.isHasElevationDependency())
+			if (!avalancheBulletin.isHasElevationDependency()) {
 				sb.append(daytimeDescription.getDangerRatingAbove().toString());
-			else
+				if (extended)
+					addMatrixInformation(sb, daytimeDescription.getMatrixInformationAbove());
+			} else {
 				sb.append(daytimeDescription.getDangerRatingBelow().toString());
+				if (extended)
+					addMatrixInformation(sb, daytimeDescription.getMatrixInformationBelow());
+			}
 			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(daytimeDescription.getDangerRatingAbove().toString());
+			if (extended)
+				addMatrixInformation(sb, daytimeDescription.getMatrixInformationAbove());
 			sb.append(GlobalVariables.csvDeliminator);
 			if (!avalancheBulletin.isHasElevationDependency())
 				sb.append(GlobalVariables.notAvailableString);
@@ -349,7 +421,69 @@ public class StatisticsController {
 				sb.append(avalancheBulletin.getTendencyCommentIn(lang));
 			else
 				sb.append(GlobalVariables.notAvailableString);
+			if (extended) {
+				sb.append(GlobalVariables.csvDeliminator);
+				if (avalancheBulletin.getUser() != null && avalancheBulletin.getUser().getName() != null)
+					sb.append(avalancheBulletin.getUser().getName());
+				else
+					sb.append(GlobalVariables.notAvailableString);
+			}
 			sb.append(GlobalVariables.csvLineBreak);
+		}
+	}
+
+	private void addMatrixInformation(StringBuilder sb, MatrixInformation matrixInformation) {
+		if (matrixInformation != null) {
+			sb.append(GlobalVariables.csvDeliminator);
+			if (matrixInformation.getArtificialDangerRating() != null)
+				sb.append(matrixInformation.getArtificialDangerRating());
+			else
+				sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			if (matrixInformation.getArtificialAvalancheSize() != null)
+				sb.append(matrixInformation.getArtificialAvalancheSize());
+			else
+				sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			if (matrixInformation.getArtificialAvalancheReleaseProbability() != null)
+				sb.append(matrixInformation.getArtificialAvalancheReleaseProbability());
+			else
+				sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			if (matrixInformation.getArtificialHazardSiteDistribution() != null)
+				sb.append(matrixInformation.getArtificialHazardSiteDistribution());
+			else
+				sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			if (matrixInformation.getNaturalDangerRating() != null)
+				sb.append(matrixInformation.getNaturalDangerRating());
+			else
+				sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			if (matrixInformation.getNaturalAvalancheReleaseProbability() != null)
+				sb.append(matrixInformation.getNaturalAvalancheReleaseProbability());
+			else
+				sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			if (matrixInformation.getNaturalHazardSiteDistribution() != null)
+				sb.append(matrixInformation.getNaturalHazardSiteDistribution());
+			else
+				sb.append(GlobalVariables.notAvailableString);
+		} else {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(GlobalVariables.notAvailableString);
 		}
 	}
 
