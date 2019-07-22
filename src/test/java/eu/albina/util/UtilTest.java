@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -104,6 +103,9 @@ public class UtilTest {
 		names.add("Felix Mast");
 		names.add("Andreas Riegler");
 		names.add("Simon Legner");
+		names.add("Bernhard Niedermoser");
+		names.add("Michael Butschek");
+		names.add("Claudia Riedl");
 
 		passwords.add("Alberto");
 		passwords.add("Sergio");
@@ -137,6 +139,9 @@ public class UtilTest {
 		passwords.add("Felix");
 		passwords.add("Andreas");
 		passwords.add("Simon");
+		passwords.add("Bernhard");
+		passwords.add("Michael");
+		passwords.add("Claudia");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -332,7 +337,7 @@ public class UtilTest {
 
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 31; i < 32; i++) {
+		for (int i = 32; i < 35; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
