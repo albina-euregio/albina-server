@@ -29,6 +29,7 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
@@ -469,8 +470,9 @@ public class AlbinaUtil {
 
 	public static String getPublicationTime(List<AvalancheBulletin> bulletins) {
 		DateTime date = getPublicationDate(bulletins);
+		DateTime utcTime = new DateTime(date, DateTimeZone.UTC);
 		if (date != null)
-			return date.toString(GlobalVariables.publicationTime);
+			return utcTime.toString(GlobalVariables.publicationTime);
 		else
 			return "";
 	}
