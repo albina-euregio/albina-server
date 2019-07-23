@@ -317,7 +317,8 @@ public class StaticWidgetUtil {
 			ig2.drawImage(interregLogo, 350, 45, null);
 
 			String filename = GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDateString(bulletins) + "/"
-					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
+					+ AlbinaUtil.getPublicationTime(bulletins) + "/" + AlbinaUtil.getFilenameDate(bulletins, lang)
+					+ ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
