@@ -283,7 +283,8 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createMaps() {
-		MapUtil.createDangerRatingMaps(bulletins);
+		MapUtil.createDangerRatingMaps(bulletins, AlbinaUtil.getValidityDateString(bulletins),
+				AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Ignore
@@ -323,7 +324,8 @@ public class UtilTest {
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
 		// PdfUtil.getInstance().createRegionPdfs(bulletins, "AT-07");#
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false);
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false,
+				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Ignore
@@ -332,7 +334,8 @@ public class UtilTest {
 		String filename = "2030-02-16";
 		int count = 5;
 		List<AvalancheBulletin> list = loadBulletins(filename, count);
-		PdfUtil.getInstance().createOverviewPdfs(list);
+		PdfUtil.getInstance().createOverviewPdfs(list, AlbinaUtil.getValidityDateString(bulletins),
+				AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Test
@@ -357,7 +360,8 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createStaticWidget() throws IOException, URISyntaxException {
-		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en);
+		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en,
+				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Ignore

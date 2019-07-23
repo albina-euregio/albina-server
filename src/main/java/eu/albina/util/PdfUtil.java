@@ -118,26 +118,28 @@ public class PdfUtil {
 	 * 
 	 * @param bulletins
 	 *            The bulletins to create the PDF of.
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
 	 */
-	public boolean createOverviewPdfs(List<AvalancheBulletin> bulletins) {
+	public boolean createOverviewPdfs(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		boolean result = true;
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
-			if (!createPdf(bulletins, lang, null, false, daytimeDependency))
+			if (!createPdf(bulletins, lang, null, false, daytimeDependency, validityDateString, publicationTimeString))
 				result = false;
-			if (!createPdf(bulletins, lang, null, true, daytimeDependency))
+			if (!createPdf(bulletins, lang, null, true, daytimeDependency, validityDateString, publicationTimeString))
 				result = false;
 		}
 		return result;
 	}
 
 	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
-			boolean daytimeDependency) {
+			boolean daytimeDependency, String validityDateString, String publicationTimeString) {
 		PdfDocument pdf;
 		PdfWriter writer;
-
-		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
 		try {
 			String filename;
@@ -213,10 +215,16 @@ public class PdfUtil {
 	 *            The bulletins to create the region PDFs of.
 	 * @param region
 	 *            The region to create the PDFs for.
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
 	 */
-	public boolean createRegionPdfs(List<AvalancheBulletin> bulletins, String region) {
+	public boolean createRegionPdfs(List<AvalancheBulletin> bulletins, String region, String validityDateString,
+			String publicationTimeString) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		boolean result = true;
+
 		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			if (avalancheBulletin.affectsRegionOnlyPublished(region))
@@ -225,11 +233,14 @@ public class PdfUtil {
 
 		if (!regionBulletins.isEmpty())
 			for (LanguageCode lang : GlobalVariables.languages) {
-				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency))
+				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString,
+						publicationTimeString))
 					result = false;
-				if (!createPdf(regionBulletins, lang, region, true, daytimeDependency))
+				if (!createPdf(regionBulletins, lang, region, true, daytimeDependency, validityDateString,
+						publicationTimeString))
 					result = false;
 			}
+
 		return result;
 	}
 

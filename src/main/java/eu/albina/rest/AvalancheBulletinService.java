@@ -62,6 +62,7 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -833,7 +834,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			Thread createPdfThread = PublicationController.getInstance().createPdf(bulletins);
+			Thread createPdfThread = PublicationController.getInstance().createPdf(bulletins,
+					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 			createPdfThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
@@ -917,7 +919,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			Thread createStaticWidgetsThread = PublicationController.getInstance().createStaticWidgets(bulletins);
+			Thread createStaticWidgetsThread = PublicationController.getInstance().createStaticWidgets(bulletins,
+					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 			createStaticWidgetsThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
@@ -959,7 +962,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			Thread createMapsThread = PublicationController.getInstance().createMaps(bulletins);
+			Thread createMapsThread = PublicationController.getInstance().createMaps(bulletins,
+					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 			createMapsThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
@@ -1001,7 +1005,8 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-			PublicationController.getInstance().createCaaml(bulletins);
+			PublicationController.getInstance().createCaaml(bulletins, AlbinaUtil.getValidityDateString(bulletins),
+					AlbinaUtil.getPublicationTime(bulletins));
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {

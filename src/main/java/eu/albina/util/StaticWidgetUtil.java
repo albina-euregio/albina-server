@@ -84,13 +84,15 @@ public class StaticWidgetUtil {
 	 * @param bulletins
 	 *            The bulletins to create the PDF of.
 	 */
-	public void createStaticWidgets(List<AvalancheBulletin> bulletins) {
+	public void createStaticWidgets(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		for (LanguageCode lang : GlobalVariables.languages)
-			createStaticWidget(bulletins, lang);
+			createStaticWidget(bulletins, lang, validityDateString, publicationTimeString);
 	}
 
 	// LANG
-	public void createStaticWidget(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	public void createStaticWidget(List<AvalancheBulletin> bulletins, LanguageCode lang, String validityDateString,
+			String publicationTimeString) {
 		try {
 			int width = 600;
 			int height = 800;
@@ -316,9 +318,8 @@ public class StaticWidgetUtil {
 			interregLogo = resizeHeight(interregLogo, 110);
 			ig2.drawImage(interregLogo, 350, 45, null);
 
-			String filename = GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDateString(bulletins) + "/"
-					+ AlbinaUtil.getPublicationTime(bulletins) + "/" + AlbinaUtil.getFilenameDate(bulletins, lang)
-					+ ".png";
+			String filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString + "/"
+					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));

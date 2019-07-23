@@ -53,10 +53,8 @@ public class XmlUtil {
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
 
 	// LANG
-	public static void createCaamlFiles(List<AvalancheBulletin> bulletins) throws TransformerException, IOException {
-		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
-
+	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) throws TransformerException, IOException {
 		String dirPathParent = GlobalVariables.getPdfDirectory() + validityDateString;
 		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();

@@ -89,20 +89,23 @@ public class PublicationController {
 	}
 
 	private void publish(List<AvalancheBulletin> bulletins) {
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+		AlbinaUtil.runDeleteFilesScript(validityDateString);
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins);
+			createCaaml(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(bulletins);
+			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
@@ -118,14 +121,15 @@ public class PublicationController {
 
 				// create pdfs
 				if (GlobalVariables.isCreatePdf()) {
-					Thread createPdfThread = createPdf(bulletins);
+					Thread createPdfThread = createPdf(bulletins, validityDateString, publicationTimeString);
 					threads.put("pdf", createPdfThread);
 					createPdfThread.start();
 				}
 
 				// create static widgets
 				if (GlobalVariables.isCreateStaticWidget()) {
-					Thread createStaticWidgetsThread = createStaticWidgets(bulletins);
+					Thread createStaticWidgetsThread = createStaticWidgets(bulletins, validityDateString,
+							publicationTimeString);
 					threads.put("staticWidget", createStaticWidgetsThread);
 					createStaticWidgetsThread.start();
 				}
@@ -184,20 +188,23 @@ public class PublicationController {
 	 *            The region that was updated.
 	 */
 	public void update(List<AvalancheBulletin> bulletins, List<String> regions) {
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+		AlbinaUtil.runDeleteFilesScript(validityDateString);
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins);
+			createCaaml(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(bulletins);
+			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
@@ -213,14 +220,15 @@ public class PublicationController {
 
 				// create pdf
 				if (GlobalVariables.isCreatePdf()) {
-					Thread createPdfThread = createPdf(bulletins);
+					Thread createPdfThread = createPdf(bulletins, validityDateString, publicationTimeString);
 					threads.put("pdf", createPdfThread);
 					createPdfThread.start();
 				}
 
 				// create static widgets
 				if (GlobalVariables.isCreateStaticWidget()) {
-					Thread createStaticWidgetsThread = createStaticWidgets(bulletins);
+					Thread createStaticWidgetsThread = createStaticWidgets(bulletins, validityDateString,
+							publicationTimeString);
 					threads.put("staticWidget", createStaticWidgetsThread);
 					createStaticWidgetsThread.start();
 				}
@@ -262,21 +270,23 @@ public class PublicationController {
 	 *            The bulletins that were changed.
 	 */
 	public void change(List<AvalancheBulletin> bulletins) {
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+		AlbinaUtil.runDeleteFilesScript(validityDateString);
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins);
+			createCaaml(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(bulletins);
+			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
@@ -292,14 +302,15 @@ public class PublicationController {
 
 				// create pdfs
 				if (GlobalVariables.isCreatePdf()) {
-					Thread createPdfThread = createPdf(bulletins);
+					Thread createPdfThread = createPdf(bulletins, validityDateString, publicationTimeString);
 					threads.put("pdf", createPdfThread);
 					createPdfThread.start();
 				}
 
 				// create static widgets
 				if (GlobalVariables.isCreateStaticWidget()) {
-					Thread createStaticWidgetsThread = createStaticWidgets(bulletins);
+					Thread createStaticWidgetsThread = createStaticWidgets(bulletins, validityDateString,
+							publicationTimeString);
 					threads.put("staticWidget", createStaticWidgetsThread);
 					createStaticWidgetsThread.start();
 				}
@@ -402,12 +413,13 @@ public class PublicationController {
 	 * @param bulletins
 	 *            the bulletins contained in the CAAML file
 	 */
-	public void createCaaml(List<AvalancheBulletin> bulletins) {
+	public void createCaaml(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		try {
 			logger.info("CAAML production started");
-			XmlUtil.createCaamlFiles(bulletins);
+			XmlUtil.createCaamlFiles(bulletins, validityDateString, publicationTimeString);
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-				AlbinaUtil.runCopyLatestXmlsScript(AlbinaUtil.getValidityDateString(bulletins));
+				AlbinaUtil.runCopyLatestXmlsScript(validityDateString);
 			logger.info("CAAML production finished");
 		} catch (TransformerException | IOException e) {
 			logger.error("Error producing CAAML: " + e.getMessage());
@@ -420,14 +432,19 @@ public class PublicationController {
 	 * 
 	 * @param bulletins
 	 *            the bulletins contained in the maps
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
 	 */
-	public Thread createMaps(List<AvalancheBulletin> bulletins) {
+	public Thread createMaps(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		return new Thread(new Runnable() {
 			public void run() {
 				logger.info("Map production started");
-				MapUtil.createDangerRatingMaps(bulletins);
+				MapUtil.createDangerRatingMaps(bulletins, validityDateString, publicationTimeString);
 				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-					AlbinaUtil.runCopyLatestMapsScript(AlbinaUtil.getValidityDateString(bulletins));
+					AlbinaUtil.runCopyLatestMapsScript(validityDateString);
 				logger.info("Map production finished");
 			}
 		});
@@ -438,19 +455,24 @@ public class PublicationController {
 	 * 
 	 * @param bulletins
 	 *            the bulletins contained in the pdfs
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
 	 */
-	public Thread createPdf(List<AvalancheBulletin> bulletins) {
+	public Thread createPdf(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		return new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("PDF production started");
-					PdfUtil.getInstance().createOverviewPdfs(bulletins);
+					PdfUtil.getInstance().createOverviewPdfs(bulletins, validityDateString, publicationTimeString);
 					for (String region : GlobalVariables.regionsEuregio)
-						PdfUtil.getInstance().createRegionPdfs(bulletins, region);
-					AlbinaUtil.runCopyPdfsScript(AlbinaUtil.getValidityDateString(bulletins),
-							AlbinaUtil.getPublicationTime(bulletins));
+						PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
+								publicationTimeString);
+					AlbinaUtil.runCopyPdfsScript(validityDateString, publicationTimeString);
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestPdfsScript(AlbinaUtil.getValidityDateString(bulletins));
+						AlbinaUtil.runCopyLatestPdfsScript(validityDateString);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating pdfs:" + e.getMessage());
 					e.printStackTrace();
@@ -492,17 +514,26 @@ public class PublicationController {
 	 * 
 	 * @param bulletins
 	 *            the bulletins contained in the static widgets
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
 	 */
-	public Thread createStaticWidgets(List<AvalancheBulletin> bulletins) {
+	public Thread createStaticWidgets(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		return new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("Static widget production started");
-					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins);
-					AlbinaUtil.runCopyPngsScript(AlbinaUtil.getValidityDateString(bulletins),
-							AlbinaUtil.getPublicationTime(bulletins));
+					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins, validityDateString,
+							publicationTimeString);
+					AlbinaUtil.runCopyPngsScript(validityDateString, publicationTimeString);
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestPngsScript(AlbinaUtil.getValidityDateString(bulletins));
+						AlbinaUtil.runCopyLatestPngsScript(validityDateString);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating static widgets:" + e.getMessage());
 					e.printStackTrace();
