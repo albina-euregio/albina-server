@@ -57,6 +57,7 @@ public class XmlUtil {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
+		String dirPathParent = GlobalVariables.getPdfDirectory() + validityDateString;
 		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();
 
@@ -74,6 +75,7 @@ public class XmlUtil {
 		perms.add(PosixFilePermission.OTHERS_EXECUTE);
 
 		try {
+			Files.setPosixFilePermissions(Paths.get(dirPathParent), perms);
 			Files.setPosixFilePermissions(Paths.get(dirPath), perms);
 		} catch (IOException | UnsupportedOperationException e) {
 			logger.warn("File permissions could not be set!");
