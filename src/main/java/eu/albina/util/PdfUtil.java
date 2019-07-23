@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -138,6 +137,7 @@ public class PdfUtil {
 		PdfWriter writer;
 
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
 		try {
 			String filename;
@@ -145,22 +145,22 @@ public class PdfUtil {
 			// TODO use correct region string
 			if (region != null) {
 				if (grayscale) {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
-							+ region + "_" + lang.toString() + "_bw.pdf";
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString
+							+ "/" + validityDateString + "_" + region + "_" + lang.toString() + "_bw.pdf";
 					writer = new PdfWriter(filename);
 				} else {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
-							+ region + "_" + lang.toString() + ".pdf";
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString
+							+ "/" + validityDateString + "_" + region + "_" + lang.toString() + ".pdf";
 					writer = new PdfWriter(filename);
 				}
 			} else {
 				if (grayscale) {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
-							+ lang.toString() + "_bw.pdf";
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString
+							+ "/" + validityDateString + "_" + lang.toString() + "_bw.pdf";
 					writer = new PdfWriter(filename);
 				} else {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + validityDateString + "_"
-							+ lang.toString() + ".pdf";
+					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString
+							+ "/" + validityDateString + "_" + lang.toString() + ".pdf";
 					writer = new PdfWriter(filename);
 				}
 			}
