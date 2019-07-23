@@ -18,7 +18,6 @@ package eu.albina.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -446,7 +445,7 @@ public class AlbinaUtil {
 		return date;
 	}
 
-	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	private static DateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			DateTime bulletinDate = avalancheBulletin.getPublicationDate();
@@ -457,8 +456,21 @@ public class AlbinaUtil {
 					date = bulletinDate;
 			}
 		}
+		return date;
+	}
+
+	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		DateTime date = getPublicationDate(bulletins);
 		if (date != null)
 			return date.toString(GlobalVariables.getPublicationDateTimeFormatter(lang));
+		else
+			return "";
+	}
+
+	public static String getPublicationTime(List<AvalancheBulletin> bulletins) {
+		DateTime date = getPublicationDate(bulletins);
+		if (date != null)
+			return date.toString(GlobalVariables.publicationTime);
 		else
 			return "";
 	}
@@ -505,9 +517,10 @@ public class AlbinaUtil {
 		return false;
 	}
 
-	public static void runCopyMapsScript(String date) {
+	public static void runCopyMapsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyMaps.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyMaps.sh", date,
+					publicationTime);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps copied to local directory for " + date + ".");
@@ -525,6 +538,19 @@ public class AlbinaUtil {
 			logger.info("Files deleted for " + date + ".");
 		} catch (Exception e) {
 			logger.error("Files could not be deleted for " + date + "!");
+			e.printStackTrace();
+		}
+	}
+
+	public static void runCopyPdfsScript(String date, String publicationTime) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPdfs.sh", date,
+					publicationTime);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("PDFs copied to date directory for " + date + ".");
+		} catch (Exception e) {
+			logger.error("PDFs could not be copied to date directory for " + date + "!");
 			e.printStackTrace();
 		}
 	}
@@ -553,6 +579,19 @@ public class AlbinaUtil {
 		}
 	}
 
+	public static void runCopyXmlsScript(String date, String publicationTime) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyXmls.sh", date,
+					publicationTime);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("XMLs copied to date directory for " + date + ".");
+		} catch (Exception e) {
+			logger.error("XMLs could not be copied to date directory for " + date + "!");
+			e.printStackTrace();
+		}
+	}
+
 	public static void runCopyLatestXmlsScript(String date) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestXmls.sh", date);
@@ -561,6 +600,19 @@ public class AlbinaUtil {
 			logger.info("XMLs for " + date + " copied to latest.");
 		} catch (Exception e) {
 			logger.error("XMLs for " + date + " could not be copied to latest!");
+			e.printStackTrace();
+		}
+	}
+
+	public static void runCopyPngsScript(String date, String publicationTime) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPngs.sh", date,
+					publicationTime);
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("PNGs copied to date directory for " + date + ".");
+		} catch (Exception e) {
+			logger.error("PNGs could not be copied to date directory for " + date + "!");
 			e.printStackTrace();
 		}
 	}

@@ -447,6 +447,8 @@ public class PublicationController {
 					PdfUtil.getInstance().createOverviewPdfs(bulletins);
 					for (String region : GlobalVariables.regionsEuregio)
 						PdfUtil.getInstance().createRegionPdfs(bulletins, region);
+					AlbinaUtil.runCopyPdfsScript(AlbinaUtil.getValidityDateString(bulletins),
+							AlbinaUtil.getPublicationTime(bulletins));
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 						AlbinaUtil.runCopyLatestPdfsScript(AlbinaUtil.getValidityDateString(bulletins));
 				} catch (IOException | URISyntaxException e) {
@@ -497,6 +499,8 @@ public class PublicationController {
 				try {
 					logger.info("Static widget production started");
 					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins);
+					AlbinaUtil.runCopyPngsScript(AlbinaUtil.getValidityDateString(bulletins),
+							AlbinaUtil.getPublicationTime(bulletins));
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 						AlbinaUtil.runCopyLatestPngsScript(AlbinaUtil.getValidityDateString(bulletins));
 				} catch (IOException | URISyntaxException e) {

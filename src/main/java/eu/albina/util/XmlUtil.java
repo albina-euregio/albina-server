@@ -52,9 +52,12 @@ public class XmlUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
 
+	// LANG
 	public static void createCaamlFiles(List<AvalancheBulletin> bulletins) throws TransformerException, IOException {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString;
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
+		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();
 
 		// using PosixFilePermission to set file permissions 755
@@ -102,6 +105,9 @@ public class XmlUtil {
 		writer.write(caamlStringEn);
 		writer.close();
 		AlbinaUtil.setFilePermissions(fileName);
+
+		AlbinaUtil.runCopyXmlsScript(AlbinaUtil.getValidityDateString(bulletins),
+				AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	public static Document createCaaml(List<AvalancheBulletin> bulletins, LanguageCode language) {
