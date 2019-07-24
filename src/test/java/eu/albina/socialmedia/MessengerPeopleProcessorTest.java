@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.socialmedia.MessengerPeopleProcessorController;
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.messengerpeople.MessengerPeopleNewsletterHistory;
 import eu.albina.model.messengerpeople.MessengerPeopleTargets;
 import eu.albina.model.messengerpeople.MessengerPeopleUser;
@@ -41,7 +42,7 @@ public class MessengerPeopleProcessorTest {
 	public void setUp() throws Exception {
 		messengerPeopleConfig = new MessengerPeopleConfig();
 		// Set api key
-		// messengerPeopleConfig.setApiKey("");
+		messengerPeopleConfig.setApiKey("");
 	}
 
 	@Ignore
@@ -73,5 +74,13 @@ public class MessengerPeopleProcessorTest {
 	public void getUsersStatsTest() throws IOException {
 		HttpResponse usersStats = MessengerPeopleProcessorController.getInstance().getUsersStats(messengerPeopleConfig);
 		logger.info(usersStats.toString());
+	}
+
+	@Ignore
+	@Test
+	public void sendNewsletterTest() throws IOException, AlbinaException {
+		HttpResponse response = MessengerPeopleProcessorController.getInstance().sendNewsLetter(messengerPeopleConfig,
+				"TEST", "Test message", null);
+		logger.info(response.toString());
 	}
 }
