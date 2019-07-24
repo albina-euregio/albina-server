@@ -26,7 +26,7 @@ public class MessengerPeopleTargets {
 	@JsonProperty("code")
 	private int code;
 
-	@JsonProperty("get")
+	@JsonProperty("list")
 	private MessengerPeopleTargetsList list;
 
 	public void setCode(int code) {
@@ -47,6 +47,6 @@ public class MessengerPeopleTargets {
 
 	@Override
 	public String toString() {
-		return "MessengerPeopleTargets{" + "code = '" + code + '\'' + ",get = '" + list + '\'' + "}";
+		return "MessengerPeopleTargets{" + "code = '" + code + '\'' + ",list = '" + list + '\'' + "}";
 	}
 }
