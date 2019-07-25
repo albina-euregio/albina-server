@@ -466,6 +466,7 @@ public class AvalancheReportController {
 					avalancheReport.setStatus(BulletinStatus.updated);
 					break;
 				case updated:
+					avalancheReport.setStatus(BulletinStatus.updated);
 					break;
 				case resubmitted:
 					avalancheReport.setStatus(BulletinStatus.updated);
