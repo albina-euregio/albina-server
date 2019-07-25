@@ -66,6 +66,11 @@ public class GlobalVariables {
 	private static boolean publishBulletinsSouthTyrol = true;
 	private static boolean publishBulletinsTrentino = true;
 
+	// REGION
+	private static boolean publishBlogsTyrol = true;
+	private static boolean publishBlogsSouthTyrol = true;
+	private static boolean publishBlogsTrentino = true;
+
 	public static String simpleBulletinBaseUrl = "https://avalanche.report/simple/";
 	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
 	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
@@ -77,6 +82,21 @@ public class GlobalVariables {
 	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
 	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
 	public static String scriptsPath = "/opt/local/";
+
+	public static String blogCacheUrl = "https://blogcache.avalanche.report/";
+	public static String googleApiKey = "AIzaSyBN0GUcRlTfoVnarVFVpA1hUEnDcDjuXQY";
+	public static String blogIdTyrolDe = "7062477220886068374";
+	public static String blogIdTyrolIt = "6964779683196470218";
+	public static String blogIdTyrolEn = "2617650030094227041";
+	public static String blogIdSouthTyrolDe = "1263754381945501754";
+	public static String blogIdSouthTyrolIt = "8922564068473612459";
+	public static String blogIdTrentinoIt = "232334535081247038";
+	public static String blogUrlTyrolDe = "lawinenwarndienst.blogspot.com";
+	public static String blogUrlTyrolIt = "servizio-valanghe-tirolo.blogspot.com";
+	public static String blogUrlTyrolEn = "avalanche-warning-service-tirol.blogspot.com";
+	public static String blogUrlSouthTyrolDe = "lawinensuedtirol.blogspot.com";
+	public static String blogUrlSouthTyrolIt = "valanghealtoadige.blogspot.com";
+	public static String blogUrlTrentinoIt = "trentinovalanghe.blogspot.com";
 
 	// LANG
 	// REGION
@@ -325,6 +345,33 @@ public class GlobalVariables {
 	public static void setPublishBulletinsTrentino(boolean publishBulletinsTrentino) throws ConfigurationException {
 		GlobalVariables.publishBulletinsTrentino = publishBulletinsTrentino;
 		setConfigProperty("publishBulletinsTrentino", publishBulletinsTrentino);
+	}
+
+	public static boolean isPublishBlogsTyrol() {
+		return publishBlogsTyrol;
+	}
+
+	public static void setPublishBlogsTyrol(boolean publishBlogsTyrol) throws ConfigurationException {
+		GlobalVariables.publishBlogsTyrol = publishBlogsTyrol;
+		setConfigProperty("publishBlogsTyrol", publishBlogsTyrol);
+	}
+
+	public static boolean isPublishBlogsSouthTyrol() {
+		return publishBlogsSouthTyrol;
+	}
+
+	public static void setPublishBlogsSouthTyrol(boolean publishBlogsSouthTyrol) throws ConfigurationException {
+		GlobalVariables.publishBlogsSouthTyrol = publishBlogsSouthTyrol;
+		setConfigProperty("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
+	}
+
+	public static boolean isPublishBlogsTrentino() {
+		return publishBlogsTrentino;
+	}
+
+	public static void setPublishBlogsTrentino(boolean publishBlogsTrentino) throws ConfigurationException {
+		GlobalVariables.publishBlogsTrentino = publishBlogsTrentino;
+		setConfigProperty("publishBlogsTrentino", publishBlogsTrentino);
 	}
 
 	public static String getScriptsPath() {
@@ -1464,6 +1511,12 @@ public class GlobalVariables {
 				publishBulletinsSouthTyrol = config.getBoolean("publishBulletinsSouthTyrol");
 			if (config.containsKey("publishBulletinsTrentino"))
 				publishBulletinsTrentino = config.getBoolean("publishBulletinsTrentino");
+			if (config.containsKey("publishBlogsTyrol"))
+				publishBlogsTyrol = config.getBoolean("publishBlogsTyrol");
+			if (config.containsKey("publishBlogsSouthTyrol"))
+				publishBlogsSouthTyrol = config.getBoolean("publishBlogsSouthTyrol");
+			if (config.containsKey("publishBlogsTrentino"))
+				publishBlogsTrentino = config.getBoolean("publishBlogsTrentino");
 			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration file could not be loaded!");
@@ -1504,6 +1557,9 @@ public class GlobalVariables {
 		json.put("publishBulletinsTyrol", publishBulletinsTyrol);
 		json.put("publishBulletinsSouthTyrol", publishBulletinsSouthTyrol);
 		json.put("publishBulletinsTrentino", publishBulletinsTrentino);
+		json.put("publishBlogsTyrol", publishBlogsTyrol);
+		json.put("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
+		json.put("publishBlogsTrentino", publishBlogsTrentino);
 
 		return json;
 	}

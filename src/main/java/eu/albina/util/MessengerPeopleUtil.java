@@ -17,7 +17,6 @@
 package eu.albina.util;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.List;
 

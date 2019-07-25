@@ -28,6 +28,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.jobs.BlogJob;
 import eu.albina.jobs.PublicationJob;
 import eu.albina.jobs.UpdateJob;
 
@@ -80,6 +81,15 @@ public class SchedulerUtil {
 			// "groupAlbina").startNow()
 			// .withSchedule(cronSchedule("0 5/10 * * * ?")).build();
 			scheduler.scheduleJob(updateJob, updateTrigger);
+
+			// start blog job (every 5 min)
+			JobDetail blogJob = newJob(BlogJob.class).withIdentity("jobBlog", "groupAlbina").build();
+			Trigger blogTrigger = newTrigger().withIdentity("triggerBlog", "groupAlbina").startNow()
+					.withSchedule(cronSchedule("0 0/5 * * * ?")).build();
+			// Trigger blogTrigger = newTrigger().withIdentity("triggerBlog",
+			// "groupAlbina").startNow()
+			// .withSchedule(cronSchedule("0 5/10 * * * ?")).build();
+			scheduler.scheduleJob(blogJob, blogTrigger);
 
 		} catch (SchedulerException e) {
 			logger.error("Scheduler could not be started: " + e.getMessage());
