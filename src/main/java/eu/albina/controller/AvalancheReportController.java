@@ -220,14 +220,10 @@ public class AvalancheReportController {
 
 		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
 
-		for (AvalancheReport avalancheReport : reports) {
+		for (AvalancheReport avalancheReport : reports)
 			if (avalancheReport.getStatus() == BulletinStatus.published
-					|| avalancheReport.getStatus() == BulletinStatus.republished) {
-				initializeAndUnproxy(avalancheReport);
-				initializeAndUnproxy(avalancheReport.getUser());
+					|| avalancheReport.getStatus() == BulletinStatus.republished)
 				result.put(date, avalancheReport);
-			}
-		}
 
 		return result;
 	}
@@ -245,7 +241,6 @@ public class AvalancheReportController {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<AvalancheReport> getPublicReports(DateTime startDate, DateTime endDate, String region) {
-		Map<DateTime, AvalancheReport> result = new HashMap<DateTime, AvalancheReport>();
 		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -257,20 +252,16 @@ public class AvalancheReportController {
 					.setParameter("startDate", startDate).setParameter("endDate", endDate)
 					.setParameter("region", region).getResultList();
 
+			for (AvalancheReport avalancheReport : reports) {
+				initializeAndUnproxy(avalancheReport);
+				initializeAndUnproxy(avalancheReport.getUser());
+			}
+
 			transaction.commit();
 			entityManager.close();
 		}
 
-		// select report with "highest" status
-		for (AvalancheReport avalancheReport : reports)
-			if (result.containsKey(avalancheReport.getDate())) {
-				if (result.get(avalancheReport.getDate()).getStatus()
-						.comparePublicationStatus(avalancheReport.getStatus()) <= 0
-						&& result.get(avalancheReport.getDate()).getTimestamp()
-								.isBefore(avalancheReport.getTimestamp()))
-					result.put(avalancheReport.getDate(), avalancheReport);
-			} else
-				result.put(avalancheReport.getDate(), avalancheReport);
+		Map<DateTime, AvalancheReport> result = getHighestStatusMap(reports);
 
 		return result.values();
 	}
@@ -288,7 +279,6 @@ public class AvalancheReportController {
 	 */
 	@SuppressWarnings("unchecked")
 	private AvalancheReport getPublicReport(DateTime date, String region) {
-		AvalancheReport result = null;
 		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -299,15 +289,52 @@ public class AvalancheReportController {
 			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", date)
 					.setParameter("region", region).getResultList();
 
+			for (AvalancheReport avalancheReport : reports) {
+				initializeAndUnproxy(avalancheReport);
+				initializeAndUnproxy(avalancheReport.getUser());
+			}
+
 			transaction.commit();
 			entityManager.close();
 		}
 
-		// select report with "highest" status
-		for (AvalancheReport avalancheReport : reports)
-			if (result == null || result.getStatus().comparePublicationStatus(avalancheReport.getStatus()) < 0)
-				result = avalancheReport;
+		AvalancheReport result = getHighestStatus(reports);
+		return result;
+	}
 
+	private AvalancheReport getHighestStatus(List<AvalancheReport> reports) {
+		AvalancheReport result = null;
+		for (AvalancheReport avalancheReport : reports) {
+			if (result == null)
+				result = avalancheReport;
+			else {
+				if (avalancheReport.getStatus() == null)
+					continue;
+				if (result.getStatus() == null)
+					result = avalancheReport;
+				else if (result.getStatus().comparePublicationStatus(avalancheReport.getStatus()) <= 0
+						&& result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
+					result = avalancheReport;
+			}
+		}
+		return result;
+	}
+
+	private Map<DateTime, AvalancheReport> getHighestStatusMap(List<AvalancheReport> reports) {
+		Map<DateTime, AvalancheReport> result = new HashMap<DateTime, AvalancheReport>();
+		for (AvalancheReport avalancheReport : reports)
+			if (result.containsKey(avalancheReport.getDate())) {
+				if (avalancheReport.getStatus() == null)
+					continue;
+				if (result.get(avalancheReport.getDate()).getStatus() == null)
+					result.put(avalancheReport.getDate(), avalancheReport);
+				else if (result.get(avalancheReport.getDate()).getStatus()
+						.comparePublicationStatus(avalancheReport.getStatus()) <= 0
+						&& result.get(avalancheReport.getDate()).getTimestamp()
+								.isBefore(avalancheReport.getTimestamp()))
+					result.put(avalancheReport.getDate(), avalancheReport);
+			} else
+				result.put(avalancheReport.getDate(), avalancheReport);
 		return result;
 	}
 
