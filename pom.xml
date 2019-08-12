@@ -148,7 +148,7 @@
       </properties>
     </profile>
   </profiles>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -415,6 +415,17 @@
 				<webApp>
 					<contextPath>/albina</contextPath>
 				</webApp>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<url>https://admin.avalanche.report/manager/text</url>
+				<path>/albina_dev</path>
+				<username>${env.TOMCAT_USERNAME}</username>
+				<password>${env.TOMCAT_PASSWORD}</password>
 			</configuration>
 		</plugin>
 	</plugins>
