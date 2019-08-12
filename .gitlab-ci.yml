@@ -8,9 +8,9 @@ cache:
   paths:
     - .m2/repository
 
-build:
+production build:
   stage: build
-  script: mvn $MAVEN_CLI_OPTS install
+  script: mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
   artifacts:
     paths:
       - target/albina.war
