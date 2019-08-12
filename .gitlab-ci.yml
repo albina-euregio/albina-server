@@ -1,15 +1,23 @@
 image: maven:3-jdk-8
 
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+
+cache:
+  paths:
+    - .m2/repository
+
 build:
   stage: build
-  script: mvn --batch-mode install
+  script: mvn $MAVEN_CLI_OPTS install
   artifacts:
     paths:
       - target/albina.war
 
 deploy to development:
   stage: deploy
-  script: mvn --batch-mode --activate-profiles env-dev tomcat7:deploy
+  script: mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:deploy
   environment:
     name: development
   only:
