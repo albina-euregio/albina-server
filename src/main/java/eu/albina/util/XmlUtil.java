@@ -209,7 +209,7 @@ public class XmlUtil {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
-		dateTimeReport.appendChild(doc.createTextNode((new DateTime()).toString(GlobalVariables.formatterDateTime)));
+		dateTimeReport.appendChild(doc.createTextNode((new DateTime().withTimeAtStartOfDay()).toString(GlobalVariables.formatterDateTime)));
 		metaData.appendChild(dateTimeReport);
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");
