@@ -210,19 +210,7 @@ public class BlogController extends CommonProcessor {
 
 	private String getBlogPostLink(JSONObject object) {
 		StringBuilder sb = new StringBuilder();
-
-		switch (lang) {
-		case de:
-			sb.append(GlobalVariables.avalancheReportBaseUrlDe);
-			break;
-		case it:
-			sb.append(GlobalVariables.avalancheReportBaseUrlIt);
-			break;
-		default:
-			sb.append(GlobalVariables.avalancheReportBaseUrlEn);
-			break;
-		}
-
+		sb.append(GlobalVariables.getAvalancheReportBaseUrl(lang));
 		sb.append(getBlogUrl());
 		sb.append("/");
 		sb.append(object.getString("id"));
