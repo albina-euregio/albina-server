@@ -19,7 +19,9 @@ package eu.albina.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -104,10 +106,12 @@ public class StatisticsController {
 		// get bulletins from report json
 		List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports);
 
+		List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
+
 		transaction.commit();
 		entityManager.close();
 
-		return getCsvString(lang, bulletins, extended);
+		return getCsvString(lang, mergedBulletins, extended);
 	}
 
 	/**
@@ -140,10 +144,55 @@ public class StatisticsController {
 			bulletins.addAll(getPublishedBulletinsFromReports(reports));
 		}
 
+		List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
+
 		transaction.commit();
 		entityManager.close();
 
-		return getCsvString(lang, bulletins, extended);
+		return getCsvString(lang, mergedBulletins, extended);
+	}
+
+	private List<AvalancheBulletin> mergeBulletins(List<AvalancheBulletin> bulletins) {
+		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
+		int revision = 1;
+
+		for (AvalancheBulletin bulletin : bulletins) {
+			if (resultMap.containsKey(bulletin.getId())) {
+				// merge bulletins with same id
+				if (resultMap.get(bulletin.getId()).equals(bulletin)) {
+					for (String publishedRegion : bulletin.getPublishedRegions())
+						resultMap.get(bulletin.getId()).addPublishedRegion(publishedRegion);
+					for (String savedRegion : bulletin.getSavedRegions())
+						resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
+					for (String suggestedRegion : bulletin.getSuggestedRegions())
+						resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
+				} else {
+					List<AvalancheBulletin> newList = new ArrayList<AvalancheBulletin>();
+					for (String bulletinId : resultMap.keySet()) {
+						if (bulletinId.startsWith(bulletin.getId())) {
+							if (resultMap.get(bulletinId).equals(bulletin)) {
+								for (String publishedRegion : bulletin.getPublishedRegions())
+									resultMap.get(bulletinId).addPublishedRegion(publishedRegion);
+								for (String savedRegion : bulletin.getSavedRegions())
+									resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
+								for (String suggestedRegion : bulletin.getSuggestedRegions())
+									resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
+							} else {
+								bulletin.setId(bulletin.getId() + "_" + revision);
+								revision++;
+								newList.add(bulletin);
+							}
+						}
+					}
+					for (AvalancheBulletin avalancheBulletin : newList) {
+						resultMap.put(avalancheBulletin.getId(), avalancheBulletin);
+					}
+				}
+			} else
+				resultMap.put(bulletin.getId(), bulletin);
+		}
+
+		return new ArrayList<AvalancheBulletin>(resultMap.values());
 	}
 
 	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports) {
@@ -203,6 +252,8 @@ public class StatisticsController {
 		StringBuilder sb = new StringBuilder();
 
 		// add header
+		sb.append("BulletinId");
+		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("Date");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("Daytime");
@@ -345,6 +396,8 @@ public class StatisticsController {
 		else
 			daytimeDescription = avalancheBulletin.getAfternoon();
 		for (String region : avalancheBulletin.getPublishedRegions()) {
+			sb.append(avalancheBulletin.getId());
+			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(avalancheBulletin.getValidityDateString());
 			sb.append(GlobalVariables.csvDeliminator);
 			if (isAfternoon)

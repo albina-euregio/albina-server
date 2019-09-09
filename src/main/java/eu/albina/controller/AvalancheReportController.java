@@ -826,8 +826,6 @@ public class AvalancheReportController {
 	 * 
 	 * @param date
 	 *            the start date of the bulletins
-	 * @param endDate
-	 *            the end date of the bulletins
 	 * @param regions
 	 *            the regions of interest
 	 * @return all published bulletins with the most recent version number
