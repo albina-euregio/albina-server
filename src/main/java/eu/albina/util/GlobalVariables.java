@@ -1042,11 +1042,11 @@ public class GlobalVariables {
 		}
 	}
 
-	public static String getInterregLogoPath(boolean grayscale) {
+	public static String getEuregioLogoPath(boolean grayscale) {
 		if (grayscale)
-			return "logo/grey/interreg.png";
+			return "logo/grey/euregio.png";
 		else
-			return "logo/grey/interreg.png";
+			return "logo/color/euregio.png";
 	}
 
 	// LANG

@@ -139,11 +139,11 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			logoImg.setFixedPosition(pageSize.getWidth() - 100, pageSize.getHeight() - 72);
 			canvas.add(logoImg);
 
-			// Add INTERREG logo
-			Image interregImg = PdfUtil.getInstance().getImage(GlobalVariables.getInterregLogoPath(grayscale));
-			interregImg.scaleToFit(130, 45);
-			interregImg.setFixedPosition(20, 0);
-			canvas.add(interregImg);
+			// Add EUREGIO logo
+			Image euregioImg = PdfUtil.getInstance().getImage(GlobalVariables.getEuregioLogoPath(grayscale));
+			euregioImg.scaleToFit(130, 45);
+			euregioImg.setFixedPosition(20, 0);
+			canvas.add(euregioImg);
 
 			// Add page number
 			int pageNumber = docEvent.getDocument().getPageNumber(page);

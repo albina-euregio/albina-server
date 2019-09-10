@@ -307,13 +307,10 @@ public class StaticWidgetUtil {
 			else
 				ig2.drawImage(overviewThumbnail, 100, 170, null);
 
-			BufferedImage interregLogo = loadImageFromPath(
-					GlobalVariables.getLocalImagesPath() + "logo/color/interreg.png");
-			// BufferedImage interregLogo =
-			// loadImage(GlobalVariables.getServerImagesUrl() +
-			// "logo/interreg_italia-oesterreich_02_RGB.png");
-			interregLogo = resizeHeight(interregLogo, 110);
-			ig2.drawImage(interregLogo, 350, 45, null);
+			BufferedImage euregioLogo = loadImageFromPath(
+					GlobalVariables.getLocalImagesPath() + "logo/color/euregio.png");
+			euregioLogo = resizeHeight(euregioLogo, 110);
+			ig2.drawImage(euregioLogo, 350, 45, null);
 
 			String filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString + "/"
 					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
