@@ -84,13 +84,15 @@ public class StaticWidgetUtil {
 	 * @param bulletins
 	 *            The bulletins to create the PDF of.
 	 */
-	public void createStaticWidgets(List<AvalancheBulletin> bulletins) {
+	public void createStaticWidgets(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		for (LanguageCode lang : GlobalVariables.languages)
-			createStaticWidget(bulletins, lang);
+			createStaticWidget(bulletins, lang, validityDateString, publicationTimeString);
 	}
 
 	// LANG
-	public void createStaticWidget(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+	public void createStaticWidget(List<AvalancheBulletin> bulletins, LanguageCode lang, String validityDateString,
+			String publicationTimeString) {
 		try {
 			int width = 600;
 			int height = 800;
@@ -123,11 +125,11 @@ public class StaticWidgetUtil {
 
 			BufferedImage overviewThumbnail;
 			if (AlbinaUtil.hasDaytimeDependency(bulletins))
-				overviewThumbnail = resizeWidth(loadImageFromUrl(GlobalVariables.getMapsPath()
-						+ AlbinaUtil.getValidityDateString(bulletins) + "/fd_albina_thumbnail.jpg"), 600);
+				overviewThumbnail = resizeWidth(loadImageFromFile(GlobalVariables.getMapsPath() + validityDateString
+						+ "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 600);
 			else
-				overviewThumbnail = resizeHeight(loadImageFromUrl(GlobalVariables.getMapsPath()
-						+ AlbinaUtil.getValidityDateString(bulletins) + "/fd_albina_thumbnail.jpg"), 400);
+				overviewThumbnail = resizeHeight(loadImageFromFile(GlobalVariables.getMapsPath() + validityDateString
+						+ "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 400);
 
 			if (highestDangerRating != DangerRating.very_high) {
 				ig2.setPaint(getDangerRatingColor(highestDangerRating));
@@ -164,7 +166,7 @@ public class StaticWidgetUtil {
 			AttributedString asFourthLine;
 			switch (lang) {
 			case de:
-				logo = loadImageFromFile("logo/color/lawinen_report.png");
+				logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/lawinen_report.png");
 
 				firstLine = "Für " + date + " maximal";
 				asFirstLine = new AttributedString(firstLine);
@@ -188,7 +190,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			case it:
-				logo = loadImageFromFile("logo/color/valanghe_report.png");
+				logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/valanghe_report.png");
 
 				firstLine = "Per " + date + " al massimo";
 				asFirstLine = new AttributedString(firstLine);
@@ -212,7 +214,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			case en:
-				logo = loadImageFromFile("logo/color/avalanche_report.png");
+				logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/avalanche_report.png");
 
 				firstLine = "On " + date + " at maximum";
 				asFirstLine = new AttributedString(firstLine);
@@ -236,7 +238,7 @@ public class StaticWidgetUtil {
 				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 				break;
 			default:
-				logo = loadImageFromFile("logo/color/avalanche_report.png");
+				logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/avalanche_report.png");
 
 				firstLine = "On " + date + " at maximum";
 				asFirstLine = new AttributedString(firstLine);
@@ -305,14 +307,12 @@ public class StaticWidgetUtil {
 			else
 				ig2.drawImage(overviewThumbnail, 100, 170, null);
 
-			BufferedImage interregLogo = loadImageFromFile("logo/color/interreg.png");
-			// BufferedImage interregLogo =
-			// loadImage(GlobalVariables.getServerImagesUrl() +
-			// "logo/interreg_italia-oesterreich_02_RGB.png");
-			interregLogo = resizeHeight(interregLogo, 110);
-			ig2.drawImage(interregLogo, 350, 45, null);
+			BufferedImage euregioLogo = loadImageFromPath(
+					GlobalVariables.getLocalImagesPath() + "logo/color/euregio.png");
+			euregioLogo = resizeHeight(euregioLogo, 110);
+			ig2.drawImage(euregioLogo, 350, 45, null);
 
-			String filename = GlobalVariables.getPdfDirectory() + AlbinaUtil.getValidityDateString(bulletins) + "/"
+			String filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString + "/"
 					+ AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
@@ -382,12 +382,23 @@ public class StaticWidgetUtil {
 		return img;
 	}
 
+	private BufferedImage loadImageFromPath(String path) {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(getClass().getResource(path));
+		} catch (IOException e) {
+			logger.error("Error loading image: " + path);
+			e.printStackTrace();
+		}
+		return img;
+	}
+
 	private BufferedImage loadImageFromFile(String path) {
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(getClass().getResource(GlobalVariables.getLocalImagesPath() + path));
+			img = ImageIO.read(new File(path));
 		} catch (IOException e) {
-			logger.error("Error loading image: " + GlobalVariables.getLocalImagesPath() + path);
+			logger.error("Error loading image: " + path);
 			e.printStackTrace();
 		}
 		return img;

@@ -177,9 +177,7 @@ public class SimpleHtmlUtil {
 
 				try {
 					Files.setPosixFilePermissions(Paths.get(dirPath), perms);
-				} catch (IOException e) {
-					logger.warn("File permissions could not be set!");
-				} catch (UnsupportedOperationException e) {
+				} catch (IOException | UnsupportedOperationException e) {
 					logger.warn("File permissions could not be set!");
 				}
 
@@ -198,10 +196,7 @@ public class SimpleHtmlUtil {
 				return true;
 			} else
 				return false;
-		} catch (IOException e) {
-			logger.error("Simple html could not be created: " + e.getMessage());
-			e.printStackTrace();
-		} catch (TemplateException e) {
+		} catch (IOException | TemplateException e) {
 			logger.error("Simple html could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}
@@ -238,8 +233,8 @@ public class SimpleHtmlUtil {
 		root.put("text", text);
 
 		Map<String, Object> link = new HashMap<>();
-		link.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "?lang=" + lang.toString());
+		link.put("website", GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/"
+				+ AlbinaUtil.getValidityDateString(bulletins));
 		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region));
 		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region));
 

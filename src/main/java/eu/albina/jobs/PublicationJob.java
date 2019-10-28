@@ -64,8 +64,6 @@ public class PublicationJob implements org.quartz.Job {
 			regions.add(GlobalVariables.codeSouthTyrol);
 		if (GlobalVariables.isPublishBulletinsTrentino())
 			regions.add(GlobalVariables.codeTrentino);
-		if (GlobalVariables.isPublishBulletinsStyria())
-			regions.add(GlobalVariables.codeStyria);
 
 		if (!regions.isEmpty()) {
 			try {
@@ -80,13 +78,6 @@ public class PublicationJob implements org.quartz.Job {
 				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
 						.publishBulletins(startDate, endDate, regions, publicationDate, user);
 
-				List<String> avalancheReportIds = new ArrayList<String>();
-				for (String region : regions) {
-					String avalancheReportId = AvalancheReportController.getInstance()
-							.publishReport(publishedBulletins.values(), startDate, region, user, publicationDate);
-					avalancheReportIds.add(avalancheReportId);
-				}
-
 				if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
 					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
 					for (AvalancheBulletin avalancheBulletin : publishedBulletins.values()) {
@@ -95,7 +86,14 @@ public class PublicationJob implements org.quartz.Job {
 							result.add(avalancheBulletin);
 					}
 					if (result != null && !result.isEmpty())
-						PublicationController.getInstance().publishAutomatically(avalancheReportIds, result);
+						PublicationController.getInstance().publishAutomatically(result);
+				}
+
+				List<String> avalancheReportIds = new ArrayList<String>();
+				for (String region : regions) {
+					String avalancheReportId = AvalancheReportController.getInstance()
+							.publishReport(publishedBulletins.values(), startDate, region, user, publicationDate);
+					avalancheReportIds.add(avalancheReportId);
 				}
 			} catch (AlbinaException e) {
 				logger.error("Error publishing bulletins - " + e.getMessage());

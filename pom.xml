@@ -41,7 +41,7 @@
       	<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
       	<albina.conf.server-images-url-localhost>http://admin.avalanche.report/images/</albina.conf.server-images-url-localhost>
       	<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-      	<albina.conf.maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/</albina.conf.maps-path>
+      	<albina.conf.maps-path>/mnt/albina_files_dev/</albina.conf.maps-path>
       	<albina.conf.univie-map-production-url></albina.conf.univie-map-production-url>
       	<albina.conf.pdf-directory>/mnt/albina_files_local/</albina.conf.pdf-directory>
       	<albina.conf.html-directory>/mnt/simple_local/</albina.conf.html-directory>
@@ -50,7 +50,9 @@
       	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
       	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
       	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
+      	<albina.conf.publish-blogs-tyrol>false</albina.conf.publish-blogs-tyrol>
+      	<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
+      	<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
       	<albina.conf.scripts-path>/opt/local/</albina.conf.scripts-path>
       	<albina.log.prefix>LOCAL</albina.log.prefix>
       	<albina.log.level>DEBUG</albina.log.level>
@@ -81,7 +83,7 @@
       	<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
       	<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
       	<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-      	<albina.conf.maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/</albina.conf.maps-path>
+      	<albina.conf.maps-path>/mnt/albina_files_dev/</albina.conf.maps-path>
       	<albina.conf.univie-map-production-url>http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php</albina.conf.univie-map-production-url>
       	<albina.conf.pdf-directory>/mnt/albina_files_dev/</albina.conf.pdf-directory>
       	<albina.conf.html-directory>/mnt/simple_dev/</albina.conf.html-directory>
@@ -90,12 +92,14 @@
       	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
       	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
       	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
+      	<albina.conf.publish-blogs-tyrol>false</albina.conf.publish-blogs-tyrol>
+      	<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
+      	<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
       	<albina.conf.scripts-path>/opt/dev/</albina.conf.scripts-path>
        	<albina.log.prefix>DEV</albina.log.prefix>
-      	<albina.log.level>INFO</albina.log.level>
-      	<albina.log.level.c3p0>INFO</albina.log.level.c3p0>
-      	<albina.log.level.sql>SEVERE</albina.log.level.sql>
+      	<albina.log.level>DEBUG</albina.log.level>
+      	<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
+      	<albina.log.level.sql>ERROR</albina.log.level.sql>
       	<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
       	<albina.log.filename>albina_dev.log</albina.log.filename>
       	<albina.log.dest>file</albina.log.dest>
@@ -121,7 +125,7 @@
       	<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
       	<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
       	<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-      	<albina.conf.maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm/</albina.conf.maps-path>
+      	<albina.conf.maps-path>/mnt/albina_files/</albina.conf.maps-path>
       	<albina.conf.univie-map-production-url>http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php</albina.conf.univie-map-production-url>
       	<albina.conf.pdf-directory>/mnt/albina_files/</albina.conf.pdf-directory>
       	<albina.conf.html-directory>/mnt/simple/</albina.conf.html-directory>
@@ -130,11 +134,13 @@
       	<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
       	<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
       	<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-      	<albina.conf.publish-bulletins-styria>false</albina.conf.publish-bulletins-styria>
+      	<albina.conf.publish-blogs-tyrol>true</albina.conf.publish-blogs-tyrol>
+      	<albina.conf.publish-blogs-south-tyrol>true</albina.conf.publish-blogs-south-tyrol>
+      	<albina.conf.publish-blogs-trentino>true</albina.conf.publish-blogs-trentino>
       	<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
      	<albina.log.prefix></albina.log.prefix>
       	<albina.log.level>INFO</albina.log.level>
-      	<albina.log.level.c3p0>SEVERE</albina.log.level.c3p0>
+      	<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
       	<albina.log.level.sql>WARN</albina.log.level.sql>
       	<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
       	<albina.log.filename>albina.log</albina.log.filename>
@@ -142,7 +148,7 @@
       </properties>
     </profile>
   </profiles>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -296,12 +302,6 @@
 	   <version>${hibernate.version}</version>
 	</dependency>
 	 
-	<dependency>
-	    <groupId>org.hibernate</groupId>
-	    <artifactId>hibernate-envers</artifactId>
-	    <version>${hibernate.version}</version>
-	</dependency>
-	 
 <!-- testing -->
     <dependency>
       <groupId>junit</groupId>
@@ -415,6 +415,17 @@
 				<webApp>
 					<contextPath>/albina</contextPath>
 				</webApp>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<url>https://admin.avalanche.report/manager/text</url>
+				<path>/albina_dev</path>
+				<username>${env.TOMCAT_USERNAME}</username>
+				<password>${env.TOMCAT_PASSWORD}</password>
 			</configuration>
 		</plugin>
 	</plugins>

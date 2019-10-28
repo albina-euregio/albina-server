@@ -162,7 +162,14 @@ public class StatisticsControllerTest {
 	@Ignore
 	@Test
 	public void getCsv() {
-		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm);
+		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, false);
+		System.out.println(csvString);
+	}
+
+	@Ignore
+	@Test
+	public void getExtendedCsv() {
+		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, true);
 		System.out.println(csvString);
 	}
 }

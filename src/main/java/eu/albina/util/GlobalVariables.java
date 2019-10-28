@@ -65,10 +65,16 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
 	private static boolean publishBulletinsTrentino = true;
-	private static boolean publishBulletinsStyria = false;
+
+	// REGION
+	private static boolean publishBlogsTyrol = true;
+	private static boolean publishBlogsSouthTyrol = true;
+	private static boolean publishBlogsTrentino = true;
 
 	public static String simpleBulletinBaseUrl = "https://avalanche.report/simple/";
-	public static String avalancheReportBaseUrl = "https://avalanche.report/albina-web/";
+	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
+	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
+	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local/";
@@ -76,6 +82,21 @@ public class GlobalVariables {
 	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
 	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
 	public static String scriptsPath = "/opt/local/";
+
+	public static String blogCacheUrl = "https://blogcache.avalanche.report/";
+	public static String googleApiKey = "AIzaSyBN0GUcRlTfoVnarVFVpA1hUEnDcDjuXQY";
+	public static String blogIdTyrolDe = "7062477220886068374";
+	public static String blogIdTyrolIt = "6964779683196470218";
+	public static String blogIdTyrolEn = "2617650030094227041";
+	public static String blogIdSouthTyrolDe = "1263754381945501754";
+	public static String blogIdSouthTyrolIt = "8922564068473612459";
+	public static String blogIdTrentinoIt = "232334535081247038";
+	public static String blogUrlTyrolDe = "lawinenwarndienst.blogspot.com";
+	public static String blogUrlTyrolIt = "servizio-valanghe-tirolo.blogspot.com";
+	public static String blogUrlTyrolEn = "avalanche-warning-service-tirol.blogspot.com";
+	public static String blogUrlSouthTyrolDe = "lawinensuedtirol.blogspot.com";
+	public static String blogUrlSouthTyrolIt = "valanghealtoadige.blogspot.com";
+	public static String blogUrlTrentinoIt = "trentinovalanghe.blogspot.com";
 
 	// LANG
 	// REGION
@@ -102,6 +123,7 @@ public class GlobalVariables {
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
+	public static DateTimeFormatter publicationTime = DateTimeFormat.forPattern("HH-mm-ss");
 
 	// LANG
 	public static DateTimeFormatter dateTimeEn = DateTimeFormat.forPattern(" dd MM yyyy");
@@ -120,7 +142,6 @@ public class GlobalVariables {
 	public static String codeTrentino = "IT-32-TN";
 	public static String codeSouthTyrol = "IT-32-BZ";
 	public static String codeTyrol = "AT-07";
-	public static String codeStyria = "AT-06";
 
 	public static String propertiesFilePath = "META-INF/config.properties";
 	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
@@ -138,7 +159,6 @@ public class GlobalVariables {
 			add(codeTyrol);
 			add(codeSouthTyrol);
 			add(codeTrentino);
-			add(codeStyria);
 		}
 	};
 
@@ -184,6 +204,22 @@ public class GlobalVariables {
 	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
 
 	private static String emailEncoding = "UTF-8";
+
+	public static String notAvailableString = "N/A";
+
+	// LANG
+	public static String getAvalancheReportBaseUrl(LanguageCode lang) {
+		switch (lang) {
+		case en:
+			return avalancheReportBaseUrlEn;
+		case de:
+			return avalancheReportBaseUrlDe;
+		case it:
+			return avalancheReportBaseUrlIt;
+		default:
+			return avalancheReportBaseUrlEn;
+		}
+	}
 
 	public static boolean isCreateCaaml() {
 		return createCaaml;
@@ -311,13 +347,31 @@ public class GlobalVariables {
 		setConfigProperty("publishBulletinsTrentino", publishBulletinsTrentino);
 	}
 
-	public static boolean isPublishBulletinsStyria() {
-		return publishBulletinsStyria;
+	public static boolean isPublishBlogsTyrol() {
+		return publishBlogsTyrol;
 	}
 
-	public static void setPublishBulletinsStyria(boolean publishBulletinsStyria) throws ConfigurationException {
-		GlobalVariables.publishBulletinsStyria = publishBulletinsStyria;
-		setConfigProperty("publishBulletinsStyria", publishBulletinsStyria);
+	public static void setPublishBlogsTyrol(boolean publishBlogsTyrol) throws ConfigurationException {
+		GlobalVariables.publishBlogsTyrol = publishBlogsTyrol;
+		setConfigProperty("publishBlogsTyrol", publishBlogsTyrol);
+	}
+
+	public static boolean isPublishBlogsSouthTyrol() {
+		return publishBlogsSouthTyrol;
+	}
+
+	public static void setPublishBlogsSouthTyrol(boolean publishBlogsSouthTyrol) throws ConfigurationException {
+		GlobalVariables.publishBlogsSouthTyrol = publishBlogsSouthTyrol;
+		setConfigProperty("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
+	}
+
+	public static boolean isPublishBlogsTrentino() {
+		return publishBlogsTrentino;
+	}
+
+	public static void setPublishBlogsTrentino(boolean publishBlogsTrentino) throws ConfigurationException {
+		GlobalVariables.publishBlogsTrentino = publishBlogsTrentino;
+		setConfigProperty("publishBlogsTrentino", publishBlogsTrentino);
 	}
 
 	public static String getScriptsPath() {
@@ -902,94 +956,8 @@ public class GlobalVariables {
 
 	// LANG
 	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
-		return "https://avalanche.report/albina-web/bulletin/" + date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"))
-				+ "?lang=" + lang.toString();
-	}
-
-	// LANG
-	public static String getDangerRatingVeryHighRecommendationsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Verzicht auf Schneesport abseits geöffneter Abfahrten und Routen empfohlen.";
-		case it:
-			return "Si consiglia di rinunciare alle attività sportive al di fuori delle discese e degli itinerari aperti.";
-		case en:
-			return "You are advised not to engage in winter sports beyond open ski runs and trails.";
-		default:
-			return "You are advised not to engage in winter sports beyond open ski runs and trails.";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingHighRecommendationsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Sich auf mässig steiles Gelände beschränken. Auslaufbereiche grosser Lawinen beachten. Unerfahrene bleiben auf den geöffneten Abfahrten und Routen.\r\n"
-					+ "Rund 10 % aller Todesopfer.";
-		case it:
-			return "Limitarsi ai pendii poco ripidi. Attenzione alla zona di deposito di valanghe di grandi dimensioni. Le persone inesperte rimangono sulle discese e sugli itinerari aperti.\r\n"
-					+ "Circa il 10 % delle vittime.";
-		case en:
-			return "Stay on moderately steep terrain. Heed runout zones of large avalanches. Unexperienced persons should remain on open ski runs and trails.\r\n"
-					+ "Around 10 % of avalanche fatalities.";
-		default:
-			return "Stay on moderately steep terrain. Heed runout zones of large avalanches. Unexperienced persons should remain on open ski runs and trails.\r\n"
-					+ "Around 10 % of avalanche fatalities.";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingConsiderableRecommendationsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Für Wintersportler kritischste Situation! Optimale Routenwahl und Anwendung von risikomindernden Massnahmen sind nötig. Sehr steile Hänge der im Lawinenbulletin angegebenen Expositionen und Höhenlagen meiden. Unerfahrene bleiben besser auf den geöffneten Abfahrten und Routen.\r\n"
-					+ "Rund die Hälfte aller Todesopfer.";
-		case it:
-			return "Questa è la situazione più critica per gli appassionati di sport invernali! Sono necessarie una scelta ottimale dell’itinerario e l’adozione di misure atte a ridurre il rischio. Evitare i pendii molto ripidi alle esposizioni e alle quote indicate nel bollettino delle valanghe. È meglio che le persone inesperte rimangano sulle discese e sugli itinerari aperti.\r\n"
-					+ "Circa il 50 % delle vittime.";
-		case en:
-			return "The most critical situation for backcountry recreationists. Select best possible route and take action to reduce risks. Avoid very steep slopes with the aspect and elevation indicated in the avalanche bulletin. Unexperienced persons are advised to remain on open ski runs and trails.\r\n"
-					+ "Around 50 % of avalanche fatalities.";
-		default:
-			return "The most critical situation for backcountry recreationists. Select best possible route and take action to reduce risks. Avoid very steep slopes with the aspect and elevation indicated in the avalanche bulletin. Unexperienced persons are advised to remain on open ski runs and trails.\r\n"
-					+ "Around 50 % of avalanche fatalities.";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingModerateRecommendationsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Vorsichtige Routenwahl, vor allem an Hängen der im Lawinenbulletin angegebenen Expositionen und Höhenlagen. Sehr steile Hänge einzeln befahren. Besondere Vorsicht bei ungünstigem Schneedeckenaufbau (Altschneeproblem).\r\n"
-					+ "Rund 30 % aller Todesopfer.";
-		case it:
-			return "Prudente scelta dell’itinerario, soprattutto sui pendii alle esposizioni e alle quote indicate nel bollettino delle valanghe. Percorrere i pendii molto ripidi una persona alla volta. Un’attenzione particolare è richiesta quando la struttura del manto nevoso è sfavorevole (situazione tipo neve vecchia).\r\n"
-					+ "Circa il 30 % delle vittime.";
-		case en:
-			return "Routes should be selected carefully, especially on slopes with the aspect and elevation indicated in the avalanche bulletin. Travel very steep slopes one person at a time. Pay attention to unfavourable snowpack structure (persistent weak layers, old snow problem).\r\n"
-					+ "Around 30 % of avalanche fatalities.";
-		default:
-			return "Routes should be selected carefully, especially on slopes with the aspect and elevation indicated in the avalanche bulletin. Travel very steep slopes one person at a time. Pay attention to unfavourable snowpack structure (persistent weak layers, old snow problem).\r\n"
-					+ "Around 30 % of avalanche fatalities.";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingLowRecommendationsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Extrem steile Hänge einzeln befahren und Absturzgefahr beachten.\r\n"
-					+ "Rund 5 % aller Todesopfer.";
-		case it:
-			return "Percorrere i pendii estremamente ripidi una persona alla volta, prestando attenzione al pericolo di caduta.\r\n"
-					+ "Circa il 5 % delle vittime.";
-		case en:
-			return "Travel extremely steep slopes one person at a time and be alert to the danger of falling.\r\n"
-					+ "Around 5 % of avalanche fatalities.";
-		default:
-			return "Travel extremely steep slopes one person at a time and be alert to the danger of falling.\r\n"
-					+ "Around 5 % of avalanche fatalities.";
-		}
+		return GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/"
+				+ date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
 	// LANG
@@ -1074,11 +1042,11 @@ public class GlobalVariables {
 		}
 	}
 
-	public static String getInterregLogoPath(boolean grayscale) {
+	public static String getEuregioLogoPath(boolean grayscale) {
 		if (grayscale)
-			return "logo/grey/interreg.png";
+			return "logo/grey/euregio.png";
 		else
-			return "logo/grey/interreg.png";
+			return "logo/color/euregio.png";
 	}
 
 	// LANG
@@ -1103,13 +1071,13 @@ public class GlobalVariables {
 	public static String getHeadlineText(LanguageCode lang) {
 		switch (lang) {
 		case de:
-			return "Lawinenvorhersage";
+			return "Lawinen.report";
 		case it:
-			return "Previsione Valanghe";
+			return "Valanghe.report";
 		case en:
-			return "Avalanche Forecast";
+			return "Avalanche.report";
 		default:
-			return "Avalanche Forecast";
+			return "Avalanche.report";
 		}
 	}
 
@@ -1543,8 +1511,12 @@ public class GlobalVariables {
 				publishBulletinsSouthTyrol = config.getBoolean("publishBulletinsSouthTyrol");
 			if (config.containsKey("publishBulletinsTrentino"))
 				publishBulletinsTrentino = config.getBoolean("publishBulletinsTrentino");
-			if (config.containsKey("publishBulletinsStyria"))
-				publishBulletinsStyria = config.getBoolean("publishBulletinsStyria");
+			if (config.containsKey("publishBlogsTyrol"))
+				publishBlogsTyrol = config.getBoolean("publishBlogsTyrol");
+			if (config.containsKey("publishBlogsSouthTyrol"))
+				publishBlogsSouthTyrol = config.getBoolean("publishBlogsSouthTyrol");
+			if (config.containsKey("publishBlogsTrentino"))
+				publishBlogsTrentino = config.getBoolean("publishBlogsTrentino");
 			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration file could not be loaded!");
@@ -1585,7 +1557,9 @@ public class GlobalVariables {
 		json.put("publishBulletinsTyrol", publishBulletinsTyrol);
 		json.put("publishBulletinsSouthTyrol", publishBulletinsSouthTyrol);
 		json.put("publishBulletinsTrentino", publishBulletinsTrentino);
-		json.put("publishBulletinsStyria", publishBulletinsStyria);
+		json.put("publishBlogsTyrol", publishBlogsTyrol);
+		json.put("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
+		json.put("publishBlogsTrentino", publishBlogsTrentino);
 
 		return json;
 	}
@@ -1648,8 +1622,6 @@ public class GlobalVariables {
 			setPublishBulletinsSouthTyrol(configuration.getBoolean("publishBulletinsSouthTyrol"));
 		if (configuration.has("publishBulletinsTrentino"))
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
-		if (configuration.has("publishBulletinsStyria"))
-			setPublishBulletinsStyria(configuration.getBoolean("publishBulletinsStyria"));
 		if (configuration.has("scriptsPath"))
 			setScriptsPath(configuration.getString("scriptsPath"));
 	}
@@ -1821,9 +1793,6 @@ public class GlobalVariables {
 		case "IT-32-TN":
 			sb.append(GlobalVariables.codeTrentino);
 			break;
-		case "AT-06":
-			sb.append(GlobalVariables.codeStyria);
-			break;
 		default:
 			break;
 		}
@@ -1848,12 +1817,8 @@ public class GlobalVariables {
 
 	public static String getImprintLink(LanguageCode lang) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(GlobalVariables.avalancheReportBaseUrl);
-		sb.append("imprint?lang=");
-		if (lang != null)
-			sb.append(lang.toString());
-		else
-			sb.append("en");
+		sb.append(GlobalVariables.getAvalancheReportBaseUrl(lang));
+		sb.append("imprint");
 		return sb.toString();
 	}
 

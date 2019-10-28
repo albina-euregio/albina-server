@@ -25,7 +25,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.envers.Audited;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,7 +40,6 @@ import eu.albina.util.GlobalVariables;
  * @author Norbert Lanzanasto
  *
  */
-@Audited
 @Entity
 @Table(name = "avalanche_reports")
 public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject {
@@ -64,9 +62,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	@Column(name = "STATUS")
 	private BulletinStatus status;
-
-	@Column(name = "REVISION")
-	private int revision;
 
 	@Column(name = "CAAML_CREATED")
 	private boolean caamlCreated;
@@ -131,9 +126,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (json.has("status"))
 			this.status = BulletinStatus.fromString(json.getString("status"));
 
-		if (json.has("revision"))
-			this.revision = json.getInt("revision");
-
 		if (json.has("caamlCreated"))
 			this.caamlCreated = json.getBoolean("caamlCreated");
 		if (json.has("pdfCreated"))
@@ -193,14 +185,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setStatus(BulletinStatus status) {
 		this.status = status;
-	}
-
-	public Number getRevision() {
-		return revision;
-	}
-
-	public void setRevision(int revision) {
-		this.revision = revision;
 	}
 
 	public boolean isCaamlCreated() {
@@ -297,48 +281,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (status != null)
 			json.put("status", status.toString());
 
-		if (revision > 0)
-			json.put("revision", revision);
-
-		if (caamlCreated)
-			json.put("caamlCreated", true);
-		else
-			json.put("caamlCreated", false);
-
-		if (pdfCreated)
-			json.put("pdfCreated", true);
-		else
-			json.put("pdfCreated", false);
-
-		if (htmlCreated)
-			json.put("htmlCreated", true);
-		else
-			json.put("htmlCreated", false);
-
-		if (staticWidgetCreated)
-			json.put("staticWidgetCreated", true);
-		else
-			json.put("staticWidgetCreated", false);
-
-		if (mapCreated)
-			json.put("mapCreated", true);
-		else
-			json.put("mapCreated", false);
-
-		if (emailCreated)
-			json.put("emailCreated", true);
-		else
-			json.put("emailCreated", false);
-
-		if (whatsappSent)
-			json.put("whatsappSent", true);
-		else
-			json.put("whatsappSent", false);
-
-		if (telegramSent)
-			json.put("telegramSent", true);
-		else
-			json.put("telegramSent", false);
+		json.put("caamlCreated", caamlCreated);
+		json.put("pdfCreated", pdfCreated);
+		json.put("htmlCreated", htmlCreated);
+		json.put("staticWidgetCreated", staticWidgetCreated);
+		json.put("mapCreated", mapCreated);
+		json.put("emailCreated", emailCreated);
+		json.put("whatsappSent", whatsappSent);
+		json.put("telegramSent", telegramSent);
 
 		if (jsonString != null)
 			json.put("jsonString", jsonString);

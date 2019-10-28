@@ -30,12 +30,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import org.hibernate.envers.Audited;
 import org.json.JSONObject;
 
 import eu.albina.model.enumerations.DangerRating;
 
-@Audited
 @Entity
 @Table(name = "avalanche_bulletin_daytime_descriptions")
 public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObject

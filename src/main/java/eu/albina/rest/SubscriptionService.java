@@ -66,24 +66,6 @@ public class SubscriptionService {
 			SubscriberController.getInstance().createSubscriber(subscriber);
 			SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 			return Response.ok().build();
-		} catch (KeyManagementException e) {
-			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		} catch (CertificateException e) {
-			logger.warn("Error unsubscribe - " + e.getMessage());
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		} catch (NoSuchAlgorithmException e) {
-			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		} catch (KeyStoreException e) {
-			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		} catch (IOException e) {
-			logger.warn("Error subscribe - " + e.getMessage());
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		} catch (Exception e) {
 			logger.warn("Error subscribe - " + e.getMessage());
 			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
@@ -104,12 +86,9 @@ public class SubscriptionService {
 		} catch (AlbinaException e) {
 			logger.warn("Error unsubscribe - " + e.getMessage());
 			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (HibernateException he) {
+		} catch (HibernateException | JSONException he) {
 			logger.warn("Error unsubscribe - " + he.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();
-		} catch (JSONException e) {
-			logger.warn("Error unsubscribe - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		}
 	}
 
@@ -132,12 +111,9 @@ public class SubscriptionService {
 		} catch (AlbinaException e) {
 			logger.warn("Error confirm - " + e.getMessage());
 			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (HibernateException he) {
+		} catch (HibernateException | JSONException he) {
 			logger.warn("Error confirm - " + he.getMessage());
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();
-		} catch (JSONException e) {
-			logger.warn("Error confirm - " + e.getMessage());
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		}
 	}
 }

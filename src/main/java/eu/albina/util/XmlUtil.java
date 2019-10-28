@@ -52,9 +52,11 @@ public class XmlUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
 
-	public static void createCaamlFiles(List<AvalancheBulletin> bulletins) throws TransformerException, IOException {
-		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString;
+	// LANG
+	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) throws TransformerException, IOException {
+		String dirPathParent = GlobalVariables.getPdfDirectory() + validityDateString;
+		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();
 
 		// using PosixFilePermission to set file permissions 755
@@ -71,10 +73,9 @@ public class XmlUtil {
 		perms.add(PosixFilePermission.OTHERS_EXECUTE);
 
 		try {
+			Files.setPosixFilePermissions(Paths.get(dirPathParent), perms);
 			Files.setPosixFilePermissions(Paths.get(dirPath), perms);
-		} catch (IOException e) {
-			logger.warn("File permissions could not be set!");
-		} catch (UnsupportedOperationException e) {
+		} catch (IOException | UnsupportedOperationException e) {
 			logger.warn("File permissions could not be set!");
 		}
 
@@ -104,6 +105,9 @@ public class XmlUtil {
 		writer.write(caamlStringEn);
 		writer.close();
 		AlbinaUtil.setFilePermissions(fileName);
+
+		AlbinaUtil.runCopyXmlsScript(AlbinaUtil.getValidityDateString(bulletins),
+				AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	public static Document createCaaml(List<AvalancheBulletin> bulletins, LanguageCode language) {
@@ -205,7 +209,7 @@ public class XmlUtil {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
-		dateTimeReport.appendChild(doc.createTextNode((new DateTime()).toString(GlobalVariables.formatterDateTime)));
+		dateTimeReport.appendChild(doc.createTextNode((new DateTime().withTimeAtStartOfDay()).toString(GlobalVariables.formatterDateTime)));
 		metaData.appendChild(dateTimeReport);
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");

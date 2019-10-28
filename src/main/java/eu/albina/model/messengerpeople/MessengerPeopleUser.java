@@ -41,6 +41,12 @@ public class MessengerPeopleUser {
 	@JsonProperty("status")
 	private String status;
 
+	@JsonProperty("blocked")
+	private String blocked;
+
+	@JsonProperty("stopped")
+	private String stopped;
+
 	public void setImage(String image) {
 		this.image = image;
 	}
@@ -89,9 +95,26 @@ public class MessengerPeopleUser {
 		return status;
 	}
 
+	public void setBlocked(String blocked) {
+		this.blocked = blocked;
+	}
+
+	public String getBlocked() {
+		return blocked;
+	}
+
+	public void setStopped(String stopped) {
+		this.stopped = stopped;
+	}
+
+	public String getStopped() {
+		return stopped;
+	}
+
 	@Override
 	public String toString() {
 		return "Response{" + "image = '" + image + '\'' + ",messenger = '" + messenger + '\'' + ",created = '" + created
-				+ '\'' + ",name = '" + name + '\'' + ",id = '" + id + '\'' + ",status = '" + status + '\'' + "}";
+				+ '\'' + ",name = '" + name + '\'' + ",id = '" + id + '\'' + ",status = '" + status + '\''
+				+ ",blocked = '" + blocked + '\'' + ",stopped = '" + stopped + '\'' + "}";
 	}
 }

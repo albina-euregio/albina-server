@@ -20,14 +20,19 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.transform.TransformerException;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
@@ -75,54 +80,81 @@ public class PublicationController {
 	 * been published automatically. This happens at 17:00 PM if this is defined in
 	 * the settings.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set necessary flags
 	 * @param bulletins
 	 *            The bulletins that were published.
 	 */
-	public void publishAutomatically(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	public void publishAutomatically(List<AvalancheBulletin> bulletins) {
 		if (GlobalVariables.isPublishAt5PM())
-			publish(avalancheReportIds, bulletins);
+			publish(bulletins);
 	}
 
-	private void publish(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	private void publish(List<AvalancheBulletin> bulletins) {
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+		AlbinaUtil.runDeleteFilesScript(validityDateString);
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
-			createCaaml(avalancheReportIds, bulletins);
+			createCaaml(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
 
+				Map<String, Thread> threads = new HashMap<String, Thread>();
+
 				// create HTML
-				if (GlobalVariables.isCreateSimpleHtml())
-					createSimpleHtml(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreateSimpleHtml()) {
+					Thread createSimpleHtmlThread = createSimpleHtml(bulletins);
+					threads.put("simpleHtml", createSimpleHtmlThread);
+					createSimpleHtmlThread.start();
+				}
 
 				// create pdfs
-				if (GlobalVariables.isCreatePdf())
-					createPdf(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreatePdf()) {
+					Thread createPdfThread = createPdf(bulletins, validityDateString, publicationTimeString);
+					threads.put("pdf", createPdfThread);
+					createPdfThread.start();
+				}
 
 				// create static widgets
-				if (GlobalVariables.isCreateStaticWidget())
-					createStaticWidgets(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreateStaticWidget()) {
+					Thread createStaticWidgetsThread = createStaticWidgets(bulletins, validityDateString,
+							publicationTimeString);
+					threads.put("staticWidget", createStaticWidgetsThread);
+					createStaticWidgetsThread.start();
+				}
+
+				for (String key : threads.keySet()) {
+					try {
+						threads.get(key).join();
+					} catch (InterruptedException e) {
+						logger.error(key + " thread interrupted: " + e.getMessage());
+						e.printStackTrace();
+					}
+				}
 
 				// send emails
-				if (GlobalVariables.isSendEmails())
-					sendEmails(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio, false);
+				if (GlobalVariables.isSendEmails()) {
+					Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.regionsEuregio, false);
+					sendEmailsThread.start();
+				}
 
 				// publish on social media
-				if (GlobalVariables.isPublishToSocialMedia())
-					triggerMessengerpeople(avalancheReportIds, bulletins, GlobalVariables.regionsEuregio, false);
+				if (GlobalVariables.isPublishToSocialMedia()) {
+					Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins,
+							GlobalVariables.regionsEuregio, false);
+					triggerMessengerpeopleThread.start();
+				}
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
@@ -136,68 +168,91 @@ public class PublicationController {
 	 * been updated automatically. This happens at 08:00 AM (if needed) if this is
 	 * defined in the settings.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set necessary flags
 	 * @param bulletins
 	 *            The bulletins that were published.
 	 * @param regions
 	 *            The regions that were updated.
 	 */
-	public void updateAutomatically(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
-			List<String> regions) {
+	public void updateAutomatically(List<AvalancheBulletin> bulletins, List<String> regions) {
 		if (GlobalVariables.isPublishAt8AM())
-			update(avalancheReportIds, bulletins, regions);
+			update(bulletins, regions);
 	}
 
 	/**
 	 * Triggers all tasks that have to take place after an update has been published
 	 * (this can be at any time, triggered by one province).
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set necessary flags
 	 * @param bulletins
 	 *            The bulletins that were updated.
 	 * @param regions
 	 *            The region that was updated.
 	 */
-	public void update(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions) {
+	public void update(List<AvalancheBulletin> bulletins, List<String> regions) {
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+		AlbinaUtil.runDeleteFilesScript(validityDateString);
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
-			createCaaml(avalancheReportIds, bulletins);
+			createCaaml(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
 
+				Map<String, Thread> threads = new HashMap<String, Thread>();
+
 				// create HTML
-				if (GlobalVariables.isCreateSimpleHtml())
-					createSimpleHtml(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreateSimpleHtml()) {
+					Thread createSimpleHtmlThread = createSimpleHtml(bulletins);
+					threads.put("simpleHtml", createSimpleHtmlThread);
+					createSimpleHtmlThread.start();
+				}
 
 				// create pdf
-				if (GlobalVariables.isCreatePdf())
-					createPdf(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreatePdf()) {
+					Thread createPdfThread = createPdf(bulletins, validityDateString, publicationTimeString);
+					threads.put("pdf", createPdfThread);
+					createPdfThread.start();
+				}
 
 				// create static widgets
-				if (GlobalVariables.isCreateStaticWidget())
-					createStaticWidgets(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreateStaticWidget()) {
+					Thread createStaticWidgetsThread = createStaticWidgets(bulletins, validityDateString,
+							publicationTimeString);
+					threads.put("staticWidget", createStaticWidgetsThread);
+					createStaticWidgetsThread.start();
+				}
+
+				for (String key : threads.keySet()) {
+					try {
+						threads.get(key).join();
+					} catch (InterruptedException e) {
+						logger.error(key + " thread interrupted: " + e.getMessage());
+						e.printStackTrace();
+					}
+				}
 
 				// send emails to regions
-				if (GlobalVariables.isSendEmails())
-					sendEmails(avalancheReportIds, bulletins, regions, true);
+				if (GlobalVariables.isSendEmails()) {
+					Thread sendEmailsThread = sendEmails(bulletins, regions, true);
+					sendEmailsThread.start();
+				}
 
 				// publish on social media
-				if (GlobalVariables.isPublishToSocialMedia())
-					triggerMessengerpeople(avalancheReportIds, bulletins, regions, true);
+				if (GlobalVariables.isPublishToSocialMedia()) {
+					Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, regions, true);
+					triggerMessengerpeopleThread.start();
+				}
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
@@ -211,42 +266,63 @@ public class PublicationController {
 	 * bulletin has been published. This does not trigger the whole publication
 	 * process.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set necessary flags
 	 * @param bulletins
 	 *            The bulletins that were changed.
 	 */
-	public void change(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	public void change(List<AvalancheBulletin> bulletins) {
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
 		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
 
-		AlbinaUtil.runDeleteFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+		AlbinaUtil.runDeleteFilesScript(validityDateString);
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(AlbinaUtil.getValidityDateString(bulletins));
+			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
-			createCaaml(avalancheReportIds, bulletins);
+			createCaaml(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(avalancheReportIds, bulletins);
+			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
 
+				Map<String, Thread> threads = new HashMap<String, Thread>();
+
 				// create HTML
-				if (GlobalVariables.isCreateSimpleHtml())
-					createSimpleHtml(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreateSimpleHtml()) {
+					Thread createSimpleHtmlThread = createSimpleHtml(bulletins);
+					threads.put("simpleHtml", createSimpleHtmlThread);
+					createSimpleHtmlThread.start();
+				}
 
 				// create pdfs
-				if (GlobalVariables.isCreatePdf())
-					createPdf(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreatePdf()) {
+					Thread createPdfThread = createPdf(bulletins, validityDateString, publicationTimeString);
+					threads.put("pdf", createPdfThread);
+					createPdfThread.start();
+				}
 
 				// create static widgets
-				if (GlobalVariables.isCreateStaticWidget())
-					createStaticWidgets(avalancheReportIds, bulletins);
+				if (GlobalVariables.isCreateStaticWidget()) {
+					Thread createStaticWidgetsThread = createStaticWidgets(bulletins, validityDateString,
+							publicationTimeString);
+					threads.put("staticWidget", createStaticWidgetsThread);
+					createStaticWidgetsThread.start();
+				}
+
+				for (String key : threads.keySet()) {
+					try {
+						threads.get(key).join();
+					} catch (InterruptedException e) {
+						logger.error(key + " thread interrupted: " + e.getMessage());
+						e.printStackTrace();
+					}
+				}
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted: " + e.getMessage());
@@ -259,26 +335,38 @@ public class PublicationController {
 	 * Start an own thread to trigger all tasks that have to take place after an
 	 * update has been published.
 	 * 
-	 * @param publishedBulletins
+	 * @param allBulletins
 	 *            The bulletins that were updated.
 	 * @param regions
 	 *            The regions that were updated.
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set necessary flags
+	 * @param publishedBulletins
+	 * @param publicationDate
+	 * @param user
+	 * @param region
+	 * @param startDate
 	 */
-	public void startUpdateThread(List<AvalancheBulletin> publishedBulletins, List<String> regions,
-			List<String> avalancheReportIds) {
+	public void startUpdateThread(List<AvalancheBulletin> allBulletins, List<String> regions,
+			List<AvalancheBulletin> publishedBulletins, DateTime startDate, String region, User user,
+			DateTime publicationDate) {
 		new Thread(new Runnable() {
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : publishedBulletins) {
+				for (AvalancheBulletin avalancheBulletin : allBulletins) {
 					if (avalancheBulletin.getPublishedRegions() != null
 							&& !avalancheBulletin.getPublishedRegions().isEmpty())
 						result.add(avalancheBulletin);
 				}
 				if (result != null && !result.isEmpty())
-					PublicationController.getInstance().update(avalancheReportIds, result, regions);
+					PublicationController.getInstance().update(result, regions);
 
+				List<String> avalancheReportIds = new ArrayList<String>();
+				try {
+					String avalancheReportId = AvalancheReportController.getInstance().publishReport(publishedBulletins,
+							startDate, region, user, publicationDate);
+					avalancheReportIds.add(avalancheReportId);
+				} catch (AlbinaException e) {
+					logger.warn("Error updating bulletins - " + e.getMessage());
+				}
 			}
 		}).start();
 	}
@@ -287,23 +375,34 @@ public class PublicationController {
 	 * Start an own thread to trigger all tasks that have to take place after a
 	 * change has been published.
 	 * 
-	 * @param publishedBulletins
+	 * @param allBulletins
 	 *            The bulletins that were updated.
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set necessary flags
+	 * @param user
+	 * @param region
+	 * @param startDate
+	 * @param publishedBulletins
 	 */
-	public void startChangeThread(List<AvalancheBulletin> publishedBulletins, List<String> avalancheReportIds) {
+	public void startChangeThread(List<AvalancheBulletin> allBulletins, List<AvalancheBulletin> publishedBulletins,
+			DateTime startDate, String region, User user) {
 		new Thread(new Runnable() {
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : publishedBulletins) {
+				for (AvalancheBulletin avalancheBulletin : allBulletins) {
 					if (avalancheBulletin.getPublishedRegions() != null
 							&& !avalancheBulletin.getPublishedRegions().isEmpty())
 						result.add(avalancheBulletin);
 				}
 				if (result != null && !result.isEmpty())
-					PublicationController.getInstance().change(avalancheReportIds, result);
+					PublicationController.getInstance().change(result);
 
+				try {
+					List<String> avalancheReportIds = new ArrayList<String>();
+					String avalancheReportId = AvalancheReportController.getInstance().changeReport(publishedBulletins,
+							startDate, region, user);
+					avalancheReportIds.add(avalancheReportId);
+				} catch (AlbinaException e) {
+					logger.warn("Error changing bulletins - " + e.getMessage());
+				}
 			}
 		}).start();
 	}
@@ -311,23 +410,18 @@ public class PublicationController {
 	/**
 	 * Trigger the creation of the CAAML (XML) files.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set the necessary flag
 	 * @param bulletins
 	 *            the bulletins contained in the CAAML file
 	 */
-	public void createCaaml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	public void createCaaml(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		try {
 			logger.info("CAAML production started");
-			AvalancheReportController.getInstance().setAvalancheReportCaamlFlag(avalancheReportIds);
-			XmlUtil.createCaamlFiles(bulletins);
+			XmlUtil.createCaamlFiles(bulletins, validityDateString, publicationTimeString);
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-				AlbinaUtil.runCopyLatestXmlsScript(AlbinaUtil.getValidityDateString(bulletins));
+				AlbinaUtil.runCopyLatestXmlsScript(validityDateString);
 			logger.info("CAAML production finished");
-		} catch (TransformerException e) {
-			logger.error("Error producing CAAML: " + e.getMessage());
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (TransformerException | IOException e) {
 			logger.error("Error producing CAAML: " + e.getMessage());
 			e.printStackTrace();
 		}
@@ -336,19 +430,21 @@ public class PublicationController {
 	/**
 	 * Trigger the creation of the maps.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set the necessary flag
 	 * @param bulletins
 	 *            the bulletins contained in the maps
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
 	 */
-	public Thread createMaps(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
+	public Thread createMaps(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
 		return new Thread(new Runnable() {
 			public void run() {
 				logger.info("Map production started");
-				MapUtil.createDangerRatingMaps(bulletins);
+				MapUtil.createDangerRatingMaps(bulletins, validityDateString, publicationTimeString);
 				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-					AlbinaUtil.runCopyLatestMapsScript(AlbinaUtil.getValidityDateString(bulletins));
-				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportIds);
+					AlbinaUtil.runCopyLatestMapsScript(validityDateString);
 				logger.info("Map production finished");
 			}
 		});
@@ -357,161 +453,138 @@ public class PublicationController {
 	/**
 	 * Trigger the creation of the pdfs.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set the necessary flag
 	 * @param bulletins
 	 *            the bulletins contained in the pdfs
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
 	 */
-	public void createPdf(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
-		new Thread(new Runnable() {
+	public Thread createPdf(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
+		return new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("PDF production started");
-					boolean result = true;
-					if (!PdfUtil.getInstance().createOverviewPdfs(bulletins))
-						result = false;
+					PdfUtil.getInstance().createOverviewPdfs(bulletins, validityDateString, publicationTimeString);
 					for (String region : GlobalVariables.regionsEuregio)
-						if (!PdfUtil.getInstance().createRegionPdfs(bulletins, region))
-							result = false;
+						PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
+								publicationTimeString);
+					AlbinaUtil.runCopyPdfsScript(validityDateString, publicationTimeString);
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestPdfsScript(AlbinaUtil.getValidityDateString(bulletins));
-					if (result)
-						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error creating pdfs:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+						AlbinaUtil.runCopyLatestPdfsScript(validityDateString);
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating pdfs:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
 					logger.info("PDF production finished");
 				}
 			}
-		}).start();
+		});
 	}
 
 	/**
 	 * Trigger the creation of the simple html files.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set the necessary flag
 	 * @param bulletins
 	 *            the bulletins contained in the html files
 	 */
-	public void createSimpleHtml(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
-		new Thread(new Runnable() {
+	public Thread createSimpleHtml(List<AvalancheBulletin> bulletins) {
+		return new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("Simple HTML production started");
-					boolean result = true;
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 						AlbinaUtil.runDeleteLatestHtmlsScript();
-					if (!SimpleHtmlUtil.getInstance().createOverviewSimpleHtml(bulletins))
-						result = false;
+					SimpleHtmlUtil.getInstance().createOverviewSimpleHtml(bulletins);
 					for (String region : GlobalVariables.regionsEuregio)
-						if (!SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region))
-							result = false;
-					if (result)
-						AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error creating simple HTML:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+						SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating simple HTML:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
 					logger.info("Simple HTML production finished");
 				}
 			}
-		}).start();
+		});
 	}
 
 	/**
 	 * Trigger the creation of the static widgets.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set the necessary flag
 	 * @param bulletins
 	 *            the bulletins contained in the static widgets
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
+	 * @param publicationTimeString
+	 *            the time of publication
+	 * @param validityDateString
+	 *            the start of the validity of the report
 	 */
-	public void createStaticWidgets(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins) {
-		new Thread(new Runnable() {
+	public Thread createStaticWidgets(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
+		return new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("Static widget production started");
-					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins);
+					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins, validityDateString,
+							publicationTimeString);
+					AlbinaUtil.runCopyPngsScript(validityDateString, publicationTimeString);
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestPngsScript(AlbinaUtil.getValidityDateString(bulletins));
-					AvalancheReportController.getInstance().setAvalancheReportStaticWidgetFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error creating static widgets:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+						AlbinaUtil.runCopyLatestPngsScript(validityDateString);
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating static widgets:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
 					logger.info("Static widget production finished");
 				}
 			}
-		}).start();
+		});
 	}
 
 	/**
 	 * Trigger the sending of the emails.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set the necessary flag
 	 * @param bulletins
 	 *            the bulletins contained in the emails
 	 */
-	public void sendEmails(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins, List<String> regions,
-			boolean update) {
-		new Thread(new Runnable() {
+	public Thread sendEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+		return new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("Email production started");
 					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update);
-					AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error preparing emails:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing emails:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
 					logger.info("Email production finished");
 				}
 			}
-		}).start();
+		});
 	}
 
 	/**
 	 * Trigger the sending of the messages via messengerpeople.
 	 * 
-	 * @param avalancheReportIds
-	 *            the ids of the corresponding reports to set the necessary flag
 	 * @param bulletins
 	 *            the bulletins contained in the messages
 	 */
-	public void triggerMessengerpeople(List<String> avalancheReportIds, List<AvalancheBulletin> bulletins,
-			List<String> regions, boolean update) {
-		new Thread(new Runnable() {
+	public Thread triggerMessengerpeople(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+		return new Thread(new Runnable() {
 			public void run() {
 				try {
 					logger.info("Messengerpeople production started");
 					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
-					AvalancheReportController.getInstance().setAvalancheReportWhatsappFlag(avalancheReportIds);
-					AvalancheReportController.getInstance().setAvalancheReportTelegramFlag(avalancheReportIds);
-				} catch (IOException e) {
-					logger.error("Error preparing messengerpeople:" + e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
+				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing messengerpeople:" + e.getMessage());
 					e.printStackTrace();
 				} finally {
 					logger.info("Messengerpeople production finished");
 				}
 			}
-		}).start();
+		});
 	}
 }

@@ -33,13 +33,11 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.envers.Audited;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import eu.albina.model.enumerations.Aspect;
 
-@Audited
 @Entity
 @Table(name = "avalanche_situation")
 public class AvalancheSituation extends AbstractPersistentObject implements AvalancheInformationObject {

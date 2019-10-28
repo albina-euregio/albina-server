@@ -79,9 +79,6 @@ public class UpdateJob implements org.quartz.Job {
 			if (!changedRegions.isEmpty()) {
 				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
 						.publishBulletins(startDate, endDate, changedRegions, publicationDate, user);
-				List<String> avalancheReportIds = AvalancheReportController.getInstance()
-						.publishReport(publishedBulletins.values(), startDate, changedRegions, user, publicationDate);
-
 				if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
 					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
 					for (AvalancheBulletin avalancheBulletin : publishedBulletins.values()) {
@@ -90,9 +87,11 @@ public class UpdateJob implements org.quartz.Job {
 							result.add(avalancheBulletin);
 					}
 					if (result != null && !result.isEmpty())
-						PublicationController.getInstance().updateAutomatically(avalancheReportIds, result,
-								changedRegions);
+						PublicationController.getInstance().updateAutomatically(result, changedRegions);
 				}
+
+				AvalancheReportController.getInstance().publishReport(publishedBulletins.values(), startDate,
+						changedRegions, user, publicationDate);
 			} else {
 				logger.info("No bulletins to update.");
 			}

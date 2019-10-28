@@ -148,6 +148,15 @@ public class EmailUtil {
 
 	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
 		logger.debug("Sending bulletin email in " + lang + " for " + region + "...");
+		return sendEmail(lang, region, emailHtml, subject);
+	}
+
+	public HttpResponse sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
+		logger.debug("Sending blog post email in " + lang + " for " + region + "...");
+		return sendEmail(lang, region, emailHtml, subject);
+	}
+
+	private HttpResponse sendEmail(LanguageCode lang, String region, String emailHtml, String subject) {
 		try {
 			RapidMailProcessorController rmc = RapidMailProcessorController.getInstance();
 			RegionConfigurationController rcc = RegionConfigurationController.getInstance();
@@ -162,129 +171,6 @@ public class EmailUtil {
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region + ": " + e.getMessage());
 			return null;
-		}
-	}
-
-	public String createConfirmationEmailHtml(String token, LanguageCode lang) {
-		try {
-			// Create data model
-			Map<String, Object> root = new HashMap<>();
-			root.put("token", token);
-			root.put("snowpackstyle", getSnowpackStyle(true));
-			Map<String, Object> image = new HashMap<>();
-			switch (lang) {
-			case de:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lawinen_report.png");
-				break;
-			case it:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/valanghe_report.png");
-				break;
-			case en:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
-				break;
-			default:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
-				break;
-			}
-			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
-			Map<String, Object> socialMediaImages = new HashMap<>();
-			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
-			socialMediaImages.put("twitter", GlobalVariables.getServerImagesUrl() + "social_media/twitter.png");
-			socialMediaImages.put("instagram", GlobalVariables.getServerImagesUrl() + "social_media/instagram.png");
-			socialMediaImages.put("youtube", GlobalVariables.getServerImagesUrl() + "social_media/youtube.png");
-			socialMediaImages.put("whatsapp", GlobalVariables.getServerImagesUrl() + "social_media/whatsapp.png");
-			image.put("socialmedia", socialMediaImages);
-			root.put("image", image);
-
-			// add texts
-			Map<String, Object> text = new HashMap<>();
-			text.put("title", GlobalVariables.getTitle(lang));
-			text.put("follow", GlobalVariables.getFollowUs(lang));
-			switch (lang) {
-			case de:
-				text.put("title", "Lawinen.report");
-				text.put("headline", "Hallo!");
-				text.put("confirm", "Bestätigen");
-				text.put("confirmation", "Anmeldebestätigung");
-				break;
-			case it:
-				text.put("title", "Valanghe.report");
-				text.put("headline", "Ciao!");
-				text.put("confirm", "Confermare");
-				text.put("confirmation", "Conferma d'iscrizione");
-				break;
-			case en:
-				text.put("title", "Avalanche.report");
-				text.put("headline", "Hello!");
-				text.put("confirm", "Confirm");
-				text.put("confirmation", "Registration confirmation");
-				break;
-			default:
-				text.put("title", "Avalanche.report");
-				text.put("headline", "Hello!");
-				text.put("confirm", "Confirm");
-				text.put("confirmation", "Registration confirmation");
-				break;
-			}
-			text.put("body1", getConfirmationText1(lang));
-			text.put("body2", getConfirmationText2(lang));
-			root.put("text", text);
-
-			Map<String, Object> links = new HashMap<>();
-			links.put("confirm", GlobalVariables.avalancheReportBaseUrl + "subscribe/" + token);
-			links.put("website", GlobalVariables.avalancheReportBaseUrl);
-			Map<String, Object> socialMediaLinks = new HashMap<>();
-			socialMediaLinks.put("facebook", "https://avalanche.report/facebook");
-			socialMediaLinks.put("twitter", "https://avalanche.report/twitter");
-			socialMediaLinks.put("instagram", "https://avalanche.report/instagram");
-			socialMediaLinks.put("youtube", "https://avalanche.report/youtube");
-			socialMediaLinks.put("whatsapp", "https://avalanche.report/whatsapp");
-			links.put("socialmedia", socialMediaLinks);
-			root.put("link", links);
-
-			// Get template
-			Template temp = cfg.getTemplate("confirmation-email.html");
-
-			// Merge template and model
-			Writer out = new StringWriter();
-			// Writer out = new OutputStreamWriter(System.out);
-			temp.process(root, out);
-
-			return out.toString();
-		} catch (IOException e) {
-			logger.error("Confirmation email could not be created: " + e.getMessage());
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			logger.error("Confirmation email could not be created: " + e.getMessage());
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	private String getConfirmationText1(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Danke für deine Registrierung bei Lawinen.report.\n\nUm die Registrierung abzuschließen, klicke bitte auf folgenden Link:\n";
-		case it:
-			return "Grazie per esservi registrati su Avalanche.report.\n\nPer completare la registrazione, seguire il link:\n";
-		case en:
-			return "Thank you for registering at Avalanche.report.\n\nTo complete the registration, follow the link:\n";
-		default:
-			return "Thank you for registering at Avalanche.report.\n\nTo complete the registration, follow the link:\n";
-		}
-	}
-
-	private String getConfirmationText2(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Wenn du dich nicht bei Lawinen.report registriert hast, ignoriere einfach diese Nachricht.";
-		case it:
-			return "Se non si è registrato su Valanghe.report, è sufficiente ignorare questo messaggio.";
-		case en:
-			return "If you did not register at Avalanche.report, just ignore this message.";
-		default:
-			return "If you did not register at Avalanche.report, just ignore this message.";
 		}
 	}
 
@@ -516,18 +402,15 @@ public class EmailUtil {
 			root.put("bulletins", arrayList);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("website", GlobalVariables.avalancheReportBaseUrl + "bulletin/"
-					+ AlbinaUtil.getValidityDateString(bulletins) + "?lang=" + lang.toString());
+			links.put("website", GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/"
+					+ AlbinaUtil.getValidityDateString(bulletins));
 			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
 			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region));
 			links.put("imprint", GlobalVariables.getImprintLink(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
-			socialMediaLinks.put("facebook",
-					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
-			socialMediaLinks.put("instagram",
-					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
-			socialMediaLinks.put("youtube",
-					GlobalVariables.avalancheReportBaseUrl + "?lang=" + lang.toString() + "#followDialog");
+			socialMediaLinks.put("facebook", GlobalVariables.getAvalancheReportBaseUrl(lang) + "#followDialog");
+			socialMediaLinks.put("instagram", GlobalVariables.getAvalancheReportBaseUrl(lang) + "#followDialog");
+			socialMediaLinks.put("youtube", GlobalVariables.getAvalancheReportBaseUrl(lang) + "#followDialog");
 			links.put("socialmedia", socialMediaLinks);
 			root.put("link", links);
 
@@ -540,10 +423,7 @@ public class EmailUtil {
 			temp.process(root, out);
 
 			return out.toString();
-		} catch (IOException e) {
-			logger.error("Bulletin email could not be created: " + e.getMessage());
-			e.printStackTrace();
-		} catch (TemplateException e) {
+		} catch (IOException | TemplateException e) {
 			logger.error("Bulletin email could not be created: " + e.getMessage());
 			e.printStackTrace();
 		}

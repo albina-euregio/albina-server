@@ -53,8 +53,8 @@ public class StatisticsService {
 	@GET
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getBulletinCsv(
-			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String startDate,
-			@ApiParam(value = "Starttime in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String endDate,
+			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String startDate,
+			@ApiParam(value = "End date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String endDate,
 			@QueryParam("lang") LanguageCode language) {
 		logger.debug("GET CSV bulletins");
 
@@ -73,7 +73,8 @@ public class StatisticsService {
 			else
 				return Response.notAcceptable(null).build();
 
-			String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language);
+			String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language,
+					false);
 			return Response.ok(new ByteArrayInputStream(statistics.getBytes()), MediaType.APPLICATION_OCTET_STREAM)
 					.build();
 		} catch (UnsupportedEncodingException e) {

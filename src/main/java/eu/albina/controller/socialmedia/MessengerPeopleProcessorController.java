@@ -28,6 +28,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
+import org.json.JSONObject;
 
 import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -55,7 +56,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 
 	// private static String
 	// apikey="a1e6d5387c979b039040447af4a4d20a_11513_9fc5a49fc674b5b2750ad90a7";
-	private final String baseUrl = "https://rest.messengerpeople.com/api/v1";
+	private final String baseUrl = "https://rest.messengerpeople.com/api/v10";
 	ObjectMapper objectMapper = new ObjectMapper();
 	int MESSENGER_PEOPLE_CONNECTION_TIMEOUT = 10000;
 	int MESSENGER_PEOPLE_SOCKET_TIMEOUT = 10000;
@@ -73,16 +74,19 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 	 */
 	public List<MessengerPeopleUser> getUsers(MessengerPeopleConfig config, Integer limit, Integer offset)
 			throws IOException {
-		String json = Request
+		String jsonString = Request
 				.Get(baseUrl + "/user"
 						+ String.format("?apikey=%s&limit=%s&offset=%s", config.getApiKey(), limit, offset))
 				.connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT).socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT)
 				.execute().returnContent().asString();
-		List<MessengerPeopleUser> users = objectMapper.readValue(json, new TypeReference<List<MessengerPeopleUser>>() {
-		});
+		JSONObject json = new JSONObject(jsonString);
+		List<MessengerPeopleUser> users = objectMapper.readValue(json.get("user").toString(),
+				new TypeReference<List<MessengerPeopleUser>>() {
+				});
 		return users;
 	}
 
+	// TODO update to API v10
 	public void setUserDetails(MessengerPeopleConfig config, String id, MessengerPeopleUserData messengerPeopleUserData)
 			throws IOException {
 		String json = URLEncoder.encode(objectMapper.writeValueAsString(messengerPeopleUserData),
@@ -115,7 +119,9 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 		} else if (StringUtils.equalsIgnoreCase(language, "IT")) {
 			categoryId = 3;
 		}
-		String params = String.format("apikey=%s&message=%s&category=%s", config.getApiKey(), message, categoryId);
+		String urlEncodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8.toString());
+		String params = String.format("apikey=%s&message=%s&category=%s", config.getApiKey(), urlEncodedMessage,
+				categoryId);
 		if (attachmentUrl != null) {
 			params += "&attachment=" + URLEncoder.encode(attachmentUrl, "UTF-8");
 		}
