@@ -84,7 +84,7 @@
       	<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
       	<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
       	<albina.conf.maps-path>/mnt/albina_files_dev/</albina.conf.maps-path>
-      	<albina.conf.univie-map-production-url>http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php</albina.conf.univie-map-production-url>
+      	<albina.conf.univie-map-production-url>https://admin.avalanche.report/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php</albina.conf.univie-map-production-url>
       	<albina.conf.pdf-directory>/mnt/albina_files_dev/</albina.conf.pdf-directory>
       	<albina.conf.html-directory>/mnt/simple_dev/</albina.conf.html-directory>
       	<albina.conf.publish-at-5-pm>false</albina.conf.publish-at-5-pm>
@@ -126,7 +126,7 @@
       	<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
       	<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
       	<albina.conf.maps-path>/mnt/albina_files/</albina.conf.maps-path>
-      	<albina.conf.univie-map-production-url>http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php</albina.conf.univie-map-production-url>
+      	<albina.conf.univie-map-production-url>https://admin.avalanche.report/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php</albina.conf.univie-map-production-url>
       	<albina.conf.pdf-directory>/mnt/albina_files/</albina.conf.pdf-directory>
       	<albina.conf.html-directory>/mnt/simple/</albina.conf.html-directory>
       	<albina.conf.publish-at-5-pm>true</albina.conf.publish-at-5-pm>
