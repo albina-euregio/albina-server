@@ -147,22 +147,24 @@ public class PdfUtil {
 			// TODO use correct region string
 			if (region != null) {
 				if (grayscale) {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString
-							+ "/" + validityDateString + "_" + region + "_" + lang.toString() + "_bw.pdf";
+					filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/"
+							+ publicationTimeString + "/" + validityDateString + "_" + region + "_" + lang.toString()
+							+ "_bw.pdf";
 					writer = new PdfWriter(filename);
 				} else {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString
-							+ "/" + validityDateString + "_" + region + "_" + lang.toString() + ".pdf";
+					filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/"
+							+ publicationTimeString + "/" + validityDateString + "_" + region + "_" + lang.toString()
+							+ ".pdf";
 					writer = new PdfWriter(filename);
 				}
 			} else {
 				if (grayscale) {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString
-							+ "/" + validityDateString + "_" + lang.toString() + "_bw.pdf";
+					filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/"
+							+ publicationTimeString + "/" + validityDateString + "_" + lang.toString() + "_bw.pdf";
 					writer = new PdfWriter(filename);
 				} else {
-					filename = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString
-							+ "/" + validityDateString + "_" + lang.toString() + ".pdf";
+					filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/"
+							+ publicationTimeString + "/" + validityDateString + "_" + lang.toString() + ".pdf";
 					writer = new PdfWriter(filename);
 				}
 			}

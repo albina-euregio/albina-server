@@ -1,1 +1,1 @@
-rm /mnt/albina_files/$1/*
+rm $1/$2/*

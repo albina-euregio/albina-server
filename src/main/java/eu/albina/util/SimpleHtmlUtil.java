@@ -159,7 +159,7 @@ public class SimpleHtmlUtil {
 				else
 					filename = lang.toString() + ".html";
 
-				String dirPath = GlobalVariables.getHtmlDirectory() + validityDateString;
+				String dirPath = GlobalVariables.getHtmlDirectory() + "/" + validityDateString;
 				new File(dirPath).mkdirs();
 
 				// using PosixFilePermission to set file permissions 755
@@ -185,12 +185,13 @@ public class SimpleHtmlUtil {
 				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
 				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
 
+				// TODO: create script to copy html files
 				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins))) {
-					Path link = Paths.get(GlobalVariables.getHtmlDirectory() + filename);
+					Path link = Paths.get(GlobalVariables.getHtmlDirectory() + "/" + filename);
 					if (Files.exists(link))
 						Files.delete(link);
 					Files.createLink(link, newHtmlFile.toPath());
-					AlbinaUtil.setFilePermissions(GlobalVariables.getHtmlDirectory() + filename);
+					AlbinaUtil.setFilePermissions(GlobalVariables.getHtmlDirectory() + "/" + filename);
 				}
 
 				return true;

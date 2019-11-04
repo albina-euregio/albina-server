@@ -1,9 +1,0 @@
-cp /mnt/albina_files_dev/$1/$1_de.png /mnt/albina_files_dev/latest/
-cp /mnt/albina_files_dev/$1/$1_it.png /mnt/albina_files_dev/latest/
-cp /mnt/albina_files_dev/$1/$1_en.png /mnt/albina_files_dev/latest/
-mv /mnt/albina_files_dev/latest/$1_de.png /mnt/albina_files_dev/latest/de.png
-mv /mnt/albina_files_dev/latest/$1_it.png /mnt/albina_files_dev/latest/it.png
-mv /mnt/albina_files_dev/latest/$1_en.png /mnt/albina_files_dev/latest/en.png
-chmod 744 /mnt/albina_files_dev/latest/de.png
-chmod 744 /mnt/albina_files_dev/latest/it.png
-chmod 744 /mnt/albina_files_dev/latest/en.png

@@ -1,1 +1,1 @@
-rm /mnt/albina_files/latest/*
+rm $1/latest/*

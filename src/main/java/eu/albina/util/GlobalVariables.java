@@ -77,10 +77,10 @@ public class GlobalVariables {
 	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
-	private static String pdfDirectory = "/mnt/albina_files_local/";
-	private static String htmlDirectory = "/mnt/simple_local/";
-	private static String mapsPath = "http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/";
-	public static String univieMapProductionUrl = "http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
+	private static String pdfDirectory = "/mnt/albina_files_local";
+	private static String htmlDirectory = "/mnt/simple_local";
+	private static String mapsPath = "/mnt/albina_files_local";
+	public static String mapProductionUrl = "https://admin.avalanche.report/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
 	public static String scriptsPath = "/opt/local/";
 
 	public static String blogCacheUrl = "https://blogcache.avalanche.report/";
@@ -428,13 +428,13 @@ public class GlobalVariables {
 		setConfigProperty("mapsPath", mapsPath);
 	}
 
-	public static String getUnivieMapProductionUrl() {
-		return univieMapProductionUrl;
+	public static String getMapProductionUrl() {
+		return mapProductionUrl;
 	}
 
-	public static void setUnivieMapProductionUrl(String univieMapProductionUrl) throws ConfigurationException {
-		GlobalVariables.univieMapProductionUrl = univieMapProductionUrl;
-		setConfigProperty("univieMapProductionUrl", univieMapProductionUrl);
+	public static void setMapProductionUrl(String mapProductionUrl) throws ConfigurationException {
+		GlobalVariables.mapProductionUrl = mapProductionUrl;
+		setConfigProperty("mapProductionUrl", mapProductionUrl);
 	}
 
 	public static String getAvalancheReportUsername() {
@@ -1484,7 +1484,7 @@ public class GlobalVariables {
 			if (config.containsKey("mapsPath"))
 				mapsPath = config.getString("mapsPath");
 			if (config.containsKey("univieMapProductionUrl"))
-				univieMapProductionUrl = config.getString("univieMapProductionUrl");
+				mapProductionUrl = config.getString("univieMapProductionUrl");
 			if (config.containsKey("scriptsPath"))
 				scriptsPath = config.getString("scriptsPath");
 			if (config.containsKey("createCaaml"))
@@ -1541,8 +1541,8 @@ public class GlobalVariables {
 			json.put("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
 		if (mapsPath != null)
 			json.put("mapsPath", mapsPath);
-		if (univieMapProductionUrl != null)
-			json.put("univieMapProductionUrl", univieMapProductionUrl);
+		if (mapProductionUrl != null)
+			json.put("univieMapProductionUrl", mapProductionUrl);
 		if (scriptsPath != null)
 			json.put("scriptsPath", scriptsPath);
 		json.put("createCaaml", createCaaml);
@@ -1597,7 +1597,7 @@ public class GlobalVariables {
 		if (configuration.has("mapsPath"))
 			setMapsPath(configuration.getString("mapsPath"));
 		if (configuration.has("univieMapProductionUrl"))
-			setUnivieMapProductionUrl(configuration.getString("univieMapProductionUrl"));
+			setMapProductionUrl(configuration.getString("univieMapProductionUrl"));
 		if (configuration.has("createCaaml"))
 			setCreateCaaml(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))

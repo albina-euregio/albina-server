@@ -55,8 +55,8 @@ public class XmlUtil {
 	// LANG
 	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, String validityDateString,
 			String publicationTimeString) throws TransformerException, IOException {
-		String dirPathParent = GlobalVariables.getPdfDirectory() + validityDateString;
-		String dirPath = GlobalVariables.getPdfDirectory() + validityDateString + "/" + publicationTimeString;
+		String dirPathParent = GlobalVariables.getPdfDirectory() + "/" + validityDateString;
+		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();
 
 		// using PosixFilePermission to set file permissions 755
@@ -209,7 +209,8 @@ public class XmlUtil {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
-		dateTimeReport.appendChild(doc.createTextNode((new DateTime().withTimeAtStartOfDay()).toString(GlobalVariables.formatterDateTime)));
+		dateTimeReport.appendChild(doc
+				.createTextNode((new DateTime().withTimeAtStartOfDay()).toString(GlobalVariables.formatterDateTime)));
 		metaData.appendChild(dateTimeReport);
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");

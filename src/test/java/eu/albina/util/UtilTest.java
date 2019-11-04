@@ -283,8 +283,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createMaps() {
-		MapUtil.createDangerRatingMaps(bulletins, AlbinaUtil.getValidityDateString(bulletins),
-				AlbinaUtil.getPublicationTime(bulletins));
+		MapUtil.createDangerRatingMaps(bulletins);
 	}
 
 	@Ignore
