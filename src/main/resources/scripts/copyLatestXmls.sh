@@ -1,7 +1,7 @@
-cp /mnt/albina_files/$1/*.xml /mnt/albina_files/latest/
-mv /mnt/albina_files/latest/$1_de.xml /mnt/albina_files/latest/de.xml
-mv /mnt/albina_files/latest/$1_it.xml /mnt/albina_files/latest/it.xml
-mv /mnt/albina_files/latest/$1_en.xml /mnt/albina_files/latest/en.xml
-chmod 744 /mnt/albina_files/latest/de.xml
-chmod 744 /mnt/albina_files/latest/it.xml
-chmod 744 /mnt/albina_files/latest/en.xml
+cp $1/$2/*.xml $1/latest/
+mv $1/latest/$2_de.xml $1/latest/de.xml
+mv $1/latest/$2_it.xml $1/latest/it.xml
+mv $1/latest/$2_en.xml $1/latest/en.xml
+chmod 744 $1/latest/de.xml
+chmod 744 $1/latest/it.xml
+chmod 744 $1/latest/en.xml

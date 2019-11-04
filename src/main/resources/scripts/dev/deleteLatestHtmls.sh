@@ -1,1 +1,0 @@
-rm /mnt/simple_dev/*

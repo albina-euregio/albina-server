@@ -1,1 +1,1 @@
-rm /mnt/simple/*
+rm $1/*

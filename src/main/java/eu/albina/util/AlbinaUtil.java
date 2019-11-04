@@ -521,8 +521,8 @@ public class AlbinaUtil {
 
 	public static void runCopyMapsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyMaps.sh", date,
-					publicationTime);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyMaps.sh",
+					GlobalVariables.getMapsPath(), date, publicationTime);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps copied to local directory for " + date + ".");
@@ -534,7 +534,8 @@ public class AlbinaUtil {
 
 	public static void runDeleteFilesScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteFiles.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteFiles.sh",
+					GlobalVariables.getPdfDirectory(), date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Files deleted for " + date + ".");
@@ -546,8 +547,8 @@ public class AlbinaUtil {
 
 	public static void runCopyPdfsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPdfs.sh", date,
-					publicationTime);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPdfs.sh",
+					GlobalVariables.getPdfDirectory(), date, publicationTime);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PDFs copied to date directory for " + date + ".");
@@ -559,7 +560,8 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestPdfsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestPdfs.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestPdfs.sh",
+					GlobalVariables.getPdfDirectory(), date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PDFs for " + date + " copied to latest.");
@@ -571,7 +573,8 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestHtmlsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestHtmls.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestHtmls.sh",
+					GlobalVariables.getPdfDirectory(), date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("HTMLs for " + date + " copied to latest.");
@@ -583,8 +586,8 @@ public class AlbinaUtil {
 
 	public static void runCopyXmlsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyXmls.sh", date,
-					publicationTime);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyXmls.sh",
+					GlobalVariables.getPdfDirectory(), date, publicationTime);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("XMLs copied to date directory for " + date + ".");
@@ -596,7 +599,8 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestXmlsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestXmls.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestXmls.sh",
+					GlobalVariables.getPdfDirectory(), date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("XMLs for " + date + " copied to latest.");
@@ -608,8 +612,8 @@ public class AlbinaUtil {
 
 	public static void runCopyPngsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPngs.sh", date,
-					publicationTime);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPngs.sh",
+					GlobalVariables.getPdfDirectory(), date, publicationTime);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PNGs copied to date directory for " + date + ".");
@@ -621,7 +625,8 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestPngsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestPngs.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestPngs.sh",
+					GlobalVariables.getPdfDirectory(), date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PNGs for " + date + " copied to latest.");
@@ -633,7 +638,8 @@ public class AlbinaUtil {
 
 	public static void runCopyLatestMapsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestMaps.sh", date);
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestMaps.sh",
+					GlobalVariables.getMapsPath(), GlobalVariables.getMapsPath(), date);
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps for " + date + " copied to latest.");
@@ -645,7 +651,8 @@ public class AlbinaUtil {
 
 	public static void runDeleteLatestFilesScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteLatestFiles.sh");
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteLatestFiles.sh",
+					GlobalVariables.getPdfDirectory());
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Latest files deleted.");
@@ -657,7 +664,8 @@ public class AlbinaUtil {
 
 	public static void runDeleteLatestHtmlsScript() {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteLatestHtmls.sh");
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteLatestHtmls.sh",
+					GlobalVariables.getHtmlDirectory());
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Latest htmls deleted.");

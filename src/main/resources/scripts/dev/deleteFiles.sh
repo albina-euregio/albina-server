@@ -1,1 +1,0 @@
-rm /mnt/albina_files_dev/$1/*
