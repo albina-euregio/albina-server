@@ -65,7 +65,7 @@ public class MapUtil {
 
 		try {
 			// Create connection
-			URL url = new URL(GlobalVariables.univieMapProductionUrl);
+			URL url = new URL(GlobalVariables.mapProductionUrl);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
