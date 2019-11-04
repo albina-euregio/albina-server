@@ -45,13 +45,8 @@ public class MapUtil {
 	 * 
 	 * @param bulletins
 	 *            The bulletins to create the maps from.
-	 * @param publicationTimeString
-	 *            the time of publication
-	 * @param validityDateString
-	 *            the start of the validity of the report
 	 */
-	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, String validityDateString,
-			String publicationTimeString) {
+	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) {
 
 		// TODO implement local creation of danger rating maps
 		// TODO delete copying of maps
@@ -59,7 +54,6 @@ public class MapUtil {
 		try {
 			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
-			AlbinaUtil.runCopyMapsScript(validityDateString, publicationTimeString);
 		} catch (AlbinaException | TransformerException e) {
 			logger.error("Error producing maps: " + e.getMessage());
 			e.printStackTrace();

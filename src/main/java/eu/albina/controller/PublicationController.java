@@ -442,7 +442,8 @@ public class PublicationController {
 		return new Thread(new Runnable() {
 			public void run() {
 				logger.info("Map production started");
-				MapUtil.createDangerRatingMaps(bulletins, validityDateString, publicationTimeString);
+				MapUtil.createDangerRatingMaps(bulletins);
+				AlbinaUtil.runCopyMapsScript(validityDateString, publicationTimeString);
 				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 					AlbinaUtil.runCopyLatestMapsScript(validityDateString);
 				logger.info("Map production finished");
