@@ -1542,7 +1542,7 @@ public class GlobalVariables {
 		if (mapsPath != null)
 			json.put("mapsPath", mapsPath);
 		if (mapProductionUrl != null)
-			json.put("univieMapProductionUrl", mapProductionUrl);
+			json.put("mapProductionUrl", mapProductionUrl);
 		if (scriptsPath != null)
 			json.put("scriptsPath", scriptsPath);
 		json.put("createCaaml", createCaaml);
@@ -1596,8 +1596,8 @@ public class GlobalVariables {
 			setServerImagesUrlLocalhost(configuration.getString("serverImagesUrlLocalhost"));
 		if (configuration.has("mapsPath"))
 			setMapsPath(configuration.getString("mapsPath"));
-		if (configuration.has("univieMapProductionUrl"))
-			setMapProductionUrl(configuration.getString("univieMapProductionUrl"));
+		if (configuration.has("mapProductionUrl"))
+			setMapProductionUrl(configuration.getString("mapProductionUrl"));
 		if (configuration.has("createCaaml"))
 			setCreateCaaml(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))
