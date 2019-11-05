@@ -65,9 +65,13 @@ public class MapUtil {
 
 		try {
 			// Create connection
+			logger.info("1");
 			URL url = new URL(GlobalVariables.mapProductionUrl);
+			logger.info("2");
 			connection = (HttpURLConnection) url.openConnection();
+			logger.info("3");
 			connection.setRequestMethod("POST");
+			logger.info("4");
 			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
 			connection.setRequestProperty("Content-Length", Integer.toString(caaml.getBytes().length));
@@ -78,8 +82,10 @@ public class MapUtil {
 
 			// Send request
 			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+			logger.info("5");
 			wr.writeBytes(caaml);
 			wr.close();
+			logger.info("6");
 
 			// Get Response
 			logger.info("Wait for response ...");
