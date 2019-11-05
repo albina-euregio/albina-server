@@ -77,7 +77,7 @@ public class MapUtil {
 			connection.setDoOutput(true);
 
 			// Send request
-			connection.setReadTimeout(1200000);
+			connection.setConnectTimeout(1200000);
 			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 			wr.writeBytes(caaml);
 			wr.close();
