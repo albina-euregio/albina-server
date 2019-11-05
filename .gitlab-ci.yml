@@ -17,7 +17,9 @@ production build:
 
 deploy to development:
   stage: deploy
-  script: mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:deploy
+  script:
+    - export GIT_VERSION=$(git describe --always)
+    - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:redeploy
   environment:
     name: development
   only:
