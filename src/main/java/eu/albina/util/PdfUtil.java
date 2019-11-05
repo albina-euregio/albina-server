@@ -286,11 +286,11 @@ public class PdfUtil {
 			ImageData regionAMImageDate;
 			if (grayscale)
 				regionAMImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString() + "/"
+						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
 								+ publicationTime + "/" + avalancheBulletin.getId() + "_bw.jpg");
 			else
 				regionAMImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString() + "/"
+						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
 								+ publicationTime + "/" + avalancheBulletin.getId() + ".jpg");
 			Image regionAMImg = new Image(regionAMImageDate);
 			regionAMImg.scaleToFit(regionMapSize, regionMapSize);
@@ -324,11 +324,11 @@ public class PdfUtil {
 			ImageData regionPMImageDate;
 			if (grayscale)
 				regionPMImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString() + "/"
+						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
 								+ publicationTime + "/" + avalancheBulletin.getId() + "_PM_bw.jpg");
 			else
 				regionPMImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString() + "/"
+						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
 								+ publicationTime + "/" + avalancheBulletin.getId() + "_PM.jpg");
 			Image regionPMImg = new Image(regionPMImageDate);
 			regionPMImg.scaleToFit(regionMapSize, regionMapSize);
@@ -357,11 +357,11 @@ public class PdfUtil {
 			ImageData regionImageDate;
 			if (grayscale)
 				regionImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString() + "/"
+						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
 								+ publicationTime + "/" + avalancheBulletin.getId() + "_bw.jpg");
 			else
 				regionImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + avalancheBulletin.getValidityDateString() + "/"
+						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
 								+ publicationTime + "/" + avalancheBulletin.getId() + ".jpg");
 			Image regionImg = new Image(regionImageDate);
 			regionImg.scaleToFit(regionMapSize, regionMapSize);
@@ -1121,7 +1121,7 @@ public class PdfUtil {
 				mapHeight = mapWidth;
 			}
 
-			ImageData overviewMapAMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
+			ImageData overviewMapAMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
 					+ getOverviewMapFilename(region, false, true, grayscale));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
@@ -1132,7 +1132,7 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
 					.showText(GlobalVariables.getAMText(lang)).endText();
 
-			ImageData overviewMapPMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
+			ImageData overviewMapPMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
 					+ getOverviewMapFilename(region, true, true, grayscale));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
@@ -1143,7 +1143,7 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(blackColor, true)
 					.showText(GlobalVariables.getPMText(lang)).endText();
 		} else {
-			ImageData overviewMapImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
+			ImageData overviewMapImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
 					+ getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);

@@ -525,9 +525,9 @@ public class AlbinaUtil {
 					GlobalVariables.getMapsPath(), date, publicationTime);
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Maps copied to local directory for " + date + ".");
+			logger.info("Maps copied to directory for " + date + ".");
 		} catch (Exception e) {
-			logger.error("Maps could not be copied to local directory for " + date + "!");
+			logger.error("Maps could not be copied to directory for " + date + "!");
 			e.printStackTrace();
 		}
 	}

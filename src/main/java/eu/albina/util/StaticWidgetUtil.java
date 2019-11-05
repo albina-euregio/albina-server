@@ -125,11 +125,11 @@ public class StaticWidgetUtil {
 
 			BufferedImage overviewThumbnail;
 			if (AlbinaUtil.hasDaytimeDependency(bulletins))
-				overviewThumbnail = resizeWidth(loadImageFromFile(GlobalVariables.getMapsPath() + validityDateString
-						+ "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 600);
+				overviewThumbnail = resizeWidth(loadImageFromFile(GlobalVariables.getMapsPath() + "/"
+						+ validityDateString + "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 600);
 			else
-				overviewThumbnail = resizeHeight(loadImageFromFile(GlobalVariables.getMapsPath() + validityDateString
-						+ "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 400);
+				overviewThumbnail = resizeHeight(loadImageFromFile(GlobalVariables.getMapsPath() + "/"
+						+ validityDateString + "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 400);
 
 			if (highestDangerRating != DangerRating.very_high) {
 				ig2.setPaint(getDangerRatingColor(highestDangerRating));
