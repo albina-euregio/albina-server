@@ -98,6 +98,7 @@ public class MapUtil {
 
 			return response.toString();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new AlbinaException(e.getMessage());
 		} finally {
 			if (connection != null) {
