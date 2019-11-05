@@ -82,8 +82,10 @@ public class MapUtil {
 			wr.close();
 
 			// Get Response
+			logger.info("Wait for response ...");
 			connection.setReadTimeout(1200000);
 			InputStream is = connection.getInputStream();
+			logger.info("Got response!");
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 			StringBuilder response = new StringBuilder();
 			String line;
