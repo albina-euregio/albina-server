@@ -45,23 +45,25 @@ public class BlogJob implements org.quartz.Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		logger.info("Blog job triggered!");
 		for (String region : GlobalVariables.regionsEuregio) {
 			switch (region) {
 			case "AT-07":
 				if (GlobalVariables.isPublishBlogsTyrol()) {
+					logger.info("Blog job triggered for TY!");
 					for (LanguageCode lang : GlobalVariables.languages)
 						(new BlogController(region, lang)).sendNewBlogPosts();
 				}
 				break;
 			case "IT-32-BZ":
 				if (GlobalVariables.isPublishBlogsSouthTyrol()) {
+					logger.info("Blog job triggered for BZ!");
 					for (LanguageCode lang : GlobalVariables.languages)
 						(new BlogController(region, lang)).sendNewBlogPosts();
 				}
 				break;
 			case "IT-32-TN":
 				if (GlobalVariables.isPublishBlogsTrentino()) {
+					logger.info("Blog job triggered for TN!");
 					for (LanguageCode lang : GlobalVariables.languages)
 						(new BlogController(region, lang)).sendNewBlogPosts();
 				}
