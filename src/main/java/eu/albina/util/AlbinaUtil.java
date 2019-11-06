@@ -494,6 +494,7 @@ public class AlbinaUtil {
 		perms.add(PosixFilePermission.OWNER_EXECUTE);
 		// add group permissions
 		perms.add(PosixFilePermission.GROUP_READ);
+		perms.add(PosixFilePermission.GROUP_WRITE);
 		// add others permissions
 		perms.add(PosixFilePermission.OTHERS_READ);
 
