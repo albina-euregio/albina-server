@@ -59,7 +59,7 @@ public class XmlUtil {
 		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();
 
-		// using PosixFilePermission to set file permissions 775
+		// using PosixFilePermission to set file permissions 777
 		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
 		// add owners permission
 		perms.add(PosixFilePermission.OWNER_READ);
@@ -71,6 +71,7 @@ public class XmlUtil {
 		perms.add(PosixFilePermission.GROUP_EXECUTE);
 		// add others permissions
 		perms.add(PosixFilePermission.OTHERS_READ);
+		perms.add(PosixFilePermission.OTHERS_WRITE);
 		perms.add(PosixFilePermission.OTHERS_EXECUTE);
 
 		try {
