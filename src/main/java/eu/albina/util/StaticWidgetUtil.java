@@ -300,7 +300,7 @@ public class StaticWidgetUtil {
 
 			logo = resizeHeight(logo, 110);
 			ig2.drawImage(ci, 0, 0, null);
-			ig2.drawImage(logo, 70, 35, null);
+			ig2.drawImage(logo, 60, 35, null);
 
 			if (AlbinaUtil.hasDaytimeDependency(bulletins))
 				ig2.drawImage(overviewThumbnail, 0, 220, null);
@@ -310,7 +310,7 @@ public class StaticWidgetUtil {
 			BufferedImage euregioLogo = loadImageFromPath(
 					GlobalVariables.getLocalImagesPath() + "logo/color/euregio.png");
 			euregioLogo = resizeHeight(euregioLogo, 110);
-			ig2.drawImage(euregioLogo, 350, 45, null);
+			ig2.drawImage(euregioLogo, 330, 35, null);
 
 			String filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString
 					+ "/" + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
