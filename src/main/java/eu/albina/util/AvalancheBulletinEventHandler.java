@@ -136,13 +136,13 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add logo
 			Image logoImg = PdfUtil.getInstance().getImage(GlobalVariables.getLogoPath(lang, grayscale));
 			logoImg.scaleToFit(130, 55);
-			logoImg.setFixedPosition(pageSize.getWidth() - 100, pageSize.getHeight() - 72);
+			logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
 			canvas.add(logoImg);
 
 			// Add EUREGIO logo
 			Image euregioImg = PdfUtil.getInstance().getImage(GlobalVariables.getEuregioLogoPath(grayscale));
-			euregioImg.scaleToFit(130, 45);
-			euregioImg.setFixedPosition(20, 0);
+			euregioImg.scaleToFit(120, 40);
+			euregioImg.setFixedPosition(15, 5);
 			canvas.add(euregioImg);
 
 			// Add page number
