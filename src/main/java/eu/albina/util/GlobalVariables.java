@@ -84,7 +84,7 @@ public class GlobalVariables {
 	public static String mapProductionUrl = "";
 	public static String scriptsPath = "/opt/local/";
 
-	public static String blogCacheUrl = "https://blogcache.avalanche.report/";
+	public static String blogApiUrl = "https://www.googleapis.com/blogger/v3/blogs/";
 	public static String googleApiKey = "AIzaSyBN0GUcRlTfoVnarVFVpA1hUEnDcDjuXQY";
 	public static String blogIdTyrolDe = "7062477220886068374";
 	public static String blogIdTyrolIt = "6964779683196470218";
