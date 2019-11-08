@@ -71,7 +71,8 @@ public class GlobalVariables {
 	private static boolean publishBlogsSouthTyrol = true;
 	private static boolean publishBlogsTrentino = true;
 
-	public static String simpleBulletinBaseUrl = "https://avalanche.report/simple/";
+	// TODO: find better solution how to get the URL for simple html and images
+	public static int directoryOffset = 5;
 	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
 	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
 	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
@@ -474,6 +475,11 @@ public class GlobalVariables {
 			throws ConfigurationException {
 		GlobalVariables.bulletinCaamlSchemaFileString = bulletinCaamlSchemaFileString;
 		setConfigProperty("bulletinCaamlSchemaFileString", bulletinCaamlSchemaFileString);
+	}
+
+	public static String getMapsUrl(LanguageCode lang) {
+		return GlobalVariables.getAvalancheReportBaseUrl(lang)
+				+ GlobalVariables.getMapsPath().substring(GlobalVariables.directoryOffset);
 	}
 
 	public static String getJsonSchemaFileString(String fileName) throws FileNotFoundException {

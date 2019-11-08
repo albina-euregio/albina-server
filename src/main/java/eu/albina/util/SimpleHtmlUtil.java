@@ -249,13 +249,13 @@ public class SimpleHtmlUtil {
 
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("mapAM", GlobalVariables.getMapsPath() + "/"
+					bulletin.put("mapAM", GlobalVariables.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_AM.jpg");
-					bulletin.put("mapPM", GlobalVariables.getMapsPath() + "/"
+					bulletin.put("mapPM", GlobalVariables.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
 					bulletin.put("widthPM", "width=\"150\"");
 				} else {
-					bulletin.put("mapAM", GlobalVariables.getMapsPath() + "/"
+					bulletin.put("mapAM", GlobalVariables.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
 					bulletin.put("mapPM", GlobalVariables.getServerImagesUrl() + "empty.png");
 					bulletin.put("widthPM", "");

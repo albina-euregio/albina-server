@@ -380,20 +380,25 @@ public class AlbinaUtil {
 
 	public static String getPreviousDayLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		if (region != null && !region.isEmpty())
-			return GlobalVariables.simpleBulletinBaseUrl + AlbinaUtil.getPreviousValidityDateString(bulletins) + "/"
-					+ region + "_" + lang.toString() + ".html";
+			return GlobalVariables.getAvalancheReportBaseUrl(lang)
+					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
+					+ AlbinaUtil.getPreviousValidityDateString(bulletins) + "/" + region + "_" + lang.toString()
+					+ ".html";
 		else
-			return GlobalVariables.simpleBulletinBaseUrl + AlbinaUtil.getPreviousValidityDateString(bulletins) + "/"
-					+ lang.toString() + ".html";
+			return GlobalVariables.getAvalancheReportBaseUrl(lang)
+					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
+					+ AlbinaUtil.getPreviousValidityDateString(bulletins) + "/" + lang.toString() + ".html";
 	}
 
 	public static String getNextDayLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		if (region != null && !region.isEmpty())
-			return GlobalVariables.simpleBulletinBaseUrl + AlbinaUtil.getNextValidityDateString(bulletins) + "/"
-					+ region + "_" + lang.toString() + ".html";
+			return GlobalVariables.getAvalancheReportBaseUrl(lang)
+					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
+					+ AlbinaUtil.getNextValidityDateString(bulletins) + "/" + region + "_" + lang.toString() + ".html";
 		else
-			return GlobalVariables.simpleBulletinBaseUrl + AlbinaUtil.getNextValidityDateString(bulletins) + "/"
-					+ lang.toString() + ".html";
+			return GlobalVariables.getAvalancheReportBaseUrl(lang) + "/"
+					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
+					+ AlbinaUtil.getNextValidityDateString(bulletins) + "/" + lang.toString() + ".html";
 	}
 
 	public static String getRegionOverviewMapFilename(String region, boolean isAfternoon) {
