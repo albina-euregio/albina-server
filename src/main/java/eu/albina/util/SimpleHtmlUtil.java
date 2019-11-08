@@ -262,8 +262,22 @@ public class SimpleHtmlUtil {
 				}
 
 				StringBuilder sb = new StringBuilder();
+				// TODO: use English region names
 				for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
-					sb.append(publishedRegion);
+					switch (lang) {
+					case de:
+						sb.append(AlbinaUtil.regionsMapDe.get(publishedRegion));
+						break;
+					case it:
+						sb.append(AlbinaUtil.regionsMapIt.get(publishedRegion));
+						break;
+					case en:
+						sb.append(AlbinaUtil.regionsMapDe.get(publishedRegion));
+						break;
+					default:
+						sb.append(AlbinaUtil.regionsMapDe.get(publishedRegion));
+						break;
+					}
 					sb.append(", ");
 				}
 				sb.delete(sb.length() - 2, sb.length());
