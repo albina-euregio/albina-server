@@ -81,7 +81,7 @@ public class GlobalVariables {
 	private static String pdfDirectory = "/mnt/albina_files_local";
 	private static String htmlDirectory = "/mnt/simple_local";
 	private static String mapsPath = "/mnt/albina_files_local";
-	public static String mapProductionUrl = "https://admin.avalanche.report/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2_dev.php";
+	public static String mapProductionUrl = "";
 	public static String scriptsPath = "/opt/local/";
 
 	public static String blogCacheUrl = "https://blogcache.avalanche.report/";
