@@ -262,7 +262,6 @@ public class SimpleHtmlUtil {
 				}
 
 				StringBuilder sb = new StringBuilder();
-				// TODO: use English region names
 				for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
 					switch (lang) {
 					case de:
@@ -272,10 +271,10 @@ public class SimpleHtmlUtil {
 						sb.append(AlbinaUtil.regionsMapIt.get(publishedRegion));
 						break;
 					case en:
-						sb.append(AlbinaUtil.regionsMapDe.get(publishedRegion));
+						sb.append(AlbinaUtil.regionsMapEn.get(publishedRegion));
 						break;
 					default:
-						sb.append(AlbinaUtil.regionsMapDe.get(publishedRegion));
+						sb.append(AlbinaUtil.regionsMapEn.get(publishedRegion));
 						break;
 					}
 					sb.append(", ");
