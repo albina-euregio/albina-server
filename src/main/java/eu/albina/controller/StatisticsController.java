@@ -88,7 +88,7 @@ public class StatisticsController {
 	 * @param region
 	 *            the desired region
 	 * @param extended
-	 *            add matrix information and author if {@code true}
+	 *            add textcat ids, matrix information and author if {@code true}
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
@@ -125,7 +125,7 @@ public class StatisticsController {
 	 * @param lang
 	 *            the desired language
 	 * @param extended
-	 *            add matrix information and author if {@code true}
+	 *            add textcat ids, matrix information and author if {@code true}
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
@@ -242,7 +242,7 @@ public class StatisticsController {
 	 * @param bulletins
 	 *            the bulletins that should be included in the CSV string
 	 * @param extended
-	 *            add matrix information and author if {@code true}
+	 *            add textcat ids, matrix information and author if {@code true}
 	 * @return a CSV string representing all {@code bulletins} in {@code lang}
 	 */
 	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended) {
@@ -351,12 +351,28 @@ public class StatisticsController {
 		sb.append("DangerPattern2");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvActivityHighlight");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvActivityHighlightIdsDe");
+		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvActivityComment");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvActivityCommentIdsDe");
+		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("SnowpackStructureComment");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("SnowpackStructureCommentIdsDe");
+		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("TendencyComment");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("TendencyCommentIdsDe");
+		}
 		if (extended) {
 			sb.append(GlobalVariables.csvDeliminator);
 			sb.append("Author");
@@ -384,7 +400,7 @@ public class StatisticsController {
 	 *            true if the afternoon information of the {@code avalancheBulletin}
 	 *            should be used
 	 * @param extended
-	 *            add matrix information and author if {@code true}
+	 *            add textcat ids, matrix information and author if {@code true}
 	 * @param lang
 	 *            the desired language
 	 */
@@ -459,21 +475,49 @@ public class StatisticsController {
 				sb.append(avalancheBulletin.getAvActivityHighlightsIn(lang));
 			else
 				sb.append(GlobalVariables.notAvailableString);
+			if (extended) {
+				sb.append(GlobalVariables.csvDeliminator);
+				if (avalancheBulletin.getAvActivityHighlightsTextcat() != null)
+					sb.append(avalancheBulletin.getAvActivityHighlightsTextcat());
+				else
+					sb.append(GlobalVariables.notAvailableString);
+			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getAvActivityCommentIn(lang) != null)
 				sb.append(avalancheBulletin.getAvActivityCommentIn(lang));
 			else
 				sb.append(GlobalVariables.notAvailableString);
+			if (extended) {
+				sb.append(GlobalVariables.csvDeliminator);
+				if (avalancheBulletin.getAvActivityCommentTextcat() != null)
+					sb.append(avalancheBulletin.getAvActivityCommentTextcat());
+				else
+					sb.append(GlobalVariables.notAvailableString);
+			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
 				sb.append(avalancheBulletin.getSnowpackStructureCommentIn(lang));
 			else
 				sb.append(GlobalVariables.notAvailableString);
+			if (extended) {
+				sb.append(GlobalVariables.csvDeliminator);
+				if (avalancheBulletin.getSnowpackStructureCommentTextcat() != null)
+					sb.append(avalancheBulletin.getSnowpackStructureCommentTextcat());
+				else
+					sb.append(GlobalVariables.notAvailableString);
+			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getTendencyCommentIn(lang) != null)
 				sb.append(avalancheBulletin.getTendencyCommentIn(lang));
 			else
 				sb.append(GlobalVariables.notAvailableString);
+			if (extended) {
+				sb.append(GlobalVariables.csvDeliminator);
+				if (avalancheBulletin.getTendencyCommentTextcat() != null)
+					sb.append(avalancheBulletin.getTendencyCommentTextcat());
+				else
+					sb.append(GlobalVariables.notAvailableString);
+			}
 			if (extended) {
 				sb.append(GlobalVariables.csvDeliminator);
 				if (avalancheBulletin.getUser() != null && avalancheBulletin.getUser().getName() != null)
