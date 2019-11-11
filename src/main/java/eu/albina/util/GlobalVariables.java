@@ -124,7 +124,7 @@ public class GlobalVariables {
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
-	public static DateTimeFormatter publicationTime = DateTimeFormat.forPattern("HH-mm-ss");
+	public static DateTimeFormatter publicationTime = DateTimeFormat.forPattern("yyyy-MM-dd_HH-mm-ss");
 
 	// LANG
 	public static DateTimeFormatter dateTimeEn = DateTimeFormat.forPattern(" dd MM yyyy");
