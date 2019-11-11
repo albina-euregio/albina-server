@@ -16,4 +16,4 @@ cp $1/$2/fd_regions.json $1/latest/
 cp $1/$2/am_regions.json $1/latest/
 cp $1/$2/pm_regions.json $1/latest/
 
-chmod -R 744 $1/latest/
+chmod -R 755 $1/latest/
