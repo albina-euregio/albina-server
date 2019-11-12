@@ -761,7 +761,7 @@ public class AlbinaUtil {
 	public static void runCopyLatestMapsScript(String date) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestMaps.sh",
-					GlobalVariables.getMapsPath(), GlobalVariables.getMapsPath(), date).inheritIO();
+					GlobalVariables.getMapsPath(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps for " + date + " copied to latest.");
