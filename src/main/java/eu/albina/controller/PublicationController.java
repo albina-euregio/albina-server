@@ -443,6 +443,8 @@ public class PublicationController {
 			public void run() {
 				logger.info("Map production started");
 				MapUtil.createDangerRatingMaps(bulletins);
+				if (GlobalVariables.getMapProductionUrl().startsWith("http://data1.geo.univie.ac.at/"))
+					AlbinaUtil.runCopyMapsUnivieScript(validityDateString, publicationTimeString);
 				AlbinaUtil.runCopyMapsScript(validityDateString, publicationTimeString);
 				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 					AlbinaUtil.runCopyLatestMapsScript(validityDateString);
