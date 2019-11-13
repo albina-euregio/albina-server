@@ -250,7 +250,7 @@ public class SimpleHtmlUtil {
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
 					bulletin.put("mapAM", GlobalVariables.getMapsUrl(lang) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_AM.jpg");
+							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
 					bulletin.put("mapPM", GlobalVariables.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
 					bulletin.put("widthPM", "width=\"150\"");
