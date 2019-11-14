@@ -478,13 +478,13 @@ public class AlbinaUtil {
 	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getValidityDate(bulletins);
 		date = date.minusDays(1);
-		return date.toString(GlobalVariables.getPublicationDateTimeFormatter(lang));
+		return date.toString(GlobalVariables.getShortDateTimeFormatter(lang)).trim();
 	}
 
 	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getValidityDate(bulletins);
 		date = date.plusDays(1);
-		return date.toString(GlobalVariables.getPublicationDateTimeFormatter(lang));
+		return date.toString(GlobalVariables.getShortDateTimeFormatter(lang)).trim();
 	}
 
 	private static DateTime getValidityDate(List<AvalancheBulletin> bulletins) {
