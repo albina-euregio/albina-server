@@ -198,7 +198,7 @@ public class StaticWidgetUtil {
 				asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 4, 4 + date.length());
 				asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 4, 4 + date.length());
 
-				secondLine = GlobalVariables.getDangerRatingTextLong(highestDangerRating, lang);
+				secondLine = GlobalVariables.getDangerRatingTextMiddle(highestDangerRating, lang);
 				asSecondLine = new AttributedString(secondLine);
 				asSecondLine.addAttribute(TextAttribute.FONT, openSansBoldBigFont);
 				asSecondLine.addAttribute(TextAttribute.FOREGROUND, getDangerRatingTextColor(highestDangerRating));
@@ -222,7 +222,7 @@ public class StaticWidgetUtil {
 				asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 3, 4 + date.length());
 				asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 3, 4 + date.length());
 
-				secondLine = GlobalVariables.getDangerRatingTextLong(highestDangerRating, lang);
+				secondLine = GlobalVariables.getDangerRatingTextMiddle(highestDangerRating, lang);
 				asSecondLine = new AttributedString(secondLine);
 				asSecondLine.addAttribute(TextAttribute.FONT, openSansBoldBigFont);
 				asSecondLine.addAttribute(TextAttribute.FOREGROUND, getDangerRatingTextColor(highestDangerRating));
