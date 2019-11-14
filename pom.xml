@@ -426,7 +426,7 @@
 			<version>2.2</version>
 			<configuration>
 				<url>https://admin.avalanche.report/manager/text</url>
-				<path>/albina_dev##${env.GIT_VERSION}</path>
+				<path>{env.TOMCAT_PATH}##${env.GIT_VERSION}</path>
 				<username>${env.TOMCAT_USERNAME}</username>
 				<password>${env.TOMCAT_PASSWORD}</password>
 			</configuration>
