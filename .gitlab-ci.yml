@@ -18,6 +18,7 @@ production build:
 deploy to development:
   stage: deploy
   script:
+    - export TOMCAT_PATH=/albina_dev
     - export GIT_VERSION=$(git describe --always)
     - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:redeploy
   environment:
@@ -25,3 +26,15 @@ deploy to development:
   only:
     - master
     - ci
+
+deploy to production:
+  stage: deploy
+  script:
+    - export TOMCAT_PATH=/albina
+    - export GIT_VERSION=$(git describe --always)
+    - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod tomcat7:redeploy
+  environment:
+    name: production
+  only:
+    - tags
+  when: manual
