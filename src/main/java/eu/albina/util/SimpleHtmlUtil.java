@@ -219,10 +219,7 @@ public class SimpleHtmlUtil {
 		text.put("publicationDate", publicationDate);
 
 		text.put("previousDay", " &#8592; " + AlbinaUtil.getPreviousValidityDateString(bulletins, lang));
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			text.put("nextDay", "");
-		else
-			text.put("nextDay", AlbinaUtil.getNextValidityDateString(bulletins, lang) + " &#8594;");
+		text.put("nextDay", AlbinaUtil.getNextValidityDateString(bulletins, lang) + " &#8594;");
 
 		if (publicationDate.isEmpty())
 			text.put("publishedAt", "");
