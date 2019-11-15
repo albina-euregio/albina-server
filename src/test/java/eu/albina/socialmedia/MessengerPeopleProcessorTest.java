@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.socialmedia.MessengerPeopleProcessorController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.messengerpeople.MessengerPeopleNewsletterHistory;
 import eu.albina.model.messengerpeople.MessengerPeopleTargets;
 import eu.albina.model.messengerpeople.MessengerPeopleUser;
@@ -80,7 +81,7 @@ public class MessengerPeopleProcessorTest {
 	@Test
 	public void sendNewsletterTest() throws IOException, AlbinaException {
 		HttpResponse response = MessengerPeopleProcessorController.getInstance().sendNewsLetter(messengerPeopleConfig,
-				"TEST", "Test message", null);
+				LanguageCode.de, "Test message", null);
 		logger.info(response.toString());
 	}
 }

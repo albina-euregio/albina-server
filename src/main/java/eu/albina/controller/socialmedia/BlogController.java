@@ -175,8 +175,8 @@ public class BlogController extends CommonProcessor {
 
 		try {
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-			MessengerPeopleProcessorController.getInstance().sendNewsLetter(rc.getMessengerPeopleConfig(),
-					lang.toString(), sb.toString(), attachmentUrl);
+			MessengerPeopleProcessorController.getInstance().sendNewsLetter(rc.getMessengerPeopleConfig(), lang,
+					sb.toString(), attachmentUrl);
 		} catch (AlbinaException e) {
 			logger.warn("Blog post could not be sent to messengerpeople: " + region + ", " + lang.toString());
 			e.printStackTrace();

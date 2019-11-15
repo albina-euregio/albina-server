@@ -50,7 +50,8 @@ public class MessengerPeopleUtil {
 				DateTime date = AlbinaUtil.getDate(bulletins);
 				String message = GlobalVariables.getMessengerPeopleText(lang, date, update);
 				String validityDate = AlbinaUtil.getValidityDateString(bulletins);
-				sendBulletinNewsletter(message, bulletins, validityDate, lang, regions);
+				String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
+				sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
 			} catch (IOException | AlbinaException e) {
 				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());
 				e.printStackTrace();
@@ -59,7 +60,7 @@ public class MessengerPeopleUtil {
 	}
 
 	private void sendBulletinNewsletter(String message, List<AvalancheBulletin> bulletins, String validityDate,
-			LanguageCode lang, List<String> regions) throws AlbinaException, IOException {
+			String publicationTime, LanguageCode lang, List<String> regions) throws AlbinaException, IOException {
 		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
 		for (String region : regions) {
 			// ArrayList<AvalancheBulletin> regionBulletins = new
@@ -76,10 +77,10 @@ public class MessengerPeopleUtil {
 			// else
 			// attachmentUrl = GlobalVariables.getMapsPath() + "/" + validityDate + "/"
 			// + AlbinaUtil.getRegionOverviewMapFilename("");
-			String attachmentUrl = GlobalVariables.getMapsPath() + "/" + validityDate + "/"
+			String attachmentUrl = GlobalVariables.getMapsUrl(lang) + "/" + validityDate + "/" + publicationTime + "/"
 					+ AlbinaUtil.getRegionOverviewMapFilename("");
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-			ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang.toString(), message, attachmentUrl);
+			ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);
 		}
 	}
 }

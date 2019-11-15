@@ -48,6 +48,7 @@ import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.controller.socialmedia.ShipmentController;
 import eu.albina.controller.socialmedia.TwitterProcessorController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
@@ -192,7 +193,8 @@ public class SocialMediaService {
 			throws IOException, AlbinaException {
 		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
 		RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(regionId);
-		HttpResponse response = ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), language, message, attachmentUrl);
+		HttpResponse response = ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), LanguageCode.fromString(language),
+				message, attachmentUrl);
 		return Response.status(response.getStatusLine().getStatusCode())
 				.entity(IOUtils.toString(response.getEntity().getContent(), "UTF-8"))
 				.header(response.getEntity().getContentType().getName(),

@@ -100,6 +100,17 @@ public class GlobalVariables {
 	public static String blogUrlSouthTyrolIt = "valanghealtoadige.blogspot.com";
 	public static String blogUrlTrentinoIt = "trentinovalanghe.blogspot.com";
 
+	// TODO shift this to social media config
+	public static int targetingTyrolDe = 17519;
+	public static int targetingTyrolIt = 17524;
+	public static int targetingTyrolEn = 17522;
+	public static int targetingSouthTyrolDe = 17533;
+	public static int targetingSouthTyrolIt = 17534;
+	public static int targetingSouthTyrolEn = 17536;
+	public static int targetingTrentinoDe = 17539;
+	public static int targetingTrentinoIt = 17537;
+	public static int targetingTrentinoEn = 17541;
+
 	// LANG
 	// REGION
 	private static String unsubscribeLinkTyrolDe = "https://t271d3041.emailsys1a.net/38/2221/61ad34fba0/unsubscribe/form.html";

@@ -25,7 +25,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.json.JSONObject;
@@ -36,6 +35,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.messengerpeople.MessengerPeopleNewsLetter;
 import eu.albina.model.messengerpeople.MessengerPeopleNewsletterHistory;
 import eu.albina.model.messengerpeople.MessengerPeopleTargets;
@@ -43,6 +43,7 @@ import eu.albina.model.messengerpeople.MessengerPeopleUser;
 import eu.albina.model.messengerpeople.MessengerPeopleUserData;
 import eu.albina.model.socialmedia.MessengerPeopleConfig;
 import eu.albina.model.socialmedia.Shipment;
+import eu.albina.util.GlobalVariables;
 
 public class MessengerPeopleProcessorController extends CommonProcessor {
 	private static MessengerPeopleProcessorController instance = null;
@@ -56,7 +57,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 
 	// private static String
 	// apikey="a1e6d5387c979b039040447af4a4d20a_11513_9fc5a49fc674b5b2750ad90a7";
-	private final String baseUrl = "https://rest.messengerpeople.com/api/v10";
+	private final String baseUrl = "https://rest.messengerpeople.com/api/v12";
 	ObjectMapper objectMapper = new ObjectMapper();
 	int MESSENGER_PEOPLE_CONNECTION_TIMEOUT = 10000;
 	int MESSENGER_PEOPLE_SOCKET_TIMEOUT = 10000;
@@ -86,7 +87,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 		return users;
 	}
 
-	// TODO update to API v10
+	// TODO update to API v12
 	public void setUserDetails(MessengerPeopleConfig config, String id, MessengerPeopleUserData messengerPeopleUserData)
 			throws IOException {
 		String json = URLEncoder.encode(objectMapper.writeValueAsString(messengerPeopleUserData),
@@ -109,37 +110,72 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 		return targets;
 	}
 
-	public HttpResponse sendNewsLetter(MessengerPeopleConfig config, String language, String message,
+	// LANG
+	// REGION
+	private int getTargeting(String region, LanguageCode lang) {
+		switch (region) {
+		case "AT-07":
+			switch (lang) {
+			case de:
+				return GlobalVariables.targetingTyrolDe;
+			case it:
+				return GlobalVariables.targetingTyrolIt;
+			case en:
+				return GlobalVariables.targetingTyrolEn;
+			default:
+				return -1;
+			}
+		case "IT-32-BZ":
+			switch (lang) {
+			case de:
+				return GlobalVariables.targetingSouthTyrolDe;
+			case it:
+				return GlobalVariables.targetingSouthTyrolIt;
+			case en:
+				return GlobalVariables.targetingSouthTyrolEn;
+			default:
+				return -1;
+			}
+		case "IT-32-TN":
+			switch (lang) {
+			case de:
+				return GlobalVariables.targetingTrentinoDe;
+			case it:
+				return GlobalVariables.targetingTrentinoIt;
+			case en:
+				return GlobalVariables.targetingTrentinoEn;
+			default:
+				return -1;
+			}
+		default:
+			return -1;
+		}
+	}
+
+	public HttpResponse sendNewsLetter(MessengerPeopleConfig config, LanguageCode language, String message,
 			String attachmentUrl) throws IOException, AlbinaException {
-		Integer categoryId = null;
-		if (StringUtils.equalsIgnoreCase(language, "EN")) {
-			categoryId = 1;
-		} else if (StringUtils.equalsIgnoreCase(language, "DE")) {
-			categoryId = 2;
-		} else if (StringUtils.equalsIgnoreCase(language, "IT")) {
-			categoryId = 3;
-		}
+		Integer targeting = getTargeting(config.getRegionConfiguration().getRegion().getId(), language);
 		String urlEncodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8.toString());
-		String params = String.format("apikey=%s&message=%s&category=%s", config.getApiKey(), urlEncodedMessage,
-				categoryId);
+		String params = String.format("apikey=%s&text=%s&notification=%s&targeting=%s", config.getApiKey(),
+				urlEncodedMessage, urlEncodedMessage, targeting);
 		if (attachmentUrl != null) {
-			params += "&attachment=" + URLEncoder.encode(attachmentUrl, "UTF-8");
+			params += "&media=" + URLEncoder.encode(attachmentUrl, "UTF-8");
 		}
-		HttpResponse response = Request.Post(baseUrl + "/newsletter?" + params)
+		HttpResponse response = Request.Post(baseUrl + "/content?" + params)
 				.connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT).socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT)
 				.execute().returnResponse();
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 200) {
 			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), "UTF-8")
 					: null;
-			ShipmentController.getInstance().saveShipment(createActivityRow(config, language,
+			ShipmentController.getInstance().saveShipment(createActivityRow(config, language.toString(),
 					"message=" + message + ", attachmentUrl=" + attachmentUrl, body, null));
 			return response;
 		}
 		String body = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
 		response.getEntity().getContent().reset();
 		MessengerPeopleNewsLetter bodyObject = objectMapper.readValue(body, MessengerPeopleNewsLetter.class);
-		ShipmentController.getInstance().saveShipment(createActivityRow(config, language,
+		ShipmentController.getInstance().saveShipment(createActivityRow(config, language.toString(),
 				"message=" + message + ", attachmentUrl=" + attachmentUrl, body, "" + bodyObject.getBroadcastId()));
 		return response;
 	}
