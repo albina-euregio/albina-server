@@ -27,7 +27,7 @@ import eu.albina.util.GlobalVariables;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
- * automatically update the Avalanche.report at 8AM.
+ * automatically publish blog posts per email and messengerpeople.
  * 
  * @author Norbert Lanzanasto
  *

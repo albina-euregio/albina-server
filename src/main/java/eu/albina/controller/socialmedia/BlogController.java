@@ -66,8 +66,8 @@ public class BlogController extends CommonProcessor {
 	private JSONArray getBlogPosts() throws ClientProtocolException, IOException {
 		String blogId = getBlogId();
 		Request request = Request
-				.Get(GlobalVariables.blogApiUrl + "/" + blogId + "/posts?key=" + GlobalVariables.googleApiKey
-						+ "&startDate=" + URLEncoder.encode(lastFetch.toString(), "UTF-8"))
+				.Get(GlobalVariables.blogApiUrl + blogId + "/posts?key=" + GlobalVariables.googleApiKey + "&startDate="
+						+ URLEncoder.encode(lastFetch.toString(), "UTF-8"))
 				.addHeader("Accept", "application/json").connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 				.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
 		logger.debug("Start date: " + lastFetch.toString());
