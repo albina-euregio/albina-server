@@ -207,23 +207,23 @@ public class EmailUtil {
 			// overview maps
 			if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
 				mapImage.put("overview",
-						GlobalVariables.getMapsPath() + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
+						GlobalVariables.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 								+ AlbinaUtil.getPublicationTime(bulletins) + "/"
 								+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
 				mapImage.put("overviewPM",
-						GlobalVariables.getMapsPath() + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
+						GlobalVariables.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 								+ AlbinaUtil.getPublicationTime(bulletins) + "/"
 								+ AlbinaUtil.getRegionOverviewMapFilename(region, true));
 				mapImage.put("widthPM", "width=\"600\"");
 			} else {
 				if (daytimeDependency)
 					mapImage.put("overview",
-							GlobalVariables.getMapsPath() + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
+							GlobalVariables.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
 									+ AlbinaUtil.getRegionOverviewMapFilename(region, false));
 				else
 					mapImage.put("overview",
-							GlobalVariables.getMapsPath() + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
+							GlobalVariables.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
 									+ AlbinaUtil.getRegionOverviewMapFilename(region));
 				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
@@ -478,10 +478,10 @@ public class EmailUtil {
 
 		// maps
 		if (isAfternoon)
-			bulletin.put("map", GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
+			bulletin.put("map", GlobalVariables.getMapsUrl(lang) + "/" + avalancheBulletin.getValidityDateString() + "/"
 					+ publicationTime + "/" + avalancheBulletin.getId() + "_PM.jpg");
 		else
-			bulletin.put("map", GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
+			bulletin.put("map", GlobalVariables.getMapsUrl(lang) + "/" + avalancheBulletin.getValidityDateString() + "/"
 					+ publicationTime + "/" + avalancheBulletin.getId() + ".jpg");
 
 		// avalanche situation 1
