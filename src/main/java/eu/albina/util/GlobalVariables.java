@@ -110,6 +110,7 @@ public class GlobalVariables {
 	public static int targetingTrentinoDe = 17539;
 	public static int targetingTrentinoIt = 17537;
 	public static int targetingTrentinoEn = 17541;
+	public static int targetingTest = 17274;
 
 	// LANG
 	// REGION

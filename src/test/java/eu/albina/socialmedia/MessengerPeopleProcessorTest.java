@@ -28,11 +28,13 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.socialmedia.MessengerPeopleProcessorController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.messengerpeople.MessengerPeopleNewsletterHistory;
 import eu.albina.model.messengerpeople.MessengerPeopleTargets;
 import eu.albina.model.messengerpeople.MessengerPeopleUser;
 import eu.albina.model.socialmedia.MessengerPeopleConfig;
+import eu.albina.model.socialmedia.RegionConfiguration;
 
 public class MessengerPeopleProcessorTest {
 
@@ -44,6 +46,11 @@ public class MessengerPeopleProcessorTest {
 		messengerPeopleConfig = new MessengerPeopleConfig();
 		// Set api key
 		messengerPeopleConfig.setApiKey("");
+		RegionConfiguration regionConfiguration = new RegionConfiguration();
+		Region region = new Region();
+		region.setId("Test");
+		regionConfiguration.setRegion(region);
+		messengerPeopleConfig.setRegionConfiguration(regionConfiguration);
 	}
 
 	@Ignore

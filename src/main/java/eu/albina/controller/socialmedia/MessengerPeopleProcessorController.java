@@ -27,6 +27,9 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 
 import com.bedatadriven.jackson.datatype.jts.JtsModule;
@@ -36,7 +39,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.messengerpeople.MessengerPeopleNewsLetter;
 import eu.albina.model.messengerpeople.MessengerPeopleNewsletterHistory;
 import eu.albina.model.messengerpeople.MessengerPeopleTargets;
 import eu.albina.model.messengerpeople.MessengerPeopleUser;
@@ -147,23 +149,43 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 			default:
 				return -1;
 			}
+		case "Test":
+			return GlobalVariables.targetingTest;
 		default:
 			return -1;
 		}
 	}
 
+	public CloseableHttpClient sslHttpClient() {
+		// Trust own CA and all self-signed certs
+		return HttpClients.custom().build();
+	}
+
 	public HttpResponse sendNewsLetter(MessengerPeopleConfig config, LanguageCode language, String message,
 			String attachmentUrl) throws IOException, AlbinaException {
 		Integer targeting = getTargeting(config.getRegionConfiguration().getRegion().getId(), language);
-		String urlEncodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8.toString());
-		String params = String.format("apikey=%s&text=%s&notification=%s&targeting=%s", config.getApiKey(),
-				urlEncodedMessage, urlEncodedMessage, targeting);
+
+		StringBuilder data = new StringBuilder();
+		data.append("{ \"text\": \"");
+		data.append(message);
 		if (attachmentUrl != null) {
-			params += "&media=" + URLEncoder.encode(attachmentUrl, "UTF-8");
+			data.append("\", \"media\": \"");
+			data.append(attachmentUrl);
 		}
-		HttpResponse response = Request.Post(baseUrl + "/content?" + params)
-				.connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT).socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT)
-				.execute().returnResponse();
+		data.append("\", \"notification\": \"");
+		data.append(message);
+		data.append("\", \"targeting\": \"");
+		data.append(targeting);
+		data.append("\", \"apikey\": \"");
+		data.append(config.getApiKey());
+		data.append("\" }");
+
+		String url = baseUrl + "/content";
+		Request request = Request.Post(url).addHeader("Content-Type", "application/json")
+				.bodyString(data.toString(), ContentType.APPLICATION_JSON)
+				.connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT).socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT);
+		HttpResponse response = request.execute().returnResponse();
+
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 200) {
 			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), "UTF-8")
@@ -172,11 +194,14 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 					"message=" + message + ", attachmentUrl=" + attachmentUrl, body, null));
 			return response;
 		}
-		String body = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
-		response.getEntity().getContent().reset();
-		MessengerPeopleNewsLetter bodyObject = objectMapper.readValue(body, MessengerPeopleNewsLetter.class);
-		ShipmentController.getInstance().saveShipment(createActivityRow(config, language.toString(),
-				"message=" + message + ", attachmentUrl=" + attachmentUrl, body, "" + bodyObject.getBroadcastId()));
+		// String body = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
+		// response.getEntity().getContent().reset();
+		// MessengerPeopleNewsLetter bodyObject = objectMapper.readValue(body,
+		// MessengerPeopleNewsLetter.class);
+		// ShipmentController.getInstance().saveShipment(createActivityRow(config,
+		// language.toString(),
+		// "message=" + message + ", attachmentUrl=" + attachmentUrl, body, "" +
+		// bodyObject.getBroadcastId()));
 		return response;
 	}
 

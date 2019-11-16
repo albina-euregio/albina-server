@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -52,35 +53,27 @@ public class MessengerPeopleUtil {
 				String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 				String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 				sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
-			} catch (IOException | AlbinaException e) {
-				logger.error("Bulletin newsletter could not be sent: " + e.getMessage());
+			} catch (UnsupportedEncodingException e) {
+				logger.error("Bulletin newsletter could not be sent in " + lang + ": " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
 	}
 
 	private void sendBulletinNewsletter(String message, List<AvalancheBulletin> bulletins, String validityDate,
-			String publicationTime, LanguageCode lang, List<String> regions) throws AlbinaException, IOException {
+			String publicationTime, LanguageCode lang, List<String> regions) {
 		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
 		for (String region : regions) {
-			// ArrayList<AvalancheBulletin> regionBulletins = new
-			// ArrayList<AvalancheBulletin>();
-			// for (AvalancheBulletin avalancheBulletin : bulletins) {
-			// if (avalancheBulletin.affectsRegionOnlyPublished(region))
-			// regionBulletins.add(avalancheBulletin);
-			// }
-			// String attachmentUrl;
-			// if (AlbinaUtil.hasDaytimeDependency(bulletins) &&
-			// !AlbinaUtil.hasDaytimeDependency(regionBulletins))
-			// attachmentUrl = GlobalVariables.getMapsPath() + "/" + validityDate + "/"
-			// + AlbinaUtil.getRegionOverviewMapFilename("", false);
-			// else
-			// attachmentUrl = GlobalVariables.getMapsPath() + "/" + validityDate + "/"
-			// + AlbinaUtil.getRegionOverviewMapFilename("");
-			String attachmentUrl = GlobalVariables.getMapsUrl(lang) + "/" + validityDate + "/" + publicationTime + "/"
-					+ AlbinaUtil.getRegionOverviewMapFilename("");
-			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-			ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);
+			try {
+				String attachmentUrl = GlobalVariables.getMapsUrl(lang) + "/" + validityDate + "/" + publicationTime
+						+ "/" + AlbinaUtil.getRegionOverviewMapFilename("");
+				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
+				ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);
+			} catch (IOException | AlbinaException e) {
+				logger.error("Error while sending bulletin newsletter in " + lang + " for region " + region + ": "
+						+ e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 }
