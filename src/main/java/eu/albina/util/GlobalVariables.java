@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -951,33 +950,24 @@ public class GlobalVariables {
 		if (update) {
 			switch (lang) {
 			case de:
-				return URLEncoder.encode(
-						"UPDATE zum Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+				return "UPDATE zum Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date);
 			case it:
-				return URLEncoder.encode(
-						"AGGIORNAMENTO sulla Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date),
-						"UTF-8");
+				return "AGGIORNAMENTO sulla Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date);
 			case en:
-				return URLEncoder.encode(
-						"UDPATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+				return "UDPATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
 			default:
-				return URLEncoder.encode(
-						"UPDATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date), "UTF-8");
+				return "UPDATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
 			}
 		} else {
 			switch (lang) {
 			case de:
-				return URLEncoder.encode("Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date),
-						"UTF-8");
+				return "Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date);
 			case it:
-				return URLEncoder.encode("Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date),
-						"UTF-8");
+				return "Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date);
 			case en:
-				return URLEncoder.encode("Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date),
-						"UTF-8");
+				return "Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
 			default:
-				return URLEncoder.encode("Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date),
-						"UTF-8");
+				return "Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
 			}
 		}
 	}
