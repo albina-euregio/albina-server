@@ -23,4 +23,4 @@ mv $1/latest/$2_IT-32-TN_en_bw.pdf $1/latest/IT-32-TN_en_bw.pdf
 mv $1/latest/$2_de.pdf $1/latest/de.pdf
 mv $1/latest/$2_it.pdf $1/latest/it.pdf
 mv $1/latest/$2_en.pdf $1/latest/en.pdf
-chmod 744 $1/latest/*.pdf
+chmod 755 $1/latest/*.pdf
