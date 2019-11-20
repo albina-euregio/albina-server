@@ -51,21 +51,21 @@ public class BlogJob implements org.quartz.Job {
 				if (GlobalVariables.isPublishBlogsTyrol()) {
 					logger.info("Blog job triggered for TY!");
 					for (LanguageCode lang : GlobalVariables.languages)
-						(new BlogController(region, lang)).sendNewBlogPosts();
+						BlogController.getInstance().sendNewBlogPosts(region, lang);
 				}
 				break;
 			case "IT-32-BZ":
 				if (GlobalVariables.isPublishBlogsSouthTyrol()) {
 					logger.info("Blog job triggered for BZ!");
 					for (LanguageCode lang : GlobalVariables.languages)
-						(new BlogController(region, lang)).sendNewBlogPosts();
+						BlogController.getInstance().sendNewBlogPosts(region, lang);
 				}
 				break;
 			case "IT-32-TN":
 				if (GlobalVariables.isPublishBlogsTrentino()) {
 					logger.info("Blog job triggered for TN!");
 					for (LanguageCode lang : GlobalVariables.languages)
-						(new BlogController(region, lang)).sendNewBlogPosts();
+						BlogController.getInstance().sendNewBlogPosts(region, lang);
 				}
 				break;
 			default:

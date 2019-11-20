@@ -49,6 +49,6 @@ public class BlogControllerTest {
 	@Test
 	public void sendBlogPostsTest() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
-		new BlogController("AT-07", LanguageCode.de).sendNewBlogPosts();
+		BlogController.getInstance().sendNewBlogPosts("AT-07", LanguageCode.de);
 	}
 }

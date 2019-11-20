@@ -66,9 +66,9 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTrentino = true;
 
 	// REGION
-	private static boolean publishBlogsTyrol = true;
-	private static boolean publishBlogsSouthTyrol = true;
-	private static boolean publishBlogsTrentino = true;
+	private static boolean publishBlogsTyrol = false;
+	private static boolean publishBlogsSouthTyrol = false;
+	private static boolean publishBlogsTrentino = false;
 
 	// TODO: find better solution how to get the URL for simple html and images
 	public static int directoryOffset = 5;
@@ -92,6 +92,7 @@ public class GlobalVariables {
 	public static String blogIdSouthTyrolDe = "1263754381945501754";
 	public static String blogIdSouthTyrolIt = "8922564068473612459";
 	public static String blogIdTrentinoIt = "232334535081247038";
+	public static String blogIdTest = "7136072879615998197";
 	public static String blogUrlTyrolDe = "lawinenwarndienst.blogspot.com";
 	public static String blogUrlTyrolIt = "servizio-valanghe-tirolo.blogspot.com";
 	public static String blogUrlTyrolEn = "avalanche-warning-service-tirol.blogspot.com";

@@ -19,6 +19,7 @@ package eu.albina.controller.socialmedia;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -46,16 +47,32 @@ public class BlogController extends CommonProcessor {
 	private static final int BLOGGER_SOCKET_TIMEOUT = 10000;
 	private static final int BLOGGER_CONNECTION_TIMEOUT = 10000;
 
-	private static DateTime lastFetch;
+	private static BlogController instance = null;
+	private HashMap<String, DateTime> lastFetch;
 	private Executor executor;
-	private String region;
-	private LanguageCode lang;
 
-	public BlogController(String r, LanguageCode l) {
+	private BlogController() {
 		executor = Executor.newInstance(sslHttpClient());
-		lastFetch = new DateTime();
-		region = r;
-		lang = l;
+		lastFetch = new HashMap<String, DateTime>();
+		DateTime date = new DateTime();
+		// REGION
+		lastFetch.put("Test", date);
+		for (String region : GlobalVariables.regionsEuregio)
+			lastFetch.put(region, date);
+	}
+
+	/**
+	 * Returns the {@code BlogController} object associated with the current Java
+	 * application.
+	 * 
+	 * @return the {@code BlogController} object associated with the current Java
+	 *         application.
+	 */
+	public static BlogController getInstance() {
+		if (instance == null) {
+			instance = new BlogController();
+		}
+		return instance;
 	}
 
 	public CloseableHttpClient sslHttpClient() {
@@ -63,17 +80,17 @@ public class BlogController extends CommonProcessor {
 		return HttpClients.custom().build();
 	}
 
-	private JSONArray getBlogPosts() throws ClientProtocolException, IOException {
-		String blogId = getBlogId();
-		Request request = Request
-				.Get(GlobalVariables.blogApiUrl + blogId + "/posts?key=" + GlobalVariables.googleApiKey + "&startDate="
-						+ URLEncoder.encode(lastFetch.toString(), "UTF-8"))
-				.addHeader("Accept", "application/json").connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
+	private JSONArray getBlogPosts(String region, LanguageCode lang) throws ClientProtocolException, IOException {
+		String blogId = getBlogId(region, lang);
+		String uri = GlobalVariables.blogApiUrl + blogId + "/posts?key=" + GlobalVariables.googleApiKey + "&startDate="
+				+ URLEncoder.encode(lastFetch.get(region).toString(GlobalVariables.formatterDateTime), "UTF-8");
+		logger.debug("URI: " + uri);
+		Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 				.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-		logger.debug("Start date: " + lastFetch.toString());
-		lastFetch = new DateTime();
+		logger.debug("Start date for " + region + ": " + lastFetch.get(region).toString());
+		lastFetch.put(region, new DateTime());
 		HttpResponse response = executor.execute(request).returnResponse();
-		logger.debug("New start date: " + lastFetch.toString());
+		logger.debug("New start date for " + region + ": " + lastFetch.get(region).toString());
 		if (response.getStatusLine().getStatusCode() == 200) {
 			HttpEntity entity = response.getEntity();
 			String entityString = EntityUtils.toString(entity, "UTF-8");
@@ -86,13 +103,13 @@ public class BlogController extends CommonProcessor {
 		return new JSONArray();
 	}
 
-	private String getBlogPost(String blogPostId) throws ClientProtocolException, IOException {
-		String blogId = getBlogId();
+	private String getBlogPost(String blogPostId, String region, LanguageCode lang)
+			throws ClientProtocolException, IOException {
+		String blogId = getBlogId(region, lang);
 		Request request = Request
 				.Get(GlobalVariables.blogApiUrl + "/" + blogId + "/posts/" + blogPostId + "?key="
 						+ GlobalVariables.googleApiKey)
-				.addHeader("Accept", "application/json").connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
-				.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
+				.connectTimeout(BLOGGER_CONNECTION_TIMEOUT).socketTimeout(BLOGGER_SOCKET_TIMEOUT);
 		HttpResponse response = executor.execute(request).returnResponse();
 		if (response.getStatusLine().getStatusCode() == 200) {
 			HttpEntity entity = response.getEntity();
@@ -105,7 +122,7 @@ public class BlogController extends CommonProcessor {
 
 	// LANG
 	// REGION
-	private String getBlogId() {
+	private String getBlogId(String region, LanguageCode lang) {
 		switch (region) {
 		case "AT-07":
 			switch (lang) {
@@ -134,22 +151,24 @@ public class BlogController extends CommonProcessor {
 			default:
 				return null;
 			}
+		case "Test":
+			return GlobalVariables.blogIdTest;
 		default:
 			return null;
 		}
 	}
 
-	public void sendNewBlogPosts() {
-		if (getBlogId() != null) {
+	public void sendNewBlogPosts(String region, LanguageCode lang) {
+		if (getBlogId(region, lang) != null) {
 			try {
-				JSONArray blogPosts = getBlogPosts();
+				JSONArray blogPosts = getBlogPosts(region, lang);
 
 				logger.info("Found " + blogPosts.length() + " new blog posts!");
-
 				for (Object object : blogPosts)
 					if (object instanceof JSONObject) {
-						sendNewBlogPostToMessengerpeople((JSONObject) object);
-						sendNewBlogPostToRapidmail((JSONObject) object);
+						logger.info(((JSONObject) object).toString());
+						sendNewBlogPostToMessengerpeople((JSONObject) object, region, lang);
+						sendNewBlogPostToRapidmail((JSONObject) object, region, lang);
 					}
 			} catch (ClientProtocolException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString());
@@ -161,13 +180,13 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToMessengerpeople(JSONObject object) {
+	private void sendNewBlogPostToMessengerpeople(JSONObject object, String region, LanguageCode lang) {
 		logger.info("Sending new blog post to messengerpeople ...");
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(object.getString("title"));
 		sb.append(": ");
-		sb.append(getBlogPostLink(object));
+		sb.append(getBlogPostLink(object, region, lang));
 
 		JSONArray imagesArray = object.getJSONArray("images");
 		JSONObject image = (JSONObject) imagesArray.get(0);
@@ -186,14 +205,14 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(JSONObject object) {
+	private void sendNewBlogPostToRapidmail(JSONObject object, String region, LanguageCode lang) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
 		String subject = object.getString("title");
 		String blogPostId = object.getString("id");
 
 		try {
-			String htmlString = getBlogPost(blogPostId);
+			String htmlString = getBlogPost(blogPostId, region, lang);
 			if (htmlString != null && !htmlString.isEmpty())
 				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject);
 		} catch (ClientProtocolException e) {
@@ -208,10 +227,10 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private String getBlogPostLink(JSONObject object) {
+	private String getBlogPostLink(JSONObject object, String region, LanguageCode lang) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(GlobalVariables.getAvalancheReportBaseUrl(lang));
-		sb.append(getBlogUrl());
+		sb.append(getBlogUrl(region, lang));
 		sb.append("/");
 		sb.append(object.getString("id"));
 
@@ -220,7 +239,7 @@ public class BlogController extends CommonProcessor {
 
 	// LANG
 	// REGION
-	private String getBlogUrl() {
+	private String getBlogUrl(String region, LanguageCode lang) {
 		switch (region) {
 		case "AT-07":
 			switch (lang) {
