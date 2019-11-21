@@ -76,4 +76,28 @@ public enum DangerRating {
 			return "0";
 		}
 	}
+
+	public static int getInt(DangerRating dangerRating) {
+		switch (dangerRating) {
+		case missing:
+			return 0;
+		case no_rating:
+			return 0;
+		case no_snow:
+			return 0;
+		case low:
+			return 1;
+		case moderate:
+			return 2;
+		case considerable:
+			return 3;
+		case high:
+			return 4;
+		case very_high:
+			return 5;
+
+		default:
+			return 0;
+		}
+	}
 }

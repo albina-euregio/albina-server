@@ -19,7 +19,10 @@ package eu.albina.model;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.joda.time.DateTime;
@@ -32,6 +35,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class AvalancheBulletinTest {
@@ -40,6 +44,9 @@ public class AvalancheBulletinTest {
 
 	private AvalancheBulletin bulletin;
 	private String bulletinJsonString;
+	private String bulletin2JsonString;
+	private String bulletin3JsonString;
+	private String bulletin4JsonString;
 
 	@Before
 	public void setUp() throws Exception {
@@ -84,8 +91,52 @@ public class AvalancheBulletinTest {
 		} catch (Exception e) {
 			logger.warn("Error parsing bulletin!");
 		}
-
 		bulletinJsonString = bulletinStringBuilder.toString();
+
+		// Load JSON from resources
+		is = classloader.getResourceAsStream("validBulletin2.json");
+
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		bulletin2JsonString = bulletinStringBuilder.toString();
+
+		// Load JSON from resources
+		is = classloader.getResourceAsStream("validBulletin3.json");
+
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		bulletin3JsonString = bulletinStringBuilder.toString();
+
+		// Load JSON from resources
+		is = classloader.getResourceAsStream("validBulletin4.json");
+
+		bulletinStringBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				bulletinStringBuilder.append(line);
+			}
+		} catch (Exception e) {
+			logger.warn("Error parsing bulletin!");
+		}
+		bulletin4JsonString = bulletinStringBuilder.toString();
 	}
 
 	@Ignore
@@ -94,5 +145,29 @@ public class AvalancheBulletinTest {
 		JSONObject data = new JSONObject(bulletinJsonString);
 		AvalancheBulletin b = new AvalancheBulletin(data);
 		JSONAssert.assertEquals(bulletinJsonString, b.toJSON(), JSONCompareMode.NON_EXTENSIBLE);
+	}
+
+	@Ignore
+	@Test
+	public void testSortByDangerRating() {
+		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
+		JSONObject data = new JSONObject(bulletinJsonString);
+		AvalancheBulletin b = new AvalancheBulletin(data);
+		bulletins.add(b);
+		data = new JSONObject(bulletin2JsonString);
+		b = new AvalancheBulletin(data);
+		bulletins.add(b);
+		data = new JSONObject(bulletin3JsonString);
+		b = new AvalancheBulletin(data);
+		bulletins.add(b);
+		data = new JSONObject(bulletin4JsonString);
+		b = new AvalancheBulletin(data);
+		bulletins.add(b);
+
+		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			logger.debug("" + avalancheBulletin.getHighestDangerRatingDouble());
+		}
 	}
 }
