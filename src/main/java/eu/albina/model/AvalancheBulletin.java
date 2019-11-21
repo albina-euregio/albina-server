@@ -58,7 +58,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.XmlUtil;
 
@@ -711,24 +710,33 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return result;
 	}
 
-	public Double getHighestDangerRatingDouble() {
-		int highestDangerRating = getHighestDangerRating().ordinal();
-
-		Double result = new Double(.0) + highestDangerRating;
+	public int getHighestDangerRatingDouble() {
+		int sum = 0;
 		if (forenoon != null) {
 			if (forenoon.getDangerRatingAbove() != null)
-				result += AlbinaUtil.getDangerRatingDouble(forenoon.getDangerRatingAbove());
+				sum += DangerRating.getInt(forenoon.getDangerRatingAbove());
 			if (forenoon.getDangerRatingBelow() != null)
-				result += AlbinaUtil.getDangerRatingDouble(forenoon.getDangerRatingBelow());
+				sum += DangerRating.getInt(forenoon.getDangerRatingBelow());
+			else
+				sum += DangerRating.getInt(forenoon.getDangerRatingAbove());
 		}
 		if (afternoon != null) {
 			if (afternoon.getDangerRatingAbove() != null)
-				result += AlbinaUtil.getDangerRatingDouble(afternoon.getDangerRatingAbove());
+				sum += DangerRating.getInt(afternoon.getDangerRatingAbove());
 			if (afternoon.getDangerRatingBelow() != null)
-				result += AlbinaUtil.getDangerRatingDouble(afternoon.getDangerRatingBelow());
+				sum += DangerRating.getInt(afternoon.getDangerRatingBelow());
+			else
+				sum += DangerRating.getInt(afternoon.getDangerRatingAbove());
+		} else if (forenoon != null) {
+			if (forenoon.getDangerRatingAbove() != null)
+				sum += DangerRating.getInt(forenoon.getDangerRatingAbove());
+			if (forenoon.getDangerRatingBelow() != null)
+				sum += DangerRating.getInt(forenoon.getDangerRatingBelow());
+			else
+				sum += DangerRating.getInt(forenoon.getDangerRatingAbove());
 		}
 
-		return result;
+		return sum;
 	}
 
 	public DateTime getValidityDate() {

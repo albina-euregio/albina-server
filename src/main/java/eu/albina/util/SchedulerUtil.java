@@ -68,27 +68,18 @@ public class SchedulerUtil {
 					.build();
 			Trigger publicationTrigger = newTrigger().withIdentity("triggerPublication", "groupAlbina").startNow()
 					.withSchedule(cronSchedule("0 0 17 * * ?")).build();
-			// Trigger publicationTrigger = newTrigger().withIdentity("triggerPublication",
-			// "groupAlbina").startNow()
-			// .withSchedule(cronSchedule("0 0/10 * * * ?")).build();
 			scheduler.scheduleJob(publicationJob, publicationTrigger);
 
 			// start update job (8AM)
 			JobDetail updateJob = newJob(UpdateJob.class).withIdentity("jobUpdate", "groupAlbina").build();
 			Trigger updateTrigger = newTrigger().withIdentity("triggerUpdate", "groupAlbina").startNow()
 					.withSchedule(cronSchedule("0 0 8 * * ?")).build();
-			// Trigger updateTrigger = newTrigger().withIdentity("triggerUpdate",
-			// "groupAlbina").startNow()
-			// .withSchedule(cronSchedule("0 5/10 * * * ?")).build();
 			scheduler.scheduleJob(updateJob, updateTrigger);
 
 			// start blog job (every 5 min)
 			JobDetail blogJob = newJob(BlogJob.class).withIdentity("jobBlog", "groupAlbina").build();
 			Trigger blogTrigger = newTrigger().withIdentity("triggerBlog", "groupAlbina").startNow()
 					.withSchedule(cronSchedule("0 0/5 * * * ?")).build();
-			// Trigger blogTrigger = newTrigger().withIdentity("triggerBlog",
-			// "groupAlbina").startNow()
-			// .withSchedule(cronSchedule("0 5/10 * * * ?")).build();
 			scheduler.scheduleJob(blogJob, blogTrigger);
 
 		} catch (SchedulerException e) {
