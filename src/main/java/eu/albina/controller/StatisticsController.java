@@ -18,7 +18,7 @@ package eu.albina.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -247,7 +247,7 @@ public class StatisticsController {
 	 */
 	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended) {
 		// sort bulletins by validity
-		Collections.sort(bulletins, new AvalancheBulletinSortByValidity());
+		bulletins.sort(Comparator.comparing(AvalancheBulletin::getValidFrom));
 
 		StringBuilder sb = new StringBuilder();
 

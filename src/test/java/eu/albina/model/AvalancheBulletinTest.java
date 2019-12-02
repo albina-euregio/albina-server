@@ -35,7 +35,6 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class AvalancheBulletinTest {
@@ -164,7 +163,7 @@ public class AvalancheBulletinTest {
 		b = new AvalancheBulletin(data);
 		bulletins.add(b);
 
-		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+		Collections.sort(bulletins);
 
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			logger.debug("" + avalancheBulletin.getHighestDangerRatingDouble());
