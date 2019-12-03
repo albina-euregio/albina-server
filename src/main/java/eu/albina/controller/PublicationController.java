@@ -92,7 +92,7 @@ public class PublicationController {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
-		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+		Collections.sort(bulletins);
 
 		AlbinaUtil.runDeleteFilesScript(validityDateString);
 
@@ -191,7 +191,7 @@ public class PublicationController {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
-		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+		Collections.sort(bulletins);
 
 		AlbinaUtil.runDeleteFilesScript(validityDateString);
 
@@ -273,7 +273,7 @@ public class PublicationController {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
-		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+		Collections.sort(bulletins);
 
 		AlbinaUtil.runDeleteFilesScript(validityDateString);
 

@@ -69,7 +69,7 @@ import eu.albina.util.XmlUtil;
  */
 @Entity
 @Table(name = "avalanche_bulletins")
-public class AvalancheBulletin extends AbstractPersistentObject implements AvalancheInformationObject {
+public class AvalancheBulletin extends AbstractPersistentObject implements AvalancheInformationObject, Comparable<AvalancheBulletin> {
 
 	/** Information about the author of the avalanche bulletin */
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -1285,4 +1285,15 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		return true;
 	}
+
+	/**
+	 * Sort {@code AvalancheBulletin} by highest danger rating (descending) with
+	 * regard to daytime and elevation dependency.
+	 *
+	 */
+	@Override
+	public int compareTo(AvalancheBulletin other) {
+		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
+	}
+
 }
