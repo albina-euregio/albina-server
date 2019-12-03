@@ -19,6 +19,7 @@ package eu.albina.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -41,7 +42,9 @@ import eu.albina.util.GlobalVariables;
  *
  */
 @Entity
-@Table(name = "avalanche_reports")
+@Table(name = "avalanche_reports", indexes = {
+		@Index(name = "avalanche_reports_DATE_IDX", columnList = "DATE"),
+})
 public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	/** Information about the author of the avalanche bulletin */
