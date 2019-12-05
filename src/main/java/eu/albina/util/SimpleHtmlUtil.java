@@ -405,7 +405,7 @@ public class SimpleHtmlUtil {
 			if (avalancheSituation.getTreelineHigh()) {
 				sb.append(GlobalVariables.getTreelinePreString(true, lang));
 				sb.append(GlobalVariables.getTreelineStringLowercase(lang));
-			} else if (avalancheSituation.getElevationHigh() > -1) {
+			} else if (avalancheSituation.getElevationHigh() > 0) {
 				sb.append(GlobalVariables.getElevationPreString(true, lang));
 				sb.append(avalancheSituation.getElevationHigh());
 				sb.append("m");
@@ -415,7 +415,7 @@ public class SimpleHtmlUtil {
 			if (avalancheSituation.getTreelineLow()) {
 				sb.append(GlobalVariables.getTreelinePreString(true, lang));
 				sb.append(GlobalVariables.getTreelineStringLowercase(lang));
-			} else if (avalancheSituation.getElevationLow() > -1) {
+			} else if (avalancheSituation.getElevationLow() > 0) {
 				sb.append(GlobalVariables.getElevationPreString(true, lang));
 				sb.append(avalancheSituation.getElevationLow());
 				sb.append("m");

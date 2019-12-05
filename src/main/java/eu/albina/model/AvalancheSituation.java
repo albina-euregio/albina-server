@@ -99,6 +99,12 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	}
 
 	public void setAvalancheSituation(eu.albina.model.enumerations.AvalancheSituation avalancheSituation) {
+		if (avalancheSituation == eu.albina.model.enumerations.AvalancheSituation.favourable_situation) {
+			this.treelineHigh = false;
+			this.treelineLow = false;
+			this.elevationHigh = -1;
+			this.elevationLow = -1;
+		}
 		this.avalancheSituation = avalancheSituation;
 	}
 
