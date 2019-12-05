@@ -49,7 +49,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheBulletinController;
-import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.UserController;
@@ -832,7 +831,7 @@ public class AvalancheBulletinService {
 			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+			Collections.sort(bulletins);
 
 			Thread createPdfThread = PublicationController.getInstance().createPdf(bulletins,
 					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
@@ -875,7 +874,7 @@ public class AvalancheBulletinService {
 			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+			Collections.sort(bulletins);
 
 			Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(bulletins);
 			createSimpleHtmlThread.start();
@@ -917,7 +916,7 @@ public class AvalancheBulletinService {
 			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+			Collections.sort(bulletins);
 
 			Thread createStaticWidgetsThread = PublicationController.getInstance().createStaticWidgets(bulletins,
 					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
@@ -960,7 +959,7 @@ public class AvalancheBulletinService {
 			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+			Collections.sort(bulletins);
 
 			Thread createMapsThread = PublicationController.getInstance().createMaps(bulletins,
 					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
@@ -1003,7 +1002,7 @@ public class AvalancheBulletinService {
 			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+			Collections.sort(bulletins);
 
 			PublicationController.getInstance().createCaaml(bulletins, AlbinaUtil.getValidityDateString(bulletins),
 					AlbinaUtil.getPublicationTime(bulletins));
@@ -1051,7 +1050,7 @@ public class AvalancheBulletinService {
 			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+			Collections.sort(bulletins);
 
 			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false);
 			sendEmailsThread.start();
@@ -1099,7 +1098,7 @@ public class AvalancheBulletinService {
 			for (AvalancheBulletin b : result)
 				bulletins.add(b);
 
-			Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+			Collections.sort(bulletins);
 
 			Thread triggerMessengerpeopleThread = PublicationController.getInstance().triggerMessengerpeople(bulletins,
 					regions, false);

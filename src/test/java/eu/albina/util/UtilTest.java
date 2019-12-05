@@ -46,7 +46,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.AvalancheBulletinSortByDangerRating;
 import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
@@ -375,7 +374,7 @@ public class UtilTest {
 			System.out.println(avalancheBulletin.getHighestDangerRating());
 		}
 		System.out.println("Sorting ...");
-		Collections.sort(bulletins, new AvalancheBulletinSortByDangerRating());
+		Collections.sort(bulletins);
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			System.out.println(avalancheBulletin.getHighestDangerRating());
 		}
