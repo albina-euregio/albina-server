@@ -106,6 +106,8 @@ public class UtilTest {
 		names.add("Bernhard Niedermoser");
 		names.add("Michael Butschek");
 		names.add("Claudia Riedl");
+		names.add("Astrid Maschits");
+		names.add("Harald Timons");
 
 		passwords.add("Alberto");
 		passwords.add("Sergio");
@@ -142,6 +144,8 @@ public class UtilTest {
 		passwords.add("Bernhard");
 		passwords.add("Michael");
 		passwords.add("Claudia");
+		passwords.add("Astrid");
+		passwords.add("Harald");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -337,9 +341,10 @@ public class UtilTest {
 				AlbinaUtil.getPublicationTime(bulletins));
 	}
 
+	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 32; i < 35; i++) {
+		for (int i = 35; i < 37; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
