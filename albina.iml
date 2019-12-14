@@ -123,5 +123,6 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.10" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.7" level="project" />
     <orderEntry type="library" name="Maven: io.sentry:sentry:1.7.27" level="project" />
+    <orderEntry type="library" name="Maven: org.mapyrus:mapyrus:1.802" level="project" />
   </component>
 </module>

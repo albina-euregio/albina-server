@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -261,6 +263,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		if (json.has("publishedRegions")) {
 			JSONArray regions = json.getJSONArray("publishedRegions");
+			for (Object entry : regions) {
+				this.publishedRegions.add((String) entry);
+			}
+		} else if (json.has("regions")) {
+			JSONArray regions = json.getJSONArray("regions");
 			for (Object entry : regions) {
 				this.publishedRegions.add((String) entry);
 			}
@@ -1301,6 +1308,15 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public static AvalancheBulletin readBulletin(final InputStream resource) {
 		final String validBulletinStringFromResource = new Scanner(resource).useDelimiter("\\Z").next();
 		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+	}
+
+	public static List<AvalancheBulletin> readBulletins(final InputStream resource) {
+		final String validBulletinStringFromResource = new Scanner(resource).useDelimiter("\\Z").next();
+		final JSONArray array = new JSONArray(validBulletinStringFromResource);
+		return IntStream.range(0, array.length())
+				.mapToObj(array::getJSONObject)
+				.map(AvalancheBulletin::new)
+				.collect(Collectors.toList());
 	}
 
 }
