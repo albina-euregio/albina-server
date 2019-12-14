@@ -38,6 +38,45 @@ public class MapUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
+	// REGION
+	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
+										 boolean grayscale) {
+		StringBuilder sb = new StringBuilder();
+		if (hasDaytimeDependency) {
+			if (isAfternoon)
+				sb.append("pm");
+			else
+				sb.append("am");
+		} else
+			sb.append("fd");
+		sb.append("_");
+		if (region != null) {
+			switch (region) {
+				case "AT-07":
+					sb.append("tyrol");
+					break;
+				case "IT-32-BZ":
+					sb.append("southtyrol");
+					break;
+				case "IT-32-TN":
+					sb.append("trentino");
+					break;
+				default:
+					sb.append("albina");
+					break;
+			}
+		} else {
+			sb.append("albina");
+		}
+		sb.append("_map");
+
+		if (grayscale)
+			sb.append("_bw");
+
+		sb.append(".jpg");
+		return sb.toString();
+	}
+
 	/**
 	 * Create images of each map needed for the different products of
 	 * avalanche.report. This consists of an overview map over the whole EUREGIO,

@@ -1059,45 +1059,6 @@ public class PdfUtil {
 		}
 	}
 
-	// REGION
-	private String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
-			boolean grayscale) {
-		StringBuilder sb = new StringBuilder();
-		if (hasDaytimeDependency) {
-			if (isAfternoon)
-				sb.append("pm");
-			else
-				sb.append("am");
-		} else
-			sb.append("fd");
-		sb.append("_");
-		if (region != null) {
-			switch (region) {
-			case "AT-07":
-				sb.append("tyrol");
-				break;
-			case "IT-32-BZ":
-				sb.append("southtyrol");
-				break;
-			case "IT-32-TN":
-				sb.append("trentino");
-				break;
-			default:
-				sb.append("albina");
-				break;
-			}
-		} else {
-			sb.append("albina");
-		}
-		sb.append("_map");
-
-		if (grayscale)
-			sb.append("_bw");
-
-		sb.append(".jpg");
-		return sb.toString();
-	}
-
 	private void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
 			PdfDocument pdf, String region, boolean grayscale, boolean daytimeDependency) throws MalformedURLException {
 		PdfPage page = pdf.addNewPage();
@@ -1123,7 +1084,7 @@ public class PdfUtil {
 
 			ImageData overviewMapAMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
-					+ getOverviewMapFilename(region, false, true, grayscale));
+					+ MapUtil.getOverviewMapFilename(region, false, true, grayscale));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
 			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY + mapHeight + 40);
@@ -1134,7 +1095,7 @@ public class PdfUtil {
 
 			ImageData overviewMapPMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
-					+ getOverviewMapFilename(region, true, true, grayscale));
+					+ MapUtil.getOverviewMapFilename(region, true, true, grayscale));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
 			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY);
@@ -1145,7 +1106,7 @@ public class PdfUtil {
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
-					+ getOverviewMapFilename(region, false, daytimeDependency, grayscale));
+					+ MapUtil.getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			if (region != null) {
 				mapY = 290;
