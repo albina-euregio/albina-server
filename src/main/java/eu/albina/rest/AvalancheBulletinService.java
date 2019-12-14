@@ -98,9 +98,7 @@ public class AvalancheBulletinService {
 			endDate = startDate.plusDays(1);
 
 			if (regions.isEmpty()) {
-				regions.add(GlobalVariables.codeTrentino);
-				regions.add(GlobalVariables.codeSouthTyrol);
-				regions.add(GlobalVariables.codeTyrol);
+				regions = GlobalVariables.regions;
 			}
 
 			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate,
@@ -129,9 +127,7 @@ public class AvalancheBulletinService {
 		DateTime startDate = null;
 
 		if (regions.isEmpty()) {
-			regions.add(GlobalVariables.codeTrentino);
-			regions.add(GlobalVariables.codeSouthTyrol);
-			regions.add(GlobalVariables.codeTyrol);
+			regions = GlobalVariables.regions;
 		}
 
 		try {
@@ -241,9 +237,7 @@ public class AvalancheBulletinService {
 		DateTime startDate = null;
 
 		if (regions.isEmpty()) {
-			regions.add(GlobalVariables.codeTrentino);
-			regions.add(GlobalVariables.codeSouthTyrol);
-			regions.add(GlobalVariables.codeTyrol);
+			regions = GlobalVariables.regions;
 		}
 
 		try {
@@ -279,9 +273,7 @@ public class AvalancheBulletinService {
 		DateTime startDate = null;
 
 		if (regions.isEmpty()) {
-			regions.add(GlobalVariables.codeTrentino);
-			regions.add(GlobalVariables.codeSouthTyrol);
-			regions.add(GlobalVariables.codeTyrol);
+			regions = GlobalVariables.regions;
 		}
 
 		try {
