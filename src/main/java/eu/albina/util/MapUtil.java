@@ -250,18 +250,20 @@ public class MapUtil {
 		}}));
 		final FileOrURL file = new FileOrURL(AVALANCHE_WARNING_MAPS_PATH + mapyrusFile);
 		mapyrus.interpret(context, file, System.in, System.out);
+
 		final int dpi = 300;
-		if (Map.overlay.equals(map)) {
-			new ProcessBuilder("gs", "-sDEVICE=png16m", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
-					outputFile.toString().replaceFirst("pdf$", "png"),
-					outputFile.toString()
-			).inheritIO().start().waitFor();
-		} else {
-			new ProcessBuilder("gs", "-sDEVICE=jpeg", "-dJPEGQ=80", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
-					outputFile.toString().replaceFirst("pdf$", "jpg"),
-					outputFile.toString()
-			).inheritIO().start().waitFor();
-		}
+		new ProcessBuilder("gs", "-sDEVICE=png16m", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
+				outputFile.toString().replaceFirst("pdf$", "png"),
+				outputFile.toString()
+		).inheritIO().start().waitFor();
+		new ProcessBuilder("cwebp",
+				outputFile.toString().replaceFirst("pdf$", "png"), "-o",
+				outputFile.toString().replaceFirst("pdf$", "webp")
+		).inheritIO().start().waitFor();
+		new ProcessBuilder("gs", "-sDEVICE=jpeg", "-dJPEGQ=80", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
+				outputFile.toString().replaceFirst("pdf$", "jpg"),
+				outputFile.toString()
+		).inheritIO().start().waitFor();
 	}
 
 	public static String triggerMapProductionUnivie(String caaml) throws AlbinaException {
