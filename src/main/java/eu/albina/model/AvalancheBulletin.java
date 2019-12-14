@@ -16,11 +16,13 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -1294,6 +1296,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	@Override
 	public int compareTo(AvalancheBulletin other) {
 		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
+	}
+
+	public static AvalancheBulletin readBulletin(final InputStream resource) {
+		final String validBulletinStringFromResource = new Scanner(resource).useDelimiter("\\Z").next();
+		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 	}
 
 }
