@@ -28,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +48,7 @@ import org.w3c.dom.Document;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -58,9 +60,14 @@ public class MapUtil {
 	// REGION
 	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
 										 boolean grayscale) {
+		final DaytimeDependency daytimeDependency = !hasDaytimeDependency
+				? DaytimeDependency.fd
+				: isAfternoon
+				? DaytimeDependency.pm
+				: DaytimeDependency.am;
 		return Map.forRegion(region)
 				.orElse(Map.fullmap)
-				.filename(isAfternoon, hasDaytimeDependency, grayscale, "jpg");
+				.filename(daytimeDependency, grayscale, "jpg");
 	}
 
 	/**
@@ -85,28 +92,31 @@ public class MapUtil {
 		}
 	}
 
-	static String createMayrusInput(List<AvalancheBulletin> bulletins) {
+	static String createMayrusInput(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency) {
 		final String header = "sys_bid;bid;region;date;am_pm;validelevation;dr_h;dr_l;aspect_h;aspect_l;avprob_h;avprob_l\n";
-		return header + bulletins.stream()
-				.flatMap(bulletin -> bulletin.getPublishedRegions().stream()
-						.map(region -> String.join(";",
-								Integer.toString(bulletins.indexOf(bulletin)),
-								bulletin.getId(),
-								region,
-								bulletin.getValidityDateString(),
-								"fd",
-								Integer.toString(bulletin.getElevation()),
-								DangerRating.getString(bulletin.getForenoon().getDangerRatingAbove()),
-								DangerRating.getString(bulletin.isHasElevationDependency()
-										? bulletin.getForenoon().getDangerRatingBelow()
-										: bulletin.getForenoon().getDangerRatingAbove()),
-								"0",
-								"0",
-								"0",
-								"0"
-						))
-				)
-				.collect(Collectors.joining("\n"));
+		return header + bulletins.stream().flatMap(bulletin -> bulletin.getPublishedRegions().stream()
+				.map(region -> {
+					final AvalancheBulletinDaytimeDescription description = bulletin.isHasDaytimeDependency() && DaytimeDependency.pm.equals(daytimeDependency)
+							? bulletin.getAfternoon()
+							: bulletin.getForenoon();
+					return String.join(";",
+							Integer.toString(bulletins.indexOf(bulletin)),
+							bulletin.getId(),
+							region,
+							bulletin.getValidityDateString(),
+							"",
+							Integer.toString(bulletin.getElevation()),
+							DangerRating.getString(description.getDangerRatingAbove()),
+							DangerRating.getString(bulletin.isHasElevationDependency()
+									? description.getDangerRatingBelow()
+									: description.getDangerRatingAbove()),
+							"0",
+							"0",
+							"0",
+							"0"
+					);
+				})
+		).collect(Collectors.joining("\n"));
 	}
 
 	enum Map {
@@ -156,17 +166,10 @@ public class MapUtil {
 			}
 		}
 
-		String filename(boolean isAfternoon, boolean hasDaytimeDependency, boolean grayscale, String format) {
+		String filename(DaytimeDependency daytimeDependency, boolean grayscale, String format) {
 			StringBuilder sb = new StringBuilder();
-			if (hasDaytimeDependency) {
-				if (isAfternoon)
-					sb.append("pm");
-				else
-					sb.append("am");
-			} else
-				sb.append("fd");
+			sb.append(daytimeDependency.name());
 			sb.append("_");
-
 			sb.append(this.filename());
 
 			if (grayscale)
@@ -192,24 +195,41 @@ public class MapUtil {
 		final int width;
 	}
 
+	enum DaytimeDependency {
+		/**
+		 * full day
+		 */
+		fd,
+		am,
+		pm
+	}
+
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) throws MapyrusException, IOException, InterruptedException {
-		// TODO handle daytime dependency
 		final String date = bulletins.get(0).getValidityDateString();
 		final Path outputDirectory = Paths.get("/tmp/" + date + "/");
 		Files.createDirectories(outputDirectory);
-		final Path drmFile = outputDirectory.resolve("fd.txt");
-		Files.write(drmFile, createMayrusInput(bulletins).getBytes(StandardCharsets.UTF_8));
-		for (Map map : Map.values()) {
-			createMapyrusMaps(map, null, 0, false, date, drmFile);
-			createMapyrusMaps(map, null, 0, true, date, drmFile);
-		}
-		for (int i = 0; i < bulletins.size(); i++) {
-			createMapyrusMaps(Map.fullmap_small, bulletins.get(i).getId(), i, false, date, drmFile);
-			createMapyrusMaps(Map.fullmap_small, bulletins.get(i).getId(), i, true, date, drmFile);
+		final boolean hasDaytimeDependency = bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
+		for (DaytimeDependency daytimeDependency : hasDaytimeDependency
+				? EnumSet.of(DaytimeDependency.am, DaytimeDependency.pm)
+				: EnumSet.of(DaytimeDependency.fd)) {
+			final Path drmFile = outputDirectory.resolve(daytimeDependency + ".txt");
+			Files.write(drmFile, createMayrusInput(bulletins, daytimeDependency).getBytes(StandardCharsets.UTF_8));
+			for (Map map : Map.values()) {
+				createMapyrusMaps(map, daytimeDependency, null, 0, false, drmFile);
+				createMapyrusMaps(map, daytimeDependency, null, 0, true, drmFile);
+			}
+			for (int i = 0; i < bulletins.size(); i++) {
+				final AvalancheBulletin bulletin = bulletins.get(i);
+				if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
+					continue;
+				}
+				createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, false, drmFile);
+				createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, true, drmFile);
+			}
 		}
 	}
 
-	static void createMapyrusMaps(Map map, String bulletinId, int bulletinIndex, boolean grayscale, String date, Path dangerRatingMapFile) throws IOException, MapyrusException, InterruptedException {
+	static void createMapyrusMaps(Map map, DaytimeDependency daytimeDependency, String bulletinId, int bulletinIndex, boolean grayscale, Path dangerRatingMapFile) throws IOException, MapyrusException, InterruptedException {
 		final MapSize size = Map.overlay.equals(map)
 				? MapSize.overlay
 				: Map.fullmap_small.equals(map)
@@ -220,8 +240,8 @@ public class MapUtil {
 		final ContextStack context = new ContextStack();
 		final Path outputDirectory = dangerRatingMapFile.getParent();
 		final Path outputFile = outputDirectory.resolve(bulletinId != null
-				? bulletinId + (grayscale ? "_bw.pdf" : ".pdf")
-				: map.filename(false, false, grayscale, "pdf"));
+				? bulletinId + (DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "") + (grayscale ? "_bw.pdf" : ".pdf")
+				: map.filename(daytimeDependency, grayscale, "pdf"));
 		context.setBindings(new SimpleBindings(new HashMap<String, Object>() {{
 			put("xmax", map.xmax);
 			put("xmin", map.xmin);
@@ -230,7 +250,6 @@ public class MapUtil {
 			put("image_type", "pdf");
 			put("drm_file", dangerRatingMapFile);
 			put("mapFile", outputFile);
-			put("date", date);
 			put("pagesize_x", size.width);
 			put("pagesize_y", size.width / map.aspectRatio());
 			put("map_xsize", size.width);
