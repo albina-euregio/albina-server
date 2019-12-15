@@ -39,8 +39,10 @@ import javax.script.SimpleBindings;
 import javax.xml.transform.TransformerException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.union.UnaryUnionOp;
+import com.vividsolutions.jts.precision.GeometryPrecisionReducer;
 
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
@@ -325,8 +327,10 @@ public class MapUtil {
 					.map(Region::getPolygon)
 					// use buffer to avoid artifacts when building polygon union
 					.map(polygon -> BufferOp.bufferOp(polygon, bufferDistance))
-					.collect(Collectors.collectingAndThen(Collectors.toList(),
-							polygons -> BufferOp.bufferOp(UnaryUnionOp.union(polygons), -bufferDistance)));
+					.collect(Collectors.collectingAndThen(Collectors.toList(), UnaryUnionOp::union));
+			feature.geometry = BufferOp.bufferOp(feature.geometry, -bufferDistance);
+			// round coordinates to 4 decimal digits in order to reduce the file size
+			feature.geometry = GeometryPrecisionReducer.reduce(feature.geometry, new PrecisionModel(1e4));
 			featureCollection.features.add(feature);
 		}
 		new ObjectMapper().writeValue(regionFile.toFile(), featureCollection);
