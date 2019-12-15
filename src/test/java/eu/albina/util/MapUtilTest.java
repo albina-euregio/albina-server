@@ -1,6 +1,7 @@
 package eu.albina.util;
 
 import eu.albina.model.AvalancheBulletin;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -10,6 +11,11 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class MapUtilTest {
+
+    @Before
+    public void setUp() {
+        HibernateUtil.getInstance().setUp();
+    }
 
     @Test
     public void testOverviewMapFilename() {

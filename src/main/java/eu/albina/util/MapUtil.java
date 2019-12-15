@@ -38,6 +38,10 @@ import java.util.stream.Collectors;
 import javax.script.SimpleBindings;
 import javax.xml.transform.TransformerException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vividsolutions.jts.operation.buffer.BufferOp;
+import com.vividsolutions.jts.operation.union.UnaryUnionOp;
+
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.Interpreter;
@@ -46,9 +50,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.AvalancheSituation;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -96,9 +103,7 @@ public class MapUtil {
 		final String header = "sys_bid;bid;region;date;am_pm;validelevation;dr_h;dr_l;aspect_h;aspect_l;avprob_h;avprob_l\n";
 		return header + bulletins.stream().flatMap(bulletin -> bulletin.getPublishedRegions().stream()
 				.map(region -> {
-					final AvalancheBulletinDaytimeDescription description = bulletin.isHasDaytimeDependency() && DaytimeDependency.pm.equals(daytimeDependency)
-							? bulletin.getAfternoon()
-							: bulletin.getForenoon();
+					final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin, daytimeDependency);
 					return String.join(";",
 							Integer.toString(bulletins.indexOf(bulletin)),
 							bulletin.getId(),
@@ -106,10 +111,8 @@ public class MapUtil {
 							bulletin.getValidityDateString(),
 							"",
 							Integer.toString(bulletin.getElevation()),
-							DangerRating.getString(description.getDangerRatingAbove()),
-							DangerRating.getString(bulletin.isHasElevationDependency()
-									? description.getDangerRatingBelow()
-									: description.getDangerRatingAbove()),
+							getDangerRatingString(bulletin, description, true),
+							getDangerRatingString(bulletin, description, false),
 							"0",
 							"0",
 							"0",
@@ -117,6 +120,18 @@ public class MapUtil {
 					);
 				})
 		).collect(Collectors.joining("\n"));
+	}
+
+	private static AvalancheBulletinDaytimeDescription getBulletinDaytimeDescription(AvalancheBulletin bulletin, DaytimeDependency daytimeDependency) {
+		return bulletin.isHasDaytimeDependency() && DaytimeDependency.pm.equals(daytimeDependency)
+				? bulletin.getAfternoon()
+				: bulletin.getForenoon();
+	}
+
+	private static String getDangerRatingString(AvalancheBulletin bulletin, AvalancheBulletinDaytimeDescription description, boolean above) {
+		return DangerRating.getString(bulletin.isHasElevationDependency() && !above
+				? description.getDangerRatingBelow()
+				: description.getDangerRatingAbove());
 	}
 
 	enum Map {
@@ -204,7 +219,7 @@ public class MapUtil {
 		pm
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) throws MapyrusException, IOException, InterruptedException {
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) throws MapyrusException, IOException, InterruptedException, AlbinaException {
 		final String date = bulletins.get(0).getValidityDateString();
 		final Path outputDirectory = Paths.get("/tmp/" + date + "/");
 		Files.createDirectories(outputDirectory);
@@ -212,6 +227,8 @@ public class MapUtil {
 		for (DaytimeDependency daytimeDependency : hasDaytimeDependency
 				? EnumSet.of(DaytimeDependency.am, DaytimeDependency.pm)
 				: EnumSet.of(DaytimeDependency.fd)) {
+			final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
+			createBulletinRegions(bulletins, daytimeDependency, regionFile);
 			final Path drmFile = outputDirectory.resolve(daytimeDependency + ".txt");
 			Files.write(drmFile, createMayrusInput(bulletins, daytimeDependency).getBytes(StandardCharsets.UTF_8));
 			for (Map map : Map.values()) {
@@ -283,6 +300,43 @@ public class MapUtil {
 				outputFile.toString().replaceFirst("pdf$", "jpg"),
 				outputFile.toString()
 		).inheritIO().start().waitFor();
+	}
+
+	static void createBulletinRegions(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, Path regionFile) throws IOException, AlbinaException {
+		final GeoJson.FeatureCollection featureCollection = new GeoJson.FeatureCollection();
+		featureCollection.properties.put("creation_date", bulletins.get(0).getPublicationDate().toString());
+		featureCollection.properties.put("valid_date", bulletins.get(0).getValidityDateString());
+		featureCollection.properties.put("valid_daytime", daytimeDependency.name());
+		final List<Region> allRegions = RegionController.getInstance().getRegions();
+		for (AvalancheBulletin bulletin : bulletins) {
+			final GeoJson.Feature feature = new GeoJson.Feature();
+			final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin, daytimeDependency);
+			feature.properties.put("bid", bulletin.getId());
+			feature.properties.put("daytime", daytimeDependency.name());
+			feature.properties.put("elevation", bulletin.getElevation());
+			feature.properties.put("dl_hi", getDangerRatingString(bulletin, description, true));
+			feature.properties.put("dl_lo", getDangerRatingString(bulletin, description, false));
+			feature.properties.put("problem_1", getAvalancheSituationString(description.getAvalancheSituation1()));
+			feature.properties.put("problem_2", getAvalancheSituationString(description.getAvalancheSituation2()));
+			final double bufferDistance = 1e-4;
+			feature.geometry = allRegions.stream()
+					.flatMap(region -> region.getSubregions().stream())
+					.filter(region -> bulletin.getPublishedRegions().contains(region.getId()))
+					.map(Region::getPolygon)
+					// use buffer to avoid artifacts when building polygon union
+					.map(polygon -> BufferOp.bufferOp(polygon, bufferDistance))
+					.collect(Collectors.collectingAndThen(Collectors.toList(),
+							polygons -> BufferOp.bufferOp(UnaryUnionOp.union(polygons), -bufferDistance)));
+			featureCollection.features.add(feature);
+		}
+		new ObjectMapper().writeValue(regionFile.toFile(), featureCollection);
+	}
+
+	private static String getAvalancheSituationString(AvalancheSituation avalancheSituation) {
+		return Optional.ofNullable(avalancheSituation)
+				.map(AvalancheSituation::getAvalancheSituation)
+				.map(eu.albina.model.enumerations.AvalancheSituation::toCaamlString)
+				.orElse("false");
 	}
 
 	public static String triggerMapProductionUnivie(String caaml) throws AlbinaException {
