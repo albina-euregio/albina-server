@@ -15,7 +15,6 @@ public class MapUtilTest {
     @Before
     public void setUp() {
         GlobalVariables.loadConfigProperties();
-        HibernateUtil.getInstance().setUp();
     }
 
     @Test
@@ -32,6 +31,7 @@ public class MapUtilTest {
     @Test
     @Ignore("requires albina-euregio/avalanche-warning-maps")
     public void testMapyrusMaps() throws Exception {
+        HibernateUtil.getInstance().setUp();
         final InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream("2019-01-17.json");
         final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
         MapUtil.createMapyrusMaps(bulletins);
@@ -40,6 +40,7 @@ public class MapUtilTest {
     @Test
     @Ignore("requires albina-euregio/avalanche-warning-maps")
     public void testMapyrusMapsWithDaytimeDependency() throws Exception {
+        HibernateUtil.getInstance().setUp();
         final InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream("2019-01-16.json");
         final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
         MapUtil.createMapyrusMaps(bulletins);
