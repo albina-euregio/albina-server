@@ -31,10 +31,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -98,6 +98,8 @@ public class MapUtil {
 	 *            The bulletins to create the maps from.
 	 */
 	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) {
+		logger.info("Creating danger rating maps for {} using {}",
+				AlbinaUtil.getValidityDateString(bulletins), GlobalVariables.getMapProductionUrl());
 		if (GlobalVariables.isMapProductionUrlUnivie()) {
 			createDangerRatingMapsUnivie(bulletins);
 		} else {
@@ -239,6 +241,7 @@ public class MapUtil {
 		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
 				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 		try {
+			logger.info("Creating directory {}", outputDirectory);
 			Files.createDirectories(outputDirectory);
 		} catch (IOException ex) {
 			throw new AlbinaMapException("Failed to create output directory", ex);
@@ -250,6 +253,7 @@ public class MapUtil {
 				: EnumSet.of(DaytimeDependency.fd)) {
 			try {
 				final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
+				logger.info("Creating region file {}", regionFile);
 				createBulletinRegions(bulletins, daytimeDependency, regionFile);
 			} catch (IOException | AlbinaException ex) {
 				throw new AlbinaMapException("Failed to create region file", ex);
@@ -257,6 +261,7 @@ public class MapUtil {
 			final Path drmFile;
 			try {
 				drmFile = outputDirectory.resolve(daytimeDependency + ".txt");
+				logger.info("Creating mapyrus input file {}", drmFile);
 				Files.write(drmFile, createMayrusInput(bulletins, daytimeDependency).getBytes(StandardCharsets.UTF_8));
 			} catch (IOException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus input file", ex);
@@ -301,7 +306,7 @@ public class MapUtil {
 				? bulletinId + (DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "") + (grayscale ? "_bw.pdf" : ".pdf")
 				: map.filename(daytimeDependency, grayscale, "pdf"));
 		final Path tempDirectory = Files.createTempDirectory("mapyrus");
-		context.setBindings(new SimpleBindings(new HashMap<String, Object>() {{
+		final TreeMap<String, Object> bindings = new TreeMap<String, Object>() {{
 			put("xmax", map.xmax);
 			put("xmin", map.xmin);
 			put("ymax", map.ymax);
@@ -325,28 +330,39 @@ public class MapUtil {
 			put("copyright", Map.overlay.equals(map) ? "off" : "on");
 			put("interreg", Map.fullmap.equals(map) ? "on" : "off");
 			put("bulletin_id", bulletinId != null ? bulletinIndex : map.name());
-		}}));
+		}};
+		context.setBindings(new SimpleBindings(bindings));
 		final FileOrURL file = new FileOrURL(mapProductionUrl + mapyrusFile);
+		logger.info("Creating map {} using {} and {} with bindings {}",
+				outputFile, dangerRatingMapFile, mapyrusFile, bindings);
 		mapyrus.interpret(context, file, System.in, System.out);
-		deleteDirecoryWithContents(tempDirectory);
+		deleteDirectoryWithContents(tempDirectory);
 
 		final int dpi = 300;
+		final String outputFileJpg = outputFile.toString().replaceFirst("pdf$", "jpg");
+		final String outputFilePng = outputFile.toString().replaceFirst("pdf$", "png");
+		final String outputFileWebp = outputFile.toString().replaceFirst("pdf$", "webp");
+
+		logger.info("Converting {} to {}}", outputFile, outputFilePng);
 		new ProcessBuilder("gs", "-sDEVICE=png16m", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
-				outputFile.toString().replaceFirst("pdf$", "png"),
+				outputFilePng,
 				outputFile.toString()
 		).inheritIO().start().waitFor();
+
+		logger.info("Converting {} to {}}", outputFilePng, outputFileWebp);
 		new ProcessBuilder("cwebp",
-				outputFile.toString().replaceFirst("pdf$", "png"), "-o",
-				outputFile.toString().replaceFirst("pdf$", "webp")
+				outputFilePng, "-o",
+				outputFileWebp
 		).inheritIO().start().waitFor();
+		logger.info("Converting {} to {}}", outputFile, outputFileJpg);
 		new ProcessBuilder("gs", "-sDEVICE=jpeg", "-dJPEGQ=80", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
-				outputFile.toString().replaceFirst("pdf$", "jpg"),
+				outputFileJpg,
 				outputFile.toString()
 		).inheritIO().start().waitFor();
 		return null;
 	}
 
-	private static void deleteDirecoryWithContents(Path directory) throws IOException {
+	private static void deleteDirectoryWithContents(Path directory) throws IOException {
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
 			for (Path path : directoryStream) {
 				Files.delete(path);
