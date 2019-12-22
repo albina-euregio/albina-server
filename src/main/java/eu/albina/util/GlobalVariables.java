@@ -455,6 +455,10 @@ public class GlobalVariables {
 		return mapProductionUrl;
 	}
 
+	public static boolean isMapProductionUrlUnivie() {
+		return getMapProductionUrl().startsWith("http://data1.geo.univie.ac.at/");
+	}
+
 	public static void setMapProductionUrl(String mapProductionUrl) throws ConfigurationException {
 		GlobalVariables.mapProductionUrl = mapProductionUrl;
 		setConfigProperty("mapProductionUrl", mapProductionUrl);

@@ -14,6 +14,7 @@ public class MapUtilTest {
 
     @Before
     public void setUp() {
+        GlobalVariables.loadConfigProperties();
         HibernateUtil.getInstance().setUp();
     }
 

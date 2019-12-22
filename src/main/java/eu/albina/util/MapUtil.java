@@ -64,7 +64,12 @@ import eu.albina.model.enumerations.LanguageCode;
 public class MapUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
-	private static final String AVALANCHE_WARNING_MAPS_PATH = "/home/simon/src/albina-euregio/avalanche-warning-maps/";
+
+	public static class AlbinaMapException extends RuntimeException {
+		public AlbinaMapException(String message, Throwable cause) {
+			super(message, cause);
+		}
+	}
 
 	// REGION
 	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
@@ -88,10 +93,18 @@ public class MapUtil {
 	 *            The bulletins to create the maps from.
 	 */
 	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) {
+		if (GlobalVariables.isMapProductionUrlUnivie()) {
+			createDangerRatingMapsUnivie(bulletins);
+		} else {
+			try {
+				createMapyrusMaps(bulletins);
+			} catch (Exception ex) {
+				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
+			}
+		}
+	}
 
-		// TODO implement local creation of danger rating maps
-		// TODO delete copying of maps
-
+	private static void createDangerRatingMapsUnivie(List<AvalancheBulletin> bulletins) {
 		try {
 			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
@@ -222,8 +235,8 @@ public class MapUtil {
 	}
 
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) throws MapyrusException, IOException, InterruptedException, AlbinaException {
-		final String date = bulletins.get(0).getValidityDateString();
-		final Path outputDirectory = Paths.get("/tmp/" + date + "/");
+		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
+				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 		Files.createDirectories(outputDirectory);
 		final boolean hasDaytimeDependency = bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 		for (DaytimeDependency daytimeDependency : hasDaytimeDependency
@@ -254,6 +267,7 @@ public class MapUtil {
 				: Map.fullmap_small.equals(map)
 				? MapSize.thumbnail_map
 				: MapSize.standard_map;
+		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
 		final String mapyrusFile = Map.overlay.equals(map) ? "mapyrus/albina_overlaymap.mapyrus" : "mapyrus/albina_drawmap.mapyrus";
 		final Interpreter mapyrus = new Interpreter();
 		final ContextStack context = new ContextStack();
@@ -273,9 +287,9 @@ public class MapUtil {
 			put("pagesize_y", size.width / map.aspectRatio());
 			put("map_xsize", size.width);
 			put("working_dir", outputDirectory);
-			put("font_dir", AVALANCHE_WARNING_MAPS_PATH + "mapyrus/fonts/");
-			put("geodata_dir", AVALANCHE_WARNING_MAPS_PATH + "geodata/");
-			put("image_dir", AVALANCHE_WARNING_MAPS_PATH + "images/");
+			put("font_dir", mapProductionUrl + "mapyrus/fonts/");
+			put("geodata_dir", mapProductionUrl + "geodata/");
+			put("image_dir", mapProductionUrl + "images/");
 			put("region", "Euregio");
 			put("level", size.ordinal() + 1);
 			put("colormode", grayscale ? "bw" : "col");
@@ -286,7 +300,7 @@ public class MapUtil {
 			put("interreg", Map.fullmap.equals(map) ? "on" : "off");
 			put("bulletin_id", bulletinId != null ? bulletinIndex : map.name());
 		}}));
-		final FileOrURL file = new FileOrURL(AVALANCHE_WARNING_MAPS_PATH + mapyrusFile);
+		final FileOrURL file = new FileOrURL(mapProductionUrl + mapyrusFile);
 		mapyrus.interpret(context, file, System.in, System.out);
 
 		final int dpi = 300;
