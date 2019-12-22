@@ -5,3 +5,10 @@ target/
 WebContent/
 logs/
 debug-backup*
+
+# JetBrains IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
