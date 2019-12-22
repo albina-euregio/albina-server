@@ -98,6 +98,7 @@ public class MapUtil {
 	 *            The bulletins to create the maps from.
 	 */
 	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) {
+		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}",
 				AlbinaUtil.getValidityDateString(bulletins), GlobalVariables.getMapProductionUrl());
 		if (GlobalVariables.isMapProductionUrlUnivie()) {
@@ -110,6 +111,7 @@ public class MapUtil {
 				throw ex;
 			}
 		}
+		logger.info("Creating danger rating maps done in {} ms", System.currentTimeMillis() - start);
 	}
 
 	private static void createDangerRatingMapsUnivie(List<AvalancheBulletin> bulletins) {
