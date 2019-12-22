@@ -103,7 +103,12 @@ public class MapUtil {
 		if (GlobalVariables.isMapProductionUrlUnivie()) {
 			createDangerRatingMapsUnivie(bulletins);
 		} else {
-			createMapyrusMaps(bulletins);
+			try {
+				createMapyrusMaps(bulletins);
+			} catch (Exception ex) {
+				logger.error("Failed to create mapyrus maps", ex);
+				throw ex;
+			}
 		}
 	}
 
