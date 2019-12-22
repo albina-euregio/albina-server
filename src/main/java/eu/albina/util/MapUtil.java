@@ -24,15 +24,20 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
 import javax.script.SimpleBindings;
@@ -96,11 +101,7 @@ public class MapUtil {
 		if (GlobalVariables.isMapProductionUrlUnivie()) {
 			createDangerRatingMapsUnivie(bulletins);
 		} else {
-			try {
-				createMapyrusMaps(bulletins);
-			} catch (Exception ex) {
-				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
-			}
+			createMapyrusMaps(bulletins);
 		}
 	}
 
@@ -234,34 +235,58 @@ public class MapUtil {
 		pm
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) throws MapyrusException, IOException, InterruptedException, AlbinaException {
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) {
 		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
 				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
-		Files.createDirectories(outputDirectory);
+		try {
+			Files.createDirectories(outputDirectory);
+		} catch (IOException ex) {
+			throw new AlbinaMapException("Failed to create output directory", ex);
+		}
 		final boolean hasDaytimeDependency = bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
+		final List<Callable<Object>> mapTasks = new ArrayList<>();
 		for (DaytimeDependency daytimeDependency : hasDaytimeDependency
 				? EnumSet.of(DaytimeDependency.am, DaytimeDependency.pm)
 				: EnumSet.of(DaytimeDependency.fd)) {
-			final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
-			createBulletinRegions(bulletins, daytimeDependency, regionFile);
-			final Path drmFile = outputDirectory.resolve(daytimeDependency + ".txt");
-			Files.write(drmFile, createMayrusInput(bulletins, daytimeDependency).getBytes(StandardCharsets.UTF_8));
+			try {
+				final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
+				createBulletinRegions(bulletins, daytimeDependency, regionFile);
+			} catch (IOException | AlbinaException ex) {
+				throw new AlbinaMapException("Failed to create region file", ex);
+			}
+			final Path drmFile;
+			try {
+				drmFile = outputDirectory.resolve(daytimeDependency + ".txt");
+				Files.write(drmFile, createMayrusInput(bulletins, daytimeDependency).getBytes(StandardCharsets.UTF_8));
+			} catch (IOException ex) {
+				throw new AlbinaMapException("Failed to create mapyrus input file", ex);
+			}
 			for (Map map : Map.values()) {
-				createMapyrusMaps(map, daytimeDependency, null, 0, false, drmFile);
-				createMapyrusMaps(map, daytimeDependency, null, 0, true, drmFile);
+				mapTasks.add(() -> createMapyrusMaps(map, daytimeDependency, null, 0, false, drmFile));
+				mapTasks.add(() -> createMapyrusMaps(map, daytimeDependency, null, 0, true, drmFile));
 			}
 			for (int i = 0; i < bulletins.size(); i++) {
 				final AvalancheBulletin bulletin = bulletins.get(i);
 				if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 					continue;
 				}
-				createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, false, drmFile);
-				createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, true, drmFile);
+				final int index = i;
+				mapTasks.add(() -> createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), index, false, drmFile));
+				mapTasks.add(() -> createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), index, true, drmFile));
 			}
+			ForkJoinPool.commonPool().invokeAll(mapTasks).forEach(x -> {
+				try {
+					x.get();
+				} catch (ExecutionException ex) {
+					throw new AlbinaMapException("Failed to create mapyrus maps", ex);
+				} catch (InterruptedException ex) {
+					throw new RuntimeException(ex);
+				}
+			});
 		}
 	}
 
-	static void createMapyrusMaps(Map map, DaytimeDependency daytimeDependency, String bulletinId, int bulletinIndex, boolean grayscale, Path dangerRatingMapFile) throws IOException, MapyrusException, InterruptedException {
+	static Void createMapyrusMaps(Map map, DaytimeDependency daytimeDependency, String bulletinId, int bulletinIndex, boolean grayscale, Path dangerRatingMapFile) throws IOException, MapyrusException, InterruptedException {
 		final MapSize size = Map.overlay.equals(map)
 				? MapSize.overlay
 				: Map.fullmap_small.equals(map)
@@ -275,6 +300,7 @@ public class MapUtil {
 		final Path outputFile = outputDirectory.resolve(bulletinId != null
 				? bulletinId + (DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "") + (grayscale ? "_bw.pdf" : ".pdf")
 				: map.filename(daytimeDependency, grayscale, "pdf"));
+		final Path tempDirectory = Files.createTempDirectory("mapyrus");
 		context.setBindings(new SimpleBindings(new HashMap<String, Object>() {{
 			put("xmax", map.xmax);
 			put("xmin", map.xmin);
@@ -286,7 +312,7 @@ public class MapUtil {
 			put("pagesize_x", size.width);
 			put("pagesize_y", size.width / map.aspectRatio());
 			put("map_xsize", size.width);
-			put("working_dir", outputDirectory);
+			put("working_dir", tempDirectory + "/");
 			put("font_dir", mapProductionUrl + "mapyrus/fonts/");
 			put("geodata_dir", mapProductionUrl + "geodata/");
 			put("image_dir", mapProductionUrl + "images/");
@@ -302,6 +328,7 @@ public class MapUtil {
 		}}));
 		final FileOrURL file = new FileOrURL(mapProductionUrl + mapyrusFile);
 		mapyrus.interpret(context, file, System.in, System.out);
+		deleteDirecoryWithContents(tempDirectory);
 
 		final int dpi = 300;
 		new ProcessBuilder("gs", "-sDEVICE=png16m", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
@@ -316,6 +343,16 @@ public class MapUtil {
 				outputFile.toString().replaceFirst("pdf$", "jpg"),
 				outputFile.toString()
 		).inheritIO().start().waitFor();
+		return null;
+	}
+
+	private static void deleteDirecoryWithContents(Path directory) throws IOException {
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
+			for (Path path : directoryStream) {
+				Files.delete(path);
+			}
+		}
+		Files.delete(directory);
 	}
 
 	static void createBulletinRegions(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, Path regionFile) throws IOException, AlbinaException {
