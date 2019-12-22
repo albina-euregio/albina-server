@@ -104,7 +104,7 @@
       	<albina.log.level.sql>ERROR</albina.log.level.sql>
       	<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
       	<albina.log.filename>albina_dev.log</albina.log.filename>
-      	<albina.log.dest>file</albina.log.dest>
+      	<albina.log.dest>file, sentry</albina.log.dest>
       </properties>
     </profile>
     <profile>
@@ -147,7 +147,7 @@
       	<albina.log.level.sql>WARN</albina.log.level.sql>
       	<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
       	<albina.log.filename>albina.log</albina.log.filename>
-      	<albina.log.dest>file</albina.log.dest>
+      	<albina.log.dest>file, sentry</albina.log.dest>
       </properties>
     </profile>
   </profiles>
