@@ -647,10 +647,9 @@ public class AlbinaUtil {
 					GlobalVariables.getMapsPath(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Maps copied to directory for " + date + ".");
+			logger.info("Maps for {} copied using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("Maps could not be copied to directory for " + date + "!");
-			e.printStackTrace();
+			logger.error("Maps could not be copied to directory for " + date + "!", e);
 		}
 	}
 
@@ -661,10 +660,9 @@ public class AlbinaUtil {
 							.inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Maps copied from Univie to directory for " + date + ".");
+			logger.info("Maps for {} copied from Univie using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("Maps could not be copied from Univie to directory for " + date + "!");
-			e.printStackTrace();
+			logger.error("Maps could not be copied from Univie to directory for " + date + "!", e);
 		}
 	}
 
@@ -674,10 +672,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Files deleted for " + date + ".");
+			logger.info("Files deleted for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("Files could not be deleted for " + date + "!");
-			e.printStackTrace();
+			logger.error("Files could not be deleted for " + date + "!", e);
 		}
 	}
 
@@ -687,10 +684,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PDFs copied to date directory for " + date + ".");
+			logger.info("PDFs copied to date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PDFs could not be copied to date directory for " + date + "!");
-			e.printStackTrace();
+			logger.error("PDFs could not be copied to date directory for " + date + "!", e);
 		}
 	}
 
@@ -700,10 +696,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PDFs for " + date + " copied to latest.");
+			logger.info("PDFs for {} to latest using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PDFs for " + date + " could not be copied to latest!");
-			e.printStackTrace();
+			logger.error("PDFs for " + date + " could not be copied to latest!", e);
 		}
 	}
 
@@ -713,10 +708,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("HTMLs for " + date + " copied to latest.");
+			logger.info("HTMLs for {} to latest using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("HTMLs for " + date + " could not be copied to latest!");
-			e.printStackTrace();
+			logger.error("HTMLs for " + date + " could not be copied to latest!", e);
 		}
 	}
 
@@ -726,10 +720,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("XMLs copied to date directory for " + date + ".");
+			logger.info("XMLs copied to date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("XMLs could not be copied to date directory for " + date + "!");
-			e.printStackTrace();
+			logger.error("XMLs could not be copied to date directory for " + date + "!", e);
 		}
 	}
 
@@ -739,10 +732,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("XMLs for " + date + " copied to latest.");
+			logger.info("XMLs for {} to latest using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("XMLs for " + date + " could not be copied to latest!");
-			e.printStackTrace();
+			logger.error("XMLs for " + date + " could not be copied to latest!", e);
 		}
 	}
 
@@ -752,10 +744,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PNGs copied to date directory for " + date + ".");
+			logger.info("PNGs copied to date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PNGs could not be copied to date directory for " + date + "!");
-			e.printStackTrace();
+			logger.error("PNGs could not be copied to date directory for " + date + "!", e);
 		}
 	}
 
@@ -765,10 +756,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PNGs for " + date + " copied to latest.");
+			logger.info("PNGs for {} to latest using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PNGs for " + date + " could not be copied to latest!");
-			e.printStackTrace();
+			logger.error("PNGs for " + date + " could not be copied to latest!", e);
 		}
 	}
 
@@ -778,10 +768,9 @@ public class AlbinaUtil {
 					GlobalVariables.getMapsPath(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Maps for " + date + " copied to latest.");
+			logger.info("Maps for {} to latest using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("Maps for " + date + " could not be copied to latest!");
-			e.printStackTrace();
+			logger.error("Maps for " + date + " could not be copied to latest!", e);
 		}
 	}
 
@@ -791,10 +780,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory()).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Latest files deleted.");
+			logger.info("Latest files deleted using {}", pb.command());
 		} catch (Exception e) {
-			logger.error("Latest files could not be deleted!");
-			e.printStackTrace();
+			logger.error("Latest files could not be deleted!", e);
 		}
 	}
 
@@ -804,10 +792,9 @@ public class AlbinaUtil {
 					GlobalVariables.getHtmlDirectory()).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Latest htmls deleted.");
+			logger.info("Latest htmls deleted using {}", pb.command());
 		} catch (Exception e) {
-			logger.error("Latest htmls could not be deleted!");
-			e.printStackTrace();
+			logger.error("Latest htmls could not be deleted!", e);
 		}
 	}
 
