@@ -3,6 +3,7 @@ mkdir $1/latest/am_overlay
 mkdir $1/latest/pm_overlay
 
 cp $1/$2/*.jpg $1/latest/
+cp $1/$2/*.webp $1/latest/
 cp $1/$2/fd_overlay.png $1/latest/
 cp $1/$2/am_overlay.png $1/latest/
 cp $1/$2/pm_overlay.png $1/latest/

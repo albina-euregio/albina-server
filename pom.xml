@@ -163,7 +163,24 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-    
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo.maven.apache.org/maven2</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>avalanche.report</id>
+      <name>avalanche.report</name>
+      <url>https://avalanche.report/maven/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
   
 <!-- timer -->
@@ -395,6 +412,18 @@
           <artifactId>sentry</artifactId>
           <version>1.7.27</version>
       </dependency>
+
+	  <dependency>
+		  <groupId>com.vividsolutions</groupId>
+		  <artifactId>jts</artifactId>
+		  <version>1.13</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.mapyrus</groupId>
+		  <artifactId>mapyrus</artifactId>
+		  <version>1.802</version>
+	  </dependency>
+
   </dependencies>
 
   <build>
