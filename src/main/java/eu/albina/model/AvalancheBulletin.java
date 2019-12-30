@@ -1043,7 +1043,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					// elevation high and low set
 					Element validElevation = doc.createElement("validElevation");
 					Element elevationRange = doc.createElement("elevationRange");
-					Element beginPosition = doc.createElement("begionPosition");
+					Element beginPosition = doc.createElement("beginPosition");
 					if (bulletin.getAvalancheSituation1().getTreelineLow())
 						beginPosition.appendChild(doc.createTextNode("Treeline"));
 					else
@@ -1110,7 +1110,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 					// elevation high and low set
 					Element validElevation = doc.createElement("validElevation");
 					Element elevationRange = doc.createElement("elevationRange");
-					Element beginPosition = doc.createElement("begionPosition");
+					Element beginPosition = doc.createElement("beginPosition");
 					if (bulletin.getAvalancheSituation2().getTreelineLow())
 						// TODO Allow treeline in CAAML
 						beginPosition.appendChild(doc.createTextNode("Treeline"));
