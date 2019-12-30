@@ -95,7 +95,7 @@ public class XmlUtil {
 		Document docIt = XmlUtil.createCaaml(bulletins, LanguageCode.it);
 		String caamlStringIt = XmlUtil.convertDocToString(docIt);
 		fileName = dirPath + "/" + validityDateString + "_it.xml";
-		writer = new BufferedWriter(new FileWriter(dirPath + "/" + validityDateString + "_it.xml"));
+		writer = new BufferedWriter(new FileWriter(fileName));
 		writer.write(caamlStringIt);
 		writer.close();
 		AlbinaUtil.setFilePermissions(fileName);
@@ -103,7 +103,7 @@ public class XmlUtil {
 		Document docEn = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 		String caamlStringEn = XmlUtil.convertDocToString(docEn);
 		fileName = dirPath + "/" + validityDateString + "_en.xml";
-		writer = new BufferedWriter(new FileWriter(dirPath + "/" + validityDateString + "_en.xml"));
+		writer = new BufferedWriter(new FileWriter(fileName));
 		writer.write(caamlStringEn);
 		writer.close();
 		AlbinaUtil.setFilePermissions(fileName);

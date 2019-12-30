@@ -17,12 +17,8 @@
 package eu.albina.util;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -31,43 +27,17 @@ import java.util.Set;
 import javax.xml.transform.TransformerException;
 
 import org.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 
 public class JsonUtil {
 
-	private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
+	// private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
 	// LANG
 	public static void createJsonFile(List<AvalancheBulletin> bulletins, String validityDateString,
 			String publicationTimeString) throws TransformerException, IOException {
-		String dirPathParent = GlobalVariables.getPdfDirectory() + "/" + validityDateString;
 		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
-		new File(dirPath).mkdirs();
-
-		// using PosixFilePermission to set file permissions 777
-		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
-		// add owners permission
-		perms.add(PosixFilePermission.OWNER_READ);
-		perms.add(PosixFilePermission.OWNER_WRITE);
-		perms.add(PosixFilePermission.OWNER_EXECUTE);
-		// add group permissions
-		perms.add(PosixFilePermission.GROUP_READ);
-		perms.add(PosixFilePermission.GROUP_WRITE);
-		perms.add(PosixFilePermission.GROUP_EXECUTE);
-		// add others permissions
-		perms.add(PosixFilePermission.OTHERS_READ);
-		perms.add(PosixFilePermission.OTHERS_WRITE);
-		perms.add(PosixFilePermission.OTHERS_EXECUTE);
-
-		try {
-			Files.setPosixFilePermissions(Paths.get(dirPathParent), perms);
-			Files.setPosixFilePermissions(Paths.get(dirPath), perms);
-		} catch (IOException | UnsupportedOperationException e) {
-			logger.warn("File permissions could not be set!");
-		}
 
 		BufferedWriter writer;
 		String fileName;
