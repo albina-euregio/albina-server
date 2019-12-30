@@ -20,10 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -46,6 +44,7 @@ import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.rest.AvalancheBulletinUpdateEndpoint;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.JsonUtil;
 
 /**
  * Controller for avalanche reports.
@@ -481,7 +480,7 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.draft);
 
 			// set json string after status is published/republished
-			avalancheReport.setJsonString(createJSONString(avalancheBulletins.values(), region).toString());
+			avalancheReport.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region).toString());
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, date, avalancheReport.getStatus());
@@ -662,7 +661,7 @@ public class AvalancheReportController {
 			}
 
 			// set json string after status is published/republished
-			avalancheReport.setJsonString(createJSONString(bulletins, region).toString());
+			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region).toString());
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
@@ -686,51 +685,6 @@ public class AvalancheReportController {
 		} finally {
 			entityManager.close();
 		}
-	}
-
-	private JSONArray createJSONString(Collection<AvalancheBulletin> bulletins, String region) {
-		JSONArray jsonResult = new JSONArray();
-		if (bulletins != null) {
-			AvalancheBulletin b;
-			for (AvalancheBulletin bulletin : bulletins) {
-				b = new AvalancheBulletin();
-				b.copy(bulletin);
-				b.setId(bulletin.getId());
-
-				// delete all published regions which are foreign
-				Set<String> newPublishedRegions = new HashSet<String>();
-				if (b.getPublishedRegions() != null) {
-					for (String publishedRegion : b.getPublishedRegions()) {
-						if (publishedRegion.startsWith(region))
-							newPublishedRegions.add(publishedRegion);
-					}
-					b.setPublishedRegions(newPublishedRegions);
-				}
-
-				// delete all saved regions which are foreign
-				Set<String> newSavedRegions = new HashSet<String>();
-				if (b.getSavedRegions() != null) {
-					for (String savedRegion : b.getSavedRegions()) {
-						if (savedRegion.startsWith(region))
-							newSavedRegions.add(savedRegion);
-					}
-					b.setSavedRegions(newSavedRegions);
-				}
-
-				// delete all suggested regions which are foreign
-				Set<String> newSuggestedRegions = new HashSet<String>();
-				if (b.getSuggestedRegions() != null) {
-					for (String suggestedRegion : b.getSuggestedRegions()) {
-						if (suggestedRegion.startsWith(region))
-							newSuggestedRegions.add(suggestedRegion);
-					}
-					b.setSuggestedRegions(newSuggestedRegions);
-				}
-
-				jsonResult.put(b.toJSON());
-			}
-		}
-		return jsonResult;
 	}
 
 	/**
@@ -796,7 +750,7 @@ public class AvalancheReportController {
 			}
 
 			// set json string after status is published/republished
-			avalancheReport.setJsonString(createJSONString(bulletins, region).toString());
+			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region).toString());
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());

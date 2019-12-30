@@ -714,6 +714,18 @@ public class AlbinaUtil {
 		}
 	}
 
+	public static void runCopyJsonScript(String validityDateString, String publicationTimeString) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyJson.sh",
+					GlobalVariables.getPdfDirectory(), validityDateString, publicationTimeString).inheritIO();
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("JSON copied to date directory for {} using {}", validityDateString, pb.command());
+		} catch (Exception e) {
+			logger.error("JSON could not be copied to date directory for " + validityDateString + "!", e);
+		}
+	}
+
 	public static void runCopyXmlsScript(String date, String publicationTime) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyXmls.sh",
@@ -723,6 +735,18 @@ public class AlbinaUtil {
 			logger.info("XMLs copied to date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
 			logger.error("XMLs could not be copied to date directory for " + date + "!", e);
+		}
+	}
+
+	public static void runCopyLatestJsonScript(String validityDateString) {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestJson.sh",
+					GlobalVariables.getPdfDirectory(), validityDateString).inheritIO();
+			Process p = pb.start();
+			p.waitFor();
+			logger.info("JSON for {} to latest using {}", validityDateString, pb.command());
+		} catch (Exception e) {
+			logger.error("JSON for " + validityDateString + " could not be copied to latest!", e);
 		}
 	}
 

@@ -36,6 +36,7 @@ import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.JsonUtil;
 import eu.albina.util.MapUtil;
 import eu.albina.util.MessengerPeopleUtil;
 import eu.albina.util.PdfUtil;
@@ -98,6 +99,8 @@ public class PublicationController {
 
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
+
+		createJson(bulletins, validityDateString, publicationTimeString);
 
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
@@ -408,10 +411,38 @@ public class PublicationController {
 	}
 
 	/**
+	 * Trigger the creation of the JSON file.
+	 * 
+	 * @param bulletins
+	 *            the bulletins contained in the JSON file
+	 * @param validityDateString
+	 *            point in time when the validity of the bulletin starts
+	 * @param publicationTimeString
+	 *            date and time of publication
+	 */
+	private void createJson(List<AvalancheBulletin> bulletins, String validityDateString,
+			String publicationTimeString) {
+		try {
+			logger.info("JSON production started");
+			JsonUtil.createJsonFile(bulletins, validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runCopyLatestJsonScript(validityDateString);
+			logger.info("JSON production finished");
+		} catch (TransformerException | IOException e) {
+			logger.error("Error producing JSON: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * Trigger the creation of the CAAML (XML) files.
 	 * 
 	 * @param bulletins
 	 *            the bulletins contained in the CAAML file
+	 * @param validityDateString
+	 *            point in time when the validity of the bulletin starts
+	 * @param publicationTimeString
+	 *            date and time of publication
 	 */
 	public void createCaaml(List<AvalancheBulletin> bulletins, String validityDateString,
 			String publicationTimeString) {
