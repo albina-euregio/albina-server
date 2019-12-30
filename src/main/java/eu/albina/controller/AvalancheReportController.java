@@ -480,7 +480,8 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(BulletinStatus.draft);
 
 			// set json string after status is published/republished
-			avalancheReport.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region).toString());
+			avalancheReport
+					.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region, false).toString());
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, date, avalancheReport.getStatus());
@@ -536,7 +537,7 @@ public class AvalancheReportController {
 				avalancheReport.setRegion(region);
 				avalancheReport.setStatus(latestReport.getStatus());
 
-				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region).toString());
+				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region, false).toString());
 				entityManager.persist(avalancheReport);
 				transaction.commit();
 				return avalancheReport.getId();
@@ -657,7 +658,7 @@ public class AvalancheReportController {
 			}
 
 			// set json string after status is published/republished
-			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region).toString());
+			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
@@ -746,7 +747,7 @@ public class AvalancheReportController {
 			}
 
 			// set json string after status is published/republished
-			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region).toString());
+			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());

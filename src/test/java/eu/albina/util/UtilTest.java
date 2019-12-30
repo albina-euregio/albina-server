@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.xml.transform.TransformerException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
@@ -281,6 +282,12 @@ public class UtilTest {
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			System.out.println(avalancheBulletin.getHighestDangerRating());
 		}
+	}
+
+	@Ignore
+	@Test
+	public void createJsonTest() throws TransformerException, IOException {
+		JsonUtil.createJsonFile(bulletins, "2019-12-30", "2019-12-30_17-15-30");
 	}
 
 	private static String encodeFileToBase64Binary(File file) {

@@ -42,7 +42,7 @@ public class JsonUtil {
 		BufferedWriter writer;
 		String fileName;
 
-		JSONArray jsonArray = JsonUtil.createJSONString(bulletins, "");
+		JSONArray jsonArray = JsonUtil.createJSONString(bulletins, "", true);
 		String jsonString = jsonArray.toString();
 
 		fileName = dirPath + "/avalanche_report.json";
@@ -54,7 +54,7 @@ public class JsonUtil {
 		AlbinaUtil.runCopyJsonScript(validityDateString, publicationTimeString);
 	}
 
-	public static JSONArray createJSONString(Collection<AvalancheBulletin> bulletins, String region) {
+	public static JSONArray createJSONString(Collection<AvalancheBulletin> bulletins, String region, boolean small) {
 		JSONArray jsonResult = new JSONArray();
 		if (bulletins != null) {
 			AvalancheBulletin b;
@@ -93,7 +93,10 @@ public class JsonUtil {
 					b.setSuggestedRegions(newSuggestedRegions);
 				}
 
-				jsonResult.put(b.toJSON());
+				if (small)
+					jsonResult.put(b.toJSON());
+				else
+					jsonResult.put(b.toSmallJSON());
 			}
 		}
 		return jsonResult;
