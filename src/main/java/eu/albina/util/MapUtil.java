@@ -39,6 +39,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.script.SimpleBindings;
 import javax.xml.transform.TransformerException;
@@ -126,11 +127,12 @@ public class MapUtil {
 
 	static String createMayrusInput(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency) {
 		final String header = "sys_bid;bid;region;date;am_pm;validelevation;dr_h;dr_l;aspect_h;aspect_l;avprob_h;avprob_l\n";
-		return header + bulletins.stream().flatMap(bulletin -> bulletin.getPublishedRegions().stream()
+		return header + IntStream.range(0, bulletins.size()).boxed().flatMap(index -> bulletins.get(index).getPublishedRegions().stream()
 				.map(region -> {
+					final AvalancheBulletin bulletin = bulletins.get(index);
 					final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin, daytimeDependency);
 					return String.join(";",
-							Integer.toString(bulletins.indexOf(bulletin)),
+							Integer.toString(index),
 							bulletin.getId(),
 							region,
 							bulletin.getValidityDateString(),
