@@ -94,9 +94,9 @@ public class JsonUtil {
 				}
 
 				if (small)
-					jsonResult.put(b.toJSON());
-				else
 					jsonResult.put(b.toSmallJSON());
+				else
+					jsonResult.put(b.toJSON());
 			}
 		}
 		return jsonResult;
