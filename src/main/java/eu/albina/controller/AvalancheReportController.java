@@ -535,12 +535,8 @@ public class AvalancheReportController {
 				avalancheReport.setDate(startDate);
 				avalancheReport.setRegion(region);
 				avalancheReport.setStatus(latestReport.getStatus());
-				JSONArray jsonResult = new JSONArray();
-				if (publishedBulletins != null)
-					for (AvalancheBulletin bulletin : publishedBulletins)
-						jsonResult.put(bulletin.toJSON());
 
-				avalancheReport.setJsonString(jsonResult.toString());
+				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region).toString());
 				entityManager.persist(avalancheReport);
 				transaction.commit();
 				return avalancheReport.getId();

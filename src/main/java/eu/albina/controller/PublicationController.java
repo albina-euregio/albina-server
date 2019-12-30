@@ -100,8 +100,6 @@ public class PublicationController {
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
 
-		createJson(bulletins, validityDateString, publicationTimeString);
-
 		// create CAAML
 		if (GlobalVariables.isCreateCaaml())
 			createCaaml(bulletins, validityDateString, publicationTimeString);
@@ -136,6 +134,9 @@ public class PublicationController {
 					threads.put("staticWidget", createStaticWidgetsThread);
 					createStaticWidgetsThread.start();
 				}
+
+				// create JSON
+				createJson(bulletins, validityDateString, publicationTimeString);
 
 				for (String key : threads.keySet()) {
 					try {
@@ -236,6 +237,9 @@ public class PublicationController {
 					createStaticWidgetsThread.start();
 				}
 
+				// create JSON
+				createJson(bulletins, validityDateString, publicationTimeString);
+
 				for (String key : threads.keySet()) {
 					try {
 						threads.get(key).join();
@@ -317,6 +321,9 @@ public class PublicationController {
 					threads.put("staticWidget", createStaticWidgetsThread);
 					createStaticWidgetsThread.start();
 				}
+
+				// create JSON
+				createJson(bulletins, validityDateString, publicationTimeString);
 
 				for (String key : threads.keySet()) {
 					try {
