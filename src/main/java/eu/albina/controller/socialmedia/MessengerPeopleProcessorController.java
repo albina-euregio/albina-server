@@ -188,7 +188,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 200) {
-			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), "UTF-8")
+			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
 					: null;
 			ShipmentController.getInstance().saveShipment(createActivityRow(config, language.toString(),
 					"message=" + message + ", attachmentUrl=" + attachmentUrl, body, null));

@@ -17,7 +17,7 @@
 package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -81,11 +81,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 	}
 
 	private String calcBasicAuth(String user, String pass) {
-		try {
-			return "Basic " + Base64.getEncoder().encodeToString((user + ":" + pass).getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
+		return "Basic " + Base64.getEncoder().encodeToString((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
 	}
 
 	public HttpResponse getRecipientsList(RapidMailConfig config, String regionId) throws IOException {
@@ -171,13 +167,13 @@ public class RapidMailProcessorController extends CommonProcessor {
 		HttpResponse response = executor.execute(request).returnResponse();
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
-			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), "UTF-8")
+			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
 					: null;
 			ShipmentController.getInstance()
 					.saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, null));
 			return response;
 		}
-		String body = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
+		String body = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 		response.getEntity().getContent().reset();
 		PostMailingsResponse bodyObject = objectMapper.readValue(body, PostMailingsResponse.class);
 		ShipmentController.getInstance()
@@ -206,7 +202,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 	}
 
 	private String getResponseContent(HttpResponse response) throws IOException {
-		return IOUtils.toString(response.getEntity().getContent(), "UTF-8");
+		return IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 	}
 
 }

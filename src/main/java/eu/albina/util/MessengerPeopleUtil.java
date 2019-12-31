@@ -17,7 +17,6 @@
 package eu.albina.util;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -47,15 +46,11 @@ public class MessengerPeopleUtil {
 
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.languages) {
-			try {
-				DateTime date = AlbinaUtil.getDate(bulletins);
-				String message = GlobalVariables.getMessengerPeopleText(lang, date, update);
-				String validityDate = AlbinaUtil.getValidityDateString(bulletins);
-				String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-				sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
-			} catch (UnsupportedEncodingException e) {
-				logger.error("Bulletin newsletter could not be sent in " + lang, e);
-			}
+			DateTime date = AlbinaUtil.getDate(bulletins);
+			String message = GlobalVariables.getMessengerPeopleText(lang, date, update);
+			String validityDate = AlbinaUtil.getValidityDateString(bulletins);
+			String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
+			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
 		}
 	}
 
