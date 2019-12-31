@@ -322,7 +322,7 @@ public class StaticWidgetUtil {
 
 			AlbinaUtil.setFilePermissions(filename);
 		} catch (IOException ie) {
-			ie.printStackTrace();
+			logger.error("Static widget could not be created", ie);
 		}
 	}
 
@@ -376,8 +376,7 @@ public class StaticWidgetUtil {
 		try {
 			img = ImageIO.read(new URL(path).openStream());
 		} catch (IOException e) {
-			logger.error("Error loading image: " + path);
-			e.printStackTrace();
+			logger.error("Error loading image: " + path, e);
 		}
 		return img;
 	}
@@ -387,8 +386,7 @@ public class StaticWidgetUtil {
 		try {
 			img = ImageIO.read(getClass().getResource(path));
 		} catch (IOException e) {
-			logger.error("Error loading image: " + path);
-			e.printStackTrace();
+			logger.error("Error loading image: " + path, e);
 		}
 		return img;
 	}
@@ -398,8 +396,7 @@ public class StaticWidgetUtil {
 		try {
 			img = ImageIO.read(new File(path));
 		} catch (IOException e) {
-			logger.error("Error loading image: " + path);
-			e.printStackTrace();
+			logger.error("Error loading image: " + path, e);
 		}
 		return img;
 	}

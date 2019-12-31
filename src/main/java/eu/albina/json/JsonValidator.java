@@ -129,21 +129,9 @@ public class JsonValidator {
 				}
 				result.append("errors", errors);
 			}
-		} catch (JsonParseException jpex) {
-			result.put("message", jpex.getMessage());
-			logger.error("JsonParseException: " + jpex.getMessage());
-			return result;
-		} catch (ProcessingException pex) {
-			result.put("message", pex.getMessage());
-			logger.error("ProcessingException: " + pex.getMessage());
-			return result;
-		} catch (FileNotFoundException fnfe) {
-			result.put("message", fnfe.getMessage());
-			logger.error("FileNotFoundException: " + fnfe.getMessage());
-			return result;
-		} catch (IOException e) {
-			result.put("message", e.getMessage());
-			logger.error("IOException: " + e.getMessage());
+		} catch (IOException | ProcessingException ex) {
+			result.put("message", ex.getMessage());
+			logger.error(ex.getMessage(), ex);
 			return result;
 		}
 

@@ -111,7 +111,7 @@ public class AvalancheBulletinService {
 			}
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -147,17 +147,17 @@ public class AvalancheBulletinService {
 				return Response.noContent().build();
 			}
 		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			try {
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			} catch (Exception ex) {
 				return Response.status(400).type(MediaType.APPLICATION_XML).build();
 			}
 		} catch (TransformerException | ParserConfigurationException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
 		}
 	}
@@ -199,10 +199,10 @@ public class AvalancheBulletinService {
 				return Response.noContent().build();
 			}
 		} catch (TransformerException | ParserConfigurationException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
 		}
 	}
@@ -221,7 +221,7 @@ public class AvalancheBulletinService {
 
 			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error loading latest date - " + e.getMessage());
+			logger.warn("Error loading latest date", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
 		}
 	}
@@ -253,10 +253,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -291,10 +291,10 @@ public class AvalancheBulletinService {
 			jsonResult.put("dangerRating", highestDangerRating);
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error loading highest danger rating - " + e.getMessage());
+			logger.warn("Error loading highest danger rating", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading highest danger rating - " + e.getMessage());
+			logger.warn("Error loading highest danger rating", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -341,10 +341,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading status - " + e.getMessage());
+			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error loading status - " + e.getMessage());
+			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -386,10 +386,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading status - " + e.getMessage());
+			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error loading status - " + e.getMessage());
+			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -431,7 +431,7 @@ public class AvalancheBulletinService {
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading status - " + e.getMessage());
+			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -471,10 +471,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error loading status - " + e.getMessage());
+			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading status - " + e.getMessage());
+			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -497,7 +497,7 @@ public class AvalancheBulletinService {
 			String json = bulletin.toJSON().toString();
 			return Response.ok(json, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletin: " + e.getMessage());
+			logger.warn("Error loading bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}
@@ -542,10 +542,10 @@ public class AvalancheBulletinService {
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 					.entity(jsonObject.toString()).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error creating bulletin - " + e.getMessage());
+			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error creating bulletin - " + e.getMessage());
+			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -601,10 +601,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error creating bulletin - " + e.getMessage());
+			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error creating bulletin - " + e.getMessage());
+			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -641,10 +641,10 @@ public class AvalancheBulletinService {
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
-			logger.warn("Error submitting bulletins - " + e.getMessage());
+			logger.warn("Error submitting bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error submitting bulletins - " + e.getMessage());
+			logger.warn("Error submitting bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -704,10 +704,10 @@ public class AvalancheBulletinService {
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
-			logger.warn("Error publishing bulletins - " + e.getMessage());
+			logger.warn("Error publishing bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error publishing bulletins - " + e1.getMessage());
+			logger.warn("Error publishing bulletins", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -780,7 +780,7 @@ public class AvalancheBulletinService {
 						avalancheReportIds.add(avalancheReportId);
 					}
 				} catch (AlbinaException e) {
-					logger.error("Error publishing bulletins - " + e.getMessage());
+					logger.error("Error publishing bulletins", e);
 					throw new AlbinaException(e.getMessage());
 				}
 			} else {
@@ -788,10 +788,10 @@ public class AvalancheBulletinService {
 			}
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error publishing bulletins - " + e.getMessage());
+			logger.warn("Error publishing bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error publishing bulletins - " + e1.getMessage());
+			logger.warn("Error publishing bulletins", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -831,10 +831,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error creating PDFs - " + e.getMessage());
+			logger.warn("Error creating PDFs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating PDFs - " + e1.getMessage());
+			logger.warn("Error creating PDFs", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -873,10 +873,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error creating HTMLs - " + e.getMessage());
+			logger.warn("Error creating HTMLs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating HTMLs - " + e1.getMessage());
+			logger.warn("Error creating HTMLs", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -916,10 +916,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error creating static widgets - " + e.getMessage());
+			logger.warn("Error creating static widgets", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating static widgets - " + e1.getMessage());
+			logger.warn("Error creating static widgets", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -959,10 +959,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error creating maps - " + e.getMessage());
+			logger.warn("Error creating maps", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating maps - " + e1.getMessage());
+			logger.warn("Error creating maps", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -1001,10 +1001,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error creating CAAML - " + e.getMessage());
+			logger.warn("Error creating CAAML", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating CAAML - " + e1.getMessage());
+			logger.warn("Error creating CAAML", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -1049,10 +1049,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error sending emails - " + e.getMessage());
+			logger.warn("Error sending emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error sending emails - " + e1.getMessage());
+			logger.warn("Error sending emails", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -1098,10 +1098,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error triggering messengerpeople - " + e.getMessage());
+			logger.warn("Error triggering messengerpeople", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error triggering messengerpeople - " + e1.getMessage());
+			logger.warn("Error triggering messengerpeople", e1);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
@@ -1135,10 +1135,10 @@ public class AvalancheBulletinService {
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins - " + e.getMessage());
+			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}

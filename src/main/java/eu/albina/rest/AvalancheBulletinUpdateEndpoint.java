@@ -46,20 +46,20 @@ public class AvalancheBulletinUpdateEndpoint {
 	private static Set<AvalancheBulletinUpdateEndpoint> updateEndpoints = new CopyOnWriteArraySet<>();
 
 	@OnOpen
-	public void onOpen(Session session, @PathParam("username") String username) throws IOException, EncodeException {
+	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
 		updateEndpoints.add(this);
 		logger.info("Client connected: " + username);
 	}
 
 	@OnMessage
-	public void onMessage(Session session, String lock) throws IOException, EncodeException, AlbinaException {
+	public void onMessage(Session session, String lock) {
 		// BulletinUpdate bulletinUpdate = new BulletinUpdate(new JSONObject(lock));
 		// broadcast(bulletinUpdate);
 	}
 
 	@OnClose
-	public void onClose(Session session) throws IOException, EncodeException {
+	public void onClose(Session session) {
 		updateEndpoints.remove(this);
 		logger.info("Client disconnected: " + session.getId());
 	}
@@ -67,16 +67,16 @@ public class AvalancheBulletinUpdateEndpoint {
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		// Do error handling here
-		logger.error("Bulletin update error: " + throwable.getMessage());
+		logger.error("Bulletin update error", throwable);
 	}
 
-	public static void broadcast(BulletinUpdate lock) throws IOException, EncodeException {
+	public static void broadcast(BulletinUpdate lock) {
 		updateEndpoints.forEach(endpoint -> {
 			synchronized (endpoint) {
 				try {
 					endpoint.session.getBasicRemote().sendObject(lock);
 				} catch (IOException | EncodeException e) {
-					e.printStackTrace();
+					logger.warn("Broadcasting error", e);
 				}
 			}
 		});

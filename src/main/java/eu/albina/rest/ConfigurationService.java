@@ -96,7 +96,7 @@ public class ConfigurationService {
 			rc.saveRegionConfiguration(regionConfiguration);
 			return Response.ok().build();
 		} catch (HibernateException | JSONException | IOException | AlbinaException e) {
-			logger.warn("Error subscribe - " + e.getMessage());
+			logger.warn("Error subscribe", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		}
 

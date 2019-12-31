@@ -96,8 +96,7 @@ public class PublicationJob implements org.quartz.Job {
 					avalancheReportIds.add(avalancheReportId);
 				}
 			} catch (AlbinaException e) {
-				logger.error("Error publishing bulletins - " + e.getMessage());
-				e.printStackTrace();
+				logger.error("Error publishing bulletins", e);
 			}
 		} else {
 			logger.info("No bulletins to publish.");

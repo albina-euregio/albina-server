@@ -98,15 +98,15 @@ public class PdfUtil {
 	private static PdfFont openSansRegularFont;
 	private static PdfFont openSansBoldFont;
 
-	protected PdfUtil() throws IOException, URISyntaxException {
+	protected PdfUtil() {
 		initialize();
 	}
 
-	private void initialize() throws IOException {
+	private void initialize() {
 		PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");
 	}
 
-	public static PdfUtil getInstance() throws IOException, URISyntaxException {
+	public static PdfUtil getInstance() {
 		if (instance == null) {
 			instance = new PdfUtil();
 		}
@@ -203,8 +203,7 @@ public class PdfUtil {
 			AlbinaUtil.setFilePermissions(filename);
 			return true;
 		} catch (com.itextpdf.io.IOException | IOException e) {
-			logger.error("PDF could not be created: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("PDF could not be created", e);
 			return false;
 		}
 	}
@@ -686,8 +685,7 @@ public class PdfUtil {
 			ImageData imageData = ImageDataFactory.create(GlobalVariables.getServerImagesUrlLocalhost() + path);
 			return new Image(imageData);
 		} catch (IOException e) {
-			logger.warn("Image could not be loaded: " + e.getMessage());
-			e.printStackTrace();
+			logger.warn("Image could not be loaded", e);
 			return null;
 		}
 	}

@@ -198,8 +198,7 @@ public class SimpleHtmlUtil {
 			} else
 				return false;
 		} catch (IOException | TemplateException e) {
-			logger.error("Simple html could not be created: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Simple html could not be created", e);
 		}
 
 		return false;

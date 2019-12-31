@@ -17,7 +17,6 @@
 package eu.albina.util;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import com.itextpdf.io.font.PdfEncodings;
@@ -38,8 +37,12 @@ import com.itextpdf.layout.element.Image;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AvalancheBulletinEventHandler implements IEventHandler {
+
+	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEventHandler.class);
 
 	private List<AvalancheBulletin> bulletins;
 	private LanguageCode lang;
@@ -156,8 +159,8 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			canvas.close();
 
 			pdfCanvas.release();
-		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			logger.warn(e.getMessage(), e);
 		}
 	}
 }

@@ -120,8 +120,7 @@ public class MapUtil {
 			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
 		} catch (AlbinaException | TransformerException e) {
-			logger.error("Error producing maps: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Error producing maps", e);
 		}
 	}
 
@@ -456,7 +455,7 @@ public class MapUtil {
 
 			return response.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn("Failed to trigger map production", e);
 			throw new AlbinaException(e.getMessage());
 		} finally {
 			if (connection != null) {

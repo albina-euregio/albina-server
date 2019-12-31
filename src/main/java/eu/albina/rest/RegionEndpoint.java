@@ -48,14 +48,14 @@ public class RegionEndpoint {
 	private static Set<RegionEndpoint> regionEndpoints = new CopyOnWriteArraySet<>();
 
 	@OnOpen
-	public void onOpen(Session session, @PathParam("username") String username) throws IOException, EncodeException {
+	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
 		regionEndpoints.add(this);
 		logger.info("Client connected: " + username);
 	}
 
 	@OnMessage
-	public void onMessage(Session session, String lock) throws IOException, EncodeException, AlbinaException {
+	public void onMessage(Session session, String lock) throws AlbinaException {
 		RegionLock regionLock = new RegionLock(new JSONObject(lock));
 		regionLock.setSessionId(session.getId());
 		if (regionLock.getLock())
@@ -66,7 +66,7 @@ public class RegionEndpoint {
 	}
 
 	@OnClose
-	public void onClose(Session session) throws IOException, EncodeException {
+	public void onClose(Session session) {
 		regionEndpoints.remove(this);
 		RegionController.getInstance().unlockRegions(session.getId());
 		logger.info("Client disconnected: " + session.getId());
@@ -75,16 +75,16 @@ public class RegionEndpoint {
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		// Do error handling here
-		logger.error("Region lock error: " + throwable.getMessage());
+		logger.error("Region lock error", throwable);
 	}
 
-	public static void broadcast(RegionLock lock) throws IOException, EncodeException {
+	public static void broadcast(RegionLock lock) {
 		regionEndpoints.forEach(endpoint -> {
 			synchronized (endpoint) {
 				try {
 					endpoint.session.getBasicRemote().sendObject(lock);
 				} catch (IOException | EncodeException e) {
-					e.printStackTrace();
+					logger.warn("Broadcasting error", e);
 				}
 			}
 		});

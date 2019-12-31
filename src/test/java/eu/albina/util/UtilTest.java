@@ -249,7 +249,7 @@ public class UtilTest {
 	public void encodeImageAndPassword() {
 		for (int i = 35; i < 37; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
-			String encodstring = encodeFileToBase64Binary(f);
+			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
 			logger.warn(names.get(i));
 			logger.warn("Image: " + encodstring);
@@ -288,21 +288,6 @@ public class UtilTest {
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
 		JsonUtil.createJsonFile(bulletins, "2019-12-30", "2019-12-30_17-15-30");
-	}
-
-	private static String encodeFileToBase64Binary(File file) {
-		String encodedfile = null;
-		try {
-			FileInputStream fileInputStreamReader = new FileInputStream(file);
-			byte[] bytes = new byte[(int) file.length()];
-			fileInputStreamReader.read(bytes);
-			encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
-			fileInputStreamReader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return encodedfile;
 	}
 
 	private List<AvalancheBulletin> loadBulletins(String filename, int count) {

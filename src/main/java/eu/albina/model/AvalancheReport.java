@@ -27,6 +27,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -113,7 +114,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			try {
 				this.user = UserController.getInstance().getUser(username);
 			} catch (Exception e) {
-				e.printStackTrace();
+				LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
 			}
 		}
 

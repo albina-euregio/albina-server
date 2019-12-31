@@ -77,10 +77,10 @@ public class ChatService {
 			}
 			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error loading chat messages - " + e.getMessage());
+			logger.warn("Error loading chat messages", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading chat messages - " + e.getMessage());
+			logger.warn("Error loading chat messages", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}

@@ -57,7 +57,7 @@ public class AuthenticationController {
 			algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
 			verifier = JWT.require(algorithm).withIssuer(GlobalVariables.tokenEncodingIssuer).build();
 		} catch (IllegalArgumentException | UnsupportedEncodingException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Failed to initialize controller", e);
 		}
 	}
 

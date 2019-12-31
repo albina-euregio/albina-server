@@ -976,11 +976,7 @@ public class AvalancheBulletinController {
 		for (BulletinLock bulletinLock : hits) {
 			bulletinLocks.remove(bulletinLock);
 			bulletinLock.setLock(false);
-			try {
-				AvalancheBulletinEndpoint.broadcast(bulletinLock);
-			} catch (IOException | EncodeException e) {
-				e.printStackTrace();
-			}
+			AvalancheBulletinEndpoint.broadcast(bulletinLock);
 		}
 	}
 }

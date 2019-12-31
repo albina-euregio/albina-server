@@ -142,8 +142,7 @@ public class PublicationController {
 					try {
 						threads.get(key).join();
 					} catch (InterruptedException e) {
-						logger.error(key + " thread interrupted: " + e.getMessage());
-						e.printStackTrace();
+						logger.error(key + " thread interrupted", e);
 					}
 				}
 
@@ -161,8 +160,7 @@ public class PublicationController {
 				}
 
 			} catch (InterruptedException e) {
-				logger.error("Map production interrupted: " + e.getMessage());
-				e.printStackTrace();
+				logger.error("Map production interrupted", e);
 			}
 		}
 	}
@@ -244,8 +242,7 @@ public class PublicationController {
 					try {
 						threads.get(key).join();
 					} catch (InterruptedException e) {
-						logger.error(key + " thread interrupted: " + e.getMessage());
-						e.printStackTrace();
+						logger.error(key + " thread interrupted", e);
 					}
 				}
 
@@ -262,8 +259,7 @@ public class PublicationController {
 				}
 
 			} catch (InterruptedException e) {
-				logger.error("Map production interrupted: " + e.getMessage());
-				e.printStackTrace();
+				logger.error("Map production interrupted", e);
 			}
 		}
 	}
@@ -329,14 +325,12 @@ public class PublicationController {
 					try {
 						threads.get(key).join();
 					} catch (InterruptedException e) {
-						logger.error(key + " thread interrupted: " + e.getMessage());
-						e.printStackTrace();
+						logger.error(key + " thread interrupted", e);
 					}
 				}
 
 			} catch (InterruptedException e) {
-				logger.error("Map production interrupted: " + e.getMessage());
-				e.printStackTrace();
+				logger.error("Map production interrupted", e);
 			}
 		}
 	}
@@ -375,7 +369,7 @@ public class PublicationController {
 							startDate, region, user, publicationDate);
 					avalancheReportIds.add(avalancheReportId);
 				} catch (AlbinaException e) {
-					logger.warn("Error updating bulletins - " + e.getMessage());
+					logger.warn("Error updating bulletins", e);
 				}
 			}
 		}).start();
@@ -411,7 +405,7 @@ public class PublicationController {
 							startDate, region, user);
 					avalancheReportIds.add(avalancheReportId);
 				} catch (AlbinaException e) {
-					logger.warn("Error changing bulletins - " + e.getMessage());
+					logger.warn("Error changing bulletins", e);
 				}
 			}
 		}).start();
@@ -436,8 +430,7 @@ public class PublicationController {
 				AlbinaUtil.runCopyLatestJsonScript(validityDateString);
 			logger.info("JSON production finished");
 		} catch (TransformerException | IOException e) {
-			logger.error("Error producing JSON: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Error producing JSON", e);
 		}
 	}
 
@@ -460,8 +453,7 @@ public class PublicationController {
 				AlbinaUtil.runCopyLatestXmlsScript(validityDateString);
 			logger.info("CAAML production finished");
 		} catch (TransformerException | IOException e) {
-			logger.error("Error producing CAAML: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Error producing CAAML", e);
 		}
 	}
 
@@ -514,9 +506,6 @@ public class PublicationController {
 					AlbinaUtil.runCopyPdfsScript(validityDateString, publicationTimeString);
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 						AlbinaUtil.runCopyLatestPdfsScript(validityDateString);
-				} catch (IOException | URISyntaxException e) {
-					logger.error("Error creating pdfs:" + e.getMessage());
-					e.printStackTrace();
 				} finally {
 					logger.info("PDF production finished");
 				}
@@ -541,8 +530,7 @@ public class PublicationController {
 					for (String region : GlobalVariables.regionsEuregio)
 						SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
 				} catch (IOException | URISyntaxException e) {
-					logger.error("Error creating simple HTML:" + e.getMessage());
-					e.printStackTrace();
+					logger.error("Error creating simple HTML", e);
 				} finally {
 					logger.info("Simple HTML production finished");
 				}
@@ -576,8 +564,7 @@ public class PublicationController {
 					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 						AlbinaUtil.runCopyLatestPngsScript(validityDateString);
 				} catch (IOException | URISyntaxException e) {
-					logger.error("Error creating static widgets:" + e.getMessage());
-					e.printStackTrace();
+					logger.error("Error creating static widgets", e);
 				} finally {
 					logger.info("Static widget production finished");
 				}
@@ -598,8 +585,7 @@ public class PublicationController {
 					logger.info("Email production started");
 					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update);
 				} catch (IOException | URISyntaxException e) {
-					logger.error("Error preparing emails:" + e.getMessage());
-					e.printStackTrace();
+					logger.error("Error preparing emails", e);
 				} finally {
 					logger.info("Email production finished");
 				}
@@ -620,8 +606,7 @@ public class PublicationController {
 					logger.info("Messengerpeople production started");
 					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
 				} catch (IOException | URISyntaxException e) {
-					logger.error("Error preparing messengerpeople:" + e.getMessage());
-					e.printStackTrace();
+					logger.error("Error preparing messengerpeople", e);
 				} finally {
 					logger.info("Messengerpeople production finished");
 				}

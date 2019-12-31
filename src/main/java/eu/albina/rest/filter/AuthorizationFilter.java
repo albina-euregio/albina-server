@@ -70,7 +70,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 			}
 
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(), e);
 			requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
 		}
 	}

@@ -170,12 +170,8 @@ public class BlogController extends CommonProcessor {
 						sendNewBlogPostToMessengerpeople((JSONObject) object, region, lang);
 						sendNewBlogPostToRapidmail((JSONObject) object, region, lang);
 					}
-			} catch (ClientProtocolException e) {
-				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString());
-				e.printStackTrace();
 			} catch (IOException e) {
-				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString());
-				e.printStackTrace();
+				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
 			}
 		}
 	}
@@ -197,11 +193,9 @@ public class BlogController extends CommonProcessor {
 			MessengerPeopleProcessorController.getInstance().sendNewsLetter(rc.getMessengerPeopleConfig(), lang,
 					sb.toString(), attachmentUrl);
 		} catch (AlbinaException e) {
-			logger.warn("Blog post could not be sent to messengerpeople: " + region + ", " + lang.toString());
-			e.printStackTrace();
+			logger.warn("Blog post could not be sent to messengerpeople: " + region + ", " + lang.toString(), e);
 		} catch (IOException e) {
-			logger.warn("Blog post could not be sent to messengerpeople: " + region + "," + lang.toString());
-			e.printStackTrace();
+			logger.warn("Blog post could not be sent to messengerpeople: " + region + "," + lang.toString(),e );
 		}
 	}
 
@@ -215,15 +209,10 @@ public class BlogController extends CommonProcessor {
 			String htmlString = getBlogPost(blogPostId, region, lang);
 			if (htmlString != null && !htmlString.isEmpty())
 				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject);
-		} catch (ClientProtocolException e) {
-			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString());
-			e.printStackTrace();
 		} catch (IOException e) {
-			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString());
-			e.printStackTrace();
+			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString(), e);
 		} catch (URISyntaxException e) {
-			logger.warn("Blog post email could not be sent: " + region + ", " + lang.toString());
-			e.printStackTrace();
+			logger.warn("Blog post email could not be sent: " + region + ", " + lang.toString(), e);
 		}
 	}
 

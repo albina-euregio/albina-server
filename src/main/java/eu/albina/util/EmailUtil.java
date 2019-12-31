@@ -169,7 +169,7 @@ public class EmailUtil {
 							.file(new PostMailingsRequestPostFile().description("mail-content.zip")
 									.type("application/zip").content(createZipFile(emailHtml, null))));
 		} catch (Exception e) {
-			logger.error("Emails could not be sent in " + lang + " for " + region + ": " + e.getMessage());
+			logger.error("Emails could not be sent in " + lang + " for " + region, e);
 			return null;
 		}
 	}
@@ -432,8 +432,7 @@ public class EmailUtil {
 
 			return out.toString();
 		} catch (IOException | TemplateException e) {
-			logger.error("Bulletin email could not be created: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Bulletin email could not be created", e);
 		}
 
 		return null;

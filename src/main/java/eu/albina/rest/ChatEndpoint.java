@@ -51,7 +51,7 @@ public class ChatEndpoint {
 	private static HashMap<String, String> users = new HashMap<>();
 
 	@OnOpen
-	public void onOpen(Session session, @PathParam("username") String username) throws IOException, EncodeException {
+	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
 		chatEndpoints.add(this);
 		users.put(session.getId(), username);
@@ -67,14 +67,14 @@ public class ChatEndpoint {
 	}
 
 	@OnMessage
-	public void onMessage(Session session, String message) throws IOException, EncodeException, AlbinaException {
+	public void onMessage(Session session, String message) {
 		ChatMessage chatMessage = new ChatMessage(new JSONObject(message));
 		ChatController.getInstance().saveChatMessage(chatMessage);
 		broadcast(chatMessage);
 	}
 
 	@OnClose
-	public void onClose(Session session) throws IOException, EncodeException {
+	public void onClose(Session session) {
 		chatEndpoints.remove(this);
 
 		// ChatMessage message = new ChatMessage();
@@ -90,16 +90,16 @@ public class ChatEndpoint {
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		// Do error handling here
-		logger.error("Chat error: " + throwable.getMessage());
+		logger.error("Chat error", throwable);
 	}
 
-	private static void broadcast(ChatMessage message) throws IOException, EncodeException {
+	private static void broadcast(ChatMessage message) {
 		chatEndpoints.forEach(endpoint -> {
 			synchronized (endpoint) {
 				try {
 					endpoint.session.getBasicRemote().sendObject(message);
 				} catch (IOException | EncodeException e) {
-					e.printStackTrace();
+					logger.warn("Broadcasting error", e);
 				}
 			}
 		});
