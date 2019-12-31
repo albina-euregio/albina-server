@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.ChatController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.ChatMessage;
 import eu.albina.util.ChatMessageDecoder;
 import eu.albina.util.ChatMessageEncoder;
