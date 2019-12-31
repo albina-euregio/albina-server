@@ -16,9 +16,6 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,7 +39,6 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.ChatMessage;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
@@ -67,8 +63,7 @@ public class ChatService {
 
 		try {
 			if (date != null)
-				dateTime = DateTime.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()),
-						GlobalVariables.parserDateTime);
+				dateTime = DateTime.parse(date);
 
 			List<ChatMessage> chatMessages = ChatController.getInstance().getChatMessages(dateTime);
 			JSONArray json = new JSONArray();
@@ -79,9 +74,6 @@ public class ChatService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading chat messages", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading chat messages", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 

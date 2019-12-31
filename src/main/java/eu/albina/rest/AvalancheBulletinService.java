@@ -16,9 +16,6 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -88,32 +85,29 @@ public class AvalancheBulletinService {
 		DateTime startDate = null;
 		DateTime endDate = null;
 
-		try {
-			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
-						.toDateTime(DateTimeZone.UTC);
-			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
-			endDate = startDate.plusDays(1);
+		if (date != null)
+			startDate = DateTime.parse(date)
+					.toDateTime(DateTimeZone.UTC);
+		else
+			startDate = new DateTime()
+					.withTimeAtStartOfDay()
+					.toDateTime(DateTimeZone.UTC);
 
-			if (regions.isEmpty()) {
-				regions = GlobalVariables.regions;
-			}
+		endDate = startDate.plusDays(1);
 
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate,
-					endDate, regions);
-			JSONArray jsonResult = new JSONArray();
-			if (bulletins != null) {
-				for (AvalancheBulletin bulletin : bulletins) {
-					jsonResult.put(bulletin.toJSON());
-				}
-			}
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		if (regions.isEmpty()) {
+			regions = GlobalVariables.regions;
 		}
+
+		List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate,
+				endDate, regions);
+		JSONArray jsonResult = new JSONArray();
+		if (bulletins != null) {
+			for (AvalancheBulletin bulletin : bulletins) {
+				jsonResult.put(bulletin.toJSON());
+			}
+		}
+		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET
@@ -132,11 +126,12 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+				startDate = new DateTime()
+						.withTimeAtStartOfDay()
+						.toDateTime(DateTimeZone.UTC);
 
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, regions,
 					language);
@@ -156,9 +151,6 @@ public class AvalancheBulletinService {
 		} catch (TransformerException | ParserConfigurationException e) {
 			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
 		}
 	}
 
@@ -183,11 +175,10 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
 			endDate = startDate.plusDays(1);
 
 			String caaml = AvalancheBulletinController.getInstance().getAinevaBulletinsCaaml(startDate, endDate,
@@ -201,9 +192,6 @@ public class AvalancheBulletinService {
 		} catch (TransformerException | ParserConfigurationException e) {
 			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
 		}
 	}
 
@@ -242,11 +230,12 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+				startDate = new DateTime()
+						.withTimeAtStartOfDay()
+						.toDateTime(DateTimeZone.UTC);
 
 			JSONArray jsonResult = AvalancheBulletinController.getInstance().getPublishedBulletinsJson(startDate,
 					regions);
@@ -255,9 +244,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -278,11 +264,12 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+				startDate = new DateTime()
+						.withTimeAtStartOfDay()
+						.toDateTime(DateTimeZone.UTC);
 
 			DangerRating highestDangerRating = AvalancheBulletinController.getInstance()
 					.getHighestDangerRating(startDate, regions);
@@ -293,9 +280,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading highest danger rating", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading highest danger rating", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -311,15 +295,15 @@ public class AvalancheBulletinService {
 
 		try {
 			if (start != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(start, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(start)
 						.toDateTime(DateTimeZone.UTC);
 			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+				startDate = new DateTime()
+						.withTimeAtStartOfDay()
+						.toDateTime(DateTimeZone.UTC);
 
 			if (end != null)
-				endDate = DateTime
-						.parse(URLDecoder.decode(end, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				endDate = DateTime.parse(end)
 						.toDateTime(DateTimeZone.UTC);
 
 			Map<DateTime, BulletinStatus> status;
@@ -340,9 +324,6 @@ public class AvalancheBulletinService {
 			}
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading status", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -362,15 +343,15 @@ public class AvalancheBulletinService {
 
 		try {
 			if (start != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(start, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(start)
 						.toDateTime(DateTimeZone.UTC);
 			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+				startDate = new DateTime()
+						.withTimeAtStartOfDay()
+						.toDateTime(DateTimeZone.UTC);
 
 			if (end != null)
-				endDate = DateTime
-						.parse(URLDecoder.decode(end, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				endDate = DateTime.parse(end)
 						.toDateTime(DateTimeZone.UTC);
 
 			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
@@ -385,9 +366,6 @@ public class AvalancheBulletinService {
 			}
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading status", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -405,35 +383,30 @@ public class AvalancheBulletinService {
 		DateTime startDate = null;
 		DateTime endDate = null;
 
-		try {
-			if (start != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(start, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
-						.toDateTime(DateTimeZone.UTC);
-			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+		if (start != null)
+			startDate = DateTime.parse(start)
+					.toDateTime(DateTimeZone.UTC);
+		else
+			startDate = new DateTime()
+					.withTimeAtStartOfDay()
+					.toDateTime(DateTimeZone.UTC);
 
-			if (end != null)
-				endDate = DateTime
-						.parse(URLDecoder.decode(end, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
-						.toDateTime(DateTimeZone.UTC);
+		if (end != null)
+			endDate = DateTime.parse(end)
+					.toDateTime(DateTimeZone.UTC);
 
-			Map<DateTime, AvalancheReport> status = AvalancheReportController.getInstance()
-					.getPublicationStatus(startDate, endDate, region);
-			JSONArray jsonResult = new JSONArray();
+		Map<DateTime, AvalancheReport> status = AvalancheReportController.getInstance()
+				.getPublicationStatus(startDate, endDate, region);
+		JSONArray jsonResult = new JSONArray();
 
-			for (Entry<DateTime, AvalancheReport> entry : status.entrySet()) {
-				JSONObject json = new JSONObject();
-				json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
-				json.put("report", entry.getValue().toJSON());
-				jsonResult.put(json);
-			}
-
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading status", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		for (Entry<DateTime, AvalancheReport> entry : status.entrySet()) {
+			JSONObject json = new JSONObject();
+			json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
+			json.put("report", entry.getValue().toJSON());
+			jsonResult.put(json);
 		}
+
+		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET
@@ -448,11 +421,12 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
-				startDate = (new DateTime().withTimeAtStartOfDay()).toDateTime(DateTimeZone.UTC);
+				startDate = new DateTime()
+						.withTimeAtStartOfDay()
+						.toDateTime(DateTimeZone.UTC);
 
 			endDate = startDate;
 
@@ -473,9 +447,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading status", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -515,8 +486,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 			DateTime endDate = null;
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -544,9 +514,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error creating bulletin", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -564,8 +531,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 			DateTime endDate = null;
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -603,9 +569,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error creating bulletin", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -627,8 +590,7 @@ public class AvalancheBulletinService {
 				DateTime endDate = null;
 
 				if (date != null)
-					startDate = DateTime.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()),
-							GlobalVariables.parserDateTime);
+					startDate = DateTime.parse(date);
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plusDays(1);
@@ -643,9 +605,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error submitting bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error submitting bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -677,8 +636,8 @@ public class AvalancheBulletinService {
 				DateTime endDate = null;
 
 				if (date != null)
-					startDate = DateTime.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()),
-							GlobalVariables.parserDateTime).toDateTime(DateTimeZone.UTC);
+					startDate = DateTime.parse(date)
+							.toDateTime(DateTimeZone.UTC);
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plusDays(1);
@@ -706,17 +665,12 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error publishing bulletins", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
 	 * 
-	 * @param region
-	 *            The region to publish the bulletins for.
 	 * @param date
 	 *            The date to publish the bulletins for.
 	 * @param securityContext
@@ -750,8 +704,7 @@ public class AvalancheBulletinService {
 					DateTime endDate = null;
 
 					if (date != null)
-						startDate = DateTime.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()),
-								GlobalVariables.parserDateTime).toDateTime(DateTimeZone.UTC);
+						startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
 					else
 						throw new AlbinaException("No date!");
 					endDate = startDate.plusDays(1);
@@ -790,9 +743,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error publishing bulletins", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
@@ -810,8 +760,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -833,9 +782,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error creating PDFs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating PDFs", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
@@ -853,8 +799,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -875,9 +820,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error creating HTMLs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating HTMLs", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
@@ -895,8 +837,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -918,9 +859,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error creating static widgets", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating static widgets", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
@@ -938,8 +876,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -961,9 +898,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error creating maps", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating maps", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
@@ -981,8 +915,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -1003,9 +936,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error creating CAAML", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error creating CAAML", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
@@ -1029,8 +959,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -1051,9 +980,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error sending emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error sending emails", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
@@ -1077,8 +1003,7 @@ public class AvalancheBulletinService {
 			DateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime
-						.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()), GlobalVariables.parserDateTime)
+				startDate = DateTime.parse(date)
 						.toDateTime(DateTimeZone.UTC);
 			else
 				throw new AlbinaException("No date!");
@@ -1100,9 +1025,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering messengerpeople", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e1) {
-			logger.warn("Error triggering messengerpeople", e1);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e1.toString()).build();
 		}
 	}
 
@@ -1124,8 +1046,7 @@ public class AvalancheBulletinService {
 				DateTime endDate = null;
 
 				if (date != null)
-					startDate = DateTime.parse(URLDecoder.decode(date, StandardCharsets.UTF_8.name()),
-							GlobalVariables.parserDateTime).toDateTime(DateTimeZone.UTC);
+					startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plusDays(1);
@@ -1137,9 +1058,6 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 }
