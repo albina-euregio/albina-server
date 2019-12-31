@@ -43,16 +43,14 @@ import eu.albina.util.HibernateUtil;
  *
  */
 public class AuthenticationController {
-	// private static Logger logger =
-	// LoggerFactory.getLogger(AuthenticationController.class);
 	private static AuthenticationController instance = null;
+	private Algorithm algorithm;
 	private JWTVerifier verifier;
 
 	/**
 	 * Private constructor. Initializing the used algorithm.
 	 */
 	private AuthenticationController() {
-		Algorithm algorithm;
 		try {
 			algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
 			verifier = JWT.require(algorithm).withIssuer(GlobalVariables.tokenEncodingIssuer).build();
@@ -99,11 +97,8 @@ public class AuthenticationController {
 	 * @return the access token for the given user
 	 * @throws IllegalArgumentException
 	 *             if the sign process fails
-	 * @throws UnsupportedEncodingException
-	 *             if the sign process fails
 	 */
-	public String issueAccessToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
-		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+	public String issueAccessToken(String username) throws IllegalArgumentException {
 		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
 		Date expirationTime = new Date(time);
 		Date issuedAt = new Date();
@@ -120,11 +115,8 @@ public class AuthenticationController {
 	 * @return the refresh token for the given user
 	 * @throws IllegalArgumentException
 	 *             if the sign process fails
-	 * @throws UnsupportedEncodingException
-	 *             if the sign process fails
 	 */
-	public String issueRefreshToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
-		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+	public String issueRefreshToken(String username) throws IllegalArgumentException {
 		long time = System.currentTimeMillis() + GlobalVariables.refreshTokenExpirationDuration;
 		Date expirationTime = new Date(time);
 		Date issuedAt = new Date();
@@ -158,11 +150,8 @@ public class AuthenticationController {
 	 * @return the refreshed access token for the given user
 	 * @throws IllegalArgumentException
 	 *             if the sign process fails
-	 * @throws UnsupportedEncodingException
-	 *             if the sign process fails
 	 */
-	public String refreshToken(String username) throws IllegalArgumentException, UnsupportedEncodingException {
-		Algorithm algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+	public String refreshToken(String username) throws IllegalArgumentException {
 		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
 		Date expirationTime = new Date(time);
 		Date issuedAt = new Date();
