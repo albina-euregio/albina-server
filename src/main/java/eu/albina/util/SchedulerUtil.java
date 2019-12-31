@@ -54,8 +54,7 @@ public class SchedulerUtil {
 		try {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 		} catch (SchedulerException se) {
-			logger.warn("Scheduler could not be set up: " + se.getMessage());
-			se.printStackTrace();
+			logger.warn("Scheduler could not be set up", se);
 		}
 	}
 
@@ -83,8 +82,7 @@ public class SchedulerUtil {
 			scheduler.scheduleJob(blogJob, blogTrigger);
 
 		} catch (SchedulerException e) {
-			logger.error("Scheduler could not be started: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Scheduler could not be started", e);
 		}
 	}
 
@@ -97,8 +95,7 @@ public class SchedulerUtil {
 			try {
 				scheduler.shutdown();
 			} catch (SchedulerException e) {
-				logger.warn("Scheduler could not be shut down: " + e.getMessage());
-				e.printStackTrace();
+				logger.warn("Scheduler could not be shut down", e);
 			}
 	}
 }

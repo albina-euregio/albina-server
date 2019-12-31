@@ -141,7 +141,7 @@ public class AuthenticationService {
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 					.entity(jsonObject.toString()).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error changing password - " + e.getMessage());
+			logger.warn("Error changing password", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
@@ -166,7 +166,7 @@ public class AuthenticationService {
 			else
 				return Response.status(400).type(MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
-			logger.warn("Error checking password - " + e.getMessage());
+			logger.warn("Error checking password", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}

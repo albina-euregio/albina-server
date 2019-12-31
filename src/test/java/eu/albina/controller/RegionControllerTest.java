@@ -46,23 +46,15 @@ public class RegionControllerTest {
 
 	@Ignore
 	@Test
-	public void getTopLevelRegionsTest() {
-		try {
-			List<Region> regions = RegionController.getInstance().getRegions("");
-			Assert.assertEquals(6, regions.size());
-		} catch (AlbinaException e) {
-			e.printStackTrace();
-		}
+	public void getTopLevelRegionsTest() throws AlbinaException {
+		List<Region> regions = RegionController.getInstance().getRegions("");
+		Assert.assertEquals(6, regions.size());
 	}
 
 	@Ignore
 	@Test
-	public void getSubregionsTest() {
-		try {
-			List<Region> regions = RegionController.getInstance().getRegions(GlobalVariables.codeTrentino);
-			Assert.assertEquals(21, regions.size());
-		} catch (AlbinaException e) {
-			e.printStackTrace();
-		}
+	public void getSubregionsTest() throws AlbinaException {
+		List<Region> regions = RegionController.getInstance().getRegions(GlobalVariables.codeTrentino);
+		Assert.assertEquals(21, regions.size());
 	}
 }

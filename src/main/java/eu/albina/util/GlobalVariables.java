@@ -1544,8 +1544,7 @@ public class GlobalVariables {
 				publishBlogsTrentino = config.getBoolean("publishBlogsTrentino");
 			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
-			logger.error("Configuration file could not be loaded!");
-			e.printStackTrace();
+			logger.error("Configuration file could not be loaded!", e);
 		}
 	}
 
@@ -1602,8 +1601,7 @@ public class GlobalVariables {
 			propertiesBuilder.save();
 			logger.info("[Configuration saved] " + key + ": " + value);
 		} catch (ConfigurationException e) {
-			logger.error("Configuration could not be saved!");
-			e.printStackTrace();
+			logger.error("Configuration could not be saved!", e);
 			throw e;
 		}
 	}

@@ -78,7 +78,7 @@ public class StatisticsService {
 			return Response.ok(new ByteArrayInputStream(statistics.getBytes()), MediaType.APPLICATION_OCTET_STREAM)
 					.build();
 		} catch (UnsupportedEncodingException e) {
-			logger.warn("Error creating CSV - " + e.getMessage());
+			logger.warn("Error creating CSV", e);
 			return Response.status(400).build();
 		}
 	}

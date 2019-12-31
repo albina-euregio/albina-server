@@ -96,8 +96,7 @@ public class UpdateJob implements org.quartz.Job {
 				logger.info("No bulletins to update.");
 			}
 		} catch (AlbinaException e) {
-			logger.error("Error publishing bulletins - " + e.getMessage());
-			e.printStackTrace();
+			logger.error("Error publishing bulletins", e);
 		}
 	}
 }

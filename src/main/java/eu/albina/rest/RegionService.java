@@ -81,7 +81,7 @@ public class RegionService {
 				return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 			}
 		} catch (AlbinaException e) {
-			logger.warn("Error loading regions - " + e.getMessage());
+			logger.warn("Error loading regions", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
@@ -129,11 +129,11 @@ public class RegionService {
 					return Response.ok(XmlUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
 				}
 			} catch (AlbinaException e) {
-				logger.warn("Error loading region: " + e.getMessage());
+				logger.warn("Error loading region", e);
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
 		} catch (TransformerException | ParserConfigurationException ex) {
-			ex.printStackTrace();
+			logger.warn("Error serializing regions", ex);
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
 		}
 	}
@@ -159,7 +159,7 @@ public class RegionService {
 				return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 			}
 		} catch (AlbinaException e) {
-			logger.warn("Error loading region: " + e.getMessage());
+			logger.warn("Error loading region", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}
@@ -193,11 +193,11 @@ public class RegionService {
 					return Response.ok(XmlUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
 				}
 			} catch (AlbinaException e) {
-				logger.warn("Error loading region: " + e.getMessage());
+				logger.warn("Error loading region", e);
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
 		} catch (TransformerException | ParserConfigurationException ex) {
-			ex.printStackTrace();
+			logger.warn("Error serializing regions", ex);
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
 		}
 	}
@@ -225,7 +225,7 @@ public class RegionService {
 				return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 			}
 		} catch (AlbinaException e) {
-			logger.warn("Error loading regions - " + e.getMessage());
+			logger.warn("Error loading regions", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
@@ -260,11 +260,11 @@ public class RegionService {
 					return Response.ok(XmlUtil.convertDocToString(doc), MediaType.APPLICATION_XML).build();
 				}
 			} catch (AlbinaException e) {
-				logger.warn("Error loading region: " + e.getMessage());
+				logger.warn("Error loading region", e);
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			}
 		} catch (TransformerException | ParserConfigurationException ex) {
-			ex.printStackTrace();
+			logger.warn("Error serializing regions", ex);
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
 		}
 	}

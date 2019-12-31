@@ -412,7 +412,7 @@ public class AlbinaUtil {
 			encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
 			fileInputStreamReader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Failed to encode to base64", e);
 		}
 
 		return encodedfile;

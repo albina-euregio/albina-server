@@ -62,7 +62,7 @@ public class SubscriptionService {
 			SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 			return Response.ok().build();
 		} catch (Exception e) {
-			logger.warn("Error subscribe - " + e.getMessage());
+			logger.warn("Error subscribe", e);
 			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
 		}
 	}
@@ -79,10 +79,10 @@ public class SubscriptionService {
 			SubscriberController.getInstance().deleteSubscriber(json.getString("email"));
 			return Response.ok().build();
 		} catch (AlbinaException e) {
-			logger.warn("Error unsubscribe - " + e.getMessage());
+			logger.warn("Error unsubscribe", e);
 			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (HibernateException | JSONException he) {
-			logger.warn("Error unsubscribe - " + he.getMessage());
+			logger.warn("Error unsubscribe", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();
 		}
 	}
@@ -104,10 +104,10 @@ public class SubscriptionService {
 			SubscriberController.getInstance().confirmSubscriber(decodedToken.getSubject());
 			return Response.ok().build();
 		} catch (AlbinaException e) {
-			logger.warn("Error confirm - " + e.getMessage());
+			logger.warn("Error confirm", e);
 			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (HibernateException | JSONException he) {
-			logger.warn("Error confirm - " + he.getMessage());
+			logger.warn("Error confirm", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();
 		}
 	}

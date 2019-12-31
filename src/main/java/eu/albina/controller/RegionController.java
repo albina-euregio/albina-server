@@ -200,12 +200,7 @@ public class RegionController {
 		for (RegionLock regionLock : hits) {
 			regionLocks.remove(regionLock);
 			regionLock.setLock(false);
-			try {
-				RegionEndpoint.broadcast(regionLock);
-			} catch (IOException | EncodeException e) {
-				logger.error("Error broadcasting region unlock: " + e.getMessage());
-				e.printStackTrace();
-			}
+			RegionEndpoint.broadcast(regionLock);
 		}
 	}
 

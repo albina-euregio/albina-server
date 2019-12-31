@@ -489,11 +489,7 @@ public class AvalancheReportController {
 			transaction.commit();
 
 			if (bulletinUpdate != null) {
-				try {
-					AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
-				} catch (IOException | EncodeException e) {
-					e.printStackTrace();
-				}
+				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
 		} catch (HibernateException he) {
@@ -666,11 +662,7 @@ public class AvalancheReportController {
 			transaction.commit();
 
 			if (bulletinUpdate != null) {
-				try {
-					AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
-				} catch (IOException | EncodeException e) {
-					e.printStackTrace();
-				}
+				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
 			return avalancheReport.getId();
@@ -755,11 +747,7 @@ public class AvalancheReportController {
 			transaction.commit();
 
 			if (bulletinUpdate != null) {
-				try {
-					AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
-				} catch (IOException | EncodeException e) {
-					e.printStackTrace();
-				}
+				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
 		} catch (HibernateException he) {

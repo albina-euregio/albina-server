@@ -51,6 +51,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -206,7 +207,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 				try {
 					this.user = UserController.getInstance().getUser(author.getString("email"));
 				} catch (Exception e) {
-					e.printStackTrace();
+					LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
 				}
 			}
 		}

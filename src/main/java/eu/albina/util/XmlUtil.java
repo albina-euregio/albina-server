@@ -163,8 +163,7 @@ public class XmlUtil {
 
 			return doc;
 		} catch (ParserConfigurationException e1) {
-			logger.error("Error producing CAAML: " + e1.getMessage());
-			e1.printStackTrace();
+			logger.error("Error producing CAAML", e1);
 			return null;
 		}
 	}

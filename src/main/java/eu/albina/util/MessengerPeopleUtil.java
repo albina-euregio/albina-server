@@ -54,8 +54,7 @@ public class MessengerPeopleUtil {
 				String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 				sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
 			} catch (UnsupportedEncodingException e) {
-				logger.error("Bulletin newsletter could not be sent in " + lang + ": " + e.getMessage());
-				e.printStackTrace();
+				logger.error("Bulletin newsletter could not be sent in " + lang, e);
 			}
 		}
 	}
@@ -70,9 +69,7 @@ public class MessengerPeopleUtil {
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 				ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);
 			} catch (IOException | AlbinaException e) {
-				logger.error("Error while sending bulletin newsletter in " + lang + " for region " + region + ": "
-						+ e.getMessage());
-				e.printStackTrace();
+				logger.error("Error while sending bulletin newsletter in " + lang + " for region " + region, e);
 			}
 		}
 	}
