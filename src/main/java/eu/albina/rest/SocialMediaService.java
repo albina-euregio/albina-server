@@ -17,6 +17,7 @@
 package eu.albina.rest;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -196,7 +197,7 @@ public class SocialMediaService {
 		HttpResponse response = ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), LanguageCode.fromString(language),
 				message, attachmentUrl);
 		return Response.status(response.getStatusLine().getStatusCode())
-				.entity(IOUtils.toString(response.getEntity().getContent(), "UTF-8"))
+				.entity(IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8))
 				.header(response.getEntity().getContentType().getName(),
 						response.getEntity().getContentType().getValue())
 				.build();
@@ -213,7 +214,7 @@ public class SocialMediaService {
 		RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(regionId);
 		HttpResponse response = ctMp.getUsersStats(rc.getMessengerPeopleConfig());
 		return Response.status(response.getStatusLine().getStatusCode())
-				.entity(IOUtils.toString(response.getEntity().getContent(), "UTF-8"))
+				.entity(IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8))
 				.header(response.getEntity().getContentType().getName(),
 						response.getEntity().getContentType().getValue())
 				.build();

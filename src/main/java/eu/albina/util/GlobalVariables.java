@@ -18,7 +18,6 @@ package eu.albina.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -948,8 +947,7 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getMessengerPeopleText(LanguageCode lang, DateTime date, boolean update)
-			throws UnsupportedEncodingException {
+	public static String getMessengerPeopleText(LanguageCode lang, DateTime date, boolean update) {
 		String dateString = GlobalVariables.getDayName(date.getDayOfWeek(), lang)
 				+ date.toString(GlobalVariables.getShortDateTimeFormatter(lang));
 		if (update) {

@@ -19,6 +19,7 @@ package eu.albina.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
@@ -409,7 +410,7 @@ public class AlbinaUtil {
 			FileInputStream fileInputStreamReader = new FileInputStream(file);
 			byte[] bytes = new byte[(int) file.length()];
 			fileInputStreamReader.read(bytes);
-			encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
+			encodedfile = new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
 			fileInputStreamReader.close();
 		} catch (IOException e) {
 			logger.error("Failed to encode to base64", e);
