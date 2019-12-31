@@ -18,7 +18,6 @@ package eu.albina.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,7 +33,6 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.junit.After;

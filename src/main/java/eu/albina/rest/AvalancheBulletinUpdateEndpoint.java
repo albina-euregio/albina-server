@@ -32,7 +32,6 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.BulletinUpdate;
 import eu.albina.util.BulletinUpdateDecoder;
 import eu.albina.util.BulletinUpdateEncoder;

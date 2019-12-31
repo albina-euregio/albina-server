@@ -16,13 +16,11 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.websocket.EncodeException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
