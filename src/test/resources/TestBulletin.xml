@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <caaml:Bulletin
-  xmlns:caaml="http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS"
-  xmlns:gml="http://www.opengis.net/gml"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS CAAMLv5_BulletinEAWS.xsd"
-  gml:id="BulletinDeID359"
-  xml:lang="de">
+	xmlns:caaml="http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS CAAMLv5_BulletinEAWS.xsd"
+	gml:id="BulletinDeID359"
+	xml:lang="de">
 
 	<caaml:metaDataProperty>
 		<caaml:MetaData>

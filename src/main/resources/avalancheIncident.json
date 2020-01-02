@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
+	"$schema": "http://json-schema.org/draft-04/schema#",
 	"title" : "Avalanche incident",
 	"description" : "JSON description of an avalanche incident.",
 	"type" : "object",
@@ -134,20 +134,20 @@
 		"files" : {
 			"type" : "array",
 			"items" : {
-              	"type" : "object",
-                "properties" : {
+				"type" : "object",
+				"properties" : {
 					"filetype" : { "$ref" : "#/definitions/filetype" },
 					"url" : { "format": "uri", "type" : "string" }
-                },
+				},
 				"additionalProperties" : false
 			},
 			"additionalProperties" : false
 		},
 		"comment" : { "type" : "string" }
 	},
-	
+
 	"additionalProperties" : false,
-	
+
 	"definitions" : {
 		"quality" : {
 			"type" : "string",
