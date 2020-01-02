@@ -16,13 +16,14 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -45,6 +46,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.google.common.io.Resources;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -68,7 +70,7 @@ import eu.albina.util.XmlUtil;
 
 /**
  * This class holds all information about one avalanche bulletin.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -191,7 +193,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 	/**
 	 * Custom constructor that creates an avalanche bulletin object from JSON input.
-	 * 
+	 *
 	 * @param json
 	 *            JSONObject holding information about an avalanche bulletin.
 	 */
@@ -1308,13 +1310,13 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
 	}
 
-	public static AvalancheBulletin readBulletin(final InputStream resource) {
-		final String validBulletinStringFromResource = new Scanner(resource).useDelimiter("\\Z").next();
+	public static AvalancheBulletin readBulletin(final URL resource) throws IOException {
+		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
 	}
 
-	public static List<AvalancheBulletin> readBulletins(final InputStream resource) {
-		final String validBulletinStringFromResource = new Scanner(resource).useDelimiter("\\Z").next();
+	public static List<AvalancheBulletin> readBulletins(final URL resource) throws IOException {
+		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		final JSONArray array = new JSONArray(validBulletinStringFromResource);
 		return IntStream.range(0, array.length())
 				.mapToObj(array::getJSONObject)

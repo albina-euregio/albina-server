@@ -35,13 +35,13 @@ public class StatisticsControllerTest {
 	@Before
 	public void setUp() throws Exception {
 		bulletinsAmPm = Arrays.asList(
-			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_2.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_6.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_7.json").openStream())
+			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_2.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_6.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_7.json"))
 		);
 	}
 

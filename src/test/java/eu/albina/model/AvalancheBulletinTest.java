@@ -34,17 +34,17 @@ public class AvalancheBulletinTest {
 	@Test
 	public void testCreateObjectFromJSONAndBack() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("validBulletin.json"), StandardCharsets.UTF_8);
-		AvalancheBulletin b = AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json").openStream());
+		AvalancheBulletin b = AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json"));
 		JSONAssert.assertEquals(expected, b.toJSON(), JSONCompareMode.NON_EXTENSIBLE);
 	}
 
 	@Test
 	public void testSortByDangerRating() throws IOException {
 		List<AvalancheBulletin> bulletins = Arrays.asList(
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin2.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin3.json").openStream()),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin4.json").openStream())
+			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin2.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin3.json")),
+			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin4.json"))
 		);
 
 		Collections.sort(bulletins);
