@@ -1,5 +1,6 @@
 package eu.albina.util;
 
+import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -32,7 +33,7 @@ public class MapUtilTest {
 	@Ignore("requires albina-euregio/avalanche-warning-maps")
 	public void testMapyrusMaps() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		final InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream("2019-01-17.json");
+		final InputStream resource = Resources.getResource("2019-01-17.json").openStream();
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		MapUtil.createMapyrusMaps(bulletins);
 	}
@@ -41,14 +42,14 @@ public class MapUtilTest {
 	@Ignore("requires albina-euregio/avalanche-warning-maps")
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		final InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream("2019-01-16.json");
+		final InputStream resource = Resources.getResource("2019-01-16.json").openStream();
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		MapUtil.createMapyrusMaps(bulletins);
 	}
 
 	@Test
 	public void testMayrusInput() {
-		final InputStream resource = Thread.currentThread().getContextClassLoader().getResourceAsStream("2019-01-17.json");
+		final InputStream resource = Resources.getResource("2019-01-17.json").openStream();
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final String input = MapUtil.createMayrusInput(bulletins, MapUtil.DaytimeDependency.fd);
 		assertEquals("" +
