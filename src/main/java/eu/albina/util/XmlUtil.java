@@ -135,14 +135,7 @@ public class XmlUtil {
 					}
 				}
 
-				Element metaDataProperty = doc.createElement("metaDataProperty");
-				Element metaData = doc.createElement("MetaData");
-				Element dateTimeReport = doc.createElement("dateTimeReport");
-				dateTimeReport.appendChild(doc.createTextNode(
-						publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
-				metaData.appendChild(dateTimeReport);
-
-				metaDataProperty.appendChild(metaData);
+				Element metaDataProperty = createMetaDataProperty(doc, publicationDate);
 				rootElement.appendChild(metaDataProperty);
 
 				Element observations = doc.createElement("observations");
@@ -207,23 +200,27 @@ public class XmlUtil {
 				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
 		doc.appendChild(rootElement);
 
+		Element metaDataProperty = createMetaDataProperty(doc, new DateTime().withTimeAtStartOfDay());
+		rootElement.appendChild(metaDataProperty);
+		return rootElement;
+	}
+
+	public static Element createMetaDataProperty(Document doc, DateTime dateTime) {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
-		dateTimeReport.appendChild(doc
-				.createTextNode((new DateTime().withTimeAtStartOfDay()).toString(GlobalVariables.formatterDateTime)));
+		dateTimeReport.appendChild(doc.createTextNode(dateTime.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
 		metaData.appendChild(dateTimeReport);
 		Element srcRef = doc.createElement("srcRef");
-		Element operation = doc.createElement("Operation");
-		operation.setAttribute("gml:id", "ALBINA");
-		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode("ALBINA"));
-		operation.appendChild(name);
-		srcRef.appendChild(operation);
+//		Element operation = doc.createElement("Operation");
+//		operation.setAttribute("gml:id", "ALBINA");
+//		Element name = doc.createElement("name");
+//		name.appendChild(doc.createTextNode("ALBINA"));
+//		operation.appendChild(name);
+//		srcRef.appendChild(operation);
 		metaData.appendChild(srcRef);
 		metaDataProperty.appendChild(metaData);
-		rootElement.appendChild(metaDataProperty);
-		return rootElement;
+		return metaDataProperty;
 	}
 
 	public static Document createXmlError(String key, String value) throws ParserConfigurationException {
