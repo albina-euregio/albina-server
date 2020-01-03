@@ -924,12 +924,6 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		Element metaDataProperty = XmlUtil.createMetaDataProperty(doc, publicationDate);
 		rootElement.appendChild(metaDataProperty);
 
-		for (String region : publishedRegions) {
-			Element locRef = doc.createElement("locRef");
-			locRef.setAttribute("xlink:href", region);
-			rootElement.appendChild(locRef);
-		}
-
 		if (validFrom != null && validUntil != null) {
 
 			DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
@@ -1167,6 +1161,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 
 		bulletinResultsOf.appendChild(bulletinMeasurements);
 		rootElement.appendChild(bulletinResultsOf);
+
+		for (String region : publishedRegions) {
+			Element locRef = doc.createElement("locRef");
+			locRef.setAttribute("xlink:href", region);
+			rootElement.appendChild(locRef);
+		}
 
 		return rootElement;
 	}
