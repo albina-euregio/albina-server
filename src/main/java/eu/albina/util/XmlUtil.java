@@ -167,7 +167,6 @@ public class XmlUtil {
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		rootElement.setAttribute("xmlns:schemaLocation",
 				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
-		rootElement.setAttribute("xmlns:app", "ALBINA");
 
 		return rootElement;
 	}
@@ -191,7 +190,6 @@ public class XmlUtil {
 		Element rootElement = doc.createElement("LocationCollection");
 		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
 		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
-		rootElement.setAttribute("xmlns:app", "ALBINA");
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		rootElement.setAttribute("xmlns:schemaLocation",
 				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
