@@ -168,8 +168,8 @@ public class XmlUtil {
 		rootElement.setAttribute("xmlns:albina", GlobalVariables.albinaXmlSchemaUrl);
 		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		rootElement.setAttribute("xmlns:schemaLocation",
-				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
+		rootElement.setAttribute("xsi:schemaLocation",
+				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
 
 		return rootElement;
 	}
@@ -194,8 +194,8 @@ public class XmlUtil {
 		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
 		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		rootElement.setAttribute("xmlns:schemaLocation",
-				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
+		rootElement.setAttribute("xsi:schemaLocation",
+			"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
 		doc.appendChild(rootElement);
 
 		Element metaDataProperty = createMetaDataProperty(doc, new DateTime().withTimeAtStartOfDay());
