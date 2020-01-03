@@ -1009,9 +1009,9 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		}
 
 		Element avProblems = doc.createElement("avProblems");
-		Element avProblem1 = doc.createElement("AvProblem");
 		if (bulletin != null && bulletin.getAvalancheSituation1() != null
 				&& bulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
+			Element avProblem1 = doc.createElement("AvProblem");
 			Element type1 = doc.createElement("type");
 			type1.appendChild(
 					doc.createTextNode(bulletin.getAvalancheSituation1().getAvalancheSituation().toCaamlString()));
@@ -1076,11 +1076,11 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			} else {
 				// no elevation set
 			}
+			avProblems.appendChild(avProblem1);
 		}
-		avProblems.appendChild(avProblem1);
-		Element avProblem2 = doc.createElement("AvProblem");
 		if (bulletin != null && bulletin.getAvalancheSituation2() != null
 				&& bulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
+			Element avProblem2 = doc.createElement("AvProblem");
 			Element type2 = doc.createElement("type");
 			type2.appendChild(
 					doc.createTextNode(bulletin.getAvalancheSituation2().getAvalancheSituation().toCaamlString()));
@@ -1145,8 +1145,8 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 			} else {
 				// no elevation set
 			}
+			avProblems.appendChild(avProblem2);
 		}
-		avProblems.appendChild(avProblem2);
 		bulletinMeasurements.appendChild(avProblems);
 
 		for (TextPart part : TextPart.values()) {
