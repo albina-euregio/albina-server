@@ -923,16 +923,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			languageCode = LanguageCode.en;
 		rootElement.setAttribute("xml:lang", languageCode.toString());
 
-		Element metaDataProperty = doc.createElement("metaDataProperty");
-		Element metaData = doc.createElement("MetaData");
-		if (publicationDate != null) {
-			Element dateTimeReport = doc.createElement("dateTimeReport");
-			dateTimeReport.appendChild(doc.createTextNode(
-					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
-			metaData.appendChild(dateTimeReport);
-		}
-
-		metaDataProperty.appendChild(metaData);
+		Element metaDataProperty = XmlUtil.createMetaDataProperty(doc, publicationDate);
 		rootElement.appendChild(metaDataProperty);
 
 		for (String region : publishedRegions) {
