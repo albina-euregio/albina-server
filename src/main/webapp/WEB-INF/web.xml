@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	<display-name>albina</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
@@ -9,32 +10,32 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
- 
+
 	<filter>
-	    <filter-name>CorsFilter</filter-name>
-	    <filter-class>eu.albina.rest.filter.CorsFilter</filter-class>
+		<filter-name>CorsFilter</filter-name>
+		<filter-class>eu.albina.rest.filter.CorsFilter</filter-class>
 	</filter>
-	 
+
 	<filter-mapping>
-	    <filter-name>CorsFilter</filter-name>
-	    <url-pattern>/*</url-pattern>
+		<filter-name>CorsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
 	<listener>
 		<listener-class>eu.albina.listener.AlbinaServiceContextListener</listener-class>
 	</listener>
- 
- 	<servlet>
-        <servlet-name>albina</servlet-name>
-        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-        <init-param>
-            <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>
-            	eu.albina.rest
-                io.swagger.jaxrs.json,
-                io.swagger.jaxrs.listing
-            </param-value>
-        </init-param>
+
+	<servlet>
+		<servlet-name>albina</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>
+				eu.albina.rest
+				io.swagger.jaxrs.json,
+				io.swagger.jaxrs.listing
+			</param-value>
+		</init-param>
 		<init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
 			<param-value>eu.albina.rest.filter.ETagFilter</param-value>
@@ -43,25 +44,25 @@
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
 			<param-value>eu.albina.rest.filter.ETagFilter</param-value>
 		</init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>albina</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
-    
-    <servlet>
-        <servlet-name>Jersey2Config</servlet-name>
-        <servlet-class>io.swagger.jaxrs.config.DefaultJaxrsConfig</servlet-class>
-        <init-param>
-            <param-name>api.version</param-name>
-            <param-value>0.1</param-value>
-        </init-param>
-        <init-param>
-            <param-name>swagger.api.basepath</param-name>
-            <param-value>https://api.avalanche.report/albina/api</param-value>
-        </init-param>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
+
+	<servlet>
+		<servlet-name>Jersey2Config</servlet-name>
+		<servlet-class>io.swagger.jaxrs.config.DefaultJaxrsConfig</servlet-class>
+		<init-param>
+			<param-name>api.version</param-name>
+			<param-value>0.1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>swagger.api.basepath</param-name>
+			<param-value>https://api.avalanche.report/albina/api</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
 </web-app>

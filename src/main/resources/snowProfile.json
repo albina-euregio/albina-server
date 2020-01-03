@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
+	"$schema": "http://json-schema.org/draft-04/schema#",
 	"title" : "Snow profile",
 	"description" : "JSON description of a snow profile.",
 	"type" : "object",
@@ -95,9 +95,9 @@
 			"additionalProperties" : false
 		}
 	},
-	
+
 	"additionalProperties" : false,
-	
+
 	"definitions" : {
 		"CT" : {
 			"type" : "object",

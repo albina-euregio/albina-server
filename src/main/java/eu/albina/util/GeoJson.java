@@ -13,25 +13,25 @@ import java.util.Map;
 
 public class GeoJson {
 
-    private GeoJson() {
-    }
+	private GeoJson() {
+	}
 
-    public static class FeatureCollection {
-        public String type = "FeatureCollection";
+	public static class FeatureCollection {
+		public String type = "FeatureCollection";
 
-        public Map<String, Object> properties = new LinkedHashMap<>();
+		public Map<String, Object> properties = new LinkedHashMap<>();
 
-        public List<Feature> features = new ArrayList<>();
-    }
+		public List<Feature> features = new ArrayList<>();
+	}
 
-    public static class Feature {
-        public String type = "Feature";
+	public static class Feature {
+		public String type = "Feature";
 
-        public Map<String, Object> properties = new LinkedHashMap<>();
+		public Map<String, Object> properties = new LinkedHashMap<>();
 
-        @JsonSerialize(using = GeometrySerializer.class)
-        @JsonDeserialize(contentUsing = GeometryDeserializer.class)
-        public Geometry geometry;
+		@JsonSerialize(using = GeometrySerializer.class)
+		@JsonDeserialize(contentUsing = GeometryDeserializer.class)
+		public Geometry geometry;
 
-    }
+	}
 }
