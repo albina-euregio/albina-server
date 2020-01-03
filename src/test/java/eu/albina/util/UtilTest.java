@@ -33,6 +33,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
+import com.google.common.io.Resources;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.junit.After;
@@ -66,7 +67,7 @@ public class UtilTest {
 	private List<String> recipients = new ArrayList<String>();
 
 	@Before
-	public void setUp() {
+	public void setUp() throws IOException {
 		// HibernateUtil.getInstance().setUp();
 
 		names.add("Alberto Trenti");
@@ -149,13 +150,13 @@ public class UtilTest {
 		bulletins = new ArrayList<AvalancheBulletin>();
 		bulletinsAmPm = new ArrayList<AvalancheBulletin>();
 		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-		bulletins.add(AvalancheBulletin.readBulletin(classloader.getResourceAsStream("2030-02-16_1.json")));
-		bulletins.add(AvalancheBulletin.readBulletin(classloader.getResourceAsStream("2030-02-16_2.json")));
-		bulletins.add(AvalancheBulletin.readBulletin(classloader.getResourceAsStream("2030-02-16_3.json")));
-		bulletins.add(AvalancheBulletin.readBulletin(classloader.getResourceAsStream("2030-02-16_4.json")));
-		bulletins.add(AvalancheBulletin.readBulletin(classloader.getResourceAsStream("2030-02-16_5.json")));
-		bulletinsAmPm.add(AvalancheBulletin.readBulletin(classloader.getResourceAsStream("2030-02-16_6.json")));
-		bulletinsAmPm.add(AvalancheBulletin.readBulletin(classloader.getResourceAsStream("2030-02-16_7.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_2.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
+		bulletinsAmPm.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_6.json")));
+		bulletinsAmPm.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_7.json")));
 
 		recipients.add("n.lanzanasto@gmail.com");
 		recipients.add("norbert.lanzanasto@tirol.gv.at");

@@ -183,6 +183,12 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>28.2-jre</version>
+		</dependency>
+
 		<!-- timer -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
