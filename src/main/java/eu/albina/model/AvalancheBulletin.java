@@ -1011,140 +1011,12 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		Element avProblems = doc.createElement("avProblems");
 		if (bulletin != null && bulletin.getAvalancheSituation1() != null
 				&& bulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
-			Element avProblem1 = doc.createElement("AvProblem");
-			Element type1 = doc.createElement("type");
-			type1.appendChild(
-					doc.createTextNode(bulletin.getAvalancheSituation1().getAvalancheSituation().toCaamlString()));
-			avProblem1.appendChild(type1);
-			if (bulletin.getAvalancheSituation1().getAspects() != null) {
-				for (Aspect aspect : bulletin.getAvalancheSituation1().getAspects()) {
-					Element validAspect = doc.createElement("validAspect");
-					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-					avProblem1.appendChild(validAspect);
-				}
-			}
-
-			if (bulletin.getAvalancheSituation1().getTreelineHigh()
-					|| bulletin.getAvalancheSituation1().getElevationHigh() > 0) {
-				if (bulletin.getAvalancheSituation1().getTreelineLow()
-						|| bulletin.getAvalancheSituation1().getElevationLow() > 0) {
-					// elevation high and low set
-					Element validElevation = doc.createElement("validElevation");
-					Element elevationRange = doc.createElement("elevationRange");
-					elevationRange.setAttribute("uom", "m");
-					Element beginPosition = doc.createElement("beginPosition");
-					if (bulletin.getAvalancheSituation1().getTreelineLow())
-						beginPosition.appendChild(doc.createTextNode("Treeline"));
-					else
-						beginPosition.appendChild(doc
-								.createTextNode(String.valueOf(bulletin.getAvalancheSituation1().getElevationLow())));
-					Element endPosition = doc.createElement("endPosition");
-					if (bulletin.getAvalancheSituation1().getTreelineHigh())
-						// TODO Allow treeline in CAAML
-						endPosition.appendChild(doc.createTextNode("Treeline"));
-					else
-						endPosition.appendChild(doc
-								.createTextNode(String.valueOf(bulletin.getAvalancheSituation1().getElevationHigh())));
-					elevationRange.appendChild(beginPosition);
-					elevationRange.appendChild(endPosition);
-					validElevation.appendChild(elevationRange);
-					avProblem1.appendChild(validElevation);
-				} else {
-					// elevation high set
-					Element validElevation = doc.createElement("validElevation");
-					String elevationString;
-					if (bulletin.getAvalancheSituation1().getTreelineHigh())
-						elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
-					else
-						elevationString = XmlUtil.createValidElevationAttribute(
-								bulletin.getAvalancheSituation1().getElevationHigh(), false, false);
-					validElevation.setAttribute("xlink:href", elevationString);
-					avProblem1.appendChild(validElevation);
-				}
-			} else if (bulletin.getAvalancheSituation1().getTreelineLow()
-					|| bulletin.getAvalancheSituation1().getElevationLow() > 0) {
-				// elevation low set
-				Element validElevation = doc.createElement("validElevation");
-				String elevationString;
-				if (bulletin.getAvalancheSituation1().getTreelineLow())
-					elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
-				else
-					elevationString = XmlUtil.createValidElevationAttribute(
-							bulletin.getAvalancheSituation1().getElevationLow(), true, false);
-				validElevation.setAttribute("xlink:href", elevationString);
-				avProblem1.appendChild(validElevation);
-			} else {
-				// no elevation set
-			}
+			Element avProblem1 = getAvProblem(doc, bulletin.getAvalancheSituation1());
 			avProblems.appendChild(avProblem1);
 		}
 		if (bulletin != null && bulletin.getAvalancheSituation2() != null
 				&& bulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
-			Element avProblem2 = doc.createElement("AvProblem");
-			Element type2 = doc.createElement("type");
-			type2.appendChild(
-					doc.createTextNode(bulletin.getAvalancheSituation2().getAvalancheSituation().toCaamlString()));
-			avProblem2.appendChild(type2);
-			if (bulletin.getAvalancheSituation2().getAspects() != null) {
-				for (Aspect aspect : bulletin.getAvalancheSituation2().getAspects()) {
-					Element validAspect = doc.createElement("validAspect");
-					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-					avProblem2.appendChild(validAspect);
-				}
-			}
-			if (bulletin.getAvalancheSituation2().getTreelineHigh()
-					|| bulletin.getAvalancheSituation2().getElevationHigh() > 0) {
-				if (bulletin.getAvalancheSituation2().getTreelineLow()
-						|| bulletin.getAvalancheSituation2().getElevationLow() > 0) {
-					// elevation high and low set
-					Element validElevation = doc.createElement("validElevation");
-					Element elevationRange = doc.createElement("elevationRange");
-					elevationRange.setAttribute("uom", "m");
-					Element beginPosition = doc.createElement("beginPosition");
-					if (bulletin.getAvalancheSituation2().getTreelineLow())
-						// TODO Allow treeline in CAAML
-						beginPosition.appendChild(doc.createTextNode("Treeline"));
-					else
-						beginPosition.appendChild(doc
-								.createTextNode(String.valueOf(bulletin.getAvalancheSituation2().getElevationLow())));
-					Element endPosition = doc.createElement("endPosition");
-					if (bulletin.getAvalancheSituation2().getTreelineHigh())
-						// TODO Allow treeline in CAAML
-						endPosition.appendChild(doc.createTextNode("Treeline"));
-					else
-						endPosition.appendChild(doc
-								.createTextNode(String.valueOf(bulletin.getAvalancheSituation2().getElevationHigh())));
-					elevationRange.appendChild(beginPosition);
-					elevationRange.appendChild(endPosition);
-					validElevation.appendChild(elevationRange);
-					avProblem2.appendChild(validElevation);
-				} else {
-					// elevation high set
-					Element validElevation = doc.createElement("validElevation");
-					String elevationString;
-					if (bulletin.getAvalancheSituation2().getTreelineHigh())
-						elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
-					else
-						elevationString = XmlUtil.createValidElevationAttribute(
-								bulletin.getAvalancheSituation2().getElevationHigh(), false, false);
-					validElevation.setAttribute("xlink:href", elevationString);
-					avProblem2.appendChild(validElevation);
-				}
-			} else if (bulletin.getAvalancheSituation2().getTreelineLow()
-					|| bulletin.getAvalancheSituation2().getElevationLow() > 0) {
-				// elevation low set
-				Element validElevation = doc.createElement("validElevation");
-				String elevationString;
-				if (bulletin.getAvalancheSituation2().getTreelineLow())
-					elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
-				else
-					elevationString = XmlUtil.createValidElevationAttribute(
-							bulletin.getAvalancheSituation2().getElevationLow(), true, false);
-				validElevation.setAttribute("xlink:href", elevationString);
-				avProblem2.appendChild(validElevation);
-			} else {
-				// no elevation set
-			}
+			Element avProblem2 = getAvProblem(doc, bulletin.getAvalancheSituation2());
 			avProblems.appendChild(avProblem2);
 		}
 		bulletinMeasurements.appendChild(avProblems);
@@ -1169,6 +1041,75 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		}
 
 		return rootElement;
+	}
+
+	private Element getAvProblem(Document doc, AvalancheSituation avalancheSituation) {
+		Element avProblem1 = doc.createElement("AvProblem");
+		Element type = doc.createElement("type");
+		type.appendChild(
+			doc.createTextNode(avalancheSituation.getAvalancheSituation().toCaamlString()));
+		avProblem1.appendChild(type);
+		if (avalancheSituation.getAspects() != null) {
+			for (Aspect aspect : avalancheSituation.getAspects()) {
+				Element validAspect = doc.createElement("validAspect");
+				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+				avProblem1.appendChild(validAspect);
+			}
+		}
+
+		if (avalancheSituation.getTreelineHigh()
+			|| avalancheSituation.getElevationHigh() > 0) {
+			if (avalancheSituation.getTreelineLow()
+				|| avalancheSituation.getElevationLow() > 0) {
+				// elevation high and low set
+				Element validElevation = doc.createElement("validElevation");
+				Element elevationRange = doc.createElement("elevationRange");
+				elevationRange.setAttribute("uom", "m");
+				Element beginPosition = doc.createElement("beginPosition");
+				if (avalancheSituation.getTreelineLow())
+					beginPosition.appendChild(doc.createTextNode("Treeline"));
+				else
+					beginPosition.appendChild(doc
+						.createTextNode(String.valueOf(avalancheSituation.getElevationLow())));
+				Element endPosition = doc.createElement("endPosition");
+				if (avalancheSituation.getTreelineHigh())
+					// TODO Allow treeline in CAAML
+					endPosition.appendChild(doc.createTextNode("Treeline"));
+				else
+					endPosition.appendChild(doc
+						.createTextNode(String.valueOf(avalancheSituation.getElevationHigh())));
+				elevationRange.appendChild(beginPosition);
+				elevationRange.appendChild(endPosition);
+				validElevation.appendChild(elevationRange);
+				avProblem1.appendChild(validElevation);
+			} else {
+				// elevation high set
+				Element validElevation = doc.createElement("validElevation");
+				String elevationString;
+				if (avalancheSituation.getTreelineHigh())
+					elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
+				else
+					elevationString = XmlUtil.createValidElevationAttribute(
+						avalancheSituation.getElevationHigh(), false, false);
+				validElevation.setAttribute("xlink:href", elevationString);
+				avProblem1.appendChild(validElevation);
+			}
+		} else if (avalancheSituation.getTreelineLow()
+			|| avalancheSituation.getElevationLow() > 0) {
+			// elevation low set
+			Element validElevation = doc.createElement("validElevation");
+			String elevationString;
+			if (avalancheSituation.getTreelineLow())
+				elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
+			else
+				elevationString = XmlUtil.createValidElevationAttribute(
+					avalancheSituation.getElevationLow(), true, false);
+			validElevation.setAttribute("xlink:href", elevationString);
+			avProblem1.appendChild(validElevation);
+		} else {
+			// no elevation set
+		}
+		return avProblem1;
 	}
 
 	public List<Element> toCAAML(Document doc, LanguageCode languageCode) {
