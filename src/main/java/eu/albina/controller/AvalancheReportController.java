@@ -18,6 +18,7 @@ package eu.albina.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -759,7 +760,7 @@ public class AvalancheReportController {
 
 	/**
 	 * Return all bulletins in a given time period and for specific regions with
-	 * status {@code published} or {@code republished}.
+	 * status {@code published} or {@code republished} (ordered by danger rating).
 	 *
 	 * @param date
 	 *            the start date of the bulletins
@@ -769,7 +770,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if the report could not be loaded from the DB
 	 */
-	public Collection<AvalancheBulletin> getPublishedBulletins(DateTime date, List<String> regions)
+	public ArrayList<AvalancheBulletin> getPublishedBulletins(DateTime date, List<String> regions)
 			throws AlbinaException {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
@@ -809,7 +810,11 @@ public class AvalancheReportController {
 					resultMap.put(bulletin.getId(), bulletin);
 			}
 		}
-		return resultMap.values();
+
+		ArrayList<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>(resultMap.values());
+		Collections.sort(bulletins);
+
+		return bulletins;
 	}
 
 	/**
