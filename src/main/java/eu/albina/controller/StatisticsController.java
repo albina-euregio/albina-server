@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -45,7 +45,7 @@ import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for statistics.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -64,7 +64,7 @@ public class StatisticsController {
 	/**
 	 * Returns the {@code RegionController} object associated with the current Java
 	 * application.
-	 * 
+	 *
 	 * @return the {@code RegionController} object associated with the current Java
 	 *         application.
 	 */
@@ -78,7 +78,7 @@ public class StatisticsController {
 	/**
 	 * Return a CSV string with all bulletin information from {@code startDate}
 	 * until {@code endDate} in {@code lang} for {@code region}.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the desired time period
 	 * @param endDate
@@ -117,7 +117,7 @@ public class StatisticsController {
 	/**
 	 * Return a CSV string with all bulletin information from {@code startDate}
 	 * until {@code endDate} in {@code lang} for whole EUREGIO.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the desired time period
 	 * @param endDate
@@ -236,7 +236,7 @@ public class StatisticsController {
 
 	/**
 	 * Return a CSV string representing all {@code bulletins} in {@code lang}.
-	 * 
+	 *
 	 * @param lang
 	 *            the desired language
 	 * @param bulletins
@@ -390,7 +390,7 @@ public class StatisticsController {
 	/**
 	 * Add a CSV string to a {@code StringBuilder} instance representing the
 	 * {@code avalancheBulletin} in {@code lang}.
-	 * 
+	 *
 	 * @param sb
 	 *            the string builder instance the new string should be added to
 	 * @param avalancheBulletin
@@ -587,7 +587,7 @@ public class StatisticsController {
 	/**
 	 * Add a CSV string to a {@code StringBuilder} instance representing the
 	 * {@code avalancheSituation}.
-	 * 
+	 *
 	 * @param sb
 	 *            the string builder instance the new string should be added to
 	 * @param avalancheSituation

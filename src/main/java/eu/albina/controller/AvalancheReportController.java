@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -46,7 +46,7 @@ import eu.albina.util.JsonUtil;
 
 /**
  * Controller for avalanche reports.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -65,7 +65,7 @@ public class AvalancheReportController {
 	/**
 	 * Returns the {@code AvalancheReportController} object associated with the
 	 * current Java application.
-	 * 
+	 *
 	 * @return the {@code AvalancheReportController} object associated with the
 	 *         current Java application.
 	 */
@@ -79,7 +79,7 @@ public class AvalancheReportController {
 	/**
 	 * Return the actual status of the bulletins for every day in a given time
 	 * period for a given {@code region}.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param endDate
@@ -111,7 +111,7 @@ public class AvalancheReportController {
 	/**
 	 * Return the actual status of the bulletins for a specific {@code date} for a
 	 * given {@code region} or null if no report was found.
-	 * 
+	 *
 	 * @param date
 	 *            the date of interest
 	 * @param region
@@ -132,7 +132,7 @@ public class AvalancheReportController {
 	 * period for a given {@code region}. For each day the highest status is
 	 * returned ({@code republished} > {@code published} > {@code submitted} >
 	 * {@code draft} > {@code missing}).
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param endDate
@@ -163,7 +163,7 @@ public class AvalancheReportController {
 	 * period for multiple {@code regions}. For each day the highest status is
 	 * returned ({@code republished} > {@code published} > {@code submitted} >
 	 * {@code draft} > {@code missing}).
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param endDate
@@ -200,7 +200,7 @@ public class AvalancheReportController {
 	 * Return the publication status of the bulletins for every day in a given time
 	 * period for a given {@code region}. For each day the status is only returned
 	 * if it is {@code republished} or {@code published}.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param endDate
@@ -227,7 +227,7 @@ public class AvalancheReportController {
 
 	/**
 	 * Return all public reports for a specific time period and {@code region}.
-	 * 
+	 *
 	 * @param startDate
 	 *            start date if the time period
 	 * @param endDate
@@ -266,7 +266,7 @@ public class AvalancheReportController {
 	/**
 	 * Return the public report for specific {@code date} and {@code region} or null
 	 * if no report was found.
-	 * 
+	 *
 	 * @param date
 	 *            the date of interest
 	 * @param region
@@ -337,7 +337,7 @@ public class AvalancheReportController {
 
 	/**
 	 * Return all most recent reports for a specific time period and {@code region}.
-	 * 
+	 *
 	 * @param startDate
 	 *            start date if the time period
 	 * @param endDate
@@ -378,7 +378,7 @@ public class AvalancheReportController {
 	/**
 	 * Returns the most recent report for specific {@code date} and {@code region}
 	 * or null if no report was found.
-	 * 
+	 *
 	 * @param date
 	 *            the date of interest
 	 * @param region
@@ -421,7 +421,7 @@ public class AvalancheReportController {
 	 * {@code published} to {@code updated}, {@code resubmitted} to {@code updated},
 	 * {@code republished} to {@code updated}. A broacast message about the changes
 	 * is sent.
-	 * 
+	 *
 	 * @param avalancheBulletins
 	 *            the affected bulletins
 	 * @param date
@@ -503,7 +503,7 @@ public class AvalancheReportController {
 	 * Change a report. This is only a small change and does not trigger the whole
 	 * publication process. The timestamp, user and revoision as well as the JSON
 	 * string of all bulletins is updated in the report.
-	 * 
+	 *
 	 * @param publishedBulletins
 	 *            the bulletins affected by this change
 	 * @param startDate
@@ -557,7 +557,7 @@ public class AvalancheReportController {
 	 * <code>republished</code> (if the previous status was
 	 * <code>resubmitted</code>) and set the json string of the bulletins. If there
 	 * was not report a new report with status <code>missing</code> is created.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins which are affected by the publication
 	 * @param startDate
@@ -588,7 +588,7 @@ public class AvalancheReportController {
 	 * <code>republished</code> (if the previous status was
 	 * <code>resubmitted</code>) and set the json string of the bulletins. If there
 	 * was not report a new report with status <code>missing</code> is created.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins which are affected by the publication
 	 * @param startDate
@@ -680,7 +680,7 @@ public class AvalancheReportController {
 	 * <code>resubmitted</code> (if the previous status was <code>updated</code>)
 	 * and set the user. If there was not report a new report with status
 	 * <code>missing</code> is created.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the affected bulletins
 	 * @param startDate
@@ -760,7 +760,7 @@ public class AvalancheReportController {
 	/**
 	 * Return all bulletins in a given time period and for specific regions with
 	 * status {@code published} or {@code republished}.
-	 * 
+	 *
 	 * @param date
 	 *            the start date of the bulletins
 	 * @param regions
@@ -815,7 +815,7 @@ public class AvalancheReportController {
 	/**
 	 * Return id of reports for a specific {@code date} and {@code regions} with
 	 * status {@code published} or {@code republished}.
-	 * 
+	 *
 	 * @param date
 	 *            the date of interest
 	 * @param regions
@@ -837,7 +837,7 @@ public class AvalancheReportController {
 
 	/**
 	 * Return all published bulletins for a specific time period and region.
-	 * 
+	 *
 	 * @param date
 	 *            start of the time period
 	 * @param endDate
@@ -869,7 +869,7 @@ public class AvalancheReportController {
 
 	/**
 	 * Initialize and unproxy fields of entity.
-	 * 
+	 *
 	 * @param entity
 	 *            the entity to initialize and unproxy
 	 * @return the entity
@@ -890,7 +890,7 @@ public class AvalancheReportController {
 	/**
 	 * Set the email flag for all reports with {@code avalancheReportIds},
 	 * indicating that the emails for this reports have been sent.
-	 * 
+	 *
 	 * @param avalancheReportIds
 	 *            the ids of the reports for whom the flag should be set
 	 */
@@ -917,7 +917,7 @@ public class AvalancheReportController {
 	/**
 	 * Set the pdf flag for all reports with {@code avalancheReportIds}, indicating
 	 * that the pdfs for this reports have been created.
-	 * 
+	 *
 	 * @param avalancheReportIds
 	 *            the ids of the reports for whom the flag should be set
 	 */
@@ -944,7 +944,7 @@ public class AvalancheReportController {
 	/**
 	 * Set the html flag for all reports with {@code avalancheReportIds}, indicating
 	 * that the simple html version for this reports have been created.
-	 * 
+	 *
 	 * @param avalancheReportIds
 	 *            the ids of the reports for whom the flag should be set
 	 */
@@ -972,7 +972,7 @@ public class AvalancheReportController {
 	 * Set the static widget flag for all reports with {@code avalancheReportIds},
 	 * indicating that the static widgets (images for press) for this reports have
 	 * been created.
-	 * 
+	 *
 	 * @param avalancheReportIds
 	 *            the ids of the reports for whom the flag should be set
 	 */
@@ -999,7 +999,7 @@ public class AvalancheReportController {
 	/**
 	 * Set the map flag for all reports with {@code avalancheReportIds}, indicating
 	 * that the maps for this reports have been created.
-	 * 
+	 *
 	 * @param avalancheReportIds
 	 *            the ids of the reports for whom the flag should be set
 	 */
@@ -1026,7 +1026,7 @@ public class AvalancheReportController {
 	/**
 	 * Set the caaml flag for all reports with {@code avalancheReportIds},
 	 * indicating that the caaml (XML) files for this reports have been created.
-	 * 
+	 *
 	 * @param avalancheReportIds
 	 *            the ids of the reports for whom the flag should be set
 	 */
@@ -1053,7 +1053,7 @@ public class AvalancheReportController {
 	/**
 	 * Set the whatsapp flag for all reports with {@code avalancheReportIds},
 	 * indicating that the messages via whatsapp for this reports have been sent.
-	 * 
+	 *
 	 * @param avalancheReportIds
 	 *            the ids of the reports for whom the flag should be set
 	 */
@@ -1080,7 +1080,7 @@ public class AvalancheReportController {
 	/**
 	 * Set the telegram flag for all reports with {@code avalancheReportIds},
 	 * indicating that the messages via telegram for this reports have been sent.
-	 * 
+	 *
 	 * @param avalancheReportIds
 	 *            the ids of the reports for whom the flag should be set
 	 */
@@ -1106,7 +1106,7 @@ public class AvalancheReportController {
 
 	/**
 	 * Returns the date of the latest published bulletin.
-	 * 
+	 *
 	 * @return the date of the latest published bulletin
 	 * @throws AlbinaException
 	 *             if no report was found

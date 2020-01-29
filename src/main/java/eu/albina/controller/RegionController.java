@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -36,7 +36,7 @@ import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for regions.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -57,7 +57,7 @@ public class RegionController {
 	/**
 	 * Returns the {@code RegionController} object associated with the current Java
 	 * application.
-	 * 
+	 *
 	 * @return the {@code RegionController} object associated with the current Java
 	 *         application.
 	 */
@@ -70,7 +70,7 @@ public class RegionController {
 
 	/**
 	 * Retrieve a region from the database by ID.
-	 * 
+	 *
 	 * @param regionId
 	 *            the ID of the desired region
 	 * @return the region with the given ID.
@@ -101,7 +101,7 @@ public class RegionController {
 
 	/**
 	 * Return all top-level regions (no parent region is available).
-	 * 
+	 *
 	 * @return all top-level regions
 	 * @throws AlbinaException
 	 *             if the {@code Region} objects could not be initialized
@@ -112,7 +112,7 @@ public class RegionController {
 
 	/**
 	 * Return all sub-regions that have {@code regionId} as parent.
-	 * 
+	 *
 	 * @param regionId
 	 *            the id of the parent region of all desired regions
 	 * @return all sub-regions that have {@code regionId} as parent
@@ -147,7 +147,7 @@ public class RegionController {
 
 	/**
 	 * Lock a specific region due to current modification.
-	 * 
+	 *
 	 * @param lock
 	 *            the bulletin lock
 	 * @throws AlbinaException
@@ -164,7 +164,7 @@ public class RegionController {
 
 	/**
 	 * Unlock a specific region.
-	 * 
+	 *
 	 * @param lock
 	 *            the bulletin lock
 	 * @throws AlbinaException
@@ -185,7 +185,7 @@ public class RegionController {
 
 	/**
 	 * Unlock all regions locked by a specific {@code sessionId}.
-	 * 
+	 *
 	 * @param sessionId
 	 *            the session id
 	 */
@@ -204,7 +204,7 @@ public class RegionController {
 
 	/**
 	 * Return all dates that are locked for {@code region}.
-	 * 
+	 *
 	 * @param region
 	 *            the region of interest
 	 * @return all dates that are locked for {@code region}
