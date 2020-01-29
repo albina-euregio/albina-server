@@ -176,7 +176,7 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToMessengerpeople(JSONObject object, String region, LanguageCode lang) {
+	void sendNewBlogPostToMessengerpeople(JSONObject object, String region, LanguageCode lang) {
 		logger.info("Sending new blog post to messengerpeople ...");
 
 		StringBuilder sb = new StringBuilder();
@@ -184,9 +184,12 @@ public class BlogController extends CommonProcessor {
 		sb.append(": ");
 		sb.append(getBlogPostLink(object, region, lang));
 
-		JSONArray imagesArray = object.getJSONArray("images");
-		JSONObject image = (JSONObject) imagesArray.get(0);
-		String attachmentUrl = image.getString("url");
+		String attachmentUrl = null;
+		if (object.has("images")) {
+			JSONArray imagesArray = object.getJSONArray("images");
+			JSONObject image = (JSONObject) imagesArray.get(0);
+			attachmentUrl = image.getString("url");
+		}
 
 		try {
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
