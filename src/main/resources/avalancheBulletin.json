@@ -12,7 +12,7 @@
 			"type" : "string",
 			"enum" : [ "republished", "resubmitted", "updated", "published", "submitted", "draft", "missing" ]
 		},
-		
+
 		"creator" : {
 			"type" : "string"
 		},
@@ -21,7 +21,7 @@
 		},
 
 		"author" : { "$ref" : "#/definitions/author" },
-		
+
 		"avActivityHighlightsTextcat" : { "type" : "string" },
 		"avActivityCommentTextcat" : { "type" : "string" },
 		"snowpackStructureHighlightsTextcat" : { "type" : "string" },
@@ -38,7 +38,7 @@
 		"travelAdvisoryComment" : { "$ref" : "#/definitions/textPart" },
 		"tendencyComment" : { "$ref" : "#/definitions/textPart" },
 
-		"publicationDate" : { "format" : "date-time", "type" : "string" }, 
+		"publicationDate" : { "format" : "date-time", "type" : "string" },
 
 		"validity" : {
 			"type" : "object",
@@ -53,26 +53,26 @@
 		"savedRegions" : { "$ref" : "#/definitions/region" },
 		"publishedRegions" : { "$ref" : "#/definitions/region" },
 		"obsoleteRegions" : { "$ref" : "#/definitions/region" },
-		
+
 		"tendency" : {
 			"type" : "string",
 			"enum" : [ "decreasing", "steady", "increasing" ]
 		},
-		
+
 		"elevation" : { "type" : "integer" },
 		"treeline" : { "type" : "boolean" },
 		"hasDaytimeDependency" : { "type" : "boolean" },
 		"hasElevationDependency" : { "type" : "boolean" },
-		
+
 		"forenoon" : { "$ref" : "#/definitions/daytimeDescription" },
 		"afternoon" : { "$ref" : "#/definitions/daytimeDescription" },
-		
+
 		"dangerPattern1" : { "$ref" : "#/definitions/dangerPattern" },
 		"dangerPattern2" : { "$ref" : "#/definitions/dangerPattern" }
 	},
 
 	"additionalProperties" : false,
-	
+
 	"definitions" : {
 		"author" : {
 			"id" : "#author",
@@ -113,7 +113,7 @@
 				"avalancheSituation1" : { "$ref" : "#/definitions/avalancheSituationObject" },
 				"avalancheSituation2" : { "$ref" : "#/definitions/avalancheSituationObject" }
 			},
-			"additionalProperties" : false						
+			"additionalProperties" : false
 		},
 		"textPart" : {
 			"id" : "#textPart",
@@ -195,7 +195,7 @@
 				"naturalAvalancheReleaseProbability" : { "$ref" : "#/definitions/naturalAvalancheReleaseProbability" },
 				"naturalHazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" }
 			},
-			"additionalProperties" : false						
+			"additionalProperties" : false
 		},
 		"dangerPattern" : {
 			"id" : "#dangerPattern",

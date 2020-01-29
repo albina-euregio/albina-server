@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -45,7 +45,7 @@ import eu.albina.util.HibernateUtil;
  * rapidmail, but in order to apply to GDPR regulations the subscription to the
  * email newsletter is done by this controller and the confirmation of the user
  * is stored in our database.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -63,7 +63,7 @@ public class SubscriberController {
 	/**
 	 * Returns the {@code SubscriberController} object associated with the current
 	 * Java application.
-	 * 
+	 *
 	 * @return the {@code SubscriberController} object associated with the current
 	 *         Java application.
 	 */
@@ -76,7 +76,7 @@ public class SubscriberController {
 
 	/**
 	 * Return the {@code Subscriber} object with {@code email} as primary key.
-	 * 
+	 *
 	 * @param email
 	 *            the email address of the desired subscriber
 	 * @return the {@code Subscriber} object with {@code email} as primary key
@@ -108,7 +108,7 @@ public class SubscriberController {
 	/**
 	 * Save a {@code Subscriber} to the database. If a {@code Subscriber} with the
 	 * same email address already exists it will be deleted first and newly created.
-	 * 
+	 *
 	 * @param subscriber
 	 *            the {@code Subscriber} to be saved in the database
 	 * @return the email address of the saved subscriber
@@ -142,7 +142,7 @@ public class SubscriberController {
 
 	/**
 	 * Delete the {@code Subscriber} with {@code email} from the database.
-	 * 
+	 *
 	 * @param email
 	 *            the email address of the {@code Subscriber} who should be deleted
 	 * @return the email address of the deleted subscriber
@@ -176,7 +176,7 @@ public class SubscriberController {
 	/**
 	 * Set the confirmation flag for the {@code Subscriber} with the specified
 	 * {@code email}.
-	 * 
+	 *
 	 * @param email
 	 *            the email address of the subscriber to be confirmed
 	 * @throws AlbinaException
@@ -196,7 +196,7 @@ public class SubscriberController {
 	/**
 	 * Return all subscribers for the language {@code lang} and the specified
 	 * {@code regions}.
-	 * 
+	 *
 	 * @param lang
 	 *            the returned subscribers have to subscribed for this language
 	 * @param regions
@@ -233,7 +233,7 @@ public class SubscriberController {
 	/**
 	 * Return the email address of all subscribers for the language {@code lang} and
 	 * the specified {@code regions}.
-	 * 
+	 *
 	 * @param lang
 	 *            the returned subscribers have to subscribed for this language
 	 * @param regions
@@ -255,7 +255,7 @@ public class SubscriberController {
 	/**
 	 * Initialize all fields of the {@code subscriber} to be able to access it after
 	 * the DB transaction was closed.
-	 * 
+	 *
 	 * @param subscriber
 	 *            the subscriber that should be initialized
 	 */
@@ -269,7 +269,7 @@ public class SubscriberController {
 
 	/**
 	 * Create a subscriber on rapidmail.
-	 * 
+	 *
 	 * @param subscriber
 	 *            the subscriber that should be created
 	 * @throws AlbinaException

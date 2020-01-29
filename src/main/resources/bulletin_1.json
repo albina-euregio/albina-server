@@ -45,7 +45,7 @@
 	},
 
 	"savedRegions" : [ "IT-32-BZ-01", "IT-32-BZ-02", "IT-32-BZ-03", "IT-32-BZ-04", "IT-32-BZ-05", "IT-32-BZ-06" ],
-	
+
 	"elevation" : 2000,
 
 	"above" : {

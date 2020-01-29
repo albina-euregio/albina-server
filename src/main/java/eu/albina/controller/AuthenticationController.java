@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -38,7 +38,7 @@ import eu.albina.util.HibernateUtil;
 
 /**
  * Controller handling the authentication and authorization.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -62,7 +62,7 @@ public class AuthenticationController {
 	/**
 	 * Returns the AuthenticationController object associated with the current Java
 	 * application.
-	 * 
+	 *
 	 * @return the <code>AuthenticationController</code> object associated with the
 	 *         current Java application.
 	 */
@@ -75,7 +75,7 @@ public class AuthenticationController {
 
 	/**
 	 * Checks if the credentials belong to a registered user.
-	 * 
+	 *
 	 * @param username
 	 *            the username
 	 * @param password
@@ -91,7 +91,7 @@ public class AuthenticationController {
 
 	/**
 	 * Creates an access token for the given user.
-	 * 
+	 *
 	 * @param username
 	 *            the username the token should be generated for
 	 * @return the access token for the given user
@@ -109,7 +109,7 @@ public class AuthenticationController {
 
 	/**
 	 * Creates a refresh token for the given user.
-	 * 
+	 *
 	 * @param username
 	 *            the username the token should be generated for
 	 * @return the refresh token for the given user
@@ -127,7 +127,7 @@ public class AuthenticationController {
 
 	/**
 	 * Decode a given token with JWT.
-	 * 
+	 *
 	 * @param token
 	 *            the encoded token
 	 * @return the decoded token
@@ -144,7 +144,7 @@ public class AuthenticationController {
 
 	/**
 	 * Refresh the token for a given user.
-	 * 
+	 *
 	 * @param username
 	 *            the username
 	 * @return the refreshed access token for the given user
@@ -162,7 +162,7 @@ public class AuthenticationController {
 
 	/**
 	 * Checks if a user in a given role.
-	 * 
+	 *
 	 * @param role
 	 *            the role to be checked if the user is in
 	 * @param username

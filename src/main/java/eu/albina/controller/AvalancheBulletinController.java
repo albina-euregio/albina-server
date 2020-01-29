@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -54,7 +54,7 @@ import eu.albina.util.XmlUtil;
 
 /**
  * Controller for avalanche bulletins.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -76,7 +76,7 @@ public class AvalancheBulletinController {
 	/**
 	 * Returns the {@code AvalancheBulletinController} object associated with the
 	 * current Java application.
-	 * 
+	 *
 	 * @return the {@code AvalancheBulletinController} object associated with the
 	 *         current Java application.
 	 */
@@ -89,7 +89,7 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Retrieve an avalanche bulletin from the database by {@code bulletinID}.
-	 * 
+	 *
 	 * @param bulletinId
 	 *            The ID of the desired avalanche bulletin.
 	 * @return The avalanche bulletin with the given ID.
@@ -121,7 +121,7 @@ public class AvalancheBulletinController {
 	/**
 	 * Initialize all fields of the {@code bulletin} to be able to access it after
 	 * the DB transaction was closed.
-	 * 
+	 *
 	 * @param bulletin
 	 *            the bulletin that should be initialized
 	 */
@@ -157,7 +157,7 @@ public class AvalancheBulletinController {
 	 * Saves a list of {@code bulletins} to the database. The new bulletins are
 	 * checked if they belong to the users {@code region} and if they are already in
 	 * the database. Depending on this the handling is different.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins to be saved
 	 * @param startDate
@@ -311,7 +311,7 @@ public class AvalancheBulletinController {
 	/**
 	 * Returns a XML (CAAML) string of all bulletins with status {@code published}
 	 * for a given {@code date} and {@code regions} in a given {@code language}.
-	 * 
+	 *
 	 * @param date
 	 *            the date the bulletins should be valid from
 	 * @param regions
@@ -390,7 +390,7 @@ public class AvalancheBulletinController {
 	 * period and {@code regions} in a given {@code language} (also if the bulletins
 	 * are not in status {@code published}). This method is only for internal use.
 	 * Currently TN and BZ need it for the AINEVA forecast.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date the bulletins should be valid from
 	 * @param endDate
@@ -450,7 +450,7 @@ public class AvalancheBulletinController {
 	/**
 	 * Returns a JSON array of all bulletins with status {@code published} for a
 	 * given {@code date} and {@code regions} in a given {@code language}.
-	 * 
+	 *
 	 * @param date
 	 *            the date the bulletins should be valid from
 	 * @param regions
@@ -480,7 +480,7 @@ public class AvalancheBulletinController {
 	/**
 	 * Returns the highest {@code DangerRating} of all bulletins with status
 	 * {@code published} for a given {@code date} and in a specific {@code regions}.
-	 * 
+	 *
 	 * @param date
 	 *            the date of the time period of interest
 	 * @param regions
@@ -509,7 +509,7 @@ public class AvalancheBulletinController {
 	/**
 	 * Returns the most recent bulletins for a given time period and
 	 * {@code regions}.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date the bulletins should be valid from
 	 * @param endDate
@@ -548,7 +548,7 @@ public class AvalancheBulletinController {
 	 * Set the author for the bulletins affected by the submission. Delete all
 	 * suggested regions, because they are not valid anymore after the bulletin has
 	 * been submitted.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param endDate
@@ -608,7 +608,7 @@ public class AvalancheBulletinController {
 	 * Publish all bulletins for the given {@code regions} in the given time period
 	 * if the status of the corresponding report is {@code submitted} or
 	 * {@code resubmitted}.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param endDate
@@ -644,7 +644,7 @@ public class AvalancheBulletinController {
 	 * Publish all bulletins for the given {@code region} in the given time period.
 	 * Sets the author of the bulletins and moves all saved regions to published
 	 * regions.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param endDate
@@ -716,7 +716,7 @@ public class AvalancheBulletinController {
 	/**
 	 * Check if a micro region of the specified {@code region} was defined twice in
 	 * the given {@code bulletins}.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins to be checked
 	 * @param region
@@ -743,7 +743,7 @@ public class AvalancheBulletinController {
 	/**
 	 * Return all micro regions that are contained by {@code regions} and part of
 	 * {@code region}.
-	 * 
+	 *
 	 * @param regions
 	 *            the micro regions to be checked
 	 * @param region
@@ -763,7 +763,7 @@ public class AvalancheBulletinController {
 	 * Check all bulletins in a given time period and a given {@code region} for
 	 * missing and duplicate micro regions, missing text parts, pending suggestions,
 	 * missing danger ratings and incomplete translations.
-	 * 
+	 *
 	 * @param startDate
 	 *            the start date of the time period
 	 * @param endDate
@@ -907,7 +907,7 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Lock a specific bulletin due to current modification.
-	 * 
+	 *
 	 * @param lock
 	 *            the bulletin lock
 	 * @throws AlbinaException
@@ -924,7 +924,7 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Unlock a specific bulletin.
-	 * 
+	 *
 	 * @param lock
 	 *            the bulletin lock
 	 * @throws AlbinaException
@@ -936,7 +936,7 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Unlock a specific {@code bulletin} for a specific {@code date}.
-	 * 
+	 *
 	 * @param bulletin
 	 *            the bulletin to be unlocked
 	 * @param date
@@ -961,7 +961,7 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Unlock all bulletins locked by a specific {@code sessionId}.
-	 * 
+	 *
 	 * @param sessionId
 	 *            the session id
 	 */

@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -36,20 +36,20 @@ import eu.albina.model.AvalancheInformationObject;
 
 /**
  * Custom exception for the ALBINA project.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
 public class AlbinaException extends Exception implements AvalancheInformationObject {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 3770001034138464030L;
 
 	/**
 	 * Constructor with a custom {@code message} text.
-	 * 
+	 *
 	 * @param message
 	 *            the message text for the exception.
 	 */
@@ -59,7 +59,7 @@ public class AlbinaException extends Exception implements AvalancheInformationOb
 
 	/**
 	 * Return a XML string of the exception.
-	 * 
+	 *
 	 * @return a XML string of the exception
 	 * @throws ParserConfigurationException
 	 *             if the XML builder could not be created
@@ -86,7 +86,7 @@ public class AlbinaException extends Exception implements AvalancheInformationOb
 	/**
 	 * Return a {@code JSONObject} representing the exception (only containing the
 	 * message).
-	 * 
+	 *
 	 * @return a {@code JSONObject} representing the exception (only containing the
 	 *         message)
 	 */

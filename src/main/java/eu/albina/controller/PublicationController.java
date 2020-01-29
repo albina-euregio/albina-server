@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -46,7 +46,7 @@ import eu.albina.util.XmlUtil;
 
 /**
  * Controller for avalanche reports.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -65,7 +65,7 @@ public class PublicationController {
 	/**
 	 * Returns the {@code PublicationController} object associated with the current
 	 * Java application.
-	 * 
+	 *
 	 * @return the {@code PublicationController} object associated with the current
 	 *         Java application.
 	 */
@@ -80,7 +80,7 @@ public class PublicationController {
 	 * Trigger all tasks that have to take place after an avalanche bulletin has
 	 * been published automatically. This happens at 17:00 PM if this is defined in
 	 * the settings.
-	 * 
+	 *
 	 * @param bulletins
 	 *            The bulletins that were published.
 	 */
@@ -169,7 +169,7 @@ public class PublicationController {
 	 * Trigger all tasks that have to take place after an avalanche bulletin has
 	 * been updated automatically. This happens at 08:00 AM (if needed) if this is
 	 * defined in the settings.
-	 * 
+	 *
 	 * @param bulletins
 	 *            The bulletins that were published.
 	 * @param regions
@@ -183,7 +183,7 @@ public class PublicationController {
 	/**
 	 * Triggers all tasks that have to take place after an update has been published
 	 * (this can be at any time, triggered by one province).
-	 * 
+	 *
 	 * @param bulletins
 	 *            The bulletins that were updated.
 	 * @param regions
@@ -268,7 +268,7 @@ public class PublicationController {
 	 * Triggers all tasks that have to take place after a small change in the
 	 * bulletin has been published. This does not trigger the whole publication
 	 * process.
-	 * 
+	 *
 	 * @param bulletins
 	 *            The bulletins that were changed.
 	 */
@@ -338,7 +338,7 @@ public class PublicationController {
 	/**
 	 * Start an own thread to trigger all tasks that have to take place after an
 	 * update has been published.
-	 * 
+	 *
 	 * @param allBulletins
 	 *            The bulletins that were updated.
 	 * @param regions
@@ -378,7 +378,7 @@ public class PublicationController {
 	/**
 	 * Start an own thread to trigger all tasks that have to take place after a
 	 * change has been published.
-	 * 
+	 *
 	 * @param allBulletins
 	 *            The bulletins that were updated.
 	 * @param user
@@ -413,7 +413,7 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the JSON file.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins contained in the JSON file
 	 * @param validityDateString
@@ -436,7 +436,7 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the CAAML (XML) files.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins contained in the CAAML file
 	 * @param validityDateString
@@ -459,7 +459,7 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the maps.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins contained in the maps
 	 * @param publicationTimeString
@@ -485,7 +485,7 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the pdfs.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins contained in the pdfs
 	 * @param publicationTimeString
@@ -515,7 +515,7 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the simple html files.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins contained in the html files
 	 */
@@ -540,7 +540,7 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the static widgets.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins contained in the static widgets
 	 * @param publicationTimeString
@@ -574,7 +574,7 @@ public class PublicationController {
 
 	/**
 	 * Trigger the sending of the emails.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins contained in the emails
 	 */
@@ -595,7 +595,7 @@ public class PublicationController {
 
 	/**
 	 * Trigger the sending of the messages via messengerpeople.
-	 * 
+	 *
 	 * @param bulletins
 	 *            the bulletins contained in the messages
 	 */

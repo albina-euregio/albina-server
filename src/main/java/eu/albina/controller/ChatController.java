@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -32,7 +32,7 @@ import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for chat.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -54,7 +54,7 @@ public class ChatController {
 	/**
 	 * Returns the {@code ChatController} object associated with the current Java
 	 * application.
-	 * 
+	 *
 	 * @return the {@code ChatController} object associated with the current Java
 	 *         application.
 	 */
@@ -67,7 +67,7 @@ public class ChatController {
 
 	/**
 	 * Return all currently active users.
-	 * 
+	 *
 	 * @return all currently active users
 	 */
 	public List<User> getActiveUsers() {
@@ -76,7 +76,7 @@ public class ChatController {
 
 	/**
 	 * Return all chat messages starting from a specific {@code date}.
-	 * 
+	 *
 	 * @param date
 	 *            chat messages newer than this date will be returned
 	 * @return all chat messages starting from a specific {@code date}
@@ -101,7 +101,7 @@ public class ChatController {
 
 	/**
 	 * Save a chat message.
-	 * 
+	 *
 	 * @param chatMessage
 	 *            the chat message to be saved
 	 * @return the id of the saved chat message
@@ -118,7 +118,7 @@ public class ChatController {
 
 	/**
 	 * Add an active user.
-	 * 
+	 *
 	 * @param user
 	 *            the user do be added
 	 */
@@ -136,7 +136,7 @@ public class ChatController {
 
 	/**
 	 * Delete an active user.
-	 * 
+	 *
 	 * @param user
 	 *            the user to be deleted
 	 */

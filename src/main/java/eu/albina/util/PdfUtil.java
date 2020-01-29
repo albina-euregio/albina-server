@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -114,7 +114,7 @@ public class PdfUtil {
 
 	/**
 	 * Create a PDF containing all the information for the EUREGIO.
-	 * 
+	 *
 	 * @param bulletins
 	 *            The bulletins to create the PDF of.
 	 * @param publicationTimeString
@@ -210,7 +210,7 @@ public class PdfUtil {
 	/**
 	 * Create PDFs for each province (TN, BZ, TI) containing an overview map and the
 	 * detailed information about each aggregated region touching the province.
-	 * 
+	 *
 	 * @param bulletins
 	 *            The bulletins to create the region PDFs of.
 	 * @param region
@@ -1237,12 +1237,12 @@ public class PdfUtil {
 		/*
 		 * // Add avalanche danger scale float marginRight = 25.f; float marginLeft =
 		 * 15.f; int tableFontSize = 7; int dangerRatingFontSize = 12;
-		 * 
+		 *
 		 * float[] columnWidths = { 1, 1 }; Table table = new
 		 * Table(columnWidths).setAutoLayout().setBorder(Border.NO_BORDER).setMarginTop(
 		 * 290)
 		 * .setMarginLeft(marginLeft).setMarginRight(marginRight).setWidthPercent(100);
-		 * 
+		 *
 		 * Paragraph symbolHeadline = new
 		 * Paragraph(GlobalVariables.getDangerRatingHeadline(lang))
 		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
@@ -1251,7 +1251,7 @@ public class PdfUtil {
 		 * cell.setTextAlignment(TextAlignment.LEFT);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * Paragraph characteristicsHeadline = new
 		 * Paragraph(GlobalVariables.getCharacteristicsHeadline(lang))
 		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
@@ -1260,7 +1260,7 @@ public class PdfUtil {
 		 * cell.setTextAlignment(TextAlignment.LEFT);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * Paragraph dangerRatingText = new
 		 * Paragraph("5").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
@@ -1271,7 +1271,7 @@ public class PdfUtil {
 		 * cell.setTextAlignment(TextAlignment.CENTER);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * Paragraph characteristicsText = new Paragraph(
 		 * GlobalVariables.getDangerRatingVeryHighCharacteristicsTextBold(lang)).setFont
 		 * (openSansBoldFont) .setFontSize(tableFontSize).setFontColor(greyDarkColor);
@@ -1282,7 +1282,7 @@ public class PdfUtil {
 		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * dangerRatingText = new
 		 * Paragraph("4").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
@@ -1293,7 +1293,7 @@ public class PdfUtil {
 		 * cell.setTextAlignment(TextAlignment.CENTER);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * characteristicsText = new
 		 * Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsTextBold(lang))
 		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
@@ -1305,7 +1305,7 @@ public class PdfUtil {
 		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * dangerRatingText = new
 		 * Paragraph("3").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
@@ -1316,7 +1316,7 @@ public class PdfUtil {
 		 * cell.setTextAlignment(TextAlignment.CENTER);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * characteristicsText = new
 		 * Paragraph(GlobalVariables.getDangerRatingConsiderableCharacteristicsTextBold(
 		 * lang)) .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
@@ -1328,7 +1328,7 @@ public class PdfUtil {
 		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * dangerRatingText = new
 		 * Paragraph("2").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
@@ -1339,7 +1339,7 @@ public class PdfUtil {
 		 * cell.setTextAlignment(TextAlignment.CENTER);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * characteristicsText = new
 		 * Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsTextBold(lang
 		 * )) .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
@@ -1351,7 +1351,7 @@ public class PdfUtil {
 		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * dangerRatingText = new
 		 * Paragraph("1").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
 		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
@@ -1362,7 +1362,7 @@ public class PdfUtil {
 		 * cell.setTextAlignment(TextAlignment.CENTER);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * characteristicsText = new
 		 * Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsTextBold(lang))
 		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
@@ -1374,7 +1374,7 @@ public class PdfUtil {
 		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
 		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
 		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 * 
+		 *
 		 * document.add(table);
 		 */
 		canvas.close();

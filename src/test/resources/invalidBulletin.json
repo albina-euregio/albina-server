@@ -63,7 +63,7 @@
 
 	"country" : "AT",
 	"region" : "Tirol",
-	
+
 	"daytimeBulletins" : [
 		{
 			"triggerType" : "low_load",

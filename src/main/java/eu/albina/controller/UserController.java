@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 Norbert Lanzanasto
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -29,7 +29,7 @@ import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for users.
- * 
+ *
  * @author Norbert Lanzanasto
  *
  */
@@ -47,7 +47,7 @@ public class UserController {
 	/**
 	 * Returns the {@code UserController} object associated with the current Java
 	 * application.
-	 * 
+	 *
 	 * @return the {@code UserController} object associated with the current Java
 	 *         application.
 	 */
@@ -60,7 +60,7 @@ public class UserController {
 
 	/**
 	 * Return {@code true} if the user with {@code username} exists.
-	 * 
+	 *
 	 * @param username
 	 *            the username of the desired user
 	 * @return {@code true} if the user with {@code username} exists
@@ -80,7 +80,7 @@ public class UserController {
 
 	/**
 	 * Return the {@code User} with the specified {@code username}.
-	 * 
+	 *
 	 * @param username
 	 *            the username of the desired user
 	 * @return the {@code User} with the specified {@code username}
@@ -102,7 +102,7 @@ public class UserController {
 
 	/**
 	 * Save a {@code user} to the database.
-	 * 
+	 *
 	 * @param user
 	 *            the user to be saved
 	 * @return the email address of the saved user
@@ -119,7 +119,7 @@ public class UserController {
 
 	/**
 	 * Change the password of a user.
-	 * 
+	 *
 	 * @param username
 	 *            the username of the user whose password should be changed
 	 * @param oldPassword
@@ -152,7 +152,7 @@ public class UserController {
 
 	/**
 	 * Check the {@code password} for the user with the specified {@code username}.
-	 * 
+	 *
 	 * @param username
 	 *            the username of the user whose password should be checked
 	 * @param password
