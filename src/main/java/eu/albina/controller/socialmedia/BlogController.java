@@ -176,22 +176,22 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToMessengerpeople(JSONObject object, String region, LanguageCode lang) {
+	void sendNewBlogPostToMessengerpeople(JSONObject object, String region, LanguageCode lang) {
 		logger.info("Sending new blog post to messengerpeople ...");
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(object.getString("title"));
-		sb.append(": ");
-		sb.append(getBlogPostLink(object, region, lang));
+		String message = object.getString("title") + ": " + getBlogPostLink(object, region, lang);
 
-		JSONArray imagesArray = object.getJSONArray("images");
-		JSONObject image = (JSONObject) imagesArray.get(0);
-		String attachmentUrl = image.getString("url");
+		String attachmentUrl = null;
+		if (object.has("images")) {
+			JSONArray imagesArray = object.getJSONArray("images");
+			JSONObject image = (JSONObject) imagesArray.get(0);
+			attachmentUrl = image.getString("url");
+		}
 
 		try {
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-			MessengerPeopleProcessorController.getInstance().sendNewsLetter(rc.getMessengerPeopleConfig(), lang,
-					sb.toString(), attachmentUrl);
+			MessengerPeopleProcessorController.getInstance().sendNewsLetter(
+				rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);
 		} catch (AlbinaException e) {
 			logger.warn("Blog post could not be sent to messengerpeople: " + region + ", " + lang.toString(), e);
 		} catch (IOException e) {
@@ -217,13 +217,10 @@ public class BlogController extends CommonProcessor {
 	}
 
 	private String getBlogPostLink(JSONObject object, String region, LanguageCode lang) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(GlobalVariables.getAvalancheReportBaseUrl(lang));
-		sb.append(getBlogUrl(region, lang));
-		sb.append("/");
-		sb.append(object.getString("id"));
-
-		return sb.toString();
+		return GlobalVariables.getAvalancheReportBaseUrl(lang)
+			+ getBlogUrl(region, lang)
+			+ "/"
+			+ object.getString("id");
 	}
 
 	// LANG
@@ -246,7 +243,7 @@ public class BlogController extends CommonProcessor {
 			case de:
 				return GlobalVariables.blogUrlSouthTyrolDe;
 			case it:
-				return GlobalVariables.blogUrlSouthTyrolDe;
+				return GlobalVariables.blogUrlSouthTyrolIt;
 			default:
 				return null;
 			}
