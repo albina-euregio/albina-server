@@ -310,7 +310,8 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Returns a XML (CAAML) string of all bulletins with status {@code published}
-	 * for a given {@code date} and {@code regions} in a given {@code language}.
+	 * for a given {@code date} and {@code regions} in a given {@code language}
+	 * (ordered by danger rating).
 	 *
 	 * @param date
 	 *            the date the bulletins should be valid from
@@ -449,7 +450,8 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Returns a JSON array of all bulletins with status {@code published} for a
-	 * given {@code date} and {@code regions} in a given {@code language}.
+	 * given {@code date} and {@code regions} in a given {@code language} (ordered
+	 * by danger rating).
 	 *
 	 * @param date
 	 *            the date the bulletins should be valid from
