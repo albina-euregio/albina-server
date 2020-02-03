@@ -47,10 +47,6 @@ public class StaticWidgetUtil {
 
 	private static StaticWidgetUtil instance = null;
 
-	public static final String OPEN_SANS_REGULAR = "/src/main/resources/fonts/open-sans/OpenSans-Regular.ttf";
-	public static final String OPEN_SANS_BOLD = "/src/main/resources/fonts/open-sans/OpenSans-Bold.ttf";
-	public static final String OPEN_SANS_LIGHT = "/src/main/resources/fonts/open-sans/OpenSans-Light.ttf";
-
 	public static final Color blueColor = new Color(0, 172, 251);
 	public static final Color greyLightColor = new Color(201, 201, 201);
 	public static final Color greyDarkColor = new Color(85, 95, 96);

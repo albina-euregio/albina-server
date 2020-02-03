@@ -68,10 +68,6 @@ public class PdfUtil {
 
 	private static PdfUtil instance = null;
 
-	public static final String OPEN_SANS_REGULAR = "/src/main/resources/fonts/open-sans/OpenSans-Regular.ttf";
-	public static final String OPEN_SANS_BOLD = "/src/main/resources/fonts/open-sans/OpenSans-Bold.ttf";
-	public static final String OPEN_SANS_LIGHT = "/src/main/resources/fonts/open-sans/OpenSans-Light.ttf";
-
 	public static final Color blueColor = new DeviceRgb(0, 172, 251);
 	public static final Color blackColor = new DeviceRgb(0, 0, 0);
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
@@ -96,13 +92,27 @@ public class PdfUtil {
 
 	private static PdfFont openSansRegularFont;
 	private static PdfFont openSansBoldFont;
+	private static PdfFont openSansLightFont;
 
 	protected PdfUtil() {
 		initialize();
 	}
 
 	private void initialize() {
-		PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");
+		PdfFontFactory.registerDirectory(GlobalVariables.getLocalFontsPath());
+		try {
+			openSansRegularFont = PdfFontFactory.createRegisteredFont("opensans", PdfEncodings.WINANSI, true);
+			openSansBoldFont = PdfFontFactory.createRegisteredFont("opensans-bold", PdfEncodings.WINANSI, true);
+			openSansLightFont = PdfFontFactory.createRegisteredFont("opensans-light", PdfEncodings.WINANSI, true);
+			// fallback if font is not found
+			if (openSansRegularFont == null || openSansBoldFont == null) {
+				openSansRegularFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI, true);
+				openSansBoldFont = PdfFontFactory.createRegisteredFont("helvetica-bold", PdfEncodings.WINANSI, true);
+				openSansLightFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI, true);
+			}
+		} catch (IOException e) {
+			logger.warn("Fonts couldn't be registered!");
+		}
 	}
 
 	public static PdfUtil getInstance() {
@@ -169,22 +179,8 @@ public class PdfUtil {
 			}
 
 			pdf = new PdfDocument(writer);
-
-			// PdfFontFactory.registerDirectory("./src/main/resources/fonts/open-sans");
-			PdfFontFactory.registerDirectory(GlobalVariables.getLocalFontsPath());
-			// for (String font : PdfFontFactory.getRegisteredFonts()) {
-			// System.out.println(font);
-			// }
-			openSansRegularFont = PdfFontFactory.createRegisteredFont("opensans", PdfEncodings.WINANSI, true);
-			openSansBoldFont = PdfFontFactory.createRegisteredFont("opensans-bold", PdfEncodings.WINANSI, true);
-			// fallback if font is not found
-			if (openSansRegularFont == null || openSansBoldFont == null) {
-				openSansRegularFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI, true);
-				openSansBoldFont = PdfFontFactory.createRegisteredFont("helvetica-bold", PdfEncodings.WINANSI, true);
-			}
-
-			pdf.addEventHandler(PdfDocumentEvent.END_PAGE,
-					new AvalancheBulletinEventHandler(lang, bulletins, grayscale));
+			pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new AvalancheBulletinEventHandler(lang, bulletins, grayscale,
+					openSansRegularFont, openSansBoldFont, openSansLightFont));
 			Document document = new Document(pdf);
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
