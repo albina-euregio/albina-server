@@ -76,11 +76,11 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 				blue = blueColor;
 
 			PdfFont openSansRegularFont = PdfFontFactory.createFont(
-					"./src/main/resources/fonts/open-sans/OpenSans-Regular.ttf", PdfEncodings.WINANSI, true);
-			PdfFont openSansBoldFont = PdfFontFactory
-					.createFont("./src/main/resources/fonts/open-sans/OpenSans-Bold.ttf", PdfEncodings.WINANSI, true);
-			PdfFont openSansLightFont = PdfFontFactory
-					.createFont("./src/main/resources/fonts/open-sans/OpenSans-Light.ttf", PdfEncodings.WINANSI, true);
+					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Regular.ttf", PdfEncodings.WINANSI, true);
+			PdfFont openSansBoldFont = PdfFontFactory.createFont(
+					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Bold.ttf", PdfEncodings.WINANSI, true);
+			PdfFont openSansLightFont = PdfFontFactory.createFont(
+					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Light.ttf", PdfEncodings.WINANSI, true);
 
 			// Add headline
 			String headline = GlobalVariables.getHeadlineText(lang);

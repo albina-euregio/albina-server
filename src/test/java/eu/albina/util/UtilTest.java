@@ -230,8 +230,8 @@ public class UtilTest {
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
 		// PdfUtil.getInstance().createRegionPdfs(bulletins, "AT-07");#
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false,
-				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false, "2030-02-16",
+				"2030-02-16_00-00-00");
 	}
 
 	@Ignore
@@ -240,8 +240,7 @@ public class UtilTest {
 		String filename = "2030-02-16";
 		int count = 5;
 		List<AvalancheBulletin> list = loadBulletins(filename, count);
-		PdfUtil.getInstance().createOverviewPdfs(list, AlbinaUtil.getValidityDateString(list),
-				AlbinaUtil.getPublicationTime(list));
+		PdfUtil.getInstance().createOverviewPdfs(list, "2030-02-16", "2030-02-16_00-00-00");
 	}
 
 	@Ignore

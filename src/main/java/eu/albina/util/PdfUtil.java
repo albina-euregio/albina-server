@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -137,34 +138,43 @@ public class PdfUtil {
 			// TODO use correct region string
 			if (region != null) {
 				if (grayscale) {
-					filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/"
-							+ publicationTimeString + "/" + validityDateString + "_" + region + "_" + lang.toString()
-							+ "_bw.pdf";
-					writer = new PdfWriter(filename);
+					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
+							+ lang.toString() + "_bw.pdf";
 				} else {
-					filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/"
-							+ publicationTimeString + "/" + validityDateString + "_" + region + "_" + lang.toString()
-							+ ".pdf";
-					writer = new PdfWriter(filename);
+					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
+							+ lang.toString() + ".pdf";
 				}
 			} else {
 				if (grayscale) {
-					filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/"
-							+ publicationTimeString + "/" + validityDateString + "_" + lang.toString() + "_bw.pdf";
-					writer = new PdfWriter(filename);
+					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
+							+ "_bw.pdf";
 				} else {
-					filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/"
-							+ publicationTimeString + "/" + validityDateString + "_" + lang.toString() + ".pdf";
-					writer = new PdfWriter(filename);
+					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
+							+ ".pdf";
 				}
 			}
 
+			File file = new File(filename);
+			if (file.createNewFile())
+				logger.debug("File " + filename + " created.");
+			else
+				logger.debug("File " + filename + " already exists.");
+
+			writer = new PdfWriter(file);
 			pdf = new PdfDocument(writer);
 
-			openSansRegularFont = PdfFontFactory.createFont("./src/main/resources/fonts/open-sans/OpenSans-Regular.ttf",
-					PdfEncodings.WINANSI, true);
-			openSansBoldFont = PdfFontFactory.createFont("./src/main/resources/fonts/open-sans/OpenSans-Bold.ttf",
-					PdfEncodings.WINANSI, true);
+			openSansRegularFont = PdfFontFactory.createFont(
+					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Regular.ttf", PdfEncodings.WINANSI, true);
+			openSansBoldFont = PdfFontFactory.createFont(
+					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Bold.ttf", PdfEncodings.WINANSI, true);
 
 			pdf.addEventHandler(PdfDocumentEvent.END_PAGE,
 					new AvalancheBulletinEventHandler(lang, bulletins, grayscale));
@@ -172,15 +182,18 @@ public class PdfUtil {
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 
-			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency);
+			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency, validityDateString,
+					publicationTimeString);
 
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
-						AlbinaUtil.getTendencyDate(bulletins, lang), writer, grayscale,
-						AlbinaUtil.getPublicationTime(bulletins));
+						AlbinaUtil.getTendencyDate(bulletins, lang), writer, grayscale, validityDateString,
+						publicationTimeString);
 			}
 
 			document.close();
+			pdf.close();
+			writer.close();
 
 			AlbinaUtil.setFilePermissions(filename);
 			return true;
@@ -228,8 +241,8 @@ public class PdfUtil {
 	}
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
-			PdfDocument pdf, String tendencyDate, PdfWriter writer, boolean grayscale, String publicationTime)
-			throws IOException {
+			PdfDocument pdf, String tendencyDate, PdfWriter writer, boolean grayscale, String validityDateString,
+			String publicationTimeString) throws IOException {
 		document.add(new AreaBreak());
 
 		float leadingHeadline = 1.f;
@@ -266,13 +279,15 @@ public class PdfUtil {
 			secondTable.addCell(cell);
 			ImageData regionAMImageDate;
 			if (grayscale)
-				regionAMImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
-								+ publicationTime + "/" + avalancheBulletin.getId() + "_bw.jpg");
+				regionAMImageDate = ImageDataFactory.create(GlobalVariables.getMapsPath()
+						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
+						+ System.getProperty("file.separator") + publicationTimeString
+						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_bw.jpg");
 			else
-				regionAMImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
-								+ publicationTime + "/" + avalancheBulletin.getId() + ".jpg");
+				regionAMImageDate = ImageDataFactory.create(GlobalVariables.getMapsPath()
+						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
+						+ System.getProperty("file.separator") + publicationTimeString
+						+ System.getProperty("file.separator") + avalancheBulletin.getId() + ".jpg");
 			Image regionAMImg = new Image(regionAMImageDate);
 			regionAMImg.scaleToFit(regionMapSize, regionMapSize);
 			regionAMImg.setMarginRight(10);
@@ -304,13 +319,15 @@ public class PdfUtil {
 			secondTable.addCell(cell);
 			ImageData regionPMImageDate;
 			if (grayscale)
-				regionPMImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
-								+ publicationTime + "/" + avalancheBulletin.getId() + "_PM_bw.jpg");
+				regionPMImageDate = ImageDataFactory.create(GlobalVariables.getMapsPath()
+						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
+						+ System.getProperty("file.separator") + publicationTimeString
+						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_PM_bw.jpg");
 			else
-				regionPMImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
-								+ publicationTime + "/" + avalancheBulletin.getId() + "_PM.jpg");
+				regionPMImageDate = ImageDataFactory.create(GlobalVariables.getMapsPath()
+						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
+						+ System.getProperty("file.separator") + publicationTimeString
+						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_PM.jpg");
 			Image regionPMImg = new Image(regionPMImageDate);
 			regionPMImg.scaleToFit(regionMapSize, regionMapSize);
 			regionPMImg.setMarginRight(10);
@@ -338,12 +355,14 @@ public class PdfUtil {
 			ImageData regionImageDate;
 			if (grayscale)
 				regionImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
-								+ publicationTime + "/" + avalancheBulletin.getId() + "_bw.jpg");
+						.create(GlobalVariables.getMapsPath() + System.getProperty("file.separator")
+								+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+								+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_bw.jpg");
 			else
 				regionImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath() + "/" + avalancheBulletin.getValidityDateString() + "/"
-								+ publicationTime + "/" + avalancheBulletin.getId() + ".jpg");
+						.create(GlobalVariables.getMapsPath() + System.getProperty("file.separator")
+								+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+								+ System.getProperty("file.separator") + avalancheBulletin.getId() + ".jpg");
 			Image regionImg = new Image(regionImageDate);
 			regionImg.scaleToFit(regionMapSize, regionMapSize);
 			regionImg.setMarginRight(10);
@@ -1040,7 +1059,8 @@ public class PdfUtil {
 	}
 
 	private void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
-			PdfDocument pdf, String region, boolean grayscale, boolean daytimeDependency) throws MalformedURLException {
+			PdfDocument pdf, String region, boolean grayscale, boolean daytimeDependency, String validityDateString,
+			String publicationTimeString) throws MalformedURLException {
 		PdfPage page = pdf.addNewPage();
 		Rectangle pageSize = page.getPageSize();
 		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdf);
@@ -1062,8 +1082,9 @@ public class PdfUtil {
 				mapHeight = mapWidth;
 			}
 
-			ImageData overviewMapAMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
-					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
+			ImageData overviewMapAMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
+					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
+					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, false, true, grayscale));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
@@ -1073,8 +1094,9 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
 					.showText(GlobalVariables.getAMText(lang)).endText();
 
-			ImageData overviewMapPMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
-					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
+			ImageData overviewMapPMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
+					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
+					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, true, true, grayscale));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
@@ -1084,8 +1106,9 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(blackColor, true)
 					.showText(GlobalVariables.getPMText(lang)).endText();
 		} else {
-			ImageData overviewMapImageData = ImageDataFactory.create(GlobalVariables.getMapsPath() + "/"
-					+ AlbinaUtil.getValidityDateString(bulletins) + "/" + AlbinaUtil.getPublicationTime(bulletins) + "/"
+			ImageData overviewMapImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
+					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
+					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			if (region != null) {
