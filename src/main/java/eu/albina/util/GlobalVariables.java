@@ -53,7 +53,7 @@ public class GlobalVariables {
 	private static boolean publishAt8AM = false;
 
 	private static String localImagesPath = "images/";
-	private static String localFontsPath = "fonts/open-sans";
+	private static String localFontsPath = "./src/main/resources/fonts/";
 
 	// REGION
 	private static boolean publishBulletinsTyrol = true;
