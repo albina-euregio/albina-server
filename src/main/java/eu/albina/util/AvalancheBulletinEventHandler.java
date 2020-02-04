@@ -19,6 +19,9 @@ package eu.albina.util;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.color.DeviceRgb;
@@ -37,8 +40,6 @@ import com.itextpdf.layout.element.Image;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class AvalancheBulletinEventHandler implements IEventHandler {
 
@@ -48,12 +49,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 	private LanguageCode lang;
 	private boolean grayscale;
 
-	public static final String OPEN_SANS_REGULAR = "./src/main/resources/fonts/open-sans/OpenSans-Regular.ttf";
-	public static final String OPEN_SANS_BOLD = "./src/main/resources/fonts/open-sans/OpenSans-Bold.ttf";
-	public static final String OPEN_SANS_LIGHT = "./src/main/resources/fonts/open-sans/OpenSans-Light.ttf";
-
 	public static final Color blueColor = new DeviceRgb(0, 172, 251);
-	// TODO add correct bw color value
 	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
 	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
@@ -79,19 +75,12 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			else
 				blue = blueColor;
 
-			PdfFontFactory.registerDirectory(GlobalVariables.getLocalFontsPath());
-			PdfFont openSansRegularFont;
-			PdfFont openSansBoldFont;
-			PdfFont openSansLightFont;
-			openSansRegularFont = PdfFontFactory.createRegisteredFont("opensans", PdfEncodings.WINANSI, true);
-			openSansBoldFont = PdfFontFactory.createRegisteredFont("opensans-bold", PdfEncodings.WINANSI, true);
-			openSansLightFont = PdfFontFactory.createRegisteredFont("opensans-light", PdfEncodings.WINANSI, true);
-			// fallback if font is not found
-			if (openSansRegularFont == null || openSansBoldFont == null) {
-				openSansRegularFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI, true);
-				openSansBoldFont = PdfFontFactory.createRegisteredFont("helvetica-bold", PdfEncodings.WINANSI, true);
-				openSansLightFont = PdfFontFactory.createRegisteredFont("helvetica", PdfEncodings.WINANSI, true);
-			}
+			PdfFont openSansRegularFont = PdfFontFactory.createFont(
+					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Regular.ttf", PdfEncodings.WINANSI, true);
+			PdfFont openSansBoldFont = PdfFontFactory.createFont(
+					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Bold.ttf", PdfEncodings.WINANSI, true);
+			PdfFont openSansLightFont = PdfFontFactory.createFont(
+					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Light.ttf", PdfEncodings.WINANSI, true);
 
 			// Add headline
 			String headline = GlobalVariables.getHeadlineText(lang);
@@ -157,7 +146,6 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 					.endText();
 
 			canvas.close();
-
 			pdfCanvas.release();
 		} catch (IOException e) {
 			logger.warn(e.getMessage(), e);

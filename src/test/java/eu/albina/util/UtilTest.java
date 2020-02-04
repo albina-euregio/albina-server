@@ -33,7 +33,6 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
-import com.google.common.io.Resources;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 import org.junit.After;
@@ -45,6 +44,8 @@ import org.junit.runners.MethodSorters;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.io.Resources;
 
 import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
@@ -229,8 +230,8 @@ public class UtilTest {
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
 		// PdfUtil.getInstance().createRegionPdfs(bulletins, "AT-07");#
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false,
-				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false, "2030-02-16",
+				"2030-02-16_00-00-00");
 	}
 
 	@Ignore
@@ -239,8 +240,7 @@ public class UtilTest {
 		String filename = "2030-02-16";
 		int count = 5;
 		List<AvalancheBulletin> list = loadBulletins(filename, count);
-		PdfUtil.getInstance().createOverviewPdfs(list, AlbinaUtil.getValidityDateString(bulletins),
-				AlbinaUtil.getPublicationTime(bulletins));
+		PdfUtil.getInstance().createOverviewPdfs(list, "2030-02-16", "2030-02-16_00-00-00");
 	}
 
 	@Ignore
