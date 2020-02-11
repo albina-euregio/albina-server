@@ -231,6 +231,8 @@ public class AvalancheBulletinController {
 						}
 						for (String r : tmpRegions)
 							b.getPublishedRegions().remove(r);
+
+						b.setOwnerRegion(bulletin.getOwnerRegion());
 					} else {
 						// foreign bulletin
 						Set<String> tmpRegions = new HashSet<String>();
