@@ -19,7 +19,7 @@ package eu.albina.model.enumerations;
 import java.util.Comparator;
 
 public enum BulletinStatus {
-	missing, draft, submitted, published, updated, resubmitted, republished;
+	missing, draft, updated, submitted, resubmitted, published, republished;
 
 	public static BulletinStatus fromString(String text) {
 		if (text != null) {
