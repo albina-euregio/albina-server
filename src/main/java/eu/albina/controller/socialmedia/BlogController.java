@@ -190,12 +190,12 @@ public class BlogController extends CommonProcessor {
 
 		try {
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-			MessengerPeopleProcessorController.getInstance().sendNewsLetter(
-				rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);
+			MessengerPeopleProcessorController.getInstance().sendNewsLetter(rc.getMessengerPeopleConfig(), lang,
+					message, attachmentUrl);
 		} catch (AlbinaException e) {
 			logger.warn("Blog post could not be sent to messengerpeople: " + region + ", " + lang.toString(), e);
 		} catch (IOException e) {
-			logger.warn("Blog post could not be sent to messengerpeople: " + region + "," + lang.toString(),e );
+			logger.warn("Blog post could not be sent to messengerpeople: " + region + "," + lang.toString(), e);
 		}
 	}
 
@@ -217,10 +217,8 @@ public class BlogController extends CommonProcessor {
 	}
 
 	private String getBlogPostLink(JSONObject object, String region, LanguageCode lang) {
-		return GlobalVariables.getAvalancheReportBaseUrl(lang)
-			+ getBlogUrl(region, lang)
-			+ "/"
-			+ object.getString("id");
+		return GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/"
+				+ object.getString("id");
 	}
 
 	// LANG

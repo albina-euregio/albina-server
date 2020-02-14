@@ -70,6 +70,7 @@ public class GlobalVariables {
 	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
 	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
 	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
+	public static String avalancheReportBlogUrl = "blog/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
@@ -228,6 +229,10 @@ public class GlobalVariables {
 		default:
 			return avalancheReportBaseUrlEn;
 		}
+	}
+
+	public static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
+		return getAvalancheReportBaseUrl(lang) + avalancheReportBlogUrl;
 	}
 
 	public static boolean isCreateCaaml() {
