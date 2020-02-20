@@ -46,7 +46,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.google.common.io.Resources;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -56,6 +55,8 @@ import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.google.common.io.Resources;
 
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
@@ -76,7 +77,8 @@ import eu.albina.util.XmlUtil;
  */
 @Entity
 @Table(name = "avalanche_bulletins")
-public class AvalancheBulletin extends AbstractPersistentObject implements AvalancheInformationObject, Comparable<AvalancheBulletin> {
+public class AvalancheBulletin extends AbstractPersistentObject
+		implements AvalancheInformationObject, Comparable<AvalancheBulletin> {
 
 	/** Information about the author of the avalanche bulletin */
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -1164,6 +1166,34 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 		avProblems.appendChild(avProblem2);
 		bulletinMeasurements.appendChild(avProblems);
 
+		// tendency
+		if (this.getTendency() != null) {
+			Element tendencyElement = doc.createElement("Tendency");
+			Element type = doc.createElement("type");
+			type.appendChild(doc.createTextNode(Tendency.getCaamlString(this.getTendency())));
+			tendencyElement.appendChild(type);
+
+			if (validFrom != null && validUntil != null) {
+				DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
+				DateTime end = new DateTime(validUntil).withZone(DateTimeZone.UTC);
+
+				start = start.plusDays(1);
+				end = end.plusDays(1);
+
+				Element validTime = doc.createElement("validTime");
+				Element timePeriod = doc.createElement("TimePeriod");
+				Element beginPosition = doc.createElement("beginPosition");
+				beginPosition.appendChild(doc.createTextNode(start.toString(GlobalVariables.formatterDateTime)));
+				timePeriod.appendChild(beginPosition);
+				Element endPosition = doc.createElement("endPosition");
+				endPosition.appendChild(doc.createTextNode(end.toString(GlobalVariables.formatterDateTime)));
+				timePeriod.appendChild(endPosition);
+				validTime.appendChild(timePeriod);
+				tendencyElement.appendChild(validTime);
+			}
+			bulletinMeasurements.appendChild(tendencyElement);
+		}
+
 		for (TextPart part : TextPart.values()) {
 			if (textPartsMap.get(part) != null && textPartsMap.get(part).getTexts() != null
 					&& (!textPartsMap.get(part).getTexts().isEmpty())
@@ -1318,9 +1348,7 @@ public class AvalancheBulletin extends AbstractPersistentObject implements Avala
 	public static List<AvalancheBulletin> readBulletins(final URL resource) throws IOException {
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		final JSONArray array = new JSONArray(validBulletinStringFromResource);
-		return IntStream.range(0, array.length())
-				.mapToObj(array::getJSONObject)
-				.map(AvalancheBulletin::new)
+		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(AvalancheBulletin::new)
 				.collect(Collectors.toList());
 	}
 
