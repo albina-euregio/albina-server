@@ -80,17 +80,13 @@ public class UtilTest {
 		names.add("Günther Geier");
 		names.add("Fabio Gheser");
 		names.add("Lukas Rastner");
-		names.add("Alex Boninsegna");
+		names.add("Sarah Graf");
 		names.add("Rudi Mair");
 		names.add("Patrick Nairz");
-		names.add("Lukas Ruetz");
-		names.add("Matthias Walcher");
-		names.add("Karel Kriz");
-		names.add("Alexander Pucher");
-		names.add("Daniel Nell");
-		names.add("Matthias Fink");
 		names.add("Christoph Mitterer");
 		names.add("Norbert Lanzanasto");
+		names.add("Lukas Ruetz");
+		names.add("Matthias Walcher");
 		names.add("Jürg Schweizer");
 		names.add("Matthias Gerber");
 		names.add("Thomas Stucki");
@@ -118,17 +114,13 @@ public class UtilTest {
 		passwords.add("Günther");
 		passwords.add("Fabio");
 		passwords.add("Lukas");
-		passwords.add("Alex");
+		passwords.add("Sarah");
 		passwords.add("Rudi");
 		passwords.add("Patrick");
-		passwords.add("Lukas");
-		passwords.add("Matthias");
-		passwords.add("Karel");
-		passwords.add("Alexander");
-		passwords.add("Daniel");
-		passwords.add("Matthias");
 		passwords.add("Christoph");
 		passwords.add("Norbert");
+		passwords.add("Lukas");
+		passwords.add("Matthias");
 		passwords.add("Jürg");
 		passwords.add("Matthias");
 		passwords.add("Thomas");
@@ -150,7 +142,6 @@ public class UtilTest {
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
 		bulletinsAmPm = new ArrayList<AvalancheBulletin>();
-		ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")));
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_2.json")));
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")));
@@ -246,7 +237,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 35; i < 37; i++) {
+		for (int i = 9; i < 10; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
