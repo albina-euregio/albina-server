@@ -58,7 +58,7 @@ let names_p = geodata_dir . "albina_namengut_p.shp"
 let names_l = geodata_dir . "albina_namengut_l.shp" 
 
 # INTERREG-Logo
-let interreg_image_file = image_dir . "interrreg_logo.png"
+let euregio_image_file = image_dir . "euregio_logo.png"
 	
 	
 ###################################################################

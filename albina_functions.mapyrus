@@ -877,7 +877,7 @@ begin place_interreg_logo
 	worlds px1, py1, px2, py2
 	clearpath
 	move mx2 - (interreg_image_size / 2) - 2, my1 + 21.0
-	icon interreg_image_file, interreg_image_size
+	icon euregio_image_file, interreg_image_size
 
 end
 
