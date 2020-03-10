@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -774,6 +775,7 @@ public class AvalancheReportController {
 			throws AlbinaException {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
+		Map<String, AvalancheBulletin> tmpMap = new HashMap<String, AvalancheBulletin>();
 
 		for (String region : regions) {
 			// get bulletins for this region
@@ -789,6 +791,7 @@ public class AvalancheReportController {
 						for (String suggestedRegion : bulletin.getSuggestedRegions())
 							resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
 					} else {
+						tmpMap = new HashMap<String, AvalancheBulletin>();
 						for (String bulletinId : resultMap.keySet()) {
 							if (bulletinId.startsWith(bulletin.getId())) {
 								if (resultMap.get(bulletinId).equals(bulletin)) {
@@ -801,9 +804,12 @@ public class AvalancheReportController {
 								} else {
 									bulletin.setId(bulletin.getId() + "_" + revision);
 									revision++;
-									resultMap.put(bulletin.getId(), bulletin);
+									tmpMap.put(bulletin.getId(), bulletin);
 								}
 							}
+						}
+						for (Entry<String, AvalancheBulletin> entry : tmpMap.entrySet()) {
+							resultMap.put(entry.getKey(), entry.getValue());
 						}
 					}
 				} else
