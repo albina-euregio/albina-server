@@ -536,7 +536,7 @@ public class AvalancheBulletinService {
 			PublicationController.getInstance().startChangeThread(allBulletins, publishedBulletins, startDate, region,
 					user);
 
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -570,7 +570,7 @@ public class AvalancheBulletinService {
 						endDate, region, user);
 				AvalancheReportController.getInstance().submitReport(bulletins, startDate, region, user);
 
-				return Response.ok(MediaType.APPLICATION_JSON).build();
+				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
@@ -629,7 +629,7 @@ public class AvalancheBulletinService {
 				PublicationController.getInstance().startUpdateThread(allBulletins, regions, publishedBulletins,
 						startDate, region, user, publicationDate);
 
-				return Response.ok(MediaType.APPLICATION_JSON).build();
+				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
@@ -709,7 +709,7 @@ public class AvalancheBulletinService {
 			} else {
 				logger.info("No bulletins to publish.");
 			}
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -747,7 +747,7 @@ public class AvalancheBulletinService {
 					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 			createPdfThread.start();
 
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating PDFs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -778,7 +778,7 @@ public class AvalancheBulletinService {
 			Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(bulletins);
 			createSimpleHtmlThread.start();
 
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating HTMLs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -810,7 +810,7 @@ public class AvalancheBulletinService {
 					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 			createStaticWidgetsThread.start();
 
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating static widgets", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -842,7 +842,7 @@ public class AvalancheBulletinService {
 					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 			createMapsThread.start();
 
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating maps", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -873,7 +873,7 @@ public class AvalancheBulletinService {
 			PublicationController.getInstance().createCaaml(bulletins, AlbinaUtil.getValidityDateString(bulletins),
 					AlbinaUtil.getPublicationTime(bulletins));
 
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating CAAML", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -910,7 +910,7 @@ public class AvalancheBulletinService {
 			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false);
 			sendEmailsThread.start();
 
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -948,7 +948,7 @@ public class AvalancheBulletinService {
 					regions, false);
 			triggerMessengerpeopleThread.start();
 
-			return Response.ok(MediaType.APPLICATION_JSON).build();
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering messengerpeople", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
