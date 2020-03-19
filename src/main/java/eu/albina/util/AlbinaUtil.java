@@ -673,7 +673,7 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Files deleted for {} using {}", date, pb.command());
+			logger.info("Files updated for {} using {}", date, pb.command());
 		} catch (Exception e) {
 			logger.error("Files could not be deleted for " + date + "!", e);
 		}
@@ -685,9 +685,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PDFs copied to date directory for {} using {}", date, pb.command());
+			logger.info("PDFs updated in date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PDFs could not be copied to date directory for " + date + "!", e);
+			logger.error("PDFs could not be updated in date directory for " + date + "!", e);
 		}
 	}
 
@@ -697,9 +697,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PDFs for {} to latest using {}", date, pb.command());
+			logger.info("PDFs for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PDFs for " + date + " could not be copied to latest!", e);
+			logger.error("PDFs for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 
@@ -709,9 +709,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), validityDateString, publicationTimeString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("JSON copied to date directory for {} using {}", validityDateString, pb.command());
+			logger.info("JSON updated in date directory for {} using {}", validityDateString, pb.command());
 		} catch (Exception e) {
-			logger.error("JSON could not be copied to date directory for " + validityDateString + "!", e);
+			logger.error("JSON could not be updated in date directory for " + validityDateString + "!", e);
 		}
 	}
 
@@ -721,9 +721,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("XMLs copied to date directory for {} using {}", date, pb.command());
+			logger.info("XMLs updated in date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("XMLs could not be copied to date directory for " + date + "!", e);
+			logger.error("XMLs could not be updated in date directory for " + date + "!", e);
 		}
 	}
 
@@ -733,9 +733,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), validityDateString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("JSON for {} to latest using {}", validityDateString, pb.command());
+			logger.info("JSON for {} updated in latest directory using {}", validityDateString, pb.command());
 		} catch (Exception e) {
-			logger.error("JSON for " + validityDateString + " could not be copied to latest!", e);
+			logger.error("JSON for " + validityDateString + " could not be updated in latest directory!", e);
 		}
 	}
 
@@ -745,9 +745,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("XMLs for {} to latest using {}", date, pb.command());
+			logger.info("XMLs for {} update in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("XMLs for " + date + " could not be copied to latest!", e);
+			logger.error("XMLs for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 
@@ -757,9 +757,9 @@ public class AlbinaUtil {
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PNGs copied to date directory for {} using {}", date, pb.command());
+			logger.info("PNGs updated in date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PNGs could not be copied to date directory for " + date + "!", e);
+			logger.error("PNGs could not be updated in date directory for " + date + "!", e);
 		}
 	}
 
@@ -770,9 +770,9 @@ public class AlbinaUtil {
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PNGs for {} to latest using {}", date, pb.command());
+			logger.info("PNGs for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PNGs for " + date + " could not be copied to latest!", e);
+			logger.error("PNGs for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 
@@ -782,9 +782,9 @@ public class AlbinaUtil {
 					GlobalVariables.getMapsPath(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Maps for {} to latest using {}", date, pb.command());
+			logger.info("Maps for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("Maps for " + date + " could not be copied to latest!", e);
+			logger.error("Maps for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 
@@ -806,9 +806,9 @@ public class AlbinaUtil {
 					GlobalVariables.getHtmlDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Latest files updated using {}", pb.command());
+			logger.info("HTMLs for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("Latest files could not be updated!", e);
+			logger.error("HTMLs for " + date + " could not be udpated in latest directory!", e);
 		}
 	}
 
