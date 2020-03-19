@@ -1,3 +1,5 @@
+rm $1/latest/*.xml
+
 cp $1/$2/*.xml $1/latest/
 mv $1/latest/$2_de.xml $1/latest/de.xml
 mv $1/latest/$2_it.xml $1/latest/it.xml

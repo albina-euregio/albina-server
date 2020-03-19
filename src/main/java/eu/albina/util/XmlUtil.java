@@ -107,9 +107,6 @@ public class XmlUtil {
 		writer.write(caamlStringEn);
 		writer.close();
 		AlbinaUtil.setFilePermissions(fileName);
-
-		AlbinaUtil.runCopyXmlsScript(AlbinaUtil.getValidityDateString(bulletins),
-				AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	public static Document createCaaml(List<AvalancheBulletin> bulletins, LanguageCode language) {

@@ -26,7 +26,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
@@ -184,15 +183,6 @@ public class SimpleHtmlUtil {
 				File newHtmlFile = new File(dirPath + "/" + filename);
 				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
 				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
-
-				// TODO: create script to copy html files
-				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins))) {
-					Path link = Paths.get(GlobalVariables.getHtmlDirectory() + "/" + filename);
-					if (Files.exists(link))
-						Files.delete(link);
-					Files.createLink(link, newHtmlFile.toPath());
-					AlbinaUtil.setFilePermissions(GlobalVariables.getHtmlDirectory() + "/" + filename);
-				}
 
 				return true;
 			} else

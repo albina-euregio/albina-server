@@ -743,9 +743,23 @@ public class AvalancheBulletinService {
 
 			Collections.sort(bulletins);
 
-			Thread createPdfThread = PublicationController.getInstance().createPdf(bulletins,
-					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
+			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
+			Thread createPdfThread = PublicationController.getInstance().createPdf(bulletins, validityDateString,
+					publicationTimeString);
 			createPdfThread.start();
+
+			try {
+				createPdfThread.join();
+			} catch (InterruptedException e) {
+				logger.error("PDF production interrupted", e);
+			}
+
+			// copy files
+			AlbinaUtil.runUpdatePdfsScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestPdfsScript(validityDateString);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -778,6 +792,16 @@ public class AvalancheBulletinService {
 			Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(bulletins);
 			createSimpleHtmlThread.start();
 
+			try {
+				createSimpleHtmlThread.join();
+			} catch (InterruptedException e) {
+				logger.error("HTML production interrupted", e);
+			}
+
+			// copy files
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestHtmlsScript(AlbinaUtil.getValidityDateString(bulletins));
+
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating HTMLs", e);
@@ -806,9 +830,23 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 
+			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
 			Thread createStaticWidgetsThread = PublicationController.getInstance().createStaticWidgets(bulletins,
-					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
+					validityDateString, publicationTimeString);
 			createStaticWidgetsThread.start();
+
+			try {
+				createStaticWidgetsThread.join();
+			} catch (InterruptedException e) {
+				logger.error("Static widget production interrupted", e);
+			}
+
+			// copy files
+			AlbinaUtil.runUpdateStaticWidgetsScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestStaticWidgetsScript(validityDateString);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -838,9 +876,23 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 
-			Thread createMapsThread = PublicationController.getInstance().createMaps(bulletins,
-					AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
+			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
+			Thread createMapsThread = PublicationController.getInstance().createMaps(bulletins, validityDateString,
+					publicationTimeString);
 			createMapsThread.start();
+
+			try {
+				createMapsThread.join();
+			} catch (InterruptedException e) {
+				logger.error("Map production interrupted", e);
+			}
+
+			// copy files
+			AlbinaUtil.runUpdateMapsScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestMapsScript(validityDateString);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -857,7 +909,7 @@ public class AvalancheBulletinService {
 	public Response createCaaml(
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST create map [" + date + "]");
+		logger.debug("POST create caaml [" + date + "]");
 
 		try {
 			DateTime startDate = null;
@@ -870,8 +922,53 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 
-			PublicationController.getInstance().createCaaml(bulletins, AlbinaUtil.getValidityDateString(bulletins),
-					AlbinaUtil.getPublicationTime(bulletins));
+			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
+			PublicationController.getInstance().createCaaml(bulletins, validityDateString, publicationTimeString);
+
+			// copy files
+			AlbinaUtil.runUpdateXmlsScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestXmlsScript(validityDateString);
+
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+		} catch (AlbinaException e) {
+			logger.warn("Error creating CAAML", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
+	@Path("/publish/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createJson(
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@Context SecurityContext securityContext) {
+		logger.debug("POST create json [" + date + "]");
+
+		try {
+			DateTime startDate = null;
+
+			if (date != null)
+				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+			else
+				throw new AlbinaException("No date!");
+
+			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+
+			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+
+			PublicationController.getInstance().createJson(bulletins, validityDateString, publicationTimeString);
+
+			// copy files
+			AlbinaUtil.runUpdateJsonScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestJsonScript(validityDateString);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
