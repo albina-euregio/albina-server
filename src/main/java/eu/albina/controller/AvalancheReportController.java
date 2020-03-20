@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -808,9 +807,7 @@ public class AvalancheReportController {
 								}
 							}
 						}
-						for (Entry<String, AvalancheBulletin> entry : tmpMap.entrySet()) {
-							resultMap.put(entry.getKey(), entry.getValue());
-						}
+						resultMap.putAll(tmpMap);
 					}
 				} else
 					resultMap.put(bulletin.getId(), bulletin);
