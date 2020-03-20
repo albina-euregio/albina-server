@@ -25,3 +25,4 @@ cp $1/$2/IT-32-TN_it.html $1/
 cp $1/$2/IT-32-TN_en.html $1/
 
 chmod 755 $1/*.html
+

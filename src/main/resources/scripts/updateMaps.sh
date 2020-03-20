@@ -27,3 +27,4 @@ cp $1/$2/$3/am_regions.json $1/$2/
 cp $1/$2/$3/pm_regions.json $1/$2/
 
 chmod -R 755 $1/$2/
+

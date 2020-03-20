@@ -9,3 +9,4 @@ mv $1/latest/$2_en.xml $1/latest/en.xml
 chmod 755 $1/latest/de.xml
 chmod 755 $1/latest/it.xml
 chmod 755 $1/latest/en.xml
+

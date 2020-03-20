@@ -50,3 +50,4 @@ cp $1/$2/$3/$2_IT-32-TN_it_bw.pdf $1/$2/
 cp $1/$2/$3/$2_IT-32-TN_en_bw.pdf $1/$2/
 
 chmod 755 $1/$2/*.pdf
+

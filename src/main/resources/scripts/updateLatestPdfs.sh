@@ -74,3 +74,4 @@ mv $1/latest/$2_it.pdf $1/latest/it.pdf
 mv $1/latest/$2_en.pdf $1/latest/en.pdf
 
 chmod 755 $1/latest/*.pdf
+
