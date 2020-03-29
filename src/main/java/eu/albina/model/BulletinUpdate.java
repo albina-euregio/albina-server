@@ -17,7 +17,7 @@
 package eu.albina.model;
 
 import org.joda.time.DateTime;
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.GlobalVariables;

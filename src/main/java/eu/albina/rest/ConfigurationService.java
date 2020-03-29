@@ -32,8 +32,8 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.hibernate.HibernateException;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.github.openjson.JSONException;
+import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

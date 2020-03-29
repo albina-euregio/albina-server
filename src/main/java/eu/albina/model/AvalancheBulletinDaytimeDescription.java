@@ -30,7 +30,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.DangerRating;
 

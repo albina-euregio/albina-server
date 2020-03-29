@@ -27,9 +27,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.joda.time.DateTime;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONException;
+import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

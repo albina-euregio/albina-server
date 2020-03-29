@@ -21,8 +21,8 @@ import java.net.URL;
 import java.util.Iterator;
 
 import com.google.common.io.Resources;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
