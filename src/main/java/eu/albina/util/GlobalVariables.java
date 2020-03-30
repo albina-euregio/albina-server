@@ -573,7 +573,7 @@ public class GlobalVariables {
 			case it:
 				return " sotto la ";
 			case en:
-				return " above the ";
+				return " below the ";
 			default:
 				return " below the ";
 			}
