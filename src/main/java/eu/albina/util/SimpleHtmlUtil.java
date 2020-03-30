@@ -201,6 +201,7 @@ public class SimpleHtmlUtil {
 		Map<String, Object> root = new HashMap<>();
 
 		Map<String, Object> text = new HashMap<>();
+		text.put("standardView", GlobalVariables.getStandardViewText(lang));
 		text.put("tabtitle", GlobalVariables.getSimpleHtmlTitle(lang) + AlbinaUtil.getShortDate(bulletins, lang));
 		text.put("title", GlobalVariables.getTitle(lang));
 		text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
@@ -224,6 +225,12 @@ public class SimpleHtmlUtil {
 				+ AlbinaUtil.getValidityDateString(bulletins));
 		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region));
 		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region));
+		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/de.html");
+		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/it.html");
+		link.put("linkEn", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/en.html");
 
 		root.put("link", link);
 

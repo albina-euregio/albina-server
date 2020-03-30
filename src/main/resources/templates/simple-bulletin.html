@@ -86,6 +86,23 @@ rating5 {
   padding: 10px 0;
 }
 
+.top-link {
+  font-size: large;
+  font-weight: normal;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.headline-small {
+  padding-top: 20px;
+}
+
+.headline-small-a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: x-large;
+}
+    
 .previous-day {
 	float: left;
 }
@@ -104,6 +121,12 @@ section:after {
 <body>
 
 <header>
+  <p class="top-link">
+    <a class="previous-day" href="${link.website}">${text.standardView}</a>
+    <a class="next-day" href="${link.linkDe}">DE</a>
+    <a class="next-day" href="${link.linkIt}">IT</a>
+    <a class="next-day" href="${link.linkEn}">IT</a>
+  </p>
   <h4><a href="${link.website}">${text.title}</a></h4>
   <h3>${text.subtitle}</h3>
   <h5>${text.publishedAt}<b>${text.publicationDate}</b></h5>

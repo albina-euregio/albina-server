@@ -28,9 +28,10 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.openjson.JSONObject;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheSituation;
@@ -229,6 +230,10 @@ public class GlobalVariables {
 		default:
 			return avalancheReportBaseUrlEn;
 		}
+	}
+
+	public static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
+		return getAvalancheReportBaseUrl(lang) + "simple/";
 	}
 
 	public static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
@@ -1125,6 +1130,20 @@ public class GlobalVariables {
 			return "Avalanche.report ";
 		default:
 			return "Avalanche.report ";
+		}
+	}
+
+	// LANG
+	public static String getStandardViewText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Standardansicht laden";
+		case it:
+			return "Vista standard del carico";
+		case en:
+			return "Load standard view";
+		default:
+			return "Load standard view";
 		}
 	}
 
