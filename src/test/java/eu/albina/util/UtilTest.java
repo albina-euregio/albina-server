@@ -34,7 +34,7 @@ import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
 import org.joda.time.DateTime;
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;

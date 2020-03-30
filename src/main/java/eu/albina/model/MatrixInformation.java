@@ -21,7 +21,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.ArtificialAvalancheReleaseProbability;
 import eu.albina.model.enumerations.AvalancheSize;

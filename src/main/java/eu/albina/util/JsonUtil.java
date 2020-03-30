@@ -26,7 +26,7 @@ import java.util.Set;
 
 import javax.xml.transform.TransformerException;
 
-import org.json.JSONArray;
+import com.github.openjson.JSONArray;
 
 import eu.albina.model.AvalancheBulletin;
 

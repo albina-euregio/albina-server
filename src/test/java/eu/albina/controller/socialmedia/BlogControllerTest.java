@@ -22,7 +22,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

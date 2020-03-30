@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 
 public interface AvalancheInformationObject {
 
