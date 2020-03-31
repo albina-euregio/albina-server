@@ -96,8 +96,10 @@ public class PublicationController {
 		Collections.sort(bulletins);
 
 		// create CAAML
-		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins, validityDateString, publicationTimeString);
+		createCaaml(bulletins, validityDateString, publicationTimeString);
+
+		// create JSON
+		createJson(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -129,9 +131,6 @@ public class PublicationController {
 					threads.put("staticWidget", createStaticWidgetsThread);
 					createStaticWidgetsThread.start();
 				}
-
-				// create JSON
-				createJson(bulletins, validityDateString, publicationTimeString);
 
 				for (String key : threads.keySet()) {
 					try {
@@ -196,8 +195,10 @@ public class PublicationController {
 		Collections.sort(bulletins);
 
 		// create CAAML
-		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins, validityDateString, publicationTimeString);
+		createCaaml(bulletins, validityDateString, publicationTimeString);
+
+		// create JSON
+		createJson(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -229,9 +230,6 @@ public class PublicationController {
 					threads.put("staticWidget", createStaticWidgetsThread);
 					createStaticWidgetsThread.start();
 				}
-
-				// create JSON
-				createJson(bulletins, validityDateString, publicationTimeString);
 
 				for (String key : threads.keySet()) {
 					try {
@@ -278,8 +276,10 @@ public class PublicationController {
 		Collections.sort(bulletins);
 
 		// create CAAML
-		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins, validityDateString, publicationTimeString);
+		createCaaml(bulletins, validityDateString, publicationTimeString);
+
+		// create JSON
+		createJson(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -311,9 +311,6 @@ public class PublicationController {
 					threads.put("staticWidget", createStaticWidgetsThread);
 					createStaticWidgetsThread.start();
 				}
-
-				// create JSON
-				createJson(bulletins, validityDateString, publicationTimeString);
 
 				for (String key : threads.keySet()) {
 					try {

@@ -43,7 +43,6 @@ public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
-	private static boolean createCaaml = false;
 	private static boolean createMaps = false;
 	private static boolean createPdf = false;
 	private static boolean createStaticWidget = false;
@@ -238,15 +237,6 @@ public class GlobalVariables {
 
 	public static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
 		return getAvalancheReportBaseUrl(lang) + avalancheReportBlogUrl;
-	}
-
-	public static boolean isCreateCaaml() {
-		return createCaaml;
-	}
-
-	public static void setCreateCaaml(boolean createCaaml) throws ConfigurationException {
-		GlobalVariables.createCaaml = createCaaml;
-		setConfigProperty("createCaaml", createCaaml);
 	}
 
 	public static boolean isCreateMaps() {
@@ -1514,8 +1504,6 @@ public class GlobalVariables {
 				mapProductionUrl = config.getString("mapProductionUrl");
 			if (config.containsKey("scriptsPath"))
 				scriptsPath = config.getString("scriptsPath");
-			if (config.containsKey("createCaaml"))
-				createCaaml = config.getBoolean("createCaaml");
 			if (config.containsKey("createMaps"))
 				createMaps = config.getBoolean("createMaps");
 			if (config.containsKey("createPdf"))
@@ -1573,7 +1561,6 @@ public class GlobalVariables {
 			json.put("mapProductionUrl", mapProductionUrl);
 		if (scriptsPath != null)
 			json.put("scriptsPath", scriptsPath);
-		json.put("createCaaml", createCaaml);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createSimpleHtml", createSimpleHtml);
@@ -1625,8 +1612,6 @@ public class GlobalVariables {
 			setMapsPath(configuration.getString("mapsPath"));
 		if (configuration.has("mapProductionUrl"))
 			setMapProductionUrl(configuration.getString("mapProductionUrl"));
-		if (configuration.has("createCaaml"))
-			setCreateCaaml(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))
 			setCreateMaps(configuration.getBoolean("createMaps"));
 		if (configuration.has("createPdf"))
