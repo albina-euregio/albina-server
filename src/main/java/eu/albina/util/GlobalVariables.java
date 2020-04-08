@@ -48,7 +48,8 @@ public class GlobalVariables {
 	private static boolean createStaticWidget = false;
 	private static boolean createSimpleHtml = false;
 	private static boolean sendEmails = false;
-	private static boolean publishToSocialMedia = false;
+	private static boolean publishToMessengerpeople = false;
+	private static boolean publishToTelegramChannel = false;
 	private static boolean publishAt5PM = false;
 	private static boolean publishAt8AM = false;
 
@@ -275,13 +276,22 @@ public class GlobalVariables {
 		setConfigProperty("sendEmails", sendEmails);
 	}
 
-	public static boolean isPublishToSocialMedia() {
-		return publishToSocialMedia;
+	public static boolean isPublishToMessengerpeople() {
+		return publishToMessengerpeople;
 	}
 
-	public static void setPublishToSocialMedia(boolean publishToSocialMedia) throws ConfigurationException {
-		GlobalVariables.publishToSocialMedia = publishToSocialMedia;
-		setConfigProperty("publishToSocialMedia", publishToSocialMedia);
+	public static void setPublishToMessengerpeople(boolean publishToMessengerpeople) throws ConfigurationException {
+		GlobalVariables.publishToMessengerpeople = publishToMessengerpeople;
+		setConfigProperty("publishToMessengerpeople", publishToMessengerpeople);
+	}
+
+	public static boolean isPublishToTelegramChannel() {
+		return publishToTelegramChannel;
+	}
+
+	public static void setPublishToTelegramChannel(boolean publishToTelegramChannel) throws ConfigurationException {
+		GlobalVariables.publishToTelegramChannel = publishToTelegramChannel;
+		setConfigProperty("publishToTelegramChannel", publishToTelegramChannel);
 	}
 
 	public static boolean isPublishAt5PM() {
@@ -927,7 +937,7 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getMessengerPeopleText(LanguageCode lang, DateTime date, boolean update) {
+	public static String getSocialMediaText(LanguageCode lang, DateTime date, boolean update) {
 		String dateString = GlobalVariables.getDayName(date.getDayOfWeek(), lang)
 				+ date.toString(GlobalVariables.getShortDateTimeFormatter(lang));
 		if (update) {
@@ -1514,8 +1524,10 @@ public class GlobalVariables {
 				createStaticWidget = config.getBoolean("createStaticWidget");
 			if (config.containsKey("sendEmails"))
 				sendEmails = config.getBoolean("sendEmails");
-			if (config.containsKey("publishToSocialMedia"))
-				publishToSocialMedia = config.getBoolean("publishToSocialMedia");
+			if (config.containsKey("publishToMessengerpeople"))
+				publishToMessengerpeople = config.getBoolean("publishToMessengerpeople");
+			if (config.containsKey("publishToTelegramChannel"))
+				publishToTelegramChannel = config.getBoolean("publishToTelegramChannel");
 			if (config.containsKey("publishAt5PM"))
 				publishAt5PM = config.getBoolean("publishAt5PM");
 			if (config.containsKey("publishAt8AM"))
@@ -1566,7 +1578,8 @@ public class GlobalVariables {
 		json.put("createSimpleHtml", createSimpleHtml);
 		json.put("createStaticWidget", createStaticWidget);
 		json.put("sendEmails", sendEmails);
-		json.put("publishToSocialMedia", publishToSocialMedia);
+		json.put("publishToMessengerpeople", publishToMessengerpeople);
+		json.put("publishToTelegramChannel", publishToTelegramChannel);
 		json.put("publishAt5PM", publishAt5PM);
 		json.put("publishAt8AM", publishAt8AM);
 		json.put("publishBulletinsTyrol", publishBulletinsTyrol);
@@ -1622,8 +1635,10 @@ public class GlobalVariables {
 			setCreateStaticWidget(configuration.getBoolean("createStaticWidget"));
 		if (configuration.has("sendEmails"))
 			setSendEmails(configuration.getBoolean("sendEmails"));
-		if (configuration.has("publishToSocialMedia"))
-			setPublishToSocialMedia(configuration.getBoolean("publishToSocialMedia"));
+		if (configuration.has("publishToMessengerpeople"))
+			setPublishToMessengerpeople(configuration.getBoolean("publishToMessengerpeople"));
+		if (configuration.has("publishToTelegramChannel"))
+			setPublishToTelegramChannel(configuration.getBoolean("publishToTelegramChannel"));
 		if (configuration.has("publishAt5PM"))
 			setPublishAt5PM(configuration.getBoolean("publishAt5PM"));
 		if (configuration.has("publishAt8AM"))

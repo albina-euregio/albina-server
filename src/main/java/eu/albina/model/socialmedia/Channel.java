@@ -59,7 +59,7 @@ public class Channel implements Serializable {
 	private Provider provider;
 
 	@JsonIgnoreProperties({ "channels", "regionConfiguration", "region", "messengerPeopleConfig", "twitterConfig",
-			"rapidMailConfig", "shipments" })
+			"rapidMailConfig", "telegramConfig", "shipments" })
 	@ManyToMany(mappedBy = "channels", fetch = FetchType.EAGER)
 	private Set<RegionConfiguration> regions = new HashSet<>();
 

@@ -30,12 +30,14 @@ import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import com.github.openjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.openjson.JSONObject;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.LanguageCode;
@@ -48,6 +50,8 @@ import eu.albina.model.socialmedia.Shipment;
 import eu.albina.util.GlobalVariables;
 
 public class MessengerPeopleProcessorController extends CommonProcessor {
+	private static Logger logger = LoggerFactory.getLogger(MessengerPeopleProcessorController.class);
+
 	private static MessengerPeopleProcessorController instance = null;
 
 	public static MessengerPeopleProcessorController getInstance() {
@@ -180,6 +184,8 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 		data.append(config.getApiKey());
 		data.append("\" }");
 
+		logger.info("Publishing report on messengerpeople for " + config.getRegionConfiguration().getRegion().getId());
+
 		String url = baseUrl + "/content";
 		Request request = Request.Post(url).addHeader("Content-Type", "application/json")
 				.bodyString(data.toString(), ContentType.APPLICATION_JSON)
@@ -188,7 +194,12 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 200) {
-			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
+			logger.warn("Error publishing report on messengerpeople for "
+					+ config.getRegionConfiguration().getRegion().getId() + "(error code "
+					+ response.getStatusLine().getStatusCode() + ")");
+
+			String body = response.getEntity() != null
+					? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
 					: null;
 			ShipmentController.getInstance().saveShipment(createActivityRow(config, language.toString(),
 					"message=" + message + ", attachmentUrl=" + attachmentUrl, body, null));

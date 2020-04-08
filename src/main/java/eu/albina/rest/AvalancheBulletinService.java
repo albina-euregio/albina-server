@@ -40,10 +40,11 @@ import javax.xml.transform.TransformerException;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
@@ -1048,6 +1049,44 @@ public class AvalancheBulletinService {
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering messengerpeople", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
+	@Path("/publish/telegram")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response triggerTelegramChannel(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@Context SecurityContext securityContext) {
+		logger.debug("POST trigger telegram channel for " + region + " [" + date + "]");
+
+		try {
+			if (region == null)
+				throw new AlbinaException("No region defined!");
+
+			List<String> regions = new ArrayList<String>();
+			regions.add(region);
+
+			DateTime startDate = null;
+
+			if (date != null)
+				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+			else
+				throw new AlbinaException("No date!");
+
+			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+
+			Thread triggerTelegramChannelThread = PublicationController.getInstance().triggerTelegramChannel(bulletins,
+					regions, false);
+			triggerTelegramChannelThread.start();
+
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+		} catch (AlbinaException e) {
+			logger.warn("Error triggering telegram channel", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}

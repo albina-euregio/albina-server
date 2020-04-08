@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 Norbert Lanzanasto
+ * Copyright (C) 2020 Norbert Lanzanasto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,27 +19,29 @@ package eu.albina.util;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.socialmedia.MessengerPeopleProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
+import eu.albina.controller.socialmedia.TelegramChannelProcessorController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.socialmedia.RegionConfiguration;
+import eu.albina.model.socialmedia.TelegramConfig;
 
-public class MessengerPeopleUtil {
+public class TelegramChannelUtil {
 
-	private static MessengerPeopleUtil instance = null;
+	private static TelegramChannelUtil instance = null;
 
-	private static final Logger logger = LoggerFactory.getLogger(MessengerPeopleUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(TelegramChannelUtil.class);
 
-	public static MessengerPeopleUtil getInstance() throws IOException, URISyntaxException {
+	public static TelegramChannelUtil getInstance() throws IOException, URISyntaxException {
 		if (instance == null) {
-			instance = new MessengerPeopleUtil();
+			instance = new TelegramChannelUtil();
 		}
 		return instance;
 	}
@@ -56,13 +58,27 @@ public class MessengerPeopleUtil {
 
 	private void sendBulletinNewsletter(String message, List<AvalancheBulletin> bulletins, String validityDate,
 			String publicationTime, LanguageCode lang, List<String> regions) {
-		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
+		TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 		for (String region : regions) {
 			try {
 				String attachmentUrl = GlobalVariables.getMapsUrl(lang) + "/" + validityDate + "/" + publicationTime
 						+ "/" + AlbinaUtil.getRegionOverviewMapFilename("");
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-				ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);
+				Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
+				TelegramConfig config = null;
+				for (TelegramConfig telegramConfig : telegramConfigs) {
+					if (telegramConfig.getLanguageCode().equals(lang)) {
+						config = telegramConfig;
+						break;
+					}
+				}
+
+				if (config != null) {
+					ctTc.sendNewsletter(config, message, attachmentUrl);
+				} else {
+					throw new AlbinaException(
+							"No configuration for telegram channel found (" + region + ", " + lang + ")");
+				}
 			} catch (IOException | AlbinaException e) {
 				logger.error("Error while sending bulletin newsletter in " + lang + " for region " + region, e);
 			}
