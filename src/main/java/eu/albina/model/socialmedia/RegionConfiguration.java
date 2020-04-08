@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -69,6 +70,9 @@ public class RegionConfiguration implements Serializable {
 
 	@OneToOne(mappedBy = "regionConfiguration")
 	private RapidMailConfig rapidMailConfig;
+
+	@OneToMany(mappedBy = "regionConfiguration", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<TelegramConfig> telegramConfigs;
 
 	@OneToMany(mappedBy = "regionConfiguration")
 	@JsonIgnore
@@ -137,6 +141,19 @@ public class RegionConfiguration implements Serializable {
 
 	public void setRapidMailConfig(RapidMailConfig rapidMailConfig) {
 		this.rapidMailConfig = rapidMailConfig;
+	}
+
+	public Set<TelegramConfig> getTelegramConfigs() {
+		return telegramConfigs;
+	}
+
+	public RegionConfiguration telegramConfigs(Set<TelegramConfig> telegramConfigs) {
+		this.telegramConfigs = telegramConfigs;
+		return this;
+	}
+
+	public void setTelegramConfigs(Set<TelegramConfig> telegramConfigs) {
+		this.telegramConfigs = telegramConfigs;
 	}
 
 	public Set<Shipment> getShipments() {

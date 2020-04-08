@@ -144,8 +144,6 @@ public class RapidMailProcessorController extends CommonProcessor {
 
 	public HttpResponse sendMessage(RapidMailConfig config, String language, PostMailingsRequest mailingsPost)
 			throws Exception {
-		// Set destination to right get i.e. IT-32-TN_IT. Resolve id by name via api
-		// If destinations already specified be transparent (do nothing)
 		if (mailingsPost.getDestinations() == null) {
 			int recipientListId = resolveRecipientListIdByName(config, language);
 			mailingsPost.setDestinations(Collections.singletonList(
@@ -167,7 +165,8 @@ public class RapidMailProcessorController extends CommonProcessor {
 		HttpResponse response = executor.execute(request).returnResponse();
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
-			String body = response.getEntity() != null ? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
+			String body = response.getEntity() != null
+					? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
 					: null;
 			ShipmentController.getInstance()
 					.saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, null));

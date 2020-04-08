@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 Clesius srl
+ * Copyright (C) 2020 Avalanche.report
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,25 +22,28 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import eu.albina.model.enumerations.LanguageCode;
+
 /**
- * A MessengerPeopleConfig.
+ * A TelegramConfig.
  */
 @Entity
-@Table(name = "socialmedia_messenger_people_config")
+@Table(name = "socialmedia_telegram_config")
 // @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-// property = "id",scope = MessengerPeopleConfig.class)
-public class MessengerPeopleConfig implements Serializable {
+// property = "id",scope = TwitterConfig.class)
+public class TelegramConfig implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,23 +52,23 @@ public class MessengerPeopleConfig implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "CHANNEL_NAME")
-	private String channelName;
+	@Column(name = "API_TOKEN")
+	private String apiToken;
 
-	@Column(name = "API_KEY")
-	private String apiKey;
+	@Column(name = "CHAT_ID")
+	private String chatId;
 
-	@Column(name = "MOBILE_NUMBER")
-	private String mobileNumber;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE_CODE")
+	private LanguageCode lang;
 
-	// @JsonIgnoreProperties("messengerPeopleConfigs")
 	@ManyToOne
 	@JoinColumn(name = "PROVIDER_ID")
 	private Provider provider;
 
 	@JsonIgnoreProperties(value = { "region", "messengerPeopleConfig", "twitterConfig", "rapidMailConfig",
 			"telegramConfigs", "shipments", "channels" }, allowSetters = true)
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(unique = true, name = "REGION_CONFIGURATION_ID")
 	private RegionConfiguration regionConfiguration;
 
@@ -77,50 +80,50 @@ public class MessengerPeopleConfig implements Serializable {
 		this.id = id;
 	}
 
-	public String getChannelName() {
-		return channelName;
+	public String getApiToken() {
+		return apiToken;
 	}
 
-	public MessengerPeopleConfig channelName(String channelName) {
-		this.channelName = channelName;
+	public TelegramConfig apiToken(String apiToken) {
+		this.apiToken = apiToken;
 		return this;
 	}
 
-	public void setChannelName(String channelName) {
-		this.channelName = channelName;
+	public void setApiToken(String apiToken) {
+		this.apiToken = apiToken;
 	}
 
-	public String getApiKey() {
-		return apiKey;
+	public String getChatId() {
+		return chatId;
 	}
 
-	public MessengerPeopleConfig apiKey(String apiKey) {
-		this.apiKey = apiKey;
+	public TelegramConfig chatId(String chatId) {
+		this.chatId = chatId;
 		return this;
 	}
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
+	public void setChatId(String chatId) {
+		this.chatId = chatId;
 	}
 
-	public String getMobileNumber() {
-		return mobileNumber;
+	public LanguageCode getLanguageCode() {
+		return lang;
 	}
 
-	public MessengerPeopleConfig mobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
+	public TelegramConfig languageCode(LanguageCode languageCode) {
+		this.lang = languageCode;
 		return this;
 	}
 
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
+	public void setLanguageCodeId(LanguageCode languageCode) {
+		this.lang = languageCode;
 	}
 
 	public RegionConfiguration getRegionConfiguration() {
 		return regionConfiguration;
 	}
 
-	public MessengerPeopleConfig regionConfiguration(RegionConfiguration regionConfiguration) {
+	public TelegramConfig regionConfiguration(RegionConfiguration regionConfiguration) {
 		this.regionConfiguration = regionConfiguration;
 		return this;
 	}
@@ -133,7 +136,7 @@ public class MessengerPeopleConfig implements Serializable {
 		return provider;
 	}
 
-	public MessengerPeopleConfig provider(Provider provider) {
+	public TelegramConfig provider(Provider provider) {
 		this.provider = provider;
 		return this;
 	}
@@ -150,11 +153,11 @@ public class MessengerPeopleConfig implements Serializable {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		MessengerPeopleConfig messengerPeopleConfig = (MessengerPeopleConfig) o;
-		if (messengerPeopleConfig.getId() == null || getId() == null) {
+		TelegramConfig telegramConfig = (TelegramConfig) o;
+		if (telegramConfig.getId() == null || getId() == null) {
 			return false;
 		}
-		return Objects.equals(getId(), messengerPeopleConfig.getId());
+		return Objects.equals(getId(), telegramConfig.getId());
 	}
 
 	@Override
@@ -164,7 +167,7 @@ public class MessengerPeopleConfig implements Serializable {
 
 	@Override
 	public String toString() {
-		return "MessengerPeopleConfig{" + "id=" + getId() + ", channelName='" + getChannelName() + "'" + ", apiKey='"
-				+ getApiKey() + "'" + ", mobileNumber='" + getMobileNumber() + "'" + "}";
+		return "TelegramConfig{" + "id=" + getId() + ", apiToken='" + getApiToken() + "'" + ", chatId='" + getChatId()
+				+ "'" + ", lanugageCode='" + getLanguageCode() + "'" + "}";
 	}
 }
