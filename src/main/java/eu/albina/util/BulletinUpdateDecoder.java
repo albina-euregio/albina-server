@@ -20,7 +20,7 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 
 import eu.albina.model.BulletinUpdate;
 

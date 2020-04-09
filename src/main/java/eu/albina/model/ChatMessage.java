@@ -21,7 +21,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 
 import eu.albina.util.GlobalVariables;
 

@@ -95,14 +95,11 @@ public class PublicationController {
 
 		Collections.sort(bulletins);
 
-		AlbinaUtil.runDeleteFilesScript(validityDateString);
-
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
-
 		// create CAAML
-		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins, validityDateString, publicationTimeString);
+		createCaaml(bulletins, validityDateString, publicationTimeString);
+
+		// create JSON
+		createJson(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -135,9 +132,6 @@ public class PublicationController {
 					createStaticWidgetsThread.start();
 				}
 
-				// create JSON
-				createJson(bulletins, validityDateString, publicationTimeString);
-
 				for (String key : threads.keySet()) {
 					try {
 						threads.get(key).join();
@@ -145,6 +139,11 @@ public class PublicationController {
 						logger.error(key + " thread interrupted", e);
 					}
 				}
+
+				// copy files
+				AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
+				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+					AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
 
 				// send emails
 				if (GlobalVariables.isSendEmails()) {
@@ -195,14 +194,11 @@ public class PublicationController {
 
 		Collections.sort(bulletins);
 
-		AlbinaUtil.runDeleteFilesScript(validityDateString);
-
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
-
 		// create CAAML
-		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins, validityDateString, publicationTimeString);
+		createCaaml(bulletins, validityDateString, publicationTimeString);
+
+		// create JSON
+		createJson(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -235,9 +231,6 @@ public class PublicationController {
 					createStaticWidgetsThread.start();
 				}
 
-				// create JSON
-				createJson(bulletins, validityDateString, publicationTimeString);
-
 				for (String key : threads.keySet()) {
 					try {
 						threads.get(key).join();
@@ -245,6 +238,11 @@ public class PublicationController {
 						logger.error(key + " thread interrupted", e);
 					}
 				}
+
+				// copy files
+				AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
+				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+					AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
 
 				// send emails to regions
 				if (GlobalVariables.isSendEmails()) {
@@ -257,7 +255,6 @@ public class PublicationController {
 					Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, regions, true);
 					triggerMessengerpeopleThread.start();
 				}
-
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
 			}
@@ -278,14 +275,11 @@ public class PublicationController {
 
 		Collections.sort(bulletins);
 
-		AlbinaUtil.runDeleteFilesScript(validityDateString);
-
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runDeleteLatestFilesScript(validityDateString);
-
 		// create CAAML
-		if (GlobalVariables.isCreateCaaml())
-			createCaaml(bulletins, validityDateString, publicationTimeString);
+		createCaaml(bulletins, validityDateString, publicationTimeString);
+
+		// create JSON
+		createJson(bulletins, validityDateString, publicationTimeString);
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
@@ -318,9 +312,6 @@ public class PublicationController {
 					createStaticWidgetsThread.start();
 				}
 
-				// create JSON
-				createJson(bulletins, validityDateString, publicationTimeString);
-
 				for (String key : threads.keySet()) {
 					try {
 						threads.get(key).join();
@@ -328,6 +319,11 @@ public class PublicationController {
 						logger.error(key + " thread interrupted", e);
 					}
 				}
+
+				// copy files
+				AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
+				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+					AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
@@ -421,13 +417,10 @@ public class PublicationController {
 	 * @param publicationTimeString
 	 *            date and time of publication
 	 */
-	private void createJson(List<AvalancheBulletin> bulletins, String validityDateString,
-			String publicationTimeString) {
+	public void createJson(List<AvalancheBulletin> bulletins, String validityDateString, String publicationTimeString) {
 		try {
 			logger.info("JSON production started");
 			JsonUtil.createJsonFile(bulletins, validityDateString, publicationTimeString);
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-				AlbinaUtil.runCopyLatestJsonScript(validityDateString);
 			logger.info("JSON production finished");
 		} catch (TransformerException | IOException e) {
 			logger.error("Error producing JSON", e);
@@ -449,8 +442,6 @@ public class PublicationController {
 		try {
 			logger.info("CAAML production started");
 			XmlUtil.createCaamlFiles(bulletins, validityDateString, publicationTimeString);
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-				AlbinaUtil.runCopyLatestXmlsScript(validityDateString);
 			logger.info("CAAML production finished");
 		} catch (TransformerException | IOException e) {
 			logger.error("Error producing CAAML", e);
@@ -475,9 +466,6 @@ public class PublicationController {
 				MapUtil.createDangerRatingMaps(bulletins);
 				if (GlobalVariables.isMapProductionUrlUnivie())
 					AlbinaUtil.runCopyMapsUnivieScript(validityDateString, publicationTimeString);
-				AlbinaUtil.runCopyMapsScript(validityDateString, publicationTimeString);
-				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-					AlbinaUtil.runCopyLatestMapsScript(validityDateString);
 				logger.info("Map production finished");
 			}
 		});
@@ -503,9 +491,6 @@ public class PublicationController {
 					for (String region : GlobalVariables.regionsEuregio)
 						PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
 								publicationTimeString);
-					AlbinaUtil.runCopyPdfsScript(validityDateString, publicationTimeString);
-					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestPdfsScript(validityDateString);
 				} finally {
 					logger.info("PDF production finished");
 				}
@@ -524,8 +509,6 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("Simple HTML production started");
-					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runDeleteLatestHtmlsScript();
 					SimpleHtmlUtil.getInstance().createOverviewSimpleHtml(bulletins);
 					for (String region : GlobalVariables.regionsEuregio)
 						SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
@@ -560,9 +543,6 @@ public class PublicationController {
 					logger.info("Static widget production started");
 					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins, validityDateString,
 							publicationTimeString);
-					AlbinaUtil.runCopyPngsScript(validityDateString, publicationTimeString);
-					if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-						AlbinaUtil.runCopyLatestPngsScript(validityDateString);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating static widgets", e);
 				} finally {

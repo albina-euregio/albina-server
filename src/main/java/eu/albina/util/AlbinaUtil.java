@@ -642,9 +642,9 @@ public class AlbinaUtil {
 		return false;
 	}
 
-	public static void runCopyMapsScript(String date, String publicationTime) {
+	public static void runUpdateMapsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyMaps.sh",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateMaps.sh",
 					GlobalVariables.getMapsPath(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -667,159 +667,148 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static void runDeleteFilesScript(String date) {
+	public static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteFiles.sh",
-					GlobalVariables.getPdfDirectory(), date).inheritIO();
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateFiles.sh",
+					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Files deleted for {} using {}", date, pb.command());
+			logger.info("Files updated for {} using {}", date, pb.command());
 		} catch (Exception e) {
 			logger.error("Files could not be deleted for " + date + "!", e);
 		}
 	}
 
-	public static void runCopyPdfsScript(String date, String publicationTime) {
+	public static void runUpdatePdfsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPdfs.sh",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updatePdfs.sh",
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PDFs copied to date directory for {} using {}", date, pb.command());
+			logger.info("PDFs updated in date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PDFs could not be copied to date directory for " + date + "!", e);
+			logger.error("PDFs could not be updated in date directory for " + date + "!", e);
 		}
 	}
 
-	public static void runCopyLatestPdfsScript(String date) {
+	public static void runUpdateLatestPdfsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestPdfs.sh",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestPdfs.sh",
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PDFs for {} to latest using {}", date, pb.command());
+			logger.info("PDFs for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PDFs for " + date + " could not be copied to latest!", e);
+			logger.error("PDFs for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 
-	public static void runCopyLatestHtmlsScript(String date) {
+	public static void runUpdateJsonScript(String validityDateString, String publicationTimeString) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestHtmls.sh",
-					GlobalVariables.getPdfDirectory(), date).inheritIO();
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("HTMLs for {} to latest using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("HTMLs for " + date + " could not be copied to latest!", e);
-		}
-	}
-
-	public static void runCopyJsonScript(String validityDateString, String publicationTimeString) {
-		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyJson.sh",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateJson.sh",
 					GlobalVariables.getPdfDirectory(), validityDateString, publicationTimeString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("JSON copied to date directory for {} using {}", validityDateString, pb.command());
+			logger.info("JSON updated in date directory for {} using {}", validityDateString, pb.command());
 		} catch (Exception e) {
-			logger.error("JSON could not be copied to date directory for " + validityDateString + "!", e);
+			logger.error("JSON could not be updated in date directory for " + validityDateString + "!", e);
 		}
 	}
 
-	public static void runCopyXmlsScript(String date, String publicationTime) {
+	public static void runUpdateXmlsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyXmls.sh",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateXmls.sh",
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("XMLs copied to date directory for {} using {}", date, pb.command());
+			logger.info("XMLs updated in date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("XMLs could not be copied to date directory for " + date + "!", e);
+			logger.error("XMLs could not be updated in date directory for " + date + "!", e);
 		}
 	}
 
-	public static void runCopyLatestJsonScript(String validityDateString) {
+	public static void runUpdateLatestJsonScript(String validityDateString) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestJson.sh",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestJson.sh",
 					GlobalVariables.getPdfDirectory(), validityDateString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("JSON for {} to latest using {}", validityDateString, pb.command());
+			logger.info("JSON for {} updated in latest directory using {}", validityDateString, pb.command());
 		} catch (Exception e) {
-			logger.error("JSON for " + validityDateString + " could not be copied to latest!", e);
+			logger.error("JSON for " + validityDateString + " could not be updated in latest directory!", e);
 		}
 	}
 
-	public static void runCopyLatestXmlsScript(String date) {
+	public static void runUpdateLatestXmlsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestXmls.sh",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestXmls.sh",
 					GlobalVariables.getPdfDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("XMLs for {} to latest using {}", date, pb.command());
+			logger.info("XMLs for {} update in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("XMLs for " + date + " could not be copied to latest!", e);
+			logger.error("XMLs for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 
-	public static void runCopyPngsScript(String date, String publicationTime) {
+	public static void runUpdateStaticWidgetsScript(String date, String publicationTime) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPngs.sh",
 					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PNGs copied to date directory for {} using {}", date, pb.command());
+			logger.info("PNGs updated in date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PNGs could not be copied to date directory for " + date + "!", e);
+			logger.error("PNGs could not be updated in date directory for " + date + "!", e);
 		}
 	}
 
-	public static void runCopyLatestPngsScript(String date) {
+	public static void runUpdateLatestStaticWidgetsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestPngs.sh",
-					GlobalVariables.getPdfDirectory(), date).inheritIO();
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
+					GlobalVariables.scriptsPath + "updateLatestStaticWidgets.sh", GlobalVariables.getPdfDirectory(),
+					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("PNGs for {} to latest using {}", date, pb.command());
+			logger.info("PNGs for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("PNGs for " + date + " could not be copied to latest!", e);
+			logger.error("PNGs for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 
-	public static void runCopyLatestMapsScript(String date) {
+	public static void runUpdateLatestMapsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyLatestMaps.sh",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestMaps.sh",
 					GlobalVariables.getMapsPath(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Maps for {} to latest using {}", date, pb.command());
+			logger.info("Maps for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("Maps for " + date + " could not be copied to latest!", e);
+			logger.error("Maps for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 
-	public static void runDeleteLatestFilesScript(String date) {
+	public static void runUpdateLatestFilesScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteLatestFiles.sh",
-					GlobalVariables.getPdfDirectory()).inheritIO();
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestFiles.sh",
+					GlobalVariables.getPdfDirectory(), date, GlobalVariables.getHtmlDirectory()).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Latest files deleted using {}", pb.command());
+			logger.info("Latest files updated using {}", pb.command());
 		} catch (Exception e) {
-			logger.error("Latest files could not be deleted!", e);
+			logger.error("Latest files could not be updated!", e);
 		}
 	}
 
-	public static void runDeleteLatestHtmlsScript() {
+	public static void runUpdateLatestHtmlsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "deleteLatestHtmls.sh",
-					GlobalVariables.getHtmlDirectory()).inheritIO();
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestHtmls.sh",
+					GlobalVariables.getHtmlDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("Latest htmls deleted using {}", pb.command());
+			logger.info("HTMLs for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("Latest htmls could not be deleted!", e);
+			logger.error("HTMLs for " + date + " could not be udpated in latest directory!", e);
 		}
 	}
 

@@ -28,9 +28,10 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.openjson.JSONObject;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheSituation;
@@ -42,7 +43,6 @@ public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
-	private static boolean createCaaml = false;
 	private static boolean createMaps = false;
 	private static boolean createPdf = false;
 	private static boolean createStaticWidget = false;
@@ -53,7 +53,7 @@ public class GlobalVariables {
 	private static boolean publishAt8AM = false;
 
 	private static String localImagesPath = "images/";
-	private static String localFontsPath = "fonts/open-sans";
+	private static String localFontsPath = "./src/main/resources/fonts/";
 
 	// REGION
 	private static boolean publishBulletinsTyrol = true;
@@ -70,6 +70,7 @@ public class GlobalVariables {
 	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
 	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
 	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
+	public static String avalancheReportBlogUrl = "blog/";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
@@ -230,13 +231,12 @@ public class GlobalVariables {
 		}
 	}
 
-	public static boolean isCreateCaaml() {
-		return createCaaml;
+	public static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
+		return getAvalancheReportBaseUrl(lang) + "simple/";
 	}
 
-	public static void setCreateCaaml(boolean createCaaml) throws ConfigurationException {
-		GlobalVariables.createCaaml = createCaaml;
-		setConfigProperty("createCaaml", createCaaml);
+	public static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
+		return getAvalancheReportBaseUrl(lang) + avalancheReportBlogUrl;
 	}
 
 	public static boolean isCreateMaps() {
@@ -568,7 +568,7 @@ public class GlobalVariables {
 			case it:
 				return " sotto la ";
 			case en:
-				return " above the ";
+				return " below the ";
 			default:
 				return " below the ";
 			}
@@ -1124,6 +1124,20 @@ public class GlobalVariables {
 	}
 
 	// LANG
+	public static String getStandardViewText(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Standardansicht laden";
+		case it:
+			return "Vista standard del carico";
+		case en:
+			return "Load standard view";
+		default:
+			return "Load standard view";
+		}
+	}
+
+	// LANG
 	public static String getEmailFromPersonal(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -1490,8 +1504,6 @@ public class GlobalVariables {
 				mapProductionUrl = config.getString("mapProductionUrl");
 			if (config.containsKey("scriptsPath"))
 				scriptsPath = config.getString("scriptsPath");
-			if (config.containsKey("createCaaml"))
-				createCaaml = config.getBoolean("createCaaml");
 			if (config.containsKey("createMaps"))
 				createMaps = config.getBoolean("createMaps");
 			if (config.containsKey("createPdf"))
@@ -1549,7 +1561,6 @@ public class GlobalVariables {
 			json.put("mapProductionUrl", mapProductionUrl);
 		if (scriptsPath != null)
 			json.put("scriptsPath", scriptsPath);
-		json.put("createCaaml", createCaaml);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createSimpleHtml", createSimpleHtml);
@@ -1601,8 +1612,6 @@ public class GlobalVariables {
 			setMapsPath(configuration.getString("mapsPath"));
 		if (configuration.has("mapProductionUrl"))
 			setMapProductionUrl(configuration.getString("mapProductionUrl"));
-		if (configuration.has("createCaaml"))
-			setCreateCaaml(configuration.getBoolean("createCaaml"));
 		if (configuration.has("createMaps"))
 			setCreateMaps(configuration.getBoolean("createMaps"));
 		if (configuration.has("createPdf"))

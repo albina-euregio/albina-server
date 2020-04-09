@@ -28,4 +28,18 @@ public enum Tendency {
 		}
 		return null;
 	}
+
+	public static String getCaamlString(Tendency tendency) {
+		switch (tendency) {
+		case decreasing:
+			return "decreasing";
+		case steady:
+			return "steady";
+		case increasing:
+			return "increasing";
+
+		default:
+			return "n/a";
+		}
+	}
 }

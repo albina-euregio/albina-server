@@ -22,7 +22,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 
-import org.json.JSONObject;
+import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.LanguageCode;
 

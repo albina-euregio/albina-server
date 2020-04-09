@@ -18,6 +18,7 @@ package eu.albina.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.proxy.HibernateProxy;
 import org.joda.time.DateTime;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -759,7 +760,7 @@ public class AvalancheReportController {
 
 	/**
 	 * Return all bulletins in a given time period and for specific regions with
-	 * status {@code published} or {@code republished}.
+	 * status {@code published} or {@code republished} (ordered by danger rating).
 	 *
 	 * @param date
 	 *            the start date of the bulletins
@@ -769,10 +770,11 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if the report could not be loaded from the DB
 	 */
-	public Collection<AvalancheBulletin> getPublishedBulletins(DateTime date, List<String> regions)
+	public ArrayList<AvalancheBulletin> getPublishedBulletins(DateTime date, List<String> regions)
 			throws AlbinaException {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
+		Map<String, AvalancheBulletin> tmpMap = new HashMap<String, AvalancheBulletin>();
 
 		for (String region : regions) {
 			// get bulletins for this region
@@ -788,6 +790,7 @@ public class AvalancheReportController {
 						for (String suggestedRegion : bulletin.getSuggestedRegions())
 							resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
 					} else {
+						tmpMap = new HashMap<String, AvalancheBulletin>();
 						for (String bulletinId : resultMap.keySet()) {
 							if (bulletinId.startsWith(bulletin.getId())) {
 								if (resultMap.get(bulletinId).equals(bulletin)) {
@@ -800,16 +803,21 @@ public class AvalancheReportController {
 								} else {
 									bulletin.setId(bulletin.getId() + "_" + revision);
 									revision++;
-									resultMap.put(bulletin.getId(), bulletin);
+									tmpMap.put(bulletin.getId(), bulletin);
 								}
 							}
 						}
+						resultMap.putAll(tmpMap);
 					}
 				} else
 					resultMap.put(bulletin.getId(), bulletin);
 			}
 		}
-		return resultMap.values();
+
+		ArrayList<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>(resultMap.values());
+		Collections.sort(bulletins);
+
+		return bulletins;
 	}
 
 	/**

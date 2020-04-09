@@ -35,7 +35,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.json.JSONArray;
+import com.github.openjson.JSONArray;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -231,6 +231,8 @@ public class AvalancheBulletinController {
 						}
 						for (String r : tmpRegions)
 							b.getPublishedRegions().remove(r);
+
+						b.setOwnerRegion(bulletin.getOwnerRegion());
 					} else {
 						// foreign bulletin
 						Set<String> tmpRegions = new HashSet<String>();
@@ -310,7 +312,8 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Returns a XML (CAAML) string of all bulletins with status {@code published}
-	 * for a given {@code date} and {@code regions} in a given {@code language}.
+	 * for a given {@code date} and {@code regions} in a given {@code language}
+	 * (ordered by danger rating).
 	 *
 	 * @param date
 	 *            the date the bulletins should be valid from
@@ -449,7 +452,8 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Returns a JSON array of all bulletins with status {@code published} for a
-	 * given {@code date} and {@code regions} in a given {@code language}.
+	 * given {@code date} and {@code regions} in a given {@code language} (ordered
+	 * by danger rating).
 	 *
 	 * @param date
 	 *            the date the bulletins should be valid from

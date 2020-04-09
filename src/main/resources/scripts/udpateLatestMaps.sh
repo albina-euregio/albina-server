@@ -1,3 +1,15 @@
+rm $1/latest/*.jpg
+rm $1/latest/*.webp
+rm $1/latest/fd_overlay.png
+rm $1/latest/am_overlay.png
+rm $1/latest/pm_overlay.png
+rm -r $1/latest/fd_overlay
+rm -r $1/latest/am_overlay
+rm -r $1/latest/pm_overlay
+rm $1/latest/fd_regions.json
+rm $1/latest/am_regions.json
+rm $1/latest/pm_regions.json
+
 mkdir $1/latest/fd_overlay
 mkdir $1/latest/am_overlay
 mkdir $1/latest/pm_overlay

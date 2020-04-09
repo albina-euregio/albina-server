@@ -26,7 +26,7 @@ import java.util.Set;
 
 import javax.xml.transform.TransformerException;
 
-import org.json.JSONArray;
+import com.github.openjson.JSONArray;
 
 import eu.albina.model.AvalancheBulletin;
 
@@ -50,8 +50,6 @@ public class JsonUtil {
 		writer.write(jsonString);
 		writer.close();
 		AlbinaUtil.setFilePermissions(fileName);
-
-		AlbinaUtil.runCopyJsonScript(validityDateString, publicationTimeString);
 	}
 
 	public static JSONArray createJSONString(Collection<AvalancheBulletin> bulletins, String region, boolean small) {

@@ -32,10 +32,10 @@ public class AvalancheBulletinTest {
 
 	@Ignore
 	@Test
-	public void testCreateObjectFromJSONAndBack() throws IOException {
+	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("validBulletin.json"), StandardCharsets.UTF_8);
 		AvalancheBulletin b = AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json"));
-		JSONAssert.assertEquals(expected, b.toJSON(), JSONCompareMode.NON_EXTENSIBLE);
+		JSONAssert.assertEquals(expected, b.toJSON().toString(), JSONCompareMode.NON_EXTENSIBLE);
 	}
 
 	@Test

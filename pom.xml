@@ -38,7 +38,7 @@
 				<albina.conf.publish-to-social-media>false</albina.conf.publish-to-social-media>
 				<albina.conf.send-emails>false</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
-				<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
+				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
 				<albina.conf.server-images-url-localhost>http://admin.avalanche.report/images/</albina.conf.server-images-url-localhost>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
 				<albina.conf.univie-maps-path></albina.conf.univie-maps-path>
@@ -81,7 +81,7 @@
 				<albina.conf.publish-to-social-media>false</albina.conf.publish-to-social-media>
 				<albina.conf.send-emails>false</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
-				<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
+				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
 				<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
 				<albina.conf.univie-maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/</albina.conf.univie-maps-path>
@@ -124,7 +124,7 @@
 				<albina.conf.publish-to-social-media>true</albina.conf.publish-to-social-media>
 				<albina.conf.send-emails>true</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
-				<albina.conf.local-fonts-path>/mnt/daten1/fonts/open-sans</albina.conf.local-fonts-path>
+				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
 				<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
 				<albina.conf.univie-maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm/</albina.conf.univie-maps-path>
@@ -261,9 +261,9 @@
 
 		<!-- JSON -->
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20151123</version>
+			<groupId>com.github.openjson</groupId>
+			<artifactId>openjson</artifactId>
+			<version>1.0.12</version>
 		</dependency>
 
 		<dependency>

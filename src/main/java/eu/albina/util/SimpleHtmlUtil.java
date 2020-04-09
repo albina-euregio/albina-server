@@ -26,7 +26,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
@@ -185,15 +184,6 @@ public class SimpleHtmlUtil {
 				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
 				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
 
-				// TODO: create script to copy html files
-				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins))) {
-					Path link = Paths.get(GlobalVariables.getHtmlDirectory() + "/" + filename);
-					if (Files.exists(link))
-						Files.delete(link);
-					Files.createLink(link, newHtmlFile.toPath());
-					AlbinaUtil.setFilePermissions(GlobalVariables.getHtmlDirectory() + "/" + filename);
-				}
-
 				return true;
 			} else
 				return false;
@@ -211,6 +201,7 @@ public class SimpleHtmlUtil {
 		Map<String, Object> root = new HashMap<>();
 
 		Map<String, Object> text = new HashMap<>();
+		text.put("standardView", GlobalVariables.getStandardViewText(lang));
 		text.put("tabtitle", GlobalVariables.getSimpleHtmlTitle(lang) + AlbinaUtil.getShortDate(bulletins, lang));
 		text.put("title", GlobalVariables.getTitle(lang));
 		text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
@@ -234,6 +225,12 @@ public class SimpleHtmlUtil {
 				+ AlbinaUtil.getValidityDateString(bulletins));
 		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region));
 		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region));
+		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/de.html");
+		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/it.html");
+		link.put("linkEn", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/en.html");
 
 		root.put("link", link);
 
