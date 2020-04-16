@@ -229,6 +229,108 @@ public class AlbinaUtil {
 		}
 	}
 
+	// LANG
+	// REGION
+	public static String getRegionName(LanguageCode lang, String region) {
+		switch (lang) {
+		case de:
+			switch (region) {
+			case "AT-07":
+				return "Tirol ";
+			case "IT-32-BZ":
+				return "Südtirol ";
+			case "IT-32-TN":
+				return "Trentino ";
+			default:
+				return "";
+			}
+		case it:
+			switch (region) {
+			case "AT-07":
+				return "Tirolo ";
+			case "IT-32-BZ":
+				return "Alto Adige ";
+			case "IT-32-TN":
+				return "Trentino ";
+			default:
+				return "";
+			}
+		case en:
+			switch (region) {
+			case "AT-07":
+				return "Tirol ";
+			case "IT-32-BZ":
+				return "Southtyrol ";
+			case "IT-32-TN":
+				return "Trentino ";
+			default:
+				return "";
+			}
+		default:
+			switch (region) {
+			case "AT-07":
+				return "Tirol ";
+			case "IT-32-BZ":
+				return "Southtyrol ";
+			case "IT-32-TN":
+				return "Trentino ";
+			default:
+				return "";
+			}
+		}
+	}
+
+	// LANG
+	// REGION
+	public static String getDaytimeString(LanguageCode lang, String type) {
+		switch (lang) {
+		case de:
+			switch (type) {
+			case "fd":
+				return "ganzer Tag";
+			case "am":
+				return "Vormittag";
+			case "pm":
+				return "Nachmittag";
+			default:
+				return "";
+			}
+		case it:
+			switch (type) {
+			case "fd":
+				return "tutto il giorno";
+			case "am":
+				return "mattina";
+			case "pm":
+				return "pomeriggio";
+			default:
+				return "";
+			}
+		case en:
+			switch (type) {
+			case "fd":
+				return "whole day";
+			case "am":
+				return "AM";
+			case "pm":
+				return "PM";
+			default:
+				return "";
+			}
+		default:
+			switch (type) {
+			case "fd":
+				return "";
+			case "am":
+				return "";
+			case "pm":
+				return "";
+			default:
+				return "";
+			}
+		}
+	}
+
 	public static String getDangerPatternText(DangerPattern dp, LanguageCode lang) {
 		switch (dp) {
 		case dp1:

@@ -1861,4 +1861,78 @@ public class GlobalVariables {
 			return "Page %d";
 		}
 	}
+
+	// LANG
+	public static String getExtFileLinkDescription(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Link zur Webseite";
+		case it:
+			return "Link al sito web";
+		case en:
+			return "Link to the website";
+		default:
+			return "Link to the website";
+		}
+	}
+
+	// LANG
+	public static String getExtFileSimpleLinkDescription(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Link zur vereinfachten Webseite";
+		case it:
+			return "Link al sito web semplificato";
+		case en:
+			return "Link to the simplified website";
+		default:
+			return "Link to the simplified website";
+		}
+	}
+
+	// LANG
+	public static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
+		String regionName = AlbinaUtil.getRegionName(lang, region);
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		switch (lang) {
+		case de:
+			return "Gefahrenstufenkarte " + regionName + "(" + timeString + ")";
+		case it:
+			return "Mappa di valutazione del pericolo " + regionName + "(" + timeString + ")";
+		case en:
+			return "Danger rating map " + regionName + "(" + timeString + ")";
+		default:
+			return "Danger rating map " + regionName + "(" + timeString + ")";
+		}
+	}
+
+	// LANG
+	public static String getExtFileOverlayDescription(LanguageCode lang, String type) {
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		switch (lang) {
+		case de:
+			return "Gefahrenstufen Overlay (" + timeString + ")";
+		case it:
+			return "Sovrapposizione della valutazione del pericolo (" + timeString + ")";
+		case en:
+			return "Danger rating overlay (" + timeString + ")";
+		default:
+			return "Danger rating overlay (" + timeString + ")";
+		}
+	}
+
+	// LANG
+	public static String getExtFileRegionsDescription(LanguageCode lang, String type) {
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		switch (lang) {
+		case de:
+			return "GeoJSON für Regionen (" + timeString + ")";
+		case it:
+			return "GeoJSON per le regioni (" + timeString + ")";
+		case en:
+			return "GeoJSON for regions (" + timeString + ")";
+		default:
+			return "GeoJSON for regions (" + timeString + ")";
+		}
+	}
 }

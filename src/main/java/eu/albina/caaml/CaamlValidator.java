@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.caaml;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -64,4 +65,29 @@ public class CaamlValidator {
 		return true;
 	}
 
+	public static boolean validateCaamlBulletinLocalV5(String caamlString) throws SAXException, IOException {
+		String bulletinCaamlSchemaString = "D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\schema_files\\CAAMLv5_BulletinEAWS.xsd";
+		StringReader stringReader = new StringReader(caamlString);
+		Source xmlFile = new StreamSource(stringReader);
+		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		File schemaFile = new File(bulletinCaamlSchemaString);
+		Schema schema = schemaFactory.newSchema(schemaFile);
+		Validator validator = schema.newValidator();
+		validator.validate(xmlFile);
+		logger.debug("CAAML is valid!");
+		return true;
+	}
+
+	public static boolean validateCaamlBulletinLocalV6(String caamlString) throws SAXException, IOException {
+		String bulletinCaamlSchemaString = "D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\schema_files\\CAAMLv6_BulletinEAWS.xsd";
+		StringReader stringReader = new StringReader(caamlString);
+		Source xmlFile = new StreamSource(stringReader);
+		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		File schemaFile = new File(bulletinCaamlSchemaString);
+		Schema schema = schemaFactory.newSchema(schemaFile);
+		Validator validator = schema.newValidator();
+		validator.validate(xmlFile);
+		logger.debug("CAAML is valid!");
+		return true;
+	}
 }

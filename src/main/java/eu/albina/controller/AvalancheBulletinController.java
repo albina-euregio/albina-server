@@ -35,9 +35,10 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import com.github.openjson.JSONArray;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.github.openjson.JSONArray;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;

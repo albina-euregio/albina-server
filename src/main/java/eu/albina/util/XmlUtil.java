@@ -158,6 +158,64 @@ public class XmlUtil {
 		}
 	}
 
+	public static Document createCaamlV6(List<AvalancheBulletin> bulletins, LanguageCode language) {
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder;
+			docBuilder = docFactory.newDocumentBuilder();
+
+			Document doc = docBuilder.newDocument();
+			Element rootElement = XmlUtil.createObsCollectionHeaderCaamlv6(doc);
+
+			DateTime publicationDate = null;
+			if (bulletins != null && !bulletins.isEmpty()) {
+				for (AvalancheBulletin bulletin : bulletins) {
+					if (bulletin.getPublicationDate() != null) {
+						if (publicationDate == null)
+							publicationDate = bulletin.getPublicationDate();
+						else {
+							if (bulletin.getPublicationDate().isAfter(publicationDate))
+								publicationDate = bulletin.getPublicationDate();
+						}
+					}
+				}
+
+				// metaData
+				Element metaData = doc.createElement("metaData");
+				Element dateTimeReport = doc.createElement("dateTimeReport");
+				dateTimeReport.appendChild(doc.createTextNode(
+						publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
+				metaData.appendChild(dateTimeReport);
+				rootElement.appendChild(metaData);
+				metaData.appendChild(createObsCollectionExtFiles(doc, bulletins, language));
+
+				// observations
+				Element observations = doc.createElement("observations");
+				for (AvalancheBulletin bulletin : bulletins) {
+					List<Element> caaml = bulletin.toCAAMLv6(doc, language);
+					if (caaml != null)
+						for (Element element : caaml) {
+							if (element != null)
+								observations.appendChild(element);
+						}
+				}
+				rootElement.appendChild(observations);
+
+				// attributes
+				if (language == null)
+					language = LanguageCode.en;
+				rootElement.setAttribute("xml:lang", language.toString());
+			}
+
+			doc.appendChild(rootElement);
+
+			return doc;
+		} catch (ParserConfigurationException e1) {
+			logger.error("Error producing CAAML", e1);
+			return null;
+		}
+	}
+
 	public static Element createObsCollectionHeaderCaaml(Document doc) {
 		Element rootElement = doc.createElement("ObsCollection");
 		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
@@ -166,13 +224,23 @@ public class XmlUtil {
 		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		rootElement.setAttribute("xsi:schemaLocation",
-				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
+				"http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS/CAAMLv6_BulletinEAWS.xsd");
+		return rootElement;
+	}
 
+	public static Element createObsCollectionHeaderCaamlv6(Document doc) {
+		Element rootElement = doc.createElement("ObsCollection");
+		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS");
+		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
+		rootElement.setAttribute("xmlns:albina", GlobalVariables.albinaXmlSchemaUrl);
+		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		rootElement.setAttribute("xsi:schemaLocation",
+				"http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS/CAAMLv6_BulletinEAWS.xsd");
 		return rootElement;
 	}
 
 	public static String createValidElevationAttribute(int elevation, boolean above, boolean treeline) {
-		// TODO Allow treeline in CAAML
 		if (treeline) {
 			if (above)
 				return "ElevationRange_TreelineHi";
@@ -192,7 +260,7 @@ public class XmlUtil {
 		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
 		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		rootElement.setAttribute("xsi:schemaLocation",
-			"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
+				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
 		doc.appendChild(rootElement);
 
 		Element metaDataProperty = createMetaDataProperty(doc, new DateTime().withTimeAtStartOfDay());
@@ -204,18 +272,99 @@ public class XmlUtil {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
-		dateTimeReport.appendChild(doc.createTextNode(dateTime.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
+		dateTimeReport.appendChild(
+				doc.createTextNode(dateTime.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
 		metaData.appendChild(dateTimeReport);
 		Element srcRef = doc.createElement("srcRef");
-//		Element operation = doc.createElement("Operation");
-//		operation.setAttribute("gml:id", "ALBINA");
-//		Element name = doc.createElement("name");
-//		name.appendChild(doc.createTextNode("ALBINA"));
-//		operation.appendChild(name);
-//		srcRef.appendChild(operation);
+		Element operation = doc.createElement("Operation");
+		Element name = doc.createElement("name");
+		name.appendChild(doc.createTextNode("Avalanche.report"));
+		operation.appendChild(name);
+		srcRef.appendChild(operation);
 		metaData.appendChild(srcRef);
+
 		metaDataProperty.appendChild(metaData);
 		return metaDataProperty;
+	}
+
+	private static Element createObsCollectionExtFiles(Document doc, List<AvalancheBulletin> bulletins,
+			LanguageCode lang) {
+		Element extFiles = doc.createElement("extFiles");
+
+		boolean hasDaytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
+		String baseUri = GlobalVariables.getMapsUrl(lang) + "/" + validityDateString + "/" + publicationTime + "/";
+
+		extFiles.appendChild(createExtFile(doc, "link", GlobalVariables.getExtFileLinkDescription(lang),
+				GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/" + validityDateString));
+		extFiles.appendChild(createExtFile(doc, "simple_link", GlobalVariables.getExtFileSimpleLinkDescription(lang),
+				GlobalVariables.getAvalancheReportSimpleBaseUrl(lang) + validityDateString + "/" + lang.toString()
+						+ ".html"));
+		extFiles.appendChild(createExtFile(doc, "fd_albina_map.jpg",
+				GlobalVariables.getExtFileMapDescription(lang, "fd", ""), baseUri + "fd_albina_map.jpg"));
+		extFiles.appendChild(createExtFile(doc, "fd_tyrol_map.jpg",
+				GlobalVariables.getExtFileMapDescription(lang, "fd", "AT-07"), baseUri + "fd_tyrol_map.jpg"));
+		extFiles.appendChild(createExtFile(doc, "fd_southtyrol_map.jpg",
+				GlobalVariables.getExtFileMapDescription(lang, "fd", "IT-32-BZ"), baseUri + "fd_southtyrol_map.jpg"));
+		extFiles.appendChild(createExtFile(doc, "fd_trentino_map.jpg",
+				GlobalVariables.getExtFileMapDescription(lang, "fd", "IT-32-TN"), baseUri + "fd_trentino_map.jpg"));
+		extFiles.appendChild(
+				createExtFile(doc, "pdf", "", baseUri + validityDateString + "_" + lang.toString() + ".pdf"));
+		extFiles.appendChild(createExtFile(doc, "tyrol_pdf", "",
+				baseUri + validityDateString + "_AT-07_" + lang.toString() + ".pdf"));
+		extFiles.appendChild(createExtFile(doc, "southtyrol_pdf", "",
+				baseUri + validityDateString + "_IT-32_BZ" + lang.toString() + ".pdf"));
+		extFiles.appendChild(createExtFile(doc, "trentino_pdf", "",
+				baseUri + validityDateString + "_IT-32-TN_" + lang.toString() + ".pdf"));
+
+		if (!hasDaytimeDependency) {
+			extFiles.appendChild(createExtFile(doc, "fd_overlay.png",
+					GlobalVariables.getExtFileOverlayDescription(lang, "fd"), baseUri + "fd_overlay.png"));
+			extFiles.appendChild(createExtFile(doc, "fd_regions.json",
+					GlobalVariables.getExtFileRegionsDescription(lang, "fd"), baseUri + "fd_regions.json"));
+		} else {
+			extFiles.appendChild(createExtFile(doc, "am_albina_map.jpg",
+					GlobalVariables.getExtFileMapDescription(lang, "am", ""), baseUri + "am_albina_map.jpg"));
+			extFiles.appendChild(createExtFile(doc, "am_tyrol_map.jpg",
+					GlobalVariables.getExtFileMapDescription(lang, "am", "AT-07"), baseUri + "am_tyrol_map.jpg"));
+			extFiles.appendChild(createExtFile(doc, "am_southtyrol_map.jpg",
+					GlobalVariables.getExtFileMapDescription(lang, "am", "IT-32-BZ"),
+					baseUri + "am_southtyrol_map.jpg"));
+			extFiles.appendChild(createExtFile(doc, "am_trentino_map.jpg",
+					GlobalVariables.getExtFileMapDescription(lang, "am", "IT-32-TN"), baseUri + "am_trentino_map.jpg"));
+			extFiles.appendChild(createExtFile(doc, "pm_albina_map.jpg",
+					GlobalVariables.getExtFileMapDescription(lang, "pm", ""), baseUri + "pm_albina_map.jpg"));
+			extFiles.appendChild(createExtFile(doc, "pm_tyrol_map.jpg",
+					GlobalVariables.getExtFileMapDescription(lang, "pm", "AT-07"), baseUri + "pm_tyrol_map.jpg"));
+			extFiles.appendChild(createExtFile(doc, "pm_southtyrol_map.jpg",
+					GlobalVariables.getExtFileMapDescription(lang, "pm", "IT-32-BZ"),
+					baseUri + "pm_southtyrol_map.jpg"));
+			extFiles.appendChild(createExtFile(doc, "pm_trentino_map.jpg",
+					GlobalVariables.getExtFileMapDescription(lang, "pm", "IT-32-TN"), baseUri + "pm_trentino_map.jpg"));
+			extFiles.appendChild(createExtFile(doc, "am_overlay.png",
+					GlobalVariables.getExtFileOverlayDescription(lang, "am"), baseUri + "am_overlay.png"));
+			extFiles.appendChild(createExtFile(doc, "pm_overlay.png",
+					GlobalVariables.getExtFileOverlayDescription(lang, "pm"), baseUri + "pm_overlay.png"));
+			extFiles.appendChild(createExtFile(doc, "am_regions.json",
+					GlobalVariables.getExtFileRegionsDescription(lang, "am"), baseUri + "am_regions.json"));
+			extFiles.appendChild(createExtFile(doc, "pm_regions.json",
+					GlobalVariables.getExtFileRegionsDescription(lang, "pm"), baseUri + "pm_regions.json"));
+		}
+
+		return extFiles;
+	}
+
+	public static Element createExtFile(Document doc, String id, String descr, String baseUri) {
+		Element extFile = doc.createElement("extFile");
+		Element description = doc.createElement("description");
+		description.appendChild(doc.createTextNode(descr));
+		extFile.appendChild(description);
+		Element fileReferenceURI = doc.createElement("fileReferenceURI");
+		fileReferenceURI.appendChild(doc.createTextNode(baseUri));
+		extFile.appendChild(fileReferenceURI);
+		extFile.setAttribute("gml:id", id);
+		return extFile;
 	}
 
 	public static Document createXmlError(String key, String value) throws ParserConfigurationException {
