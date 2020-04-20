@@ -19,9 +19,12 @@ package eu.albina.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -33,6 +36,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
@@ -68,6 +72,18 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	@Column(name = "TREELINE_LOW")
 	private boolean treelineLow;
 
+	/** Information about the selected field in the EAWS matrix */
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "artificialDangerRating", column = @Column(name = "ARTIFICIAL_DANGER_RATING")),
+			@AttributeOverride(name = "artificialAvalancheSize", column = @Column(name = "ARTIFICIAL_AVALANCHE_SIZE")),
+			@AttributeOverride(name = "artificialAvalancheReleaseProbability", column = @Column(name = "ARTIFICIAL_AVALANCHE_RELEASE_PROBABILITY")),
+			@AttributeOverride(name = "artificialHazardSiteDistribution", column = @Column(name = "ARTIFICIAL_HAZARD_SITE_DISTRIBUTION")),
+			@AttributeOverride(name = "naturalDangerRating", column = @Column(name = "NATURAL_DANGER_RATING")),
+			@AttributeOverride(name = "naturalAvalancheReleaseProbability", column = @Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY")),
+			@AttributeOverride(name = "naturalHazardSiteDistribution", column = @Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION")) })
+	private MatrixInformation matrixInformation;
+
 	public AvalancheSituation() {
 		this.aspects = new HashSet<Aspect>();
 	}
@@ -92,6 +108,8 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 			this.elevationLow = json.getInt("elevationLow");
 		if (json.has("treelineLow"))
 			this.treelineLow = json.getBoolean("treelineLow");
+		if (json.has("matrixInformation"))
+			this.matrixInformation = new MatrixInformation(json.getJSONObject("matrixInformation"));
 	}
 
 	public eu.albina.model.enumerations.AvalancheSituation getAvalancheSituation() {
@@ -148,6 +166,14 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		this.treelineLow = treelineLow;
 	}
 
+	public MatrixInformation getMatrixInformation() {
+		return matrixInformation;
+	}
+
+	public void setMatrixInformation(MatrixInformation matrixInformation) {
+		this.matrixInformation = matrixInformation;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -169,6 +195,8 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 			json.put("treelineLow", treelineLow);
 		else if (elevationLow > 0)
 			json.put("elevationLow", elevationLow);
+		if (matrixInformation != null)
+			json.put("matrixInformation", matrixInformation.toJSON());
 
 		return json;
 	}
@@ -190,6 +218,9 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		if (this.elevationHigh != other.elevationHigh)
 			return false;
 		if (this.elevationLow != other.elevationLow)
+			return false;
+		if ((this.matrixInformation == null) ? (other.matrixInformation != null)
+				: !this.matrixInformation.equals(other.matrixInformation))
 			return false;
 
 		return true;

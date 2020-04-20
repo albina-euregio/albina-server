@@ -83,6 +83,18 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@JoinColumn(name = "AVALANCHE_SITUATION_2_ID")
 	private AvalancheSituation avalancheSituation2;
 
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "AVALANCHE_SITUATION_3_ID")
+	private AvalancheSituation avalancheSituation3;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "AVALANCHE_SITUATION_4_ID")
+	private AvalancheSituation avalancheSituation4;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "AVALANCHE_SITUATION_5_ID")
+	private AvalancheSituation avalancheSituation5;
+
 	public AvalancheBulletinDaytimeDescription() {
 	}
 
@@ -105,6 +117,15 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		if (json.has("avalancheSituation2"))
 			this.avalancheSituation2 = new eu.albina.model.AvalancheSituation(
 					json.getJSONObject("avalancheSituation2"));
+		if (json.has("avalancheSituation3"))
+			this.avalancheSituation3 = new eu.albina.model.AvalancheSituation(
+					json.getJSONObject("avalancheSituation3"));
+		if (json.has("avalancheSituation4"))
+			this.avalancheSituation4 = new eu.albina.model.AvalancheSituation(
+					json.getJSONObject("avalancheSituation4"));
+		if (json.has("avalancheSituation5"))
+			this.avalancheSituation5 = new eu.albina.model.AvalancheSituation(
+					json.getJSONObject("avalancheSituation5"));
 	}
 
 	public DangerRating getDangerRatingAbove() {
@@ -155,6 +176,30 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.avalancheSituation2 = avalancheSituation2;
 	}
 
+	public AvalancheSituation getAvalancheSituation3() {
+		return avalancheSituation3;
+	}
+
+	public void setAvalancheSituation3(AvalancheSituation avalancheSituation3) {
+		this.avalancheSituation3 = avalancheSituation3;
+	}
+
+	public AvalancheSituation getAvalancheSituation4() {
+		return avalancheSituation4;
+	}
+
+	public void setAvalancheSituation4(AvalancheSituation avalancheSituation4) {
+		this.avalancheSituation4 = avalancheSituation4;
+	}
+
+	public AvalancheSituation getAvalancheSituation5() {
+		return avalancheSituation5;
+	}
+
+	public void setAvalancheSituation5(AvalancheSituation avalancheSituation5) {
+		this.avalancheSituation5 = avalancheSituation5;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -172,6 +217,12 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			json.put("avalancheSituation1", avalancheSituation1.toJSON());
 		if (avalancheSituation2 != null)
 			json.put("avalancheSituation2", avalancheSituation2.toJSON());
+		if (avalancheSituation3 != null)
+			json.put("avalancheSituation3", avalancheSituation3.toJSON());
+		if (avalancheSituation4 != null)
+			json.put("avalancheSituation4", avalancheSituation4.toJSON());
+		if (avalancheSituation5 != null)
+			json.put("avalancheSituation5", avalancheSituation5.toJSON());
 		return json;
 	}
 
@@ -187,6 +238,12 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			json.put("avalancheSituation1", avalancheSituation1.toJSON());
 		if (avalancheSituation2 != null)
 			json.put("avalancheSituation2", avalancheSituation2.toJSON());
+		if (avalancheSituation3 != null)
+			json.put("avalancheSituation3", avalancheSituation3.toJSON());
+		if (avalancheSituation4 != null)
+			json.put("avalancheSituation4", avalancheSituation4.toJSON());
+		if (avalancheSituation5 != null)
+			json.put("avalancheSituation5", avalancheSituation5.toJSON());
 		return json;
 	}
 
@@ -217,6 +274,15 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			return false;
 		if ((this.avalancheSituation2 == null) ? (other.avalancheSituation2 != null)
 				: !this.avalancheSituation2.equals(other.avalancheSituation2))
+			return false;
+		if ((this.avalancheSituation3 == null) ? (other.avalancheSituation3 != null)
+				: !this.avalancheSituation3.equals(other.avalancheSituation3))
+			return false;
+		if ((this.avalancheSituation4 == null) ? (other.avalancheSituation4 != null)
+				: !this.avalancheSituation4.equals(other.avalancheSituation4))
+			return false;
+		if ((this.avalancheSituation5 == null) ? (other.avalancheSituation5 != null)
+				: !this.avalancheSituation5.equals(other.avalancheSituation5))
 			return false;
 
 		return true;

@@ -28,4 +28,22 @@ public enum AvalancheSize {
 		}
 		return null;
 	}
+
+	public String toCaamlString() {
+		switch (this) {
+		case small:
+			return "1";
+		case medium:
+			return "2";
+		case large:
+			return "3";
+		case very_large:
+			return "4";
+		case extreme:
+			return "5";
+
+		default:
+			return null;
+		}
+	}
 }

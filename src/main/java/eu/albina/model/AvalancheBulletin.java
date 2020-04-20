@@ -1021,6 +1021,21 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			Element avProblem2 = getAvProblem(doc, bulletin.getAvalancheSituation2());
 			avProblems.appendChild(avProblem2);
 		}
+		if (bulletin != null && bulletin.getAvalancheSituation3() != null
+				&& bulletin.getAvalancheSituation3().getAvalancheSituation() != null) {
+			Element avProblem3 = getAvProblem(doc, bulletin.getAvalancheSituation3());
+			avProblems.appendChild(avProblem3);
+		}
+		if (bulletin != null && bulletin.getAvalancheSituation4() != null
+				&& bulletin.getAvalancheSituation4().getAvalancheSituation() != null) {
+			Element avProblem4 = getAvProblem(doc, bulletin.getAvalancheSituation4());
+			avProblems.appendChild(avProblem4);
+		}
+		if (bulletin != null && bulletin.getAvalancheSituation5() != null
+				&& bulletin.getAvalancheSituation5().getAvalancheSituation() != null) {
+			Element avProblem5 = getAvProblem(doc, bulletin.getAvalancheSituation5());
+			avProblems.appendChild(avProblem5);
+		}
 		bulletinMeasurements.appendChild(avProblems);
 
 		// tendency
@@ -1163,6 +1178,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			validElevationAbove.setAttribute("xlink:href",
 					XmlUtil.createValidElevationAttribute(elevation, true, treeline));
 			dangerRatingAbove.appendChild(validElevationAbove);
+			if (bulletin.getMatrixInformationAbove() != null)
+				dangerRatingAbove.appendChild(bulletin.getMatrixInformationAbove().toCAAMLv6(doc));
+
+			// TODO add terrain feature above
+
 			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
 				mainValueAbove
@@ -1175,6 +1195,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			validElevationBelow.setAttribute("xlink:href",
 					XmlUtil.createValidElevationAttribute(elevation, false, treeline));
 			dangerRatingBelow.appendChild(validElevationBelow);
+			if (bulletin.getMatrixInformationBelow() != null)
+				dangerRatingBelow.appendChild(bulletin.getMatrixInformationBelow().toCAAMLv6(doc));
+
+			// TODO add terrain feature below
+
 			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
 				mainValueBelow
@@ -1185,6 +1210,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		} else {
 			// NOTE if no elevation dependency is set, the elevation description is above
 			Element dangerRating = doc.createElement("DangerRating");
+			if (bulletin.getMatrixInformationAbove() != null)
+				dangerRating.appendChild(bulletin.getMatrixInformationAbove().toCAAMLv6(doc));
+
+			// TODO add terrain feature above
+
 			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValue = doc.createElement("mainValue");
 				mainValue.appendChild(doc.createTextNode(DangerRating.getCAAMLString(bulletin.getDangerRatingAbove())));
@@ -1277,15 +1307,15 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	private Element getAvProblem(Document doc, AvalancheSituation avalancheSituation) {
-		Element avProblem1 = doc.createElement("AvProblem");
+		Element avProblem = doc.createElement("AvProblem");
 		Element type = doc.createElement("type");
 		type.appendChild(doc.createTextNode(avalancheSituation.getAvalancheSituation().toCaamlString()));
-		avProblem1.appendChild(type);
+		avProblem.appendChild(type);
 		if (avalancheSituation.getAspects() != null) {
 			for (Aspect aspect : avalancheSituation.getAspects()) {
 				Element validAspect = doc.createElement("validAspect");
 				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-				avProblem1.appendChild(validAspect);
+				avProblem.appendChild(validAspect);
 			}
 		}
 
@@ -1302,14 +1332,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 					beginPosition.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationLow())));
 				Element endPosition = doc.createElement("endPosition");
 				if (avalancheSituation.getTreelineHigh())
-					// TODO Allow treeline in CAAML
 					endPosition.appendChild(doc.createTextNode("Treeline"));
 				else
 					endPosition.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationHigh())));
 				elevationRange.appendChild(beginPosition);
 				elevationRange.appendChild(endPosition);
 				validElevation.appendChild(elevationRange);
-				avProblem1.appendChild(validElevation);
+				avProblem.appendChild(validElevation);
 			} else {
 				// elevation high set
 				Element validElevation = doc.createElement("validElevation");
@@ -1320,7 +1349,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 					elevationString = XmlUtil.createValidElevationAttribute(avalancheSituation.getElevationHigh(),
 							false, false);
 				validElevation.setAttribute("xlink:href", elevationString);
-				avProblem1.appendChild(validElevation);
+				avProblem.appendChild(validElevation);
 			}
 		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 			// elevation low set
@@ -1332,23 +1361,24 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				elevationString = XmlUtil.createValidElevationAttribute(avalancheSituation.getElevationLow(), true,
 						false);
 			validElevation.setAttribute("xlink:href", elevationString);
-			avProblem1.appendChild(validElevation);
+			avProblem.appendChild(validElevation);
 		} else {
 			// no elevation set
 		}
-		return avProblem1;
+
+		return avProblem;
 	}
 
 	private Element getAvProblemCaamlV6(Document doc, AvalancheSituation avalancheSituation) {
-		Element avProblem1 = doc.createElement("AvProblem");
+		Element avProblem = doc.createElement("AvProblem");
 		Element type = doc.createElement("type");
 		type.appendChild(doc.createTextNode(avalancheSituation.getAvalancheSituation().toCaamlString()));
-		avProblem1.appendChild(type);
+		avProblem.appendChild(type);
 		if (avalancheSituation.getAspects() != null) {
 			for (Aspect aspect : avalancheSituation.getAspects()) {
 				Element validAspect = doc.createElement("validAspect");
 				validAspect.appendChild(doc.createTextNode(aspect.toUpperCaseString()));
-				avProblem1.appendChild(validAspect);
+				avProblem.appendChild(validAspect);
 			}
 		}
 
@@ -1365,14 +1395,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 					beginPosition.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationLow())));
 				Element endPosition = doc.createElement("endPosition");
 				if (avalancheSituation.getTreelineHigh())
-					// TODO Allow treeline in CAAML
 					endPosition.appendChild(doc.createTextNode("Treeline"));
 				else
 					endPosition.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationHigh())));
 				elevationRange.appendChild(beginPosition);
 				elevationRange.appendChild(endPosition);
 				validElevation.appendChild(elevationRange);
-				avProblem1.appendChild(validElevation);
+				avProblem.appendChild(validElevation);
 			} else {
 				// elevation high set
 				Element validElevation = doc.createElement("validElevation");
@@ -1383,7 +1412,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 					elevationString = XmlUtil.createValidElevationAttribute(avalancheSituation.getElevationHigh(),
 							false, false);
 				validElevation.setAttribute("xlink:href", elevationString);
-				avProblem1.appendChild(validElevation);
+				avProblem.appendChild(validElevation);
 			}
 		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 			// elevation low set
@@ -1395,11 +1424,18 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				elevationString = XmlUtil.createValidElevationAttribute(avalancheSituation.getElevationLow(), true,
 						false);
 			validElevation.setAttribute("xlink:href", elevationString);
-			avProblem1.appendChild(validElevation);
+			avProblem.appendChild(validElevation);
 		} else {
 			// no elevation set
 		}
-		return avProblem1;
+
+		// matrix information
+		if (avalancheSituation.getMatrixInformation() != null)
+			avProblem.appendChild(avalancheSituation.getMatrixInformation().toCAAMLv6(doc));
+
+		// TODO add terrain feature above
+
+		return avProblem;
 	}
 
 	public List<Element> toCAAML(Document doc, LanguageCode languageCode) {

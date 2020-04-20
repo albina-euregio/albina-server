@@ -17,11 +17,29 @@
 			"dangerRatingBelow": "considerable",
 			"avalancheSituation2": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
-				"avalancheSituation": "wind_drifted_snow"
+				"avalancheSituation": "wind_drifted_snow",
+				"matrixInformation" : {
+					"artificialDangerRating": "considerable",
+					"artificialAvalancheSize": "large",
+					"artificialAvalancheReleaseProbability": "three",
+					"artificialHazardSiteDistribution": "some",
+					"naturalDangerRating": "moderate",
+					"naturalAvalancheReleaseProbability": "two",
+					"naturalHazardSiteDistribution": "single"
+				}
 			},
 			"avalancheSituation1": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
-				"avalancheSituation": "new_snow"
+				"avalancheSituation": "new_snow",
+				"matrixInformation" : {
+					"artificialDangerRating": "considerable",
+					"artificialAvalancheSize": "large",
+					"artificialAvalancheReleaseProbability": "three",
+					"artificialHazardSiteDistribution": "some",
+					"naturalDangerRating": "moderate",
+					"naturalAvalancheReleaseProbability": "two",
+					"naturalHazardSiteDistribution": "single"
+				}
 			},
 			"id": "0635614e-463a-44fc-ac24-97e97c22b225",
 			"dangerRatingAbove": "considerable"
