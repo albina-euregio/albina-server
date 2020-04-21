@@ -64,6 +64,25 @@
 		},
 		"avActivityHighlightsTextcat": "156[16309,22266,24567]",
 		"hasDaytimeDependency": true,
+		"highlightsTextcat": "76[12189[12243,6224]].",
+		"highlights": [
+			{
+				"text": " Molti bacini di alimentazione non si sono ancora completamente scaricati.",
+				"languageCode": "it"
+			},
+			{
+				"text": " De nombreuses zones de départ ne sont pas encore totalement déchargées.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Viele Einzugsgebiete sind noch nicht vollständig entladen.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Many starting zones have released the snow but not entirely.",
+				"languageCode": "en"
+			}
+		],
 		"avActivityCommentTextcat": "76[12189[12243,6224]].61[9516[12003],7705[14871,7589,3731,823],9808,6634,11635,14847,7350,3736,9413].30[680[12003,14871],3875,10400[3796],11558,14841,10447,11892].45[4817,2960,9330,8450,5871,9413].102[6659,6991,7599[7041,3771],7407,9728,10551[7041,3772],9413].72[3678,4259].48[12072[6791,568]]",
 		"avActivityComment": [
 			{

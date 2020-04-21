@@ -144,6 +144,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private AvalancheBulletinDaytimeDescription afternoon;
 
 	@Lob
+	@Column(name = "HIGHLIGHTS_TEXTCAT")
+	private String highlightsTextcat;
+
+	@Lob
 	@Column(name = "AV_ACTIVITY_HIGHLIGHTS_TEXTCAT")
 	private String avActivityHighlightsTextcat;
 
@@ -225,6 +229,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		if (json.has("ownerRegion"))
 			this.ownerRegion = json.getString("ownerRegion");
+		if (json.has("highlightsTextcat"))
+			this.highlightsTextcat = json.getString("highlightsTextcat");
 		if (json.has("avActivityHighlightsTextcat"))
 			this.avActivityHighlightsTextcat = json.getString("avActivityHighlightsTextcat");
 		if (json.has("avActivityCommentTextcat"))
@@ -335,6 +341,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public Map<TextPart, Texts> getTextPartsMap() {
 		return textPartsMap;
+	}
+
+	public String getHighlightsTextcat() {
+		return highlightsTextcat;
+	}
+
+	public void setHighlightsTextcat(String highlightsTextcat) {
+		this.highlightsTextcat = highlightsTextcat;
 	}
 
 	public String getAvActivityHighlightsTextcat() {
@@ -787,6 +801,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (user != null && user.getRoles() != null)
 			json.put("ownerRegion", ownerRegion);
 
+		if (highlightsTextcat != null && highlightsTextcat != "")
+			json.put("highlightsTextcat", highlightsTextcat);
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
 		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
@@ -849,6 +865,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (id != null && id != "")
 			json.put("id", id);
 
+		if (highlightsTextcat != null && highlightsTextcat != "")
+			json.put("highlightsTextcat", highlightsTextcat);
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
 		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
@@ -1543,6 +1561,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if ((this.forenoon == null) ? (other.forenoon != null) : !this.forenoon.equals(other.forenoon))
 			return false;
 		if ((this.afternoon == null) ? (other.afternoon != null) : !this.afternoon.equals(other.afternoon))
+			return false;
+		if ((this.highlightsTextcat == null) ? (other.highlightsTextcat != null)
+				: !this.highlightsTextcat.equals(other.highlightsTextcat))
 			return false;
 		if ((this.avActivityHighlightsTextcat == null) ? (other.avActivityHighlightsTextcat != null)
 				: !this.avActivityHighlightsTextcat.equals(other.avActivityHighlightsTextcat))
