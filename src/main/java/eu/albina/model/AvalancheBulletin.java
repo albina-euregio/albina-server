@@ -1199,7 +1199,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			if (bulletin.getMatrixInformationAbove() != null)
 				dangerRatingAbove.appendChild(bulletin.getMatrixInformationAbove().toCAAMLv6(doc));
 
-			// TODO add terrain feature above
+			// terrain feature above
+			if (bulletin.getTerrainFeatureAbove() != null && (!bulletin.getTerrainFeatureAbove().isEmpty())
+					&& (bulletin.getTerrainFeatureAbove(languageCode) != null)) {
+				Element textPart = doc.createElement("terrainFeature");
+				textPart.appendChild(doc.createTextNode(bulletin.getTerrainFeatureAbove(languageCode)));
+				dangerRatingAbove.appendChild(textPart);
+			}
 
 			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
@@ -1216,7 +1222,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			if (bulletin.getMatrixInformationBelow() != null)
 				dangerRatingBelow.appendChild(bulletin.getMatrixInformationBelow().toCAAMLv6(doc));
 
-			// TODO add terrain feature below
+			// terrain feature below
+			if (bulletin.getTerrainFeatureBelow() != null && (!bulletin.getTerrainFeatureBelow().isEmpty())
+					&& (bulletin.getTerrainFeatureBelow(languageCode) != null)) {
+				Element textPart = doc.createElement("terrainFeature");
+				textPart.appendChild(doc.createTextNode(bulletin.getTerrainFeatureBelow(languageCode)));
+				dangerRatingBelow.appendChild(textPart);
+			}
 
 			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
@@ -1231,7 +1243,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			if (bulletin.getMatrixInformationAbove() != null)
 				dangerRating.appendChild(bulletin.getMatrixInformationAbove().toCAAMLv6(doc));
 
-			// TODO add terrain feature above
+			// terrain feature above
+			if (bulletin.getTerrainFeatureAbove() != null && (!bulletin.getTerrainFeatureAbove().isEmpty())
+					&& (bulletin.getTerrainFeatureAbove(languageCode) != null)) {
+				Element textPart = doc.createElement("terrainFeature");
+				textPart.appendChild(doc.createTextNode(bulletin.getTerrainFeatureAbove(languageCode)));
+				dangerRating.appendChild(textPart);
+			}
 
 			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValue = doc.createElement("mainValue");
@@ -1264,12 +1282,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element avProblems = doc.createElement("avProblems");
 		if (bulletin != null && bulletin.getAvalancheSituation1() != null
 				&& bulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
-			Element avProblem1 = getAvProblemCaamlV6(doc, bulletin.getAvalancheSituation1());
+			Element avProblem1 = getAvProblemCaamlV6(doc, bulletin.getAvalancheSituation1(), languageCode);
 			avProblems.appendChild(avProblem1);
 		}
 		if (bulletin != null && bulletin.getAvalancheSituation2() != null
 				&& bulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
-			Element avProblem2 = getAvProblemCaamlV6(doc, bulletin.getAvalancheSituation2());
+			Element avProblem2 = getAvProblemCaamlV6(doc, bulletin.getAvalancheSituation2(), languageCode);
 			avProblems.appendChild(avProblem2);
 		}
 		bulletinMeasurements.appendChild(avProblems);
@@ -1387,7 +1405,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return avProblem;
 	}
 
-	private Element getAvProblemCaamlV6(Document doc, AvalancheSituation avalancheSituation) {
+	private Element getAvProblemCaamlV6(Document doc, AvalancheSituation avalancheSituation,
+			LanguageCode languageCode) {
 		Element avProblem = doc.createElement("AvProblem");
 		Element type = doc.createElement("type");
 		type.appendChild(doc.createTextNode(avalancheSituation.getAvalancheSituation().toCaamlString()));
@@ -1451,7 +1470,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (avalancheSituation.getMatrixInformation() != null)
 			avProblem.appendChild(avalancheSituation.getMatrixInformation().toCAAMLv6(doc));
 
-		// TODO add terrain feature above
+		// terrain feature
+		if (avalancheSituation.getTerrainFeature() != null && (!avalancheSituation.getTerrainFeature().isEmpty())
+				&& (avalancheSituation.getTerrainFeature(languageCode) != null)) {
+			Element textPart = doc.createElement("terrainFeature");
+			textPart.appendChild(doc.createTextNode(avalancheSituation.getTerrainFeature(languageCode)));
+			avProblem.appendChild(textPart);
+		}
 
 		return avProblem;
 	}
@@ -1505,10 +1530,17 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			else {
 				forenoon.setDangerRatingAbove(bulletin.getForenoon().getDangerRatingAbove());
 				forenoon.setMatrixInformationAbove(bulletin.getForenoon().getMatrixInformationAbove());
+				forenoon.setTerrainFeatureAboveTextcat(bulletin.getForenoon().getTerrainFeatureAboveTextcat());
+				forenoon.setTerrainFeatureAbove(bulletin.getForenoon().getTerrainFeatureAbove());
 				forenoon.setDangerRatingBelow(bulletin.getForenoon().getDangerRatingBelow());
 				forenoon.setMatrixInformationBelow(bulletin.getForenoon().getMatrixInformationBelow());
+				forenoon.setTerrainFeatureBelowTextcat(bulletin.getForenoon().getTerrainFeatureBelowTextcat());
+				forenoon.setTerrainFeatureBelow(bulletin.getForenoon().getTerrainFeatureBelow());
 				forenoon.setAvalancheSituation1(bulletin.getForenoon().getAvalancheSituation1());
 				forenoon.setAvalancheSituation2(bulletin.getForenoon().getAvalancheSituation2());
+				forenoon.setAvalancheSituation3(bulletin.getForenoon().getAvalancheSituation3());
+				forenoon.setAvalancheSituation4(bulletin.getForenoon().getAvalancheSituation4());
+				forenoon.setAvalancheSituation5(bulletin.getForenoon().getAvalancheSituation5());
 			}
 		}
 
@@ -1518,10 +1550,17 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			else {
 				afternoon.setDangerRatingAbove(bulletin.getAfternoon().getDangerRatingAbove());
 				afternoon.setMatrixInformationAbove(bulletin.getAfternoon().getMatrixInformationAbove());
+				afternoon.setTerrainFeatureAboveTextcat(bulletin.getAfternoon().getTerrainFeatureAboveTextcat());
+				afternoon.setTerrainFeatureAbove(bulletin.getAfternoon().getTerrainFeatureAbove());
 				afternoon.setDangerRatingBelow(bulletin.getAfternoon().getDangerRatingBelow());
 				afternoon.setMatrixInformationBelow(bulletin.getAfternoon().getMatrixInformationBelow());
+				afternoon.setTerrainFeatureBelowTextcat(bulletin.getAfternoon().getTerrainFeatureBelowTextcat());
+				afternoon.setTerrainFeatureBelow(bulletin.getAfternoon().getTerrainFeatureBelow());
 				afternoon.setAvalancheSituation1(bulletin.getAfternoon().getAvalancheSituation1());
 				afternoon.setAvalancheSituation2(bulletin.getAfternoon().getAvalancheSituation2());
+				afternoon.setAvalancheSituation3(bulletin.getAfternoon().getAvalancheSituation3());
+				afternoon.setAvalancheSituation4(bulletin.getAfternoon().getAvalancheSituation4());
+				afternoon.setAvalancheSituation5(bulletin.getAfternoon().getAvalancheSituation5());
 			}
 		}
 

@@ -39,7 +39,25 @@
 					"naturalDangerRating": "moderate",
 					"naturalAvalancheReleaseProbability": "two",
 					"naturalHazardSiteDistribution": "single"
-				}
+				},
+				"terrainFeature": [
+					{
+						"text": " Molti bacini di alimentazione non si sono ancora completamente scaricati.",
+						"languageCode": "it"
+					},
+					{
+						"text": " De nombreuses zones de départ ne sont pas encore totalement déchargées.",
+						"languageCode": "fr"
+					},
+					{
+						"text": " Viele Einzugsgebiete sind noch nicht vollständig entladen.",
+						"languageCode": "de"
+					},
+					{
+						"text": " Many starting zones have released the snow but not entirely.",
+						"languageCode": "en"
+					}
+				]
 			},
 			"id": "0635614e-463a-44fc-ac24-97e97c22b225",
 			"dangerRatingAbove": "considerable"

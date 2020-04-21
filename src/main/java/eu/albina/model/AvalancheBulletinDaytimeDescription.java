@@ -16,23 +16,31 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.DangerRating;
+import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
 @Table(name = "avalanche_bulletin_daytime_descriptions")
@@ -59,6 +67,15 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			@AttributeOverride(name = "naturalHazardSiteDistribution", column = @Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION_ABOVE")) })
 	private MatrixInformation matrixInformationAbove;
 
+	@Lob
+	@Column(name = "TERRAIN_FEATURE_ABOVE_TEXTCAT")
+	private String terrainFeatureAboveTextcat;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinTable(name = "TEXT_PARTS", joinColumns = @JoinColumn(name = "TEXTS_ID"))
+	@Column(name = "TERRAIN_FEATURE_ABOVE")
+	private Set<Text> terrainFeatureAbove;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_RATING_BELOW")
 	private DangerRating dangerRatingBelow;
@@ -74,6 +91,15 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			@AttributeOverride(name = "naturalAvalancheReleaseProbability", column = @Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY_BELOW")),
 			@AttributeOverride(name = "naturalHazardSiteDistribution", column = @Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION_BELOW")) })
 	private MatrixInformation matrixInformationBelow;
+
+	@Lob
+	@Column(name = "TERRAIN_FEATURE_BELOW_TEXTCAT")
+	private String terrainFeatureBelowTextcat;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@JoinTable(name = "TEXT_PARTS", joinColumns = @JoinColumn(name = "TEXTS_ID"))
+	@Column(name = "TERRAIN_FEATURE_BELOW")
+	private Set<Text> terrainFeatureBelow;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "AVALANCHE_SITUATION_1_ID")
@@ -96,6 +122,8 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	private AvalancheSituation avalancheSituation5;
 
 	public AvalancheBulletinDaytimeDescription() {
+		this.terrainFeatureAbove = new HashSet<Text>();
+		this.terrainFeatureBelow = new HashSet<Text>();
 	}
 
 	public AvalancheBulletinDaytimeDescription(JSONObject json) {
@@ -107,10 +135,20 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			this.dangerRatingAbove = DangerRating.valueOf(json.getString("dangerRatingAbove").toLowerCase());
 		if (json.has("matrixInformationAbove"))
 			this.matrixInformationAbove = new MatrixInformation(json.getJSONObject("matrixInformationAbove"));
+		if (json.has("terrainFeatureAboveTextcat"))
+			this.terrainFeatureAboveTextcat = json.getString("terrainFeatureAboveTextcat");
+		if (json.has("terrainFeatureAbove"))
+			for (Object entry : json.getJSONArray("terrainFeatureAbove"))
+				terrainFeatureAbove.add(new Text((JSONObject) entry));
 		if (json.has("dangerRatingBelow"))
 			this.dangerRatingBelow = DangerRating.valueOf(json.getString("dangerRatingBelow").toLowerCase());
 		if (json.has("matrixInformationBelow"))
 			this.matrixInformationBelow = new MatrixInformation(json.getJSONObject("matrixInformationBelow"));
+		if (json.has("terrainFeatureBelowTextcat"))
+			this.terrainFeatureBelowTextcat = json.getString("terrainFeatureBelowTextcat");
+		if (json.has("terrainFeatureBelow"))
+			for (Object entry : json.getJSONArray("terrainFeatureBelow"))
+				terrainFeatureBelow.add(new Text((JSONObject) entry));
 		if (json.has("avalancheSituation1"))
 			this.avalancheSituation1 = new eu.albina.model.AvalancheSituation(
 					json.getJSONObject("avalancheSituation1"));
@@ -144,6 +182,34 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.matrixInformationAbove = matrixInformationAbove;
 	}
 
+	public String getTerrainFeatureAboveTextcat() {
+		return terrainFeatureAboveTextcat;
+	}
+
+	public void setTerrainFeatureAboveTextcat(String terrainFeatureTextcat) {
+		this.terrainFeatureAboveTextcat = terrainFeatureTextcat;
+	}
+
+	public Set<Text> getTerrainFeatureAbove() {
+		return terrainFeatureAbove;
+	}
+
+	public String getTerrainFeatureAbove(LanguageCode languageCode) {
+		for (Text text : terrainFeatureAbove) {
+			if (text.getLanguage() == languageCode)
+				return text.getText();
+		}
+		return null;
+	}
+
+	public void setTerrainFeatureAbove(Set<Text> terrainFeature) {
+		this.terrainFeatureAbove = terrainFeature;
+	}
+
+	public void addTerrainFeatureAbove(Text terrainFeature) {
+		this.terrainFeatureAbove.add(terrainFeature);
+	}
+
 	public DangerRating getDangerRatingBelow() {
 		return dangerRatingBelow;
 	}
@@ -158,6 +224,34 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 	public void setMatrixInformationBelow(MatrixInformation matrixInformationBelow) {
 		this.matrixInformationBelow = matrixInformationBelow;
+	}
+
+	public String getTerrainFeatureBelowTextcat() {
+		return terrainFeatureBelowTextcat;
+	}
+
+	public void setTerrainFeatureBelowTextcat(String terrainFeatureTextcat) {
+		this.terrainFeatureBelowTextcat = terrainFeatureTextcat;
+	}
+
+	public Set<Text> getTerrainFeatureBelow() {
+		return terrainFeatureBelow;
+	}
+
+	public String getTerrainFeatureBelow(LanguageCode languageCode) {
+		for (Text text : terrainFeatureBelow) {
+			if (text.getLanguage() == languageCode)
+				return text.getText();
+		}
+		return null;
+	}
+
+	public void setTerrainFeatureBelow(Set<Text> terrainFeature) {
+		this.terrainFeatureBelow = terrainFeature;
+	}
+
+	public void addTerrainFeatureBelow(Text terrainFeature) {
+		this.terrainFeatureBelow.add(terrainFeature);
 	}
 
 	public AvalancheSituation getAvalancheSituation1() {
@@ -209,10 +303,28 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
 		if (matrixInformationAbove != null)
 			json.put("matrixInformationAbove", matrixInformationAbove.toJSON());
+		if (terrainFeatureAboveTextcat != null && terrainFeatureAboveTextcat != "")
+			json.put("terrainFeatureAboveTextcat", terrainFeatureAboveTextcat);
+		if (terrainFeatureAbove != null && !terrainFeatureAbove.isEmpty()) {
+			JSONArray arrayAbove = new JSONArray();
+			for (Text text : terrainFeatureAbove) {
+				arrayAbove.put(text.toJSON());
+			}
+			json.put("terrainFeatureAbove", arrayAbove);
+		}
 		if (dangerRatingBelow != null)
 			json.put("dangerRatingBelow", this.dangerRatingBelow.toString());
 		if (matrixInformationBelow != null)
 			json.put("matrixInformationBelow", matrixInformationBelow.toJSON());
+		if (terrainFeatureBelowTextcat != null && terrainFeatureBelowTextcat != "")
+			json.put("terrainFeatureBelowTextcat", terrainFeatureBelowTextcat);
+		if (terrainFeatureBelow != null && !terrainFeatureBelow.isEmpty()) {
+			JSONArray arrayBelow = new JSONArray();
+			for (Text text : terrainFeatureBelow) {
+				arrayBelow.put(text.toJSON());
+			}
+			json.put("terrainFeatureBelow", arrayBelow);
+		}
 		if (avalancheSituation1 != null)
 			json.put("avalancheSituation1", avalancheSituation1.toJSON());
 		if (avalancheSituation2 != null)
@@ -232,8 +344,26 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			json.put("id", id);
 		if (dangerRatingAbove != null)
 			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
+		if (terrainFeatureAboveTextcat != null && terrainFeatureAboveTextcat != "")
+			json.put("terrainFeatureAboveTextcat", terrainFeatureAboveTextcat);
+		if (terrainFeatureAbove != null && !terrainFeatureAbove.isEmpty()) {
+			JSONArray arrayAbove = new JSONArray();
+			for (Text text : terrainFeatureAbove) {
+				arrayAbove.put(text.toJSON());
+			}
+			json.put("terrainFeatureAbove", arrayAbove);
+		}
 		if (dangerRatingBelow != null)
 			json.put("dangerRatingBelow", this.dangerRatingBelow.toString());
+		if (terrainFeatureBelowTextcat != null && terrainFeatureBelowTextcat != "")
+			json.put("terrainFeatureBelowTextcat", terrainFeatureBelowTextcat);
+		if (terrainFeatureBelow != null && !terrainFeatureBelow.isEmpty()) {
+			JSONArray arrayBelow = new JSONArray();
+			for (Text text : terrainFeatureBelow) {
+				arrayBelow.put(text.toJSON());
+			}
+			json.put("terrainFeatureBelow", arrayBelow);
+		}
 		if (avalancheSituation1 != null)
 			json.put("avalancheSituation1", avalancheSituation1.toJSON());
 		if (avalancheSituation2 != null)
@@ -257,17 +387,25 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 		final AvalancheBulletinDaytimeDescription other = (AvalancheBulletinDaytimeDescription) obj;
 
+		// TODO textcat ids will be different for italian and german
+
 		if ((this.dangerRatingAbove == null) ? (other.dangerRatingAbove != null)
 				: !this.dangerRatingAbove.equals(other.dangerRatingAbove))
 			return false;
 		if ((this.matrixInformationAbove == null) ? (other.matrixInformationAbove != null)
 				: !this.matrixInformationAbove.equals(other.matrixInformationAbove))
 			return false;
+		if ((this.terrainFeatureAboveTextcat == null) ? (other.terrainFeatureAboveTextcat != null)
+				: !this.terrainFeatureAboveTextcat.equals(other.terrainFeatureAboveTextcat))
+			return false;
 		if ((this.dangerRatingBelow == null) ? (other.dangerRatingBelow != null)
 				: !this.dangerRatingBelow.equals(other.dangerRatingBelow))
 			return false;
 		if ((this.matrixInformationBelow == null) ? (other.matrixInformationBelow != null)
 				: !this.matrixInformationBelow.equals(other.matrixInformationBelow))
+			return false;
+		if ((this.terrainFeatureBelowTextcat == null) ? (other.terrainFeatureBelowTextcat != null)
+				: !this.terrainFeatureBelowTextcat.equals(other.terrainFeatureBelowTextcat))
 			return false;
 		if ((this.avalancheSituation1 == null) ? (other.avalancheSituation1 != null)
 				: !this.avalancheSituation1.equals(other.avalancheSituation1))
