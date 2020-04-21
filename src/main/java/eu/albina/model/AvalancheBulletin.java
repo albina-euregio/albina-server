@@ -1131,20 +1131,22 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (!isAfternoon) {
 			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ publicationTime + "/" + getId() + ".jpg";
-			extFiles.appendChild(XmlUtil.createExtFile(doc, "thumbnail_" + getId(), "", fileReferenceURI));
+			extFiles.appendChild(XmlUtil.createExtFile(doc, "thumbnail_" + getId(),
+					GlobalVariables.getExtFileThumbnailImageDescription(languageCode), fileReferenceURI));
 		} else {
 			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ publicationTime + "/" + getId() + "_PM.jpg";
-			extFiles.appendChild(XmlUtil.createExtFile(doc, "thumbnail_" + getId() + "_PM", "", fileReferenceURI));
+			extFiles.appendChild(XmlUtil.createExtFile(doc, "thumbnail_" + getId() + "_PM",
+					GlobalVariables.getExtFileThumbnailImageDescription(languageCode), fileReferenceURI));
 		}
 		String linkReferenceURI = GlobalVariables.getAvalancheReportBaseUrl(languageCode) + "/"
 				+ getValidityDateString() + "?region=" + getId();
 		if (!isAfternoon)
 			extFiles.appendChild(XmlUtil.createExtFile(doc, "link_" + getId(),
-					GlobalVariables.getExtFileLinkDescription(languageCode), linkReferenceURI));
+					GlobalVariables.getExtFileRegionLinkDescription(languageCode), linkReferenceURI));
 		else
 			extFiles.appendChild(XmlUtil.createExtFile(doc, "link_" + getId() + "_PM",
-					GlobalVariables.getExtFileLinkDescription(languageCode), linkReferenceURI));
+					GlobalVariables.getExtFileRegionLinkDescription(languageCode), linkReferenceURI));
 		metaData.appendChild(extFiles);
 
 		// validTime

@@ -309,14 +309,16 @@ public class XmlUtil {
 				GlobalVariables.getExtFileMapDescription(lang, "fd", "IT-32-BZ"), baseUri + "fd_southtyrol_map.jpg"));
 		extFiles.appendChild(createExtFile(doc, "fd_trentino_map.jpg",
 				GlobalVariables.getExtFileMapDescription(lang, "fd", "IT-32-TN"), baseUri + "fd_trentino_map.jpg"));
-		extFiles.appendChild(
-				createExtFile(doc, "pdf", "", baseUri + validityDateString + "_" + lang.toString() + ".pdf"));
-		extFiles.appendChild(createExtFile(doc, "tyrol_pdf", "",
+		extFiles.appendChild(createExtFile(doc, "pdf", GlobalVariables.getExtFilePdfDescription(lang, ""),
+				baseUri + validityDateString + "_" + lang.toString() + ".pdf"));
+		extFiles.appendChild(createExtFile(doc, "tyrol_pdf", GlobalVariables.getExtFilePdfDescription(lang, "AT-07"),
 				baseUri + validityDateString + "_AT-07_" + lang.toString() + ".pdf"));
-		extFiles.appendChild(createExtFile(doc, "southtyrol_pdf", "",
-				baseUri + validityDateString + "_IT-32_BZ" + lang.toString() + ".pdf"));
-		extFiles.appendChild(createExtFile(doc, "trentino_pdf", "",
-				baseUri + validityDateString + "_IT-32-TN_" + lang.toString() + ".pdf"));
+		extFiles.appendChild(
+				createExtFile(doc, "southtyrol_pdf", GlobalVariables.getExtFilePdfDescription(lang, "IT-32-BZ"),
+						baseUri + validityDateString + "_IT-32_BZ" + lang.toString() + ".pdf"));
+		extFiles.appendChild(
+				createExtFile(doc, "trentino_pdf", GlobalVariables.getExtFilePdfDescription(lang, "IT-32-TN"),
+						baseUri + validityDateString + "_IT-32-TN_" + lang.toString() + ".pdf"));
 
 		if (!hasDaytimeDependency) {
 			extFiles.appendChild(createExtFile(doc, "fd_overlay.png",

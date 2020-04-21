@@ -1877,6 +1877,34 @@ public class GlobalVariables {
 	}
 
 	// LANG
+	public static String getExtFileRegionLinkDescription(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Link zur Region auf der Webseite";
+		case it:
+			return "Link alla regione sul sito web";
+		case en:
+			return "Link to region on the website";
+		default:
+			return "Link to region on the website";
+		}
+	}
+
+	// LANG
+	public static String getExtFileThumbnailImageDescription(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Vereinfachte Gefahrenstufenkarte der Region";
+		case it:
+			return "Mappa di classificazione del pericolo semplificata della regione";
+		case en:
+			return "Simplified danger rating map of the region";
+		default:
+			return "Simplified danger rating map of the region";
+		}
+	}
+
+	// LANG
 	public static String getExtFileSimpleLinkDescription(LanguageCode lang) {
 		switch (lang) {
 		case de:
@@ -1933,6 +1961,21 @@ public class GlobalVariables {
 			return "GeoJSON for regions (" + timeString + ")";
 		default:
 			return "GeoJSON for regions (" + timeString + ")";
+		}
+	}
+
+	// LANG
+	public static String getExtFilePdfDescription(LanguageCode lang, String region) {
+		String regionName = AlbinaUtil.getRegionName(lang, region);
+		switch (lang) {
+		case de:
+			return "PDF " + regionName;
+		case it:
+			return "PDF " + regionName;
+		case en:
+			return "PDF " + regionName;
+		default:
+			return "PDF " + regionName;
 		}
 	}
 }
