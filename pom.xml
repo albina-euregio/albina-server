@@ -35,7 +35,8 @@
 				<albina.conf.create-pdf>false</albina.conf.create-pdf>
 				<albina.conf.create-static-widget>false</albina.conf.create-static-widget>
 				<albina.conf.create-simple-html>false</albina.conf.create-simple-html>
-				<albina.conf.publish-to-social-media>false</albina.conf.publish-to-social-media>
+				<albina.conf.publish-to-messengerpeople>false</albina.conf.publish-to-messengerpeople>
+				<albina.conf.publish-to-telegram-channel>false</albina.conf.publish-to-telegram-channel>
 				<albina.conf.send-emails>false</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
 				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
@@ -78,7 +79,8 @@
 				<albina.conf.create-pdf>true</albina.conf.create-pdf>
 				<albina.conf.create-static-widget>true</albina.conf.create-static-widget>
 				<albina.conf.create-simple-html>true</albina.conf.create-simple-html>
-				<albina.conf.publish-to-social-media>false</albina.conf.publish-to-social-media>
+				<albina.conf.publish-to-messengerpeople>false</albina.conf.publish-to-messengerpeople>
+				<albina.conf.publish-to-telegram-channel>false</albina.conf.publish-to-telegram-channel>
 				<albina.conf.send-emails>false</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
 				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
@@ -121,7 +123,8 @@
 				<albina.conf.create-pdf>true</albina.conf.create-pdf>
 				<albina.conf.create-static-widget>true</albina.conf.create-static-widget>
 				<albina.conf.create-simple-html>true</albina.conf.create-simple-html>
-				<albina.conf.publish-to-social-media>true</albina.conf.publish-to-social-media>
+				<albina.conf.publish-to-messengerpeople>true</albina.conf.publish-to-messengerpeople>
+				<albina.conf.publish-to-telegram-channel>true</albina.conf.publish-to-telegram-channel>
 				<albina.conf.send-emails>true</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
 				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>

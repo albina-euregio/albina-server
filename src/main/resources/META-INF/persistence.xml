@@ -14,6 +14,7 @@
 		<class>eu.albina.model.ChatMessage</class>
 		<class>eu.albina.model.socialmedia.Channel</class>
 		<class>eu.albina.model.socialmedia.MessengerPeopleConfig</class>
+		<class>eu.albina.model.socialmedia.TelegramConfig</class>
 		<class>eu.albina.model.socialmedia.Provider</class>
 		<class>eu.albina.model.socialmedia.RapidMailConfig</class>
 		<class>eu.albina.model.socialmedia.RegionConfiguration</class>

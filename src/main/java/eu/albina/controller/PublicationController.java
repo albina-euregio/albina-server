@@ -42,6 +42,7 @@ import eu.albina.util.MessengerPeopleUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.SimpleHtmlUtil;
 import eu.albina.util.StaticWidgetUtil;
+import eu.albina.util.TelegramChannelUtil;
 import eu.albina.util.XmlUtil;
 
 /**
@@ -108,6 +109,8 @@ public class PublicationController {
 			try {
 				createMapsThread.join();
 
+				// TODO: check if map production was successful
+
 				Map<String, Thread> threads = new HashMap<String, Thread>();
 
 				// create HTML
@@ -152,12 +155,18 @@ public class PublicationController {
 				}
 
 				// publish on social media
-				if (GlobalVariables.isPublishToSocialMedia()) {
+				if (GlobalVariables.isPublishToMessengerpeople()) {
 					Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins,
 							GlobalVariables.regionsEuregio, false);
 					triggerMessengerpeopleThread.start();
 				}
 
+				// publish on telegram channel
+				if (GlobalVariables.isPublishToTelegramChannel()) {
+					Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins,
+							GlobalVariables.regionsEuregio, true);
+					triggerTelegramChannelThread.start();
+				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
 			}
@@ -207,6 +216,8 @@ public class PublicationController {
 			try {
 				createMapsThread.join();
 
+				// TODO: check if map production was successful
+
 				Map<String, Thread> threads = new HashMap<String, Thread>();
 
 				// create HTML
@@ -251,9 +262,15 @@ public class PublicationController {
 				}
 
 				// publish on social media
-				if (GlobalVariables.isPublishToSocialMedia()) {
+				if (GlobalVariables.isPublishToMessengerpeople()) {
 					Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, regions, true);
 					triggerMessengerpeopleThread.start();
+				}
+
+				// publish on telegram channel
+				if (GlobalVariables.isPublishToTelegramChannel()) {
+					Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true);
+					triggerTelegramChannelThread.start();
 				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
@@ -287,6 +304,8 @@ public class PublicationController {
 			createMapsThread.start();
 			try {
 				createMapsThread.join();
+
+				// TODO: check if map production was successful
 
 				Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -583,14 +602,30 @@ public class PublicationController {
 		return new Thread(new Runnable() {
 			public void run() {
 				try {
-					logger.info("Messengerpeople production started");
+					logger.info("Messengerpeople triggered");
 					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing messengerpeople", e);
 				} finally {
-					logger.info("Messengerpeople production finished");
+					logger.info("Messengerpeople finished");
 				}
 			}
 		});
 	}
+
+	public Thread triggerTelegramChannel(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+		return new Thread(new Runnable() {
+			public void run() {
+				try {
+					logger.info("Telegram channel triggered");
+					TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
+				} catch (IOException | URISyntaxException e) {
+					logger.error("Error preparing telegram channel", e);
+				} finally {
+					logger.info("Telegram channel finished");
+				}
+			}
+		});
+	}
+
 }
