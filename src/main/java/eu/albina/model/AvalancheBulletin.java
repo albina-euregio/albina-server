@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1126,30 +1127,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		// avalanche problems
 		Element avProblems = doc.createElement("avProblems");
-		if (bulletin != null && bulletin.getAvalancheSituation1() != null
-				&& bulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
-			Element avProblem1 = getAvProblemCaaml(doc, bulletin.getAvalancheSituation1(), languageCode, version);
-			avProblems.appendChild(avProblem1);
-		}
-		if (bulletin != null && bulletin.getAvalancheSituation2() != null
-				&& bulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
-			Element avProblem2 = getAvProblemCaaml(doc, bulletin.getAvalancheSituation2(), languageCode, version);
-			avProblems.appendChild(avProblem2);
-		}
-		if (bulletin != null && bulletin.getAvalancheSituation3() != null
-				&& bulletin.getAvalancheSituation3().getAvalancheSituation() != null) {
-			Element avProblem3 = getAvProblemCaaml(doc, bulletin.getAvalancheSituation3(), languageCode, version);
-			avProblems.appendChild(avProblem3);
-		}
-		if (bulletin != null && bulletin.getAvalancheSituation4() != null
-				&& bulletin.getAvalancheSituation4().getAvalancheSituation() != null) {
-			Element avProblem4 = getAvProblemCaaml(doc, bulletin.getAvalancheSituation4(), languageCode, version);
-			avProblems.appendChild(avProblem4);
-		}
-		if (bulletin != null && bulletin.getAvalancheSituation5() != null
-				&& bulletin.getAvalancheSituation5().getAvalancheSituation() != null) {
-			Element avProblem5 = getAvProblemCaaml(doc, bulletin.getAvalancheSituation5(), languageCode, version);
-			avProblems.appendChild(avProblem5);
+		for (AvalancheSituation situation : bulletin != null ? bulletin.getAvalancheSituations() : Collections.<AvalancheSituation>emptyList()) {
+			if (situation != null && situation.getAvalancheSituation() != null) {
+				Element avProblem = getAvProblemCaaml(doc, situation, languageCode, version);
+				avProblems.appendChild(avProblem);
+			}
 		}
 		bulletinMeasurements.appendChild(avProblems);
 
