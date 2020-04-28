@@ -973,7 +973,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				extFiles.appendChild(XmlUtil.createExtFile(doc, "thumbnail_" + getId() + "_PM",
 					GlobalVariables.getExtFileThumbnailImageDescription(languageCode), fileReferenceURI));
 			}
-			String linkReferenceURI = GlobalVariables.getAvalancheReportBaseUrl(languageCode) + "/"
+			String linkReferenceURI = GlobalVariables.getAvalancheReportBaseUrl(languageCode) + "bulletin/"
 				+ getValidityDateString() + "?region=" + getId();
 			if (!isAfternoon)
 				extFiles.appendChild(XmlUtil.createExtFile(doc, "link_" + getId(),
