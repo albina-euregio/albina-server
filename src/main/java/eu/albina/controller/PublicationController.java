@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.xml.transform.TransformerException;
 
+import eu.albina.caaml.CaamlVersion;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -460,7 +461,7 @@ public class PublicationController {
 			String publicationTimeString) {
 		try {
 			logger.info("CAAML production started");
-			XmlUtil.createCaamlFiles(bulletins, validityDateString, publicationTimeString);
+			XmlUtil.createCaamlFiles(bulletins, validityDateString, publicationTimeString, CaamlVersion.V5);
 			logger.info("CAAML production finished");
 		} catch (TransformerException | IOException e) {
 			logger.error("Error producing CAAML", e);

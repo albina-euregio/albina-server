@@ -52,8 +52,8 @@ public class CaamlValidator {
 	 * @throws SAXException
 	 *             If the caamlString is not valid.
 	 */
-	public static boolean validateCaamlBulletin(String caamlString) throws SAXException, IOException {
-		return validate(caamlString, new StreamSource(GlobalVariables.bulletinCaamlSchemaFileString));
+	public static boolean validateCaamlBulletin(String caamlString, CaamlVersion version) throws SAXException, IOException {
+		return validate(caamlString, new StreamSource(version.schemaLocation()));
 	}
 
 	public static boolean validateCaamlBulletinLocalV5(String caamlString) throws SAXException, IOException {

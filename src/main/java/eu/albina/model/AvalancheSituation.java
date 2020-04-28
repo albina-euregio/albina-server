@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -97,8 +97,8 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	private Set<Text> terrainFeature;
 
 	public AvalancheSituation() {
-		this.aspects = new HashSet<Aspect>();
-		this.terrainFeature = new HashSet<Text>();
+		this.aspects = new LinkedHashSet<Aspect>();
+		this.terrainFeature = new LinkedHashSet<Text>();
 	}
 
 	public AvalancheSituation(JSONObject json) {
