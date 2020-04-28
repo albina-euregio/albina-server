@@ -138,14 +138,26 @@ public class AvalancheBulletinController {
 		if (bulletin.getForenoon() != null) {
 			if (bulletin.getForenoon().getAvalancheSituation1() != null)
 				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation1().getAspects());
-			if (bulletin.getForenoon().getAvalancheSituation1() != null)
+			if (bulletin.getForenoon().getAvalancheSituation2() != null)
 				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation2().getAspects());
+			if (bulletin.getForenoon().getAvalancheSituation3() != null)
+				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation3().getAspects());
+			if (bulletin.getForenoon().getAvalancheSituation4() != null)
+				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation4().getAspects());
+			if (bulletin.getForenoon().getAvalancheSituation5() != null)
+				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation5().getAspects());
 		}
 		if (bulletin.getAfternoon() != null) {
 			if (bulletin.getAfternoon().getAvalancheSituation1() != null)
 				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation1().getAspects());
 			if (bulletin.getAfternoon().getAvalancheSituation2() != null)
 				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation2().getAspects());
+			if (bulletin.getAfternoon().getAvalancheSituation3() != null)
+				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation3().getAspects());
+			if (bulletin.getAfternoon().getAvalancheSituation4() != null)
+				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation4().getAspects());
+			if (bulletin.getAfternoon().getAvalancheSituation5() != null)
+				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation5().getAspects());
 		}
 		Hibernate.initialize(bulletin.getSuggestedRegions());
 		Hibernate.initialize(bulletin.getSavedRegions());
