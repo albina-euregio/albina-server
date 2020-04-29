@@ -50,6 +50,7 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.union.UnaryUnionOp;
 import com.vividsolutions.jts.precision.GeometryPrecisionReducer;
 
+import eu.albina.caaml.CaamlVersion;
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.Interpreter;
@@ -117,7 +118,7 @@ public class MapUtil {
 
 	private static void createDangerRatingMapsUnivie(List<AvalancheBulletin> bulletins) {
 		try {
-			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en);
+			Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en, CaamlVersion.V5);
 			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
 		} catch (AlbinaException | TransformerException e) {
 			logger.error("Error producing maps", e);

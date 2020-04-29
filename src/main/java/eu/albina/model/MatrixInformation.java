@@ -21,6 +21,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import eu.albina.caaml.CaamlVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -168,7 +169,7 @@ public class MatrixInformation implements AvalancheInformationObject {
 		return json;
 	}
 
-	public Element toCAAMLv6(Document doc) {
+	public Element toCAAML(Document doc, CaamlVersion version) {
 		Element matrixInformation = doc.createElement("matrixInformation");
 		if (artificialDangerRating != null) {
 			Element artDangerRating = doc.createElement("artificialDangerRating");

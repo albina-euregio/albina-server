@@ -52,38 +52,22 @@ public class CaamlValidator {
 	 * @throws SAXException
 	 *             If the caamlString is not valid.
 	 */
-	public static boolean validateCaamlBulletin(String caamlString) throws SAXException, IOException {
-		String bulletinCaamlSchemaString = GlobalVariables.bulletinCaamlSchemaFileString;
-		URL schemaFile = new URL(bulletinCaamlSchemaString);
-		StringReader stringReader = new StringReader(caamlString);
-		Source xmlFile = new StreamSource(stringReader);
-		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		Schema schema = schemaFactory.newSchema(schemaFile);
-		Validator validator = schema.newValidator();
-		validator.validate(xmlFile);
-		logger.debug("CAAML is valid!");
-		return true;
+	public static boolean validateCaamlBulletin(String caamlString, CaamlVersion version) throws SAXException, IOException {
+		return validate(caamlString, new StreamSource(version.schemaLocation()));
 	}
 
 	public static boolean validateCaamlBulletinLocalV5(String caamlString) throws SAXException, IOException {
-		String bulletinCaamlSchemaString = "D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\schema_files\\CAAMLv5_BulletinEAWS.xsd";
-		StringReader stringReader = new StringReader(caamlString);
-		Source xmlFile = new StreamSource(stringReader);
-		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		File schemaFile = new File(bulletinCaamlSchemaString);
-		Schema schema = schemaFactory.newSchema(schemaFile);
-		Validator validator = schema.newValidator();
-		validator.validate(xmlFile);
-		logger.debug("CAAML is valid!");
-		return true;
+		return validate(caamlString, new StreamSource(new File("D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\schema_files\\CAAMLv5_BulletinEAWS.xsd")));
 	}
 
 	public static boolean validateCaamlBulletinLocalV6(String caamlString) throws SAXException, IOException {
-		String bulletinCaamlSchemaString = "D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\schema_files\\CAAMLv6_BulletinEAWS.xsd";
+		return validate(caamlString, new StreamSource(new File("D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\schema_files\\CAAMLv6_BulletinEAWS.xsd")));
+	}
+
+	private static boolean validate(String caamlString, Source schemaFile) throws SAXException, IOException {
 		StringReader stringReader = new StringReader(caamlString);
 		Source xmlFile = new StreamSource(stringReader);
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		File schemaFile = new File(bulletinCaamlSchemaString);
 		Schema schema = schemaFactory.newSchema(schemaFile);
 		Validator validator = schema.newValidator();
 		validator.validate(xmlFile);

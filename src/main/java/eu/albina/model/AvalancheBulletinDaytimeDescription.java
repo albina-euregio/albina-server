@@ -16,7 +16,9 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -292,6 +294,10 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 	public void setAvalancheSituation5(AvalancheSituation avalancheSituation5) {
 		this.avalancheSituation5 = avalancheSituation5;
+	}
+
+	public List<AvalancheSituation> getAvalancheSituations() {
+		return Arrays.asList(avalancheSituation1, avalancheSituation2, avalancheSituation3, avalancheSituation4, avalancheSituation5);
 	}
 
 	@Override

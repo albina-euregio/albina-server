@@ -38,6 +38,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import eu.albina.caaml.CaamlVersion;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
@@ -54,7 +55,7 @@ public class XmlUtil {
 
 	// LANG
 	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, String validityDateString,
-			String publicationTimeString) throws TransformerException, IOException {
+										String publicationTimeString, CaamlVersion version) throws TransformerException, IOException {
 		String dirPathParent = GlobalVariables.getPdfDirectory() + "/" + validityDateString;
 		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();
@@ -84,7 +85,7 @@ public class XmlUtil {
 		BufferedWriter writer;
 		String fileName;
 
-		Document docDe = XmlUtil.createCaaml(bulletins, LanguageCode.de);
+		Document docDe = XmlUtil.createCaaml(bulletins, LanguageCode.de, version);
 		String caamlStringDe = XmlUtil.convertDocToString(docDe);
 		fileName = dirPath + "/" + validityDateString + "_de.xml";
 		writer = new BufferedWriter(new FileWriter(fileName));
@@ -92,7 +93,7 @@ public class XmlUtil {
 		writer.close();
 		AlbinaUtil.setFilePermissions(fileName);
 
-		Document docIt = XmlUtil.createCaaml(bulletins, LanguageCode.it);
+		Document docIt = XmlUtil.createCaaml(bulletins, LanguageCode.it, version);
 		String caamlStringIt = XmlUtil.convertDocToString(docIt);
 		fileName = dirPath + "/" + validityDateString + "_it.xml";
 		writer = new BufferedWriter(new FileWriter(fileName));
@@ -100,7 +101,7 @@ public class XmlUtil {
 		writer.close();
 		AlbinaUtil.setFilePermissions(fileName);
 
-		Document docEn = XmlUtil.createCaaml(bulletins, LanguageCode.en);
+		Document docEn = XmlUtil.createCaaml(bulletins, LanguageCode.en, version);
 		String caamlStringEn = XmlUtil.convertDocToString(docEn);
 		fileName = dirPath + "/" + validityDateString + "_en.xml";
 		writer = new BufferedWriter(new FileWriter(fileName));
@@ -109,14 +110,14 @@ public class XmlUtil {
 		AlbinaUtil.setFilePermissions(fileName);
 	}
 
-	public static Document createCaaml(List<AvalancheBulletin> bulletins, LanguageCode language) {
+	public static Document createCaaml(List<AvalancheBulletin> bulletins, LanguageCode language, CaamlVersion version) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
 			docBuilder = docFactory.newDocumentBuilder();
 
 			Document doc = docBuilder.newDocument();
-			Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
+			Element rootElement = version.setNamespaceAttributes(doc.createElement("ObsCollection"));
 
 			// create meta data
 			DateTime publicationDate = null;
@@ -132,67 +133,26 @@ public class XmlUtil {
 					}
 				}
 
-				Element metaDataProperty = createMetaDataProperty(doc, publicationDate);
-				rootElement.appendChild(metaDataProperty);
-
-				Element observations = doc.createElement("observations");
-
-				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAML(doc, language);
-					if (caaml != null)
-						for (Element element : caaml) {
-							if (element != null)
-								observations.appendChild(element);
-						}
-				}
-				rootElement.appendChild(observations);
-
-			}
-
-			doc.appendChild(rootElement);
-
-			return doc;
-		} catch (ParserConfigurationException e1) {
-			logger.error("Error producing CAAML", e1);
-			return null;
-		}
-	}
-
-	public static Document createCaamlV6(List<AvalancheBulletin> bulletins, LanguageCode language) {
-		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder;
-			docBuilder = docFactory.newDocumentBuilder();
-
-			Document doc = docBuilder.newDocument();
-			Element rootElement = XmlUtil.createObsCollectionHeaderCaamlv6(doc);
-
-			DateTime publicationDate = null;
-			if (bulletins != null && !bulletins.isEmpty()) {
-				for (AvalancheBulletin bulletin : bulletins) {
-					if (bulletin.getPublicationDate() != null) {
-						if (publicationDate == null)
-							publicationDate = bulletin.getPublicationDate();
-						else {
-							if (bulletin.getPublicationDate().isAfter(publicationDate))
-								publicationDate = bulletin.getPublicationDate();
-						}
-					}
-				}
-
 				// metaData
-				Element metaData = doc.createElement("metaData");
-				Element dateTimeReport = doc.createElement("dateTimeReport");
-				dateTimeReport.appendChild(doc.createTextNode(
+				if (version == CaamlVersion.V5) {
+					Element metaDataProperty = createMetaDataProperty(doc, publicationDate);
+					rootElement.appendChild(metaDataProperty);
+				} else {
+					Element metaData = doc.createElement("metaData");
+					Element dateTimeReport = doc.createElement("dateTimeReport");
+					dateTimeReport.appendChild(doc.createTextNode(
 						publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
-				metaData.appendChild(dateTimeReport);
-				rootElement.appendChild(metaData);
-				metaData.appendChild(createObsCollectionExtFiles(doc, bulletins, language));
+					metaData.appendChild(dateTimeReport);
+					rootElement.appendChild(metaData);
+					metaData.appendChild(createObsCollectionExtFiles(doc, bulletins, language));
+				}
+
 
 				// observations
 				Element observations = doc.createElement("observations");
+
 				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv6(doc, language);
+					List<Element> caaml = bulletin.toCAAML(doc, language, version);
 					if (caaml != null)
 						for (Element element : caaml) {
 							if (element != null)
@@ -202,9 +162,11 @@ public class XmlUtil {
 				rootElement.appendChild(observations);
 
 				// attributes
-				if (language == null)
-					language = LanguageCode.en;
-				rootElement.setAttribute("xml:lang", language.toString());
+				if (version != CaamlVersion.V5) {
+					if (language == null)
+						language = LanguageCode.en;
+					rootElement.setAttribute("xml:lang", language.toString());
+				}
 			}
 
 			doc.appendChild(rootElement);
@@ -214,30 +176,6 @@ public class XmlUtil {
 			logger.error("Error producing CAAML", e1);
 			return null;
 		}
-	}
-
-	public static Element createObsCollectionHeaderCaaml(Document doc) {
-		Element rootElement = doc.createElement("ObsCollection");
-		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
-		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
-		rootElement.setAttribute("xmlns:albina", GlobalVariables.albinaXmlSchemaUrl);
-		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		rootElement.setAttribute("xsi:schemaLocation",
-				"http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS/CAAMLv6_BulletinEAWS.xsd");
-		return rootElement;
-	}
-
-	public static Element createObsCollectionHeaderCaamlv6(Document doc) {
-		Element rootElement = doc.createElement("ObsCollection");
-		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS");
-		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
-		rootElement.setAttribute("xmlns:albina", GlobalVariables.albinaXmlSchemaUrl);
-		rootElement.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		rootElement.setAttribute("xsi:schemaLocation",
-				"http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS/CAAMLv6_BulletinEAWS.xsd");
-		return rootElement;
 	}
 
 	public static String createValidElevationAttribute(int elevation, boolean above, boolean treeline) {
@@ -255,12 +193,7 @@ public class XmlUtil {
 	}
 
 	public static Element createRegionHeaderCaaml(Document doc) throws ParserConfigurationException {
-		Element rootElement = doc.createElement("LocationCollection");
-		rootElement.setAttribute("xmlns", "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS");
-		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
-		rootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		rootElement.setAttribute("xsi:schemaLocation",
-				"http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd");
+		Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("LocationCollection"));
 		doc.appendChild(rootElement);
 
 		Element metaDataProperty = createMetaDataProperty(doc, new DateTime().withTimeAtStartOfDay());

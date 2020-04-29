@@ -31,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import eu.albina.caaml.CaamlVersion;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
@@ -136,28 +137,12 @@ public class AvalancheBulletinController {
 		Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 		Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
 		if (bulletin.getForenoon() != null) {
-			if (bulletin.getForenoon().getAvalancheSituation1() != null)
-				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation1().getAspects());
-			if (bulletin.getForenoon().getAvalancheSituation2() != null)
-				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation2().getAspects());
-			if (bulletin.getForenoon().getAvalancheSituation3() != null)
-				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation3().getAspects());
-			if (bulletin.getForenoon().getAvalancheSituation4() != null)
-				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation4().getAspects());
-			if (bulletin.getForenoon().getAvalancheSituation5() != null)
-				Hibernate.initialize(bulletin.getForenoon().getAvalancheSituation5().getAspects());
+			bulletin.getForenoon().getAvalancheSituations()
+				.forEach(s -> Hibernate.initialize(s.getAspects()));
 		}
 		if (bulletin.getAfternoon() != null) {
-			if (bulletin.getAfternoon().getAvalancheSituation1() != null)
-				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation1().getAspects());
-			if (bulletin.getAfternoon().getAvalancheSituation2() != null)
-				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation2().getAspects());
-			if (bulletin.getAfternoon().getAvalancheSituation3() != null)
-				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation3().getAspects());
-			if (bulletin.getAfternoon().getAvalancheSituation4() != null)
-				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation4().getAspects());
-			if (bulletin.getAfternoon().getAvalancheSituation5() != null)
-				Hibernate.initialize(bulletin.getAfternoon().getAvalancheSituation5().getAspects());
+			bulletin.getAfternoon().getAvalancheSituations()
+				.forEach(s -> Hibernate.initialize(s.getAspects()));
 		}
 		Hibernate.initialize(bulletin.getSuggestedRegions());
 		Hibernate.initialize(bulletin.getSavedRegions());
@@ -354,7 +339,7 @@ public class AvalancheBulletinController {
 		docBuilder = docFactory.newDocumentBuilder();
 
 		Document doc = docBuilder.newDocument();
-		Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
+        Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
 
 		// create meta data
 		DateTime publicationDate = null;
@@ -388,7 +373,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : result) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published
 						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
-					for (Element element : bulletin.toCAAML(doc, language)) {
+					for (Element element : bulletin.toCAAML(doc, language, CaamlVersion.V5)) {
 						observations.appendChild(element);
 					}
 				}
@@ -432,7 +417,7 @@ public class AvalancheBulletinController {
 		docBuilder = docFactory.newDocumentBuilder();
 
 		Document doc = docBuilder.newDocument();
-		Element rootElement = XmlUtil.createObsCollectionHeaderCaaml(doc);
+        Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
 
 		if (bulletins != null && !bulletins.isEmpty()) {
 			Element observations = doc.createElement("observations");
@@ -450,7 +435,7 @@ public class AvalancheBulletinController {
 				}
 				if (!tmpRegions.isEmpty()) {
 					bulletin.setPublishedRegions(tmpRegions);
-					for (Element element : bulletin.toCAAML(doc, language)) {
+					for (Element element : bulletin.toCAAML(doc, language, CaamlVersion.V5)) {
 						observations.appendChild(element);
 					}
 				}
