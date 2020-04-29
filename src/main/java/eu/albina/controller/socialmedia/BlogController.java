@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -30,14 +31,16 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.joda.time.DateTime;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.socialmedia.RegionConfiguration;
+import eu.albina.model.socialmedia.TelegramConfig;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 
@@ -169,6 +172,7 @@ public class BlogController extends CommonProcessor {
 						logger.info(((JSONObject) object).toString());
 						sendNewBlogPostToMessengerpeople((JSONObject) object, region, lang);
 						sendNewBlogPostToRapidmail((JSONObject) object, region, lang);
+						sendNewBlogPostToTelegramChannel((JSONObject) object, region, lang);
 					}
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
@@ -196,6 +200,42 @@ public class BlogController extends CommonProcessor {
 			logger.warn("Blog post could not be sent to messengerpeople: " + region + ", " + lang.toString(), e);
 		} catch (IOException e) {
 			logger.warn("Blog post could not be sent to messengerpeople: " + region + "," + lang.toString(), e);
+		}
+	}
+
+	void sendNewBlogPostToTelegramChannel(JSONObject object, String region, LanguageCode lang) {
+		logger.info("Sending new blog post to telegram channel ...");
+
+		String message = object.getString("title") + ": " + getBlogPostLink(object, region, lang);
+
+		String attachmentUrl = null;
+		if (object.has("images")) {
+			JSONArray imagesArray = object.getJSONArray("images");
+			JSONObject image = (JSONObject) imagesArray.get(0);
+			attachmentUrl = image.getString("url");
+		}
+
+		try {
+			TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
+			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
+			Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
+			TelegramConfig config = null;
+			for (TelegramConfig telegramConfig : telegramConfigs) {
+				if (telegramConfig.getLanguageCode().equals(lang)) {
+					config = telegramConfig;
+					break;
+				}
+			}
+
+			if (config != null) {
+				ctTc.sendNewsletter(config, message, attachmentUrl);
+			} else {
+				throw new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")");
+			}
+		} catch (AlbinaException e) {
+			logger.warn("Blog post could not be sent to telegram channel: " + region + ", " + lang.toString(), e);
+		} catch (IOException e) {
+			logger.warn("Blog post could not be sent to telegram channel: " + region + "," + lang.toString(), e);
 		}
 	}
 
