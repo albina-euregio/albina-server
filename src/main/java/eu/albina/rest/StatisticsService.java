@@ -51,7 +51,8 @@ public class StatisticsService {
 	public Response getBulletinCsv(
 			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String startDate,
 			@ApiParam(value = "End date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String endDate,
-			@QueryParam("lang") LanguageCode language) {
+			@QueryParam("lang") LanguageCode language, @QueryParam("extended") boolean extended,
+			@QueryParam("duplicate") boolean duplicate) {
 		logger.debug("GET CSV bulletins");
 
 		DateTime start = null;
@@ -66,9 +67,8 @@ public class StatisticsService {
 		else
 			return Response.notAcceptable(null).build();
 
-		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language,
-				false);
-		return Response.ok(new ByteArrayInputStream(statistics.getBytes()), MediaType.APPLICATION_OCTET_STREAM)
-				.build();
+		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, extended,
+				duplicate);
+		return Response.ok(new ByteArrayInputStream(statistics.getBytes()), MediaType.APPLICATION_OCTET_STREAM).build();
 	}
 }
