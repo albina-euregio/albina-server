@@ -27,11 +27,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -89,11 +90,14 @@ public class StatisticsController {
 	 *            the desired region
 	 * @param extended
 	 *            add textcat ids, matrix information and author if {@code true}
+	 * @param duplicateBulletinForenoon
+	 *            add two lines for each bulletin that has no daytime dependency if
+	 *            {@code true}
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
 	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, String region,
-			boolean extended) {
+			boolean extended, boolean duplicateBulletinForenoon) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -111,7 +115,7 @@ public class StatisticsController {
 		transaction.commit();
 		entityManager.close();
 
-		return getCsvString(lang, mergedBulletins, extended);
+		return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon);
 	}
 
 	/**
@@ -126,10 +130,14 @@ public class StatisticsController {
 	 *            the desired language
 	 * @param extended
 	 *            add textcat ids, matrix information and author if {@code true}
+	 * @param duplicateBulletinForenoon
+	 *            add two lines for each bulletin that has no daytime dependency if
+	 *            {@code true}
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, boolean extended) {
+	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, boolean extended,
+			boolean duplicateBulletinForenoon) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -149,7 +157,7 @@ public class StatisticsController {
 		transaction.commit();
 		entityManager.close();
 
-		return getCsvString(lang, mergedBulletins, extended);
+		return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon);
 	}
 
 	private List<AvalancheBulletin> mergeBulletins(List<AvalancheBulletin> bulletins) {
@@ -243,9 +251,13 @@ public class StatisticsController {
 	 *            the bulletins that should be included in the CSV string
 	 * @param extended
 	 *            add textcat ids, matrix information and author if {@code true}
+	 * @param duplicateBulletinForenoon
+	 *            add two lines for each bulletin that has no daytime dependency if
+	 *            {@code true}
 	 * @return a CSV string representing all {@code bulletins} in {@code lang}
 	 */
-	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended) {
+	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended,
+			boolean duplicateBulletinForenoon) {
 		// sort bulletins by validity
 		bulletins.sort(Comparator.comparing(AvalancheBulletin::getValidFrom));
 
@@ -379,9 +391,12 @@ public class StatisticsController {
 		}
 		sb.append(GlobalVariables.csvLineBreak);
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			addCsvLines(sb, avalancheBulletin, false, lang, extended);
-			if (avalancheBulletin.isHasDaytimeDependency())
-				addCsvLines(sb, avalancheBulletin, true, lang, extended);
+			addCsvLines(sb, avalancheBulletin, false, lang, extended, false);
+			if (avalancheBulletin.isHasDaytimeDependency()) {
+				addCsvLines(sb, avalancheBulletin, true, lang, extended, false);
+			} else if (duplicateBulletinForenoon) {
+				addCsvLines(sb, avalancheBulletin, false, lang, extended, duplicateBulletinForenoon);
+			}
 		}
 
 		return sb.toString();
@@ -405,9 +420,9 @@ public class StatisticsController {
 	 *            the desired language
 	 */
 	private void addCsvLines(StringBuilder sb, AvalancheBulletin avalancheBulletin, boolean isAfternoon,
-			LanguageCode lang, boolean extended) {
+			LanguageCode lang, boolean extended, boolean duplicateBulletinForenoon) {
 		AvalancheBulletinDaytimeDescription daytimeDescription;
-		if (!isAfternoon)
+		if (!isAfternoon || duplicateBulletinForenoon)
 			daytimeDescription = avalancheBulletin.getForenoon();
 		else
 			daytimeDescription = avalancheBulletin.getAfternoon();
@@ -416,7 +431,7 @@ public class StatisticsController {
 			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(avalancheBulletin.getValidityDateString());
 			sb.append(GlobalVariables.csvDeliminator);
-			if (isAfternoon)
+			if (isAfternoon || duplicateBulletinForenoon)
 				sb.append("PM");
 			else
 				sb.append("AM");
