@@ -29,16 +29,16 @@ public enum ArtificialAvalancheReleaseProbability {
 		return null;
 	}
 
-	public String toCaamlString() {
+	public String toCaamlv6String() {
 		switch (this) {
 		case one:
-			return "one";
+			return "1";
 		case two:
-			return "two";
+			return "2";
 		case three:
-			return "three";
+			return "3";
 		case four:
-			return "four";
+			return "4";
 
 		default:
 			return null;

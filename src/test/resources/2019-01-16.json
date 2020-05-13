@@ -15,6 +15,7 @@
 		"tendency": "decreasing",
 		"forenoon": {
 			"dangerRatingBelow": "considerable",
+			"complexity": "easy",
 			"avalancheSituation2": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
 				"avalancheSituation": "wind_drifted_snow",
@@ -168,6 +169,7 @@
 		"tendency": "steady",
 		"forenoon": {
 			"dangerRatingBelow": "low",
+			"complexity": "complex",
 			"avalancheSituation2": {},
 			"avalancheSituation1": {
 				"treelineLow": true,
@@ -246,6 +248,7 @@
 		"regions": ["IT-32-TN-02", "IT-32-TN-01", "IT-32-TN-04", "IT-32-TN-05"],
 		"tendency": "steady",
 		"forenoon": {
+			"complexity": "challenging",
 			"dangerRatingBelow": "low",
 			"avalancheSituation2": {
 				"elevationLow": 2000,

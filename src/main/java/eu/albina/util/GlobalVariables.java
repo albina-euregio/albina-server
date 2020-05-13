@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.albina.caaml.CaamlVersion;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -34,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
+import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.DangerRating;
@@ -69,6 +69,9 @@ public class GlobalVariables {
 
 	// TODO: find better solution how to get the URL for simple html and images
 	public static int directoryOffset = 5;
+	public static String avalancheReportNameEn = "Avalanche.report";
+	public static String avalancheReportNameDe = "Lawinen.report";
+	public static String avalancheReportNameIt = "Valanghe.report";
 	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
 	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
 	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
@@ -230,6 +233,20 @@ public class GlobalVariables {
 			return avalancheReportBaseUrlIt;
 		default:
 			return avalancheReportBaseUrlEn;
+		}
+	}
+
+	// LANG
+	public static String getAvalancheReportName(LanguageCode lang) {
+		switch (lang) {
+		case en:
+			return avalancheReportNameEn;
+		case de:
+			return avalancheReportNameDe;
+		case it:
+			return avalancheReportNameIt;
+		default:
+			return avalancheReportNameEn;
 		}
 	}
 
@@ -944,24 +961,28 @@ public class GlobalVariables {
 		if (update) {
 			switch (lang) {
 			case de:
-				return "UPDATE zum Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date);
+				return "UPDATE zum " + getAvalancheReportName(lang) + " für " + dateString + ": "
+						+ getBulletinUrl(lang, date);
 			case it:
-				return "AGGIORNAMENTO sulla Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date);
+				return "AGGIORNAMENTO sulla " + getAvalancheReportName(lang) + " per " + dateString + ": "
+						+ getBulletinUrl(lang, date);
 			case en:
-				return "UDPATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
+				return "UDPATE on " + getAvalancheReportName(lang) + " for " + dateString + ": "
+						+ getBulletinUrl(lang, date);
 			default:
-				return "UPDATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
+				return "UPDATE on " + getAvalancheReportName(lang) + " for " + dateString + ": "
+						+ getBulletinUrl(lang, date);
 			}
 		} else {
 			switch (lang) {
 			case de:
-				return "Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date);
+				return getAvalancheReportName(lang) + " für " + dateString + ": " + getBulletinUrl(lang, date);
 			case it:
-				return "Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date);
+				return getAvalancheReportName(lang) + " per " + dateString + ": " + getBulletinUrl(lang, date);
 			case en:
-				return "Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
+				return getAvalancheReportName(lang) + " for " + dateString + ": " + getBulletinUrl(lang, date);
 			default:
-				return "Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
+				return getAvalancheReportName(lang) + " for " + dateString + ": " + getBulletinUrl(lang, date);
 			}
 		}
 	}

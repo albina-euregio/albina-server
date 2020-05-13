@@ -31,7 +31,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import eu.albina.caaml.CaamlVersion;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
@@ -41,6 +40,7 @@ import org.w3c.dom.Element;
 
 import com.github.openjson.JSONArray;
 
+import eu.albina.caaml.CaamlVersion;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
@@ -137,12 +137,10 @@ public class AvalancheBulletinController {
 		Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 		Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
 		if (bulletin.getForenoon() != null) {
-			bulletin.getForenoon().getAvalancheSituations()
-				.forEach(s -> Hibernate.initialize(s.getAspects()));
+			bulletin.getForenoon().getAvalancheSituations().forEach(s -> Hibernate.initialize(s.getAspects()));
 		}
 		if (bulletin.getAfternoon() != null) {
-			bulletin.getAfternoon().getAvalancheSituations()
-				.forEach(s -> Hibernate.initialize(s.getAspects()));
+			bulletin.getAfternoon().getAvalancheSituations().forEach(s -> Hibernate.initialize(s.getAspects()));
 		}
 		Hibernate.initialize(bulletin.getSuggestedRegions());
 		Hibernate.initialize(bulletin.getSavedRegions());
@@ -339,7 +337,7 @@ public class AvalancheBulletinController {
 		docBuilder = docFactory.newDocumentBuilder();
 
 		Document doc = docBuilder.newDocument();
-        Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
+		Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
 
 		// create meta data
 		DateTime publicationDate = null;
@@ -373,7 +371,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : result) {
 				if (bulletin.getStatus(regions) == BulletinStatus.published
 						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
-					for (Element element : bulletin.toCAAML(doc, language, CaamlVersion.V5)) {
+					for (Element element : bulletin.toCAAMLv5(doc, language)) {
 						observations.appendChild(element);
 					}
 				}
@@ -417,7 +415,7 @@ public class AvalancheBulletinController {
 		docBuilder = docFactory.newDocumentBuilder();
 
 		Document doc = docBuilder.newDocument();
-        Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
+		Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
 
 		if (bulletins != null && !bulletins.isEmpty()) {
 			Element observations = doc.createElement("observations");
@@ -435,7 +433,7 @@ public class AvalancheBulletinController {
 				}
 				if (!tmpRegions.isEmpty()) {
 					bulletin.setPublishedRegions(tmpRegions);
-					for (Element element : bulletin.toCAAML(doc, language, CaamlVersion.V5)) {
+					for (Element element : bulletin.toCAAMLv5(doc, language)) {
 						observations.appendChild(element);
 					}
 				}

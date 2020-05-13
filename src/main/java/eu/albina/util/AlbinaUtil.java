@@ -231,6 +231,21 @@ public class AlbinaUtil {
 
 	// LANG
 	// REGION
+	public static String getMicroRegionName(LanguageCode lang, String microRegionId) {
+		switch (lang) {
+		case de:
+			return AlbinaUtil.regionsMapDe.get(microRegionId);
+		case it:
+			return AlbinaUtil.regionsMapIt.get(microRegionId);
+		case en:
+			return AlbinaUtil.regionsMapEn.get(microRegionId);
+		default:
+			return AlbinaUtil.regionsMapEn.get(microRegionId);
+		}
+	}
+
+	// LANG
+	// REGION
 	public static String getRegionName(LanguageCode lang, String region) {
 		switch (lang) {
 		case de:

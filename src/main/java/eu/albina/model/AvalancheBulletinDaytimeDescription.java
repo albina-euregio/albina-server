@@ -41,6 +41,7 @@ import javax.persistence.Table;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
+import eu.albina.model.enumerations.Complexity;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -103,6 +104,10 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@Column(name = "TERRAIN_FEATURE_BELOW")
 	private Set<Text> terrainFeatureBelow;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "COMPLEXITY")
+	private Complexity complexity;
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "AVALANCHE_SITUATION_1_ID")
 	private AvalancheSituation avalancheSituation1;
@@ -151,6 +156,8 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		if (json.has("terrainFeatureBelow"))
 			for (Object entry : json.getJSONArray("terrainFeatureBelow"))
 				terrainFeatureBelow.add(new Text((JSONObject) entry));
+		if (json.has("complexity"))
+			this.complexity = Complexity.valueOf(json.getString("complexity").toLowerCase());
 		if (json.has("avalancheSituation1"))
 			this.avalancheSituation1 = new eu.albina.model.AvalancheSituation(
 					json.getJSONObject("avalancheSituation1"));
@@ -256,6 +263,14 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.terrainFeatureBelow.add(terrainFeature);
 	}
 
+	public Complexity getComplexity() {
+		return complexity;
+	}
+
+	public void setComplexity(Complexity complexity) {
+		this.complexity = complexity;
+	}
+
 	public AvalancheSituation getAvalancheSituation1() {
 		return avalancheSituation1;
 	}
@@ -297,7 +312,8 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public List<AvalancheSituation> getAvalancheSituations() {
-		return Arrays.asList(avalancheSituation1, avalancheSituation2, avalancheSituation3, avalancheSituation4, avalancheSituation5);
+		return Arrays.asList(avalancheSituation1, avalancheSituation2, avalancheSituation3, avalancheSituation4,
+				avalancheSituation5);
 	}
 
 	@Override
@@ -331,6 +347,8 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			}
 			json.put("terrainFeatureBelow", arrayBelow);
 		}
+		if (complexity != null)
+			json.put("complexity", this.complexity.toString());
 		if (avalancheSituation1 != null)
 			json.put("avalancheSituation1", avalancheSituation1.toJSON());
 		if (avalancheSituation2 != null)
@@ -370,6 +388,8 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			}
 			json.put("terrainFeatureBelow", arrayBelow);
 		}
+		if (complexity != null)
+			json.put("complexity", this.complexity.toString());
 		if (avalancheSituation1 != null)
 			json.put("avalancheSituation1", avalancheSituation1.toJSON());
 		if (avalancheSituation2 != null)
@@ -412,6 +432,8 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			return false;
 		if ((this.terrainFeatureBelowTextcat == null) ? (other.terrainFeatureBelowTextcat != null)
 				: !this.terrainFeatureBelowTextcat.equals(other.terrainFeatureBelowTextcat))
+			return false;
+		if ((this.complexity == null) ? (other.complexity != null) : !this.complexity.equals(other.complexity))
 			return false;
 		if ((this.avalancheSituation1 == null) ? (other.avalancheSituation1 != null)
 				: !this.avalancheSituation1.equals(other.avalancheSituation1))

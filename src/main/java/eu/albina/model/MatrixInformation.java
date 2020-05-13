@@ -21,7 +21,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import eu.albina.caaml.CaamlVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -169,43 +168,42 @@ public class MatrixInformation implements AvalancheInformationObject {
 		return json;
 	}
 
-	public Element toCAAML(Document doc, CaamlVersion version) {
+	public Element toCAAMLv6(Document doc) {
 		Element matrixInformation = doc.createElement("matrixInformation");
 		if (artificialDangerRating != null) {
 			Element artDangerRating = doc.createElement("artificialDangerRating");
-			artDangerRating.appendChild(doc.createTextNode(DangerRating.getCAAMLString(artificialDangerRating)));
+			artDangerRating.appendChild(doc.createTextNode(DangerRating.getCAAMLv6String(artificialDangerRating)));
 			matrixInformation.appendChild(artDangerRating);
 		}
 		if (artificialAvalancheSize != null) {
-			Element artAvSize = doc.createElement("artificialAvSize");
+			Element artAvSize = doc.createElement("artificialAvalancheSize");
 			artAvSize.appendChild(doc.createTextNode(artificialAvalancheSize.toCaamlString()));
 			matrixInformation.appendChild(artAvSize);
 		}
 		if (artificialAvalancheReleaseProbability != null) {
-			Element artAvReleaseProbability = doc.createElement("artificialAvReleaseProbability");
+			Element artAvReleaseProbability = doc.createElement("artificialAvalancheReleaseProbability");
 			artAvReleaseProbability
-					.appendChild(doc.createTextNode(artificialAvalancheReleaseProbability.toCaamlString()));
+					.appendChild(doc.createTextNode(artificialAvalancheReleaseProbability.toCaamlv6String()));
 			matrixInformation.appendChild(artAvReleaseProbability);
 		}
 		if (artificialHazardSiteDistribution != null) {
 			Element artHazardSiteDistribution = doc.createElement("artificialHazardSiteDistribution");
-			artHazardSiteDistribution.appendChild(doc.createTextNode(artificialHazardSiteDistribution.toCaamlString()));
+			artHazardSiteDistribution.appendChild(doc.createTextNode(artificialHazardSiteDistribution.toCaamlv6String()));
 			matrixInformation.appendChild(artHazardSiteDistribution);
 		}
 		if (naturalDangerRating != null) {
 			Element natDangerRating = doc.createElement("naturalDangerRating");
-			natDangerRating.appendChild(doc.createTextNode(DangerRating.getCAAMLString(naturalDangerRating)));
+			natDangerRating.appendChild(doc.createTextNode(DangerRating.getCAAMLv6String(naturalDangerRating)));
 			matrixInformation.appendChild(natDangerRating);
 		}
 		if (naturalAvalancheReleaseProbability != null) {
-			Element natAvReleaseProbability = doc.createElement("naturalAvReleaseProbability");
-			natAvReleaseProbability
-					.appendChild(doc.createTextNode(naturalAvalancheReleaseProbability.toCaamlString()));
+			Element natAvReleaseProbability = doc.createElement("naturalAvalancheReleaseProbability");
+			natAvReleaseProbability.appendChild(doc.createTextNode(naturalAvalancheReleaseProbability.toCaamlv6String()));
 			matrixInformation.appendChild(natAvReleaseProbability);
 		}
 		if (naturalHazardSiteDistribution != null) {
 			Element natHazardSiteDistribution = doc.createElement("naturalHazardSiteDistribution");
-			natHazardSiteDistribution.appendChild(doc.createTextNode(naturalHazardSiteDistribution.toCaamlString()));
+			natHazardSiteDistribution.appendChild(doc.createTextNode(naturalHazardSiteDistribution.toCaamlv6String()));
 			matrixInformation.appendChild(natHazardSiteDistribution);
 		}
 		return matrixInformation;

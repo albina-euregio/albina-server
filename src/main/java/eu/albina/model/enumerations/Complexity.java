@@ -16,12 +16,12 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
-public enum NaturalAvalancheReleaseProbability {
-	one, two, three, four;
+public enum Complexity {
+	easy, challenging, complex;
 
-	public static NaturalAvalancheReleaseProbability fromString(String text) {
+	public static Complexity fromString(String text) {
 		if (text != null) {
-			for (NaturalAvalancheReleaseProbability type : NaturalAvalancheReleaseProbability.values()) {
+			for (Complexity type : Complexity.values()) {
 				if (text.equalsIgnoreCase(type.toString()))
 					return type;
 			}
@@ -29,19 +29,31 @@ public enum NaturalAvalancheReleaseProbability {
 		return null;
 	}
 
-	public String toCaamlv6String() {
-		switch (this) {
-		case one:
-			return "1";
-		case two:
-			return "2";
-		case three:
-			return "3";
-		case four:
-			return "4";
+	public static String getCAAMLString(Complexity complexity) {
+		switch (complexity) {
+		case easy:
+			return "easy";
+		case challenging:
+			return "challenging";
+		case complex:
+			return "complex";
 
 		default:
-			return null;
+			return "n/a";
+		}
+	}
+
+	public static String getString(Complexity complexity) {
+		switch (complexity) {
+		case easy:
+			return "easy";
+		case challenging:
+			return "challenging";
+		case complex:
+			return "complex";
+
+		default:
+			return "n/a";
 		}
 	}
 }

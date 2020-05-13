@@ -29,18 +29,18 @@ public enum HazardSiteDistribution {
 		return null;
 	}
 
-	public String toCaamlString() {
+	public String toCaamlv6String() {
 		switch (this) {
 		case single:
-			return "single";
+			return "1";
 		case some:
-			return "some";
+			return "2";
 		case many:
-			return "many";
+			return "3";
 		case many_most:
-			return "many_most";
+			return "4";
 		case moderately_steep:
-			return "moderately_steep";
+			return "5";
 
 		default:
 			return null;
