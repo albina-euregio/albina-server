@@ -92,7 +92,10 @@ public class XmlUtil {
 		else
 			docDe = XmlUtil.createCaamlv6(bulletins, LanguageCode.de);
 		String caamlStringDe = XmlUtil.convertDocToString(docDe);
-		fileName = dirPath + "/" + validityDateString + "_de.xml";
+		if (version == CaamlVersion.V5)
+			fileName = dirPath + "/" + validityDateString + "_de.xml";
+		else
+			fileName = dirPath + "/" + validityDateString + "_de_CAAMLv6.xml";
 		writer = new BufferedWriter(new FileWriter(fileName));
 		writer.write(caamlStringDe);
 		writer.close();
@@ -104,7 +107,10 @@ public class XmlUtil {
 		else
 			docIt = XmlUtil.createCaamlv6(bulletins, LanguageCode.it);
 		String caamlStringIt = XmlUtil.convertDocToString(docIt);
-		fileName = dirPath + "/" + validityDateString + "_it.xml";
+		if (version == CaamlVersion.V5)
+			fileName = dirPath + "/" + validityDateString + "_it.xml";
+		else
+			fileName = dirPath + "/" + validityDateString + "_it_CAAMLv6.xml";
 		writer = new BufferedWriter(new FileWriter(fileName));
 		writer.write(caamlStringIt);
 		writer.close();
@@ -116,7 +122,10 @@ public class XmlUtil {
 		else
 			docEn = XmlUtil.createCaamlv6(bulletins, LanguageCode.en);
 		String caamlStringEn = XmlUtil.convertDocToString(docEn);
-		fileName = dirPath + "/" + validityDateString + "_en.xml";
+		if (version == CaamlVersion.V5)
+			fileName = dirPath + "/" + validityDateString + "_en.xml";
+		else
+			fileName = dirPath + "/" + validityDateString + "_en_CAAMLv6.xml";
 		writer = new BufferedWriter(new FileWriter(fileName));
 		writer.write(caamlStringEn);
 		writer.close();
