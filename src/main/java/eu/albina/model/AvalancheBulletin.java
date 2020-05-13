@@ -1538,6 +1538,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				forenoon.setMatrixInformationBelow(bulletin.getForenoon().getMatrixInformationBelow());
 				forenoon.setTerrainFeatureBelowTextcat(bulletin.getForenoon().getTerrainFeatureBelowTextcat());
 				forenoon.setTerrainFeatureBelow(bulletin.getForenoon().getTerrainFeatureBelow());
+				forenoon.setComplexity(bulletin.getForenoon().getComplexity());
 				forenoon.setAvalancheSituation1(bulletin.getForenoon().getAvalancheSituation1());
 				forenoon.setAvalancheSituation2(bulletin.getForenoon().getAvalancheSituation2());
 				forenoon.setAvalancheSituation3(bulletin.getForenoon().getAvalancheSituation3());
@@ -1558,6 +1559,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				afternoon.setMatrixInformationBelow(bulletin.getAfternoon().getMatrixInformationBelow());
 				afternoon.setTerrainFeatureBelowTextcat(bulletin.getAfternoon().getTerrainFeatureBelowTextcat());
 				afternoon.setTerrainFeatureBelow(bulletin.getAfternoon().getTerrainFeatureBelow());
+				afternoon.setComplexity(bulletin.getAfternoon().getComplexity());
 				afternoon.setAvalancheSituation1(bulletin.getAfternoon().getAvalancheSituation1());
 				afternoon.setAvalancheSituation2(bulletin.getAfternoon().getAvalancheSituation2());
 				afternoon.setAvalancheSituation3(bulletin.getAfternoon().getAvalancheSituation3());
