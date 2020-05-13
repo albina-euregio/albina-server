@@ -17,6 +17,7 @@
 package eu.albina.json;
 
 import com.google.common.io.Resources;
+import eu.albina.model.AvalancheBulletin;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -32,6 +33,15 @@ public class AvalancheBulletinJsonValidatorTest {
 		final URL resource = Resources.getResource("validBulletin.json");
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		assertEquals(0, JsonValidator.validateAvalancheBulletin(validBulletinStringFromResource).length());
+	}
+
+	@Test
+	public void testValidateAvalancheBulletinValid() throws IOException {
+		final URL resource = Resources.getResource("2019-01-16.json");
+		for (AvalancheBulletin bulletin : AvalancheBulletin.readBulletins(resource)) {
+			final String json = bulletin.toJSON().toString();
+			assertEquals(0, JsonValidator.validateAvalancheBulletin(json).length());
+		}
 	}
 
 	@Test

@@ -1,4 +1,14 @@
 {
+	"synopsisComment": [
+		{
+			"languageCode": "de",
+			"text": "Wetterbericht: Tirol liegt am Rande eines Hochs, das seinen Kern über Frankreich hat. In der nordwestlichen Höhenströmung sind zeitweise Wolken mit leichtem Schauerpotential eingebettet. Zur Wochenmitte legt sich das Hoch direkt über die Alpen, dürfte aber am Freitag von einer Kaltfront verdrängt werden. Bergwetter heute: Zur Sonne kommen zuerst hohe Wolken. Gegen Mittag kann es im Norden zwischen Karwendel und Kaiser schon wolkiger werden, nachmittags wachsen allgemein einige Quellwolken in den Himmel. Zu einem lokalen Schauer reicht es am ehesten im östlichen Unterland. Nachts auf der Alpennordseite und in den Tauern allgemein steigende Schauerneigung, die Schneefallgrenze sinkt von 2200 gegen 1500m. Temperatur in 2000m zwischen +3 bis +7 Grad, in 3000m um -3 Grad. Höhenwind: Schwach bis mäßig aus Nordwest."
+		},
+		{
+			"languageCode": "en",
+			"text": "Weather in english."
+		}
+	],
 	"avActivityHighlights": [
 		{
 			"languageCode": "de",
@@ -17,16 +27,6 @@
 		{
 			"languageCode": "en",
 			"text": "Avalanche situation in english."
-		}
-	],
-	"synopsisComment": [
-		{
-			"languageCode": "de",
-			"text": "Wetterbericht: Tirol liegt am Rande eines Hochs, das seinen Kern über Frankreich hat. In der nordwestlichen Höhenströmung sind zeitweise Wolken mit leichtem Schauerpotential eingebettet. Zur Wochenmitte legt sich das Hoch direkt über die Alpen, dürfte aber am Freitag von einer Kaltfront verdrängt werden. Bergwetter heute: Zur Sonne kommen zuerst hohe Wolken. Gegen Mittag kann es im Norden zwischen Karwendel und Kaiser schon wolkiger werden, nachmittags wachsen allgemein einige Quellwolken in den Himmel. Zu einem lokalen Schauer reicht es am ehesten im östlichen Unterland. Nachts auf der Alpennordseite und in den Tauern allgemein steigende Schauerneigung, die Schneefallgrenze sinkt von 2200 gegen 1500m. Temperatur in 2000m zwischen +3 bis +7 Grad, in 3000m um -3 Grad. Höhenwind: Schwach bis mäßig aus Nordwest."
-		},
-		{
-			"languageCode": "en",
-			"text": "Weather in english."
 		}
 	],
 	"snowpackStructureComment": [
@@ -49,18 +49,23 @@
 			"text": "Tendency in english."
 		}
 	],
+	"tendency": "increasing",
+	"dangerPattern1": "dp1",
+	"dangerPattern2": "dp4",
 	"validity": {
-		"from": "2015-12-10T17:00:00+01:00",
-		"until": "2015-12-11T16:59:59+01:00"
+		"from": "2015-12-10T16:00:00Z",
+		"until": "2015-12-11T15:59:59Z"
 	},
+	"suggestedRegions": [],
 	"savedRegions": [
 		"AT-07-10",
 		"AT-07-11",
 		"AT-07-12"
 	],
+	"publishedRegions": [],
 	"hasDaytimeDependency": false,
 	"hasElevationDependency": true,
-	"treeline" : true,
+	"treeline": true,
 	"forenoon": {
 		"dangerRatingAbove": "considerable",
 		"dangerRatingBelow": "moderate",
@@ -80,8 +85,5 @@
 				"NE"
 			]
 		}
-	},
-	"tendency" : "increasing",
-	"dangerPattern1" : "dp1",
-	"dangerPattern2" : "dp4"
+	}
 }

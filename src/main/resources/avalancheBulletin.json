@@ -106,6 +106,7 @@
 			"id" : "#daytimeDescription",
 			"type" : "object",
 			"properties" : {
+				"id" : { "type": "string" },
 				"dangerRatingAbove" : { "$ref" : "#/definitions/dangerRating" },
 				"matrixInformationAbove" : { "$ref" : "#/definitions/matrixInformation" },
 				"dangerRatingBelow" : { "$ref" : "#/definitions/dangerRating" },
