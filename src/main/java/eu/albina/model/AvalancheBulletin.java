@@ -1132,9 +1132,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		// attributes
 		if (getId() != null) {
 			if (isAfternoon)
-				rootElement.setAttribute("xml:id", getId() + "_PM");
+				rootElement.setAttribute("xml:id", "ID_" + getId() + "_PM");
 			else
-				rootElement.setAttribute("xml:id", getId());
+				rootElement.setAttribute("xml:id", "ID_" + getId());
 		}
 		if (languageCode == null)
 			languageCode = LanguageCode.en;
