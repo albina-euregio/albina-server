@@ -132,6 +132,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Column(name = "TREELINE")
 	private boolean treeline;
 
+	@Column(name = "IS_MANUAL_DANGER_RATING")
+	private boolean isManualDangerRating;
+
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
 	private boolean hasDaytimeDependency;
 
@@ -293,6 +296,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				this.savedRegions.add((String) entry);
 			}
 		}
+
+		if (json.has("isManualDangerRating"))
+			this.isManualDangerRating = json.getBoolean("isManualDangerRating");
 
 		if (json.has("hasDaytimeDependency"))
 			this.hasDaytimeDependency = json.getBoolean("hasDaytimeDependency");
@@ -667,6 +673,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.treeline = treeline;
 	}
 
+	public boolean isManualDangerRating() {
+		return isManualDangerRating;
+	}
+
+	public void setManualDangerRating(boolean isManualDangerRating) {
+		this.isManualDangerRating = isManualDangerRating;
+	}
+
 	public boolean isHasDaytimeDependency() {
 		return hasDaytimeDependency;
 	}
@@ -842,6 +856,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		json.put("savedRegions", savedRegions);
 		json.put("publishedRegions", publishedRegions);
 
+		json.put("isManualDangerRating", isManualDangerRating);
 		json.put("hasDaytimeDependency", hasDaytimeDependency);
 		json.put("hasElevationDependency", hasElevationDependency);
 
@@ -904,6 +919,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		json.put("regions", publishedRegions);
 
+		json.put("isManualDangerRating", isManualDangerRating);
 		json.put("hasDaytimeDependency", hasDaytimeDependency);
 		json.put("hasElevationDependency", hasElevationDependency);
 
@@ -1519,6 +1535,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		setPublishedRegions(bulletin.getPublishedRegions());
 		setSavedRegions(bulletin.getSavedRegions());
 		setElevation(bulletin.getElevation());
+		setManualDangerRating(bulletin.isManualDangerRating());
 		setHasDaytimeDependency(bulletin.isHasDaytimeDependency());
 		setHasElevationDependency(bulletin.isHasElevationDependency());
 		setTreeline(bulletin.getTreeline());
