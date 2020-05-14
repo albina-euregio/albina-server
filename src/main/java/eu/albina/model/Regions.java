@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -23,6 +24,12 @@ public class Regions extends ArrayList<Region> implements AvalancheInformationOb
 
 	public Regions(Collection<? extends Region> c) {
 		super(c);
+	}
+
+	public Stream<Region> getRegionsForBulletin(AvalancheBulletin bulletin) {
+		return stream()
+				.flatMap(region -> Stream.concat(Stream.of(region), region.getSubregions().stream()))
+				.filter(region -> bulletin.getPublishedRegions().contains(region.getId()));
 	}
 
 	@Override

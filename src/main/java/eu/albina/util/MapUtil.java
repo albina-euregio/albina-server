@@ -50,6 +50,7 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.union.UnaryUnionOp;
 import com.vividsolutions.jts.precision.GeometryPrecisionReducer;
 
+import org.joda.time.DateTimeZone;
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.Interpreter;
@@ -64,6 +65,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.Region;
+import eu.albina.model.Regions;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -262,7 +264,7 @@ public class MapUtil {
 			try {
 				final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
 				logger.info("Creating region file {}", regionFile);
-				createBulletinRegions(bulletins, daytimeDependency, regionFile);
+				createBulletinRegions(bulletins, daytimeDependency, regionFile, RegionController.getInstance().getRegions());
 			} catch (IOException | AlbinaException ex) {
 				throw new AlbinaMapException("Failed to create region file", ex);
 			}
@@ -379,12 +381,11 @@ public class MapUtil {
 		Files.delete(directory);
 	}
 
-	static void createBulletinRegions(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, Path regionFile) throws IOException, AlbinaException {
+	static void createBulletinRegions(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, Path regionFile, Regions regions) throws IOException, AlbinaException {
 		final GeoJson.FeatureCollection featureCollection = new GeoJson.FeatureCollection();
-		featureCollection.properties.put("creation_date", bulletins.get(0).getPublicationDate().toString());
+		featureCollection.properties.put("creation_date", bulletins.get(0).getPublicationDate().withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
 		featureCollection.properties.put("valid_date", bulletins.get(0).getValidityDateString());
 		featureCollection.properties.put("valid_daytime", daytimeDependency.name());
-		final List<Region> allRegions = RegionController.getInstance().getRegions();
 		for (AvalancheBulletin bulletin : bulletins) {
 			final GeoJson.Feature feature = new GeoJson.Feature();
 			final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin, daytimeDependency);
@@ -396,9 +397,7 @@ public class MapUtil {
 			feature.properties.put("problem_1", getAvalancheSituationString(description.getAvalancheSituation1()));
 			feature.properties.put("problem_2", getAvalancheSituationString(description.getAvalancheSituation2()));
 			final double bufferDistance = 1e-4;
-			feature.geometry = allRegions.stream()
-					.flatMap(region -> region.getSubregions().stream())
-					.filter(region -> bulletin.getPublishedRegions().contains(region.getId()))
+			feature.geometry = regions.getRegionsForBulletin(bulletin)
 					.map(Region::getPolygon)
 					// use buffer to avoid artifacts when building polygon union
 					.map(polygon -> BufferOp.bufferOp(polygon, bufferDistance))
