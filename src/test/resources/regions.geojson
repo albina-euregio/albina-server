@@ -13,8 +13,7 @@
 				"nameDe": "Allgäuer Alpen",
 				"nameIt": "Alpi dell'Allgäu",
 				"nameEn": "Allgäu Alps",
-				"id": "AT-07-01",
-				"parentRegion": "AT-07"
+				"id": "AT-07-01"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -1566,8 +1565,7 @@
 				"nameDe": "Östliche Lechtaler Alpen - Ammergauer Alpen",
 				"nameIt": "Alpi della Lechtal orientali - Alpi dell'Ammergau",
 				"nameEn": "Eastern Lechtal Alps - Ammergau Alps",
-				"id": "AT-07-02",
-				"parentRegion": "AT-07"
+				"id": "AT-07-02"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -2915,8 +2913,7 @@
 				"nameDe": "Mieminger Gebirge",
 				"nameIt": "Monti di Mieming",
 				"nameEn": "Mieming Mountains",
-				"id": "AT-07-03",
-				"parentRegion": "AT-07"
+				"id": "AT-07-03"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -4344,8 +4341,7 @@
 				"nameDe": "Karwendel",
 				"nameIt": "Monti del Karwendel",
 				"nameEn": "Karwendel Mountains",
-				"id": "AT-07-04",
-				"parentRegion": "AT-07"
+				"id": "AT-07-04"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -6081,8 +6077,7 @@
 				"nameDe": "Brandenberger Alpen",
 				"nameIt": "Alpi di Brandenberg",
 				"nameEn": "Brandenberg Alps",
-				"id": "AT-07-05",
-				"parentRegion": "AT-07"
+				"id": "AT-07-05"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -7438,8 +7433,7 @@
 				"nameDe": "Wilder Kaiser - Waidringer Alpen",
 				"nameIt": "Monti del Kaiser - Alpi di Waidring",
 				"nameEn": "Wilder Kaiser Mountains - Waidring Alps",
-				"id": "AT-07-06",
-				"parentRegion": "AT-07"
+				"id": "AT-07-06"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -8091,8 +8085,7 @@
 				"nameDe": "Westliche Lechtaler Alpen",
 				"nameIt": "Alpi della Lechtal occidentali",
 				"nameEn": "Western Lechtal Alps",
-				"id": "AT-07-07",
-				"parentRegion": "AT-07"
+				"id": "AT-07-07"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -8908,8 +8901,7 @@
 				"nameDe": "Zentrale Lechtaler Alpen",
 				"nameIt": "Alpi della Lechtal centrali",
 				"nameEn": "Central Lechtal Alps",
-				"id": "AT-07-08",
-				"parentRegion": "AT-07"
+				"id": "AT-07-08"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -10041,8 +10033,7 @@
 				"nameDe": "Grieskogelgruppe",
 				"nameIt": "Gruppo del Grieskogel",
 				"nameEn": "Grieskogel Mountains",
-				"id": "AT-07-09",
-				"parentRegion": "AT-07"
+				"id": "AT-07-09"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -11126,8 +11117,7 @@
 				"nameDe": "Westliche Verwallgruppe",
 				"nameIt": "Gruppo Verwall occidentali",
 				"nameEn": "Western Verwall Mountains",
-				"id": "AT-07-10",
-				"parentRegion": "AT-07"
+				"id": "AT-07-10"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -11727,8 +11717,7 @@
 				"nameDe": "Östliche Verwallgruppe",
 				"nameIt": "Gruppo Verwall orientali",
 				"nameEn": "Eastern Verwall Mountains",
-				"id": "AT-07-11",
-				"parentRegion": "AT-07"
+				"id": "AT-07-11"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -12352,8 +12341,7 @@
 				"nameDe": "Silvretta",
 				"nameIt": "Silvretta",
 				"nameEn": "Silvretta",
-				"id": "AT-07-12",
-				"parentRegion": "AT-07"
+				"id": "AT-07-12"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -12689,8 +12677,7 @@
 				"nameDe": "Samnaungruppe",
 				"nameIt": "Gruppo Samnaun",
 				"nameEn": "Samnaun Mountains",
-				"id": "AT-07-13",
-				"parentRegion": "AT-07"
+				"id": "AT-07-13"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -14002,8 +13989,7 @@
 				"nameDe": "Nördliche Ötztaler- und Stubaier Alpen",
 				"nameIt": "Alpi della Valle Oetz e dello Stubai settentrionale",
 				"nameEn": "Northern Oetz and Stubai Alps",
-				"id": "AT-07-14",
-				"parentRegion": "AT-07"
+				"id": "AT-07-14"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -17167,8 +17153,7 @@
 				"nameDe": "Westliche Tuxer Alpen",
 				"nameIt": "Alpi del Tux occidentali",
 				"nameEn": "Western Tuxer Alps",
-				"id": "AT-07-15",
-				"parentRegion": "AT-07"
+				"id": "AT-07-15"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -18460,8 +18445,7 @@
 				"nameDe": "Östliche Tuxer Alpen",
 				"nameIt": "Alpi del Tux orientali",
 				"nameEn": "Eastern Tuxer Alps",
-				"id": "AT-07-16",
-				"parentRegion": "AT-07"
+				"id": "AT-07-16"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -19293,8 +19277,7 @@
 				"nameDe": "Westliche Kitzbüheler Alpen",
 				"nameIt": "Alpi di Kitzbühel occidentali",
 				"nameEn": "Western Kitzbühel Alps",
-				"id": "AT-07-17",
-				"parentRegion": "AT-07"
+				"id": "AT-07-17"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -20822,8 +20805,7 @@
 				"nameDe": "Östliche Kitzbüheler Alpen",
 				"nameIt": "Alpi di Kitzbühel orientali",
 				"nameEn": "Eastern Kitzbühel Alps",
-				"id": "AT-07-18",
-				"parentRegion": "AT-07"
+				"id": "AT-07-18"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -21351,8 +21333,7 @@
 				"nameDe": "Glockturmgruppe",
 				"nameIt": "Gruppo della Punta della Gallina",
 				"nameEn": "Glockturm Range",
-				"id": "AT-07-19",
-				"parentRegion": "AT-07"
+				"id": "AT-07-19"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -21852,8 +21833,7 @@
 				"nameDe": "Weißkugelgruppe",
 				"nameIt": "Gruppo della Palla Bianca",
 				"nameEn": "Weißkugel Range",
-				"id": "AT-07-20",
-				"parentRegion": "AT-07"
+				"id": "AT-07-20"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -22401,8 +22381,7 @@
 				"nameDe": "Gurgler Gruppe",
 				"nameIt": "Alpi Passirie",
 				"nameEn": "Gurgler Range",
-				"id": "AT-07-21",
-				"parentRegion": "AT-07"
+				"id": "AT-07-21"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -22726,8 +22705,7 @@
 				"nameDe": "Zentrale Stubaier Alpen",
 				"nameIt": "Alpi dello Stubai centrali",
 				"nameEn": "Central Stubai Alps",
-				"id": "AT-07-22",
-				"parentRegion": "AT-07"
+				"id": "AT-07-22"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -23431,8 +23409,7 @@
 				"nameDe": "Nördliche Zillertaler Alpen",
 				"nameIt": "Alpi della Zillertal settentrionali",
 				"nameEn": "Northern Zillertal Alps",
-				"id": "AT-07-23",
-				"parentRegion": "AT-07"
+				"id": "AT-07-23"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -24180,8 +24157,7 @@
 				"nameDe": "Venedigergruppe",
 				"nameIt": "Gruppo del Venediger",
 				"nameEn": "Venediger Range",
-				"id": "AT-07-24",
-				"parentRegion": "AT-07"
+				"id": "AT-07-24"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -24549,8 +24525,7 @@
 				"nameDe": "Östliche Rieserfernergruppe",
 				"nameIt": "Catena delle Vedrette di Ries orientali",
 				"nameEn": "Eastern Rieserferner Mountains",
-				"id": "AT-07-25",
-				"parentRegion": "AT-07"
+				"id": "AT-07-25"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -25410,8 +25385,7 @@
 				"nameDe": "Glocknergruppe",
 				"nameIt": "Gruppo del Glockner",
 				"nameEn": "Glockner Range",
-				"id": "AT-07-26",
-				"parentRegion": "AT-07"
+				"id": "AT-07-26"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -25815,8 +25789,7 @@
 				"nameDe": "Östliche Deferegger Alpen",
 				"nameIt": "Alpi del Defereggen orientali",
 				"nameEn": "Eastern Deferegger Alps",
-				"id": "AT-07-27",
-				"parentRegion": "AT-07"
+				"id": "AT-07-27"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -27100,8 +27073,7 @@
 				"nameDe": "Schobergruppe",
 				"nameIt": "Gruppo dello Schober",
 				"nameEn": "Schober Mountains",
-				"id": "AT-07-28",
-				"parentRegion": "AT-07"
+				"id": "AT-07-28"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -27805,8 +27777,7 @@
 				"nameDe": "Lienzer Dolomiten",
 				"nameIt": "Dolomiti di Lienz",
 				"nameEn": "Lienzer Dolomites",
-				"id": "AT-07-29",
-				"parentRegion": "AT-07"
+				"id": "AT-07-29"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -28834,8 +28805,7 @@
 				"nameDe": "Münstertaler Alpen",
 				"nameIt": "Alpi della Val Müstair",
 				"nameEn": "Val Müstair Alps",
-				"id": "IT-32-BZ-01",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-01"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -29211,8 +29181,7 @@
 				"nameDe": "Langtaufers",
 				"nameIt": "Vallelunga",
 				"nameEn": "Langtaufers",
-				"id": "IT-32-BZ-02",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-02"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -29668,8 +29637,7 @@
 				"nameDe": "Schnalser Kamm",
 				"nameIt": "Cresta di Senales",
 				"nameEn": "Schnals Ridge",
-				"id": "IT-32-BZ-03",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-03"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -29981,8 +29949,7 @@
 				"nameDe": "Südliche Stubaier Alpen",
 				"nameIt": "Alpi dello Stubai meridionali",
 				"nameEn": "Southern Stubai Alps",
-				"id": "IT-32-BZ-04",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-04"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -30710,8 +30677,7 @@
 				"nameDe": "Südliche Zillertaler Alpen und Hohe Tauern",
 				"nameIt": "Alpi della Zillertal meridionali e Alti Tauri",
 				"nameEn": "Southern Zillertal Alps and High Tauern",
-				"id": "IT-32-BZ-05",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-05"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -31679,8 +31645,7 @@
 				"nameDe": "Saldurn-Mastaun Kamm",
 				"nameIt": "Gruppo Saldura-Mastaun",
 				"nameEn": "Saldurn-Mastaun Ridge",
-				"id": "IT-32-BZ-06",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-06"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -32284,8 +32249,7 @@
 				"nameDe": "Texelgruppe",
 				"nameIt": "Gruppo Tessa",
 				"nameEn": "Texel Mountains",
-				"id": "IT-32-BZ-07",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-07"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -33297,8 +33261,7 @@
 				"nameDe": "Sarntaler Alpen",
 				"nameIt": "Alpi Sarentine",
 				"nameEn": "Sarntal Alps",
-				"id": "IT-32-BZ-08",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-08"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -35238,8 +35201,7 @@
 				"nameDe": "Westliche Pfunderer Berge",
 				"nameIt": "Monti di Fundres occidentali",
 				"nameEn": "Western Pfunderer Mountains",
-				"id": "IT-32-BZ-09",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-09"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -35855,8 +35817,7 @@
 				"nameDe": "Östliche Pfunderer Berge",
 				"nameIt": "Monti di Fundres orientali",
 				"nameEn": "Eastern Pfunderer Mountains",
-				"id": "IT-32-BZ-10",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-10"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -36684,8 +36645,7 @@
 				"nameDe": "Durreckgruppe",
 				"nameIt": "Gruppo del la Cima Dura",
 				"nameEn": "Durreck Range",
-				"id": "IT-32-BZ-11",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-11"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -37089,8 +37049,7 @@
 				"nameDe": "Westliche Rieserfernergruppe",
 				"nameIt": "Catena delle Vedrette di Ries occidentali",
 				"nameEn": "Western Rieserferner Mountains",
-				"id": "IT-32-BZ-12",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-12"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -37806,8 +37765,7 @@
 				"nameDe": "Westliche Deferegger Alpen",
 				"nameIt": "Alpi del Defereggen occidentali",
 				"nameEn": "Western Deferegger Alps",
-				"id": "IT-32-BZ-13",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-13"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -38287,8 +38245,7 @@
 				"nameDe": "Ortlergruppe",
 				"nameIt": "Gruppo dell'Ortles",
 				"nameEn": "Ortler Range",
-				"id": "IT-32-BZ-14",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-14"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -38836,8 +38793,7 @@
 				"nameDe": "Ultental",
 				"nameIt": "Val d'Ultimo",
 				"nameEn": "Ulten Valley",
-				"id": "IT-32-BZ-15",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-15"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -39637,8 +39593,7 @@
 				"nameDe": "Östliche Nonsberger Alpen",
 				"nameIt": "Alpi della Val di Non orientali",
 				"nameEn": "Eastern Nonsberg Alps",
-				"id": "IT-32-BZ-16",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-16"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -40362,8 +40317,7 @@
 				"nameDe": "Nördliche Fleimstaler Alpen",
 				"nameIt": "Dolomiti di Fiemme settentrionali",
 				"nameEn": "Northern Dolomites of Fiemme",
-				"id": "IT-32-BZ-17",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-17"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -41019,8 +40973,7 @@
 				"nameDe": "Grödner Dolomiten",
 				"nameIt": "Dolomiti di Gardena",
 				"nameEn": "Gröden Dolomites",
-				"id": "IT-32-BZ-18",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-18"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -42852,8 +42805,7 @@
 				"nameDe": "Pragser Dolomiten",
 				"nameIt": "Dolomiti di Braies",
 				"nameEn": "Prags Dolomites",
-				"id": "IT-32-BZ-19",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-19"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -44157,8 +44109,7 @@
 				"nameDe": "Sextner Dolomiten",
 				"nameIt": "Dolomiti di Sesto",
 				"nameEn": "Sexten Dolomites",
-				"id": "IT-32-BZ-20",
-				"parentRegion": "IT-32-BZ"
+				"id": "IT-32-BZ-20"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -44550,8 +44501,7 @@
 				"nameDe": "Adamello - Presanella",
 				"nameIt": "Adamello - Presanella",
 				"nameEn": "Adamello - Presanella",
-				"id": "IT-32-TN-01",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-01"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -44947,8 +44897,7 @@
 				"nameDe": "Südlicher Adamello",
 				"nameIt": "Adamello meridionale",
 				"nameEn": "Southern Adamello",
-				"id": "IT-32-TN-02",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-02"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -45540,8 +45489,7 @@
 				"nameDe": "Bondone und Stivo",
 				"nameIt": "Bondone e Stivo",
 				"nameEn": "Bondone and Stivo",
-				"id": "IT-32-TN-03",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-03"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -46525,8 +46473,7 @@
 				"nameDe": "Nördliche Brenta - Peller",
 				"nameIt": "Brenta settentrionale - Peller",
 				"nameEn": "Northern Brenta - Peller",
-				"id": "IT-32-TN-04",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-04"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -47534,8 +47481,7 @@
 				"nameDe": "Südliche Brenta",
 				"nameIt": "Brenta meridionale",
 				"nameEn": "Southern Brenta",
-				"id": "IT-32-TN-05",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-05"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -48439,8 +48385,7 @@
 				"nameDe": "Folgaria - Lavarone",
 				"nameIt": "Folgaria - Lavarone",
 				"nameEn": "Folgaria - Lavarone",
-				"id": "IT-32-TN-06",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-06"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -48996,8 +48941,7 @@
 				"nameDe": "Nördliche Lagorai",
 				"nameIt": "Lagorai settentrionale",
 				"nameEn": "Northern Lagorai",
-				"id": "IT-32-TN-07",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-07"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -49597,8 +49541,7 @@
 				"nameDe": "Südliche Lagorai",
 				"nameIt": "Lagorai meridionale",
 				"nameEn": "Southern Lagorai",
-				"id": "IT-32-TN-08",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-08"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -50386,8 +50329,7 @@
 				"nameDe": "Latemar",
 				"nameIt": "Latemar",
 				"nameEn": "Latemar",
-				"id": "IT-32-TN-09",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-09"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -51091,8 +51033,7 @@
 				"nameDe": "Marzola - Valsugana",
 				"nameIt": "Marzola - Valsugana",
 				"nameEn": "Marzola - Valsugana",
-				"id": "IT-32-TN-10",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-10"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -52028,8 +51969,7 @@
 				"nameDe": "Paganella",
 				"nameIt": "Paganella",
 				"nameEn": "Paganella",
-				"id": "IT-32-TN-11",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-11"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -52525,8 +52465,7 @@
 				"nameDe": "Prealpi",
 				"nameIt": "Prealpi",
 				"nameEn": "Prealps",
-				"id": "IT-32-TN-12",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-12"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -52922,8 +52861,7 @@
 				"nameDe": "Primiero - Pale di S. Martino",
 				"nameIt": "Primiero - Pale di S. Martino",
 				"nameEn": "Primiero - Pale di S. Martino",
-				"id": "IT-32-TN-13",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-13"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -53339,8 +53277,7 @@
 				"nameDe": "Vallarse",
 				"nameIt": "Vallarsa",
 				"nameEn": "Vallarsa",
-				"id": "IT-32-TN-14",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-14"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -53800,8 +53737,7 @@
 				"nameDe": "Cimberntal",
 				"nameIt": "Valle di Cembra",
 				"nameEn": "Cembra Valley",
-				"id": "IT-32-TN-15",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-15"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -54445,8 +54381,7 @@
 				"nameDe": "Fassatal",
 				"nameIt": "Valle di Fassa",
 				"nameEn": "Fassa Valley",
-				"id": "IT-32-TN-16",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-16"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -54950,8 +54885,7 @@
 				"nameDe": "Westliche Nonsberger Alpen",
 				"nameIt": "Alpi della Val di Non occidentali",
 				"nameEn": "Western Nonsberg Alps",
-				"id": "IT-32-TN-17",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-17"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -55731,8 +55665,7 @@
 				"nameDe": "Ledrotal",
 				"nameIt": "Valle di Ledro",
 				"nameEn": "Ledro Valley",
-				"id": "IT-32-TN-18",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-18"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -57336,8 +57269,7 @@
 				"nameDe": "Sole, Pejo und Rabbi",
 				"nameIt": "Sole, Pejo e Rabbi",
 				"nameEn": "Sole, Pejo and Rabbi",
-				"id": "IT-32-TN-19",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-19"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -57781,8 +57713,7 @@
 				"nameDe": "Maddalene",
 				"nameIt": "Maddalene",
 				"nameEn": "Maddalene",
-				"id": "IT-32-TN-20",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-20"
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -58134,8 +58065,7 @@
 				"nameDe": "Pine' - Fersental",
 				"nameIt": "Pine' - Valle dei Mocheni",
 				"nameEn": "Pine' - Mocheni Valley",
-				"id": "IT-32-TN-21",
-				"parentRegion": "IT-32-TN"
+				"id": "IT-32-TN-21"
 			},
 			"geometry": {
 				"type": "Polygon",

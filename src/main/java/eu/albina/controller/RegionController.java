@@ -19,6 +19,7 @@ package eu.albina.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
+import eu.albina.model.Regions;
 import eu.albina.rest.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
@@ -106,7 +108,8 @@ public class RegionController {
 	 * @throws AlbinaException
 	 *             if the {@code Region} objects could not be initialized
 	 */
-	public List<Region> getRegions() throws AlbinaException {
+	@Nonnull
+	public Regions getRegions() throws AlbinaException {
 		return getRegions(null);
 	}
 
@@ -120,7 +123,8 @@ public class RegionController {
 	 *             if the {@code Region} objects could not be initialized
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Region> getRegions(String regionId) throws AlbinaException {
+	@Nonnull
+	public Regions getRegions(String regionId) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -135,7 +139,7 @@ public class RegionController {
 				Hibernate.initialize(region.getSubregions());
 			}
 			transaction.commit();
-			return regions;
+			return new Regions(regions);
 		} catch (HibernateException he) {
 			if (transaction != null)
 				transaction.rollback();
