@@ -170,12 +170,6 @@ public class AlbinaUtil {
 			{ "IT-32-TN-19", "Sole, Pejo and Rabbi" }, { "IT-32-TN-20", "Maddalene" },
 			{ "IT-32-TN-21", "Pine' - Mocheni Valley" } }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
-	public static final String dangerRatingColorLow = "#CCFF66";
-	public static final String dangerRatingColorModerate = "#FFFF00";
-	public static final String dangerRatingColorConsiderable = "#FF9900";
-	public static final String dangerRatingColorHigh = "#FF0000";
-	public static final String dangerRatingColorVeryHigh = "#800000";
-	public static final String dangerRatingColorMissing = "#969696";
 	public static final String greyDarkColor = "#565F61";
 
 	// REGION
@@ -312,23 +306,6 @@ public class AlbinaUtil {
 
 	public static String getDangerPatternText(DangerPattern dp, LanguageCode lang) {
 		return dp.toString(lang.getLocale());
-	}
-
-	public static String getDangerRatingColor(DangerRating dangerRating) {
-		switch (dangerRating) {
-		case low:
-			return dangerRatingColorLow;
-		case moderate:
-			return dangerRatingColorModerate;
-		case considerable:
-			return dangerRatingColorConsiderable;
-		case high:
-			return dangerRatingColorHigh;
-		case very_high:
-			return dangerRatingColorVeryHigh;
-		default:
-			return dangerRatingColorMissing;
-		}
 	}
 
 	public static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription,

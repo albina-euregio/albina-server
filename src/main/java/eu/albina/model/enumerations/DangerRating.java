@@ -37,6 +37,23 @@ public enum DangerRating {
 		return null;
 	}
 
+	public String getColor() {
+		switch (this) {
+			case low:
+				return "#CCFF66";
+			case moderate:
+				return "#FFFF00";
+			case considerable:
+				return "#FF9900";
+			case high:
+				return "#FF0000";
+			case very_high:
+				return "#800000";
+			default:
+				return "#969696";
+		}
+	}
+
 	public static String getCAAMLv6String(DangerRating dangerRating) {
 		switch (dangerRating) {
 		case missing:
