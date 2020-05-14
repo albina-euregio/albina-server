@@ -295,7 +295,11 @@ public class Region implements AvalancheInformationObject {
 
 	public static List<Region> readRegions(final URL resource) throws IOException {
 		final String string = Resources.toString(resource, StandardCharsets.UTF_8);
-		final JSONArray array = new JSONArray(string);
-		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(Region::new).collect(Collectors.toList());
+		final JSONObject object = new JSONObject(string);
+		if (!"FeatureCollection".equals(object.getString("type"))) {
+			throw new IllegalArgumentException("Expecting type=FeatureCollection");
+		}
+		final JSONArray features = object.getJSONArray("features");
+		return IntStream.range(0, features.length()).mapToObj(features::getJSONObject).map(Region::new).collect(Collectors.toList());
 	}
 }

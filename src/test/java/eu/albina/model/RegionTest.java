@@ -2,6 +2,7 @@ package eu.albina.model;
 
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
@@ -27,6 +28,14 @@ public class RegionTest {
 		final Region expected = createRegion();
 		final URL resource = Resources.getResource("AT-07-08.geojson");
 		assertEquals(expected, Region.readRegion(resource));
+	}
+
+	@Test
+	public void readRegions() throws Exception {
+		final URL resource = getClass().getClassLoader().getResource("regions.geojson");
+		final List<Region> regions = Region.readRegions(resource);
+		assertEquals(70, regions.size());
+		assertEquals("AT-07-01", regions.get(0).getId());
 	}
 
 	private Region createRegion() throws Exception {
