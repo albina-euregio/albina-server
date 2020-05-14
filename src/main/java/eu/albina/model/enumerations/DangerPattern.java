@@ -16,8 +16,15 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public enum DangerPattern {
 	dp1, dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9, dp10;
+
+	public String toString(Locale locale) {
+		return ResourceBundle.getBundle("i18n.DangerPattern", locale).getString(name());
+	}
 
 	public static DangerPattern fromString(String text) {
 		if (text != null) {

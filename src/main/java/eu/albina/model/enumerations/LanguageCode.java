@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Locale;
+
 /**
  * The enum contains the ISO 639-1 codes for available languages.
  *
@@ -23,7 +25,17 @@ package eu.albina.model.enumerations;
  *
  */
 public enum LanguageCode {
-	de, it, en, fr;
+	de(Locale.GERMAN), it(Locale.ITALIAN), en(Locale.ENGLISH), fr(Locale.FRENCH);
+
+	private final Locale locale;
+
+	LanguageCode(Locale locale) {
+		this.locale = locale;
+	}
+
+	public Locale getLocale() {
+		return locale;
+	}
 
 	public static LanguageCode fromString(String text) {
 		if (text != null) {
