@@ -13,13 +13,20 @@ import org.junit.Test;
 public class RegionTest {
 
 	@Test
-	public void testRegion() throws Exception {
-		final URL resource = getClass().getClassLoader().getResource("AT-07-08.geojson");
+	public void toJSON() throws Exception {
+		final URL resource = Resources.getResource("AT-07-08.geojson");
 		final JSONObject expected = new JSONObject(Resources.toString(resource, StandardCharsets.UTF_8));
 
 		final Region region = createRegion();
 		final JSONObject actual = region.toJSON();
 		assertEquals(expected.toString(4), actual.toString(4));
+	}
+
+	@Test
+	public void readRegion() throws Exception {
+		final Region expected = createRegion();
+		final URL resource = Resources.getResource("AT-07-08.geojson");
+		assertEquals(expected, Region.readRegion(resource));
 	}
 
 	private Region createRegion() throws Exception {
