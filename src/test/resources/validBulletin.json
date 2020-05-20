@@ -63,6 +63,7 @@
 		"AT-07-12"
 	],
 	"publishedRegions": [],
+	"isManualDangerRating": false,
 	"hasDaytimeDependency": false,
 	"hasElevationDependency": true,
 	"treeline": true,
