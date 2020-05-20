@@ -30,21 +30,21 @@ public class CaamlValidatorTest {
 	public void testValidateAvalancheBulletinCaamlValid() throws Exception {
 		final URL resource = Resources.getResource("validBulletin.xml");
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		CaamlValidator.validateCaamlBulletin(validBulletinStringFromResource);
+		CaamlValidator.validateCaamlBulletin(validBulletinStringFromResource, CaamlVersion.V5);
 	}
 
 	@Test(expected = SAXException.class)
 	public void testValidateAvalancheBulletinCaamlInvalid() throws SAXException, IOException {
 		final URL resource = Resources.getResource("invalidBulletin.xml");
 		final String invalidBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		CaamlValidator.validateCaamlBulletin(invalidBulletinStringFromResource);
+		CaamlValidator.validateCaamlBulletin(invalidBulletinStringFromResource, CaamlVersion.V5);
 	}
 
 	@Test
 	public void testValidateAvalancheBulletinCaamlUnclear() throws Exception {
 		final URL resource = Resources.getResource("unclearBulletin.xml");
 		final String unclearBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		CaamlValidator.validateCaamlBulletin(unclearBulletinStringFromResource);
+		CaamlValidator.validateCaamlBulletin(unclearBulletinStringFromResource, CaamlVersion.V5);
 	}
 
 }

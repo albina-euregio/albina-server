@@ -17,7 +17,7 @@
 package eu.albina.model.enumerations;
 
 public enum TextPart {
-	synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment, tendencyComment;
+	highlights, synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment, tendencyComment;
 
 	public static TextPart fromString(String text) {
 		if (text != null) {
@@ -29,7 +29,7 @@ public enum TextPart {
 		return null;
 	}
 
-	public String toCaamlString() {
+	public String toCaamlv5String() {
 		switch (this) {
 		case avActivityHighlights:
 			return "avActivityHighlights";
@@ -49,6 +49,36 @@ public enum TextPart {
 			return "travelAdvisoryComment";
 		case tendencyComment:
 			return "tendencyComment";
+		case highlights:
+			return "highlights";
+
+		default:
+			return null;
+		}
+	}
+
+	public String toCaamlv6String() {
+		switch (this) {
+		case avActivityHighlights:
+			return "avalancheActivityHighlights";
+		case avActivityComment:
+			return "avalancheActivityComment";
+		case synopsisHighlights:
+			return "wxSynopsisHighlights";
+		case synopsisComment:
+			return "wxSynopsisComment";
+		case snowpackStructureHighlights:
+			return "snowpackStructureHighlights";
+		case snowpackStructureComment:
+			return "snowpackStructureComment";
+		case travelAdvisoryHighlights:
+			return "travelAdvisoryHighlights";
+		case travelAdvisoryComment:
+			return "travelAdvisoryComment";
+		case tendencyComment:
+			return "tendencyComment";
+		case highlights:
+			return "highlights";
 
 		default:
 			return null;

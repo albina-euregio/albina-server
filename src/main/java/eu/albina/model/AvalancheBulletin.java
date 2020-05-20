@@ -20,8 +20,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,22 +51,24 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.Complexity;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.XmlUtil;
 
@@ -129,6 +132,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Column(name = "TREELINE")
 	private boolean treeline;
 
+	@Column(name = "IS_MANUAL_DANGER_RATING")
+	private boolean isManualDangerRating;
+
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
 	private boolean hasDaytimeDependency;
 
@@ -142,6 +148,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "AFTERNOON_ID")
 	private AvalancheBulletinDaytimeDescription afternoon;
+
+	@Lob
+	@Column(name = "HIGHLIGHTS_TEXTCAT")
+	private String highlightsTextcat;
 
 	@Lob
 	@Column(name = "AV_ACTIVITY_HIGHLIGHTS_TEXTCAT")
@@ -186,11 +196,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	 * Standard constructor for an avalanche bulletin.
 	 */
 	public AvalancheBulletin() {
-		additionalAuthors = new HashSet<String>();
-		textPartsMap = new HashMap<TextPart, Texts>();
-		publishedRegions = new HashSet<String>();
-		savedRegions = new HashSet<String>();
-		suggestedRegions = new HashSet<String>();
+		additionalAuthors = new LinkedHashSet<>();
+		textPartsMap = new LinkedHashMap<>();
+		publishedRegions = new LinkedHashSet<>();
+		savedRegions = new LinkedHashSet<>();
+		suggestedRegions = new LinkedHashSet<>();
 	}
 
 	/**
@@ -225,6 +235,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		if (json.has("ownerRegion"))
 			this.ownerRegion = json.getString("ownerRegion");
+		if (json.has("highlightsTextcat"))
+			this.highlightsTextcat = json.getString("highlightsTextcat");
 		if (json.has("avActivityHighlightsTextcat"))
 			this.avActivityHighlightsTextcat = json.getString("avActivityHighlightsTextcat");
 		if (json.has("avActivityCommentTextcat"))
@@ -285,6 +297,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			}
 		}
 
+		if (json.has("isManualDangerRating"))
+			this.isManualDangerRating = json.getBoolean("isManualDangerRating");
+
 		if (json.has("hasDaytimeDependency"))
 			this.hasDaytimeDependency = json.getBoolean("hasDaytimeDependency");
 
@@ -335,6 +350,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public Map<TextPart, Texts> getTextPartsMap() {
 		return textPartsMap;
+	}
+
+	public String getHighlightsTextcat() {
+		return highlightsTextcat;
+	}
+
+	public void setHighlightsTextcat(String highlightsTextcat) {
+		this.highlightsTextcat = highlightsTextcat;
 	}
 
 	public String getAvActivityHighlightsTextcat() {
@@ -650,6 +673,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.treeline = treeline;
 	}
 
+	public boolean isManualDangerRating() {
+		return isManualDangerRating;
+	}
+
+	public void setManualDangerRating(boolean isManualDangerRating) {
+		this.isManualDangerRating = isManualDangerRating;
+	}
+
 	public boolean isHasDaytimeDependency() {
 		return hasDaytimeDependency;
 	}
@@ -787,6 +818,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (user != null && user.getRoles() != null)
 			json.put("ownerRegion", ownerRegion);
 
+		if (highlightsTextcat != null && highlightsTextcat != "")
+			json.put("highlightsTextcat", highlightsTextcat);
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
 		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
@@ -823,6 +856,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		json.put("savedRegions", savedRegions);
 		json.put("publishedRegions", publishedRegions);
 
+		json.put("isManualDangerRating", isManualDangerRating);
 		json.put("hasDaytimeDependency", hasDaytimeDependency);
 		json.put("hasElevationDependency", hasElevationDependency);
 
@@ -849,6 +883,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (id != null && id != "")
 			json.put("id", id);
 
+		if (highlightsTextcat != null && highlightsTextcat != "")
+			json.put("highlightsTextcat", highlightsTextcat);
 		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
 		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
@@ -883,6 +919,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		json.put("regions", publishedRegions);
 
+		json.put("isManualDangerRating", isManualDangerRating);
 		json.put("hasDaytimeDependency", hasDaytimeDependency);
 		json.put("hasElevationDependency", hasElevationDependency);
 
@@ -903,8 +940,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return json;
 	}
 
-	private Element createCAAMLBulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
-
+	private Element createCAAMLv5Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
 		AvalancheBulletinDaytimeDescription bulletin;
 
 		if (isAfternoon)
@@ -913,6 +949,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			bulletin = this.forenoon;
 
 		Element rootElement = doc.createElement("Bulletin");
+
+		// attributes
 		if (getId() != null) {
 			if (isAfternoon)
 				rootElement.setAttribute("gml:id", getId() + "_PM");
@@ -923,24 +961,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			languageCode = LanguageCode.en;
 		rootElement.setAttribute("xml:lang", languageCode.toString());
 
-		Element metaDataProperty = doc.createElement("metaDataProperty");
-		Element metaData = doc.createElement("MetaData");
-		if (publicationDate != null) {
-			Element dateTimeReport = doc.createElement("dateTimeReport");
-			dateTimeReport.appendChild(doc.createTextNode(
-					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
-			metaData.appendChild(dateTimeReport);
-		}
-
-		metaDataProperty.appendChild(metaData);
+		// metaData
+		Element metaDataProperty = XmlUtil.createMetaDataProperty(doc, publicationDate);
 		rootElement.appendChild(metaDataProperty);
 
-		for (String region : publishedRegions) {
-			Element locRef = doc.createElement("locRef");
-			locRef.setAttribute("xlink:href", region);
-			rootElement.appendChild(locRef);
-		}
-
+		// validTime
 		if (validFrom != null && validUntil != null) {
 
 			DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
@@ -965,9 +990,27 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			rootElement.appendChild(validTime);
 		}
 
+		// srcRef
+		Element srcRef = doc.createElement("srcRef");
+		Element operation = doc.createElement("Operation");
+		Element name = doc.createElement("name");
+		name.appendChild(doc.createTextNode("Avalanche.report"));
+		operation.appendChild(name);
+		srcRef.appendChild(operation);
+		rootElement.appendChild(srcRef);
+
+		// locRef
+		for (String region : publishedRegions) {
+			Element locRef = doc.createElement("locRef");
+			locRef.setAttribute("xlink:href", region);
+			rootElement.appendChild(locRef);
+		}
+
+		// bulletinResultsOf
 		Element bulletinResultsOf = doc.createElement("bulletinResultsOf");
 		Element bulletinMeasurements = doc.createElement("BulletinMeasurements");
 
+		// danger ratings
 		Element dangerRatings = doc.createElement("dangerRatings");
 		if (hasElevationDependency) {
 			Element dangerRatingAbove = doc.createElement("DangerRating");
@@ -975,10 +1018,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			validElevationAbove.setAttribute("xlink:href",
 					XmlUtil.createValidElevationAttribute(elevation, true, treeline));
 			dangerRatingAbove.appendChild(validElevationAbove);
+
 			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
-				mainValueAbove
-						.appendChild(doc.createTextNode(DangerRating.getCAAMLString(bulletin.getDangerRatingAbove())));
+				mainValueAbove.appendChild(
+						doc.createTextNode(DangerRating.getCAAMLv5String(bulletin.getDangerRatingAbove())));
 				dangerRatingAbove.appendChild(mainValueAbove);
 			}
 			dangerRatings.appendChild(dangerRatingAbove);
@@ -987,188 +1031,62 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			validElevationBelow.setAttribute("xlink:href",
 					XmlUtil.createValidElevationAttribute(elevation, false, treeline));
 			dangerRatingBelow.appendChild(validElevationBelow);
+
 			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
-				mainValueBelow
-						.appendChild(doc.createTextNode(DangerRating.getCAAMLString(bulletin.getDangerRatingBelow())));
+				mainValueBelow.appendChild(
+						doc.createTextNode(DangerRating.getCAAMLv5String(bulletin.getDangerRatingBelow())));
 				dangerRatingBelow.appendChild(mainValueBelow);
 			}
 			dangerRatings.appendChild(dangerRatingBelow);
 		} else {
 			// NOTE if no elevation dependency is set, the elevation description is above
 			Element dangerRating = doc.createElement("DangerRating");
+
 			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
 				Element mainValue = doc.createElement("mainValue");
-				mainValue.appendChild(doc.createTextNode(DangerRating.getCAAMLString(bulletin.getDangerRatingAbove())));
+				mainValue.appendChild(
+						doc.createTextNode(DangerRating.getCAAMLv5String(bulletin.getDangerRatingAbove())));
 				dangerRating.appendChild(mainValue);
 			}
 			dangerRatings.appendChild(dangerRating);
 		}
 		bulletinMeasurements.appendChild(dangerRatings);
 
+		// danger patterns
 		if (dangerPattern1 != null || dangerPattern2 != null) {
 			Element dangerPatterns = doc.createElement("dangerPatterns");
 			if (dangerPattern1 != null) {
 				Element dangerPatternOne = doc.createElement("DangerPattern");
 				Element dangerPatternOneType = doc.createElement("type");
-				dangerPatternOneType.appendChild(doc.createTextNode(DangerPattern.getCAAMLString(dangerPattern1)));
+				dangerPatternOneType.appendChild(doc.createTextNode(DangerPattern.getCAAMLv5String(dangerPattern1)));
 				dangerPatternOne.appendChild(dangerPatternOneType);
 				dangerPatterns.appendChild(dangerPatternOne);
 			}
 			if (dangerPattern2 != null) {
 				Element dangerPatternTwo = doc.createElement("DangerPattern");
 				Element dangerPatternTwoType = doc.createElement("type");
-				dangerPatternTwoType.appendChild(doc.createTextNode(DangerPattern.getCAAMLString(dangerPattern2)));
+				dangerPatternTwoType.appendChild(doc.createTextNode(DangerPattern.getCAAMLv5String(dangerPattern2)));
 				dangerPatternTwo.appendChild(dangerPatternTwoType);
 				dangerPatterns.appendChild(dangerPatternTwo);
 			}
 			bulletinMeasurements.appendChild(dangerPatterns);
 		}
 
+		// avalanche problems
 		Element avProblems = doc.createElement("avProblems");
-		Element avProblem1 = doc.createElement("AvProblem");
-		if (bulletin != null && bulletin.getAvalancheSituation1() != null
-				&& bulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
-			Element type1 = doc.createElement("type");
-			type1.appendChild(
-					doc.createTextNode(bulletin.getAvalancheSituation1().getAvalancheSituation().toCaamlString()));
-			avProblem1.appendChild(type1);
-			if (bulletin.getAvalancheSituation1().getAspects() != null) {
-				for (Aspect aspect : bulletin.getAvalancheSituation1().getAspects()) {
-					Element validAspect = doc.createElement("validAspect");
-					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-					avProblem1.appendChild(validAspect);
-				}
-			}
-
-			if (bulletin.getAvalancheSituation1().getTreelineHigh()
-					|| bulletin.getAvalancheSituation1().getElevationHigh() > 0) {
-				if (bulletin.getAvalancheSituation1().getTreelineLow()
-						|| bulletin.getAvalancheSituation1().getElevationLow() > 0) {
-					// elevation high and low set
-					Element validElevation = doc.createElement("validElevation");
-					Element elevationRange = doc.createElement("elevationRange");
-					elevationRange.setAttribute("uom", "m");
-					Element beginPosition = doc.createElement("beginPosition");
-					if (bulletin.getAvalancheSituation1().getTreelineLow())
-						beginPosition.appendChild(doc.createTextNode("Treeline"));
-					else
-						beginPosition.appendChild(doc
-								.createTextNode(String.valueOf(bulletin.getAvalancheSituation1().getElevationLow())));
-					Element endPosition = doc.createElement("endPosition");
-					if (bulletin.getAvalancheSituation1().getTreelineHigh())
-						// TODO Allow treeline in CAAML
-						endPosition.appendChild(doc.createTextNode("Treeline"));
-					else
-						endPosition.appendChild(doc
-								.createTextNode(String.valueOf(bulletin.getAvalancheSituation1().getElevationHigh())));
-					elevationRange.appendChild(beginPosition);
-					elevationRange.appendChild(endPosition);
-					validElevation.appendChild(elevationRange);
-					avProblem1.appendChild(validElevation);
-				} else {
-					// elevation high set
-					Element validElevation = doc.createElement("validElevation");
-					String elevationString;
-					if (bulletin.getAvalancheSituation1().getTreelineHigh())
-						elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
-					else
-						elevationString = XmlUtil.createValidElevationAttribute(
-								bulletin.getAvalancheSituation1().getElevationHigh(), false, false);
-					validElevation.setAttribute("xlink:href", elevationString);
-					avProblem1.appendChild(validElevation);
-				}
-			} else if (bulletin.getAvalancheSituation1().getTreelineLow()
-					|| bulletin.getAvalancheSituation1().getElevationLow() > 0) {
-				// elevation low set
-				Element validElevation = doc.createElement("validElevation");
-				String elevationString;
-				if (bulletin.getAvalancheSituation1().getTreelineLow())
-					elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
-				else
-					elevationString = XmlUtil.createValidElevationAttribute(
-							bulletin.getAvalancheSituation1().getElevationLow(), true, false);
-				validElevation.setAttribute("xlink:href", elevationString);
-				avProblem1.appendChild(validElevation);
-			} else {
-				// no elevation set
+		for (AvalancheSituation situation : bulletin != null ? bulletin.getAvalancheSituations()
+				: Collections.<AvalancheSituation>emptyList()) {
+			if (situation != null && situation.getAvalancheSituation() != null) {
+				Element avProblem = getAvProblemCaamlv5(doc, situation, languageCode);
+				avProblems.appendChild(avProblem);
 			}
 		}
-		avProblems.appendChild(avProblem1);
-		Element avProblem2 = doc.createElement("AvProblem");
-		if (bulletin != null && bulletin.getAvalancheSituation2() != null
-				&& bulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
-			Element type2 = doc.createElement("type");
-			type2.appendChild(
-					doc.createTextNode(bulletin.getAvalancheSituation2().getAvalancheSituation().toCaamlString()));
-			avProblem2.appendChild(type2);
-			if (bulletin.getAvalancheSituation2().getAspects() != null) {
-				for (Aspect aspect : bulletin.getAvalancheSituation2().getAspects()) {
-					Element validAspect = doc.createElement("validAspect");
-					validAspect.setAttribute("xlink:href", aspect.toCaamlString());
-					avProblem2.appendChild(validAspect);
-				}
-			}
-			if (bulletin.getAvalancheSituation2().getTreelineHigh()
-					|| bulletin.getAvalancheSituation2().getElevationHigh() > 0) {
-				if (bulletin.getAvalancheSituation2().getTreelineLow()
-						|| bulletin.getAvalancheSituation2().getElevationLow() > 0) {
-					// elevation high and low set
-					Element validElevation = doc.createElement("validElevation");
-					Element elevationRange = doc.createElement("elevationRange");
-					elevationRange.setAttribute("uom", "m");
-					Element beginPosition = doc.createElement("beginPosition");
-					if (bulletin.getAvalancheSituation2().getTreelineLow())
-						// TODO Allow treeline in CAAML
-						beginPosition.appendChild(doc.createTextNode("Treeline"));
-					else
-						beginPosition.appendChild(doc
-								.createTextNode(String.valueOf(bulletin.getAvalancheSituation2().getElevationLow())));
-					Element endPosition = doc.createElement("endPosition");
-					if (bulletin.getAvalancheSituation2().getTreelineHigh())
-						// TODO Allow treeline in CAAML
-						endPosition.appendChild(doc.createTextNode("Treeline"));
-					else
-						endPosition.appendChild(doc
-								.createTextNode(String.valueOf(bulletin.getAvalancheSituation2().getElevationHigh())));
-					elevationRange.appendChild(beginPosition);
-					elevationRange.appendChild(endPosition);
-					validElevation.appendChild(elevationRange);
-					avProblem2.appendChild(validElevation);
-				} else {
-					// elevation high set
-					Element validElevation = doc.createElement("validElevation");
-					String elevationString;
-					if (bulletin.getAvalancheSituation2().getTreelineHigh())
-						elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
-					else
-						elevationString = XmlUtil.createValidElevationAttribute(
-								bulletin.getAvalancheSituation2().getElevationHigh(), false, false);
-					validElevation.setAttribute("xlink:href", elevationString);
-					avProblem2.appendChild(validElevation);
-				}
-			} else if (bulletin.getAvalancheSituation2().getTreelineLow()
-					|| bulletin.getAvalancheSituation2().getElevationLow() > 0) {
-				// elevation low set
-				Element validElevation = doc.createElement("validElevation");
-				String elevationString;
-				if (bulletin.getAvalancheSituation2().getTreelineLow())
-					elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
-				else
-					elevationString = XmlUtil.createValidElevationAttribute(
-							bulletin.getAvalancheSituation2().getElevationLow(), true, false);
-				validElevation.setAttribute("xlink:href", elevationString);
-				avProblem2.appendChild(validElevation);
-			} else {
-				// no elevation set
-			}
-		}
-		avProblems.appendChild(avProblem2);
 		bulletinMeasurements.appendChild(avProblems);
 
 		// tendency
 		if (this.getTendency() != null) {
-			Element tendencyElement = doc.createElement("Tendency");
+			Element tendencyElement = doc.createElement("tendency");
 			Element type = doc.createElement("type");
 			type.appendChild(doc.createTextNode(Tendency.getCaamlString(this.getTendency())));
 			tendencyElement.appendChild(type);
@@ -1198,7 +1116,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			if (textPartsMap.get(part) != null && textPartsMap.get(part).getTexts() != null
 					&& (!textPartsMap.get(part).getTexts().isEmpty())
 					&& (textPartsMap.get(part).getText(languageCode) != null)) {
-				Element textPart = doc.createElement(part.toCaamlString());
+				Element textPart = doc.createElement(part.toCaamlv5String());
 				textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode)));
 				bulletinMeasurements.appendChild(textPart);
 			}
@@ -1207,16 +1125,424 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		bulletinResultsOf.appendChild(bulletinMeasurements);
 		rootElement.appendChild(bulletinResultsOf);
 
+		for (String region : publishedRegions) {
+			Element locRef = doc.createElement("locRef");
+			locRef.setAttribute("xlink:href", region);
+			rootElement.appendChild(locRef);
+		}
+
 		return rootElement;
 	}
 
-	public List<Element> toCAAML(Document doc, LanguageCode languageCode) {
+	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
+
+		AvalancheBulletinDaytimeDescription bulletin;
+
+		if (isAfternoon)
+			bulletin = this.afternoon;
+		else
+			bulletin = this.forenoon;
+
+		Element rootElement = doc.createElement("bulletin");
+
+		// attributes
+		if (getId() != null) {
+			if (isAfternoon)
+				rootElement.setAttribute("xml:id", "ID_" + getId() + "_PM");
+			else
+				rootElement.setAttribute("xml:id", "ID_" + getId());
+		}
+		if (languageCode == null)
+			languageCode = LanguageCode.en;
+		rootElement.setAttribute("xml:lang", languageCode.toString());
+
+		// metaData
+		Element metaData = doc.createElement("metaData");
+		rootElement.appendChild(metaData);
+		String publicationTime = "";
+		DateTime date = getPublicationDate();
+		DateTime utcTime = new DateTime(date, DateTimeZone.UTC);
+		if (date != null)
+			publicationTime = utcTime.toString(GlobalVariables.publicationTime);
+		if (!isAfternoon) {
+			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+					+ publicationTime + "/" + getId() + ".jpg";
+			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
+					GlobalVariables.getExtFileThumbnailImageDescription(languageCode), fileReferenceURI));
+		} else {
+			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+					+ publicationTime + "/" + getId() + "_PM.jpg";
+			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
+					GlobalVariables.getExtFileThumbnailImageDescription(languageCode), fileReferenceURI));
+		}
+		String linkReferenceURI = GlobalVariables.getAvalancheReportBaseUrl(languageCode) + "bulletin/"
+				+ getValidityDateString() + "?region=" + getId();
+		if (!isAfternoon)
+			metaData.appendChild(XmlUtil.createExtFile(doc, "website",
+					GlobalVariables.getExtFileRegionLinkDescription(languageCode), linkReferenceURI));
+		else
+			metaData.appendChild(XmlUtil.createExtFile(doc, "website",
+					GlobalVariables.getExtFileRegionLinkDescription(languageCode), linkReferenceURI));
+
+		// publication time
+		Element pubTime = doc.createElement("publicationTime");
+		pubTime.appendChild(doc.createTextNode(
+				publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
+		rootElement.appendChild(pubTime);
+
+		// validTime
+		if (validFrom != null && validUntil != null) {
+
+			DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
+			DateTime end = new DateTime(validUntil).withZone(DateTimeZone.UTC);
+
+			if (hasDaytimeDependency) {
+				if (isAfternoon)
+					start = start.plusHours(12);
+				else
+					end = end.minusHours(12);
+			}
+
+			Element validTime = doc.createElement("validTime");
+			Element beginPosition = doc.createElement("startTime");
+			beginPosition.appendChild(doc.createTextNode(start.toString(GlobalVariables.formatterDateTime)));
+			validTime.appendChild(beginPosition);
+			Element endPosition = doc.createElement("endTime");
+			endPosition.appendChild(doc.createTextNode(end.toString(GlobalVariables.formatterDateTime)));
+			validTime.appendChild(endPosition);
+			rootElement.appendChild(validTime);
+		}
+
+		// source
+		Element source = doc.createElement("source");
+		Element operation = doc.createElement("operation");
+		Element name = doc.createElement("name");
+		name.appendChild(doc.createTextNode(GlobalVariables.getAvalancheReportName(languageCode)));
+		operation.appendChild(name);
+		Element website = doc.createElement("website");
+		website.appendChild(doc.createTextNode(GlobalVariables.getAvalancheReportBaseUrl(languageCode)));
+		operation.appendChild(website);
+		source.appendChild(operation);
+		rootElement.appendChild(source);
+
+		// region
+		for (String region : publishedRegions) {
+			Element regionElement = doc.createElement("region");
+			Element nameElement = doc.createElement("name");
+			nameElement.appendChild(doc.createTextNode(AlbinaUtil.getMicroRegionName(languageCode, region)));
+			regionElement.appendChild(nameElement);
+			// TODO add polygon
+			regionElement.setAttribute("id", region);
+			rootElement.appendChild(regionElement);
+		}
+
+		// complexity
+		if (bulletin != null && bulletin.getComplexity() != null) {
+			Element complexity = doc.createElement("complexity");
+			complexity.appendChild(doc.createTextNode(Complexity.getCAAMLString(bulletin.getComplexity())));
+			rootElement.appendChild(complexity);
+		}
+
+		// danger ratings
+		if (hasElevationDependency) {
+			Element dangerRatingAbove = doc.createElement("dangerRating");
+			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
+				Element mainValueAbove = doc.createElement("mainValue");
+				mainValueAbove.appendChild(
+						doc.createTextNode(DangerRating.getCAAMLv6String(bulletin.getDangerRatingAbove())));
+				dangerRatingAbove.appendChild(mainValueAbove);
+			}
+			Element elevationAbove = doc.createElement("elevation");
+			elevationAbove.setAttribute("uom", "m");
+			Element lowerBound = doc.createElement("lowerBound");
+			if (treeline)
+				lowerBound.appendChild(doc.createTextNode("treeline"));
+			else
+				lowerBound.appendChild(doc.createTextNode(String.valueOf(elevation)));
+			elevationAbove.appendChild(lowerBound);
+			dangerRatingAbove.appendChild(elevationAbove);
+			if (bulletin.getMatrixInformationAbove() != null)
+				bulletin.getMatrixInformationAbove().toCAAMLv6(doc, dangerRatingAbove);
+			rootElement.appendChild(dangerRatingAbove);
+
+			Element dangerRatingBelow = doc.createElement("dangerRating");
+			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
+				Element mainValueBelow = doc.createElement("mainValue");
+				mainValueBelow.appendChild(
+						doc.createTextNode(DangerRating.getCAAMLv6String(bulletin.getDangerRatingBelow())));
+				dangerRatingBelow.appendChild(mainValueBelow);
+			}
+			Element elevationBelow = doc.createElement("elevation");
+			elevationBelow.setAttribute("uom", "m");
+			Element upperBound = doc.createElement("upperBound");
+			if (treeline)
+				upperBound.appendChild(doc.createTextNode("treeline"));
+			else
+				upperBound.appendChild(doc.createTextNode(String.valueOf(elevation)));
+			elevationBelow.appendChild(upperBound);
+			dangerRatingBelow.appendChild(elevationBelow);
+			if (bulletin.getMatrixInformationBelow() != null)
+				bulletin.getMatrixInformationBelow().toCAAMLv6(doc, dangerRatingBelow);
+			rootElement.appendChild(dangerRatingBelow);
+		} else {
+			// NOTE if no elevation dependency is set, the elevation description is above
+			Element dangerRating = doc.createElement("dangerRating");
+			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
+				Element mainValue = doc.createElement("mainValue");
+				mainValue.appendChild(
+						doc.createTextNode(DangerRating.getCAAMLv6String(bulletin.getDangerRatingAbove())));
+				dangerRating.appendChild(mainValue);
+			}
+			if (bulletin.getMatrixInformationAbove() != null)
+				bulletin.getMatrixInformationAbove().toCAAMLv6(doc, dangerRating);
+			rootElement.appendChild(dangerRating);
+		}
+
+		// danger patterns
+		if (dangerPattern1 != null) {
+			Element dangerPatternOne = doc.createElement("dangerPattern");
+			Element dangerPatternOneType = doc.createElement("type");
+			dangerPatternOneType.appendChild(doc.createTextNode(DangerPattern.getCAAMLv6String(dangerPattern1)));
+			dangerPatternOne.appendChild(dangerPatternOneType);
+			rootElement.appendChild(dangerPatternOne);
+		}
+		if (dangerPattern2 != null) {
+			Element dangerPatternTwo = doc.createElement("dangerPattern");
+			Element dangerPatternTwoType = doc.createElement("type");
+			dangerPatternTwoType.appendChild(doc.createTextNode(DangerPattern.getCAAMLv6String(dangerPattern2)));
+			dangerPatternTwo.appendChild(dangerPatternTwoType);
+			rootElement.appendChild(dangerPatternTwo);
+		}
+
+		// avalanche problems
+		for (AvalancheSituation situation : bulletin != null ? bulletin.getAvalancheSituations()
+				: Collections.<AvalancheSituation>emptyList()) {
+			if (situation != null && situation.getAvalancheSituation() != null) {
+				Element avalancheProblem = getAvalancheProblemCaamlv6(doc, situation, languageCode);
+				rootElement.appendChild(avalancheProblem);
+			}
+		}
+
+		// tendency
+		if (this.getTendency() != null) {
+			Element tendencyElement = doc.createElement("tendency");
+			Element type = doc.createElement("type");
+			type.appendChild(doc.createTextNode(Tendency.getCaamlString(this.getTendency())));
+			tendencyElement.appendChild(type);
+
+			if (validFrom != null && validUntil != null) {
+				DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
+				DateTime end = new DateTime(validUntil).withZone(DateTimeZone.UTC);
+
+				start = start.plusDays(1);
+				end = end.plusDays(1);
+
+				Element validTime = doc.createElement("validTime");
+				Element startTime = doc.createElement("startTime");
+				startTime.appendChild(doc.createTextNode(start.toString(GlobalVariables.formatterDateTime)));
+				validTime.appendChild(startTime);
+				Element endTime = doc.createElement("endTime");
+				endTime.appendChild(doc.createTextNode(end.toString(GlobalVariables.formatterDateTime)));
+				validTime.appendChild(endTime);
+				tendencyElement.appendChild(validTime);
+			}
+			rootElement.appendChild(tendencyElement);
+		}
+
+		for (TextPart part : TextPart.values()) {
+			if (textPartsMap.get(part) != null && textPartsMap.get(part).getTexts() != null
+					&& (!textPartsMap.get(part).getTexts().isEmpty())
+					&& (textPartsMap.get(part).getText(languageCode) != null)) {
+				Element textPart = doc.createElement(part.toCaamlv6String());
+				textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode)));
+				rootElement.appendChild(textPart);
+			}
+		}
+
+		return rootElement;
+	}
+
+	private Element getAvProblemCaamlv5(Document doc, AvalancheSituation avalancheSituation,
+			LanguageCode languageCode) {
+		Element avProblem = doc.createElement("AvProblem");
+		Element type = doc.createElement("type");
+		type.appendChild(doc.createTextNode(avalancheSituation.getAvalancheSituation().toCaamlv5String()));
+		avProblem.appendChild(type);
+		if (avalancheSituation.getAspects() != null) {
+			for (Aspect aspect : avalancheSituation.getAspects()) {
+				Element validAspect = doc.createElement("validAspect");
+				validAspect.setAttribute("xlink:href", aspect.toCaamlString());
+				avProblem.appendChild(validAspect);
+			}
+		}
+
+		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
+			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+				// elevation high and low set
+				Element validElevation = doc.createElement("validElevation");
+				Element elevationRange = doc.createElement("elevationRange");
+				elevationRange.setAttribute("uom", "m");
+				Element beginPosition = doc.createElement("beginPosition");
+				if (avalancheSituation.getTreelineLow())
+					beginPosition.appendChild(doc.createTextNode("Treeline"));
+				else
+					beginPosition.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationLow())));
+				Element endPosition = doc.createElement("endPosition");
+				if (avalancheSituation.getTreelineHigh())
+					endPosition.appendChild(doc.createTextNode("Treeline"));
+				else
+					endPosition.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationHigh())));
+				elevationRange.appendChild(beginPosition);
+				elevationRange.appendChild(endPosition);
+				validElevation.appendChild(elevationRange);
+				avProblem.appendChild(validElevation);
+			} else {
+				// elevation high set
+				Element validElevation = doc.createElement("validElevation");
+				String elevationString;
+				if (avalancheSituation.getTreelineHigh())
+					elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
+				else
+					elevationString = XmlUtil.createValidElevationAttribute(avalancheSituation.getElevationHigh(),
+							false, false);
+				validElevation.setAttribute("xlink:href", elevationString);
+				avProblem.appendChild(validElevation);
+			}
+		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			// elevation low set
+			Element validElevation = doc.createElement("validElevation");
+			String elevationString;
+			if (avalancheSituation.getTreelineLow())
+				elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
+			else
+				elevationString = XmlUtil.createValidElevationAttribute(avalancheSituation.getElevationLow(), true,
+						false);
+			validElevation.setAttribute("xlink:href", elevationString);
+			avProblem.appendChild(validElevation);
+		} else {
+			// no elevation set
+		}
+
+		return avProblem;
+	}
+
+	private Element getAvalancheProblemCaamlv6(Document doc, AvalancheSituation avalancheSituation,
+			LanguageCode languageCode) {
+		Element avalancheProblem = doc.createElement("avalancheProblem");
+		Element type = doc.createElement("type");
+		type.appendChild(doc.createTextNode(avalancheSituation.getAvalancheSituation().toCaamlv6String()));
+		avalancheProblem.appendChild(type);
+		Element dangerRating = doc.createElement("dangerRating");
+		if (avalancheSituation.getAspects() != null) {
+			for (Aspect aspect : avalancheSituation.getAspects()) {
+				Element validAspect = doc.createElement("aspect");
+				validAspect.appendChild(doc.createTextNode(aspect.toUpperCaseString()));
+				dangerRating.appendChild(validAspect);
+			}
+		}
+
+		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
+			Element validElevation = doc.createElement("elevation");
+			validElevation.setAttribute("uom", "m");
+			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+				// elevation high and low set
+				Element lowerBound = doc.createElement("lowerBound");
+				if (avalancheSituation.getTreelineLow())
+					lowerBound.appendChild(doc.createTextNode("treeline"));
+				else
+					lowerBound.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationLow())));
+				Element upperBound = doc.createElement("upperBound");
+				if (avalancheSituation.getTreelineHigh())
+					upperBound.appendChild(doc.createTextNode("treeline"));
+				else
+					upperBound.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationHigh())));
+				validElevation.appendChild(lowerBound);
+				validElevation.appendChild(upperBound);
+			} else {
+				// elevation high set
+				Element upperBound = doc.createElement("upperBound");
+				if (avalancheSituation.getTreelineHigh())
+					upperBound.appendChild(doc.createTextNode("treeline"));
+				else
+					upperBound.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationHigh())));
+				validElevation.appendChild(upperBound);
+			}
+			dangerRating.appendChild(validElevation);
+		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			// elevation low set
+			Element validElevation = doc.createElement("elevation");
+			validElevation.setAttribute("uom", "m");
+			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+				Element lowerBound = doc.createElement("lowerBound");
+				if (avalancheSituation.getTreelineLow())
+					lowerBound.appendChild(doc.createTextNode("treeline"));
+				else
+					lowerBound.appendChild(doc.createTextNode(String.valueOf(avalancheSituation.getElevationLow())));
+				validElevation.appendChild(lowerBound);
+			}
+			dangerRating.appendChild(validElevation);
+		} else {
+			// no elevation set
+		}
+
+		// terrain feature
+		if (avalancheSituation.getTerrainFeature() != null && !avalancheSituation.getTerrainFeature().isEmpty()
+				&& avalancheSituation.getTerrainFeature(languageCode) != null) {
+			Element textPart = doc.createElement("terrainFeature");
+			textPart.appendChild(doc.createTextNode(avalancheSituation.getTerrainFeature(languageCode)));
+			dangerRating.appendChild(textPart);
+		}
+
+		// danger rating
+		if (avalancheSituation.getMatrixInformation() != null) {
+			DangerRating rating = null;
+			if (avalancheSituation.getMatrixInformation().getArtificialDangerRating() != null) {
+				if (avalancheSituation.getMatrixInformation().getNaturalDangerRating() != null) {
+					if (avalancheSituation.getMatrixInformation().getArtificialDangerRating()
+							.compareTo(avalancheSituation.getMatrixInformation().getNaturalDangerRating()) < 0)
+						rating = avalancheSituation.getMatrixInformation().getNaturalDangerRating();
+					else
+						rating = avalancheSituation.getMatrixInformation().getArtificialDangerRating();
+				} else {
+					rating = avalancheSituation.getMatrixInformation().getArtificialDangerRating();
+				}
+			} else if (avalancheSituation.getMatrixInformation().getNaturalDangerRating() != null) {
+				rating = avalancheSituation.getMatrixInformation().getNaturalDangerRating();
+			}
+			if (rating != null) {
+				Element mainValue = doc.createElement("mainValue");
+				mainValue.appendChild(doc.createTextNode(DangerRating.getCAAMLv6String(rating)));
+				dangerRating.appendChild(mainValue);
+			}
+
+			avalancheSituation.getMatrixInformation().toCAAMLv6(doc, dangerRating);
+		}
+
+		avalancheProblem.appendChild(dangerRating);
+
+		return avalancheProblem;
+	}
+
+	public List<Element> toCAAMLv5(Document doc, LanguageCode languageCode) {
 		if (publishedRegions != null && !publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLBulletin(doc, languageCode, false));
+			result.add(createCAAMLv5Bulletin(doc, languageCode, false));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLBulletin(doc, languageCode, true));
+				result.add(createCAAMLv5Bulletin(doc, languageCode, true));
+
+			return result;
+		} else
+			return null;
+	}
+
+	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode) {
+		if (publishedRegions != null && !publishedRegions.isEmpty()) {
+			List<Element> result = new ArrayList<Element>();
+			result.add(createCAAMLv6Bulletin(doc, languageCode, false));
+
+			if (hasDaytimeDependency)
+				result.add(createCAAMLv6Bulletin(doc, languageCode, true));
 
 			return result;
 		} else
@@ -1233,6 +1559,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		setPublishedRegions(bulletin.getPublishedRegions());
 		setSavedRegions(bulletin.getSavedRegions());
 		setElevation(bulletin.getElevation());
+		setManualDangerRating(bulletin.isManualDangerRating());
 		setHasDaytimeDependency(bulletin.isHasDaytimeDependency());
 		setHasElevationDependency(bulletin.isHasElevationDependency());
 		setTreeline(bulletin.getTreeline());
@@ -1246,10 +1573,18 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			else {
 				forenoon.setDangerRatingAbove(bulletin.getForenoon().getDangerRatingAbove());
 				forenoon.setMatrixInformationAbove(bulletin.getForenoon().getMatrixInformationAbove());
+				forenoon.setTerrainFeatureAboveTextcat(bulletin.getForenoon().getTerrainFeatureAboveTextcat());
+				forenoon.setTerrainFeatureAbove(bulletin.getForenoon().getTerrainFeatureAbove());
 				forenoon.setDangerRatingBelow(bulletin.getForenoon().getDangerRatingBelow());
 				forenoon.setMatrixInformationBelow(bulletin.getForenoon().getMatrixInformationBelow());
+				forenoon.setTerrainFeatureBelowTextcat(bulletin.getForenoon().getTerrainFeatureBelowTextcat());
+				forenoon.setTerrainFeatureBelow(bulletin.getForenoon().getTerrainFeatureBelow());
+				forenoon.setComplexity(bulletin.getForenoon().getComplexity());
 				forenoon.setAvalancheSituation1(bulletin.getForenoon().getAvalancheSituation1());
 				forenoon.setAvalancheSituation2(bulletin.getForenoon().getAvalancheSituation2());
+				forenoon.setAvalancheSituation3(bulletin.getForenoon().getAvalancheSituation3());
+				forenoon.setAvalancheSituation4(bulletin.getForenoon().getAvalancheSituation4());
+				forenoon.setAvalancheSituation5(bulletin.getForenoon().getAvalancheSituation5());
 			}
 		}
 
@@ -1259,10 +1594,18 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			else {
 				afternoon.setDangerRatingAbove(bulletin.getAfternoon().getDangerRatingAbove());
 				afternoon.setMatrixInformationAbove(bulletin.getAfternoon().getMatrixInformationAbove());
+				afternoon.setTerrainFeatureAboveTextcat(bulletin.getAfternoon().getTerrainFeatureAboveTextcat());
+				afternoon.setTerrainFeatureAbove(bulletin.getAfternoon().getTerrainFeatureAbove());
 				afternoon.setDangerRatingBelow(bulletin.getAfternoon().getDangerRatingBelow());
 				afternoon.setMatrixInformationBelow(bulletin.getAfternoon().getMatrixInformationBelow());
+				afternoon.setTerrainFeatureBelowTextcat(bulletin.getAfternoon().getTerrainFeatureBelowTextcat());
+				afternoon.setTerrainFeatureBelow(bulletin.getAfternoon().getTerrainFeatureBelow());
+				afternoon.setComplexity(bulletin.getAfternoon().getComplexity());
 				afternoon.setAvalancheSituation1(bulletin.getAfternoon().getAvalancheSituation1());
 				afternoon.setAvalancheSituation2(bulletin.getAfternoon().getAvalancheSituation2());
+				afternoon.setAvalancheSituation3(bulletin.getAfternoon().getAvalancheSituation3());
+				afternoon.setAvalancheSituation4(bulletin.getAfternoon().getAvalancheSituation4());
+				afternoon.setAvalancheSituation5(bulletin.getAfternoon().getAvalancheSituation5());
 			}
 		}
 
@@ -1302,6 +1645,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if ((this.forenoon == null) ? (other.forenoon != null) : !this.forenoon.equals(other.forenoon))
 			return false;
 		if ((this.afternoon == null) ? (other.afternoon != null) : !this.afternoon.equals(other.afternoon))
+			return false;
+		if ((this.highlightsTextcat == null) ? (other.highlightsTextcat != null)
+				: !this.highlightsTextcat.equals(other.highlightsTextcat))
 			return false;
 		if ((this.avActivityHighlightsTextcat == null) ? (other.avActivityHighlightsTextcat != null)
 				: !this.avActivityHighlightsTextcat.equals(other.avActivityHighlightsTextcat))

@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.ElementCollection;
@@ -40,7 +40,7 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 	private Set<Text> texts;
 
 	public Texts() {
-		texts = new HashSet<Text>();
+		texts = new LinkedHashSet<>();
 	}
 
 	public Texts(JSONArray json) {
