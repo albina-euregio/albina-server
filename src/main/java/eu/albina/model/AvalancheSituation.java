@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -69,7 +69,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	private boolean treelineLow;
 
 	public AvalancheSituation() {
-		this.aspects = new HashSet<Aspect>();
+		this.aspects = new LinkedHashSet<>();
 	}
 
 	public AvalancheSituation(JSONObject json) {
@@ -156,7 +156,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		if (aspects != null && aspects.size() > 0) {
 			JSONArray aspects = new JSONArray();
 			for (Aspect aspect : this.aspects) {
-				aspects.put(aspect.toString());
+				aspects.put(aspect.toUpperCaseString());
 			}
 			json.put("aspects", aspects);
 		}

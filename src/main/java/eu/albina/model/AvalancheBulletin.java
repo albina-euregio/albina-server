@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -186,11 +186,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	 * Standard constructor for an avalanche bulletin.
 	 */
 	public AvalancheBulletin() {
-		additionalAuthors = new HashSet<String>();
-		textPartsMap = new HashMap<TextPart, Texts>();
-		publishedRegions = new HashSet<String>();
-		savedRegions = new HashSet<String>();
-		suggestedRegions = new HashSet<String>();
+		additionalAuthors = new LinkedHashSet<>();
+		textPartsMap = new LinkedHashMap<>();
+		publishedRegions = new LinkedHashSet<>();
+		savedRegions = new LinkedHashSet<>();
+		suggestedRegions = new LinkedHashSet<>();
 	}
 
 	/**
