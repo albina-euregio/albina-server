@@ -228,7 +228,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		if (aspects != null && aspects.size() > 0) {
 			JSONArray aspects = new JSONArray();
 			for (Aspect aspect : this.aspects) {
-				aspects.put(aspect.toString());
+				aspects.put(aspect.toUpperCaseString());
 			}
 			json.put("aspects", aspects);
 		}

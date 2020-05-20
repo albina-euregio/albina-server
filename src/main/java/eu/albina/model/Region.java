@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -94,7 +94,7 @@ public class Region implements AvalancheInformationObject {
 	 * Default constructor. Initializes all collections of the region.
 	 */
 	public Region() {
-		subregions = new HashSet<Region>();
+		subregions = new LinkedHashSet<>();
 	}
 
 	public String getId() {

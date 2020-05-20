@@ -16,11 +16,10 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
-import org.junit.Ignore;
+import org.junit.Assert;
 import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,12 +29,14 @@ import java.util.List;
 
 public class AvalancheBulletinTest {
 
-	@Ignore
 	@Test
 	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("validBulletin.json"), StandardCharsets.UTF_8);
 		AvalancheBulletin b = AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json"));
-		JSONAssert.assertEquals(expected, b.toJSON().toString(), JSONCompareMode.NON_EXTENSIBLE);
+		Assert.assertEquals(
+			new JSONObject(expected).toString(4),
+			b.toJSON().toString(4)
+		);
 	}
 
 	@Test
