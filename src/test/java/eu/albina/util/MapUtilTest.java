@@ -1,17 +1,28 @@
 package eu.albina.util;
 
+import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Regions;
+
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class MapUtilTest {
+
+	@Rule
+	public TemporaryFolder folder= new TemporaryFolder();
 
 	@Before
 	public void setUp() {
@@ -45,6 +56,20 @@ public class MapUtilTest {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		MapUtil.createMapyrusMaps(bulletins);
+	}
+
+	@Test
+	public void testRegionsFile() throws Exception {
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final Path path = folder.newFile("regions.json").toPath();
+
+		MapUtil.createBulletinRegions(bulletins, MapUtil.DaytimeDependency.fd, path, regions);
+		final String actual = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+
+		final String expected = Resources.toString(Resources.getResource("2019-01-17.regions.json"), StandardCharsets.UTF_8);
+		assertEquals(new JSONObject(expected).toString(4), new JSONObject(actual).toString(4));
 	}
 
 	@Test

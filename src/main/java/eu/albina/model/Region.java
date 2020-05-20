@@ -16,7 +16,11 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,17 +34,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
 import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
+import com.google.common.io.Resources;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Polygon;
 
@@ -95,6 +102,25 @@ public class Region implements AvalancheInformationObject {
 	 */
 	public Region() {
 		subregions = new LinkedHashSet<>();
+	}
+
+	public Region(JSONObject object) {
+		this();
+		if (!"Feature".equals(object.getString("type"))) {
+			throw new IllegalArgumentException("Expecting type=Feature");
+		}
+		final JSONObject properties = object.getJSONObject("properties");
+		nameDe = properties.getString("nameDe");
+		nameIt = properties.getString("nameIt");
+		nameEn = properties.getString("nameEn");
+		id = properties.getString("id");
+
+		try {
+			polygon = new ObjectMapper().registerModule(new JtsModule())
+					.readValue(object.getJSONObject("geometry").toString(), Polygon.class);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	public String getId() {
@@ -240,4 +266,27 @@ public class Region implements AvalancheInformationObject {
 		feature.put("geometry", geometry);
 		return feature;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Region region = (Region) o;
+		return Objects.equals(id, region.id) && Objects.equals(version, region.version)
+				&& Objects.equals(nameDe, region.nameDe) && Objects.equals(nameIt, region.nameIt)
+				&& Objects.equals(nameEn, region.nameEn) && Objects.equals(polygon, region.polygon);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, version, nameDe, nameIt, nameEn, polygon);
+	}
+
+	public static Region readRegion(final URL resource) throws IOException {
+		final String string = Resources.toString(resource, StandardCharsets.UTF_8);
+		return new Region(new JSONObject(string));
+	}
+
 }
