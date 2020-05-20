@@ -16,12 +16,12 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
-public enum AvalancheSize {
-	small, medium, large, very_large, extreme;
+public enum Complexity {
+	easy, challenging, complex;
 
-	public static AvalancheSize fromString(String text) {
+	public static Complexity fromString(String text) {
 		if (text != null) {
-			for (AvalancheSize type : AvalancheSize.values()) {
+			for (Complexity type : Complexity.values()) {
 				if (text.equalsIgnoreCase(type.toString()))
 					return type;
 			}
@@ -29,21 +29,31 @@ public enum AvalancheSize {
 		return null;
 	}
 
-	public String toCaamlString() {
-		switch (this) {
-		case small:
-			return "1";
-		case medium:
-			return "2";
-		case large:
-			return "3";
-		case very_large:
-			return "4";
-		case extreme:
-			return "5";
+	public static String getCAAMLString(Complexity complexity) {
+		switch (complexity) {
+		case easy:
+			return "easy";
+		case challenging:
+			return "challenging";
+		case complex:
+			return "complex";
 
 		default:
-			return null;
+			return "n/a";
+		}
+	}
+
+	public static String getString(Complexity complexity) {
+		switch (complexity) {
+		case easy:
+			return "easy";
+		case challenging:
+			return "challenging";
+		case complex:
+			return "complex";
+
+		default:
+			return "n/a";
 		}
 	}
 }

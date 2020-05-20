@@ -29,7 +29,7 @@ public enum AvalancheSituation {
 		return null;
 	}
 
-	public String toCaamlString() {
+	public String toCaamlv5String() {
 		switch (this) {
 		case new_snow:
 			return "new snow";
@@ -43,6 +43,26 @@ public enum AvalancheSituation {
 			return "gliding snow";
 		case favourable_situation:
 			return "favourable situation";
+
+		default:
+			return null;
+		}
+	}
+
+	public String toCaamlv6String() {
+		switch (this) {
+		case new_snow:
+			return "new_snow";
+		case wind_drifted_snow:
+			return "wind_drifted_snow";
+		case weak_persistent_layer:
+			return "persistent_weak_layer";
+		case wet_snow:
+			return "wet_snow";
+		case gliding_snow:
+			return "gliding_snow";
+		case favourable_situation:
+			return "favourable_situation";
 
 		default:
 			return null;

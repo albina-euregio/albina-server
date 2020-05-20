@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
+import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.DangerRating;
@@ -68,6 +69,9 @@ public class GlobalVariables {
 
 	// TODO: find better solution how to get the URL for simple html and images
 	public static int directoryOffset = 5;
+	public static String avalancheReportNameEn = "Avalanche.report";
+	public static String avalancheReportNameDe = "Lawinen.report";
+	public static String avalancheReportNameIt = "Valanghe.report";
 	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
 	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
 	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
@@ -212,7 +216,7 @@ public class GlobalVariables {
 
 	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
 	// public static String referenceSystemUrn = "EPSG:32632";
-	public static String bulletinCaamlSchemaFileString = "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd";
+	public static String bulletinCaamlSchemaFileString = CaamlVersion.V5.schemaLocation();
 
 	private static String emailEncoding = "UTF-8";
 
@@ -229,6 +233,20 @@ public class GlobalVariables {
 			return avalancheReportBaseUrlIt;
 		default:
 			return avalancheReportBaseUrlEn;
+		}
+	}
+
+	// LANG
+	public static String getAvalancheReportName(LanguageCode lang) {
+		switch (lang) {
+		case en:
+			return avalancheReportNameEn;
+		case de:
+			return avalancheReportNameDe;
+		case it:
+			return avalancheReportNameIt;
+		default:
+			return avalancheReportNameEn;
 		}
 	}
 
@@ -943,24 +961,28 @@ public class GlobalVariables {
 		if (update) {
 			switch (lang) {
 			case de:
-				return "UPDATE zum Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date);
+				return "UPDATE zum " + getAvalancheReportName(lang) + " für " + dateString + ": "
+						+ getBulletinUrl(lang, date);
 			case it:
-				return "AGGIORNAMENTO sulla Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date);
+				return "AGGIORNAMENTO sulla " + getAvalancheReportName(lang) + " per " + dateString + ": "
+						+ getBulletinUrl(lang, date);
 			case en:
-				return "UDPATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
+				return "UDPATE on " + getAvalancheReportName(lang) + " for " + dateString + ": "
+						+ getBulletinUrl(lang, date);
 			default:
-				return "UPDATE on Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
+				return "UPDATE on " + getAvalancheReportName(lang) + " for " + dateString + ": "
+						+ getBulletinUrl(lang, date);
 			}
 		} else {
 			switch (lang) {
 			case de:
-				return "Lawinen.report für " + dateString + ": " + getBulletinUrl(lang, date);
+				return getAvalancheReportName(lang) + " für " + dateString + ": " + getBulletinUrl(lang, date);
 			case it:
-				return "Valanghe.report per " + dateString + ": " + getBulletinUrl(lang, date);
+				return getAvalancheReportName(lang) + " per " + dateString + ": " + getBulletinUrl(lang, date);
 			case en:
-				return "Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
+				return getAvalancheReportName(lang) + " for " + dateString + ": " + getBulletinUrl(lang, date);
 			default:
-				return "Avalanche.report for " + dateString + ": " + getBulletinUrl(lang, date);
+				return getAvalancheReportName(lang) + " for " + dateString + ": " + getBulletinUrl(lang, date);
 			}
 		}
 	}
@@ -1874,6 +1896,123 @@ public class GlobalVariables {
 			return "Page %d";
 		default:
 			return "Page %d";
+		}
+	}
+
+	// LANG
+	public static String getExtFileLinkDescription(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Link zur Webseite";
+		case it:
+			return "Link al sito web";
+		case en:
+			return "Link to the website";
+		default:
+			return "Link to the website";
+		}
+	}
+
+	// LANG
+	public static String getExtFileRegionLinkDescription(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Link zur Region auf der Webseite";
+		case it:
+			return "Link alla regione sul sito web";
+		case en:
+			return "Link to region on the website";
+		default:
+			return "Link to region on the website";
+		}
+	}
+
+	// LANG
+	public static String getExtFileThumbnailImageDescription(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Vereinfachte Gefahrenstufenkarte der Region";
+		case it:
+			return "Mappa di classificazione del pericolo semplificata della regione";
+		case en:
+			return "Simplified danger rating map of the region";
+		default:
+			return "Simplified danger rating map of the region";
+		}
+	}
+
+	// LANG
+	public static String getExtFileSimpleLinkDescription(LanguageCode lang) {
+		switch (lang) {
+		case de:
+			return "Link zur vereinfachten Webseite";
+		case it:
+			return "Link al sito web semplificato";
+		case en:
+			return "Link to the simplified website";
+		default:
+			return "Link to the simplified website";
+		}
+	}
+
+	// LANG
+	public static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
+		String regionName = AlbinaUtil.getRegionName(lang, region);
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		switch (lang) {
+		case de:
+			return "Gefahrenstufenkarte " + regionName + "(" + timeString + ")";
+		case it:
+			return "Mappa di valutazione del pericolo " + regionName + "(" + timeString + ")";
+		case en:
+			return "Danger rating map " + regionName + "(" + timeString + ")";
+		default:
+			return "Danger rating map " + regionName + "(" + timeString + ")";
+		}
+	}
+
+	// LANG
+	public static String getExtFileOverlayDescription(LanguageCode lang, String type) {
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		switch (lang) {
+		case de:
+			return "Gefahrenstufen Overlay (" + timeString + ")";
+		case it:
+			return "Sovrapposizione della valutazione del pericolo (" + timeString + ")";
+		case en:
+			return "Danger rating overlay (" + timeString + ")";
+		default:
+			return "Danger rating overlay (" + timeString + ")";
+		}
+	}
+
+	// LANG
+	public static String getExtFileRegionsDescription(LanguageCode lang, String type) {
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		switch (lang) {
+		case de:
+			return "GeoJSON für Regionen (" + timeString + ")";
+		case it:
+			return "GeoJSON per le regioni (" + timeString + ")";
+		case en:
+			return "GeoJSON for regions (" + timeString + ")";
+		default:
+			return "GeoJSON for regions (" + timeString + ")";
+		}
+	}
+
+	// LANG
+	public static String getExtFilePdfDescription(LanguageCode lang, String region) {
+		String regionName = AlbinaUtil.getRegionName(lang, region);
+		switch (lang) {
+		case de:
+			return "PDF " + regionName;
+		case it:
+			return "PDF " + regionName;
+		case en:
+			return "PDF " + regionName;
+		default:
+			return "PDF " + regionName;
 		}
 	}
 }

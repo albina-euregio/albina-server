@@ -21,6 +21,9 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.ArtificialAvalancheReleaseProbability;
@@ -163,6 +166,47 @@ public class MatrixInformation implements AvalancheInformationObject {
 			json.put("naturalHazardSiteDistribution", this.naturalHazardSiteDistribution.toString());
 
 		return json;
+	}
+
+	public void toCAAMLv6(Document doc, Element rootElement) {
+		if (artificialDangerRating != null) {
+			Element artDangerRating = doc.createElement("artificialDangerRating");
+			artDangerRating.appendChild(doc.createTextNode(DangerRating.getCAAMLv6String(artificialDangerRating)));
+			rootElement.appendChild(artDangerRating);
+		}
+		if (artificialAvalancheSize != null) {
+			Element artAvSize = doc.createElement("artificialAvalancheSize");
+			artAvSize.appendChild(doc.createTextNode(artificialAvalancheSize.toCaamlString()));
+			rootElement.appendChild(artAvSize);
+		}
+		if (artificialAvalancheReleaseProbability != null) {
+			Element artAvReleaseProbability = doc.createElement("artificialAvalancheReleaseProbability");
+			artAvReleaseProbability
+					.appendChild(doc.createTextNode(artificialAvalancheReleaseProbability.toCaamlv6String()));
+			rootElement.appendChild(artAvReleaseProbability);
+		}
+		if (artificialHazardSiteDistribution != null) {
+			Element artHazardSiteDistribution = doc.createElement("artificialHazardSiteDistribution");
+			artHazardSiteDistribution
+					.appendChild(doc.createTextNode(artificialHazardSiteDistribution.toCaamlv6String()));
+			rootElement.appendChild(artHazardSiteDistribution);
+		}
+		if (naturalDangerRating != null) {
+			Element natDangerRating = doc.createElement("naturalDangerRating");
+			natDangerRating.appendChild(doc.createTextNode(DangerRating.getCAAMLv6String(naturalDangerRating)));
+			rootElement.appendChild(natDangerRating);
+		}
+		if (naturalAvalancheReleaseProbability != null) {
+			Element natAvReleaseProbability = doc.createElement("naturalAvalancheReleaseProbability");
+			natAvReleaseProbability
+					.appendChild(doc.createTextNode(naturalAvalancheReleaseProbability.toCaamlv6String()));
+			rootElement.appendChild(natAvReleaseProbability);
+		}
+		if (naturalHazardSiteDistribution != null) {
+			Element natHazardSiteDistribution = doc.createElement("naturalHazardSiteDistribution");
+			natHazardSiteDistribution.appendChild(doc.createTextNode(naturalHazardSiteDistribution.toCaamlv6String()));
+			rootElement.appendChild(natHazardSiteDistribution);
+		}
 	}
 
 	@Override

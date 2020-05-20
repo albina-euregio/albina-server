@@ -28,4 +28,20 @@ public enum NaturalAvalancheReleaseProbability {
 		}
 		return null;
 	}
+
+	public String toCaamlv6String() {
+		switch (this) {
+		case one:
+			return "1";
+		case two:
+			return "2";
+		case three:
+			return "3";
+		case four:
+			return "4";
+
+		default:
+			return null;
+		}
+	}
 }

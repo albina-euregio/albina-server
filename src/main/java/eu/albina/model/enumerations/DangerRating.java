@@ -29,7 +29,31 @@ public enum DangerRating {
 		return null;
 	}
 
-	public static String getCAAMLString(DangerRating dangerRating) {
+	public static String getCAAMLv6String(DangerRating dangerRating) {
+		switch (dangerRating) {
+		case missing:
+			return "no_rating";
+		case no_rating:
+			return "no_rating";
+		case no_snow:
+			return "no_snow";
+		case low:
+			return "low";
+		case moderate:
+			return "moderate";
+		case considerable:
+			return "considerable";
+		case high:
+			return "high";
+		case very_high:
+			return "very_high";
+
+		default:
+			return "no_rating";
+		}
+	}
+
+	public static String getCAAMLv5String(DangerRating dangerRating) {
 		switch (dangerRating) {
 		case missing:
 			return "n/a";

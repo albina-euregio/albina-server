@@ -29,7 +29,7 @@ public enum DangerPattern {
 		return null;
 	}
 
-	public static String getCAAMLString(DangerPattern dangerPattern) {
+	public static String getCAAMLv5String(DangerPattern dangerPattern) {
 		switch (dangerPattern) {
 		case dp1:
 			return "DP1";
@@ -54,6 +54,34 @@ public enum DangerPattern {
 
 		default:
 			return "missing";
+		}
+	}
+
+	public static String getCAAMLv6String(DangerPattern dangerPattern) {
+		switch (dangerPattern) {
+		case dp1:
+			return "dp1";
+		case dp2:
+			return "dp2";
+		case dp3:
+			return "dp3";
+		case dp4:
+			return "dp4";
+		case dp5:
+			return "dp5";
+		case dp6:
+			return "dp6";
+		case dp7:
+			return "dp7";
+		case dp8:
+			return "dp8";
+		case dp9:
+			return "dp9";
+		case dp10:
+			return "dp10";
+
+		default:
+			return null;
 		}
 	}
 }
