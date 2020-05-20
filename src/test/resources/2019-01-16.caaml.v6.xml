@@ -175,16 +175,17 @@
     </dangerRating>
     <avalancheProblem>
       <type>new_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <terrainFeature> Many starting zones have released the snow but not entirely.</terrainFeature>
-      <matrixInformation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <terrainFeature> Many starting zones have released the snow but not entirely.</terrainFeature>
+        <mainValue>considerable</mainValue>
         <artificialDangerRating>considerable</artificialDangerRating>
         <artificialAvalancheSize>3</artificialAvalancheSize>
         <artificialAvalancheReleaseProbability>3</artificialAvalancheReleaseProbability>
@@ -192,19 +193,20 @@
         <naturalDangerRating>moderate</naturalDangerRating>
         <naturalAvalancheReleaseProbability>2</naturalAvalancheReleaseProbability>
         <naturalHazardSiteDistribution>1</naturalHazardSiteDistribution>
-      </matrixInformation>
+      </dangerRating>
     </avalancheProblem>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <matrixInformation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <mainValue>considerable</mainValue>
         <artificialDangerRating>considerable</artificialDangerRating>
         <artificialAvalancheSize>3</artificialAvalancheSize>
         <artificialAvalancheReleaseProbability>3</artificialAvalancheReleaseProbability>
@@ -212,7 +214,7 @@
         <naturalDangerRating>moderate</naturalDangerRating>
         <naturalAvalancheReleaseProbability>2</naturalAvalancheReleaseProbability>
         <naturalHazardSiteDistribution>1</naturalHazardSiteDistribution>
-      </matrixInformation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>decreasing</type>
@@ -289,14 +291,16 @@
     </dangerRating>
     <avalancheProblem>
       <type>wet_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <elevation uom="m">
-        <upperBound>2800</upperBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <elevation uom="m">
+          <upperBound>2800</upperBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>decreasing</type>
@@ -359,15 +363,17 @@
     </dangerRating>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>S</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>treeline</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>treeline</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>steady</type>
@@ -432,28 +438,32 @@
     </dangerRating>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>2300</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>2300</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <avalancheProblem>
       <type>persistent_weak_layer</type>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>2000</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>2000</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>steady</type>
@@ -586,31 +596,35 @@
     </dangerPattern>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>1800</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>1800</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <avalancheProblem>
       <type>gliding_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <upperBound>2400</upperBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <upperBound>2400</upperBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>decreasing</type>
@@ -668,13 +682,15 @@
     </dangerPattern>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>2000</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>2000</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>decreasing</type>
@@ -735,17 +751,19 @@
     </dangerRating>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>treeline</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>treeline</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>decreasing</type>
@@ -815,28 +833,32 @@
     </dangerRating>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>2200</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>2200</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <avalancheProblem>
       <type>persistent_weak_layer</type>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>2000</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>2000</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>steady</type>
@@ -912,14 +934,16 @@
     </dangerRating>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>2200</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>2200</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>steady</type>
@@ -983,31 +1007,35 @@
     </dangerRating>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>1800</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>1800</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <avalancheProblem>
       <type>persistent_weak_layer</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>1800</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>1800</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>steady</type>
@@ -1074,31 +1102,35 @@
     </dangerPattern>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>treeline</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>treeline</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <avalancheProblem>
       <type>persistent_weak_layer</type>
-      <aspect>S</aspect>
-      <aspect>SW</aspect>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>SE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>treeline</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>S</aspect>
+        <aspect>SW</aspect>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>SE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>treeline</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>decreasing</type>
@@ -1147,14 +1179,16 @@
     </dangerRating>
     <avalancheProblem>
       <type>wind_drifted_snow</type>
-      <aspect>W</aspect>
-      <aspect>NW</aspect>
-      <aspect>NE</aspect>
-      <aspect>E</aspect>
-      <aspect>N</aspect>
-      <elevation uom="m">
-        <lowerBound>2200</lowerBound>
-      </elevation>
+      <dangerRating>
+        <aspect>W</aspect>
+        <aspect>NW</aspect>
+        <aspect>NE</aspect>
+        <aspect>E</aspect>
+        <aspect>N</aspect>
+        <elevation uom="m">
+          <lowerBound>2200</lowerBound>
+        </elevation>
+      </dangerRating>
     </avalancheProblem>
     <tendency>
       <type>steady</type>

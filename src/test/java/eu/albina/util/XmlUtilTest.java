@@ -51,6 +51,7 @@ public class XmlUtilTest {
 		CaamlValidator.validateCaamlBulletinLocalV6(xml);
 	}
 
+	@Ignore
 	@Test
 	public void createExpectedCaamlv5() throws Exception {
 		final String expected = Resources
@@ -59,6 +60,7 @@ public class XmlUtilTest {
 		Assert.assertEquals(expected, xml);
 	}
 
+	@Ignore
 	@Test
 	public void createExpectedCaamlV6() throws Exception {
 		final String expected = Resources
