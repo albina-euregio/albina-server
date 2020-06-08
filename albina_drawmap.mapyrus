@@ -1,11 +1,15 @@
+#setoutput mapyrus_dir . date .  "_mapyrus_log_" . bulletin_id . ".txt"
+setoutput mapyrus_dir . "mapyrus_log.txt"
+
 print "========================================="
 print "Mapyrus.time.stamp = ", Mapyrus.time.stamp
 print "Mapyrus.version    = ", Mapyrus.version
 print "-----------------------------------------"
 print "Kartenerstelleung ALBINA"
 print "-----------------------------------------"
-
-setoutput mapyrus_dir . "mapyrus_log.txt"
+print "Gueltiges Kartendatum: " . date
+print "Bulletin-ID/Karte: " . bulletin_id
+print "######################################################"
 
 # Daten Input (includes)
 let inc1 = "include " . mapyrus_dir . "fontdefinition.mapyrus"
@@ -16,7 +20,13 @@ let inc3 = "include " . mapyrus_dir . "albina_styles.mapyrus"
 eval inc3
 
 # Raster-Input
-let raster = geodata_dir . "alpes_srtm250_n_gm_hs_v1.png"
+if level == 1 then
+	let raster = geodata_dir . "alpes_srtm250_n_gm_hs_light.png"
+elif level == 2 then
+	let raster = geodata_dir . "alpes_srtm250_n_gm_hs_v1.png"
+elif level == 3 then
+	let raster = geodata_dir . "srtm90_albina_EPSG_3395_hs.png"
+endif
 
 # Shapefile-Input
 if level == 1 then
@@ -32,6 +42,8 @@ else
 	let rivers = geodata_dir . "gewaesser_l.shp"
 	let lakes = geodata_dir . "gewaesser_a.shp"
 endif
+
+let region_l = geodata_dir . "regionen_euregio_l.shp"
 
 let euregio = geodata_dir . "euregio_a.shp"
 if level == 1 then
@@ -54,12 +66,60 @@ elif bulletin_id eq "trentino" then
 endif
 
 let cities = geodata_dir . "albina_orte_p.shp" 
+let peaks = geodata_dir . "albina_hoehenpunkte_p.shp" 
 let names_p = geodata_dir . "albina_namengut_p.shp" 
 let names_l = geodata_dir . "albina_namengut_l.shp" 
 
-# INTERREG-Logo
-let euregio_image_file = image_dir . "euregio_logo.png"
+define_albina_graphic_value_arrays_from_datafile drm_file, "1", "bul_id", "icon_elev", "icon_danger_h", "icon_danger_l", "icon_asp_h", "icon_asp_l", "icon_prob_h", "icon_prob_l"
+
+let elevation_level = icon_elev[bulletin_id]
 	
+let danger_rating_high = icon_danger_h[bulletin_id]
+let danger_rating_low = icon_danger_l[bulletin_id]
+	
+let aspect_high = icon_asp_h[bulletin_id]
+let aspect_low = icon_asp_l[bulletin_id]
+
+if icon_prob_h[bulletin_id] eq "drifting snow" then
+	let problem_icon_h = image_dir . "drifting_snow" . icon_color . icon_ext
+elif icon_prob_h[bulletin_id] eq "gliding snow" then
+	let problem_icon_h = image_dir . "gliding_snow" . icon_color . icon_ext
+elif icon_prob_h[bulletin_id] eq "new snow" then
+	let problem_icon_h = image_dir . "new_snow" . icon_color . icon_ext
+elif icon_prob_h[bulletin_id] eq "old snow" then
+	let problem_icon_h = image_dir . "old_snow" . icon_color . icon_ext
+elif icon_prob_h[bulletin_id] eq "wet snow" then
+	let problem_icon_h = image_dir . "wet_snow" . icon_color . icon_ext
+elif icon_prob_h[bulletin_id] eq "favourable situation" then
+	let problem_icon_h = image_dir . "favourable_situation" . icon_color . icon_ext
+elif icon_prob_h[bulletin_id] eq "n/a" then
+	let problem_icon_h = image_dir . "n_a" . icon_color . icon_ext
+endif
+	
+if icon_prob_l[bulletin_id] eq "drifting snow" then
+	let problem_icon_l = image_dir . "drifting_snow" . icon_color . icon_ext
+elif icon_prob_l[bulletin_id] eq "gliding snow" then
+	let problem_icon_l = image_dir . "gliding_snow" . icon_color . icon_ext
+elif icon_prob_l[bulletin_id] eq "new snow" then
+	let problem_icon_l = image_dir . "new_snow" . icon_color . icon_ext
+elif icon_prob_l[bulletin_id] eq "old snow" then
+	let problem_icon_l = image_dir . "old_snow" . icon_color . icon_ext
+elif icon_prob_l[bulletin_id] eq "wet snow" then
+	let problem_icon_l = image_dir . "wet_snow" . icon_color . icon_ext
+elif icon_prob_l[bulletin_id] eq "favourable situation" then
+	let problem_icon_l = image_dir . "favourable_situation" . icon_color . icon_ext
+elif icon_prob_l[bulletin_id] eq "n/a" then
+	let problem_icon_l = image_dir . "n_a" . icon_color . icon_ext
+endif
+
+# INTERREG-Logo
+let interreg_image_file = image_dir . "interrreg_logo.png"
+
+# EUREGIO-Logo
+let euregio_image_file = image_dir . "euregio_logo.png"
+if colormode eq "bw" then	
+	let euregio_image_file = image_dir . "euregio_logo_bw.png"
+endif		
 	
 ###################################################################
 # --- Define NEWPAGE
@@ -131,9 +191,10 @@ if copyright eq "on" then
 	draw_copyright copyright_txt, c_font, c_fontsize, c_fontcolor
 endif
 
-# INTERREG-Logo bei Karten
-if interreg eq "on" then
-	place_interreg_logo
+# Logo bei Karten
+if logo eq "on" then
+	#place_interreg_logo
+	place_euregio_logo
 endif
 
 # Rahmen

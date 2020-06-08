@@ -80,10 +80,12 @@ begin LABEL_POINT color, font, size, outlinecolor, outlinewidth, ext_o, inn_o, x
 	font font, size, outlinewidth				# Schriftfont, -größe & Stärke des Halo (s. TEXT_LOOKUP)
 	eval outlinecolor							# Halofarbe (s. TEXT_LOOKUP)		
 	flowlabel spacing, 0, "rotate=false", label					# Labelplatzierung
+###label label
 	
 	font font, size								# Schriftfont und -größe (s. TEXT_LOOKUP)
 	eval color									# Farbe (s. TEXT_LOOKUP)
 	flowlabel spacing, 0, "rotate=false", label					# Labelplatzierung
+###label label
 	clearpath
 
 end
@@ -159,7 +161,7 @@ begin image_feature file
         geoimage file
 	endif
 	
-	print "Schummerung"
+	print "Schummerung gezeichnet"
 	
 end
 
@@ -185,7 +187,7 @@ begin polygon_feature_pp file, level
 			endif
 		done	
 		
-	print "Passepartout"
+	print "Passepartout gezeichnet"
 	
 end
 
@@ -209,7 +211,7 @@ begin polygon_feature_shadow_bw file, level, linewidth
 			endif
 		done	
 		
-	print "Schatten"
+	print "Schatten gezeichnet"
 	
 end
 
@@ -244,7 +246,7 @@ begin line_feature_rivers file, level
 			endif
 		done	
 		
-	print "Flüsse"
+	print "Fluesse gezeichnet"
 	
 end
 
@@ -281,7 +283,7 @@ begin polygon_feature_lakes file, level
 			endif
 		done	
 		
-	print "Seen"
+	print "Seen gezeichnet"
 	
 end
 
@@ -313,7 +315,7 @@ begin polygon_feature_euregio file
 					endif
 		done
 	
-	print "Euregio"
+	print "Euregio gezeichnet"
 end
 
 # -------------------------------------------------------------
@@ -345,6 +347,9 @@ begin polygon_feature_danger_levels file, txtfile, level
 					endif
 				endif
 			done	
+	
+	print "---------------------------------"
+	print "--- Gefahrenstufeneinfaerbung ---"
 	
 	dataset "shapefile", file, ""
 	while Mapyrus.fetch.more
@@ -402,7 +407,8 @@ begin polygon_feature_danger_levels file, txtfile, level
 							stroke
 						endif
 					elif threshold < elevation_h[ALB_ID] then
-						let high_color = danger_l[ALB_ID]
+						let alb_id_low = code ."-l"
+						let high_color = danger_l[alb_id_low]
 						print high_color . " = " . ALB_ID
 						if high_color eq 5 then
 							eval danger_color[4]
@@ -471,7 +477,9 @@ begin polygon_feature_danger_levels file, txtfile, level
 								stroke
 							endif
 						elif threshold < elevation_h[ALB_ID] then
-							let high_color = danger_l[ALB_ID]
+							let alb_id_low = code ."-l"
+							let high_color = danger_l[alb_id_low]
+							print high_color . " = " . ALB_ID
 							if high_color eq 5 then
 								eval danger_color[4]
 								fill
@@ -493,7 +501,8 @@ begin polygon_feature_danger_levels file, txtfile, level
 				endif
 			done		
 
-	print "Gefahrenstufen"
+	print "---------------------------------"
+	print "Gefahrenstufen gezeichnet"
 	
 end
 
@@ -526,7 +535,7 @@ begin line_feature_regions file, level
 				endif
 			done				
 			
-	print "Regionsgrenzen"
+	print "Regionsgrenzen gezeichnet"
 	
 end
 
@@ -561,7 +570,7 @@ begin line_feature_country file, level, in_out
 				endif
 			done				
 			
-	print "Staatsgrenzen"
+	print "Staatsgrenzen gezeichnet"
 	
 end
 
@@ -602,7 +611,7 @@ begin line_feature_provinces file, level, in_out
 				endif
 			done				
 			
-	print "Provinzgrenzen"
+	print "Provinzgrenzen gezeichnet"
 	
 end
 
@@ -711,7 +720,7 @@ begin CIRCLEMARKER scalefactor, fillcolor, strokecolor, linewidth
 	stroke	
 end
 
-begin point_feature_city_marker file, level		
+begin point_feature_city_marker file, level					#, in_out
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -722,6 +731,7 @@ begin point_feature_city_marker file, level
 			fetch
 			clearpath
 			addpath GEOMETRY
+			#if EUREGIO == in_out then
 				if (level == 1 and ALBINA_1 == 1) then
 					if category <= 3 then
 						SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
@@ -748,9 +758,10 @@ begin point_feature_city_marker file, level
 						endif
 					endif
 				endif
+			#endif
 		done		
 
-	print "Städte"
+	print "Staedte gezeichnet"
 
 end
 
@@ -782,7 +793,7 @@ begin point_feature_labels file, level
 			endif
 		done		
 
-	print "Namengut"
+	print "Namengut (P) gezeichnet"
 
 end
 
@@ -806,10 +817,47 @@ begin line_feature_labels file, level
 			endif
 		done		
 
-	print "Namengut"
+	print "Namengut (L) gezeichnet"
 
 end
 
+
+###############################################################
+# Symbol Berg
+###############################################################
+
+begin MOUNTAIN scalefactor, fillcolor, linecolor, line
+	clearpath
+	scale scalefactor
+	triangle 0, 0, 1.2, 0
+	eval fillcolor
+	fill
+	eval linecolor
+	eval line
+	stroke
+end
+
+begin point_feature_peaks file, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, "encoding=UTF-8"
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			if (level == 1 and ALBINA_1 == 1) or (level == 2 and ALBINA_2 == 1) or (level == 3 and ALBINA_3 == 1) then
+				MOUNTAIN peak_scale, peak_color, peak_line_color, peak_line
+				LABEL_POINT peak_label_color, font_semibold_italic, peak_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+				LABEL_POINT peak_label_color, font_semibold_italic, peak_font_size, label_halo_background_color, label_halo_width, h_ext_o, h_inn_o, h_x_off, h_y_off, h_angle, h_spacing, height
+			endif
+		done		
+
+	print "Berggipfel gezeichnet"
+
+end
 
 ###############################################################
 # Rahmen
@@ -877,7 +925,20 @@ begin place_interreg_logo
 	worlds px1, py1, px2, py2
 	clearpath
 	move mx2 - (interreg_image_size / 2) - 2, my1 + 21.0
-	icon euregio_image_file, interreg_image_size
+	icon interreg_image_file, interreg_image_size
+
+end
+
+###############################################################
+# EUREGIO-Logo
+###############################################################
+
+begin place_euregio_logo
+
+	worlds px1, py1, px2, py2
+	clearpath
+	move mx2 - (euregio_image_size / 2) - 2, my1 + 19.0
+	icon euregio_image_file, euregio_image_size
 
 end
 
@@ -1028,8 +1089,126 @@ print "value_l-array: ", value4_l_array
 print "-----------------------------------"
 let for4_l = "for key in " . value4_l_array ." do " . "print key, " . value4_l_array . "[key]" . "; done"
 eval for4_l
+print "==================================="
 #*/
 return numlines
 end
+# ======================================================================
+
+
+# ======================================================================
+function define_albina_graphic_value_arrays_from_datafile infile, header, index_array, elev_array, value1_array, value2_array, value3_array, value4_array, value5_array, value6_array
+# ----------------------------------
+# --- defines data arrays from input file
+# ----------------------------------
+#
+#   infile = input data file (4 columns id; value1; value2; value3) 
+#   header = number of header rows that will not be included in array
+#   value1_array = array [column1] = value1
+#   value2_array = array [column1] = value2
+#   value3_array = array [column1] = value3
+#   index_array = array [sequential number] = column1
+
+# ----------------------------------
+# --- define value-array and index-array
+# ----------------------------------
+
+let bul = "let " . index_array . "[m] = index"
+let elev = "let " . elev_array . "[index] = elev_m"
+let v1 = "let " . value1_array . "[index] = dr_h"
+let v2 = "let " . value2_array . "[index] = dr_l"
+let v3 = "let " . value3_array . "[index] = exp_h"
+let v4 = "let " . value4_array . "[index] = exp_l"
+let v5 = "let " . value5_array . "[index] = snow_h"
+let v6 = "let " . value6_array . "[index] = snow_l"
+
+# ----------------------------------
+# --- read data from textfile and create value-array and index-array
+# ----------------------------------
+let n = 1
+dataset "textfile", infile , "delimiter=;"
+while Mapyrus.fetch.more
+do
+  fetch
+  let arr = split($0,";")
+  let numvar = length(arr)
+  if n > header then
+	let m = n - header
+	let index = $1
+	let elev_m = $6
+	let dr_h = $7
+	let dr_l = $8
+	let exp_h = $9
+	let exp_l = $10
+	let snow_h = $11
+	let snow_l = $12
+
+	eval bul	
+ 	eval elev
+	eval v1
+	eval v2
+	eval v3
+	eval v4
+	eval v5
+	eval v6
+
+  endif
+  let n = n + 1
+done
+let numlines = m
+
+#/*
+print "==================================="
+print "define graphic data arrays from input file "
+print "input file: " . infile
+print "==================================="
+
+print "==================================="
+print "value-array: ", elev_array
+print "-----------------------------------"
+let for0b = "for key in " . elev_array ." do " . "print key, " . elev_array . "[key]" . "; done"
+eval for0b
+
+print "==================================="
+print "value-array: ", value1_array
+print "-----------------------------------"
+let for1 = "for key in " . value1_array ." do " . "print key, " . value1_array . "[key]" . "; done"
+eval for1
+
+print "==================================="
+print "value-array: ", value2_array
+print "-----------------------------------"
+let for2 = "for key in " . value2_array ." do " . "print key, " . value2_array . "[key]" . "; done"
+eval for2
+
+print "==================================="
+print "value-array: ", value3_array
+print "-----------------------------------"
+let for3 = "for key in " . value3_array ." do " . "print key, " . value3_array . "[key]" . "; done"
+eval for3
+
+print "==================================="
+print "value-array: ", value4_array
+print "-----------------------------------"
+let for4 = "for key in " . value4_array ." do " . "print key, " . value4_array . "[key]" . "; done"
+eval for4
+
+print "==================================="
+print "value-array: ", value5_array
+print "-----------------------------------"
+let for5 = "for key in " . value5_array ." do " . "print key, " . value5_array . "[key]" . "; done"
+eval for5
+
+print "==================================="
+print "value-array: ", value6_array
+print "-----------------------------------"
+let for6 = "for key in " . value6_array ." do " . "print key, " . value6_array . "[key]" . "; done"
+eval for6
+
+return numlines
+end
+# ======================================================================
+
+
 
 # ======================================================================
