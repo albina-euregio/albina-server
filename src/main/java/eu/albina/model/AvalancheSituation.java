@@ -43,6 +43,7 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.Direction;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
@@ -74,6 +75,10 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 
 	@Column(name = "TREELINE_LOW")
 	private boolean treelineLow;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "DANGER_RATING_DIRECTION")
+	private Direction dangerRatingDirection;
 
 	/** Information about the selected field in the EAWS matrix */
 	@Embedded
@@ -121,6 +126,8 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 			this.elevationLow = json.getInt("elevationLow");
 		if (json.has("treelineLow"))
 			this.treelineLow = json.getBoolean("treelineLow");
+		if (json.has("dangerRatingDirection"))
+			this.dangerRatingDirection = Direction.valueOf(json.getString("dangerRatingDirection").toLowerCase());
 		if (json.has("matrixInformation"))
 			this.matrixInformation = new MatrixInformation(json.getJSONObject("matrixInformation"));
 		if (json.has("terrainFeatureTextcat"))
@@ -184,6 +191,14 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		this.treelineLow = treelineLow;
 	}
 
+	public Direction getDangerRatingDirection() {
+		return dangerRatingDirection;
+	}
+
+	public void setDangerRatingDirection(Direction dangerRatingDirection) {
+		this.dangerRatingDirection = dangerRatingDirection;
+	}
+
 	public MatrixInformation getMatrixInformation() {
 		return matrixInformation;
 	}
@@ -241,6 +256,8 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 			json.put("treelineLow", treelineLow);
 		else if (elevationLow > 0)
 			json.put("elevationLow", elevationLow);
+		if (dangerRatingDirection != null)
+			json.put("dangerRatingDirection", this.dangerRatingDirection.toString());
 		if (matrixInformation != null)
 			json.put("matrixInformation", matrixInformation.toJSON());
 
@@ -276,6 +293,9 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		if (this.elevationHigh != other.elevationHigh)
 			return false;
 		if (this.elevationLow != other.elevationLow)
+			return false;
+		if ((this.dangerRatingDirection == null) ? (other.dangerRatingDirection != null)
+				: !this.dangerRatingDirection.equals(other.dangerRatingDirection))
 			return false;
 		if ((this.matrixInformation == null) ? (other.matrixInformation != null)
 				: !this.matrixInformation.equals(other.matrixInformation))
