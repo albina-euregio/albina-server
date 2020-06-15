@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.rest;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -44,6 +45,7 @@ import org.w3c.dom.Element;
 import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
+import eu.albina.model.Regions;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.XmlUtil;
@@ -66,18 +68,13 @@ public class RegionService {
 		logger.debug("GET JSON top level regions");
 
 		try {
-			List<Region> regions = RegionController.getInstance().getRegions();
+			Regions regions = RegionController.getInstance().getRegions();
 			if (regions == null) {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.append("message", "No regions found!");
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = createRegionHeaderJson();
-				JSONArray features = new JSONArray();
-				for (Region entry : regions) {
-					features.put(entry.toJSON());
-				}
-				json.put("features", features);
+				JSONObject json = regions.toJSON();
 				return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 			}
 		} catch (AlbinaException e) {
@@ -152,10 +149,7 @@ public class RegionService {
 				jsonObject.append("message", "Region not found for ID: " + regionId);
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = createRegionHeaderJson();
-				JSONArray features = new JSONArray();
-				features.put(region.toJSON());
-				json.put("features", features);
+				JSONObject json = new Regions(Collections.singletonList(region)).toJSON();
 				return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 			}
 		} catch (AlbinaException e) {
@@ -204,7 +198,7 @@ public class RegionService {
 
 	@GET
 	@Path("/{regionId}/subregions")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes({MediaType.APPLICATION_JSON})
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJsonSubregions(@PathParam("regionId") String regionId) {
 		logger.debug("GET JSON subregions");
@@ -216,12 +210,7 @@ public class RegionService {
 				jsonObject.append("message", "No subregions found for region: " + regionId);
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			} else {
-				JSONObject json = createRegionHeaderJson();
-				JSONArray features = new JSONArray();
-				for (Region entry : regions) {
-					features.put(entry.toJSON());
-				}
-				json.put("features", features);
+				JSONObject json = new Regions(regions).toJSON();
 				return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 			}
 		} catch (AlbinaException e) {
@@ -267,17 +256,5 @@ public class RegionService {
 			logger.warn("Error serializing regions", ex);
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(ex.getMessage().toString()).build();
 		}
-	}
-
-	private static JSONObject createRegionHeaderJson() {
-		JSONObject json = new JSONObject();
-		json.put("type", "FeatureCollection");
-		JSONObject crs = new JSONObject();
-		crs.put("type", "name");
-		JSONObject properties = new JSONObject();
-		properties.put("name", GlobalVariables.referenceSystemUrn);
-		crs.put("properties", properties);
-		json.put("crs", crs);
-		return json;
 	}
 }
