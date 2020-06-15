@@ -65,7 +65,6 @@
 		"treeline" : { "type" : "boolean" },
 		"hasDaytimeDependency" : { "type" : "boolean" },
 		"hasElevationDependency" : { "type" : "boolean" },
-		"isManualDangerRating" : { "type" : "boolean" },
 
 		"forenoon" : { "$ref" : "#/definitions/daytimeDescription" },
 		"afternoon" : { "$ref" : "#/definitions/daytimeDescription" },
