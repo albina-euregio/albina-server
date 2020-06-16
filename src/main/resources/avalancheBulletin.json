@@ -180,8 +180,9 @@
 					"items" : { "$ref" : "#/definitions/aspect" },
 					"additionalProperties" : false
 				},
-				"elevationHigh" : { "type": "integer" },
-				"elevationLow" : { "type": "integer" }
+				"elevationHigh" : { "type" : "integer" },
+				"elevationLow" : { "type" : "integer" },
+				"dangerRatingDirection" : { "$ref" : "#/definitions/direction"}
 			}
 		},
 		"avalancheSituation" : {
@@ -191,6 +192,14 @@
 			"description" : "The five avalanche situations.",
 			"type" : "string",
 			"enum" : [ "new_snow", "wind_drifted_snow", "weak_persistent_layer", "wet_snow", "gliding_snow", "favourable_situation" ]
+		},
+		"direction" : {
+			"id" : "#direction",
+			"$schema" : "http://json-schema.org/draft-04/schema#",
+			"title" : "Direction",
+			"description" : "Definition of a direction.",
+			"type" : "string",
+			"enum" : [ "up", "down" ]
 		},
 		"matrixInformation" : {
 			"id" : "#matrixInformation",
