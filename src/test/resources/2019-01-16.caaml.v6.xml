@@ -160,7 +160,6 @@
     <region id="IT-32-BZ-05">
       <name>Southern Zillertal Alps and High Tauern</name>
     </region>
-    <complexity>easy</complexity>
     <dangerRating>
       <mainValue>considerable</mainValue>
       <elevation uom="m">
@@ -315,7 +314,7 @@
     <snowpackStructureComment> Weak layers in the upper part of the snowpack represent the main danger. The wind slabs have bonded insufficiently with each other and the old snowpack. The fresh snow and wind slabs of last week are lying on the unfavourable surface of an old snowpack in all aspects. Dunes on the snow surface and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack can indicate the danger. Remotely triggered avalanches are possible.</snowpackStructureComment>
     <tendencyComment> Gradual decrease in avalanche danger.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_a2dda2a6-f451-4fac-ac81-4acd051f47a6" xml:lang="en">
+  <bulletin xml:id="ID_a2dda2a6-f451-4fac-ac81-4acd051f47a6" xml:lang="en" complex="true">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -348,7 +347,6 @@
     <region id="IT-32-BZ-20">
       <name>Sexten Dolomites</name>
     </region>
-    <complexity>complex</complexity>
     <dangerRating>
       <mainValue>moderate</mainValue>
       <elevation uom="m">
@@ -423,7 +421,6 @@
     <region id="IT-32-TN-05">
       <name>Southern Brenta</name>
     </region>
-    <complexity>challenging</complexity>
     <dangerRating>
       <mainValue>moderate</mainValue>
       <elevation uom="m">

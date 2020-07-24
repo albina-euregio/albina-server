@@ -1222,9 +1222,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		// complexity
 		if (bulletin != null && bulletin.getComplexity() != null) {
-			Element complexity = doc.createElement("complexity");
-			complexity.appendChild(doc.createTextNode(Complexity.getCAAMLString(bulletin.getComplexity())));
-			rootElement.appendChild(complexity);
+			// Element complexity = doc.createElement("complexity");
+			// complexity.appendChild(doc.createTextNode(Complexity.getCAAMLString(bulletin.getComplexity())));
+			// rootElement.appendChild(complexity);
+			if (bulletin.getComplexity() == Complexity.complex) {
+				rootElement.setAttribute("complex", "true");
+			}
 		}
 
 		// danger ratings
