@@ -23,7 +23,7 @@ package eu.albina.model.enumerations;
  *
  */
 public enum LanguageCode {
-	de, it, en, fr;
+	de, it, en, fr, es, ca, oc;
 
 	public static LanguageCode fromString(String text) {
 		if (text != null) {

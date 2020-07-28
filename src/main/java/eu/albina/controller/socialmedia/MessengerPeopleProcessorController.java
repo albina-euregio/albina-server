@@ -205,14 +205,6 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 					"message=" + message + ", attachmentUrl=" + attachmentUrl, body, null));
 			return response;
 		}
-		// String body = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
-		// response.getEntity().getContent().reset();
-		// MessengerPeopleNewsLetter bodyObject = objectMapper.readValue(body,
-		// MessengerPeopleNewsLetter.class);
-		// ShipmentController.getInstance().saveShipment(createActivityRow(config,
-		// language.toString(),
-		// "message=" + message + ", attachmentUrl=" + attachmentUrl, body, "" +
-		// bodyObject.getBroadcastId()));
 		return response;
 	}
 

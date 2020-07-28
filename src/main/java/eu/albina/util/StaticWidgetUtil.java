@@ -31,6 +31,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.AttributedString;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
@@ -86,15 +88,17 @@ public class StaticWidgetUtil {
 			createStaticWidget(bulletins, lang, validityDateString, publicationTimeString);
 	}
 
-	// LANG
 	public void createStaticWidget(List<AvalancheBulletin> bulletins, LanguageCode lang, String validityDateString,
 			String publicationTimeString) {
 		try {
 			int width = 600;
 			int height = 800;
 
+			Locale currentLocale = new Locale(lang.toString());
+			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+
 			DangerRating highestDangerRating = GlobalVariables.getHighestDangerRating(bulletins);
-			String date = AlbinaUtil.getShortDate(bulletins, lang);
+			String date = AlbinaUtil.getDate(bulletins, messages);
 
 			// TYPE_INT_ARGB specifies the image format: 8-bit RGBA packed
 			// into integer pixels
@@ -160,104 +164,29 @@ public class StaticWidgetUtil {
 			AttributedString asSecondLine;
 			AttributedString asThirdLine;
 			AttributedString asFourthLine;
-			switch (lang) {
-			case de:
-				logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/lawinen_report.png");
 
-				firstLine = "Für " + date + " maximal";
-				asFirstLine = new AttributedString(firstLine);
-				asFirstLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 4, 4 + date.length());
-				asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 4, 4 + date.length());
+			logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/lawinen_report.png");
 
-				secondLine = GlobalVariables.getDangerRatingTextMiddle(highestDangerRating, lang);
-				asSecondLine = new AttributedString(secondLine);
-				asSecondLine.addAttribute(TextAttribute.FONT, openSansBoldBigFont);
-				asSecondLine.addAttribute(TextAttribute.FOREGROUND, getDangerRatingTextColor(highestDangerRating));
+			firstLine = messages.getString("static-widget.line.1");
+			asFirstLine = new AttributedString(firstLine);
+			asFirstLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
+			asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 4, 4 + date.length());
+			asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 4, 4 + date.length());
 
-				thirdLine = "Die komplette Lawinenvorhersage und wo's";
-				asThirdLine = new AttributedString(thirdLine);
-				asThirdLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				asThirdLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 14, 31);
-				asThirdLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 14, 31);
+			secondLine = GlobalVariables.getDangerRatingTextLong(highestDangerRating, messages);
+			asSecondLine = new AttributedString(secondLine);
+			asSecondLine.addAttribute(TextAttribute.FONT, openSansBoldBigFont);
+			asSecondLine.addAttribute(TextAttribute.FOREGROUND, getDangerRatingTextColor(highestDangerRating));
 
-				fourthLine = "besser ist, findet ihr auf:";
-				asFourthLine = new AttributedString(fourthLine);
-				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				break;
-			case it:
-				logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/valanghe_report.png");
+			thirdLine = messages.getString("static-widget.line.3");
+			asThirdLine = new AttributedString(thirdLine);
+			asThirdLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
+			asThirdLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 14, 31);
+			asThirdLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 14, 31);
 
-				firstLine = "Per " + date + " al massimo";
-				asFirstLine = new AttributedString(firstLine);
-				asFirstLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 4, 4 + date.length());
-				asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 4, 4 + date.length());
-
-				secondLine = GlobalVariables.getDangerRatingTextMiddle(highestDangerRating, lang);
-				asSecondLine = new AttributedString(secondLine);
-				asSecondLine.addAttribute(TextAttribute.FONT, openSansBoldBigFont);
-				asSecondLine.addAttribute(TextAttribute.FOREGROUND, getDangerRatingTextColor(highestDangerRating));
-
-				thirdLine = "Il bollettino valanghe completo e dov'è";
-				asThirdLine = new AttributedString(thirdLine);
-				asThirdLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				asThirdLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 3, 23);
-				asThirdLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 3, 23);
-
-				fourthLine = "meglio, trovi su:";
-				asFourthLine = new AttributedString(fourthLine);
-				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				break;
-			case en:
-				logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/avalanche_report.png");
-
-				firstLine = "On " + date + " at maximum";
-				asFirstLine = new AttributedString(firstLine);
-				asFirstLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 3, 4 + date.length());
-				asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 3, 4 + date.length());
-
-				secondLine = GlobalVariables.getDangerRatingTextMiddle(highestDangerRating, lang);
-				asSecondLine = new AttributedString(secondLine);
-				asSecondLine.addAttribute(TextAttribute.FONT, openSansBoldBigFont);
-				asSecondLine.addAttribute(TextAttribute.FOREGROUND, getDangerRatingTextColor(highestDangerRating));
-
-				thirdLine = "The complete avalanche forecast and where it's";
-				asThirdLine = new AttributedString(thirdLine);
-				asThirdLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				asThirdLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 13, 31);
-				asThirdLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 13, 31);
-
-				fourthLine = "going to be better:";
-				asFourthLine = new AttributedString(fourthLine);
-				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				break;
-			default:
-				logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/avalanche_report.png");
-
-				firstLine = "On " + date + " at maximum";
-				asFirstLine = new AttributedString(firstLine);
-				asFirstLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 3, 4 + date.length());
-				asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 3, 4 + date.length());
-
-				secondLine = GlobalVariables.getDangerRatingTextLong(highestDangerRating, lang);
-				asSecondLine = new AttributedString(secondLine);
-				asSecondLine.addAttribute(TextAttribute.FONT, openSansBoldBigFont);
-				asSecondLine.addAttribute(TextAttribute.FOREGROUND, getDangerRatingTextColor(highestDangerRating));
-
-				thirdLine = "The complete avalanche forecast and where it's";
-				asThirdLine = new AttributedString(thirdLine);
-				asThirdLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				asThirdLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 13, 31);
-				asThirdLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 13, 31);
-
-				fourthLine = "going to be better:";
-				asFourthLine = new AttributedString(fourthLine);
-				asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-				break;
-			}
+			fourthLine = messages.getString("static-widget.line.4");
+			asFourthLine = new AttributedString(fourthLine);
+			asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 
 			// Danger rating headline
 			FontRenderContext frc = ig2.getFontRenderContext();
@@ -274,7 +203,7 @@ public class StaticWidgetUtil {
 			ig2.drawString(asFourthLine.getIterator(), 30, 718);
 
 			// Blue button at bottom
-			String urlLine = GlobalVariables.getCapitalUrl(lang);
+			String urlLine = messages.getString("avalanche-report.url.capitalized");
 			AttributedString asUrlLine = new AttributedString(urlLine);
 			asUrlLine.addAttribute(TextAttribute.FONT, openSansBoldFont);
 			asUrlLine.addAttribute(TextAttribute.FOREGROUND, whiteColor);

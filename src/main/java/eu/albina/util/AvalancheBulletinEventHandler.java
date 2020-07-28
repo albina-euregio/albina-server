@@ -17,7 +17,10 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +72,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Rectangle pageSize = page.getPageSize();
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
+			Locale currentLocale = new Locale(lang.toString());
+			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+
 			Color blue;
 			if (grayscale)
 				blue = blueColorBw;
@@ -83,27 +89,27 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Light.ttf", PdfEncodings.WINANSI, true);
 
 			// Add headline
-			String headline = GlobalVariables.getHeadlineText(lang);
+			String headline = messages.getString("avalanche-report.name");
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 					.setColor(greyDarkColor, true).showText(headline).endText();
-			String date = AlbinaUtil.getDate(bulletins, lang);
+			String date = AlbinaUtil.getDate(bulletins, messages);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
 					.setColor(blue, true).showText(date).endText();
 
-			String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
+			String publicationDate = AlbinaUtil.getPublicationDate(bulletins, messages);
 			if (!publicationDate.isEmpty())
 				pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
-						.setColor(greyDarkColor, true)
-						.showText(GlobalVariables.getPublishedText(lang) + publicationDate).endText();
+						.setColor(greyDarkColor, true).showText(messages.getString("published") + publicationDate)
+						.endText();
 
 			Canvas canvas = new Canvas(pdfCanvas, pdfDoc, page.getPageSize());
 
 			// Add copyright
-			String copyright = GlobalVariables.getCopyrightText(lang);
+			String copyright = GlobalVariables.getCopyrightText(messages);
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
 					.showText(copyright).endText();
 
-			String urlString = GlobalVariables.getCapitalUrl(lang);
+			String urlString = messages.getString("avalanche-report.url.capitalized");
 			Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
 			pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)
@@ -126,7 +132,11 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			canvas.add(ciImg);
 
 			// Add logo
-			Image logoImg = PdfUtil.getInstance().getImage(GlobalVariables.getLogoPath(lang, grayscale));
+			Image logoImg;
+			if (grayscale)
+				logoImg = PdfUtil.getInstance().getImage(messages.getString("avalanche-report.logo.path.bw"));
+			else
+				logoImg = PdfUtil.getInstance().getImage(messages.getString("avalanche-report.logo.path"));
 			logoImg.scaleToFit(130, 55);
 			logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
 			canvas.add(logoImg);
@@ -139,7 +149,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 			// Add page number
 			int pageNumber = docEvent.getDocument().getPageNumber(page);
-			String pageText = String.format(GlobalVariables.getPageNumberText(lang), pageNumber);
+			String pageText = MessageFormat.format(messages.getString("pdf.page-number"), pageNumber);
 			double width = openSansRegularFont.getContentWidth(new PdfString(pageText)) * 0.001f * 12 / 2;
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 12)
 					.moveText(pageSize.getWidth() / 2 - width / 2, 20).setColor(greyDarkColor, true).showText(pageText)

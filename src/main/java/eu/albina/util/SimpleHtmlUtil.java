@@ -33,7 +33,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -144,7 +146,6 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	// LANG
 	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		try {
 			if (bulletins != null && !bulletins.isEmpty()) {
@@ -197,39 +198,43 @@ public class SimpleHtmlUtil {
 	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
+		Locale currentLocale = new Locale(lang.toString());
+		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+
 		// Create data model
 		Map<String, Object> root = new HashMap<>();
 
 		Map<String, Object> text = new HashMap<>();
-		text.put("standardView", GlobalVariables.getStandardViewText(lang));
-		text.put("tabtitle", GlobalVariables.getSimpleHtmlTitle(lang) + AlbinaUtil.getShortDate(bulletins, lang));
-		text.put("title", GlobalVariables.getTitle(lang));
-		text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
-		String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
+		text.put("standardView", messages.getString("avalanche-report.standard.link.text"));
+		text.put("tabtitle",
+				messages.getString("avalanche-report.name") + " " + AlbinaUtil.getDate(bulletins, messages));
+		text.put("title", messages.getString("title"));
+		text.put("subtitle", AlbinaUtil.getDate(bulletins, messages));
+		String publicationDate = AlbinaUtil.getPublicationDate(bulletins, messages);
 		text.put("publicationDate", publicationDate);
 
-		text.put("previousDay", " &#8592; " + AlbinaUtil.getPreviousValidityDateString(bulletins, lang));
-		text.put("nextDay", AlbinaUtil.getNextValidityDateString(bulletins, lang) + " &#8594;");
+		text.put("previousDay", " &#8592; " + AlbinaUtil.getPreviousValidityDateString(bulletins, messages));
+		text.put("nextDay", AlbinaUtil.getNextValidityDateString(bulletins, messages) + " &#8594;");
 
 		if (publicationDate.isEmpty())
 			text.put("publishedAt", "");
 		else
-			text.put("publishedAt", GlobalVariables.getPublishedText(lang));
-		text.put("regions", GlobalVariables.getRegionsHeadline(lang));
-		text.put("snowpack", GlobalVariables.getSnowpackHeadline(lang));
-		text.put("tendency", GlobalVariables.getTendencyHeadline(lang));
+			text.put("publishedAt", messages.getString("published"));
+		text.put("regions", messages.getString("headline.regions"));
+		text.put("snowpack", messages.getString("headline.snowpack"));
+		text.put("tendency", messages.getString("headline.tendency"));
 		root.put("text", text);
 
 		Map<String, Object> link = new HashMap<>();
-		link.put("website", GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/"
+		link.put("website", messages.getString("avalanche-report.url") + "/bulletin/"
 				+ AlbinaUtil.getValidityDateString(bulletins));
-		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region));
-		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region));
-		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region, messages));
+		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region, messages));
+		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/de.html");
-		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/it.html");
-		link.put("linkEn", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkEn", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/en.html");
 
 		root.put("link", link);
@@ -242,13 +247,13 @@ public class SimpleHtmlUtil {
 
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("mapAM", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAM", GlobalVariables.getMapsUrl(messages) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapPM", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapPM", GlobalVariables.getMapsUrl(messages) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
 					bulletin.put("widthPM", "width=\"150\"");
 				} else {
-					bulletin.put("mapAM", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAM", GlobalVariables.getMapsUrl(messages) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
 					bulletin.put("mapPM", GlobalVariables.getServerImagesUrl() + "empty.png");
 					bulletin.put("widthPM", "");
@@ -275,11 +280,11 @@ public class SimpleHtmlUtil {
 				sb.delete(sb.length() - 2, sb.length());
 				bulletin.put("regions", sb.toString());
 
-				bulletin.put("forenoon", getDaytime(avalancheBulletin, false, lang));
+				bulletin.put("forenoon", getDaytime(avalancheBulletin, false, messages));
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("afternoon", getDaytime(avalancheBulletin, true, lang));
-					bulletin.put("am", "<b>" + GlobalVariables.getAMText(lang).toUpperCase() + "</b><br>");
-					bulletin.put("pm", "<b>" + GlobalVariables.getPMText(lang).toUpperCase() + "</b><br>");
+					bulletin.put("afternoon", getDaytime(avalancheBulletin, true, messages));
+					bulletin.put("am", "<b>" + messages.getString("daytime.am.capitalized").toUpperCase() + "</b><br>");
+					bulletin.put("pm", "<b>" + messages.getString("daytime.pm.capitalized").toUpperCase() + "</b><br>");
 				} else {
 					bulletin.put("afternoon", getEmptyDaytime());
 					bulletin.put("am", "");
@@ -298,12 +303,12 @@ public class SimpleHtmlUtil {
 					bulletin.put("avAvalancheComment", "");
 				if (avalancheBulletin.getDangerPattern1() != null)
 					bulletin.put("dangerPattern1",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang) + "<br>");
+							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), messages) + "<br>");
 				else
 					bulletin.put("dangerPattern1", "");
 				if (avalancheBulletin.getDangerPattern2() != null)
 					bulletin.put("dangerPattern2",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang) + "<br>");
+							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), messages) + "<br>");
 				else
 					bulletin.put("dangerPattern2", "");
 				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
@@ -346,12 +351,13 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	private Map<String, Object> getDaytime(AvalancheBulletin avalancheBulletin, boolean afternoon, LanguageCode lang) {
+	private Map<String, Object> getDaytime(AvalancheBulletin avalancheBulletin, boolean afternoon,
+			ResourceBundle messages) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> dangerLevel = new HashMap<>();
 		Map<String, Object> text = new HashMap<>();
 
-		text.put("dangerLevel", "<b>" + GlobalVariables.getDangerRatingHeadline(lang) + "</b><br>");
+		text.put("dangerLevel", "<b>" + messages.getString("headline.danger-rating") + "</b><br>");
 
 		AvalancheBulletinDaytimeDescription daytimeDescription;
 		if (afternoon)
@@ -363,16 +369,16 @@ public class SimpleHtmlUtil {
 				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null)
 				|| (daytimeDescription.getAvalancheSituation2() != null
 						&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null))
-			text.put("avalancheProblem", "<b>" + GlobalVariables.getAvalancheProblemsHeadline(lang) + "</b><br>");
+			text.put("avalancheProblem", "<b>" + messages.getString("headline.avalanche-problem") + "</b><br>");
 		else
 			text.put("avalancheProblem", "");
 		result.put("text", text);
 
 		dangerLevel.put("above", getDangerRatingLineString(daytimeDescription.getDangerRatingAbove(),
-				avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), lang, true));
+				avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), messages, true));
 		if (avalancheBulletin.isHasElevationDependency())
 			dangerLevel.put("below", getDangerRatingLineString(daytimeDescription.getDangerRatingBelow(),
-					avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), lang, false));
+					avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), messages, false));
 		else
 			dangerLevel.put("below", "");
 
@@ -381,38 +387,38 @@ public class SimpleHtmlUtil {
 		if (daytimeDescription.getAvalancheSituation1() != null
 				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null) {
 			result.put("avalancheProblem1",
-					getAvalancheSituationString(daytimeDescription.getAvalancheSituation1(), lang));
+					getAvalancheSituationString(daytimeDescription.getAvalancheSituation1(), messages));
 		} else
 			result.put("avalancheProblem1", "");
 		if (daytimeDescription.getAvalancheSituation2() != null
 				&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null) {
 			result.put("avalancheProblem2",
-					getAvalancheSituationString(daytimeDescription.getAvalancheSituation2(), lang));
+					getAvalancheSituationString(daytimeDescription.getAvalancheSituation2(), messages));
 		} else
 			result.put("avalancheProblem2", "");
 
 		return result;
 	}
 
-	private String getAvalancheSituationString(AvalancheSituation avalancheSituation, LanguageCode lang) {
+	private String getAvalancheSituationString(AvalancheSituation avalancheSituation, ResourceBundle messages) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(avalancheSituation.getAvalancheSituation().toString(lang));
+		sb.append(avalancheSituation.getAvalancheSituation().toString(messages));
 		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
 			if (avalancheSituation.getTreelineHigh()) {
-				sb.append(GlobalVariables.getTreelinePreString(true, lang));
-				sb.append(GlobalVariables.getTreelineStringLowercase(lang));
+				sb.append(messages.getString("elevation.treeline.below.pre-string"));
+				sb.append(messages.getString("elevation.treeline"));
 			} else if (avalancheSituation.getElevationHigh() > 0) {
-				sb.append(GlobalVariables.getElevationPreString(true, lang));
+				sb.append(messages.getString("elevation.below.pre-string"));
 				sb.append(avalancheSituation.getElevationHigh());
 				sb.append("m");
 			}
 		}
 		if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 			if (avalancheSituation.getTreelineLow()) {
-				sb.append(GlobalVariables.getTreelinePreString(true, lang));
-				sb.append(GlobalVariables.getTreelineStringLowercase(lang));
+				sb.append(messages.getString("elevation.treeline.above.pre-string"));
+				sb.append(messages.getString("elevation.treeline"));
 			} else if (avalancheSituation.getElevationLow() > 0) {
-				sb.append(GlobalVariables.getElevationPreString(true, lang));
+				sb.append(messages.getString("elevation.above.pre-string"));
 				sb.append(avalancheSituation.getElevationLow());
 				sb.append("m");
 			}
@@ -434,7 +440,7 @@ public class SimpleHtmlUtil {
 	}
 
 	private String getDangerRatingLineString(DangerRating dangerRating, int elevation, boolean treeline,
-			LanguageCode lang, boolean above) {
+			ResourceBundle messages, boolean above) {
 		StringBuilder sb = new StringBuilder();
 		String tag;
 		switch (dangerRating) {
@@ -460,16 +466,22 @@ public class SimpleHtmlUtil {
 		sb.append("<");
 		sb.append(tag);
 		sb.append(">");
-		sb.append(GlobalVariables.getDangerRatingTextMiddle(dangerRating, lang));
+		sb.append(GlobalVariables.getDangerRatingTextLong(dangerRating, messages));
 		sb.append("</");
 		sb.append(tag);
 		sb.append(">");
 
 		if (treeline) {
-			sb.append(GlobalVariables.getTreelinePreString(above, lang));
-			sb.append(GlobalVariables.getTreelineStringLowercase(lang));
+			if (above)
+				messages.getString("elevation.treeline.above.pre-string");
+			else
+				messages.getString("elevation.treeline.below.pre-string");
+			sb.append(messages.getString("elevation.treeline"));
 		} else if (elevation > 0) {
-			sb.append(GlobalVariables.getElevationPreString(above, lang));
+			if (above)
+				sb.append(messages.getString("elevation.above.pre-string"));
+			else
+				sb.append(messages.getString("elevation.below.pre-string"));
 			sb.append(elevation);
 			sb.append("m");
 		}

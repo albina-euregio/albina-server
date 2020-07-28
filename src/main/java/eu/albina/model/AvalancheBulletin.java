@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -58,6 +59,7 @@ import org.w3c.dom.Element;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
+import com.mysql.cj.Messages;
 
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
@@ -1118,7 +1120,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return rootElement;
 	}
 
-	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
+	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon,
+			ResourceBundle messages) {
 
 		AvalancheBulletinDaytimeDescription bulletin;
 
@@ -1149,24 +1152,20 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (date != null)
 			publicationTime = utcTime.toString(GlobalVariables.publicationTime);
 		if (!isAfternoon) {
-			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = GlobalVariables.getMapsUrl(messages) + "/" + getValidityDateString() + "/"
 					+ publicationTime + "/" + getId() + ".jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
-					GlobalVariables.getExtFileThumbnailImageDescription(languageCode), fileReferenceURI));
+					messages.getString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
-			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = GlobalVariables.getMapsUrl(messages) + "/" + getValidityDateString() + "/"
 					+ publicationTime + "/" + getId() + "_PM.jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
-					GlobalVariables.getExtFileThumbnailImageDescription(languageCode), fileReferenceURI));
+					messages.getString("ext-file.thumbnail.description"), fileReferenceURI));
 		}
-		String linkReferenceURI = GlobalVariables.getAvalancheReportBaseUrl(languageCode) + "bulletin/"
-				+ getValidityDateString() + "?region=" + getId();
-		if (!isAfternoon)
-			metaData.appendChild(XmlUtil.createExtFile(doc, "website",
-					GlobalVariables.getExtFileRegionLinkDescription(languageCode), linkReferenceURI));
-		else
-			metaData.appendChild(XmlUtil.createExtFile(doc, "website",
-					GlobalVariables.getExtFileRegionLinkDescription(languageCode), linkReferenceURI));
+		String linkReferenceURI = messages.getString("avalanche-report.url") + "/bulletin/" + getValidityDateString()
+				+ "?region=" + getId();
+		metaData.appendChild(XmlUtil.createExtFile(doc, "website",
+				Messages.getString("ext-file.region-link.description"), linkReferenceURI));
 
 		// publication time
 		Element pubTime = doc.createElement("publicationTime");
@@ -1201,10 +1200,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element source = doc.createElement("source");
 		Element operation = doc.createElement("operation");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode(GlobalVariables.getAvalancheReportName(languageCode)));
+		name.appendChild(doc.createTextNode(messages.getString("avalanche-report.name")));
 		operation.appendChild(name);
 		Element website = doc.createElement("website");
-		website.appendChild(doc.createTextNode(GlobalVariables.getAvalancheReportBaseUrl(languageCode)));
+		website.appendChild(doc.createTextNode(messages.getString("avalanche-report.url")));
 		operation.appendChild(website);
 		source.appendChild(operation);
 		rootElement.appendChild(source);
@@ -1523,13 +1522,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			return null;
 	}
 
-	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode) {
+	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode, ResourceBundle messages) {
 		if (publishedRegions != null && !publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLv6Bulletin(doc, languageCode, false));
+			result.add(createCAAMLv6Bulletin(doc, languageCode, false, messages));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLv6Bulletin(doc, languageCode, true));
+				result.add(createCAAMLv6Bulletin(doc, languageCode, true, messages));
 
 			return result;
 		} else

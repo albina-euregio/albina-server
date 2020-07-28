@@ -19,6 +19,8 @@ package eu.albina.util;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.joda.time.DateTime;
@@ -48,20 +50,23 @@ public class TelegramChannelUtil {
 
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.languages) {
+			Locale currentLocale = new Locale(lang.toString());
+			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+
 			DateTime date = AlbinaUtil.getDate(bulletins);
-			String message = GlobalVariables.getSocialMediaText(lang, date, update);
+			String message = GlobalVariables.getSocialMediaText(date, update, messages);
 			String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
+			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions, messages);
 		}
 	}
 
 	private void sendBulletinNewsletter(String message, List<AvalancheBulletin> bulletins, String validityDate,
-			String publicationTime, LanguageCode lang, List<String> regions) {
+			String publicationTime, LanguageCode lang, List<String> regions, ResourceBundle messages) {
 		TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 		for (String region : regions) {
 			try {
-				String attachmentUrl = GlobalVariables.getMapsUrl(lang) + "/" + validityDate + "/" + publicationTime
+				String attachmentUrl = GlobalVariables.getMapsUrl(messages) + "/" + validityDate + "/" + publicationTime
 						+ "/" + AlbinaUtil.getRegionOverviewMapFilename("");
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 				Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();

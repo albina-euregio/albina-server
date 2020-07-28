@@ -16,8 +16,10 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -69,13 +71,12 @@ public class GlobalVariables {
 
 	// TODO: find better solution how to get the URL for simple html and images
 	public static int directoryOffset = 5;
-	public static String avalancheReportNameEn = "Avalanche.report";
-	public static String avalancheReportNameDe = "Lawinen.report";
-	public static String avalancheReportNameIt = "Valanghe.report";
-	public static String avalancheReportBaseUrlEn = "https://avalanche.report/";
-	public static String avalancheReportBaseUrlDe = "https://lawinen.report/";
-	public static String avalancheReportBaseUrlIt = "https://valanghe.report/";
-	public static String avalancheReportBlogUrl = "blog/";
+
+	public static String avalancheReportBlogUrl = "/blog/";
+	public static String avalancheReportFilesUrl = "/albina_files/";
+	public static String avalancheReportBulletinUrl = "/bulletin/";
+	public static String avalancheReportSimpleUrl = "/simple/";
+
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
@@ -125,33 +126,10 @@ public class GlobalVariables {
 	private static String unsubscribeLinkTrentinoIt = "https://t271d3041.emailsys1a.net/38/2207/bc2b53964c/unsubscribe/form.html";
 	private static String unsubscribeLinkTrentinoEn = "https://t271d3041.emailsys1a.net/38/2211/361ad0a282/unsubscribe/form.html";
 
-	// LANG
-	public static String[] daysDe = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag" };
-	public static String[] daysIt = { "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica" };
-	public static String[] daysEn = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-
-	// LANG
-	public static String incompleteTranslationTextDe = "Warte auf laufende Übersetzung ....";
-	public static String incompleteTranslationTextIt = "Attendere traduzione in corso....";
-	public static String incompleteTranslationTextEn = "Wait for translation in progress ....";
-
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
 	public static DateTimeFormatter publicationTime = DateTimeFormat.forPattern("yyyy-MM-dd_HH-mm-ss");
-
-	// LANG
-	public static DateTimeFormatter dateTimeEn = DateTimeFormat.forPattern(" dd MM yyyy");
-	public static DateTimeFormatter dateTimeDe = DateTimeFormat.forPattern(" dd.MM.yyyy");
-	public static DateTimeFormatter dateTimeIt = DateTimeFormat.forPattern(" dd.MM.yyyy");
-	// LANG
-	public static DateTimeFormatter publicationDateTimeEn = DateTimeFormat.forPattern("dd MM yyyy, HH:mm");
-	public static DateTimeFormatter publicationDateTimeDe = DateTimeFormat.forPattern("dd.MM.yyyy 'um' HH:mm");
-	public static DateTimeFormatter publicationDateTimeIt = DateTimeFormat.forPattern("dd.MM.yyyy 'alle ore' HH:mm");
-	// LANG
-	public static DateTimeFormatter tendencyDateTimeEn = DateTimeFormat.forPattern(" dd MM yyyy");
-	public static DateTimeFormatter tendencyDateTimeDe = DateTimeFormat.forPattern(", 'den' dd.MM.yyyy");
-	public static DateTimeFormatter tendencyDateTimeIt = DateTimeFormat.forPattern(" 'il' dd.MM.yyyy");
 
 	// REGION
 	public static String codeTrentino = "IT-32-TN";
@@ -192,6 +170,7 @@ public class GlobalVariables {
 	};
 
 	// LANG
+	// TODO check if publication works even if lang was not found
 	public static List<LanguageCode> languages = new ArrayList<LanguageCode>() {
 		/**
 		 *
@@ -222,40 +201,12 @@ public class GlobalVariables {
 
 	public static String notAvailableString = "N/A";
 
-	// LANG
-	public static String getAvalancheReportBaseUrl(LanguageCode lang) {
-		switch (lang) {
-		case en:
-			return avalancheReportBaseUrlEn;
-		case de:
-			return avalancheReportBaseUrlDe;
-		case it:
-			return avalancheReportBaseUrlIt;
-		default:
-			return avalancheReportBaseUrlEn;
-		}
+	public static String getAvalancheReportSimpleBaseUrl(ResourceBundle messages) {
+		return messages.getString("avalanche-report.url") + avalancheReportSimpleUrl;
 	}
 
-	// LANG
-	public static String getAvalancheReportName(LanguageCode lang) {
-		switch (lang) {
-		case en:
-			return avalancheReportNameEn;
-		case de:
-			return avalancheReportNameDe;
-		case it:
-			return avalancheReportNameIt;
-		default:
-			return avalancheReportNameEn;
-		}
-	}
-
-	public static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
-		return getAvalancheReportBaseUrl(lang) + "simple/";
-	}
-
-	public static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
-		return getAvalancheReportBaseUrl(lang) + avalancheReportBlogUrl;
+	public static String getAvalancheReportFullBlogUrl(ResourceBundle messages) {
+		return messages.getString("avalanche-report.url") + avalancheReportBlogUrl;
 	}
 
 	public static boolean isCreateMaps() {
@@ -526,553 +477,25 @@ public class GlobalVariables {
 		setConfigProperty("bulletinCaamlSchemaFileString", bulletinCaamlSchemaFileString);
 	}
 
-	public static String getMapsUrl(LanguageCode lang) {
-		return GlobalVariables.getAvalancheReportBaseUrl(lang)
-				+ GlobalVariables.getMapsPath().substring(GlobalVariables.directoryOffset);
+	public static String getMapsUrl(ResourceBundle messages) {
+		return messages.getString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
 	}
 
-	// LANG
-	public static String getDayName(int day, LanguageCode lang) {
-		if (day < 8) {
-			switch (lang) {
-			case de:
-				return daysDe[day - 1];
-			case it:
-				return daysIt[day - 1];
-			case en:
-				return daysEn[day - 1];
-			default:
-				return daysEn[day - 1];
-			}
-		} else
-			return "";
-	}
-
-	// LANG
-	public static String getTreelineString(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Waldgrenze";
-		case it:
-			return "Linea del bosco";
-		case en:
-			return "Treeline";
-		default:
-			return "Treeline";
-		}
-	}
-
-	// LANG
-	public static String getTreelineStringLowercase(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Waldgrenze";
-		case it:
-			return "linea del bosco";
-		case en:
-			return "treeline";
-		default:
-			return "treeline";
-		}
-	}
-
-	// LANG
-	public static String getTreelinePreString(boolean above, LanguageCode lang) {
-		if (above) {
-			switch (lang) {
-			case de:
-				return " über der ";
-			case it:
-				return " sopra la ";
-			case en:
-				return " above the ";
-			default:
-				return " above the ";
-			}
-		} else {
-			switch (lang) {
-			case de:
-				return " unter der ";
-			case it:
-				return " sotto la ";
-			case en:
-				return " below the ";
-			default:
-				return " below the ";
-			}
-		}
-	}
-
-	// LANG
-	public static String getElevationPreString(boolean above, LanguageCode lang) {
-		if (above) {
-			switch (lang) {
-			case de:
-				return " über ";
-			case it:
-				return " sopra i ";
-			case en:
-				return " above ";
-			default:
-				return " above ";
-			}
-		} else {
-			switch (lang) {
-			case de:
-				return " unter ";
-			case it:
-				return " sotto i ";
-			case en:
-				return " above ";
-			default:
-				return " below ";
-			}
-		}
-	}
-
-	// LANG
-	public static String getPublishedText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Veröffentlicht am ";
-		case it:
-			return "Pubblicato il ";
-		case en:
-			return "Published ";
-		default:
-			return "Published ";
-		}
-	}
-
-	// LANG
-	public static String getTendencyHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Tendenz";
-		case it:
-			return "Tendenza";
-		case en:
-			return "Tendency";
-		default:
-			return "Tendency";
-		}
-	}
-
-	// LANG
-	public static String getRegionsHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Regionen";
-		case it:
-			return "Regioni";
-		case en:
-			return "Regions";
-		default:
-			return "Regions";
-		}
-	}
-
-	// LANG
-	public static String getAvalancheProblemsHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinenproblem";
-		case it:
-			return "Problema Valanghe";
-		case en:
-			return "Avalanche Problem";
-		default:
-			return "Avalanche Problem";
-		}
-	}
-
-	// LANG
-	public static String getTendencyText(Tendency tendency, LanguageCode lang) {
-		if (tendency != null) {
-			switch (tendency) {
-			case increasing:
-				switch (lang) {
-				case de:
-					return "Tendenz: Lawinengefahr steigt";
-				case it:
-					return "Tendenza: Pericolo valanghe in aumento";
-				case en:
-					return "Tendency: Increasing avalanche danger";
-				default:
-					return "Tendency: Increasing avalanche danger";
-				}
-			case steady:
-				switch (lang) {
-				case de:
-					return "Tendenz: Lawinengefahr bleibt gleich";
-				case it:
-					return "Tendenza: Pericolo valanghe stabile";
-				case en:
-					return "Tendency: Constant avalanche danger";
-				default:
-					return "Tendency: Constant avalanche danger";
-				}
-			case decreasing:
-				switch (lang) {
-				case de:
-					return "Tendenz: Lawinengefahr nimmt ab";
-				case it:
-					return "Tendenza: Pericolo valanghe in diminuzione";
-				case en:
-					return "Tendency: Decreasing avalanche danger";
-				default:
-					return "Tendency: Decreasing avalanche danger";
-				}
-			default:
-				return "";
-			}
-		} else
-			return "";
-	}
-
-	// LANG
-	public static String getDangerPatternsHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Gefahrenmuster";
-		case it:
-			return "Situazione tipo";
-		case en:
-			return "Danger patterns";
-		default:
-			return "Danger patterns";
-		}
-	}
-
-	// LANG
-	public static String getSnowpackHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Schneedecke";
-		case it:
-			return "Manto nevoso";
-		case en:
-			return "Snowpack";
-		default:
-			return "Snowpack";
-		}
-	}
-
-	// LANG
-	public static String getTitle(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinen.report";
-		case it:
-			return "Valanghe.report";
-		case en:
-			return "Avalanche.report";
-		default:
-			return "Avalanche.report";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Gefahrenstufe";
-		case it:
-			return "Grado";
-		case en:
-			return "Danger level";
-		default:
-			return "Danger level";
-		}
-	}
-
-	// LANG
-	public static String getCharacteristicsHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Merkmale";
-		case it:
-			return "Caratteristiche";
-		case en:
-			return "Characteristics";
-		default:
-			return "Characteristics";
-		}
-	}
-
-	// LANG
-	public static String getRecommendationsHeadline(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Empfehlungen für Personen außerhalb gesicherter Gebiete";
-		case it:
-			return "Raccomandazioni per le persone che praticano attività fuoripista";
-		case en:
-			return "Recommendations for backcountry recreationists";
-		default:
-			return "Recommendations for backcountry recreationists";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingVeryHighCharacteristicsTextBold(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Katastrophensituation";
-		case it:
-			return "Situazione catastrofica";
-		case en:
-			return "Disaster situation";
-		default:
-			return "Disaster situation";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingVeryHighCharacteristicsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Viele große und sehr große spontane Lawinen sind zu erwarten. Diese können Straßen und Siedlungen in Tallagen erreichen.";
-		case it:
-			return "Si prevedono numerose valanghe spontanee di dimensioni grandi e molto grandi che possono raggiungere le strade e i centri abitati situati a fondovalle.";
-		case en:
-			return "Numerous large and very large natural avalanches can be expected. These can reach roads and settlements in the valley.";
-		default:
-			return "Numerous large and very large natural avalanches can be expected. These can reach roads and settlements in the valley.";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingHighCharacteristicsTextBold(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Sehr kritische Lawinensituation";
-		case it:
-			return "Situazione valanghiva molto critica";
-		case en:
-			return "Very critical avalanche situation";
-		default:
-			return "Very critical avalanche situation";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingHighCharacteristicsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Spontane und oft auch grosse Lawinen sind wahrscheinlich. An vielen Steilhängen können Lawinen leicht ausgelöst werden. Fernauslösungen sind typisch. Wummgeräusche und Risse sind häufig.";
-		case it:
-			return "Probabili valanghe spontanee, spesso anche di grandi dimensioni. Su molti pendii ripidi è facile provocare il distacco di valanghe. I distacchi a distanza sono tipici di questo grado di pericolo. I rumori di “whum” e le fessure sono frequenti.";
-		case en:
-			return "Natural and often large avalanches are likely. Avalanches can easily be triggered on many steep slopes. Remote triggering is typical. Whumpf sounds and shooting cracks occur frequently.";
-		default:
-			return "Natural and often large avalanches are likely. Avalanches can easily be triggered on many steep slopes. Remote triggering is typical. Whumpf sounds and shooting cracks occur frequently.";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingConsiderableCharacteristicsTextBold(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Kritische Lawinensituation";
-		case it:
-			return "Situazione valanghiva critica";
-		case en:
-			return "Critical avalanche situation";
-		default:
-			return "Critical avalanche situation";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingConsiderableCharacteristicsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Wummgeräusche und Risse sind typisch. Lawinen können vor allem an Steilhängen der in der Lawinenvorhersage angegebenen Expositionen und Höhenlagen leicht ausgelöst werden. Spontane Lawinen und Fernauslösungen sind möglich.";
-		case it:
-			return "I rumori di “whum” e le fessure sono tipici. Le valanghe possono facilmente essere staccate, soprattutto sui pendii ripidi alle esposizioni e alle quote indicate nel bollettino delle valanghe. Possibili valanghe spontanee e distacchi a distanza.";
-		case en:
-			return "Whumpf sounds and shooting cracks are typical. Avalanches can easily be triggered, particularly on steep slopes with the aspect and elevation indicated in the avalanche bulletin. Natural avalanches and remote triggering can occur.";
-		default:
-			return "Whumpf sounds and shooting cracks are typical. Avalanches can easily be triggered, particularly on steep slopes with the aspect and elevation indicated in the avalanche bulletin. Natural avalanches and remote triggering can occur.";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingModerateCharacteristicsTextBold(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Mehrheitlich günstige Lawinensituation";
-		case it:
-			return "Situazione valanghiva per lo più favorevole";
-		case en:
-			return "Mostly favourable avalanche situation";
-		default:
-			return "Mostly favourable avalanche situation";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingModerateCharacteristicsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Alarmzeichen können vereinzelt auftreten. Lawinen können vor allem an sehr steilen Hängen der in der Lawinenvorhersage angegebenen Expositionen und Höhenlagen ausgelöst werden. Größere spontane Lawinen sind nicht zu erwarten.";
-		case it:
-			return "Possibile la presenza di singoli segnali di allarme. Le valanghe possono essere staccate specialmente sui pendii molto ripidi alle esposizioni e alle quote indicate nel bollettino delle valanghe. Non sono previste valanghe spontanee di grandi dimensioni.";
-		case en:
-			return "Warning signs can occur in isolated cases. Avalanches can be triggered in particular on very steep slopes with the aspect and elevation indicated in the avalanche bulletin. Large natural avalanches are unlikely.";
-		default:
-			return "Warning signs can occur in isolated cases. Avalanches can be triggered in particular on very steep slopes with the aspect and elevation indicated in the avalanche bulletin. Large natural avalanches are unlikely.";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingLowCharacteristicsTextBold(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Allgemein günstige Lawinensituation";
-		case it:
-			return "Situazione valanghiva generalmente favorevole";
-		case en:
-			return "Generally favourable avalanche situation";
-		default:
-			return "Generally favourable avalanche situation";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingLowCharacteristicsText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Es sind keine Alarmzeichen feststellbar. Lawinen können nur vereinzelt, vor allem an extrem steilen Hängen ausgelöst werden.";
-		case it:
-			return "Non si manifestano segnali di allarme. Possibile solo il distacco di valanghe isolate, soprattutto sui pendii estremamente ripidi.";
-		case en:
-			return "No warning signs present. Avalanches can only be triggered in isolated cases, in particular on extremely steep slopes.";
-		default:
-			return "No warning signs present. Avalanches can only be triggered in isolated cases, in particular on extremely steep slopes.";
-		}
-	}
-
-	// LANG
-	public static String getSocialMediaText(LanguageCode lang, DateTime date, boolean update) {
-		String dateString = GlobalVariables.getDayName(date.getDayOfWeek(), lang)
-				+ date.toString(GlobalVariables.getShortDateTimeFormatter(lang));
+	public static String getSocialMediaText(DateTime date, boolean update, ResourceBundle messages) {
+		String dateString = messages.getString("day." + date.getDayOfWeek())
+				+ date.toString(messages.getString("date-time-format"));
 		if (update) {
-			switch (lang) {
-			case de:
-				return "UPDATE zum " + getAvalancheReportName(lang) + " für " + dateString + ": "
-						+ getBulletinUrl(lang, date);
-			case it:
-				return "AGGIORNAMENTO sulla " + getAvalancheReportName(lang) + " per " + dateString + ": "
-						+ getBulletinUrl(lang, date);
-			case en:
-				return "UDPATE on " + getAvalancheReportName(lang) + " for " + dateString + ": "
-						+ getBulletinUrl(lang, date);
-			default:
-				return "UPDATE on " + getAvalancheReportName(lang) + " for " + dateString + ": "
-						+ getBulletinUrl(lang, date);
-			}
+			return MessageFormat.format(messages.getString("social-media.message.update"),
+					messages.getString("avalanche-report.name"), dateString, getBulletinUrl(messages, date));
 		} else {
-			switch (lang) {
-			case de:
-				return getAvalancheReportName(lang) + " für " + dateString + ": " + getBulletinUrl(lang, date);
-			case it:
-				return getAvalancheReportName(lang) + " per " + dateString + ": " + getBulletinUrl(lang, date);
-			case en:
-				return getAvalancheReportName(lang) + " for " + dateString + ": " + getBulletinUrl(lang, date);
-			default:
-				return getAvalancheReportName(lang) + " for " + dateString + ": " + getBulletinUrl(lang, date);
-			}
+			return MessageFormat.format(messages.getString("social-media.message"),
+					messages.getString("avalanche-report.name"), dateString, getBulletinUrl(messages, date));
 		}
 	}
 
-	// LANG
-	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
-		return GlobalVariables.getAvalancheReportBaseUrl(lang) + "bulletin/"
+	public static String getBulletinUrl(ResourceBundle messages, DateTime date) {
+		return messages.getString("avalanche-report.url") + avalancheReportBulletinUrl
 				+ date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
-	}
-
-	// LANG
-	public static String getHeadline(LanguageCode lang, boolean update) {
-		if (!update) {
-			switch (lang) {
-			case de:
-				return "Lawinenvorhersage";
-			case it:
-				return "Previsione Valanghe";
-			case en:
-				return "Avalanche Forecast";
-			default:
-				return "Avalanche Forecast";
-			}
-		} else {
-			switch (lang) {
-			case de:
-				return "UPDATE zur Lawinenvorhersage";
-			case it:
-				return "AGGIORNAMENTO sulla Previsione Valanghe";
-			case en:
-				return "UPDATE on Avalanche Forecast";
-			default:
-				return "UPDATE on Avalanche Forecast";
-			}
-		}
-	}
-
-	// LANG
-	public static String getFollowUs(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Folge uns";
-		case it:
-			return "Seguici";
-		case en:
-			return "Follow us";
-		default:
-			return "Follow us";
-		}
-	}
-
-	// LANG
-	public static String getUnsubscribe(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Abmelden";
-		case it:
-			return "Annullare l'iscrizione";
-		case en:
-			return "Unsubscribe";
-		default:
-			return "Unsubscribe";
-		}
-	}
-
-	// LANG
-	public static String getLogoPath(LanguageCode lang, boolean grayscale) {
-		if (grayscale) {
-			switch (lang) {
-			case de:
-				return "logo/grey/lawinen_report.png";
-			case it:
-				return "logo/grey/valanghe_report.png";
-			case en:
-				return "logo/grey/avalanche_report.png";
-			default:
-				return "logo/grey/avalanche_report.png";
-			}
-		} else {
-			switch (lang) {
-			case de:
-				return "logo/color/lawinen_report.png";
-			case it:
-				return "logo/color/valanghe_report.png";
-			case en:
-				return "logo/color/avalanche_report.png";
-			default:
-				return "logo/color/avalanche_report.png";
-			}
-		}
 	}
 
 	public static String getEuregioLogoPath(boolean grayscale) {
@@ -1082,432 +505,31 @@ public class GlobalVariables {
 			return "logo/color/euregio.png";
 	}
 
-	// LANG
-	public static String getCopyrightText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			// return AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla";
-			return "";
-		case it:
-			// return AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla";
-			return "";
-		case en:
-			// return AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla";
-			return "";
-		default:
-			// return AlbinaUtil.getYear(bulletins, lang) + " Bla bla bla";
-			return "";
-		}
-	}
-
-	// LANG
-	public static String getHeadlineText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinen.report";
-		case it:
-			return "Valanghe.report";
-		case en:
-			return "Avalanche.report";
-		default:
-			return "Avalanche.report";
-		}
-	}
-
-	// LANG
-	public static String getEmailSubject(LanguageCode lang, boolean update) {
-		if (update) {
-			switch (lang) {
-			case de:
-				return "UPDATE zum Lawinen.report, ";
-			case it:
-				return "AGGIORNAMENTO sulla Valanghe.report, ";
-			case en:
-				return "UPDATE on Avalanche.report, ";
-			default:
-				return "UPDATE on Avalanche.report, ";
-			}
-		} else {
-			switch (lang) {
-			case de:
-				return "Lawinen.report, ";
-			case it:
-				return "Valanghe.report, ";
-			case en:
-				return "Avalanche.report, ";
-			default:
-				return "Avalanche.report, ";
-			}
-		}
-	}
-
-	// LANG
-	public static String getSimpleHtmlTitle(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinen.report ";
-		case it:
-			return "Valanghe.report ";
-		case en:
-			return "Avalanche.report ";
-		default:
-			return "Avalanche.report ";
-		}
-	}
-
-	// LANG
-	public static String getStandardViewText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Standardansicht laden";
-		case it:
-			return "Vista standard del carico";
-		case en:
-			return "Load standard view";
-		default:
-			return "Load standard view";
-		}
-	}
-
-	// LANG
-	public static String getEmailFromPersonal(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinen.report";
-		case it:
-			return "Valanghe.report";
-		case en:
-			return "Avalanche.report";
-		default:
-			return "Avalanche.report";
-		}
-	}
-
-	// LANG
-	public static String getConfirmationEmailSubject(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Anmeldung Lawinen.report";
-		case it:
-			return "Registrazione Valanghe.report";
-		case en:
-			return "Subscription Avalanche.report";
-		default:
-			return "Subscription Avalanche.report";
-		}
+	public static String getCopyrightText(ResourceBundle messages) {
+		// return AlbinaUtil.getYear(bulletins) + messages.getString("copyright");
+		return "";
 	}
 
 	public static String getEmailEncoding() {
 		return emailEncoding;
 	}
 
-	// LANG
-	public static String getPdfFilename(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinenvorhersage";
-		case it:
-			return "Previsione Valanghe";
-		case en:
-			return "Avalanche Forecast";
-		default:
-			return "Avalanche Forecast";
-		}
-	}
-
-	// LANG
-	public static DateTimeFormatter getDateTimeFormatter(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return dateTimeDe;
-		case it:
-			return dateTimeIt;
-		case en:
-			return dateTimeEn;
-		default:
-			return dateTimeEn;
-		}
-	}
-
-	// LANG
-	public static DateTimeFormatter getTendencyDateTimeFormatter(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return tendencyDateTimeDe;
-		case it:
-			return tendencyDateTimeIt;
-		case en:
-			return tendencyDateTimeEn;
-		default:
-			return tendencyDateTimeEn;
-		}
-	}
-
-	// LANG
-	public static DateTimeFormatter getShortDateTimeFormatter(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return dateTimeDe;
-		case it:
-			return dateTimeIt;
-		case en:
-			return dateTimeEn;
-		default:
-			return dateTimeEn;
-		}
-	}
-
-	// LANG
-	public static String getCapitalUrl(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "WWW.LAWINEN.REPORT";
-		case it:
-			return "WWW.VALANGHE.REPORT";
-		case en:
-			return "WWW.AVALANCHE.REPORT";
-		default:
-			return "WWW.AVALANCHE.REPORT";
-		}
-	}
-
-	// LANG
-	public static DateTimeFormatter getPublicationDateTimeFormatter(LanguageCode lang) {
-		switch (lang) {
-		case en:
-			return publicationDateTimeEn;
-		case de:
-			return publicationDateTimeDe;
-		case it:
-			return publicationDateTimeIt;
-		default:
-			return publicationDateTimeEn;
-		}
-	}
-
-	// LANG
-	public static String getAMText(LanguageCode lang) {
-		switch (lang) {
-		case en:
-			return "AM";
-		case de:
-			return "Vormittag";
-		case it:
-			return "Mattina";
-		default:
-			return "AM";
-		}
-	}
-
-	// LANG
-	public static String getPMText(LanguageCode lang) {
-		switch (lang) {
-		case en:
-			return "PM";
-		case de:
-			return "Nachmittag";
-		case it:
-			return "Pomeriggio";
-		default:
-			return "PM";
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingTextLong(DangerRating dangerRating, LanguageCode lang) {
-		StringBuilder sb = new StringBuilder();
-		switch (lang) {
-		case de:
-			sb.append("Gefahrenstufe ");
-			break;
-		case it:
-			sb.append("Grado Pericolo ");
-			break;
-		case en:
-			sb.append("Danger Level ");
-			break;
-		default:
-			sb.append("Danger Level ");
-			break;
-		}
-		sb.append(getDangerRatingTextMiddle(dangerRating, lang));
-		return sb.toString();
-	}
-
-	// LANG
-	public static String getDangerRatingTextMiddle(DangerRating dangerRating, LanguageCode lang) {
+	public static String getDangerRatingTextLong(DangerRating dangerRating, ResourceBundle messages) {
 		switch (dangerRating) {
 		case low:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 1 - Gering";
-			case it:
-				return "Grado Pericolo 1 - Debole";
-			case en:
-				return "Danger Level 1 - Low";
-			default:
-				return "Danger Level 1 - Low";
-			}
+			return messages.getString("danger-rating.low");
 		case moderate:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 2 - Mäßig";
-			case it:
-				return "Grado Pericolo 2 - Moderato";
-			case en:
-				return "Danger Level 2 - Moderate";
-			default:
-				return "Danger Level 2 - Moderate";
-			}
+			return messages.getString("danger-rating.moderate");
 		case considerable:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 3 - Erheblich";
-			case it:
-				return "Grado Pericolo 3 - Marcato";
-			case en:
-				return "Danger Level 3 - Considerable";
-			default:
-				return "Danger Level 3 - Considerable";
-			}
+			return messages.getString("danger-rating.considerable");
 		case high:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 4 - Groß";
-			case it:
-				return "Grado Pericolo 4 - Forte";
-			case en:
-				return "Danger Level 4 - High";
-			default:
-				return "Danger Level 4 - High";
-			}
+			return messages.getString("danger-rating.high");
 		case very_high:
-			switch (lang) {
-			case de:
-				return "Gefahrenstufe 5 - Sehr Groß";
-			case it:
-				return "Grado Pericolo 5 - Molto Forte";
-			case en:
-				return "Danger Level 5 - Very High";
-			default:
-				return "Danger Level 5 - Very High";
-			}
+			return messages.getString("danger-rating.very-high");
 		case no_rating:
-			switch (lang) {
-			case de:
-				return "Keine Beurteilung";
-			case it:
-				return "Senza Valutazione";
-			case en:
-				return "No Rating";
-			default:
-				return "No Rating";
-			}
+			return messages.getString("danger-rating.no-rating");
 		default:
-			switch (lang) {
-			case de:
-				return "Keine Beurteilung";
-			case it:
-				return "Senza Valutazione";
-			case en:
-				return "No Rating";
-			default:
-				return "No Rating";
-			}
-		}
-	}
-
-	// LANG
-	public static String getDangerRatingTextShort(DangerRating dangerRating, LanguageCode lang) {
-		switch (dangerRating) {
-		case low:
-			switch (lang) {
-			case de:
-				return "gering";
-			case it:
-				return "debole";
-			case en:
-				return "low";
-			default:
-				return "low";
-			}
-		case moderate:
-			switch (lang) {
-			case de:
-				return "mäßig";
-			case it:
-				return "moderato";
-			case en:
-				return "moderate";
-			default:
-				return "moderate";
-			}
-		case considerable:
-			switch (lang) {
-			case de:
-				return "erheblich";
-			case it:
-				return "marcato";
-			case en:
-				return "considerable";
-			default:
-				return "considerable";
-			}
-		case high:
-			switch (lang) {
-			case de:
-				return "groß";
-			case it:
-				return "forte";
-			case en:
-				return "high";
-			default:
-				return "high";
-			}
-		case very_high:
-			switch (lang) {
-			case de:
-				return "sehr groß";
-			case it:
-				return "molto forte";
-			case en:
-				return "very high";
-			default:
-				return "very high";
-			}
-		case missing:
-			switch (lang) {
-			case de:
-				return "fehlt";
-			case it:
-				return "mancha";
-			case en:
-				return "missing";
-			default:
-				return "missing";
-			}
-		case no_rating:
-			switch (lang) {
-			case de:
-				return "keine Beurteilung";
-			case it:
-				return "senza valutazione";
-			case en:
-				return "no rating";
-			default:
-				return "no rating";
-			}
-		default:
-			switch (lang) {
-			case de:
-				return "fehlt";
-			case it:
-				return "mancha";
-			case en:
-				return "missing";
-			default:
-				return "missing";
-			}
+			return messages.getString("danger-rating.missing");
 		}
 	}
 
@@ -1722,20 +744,6 @@ public class GlobalVariables {
 		}
 	}
 
-	// LANG
-	public static Object getTendencyBindingWord(LanguageCode lang) {
-		switch (lang) {
-		case en:
-			return "on ";
-		case de:
-			return "am ";
-		case it:
-			return "per ";
-		default:
-			return "on ";
-		}
-	}
-
 	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
 		DangerRating result = DangerRating.missing;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
@@ -1747,33 +755,6 @@ public class GlobalVariables {
 	}
 
 	// LANG
-	public static String getFromEmail(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "info@lawinen.report";
-		case en:
-			return "info@avalanche.report";
-		case it:
-			return "info@valanghe.report";
-		default:
-			return "info@avalanche.report";
-		}
-	}
-
-	// LANG
-	public static String getFromName(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Lawinen.report";
-		case en:
-			return "Avalanche.report";
-		case it:
-			return "Valanghe.report";
-		default:
-			return "Avalanche.report";
-		}
-	}
-
 	public static String getUnsubscribeLink(LanguageCode lang, String region) {
 		switch (lang) {
 		case de:
@@ -1823,196 +804,62 @@ public class GlobalVariables {
 		}
 	}
 
-	// LANG
 	// REGION
-	public static String getPdfLink(String date, LanguageCode lang, String region) {
+	public static String getPdfLink(String date, LanguageCode lang, String region, ResourceBundle messages) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("https://avalanche.report/albina_files/");
+		sb.append(messages.getString("avalanche-report.url"));
+		sb.append(avalancheReportFilesUrl);
 		sb.append(date);
 		sb.append("/");
 		sb.append(date);
 		sb.append("_");
 		switch (region) {
 		case "AT-07":
-			sb.append(GlobalVariables.codeTyrol);
+			sb.append(codeTyrol);
 			break;
 		case "IT-32-BZ":
-			sb.append(GlobalVariables.codeSouthTyrol);
+			sb.append(codeSouthTyrol);
 			break;
 		case "IT-32-TN":
-			sb.append(GlobalVariables.codeTrentino);
+			sb.append(codeTrentino);
 			break;
 		default:
 			break;
 		}
 		sb.append("_");
-		switch (lang) {
-		case de:
-			sb.append(LanguageCode.de);
-			break;
-		case it:
-			sb.append(LanguageCode.it);
-			break;
-		case en:
-			sb.append(LanguageCode.en);
-			break;
-		default:
-			sb.append(LanguageCode.en);
-			break;
-		}
+		// TODO test if this works
+		sb.append(lang.toString());
 		sb.append(".pdf");
 		return sb.toString();
 	}
 
-	public static String getImprintLink(LanguageCode lang) {
+	public static String getImprintLink(ResourceBundle messages) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(GlobalVariables.getAvalancheReportBaseUrl(lang));
+		sb.append(messages.getString("avalanche-report.url"));
+		sb.append("/");
 		sb.append("imprint");
 		return sb.toString();
 	}
 
-	// LANG
-	public static String getImprint(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Impressum";
-		case it:
-			return "Impressum";
-		case en:
-			return "Imprint";
-		default:
-			return "Imprint";
-		}
-	}
-
-	// LANG
-	public static String getPageNumberText(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Seite %d";
-		case it:
-			return "Pagina %d";
-		case en:
-			return "Page %d";
-		default:
-			return "Page %d";
-		}
-	}
-
-	// LANG
-	public static String getExtFileLinkDescription(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Link zur Webseite";
-		case it:
-			return "Link al sito web";
-		case en:
-			return "Link to the website";
-		default:
-			return "Link to the website";
-		}
-	}
-
-	// LANG
-	public static String getExtFileRegionLinkDescription(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Link zur Region auf der Webseite";
-		case it:
-			return "Link alla regione sul sito web";
-		case en:
-			return "Link to region on the website";
-		default:
-			return "Link to region on the website";
-		}
-	}
-
-	// LANG
-	public static String getExtFileThumbnailImageDescription(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Vereinfachte Gefahrenstufenkarte der Region";
-		case it:
-			return "Mappa di classificazione del pericolo semplificata della regione";
-		case en:
-			return "Simplified danger rating map of the region";
-		default:
-			return "Simplified danger rating map of the region";
-		}
-	}
-
-	// LANG
-	public static String getExtFileSimpleLinkDescription(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			return "Link zur vereinfachten Webseite";
-		case it:
-			return "Link al sito web semplificato";
-		case en:
-			return "Link to the simplified website";
-		default:
-			return "Link to the simplified website";
-		}
-	}
-
-	// LANG
-	public static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
+	public static String getExtFileMapDescription(LanguageCode lang, String type, String region,
+			ResourceBundle messages) {
 		String regionName = AlbinaUtil.getRegionName(lang, region);
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		switch (lang) {
-		case de:
-			return "Gefahrenstufenkarte " + regionName + "(" + timeString + ")";
-		case it:
-			return "Mappa di valutazione del pericolo " + regionName + "(" + timeString + ")";
-		case en:
-			return "Danger rating map " + regionName + "(" + timeString + ")";
-		default:
-			return "Danger rating map " + regionName + "(" + timeString + ")";
-		}
+		String timeString = AlbinaUtil.getDaytimeString(messages, type);
+		return MessageFormat.format(messages.getString("ext-file.map.description"), regionName, timeString);
 	}
 
-	// LANG
-	public static String getExtFileOverlayDescription(LanguageCode lang, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		switch (lang) {
-		case de:
-			return "Gefahrenstufen Overlay (" + timeString + ")";
-		case it:
-			return "Sovrapposizione della valutazione del pericolo (" + timeString + ")";
-		case en:
-			return "Danger rating overlay (" + timeString + ")";
-		default:
-			return "Danger rating overlay (" + timeString + ")";
-		}
+	public static String getExtFileOverlayDescription(String type, ResourceBundle messages) {
+		String timeString = AlbinaUtil.getDaytimeString(messages, type);
+		return MessageFormat.format(messages.getString("ext-file.overlay.description"), timeString);
 	}
 
-	// LANG
-	public static String getExtFileRegionsDescription(LanguageCode lang, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		switch (lang) {
-		case de:
-			return "GeoJSON für Regionen (" + timeString + ")";
-		case it:
-			return "GeoJSON per le regioni (" + timeString + ")";
-		case en:
-			return "GeoJSON for regions (" + timeString + ")";
-		default:
-			return "GeoJSON for regions (" + timeString + ")";
-		}
+	public static String getExtFileRegionsDescription(ResourceBundle messages, String type) {
+		String timeString = AlbinaUtil.getDaytimeString(messages, type);
+		return MessageFormat.format(messages.getString("ext-file.regions.description"), timeString);
 	}
 
-	// LANG
 	public static String getExtFilePdfDescription(LanguageCode lang, String region) {
 		String regionName = AlbinaUtil.getRegionName(lang, region);
-		switch (lang) {
-		case de:
-			return "PDF " + regionName;
-		case it:
-			return "PDF " + regionName;
-		case en:
-			return "PDF " + regionName;
-		default:
-			return "PDF " + regionName;
-		}
+		return "PDF " + regionName;
 	}
 }
