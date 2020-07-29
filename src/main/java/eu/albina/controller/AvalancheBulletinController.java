@@ -36,7 +36,6 @@ import javax.xml.transform.TransformerException;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -326,6 +325,8 @@ public class AvalancheBulletinController {
 	 * @param language
 	 *            the language in which the texts of the bulletins should be added
 	 *            to the XML (CAAML) string
+	 * @param caamlV6
+	 *            if true the produced XML follow the CAAML v6 standard
 	 * @return the XML (CAAML) string of all published bulletins for the given time
 	 *         period and regions in the given language
 	 * @throws TransformerException
@@ -335,61 +336,18 @@ public class AvalancheBulletinController {
 	 * @throws ParserConfigurationException
 	 *             if the XML document can not be initialized
 	 */
-	public String getPublishedBulletinsCaaml(DateTime date, List<String> regions, LanguageCode language)
-			throws TransformerException, AlbinaException, ParserConfigurationException {
-		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
+	public String getPublishedBulletinsCaaml(DateTime date, List<String> regions, LanguageCode language,
+			boolean caamlV6) throws TransformerException, AlbinaException, ParserConfigurationException {
+		ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				regions);
 
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder;
-		docBuilder = docFactory.newDocumentBuilder();
+		Document caamlDoc;
+		if (caamlV6)
+			caamlDoc = XmlUtil.createCaamlv6(result, language);
+		else
+			caamlDoc = XmlUtil.createCaamlv5(result, language);
 
-		Document doc = docBuilder.newDocument();
-		Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
-
-		// create meta data
-		DateTime publicationDate = null;
-		if (result != null && !result.isEmpty()) {
-			for (AvalancheBulletin bulletin : result) {
-				if (bulletin.getStatus(regions) == BulletinStatus.published
-						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
-					if (bulletin.getPublicationDate() != null) {
-						if (publicationDate == null)
-							publicationDate = bulletin.getPublicationDate();
-						else {
-							if (bulletin.getPublicationDate().isAfter(publicationDate))
-								publicationDate = bulletin.getPublicationDate();
-						}
-					}
-				}
-			}
-
-			Element metaDataProperty = doc.createElement("metaDataProperty");
-			Element metaData = doc.createElement("MetaData");
-			Element dateTimeReport = doc.createElement("dateTimeReport");
-			dateTimeReport.appendChild(doc.createTextNode(
-					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
-			metaData.appendChild(dateTimeReport);
-
-			metaDataProperty.appendChild(metaData);
-			rootElement.appendChild(metaDataProperty);
-
-			Element observations = doc.createElement("observations");
-
-			for (AvalancheBulletin bulletin : result) {
-				if (bulletin.getStatus(regions) == BulletinStatus.published
-						|| bulletin.getStatus(regions) == BulletinStatus.republished) {
-					for (Element element : bulletin.toCAAMLv5(doc, language)) {
-						observations.appendChild(element);
-					}
-				}
-			}
-			rootElement.appendChild(observations);
-		}
-
-		doc.appendChild(rootElement);
-
-		return XmlUtil.convertDocToString(doc);
+		return XmlUtil.convertDocToString(caamlDoc);
 	}
 
 	/**

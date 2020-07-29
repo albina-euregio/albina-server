@@ -114,7 +114,8 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getPublishedXMLBulletins(
 			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
-			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
+			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language,
+			@QueryParam("caamlV6") boolean caamlV6) {
 		logger.debug("GET published XML bulletins");
 
 		DateTime startDate = null;
@@ -130,7 +131,7 @@ public class AvalancheBulletinService {
 				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
 
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, regions,
-					language);
+					language, caamlV6);
 			if (caaml != null) {
 				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 			} else {
