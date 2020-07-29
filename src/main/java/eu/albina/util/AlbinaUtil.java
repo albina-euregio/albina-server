@@ -57,6 +57,7 @@ public class AlbinaUtil {
 	public static final int regionCountSouthTyrol = 20;
 	public static final int regionCountTrentino = 21;
 
+	// LANG
 	// REGION
 	public static final Map<String, String> regionsMapDe = Stream.of(new String[][] { { "AT-07-01", "Allgäuer Alpen" },
 			{ "AT-07-02", "Östliche Lechtaler Alpen - Ammergauer Alpen" }, { "AT-07-03", "Mieminger Gebirge" },
@@ -94,6 +95,7 @@ public class AlbinaUtil {
 			{ "IT-32-TN-19", "Sole, Pejo und Rabbi" }, { "IT-32-TN-20", "Maddalene" },
 			{ "IT-32-TN-21", "Pine' - Fersental" } }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
+	// LANG
 	// REGION
 	public static final Map<String, String> regionsMapIt = Stream.of(new String[][] {
 			{ "AT-07-01", "Alpi dell'Allgäu" }, { "AT-07-02", "Alpi della Lechtal orientali - Alpi dell'Ammergau" },
@@ -134,6 +136,7 @@ public class AlbinaUtil {
 			{ "IT-32-TN-21", "Pine' - Valle dei Mocheni" } })
 			.collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
+	// LANG
 	// REGION
 	public static final Map<String, String> regionsMapEn = Stream.of(new String[][] { { "AT-07-01", "Allgäu Alps" },
 			{ "AT-07-02", "Eastern Lechtal Alps - Ammergau Alps" }, { "AT-07-03", "Mieming Mountains" },
