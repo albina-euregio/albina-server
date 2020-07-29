@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
@@ -165,14 +167,16 @@ public class BlogController extends CommonProcessor {
 		if (getBlogId(region, lang) != null) {
 			try {
 				JSONArray blogPosts = getBlogPosts(region, lang);
+				Locale currentLocale = new Locale(lang.toString());
+				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
 
 				logger.info("Found " + blogPosts.length() + " new blog posts!");
 				for (Object object : blogPosts)
 					if (object instanceof JSONObject) {
 						logger.info(((JSONObject) object).toString());
-						sendNewBlogPostToMessengerpeople((JSONObject) object, region, lang);
-						sendNewBlogPostToRapidmail((JSONObject) object, region, lang);
-						sendNewBlogPostToTelegramChannel((JSONObject) object, region, lang);
+						sendNewBlogPostToMessengerpeople((JSONObject) object, region, lang, messages);
+						sendNewBlogPostToRapidmail((JSONObject) object, region, lang, messages);
+						sendNewBlogPostToTelegramChannel((JSONObject) object, region, lang, messages);
 					}
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
@@ -180,10 +184,12 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	void sendNewBlogPostToMessengerpeople(JSONObject object, String region, LanguageCode lang) {
+	void sendNewBlogPostToMessengerpeople(JSONObject object, String region, LanguageCode lang,
+			ResourceBundle messages) {
 		logger.info("Sending new blog post to messengerpeople ...");
 
-		String message = object.getString("title") + ": " + getBlogPostLink(object, region, lang);
+		String message = object.getString("avalanche-report.name") + ": "
+				+ getBlogPostLink(object, region, lang, messages);
 
 		String attachmentUrl = null;
 		if (object.has("images")) {
@@ -203,10 +209,12 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	void sendNewBlogPostToTelegramChannel(JSONObject object, String region, LanguageCode lang) {
+	void sendNewBlogPostToTelegramChannel(JSONObject object, String region, LanguageCode lang,
+			ResourceBundle messages) {
 		logger.info("Sending new blog post to telegram channel ...");
 
-		String message = object.getString("title") + ": " + getBlogPostLink(object, region, lang);
+		String message = object.getString("avalanche-report.name") + ": "
+				+ getBlogPostLink(object, region, lang, messages);
 
 		String attachmentUrl = null;
 		if (object.has("images")) {
@@ -239,16 +247,17 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(JSONObject object, String region, LanguageCode lang) {
+	private void sendNewBlogPostToRapidmail(JSONObject object, String region, LanguageCode lang,
+			ResourceBundle messages) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
-		String subject = object.getString("title");
+		String subject = object.getString("avalanche-report.name");
 		String blogPostId = object.getString("id");
 
 		try {
 			String htmlString = getBlogPost(blogPostId, region, lang);
 			if (htmlString != null && !htmlString.isEmpty())
-				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject);
+				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject, messages);
 		} catch (IOException e) {
 			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString(), e);
 		} catch (URISyntaxException e) {
@@ -256,8 +265,8 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private String getBlogPostLink(JSONObject object, String region, LanguageCode lang) {
-		return GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/"
+	private String getBlogPostLink(JSONObject object, String region, LanguageCode lang, ResourceBundle messages) {
+		return GlobalVariables.getAvalancheReportFullBlogUrl(messages) + getBlogUrl(region, lang) + "/"
 				+ object.getString("id");
 	}
 

@@ -34,7 +34,6 @@ public class JsonUtil {
 
 	// private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
-	// LANG
 	public static void createJsonFile(List<AvalancheBulletin> bulletins, String validityDateString,
 			String publicationTimeString) throws TransformerException, IOException {
 		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;

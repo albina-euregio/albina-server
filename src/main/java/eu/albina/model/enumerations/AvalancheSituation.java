@@ -16,8 +16,15 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public enum AvalancheSituation {
 	new_snow, wind_drifted_snow, weak_persistent_layer, wet_snow, gliding_snow, favourable_situation;
+
+	public String toString(Locale locale) {
+		return ResourceBundle.getBundle("i18n.AvalancheSituation", locale).getString(name());
+	}
 
 	public static AvalancheSituation fromString(String text) {
 		if (text != null) {
@@ -88,77 +95,7 @@ public enum AvalancheSituation {
 		}
 	}
 
-	public String toString(LanguageCode lang) {
-		switch (lang) {
-		case de:
-			switch (this) {
-			case new_snow:
-				return "Neuschnee";
-			case wind_drifted_snow:
-				return "Triebschnee";
-			case weak_persistent_layer:
-				return "Altschnee";
-			case wet_snow:
-				return "Nasschnee";
-			case gliding_snow:
-				return "Gleitschnee";
-			case favourable_situation:
-				return "Günstige Situation";
-			default:
-				return "";
-			}
-		case it:
-			switch (this) {
-			case new_snow:
-				return "Neve fresca";
-			case wind_drifted_snow:
-				return "Neve ventata";
-			case weak_persistent_layer:
-				return "Strati deboli persistenti";
-			case wet_snow:
-				return "Neve bagnata";
-			case gliding_snow:
-				return "Valanghe di slittamento";
-			case favourable_situation:
-				return "Situazione favorevole";
-			default:
-				return "";
-			}
-		case en:
-			switch (this) {
-			case new_snow:
-				return "New snow";
-			case wind_drifted_snow:
-				return "Wind-drifted snow";
-			case weak_persistent_layer:
-				return "Persistent weak layer";
-			case wet_snow:
-				return "Wet snow";
-			case gliding_snow:
-				return "Gliding snow";
-			case favourable_situation:
-				return "Favourable situation";
-			default:
-				return "";
-			}
-
-		default:
-			switch (this) {
-			case new_snow:
-				return "New snow";
-			case wind_drifted_snow:
-				return "Wind-drifted snow";
-			case weak_persistent_layer:
-				return "Persistent weak layer";
-			case wet_snow:
-				return "Wet snow";
-			case gliding_snow:
-				return "Gliding snow";
-			case favourable_situation:
-				return "Favourable situation";
-			default:
-				return "";
-			}
-		}
+	public String toString(ResourceBundle messages) {
+		return messages.getString("avalanche-problem" + this.toStringId());
 	}
 }

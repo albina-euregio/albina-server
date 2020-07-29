@@ -29,12 +29,13 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
 import org.joda.time.DateTime;
-import com.github.openjson.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -45,6 +46,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.SubscriberController;
@@ -164,8 +166,11 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07", false,
-				false);
+		Locale currentLocale = new Locale("de");
+		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+
+		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07", false, false,
+				messages);
 		System.out.println(html);
 	}
 
@@ -218,11 +223,14 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createPdf() throws IOException, URISyntaxException {
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale());
+
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
-		// PdfUtil.getInstance().createRegionPdfs(bulletins, "AT-07");#
+		// PdfUtil.getInstance().createRegionPdfs(bulletins, "AT-07");
+
 		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false, "2030-02-16",
-				"2030-02-16_00-00-00");
+				"2030-02-16_00-00-00", messages);
 	}
 
 	@Ignore

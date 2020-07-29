@@ -16,8 +16,16 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public enum DangerRating {
 	missing, no_snow, no_rating, low, moderate, considerable, high, very_high;
+
+	public String toString(Locale locale, boolean useLong) {
+		return ResourceBundle.getBundle("i18n.DangerRating", locale)
+			.getString(name() + (useLong ? ".long" : ""));
+	}
 
 	public static DangerRating fromString(String text) {
 		if (text != null) {
@@ -27,6 +35,23 @@ public enum DangerRating {
 			}
 		}
 		return null;
+	}
+
+	public String getColor() {
+		switch (this) {
+			case low:
+				return "#CCFF66";
+			case moderate:
+				return "#FFFF00";
+			case considerable:
+				return "#FF9900";
+			case high:
+				return "#FF0000";
+			case very_high:
+				return "#800000";
+			default:
+				return "#969696";
+		}
 	}
 
 	public static String getCAAMLv6String(DangerRating dangerRating) {

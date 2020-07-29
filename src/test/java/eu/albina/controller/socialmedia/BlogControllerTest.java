@@ -21,12 +21,15 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import com.github.openjson.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.HibernateUtil;
@@ -56,21 +59,20 @@ public class BlogControllerTest {
 	@Ignore
 	@Test
 	public void testTicket150() {
-		final JSONObject blog = new JSONObject("{\n" +
-			"  \"replies\": {},\n" +
-			"  \"kind\": \"blogger#post\",\n" +
-			"  \"author\": {},\n" +
-			"  \"etag\": \"\\\"dGltZXN0YW1wOiAxNTc1NTYxNTg5NzM2Cm9mZnNldDogMz YwMDAwMAo\\\"\",\n" +
-			"  \"id\": \"4564885875858452565\",\n" +
-			"  \"published\": \"2019-12-05T16:59:00+01:00\",\n" +
-			"  \"blog\": {\"id\": \"1263754381945501754\"},\n" +
-			"  \"title\": \"Sonnige Woche\",\n" +
-			"  \"updated\": \"2019-12-05T16:59:49+01:00\",\n" +
-			"  \"url\": \"http ://lawinensuedtirol.blogspot.com/2019/12/sonnige-woche.html\",\n" +
-			"  \"content\": \"\",\n" +
-			"  \"selfLink\": \"https://www.googleapis.com/blogger/v3/blogs/1263754381945501754/posts/4564885875858452565\"\n" +
-			"}\n");
+		final JSONObject blog = new JSONObject("{\n" + "  \"replies\": {},\n" + "  \"kind\": \"blogger#post\",\n"
+				+ "  \"author\": {},\n"
+				+ "  \"etag\": \"\\\"dGltZXN0YW1wOiAxNTc1NTYxNTg5NzM2Cm9mZnNldDogMz YwMDAwMAo\\\"\",\n"
+				+ "  \"id\": \"4564885875858452565\",\n" + "  \"published\": \"2019-12-05T16:59:00+01:00\",\n"
+				+ "  \"blog\": {\"id\": \"1263754381945501754\"},\n" + "  \"title\": \"Sonnige Woche\",\n"
+				+ "  \"updated\": \"2019-12-05T16:59:49+01:00\",\n"
+				+ "  \"url\": \"http ://lawinensuedtirol.blogspot.com/2019/12/sonnige-woche.html\",\n"
+				+ "  \"content\": \"\",\n"
+				+ "  \"selfLink\": \"https://www.googleapis.com/blogger/v3/blogs/1263754381945501754/posts/4564885875858452565\"\n"
+				+ "}\n");
 
-		BlogController.getInstance().sendNewBlogPostToMessengerpeople(blog, "IT-32-BZ", LanguageCode.de);
+		Locale currentLocale = new Locale(LanguageCode.de.toString());
+		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+
+		BlogController.getInstance().sendNewBlogPostToMessengerpeople(blog, "IT-32-BZ", LanguageCode.de, messages);
 	}
 }

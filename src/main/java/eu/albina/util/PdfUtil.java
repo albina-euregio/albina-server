@@ -22,6 +22,8 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -119,16 +121,22 @@ public class PdfUtil {
 		boolean result = true;
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
-			if (!createPdf(bulletins, lang, null, false, daytimeDependency, validityDateString, publicationTimeString))
+			Locale currentLocale = new Locale(lang.toString());
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+
+			if (!createPdf(bulletins, lang, null, false, daytimeDependency, validityDateString, publicationTimeString,
+					messages))
 				result = false;
-			if (!createPdf(bulletins, lang, null, true, daytimeDependency, validityDateString, publicationTimeString))
+			if (!createPdf(bulletins, lang, null, true, daytimeDependency, validityDateString, publicationTimeString,
+					messages))
 				result = false;
 		}
 		return result;
 	}
 
 	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
-			boolean daytimeDependency, String validityDateString, String publicationTimeString) {
+			boolean daytimeDependency, String validityDateString, String publicationTimeString,
+			ResourceBundle messages) {
 		PdfDocument pdf;
 		PdfWriter writer;
 
@@ -183,12 +191,12 @@ public class PdfUtil {
 			document.setMargins(110, 30, 60, 50);
 
 			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency, validityDateString,
-					publicationTimeString);
+					publicationTimeString, messages);
 
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
-						AlbinaUtil.getTendencyDate(bulletins, lang), writer, grayscale, validityDateString,
-						publicationTimeString);
+						AlbinaUtil.getTendencyDate(bulletins, messages), writer, grayscale, validityDateString,
+						publicationTimeString, messages);
 			}
 
 			document.close();
@@ -229,11 +237,14 @@ public class PdfUtil {
 
 		if (!regionBulletins.isEmpty())
 			for (LanguageCode lang : GlobalVariables.languages) {
+				Locale currentLocale = new Locale(lang.toString());
+				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+
 				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString,
-						publicationTimeString))
+						publicationTimeString, messages))
 					result = false;
 				if (!createPdf(regionBulletins, lang, region, true, daytimeDependency, validityDateString,
-						publicationTimeString))
+						publicationTimeString, messages))
 					result = false;
 			}
 
@@ -242,7 +253,7 @@ public class PdfUtil {
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
 			PdfDocument pdf, String tendencyDate, PdfWriter writer, boolean grayscale, String validityDateString,
-			String publicationTimeString) throws IOException {
+			String publicationTimeString, ResourceBundle messages) throws IOException {
 		document.add(new AreaBreak());
 
 		float leadingHeadline = 1.f;
@@ -256,8 +267,8 @@ public class PdfUtil {
 		Cell cell;
 
 		Paragraph dangerRatingHeadline = new Paragraph(
-				GlobalVariables.getDangerRatingTextMiddle(avalancheBulletin.getHighestDangerRating(), lang))
-						.setFont(openSansBoldFont).setFontSize(14)
+				avalancheBulletin.getHighestDangerRating().toString(lang.getLocale(), true)).setFont(openSansBoldFont)
+						.setFontSize(14)
 						.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating(), grayscale))
 						.setMultipliedLeading(leadingHeadline);
 		cell = new Cell(1, 10).add(dangerRatingHeadline);
@@ -295,8 +306,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1)
-					.add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer, grayscale));
+			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer,
+					grayscale, messages));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -335,8 +346,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1)
-					.add(createSymbols(avalancheBulletin, true, lang, tendencyDate, pdf, document, writer, grayscale));
+			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, true, lang, tendencyDate, pdf, document, writer,
+					grayscale, messages));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -370,8 +381,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1)
-					.add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer, grayscale));
+			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer,
+					grayscale, messages));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -423,7 +434,7 @@ public class PdfUtil {
 			if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
 					|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
 					|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null) {
-				cell = new Cell(1, 10).add(new Paragraph(GlobalVariables.getSnowpackHeadline(lang))
+				cell = new Cell(1, 10).add(new Paragraph(messages.getString("headline.snowpack"))
 						.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(5)
 						.setMultipliedLeading(leadingHeadline));
 				cell.setTextAlignment(TextAlignment.LEFT);
@@ -442,7 +453,7 @@ public class PdfUtil {
 				if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null) {
 					float[] dangerPatternColumnWidths = { 1, 1, 1 };
 					Table dangerPatternTable = new Table(dangerPatternColumnWidths);
-					Paragraph dangerPatternHeadline = new Paragraph(GlobalVariables.getDangerPatternsHeadline(lang))
+					Paragraph dangerPatternHeadline = new Paragraph(messages.getString("headline.danger-patterns"))
 							.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					cell = new Cell(1, 1).add(dangerPatternHeadline);
 					cell.setTextAlignment(TextAlignment.LEFT);
@@ -507,7 +518,7 @@ public class PdfUtil {
 			}
 
 			if (avalancheBulletin.getTendencyCommentIn(lang) != null) {
-				Paragraph tendencyHeadline = new Paragraph(GlobalVariables.getTendencyHeadline(lang))
+				Paragraph tendencyHeadline = new Paragraph(messages.getString("headline.tendency"))
 						.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 						.setMultipliedLeading(leadingHeadline);
 				cell = new Cell(1, 10).add(tendencyHeadline);
@@ -546,8 +557,8 @@ public class PdfUtil {
 	}
 
 	private Table createSymbols(AvalancheBulletin avalancheBulletin, boolean isAfternoon, LanguageCode lang,
-			String tendencyDate, PdfDocument pdf, Document document, PdfWriter writer, boolean grayscale)
-			throws MalformedURLException {
+			String tendencyDate, PdfDocument pdf, Document document, PdfWriter writer, boolean grayscale,
+			ResourceBundle messages) throws MalformedURLException {
 		AvalancheBulletinDaytimeDescription daytimeBulletin;
 		int height = 30;
 
@@ -597,7 +608,7 @@ public class PdfUtil {
 					&& !(!isAfternoon && avalancheBulletin.getForenoon().getDangerRatingAbove()
 							.equals(avalancheBulletin.getForenoon().getDangerRatingBelow()))) {
 				if (avalancheBulletin.getTreeline()) {
-					Paragraph paragraph = new Paragraph(GlobalVariables.getTreelineString(lang))
+					Paragraph paragraph = new Paragraph(messages.getString("elevation.treeline.capitalized"))
 							.setFontColor(blackColor).setFontSize(8).setFont(openSansBoldFont);
 					paragraph.setRelativePosition(-2, 2, 0, 0);
 					cell.add(paragraph);
@@ -621,8 +632,8 @@ public class PdfUtil {
 
 			Paragraph paragraph = new Paragraph().setFontSize(8).setFontColor(blackColor).setMarginLeft(10)
 					.setMultipliedLeading(1.0f);
-			paragraph.add(new Text(GlobalVariables.getTendencyText(avalancheBulletin.getTendency(), lang))
-					.setFont(openSansBoldFont));
+			paragraph.add(
+					new Text(avalancheBulletin.getTendency().toString(lang.getLocale())).setFont(openSansBoldFont));
 			paragraph.add(new Text("\n"));
 			paragraph.add(new Text(tendencyDate).setFont(openSansRegularFont));
 			cell.add(paragraph);
@@ -651,7 +662,7 @@ public class PdfUtil {
 		table.addCell(cell);
 
 		cell = new Cell(1, 1).add(createAvalancheSituations(daytimeBulletin, lang, pdf, document, writer, isAfternoon,
-				avalancheBulletin.isHasDaytimeDependency(), grayscale));
+				avalancheBulletin.isHasDaytimeDependency(), grayscale, messages));
 		cell.setTextAlignment(TextAlignment.LEFT);
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
@@ -661,7 +672,7 @@ public class PdfUtil {
 
 	private Table createAvalancheSituations(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang,
 			PdfDocument pdf, Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime,
-			boolean grayscale) throws MalformedURLException {
+			boolean grayscale, ResourceBundle messages) throws MalformedURLException {
 		float[] columnWidths = { 1, 1, 1, 1, 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
 
@@ -669,13 +680,13 @@ public class PdfUtil {
 				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
 			createAvalancheSituation(daytimeBulletin.getAvalancheSituation1(), lang, table, false, document, writer,
-					isAfternoon, hasDaytime, grayscale);
+					isAfternoon, hasDaytime, grayscale, messages);
 		}
 		if (daytimeBulletin.getAvalancheSituation2() != null
 				&& daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
 			createAvalancheSituation(daytimeBulletin.getAvalancheSituation2(), lang, table, true, document, writer,
-					isAfternoon, hasDaytime, grayscale);
+					isAfternoon, hasDaytime, grayscale, messages);
 		}
 
 		return table;
@@ -693,7 +704,7 @@ public class PdfUtil {
 
 	private void createAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, Table table,
 			boolean isSecond, Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime,
-			boolean grayscale) throws MalformedURLException {
+			boolean grayscale, ResourceBundle messages) throws MalformedURLException {
 		float[] avalancheSituationColumnWidths = { 1 };
 		Table avalancheSituationTable;
 		Paragraph paragraph;
@@ -720,7 +731,7 @@ public class PdfUtil {
 				}
 				if (isSecond)
 					avalancheSituationTable.setBorderLeft(new SolidBorder(blackColor, 0.5f));
-				paragraph = new Paragraph(avalancheSituation.getAvalancheSituation().toString(lang))
+				paragraph = new Paragraph(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()))
 						.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor)
 						.setMultipliedLeading(1.0f);
 				if (isSecond)
@@ -804,7 +815,7 @@ public class PdfUtil {
 						table.addCell(cell);
 					}
 					if (avalancheSituation.getTreelineHigh()) {
-						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
+						Paragraph paragraph2 = new Paragraph(messages.getString("elevation.treeline.capitalized"))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
 						cell = new Cell(1, 1);
@@ -827,7 +838,7 @@ public class PdfUtil {
 						elevationTable.addCell(cell);
 					}
 					if (avalancheSituation.getTreelineLow()) {
-						Paragraph paragraph2 = new Paragraph(GlobalVariables.getTreelineString(lang))
+						Paragraph paragraph2 = new Paragraph(messages.getString("elevation.treeline.capitalized"))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
 						cell = new Cell(1, 1);
@@ -867,8 +878,8 @@ public class PdfUtil {
 					}
 
 					if (avalancheSituation.getTreelineHigh()) {
-						paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFont(openSansBoldFont)
-								.setFontSize(8).setFontColor(blackColor);
+						paragraph = new Paragraph(messages.getString("elevation.treeline.capitalized"))
+								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph.setRelativePosition(-6, -4, 0, 0);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -907,8 +918,8 @@ public class PdfUtil {
 				}
 
 				if (avalancheSituation.getTreelineLow()) {
-					paragraph = new Paragraph(GlobalVariables.getTreelineString(lang)).setFont(openSansBoldFont)
-							.setFontSize(8).setFontColor(blackColor);
+					paragraph = new Paragraph(messages.getString("elevation.treeline.capitalized"))
+							.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph.setRelativePosition(-6, 4, 0, 0);
 					cell = new Cell(1, 1);
 					cell.setTextAlignment(TextAlignment.LEFT);
@@ -1060,7 +1071,7 @@ public class PdfUtil {
 
 	private void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
 			PdfDocument pdf, String region, boolean grayscale, boolean daytimeDependency, String validityDateString,
-			String publicationTimeString) throws MalformedURLException {
+			String publicationTimeString, ResourceBundle messages) throws MalformedURLException {
 		PdfPage page = pdf.addNewPage();
 		Rectangle pageSize = page.getPageSize();
 		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdf);
@@ -1092,7 +1103,7 @@ public class PdfUtil {
 			canvas.add(overviewMapAMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
-					.showText(GlobalVariables.getAMText(lang)).endText();
+					.showText(messages.getString("daytime.am.capitalized")).endText();
 
 			ImageData overviewMapPMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
 					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
@@ -1104,7 +1115,7 @@ public class PdfUtil {
 			canvas.add(overviewMapPMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(blackColor, true)
-					.showText(GlobalVariables.getPMText(lang)).endText();
+					.showText(messages.getString("daytime.pm.capitalized")).endText();
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
 					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
@@ -1209,180 +1220,35 @@ public class PdfUtil {
 				.showText("5").endText();
 
 		y = y - 9;
-		width = openSansRegularFont
-				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang)))
+		width = openSansRegularFont.getContentWidth(new PdfString(DangerRating.low.toString(lang.getLocale(), false)))
 				* 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(blackColor, true)
-				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang)).endText();
+				.showText(DangerRating.low.toString(lang.getLocale(), false)).endText();
 		width = openSansRegularFont
-				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang)))
-				* 0.001f * fontSize / 2;
+				.getContentWidth(new PdfString(DangerRating.moderate.toString(lang.getLocale(), false))) * 0.001f
+				* fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(blackColor, true)
-				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate, lang)).endText();
-		width = openSansRegularFont.getContentWidth(
-				new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang))) * 0.001f
+				.showText(DangerRating.moderate.toString(lang.getLocale(), false)).endText();
+		width = openSansRegularFont
+				.getContentWidth(new PdfString(DangerRating.considerable.toString(lang.getLocale(), false))) * 0.001f
 				* fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize).moveText(pageSize.getWidth() / 2 - width, y)
-				.setColor(blackColor, true)
-				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable, lang)).endText();
-		width = openSansRegularFont
-				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang)))
+				.setColor(blackColor, true).showText(DangerRating.considerable.toString(lang.getLocale(), false))
+				.endText();
+		width = openSansRegularFont.getContentWidth(new PdfString(DangerRating.high.toString(lang.getLocale(), false)))
 				* 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(blackColor, true)
-				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang)).endText();
+				.showText(DangerRating.high.toString(lang.getLocale(), false)).endText();
 		width = openSansRegularFont
-				.getContentWidth(new PdfString(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang)))
-				* 0.001f * fontSize / 2;
+				.getContentWidth(new PdfString(DangerRating.very_high.toString(lang.getLocale(), false))) * 0.001f
+				* fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(blackColor, true)
-				.showText(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high, lang)).endText();
+				.showText(DangerRating.very_high.toString(lang.getLocale(), false)).endText();
 
-		/*
-		 * // Add avalanche danger scale float marginRight = 25.f; float marginLeft =
-		 * 15.f; int tableFontSize = 7; int dangerRatingFontSize = 12;
-		 *
-		 * float[] columnWidths = { 1, 1 }; Table table = new
-		 * Table(columnWidths).setAutoLayout().setBorder(Border.NO_BORDER).setMarginTop(
-		 * 290)
-		 * .setMarginLeft(marginLeft).setMarginRight(marginRight).setWidthPercent(100);
-		 *
-		 * Paragraph symbolHeadline = new
-		 * Paragraph(GlobalVariables.getDangerRatingHeadline(lang))
-		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); Cell cell = new Cell(1, 1).add(symbolHeadline);
-		 * cell.setPaddingLeft(5); cell.setPaddingRight(5);
-		 * cell.setTextAlignment(TextAlignment.LEFT);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * Paragraph characteristicsHeadline = new
-		 * Paragraph(GlobalVariables.getCharacteristicsHeadline(lang))
-		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsHeadline);
-		 * cell.setPaddingLeft(5); cell.setPaddingRight(5);
-		 * cell.setTextAlignment(TextAlignment.LEFT);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * Paragraph dangerRatingText = new
-		 * Paragraph("5").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
-		 * dangerRatingText = new
-		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.very_high,
-		 * lang)) .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(dangerRatingText);
-		 * cell.setTextAlignment(TextAlignment.CENTER);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * Paragraph characteristicsText = new Paragraph(
-		 * GlobalVariables.getDangerRatingVeryHighCharacteristicsTextBold(lang)).setFont
-		 * (openSansBoldFont) .setFontSize(tableFontSize).setFontColor(greyDarkColor);
-		 * cell = new Cell(1, 1).add(characteristicsText); characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingVeryHighCharacteristicsText(lang))
-		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
-		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * dangerRatingText = new
-		 * Paragraph("4").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
-		 * dangerRatingText = new
-		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.high, lang))
-		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(dangerRatingText);
-		 * cell.setTextAlignment(TextAlignment.CENTER);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsTextBold(lang))
-		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsText);
-		 * characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingHighCharacteristicsText(lang))
-		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
-		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * dangerRatingText = new
-		 * Paragraph("3").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
-		 * dangerRatingText = new
-		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.considerable,
-		 * lang)) .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(dangerRatingText);
-		 * cell.setTextAlignment(TextAlignment.CENTER);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingConsiderableCharacteristicsTextBold(
-		 * lang)) .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsText);
-		 * characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingConsiderableCharacteristicsText(lang
-		 * )) .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
-		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * dangerRatingText = new
-		 * Paragraph("2").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
-		 * dangerRatingText = new
-		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.moderate,
-		 * lang)) .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(dangerRatingText);
-		 * cell.setTextAlignment(TextAlignment.CENTER);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsTextBold(lang
-		 * )) .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsText);
-		 * characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingModerateCharacteristicsText(lang))
-		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
-		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * dangerRatingText = new
-		 * Paragraph("1").setFont(openSansBoldFont).setFontSize(dangerRatingFontSize)
-		 * .setFontColor(greyDarkColor); cell = new Cell(1, 1).add(dangerRatingText);
-		 * dangerRatingText = new
-		 * Paragraph(GlobalVariables.getDangerRatingTextShort(DangerRating.low, lang))
-		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(dangerRatingText);
-		 * cell.setTextAlignment(TextAlignment.CENTER);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsTextBold(lang))
-		 * .setFont(openSansBoldFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell = new Cell(1, 1).add(characteristicsText);
-		 * characteristicsText = new
-		 * Paragraph(GlobalVariables.getDangerRatingLowCharacteristicsText(lang))
-		 * .setFont(openSansRegularFont).setFontSize(tableFontSize).setFontColor(
-		 * greyDarkColor); cell.add(characteristicsText); cell.setPaddingLeft(5);
-		 * cell.setPaddingRight(5); cell.setTextAlignment(TextAlignment.LEFT);
-		 * cell.setVerticalAlignment(VerticalAlignment.MIDDLE); cell.setBorder(new
-		 * SolidBorder(greyDarkColor, 0.5f)); table.addCell(cell);
-		 *
-		 * document.add(table);
-		 */
 		canvas.close();
 		pdfCanvas.release();
 	}

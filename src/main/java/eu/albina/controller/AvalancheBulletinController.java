@@ -21,7 +21,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -789,6 +791,11 @@ public class AvalancheBulletinController {
 		boolean missingDangerRating = false;
 		boolean incompleteTranslation = false;
 
+		// LANG
+		ResourceBundle messagesDe = ResourceBundle.getBundle("i18n.MessagesBundle", new Locale("de"));
+		ResourceBundle messagesIt = ResourceBundle.getBundle("i18n.MessagesBundle", new Locale("it"));
+		ResourceBundle messagesEn = ResourceBundle.getBundle("i18n.MessagesBundle", new Locale("en"));
+
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
@@ -822,12 +829,6 @@ public class AvalancheBulletinController {
 				if (missingAvActivityComment || bulletin.getAvActivityCommentTextcat() == null
 						|| bulletin.getAvActivityCommentTextcat().isEmpty())
 					missingAvActivityComment = true;
-				/*
-				 * if (missingSnowpackStructureHighlights ||
-				 * bulletin.getSnowpackStructureHighlightsTextcat() == null ||
-				 * bulletin.getSnowpackStructureHighlightsTextcat().isEmpty())
-				 * missingSnowpackStructureHighlights = true;
-				 */
 				if (missingSnowpackStructureComment || bulletin.getSnowpackStructureCommentTextcat() == null
 						|| bulletin.getSnowpackStructureCommentTextcat().isEmpty())
 					missingSnowpackStructureComment = true;
@@ -848,41 +849,42 @@ public class AvalancheBulletinController {
 					missingDangerRating = true;
 				}
 
-				if ((bulletin.getAvActivityHighlightsIn(LanguageCode.de) != null && bulletin
-						.getAvActivityHighlightsIn(LanguageCode.de).equals(GlobalVariables.incompleteTranslationTextDe))
+				if ((bulletin.getAvActivityHighlightsIn(LanguageCode.de) != null
+						&& bulletin.getAvActivityHighlightsIn(LanguageCode.de)
+								.equals(messagesDe.getString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityHighlightsIn(LanguageCode.it) != null
 								&& bulletin.getAvActivityHighlightsIn(LanguageCode.it)
-										.equals(GlobalVariables.incompleteTranslationTextIt))
+										.equals(messagesIt.getString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityHighlightsIn(LanguageCode.en) != null
 								&& bulletin.getAvActivityHighlightsIn(LanguageCode.en)
-										.equals(GlobalVariables.incompleteTranslationTextEn))
+										.equals(messagesEn.getString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityCommentIn(LanguageCode.de) != null
 								&& bulletin.getAvActivityCommentIn(LanguageCode.de)
-										.equals(GlobalVariables.incompleteTranslationTextDe))
+										.equals(messagesDe.getString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityCommentIn(LanguageCode.it) != null
 								&& bulletin.getAvActivityCommentIn(LanguageCode.it)
-										.equals(GlobalVariables.incompleteTranslationTextIt))
+										.equals(messagesIt.getString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityCommentIn(LanguageCode.en) != null
 								&& bulletin.getAvActivityCommentIn(LanguageCode.en)
-										.equals(GlobalVariables.incompleteTranslationTextEn))
+										.equals(messagesEn.getString("cop.incomplete-translation")))
 						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.de) != null
 								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.de)
-										.equals(GlobalVariables.incompleteTranslationTextDe))
+										.equals(messagesDe.getString("cop.incomplete-translation")))
 						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.it) != null
 								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.it)
-										.equals(GlobalVariables.incompleteTranslationTextIt))
+										.equals(messagesIt.getString("cop.incomplete-translation")))
 						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.en) != null
 								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.en)
-										.equals(GlobalVariables.incompleteTranslationTextEn))
+										.equals(messagesEn.getString("cop.incomplete-translation")))
 						|| (bulletin.getTendencyCommentIn(LanguageCode.de) != null
 								&& bulletin.getTendencyCommentIn(LanguageCode.de)
-										.equals(GlobalVariables.incompleteTranslationTextDe))
+										.equals(messagesDe.getString("cop.incomplete-translation")))
 						|| (bulletin.getTendencyCommentIn(LanguageCode.it) != null
 								&& bulletin.getTendencyCommentIn(LanguageCode.it)
-										.equals(GlobalVariables.incompleteTranslationTextIt))
+										.equals(messagesIt.getString("cop.incomplete-translation")))
 						|| (bulletin.getTendencyCommentIn(LanguageCode.en) != null
 								&& bulletin.getTendencyCommentIn(LanguageCode.en)
-										.equals(GlobalVariables.incompleteTranslationTextEn))) {
+										.equals(messagesEn.getString("cop.incomplete-translation")))) {
 					incompleteTranslation = true;
 				}
 			}
