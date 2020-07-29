@@ -49,22 +49,19 @@ public class MessengerPeopleUtil {
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.languages) {
 			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
 
 			DateTime date = AlbinaUtil.getDate(bulletins);
 			String message = GlobalVariables.getSocialMediaText(date, update, messages);
 			String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
+			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions, messages);
 		}
 	}
 
 	private void sendBulletinNewsletter(String message, List<AvalancheBulletin> bulletins, String validityDate,
-			String publicationTime, LanguageCode lang, List<String> regions) {
+			String publicationTime, LanguageCode lang, List<String> regions, ResourceBundle messages) {
 		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
-		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-
 		for (String region : regions) {
 			try {
 				String attachmentUrl = GlobalVariables.getMapsUrl(messages) + "/" + validityDate + "/" + publicationTime

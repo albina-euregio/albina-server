@@ -121,21 +121,24 @@ public class PdfUtil {
 		boolean result = true;
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
-			if (!createPdf(bulletins, lang, null, false, daytimeDependency, validityDateString, publicationTimeString))
+			Locale currentLocale = new Locale(lang.toString());
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+
+			if (!createPdf(bulletins, lang, null, false, daytimeDependency, validityDateString, publicationTimeString,
+					messages))
 				result = false;
-			if (!createPdf(bulletins, lang, null, true, daytimeDependency, validityDateString, publicationTimeString))
+			if (!createPdf(bulletins, lang, null, true, daytimeDependency, validityDateString, publicationTimeString,
+					messages))
 				result = false;
 		}
 		return result;
 	}
 
 	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
-			boolean daytimeDependency, String validityDateString, String publicationTimeString) {
+			boolean daytimeDependency, String validityDateString, String publicationTimeString,
+			ResourceBundle messages) {
 		PdfDocument pdf;
 		PdfWriter writer;
-
-		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
 
 		try {
 			String filename;
@@ -188,12 +191,12 @@ public class PdfUtil {
 			document.setMargins(110, 30, 60, 50);
 
 			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency, validityDateString,
-					publicationTimeString);
+					publicationTimeString, messages);
 
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
 						AlbinaUtil.getTendencyDate(bulletins, messages), writer, grayscale, validityDateString,
-						publicationTimeString);
+						publicationTimeString, messages);
 			}
 
 			document.close();
@@ -234,11 +237,14 @@ public class PdfUtil {
 
 		if (!regionBulletins.isEmpty())
 			for (LanguageCode lang : GlobalVariables.languages) {
+				Locale currentLocale = new Locale(lang.toString());
+				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+
 				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString,
-						publicationTimeString))
+						publicationTimeString, messages))
 					result = false;
 				if (!createPdf(regionBulletins, lang, region, true, daytimeDependency, validityDateString,
-						publicationTimeString))
+						publicationTimeString, messages))
 					result = false;
 			}
 
@@ -247,10 +253,7 @@ public class PdfUtil {
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
 			PdfDocument pdf, String tendencyDate, PdfWriter writer, boolean grayscale, String validityDateString,
-			String publicationTimeString) throws IOException {
-		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-
+			String publicationTimeString, ResourceBundle messages) throws IOException {
 		document.add(new AreaBreak());
 
 		float leadingHeadline = 1.f;
@@ -264,8 +267,8 @@ public class PdfUtil {
 		Cell cell;
 
 		Paragraph dangerRatingHeadline = new Paragraph(
-				GlobalVariables.getDangerRatingTextLong(avalancheBulletin.getHighestDangerRating(), messages))
-						.setFont(openSansBoldFont).setFontSize(14)
+				avalancheBulletin.getHighestDangerRating().toString(lang.getLocale(), true)).setFont(openSansBoldFont)
+						.setFontSize(14)
 						.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating(), grayscale))
 						.setMultipliedLeading(leadingHeadline);
 		cell = new Cell(1, 10).add(dangerRatingHeadline);
@@ -303,8 +306,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1)
-					.add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer, grayscale));
+			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer,
+					grayscale, messages));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -343,8 +346,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1)
-					.add(createSymbols(avalancheBulletin, true, lang, tendencyDate, pdf, document, writer, grayscale));
+			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, true, lang, tendencyDate, pdf, document, writer,
+					grayscale, messages));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -378,8 +381,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1)
-					.add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer, grayscale));
+			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer,
+					grayscale, messages));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -459,7 +462,7 @@ public class PdfUtil {
 
 					if (avalancheBulletin.getDangerPattern1() != null) {
 						Paragraph paragraph = new Paragraph(
-								AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), messages))
+								AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang))
 										.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 						;
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
@@ -470,7 +473,7 @@ public class PdfUtil {
 					}
 					if (avalancheBulletin.getDangerPattern2() != null) {
 						Paragraph paragraph = new Paragraph(
-								AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), messages))
+								AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang))
 										.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 						;
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
@@ -554,11 +557,8 @@ public class PdfUtil {
 	}
 
 	private Table createSymbols(AvalancheBulletin avalancheBulletin, boolean isAfternoon, LanguageCode lang,
-			String tendencyDate, PdfDocument pdf, Document document, PdfWriter writer, boolean grayscale)
-			throws MalformedURLException {
-		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-
+			String tendencyDate, PdfDocument pdf, Document document, PdfWriter writer, boolean grayscale,
+			ResourceBundle messages) throws MalformedURLException {
 		AvalancheBulletinDaytimeDescription daytimeBulletin;
 		int height = 30;
 
@@ -632,19 +632,8 @@ public class PdfUtil {
 
 			Paragraph paragraph = new Paragraph().setFontSize(8).setFontColor(blackColor).setMarginLeft(10)
 					.setMultipliedLeading(1.0f);
-			switch (avalancheBulletin.getTendency()) {
-			case decreasing:
-				paragraph.add(new Text(messages.getString("tendency.decreasing")).setFont(openSansBoldFont));
-				break;
-			case steady:
-				paragraph.add(new Text(messages.getString("tendency.steady")).setFont(openSansBoldFont));
-				break;
-			case increasing:
-				paragraph.add(new Text(messages.getString("tendency.increasing")).setFont(openSansBoldFont));
-				break;
-			default:
-				break;
-			}
+			paragraph.add(
+					new Text(avalancheBulletin.getTendency().toString(lang.getLocale())).setFont(openSansBoldFont));
 			paragraph.add(new Text("\n"));
 			paragraph.add(new Text(tendencyDate).setFont(openSansRegularFont));
 			cell.add(paragraph);
@@ -673,7 +662,7 @@ public class PdfUtil {
 		table.addCell(cell);
 
 		cell = new Cell(1, 1).add(createAvalancheSituations(daytimeBulletin, lang, pdf, document, writer, isAfternoon,
-				avalancheBulletin.isHasDaytimeDependency(), grayscale));
+				avalancheBulletin.isHasDaytimeDependency(), grayscale, messages));
 		cell.setTextAlignment(TextAlignment.LEFT);
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
@@ -683,7 +672,7 @@ public class PdfUtil {
 
 	private Table createAvalancheSituations(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang,
 			PdfDocument pdf, Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime,
-			boolean grayscale) throws MalformedURLException {
+			boolean grayscale, ResourceBundle messages) throws MalformedURLException {
 		float[] columnWidths = { 1, 1, 1, 1, 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
 
@@ -691,13 +680,13 @@ public class PdfUtil {
 				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
 			createAvalancheSituation(daytimeBulletin.getAvalancheSituation1(), lang, table, false, document, writer,
-					isAfternoon, hasDaytime, grayscale);
+					isAfternoon, hasDaytime, grayscale, messages);
 		}
 		if (daytimeBulletin.getAvalancheSituation2() != null
 				&& daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
 			createAvalancheSituation(daytimeBulletin.getAvalancheSituation2(), lang, table, true, document, writer,
-					isAfternoon, hasDaytime, grayscale);
+					isAfternoon, hasDaytime, grayscale, messages);
 		}
 
 		return table;
@@ -715,10 +704,7 @@ public class PdfUtil {
 
 	private void createAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, Table table,
 			boolean isSecond, Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime,
-			boolean grayscale) throws MalformedURLException {
-		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-
+			boolean grayscale, ResourceBundle messages) throws MalformedURLException {
 		float[] avalancheSituationColumnWidths = { 1 };
 		Table avalancheSituationTable;
 		Paragraph paragraph;
@@ -745,7 +731,7 @@ public class PdfUtil {
 				}
 				if (isSecond)
 					avalancheSituationTable.setBorderLeft(new SolidBorder(blackColor, 0.5f));
-				paragraph = new Paragraph(avalancheSituation.getAvalancheSituation().toString(messages))
+				paragraph = new Paragraph(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()))
 						.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor)
 						.setMultipliedLeading(1.0f);
 				if (isSecond)
@@ -1085,7 +1071,7 @@ public class PdfUtil {
 
 	private void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
 			PdfDocument pdf, String region, boolean grayscale, boolean daytimeDependency, String validityDateString,
-			String publicationTimeString) throws MalformedURLException {
+			String publicationTimeString, ResourceBundle messages) throws MalformedURLException {
 		PdfPage page = pdf.addNewPage();
 		Rectangle pageSize = page.getPageSize();
 		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdf);
@@ -1094,9 +1080,6 @@ public class PdfUtil {
 		int mapY;
 		int mapWidth;
 		int mapHeight;
-
-		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
 
 		// Add overview maps
 		if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
@@ -1237,31 +1220,34 @@ public class PdfUtil {
 				.showText("5").endText();
 
 		y = y - 9;
-		width = openSansRegularFont.getContentWidth(new PdfString(messages.getString("danger-rating.low.short")))
+		width = openSansRegularFont.getContentWidth(new PdfString(DangerRating.low.toString(lang.getLocale(), false)))
 				* 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(blackColor, true)
-				.showText(messages.getString("danger-rating.low.short")).endText();
-		width = openSansRegularFont.getContentWidth(new PdfString(messages.getString("danger-rating.moderate.short")))
-				* 0.001f * fontSize / 2;
+				.showText(DangerRating.low.toString(lang.getLocale(), false)).endText();
+		width = openSansRegularFont
+				.getContentWidth(new PdfString(DangerRating.moderate.toString(lang.getLocale(), false))) * 0.001f
+				* fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(blackColor, true)
-				.showText(messages.getString("danger-rating.moderate.short")).endText();
+				.showText(DangerRating.moderate.toString(lang.getLocale(), false)).endText();
 		width = openSansRegularFont
-				.getContentWidth(new PdfString(messages.getString("danger-rating.considerable.short"))) * 0.001f
+				.getContentWidth(new PdfString(DangerRating.considerable.toString(lang.getLocale(), false))) * 0.001f
 				* fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize).moveText(pageSize.getWidth() / 2 - width, y)
-				.setColor(blackColor, true).showText(messages.getString("danger-rating.considerable.short")).endText();
-		width = openSansRegularFont.getContentWidth(new PdfString(messages.getString("danger-rating.high.short")))
+				.setColor(blackColor, true).showText(DangerRating.considerable.toString(lang.getLocale(), false))
+				.endText();
+		width = openSansRegularFont.getContentWidth(new PdfString(DangerRating.high.toString(lang.getLocale(), false)))
 				* 0.001f * fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(blackColor, true)
-				.showText(messages.getString("danger-rating.high.short")).endText();
-		width = openSansRegularFont.getContentWidth(new PdfString(messages.getString("danger-rating.very-high.short")))
-				* 0.001f * fontSize / 2;
+				.showText(DangerRating.high.toString(lang.getLocale(), false)).endText();
+		width = openSansRegularFont
+				.getContentWidth(new PdfString(DangerRating.very_high.toString(lang.getLocale(), false))) * 0.001f
+				* fontSize / 2;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
 				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(blackColor, true)
-				.showText(messages.getString("danger-rating.very-high.short")).endText();
+				.showText(DangerRating.very_high.toString(lang.getLocale(), false)).endText();
 
 		canvas.close();
 		pdfCanvas.release();

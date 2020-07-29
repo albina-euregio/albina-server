@@ -16,10 +16,15 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public enum AvalancheSituation {
 	new_snow, wind_drifted_snow, weak_persistent_layer, wet_snow, gliding_snow, favourable_situation;
+
+	public String toString(Locale locale) {
+		return ResourceBundle.getBundle("i18n.AvalancheSituation", locale).getString(name());
+	}
 
 	public static AvalancheSituation fromString(String text) {
 		if (text != null) {

@@ -223,12 +223,14 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createPdf() throws IOException, URISyntaxException {
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale());
+
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
 		// PdfUtil.getInstance().createRegionPdfs(bulletins, "AT-07");
 
 		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false, "2030-02-16",
-				"2030-02-16_00-00-00");
+				"2030-02-16_00-00-00", messages);
 	}
 
 	@Ignore

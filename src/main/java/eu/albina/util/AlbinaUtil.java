@@ -171,12 +171,6 @@ public class AlbinaUtil {
 			{ "IT-32-TN-19", "Sole, Pejo and Rabbi" }, { "IT-32-TN-20", "Maddalene" },
 			{ "IT-32-TN-21", "Pine' - Mocheni Valley" } }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
-	public static final String dangerRatingColorLow = "#CCFF66";
-	public static final String dangerRatingColorModerate = "#FFFF00";
-	public static final String dangerRatingColorConsiderable = "#FF9900";
-	public static final String dangerRatingColorHigh = "#FF0000";
-	public static final String dangerRatingColorVeryHigh = "#800000";
-	public static final String dangerRatingColorMissing = "#969696";
 	public static final String greyDarkColor = "#565F61";
 
 	// REGION
@@ -264,48 +258,8 @@ public class AlbinaUtil {
 		return messages.getString("daytime." + type);
 	}
 
-	public static String getDangerPatternText(DangerPattern dp, ResourceBundle messages) {
-		switch (dp) {
-		case dp1:
-			return messages.getString("danger-pattern.1");
-		case dp2:
-			return messages.getString("danger-pattern.2");
-		case dp3:
-			return messages.getString("danger-pattern.3");
-		case dp4:
-			return messages.getString("danger-pattern.4");
-		case dp5:
-			return messages.getString("danger-pattern.5");
-		case dp6:
-			return messages.getString("danger-pattern.6");
-		case dp7:
-			return messages.getString("danger-pattern.7");
-		case dp8:
-			return messages.getString("danger-pattern.8");
-		case dp9:
-			return messages.getString("danger-pattern.9");
-		case dp10:
-			return messages.getString("danger-pattern.10");
-		default:
-			return null;
-		}
-	}
-
-	public static String getDangerRatingColor(DangerRating dangerRating) {
-		switch (dangerRating) {
-		case low:
-			return dangerRatingColorLow;
-		case moderate:
-			return dangerRatingColorModerate;
-		case considerable:
-			return dangerRatingColorConsiderable;
-		case high:
-			return dangerRatingColorHigh;
-		case very_high:
-			return dangerRatingColorVeryHigh;
-		default:
-			return dangerRatingColorMissing;
-		}
+	public static String getDangerPatternText(DangerPattern dp, LanguageCode lang) {
+		return dp.toString(lang.getLocale());
 	}
 
 	public static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription,

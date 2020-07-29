@@ -199,7 +199,7 @@ public class SimpleHtmlUtil {
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
 		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
 
 		// Create data model
 		Map<String, Object> root = new HashMap<>();
@@ -280,9 +280,9 @@ public class SimpleHtmlUtil {
 				sb.delete(sb.length() - 2, sb.length());
 				bulletin.put("regions", sb.toString());
 
-				bulletin.put("forenoon", getDaytime(avalancheBulletin, false, messages));
+				bulletin.put("forenoon", getDaytime(avalancheBulletin, false, lang, messages));
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("afternoon", getDaytime(avalancheBulletin, true, messages));
+					bulletin.put("afternoon", getDaytime(avalancheBulletin, true, lang, messages));
 					bulletin.put("am", "<b>" + messages.getString("daytime.am.capitalized").toUpperCase() + "</b><br>");
 					bulletin.put("pm", "<b>" + messages.getString("daytime.pm.capitalized").toUpperCase() + "</b><br>");
 				} else {
@@ -303,12 +303,12 @@ public class SimpleHtmlUtil {
 					bulletin.put("avAvalancheComment", "");
 				if (avalancheBulletin.getDangerPattern1() != null)
 					bulletin.put("dangerPattern1",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), messages) + "<br>");
+							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang) + "<br>");
 				else
 					bulletin.put("dangerPattern1", "");
 				if (avalancheBulletin.getDangerPattern2() != null)
 					bulletin.put("dangerPattern2",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), messages) + "<br>");
+							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang) + "<br>");
 				else
 					bulletin.put("dangerPattern2", "");
 				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
@@ -351,7 +351,7 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	private Map<String, Object> getDaytime(AvalancheBulletin avalancheBulletin, boolean afternoon,
+	private Map<String, Object> getDaytime(AvalancheBulletin avalancheBulletin, boolean afternoon, LanguageCode lang,
 			ResourceBundle messages) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> dangerLevel = new HashMap<>();
@@ -375,10 +375,10 @@ public class SimpleHtmlUtil {
 		result.put("text", text);
 
 		dangerLevel.put("above", getDangerRatingLineString(daytimeDescription.getDangerRatingAbove(),
-				avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), messages, true));
+				avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), lang, messages, true));
 		if (avalancheBulletin.isHasElevationDependency())
 			dangerLevel.put("below", getDangerRatingLineString(daytimeDescription.getDangerRatingBelow(),
-					avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), messages, false));
+					avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), lang, messages, false));
 		else
 			dangerLevel.put("below", "");
 
@@ -387,22 +387,23 @@ public class SimpleHtmlUtil {
 		if (daytimeDescription.getAvalancheSituation1() != null
 				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null) {
 			result.put("avalancheProblem1",
-					getAvalancheSituationString(daytimeDescription.getAvalancheSituation1(), messages));
+					getAvalancheSituationString(daytimeDescription.getAvalancheSituation1(), lang, messages));
 		} else
 			result.put("avalancheProblem1", "");
 		if (daytimeDescription.getAvalancheSituation2() != null
 				&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null) {
 			result.put("avalancheProblem2",
-					getAvalancheSituationString(daytimeDescription.getAvalancheSituation2(), messages));
+					getAvalancheSituationString(daytimeDescription.getAvalancheSituation2(), lang, messages));
 		} else
 			result.put("avalancheProblem2", "");
 
 		return result;
 	}
 
-	private String getAvalancheSituationString(AvalancheSituation avalancheSituation, ResourceBundle messages) {
+	private String getAvalancheSituationString(AvalancheSituation avalancheSituation, LanguageCode lang,
+			ResourceBundle messages) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(avalancheSituation.getAvalancheSituation().toString(messages));
+		sb.append(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
 			if (avalancheSituation.getTreelineHigh()) {
 				sb.append(messages.getString("elevation.treeline.below.pre-string"));
@@ -440,7 +441,7 @@ public class SimpleHtmlUtil {
 	}
 
 	private String getDangerRatingLineString(DangerRating dangerRating, int elevation, boolean treeline,
-			ResourceBundle messages, boolean above) {
+			LanguageCode lang, ResourceBundle messages, boolean above) {
 		StringBuilder sb = new StringBuilder();
 		String tag;
 		switch (dangerRating) {
@@ -466,7 +467,7 @@ public class SimpleHtmlUtil {
 		sb.append("<");
 		sb.append(tag);
 		sb.append(">");
-		sb.append(GlobalVariables.getDangerRatingTextLong(dangerRating, messages));
+		sb.append(dangerRating.toString(lang.getLocale(), true));
 		sb.append("</");
 		sb.append(tag);
 		sb.append(">");

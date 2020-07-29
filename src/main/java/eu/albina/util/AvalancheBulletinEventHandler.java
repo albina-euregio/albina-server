@@ -73,7 +73,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
 			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
 
 			Color blue;
 			if (grayscale)

@@ -170,7 +170,7 @@ public class XmlUtil {
 			Element rootElement = CaamlVersion.V6.setNamespaceAttributes(doc.createElement("bulletins"));
 
 			Locale currentLocale = new Locale(language.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
 
 			// create meta data
 			if (bulletins != null && !bulletins.isEmpty()) {

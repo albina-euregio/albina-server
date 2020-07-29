@@ -95,7 +95,8 @@ public class StaticWidgetUtil {
 			int height = 800;
 
 			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+			ResourceBundle staticWidgetBundle = ResourceBundle.getBundle("i18n.StaticWidget", currentLocale);
 
 			DangerRating highestDangerRating = GlobalVariables.getHighestDangerRating(bulletins);
 			String date = AlbinaUtil.getDate(bulletins, messages);
@@ -167,24 +168,24 @@ public class StaticWidgetUtil {
 
 			logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/lawinen_report.png");
 
-			firstLine = messages.getString("static-widget.line.1");
+			firstLine = staticWidgetBundle.getString("line.1");
 			asFirstLine = new AttributedString(firstLine);
 			asFirstLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 			asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 4, 4 + date.length());
 			asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 4, 4 + date.length());
 
-			secondLine = GlobalVariables.getDangerRatingTextLong(highestDangerRating, messages);
+			secondLine = highestDangerRating.toString(lang.getLocale(), true);
 			asSecondLine = new AttributedString(secondLine);
 			asSecondLine.addAttribute(TextAttribute.FONT, openSansBoldBigFont);
 			asSecondLine.addAttribute(TextAttribute.FOREGROUND, getDangerRatingTextColor(highestDangerRating));
 
-			thirdLine = messages.getString("static-widget.line.3");
+			thirdLine = staticWidgetBundle.getString("line.3");
 			asThirdLine = new AttributedString(thirdLine);
 			asThirdLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 			asThirdLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 14, 31);
 			asThirdLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 14, 31);
 
-			fourthLine = messages.getString("static-widget.line.4");
+			fourthLine = staticWidgetBundle.getString("line.4");
 			asFourthLine = new AttributedString(fourthLine);
 			asFourthLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
 

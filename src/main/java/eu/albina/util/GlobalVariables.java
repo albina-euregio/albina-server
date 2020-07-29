@@ -514,25 +514,6 @@ public class GlobalVariables {
 		return emailEncoding;
 	}
 
-	public static String getDangerRatingTextLong(DangerRating dangerRating, ResourceBundle messages) {
-		switch (dangerRating) {
-		case low:
-			return messages.getString("danger-rating.low");
-		case moderate:
-			return messages.getString("danger-rating.moderate");
-		case considerable:
-			return messages.getString("danger-rating.considerable");
-		case high:
-			return messages.getString("danger-rating.high");
-		case very_high:
-			return messages.getString("danger-rating.very-high");
-		case no_rating:
-			return messages.getString("danger-rating.no-rating");
-		default:
-			return messages.getString("danger-rating.missing");
-		}
-	}
-
 	public static void loadConfigProperties() {
 		Configurations configs = new Configurations();
 		Configuration config;

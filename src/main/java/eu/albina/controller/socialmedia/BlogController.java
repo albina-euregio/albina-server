@@ -168,14 +168,14 @@ public class BlogController extends CommonProcessor {
 			try {
 				JSONArray blogPosts = getBlogPosts(region, lang);
 				Locale currentLocale = new Locale(lang.toString());
-				ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
 
 				logger.info("Found " + blogPosts.length() + " new blog posts!");
 				for (Object object : blogPosts)
 					if (object instanceof JSONObject) {
 						logger.info(((JSONObject) object).toString());
 						sendNewBlogPostToMessengerpeople((JSONObject) object, region, lang, messages);
-						sendNewBlogPostToRapidmail((JSONObject) object, region, lang);
+						sendNewBlogPostToRapidmail((JSONObject) object, region, lang, messages);
 						sendNewBlogPostToTelegramChannel((JSONObject) object, region, lang, messages);
 					}
 			} catch (IOException e) {
@@ -247,7 +247,8 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(JSONObject object, String region, LanguageCode lang) {
+	private void sendNewBlogPostToRapidmail(JSONObject object, String region, LanguageCode lang,
+			ResourceBundle messages) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
 		String subject = object.getString("avalanche-report.name");
@@ -256,7 +257,7 @@ public class BlogController extends CommonProcessor {
 		try {
 			String htmlString = getBlogPost(blogPostId, region, lang);
 			if (htmlString != null && !htmlString.isEmpty())
-				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject);
+				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject, messages);
 		} catch (IOException e) {
 			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString(), e);
 		} catch (URISyntaxException e) {

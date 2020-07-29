@@ -114,7 +114,7 @@ public class EmailUtil {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
 			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
 
 			String subject;
 			if (update)
@@ -129,7 +129,7 @@ public class EmailUtil {
 				}
 				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency,
 						messages);
-				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
+				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, messages);
 			}
 		}
 	}
@@ -156,25 +156,25 @@ public class EmailUtil {
 		return Base64.encodeBase64String(zipData);
 	}
 
-	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
+	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject,
+			ResourceBundle messages) {
 		logger.debug("Sending bulletin email in " + lang + " for " + region + "...");
-		return sendEmail(lang, region, emailHtml, subject);
+		return sendEmail(lang, region, emailHtml, subject, messages);
 	}
 
-	public HttpResponse sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
+	public HttpResponse sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject,
+			ResourceBundle messages) {
 		logger.debug("Sending blog post email in " + lang + " for " + region + "...");
-		return sendEmail(lang, region, emailHtml, subject);
+		return sendEmail(lang, region, emailHtml, subject, messages);
 	}
 
-	private HttpResponse sendEmail(LanguageCode lang, String region, String emailHtml, String subject) {
+	private HttpResponse sendEmail(LanguageCode lang, String region, String emailHtml, String subject,
+			ResourceBundle messages) {
 		try {
 			RapidMailProcessorController rmc = RapidMailProcessorController.getInstance();
 			RegionConfigurationController rcc = RegionConfigurationController.getInstance();
 			RegionConfiguration regionConfiguration = rcc.getRegionConfiguration(region);
 			RapidMailConfig rmConfig = regionConfiguration.getRapidMailConfig();
-
-			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
 
 			return rmc.sendMessage(rmConfig, lang.name().toUpperCase(),
 					new PostMailingsRequest().fromEmail(messages.getString("avalanche-report.email"))
@@ -271,11 +271,11 @@ public class EmailUtil {
 			}
 
 			Map<String, Object> dangerRatings = new HashMap<>();
-			dangerRatings.put("low", messages.getString("danger-rating.low.short"));
-			dangerRatings.put("moderate", messages.getString("danger-rating.moderate.short"));
-			dangerRatings.put("considerable", messages.getString("danger-rating.considerable.short"));
-			dangerRatings.put("high", messages.getString("danger-rating.high.short"));
-			dangerRatings.put("veryHigh", messages.getString("danger-rating.very-high.short"));
+			dangerRatings.put("low", DangerRating.low.toString(lang.getLocale(), false));
+			dangerRatings.put("moderate", DangerRating.moderate.toString(lang.getLocale(), false));
+			dangerRatings.put("considerable", DangerRating.considerable.toString(lang.getLocale(), false));
+			dangerRatings.put("high", DangerRating.high.toString(lang.getLocale(), false));
+			dangerRatings.put("veryHigh", DangerRating.very_high.toString(lang.getLocale(), false));
 			text.put("dangerRating", dangerRatings);
 
 			root.put("text", text);
@@ -296,7 +296,7 @@ public class EmailUtil {
 				}
 
 				bulletin.put("warningLevelText",
-						GlobalVariables.getDangerRatingTextLong(avalancheBulletin.getHighestDangerRating(), messages));
+						avalancheBulletin.getHighestDangerRating().toString(lang.getLocale(), true));
 
 				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
@@ -334,16 +334,16 @@ public class EmailUtil {
 								|| avalancheBulletin.getDangerPattern2() != null) {
 							bulletin.put("dangerPatternsHeadline", messages.getString("headline.danger-patterns"));
 							if (avalancheBulletin.getDangerPattern1() != null) {
-								bulletin.put("dangerPattern1", AlbinaUtil
-										.getDangerPatternText(avalancheBulletin.getDangerPattern1(), messages));
+								bulletin.put("dangerPattern1",
+										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
 								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
 							} else {
 								bulletin.put("dangerPattern1", "");
 								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
 							}
 							if (avalancheBulletin.getDangerPattern2() != null) {
-								bulletin.put("dangerPattern2", AlbinaUtil
-										.getDangerPatternText(avalancheBulletin.getDangerPattern2(), messages));
+								bulletin.put("dangerPattern2",
+										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
 								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
 							} else {
 								bulletin.put("dangerPattern2", "");
@@ -390,19 +390,7 @@ public class EmailUtil {
 				}
 
 				Map<String, Object> tendency = new HashMap<>();
-				switch (avalancheBulletin.getTendency()) {
-				case decreasing:
-					tendency.put("text", messages.getString("tendency.decreasing"));
-					break;
-				case steady:
-					tendency.put("text", messages.getString("tendency.steady"));
-					break;
-				case increasing:
-					tendency.put("text", messages.getString("tendency.increasing"));
-					break;
-				default:
-					break;
-				}
+				tendency.put("text", avalancheBulletin.getTendency().toString(lang.getLocale()));
 				if (avalancheBulletin.getTendency() == Tendency.decreasing) {
 					tendency.put("symbol",
 							GlobalVariables.getServerImagesUrl() + "tendency/tendency_decreasing_blue.png");
@@ -424,12 +412,15 @@ public class EmailUtil {
 						getDangerRatingColorStyle(avalancheBulletin.getHighestDangerRating()));
 				bulletin.put("headlinestyle", getHeadlineStyle(avalancheBulletin.getHighestDangerRating()));
 
-				addDaytimeInfo(lang, avalancheBulletin, bulletin, false, AlbinaUtil.getPublicationTime(bulletins));
+				addDaytimeInfo(lang, avalancheBulletin, bulletin, false, AlbinaUtil.getPublicationTime(bulletins),
+						messages);
 				Map<String, Object> pm = new HashMap<>();
 				if (avalancheBulletin.isHasDaytimeDependency())
-					addDaytimeInfo(lang, avalancheBulletin, pm, true, AlbinaUtil.getPublicationTime(bulletins));
+					addDaytimeInfo(lang, avalancheBulletin, pm, true, AlbinaUtil.getPublicationTime(bulletins),
+							messages);
 				else
-					addDaytimeInfo(lang, avalancheBulletin, pm, false, AlbinaUtil.getPublicationTime(bulletins));
+					addDaytimeInfo(lang, avalancheBulletin, pm, false, AlbinaUtil.getPublicationTime(bulletins),
+							messages);
 				bulletin.put("pm", pm);
 
 				arrayList.add(bulletin);
@@ -467,10 +458,7 @@ public class EmailUtil {
 	}
 
 	private void addDaytimeInfo(LanguageCode lang, AvalancheBulletin avalancheBulletin, Map<String, Object> bulletin,
-			boolean isAfternoon, String publicationTime) {
-		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-
+			boolean isAfternoon, String publicationTime, ResourceBundle messages) {
 		AvalancheBulletinDaytimeDescription daytimeBulletin;
 		if (isAfternoon)
 			daytimeBulletin = avalancheBulletin.getAfternoon();
@@ -525,7 +513,7 @@ public class EmailUtil {
 				// daytimeBulletin
 				// .getAvalancheSituation1().getAvalancheSituation().toStringId());
 				avalancheSituation1.put("text",
-						daytimeBulletin.getAvalancheSituation1().getAvalancheSituation().toString(messages));
+						daytimeBulletin.getAvalancheSituation1().getAvalancheSituation().toString(lang.getLocale()));
 			} else {
 				avalancheSituation1.put("symbol",
 						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
@@ -737,18 +725,17 @@ public class EmailUtil {
 			return "background=\"" + GlobalVariables.getServerImagesUrl() + "bg_checkered.png"
 					+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
 		} else
-			return "style=\"background-color: " + AlbinaUtil.getDangerRatingColor(dangerRating)
+			return "style=\"background-color: " + dangerRating.getColor()
 					+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
 	}
 
 	private String getHeadlineStyle(DangerRating dangerRating) {
 		if (dangerRating.equals(DangerRating.low) || dangerRating.equals(DangerRating.moderate)) {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-					+ AlbinaUtil.greyDarkColor + "; background-color: " + AlbinaUtil.getDangerRatingColor(dangerRating)
-					+ ";\"";
+					+ AlbinaUtil.greyDarkColor + "; background-color: " + dangerRating.getColor() + ";\"";
 		} else {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-					+ AlbinaUtil.getDangerRatingColor(dangerRating) + ";\"";
+					+ dangerRating.getColor() + ";\"";
 		}
 	}
 

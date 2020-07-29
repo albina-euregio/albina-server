@@ -65,7 +65,7 @@ public class StatisticsController {
 	 */
 	private StatisticsController() {
 		Locale currentLocale = new Locale(LanguageCode.en.toString());
-		messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+		messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
 	}
 
 	/**
