@@ -1,0 +1,38 @@
+[main]
+host = https://www.transifex.com
+
+[albina-server.messages]
+source_file = src/main/resources/i18n/MessagesBundle.properties
+source_lang = en
+type = PROPERTIES
+file_filter = src/main/resources/i18n/MessagesBundle_<lang>.properties
+
+[albina-server.avalanche-situation]
+source_file = src/main/resources/i18n/AvalancheSituation.properties
+source_lang = en
+type = PROPERTIES
+file_filter = src/main/resources/i18n/AvalancheSituation_<lang>.properties
+
+[albina-server.danger-pattern]
+source_file = src/main/resources/i18n/DangerPattern.properties
+source_lang = en
+type = PROPERTIES
+file_filter = src/main/resources/i18n/DangerPattern_<lang>.properties
+
+[albina-server.danger-rating]
+source_file = src/main/resources/i18n/DangerRating.properties
+source_lang = en
+type = PROPERTIES
+file_filter = src/main/resources/i18n/DangerRating_<lang>.properties
+
+[albina-server.static-widget]
+source_file = src/main/resources/i18n/StaticWidget.properties
+source_lang = en
+type = PROPERTIES
+file_filter = src/main/resources/i18n/StaticWidget_<lang>.properties
+
+[albina-server.tendency]
+source_file = src/main/resources/i18n/Tendency.properties
+source_lang = en
+type = PROPERTIES
+file_filter = src/main/resources/i18n/Tendency_<lang>.properties
