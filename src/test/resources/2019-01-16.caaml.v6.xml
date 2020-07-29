@@ -112,7 +112,7 @@
       <fileReferenceURI>https://avalanche.report/albina_files_local/2019-01-16/2019-01-15_16-00-00/pm_regions.json</fileReferenceURI>
     </extFile>
   </metaData>
-  <bulletin xml:id="ID_a19bd3dc-85df-448f-be5e-f88f0c14ed4f" xml:lang="en">
+  <bulletin xml:id="a19bd3dc-85df-448f-be5e-f88f0c14ed4f" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -228,7 +228,7 @@
     <snowpackStructureComment> Weak layers in the upper part of the snowpack represent the main danger. The wind slabs have bonded insufficiently with each other and the old snowpack. The fresh snow and wind slabs of last week are lying on the unfavourable surface of an old snowpack in all aspects. Dunes on the snow surface and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack can indicate the danger. Remotely triggered avalanches are possible.</snowpackStructureComment>
     <tendencyComment> Gradual decrease in avalanche danger.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_a19bd3dc-85df-448f-be5e-f88f0c14ed4f_PM" xml:lang="en">
+  <bulletin xml:id="a19bd3dc-85df-448f-be5e-f88f0c14ed4f_PM" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -314,7 +314,7 @@
     <snowpackStructureComment> Weak layers in the upper part of the snowpack represent the main danger. The wind slabs have bonded insufficiently with each other and the old snowpack. The fresh snow and wind slabs of last week are lying on the unfavourable surface of an old snowpack in all aspects. Dunes on the snow surface and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack can indicate the danger. Remotely triggered avalanches are possible.</snowpackStructureComment>
     <tendencyComment> Gradual decrease in avalanche danger.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_a2dda2a6-f451-4fac-ac81-4acd051f47a6" xml:lang="en" complex="true">
+  <bulletin xml:id="a2dda2a6-f451-4fac-ac81-4acd051f47a6" xml:lang="en" complex="true">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -385,7 +385,7 @@
     <snowpackStructureComment> In some cases the wind slabs have bonded poorly with the old snowpack. The snowpack will be subject to considerable local variations.</snowpackStructureComment>
     <tendencyComment> Moderate, level 2.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_c0fba3a0-9ca2-4dd9-a198-9a59a3f8b77a" xml:lang="en">
+  <bulletin xml:id="c0fba3a0-9ca2-4dd9-a198-9a59a3f8b77a" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -474,7 +474,7 @@
     <snowpackStructureComment> Faceted weak layers exist in the snowpack in particular on shady slopes. The mostly small wind slabs must be evaluated with care and prudence in all aspects above approximately 2500 m. In steep terrain there is a danger of falling on the hard crust. Below approximately 2000 m a little snow is lying.</snowpackStructureComment>
     <tendencyComment> The avalanche danger will persist.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_hbc68380-6475-4726-95ce-d946e3a2cf79" xml:lang="en">
+  <bulletin xml:id="hbc68380-6475-4726-95ce-d946e3a2cf79" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -635,7 +635,7 @@
     <snowpackStructureComment> By the evening the wind has been moderate to strong adjacent to ridgelines in some regions. The fresh wind slabs of the last few days are prone to triggering. Weak layers in the upper part of the snowpack represent the main danger. No distinct weak layers exist in the bottom section of the snowpack. The snowpack will become moist at low and intermediate altitudes.</snowpackStructureComment>
     <tendencyComment> Further decrease in avalanche danger.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_cfcbf4e6-73cd-4d0a-98d4-0c06a519bf30" xml:lang="en">
+  <bulletin xml:id="cfcbf4e6-73cd-4d0a-98d4-0c06a519bf30" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -701,7 +701,7 @@
     <snowpackStructureComment> Thus far only a little snow is lying. The snowpack will be subject to considerable local variations. In some cases the wind slabs have bonded poorly with the old snowpack.</snowpackStructureComment>
     <tendencyComment> Slight decrease in avalanche danger.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_j1c0717f-2aaa-444f-b06e-9d6ffddd417a" xml:lang="en">
+  <bulletin xml:id="j1c0717f-2aaa-444f-b06e-9d6ffddd417a" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -774,7 +774,7 @@
     <snowpackStructureComment> In some cases fresh snow and wind slabs are lying on soft layers. Isolated avalanche prone weak layers exist in the old snowpack. The snowpack will be generally prone to triggering. As a consequence of warming during the day and the solar radiation, the likelihood of dry and moist avalanches being released will increase in particular on steep sunny slopes.</snowpackStructureComment>
     <tendencyComment> Fresh wind slabs represent the main danger.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_m50f79b9-39bb-4b44-b795-536319013cad" xml:lang="en">
+  <bulletin xml:id="m50f79b9-39bb-4b44-b795-536319013cad" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -869,7 +869,7 @@
     <snowpackStructureComment> In many cases fresh snow and wind slabs are lying on a hard crust. The mostly small wind slabs of the day before yesterday must be evaluated with care and prudence in all aspects. Faceted weak layers exist in the snowpack especially on steep, rather lightly snow-covered shady slopes. Below approximately 2000 m thus far only a little snow is lying.</snowpackStructureComment>
     <tendencyComment> Moderate, level 2.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_c06be44f-9ec4-4e78-b534-2e3f87f7aa3d" xml:lang="en">
+  <bulletin xml:id="c06be44f-9ec4-4e78-b534-2e3f87f7aa3d" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -954,7 +954,7 @@
     <snowpackStructureComment> The snowpack remains generally well bonded. Below approximately 1800 m only a little snow is lying.</snowpackStructureComment>
     <tendencyComment> Low, level 1.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_a7bbc5cb-db37-4577-a328-95e639ff969d" xml:lang="en">
+  <bulletin xml:id="a7bbc5cb-db37-4577-a328-95e639ff969d" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -1046,7 +1046,7 @@
     <snowpackStructureComment> In the last few days extensive wind slabs formed in all aspects. Over a wide area fresh snow and wind slabs are lying on soft layers. Faceted weak layers exist in the old snowpack. The snowpack will be quite prone to triggering. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack serve as an alarm indicating the danger.</snowpackStructureComment>
     <tendencyComment> Fresh wind slabs represent the main danger.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_f6c0b17f-136f-4c03-a0b7-4e4af39a3ade" xml:lang="en">
+  <bulletin xml:id="f6c0b17f-136f-4c03-a0b7-4e4af39a3ade" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
@@ -1141,7 +1141,7 @@
     <snowpackStructureComment> During the night the wind will be moderate to strong over a wide area. The wind will transport the fresh snow. In many cases various wind slab layers are lying on soft layers. Faceted weak layers exist in the old snowpack.</snowpackStructureComment>
     <tendencyComment> Further decrease in avalanche danger.</tendencyComment>
   </bulletin>
-  <bulletin xml:id="ID_vfd074b7-c2dd-4da8-8d7d-038471d4b5a9" xml:lang="en">
+  <bulletin xml:id="vfd074b7-c2dd-4da8-8d7d-038471d4b5a9" xml:lang="en">
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
