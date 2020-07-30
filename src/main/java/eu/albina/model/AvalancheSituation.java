@@ -109,9 +109,13 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	public AvalancheSituation(JSONObject json) {
 		this();
 
-		if (json.has("avalancheSituation"))
-			this.avalancheSituation = eu.albina.model.enumerations.AvalancheSituation
-					.valueOf(json.getString("avalancheSituation").toLowerCase());
+		if (json.has("avalancheSituation")) {
+			if (json.getString("avalancheSituation").equals("weak_persistent_layer"))
+				this.avalancheSituation = eu.albina.model.enumerations.AvalancheSituation.persistent_weak_layers;
+			else
+				this.avalancheSituation = eu.albina.model.enumerations.AvalancheSituation
+						.valueOf(json.getString("avalancheSituation").toLowerCase());
+		}
 		if (json.has("aspects")) {
 			JSONArray aspects = json.getJSONArray("aspects");
 			for (Object entry : aspects) {

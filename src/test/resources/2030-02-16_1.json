@@ -30,7 +30,7 @@
 				"ne",
 				"n"
 			],
-			"avalancheSituation": "weak_persistent_layer"
+			"avalancheSituation": "persistent_weak_layers"
 		},
 		"avalancheSituation1": {
 			"treelineLow": true,

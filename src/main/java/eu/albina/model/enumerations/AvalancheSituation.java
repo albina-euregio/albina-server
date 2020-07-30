@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public enum AvalancheSituation {
-	new_snow, wind_drifted_snow, weak_persistent_layer, wet_snow, gliding_snow, favourable_situation;
+	new_snow, wind_drifted_snow, persistent_weak_layers, wet_snow, gliding_snow, favourable_situation;
 
 	public String toString(Locale locale) {
 		return ResourceBundle.getBundle("i18n.AvalancheSituation", locale).getString(name());
@@ -28,6 +28,8 @@ public enum AvalancheSituation {
 
 	public static AvalancheSituation fromString(String text) {
 		if (text != null) {
+			if (text.equalsIgnoreCase("weak_persistent_layer"))
+				return persistent_weak_layers;
 			for (AvalancheSituation type : AvalancheSituation.values()) {
 				if (text.equalsIgnoreCase(type.toString()))
 					return type;
@@ -42,7 +44,7 @@ public enum AvalancheSituation {
 			return "new snow";
 		case wind_drifted_snow:
 			return "drifting snow";
-		case weak_persistent_layer:
+		case persistent_weak_layers:
 			return "old snow";
 		case wet_snow:
 			return "wet snow";
@@ -62,8 +64,8 @@ public enum AvalancheSituation {
 			return "new_snow";
 		case wind_drifted_snow:
 			return "wind_drifted_snow";
-		case weak_persistent_layer:
-			return "persistent_weak_layer";
+		case persistent_weak_layers:
+			return "persistent_weak_layers";
 		case wet_snow:
 			return "wet_snow";
 		case gliding_snow:
@@ -82,8 +84,8 @@ public enum AvalancheSituation {
 			return "new_snow";
 		case wind_drifted_snow:
 			return "wind_drifted_snow";
-		case weak_persistent_layer:
-			return "weak_persistent_layer";
+		case persistent_weak_layers:
+			return "persistent_weak_layers";
 		case wet_snow:
 			return "wet_snow";
 		case gliding_snow:

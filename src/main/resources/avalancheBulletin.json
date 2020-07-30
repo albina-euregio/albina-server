@@ -191,7 +191,7 @@
 			"title" : "Avalanche Situation",
 			"description" : "The five avalanche situations.",
 			"type" : "string",
-			"enum" : [ "new_snow", "wind_drifted_snow", "weak_persistent_layer", "wet_snow", "gliding_snow", "favourable_situation" ]
+			"enum" : [ "new_snow", "wind_drifted_snow", "persistent_weak_layers", "wet_snow", "gliding_snow", "favourable_situation" ]
 		},
 		"direction" : {
 			"id" : "#direction",

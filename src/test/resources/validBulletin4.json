@@ -20,7 +20,7 @@
 				"NE",
 				"SW"
 			],
-			"avalancheSituation": "weak_persistent_layer"
+			"avalancheSituation": "persistent_weak_layers"
 		},
 		"id": "e1978b81-307a-4240-a47f-8ed49fa691e4",
 		"dangerRatingAbove": "considerable"

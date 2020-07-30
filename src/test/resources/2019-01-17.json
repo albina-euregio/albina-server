@@ -121,7 +121,7 @@
 			"avalancheSituation2": {
 				"elevationLow": 1600,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "n", "e"],
-				"avalancheSituation": "weak_persistent_layer"
+				"avalancheSituation": "persistent_weak_layers"
 			},
 			"avalancheSituation1": {
 				"treelineLow": true,
@@ -327,7 +327,7 @@
 			"avalancheSituation2": {
 				"elevationLow": 2000,
 				"aspects": ["w", "nw", "ne", "n", "e"],
-				"avalancheSituation": "weak_persistent_layer"
+				"avalancheSituation": "persistent_weak_layers"
 			},
 			"avalancheSituation1": {
 				"elevationLow": 2200,
@@ -690,7 +690,7 @@
 			"dangerRatingBelow": "moderate",
 			"avalancheSituation2": {
 				"aspects": ["w", "nw", "ne", "n", "e"],
-				"avalancheSituation": "weak_persistent_layer"
+				"avalancheSituation": "persistent_weak_layers"
 			},
 			"avalancheSituation1": {
 				"treelineLow": true,
