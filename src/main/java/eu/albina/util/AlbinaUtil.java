@@ -213,44 +213,44 @@ public class AlbinaUtil {
 		case de:
 			switch (region) {
 			case "AT-07":
-				return "Tirol ";
+				return "Tirol";
 			case "IT-32-BZ":
-				return "Südtirol ";
+				return "Südtirol";
 			case "IT-32-TN":
-				return "Trentino ";
+				return "Trentino";
 			default:
 				return "";
 			}
 		case it:
 			switch (region) {
 			case "AT-07":
-				return "Tirolo ";
+				return "Tirolo";
 			case "IT-32-BZ":
-				return "Alto Adige ";
+				return "Alto Adige";
 			case "IT-32-TN":
-				return "Trentino ";
+				return "Trentino";
 			default:
 				return "";
 			}
 		case en:
 			switch (region) {
 			case "AT-07":
-				return "Tirol ";
+				return "Tirol";
 			case "IT-32-BZ":
-				return "Southtyrol ";
+				return "Southtyrol";
 			case "IT-32-TN":
-				return "Trentino ";
+				return "Trentino";
 			default:
 				return "";
 			}
 		default:
 			switch (region) {
 			case "AT-07":
-				return "Tirol ";
+				return "Tirol";
 			case "IT-32-BZ":
-				return "Southtyrol ";
+				return "Southtyrol";
 			case "IT-32-TN":
-				return "Trentino ";
+				return "Trentino";
 			default:
 				return "";
 			}
