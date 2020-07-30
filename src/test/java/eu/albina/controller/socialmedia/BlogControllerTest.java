@@ -70,8 +70,7 @@ public class BlogControllerTest {
 				+ "  \"selfLink\": \"https://www.googleapis.com/blogger/v3/blogs/1263754381945501754/posts/4564885875858452565\"\n"
 				+ "}\n");
 
-		Locale currentLocale = new Locale(LanguageCode.de.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+		ResourceBundle messages = LanguageCode.de.getBundle("i18n.MessagesBundle");
 
 		BlogController.getInstance().sendNewBlogPostToMessengerpeople(blog, "IT-32-BZ", LanguageCode.de, messages);
 	}

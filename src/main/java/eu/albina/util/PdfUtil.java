@@ -121,8 +121,7 @@ public class PdfUtil {
 		boolean result = true;
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
-			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
 
 			if (!createPdf(bulletins, lang, null, false, daytimeDependency, validityDateString, publicationTimeString,
 					messages))
@@ -237,8 +236,7 @@ public class PdfUtil {
 
 		if (!regionBulletins.isEmpty())
 			for (LanguageCode lang : GlobalVariables.languages) {
-				Locale currentLocale = new Locale(lang.toString());
-				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+				ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
 
 				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString,
 						publicationTimeString, messages))

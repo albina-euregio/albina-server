@@ -198,8 +198,7 @@ public class SimpleHtmlUtil {
 	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
-		Locale currentLocale = new Locale(lang.toString());
-		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+		ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
 
 		// Create data model
 		Map<String, Object> root = new HashMap<>();

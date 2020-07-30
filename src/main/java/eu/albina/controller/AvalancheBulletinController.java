@@ -745,9 +745,9 @@ public class AvalancheBulletinController {
 		boolean incompleteTranslation = false;
 
 		// LANG
-		ResourceBundle messagesDe = ResourceBundle.getBundle("i18n.MessagesBundle", new Locale("de"));
-		ResourceBundle messagesIt = ResourceBundle.getBundle("i18n.MessagesBundle", new Locale("it"));
-		ResourceBundle messagesEn = ResourceBundle.getBundle("i18n.MessagesBundle", new Locale("en"));
+		ResourceBundle messagesDe = LanguageCode.de.getBundle("i18n.MessagesBundle");
+		ResourceBundle messagesIt = LanguageCode.it.getBundle("i18n.MessagesBundle");
+		ResourceBundle messagesEn = LanguageCode.en.getBundle("i18n.MessagesBundle");
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();

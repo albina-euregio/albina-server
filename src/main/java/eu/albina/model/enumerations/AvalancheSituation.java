@@ -97,7 +97,4 @@ public enum AvalancheSituation {
 		}
 	}
 
-	public String toString(ResourceBundle messages) {
-		return messages.getString("avalanche-problem" + this.toStringId());
-	}
 }
