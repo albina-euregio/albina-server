@@ -14,3 +14,7 @@ indent_style = tab
 [*.{yaml,yml}]
 indent_size = 4
 indent_style = space
+
+# see https://docs.oracle.com/javase/8/docs/api/java/util/PropertyResourceBundle.html
+[src/main/resources/i18n/**.properties]
+charset = latin1
