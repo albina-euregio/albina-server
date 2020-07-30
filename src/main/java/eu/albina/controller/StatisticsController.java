@@ -58,14 +58,13 @@ public class StatisticsController {
 
 	private static StatisticsController instance = null;
 
-	private ResourceBundle messages;
+	private final ResourceBundle messages;
 
 	/**
 	 * Private constructor.
 	 */
 	private StatisticsController() {
-		Locale currentLocale = new Locale(LanguageCode.en.toString());
-		messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+		messages = LanguageCode.en.getBundle("i18n.MessagesBundle");
 	}
 
 	/**

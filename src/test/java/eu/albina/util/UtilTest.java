@@ -166,9 +166,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		Locale currentLocale = new Locale("de");
-		ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
-
+		ResourceBundle messages = LanguageCode.de.getBundle("i18n.MessagesBundle");
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07", false, false,
 				messages);
 		System.out.println(html);
@@ -223,7 +221,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createPdf() throws IOException, URISyntaxException {
-		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale());
+		ResourceBundle messages = LanguageCode.de.getBundle("i18n.MessagesBundle");
 
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);

@@ -17,6 +17,7 @@
 package eu.albina.model.enumerations;
 
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * The enum contains the ISO 639-1 codes for available languages.
@@ -36,6 +37,10 @@ public enum LanguageCode {
 
 	public Locale getLocale() {
 		return locale;
+	}
+
+	public ResourceBundle getBundle(String name) {
+		return ResourceBundle.getBundle(name, locale);
 	}
 
 	public static LanguageCode fromString(String text) {

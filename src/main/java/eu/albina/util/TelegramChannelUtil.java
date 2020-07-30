@@ -50,8 +50,7 @@ public class TelegramChannelUtil {
 
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.languages) {
-			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
 
 			DateTime date = AlbinaUtil.getDate(bulletins);
 			String message = GlobalVariables.getSocialMediaText(date, update, messages);

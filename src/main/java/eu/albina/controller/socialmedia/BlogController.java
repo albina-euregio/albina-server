@@ -167,8 +167,7 @@ public class BlogController extends CommonProcessor {
 		if (getBlogId(region, lang) != null) {
 			try {
 				JSONArray blogPosts = getBlogPosts(region, lang);
-				Locale currentLocale = new Locale(lang.toString());
-				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+				ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
 
 				logger.info("Found " + blogPosts.length() + " new blog posts!");
 				for (Object object : blogPosts)

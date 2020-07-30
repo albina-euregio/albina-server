@@ -113,8 +113,7 @@ public class EmailUtil {
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
-			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
+			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
 
 			String subject;
 			if (update)
@@ -607,7 +606,7 @@ public class EmailUtil {
 				// daytimeBulletin
 				// .getAvalancheSituation2().getAvalancheSituation().toStringId());
 				avalancheSituation2.put("text",
-						daytimeBulletin.getAvalancheSituation2().getAvalancheSituation().toString(messages));
+					daytimeBulletin.getAvalancheSituation2().getAvalancheSituation().toString(lang.getLocale()));
 			} else {
 				avalancheSituation2.put("symbol",
 						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");

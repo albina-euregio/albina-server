@@ -94,9 +94,8 @@ public class StaticWidgetUtil {
 			int width = 600;
 			int height = 800;
 
-			Locale currentLocale = new Locale(lang.toString());
-			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", currentLocale);
-			ResourceBundle staticWidgetBundle = ResourceBundle.getBundle("i18n.StaticWidget", currentLocale);
+			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
+			ResourceBundle staticWidgetBundle = lang.getBundle("i18n.StaticWidget");
 
 			DangerRating highestDangerRating = GlobalVariables.getHighestDangerRating(bulletins);
 			String date = AlbinaUtil.getDate(bulletins, messages);
