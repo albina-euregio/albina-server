@@ -59,7 +59,6 @@ import org.w3c.dom.Element;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
-import com.mysql.cj.Messages;
 
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
@@ -1165,7 +1164,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		String linkReferenceURI = messages.getString("avalanche-report.url") + "/bulletin/" + getValidityDateString()
 				+ "?region=" + getId();
 		metaData.appendChild(XmlUtil.createExtFile(doc, "website",
-				Messages.getString("ext-file.region-link.description"), linkReferenceURI));
+				messages.getString("ext-file.region-link.description"), linkReferenceURI));
 
 		// publication time
 		Element pubTime = doc.createElement("publicationTime");
