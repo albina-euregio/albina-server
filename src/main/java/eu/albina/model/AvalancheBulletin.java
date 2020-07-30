@@ -1340,7 +1340,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 					&& (!textPartsMap.get(part).getTexts().isEmpty())
 					&& (textPartsMap.get(part).getText(languageCode) != null)) {
 				Element textPart = doc.createElement(part.toCaamlv6String());
-				textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode)));
+				textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode).trim()));
 				rootElement.appendChild(textPart);
 			}
 		}
