@@ -325,8 +325,8 @@ public class AvalancheBulletinController {
 	 * @param language
 	 *            the language in which the texts of the bulletins should be added
 	 *            to the XML (CAAML) string
-	 * @param caamlV6
-	 *            if true the produced XML follow the CAAML v6 standard
+	 * @param version
+	 *            the CAAML version to generate
 	 * @return the XML (CAAML) string of all published bulletins for the given time
 	 *         period and regions in the given language
 	 * @throws TransformerException
@@ -337,16 +337,11 @@ public class AvalancheBulletinController {
 	 *             if the XML document can not be initialized
 	 */
 	public String getPublishedBulletinsCaaml(DateTime date, List<String> regions, LanguageCode language,
-			boolean caamlV6) throws TransformerException, AlbinaException, ParserConfigurationException {
+			CaamlVersion version) throws TransformerException, AlbinaException, ParserConfigurationException {
 		ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				regions);
 
-		Document caamlDoc;
-		if (caamlV6)
-			caamlDoc = XmlUtil.createCaamlv6(result, language);
-		else
-			caamlDoc = XmlUtil.createCaamlv5(result, language);
-
+		Document caamlDoc = XmlUtil.createCaaml(result, language, version);
 		return XmlUtil.convertDocToString(caamlDoc);
 	}
 

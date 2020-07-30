@@ -38,6 +38,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import com.google.common.base.MoreObjects;
+import eu.albina.caaml.CaamlVersion;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
@@ -115,7 +117,7 @@ public class AvalancheBulletinService {
 	public Response getPublishedXMLBulletins(
 			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language,
-			@QueryParam("caamlV6") boolean caamlV6) {
+			@QueryParam("version") CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
 		DateTime startDate = null;
@@ -131,7 +133,7 @@ public class AvalancheBulletinService {
 				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
 
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, regions,
-					language, caamlV6);
+					language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
 				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 			} else {

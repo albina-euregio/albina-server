@@ -2,6 +2,10 @@ package eu.albina.caaml;
 
 import org.w3c.dom.Element;
 
+/**
+ * The version of CAAML (Canadian Avalanche Association Markup Language)
+ * @apiNote http://caaml.org/
+ */
 public enum CaamlVersion {
 
 	V5, V6;

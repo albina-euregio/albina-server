@@ -21,19 +21,7 @@ public class XmlUtilTest {
 	private String createCaaml(CaamlVersion version) throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		final Document doc;
-		switch (version) {
-		case V6:
-			doc = XmlUtil.createCaamlv6(bulletins, LanguageCode.en);
-			break;
-		case V5:
-			doc = XmlUtil.createCaamlv5(bulletins, LanguageCode.en);
-			break;
-
-		default:
-			doc = XmlUtil.createCaamlv5(bulletins, LanguageCode.en);
-			break;
-		}
+		final Document doc = XmlUtil.createCaaml(bulletins, LanguageCode.en, version);
 		return XmlUtil.convertDocToString(doc);
 	}
 

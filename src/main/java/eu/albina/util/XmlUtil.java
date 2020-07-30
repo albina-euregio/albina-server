@@ -88,11 +88,7 @@ public class XmlUtil {
 		String fileName;
 
 		for (LanguageCode lang : GlobalVariables.languages) {
-			Document doc;
-			if (version == CaamlVersion.V5)
-				doc = XmlUtil.createCaamlv5(bulletins, lang);
-			else
-				doc = XmlUtil.createCaamlv6(bulletins, lang);
+			Document doc = createCaaml(bulletins, lang, version);
 			String caamlString = XmlUtil.convertDocToString(doc);
 			if (version == CaamlVersion.V5)
 				fileName = dirPath + "/" + validityDateString + "_" + lang.toString() + ".xml";
@@ -102,6 +98,14 @@ public class XmlUtil {
 			writer.write(caamlString);
 			writer.close();
 			AlbinaUtil.setFilePermissions(fileName);
+		}
+	}
+
+	public static Document createCaaml(List<AvalancheBulletin> bulletins, LanguageCode lang, CaamlVersion version) {
+		if (version == CaamlVersion.V5) {
+			return XmlUtil.createCaamlv5(bulletins, lang);
+		} else {
+			return XmlUtil.createCaamlv6(bulletins, lang);
 		}
 	}
 
