@@ -36,3 +36,9 @@ source_file = src/main/resources/i18n/Tendency.properties
 source_lang = en
 type = PROPERTIES
 file_filter = src/main/resources/i18n/Tendency_<lang>.properties
+
+[albina-server.regions]
+source_file = src/main/resources/i18n/Regions.properties
+source_lang = en
+type = PROPERTIES
+file_filter = src/main/resources/i18n/Regions_<lang>.properties

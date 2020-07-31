@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
@@ -57,123 +55,6 @@ public class AlbinaUtil {
 	public static final int regionCountSouthTyrol = 20;
 	public static final int regionCountTrentino = 21;
 
-	// LANG
-	// REGION
-	public static final Map<String, String> regionsMapDe = Stream.of(new String[][] { { "AT-07-01", "Allgäuer Alpen" },
-			{ "AT-07-02", "Östliche Lechtaler Alpen - Ammergauer Alpen" }, { "AT-07-03", "Mieminger Gebirge" },
-			{ "AT-07-04", "Karwendel" }, { "AT-07-05", "Brandenberger Alpen" },
-			{ "AT-07-06", "Wilder Kaiser - Waidringer Alpen" }, { "AT-07-07", "Westliche Lechtaler Alpen" },
-			{ "AT-07-08", "Zentrale Lechtaler Alpen" }, { "AT-07-09", "Grieskogelgruppe" },
-			{ "AT-07-10", "Westliche Verwallgruppe" }, { "AT-07-11", "Östliche Verwallgruppe" },
-			{ "AT-07-12", "Silvretta" }, { "AT-07-13", "Samnaungruppe" },
-			{ "AT-07-14", "Nördliche Ötztaler- und Stubaier Alpen" }, { "AT-07-15", "Westliche Tuxer Alpen" },
-			{ "AT-07-16", "Östliche Tuxer Alpen" }, { "AT-07-17", "Westliche Kitzbüheler Alpen" },
-			{ "AT-07-18", "Östliche Kitzbüheler Alpen" }, { "AT-07-19", "Glockturmgruppe" },
-			{ "AT-07-20", "Weißkugelgruppe" }, { "AT-07-21", "Gurgler Gruppe" },
-			{ "AT-07-22", "Zentrale Stubaier Alpen" }, { "AT-07-23", "Nördliche Zillertaler Alpen" },
-			{ "AT-07-24", "Venedigergruppe" }, { "AT-07-25", "Östliche Rieserfernergruppe" },
-			{ "AT-07-26", "Glocknergruppe" }, { "AT-07-27", "Östliche Deferegger Alpen" },
-			{ "AT-07-28", "Schobergruppe" }, { "AT-07-29", "Lienzer Dolomiten" },
-			{ "IT-32-BZ-01", "Münstertaler Alpen" }, { "IT-32-BZ-02", "Langtaufers" },
-			{ "IT-32-BZ-03", "Schnalser Kamm" }, { "IT-32-BZ-04", "Südliche Stubaier Alpen" },
-			{ "IT-32-BZ-05", "Südliche Zillertaler Alpen und Hohe Tauern" }, { "IT-32-BZ-06", "Saldurn-Mastaun Kamm" },
-			{ "IT-32-BZ-07", "Texelgruppe" }, { "IT-32-BZ-08", "Sarntaler Alpen" },
-			{ "IT-32-BZ-09", "Westliche Pfunderer Berge" }, { "IT-32-BZ-10", "Östliche Pfunderer Berge" },
-			{ "IT-32-BZ-11", "Durreckgruppe" }, { "IT-32-BZ-12", "Westliche Rieserfernergruppe" },
-			{ "IT-32-BZ-13", "Westliche Deferegger Alpen" }, { "IT-32-BZ-14", "Ortlergruppe" },
-			{ "IT-32-BZ-15", "Ultental" }, { "IT-32-BZ-16", "Östliche Nonsberger Alpen" },
-			{ "IT-32-BZ-17", "Nördliche Fleimstaler Alpen" }, { "IT-32-BZ-18", "Grödner Dolomiten" },
-			{ "IT-32-BZ-19", "Pragser Dolomiten" }, { "IT-32-BZ-20", "Sextner Dolomiten" },
-			{ "IT-32-TN-01", "Adamello - Presanella" }, { "IT-32-TN-02", "Südlicher Adamello" },
-			{ "IT-32-TN-03", "Bondone und Stivo" }, { "IT-32-TN-04", "Nördliche Brenta - Peller" },
-			{ "IT-32-TN-05", "Südliche Brenta" }, { "IT-32-TN-06", "Folgaria - Lavarone" },
-			{ "IT-32-TN-07", "Nördliche Lagorai" }, { "IT-32-TN-08", "Südliche Lagorai" }, { "IT-32-TN-09", "Latemar" },
-			{ "IT-32-TN-10", "Marzola - Valsugana" }, { "IT-32-TN-11", "Paganella" }, { "IT-32-TN-12", "Prealpi" },
-			{ "IT-32-TN-13", "Primiero - Pale di S. Martino" }, { "IT-32-TN-14", "Vallarse" },
-			{ "IT-32-TN-15", "Cimberntal" }, { "IT-32-TN-16", "Fassatal" },
-			{ "IT-32-TN-17", "Westliche Nonsberger Alpen" }, { "IT-32-TN-18", "Ledrotal" },
-			{ "IT-32-TN-19", "Sole, Pejo und Rabbi" }, { "IT-32-TN-20", "Maddalene" },
-			{ "IT-32-TN-21", "Pine' - Fersental" } }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
-
-	// LANG
-	// REGION
-	public static final Map<String, String> regionsMapIt = Stream.of(new String[][] {
-			{ "AT-07-01", "Alpi dell'Allgäu" }, { "AT-07-02", "Alpi della Lechtal orientali - Alpi dell'Ammergau" },
-			{ "AT-07-03", "Monti di Mieming" }, { "AT-07-04", "Monti del Karwendel" },
-			{ "AT-07-05", "Alpi di Brandenberg" }, { "AT-07-06", "Monti del Kaiser - Alpi di Waidring" },
-			{ "AT-07-07", "Alpi della Lechtal occidentali" }, { "AT-07-08", "Alpi della Lechtal centrali" },
-			{ "AT-07-09", "Gruppo del Grieskogel" }, { "AT-07-10", "Gruppo Verwall occidentali" },
-			{ "AT-07-11", "Gruppo Verwall orientali" }, { "AT-07-12", "Silvretta" }, { "AT-07-13", "Gruppo Samnaun" },
-			{ "AT-07-14", "Alpi della Valle Oetz e dello Stubai settentrionali" },
-			{ "AT-07-15", "Alpi del Tux occidentali" }, { "AT-07-16", "Alpi del Tux orientali" },
-			{ "AT-07-17", "Alpi di Kitzbühel occidentali" }, { "AT-07-18", "Alpi di Kitzbühel orientali" },
-			{ "AT-07-19", "Gruppo della Punta della Gallina" }, { "AT-07-20", "Gruppo della Palla Bianca" },
-			{ "AT-07-21", "Alpi Passirie" }, { "AT-07-22", "Alpi dello Stubai centrali" },
-			{ "AT-07-23", "Alpi della Zillertal settentrionali" }, { "AT-07-24", "Gruppo del Venediger" },
-			{ "AT-07-25", "Catena delle Vedrette di Ries orientali" }, { "AT-07-26", "Gruppo del Glockner" },
-			{ "AT-07-27", "Alpi del Defereggen orientali" }, { "AT-07-28", "Gruppo dello Schober" },
-			{ "AT-07-29", "Dolomiti di Lienz" }, { "IT-32-BZ-01", "Alpi della Val Müstair" },
-			{ "IT-32-BZ-02", "Vallelunga" }, { "IT-32-BZ-03", "Cresta di Senales" },
-			{ "IT-32-BZ-04", "Alpi dello Stubai meridionali" },
-			{ "IT-32-BZ-05", "Alpi della Zillertal meridionali e Alti Tauri" },
-			{ "IT-32-BZ-06", "Gruppo Saldura-Mastaun" }, { "IT-32-BZ-07", "Gruppo Tessa" },
-			{ "IT-32-BZ-08", "Alpi Sarentine" }, { "IT-32-BZ-09", "Monti di Fundres occidentali" },
-			{ "IT-32-BZ-10", "Monti di Fundres orientali" }, { "IT-32-BZ-11", "Gruppo della Cima Dura" },
-			{ "IT-32-BZ-12", "Catena delle Vedrette di Ries occidentali" },
-			{ "IT-32-BZ-13", "Alpi del Defereggen occidentali" }, { "IT-32-BZ-14", "Gruppo dell'Ortles" },
-			{ "IT-32-BZ-15", "Val d'Ultimo" }, { "IT-32-BZ-16", "Alpi della Val di Non orientali" },
-			{ "IT-32-BZ-17", "Dolomiti di Fiemme settentrionali" }, { "IT-32-BZ-18", "Dolomiti di Gardena" },
-			{ "IT-32-BZ-19", "Dolomiti di Braies" }, { "IT-32-BZ-20", "Dolomiti di Sesto" },
-			{ "IT-32-TN-01", "Adamello - Presanella" }, { "IT-32-TN-02", "Adamello meridionale" },
-			{ "IT-32-TN-03", "Bondone e Stivo" }, { "IT-32-TN-04", "Brenta settentrionale - Peller" },
-			{ "IT-32-TN-05", "Brenta meridionale" }, { "IT-32-TN-06", "Folgaria - Lavarone" },
-			{ "IT-32-TN-07", "Lagorai settentrionale" }, { "IT-32-TN-08", "Lagorai meridionale" },
-			{ "IT-32-TN-09", "Latemar" }, { "IT-32-TN-10", "Marzola - Valsugana" }, { "IT-32-TN-11", "Paganella" },
-			{ "IT-32-TN-12", "Prealpi" }, { "IT-32-TN-13", "Primiero - Pale di S. Martino" },
-			{ "IT-32-TN-14", "Vallarsa" }, { "IT-32-TN-15", "Valle di Cembra" }, { "IT-32-TN-16", "Valle di Fassa" },
-			{ "IT-32-TN-17", "Alpi della Val di Non occidentali" }, { "IT-32-TN-18", "Valle di Ledro" },
-			{ "IT-32-TN-19", "Sole, Pejo e Rabbi" }, { "IT-32-TN-20", "Maddalene" },
-			{ "IT-32-TN-21", "Pine' - Valle dei Mocheni" } })
-			.collect(Collectors.toMap(data -> data[0], data -> data[1]));
-
-	// LANG
-	// REGION
-	public static final Map<String, String> regionsMapEn = Stream.of(new String[][] { { "AT-07-01", "Allgäu Alps" },
-			{ "AT-07-02", "Eastern Lechtal Alps - Ammergau Alps" }, { "AT-07-03", "Mieming Mountains" },
-			{ "AT-07-04", "Karwendel Mountains" }, { "AT-07-05", "Brandenberg Alps" },
-			{ "AT-07-06", "Wilder Kaiser Mountains - Waidring Alps" }, { "AT-07-07", "Western Lechtal Alps" },
-			{ "AT-07-08", "Central Lechtal Alps" }, { "AT-07-09", "Grieskogel Mountains" },
-			{ "AT-07-10", "Western Verwall Mountains" }, { "AT-07-11", "Eastern Verwall Mountains" },
-			{ "AT-07-12", "Silvretta" }, { "AT-07-13", "Samnaun Mountains" },
-			{ "AT-07-14", "Northern Oetz and Stubai Alps" }, { "AT-07-15", "Western Tuxer Alps" },
-			{ "AT-07-16", "Eastern Tuxer Alps" }, { "AT-07-17", "Western Kitzbühel Alps" },
-			{ "AT-07-18", "Eastern Kitzbühel Alps" }, { "AT-07-19", "Glockturm Range" },
-			{ "AT-07-20", "Weißkugel Range" }, { "AT-07-21", "Gurgler Range" }, { "AT-07-22", "Central Stubai Alps" },
-			{ "AT-07-23", "Northern Zillertal Alps" }, { "AT-07-24", "Venediger Range" },
-			{ "AT-07-25", "Eastern Rieserferner Mountains" }, { "AT-07-26", "Glockner Range" },
-			{ "AT-07-27", "Eastern Deferegger Alps" }, { "AT-07-28", "Schober Mountains" },
-			{ "AT-07-29", "Lienzer Dolomites" }, { "IT-32-BZ-01", "Val Müstair Alps" },
-			{ "IT-32-BZ-02", "Langtaufers" }, { "IT-32-BZ-03", "Schnals Ridge" },
-			{ "IT-32-BZ-04", "Southern Stubai Alps" }, { "IT-32-BZ-05", "Southern Zillertal Alps and High Tauern" },
-			{ "IT-32-BZ-06", "Saldurn-Mastaun Ridge" }, { "IT-32-BZ-07", "Texel Mountains" },
-			{ "IT-32-BZ-08", "Sarntal Alps" }, { "IT-32-BZ-09", "Western Pfunderer Mountains" },
-			{ "IT-32-BZ-10", "Eastern Pfunderer Mountains" }, { "IT-32-BZ-11", "Durreck Range" },
-			{ "IT-32-BZ-12", "Western Rieserferner Mountains" }, { "IT-32-BZ-13", "Western Deferegger Alps" },
-			{ "IT-32-BZ-14", "Ortler Range" }, { "IT-32-BZ-15", "Ulten Valley" },
-			{ "IT-32-BZ-16", "Eastern Nonsberger Alps" }, { "IT-32-BZ-17", "Northern Dolomites of Fiemme" },
-			{ "IT-32-BZ-18", "Gröden Dolomites" }, { "IT-32-BZ-19", "Prags Dolomites" },
-			{ "IT-32-BZ-20", "Sexten Dolomites" }, { "IT-32-TN-01", "Adamello - Presanella" },
-			{ "IT-32-TN-02", "Southern Adamello" }, { "IT-32-TN-03", "Bondone and Stivo" },
-			{ "IT-32-TN-04", "Northern Brenta - Peller" }, { "IT-32-TN-05", "Southern Brenta" },
-			{ "IT-32-TN-06", "Folgaria - Laverone" }, { "IT-32-TN-07", "Northern Lagorai" },
-			{ "IT-32-TN-08", "Southern Lagorai" }, { "IT-32-TN-09", "Latemar" },
-			{ "IT-32-TN-10", "Marzola - Valsugana" }, { "IT-32-TN-11", "Paganella" }, { "IT-32-TN-12", "Prealps" },
-			{ "IT-32-TN-13", "Primiero - Pale di S. Martino" }, { "IT-32-TN-14", "Vallarsa" },
-			{ "IT-32-TN-15", "Cembra Valley" }, { "IT-32-TN-16", "Fassa Valley" },
-			{ "IT-32-TN-17", "Western Nonsberg Alps" }, { "IT-32-TN-18", "Ledro Valley" },
-			{ "IT-32-TN-19", "Sole, Pejo and Rabbi" }, { "IT-32-TN-20", "Maddalene" },
-			{ "IT-32-TN-21", "Pine' - Mocheni Valley" } }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
-
 	public static final String greyDarkColor = "#565F61";
 
 	// REGION
@@ -191,70 +72,9 @@ public class AlbinaUtil {
 		}
 	}
 
-	// TODO LANG
-	// REGION
-	public static String getMicroRegionName(LanguageCode lang, String microRegionId) {
-		switch (lang) {
-		case de:
-			return AlbinaUtil.regionsMapDe.get(microRegionId);
-		case it:
-			return AlbinaUtil.regionsMapIt.get(microRegionId);
-		case en:
-			return AlbinaUtil.regionsMapEn.get(microRegionId);
-		default:
-			return AlbinaUtil.regionsMapEn.get(microRegionId);
-		}
-	}
-
-	// TODO LANG
-	// REGION
-	public static String getRegionName(LanguageCode lang, String region) {
-		switch (lang) {
-		case de:
-			switch (region) {
-			case "AT-07":
-				return "Tirol";
-			case "IT-32-BZ":
-				return "Südtirol";
-			case "IT-32-TN":
-				return "Trentino";
-			default:
-				return "";
-			}
-		case it:
-			switch (region) {
-			case "AT-07":
-				return "Tirolo";
-			case "IT-32-BZ":
-				return "Alto Adige";
-			case "IT-32-TN":
-				return "Trentino";
-			default:
-				return "";
-			}
-		case en:
-			switch (region) {
-			case "AT-07":
-				return "Tirol";
-			case "IT-32-BZ":
-				return "Southtyrol";
-			case "IT-32-TN":
-				return "Trentino";
-			default:
-				return "";
-			}
-		default:
-			switch (region) {
-			case "AT-07":
-				return "Tirol";
-			case "IT-32-BZ":
-				return "Southtyrol";
-			case "IT-32-TN":
-				return "Trentino";
-			default:
-				return "";
-			}
-		}
+	public static String getRegionName(LanguageCode lang, String regionId) {
+		ResourceBundle regions = lang.getBundle("i18n.Regions");
+		return regions.getString(regionId);
 	}
 
 	public static String getDaytimeString(ResourceBundle messages, String type) {

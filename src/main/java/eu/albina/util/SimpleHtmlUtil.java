@@ -33,7 +33,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -260,20 +259,7 @@ public class SimpleHtmlUtil {
 
 				StringBuilder sb = new StringBuilder();
 				for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
-					switch (lang) {
-					case de:
-						sb.append(AlbinaUtil.regionsMapDe.get(publishedRegion));
-						break;
-					case it:
-						sb.append(AlbinaUtil.regionsMapIt.get(publishedRegion));
-						break;
-					case en:
-						sb.append(AlbinaUtil.regionsMapEn.get(publishedRegion));
-						break;
-					default:
-						sb.append(AlbinaUtil.regionsMapEn.get(publishedRegion));
-						break;
-					}
+					sb.append(AlbinaUtil.getRegionName(lang, publishedRegion));
 					sb.append(", ");
 				}
 				sb.delete(sb.length() - 2, sb.length());
