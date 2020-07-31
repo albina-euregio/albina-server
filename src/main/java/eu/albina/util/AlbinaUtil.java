@@ -525,26 +525,4 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static double getDangerRatingDouble(DangerRating dangerRating) {
-		switch (dangerRating) {
-		case missing:
-			return .0;
-		case no_rating:
-			return .0;
-		case no_snow:
-			return .0;
-		case low:
-			return 1.0 / 1364;
-		case moderate:
-			return 1.0 / 1364 * 4.0;
-		case considerable:
-			return 1.0 / 1364 * 4.0 * 4.0;
-		case high:
-			return 1.0 / 1364 * 4.0 * 4.0 * 4.0;
-		case very_high:
-			return 1.0 / 1364 * 4.0 * 4.0 * 4.0 * 4.0;
-		default:
-			return .0;
-		}
-	}
 }
