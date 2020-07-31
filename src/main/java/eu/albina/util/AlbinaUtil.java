@@ -73,6 +73,9 @@ public class AlbinaUtil {
 	}
 
 	public static String getRegionName(LanguageCode lang, String regionId) {
+		if ("".equals(regionId)) {
+			return "";
+		}
 		ResourceBundle regions = lang.getBundle("i18n.Regions");
 		return regions.getString(regionId);
 	}
