@@ -29,7 +29,6 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.mail.MessagingException;
@@ -106,6 +105,7 @@ public class UtilTest {
 		names.add("Claudia Riedl");
 		names.add("Astrid Maschits");
 		names.add("Harald Timons");
+		names.add("Jordi Gavaldà Bordes");
 
 		passwords.add("Alberto");
 		passwords.add("Sergio");
@@ -140,6 +140,7 @@ public class UtilTest {
 		passwords.add("Claudia");
 		passwords.add("Astrid");
 		passwords.add("Harald");
+		passwords.add("Jordi");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -243,7 +244,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 9; i < 10; i++) {
+		for (int i = 30; i < 35; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());

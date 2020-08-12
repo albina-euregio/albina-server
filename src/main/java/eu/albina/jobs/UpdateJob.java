@@ -73,6 +73,9 @@ public class UpdateJob implements org.quartz.Job {
 			if (GlobalVariables.isPublishBulletinsTrentino()
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeTrentino))
 				changedRegions.add(GlobalVariables.codeTrentino);
+			if (GlobalVariables.isPublishBulletinsAran()
+					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeAran))
+				changedRegions.add(GlobalVariables.codeAran);
 
 			DateTime publicationDate = new DateTime();
 

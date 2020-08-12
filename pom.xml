@@ -52,6 +52,7 @@
 				<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
 				<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
 				<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
+				<albina.conf.publish-bulletins-aran>true</albina.conf.publish-bulletins-aran>
 				<albina.conf.publish-blogs-tyrol>false</albina.conf.publish-blogs-tyrol>
 				<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
 				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
@@ -96,6 +97,7 @@
 				<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
 				<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
 				<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
+				<albina.conf.publish-bulletins-aran>true</albina.conf.publish-bulletins-aran>
 				<albina.conf.publish-blogs-tyrol>false</albina.conf.publish-blogs-tyrol>
 				<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
 				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
@@ -140,6 +142,7 @@
 				<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
 				<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
 				<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
+				<albina.conf.publish-bulletins-aran>true</albina.conf.publish-bulletins-aran>
 				<albina.conf.publish-blogs-tyrol>true</albina.conf.publish-blogs-tyrol>
 				<albina.conf.publish-blogs-south-tyrol>true</albina.conf.publish-blogs-south-tyrol>
 				<albina.conf.publish-blogs-trentino>true</albina.conf.publish-blogs-trentino>

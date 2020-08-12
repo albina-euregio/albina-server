@@ -63,6 +63,7 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
 	private static boolean publishBulletinsTrentino = true;
+	private static boolean publishBulletinsAran = true;
 
 	// REGION
 	private static boolean publishBlogsTyrol = false;
@@ -135,6 +136,7 @@ public class GlobalVariables {
 	public static String codeTrentino = "IT-32-TN";
 	public static String codeSouthTyrol = "IT-32-BZ";
 	public static String codeTyrol = "AT-07";
+	public static String codeAran = "ES-CT-L";
 
 	public static String propertiesFilePath = "META-INF/config.properties";
 	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
@@ -152,6 +154,7 @@ public class GlobalVariables {
 			add(codeTyrol);
 			add(codeSouthTyrol);
 			add(codeTrentino);
+			add(codeAran);
 		}
 	};
 
@@ -181,6 +184,9 @@ public class GlobalVariables {
 			add(LanguageCode.de);
 			add(LanguageCode.it);
 			add(LanguageCode.en);
+			add(LanguageCode.es);
+			add(LanguageCode.ca);
+			add(LanguageCode.oc);
 		}
 	};
 
@@ -333,6 +339,15 @@ public class GlobalVariables {
 	public static void setPublishBulletinsTrentino(boolean publishBulletinsTrentino) throws ConfigurationException {
 		GlobalVariables.publishBulletinsTrentino = publishBulletinsTrentino;
 		setConfigProperty("publishBulletinsTrentino", publishBulletinsTrentino);
+	}
+
+	public static boolean isPublishBulletinsAran() {
+		return publishBulletinsAran;
+	}
+
+	public static void setPublishBulletinsAran(boolean publishBulletinsAran) throws ConfigurationException {
+		GlobalVariables.publishBulletinsAran = publishBulletinsAran;
+		setConfigProperty("publishBulletinsAran", publishBulletinsAran);
 	}
 
 	public static boolean isPublishBlogsTyrol() {
@@ -563,6 +578,8 @@ public class GlobalVariables {
 				publishBulletinsSouthTyrol = config.getBoolean("publishBulletinsSouthTyrol");
 			if (config.containsKey("publishBulletinsTrentino"))
 				publishBulletinsTrentino = config.getBoolean("publishBulletinsTrentino");
+			if (config.containsKey("publishBulletinsAran"))
+				publishBulletinsAran = config.getBoolean("publishBulletinsAran");
 			if (config.containsKey("publishBlogsTyrol"))
 				publishBlogsTyrol = config.getBoolean("publishBlogsTyrol");
 			if (config.containsKey("publishBlogsSouthTyrol"))
@@ -610,6 +627,7 @@ public class GlobalVariables {
 		json.put("publishBulletinsTyrol", publishBulletinsTyrol);
 		json.put("publishBulletinsSouthTyrol", publishBulletinsSouthTyrol);
 		json.put("publishBulletinsTrentino", publishBulletinsTrentino);
+		json.put("publishBulletinsAran", publishBulletinsAran);
 		json.put("publishBlogsTyrol", publishBlogsTyrol);
 		json.put("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
 		json.put("publishBlogsTrentino", publishBlogsTrentino);
@@ -674,6 +692,8 @@ public class GlobalVariables {
 			setPublishBulletinsSouthTyrol(configuration.getBoolean("publishBulletinsSouthTyrol"));
 		if (configuration.has("publishBulletinsTrentino"))
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
+		if (configuration.has("publishBulletinsAran"))
+			setPublishBulletinsAran(configuration.getBoolean("publishBulletinsAran"));
 		if (configuration.has("scriptsPath"))
 			setScriptsPath(configuration.getString("scriptsPath"));
 	}

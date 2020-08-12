@@ -54,6 +54,7 @@ public class AlbinaUtil {
 	public static final int regionCountTyrol = 29;
 	public static final int regionCountSouthTyrol = 20;
 	public static final int regionCountTrentino = 21;
+	public static final int regionCountAran = 3;
 
 	public static final String greyDarkColor = "#565F61";
 
@@ -66,6 +67,8 @@ public class AlbinaUtil {
 			return regionCountSouthTyrol;
 		case "IT-32-TN":
 			return regionCountTrentino;
+		case "ES-CT-L":
+			return regionCountAran;
 
 		default:
 			return -1;

@@ -38,8 +38,6 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import com.google.common.base.MoreObjects;
-import eu.albina.caaml.CaamlVersion;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
@@ -47,7 +45,9 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+import com.google.common.base.MoreObjects;
 
+import eu.albina.caaml.CaamlVersion;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
@@ -669,6 +669,8 @@ public class AvalancheBulletinService {
 				regions.add(GlobalVariables.codeSouthTyrol);
 			if (GlobalVariables.isPublishBulletinsTrentino())
 				regions.add(GlobalVariables.codeTrentino);
+			if (GlobalVariables.isPublishBulletinsAran())
+				regions.add(GlobalVariables.codeAran);
 
 			if (!regions.isEmpty()) {
 				try {
