@@ -19,6 +19,7 @@ package eu.albina.util;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -41,14 +42,22 @@ public class JsonUtil {
 		BufferedWriter writer;
 		String fileName;
 
-		JSONArray jsonArray = JsonUtil.createJSONString(bulletins, "", true);
-		String jsonString = jsonArray.toString();
+		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			if (avalancheBulletin.affectsRegionOnlyPublished(GlobalVariables.codeEuregio))
+				regionBulletins.add(avalancheBulletin);
+		}
 
-		fileName = dirPath + "/avalanche_report.json";
-		writer = new BufferedWriter(new FileWriter(fileName));
-		writer.write(jsonString);
-		writer.close();
-		AlbinaUtil.setFilePermissions(fileName);
+		if (!regionBulletins.isEmpty()) {
+			JSONArray jsonArray = JsonUtil.createJSONString(regionBulletins, "", true);
+			String jsonString = jsonArray.toString();
+
+			fileName = dirPath + "/avalanche_report.json";
+			writer = new BufferedWriter(new FileWriter(fileName));
+			writer.write(jsonString);
+			writer.close();
+			AlbinaUtil.setFilePermissions(fileName);
+		}
 	}
 
 	public static JSONArray createJSONString(Collection<AvalancheBulletin> bulletins, String region, boolean small) {
