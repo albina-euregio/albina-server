@@ -484,10 +484,20 @@ public class PublicationController {
 		return new Thread(new Runnable() {
 			public void run() {
 				logger.info("Map production started");
-				MapUtil.createDangerRatingMaps(bulletins);
-				if (GlobalVariables.isMapProductionUrlUnivie())
-					AlbinaUtil.runCopyMapsUnivieScript(validityDateString, publicationTimeString);
-				logger.info("Map production finished");
+
+				// TODO map production only for EUREGIO
+				ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+				for (AvalancheBulletin avalancheBulletin : bulletins) {
+					if (avalancheBulletin.affectsRegionOnlyPublished(GlobalVariables.codeEuregio))
+						regionBulletins.add(avalancheBulletin);
+				}
+
+				if (!regionBulletins.isEmpty()) {
+					MapUtil.createDangerRatingMaps(bulletins);
+					if (GlobalVariables.isMapProductionUrlUnivie())
+						AlbinaUtil.runCopyMapsUnivieScript(validityDateString, publicationTimeString);
+					logger.info("Map production finished");
+				}
 			}
 		});
 	}
