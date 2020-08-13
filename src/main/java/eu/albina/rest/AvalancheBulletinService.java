@@ -96,19 +96,20 @@ public class AvalancheBulletinService {
 		endDate = startDate.plusDays(1);
 
 		if (regions.isEmpty()) {
-			return Response.ok((new JSONArray()).toString(), MediaType.APPLICATION_JSON).build();
-		} else {
-			List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate,
-					endDate, regions);
-			JSONArray jsonResult = new JSONArray();
-			if (bulletins != null) {
-				Collections.sort(bulletins);
-				for (AvalancheBulletin bulletin : bulletins) {
-					jsonResult.put(bulletin.toJSON());
-				}
-			}
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+			logger.warn("No region defined.");
+			return Response.noContent().build();
 		}
+
+		List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, endDate,
+				regions);
+		JSONArray jsonResult = new JSONArray();
+		if (bulletins != null) {
+			Collections.sort(bulletins);
+			for (AvalancheBulletin bulletin : bulletins) {
+				jsonResult.put(bulletin.toJSON());
+			}
+		}
+		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET
@@ -254,9 +255,8 @@ public class AvalancheBulletinService {
 		DateTime startDate = null;
 
 		if (regions.isEmpty()) {
-			JSONObject jsonResult = new JSONObject();
-			jsonResult.put("error", "No region defined!");
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(jsonResult.toString()).build();
+			logger.warn("No region defined.");
+			return Response.noContent().build();
 		}
 
 		try {
