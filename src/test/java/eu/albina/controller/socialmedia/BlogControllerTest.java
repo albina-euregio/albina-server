@@ -21,7 +21,6 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.junit.After;
@@ -32,6 +31,7 @@ import org.junit.Test;
 import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 public class BlogControllerTest {
@@ -53,7 +53,7 @@ public class BlogControllerTest {
 	@Test
 	public void sendBlogPostsTest() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
-		BlogController.getInstance().sendNewBlogPosts("AT-07", LanguageCode.de);
+		BlogController.getInstance().sendNewBlogPosts(GlobalVariables.codeTyrol, LanguageCode.de);
 	}
 
 	@Ignore

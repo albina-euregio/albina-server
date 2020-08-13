@@ -133,10 +133,10 @@ public class GlobalVariables {
 	public static DateTimeFormatter publicationTime = DateTimeFormat.forPattern("yyyy-MM-dd_HH-mm-ss");
 
 	// REGION
-	public static String codeTrentino = "IT-32-TN";
-	public static String codeSouthTyrol = "IT-32-BZ";
-	public static String codeTyrol = "AT-07";
-	public static String codeAran = "ES-CT-L";
+	public final static String codeTrentino = "IT-32-TN";
+	public final static String codeSouthTyrol = "IT-32-BZ";
+	public final static String codeTyrol = "AT-07";
+	public final static String codeAran = "ES-CT-L";
 
 	public static String propertiesFilePath = "META-INF/config.properties";
 	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
@@ -375,6 +375,22 @@ public class GlobalVariables {
 	public static void setPublishBlogsTrentino(boolean publishBlogsTrentino) throws ConfigurationException {
 		GlobalVariables.publishBlogsTrentino = publishBlogsTrentino;
 		setConfigProperty("publishBlogsTrentino", publishBlogsTrentino);
+	}
+
+	// REGION
+	public static boolean isPublishBlogs(String region) {
+		switch (region) {
+		case codeTyrol:
+			return publishBlogsTyrol;
+		case codeSouthTyrol:
+			return publishBlogsSouthTyrol;
+		case codeTrentino:
+			return publishBlogsTrentino;
+		case codeAran:
+			return false;
+		default:
+			return false;
+		}
 	}
 
 	public static String getScriptsPath() {
@@ -755,49 +771,50 @@ public class GlobalVariables {
 		return result;
 	}
 
-	// LANG
+	// LANG: rapid mail support
+	// REGION: rapid mail support
 	public static String getUnsubscribeLink(LanguageCode lang, String region) {
 		switch (lang) {
 		case de:
 			switch (region) {
-			case "AT-07":
+			case GlobalVariables.codeTyrol:
 				return unsubscribeLinkTyrolDe;
-			case "IT-32-BZ":
+			case GlobalVariables.codeSouthTyrol:
 				return unsubscribeLinkSouthTyrolDe;
-			case "IT-32-TN":
+			case GlobalVariables.codeTrentino:
 				return unsubscribeLinkTrentinoDe;
 			default:
 				return "";
 			}
 		case it:
 			switch (region) {
-			case "AT-07":
+			case GlobalVariables.codeTyrol:
 				return unsubscribeLinkTyrolIt;
-			case "IT-32-BZ":
+			case GlobalVariables.codeSouthTyrol:
 				return unsubscribeLinkSouthTyrolIt;
-			case "IT-32-TN":
+			case GlobalVariables.codeTrentino:
 				return unsubscribeLinkTrentinoIt;
 			default:
 				return "";
 			}
 		case en:
 			switch (region) {
-			case "AT-07":
+			case GlobalVariables.codeTyrol:
 				return unsubscribeLinkTyrolEn;
-			case "IT-32-BZ":
+			case GlobalVariables.codeSouthTyrol:
 				return unsubscribeLinkSouthTyrolEn;
-			case "IT-32-TN":
+			case GlobalVariables.codeTrentino:
 				return unsubscribeLinkTrentinoEn;
 			default:
 				return "";
 			}
 		default:
 			switch (region) {
-			case "AT-07":
+			case GlobalVariables.codeTyrol:
 				return unsubscribeLinkTyrolEn;
-			case "IT-32-BZ":
+			case GlobalVariables.codeSouthTyrol:
 				return unsubscribeLinkSouthTyrolEn;
-			case "IT-32-TN":
+			case GlobalVariables.codeTrentino:
 				return unsubscribeLinkTrentinoEn;
 			default:
 				return "";
@@ -814,19 +831,7 @@ public class GlobalVariables {
 		sb.append("/");
 		sb.append(date);
 		sb.append("_");
-		switch (region) {
-		case "AT-07":
-			sb.append(codeTyrol);
-			break;
-		case "IT-32-BZ":
-			sb.append(codeSouthTyrol);
-			break;
-		case "IT-32-TN":
-			sb.append(codeTrentino);
-			break;
-		default:
-			break;
-		}
+		sb.append(region);
 		sb.append("_");
 		// TODO test if this works
 		sb.append(lang.toString());

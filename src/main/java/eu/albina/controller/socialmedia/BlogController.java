@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -87,23 +86,26 @@ public class BlogController extends CommonProcessor {
 
 	private JSONArray getBlogPosts(String region, LanguageCode lang) throws ClientProtocolException, IOException {
 		String blogId = getBlogId(region, lang);
-		String uri = GlobalVariables.blogApiUrl + blogId + "/posts?key=" + GlobalVariables.googleApiKey + "&startDate="
-				+ URLEncoder.encode(lastFetch.get(region).toString(GlobalVariables.formatterDateTime), "UTF-8");
-		logger.debug("URI: " + uri);
-		Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
-				.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-		logger.debug("Start date for " + region + ": " + lastFetch.get(region).toString());
-		lastFetch.put(region, new DateTime());
-		HttpResponse response = executor.execute(request).returnResponse();
-		logger.debug("New start date for " + region + ": " + lastFetch.get(region).toString());
-		if (response.getStatusLine().getStatusCode() == 200) {
-			HttpEntity entity = response.getEntity();
-			String entityString = EntityUtils.toString(entity, "UTF-8");
-			JSONObject jsonObject = new JSONObject(entityString);
-			if (jsonObject.has("items"))
-				return jsonObject.getJSONArray("items");
-			else
-				return new JSONArray();
+		if (blogId != null) {
+			String uri = GlobalVariables.blogApiUrl + blogId + "/posts?key=" + GlobalVariables.googleApiKey
+					+ "&startDate="
+					+ URLEncoder.encode(lastFetch.get(region).toString(GlobalVariables.formatterDateTime), "UTF-8");
+			logger.debug("URI: " + uri);
+			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
+					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
+			logger.debug("Start date for " + region + ": " + lastFetch.get(region).toString());
+			lastFetch.put(region, new DateTime());
+			HttpResponse response = executor.execute(request).returnResponse();
+			logger.debug("New start date for " + region + ": " + lastFetch.get(region).toString());
+			if (response.getStatusLine().getStatusCode() == 200) {
+				HttpEntity entity = response.getEntity();
+				String entityString = EntityUtils.toString(entity, "UTF-8");
+				JSONObject jsonObject = new JSONObject(entityString);
+				if (jsonObject.has("items"))
+					return jsonObject.getJSONArray("items");
+				else
+					return new JSONArray();
+			}
 		}
 		return new JSONArray();
 	}
@@ -111,25 +113,27 @@ public class BlogController extends CommonProcessor {
 	private String getBlogPost(String blogPostId, String region, LanguageCode lang)
 			throws ClientProtocolException, IOException {
 		String blogId = getBlogId(region, lang);
-		Request request = Request
-				.Get(GlobalVariables.blogApiUrl + "/" + blogId + "/posts/" + blogPostId + "?key="
-						+ GlobalVariables.googleApiKey)
-				.connectTimeout(BLOGGER_CONNECTION_TIMEOUT).socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-		HttpResponse response = executor.execute(request).returnResponse();
-		if (response.getStatusLine().getStatusCode() == 200) {
-			HttpEntity entity = response.getEntity();
-			String entityString = EntityUtils.toString(entity, "UTF-8");
-			JSONObject jsonObject = new JSONObject(entityString);
-			return jsonObject.getString("content");
+		if (blogId != null) {
+			Request request = Request
+					.Get(GlobalVariables.blogApiUrl + "/" + blogId + "/posts/" + blogPostId + "?key="
+							+ GlobalVariables.googleApiKey)
+					.connectTimeout(BLOGGER_CONNECTION_TIMEOUT).socketTimeout(BLOGGER_SOCKET_TIMEOUT);
+			HttpResponse response = executor.execute(request).returnResponse();
+			if (response.getStatusLine().getStatusCode() == 200) {
+				HttpEntity entity = response.getEntity();
+				String entityString = EntityUtils.toString(entity, "UTF-8");
+				JSONObject jsonObject = new JSONObject(entityString);
+				return jsonObject.getString("content");
+			}
 		}
 		return null;
 	}
 
-	// LANG
-	// REGION
+	// LANG: only languages for which a blog exists
+	// REGION: only regions that have a blog
 	private String getBlogId(String region, LanguageCode lang) {
 		switch (region) {
-		case "AT-07":
+		case GlobalVariables.codeTyrol:
 			switch (lang) {
 			case de:
 				return GlobalVariables.blogIdTyrolDe;
@@ -140,7 +144,7 @@ public class BlogController extends CommonProcessor {
 			default:
 				return null;
 			}
-		case "IT-32-BZ":
+		case GlobalVariables.codeSouthTyrol:
 			switch (lang) {
 			case de:
 				return GlobalVariables.blogIdSouthTyrolDe;
@@ -149,7 +153,7 @@ public class BlogController extends CommonProcessor {
 			default:
 				return null;
 			}
-		case "IT-32-TN":
+		case GlobalVariables.codeTrentino:
 			switch (lang) {
 			case it:
 				return GlobalVariables.blogIdTrentinoIt;
@@ -269,11 +273,11 @@ public class BlogController extends CommonProcessor {
 				+ object.getString("id");
 	}
 
-	// LANG
-	// REGION
+	// LANG: only languages which a blog exists for
+	// REGION: only regions that have a blog
 	private String getBlogUrl(String region, LanguageCode lang) {
 		switch (region) {
-		case "AT-07":
+		case GlobalVariables.codeTyrol:
 			switch (lang) {
 			case de:
 				return GlobalVariables.blogUrlTyrolDe;
@@ -284,7 +288,7 @@ public class BlogController extends CommonProcessor {
 			default:
 				return null;
 			}
-		case "IT-32-BZ":
+		case GlobalVariables.codeSouthTyrol:
 			switch (lang) {
 			case de:
 				return GlobalVariables.blogUrlSouthTyrolDe;
@@ -293,7 +297,7 @@ public class BlogController extends CommonProcessor {
 			default:
 				return null;
 			}
-		case "IT-32-TN":
+		case GlobalVariables.codeTrentino:
 			switch (lang) {
 			case it:
 				return GlobalVariables.blogUrlTrentinoIt;

@@ -36,7 +36,6 @@ public class BlogJob implements org.quartz.Job {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlogJob.class);
 
-	// REGION
 	/**
 	 * Execute all necessary tasks to publish new blog posts per email and
 	 * messengerpeople.
@@ -45,31 +44,11 @@ public class BlogJob implements org.quartz.Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		for (String region : GlobalVariables.regionsEuregio) {
-			switch (region) {
-			case "AT-07":
-				if (GlobalVariables.isPublishBlogsTyrol()) {
-					logger.info("Blog job triggered for TY!");
-					for (LanguageCode lang : GlobalVariables.languages)
-						BlogController.getInstance().sendNewBlogPosts(region, lang);
-				}
-				break;
-			case "IT-32-BZ":
-				if (GlobalVariables.isPublishBlogsSouthTyrol()) {
-					logger.info("Blog job triggered for BZ!");
-					for (LanguageCode lang : GlobalVariables.languages)
-						BlogController.getInstance().sendNewBlogPosts(region, lang);
-				}
-				break;
-			case "IT-32-TN":
-				if (GlobalVariables.isPublishBlogsTrentino()) {
-					logger.info("Blog job triggered for TN!");
-					for (LanguageCode lang : GlobalVariables.languages)
-						BlogController.getInstance().sendNewBlogPosts(region, lang);
-				}
-				break;
-			default:
-				break;
+		for (String region : GlobalVariables.regions) {
+			if (GlobalVariables.isPublishBlogs(region)) {
+				logger.info("Blog job triggered for " + region + "!");
+				for (LanguageCode lang : GlobalVariables.languages)
+					BlogController.getInstance().sendNewBlogPosts(region, lang);
 			}
 		}
 	}

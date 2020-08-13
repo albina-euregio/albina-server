@@ -116,11 +116,11 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 		return targets;
 	}
 
-	// LANG
-	// REGION
+	// LANG: only languages on messengerpeople
+	// REGION: only regions on messengerpeople
 	private int getTargeting(String region, LanguageCode lang) {
 		switch (region) {
-		case "AT-07":
+		case GlobalVariables.codeTyrol:
 			switch (lang) {
 			case de:
 				return GlobalVariables.targetingTyrolDe;
@@ -131,7 +131,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 			default:
 				return -1;
 			}
-		case "IT-32-BZ":
+		case GlobalVariables.codeSouthTyrol:
 			switch (lang) {
 			case de:
 				return GlobalVariables.targetingSouthTyrolDe;
@@ -142,7 +142,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 			default:
 				return -1;
 			}
-		case "IT-32-TN":
+		case GlobalVariables.codeTrentino:
 			switch (lang) {
 			case de:
 				return GlobalVariables.targetingTrentinoDe;
@@ -169,43 +169,49 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 			String attachmentUrl) throws IOException, AlbinaException {
 		Integer targeting = getTargeting(config.getRegionConfiguration().getRegion().getId(), language);
 
-		StringBuilder data = new StringBuilder();
-		data.append("{ \"text\": \"");
-		data.append(message);
-		if (attachmentUrl != null) {
-			data.append("\", \"media\": \"");
-			data.append(attachmentUrl);
-		}
-		data.append("\", \"notification\": \"");
-		data.append(message);
-		data.append("\", \"targeting\": \"");
-		data.append(targeting);
-		data.append("\", \"apikey\": \"");
-		data.append(config.getApiKey());
-		data.append("\" }");
+		if (targeting < 0) {
 
-		logger.info("Publishing report on messengerpeople for " + config.getRegionConfiguration().getRegion().getId());
+			StringBuilder data = new StringBuilder();
+			data.append("{ \"text\": \"");
+			data.append(message);
+			if (attachmentUrl != null) {
+				data.append("\", \"media\": \"");
+				data.append(attachmentUrl);
+			}
+			data.append("\", \"notification\": \"");
+			data.append(message);
+			data.append("\", \"targeting\": \"");
+			data.append(targeting);
+			data.append("\", \"apikey\": \"");
+			data.append(config.getApiKey());
+			data.append("\" }");
 
-		String url = baseUrl + "/content";
-		Request request = Request.Post(url).addHeader("Content-Type", "application/json")
-				.bodyString(data.toString(), ContentType.APPLICATION_JSON)
-				.connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT).socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT);
-		HttpResponse response = request.execute().returnResponse();
+			logger.info(
+					"Publishing report on messengerpeople for " + config.getRegionConfiguration().getRegion().getId());
 
-		// Go ahead only if success
-		if (response.getStatusLine().getStatusCode() != 200) {
-			logger.warn("Error publishing report on messengerpeople for "
-					+ config.getRegionConfiguration().getRegion().getId() + "(error code "
-					+ response.getStatusLine().getStatusCode() + ")");
+			String url = baseUrl + "/content";
+			Request request = Request.Post(url).addHeader("Content-Type", "application/json")
+					.bodyString(data.toString(), ContentType.APPLICATION_JSON)
+					.connectTimeout(MESSENGER_PEOPLE_CONNECTION_TIMEOUT).socketTimeout(MESSENGER_PEOPLE_SOCKET_TIMEOUT);
+			HttpResponse response = request.execute().returnResponse();
 
-			String body = response.getEntity() != null
-					? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
-					: null;
-			ShipmentController.getInstance().saveShipment(createActivityRow(config, language.toString(),
-					"message=" + message + ", attachmentUrl=" + attachmentUrl, body, null));
+			// Go ahead only if success
+			if (response.getStatusLine().getStatusCode() != 200) {
+				logger.warn("Error publishing report on messengerpeople for "
+						+ config.getRegionConfiguration().getRegion().getId() + "(error code "
+						+ response.getStatusLine().getStatusCode() + ")");
+
+				String body = response.getEntity() != null
+						? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
+						: null;
+				ShipmentController.getInstance().saveShipment(createActivityRow(config, language.toString(),
+						"message=" + message + ", attachmentUrl=" + attachmentUrl, body, null));
+				return response;
+			}
 			return response;
+		} else {
+			throw new AlbinaException("No targeting on messengerpeople!");
 		}
-		return response;
 	}
 
 	public MessengerPeopleNewsletterHistory getNewsLetterHistory(MessengerPeopleConfig config, Integer limit)

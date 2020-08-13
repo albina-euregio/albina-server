@@ -61,13 +61,13 @@ public class AlbinaUtil {
 	// REGION
 	public static int getRegionCount(String region) {
 		switch (region) {
-		case "AT-07":
+		case GlobalVariables.codeTyrol:
 			return regionCountTyrol;
-		case "IT-32-BZ":
+		case GlobalVariables.codeSouthTyrol:
 			return regionCountSouthTyrol;
-		case "IT-32-TN":
+		case GlobalVariables.codeTrentino:
 			return regionCountTrentino;
-		case "ES-CT-L":
+		case GlobalVariables.codeAran:
 			return regionCountAran;
 
 		default:
@@ -251,17 +251,17 @@ public class AlbinaUtil {
 		return sb.toString();
 	}
 
-	// REGION
+	// REGION: only regions supported by map production
 	private static String getMapFilename(String region) {
 		StringBuilder sb = new StringBuilder();
 		switch (region) {
-		case "AT-07":
+		case GlobalVariables.codeTyrol:
 			sb.append("tyrol");
 			break;
-		case "IT-32-BZ":
+		case GlobalVariables.codeSouthTyrol:
 			sb.append("southtyrol");
 			break;
-		case "IT-32-TN":
+		case GlobalVariables.codeAran:
 			sb.append("trentino");
 			break;
 		default:

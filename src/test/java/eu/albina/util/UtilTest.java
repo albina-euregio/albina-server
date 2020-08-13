@@ -72,7 +72,6 @@ public class UtilTest {
 	public void setUp() throws IOException {
 		// HibernateUtil.getInstance().setUp();
 
-		names.add("Alberto Trenti");
 		names.add("Sergio Benigni");
 		names.add("Paolo Cestari");
 		names.add("Marco Gadotti");
@@ -86,19 +85,12 @@ public class UtilTest {
 		names.add("Patrick Nairz");
 		names.add("Christoph Mitterer");
 		names.add("Norbert Lanzanasto");
-		names.add("Lukas Ruetz");
-		names.add("Matthias Walcher");
 		names.add("Jürg Schweizer");
 		names.add("Matthias Gerber");
 		names.add("Thomas Stucki");
 		names.add("Kurt Winkler");
 		names.add("Ulrich Niederer");
 		names.add("Marc Ruesch");
-		names.add("Arno Studeregger");
-		names.add("Alfred Ortner");
-		names.add("Jonathan Flunger");
-		names.add("Felix Mast");
-		names.add("Andreas Riegler");
 		names.add("Simon Legner");
 		names.add("Bernhard Niedermoser");
 		names.add("Michael Butschek");
@@ -107,8 +99,8 @@ public class UtilTest {
 		names.add("Harald Timons");
 		names.add("Jordi Gavaldà Bordes");
 		names.add("Ivan Moner Seira");
+		names.add("Montse Bacardit");
 
-		passwords.add("Alberto");
 		passwords.add("Sergio");
 		passwords.add("Paolo");
 		passwords.add("Marco");
@@ -122,19 +114,12 @@ public class UtilTest {
 		passwords.add("Patrick");
 		passwords.add("Christoph");
 		passwords.add("Norbert");
-		passwords.add("Lukas");
-		passwords.add("Matthias");
 		passwords.add("Jürg");
 		passwords.add("Matthias");
 		passwords.add("Thomas");
 		passwords.add("Kurt");
 		passwords.add("Ulrich");
 		passwords.add("Marc");
-		passwords.add("Arno");
-		passwords.add("Alfred");
-		passwords.add("Jonathan");
-		passwords.add("Felix");
-		passwords.add("Andreas");
 		passwords.add("Simon");
 		passwords.add("Bernhard");
 		passwords.add("Michael");
@@ -143,6 +128,7 @@ public class UtilTest {
 		passwords.add("Harald");
 		passwords.add("Jordi");
 		passwords.add("Ivan");
+		passwords.add("Montse");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -170,8 +156,8 @@ public class UtilTest {
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
 		ResourceBundle messages = LanguageCode.de.getBundle("i18n.MessagesBundle");
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de, "AT-07", false, false,
-				messages);
+		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
+				GlobalVariables.codeTyrol, false, false, messages);
 		System.out.println(html);
 	}
 
@@ -180,7 +166,7 @@ public class UtilTest {
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
 		// TODO test this test
 		ArrayList<String> regions = new ArrayList<String>();
-		regions.add("AT-07");
+		regions.add(GlobalVariables.codeTyrol);
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false);
 	}
 
@@ -195,7 +181,7 @@ public class UtilTest {
 	public void addSubscriber() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, AlbinaException, IOException, Exception {
 		ArrayList<String> regions = new ArrayList<String>();
-		regions.add("AT-07");
+		regions.add(GlobalVariables.codeTyrol);
 
 		Subscriber subscriber = new Subscriber();
 		subscriber.setEmail("n.lanzanasto@gmail.com");
@@ -228,10 +214,10 @@ public class UtilTest {
 
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
-		// PdfUtil.getInstance().createRegionPdfs(bulletins, "AT-07");
+		// PdfUtil.getInstance().createRegionPdfs(bulletins, GlobalVariables.codeTyrol);
 
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, "AT-07", false, false, "2030-02-16",
-				"2030-02-16_00-00-00", messages);
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, GlobalVariables.codeTyrol, false, false,
+				"2030-02-16", "2030-02-16_00-00-00", messages);
 	}
 
 	@Ignore
@@ -246,7 +232,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 32; i < 36; i++) {
+		for (int i = 32; i < 37; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());

@@ -181,7 +181,6 @@ public class RapidMailProcessorController extends CommonProcessor {
 	}
 
 	private int resolveRecipientListIdByName(RapidMailConfig config, String language) throws Exception {
-		// Set destination to right get i.e. IT-32-TN_IT. Resolve id by name via api
 		String recipientName = config.getRegionConfiguration().getRegion().getId() + "_" + language.toUpperCase();
 		HttpResponse resp = getRecipientsList(config, null);
 		RapidMailRecipientListResponse recipientListResponse = objectMapper.readValue(getResponseContent(resp),
