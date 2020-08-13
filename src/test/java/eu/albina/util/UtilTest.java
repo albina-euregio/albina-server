@@ -226,7 +226,7 @@ public class UtilTest {
 		String filename = "2030-02-16";
 		int count = 5;
 		List<AvalancheBulletin> list = loadBulletins(filename, count);
-		PdfUtil.getInstance().createEuregioPdfs(list, "2030-02-16", "2030-02-16_00-00-00");
+		PdfUtil.getInstance().createRegionPdfs(list, GlobalVariables.codeEuregio, "2030-02-16", "2030-02-16_00-00-00");
 	}
 
 	@Ignore
