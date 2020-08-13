@@ -685,41 +685,104 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public boolean affectsRegion(String region) {
-		if (getSuggestedRegions() != null)
-			for (String entry : getSuggestedRegions())
-				if (entry.startsWith(region))
-					return true;
-		if (getSavedRegions() != null)
-			for (String entry : getSavedRegions())
-				if (entry.startsWith(region))
-					return true;
-		if (getPublishedRegions() != null)
-			for (String entry : getPublishedRegions())
-				if (entry.startsWith(region))
-					return true;
-
+		if (getSuggestedRegions() != null) {
+			for (String entry : getSuggestedRegions()) {
+				if (region.equals(GlobalVariables.codeEuregio)) {
+					for (String reg : GlobalVariables.regionsEuregio) {
+						if (entry.startsWith(reg)) {
+							return true;
+						}
+					}
+				} else {
+					if (entry.startsWith(region)) {
+						return true;
+					}
+				}
+			}
+		}
+		if (getSavedRegions() != null) {
+			for (String entry : getSavedRegions()) {
+				if (region.equals(GlobalVariables.codeEuregio)) {
+					for (String reg : GlobalVariables.regionsEuregio) {
+						if (entry.startsWith(reg)) {
+							return true;
+						}
+					}
+				} else {
+					if (entry.startsWith(region)) {
+						return true;
+					}
+				}
+			}
+		}
+		if (getPublishedRegions() != null) {
+			for (String entry : getPublishedRegions()) {
+				if (region.equals(GlobalVariables.codeEuregio)) {
+					for (String reg : GlobalVariables.regionsEuregio) {
+						if (entry.startsWith(reg)) {
+							return true;
+						}
+					}
+				} else {
+					if (entry.startsWith(region)) {
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
 	public boolean affectsRegionWithoutSuggestions(String region) {
-		if (getSavedRegions() != null)
-			for (String entry : getSavedRegions())
-				if (entry.startsWith(region))
-					return true;
-		if (getPublishedRegions() != null)
-			for (String entry : getPublishedRegions())
-				if (entry.startsWith(region))
-					return true;
-
+		if (getSavedRegions() != null) {
+			for (String entry : getSavedRegions()) {
+				if (region.equals(GlobalVariables.codeEuregio)) {
+					for (String reg : GlobalVariables.regionsEuregio) {
+						if (entry.startsWith(reg)) {
+							return true;
+						}
+					}
+				} else {
+					if (entry.startsWith(region)) {
+						return true;
+					}
+				}
+			}
+		}
+		if (getPublishedRegions() != null) {
+			for (String entry : getPublishedRegions()) {
+				if (region.equals(GlobalVariables.codeEuregio)) {
+					for (String reg : GlobalVariables.regionsEuregio) {
+						if (entry.startsWith(reg)) {
+							return true;
+						}
+					}
+				} else {
+					if (entry.startsWith(region)) {
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
 	public boolean affectsRegionOnlyPublished(String region) {
-		if (getPublishedRegions() != null)
-			for (String entry : getPublishedRegions())
-				if (entry.startsWith(region))
-					return true;
-
+		if (getPublishedRegions() != null) {
+			for (String entry : getPublishedRegions()) {
+				if (region.equals(GlobalVariables.codeEuregio)) {
+					for (String reg : GlobalVariables.regionsEuregio) {
+						if (entry.startsWith(reg)) {
+							return true;
+						}
+					}
+				} else {
+					if (entry.startsWith(region)) {
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 

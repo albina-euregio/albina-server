@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.joda.time.DateTime;
@@ -47,13 +46,13 @@ public class MessengerPeopleUtil {
 	}
 
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+		DateTime date = AlbinaUtil.getDate(bulletins);
+		String validityDate = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
+
 		for (LanguageCode lang : GlobalVariables.languages) {
 			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
-
-			DateTime date = AlbinaUtil.getDate(bulletins);
 			String message = GlobalVariables.getSocialMediaText(date, update, messages);
-			String validityDate = AlbinaUtil.getValidityDateString(bulletins);
-			String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions, messages);
 		}
 	}

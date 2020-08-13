@@ -118,15 +118,6 @@ public class SimpleHtmlUtil {
 		return instance;
 	}
 
-	public boolean createOverviewSimpleHtml(List<AvalancheBulletin> bulletins) {
-		boolean result = true;
-		for (LanguageCode lang : GlobalVariables.languages) {
-			if (!createSimpleHtml(bulletins, lang, ""))
-				result = false;
-		}
-		return result;
-	}
-
 	public boolean createRegionSimpleHtml(List<AvalancheBulletin> bulletins, String region) {
 		boolean result = true;
 		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
@@ -137,8 +128,6 @@ public class SimpleHtmlUtil {
 
 		if (!regionBulletins.isEmpty())
 			for (LanguageCode lang : GlobalVariables.languages) {
-				if (!createSimpleHtml(regionBulletins, lang, region))
-					result = false;
 				if (!createSimpleHtml(regionBulletins, lang, region))
 					result = false;
 			}
@@ -153,10 +142,10 @@ public class SimpleHtmlUtil {
 				String filename;
 				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 
-				if (region != null && !region.isEmpty())
-					filename = region + "_" + lang.toString() + ".html";
-				else
+				if (region.equals(GlobalVariables.codeEuregio))
 					filename = lang.toString() + ".html";
+				else
+					filename = region + "_" + lang.toString() + ".html";
 
 				String dirPath = GlobalVariables.getHtmlDirectory() + "/" + validityDateString;
 				new File(dirPath).mkdirs();

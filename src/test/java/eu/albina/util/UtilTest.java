@@ -226,7 +226,7 @@ public class UtilTest {
 		String filename = "2030-02-16";
 		int count = 5;
 		List<AvalancheBulletin> list = loadBulletins(filename, count);
-		PdfUtil.getInstance().createOverviewPdfs(list, "2030-02-16", "2030-02-16_00-00-00");
+		PdfUtil.getInstance().createEuregioPdfs(list, "2030-02-16", "2030-02-16_00-00-00");
 	}
 
 	@Ignore

@@ -22,7 +22,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -106,33 +105,6 @@ public class PdfUtil {
 		return instance;
 	}
 
-	/**
-	 * Create a PDF containing all the information for the EUREGIO.
-	 *
-	 * @param bulletins
-	 *            The bulletins to create the PDF of.
-	 * @param publicationTimeString
-	 *            the time of publication
-	 * @param validityDateString
-	 *            the start of the validity of the report
-	 */
-	public boolean createOverviewPdfs(List<AvalancheBulletin> bulletins, String validityDateString,
-			String publicationTimeString) {
-		boolean result = true;
-		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
-		for (LanguageCode lang : GlobalVariables.languages) {
-			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
-
-			if (!createPdf(bulletins, lang, null, false, daytimeDependency, validityDateString, publicationTimeString,
-					messages))
-				result = false;
-			if (!createPdf(bulletins, lang, null, true, daytimeDependency, validityDateString, publicationTimeString,
-					messages))
-				result = false;
-		}
-		return result;
-	}
-
 	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
 			boolean daytimeDependency, String validityDateString, String publicationTimeString,
 			ResourceBundle messages) {
@@ -143,19 +115,7 @@ public class PdfUtil {
 			String filename;
 
 			// TODO use correct region string
-			if (region != null) {
-				if (grayscale) {
-					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
-							+ lang.toString() + "_bw.pdf";
-				} else {
-					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
-							+ lang.toString() + ".pdf";
-				}
-			} else {
+			if (region.equals(GlobalVariables.codeEuregio)) {
 				if (grayscale) {
 					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
 							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
@@ -166,6 +126,18 @@ public class PdfUtil {
 							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
 							+ ".pdf";
+				}
+			} else {
+				if (grayscale) {
+					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
+							+ lang.toString() + "_bw.pdf";
+				} else {
+					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
+							+ lang.toString() + ".pdf";
 				}
 			}
 
@@ -1081,14 +1053,14 @@ public class PdfUtil {
 
 		// Add overview maps
 		if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-			if (region != null) {
-				mapY = 130;
-				mapWidth = 400;
-				mapHeight = mapWidth / 3 * 2;
-			} else {
+			if (region.equals(GlobalVariables.codeEuregio)) {
 				mapY = 130;
 				mapWidth = 270;
 				mapHeight = mapWidth;
+			} else {
+				mapY = 130;
+				mapWidth = 400;
+				mapHeight = mapWidth / 3 * 2;
 			}
 
 			ImageData overviewMapAMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath()
@@ -1120,14 +1092,14 @@ public class PdfUtil {
 					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
-			if (region != null) {
-				mapY = 290;
-				overviewMapImg.scaleToFit(500, 500);
-				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 250, mapY);
-			} else {
+			if (region.equals(GlobalVariables.codeEuregio)) {
 				mapY = 250;
 				overviewMapImg.scaleToFit(420, 500);
 				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 210, mapY);
+			} else {
+				mapY = 290;
+				overviewMapImg.scaleToFit(500, 500);
+				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 250, mapY);
 			}
 			canvas.add(overviewMapImg);
 		}

@@ -136,6 +136,7 @@ public class GlobalVariables {
 	public final static String codeTrentino = "IT-32-TN";
 	public final static String codeSouthTyrol = "IT-32-BZ";
 	public final static String codeTyrol = "AT-07";
+	public final static String codeEuregio = "EUREGIO";
 	public final static String codeAran = "ES-CT-L";
 
 	public static String propertiesFilePath = "META-INF/config.properties";
@@ -154,6 +155,7 @@ public class GlobalVariables {
 			add(codeTyrol);
 			add(codeSouthTyrol);
 			add(codeTrentino);
+			add(codeEuregio);
 			add(codeAran);
 		}
 	};
@@ -833,7 +835,6 @@ public class GlobalVariables {
 		sb.append("_");
 		sb.append(region);
 		sb.append("_");
-		// TODO test if this works
 		sb.append(lang.toString());
 		sb.append(".pdf");
 		return sb.toString();

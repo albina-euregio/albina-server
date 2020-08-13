@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import eu.albina.controller.AvalancheReportController;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
@@ -20,6 +19,7 @@ import com.google.common.io.Resources;
 
 import eu.albina.caaml.CaamlValidator;
 import eu.albina.caaml.CaamlVersion;
+import eu.albina.controller.AvalancheReportController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -68,9 +68,10 @@ public class XmlUtilTest {
 	@Test
 	public void createOldCaamlFiles() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		for (LocalDate date = new LocalDate("2019-11-16"); date.isBefore(new LocalDate("2020-05-04")); date = date.plusDays(1)) {
-			List<AvalancheBulletin> result = AvalancheReportController.getInstance()
-				.getPublishedBulletins(date.toDateTimeAtStartOfDay().withZone(DateTimeZone.UTC), GlobalVariables.regions);
+		for (LocalDate date = new LocalDate("2019-11-16"); date
+				.isBefore(new LocalDate("2020-05-04")); date = date.plusDays(1)) {
+			List<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(
+					date.toDateTimeAtStartOfDay().withZone(DateTimeZone.UTC), GlobalVariables.regionsEuregio);
 			for (LanguageCode language : GlobalVariables.languages) {
 				Path path = Paths.get("/tmp/albina_files" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
 				Document caamlDoc = XmlUtil.createCaaml(result, language, CaamlVersion.V6);
