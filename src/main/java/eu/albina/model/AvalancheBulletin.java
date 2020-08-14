@@ -852,8 +852,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (id != null && id != "")
 			json.put("id", id);
 
-		// TODO do not add user image to JSON, use user.toSmallJSON()?
-
 		if (user != null && user.getName() != null && user.getName() != "")
 			json.put("author", user.toSmallJSON());
 
