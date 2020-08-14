@@ -114,7 +114,6 @@ public class PdfUtil {
 		try {
 			String filename;
 
-			// TODO use correct region string
 			if (region.equals(GlobalVariables.codeEuregio)) {
 				if (grayscale) {
 					filename = GlobalVariables.getPdfDirectory() + System.getProperty("file.separator")

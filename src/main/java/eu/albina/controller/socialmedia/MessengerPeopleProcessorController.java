@@ -93,7 +93,6 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 		return users;
 	}
 
-	// TODO update to API v12
 	public void setUserDetails(MessengerPeopleConfig config, String id, MessengerPeopleUserData messengerPeopleUserData)
 			throws IOException {
 		String json = URLEncoder.encode(objectMapper.writeValueAsString(messengerPeopleUserData),
