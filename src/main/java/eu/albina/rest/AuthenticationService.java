@@ -30,9 +30,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.openjson.JSONObject;
 
 import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
@@ -137,9 +138,7 @@ public class AuthenticationService {
 					dataJson.get("newPassword").toString());
 
 			JSONObject jsonObject = new JSONObject();
-			// TODO return some meaningful path
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
+			return Response.ok().type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error changing password", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
