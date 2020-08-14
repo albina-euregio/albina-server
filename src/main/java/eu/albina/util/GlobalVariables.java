@@ -175,7 +175,6 @@ public class GlobalVariables {
 	};
 
 	// LANG
-	// TODO check if publication works even if lang was not found
 	public static List<LanguageCode> languages = new ArrayList<LanguageCode>() {
 		/**
 		 *
