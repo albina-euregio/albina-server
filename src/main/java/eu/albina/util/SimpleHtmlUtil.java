@@ -195,7 +195,7 @@ public class SimpleHtmlUtil {
 		text.put("standardView", messages.getString("avalanche-report.standard.link.text"));
 		text.put("tabtitle",
 				messages.getString("avalanche-report.name") + " " + AlbinaUtil.getDate(bulletins, messages));
-		text.put("title", messages.getString("title"));
+		text.put("title", messages.getString("avalanche-report.name"));
 		text.put("subtitle", AlbinaUtil.getDate(bulletins, messages));
 		String publicationDate = AlbinaUtil.getPublicationDate(bulletins, messages);
 		text.put("publicationDate", publicationDate);
