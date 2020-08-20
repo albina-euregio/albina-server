@@ -351,9 +351,10 @@ public class XmlUtil {
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		StreamResult result = new StreamResult(new StringWriter());
+		final StringWriter stringWriter = new StringWriter();
+		StreamResult result = new StreamResult(stringWriter);
 		DOMSource source = new DOMSource(doc);
 		transformer.transform(source, result);
-		return result.getWriter().toString();
+		return stringWriter.toString();
 	}
 }

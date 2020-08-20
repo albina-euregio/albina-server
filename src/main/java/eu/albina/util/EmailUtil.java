@@ -134,25 +134,26 @@ public class EmailUtil {
 	}
 
 	private String createZipFile(String htmlContent, String textContent) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ZipOutputStream out = new ZipOutputStream(baos);
-		if (htmlContent != null) {
-			ZipEntry e = new ZipEntry("content.html");
-			out.putNextEntry(e);
-			byte[] data = htmlContent.getBytes(StandardCharsets.UTF_8);
-			out.write(data, 0, data.length);
-			out.closeEntry();
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			 ZipOutputStream out = new ZipOutputStream(baos)) {
+			if (htmlContent != null) {
+				ZipEntry e = new ZipEntry("content.html");
+				out.putNextEntry(e);
+				byte[] data = htmlContent.getBytes(StandardCharsets.UTF_8);
+				out.write(data, 0, data.length);
+				out.closeEntry();
+			}
+			if (textContent != null) {
+				ZipEntry e = new ZipEntry("content.txt");
+				out.putNextEntry(e);
+				byte[] data = textContent.getBytes(StandardCharsets.UTF_8);
+				out.write(data, 0, data.length);
+				out.closeEntry();
+			}
+			out.close();
+			byte[] zipData = baos.toByteArray();
+			return Base64.encodeBase64String(zipData);
 		}
-		if (textContent != null) {
-			ZipEntry e = new ZipEntry("content.txt");
-			out.putNextEntry(e);
-			byte[] data = textContent.getBytes(StandardCharsets.UTF_8);
-			out.write(data, 0, data.length);
-			out.closeEntry();
-		}
-		out.close();
-		byte[] zipData = baos.toByteArray();
-		return Base64.encodeBase64String(zipData);
 	}
 
 	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject,
