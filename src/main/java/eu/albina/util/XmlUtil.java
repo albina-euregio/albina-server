@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
@@ -83,19 +84,15 @@ public class XmlUtil {
 			logger.warn("File permissions could not be set!");
 		}
 
-		BufferedWriter writer;
-		String fileName;
-
 		for (LanguageCode lang : GlobalVariables.languages) {
 			Document doc = createCaaml(bulletins, lang, version);
 			String caamlString = XmlUtil.convertDocToString(doc);
+			String fileName;
 			if (version == CaamlVersion.V5)
 				fileName = dirPath + "/" + validityDateString + "_" + lang.toString() + ".xml";
 			else
 				fileName = dirPath + "/" + validityDateString + "_" + lang.toString() + "_CAAMLv6.xml";
-			writer = new BufferedWriter(new FileWriter(fileName));
-			writer.write(caamlString);
-			writer.close();
+			Files.write(Paths.get(fileName), caamlString.getBytes(StandardCharsets.UTF_8));
 			AlbinaUtil.setFilePermissions(fileName);
 		}
 	}

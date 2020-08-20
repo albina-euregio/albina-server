@@ -16,9 +16,10 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -39,9 +40,6 @@ public class JsonUtil {
 			String publicationTimeString) throws TransformerException, IOException {
 		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
 
-		BufferedWriter writer;
-		String fileName;
-
 		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			if (avalancheBulletin.affectsRegionOnlyPublished(GlobalVariables.codeEuregio))
@@ -52,10 +50,8 @@ public class JsonUtil {
 			JSONArray jsonArray = JsonUtil.createJSONString(regionBulletins, "", true);
 			String jsonString = jsonArray.toString();
 
-			fileName = dirPath + "/avalanche_report.json";
-			writer = new BufferedWriter(new FileWriter(fileName));
-			writer.write(jsonString);
-			writer.close();
+			String fileName = dirPath + "/avalanche_report.json";
+			Files.write(Paths.get(fileName), jsonString.getBytes(StandardCharsets.UTF_8));
 			AlbinaUtil.setFilePermissions(fileName);
 		}
 	}
