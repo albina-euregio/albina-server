@@ -16,12 +16,10 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -45,7 +43,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.SubscriberController;
@@ -275,24 +272,12 @@ public class UtilTest {
 		JsonUtil.createJsonFile(bulletins, "2019-12-30", "2019-12-30_17-15-30");
 	}
 
-	private List<AvalancheBulletin> loadBulletins(String filename, int count) {
+	private List<AvalancheBulletin> loadBulletins(String filename, int count) throws IOException {
 		List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
 		for (int i = 1; i <= count; i++) {
 			bulletins = new ArrayList<AvalancheBulletin>();
-			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-			InputStream is = classloader.getResourceAsStream(filename + "_" + i + ".json");
-			StringBuilder bulletinStringBuilder = new StringBuilder();
-			try {
-				BufferedReader in = new BufferedReader(new InputStreamReader(is));
-				String line = null;
-				while ((line = in.readLine()) != null) {
-					bulletinStringBuilder.append(line);
-				}
-			} catch (Exception e) {
-				logger.warn("Error parsing bulletin!");
-			}
-			String validBulletinStringFromResource = bulletinStringBuilder.toString();
-			AvalancheBulletin bulletin = new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+			URL resource = Resources.getResource(filename + "_" + i + ".json");
+			AvalancheBulletin bulletin = AvalancheBulletin.readBulletin(resource);
 			result.add(bulletin);
 		}
 		return result;
