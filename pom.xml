@@ -5,8 +5,9 @@
 	<artifactId>albina</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ALBINA Maven Webapp</name>
-	<url>http://maven.apache.org</url>
+	<name>albina-server</name>
+	<description>Server for avalanche.report</description>
+	<url>https://gitlab.com/albina-euregio/albina-server</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

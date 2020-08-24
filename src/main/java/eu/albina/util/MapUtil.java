@@ -258,34 +258,26 @@ public class MapUtil {
 			} catch (IOException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus input file", ex);
 			}
-			for (Map map : Map.values()) {
-				mapTasks.add(() -> createMapyrusMaps(map, daytimeDependency, null, 0, false, drmFile));
-				mapTasks.add(() -> createMapyrusMaps(map, daytimeDependency, null, 0, true, drmFile));
-			}
-			for (int i = 0; i < bulletins.size(); i++) {
-				final AvalancheBulletin bulletin = bulletins.get(i);
-				if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
-					continue;
+			try {
+				for (Map map : Map.values()) {
+					createMapyrusMaps(map, daytimeDependency, null, 0, false, drmFile);
+					createMapyrusMaps(map, daytimeDependency, null, 0, true, drmFile);
 				}
-				final int index = i;
-				mapTasks.add(() -> createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), index,
-						false, drmFile));
-				mapTasks.add(() -> createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), index,
-						true, drmFile));
-			}
-			ForkJoinPool.commonPool().invokeAll(mapTasks).forEach(x -> {
-				try {
-					x.get();
-				} catch (ExecutionException ex) {
-					throw new AlbinaMapException("Failed to create mapyrus maps", ex);
-				} catch (InterruptedException ex) {
-					throw new RuntimeException(ex);
+				for (int i = 0; i < bulletins.size(); i++) {
+					final AvalancheBulletin bulletin = bulletins.get(i);
+					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
+						continue;
+					}
+					createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, false, drmFile);
+					createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, true, drmFile);
 				}
-			});
+			} catch (IOException | MapyrusException | InterruptedException ex) {
+				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
+			}
 		}
 	}
 
-	static Void createMapyrusMaps(Map map, DaytimeDependency daytimeDependency, String bulletinId, int bulletinIndex,
+	static void createMapyrusMaps(Map map, DaytimeDependency daytimeDependency, String bulletinId, int bulletinIndex,
 			boolean grayscale, Path dangerRatingMapFile) throws IOException, MapyrusException, InterruptedException {
 		final MapSize size = Map.overlay.equals(map) ? MapSize.overlay
 				: Map.fullmap_small.equals(map) ? MapSize.thumbnail_map : MapSize.standard_map;
@@ -349,7 +341,6 @@ public class MapUtil {
 		logger.info("Converting {} to {}}", outputFile, outputFileJpg);
 		new ProcessBuilder("gs", "-sDEVICE=jpeg", "-dJPEGQ=80", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4",
 				"-r" + dpi, "-o", outputFileJpg, outputFile.toString()).inheritIO().start().waitFor();
-		return null;
 	}
 
 	private static void deleteDirectoryWithContents(Path directory) throws IOException {

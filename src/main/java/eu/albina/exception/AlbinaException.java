@@ -77,10 +77,11 @@ public class AlbinaException extends Exception implements AvalancheInformationOb
 		Element rootElement = doc.createElement("message");
 		rootElement.appendChild(doc.createTextNode(this.getMessage()));
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		StreamResult result = new StreamResult(new StringWriter());
+		StringWriter stringWriter = new StringWriter();
+		StreamResult result = new StreamResult(stringWriter);
 		DOMSource source = new DOMSource(doc);
 		transformer.transform(source, result);
-		return result.getWriter().toString();
+		return stringWriter.toString();
 	}
 
 	/**
