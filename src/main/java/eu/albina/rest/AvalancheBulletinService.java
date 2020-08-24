@@ -887,14 +887,12 @@ public class AvalancheBulletinService {
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
-			Thread createMapsThread = PublicationController.getInstance().createMaps(bulletins, validityDateString,
-					publicationTimeString);
-			createMapsThread.start();
-
 			try {
-				createMapsThread.join();
+				PublicationController.getInstance().createMaps(bulletins, validityDateString, publicationTimeString);
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
+			} catch (Exception e1) {
+				logger.error("Error during map production", e1);
 			}
 
 			// copy files

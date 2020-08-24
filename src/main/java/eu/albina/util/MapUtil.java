@@ -36,8 +36,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -94,8 +92,10 @@ public class MapUtil {
 	 *
 	 * @param bulletins
 	 *            The bulletins to create the maps from.
+	 * @throws Exception
+	 *             an error occurred during map production
 	 */
-	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) {
+	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) throws Exception {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());

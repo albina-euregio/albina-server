@@ -105,12 +105,8 @@ public class PublicationController {
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
-			createMapsThread.start();
 			try {
-				createMapsThread.join();
-
-				// TODO: check if map production was successful
+				createMaps(bulletins, validityDateString, publicationTimeString);
 
 				Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -170,6 +166,8 @@ public class PublicationController {
 				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
+			} catch (Exception e1) {
+				logger.error("Error during map production", e1);
 			}
 		}
 	}
@@ -212,12 +210,8 @@ public class PublicationController {
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
-			createMapsThread.start();
 			try {
-				createMapsThread.join();
-
-				// TODO: check if map production was successful
+				createMaps(bulletins, validityDateString, publicationTimeString);
 
 				Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -275,6 +269,8 @@ public class PublicationController {
 				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
+			} catch (Exception e1) {
+				logger.error("Error during map production", e1);
 			}
 		}
 	}
@@ -301,12 +297,8 @@ public class PublicationController {
 
 		// create maps
 		if (GlobalVariables.isCreateMaps()) {
-			Thread createMapsThread = createMaps(bulletins, validityDateString, publicationTimeString);
-			createMapsThread.start();
 			try {
-				createMapsThread.join();
-
-				// TODO: check if map production was successful
+				createMaps(bulletins, validityDateString, publicationTimeString);
 
 				Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -347,6 +339,8 @@ public class PublicationController {
 
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
+			} catch (Exception e) {
+				logger.error("Error during map production", e);
 			}
 		}
 	}
@@ -479,27 +473,23 @@ public class PublicationController {
 	 * @param validityDateString
 	 *            the start of the validity of the report
 	 */
-	public Thread createMaps(List<AvalancheBulletin> bulletins, String validityDateString,
-			String publicationTimeString) {
-		return new Thread(new Runnable() {
-			public void run() {
-				logger.info("Map production started");
+	public void createMaps(List<AvalancheBulletin> bulletins, String validityDateString, String publicationTimeString)
+			throws Exception {
+		logger.info("Map production started");
 
-				// TODO map production only for EUREGIO
-				ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : bulletins) {
-					if (avalancheBulletin.affectsRegionOnlyPublished(GlobalVariables.codeEuregio))
-						regionBulletins.add(avalancheBulletin);
-				}
+		// map production only for EUREGIO
+		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			if (avalancheBulletin.affectsRegionOnlyPublished(GlobalVariables.codeEuregio))
+				regionBulletins.add(avalancheBulletin);
+		}
 
-				if (!regionBulletins.isEmpty()) {
-					MapUtil.createDangerRatingMaps(bulletins);
-					if (GlobalVariables.isMapProductionUrlUnivie())
-						AlbinaUtil.runCopyMapsUnivieScript(validityDateString, publicationTimeString);
-					logger.info("Map production finished");
-				}
-			}
-		});
+		if (!regionBulletins.isEmpty()) {
+			MapUtil.createDangerRatingMaps(bulletins);
+			if (GlobalVariables.isMapProductionUrlUnivie())
+				AlbinaUtil.runCopyMapsUnivieScript(validityDateString, publicationTimeString);
+			logger.info("Map production finished");
+		}
 	}
 
 	/**
