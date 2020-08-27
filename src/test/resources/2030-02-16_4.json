@@ -1,5 +1,4 @@
 {
-	"elevation": 2000,
 	"tendencyCommentTextcat": "86[6417,7750,7100,14258,3991,9413]",
 	"publishedRegions": [
 		"IT-32-BZ-11",
@@ -19,6 +18,8 @@
 	],
 	"tendency": "increasing",
 	"forenoon": {
+		"hasElevationDependency": true,
+		"elevation": 2000,
 		"dangerRatingBelow": "considerable",
 		"avalancheSituation2": {
 			"elevationLow": 2000,
@@ -51,7 +52,6 @@
 		"id": "e68d97a6-17b3-43c0-99ec-45d8dcc477df",
 		"dangerRatingAbove": "high"
 	},
-	"hasElevationDependency": true,
 	"avActivityHighlightsTextcat": "79[10300,6955[12913,14844,7358,3735]]",
 	"hasDaytimeDependency": false,
 	"avActivityCommentTextcat": "84[6748,10542,1590,10289,2945,9243].110[6144[10033,12054,10192],14928,8413[6754],7522,4186,5890,9413].13[9382[3741],11645[10214,5932[4170,3773]],9413].61[9516[12004],7703,9808,6621,11633,14841,7358,3736,9413].8[796,7855,14189,478,9413].72[3674,4259].92[2977[6242],3761,10399[3790],2798[7468,9568],12126[9570]].13[9367,11650[10215[9257,7593,825,12250],5932[4170,3773]],9413]",

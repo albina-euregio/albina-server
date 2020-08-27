@@ -546,13 +546,10 @@ public class PdfUtil {
 
 		Image regionImg;
 		if (grayscale)
-			regionImg = getImage("warning_pictos/grey/level_"
-					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
-					+ ".png");
+			regionImg = getImage("warning_pictos/grey/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		else
-			regionImg = getImage("warning_pictos/color/level_"
-					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
-					+ ".png");
+			regionImg = getImage(
+					"warning_pictos/color/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		if (regionImg != null) {
 			regionImg.scaleToFit(70, 30);
 			firstRow.add(regionImg);
@@ -571,18 +568,18 @@ public class PdfUtil {
 		cell.setBorder(Border.NO_BORDER);
 		cell.setHeight(height);
 		cell.setPaddingRight(10);
-		if (avalancheBulletin.isHasElevationDependency()) {
+		if (daytimeBulletin.isHasElevationDependency()) {
 			if (!(isAfternoon && avalancheBulletin.getAfternoon().getDangerRatingAbove()
 					.equals(avalancheBulletin.getAfternoon().getDangerRatingBelow()))
 					&& !(!isAfternoon && avalancheBulletin.getForenoon().getDangerRatingAbove()
 							.equals(avalancheBulletin.getForenoon().getDangerRatingBelow()))) {
-				if (avalancheBulletin.getTreeline()) {
+				if (daytimeBulletin.getTreeline()) {
 					Paragraph paragraph = new Paragraph(messages.getString("elevation.treeline.capitalized"))
 							.setFontColor(blackColor).setFontSize(8).setFont(openSansBoldFont);
 					paragraph.setRelativePosition(-2, 2, 0, 0);
 					cell.add(paragraph);
-				} else if (avalancheBulletin.getElevation() > 0) {
-					Paragraph paragraph = new Paragraph(avalancheBulletin.getElevation() + "m").setFontColor(blackColor)
+				} else if (daytimeBulletin.getElevation() > 0) {
+					Paragraph paragraph = new Paragraph(daytimeBulletin.getElevation() + "m").setFontColor(blackColor)
 							.setFontSize(8).setFont(openSansBoldFont);
 					paragraph.setRelativePosition(-2, 2, 0, 0);
 					cell.add(paragraph);

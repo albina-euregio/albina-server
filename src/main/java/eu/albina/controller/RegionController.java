@@ -26,8 +26,6 @@ import javax.persistence.EntityTransaction;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -44,7 +42,8 @@ import eu.albina.util.HibernateUtil;
  */
 public class RegionController {
 
-	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
+	// private static Logger logger =
+	// LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
 	private List<RegionLock> regionLocks;

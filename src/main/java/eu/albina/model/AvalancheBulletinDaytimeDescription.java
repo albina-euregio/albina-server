@@ -54,9 +54,18 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@PrimaryKeyJoinColumn
 	private AvalancheBulletin avalancheBulletin;
 
+	@Column(name = "HAS_ELEVATION_DEPENDENCY")
+	private boolean hasElevationDependency;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_RATING_ABOVE")
 	private DangerRating dangerRatingAbove;
+
+	@Column(name = "ELEVATION")
+	private int elevation;
+
+	@Column(name = "TREELINE")
+	private boolean treeline;
 
 	/** Information about the selected field in the EAWS matrix */
 	@Embedded
@@ -138,6 +147,12 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 		if (json.has("id"))
 			this.id = json.getString("id");
+		if (json.has("hasElevationDependency"))
+			this.hasElevationDependency = json.getBoolean("hasElevationDependency");
+		if (json.has("elevation"))
+			this.elevation = json.getInt("elevation");
+		if (json.has("treeline"))
+			this.treeline = json.getBoolean("treeline");
 		if (json.has("dangerRatingAbove"))
 			this.dangerRatingAbove = DangerRating.valueOf(json.getString("dangerRatingAbove").toLowerCase());
 		if (json.has("matrixInformationAbove"))
@@ -173,6 +188,30 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		if (json.has("avalancheSituation5"))
 			this.avalancheSituation5 = new eu.albina.model.AvalancheSituation(
 					json.getJSONObject("avalancheSituation5"));
+	}
+
+	public boolean isHasElevationDependency() {
+		return hasElevationDependency;
+	}
+
+	public void setHasElevationDependency(boolean hasElevationDependency) {
+		this.hasElevationDependency = hasElevationDependency;
+	}
+
+	public int getElevation() {
+		return elevation;
+	}
+
+	public void setElevation(int elevation) {
+		this.elevation = elevation;
+	}
+
+	public boolean getTreeline() {
+		return treeline;
+	}
+
+	public void setTreeline(boolean treeline) {
+		this.treeline = treeline;
 	}
 
 	public DangerRating getDangerRatingAbove() {
@@ -321,6 +360,14 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		JSONObject json = new JSONObject();
 		if (id != null)
 			json.put("id", id);
+		json.put("hasElevationDependency", hasElevationDependency);
+		if (hasElevationDependency) {
+			if (treeline) {
+				json.put("treeline", treeline);
+			} else {
+				json.put("elevation", elevation);
+			}
+		}
 		if (dangerRatingAbove != null)
 			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
 		if (matrixInformationAbove != null)
@@ -366,6 +413,14 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		JSONObject json = new JSONObject();
 		if (id != null)
 			json.put("id", id);
+		json.put("hasElevationDependency", hasElevationDependency);
+		if (hasElevationDependency) {
+			if (treeline) {
+				json.put("treeline", treeline);
+			} else {
+				json.put("elevation", elevation);
+			}
+		}
 		if (dangerRatingAbove != null)
 			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
 		if (terrainFeatureAboveTextcat != null && terrainFeatureAboveTextcat != "")
@@ -415,6 +470,12 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 		// TODO textcat ids will be different for italian and german
 
+		if (this.hasElevationDependency != other.hasElevationDependency)
+			return false;
+		if (this.elevation != other.elevation)
+			return false;
+		if (this.treeline != other.treeline)
+			return false;
 		if ((this.dangerRatingAbove == null) ? (other.dangerRatingAbove != null)
 				: !this.dangerRatingAbove.equals(other.dangerRatingAbove))
 			return false;

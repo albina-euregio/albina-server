@@ -12,6 +12,7 @@
 	],
 	"tendency": "steady",
 	"forenoon": {
+		"hasElevationDependency": false,
 		"avalancheSituation2": {},
 		"avalancheSituation1": {
 			"avalancheSituation": "favourable_situation"
@@ -19,7 +20,6 @@
 		"id": "2a174a7a-19a0-4028-b1c8-742f029454f3",
 		"dangerRatingAbove": "low"
 	},
-	"hasElevationDependency": false,
 	"avActivityHighlightsTextcat": "35[7038,12104,3702,11244,6504]",
 	"hasDaytimeDependency": false,
 	"avActivityCommentTextcat": "35[7038,12104,3702,11244,6504].56[1375,6564,9345,6191,6952].102[6661,7016,7595,7404,9751,10547,9413].56[1384,6556,9334,6191,6941]",

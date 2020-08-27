@@ -21,6 +21,7 @@
 		],
 		"tendency": "decreasing",
 		"forenoon": {
+			"hasElevationDependency": false,
 			"avalancheSituation2": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "n", "e"],
 				"elevationHigh": 2400,
@@ -40,7 +41,6 @@
 			{"languageCode": "en"},
 			{"languageCode": "fr"}
 		],
-		"hasElevationDependency": false,
 		"avActivityHighlightsTextcat": "16[1438,7752[10213,5929],9413].119[11874,6674,6210[6984]]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "15[6226,4164,5890,871,7225[10213,5930[3794],10179,3907],9413].102[6658,7010,7595,7404,9731[14871],10547,9413].62[503,9182,1406,10109].73[14893,7130,2168,3645,6537,11879,6914,606].30[680[12003,14871],3875,10400[3796],11555,14841,10447,11892].102[6657,6998,7595,7404,9728,10547,9413].36[5914].36[5915].46[7050,9834,9413]",
@@ -112,11 +112,12 @@
 		"publicationDate": "2019-01-16T16:00:00Z"
 	},
 	{
-		"elevation": 1600,
 		"tendencyCommentTextcat": "86[6412,7750,7100,14258,3990,9413]",
 		"regions": ["AT-07-27", "AT-07-28", "AT-07-25"],
 		"tendency": "decreasing",
 		"forenoon": {
+			"hasElevationDependency": true,
+			"elevation": 1600,
 			"dangerRatingBelow": "moderate",
 			"avalancheSituation2": {
 				"elevationLow": 1600,
@@ -137,7 +138,6 @@
 			{"languageCode": "it"},
 			{"languageCode": "en"}
 		],
-		"hasElevationDependency": true,
 		"avActivityHighlightsTextcat": "7[6437[12317,6797],9413]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "15[6226,4141,5890,882[5861],7233[10213,5932[4170,3774],2966],9413].56[1391[9201],6552,9341,6191,6941].40[4094,1496,9820,12341,12948[12005,14871,7587,3726,816,10398],6086[10398],9413].25[10395[2772,14930,12928],6163,5859,9430[6940],9413].103[7496,6769,9413].38[11947,9893,10086,12285[12006],11207].60[6577,9305].39[14195,3612,1480,13001[10181]].48[12068]",
@@ -200,7 +200,6 @@
 		"publicationDate": "2019-01-16T16:00:00Z"
 	},
 	{
-		"elevation": 2200,
 		"tendencyCommentTextcat": "86[6412,7750,7100,14258,3990,9413]",
 		"regions": [
 			"AT-07-15",
@@ -215,6 +214,8 @@
 		],
 		"tendency": "decreasing",
 		"forenoon": {
+			"hasElevationDependency": true,
+			"elevation": 2200,
 			"dangerRatingBelow": "moderate",
 			"avalancheSituation2": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "n", "e"],
@@ -235,7 +236,6 @@
 			{"languageCode": "it"},
 			{"languageCode": "fr"}
 		],
-		"hasElevationDependency": true,
 		"avActivityHighlightsTextcat": "16[1438,7752[10213,5929],9413]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "15[6226,4164,5890,871,7225[10213,5930[3794],10179,3907],9413].102[6658,7010,7595,7404,9731[14871],10547,9413].62[503,9182,1406,10109].73[14893,7130,2168,3645,6537,11879,6914,606].30[680[12003,14871],3875,10400[3796],11558,14840,10447,11892].102[6657,6998,7595,7404,9728,10547,9413].36[5914].36[5915].46[7050,9834,9413]",
@@ -307,7 +307,6 @@
 		"publicationDate": "2019-01-16T16:00:00Z"
 	},
 	{
-		"elevation": 2500,
 		"tendencyCommentTextcat": "127[19190,24567]",
 		"regions": [
 			"IT-32-TN-02",
@@ -323,6 +322,8 @@
 		],
 		"tendency": "steady",
 		"forenoon": {
+			"hasElevationDependency": true,
+			"elevation": 2500,
 			"dangerRatingBelow": "low",
 			"avalancheSituation2": {
 				"elevationLow": 2000,
@@ -343,7 +344,6 @@
 			{"languageCode": "fr"},
 			{"languageCode": "de"}
 		],
-		"hasElevationDependency": true,
 		"avActivityHighlightsTextcat": "131[21507[16541,27706,16540],24567]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "138[25662,15818[20905],26919[25486,20973],24567].197[30305[27352],17133,22257,17132,22029,18621,21621,27224,15542].139[21303,19133,20934,19132,15818[20905],22354[25487,20974[18774],18894],24567].164[19081,16437,25015,27704,28337[27351,25671],21148[25353,18969,25671],24567].163[29579,18588,16425,28372[25434]].165[22434[27352,30130,28805,23017],19858[18780],25329,29497,21442]",
@@ -405,6 +405,8 @@
 		"regions": ["IT-32-BZ-14"],
 		"tendency": "steady",
 		"forenoon": {
+			"hasElevationDependency": true,
+			"treeline": true,
 			"dangerRatingBelow": "low",
 			"avalancheSituation2": {"treelineLow": true},
 			"avalancheSituation1": {
@@ -421,7 +423,6 @@
 			{"languageCode": "de"},
 			{"languageCode": "en"}
 		],
-		"hasElevationDependency": true,
 		"avActivityHighlightsTextcat": "139[21303,19139,20934,19138,15807,22342,24567]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "18[7645,11099,6519,6919[5861],6479,11613].57[7702[3932],4140,11697,12188,7105].40[4094,1496,9820,12341,12947[12004,14871,10398],6072[6573,3773],9413].39[14199,3612,1481,12997[10182]].45[4817,2954,9329,8450,5880,9413]",
@@ -482,7 +483,6 @@
 				"languageCode": "en"
 			}
 		],
-		"treeline": true,
 		"id": "2683b4d4-a4d3-48e0-ac4b-1e8a04676925",
 		"validity": {"from": "2019-01-16T23:00:00Z", "until": "2019-01-17T23:00:00Z"},
 		"snowpackStructureCommentTextcat": "12[6490,10092,8417,12938].22[5933,3740,5928,6439,1541,6420].11[10387,3976,6031,9538]",
@@ -505,6 +505,7 @@
 		],
 		"tendency": "steady",
 		"forenoon": {
+			"hasElevationDependency": false,
 			"avalancheSituation2": {},
 			"avalancheSituation1": {
 				"elevationLow": 2200,
@@ -520,7 +521,6 @@
 			{"languageCode": "it"},
 			{"languageCode": "en"}
 		],
-		"hasElevationDependency": false,
 		"avActivityHighlightsTextcat": "230[22970,17144,28382,29658,14938[22714,15754],24567]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "139[21303,19133,20934,19132,15807,22365[25490[24411,22624],20973],24567].144[16387[21891],17948,25309[27354,18968,17996],24567].163[29576,18588,16426,28371[25435]].186[15438,24329,16339,25364[28320,22094,22030]].175[19069[28251]]",
@@ -591,6 +591,7 @@
 		"regions": ["IT-32-BZ-16", "IT-32-BZ-17"],
 		"tendency": "steady",
 		"forenoon": {
+			"hasElevationDependency": false,
 			"avalancheSituation2": {},
 			"avalancheSituation1": {
 				"elevationLow": 2200,
@@ -606,7 +607,6 @@
 			{"languageCode": "en"},
 			{"languageCode": "de"}
 		],
-		"hasElevationDependency": false,
 		"avActivityHighlightsTextcat": "16[1428,7751,9413]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "20[1428,2972,10065[12006,3981,3020],9413].39[14196,3612,1485,12996[10183]].62[502,9182,1403,10111[12946,6497,9452]].51[4082[12888]]",
@@ -687,6 +687,8 @@
 		],
 		"tendency": "steady",
 		"forenoon": {
+			"hasElevationDependency": true,
+			"treeline": true,
 			"dangerRatingBelow": "moderate",
 			"avalancheSituation2": {
 				"aspects": ["w", "nw", "ne", "n", "e"],
@@ -706,7 +708,6 @@
 			{"languageCode": "it"},
 			{"languageCode": "fr"}
 		],
-		"hasElevationDependency": true,
 		"avActivityHighlightsTextcat": "134[23566,27708,24748[26478,27571],24567]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "15[6226,4149,5890,884,7246[10213,5929],9413].15[6226,4148,5890,871,7222[10213,5929],9413].24[6872,3911,6841].30[680[12003,14871],3875,10400[3796],11558,14839,10447,11892]",
@@ -767,18 +768,18 @@
 				"languageCode": "en"
 			}
 		],
-		"treeline": true,
 		"id": "0d9c6af5-53cc-4c80-8901-065a3f5b3195",
 		"validity": {"from": "2019-01-16T23:00:00Z", "until": "2019-01-17T23:00:00Z"},
 		"snowpackStructureCommentTextcat": "16[1438,7780[10214,5929],9413].22[5937,3740,5928,6444,1540,6420].21[6727,3737,5890,11097,6127,5998,7566].63[11247,886,11402,6154,6352]",
 		"publicationDate": "2019-01-16T16:00:00Z"
 	},
 	{
-		"elevation": 2000,
 		"tendencyCommentTextcat": "86[6415,7750,7100,14258,3990,9413]",
 		"regions": ["AT-07-29"],
 		"tendency": "decreasing",
 		"forenoon": {
+			"hasElevationDependency": true,
+			"elevation": 2000,
 			"dangerRatingBelow": "low",
 			"avalancheSituation2": {},
 			"avalancheSituation1": {
@@ -795,7 +796,6 @@
 			{"languageCode": "en"},
 			{"languageCode": "de"}
 		],
-		"hasElevationDependency": true,
 		"avActivityHighlightsTextcat": "7[6430[12344,1585],9413]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "17[1429,11942,10172[9189,7090],9605[9391],9413].40[4094,1496,9820,12341,12961[12004,10399[3796]],6068,9413].39[14198,3612,1486,12996[10183]]",
@@ -857,11 +857,12 @@
 		"publicationDate": "2019-01-16T16:00:00Z"
 	},
 	{
-		"elevation": 2000,
 		"tendencyCommentTextcat": "127[19190,24567]",
 		"regions": ["IT-32-BZ-18", "IT-32-BZ-19", "IT-32-BZ-08", "IT-32-BZ-20", "IT-32-BZ-15"],
 		"tendency": "steady",
 		"forenoon": {
+			"hasElevationDependency": true,
+			"elevation": 2000,
 			"dangerRatingBelow": "low",
 			"avalancheSituation2": {},
 			"avalancheSituation1": {
@@ -878,7 +879,6 @@
 			{"languageCode": "en"},
 			{"languageCode": "de"}
 		],
-		"hasElevationDependency": true,
 		"avActivityHighlightsTextcat": "7[6434[12336],9413]",
 		"hasDaytimeDependency": false,
 		"avActivityCommentTextcat": "112[1506[12004,14184],14929,4182,5890,9413].56[1391[9201],6552,9340,6191,6941].82[6335,5,10138,14927]",

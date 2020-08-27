@@ -129,7 +129,7 @@ public class MapUtil {
 					final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin,
 							daytimeDependency);
 					return String.join(";", Integer.toString(index), bulletin.getId(), region,
-							bulletin.getValidityDateString(), "", Integer.toString(bulletin.getElevation()),
+							bulletin.getValidityDateString(), "", Integer.toString(description.getElevation()),
 							getDangerRatingString(bulletin, description, true),
 							getDangerRatingString(bulletin, description, false), "0", "0", "0", "0");
 				})).collect(Collectors.joining("\n"));
@@ -144,8 +144,9 @@ public class MapUtil {
 
 	private static String getDangerRatingString(AvalancheBulletin bulletin,
 			AvalancheBulletinDaytimeDescription description, boolean above) {
-		return DangerRating.getString(bulletin.isHasElevationDependency() && !above ? description.getDangerRatingBelow()
-				: description.getDangerRatingAbove());
+		return DangerRating
+				.getString(description.isHasElevationDependency() && !above ? description.getDangerRatingBelow()
+						: description.getDangerRatingAbove());
 	}
 
 	enum Map {
@@ -365,7 +366,7 @@ public class MapUtil {
 					daytimeDependency);
 			feature.properties.put("bid", bulletin.getId());
 			feature.properties.put("daytime", daytimeDependency.name());
-			feature.properties.put("elevation", bulletin.getElevation());
+			feature.properties.put("elevation", description.getElevation());
 			feature.properties.put("dl_hi", getDangerRatingString(bulletin, description, true));
 			feature.properties.put("dl_lo", getDangerRatingString(bulletin, description, false));
 			feature.properties.put("problem_1", getAvalancheSituationString(description.getAvalancheSituation1()));

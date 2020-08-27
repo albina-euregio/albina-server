@@ -46,6 +46,7 @@ public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
+	/*---- Defined in configuration file -----*/
 	private static boolean createMaps = false;
 	private static boolean createPdf = false;
 	private static boolean createStaticWidget = false;
@@ -55,20 +56,18 @@ public class GlobalVariables {
 	private static boolean publishToTelegramChannel = false;
 	private static boolean publishAt5PM = false;
 	private static boolean publishAt8AM = false;
-
 	private static String localImagesPath = "images/";
 	private static String localFontsPath = "./src/main/resources/fonts/";
-
 	// REGION
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
 	private static boolean publishBulletinsTrentino = true;
 	private static boolean publishBulletinsAran = true;
-
 	// REGION
 	private static boolean publishBlogsTyrol = false;
 	private static boolean publishBlogsSouthTyrol = false;
 	private static boolean publishBlogsTrentino = false;
+	/*---- Defined in configuration file -----*/
 
 	// TODO: find better solution how to get the URL for simple html and images
 	public static int directoryOffset = 5;

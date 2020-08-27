@@ -91,9 +91,8 @@ public class AlbinaUtil {
 		return dp.toString(lang.getLocale());
 	}
 
-	public static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription,
-			boolean elevationDependency) {
-		if (elevationDependency)
+	public static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription) {
+		if (avalancheBulletinDaytimeDescription.isHasElevationDependency())
 			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
 					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 		else

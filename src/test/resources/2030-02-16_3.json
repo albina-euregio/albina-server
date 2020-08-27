@@ -21,6 +21,8 @@
 	],
 	"tendency": "increasing",
 	"forenoon": {
+		"hasElevationDependency": true,
+		"treeline": true,
 		"dangerRatingBelow": "low",
 		"avalancheSituation2": {},
 		"avalancheSituation1": {
@@ -37,7 +39,6 @@
 		"id": "eff4f0a3-aa80-4244-bfd0-0392857b65ac",
 		"dangerRatingAbove": "moderate"
 	},
-	"hasElevationDependency": true,
 	"avActivityHighlightsTextcat": "5[10166,3896[3773]]",
 	"hasDaytimeDependency": false,
 	"avActivityCommentTextcat": "111[7663[5861],14929,7521[836,7593,3727,819],4183,5890,9413].16[1451[6776],7751,9413].16[1434,7753[10213,5932[4170,3773]],9413].56[1390[10281],6555,9343,6191,6942]",
@@ -118,7 +119,6 @@
 			"languageCode": "it"
 		}
 	],
-	"treeline": true,
 	"id": "729cd621-6826-422b-ad45-83f724c6b994",
 	"validity": {
 		"from": "2030-02-15T23:00:00Z",

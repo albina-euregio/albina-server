@@ -64,9 +64,9 @@
 	],
 	"publishedRegions": [],
 	"hasDaytimeDependency": false,
-	"hasElevationDependency": true,
-	"treeline": true,
 	"forenoon": {
+		"hasElevationDependency": true,
+		"treeline": true,
 		"dangerRatingAbove": "considerable",
 		"dangerRatingBelow": "moderate",
 		"avalancheSituation1": {

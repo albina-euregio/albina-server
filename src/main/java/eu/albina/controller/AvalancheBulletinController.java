@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -788,7 +787,7 @@ public class AvalancheBulletinController {
 
 				if (bulletin.getForenoon() == null
 						|| bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
-						|| (bulletin.getForenoon() != null && bulletin.isHasElevationDependency()
+						|| (bulletin.getForenoon() != null && bulletin.getForenoon().isHasElevationDependency()
 								&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
 					missingDangerRating = true;
 				}
@@ -797,7 +796,7 @@ public class AvalancheBulletinController {
 						|| (bulletin.isHasDaytimeDependency()
 								&& bulletin.getAfternoon().getDangerRatingAbove() == DangerRating.missing)
 						|| (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() != null
-								&& bulletin.isHasElevationDependency()
+								&& bulletin.getAfternoon().isHasElevationDependency()
 								&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
 					missingDangerRating = true;
 				}

@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -135,7 +134,7 @@ public class EmailUtil {
 
 	private String createZipFile(String htmlContent, String textContent) throws IOException {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			 ZipOutputStream out = new ZipOutputStream(baos)) {
+				ZipOutputStream out = new ZipOutputStream(baos)) {
 			if (htmlContent != null) {
 				ZipEntry e = new ZipEntry("content.html");
 				out.putNextEntry(e);
@@ -476,18 +475,17 @@ public class EmailUtil {
 			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_0_0.png");
 		} else {
 			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
-					+ AlbinaUtil.getWarningLevelId(daytimeBulletin, avalancheBulletin.isHasElevationDependency())
-					+ ".png");
+					+ AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		}
 		// dangerRating.put("symbol", "cid:warning_picto/" +
 		// getWarningLevelId(daytimeBulletin,
 		// avalancheBulletin.isHasElevationDependency()));
-		if (avalancheBulletin.isHasElevationDependency()
+		if (daytimeBulletin.isHasElevationDependency()
 				&& (daytimeBulletin.getDangerRatingAbove() != daytimeBulletin.getDangerRatingBelow())) {
-			if (avalancheBulletin.getTreeline())
+			if (daytimeBulletin.getTreeline())
 				dangerRating.put("elevation", messages.getString("elevation.treeline.capitalized"));
-			else if (avalancheBulletin.getElevation() > 0)
-				dangerRating.put("elevation", avalancheBulletin.getElevation() + "m");
+			else if (daytimeBulletin.getElevation() > 0)
+				dangerRating.put("elevation", daytimeBulletin.getElevation() + "m");
 			else
 				dangerRating.put("elevation", "");
 		} else
@@ -607,7 +605,7 @@ public class EmailUtil {
 				// daytimeBulletin
 				// .getAvalancheSituation2().getAvalancheSituation().toStringId());
 				avalancheSituation2.put("text",
-					daytimeBulletin.getAvalancheSituation2().getAvalancheSituation().toString(lang.getLocale()));
+						daytimeBulletin.getAvalancheSituation2().getAvalancheSituation().toString(lang.getLocale()));
 			} else {
 				avalancheSituation2.put("symbol",
 						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");

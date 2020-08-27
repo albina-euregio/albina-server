@@ -22,6 +22,8 @@
 	],
 	"tendency": "increasing",
 	"forenoon": {
+		"hasElevationDependency": true,
+		"treeline": true,
 		"dangerRatingBelow": "low",
 		"avalancheSituation2": {
 			"treelineLow": true,
@@ -49,7 +51,6 @@
 		"id": "871723b9-c4ef-4357-b14a-154f0a50c470",
 		"dangerRatingAbove": "considerable"
 	},
-	"hasElevationDependency": true,
 	"avActivityHighlightsTextcat": "16[1429,7751,9413].11[10388,3978,6042[535[12005,14871]],9538]",
 	"hasDaytimeDependency": false,
 	"avActivityCommentTextcat": "15[6226,4159,5890,882[5862],7225[10213,5932[4170,3773],10180,3908],9413].42[4271,497,12112,6676,6388[10398],9413].63[11247,886,11358[12006,14872],6154,6359].102[6658,7018[6218],7595,7405,9749,10551[7041,3773],9413].24[6870,3911,6838].9[12028[3772],9204,4837,14257,9413].56[1375,6561,9345,6191,6941].40[4096,1496,9820,12341,12954[12004,10398],6085[10101,3981,10398],9413]",
@@ -132,7 +133,6 @@
 			"languageCode": "it"
 		}
 	],
-	"treeline": true,
 	"id": "4474141b-2547-41c6-bb3c-da8a27149605",
 	"validity": {
 		"from": "2030-02-15T23:00:00Z",

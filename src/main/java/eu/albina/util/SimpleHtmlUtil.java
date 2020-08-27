@@ -254,9 +254,9 @@ public class SimpleHtmlUtil {
 				sb.delete(sb.length() - 2, sb.length());
 				bulletin.put("regions", sb.toString());
 
-				bulletin.put("forenoon", getDaytime(avalancheBulletin, false, lang, messages));
+				bulletin.put("forenoon", getDaytime(avalancheBulletin.getForenoon(), lang, messages));
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("afternoon", getDaytime(avalancheBulletin, true, lang, messages));
+					bulletin.put("afternoon", getDaytime(avalancheBulletin.getAfternoon(), lang, messages));
 					bulletin.put("am", "<b>" + messages.getString("daytime.am.capitalized").toUpperCase() + "</b><br>");
 					bulletin.put("pm", "<b>" + messages.getString("daytime.pm.capitalized").toUpperCase() + "</b><br>");
 				} else {
@@ -325,19 +325,13 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	private Map<String, Object> getDaytime(AvalancheBulletin avalancheBulletin, boolean afternoon, LanguageCode lang,
+	private Map<String, Object> getDaytime(AvalancheBulletinDaytimeDescription daytimeDescription, LanguageCode lang,
 			ResourceBundle messages) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> dangerLevel = new HashMap<>();
 		Map<String, Object> text = new HashMap<>();
 
 		text.put("dangerLevel", "<b>" + messages.getString("headline.danger-rating") + "</b><br>");
-
-		AvalancheBulletinDaytimeDescription daytimeDescription;
-		if (afternoon)
-			daytimeDescription = avalancheBulletin.getAfternoon();
-		else
-			daytimeDescription = avalancheBulletin.getForenoon();
 
 		if ((daytimeDescription.getAvalancheSituation1() != null
 				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null)
@@ -349,10 +343,10 @@ public class SimpleHtmlUtil {
 		result.put("text", text);
 
 		dangerLevel.put("above", getDangerRatingLineString(daytimeDescription.getDangerRatingAbove(),
-				avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), lang, messages, true));
-		if (avalancheBulletin.isHasElevationDependency())
+				daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang, messages, true));
+		if (daytimeDescription.isHasElevationDependency())
 			dangerLevel.put("below", getDangerRatingLineString(daytimeDescription.getDangerRatingBelow(),
-					avalancheBulletin.getElevation(), avalancheBulletin.getTreeline(), lang, messages, false));
+					daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang, messages, false));
 		else
 			dangerLevel.put("below", "");
 

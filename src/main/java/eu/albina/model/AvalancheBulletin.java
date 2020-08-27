@@ -127,17 +127,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Column(name = "REGION_ID")
 	private Set<String> savedRegions;
 
-	@Column(name = "ELEVATION")
-	private int elevation;
-
-	@Column(name = "TREELINE")
-	private boolean treeline;
-
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
 	private boolean hasDaytimeDependency;
-
-	@Column(name = "HAS_ELEVATION_DEPENDENCY")
-	private boolean hasElevationDependency;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "FORENOON_ID")
@@ -297,15 +288,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		if (json.has("hasDaytimeDependency"))
 			this.hasDaytimeDependency = json.getBoolean("hasDaytimeDependency");
-
-		if (json.has("hasElevationDependency"))
-			this.hasElevationDependency = json.getBoolean("hasElevationDependency");
-
-		if (json.has("elevation"))
-			this.elevation = json.getInt("elevation");
-
-		if (json.has("treeline"))
-			this.treeline = json.getBoolean("treeline");
 
 		if (json.has("forenoon"))
 			this.forenoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("forenoon"));
@@ -652,36 +634,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return result;
 	}
 
-	public int getElevation() {
-		return elevation;
-	}
-
-	public void setElevation(int elevation) {
-		this.elevation = elevation;
-	}
-
-	public boolean getTreeline() {
-		return treeline;
-	}
-
-	public void setTreeline(boolean treeline) {
-		this.treeline = treeline;
-	}
-
 	public boolean isHasDaytimeDependency() {
 		return hasDaytimeDependency;
 	}
 
 	public void setHasDaytimeDependency(boolean hasDaytimeDependency) {
 		this.hasDaytimeDependency = hasDaytimeDependency;
-	}
-
-	public boolean isHasElevationDependency() {
-		return hasElevationDependency;
-	}
-
-	public void setHasElevationDependency(boolean hasElevationDependency) {
-		this.hasElevationDependency = hasElevationDependency;
 	}
 
 	public boolean affectsRegion(String region) {
@@ -905,15 +863,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		json.put("publishedRegions", publishedRegions);
 
 		json.put("hasDaytimeDependency", hasDaytimeDependency);
-		json.put("hasElevationDependency", hasElevationDependency);
-
-		if (hasElevationDependency) {
-			if (treeline) {
-				json.put("treeline", treeline);
-			} else {
-				json.put("elevation", elevation);
-			}
-		}
 
 		if (forenoon != null)
 			json.put("forenoon", forenoon.toJSON());
@@ -967,15 +916,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		json.put("regions", publishedRegions);
 
 		json.put("hasDaytimeDependency", hasDaytimeDependency);
-		json.put("hasElevationDependency", hasElevationDependency);
-
-		if (hasElevationDependency) {
-			if (treeline) {
-				json.put("treeline", treeline);
-			} else {
-				json.put("elevation", elevation);
-			}
-		}
 
 		if (forenoon != null)
 			json.put("forenoon", forenoon.toSmallJSON());
@@ -987,12 +927,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	private Element createCAAMLv5Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
-		AvalancheBulletinDaytimeDescription bulletin;
+		AvalancheBulletinDaytimeDescription bulletinDaytimeDescription;
 
 		if (isAfternoon)
-			bulletin = this.afternoon;
+			bulletinDaytimeDescription = this.afternoon;
 		else
-			bulletin = this.forenoon;
+			bulletinDaytimeDescription = this.forenoon;
 
 		Element rootElement = doc.createElement("Bulletin");
 
@@ -1058,30 +998,30 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		// danger ratings
 		Element dangerRatings = doc.createElement("dangerRatings");
-		if (hasElevationDependency) {
+		if (bulletinDaytimeDescription.isHasElevationDependency()) {
 			Element dangerRatingAbove = doc.createElement("DangerRating");
 			Element validElevationAbove = doc.createElement("validElevation");
-			validElevationAbove.setAttribute("xlink:href",
-					XmlUtil.createValidElevationAttribute(elevation, true, treeline));
+			validElevationAbove.setAttribute("xlink:href", XmlUtil.createValidElevationAttribute(
+					bulletinDaytimeDescription.getElevation(), true, bulletinDaytimeDescription.getTreeline()));
 			dangerRatingAbove.appendChild(validElevationAbove);
 
-			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingAbove() != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
-				mainValueAbove.appendChild(
-						doc.createTextNode(DangerRating.getCAAMLv5String(bulletin.getDangerRatingAbove())));
+				mainValueAbove.appendChild(doc.createTextNode(
+						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.getDangerRatingAbove())));
 				dangerRatingAbove.appendChild(mainValueAbove);
 			}
 			dangerRatings.appendChild(dangerRatingAbove);
 			Element dangerRatingBelow = doc.createElement("DangerRating");
 			Element validElevationBelow = doc.createElement("validElevation");
-			validElevationBelow.setAttribute("xlink:href",
-					XmlUtil.createValidElevationAttribute(elevation, false, treeline));
+			validElevationBelow.setAttribute("xlink:href", XmlUtil.createValidElevationAttribute(
+					bulletinDaytimeDescription.getElevation(), false, bulletinDaytimeDescription.getTreeline()));
 			dangerRatingBelow.appendChild(validElevationBelow);
 
-			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingBelow() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
-				mainValueBelow.appendChild(
-						doc.createTextNode(DangerRating.getCAAMLv5String(bulletin.getDangerRatingBelow())));
+				mainValueBelow.appendChild(doc.createTextNode(
+						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.getDangerRatingBelow())));
 				dangerRatingBelow.appendChild(mainValueBelow);
 			}
 			dangerRatings.appendChild(dangerRatingBelow);
@@ -1089,10 +1029,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			// NOTE if no elevation dependency is set, the elevation description is above
 			Element dangerRating = doc.createElement("DangerRating");
 
-			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingAbove() != null) {
 				Element mainValue = doc.createElement("mainValue");
-				mainValue.appendChild(
-						doc.createTextNode(DangerRating.getCAAMLv5String(bulletin.getDangerRatingAbove())));
+				mainValue.appendChild(doc.createTextNode(
+						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.getDangerRatingAbove())));
 				dangerRating.appendChild(mainValue);
 			}
 			dangerRatings.appendChild(dangerRating);
@@ -1121,7 +1061,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		// avalanche problems
 		Element avProblems = doc.createElement("avProblems");
-		for (AvalancheSituation situation : bulletin != null ? bulletin.getAvalancheSituations()
+		for (AvalancheSituation situation : bulletinDaytimeDescription != null
+				? bulletinDaytimeDescription.getAvalancheSituations()
 				: Collections.<AvalancheSituation>emptyList()) {
 			if (situation != null && situation.getAvalancheSituation() != null) {
 				Element avProblem = getAvProblemCaamlv5(doc, situation, languageCode);
@@ -1183,12 +1124,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon,
 			ResourceBundle messages) {
 
-		AvalancheBulletinDaytimeDescription bulletin;
+		AvalancheBulletinDaytimeDescription bulletinDaytimeDescription;
 
 		if (isAfternoon)
-			bulletin = this.afternoon;
+			bulletinDaytimeDescription = this.afternoon;
 		else
-			bulletin = this.forenoon;
+			bulletinDaytimeDescription = this.forenoon;
 
 		Element rootElement = doc.createElement("bulletin");
 
@@ -1280,67 +1221,67 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 
 		// complexity
-		if (bulletin != null && bulletin.getComplexity() != null) {
+		if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getComplexity() != null) {
 			// Element complexity = doc.createElement("complexity");
 			// complexity.appendChild(doc.createTextNode(Complexity.getCAAMLString(bulletin.getComplexity())));
 			// rootElement.appendChild(complexity);
-			if (bulletin.getComplexity() == Complexity.complex) {
+			if (bulletinDaytimeDescription.getComplexity() == Complexity.complex) {
 				rootElement.setAttribute("complex", "true");
 			}
 		}
 
 		// danger ratings
-		if (hasElevationDependency) {
+		if (bulletinDaytimeDescription.isHasElevationDependency()) {
 			Element dangerRatingAbove = doc.createElement("dangerRating");
-			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingAbove() != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
-				mainValueAbove.appendChild(
-						doc.createTextNode(DangerRating.getCAAMLv6String(bulletin.getDangerRatingAbove())));
+				mainValueAbove.appendChild(doc.createTextNode(
+						DangerRating.getCAAMLv6String(bulletinDaytimeDescription.getDangerRatingAbove())));
 				dangerRatingAbove.appendChild(mainValueAbove);
 			}
 			Element elevationAbove = doc.createElement("elevation");
 			elevationAbove.setAttribute("uom", "m");
 			Element lowerBound = doc.createElement("lowerBound");
-			if (treeline)
+			if (bulletinDaytimeDescription.getTreeline())
 				lowerBound.appendChild(doc.createTextNode("treeline"));
 			else
-				lowerBound.appendChild(doc.createTextNode(String.valueOf(elevation)));
+				lowerBound.appendChild(doc.createTextNode(String.valueOf(bulletinDaytimeDescription.getElevation())));
 			elevationAbove.appendChild(lowerBound);
 			dangerRatingAbove.appendChild(elevationAbove);
-			if (bulletin.getMatrixInformationAbove() != null)
-				bulletin.getMatrixInformationAbove().toCAAMLv6(doc, dangerRatingAbove);
+			if (bulletinDaytimeDescription.getMatrixInformationAbove() != null)
+				bulletinDaytimeDescription.getMatrixInformationAbove().toCAAMLv6(doc, dangerRatingAbove);
 			rootElement.appendChild(dangerRatingAbove);
 
 			Element dangerRatingBelow = doc.createElement("dangerRating");
-			if (bulletin != null && bulletin.getDangerRatingBelow() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingBelow() != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
-				mainValueBelow.appendChild(
-						doc.createTextNode(DangerRating.getCAAMLv6String(bulletin.getDangerRatingBelow())));
+				mainValueBelow.appendChild(doc.createTextNode(
+						DangerRating.getCAAMLv6String(bulletinDaytimeDescription.getDangerRatingBelow())));
 				dangerRatingBelow.appendChild(mainValueBelow);
 			}
 			Element elevationBelow = doc.createElement("elevation");
 			elevationBelow.setAttribute("uom", "m");
 			Element upperBound = doc.createElement("upperBound");
-			if (treeline)
+			if (bulletinDaytimeDescription.getTreeline())
 				upperBound.appendChild(doc.createTextNode("treeline"));
 			else
-				upperBound.appendChild(doc.createTextNode(String.valueOf(elevation)));
+				upperBound.appendChild(doc.createTextNode(String.valueOf(bulletinDaytimeDescription.getElevation())));
 			elevationBelow.appendChild(upperBound);
 			dangerRatingBelow.appendChild(elevationBelow);
-			if (bulletin.getMatrixInformationBelow() != null)
-				bulletin.getMatrixInformationBelow().toCAAMLv6(doc, dangerRatingBelow);
+			if (bulletinDaytimeDescription.getMatrixInformationBelow() != null)
+				bulletinDaytimeDescription.getMatrixInformationBelow().toCAAMLv6(doc, dangerRatingBelow);
 			rootElement.appendChild(dangerRatingBelow);
 		} else {
 			// NOTE if no elevation dependency is set, the elevation description is above
 			Element dangerRating = doc.createElement("dangerRating");
-			if (bulletin != null && bulletin.getDangerRatingAbove() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingAbove() != null) {
 				Element mainValue = doc.createElement("mainValue");
-				mainValue.appendChild(
-						doc.createTextNode(DangerRating.getCAAMLv6String(bulletin.getDangerRatingAbove())));
+				mainValue.appendChild(doc.createTextNode(
+						DangerRating.getCAAMLv6String(bulletinDaytimeDescription.getDangerRatingAbove())));
 				dangerRating.appendChild(mainValue);
 			}
-			if (bulletin.getMatrixInformationAbove() != null)
-				bulletin.getMatrixInformationAbove().toCAAMLv6(doc, dangerRating);
+			if (bulletinDaytimeDescription.getMatrixInformationAbove() != null)
+				bulletinDaytimeDescription.getMatrixInformationAbove().toCAAMLv6(doc, dangerRating);
 			rootElement.appendChild(dangerRating);
 		}
 
@@ -1361,7 +1302,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 
 		// avalanche problems
-		for (AvalancheSituation situation : bulletin != null ? bulletin.getAvalancheSituations()
+		for (AvalancheSituation situation : bulletinDaytimeDescription != null
+				? bulletinDaytimeDescription.getAvalancheSituations()
 				: Collections.<AvalancheSituation>emptyList()) {
 			if (situation != null && situation.getAvalancheSituation() != null) {
 				Element avalancheProblem = getAvalancheProblemCaamlv6(doc, situation, languageCode);
@@ -1604,10 +1546,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		setSuggestedRegions(bulletin.getSuggestedRegions());
 		setPublishedRegions(bulletin.getPublishedRegions());
 		setSavedRegions(bulletin.getSavedRegions());
-		setElevation(bulletin.getElevation());
 		setHasDaytimeDependency(bulletin.isHasDaytimeDependency());
-		setHasElevationDependency(bulletin.isHasElevationDependency());
-		setTreeline(bulletin.getTreeline());
 		setTendency(bulletin.getTendency());
 		setDangerPattern1(bulletin.getDangerPattern1());
 		setDangerPattern2(bulletin.getDangerPattern2());
@@ -1616,6 +1555,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			if (forenoon == null)
 				forenoon = bulletin.getForenoon();
 			else {
+				forenoon.setHasElevationDependency(bulletin.getForenoon().isHasElevationDependency());
+				forenoon.setTreeline(bulletin.getForenoon().getTreeline());
+				forenoon.setElevation(bulletin.getForenoon().getElevation());
 				forenoon.setDangerRatingAbove(bulletin.getForenoon().getDangerRatingAbove());
 				forenoon.setMatrixInformationAbove(bulletin.getForenoon().getMatrixInformationAbove());
 				forenoon.setTerrainFeatureAboveTextcat(bulletin.getForenoon().getTerrainFeatureAboveTextcat());
@@ -1637,6 +1579,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			if (afternoon == null)
 				afternoon = bulletin.getAfternoon();
 			else {
+				afternoon.setHasElevationDependency(bulletin.getAfternoon().isHasElevationDependency());
+				afternoon.setTreeline(bulletin.getAfternoon().getTreeline());
+				afternoon.setElevation(bulletin.getAfternoon().getElevation());
 				afternoon.setDangerRatingAbove(bulletin.getAfternoon().getDangerRatingAbove());
 				afternoon.setMatrixInformationAbove(bulletin.getAfternoon().getMatrixInformationAbove());
 				afternoon.setTerrainFeatureAboveTextcat(bulletin.getAfternoon().getTerrainFeatureAboveTextcat());
@@ -1679,13 +1624,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			return false;
 		if ((this.validUntil == null) ? (other.validUntil != null) : !this.validUntil.equals(other.validUntil))
 			return false;
-		if (this.elevation != other.elevation)
-			return false;
-		if (this.treeline != other.treeline)
-			return false;
 		if (this.hasDaytimeDependency != other.hasDaytimeDependency)
-			return false;
-		if (this.hasElevationDependency != other.hasElevationDependency)
 			return false;
 		if ((this.forenoon == null) ? (other.forenoon != null) : !this.forenoon.equals(other.forenoon))
 			return false;

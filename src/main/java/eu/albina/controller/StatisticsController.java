@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -446,7 +445,7 @@ public class StatisticsController {
 			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(r[1]);
 			sb.append(GlobalVariables.csvDeliminator);
-			if (!avalancheBulletin.isHasElevationDependency()) {
+			if (!daytimeDescription.isHasElevationDependency()) {
 				sb.append(daytimeDescription.getDangerRatingAbove().toString());
 				if (extended)
 					addMatrixInformation(sb, daytimeDescription.getMatrixInformationAbove());
@@ -460,13 +459,13 @@ public class StatisticsController {
 			if (extended)
 				addMatrixInformation(sb, daytimeDescription.getMatrixInformationAbove());
 			sb.append(GlobalVariables.csvDeliminator);
-			if (!avalancheBulletin.isHasElevationDependency())
+			if (!daytimeDescription.isHasElevationDependency())
 				sb.append(GlobalVariables.notAvailableString);
 			else {
-				if (avalancheBulletin.getTreeline())
+				if (daytimeDescription.getTreeline())
 					sb.append(messages.getString("elevation.treeline"));
 				else
-					sb.append(avalancheBulletin.getElevation());
+					sb.append(daytimeDescription.getElevation());
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 

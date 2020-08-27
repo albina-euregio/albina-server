@@ -61,10 +61,7 @@
 			"enum" : [ "decreasing", "steady", "increasing" ]
 		},
 
-		"elevation" : { "type" : "integer" },
-		"treeline" : { "type" : "boolean" },
 		"hasDaytimeDependency" : { "type" : "boolean" },
-		"hasElevationDependency" : { "type" : "boolean" },
 
 		"forenoon" : { "$ref" : "#/definitions/daytimeDescription" },
 		"afternoon" : { "$ref" : "#/definitions/daytimeDescription" },
@@ -110,6 +107,9 @@
 			"properties" : {
 				"id" : { "type": "string" },
 				"complexity" : { "$ref" : "#/definitions/complexity" },
+				"hasElevationDependency" : { "type" : "boolean" },
+				"elevation" : { "type" : "integer" },
+				"treeline" : { "type" : "boolean" },
 				"dangerRatingAbove" : { "$ref" : "#/definitions/dangerRating" },
 				"matrixInformationAbove" : { "$ref" : "#/definitions/matrixInformation" },
 				"dangerRatingBelow" : { "$ref" : "#/definitions/dangerRating" },
