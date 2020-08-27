@@ -332,13 +332,17 @@ public class MapUtil {
 		final String outputFilePng = outputFile.toString().replaceFirst("pdf$", "png");
 		final String outputFileWebp = outputFile.toString().replaceFirst("pdf$", "webp");
 
-		logger.info("Converting {} to {}}", outputFile, outputFilePng);
+		// convert to png
+		logger.info("Converting {} to {}", outputFile, outputFilePng);
 		new ProcessBuilder("gs", "-sDEVICE=png16m", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
 				outputFilePng, outputFile.toString()).inheritIO().start().waitFor();
 
-		logger.info("Converting {} to {}}", outputFilePng, outputFileWebp);
+		// convert to webp
+		logger.info("Converting {} to {}", outputFilePng, outputFileWebp);
 		new ProcessBuilder("cwebp", outputFilePng, "-o", outputFileWebp).inheritIO().start().waitFor();
-		logger.info("Converting {} to {}}", outputFile, outputFileJpg);
+
+		// convert to jpg
+		logger.info("Converting {} to {}", outputFile, outputFileJpg);
 		new ProcessBuilder("gs", "-sDEVICE=jpeg", "-dJPEGQ=80", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4",
 				"-r" + dpi, "-o", outputFileJpg, outputFile.toString()).inheritIO().start().waitFor();
 	}
