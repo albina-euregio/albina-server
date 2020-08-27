@@ -343,8 +343,15 @@ public class MapUtil {
 
 		// convert to jpg
 		logger.info("Converting {} to {}", outputFile, outputFileJpg);
-		new ProcessBuilder("gs", "-sDEVICE=jpeg", "-dJPEGQ=80", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4",
-				"-r" + dpi, "-o", outputFileJpg, outputFile.toString()).inheritIO().start().waitFor();
+		new ProcessBuilder("convert", outputFilePng, outputFileJpg).inheritIO().start().waitFor();
+		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletinId == null) {
+			// create combined am/pm maps
+			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, grayscale, "jpg")).toString();
+			final String pmFile = outputDirectory.resolve(map.filename(DaytimeDependency.pm, grayscale, "jpg")).toString();
+			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, grayscale, "jpg")).toString();
+			logger.info("Combining {} and {} to {}", amFile, pmFile, fdFile);
+			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
+		}
 	}
 
 	private static void deleteDirectoryWithContents(Path directory) throws IOException {
