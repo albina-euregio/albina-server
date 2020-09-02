@@ -140,11 +140,6 @@ public class PublicationController {
 					}
 				}
 
-				// copy files
-				AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
-				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-					AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
-
 				// send emails
 				if (GlobalVariables.isSendEmails()) {
 					Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.regionsEuregio, false);
@@ -169,6 +164,11 @@ public class PublicationController {
 			} catch (Exception e1) {
 				logger.error("Error during map production", e1);
 			}
+
+			// copy files
+			AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
 		}
 	}
 
@@ -245,11 +245,6 @@ public class PublicationController {
 					}
 				}
 
-				// copy files
-				AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
-				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-					AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
-
 				// send emails to regions
 				if (GlobalVariables.isSendEmails()) {
 					Thread sendEmailsThread = sendEmails(bulletins, regions, true);
@@ -272,6 +267,11 @@ public class PublicationController {
 			} catch (Exception e1) {
 				logger.error("Error during map production", e1);
 			}
+
+			// copy files
+			AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
 		}
 	}
 
@@ -331,17 +331,17 @@ public class PublicationController {
 						logger.error(key + " thread interrupted", e);
 					}
 				}
-
-				// copy files
-				AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
-				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-					AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
-
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
 			} catch (Exception e) {
 				logger.error("Error during map production", e);
 			}
+
+			// copy files
+			AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
+
 		}
 	}
 
