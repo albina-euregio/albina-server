@@ -1,6 +1,3 @@
-#setoutput mapyrus_dir . date .  "_mapyrus_log_" . bulletin_id . ".txt"
-setoutput mapyrus_dir . "mapyrus_log.txt"
-
 print "========================================="
 print "Mapyrus.time.stamp = ", Mapyrus.time.stamp
 print "Mapyrus.version    = ", Mapyrus.version
@@ -10,14 +7,6 @@ print "-----------------------------------------"
 print "Gueltiges Kartendatum: " . date
 print "Bulletin-ID/Karte: " . bulletin_id
 print "######################################################"
-
-# Daten Input (includes)
-let inc1 = "include " . mapyrus_dir . "fontdefinition.mapyrus"
-eval inc1
-let inc2 = "include " . mapyrus_dir . "albina_functions.mapyrus"
-eval inc2
-let inc3 = "include " . mapyrus_dir . "albina_styles.mapyrus"
-eval inc3
 
 # Raster-Input
 if level == 1 then
