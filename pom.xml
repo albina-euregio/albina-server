@@ -480,6 +480,7 @@
 					<path>${env.TOMCAT_PATH}##${env.GIT_VERSION}</path>
 					<username>${env.TOMCAT_USERNAME}</username>
 					<password>${env.TOMCAT_PASSWORD}</password>
+					<update>true</update>
 				</configuration>
 			</plugin>
 		</plugins>
