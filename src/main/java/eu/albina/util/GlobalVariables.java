@@ -184,6 +184,7 @@ public class GlobalVariables {
 			add(LanguageCode.de);
 			add(LanguageCode.it);
 			add(LanguageCode.en);
+			add(LanguageCode.fr);
 			add(LanguageCode.es);
 			add(LanguageCode.ca);
 			add(LanguageCode.oc);
