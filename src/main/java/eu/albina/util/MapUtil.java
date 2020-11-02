@@ -283,8 +283,6 @@ public class MapUtil {
 		final MapSize size = Map.overlay.equals(map) ? MapSize.overlay
 				: Map.fullmap_small.equals(map) ? MapSize.thumbnail_map : MapSize.standard_map;
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
-		final String mapyrusFile = Map.overlay.equals(map) ? "mapyrus/albina_overlaymap.mapyrus"
-				: "mapyrus/albina_drawmap.mapyrus";
 		final Interpreter mapyrus = new Interpreter();
 		final ContextStack context = new ContextStack();
 		final Path outputDirectory = dangerRatingMapFile.getParent();
@@ -322,10 +320,17 @@ public class MapUtil {
 			}
 		};
 		context.setBindings(new SimpleBindings(bindings));
-		final FileOrURL file = new FileOrURL(mapProductionUrl + mapyrusFile);
-		logger.info("Creating map {} using {} and {} with bindings {}", outputFile, dangerRatingMapFile, mapyrusFile,
+		final List<String> mapyrusFiles = new ArrayList<>();
+		mapyrusFiles.add("fontdefinition.mapyrus");
+		mapyrusFiles.add("albina_functions.mapyrus");
+		mapyrusFiles.add("albina_styles.mapyrus");
+		mapyrusFiles.add(Map.overlay.equals(map) ? "albina_overlaymap.mapyrus" : "albina_drawmap.mapyrus");
+		logger.info("Creating map {} using {} and {} with bindings {}", outputFile, dangerRatingMapFile, mapyrusFiles,
 				bindings);
-		mapyrus.interpret(context, file, System.in, System.out);
+		for (String mapyrusFile : mapyrusFiles) {
+			final FileOrURL file = new FileOrURL(mapProductionUrl + "mapyrus/" + mapyrusFile);
+			mapyrus.interpret(context, file, System.in, System.out);
+		}
 		deleteDirectoryWithContents(tempDirectory);
 
 		final int dpi = 300;
