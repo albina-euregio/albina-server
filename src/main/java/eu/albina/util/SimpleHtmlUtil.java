@@ -171,7 +171,7 @@ public class SimpleHtmlUtil {
 				}
 
 				File newHtmlFile = new File(dirPath + "/" + filename);
-				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
+				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.ISO_8859_1);
 				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
 
 				return true;
