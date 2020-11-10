@@ -219,17 +219,17 @@ public class SimpleHtmlUtil {
 		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region, messages));
 		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region, messages));
 		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "/de.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_de.html");
 		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "/it.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_it.html");
 		link.put("linkEn", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "/en.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_en.html");
 		link.put("linkEs", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "/es.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_es.html");
 		link.put("linkCa", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "/ca.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_ca.html");
 		link.put("linkAr", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "/ar.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_ar.html");
 
 		root.put("link", link);
 
