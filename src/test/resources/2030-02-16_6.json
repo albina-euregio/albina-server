@@ -75,6 +75,7 @@
 		"id": "9a351c23-4111-4092-bde0-2c086363792f",
 		"dangerRatingAbove": "considerable"
 	},
+	"highlightsTextcat": "16[1428,7751,9413]",
 	"avActivityHighlightsTextcat": "16[1428,7751,9413]",
 	"hasDaytimeDependency": true,
 	"avActivityCommentTextcat": "110[6144[10032,12062,10209],14928,8412,7523[12006,14187],4190,5890,9413].4[1402,861,10398,6391[10398],9413].15[6226,4152,5890,871,7224[10213,5932[4170,3773],10186,3907],9413].25[10395[2769,14930,12929],6170,5859,9430[6932],9413].10[8420,9594[11203,12225],12345]",
@@ -121,6 +122,24 @@
 	],
 	"dangerPattern2": "dp1",
 	"dangerPattern1": "dp6",
+	"highlights": [
+		{
+			"text": " The wind slabs represent the main danger.",
+			"languageCode": "en"
+		},
+		{
+			"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo.",
+			"languageCode": "it"
+		},
+		{
+			"text": " Les accumulations de neige soufflée constituent le danger principal.",
+			"languageCode": "fr"
+		},
+		{
+			"text": " Die Triebschneeansammlungen bilden die Hauptgefahr.",
+			"languageCode": "de"
+		}
+	],
 	"avActivityHighlights": [
 		{
 			"text": " The wind slabs represent the main danger.",

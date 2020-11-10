@@ -377,6 +377,22 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.tendencyCommentTextcat = tendencyCommentTextcat;
 	}
 
+	public Texts getHighlights() {
+		return textPartsMap.get(TextPart.highlights);
+	}
+
+	public String getHighlightsIn(LanguageCode lang) {
+		Texts texts = textPartsMap.get(TextPart.highlights);
+		if (texts != null)
+			return texts.getText(lang);
+		else
+			return null;
+	}
+
+	public void setHighlights(Texts highlights) {
+		textPartsMap.put(TextPart.highlights, highlights);
+	}
+
 	public Texts getAvActivityHighlights() {
 		return textPartsMap.get(TextPart.avActivityHighlights);
 	}

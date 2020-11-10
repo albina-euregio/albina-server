@@ -171,7 +171,7 @@ public class SimpleHtmlUtil {
 				}
 
 				File newHtmlFile = new File(dirPath + "/" + filename);
-				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_16);
+				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
 				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
 
 				return true;
@@ -276,6 +276,11 @@ public class SimpleHtmlUtil {
 					bulletin.put("pm", "");
 				}
 
+				if (avalancheBulletin.getHighlightsIn(lang) != null
+						&& !avalancheBulletin.getHighlightsIn(lang).isEmpty())
+					bulletin.put("highlights", avalancheBulletin.getHighlightsIn(lang));
+				else
+					bulletin.put("highlights", "");
 				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null
 						&& !avalancheBulletin.getAvActivityHighlightsIn(lang).isEmpty())
 					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
