@@ -33,6 +33,7 @@ h3 {
 }
 
 h4 {
+  padding-top: 20px;
   padding: 0px;
   margin: 0px;
 }
@@ -123,9 +124,12 @@ section:after {
 <header>
   <p class="top-link">
     <a class="previous-day" href="${link.website}">${text.standardView}</a>
-    <a class="next-day" href="${link.linkDe}">DE</a>
-    <a class="next-day" href="${link.linkIt}">IT</a>
-    <a class="next-day" href="${link.linkEn}">IT</a>
+    <a class="next-day" href="${link.linkDe}">DE&nbsp;</a>
+    <a class="next-day" href="${link.linkIt}">IT&nbsp;</a>
+    <a class="next-day" href="${link.linkEn}">EN&nbsp;</a>
+    <a class="next-day" href="${link.linkEs}">ES&nbsp;</a>
+    <a class="next-day" href="${link.linkCa}">CA&nbsp;</a>
+    <a class="next-day" href="${link.linkAr}">AR&nbsp;</a>
   </p>
   <h4><a href="${link.website}">${text.title}</a></h4>
   <h3>${text.subtitle}</h3>
@@ -143,23 +147,139 @@ section:after {
 			${bulletin.regions}<br>
 			<p>
 				${bulletin.am}
-				<img width="150" style="margin-right: 10px;" src="${bulletin.mapAM}"/><br>
+				<img style="margin-right: 10px;" src="${bulletin.mapAM}"/><br>
 				${bulletin.forenoon.text.dangerLevel}
-				${bulletin.forenoon.dangerLevel.above}
-				${bulletin.forenoon.dangerLevel.below}
+				<table>
+					<tr>
+						<td>
+							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.dangerLevel.warningPicto}"/>
+						</td>
+						<td>
+							${bulletin.forenoon.dangerLevel.elevation}
+						</td>
+					</tr>
+				</table>
 				${bulletin.forenoon.text.avalancheProblem}
-				${bulletin.forenoon.avalancheProblem1}
-				${bulletin.forenoon.avalancheProblem2}
+				<table>
+					<tr>
+						<td>
+							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem1.avalancheProblemIcon}"/>
+						</td>
+						<td>
+							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem1.elevationIcon}"/>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td>
+										${bulletin.forenoon.avalancheProblem1.elevationHigh}
+									</td>
+								</tr>
+								<tr>
+									<td>
+										${bulletin.forenoon.avalancheProblem1.elevationLow}
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem1.aspectsIcon}"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem2.avalancheProblemIcon}"/>
+						</td>
+						<td>
+							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem2.elevationIcon}"/>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td>
+										${bulletin.forenoon.avalancheProblem2.elevationHigh}
+									</td>
+								</tr>
+								<tr>
+									<td>
+										${bulletin.forenoon.avalancheProblem2.elevationLow}
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem2.aspectsIcon}"/>
+						</td>
+					</tr>
+				</table>
 			</p>
-			<p>
+			<p ${bulletin.heightPMSmall}>
 				${bulletin.pm}
-				<img ${bulletin.widthPM} src="${bulletin.mapPM}"/><br>
+				<img style="margin-right: 10px;" src="${bulletin.mapPM}"/><br>
 				${bulletin.afternoon.text.dangerLevel}
-				${bulletin.afternoon.dangerLevel.above}
-				${bulletin.afternoon.dangerLevel.below}
+				<table ${bulletin.fontSize}>
+					<tr>
+						<td>
+							<img height="50" style="margin-right: 10px;" src="${bulletin.afternoon.dangerLevel.warningPicto}"/>
+						</td>
+						<td>
+							${bulletin.afternoon.dangerLevel.elevation}
+						</td>
+					</tr>
+				</table>
 				${bulletin.afternoon.text.avalancheProblem}
-				${bulletin.afternoon.avalancheProblem1}
-				${bulletin.afternoon.avalancheProblem2}
+				<table ${bulletin.fontSize}>
+					<tr>
+						<td>
+							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem1.avalancheProblemIcon}"/>
+						</td>
+						<td>
+							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem1.elevationIcon}"/>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td>
+										${bulletin.afternoon.avalancheProblem1.elevationHigh}
+									</td>
+								</tr>
+								<tr>
+									<td>
+										${bulletin.afternoon.avalancheProblem1.elevationLow}
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem1.aspectsIcon}"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem2.avalancheProblemIcon}"/>
+						</td>
+						<td>
+							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem2.elevationIcon}"/>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td>
+										${bulletin.afternoon.avalancheProblem2.elevationHigh}
+									</td>
+								</tr>
+								<tr>
+									<td>
+										${bulletin.afternoon.avalancheProblem2.elevationLow}
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem2.aspectsIcon}"/>
+						</td>
+					</tr>
+				</table>
 			</p>
 		</p>
 		<h3>${bulletin.avAvalancheHighlights}</h3>

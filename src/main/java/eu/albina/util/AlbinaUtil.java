@@ -151,6 +151,7 @@ public class AlbinaUtil {
 		DateTime date = getDate(bulletins);
 		if (date != null) {
 			result.append(messages.getString("day." + date.getDayOfWeek()));
+			result.append(" ");
 			result.append(date.toString(messages.getString("date-time-format")));
 		} else {
 			// TODO what if no date is given (should not happen)

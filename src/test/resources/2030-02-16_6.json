@@ -30,6 +30,7 @@
 		},
 		"avalancheSituation1": {
 			"treelineLow": true,
+			"elevationHigh": 2500,
 			"aspects": [
 				"nw",
 				"ne",

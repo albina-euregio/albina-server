@@ -202,7 +202,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException, TemplateException {
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletinsAmPm, LanguageCode.de, "");
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletinsAmPm, LanguageCode.en, "");
 		System.out.println(htmlString);
 	}
 

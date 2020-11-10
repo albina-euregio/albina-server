@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -223,6 +224,12 @@ public class SimpleHtmlUtil {
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/it.html");
 		link.put("linkEn", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/en.html");
+		link.put("linkEs", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/es.html");
+		link.put("linkCa", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/ca.html");
+		link.put("linkAr", GlobalVariables.getAvalancheReportSimpleBaseUrl(messages)
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/ar.html");
 
 		root.put("link", link);
 
@@ -239,11 +246,15 @@ public class SimpleHtmlUtil {
 					bulletin.put("mapPM", GlobalVariables.getMapsUrl(messages) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
 					bulletin.put("widthPM", "width=\"150\"");
+					bulletin.put("heightPMSmall", "height=\"50\"");
+					bulletin.put("fontSize", "");
 				} else {
 					bulletin.put("mapAM", GlobalVariables.getMapsUrl(messages) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
 					bulletin.put("mapPM", GlobalVariables.getServerImagesUrl() + "empty.png");
-					bulletin.put("widthPM", "");
+					bulletin.put("widthPM", "width=\"0\"");
+					bulletin.put("heightPMSmall", "style=\"height: 0; margin: 0\"");
+					bulletin.put("fontSize", "style=\"font-size: 0\"");
 				}
 
 				StringBuilder sb = new StringBuilder();
@@ -317,11 +328,21 @@ public class SimpleHtmlUtil {
 		text.put("dangerLevel", "");
 		text.put("avalancheProblem", "");
 		result.put("text", text);
-		dangerLevel.put("above", "");
-		dangerLevel.put("below", "");
+		dangerLevel.put("elevation", "");
+		dangerLevel.put("warningPicto", "");
 		result.put("dangerLevel", dangerLevel);
-		result.put("avalancheProblem1", "");
-		result.put("avalancheProblem2", "");
+		result.put("avalancheProblem1", getEmptyAvalancheSituation());
+		result.put("avalancheProblem2", getEmptyAvalancheSituation());
+		return result;
+	}
+
+	private Map<String, Object> getEmptyAvalancheSituation() {
+		Map<String, Object> result = new HashMap<>();
+		result.put("avalancheProblemIcon", "");
+		result.put("elevationIcon", "");
+		result.put("elevationLow", "");
+		result.put("elevationHigh", "");
+		result.put("aspectsIcon", "");
 		return result;
 	}
 
@@ -342,30 +363,111 @@ public class SimpleHtmlUtil {
 			text.put("avalancheProblem", "");
 		result.put("text", text);
 
-		dangerLevel.put("above", getDangerRatingLineString(daytimeDescription.getDangerRatingAbove(),
-				daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang, messages, true));
-		if (daytimeDescription.isHasElevationDependency())
-			dangerLevel.put("below", getDangerRatingLineString(daytimeDescription.getDangerRatingBelow(),
-					daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang, messages, false));
-		else
-			dangerLevel.put("below", "");
+		dangerLevel.put("warningPicto", GlobalVariables.getServerImagesUrl() + "/warning_pictos/color/level_"
+				+ AlbinaUtil.getWarningLevelId(daytimeDescription) + ".png");
+		dangerLevel.put("elevation", getElevationString(daytimeDescription.getElevation(),
+				daytimeDescription.getTreeline(), lang, messages));
 
 		result.put("dangerLevel", dangerLevel);
 
 		if (daytimeDescription.getAvalancheSituation1() != null
 				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null) {
 			result.put("avalancheProblem1",
-					getAvalancheSituationString(daytimeDescription.getAvalancheSituation1(), lang, messages));
+					getAvalancheSituation(daytimeDescription.getAvalancheSituation1(), lang, messages));
 		} else
-			result.put("avalancheProblem1", "");
+			result.put("avalancheProblem1", getEmptyAvalancheSituation());
 		if (daytimeDescription.getAvalancheSituation2() != null
 				&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null) {
 			result.put("avalancheProblem2",
-					getAvalancheSituationString(daytimeDescription.getAvalancheSituation2(), lang, messages));
+					getAvalancheSituation(daytimeDescription.getAvalancheSituation2(), lang, messages));
 		} else
-			result.put("avalancheProblem2", "");
+			result.put("avalancheProblem2", getEmptyAvalancheSituation());
 
 		return result;
+	}
+
+	private Map<String, Object> getAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang,
+			ResourceBundle messages) {
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("avalancheProblemIcon", GlobalVariables.getServerImagesUrl()
+				+ GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, false));
+		result.put("elevationIcon",
+				GlobalVariables.getServerImagesUrl() + getElevationIcon(avalancheSituation, messages));
+		result.put("elevationLow", getElevationLowText(avalancheSituation, messages));
+		result.put("elevationHigh", getElevationHighText(avalancheSituation, messages));
+		result.put("aspectsIcon", GlobalVariables.getServerImagesUrl()
+				+ GlobalVariables.getAspectSymbolPath(getAspectsCode(avalancheSituation.getAspects()), false));
+
+		return result;
+	}
+
+	private String getElevationIcon(AvalancheSituation avalancheSituation, ResourceBundle messages) {
+		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
+			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+				// elevation high and low set
+				return "elevation/color/levels_middle_two.png";
+			} else {
+				// elevation high set
+				return "elevation/color/levels_below.png";
+			}
+		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			// elevation low set
+			return "elevation/color/levels_above.png";
+		} else {
+			// no elevation set
+			return "elevation/color/levels_all.png";
+		}
+	}
+
+	private String getElevationLowText(AvalancheSituation avalancheSituation, ResourceBundle messages) {
+		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
+			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+				// elevation high and low set
+				if (avalancheSituation.getTreelineLow()) {
+					return messages.getString("elevation.treeline.capitalized");
+				} else {
+					return avalancheSituation.getElevationLow() + "m";
+				}
+			} else {
+				// elevation high set
+				return "";
+			}
+		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			// elevation low set
+			if (avalancheSituation.getTreelineLow()) {
+				return messages.getString("elevation.treeline.capitalized");
+			} else {
+				return avalancheSituation.getElevationLow() + "m";
+			}
+		} else {
+			return "";
+		}
+	}
+
+	private String getElevationHighText(AvalancheSituation avalancheSituation, ResourceBundle messages) {
+		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
+			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+				// elevation high and low set
+				if (avalancheSituation.getTreelineHigh()) {
+					return messages.getString("elevation.treeline.capitalized");
+				} else {
+					return avalancheSituation.getElevationHigh() + "m";
+				}
+			} else {
+				// elevation high set
+				if (avalancheSituation.getTreelineHigh()) {
+					return messages.getString("elevation.treeline.capitalized");
+				} else {
+					return avalancheSituation.getElevationHigh() + "m";
+				}
+			}
+		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			// elevation low set
+			return "";
+		} else {
+			return "";
+		}
 	}
 
 	private String getAvalancheSituationString(AvalancheSituation avalancheSituation, LanguageCode lang,
@@ -406,6 +508,43 @@ public class SimpleHtmlUtil {
 		}
 		sb.append("<br>");
 		return sb.toString();
+	}
+
+	private int getAspectsCode(Set<Aspect> aspects) {
+		int result = 0b00000000;
+		Iterator<Aspect> iterator = aspects.iterator();
+		while (iterator.hasNext()) {
+			switch (iterator.next()) {
+			case N:
+				result = result | 0b10000000;
+				break;
+			case NE:
+				result = result | 0b01000000;
+				break;
+			case E:
+				result = result | 0b00100000;
+				break;
+			case SE:
+				result = result | 0b00010000;
+				break;
+			case S:
+				result = result | 0b00001000;
+				break;
+			case SW:
+				result = result | 0b00000100;
+				break;
+			case W:
+				result = result | 0b00000010;
+				break;
+			case NW:
+				result = result | 0b00000001;
+				break;
+
+			default:
+				break;
+			}
+		}
+		return result;
 	}
 
 	private String getDangerRatingLineString(DangerRating dangerRating, int elevation, boolean treeline,
@@ -457,6 +596,18 @@ public class SimpleHtmlUtil {
 
 		sb.append("<br>");
 
+		return sb.toString();
+	}
+
+	private String getElevationString(int elevation, boolean treeline, LanguageCode lang, ResourceBundle messages) {
+		StringBuilder sb = new StringBuilder();
+		if (treeline) {
+			sb.append(messages.getString("elevation.treeline"));
+		} else if (elevation > 0) {
+			sb.append(elevation);
+			sb.append("m");
+		}
+		sb.append("<br>");
 		return sb.toString();
 	}
 }
