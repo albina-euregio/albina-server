@@ -9,7 +9,7 @@ public class DangerPatternTest {
 	@Test
 	public void testI18n() {
 		assertEquals("gm 7: schneearm neben schneereich", DangerPattern.dp7.toString(Locale.GERMAN));
-		assertEquals("md7: zones avec peu de neige \u00E0 cot\u00E9 des zones enneig\u00E9es",
+		assertEquals("md 7: zones avec peu de neige à coté des zones enneigées",
 			DangerPattern.dp7.toString(Locale.FRENCH));
 	}
 }
