@@ -344,6 +344,7 @@ public class SimpleHtmlUtil {
 	private Map<String, Object> getEmptyAvalancheSituation() {
 		Map<String, Object> result = new HashMap<>();
 		result.put("avalancheProblemIcon", "");
+		result.put("avalancheProblemText", "");
 		result.put("elevationIcon", "");
 		result.put("elevationLow", "");
 		result.put("elevationHigh", "");
@@ -393,10 +394,13 @@ public class SimpleHtmlUtil {
 
 	private Map<String, Object> getAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang,
 			ResourceBundle messages) {
+		ResourceBundle avalancheSituationMessages = lang.getBundle("i18n.AvalancheSituation");
 		Map<String, Object> result = new HashMap<>();
 
 		result.put("avalancheProblemIcon", GlobalVariables.getServerImagesUrl()
 				+ GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, false));
+		result.put("avalancheProblemText",
+				avalancheSituationMessages.getString(avalancheSituation.getAvalancheSituation().toStringId()));
 		result.put("elevationIcon",
 				GlobalVariables.getServerImagesUrl() + getElevationIcon(avalancheSituation, messages));
 		result.put("elevationLow", getElevationLowText(avalancheSituation, messages));
