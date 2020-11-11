@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="line.1">Für {0} maximal</entry>
+  <entry key="line.3">Die komplette Lawinenvorhersage und wo's</entry>
+  <entry key="line.4">besser ist, findet ihr auf:</entry>
+</properties>

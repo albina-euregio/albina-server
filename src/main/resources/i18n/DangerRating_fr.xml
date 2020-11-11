@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="missing">manquant</entry>
+  <entry key="missing.long">Manquant</entry>
+  <entry key="no_snow">pas de neige</entry>
+  <entry key="no_snow.long">Pas de Neige</entry>
+  <entry key="no_rating">pas noté</entry>
+  <entry key="no_rating.long">Pas Noté</entry>
+  <entry key="low">faible</entry>
+  <entry key="low.long">Degré de danger 1 - Faible</entry>
+  <entry key="moderate">limité</entry>
+  <entry key="moderate.long">Degré de danger 2 - Limité</entry>
+  <entry key="considerable">marqué</entry>
+  <entry key="considerable.long">Degré de danger 3 - Marqué</entry>
+  <entry key="high">fort</entry>
+  <entry key="high.long">Degré de danger 4 - Fort</entry>
+  <entry key="very_high">très fort</entry>
+  <entry key="very_high.long">Degré de danger 5 - Très Fort</entry>
+</properties>

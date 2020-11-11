@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="decreasing">Tendencia: peligro de aludes en disminución</entry>
+  <entry key="steady">Tendencia: peligro de aludes sin cambios</entry>
+  <entry key="increasing">Tendencia: peligro de aludes en aumento</entry>
+</properties>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="dp1">dp 1: capas débiles persistentes profundas</entry>
+  <entry key="dp2">dp 2: deslizamientos</entry>
+  <entry key="dp3">dp 3: lluvia</entry>
+  <entry key="dp4">dp 4: frío después de cálido / cálido después de frío</entry>
+  <entry key="dp5">dp 5: nevada después de un largo periodo frío</entry>
+  <entry key="dp6">dp 6: frío, nieve suelta y viento</entry>
+  <entry key="dp7">dp 7: zonas de poca nieve en entornos con mucha nieve</entry>
+  <entry key="dp8">dp 8: escarcha de superfície cubierta de nieve</entry>
+  <entry key="dp9">dp 9: nieve granulada cubierta de nieve</entry>
+  <entry key="dp10">dp 10: escenario de primavera</entry>
+</properties>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="new_snow">Nieve reciente</entry>
+  <entry key="wind_drifted_snow">Nieve venteada</entry>
+  <entry key="persistent_weak_layers">Capas débiles persistentes</entry>
+  <entry key="wet_snow">Nieve húmeda</entry>
+  <entry key="gliding_snow">Deslizamientos </entry>
+  <entry key="favourable_situation">Situación favorable</entry>
+</properties>

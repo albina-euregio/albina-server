@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<entry key="new_snow">New snow</entry>
+	<entry key="wind_drifted_snow">Wind-drifted snow</entry>
+	<entry key="persistent_weak_layers">Persistent weak layer</entry>
+	<entry key="wet_snow">Wet snow</entry>
+	<entry key="gliding_snow">Gliding snow</entry>
+	<entry key="favourable_situation">Favourable situation</entry>
+</properties>

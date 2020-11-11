@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="new_snow">Neige fraîche</entry>
+  <entry key="wind_drifted_snow">Neige soufflée (Neige ventée)</entry>
+  <entry key="persistent_weak_layers">Neige ancienne (Sous-couche fragile persistante)</entry>
+  <entry key="wet_snow">Avalanches mouillées (Neige humide)</entry>
+  <entry key="gliding_snow">Avalanches de glissement (Avalanches de fond)</entry>
+  <entry key="favourable_situation">Situation favorable</entry>
+</properties>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="decreasing">Tendència: perill d'allaus en disminució</entry>
+  <entry key="steady">Tendència: Perill d'allaus constant</entry>
+  <entry key="increasing">Tendència: perill d'allaus en augment</entry>
+</properties>

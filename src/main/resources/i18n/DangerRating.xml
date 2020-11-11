@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="missing">missing</entry>
+	<entry key="missing.long">Missing</entry>
+	<entry key="no_snow">no snow</entry>
+	<entry key="no_snow.long">No Snow</entry>
+	<entry key="no_rating">no rating</entry>
+	<entry key="no_rating.long">No Rating</entry>
+	<entry key="low">low</entry>
+	<entry key="low.long">Danger Level 1 - Low</entry>
+	<entry key="moderate">moderate</entry>
+	<entry key="moderate.long">Danger Level 2 - Moderate</entry>
+	<entry key="considerable">considerable</entry>
+	<entry key="considerable.long">Danger Level 3 - Considerable</entry>
+	<entry key="high">high</entry>
+	<entry key="high.long">Danger Level 4 - High</entry>
+	<entry key="very_high">very high</entry>
+	<entry key="very_high.long">Danger Level 5 - Very High</entry>
+</properties>

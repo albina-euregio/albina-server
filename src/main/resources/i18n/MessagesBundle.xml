@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<entry key="avalanche-report.name">Avalanche.report</entry>
+	<entry key="avalanche-report.url">https://avalanche.report</entry>
+	<entry key="avalanche-report.url.capitalized">WWW.AVALANCHE.REPORT</entry>
+	<entry key="avalanche-report.email">info@avalanche.report</entry>
+	<entry key="avalanche-report.logo.path.bw">logo/grey/avalanche_report.png</entry>
+	<entry key="avalanche-report.logo.path">logo/color/avalanche_report.png</entry>
+	<entry key="avalanche-report.standard.link.text">Load standard view</entry>
+	<entry key="day.1">Monday</entry>
+	<entry key="day.2">Tuesday</entry>
+	<entry key="day.3">Wednesday</entry>
+	<entry key="day.4">Thursday</entry>
+	<entry key="day.5">Friday</entry>
+	<entry key="day.6">Saturday</entry>
+	<entry key="day.7">Sunday</entry>
+	<entry key="date-time-format"> dd.MM.yyyy</entry>
+	<entry key="date-time-format.publication">dd MM yyyy, HH:mm</entry>
+	<entry key="date-time-format.tendency"> dd MM yyyy</entry>
+	<entry key="daytime.fd">whole day</entry>
+	<entry key="daytime.fd.capitalized">Whole day</entry>
+	<entry key="daytime.am">AM</entry>
+	<entry key="daytime.am.capitalized">AM</entry>
+	<entry key="daytime.pm">PM</entry>
+	<entry key="daytime.pm.capitalized">PM</entry>
+	<entry key="ext-file.regions.description">GeoJSON for regions ({0})</entry>
+	<entry key="ext-file.thumbnail.description">Simplified danger rating map of the region</entry>
+	<entry key="ext-file.simple-link.description">Link to the simplified website</entry>
+	<entry key="ext-file.map.description">Danger rating map {0} ({1})</entry>
+	<entry key="ext-file.overlay.description">Danger rating overlay ({0})</entry>
+	<entry key="ext-file.website-link.description">Link to website</entry>
+	<entry key="ext-file.region-link.description">Link to region on the website</entry>
+	<entry key="elevation.treeline">treeline</entry>
+	<entry key="elevation.treeline.capitalized">Treeline</entry>
+	<entry key="elevation.treeline.above.pre-string"> above the </entry>
+	<entry key="elevation.treeline.below.pre-string"> below the </entry>
+	<entry key="elevation.above.pre-string"> above </entry>
+	<entry key="elevation.below.pre-string"> below </entry>
+	<entry key="social-media.message">{0} for {1}: {2}</entry>
+	<entry key="social-media.message.update">UDPATE on {0} for {1}: {2}</entry>
+	<entry key="headline">Avalanche Forecast</entry>
+	<entry key="headline.update">UPDATE on Avalanche Forecast </entry>
+	<entry key="headline.tendency">Tendency</entry>
+	<entry key="headline.regions">Regions</entry>
+	<entry key="headline.avalanche-problem">Avalanche Problem</entry>
+	<entry key="headline.danger-patterns">Danger patterns</entry>
+	<entry key="headline.snowpack">Snowpack</entry>
+	<entry key="headline.danger-rating">Danger level</entry>
+	<entry key="tendency.binding-word">on </entry>
+	<entry key="email.follow-us">Follow us</entry>
+	<entry key="email.unsubscribe">Unsubscribe</entry>
+	<entry key="email.subject">Avalanche.report, </entry>
+	<entry key="email.subject.update">UPDATE on Avalanche.report, </entry>
+	<entry key="email.imprint">Imprint</entry>
+	<entry key="pdf.page-number">Page {0}</entry>
+	<entry key="cop.incomplete-translation">Wait for translation in progress ....</entry>
+	<entry key="published">Published</entry>
+</properties>

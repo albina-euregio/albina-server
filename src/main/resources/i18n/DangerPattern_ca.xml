@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="dp1">dp 1: capa feble persistent</entry>
+  <entry key="dp2">dp 2: lliscaments</entry>
+  <entry key="dp3">dp 3: pluja</entry>
+  <entry key="dp4">dp 4: fred desprès de càlid /càlid desprès de fred</entry>
+  <entry key="dp5">dp 5: nevada després d'un període llarg fred</entry>
+  <entry key="dp6">dp 6: neu freda i incohesiva i vent</entry>
+  <entry key="dp7">dp 7: zones de poca neu en entorns amb molta neu</entry>
+  <entry key="dp8">dp 8: gebre de superfície cobert de neu</entry>
+  <entry key="dp9">dp 9: neu granulada coberta de neu</entry>
+  <entry key="dp10">dp 10: escenari de primavera</entry>
+</properties>

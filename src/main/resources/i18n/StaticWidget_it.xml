@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="line.1">Per {0} al massimo</entry>
+  <entry key="line.3">Il bollettino valanghe completo e dov'è</entry>
+  <entry key="line.4">meglio, trovi su:</entry>
+</properties>

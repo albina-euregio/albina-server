@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="line.1">En {0} com a màxim</entry>
+  <entry key="line.3">La predicció completa d'allaus i on estarà</entry>
+  <entry key="line.4">millor:</entry>
+</properties>

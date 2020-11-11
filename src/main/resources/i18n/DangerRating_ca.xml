@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="missing">absent</entry>
+  <entry key="missing.long">Absent</entry>
+  <entry key="no_snow">sense neu</entry>
+  <entry key="no_snow.long">Sense Neu</entry>
+  <entry key="no_rating">Sense  grau de perill</entry>
+  <entry key="no_rating.long">Sense Grau de Perill</entry>
+  <entry key="low">feble</entry>
+  <entry key="low.long">Grau de Perill 1 - Feble</entry>
+  <entry key="moderate">moderat</entry>
+  <entry key="moderate.long">Grau de Perill 2 - Moderat</entry>
+  <entry key="considerable">Marcat</entry>
+  <entry key="considerable.long">Grau de Perill 3 - Marcat</entry>
+  <entry key="high">Fort</entry>
+  <entry key="high.long">Grau de Perill 4 - Fort</entry>
+  <entry key="very_high">molt fort</entry>
+  <entry key="very_high.long">Grau de Perill 5 - Molt Fort</entry>
+</properties>
