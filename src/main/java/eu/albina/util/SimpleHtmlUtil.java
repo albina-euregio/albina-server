@@ -187,7 +187,8 @@ public class SimpleHtmlUtil {
 	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
-		ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
+				new XMLResourceBundleControl());
 
 		// Create data model
 		Map<String, Object> root = new HashMap<>();
@@ -394,7 +395,8 @@ public class SimpleHtmlUtil {
 
 	private Map<String, Object> getAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang,
 			ResourceBundle messages) {
-		ResourceBundle avalancheSituationMessages = lang.getBundle("i18n.AvalancheSituation");
+		ResourceBundle avalancheSituationMessages = ResourceBundle.getBundle("i18n.AvalancheSituation",
+				lang.getLocale(), new XMLResourceBundleControl());
 		Map<String, Object> result = new HashMap<>();
 
 		result.put("avalancheProblemIcon", GlobalVariables.getServerImagesUrl()

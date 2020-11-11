@@ -44,6 +44,7 @@ import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.TelegramConfig;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.XMLResourceBundleControl;
 
 public class BlogController extends CommonProcessor {
 	private static Logger logger = LoggerFactory.getLogger(BlogController.class);
@@ -171,7 +172,8 @@ public class BlogController extends CommonProcessor {
 		if (getBlogId(region, lang) != null) {
 			try {
 				JSONArray blogPosts = getBlogPosts(region, lang);
-				ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
+				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
+						new XMLResourceBundleControl());
 
 				logger.info("Found " + blogPosts.length() + " new blog posts!");
 				for (Object object : blogPosts)

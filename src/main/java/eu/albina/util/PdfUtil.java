@@ -207,7 +207,8 @@ public class PdfUtil {
 
 		if (!regionBulletins.isEmpty())
 			for (LanguageCode lang : GlobalVariables.languages) {
-				ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
+				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
+						new XMLResourceBundleControl());
 
 				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString,
 						publicationTimeString, messages))

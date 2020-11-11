@@ -31,7 +31,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.AttributedString;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
@@ -94,8 +93,10 @@ public class StaticWidgetUtil {
 			int width = 600;
 			int height = 800;
 
-			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
-			ResourceBundle staticWidgetBundle = lang.getBundle("i18n.StaticWidget");
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
+					new XMLResourceBundleControl());
+			ResourceBundle staticWidgetBundle = ResourceBundle.getBundle("i18n.StaticWidget", lang.getLocale(),
+					new XMLResourceBundleControl());
 
 			DangerRating highestDangerRating = GlobalVariables.getHighestDangerRating(bulletins);
 			String date = AlbinaUtil.getDate(bulletins, messages);

@@ -19,12 +19,14 @@ package eu.albina.model.enumerations;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import eu.albina.util.XMLResourceBundleControl;
+
 public enum DangerRating {
 	missing, no_snow, no_rating, low, moderate, considerable, high, very_high;
 
 	public String toString(Locale locale, boolean useLong) {
-		return ResourceBundle.getBundle("i18n.DangerRating", locale)
-			.getString(name() + (useLong ? ".long" : ""));
+		return ResourceBundle.getBundle("i18n.DangerRating", locale, new XMLResourceBundleControl())
+				.getString(name() + (useLong ? ".long" : ""));
 	}
 
 	public static DangerRating fromString(String text) {
@@ -39,18 +41,18 @@ public enum DangerRating {
 
 	public String getColor() {
 		switch (this) {
-			case low:
-				return "#CCFF66";
-			case moderate:
-				return "#FFFF00";
-			case considerable:
-				return "#FF9900";
-			case high:
-				return "#FF0000";
-			case very_high:
-				return "#800000";
-			default:
-				return "#969696";
+		case low:
+			return "#CCFF66";
+		case moderate:
+			return "#FFFF00";
+		case considerable:
+			return "#FF9900";
+		case high:
+			return "#FF0000";
+		case very_high:
+			return "#800000";
+		default:
+			return "#969696";
 		}
 	}
 
@@ -152,24 +154,24 @@ public enum DangerRating {
 
 	public double getDouble() {
 		switch (this) {
-			case missing:
-				return .0;
-			case no_rating:
-				return .0;
-			case no_snow:
-				return .0;
-			case low:
-				return 1.0 / 1364;
-			case moderate:
-				return 1.0 / 1364 * 4.0;
-			case considerable:
-				return 1.0 / 1364 * 4.0 * 4.0;
-			case high:
-				return 1.0 / 1364 * 4.0 * 4.0 * 4.0;
-			case very_high:
-				return 1.0 / 1364 * 4.0 * 4.0 * 4.0 * 4.0;
-			default:
-				return .0;
+		case missing:
+			return .0;
+		case no_rating:
+			return .0;
+		case no_snow:
+			return .0;
+		case low:
+			return 1.0 / 1364;
+		case moderate:
+			return 1.0 / 1364 * 4.0;
+		case considerable:
+			return 1.0 / 1364 * 4.0 * 4.0;
+		case high:
+			return 1.0 / 1364 * 4.0 * 4.0 * 4.0;
+		case very_high:
+			return 1.0 / 1364 * 4.0 * 4.0 * 4.0 * 4.0;
+		default:
+			return .0;
 		}
 	}
 }

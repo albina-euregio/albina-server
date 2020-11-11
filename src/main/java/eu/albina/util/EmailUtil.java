@@ -112,7 +112,8 @@ public class EmailUtil {
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : GlobalVariables.languages) {
-			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
+					new XMLResourceBundleControl());
 
 			String subject;
 			if (update)

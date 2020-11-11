@@ -19,11 +19,13 @@ package eu.albina.model.enumerations;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import eu.albina.util.XMLResourceBundleControl;
+
 public enum Tendency {
 	decreasing, steady, increasing;
 
 	public String toString(Locale locale) {
-		return ResourceBundle.getBundle("i18n.Tendency", locale).getString(name());
+		return ResourceBundle.getBundle("i18n.Tendency", locale, new XMLResourceBundleControl()).getString(name());
 	}
 
 	public static Tendency fromString(String text) {

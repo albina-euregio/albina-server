@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
@@ -72,7 +71,8 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Rectangle pageSize = page.getPageSize();
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
-			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
+					new XMLResourceBundleControl());
 
 			Color blue;
 			if (grayscale)

@@ -79,7 +79,8 @@ public class AlbinaUtil {
 		if ("".equals(regionId)) {
 			return "";
 		}
-		ResourceBundle regions = lang.getBundle("i18n.Regions");
+		ResourceBundle regions = ResourceBundle.getBundle("i18n.Regions", lang.getLocale(),
+				new XMLResourceBundleControl());
 		return regions.getString(regionId);
 	}
 

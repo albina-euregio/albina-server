@@ -51,7 +51,8 @@ public class MessengerPeopleUtil {
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 
 		for (LanguageCode lang : GlobalVariables.languages) {
-			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
+					new XMLResourceBundleControl());
 			String message = GlobalVariables.getSocialMediaText(date, update, messages);
 			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions, messages);
 		}

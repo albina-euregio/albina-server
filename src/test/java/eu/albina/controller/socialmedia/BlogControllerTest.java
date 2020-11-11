@@ -33,6 +33,7 @@ import com.github.openjson.JSONObject;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.XMLResourceBundleControl;
 
 public class BlogControllerTest {
 
@@ -70,7 +71,8 @@ public class BlogControllerTest {
 				+ "  \"selfLink\": \"https://www.googleapis.com/blogger/v3/blogs/1263754381945501754/posts/4564885875858452565\"\n"
 				+ "}\n");
 
-		ResourceBundle messages = LanguageCode.de.getBundle("i18n.MessagesBundle");
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
+				new XMLResourceBundleControl());
 
 		BlogController.getInstance().sendNewBlogPostToMessengerpeople(blog, "IT-32-BZ", LanguageCode.de, messages);
 	}

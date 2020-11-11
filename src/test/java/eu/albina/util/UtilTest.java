@@ -18,6 +18,7 @@ package eu.albina.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -156,7 +157,8 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		ResourceBundle messages = LanguageCode.de.getBundle("i18n.MessagesBundle");
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
+				new XMLResourceBundleControl());
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
 				GlobalVariables.codeTyrol, false, false, messages);
 		System.out.println(html);
@@ -199,17 +201,26 @@ public class UtilTest {
 		MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, false);
 	}
 
-	@Ignore
 	@Test
 	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException, TemplateException {
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.en, "");
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, "");
 		System.out.println(htmlString);
 	}
 
 	@Ignore
 	@Test
+	public void retrieveTranslationTest() throws UnsupportedEncodingException {
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.ca.getLocale(),
+				new XMLResourceBundleControl());
+		String string = messages.getString("headline.tendency");
+		System.out.println(string);
+	}
+
+	@Ignore
+	@Test
 	public void createPdf() throws IOException, URISyntaxException {
-		ResourceBundle messages = LanguageCode.de.getBundle("i18n.MessagesBundle");
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
+				new XMLResourceBundleControl());
 
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);

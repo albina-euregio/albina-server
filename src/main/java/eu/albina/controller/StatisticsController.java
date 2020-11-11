@@ -44,6 +44,7 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.XMLResourceBundleControl;
 
 /**
  * Controller for statistics.
@@ -63,7 +64,8 @@ public class StatisticsController {
 	 * Private constructor.
 	 */
 	private StatisticsController() {
-		messages = LanguageCode.en.getBundle("i18n.MessagesBundle");
+		messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.en.getLocale(),
+				new XMLResourceBundleControl());
 	}
 
 	/**

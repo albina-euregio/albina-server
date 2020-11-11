@@ -52,6 +52,7 @@ import eu.albina.rest.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.XMLResourceBundleControl;
 import eu.albina.util.XmlUtil;
 
 /**
@@ -744,9 +745,12 @@ public class AvalancheBulletinController {
 		boolean incompleteTranslation = false;
 
 		// LANG
-		ResourceBundle messagesDe = LanguageCode.de.getBundle("i18n.MessagesBundle");
-		ResourceBundle messagesIt = LanguageCode.it.getBundle("i18n.MessagesBundle");
-		ResourceBundle messagesEn = LanguageCode.en.getBundle("i18n.MessagesBundle");
+		ResourceBundle messagesDe = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
+				new XMLResourceBundleControl());
+		ResourceBundle messagesIt = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.it.getLocale(),
+				new XMLResourceBundleControl());
+		ResourceBundle messagesEn = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.en.getLocale(),
+				new XMLResourceBundleControl());
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();

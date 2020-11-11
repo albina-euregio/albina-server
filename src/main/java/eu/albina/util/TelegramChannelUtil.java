@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -50,7 +49,8 @@ public class TelegramChannelUtil {
 
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.languages) {
-			ResourceBundle messages = lang.getBundle("i18n.MessagesBundle");
+			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
+					new XMLResourceBundleControl());
 
 			DateTime date = AlbinaUtil.getDate(bulletins);
 			String message = GlobalVariables.getSocialMediaText(date, update, messages);
