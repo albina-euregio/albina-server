@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="dp1">md 1: sous-couche fragile persistante</entry>
-  <entry key="dp2">md 2: neige glissante</entry>
-  <entry key="dp3">md 3: pluie</entry>
-  <entry key="dp4">md 4: froid suivant chaud/ chaud suivant froid</entry>
-  <entry key="dp5">md 5: chute de neige après une longue période de froid</entry>
-  <entry key="dp6">md 6: froid, neige légère et vent</entry>
-  <entry key="dp7">md 7: zones avec peu de neige à coté des zones enneigées</entry>
-  <entry key="dp8">md 8: givre de surface enneigé</entry>
-  <entry key="dp9">md 9: neige roulée enneigé</entry>
-  <entry key="dp10">md 10: situation de printemps</entry>
+  <entry key="dp1">md.1: sous-couche fragile persistante</entry>
+  <entry key="dp2">md.2: neige glissante</entry>
+  <entry key="dp3">md.3: pluie</entry>
+  <entry key="dp4">md.4: froid suivant chaud / chaud suivant froid</entry>
+  <entry key="dp5">md.5: chute de neige après une longue période de froid</entry>
+  <entry key="dp6">md.6: froid, neige légère et vent</entry>
+  <entry key="dp7">md.7: zones avec peu de neige à coté des zones enneigées</entry>
+  <entry key="dp8">md.8: givre de surface enneigé</entry>
+  <entry key="dp9">md.9: neige roulée enneigé</entry>
+  <entry key="dp10">md.10: situation de printemps</entry>
 </properties>

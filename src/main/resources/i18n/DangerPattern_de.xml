@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="dp1">gm 1: bodennahe schwachschicht vom frühwinter</entry>
-  <entry key="dp2">gm 2: gleitschnee</entry>
-  <entry key="dp3">gm 3: regen</entry>
-  <entry key="dp4">gm 4: kalt auf warm / warm auf kalt</entry>
-  <entry key="dp5">gm 5: schnee nach langer kälteperiode</entry>
-  <entry key="dp6">gm 6: lockerer schnee und wind</entry>
-  <entry key="dp7">gm 7: schneearm neben schneereich</entry>
-  <entry key="dp8">gm 8: eingeschneiter oberflächenreif</entry>
-  <entry key="dp9">gm 9: eingeschneiter graupel</entry>
-  <entry key="dp10">gm 10: frühjahrssituation</entry>
+  <entry key="dp1">gm.1: bodennahe schwachschicht</entry>
+  <entry key="dp2">gm.2: gleitschnee</entry>
+  <entry key="dp3">gm.3: regen</entry>
+  <entry key="dp4">gm.4: kalt auf warm / warm auf kalt</entry>
+  <entry key="dp5">gm.5: schnee nach langer kälteperiode</entry>
+  <entry key="dp6">gm.6: lockerer schnee und wind</entry>
+  <entry key="dp7">gm.7: schneearm neben schneereich</entry>
+  <entry key="dp8">gm.8: eingeschneiter oberflächenreif</entry>
+  <entry key="dp9">gm.9: eingeschneiter graupel</entry>
+  <entry key="dp10">gm.10: frühjahrssituation</entry>
 </properties>

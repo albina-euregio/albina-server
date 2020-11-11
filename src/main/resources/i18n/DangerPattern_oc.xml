@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="dp1">dp 1: cocha fèbla persistena prigonda</entry>
-  <entry key="dp2">dp 2: esguitlament de nhèu</entry>
-  <entry key="dp3">dp 3: ploja</entry>
-  <entry key="dp4">dp 4: heired dessús de caud / caud dessús de heired</entry>
-  <entry key="dp5">dp 5: nheuada dempús d'un long periòde d'iuern</entry>
-  <entry key="dp6">dp 6: heired, nhèu sense coesion e vent</entry>
-  <entry key="dp7">dp 7: zònes praubes de nhèu en zònes abundantes de nhèu</entry>
-  <entry key="dp8">dp 8: geladiua de superfícia caperada damb nhèu</entry>
-  <entry key="dp9">dp 9: nhèu granulada caperada damb nhèu</entry>
-  <entry key="dp10">dp 10: scenari de primauera</entry>
+  <entry key="dp1">pp.1: cocha fèbla persistena prigonda</entry>
+  <entry key="dp2">pp.2: esguitlament de nhèu</entry>
+  <entry key="dp3">pp.3: ploja</entry>
+  <entry key="dp4">pp.4: heired dessús de caud / caud dessús de heired</entry>
+  <entry key="dp5">pp.5: nheuada dempús d'un long periòde d'iuern</entry>
+  <entry key="dp6">pp.6: heired, nhèu sense coesion e vent</entry>
+  <entry key="dp7">pp.7: zònes praubes de nhèu en zònes abundantes de nhèu</entry>
+  <entry key="dp8">pp.8: geladiua de superfícia caperada damb nhèu</entry>
+  <entry key="dp9">pp.9: nhèu granulada caperada damb nhèu</entry>
+  <entry key="dp10">pp.10: scenari de primauera</entry>
 </properties>

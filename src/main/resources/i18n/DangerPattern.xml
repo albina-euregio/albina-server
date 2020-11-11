@@ -2,14 +2,14 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 
 <properties>
-	<entry key="dp1">dp 1: deep persistent weak layer</entry>
-	<entry key="dp2">dp 2: gliding snow</entry>
-	<entry key="dp3">dp 3: rain</entry>
-	<entry key="dp4">dp 4: cold following warm / warm following cold</entry>
-	<entry key="dp5">dp 5: snowfall after a long period of cold</entry>
-	<entry key="dp6">dp 6: cold, loose snow and wind</entry>
-	<entry key="dp7">dp 7: snow-poor zones in snow-rich surrounding</entry>
-	<entry key="dp8">dp 8: surface hoar blanketed with snow</entry>
-	<entry key="dp9">dp 9: graupel blanketed with snow</entry>
-	<entry key="dp10">dp 10: springtime scenario</entry>
+	<entry key="dp1">dp.1: deep persistent weak layer</entry>
+	<entry key="dp2">dp.2: gliding snow</entry>
+	<entry key="dp3">dp.3: rain</entry>
+	<entry key="dp4">dp.4: cold following warm / warm following cold</entry>
+	<entry key="dp5">dp.5: snowfall after a long period of cold</entry>
+	<entry key="dp6">dp.6: cold, loose snow and wind</entry>
+	<entry key="dp7">dp.7: snow-poor zones in snow-rich surrounding</entry>
+	<entry key="dp8">dp.8: surface hoar blanketed with snow</entry>
+	<entry key="dp9">dp.9: graupel blanketed with snow</entry>
+	<entry key="dp10">dp.10: springtime scenario</entry>
 </properties>
