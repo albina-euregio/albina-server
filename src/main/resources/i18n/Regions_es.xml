@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="AT-07">Tirol</entry>
-  <entry key="AT-07-01">Allgäu Alps</entry>
+  <entry key="AT-07-01">Alpes de Allgäu</entry>
   <entry key="AT-07-02">Alpes de Lechtal Este - Alpes de Ammergau</entry>
   <entry key="AT-07-03">Montañas de Mieming</entry>
   <entry key="AT-07-04">Montañas de Karwendel</entry>
@@ -18,10 +18,10 @@
   <entry key="AT-07-14">Oetz Norte y Alpes de Stubai</entry>
   <entry key="AT-07-15">Alpes de Tuxer Oeste</entry>
   <entry key="AT-07-16">Alpes de Tuxer Este</entry>
-  <entry key="AT-07-17">Western Kitzbühel Alps</entry>
-  <entry key="AT-07-18">Eastern Kitzbühel Alps</entry>
+  <entry key="AT-07-17">Alpes de Kitzbühel Oeste</entry>
+  <entry key="AT-07-18">Alpes de Kitzbühel Este</entry>
   <entry key="AT-07-19">Cordillera de Glockturm</entry>
-  <entry key="AT-07-20">Weißkugel Range</entry>
+  <entry key="AT-07-20">Cordillera de Weißkugel</entry>
   <entry key="AT-07-21">Cordillera de Gurgler</entry>
   <entry key="AT-07-22">Alpes de Stubai Centrales</entry>
   <entry key="AT-07-23">Alpes de Zillertal Norte</entry>
@@ -32,7 +32,7 @@
   <entry key="AT-07-28">Montañas de Schober</entry>
   <entry key="AT-07-29">Lienzer Dolomites</entry>
   <entry key="IT-32-BZ">Tirol del Sur</entry>
-  <entry key="IT-32-BZ-01">Val Müstair Alps</entry>
+  <entry key="IT-32-BZ-01">Alpes de Val Müstair</entry>
   <entry key="IT-32-BZ-02">Langtaufers</entry>
   <entry key="IT-32-BZ-03">Schnals Ridge</entry>
   <entry key="IT-32-BZ-04">Alpes de Stubai del Sur</entry>

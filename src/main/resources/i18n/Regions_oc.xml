@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="AT-07">Tiròl</entry>
-  <entry key="AT-07-01">Allgäu Alps</entry>
+  <entry key="AT-07-01">Alps Allgäu</entry>
   <entry key="AT-07-02">Alps der èst de Lechtal - Alps de Ammergau</entry>
   <entry key="AT-07-03">Montanhes de Mieming</entry>
   <entry key="AT-07-04">Montanhes de Karwendel</entry>
@@ -18,10 +18,10 @@
   <entry key="AT-07-14">Oetz nòrd e Alps de Stubai</entry>
   <entry key="AT-07-15">Alps der oèst de Tuxer</entry>
   <entry key="AT-07-16">Alps der èst de Tuxer</entry>
-  <entry key="AT-07-17">Western Kitzbühel Alps</entry>
-  <entry key="AT-07-18">Eastern Kitzbühel Alps</entry>
+  <entry key="AT-07-17">Alps der oèst de Kitzbühel</entry>
+  <entry key="AT-07-18">Alps der èst de Kitzbühel</entry>
   <entry key="AT-07-19">Sèrra de Glockturm</entry>
-  <entry key="AT-07-20">Weißkugel Range</entry>
+  <entry key="AT-07-20">Sèrra de Weisskugel</entry>
   <entry key="AT-07-21">Sèrra de Gurgler</entry>
   <entry key="AT-07-22">Alps deth centre de Stubai</entry>
   <entry key="AT-07-23">Alps deth nòrd de Zillertal</entry>
@@ -32,7 +32,7 @@
   <entry key="AT-07-28">Montanhes de Schober</entry>
   <entry key="AT-07-29">Dolomites de Lienz</entry>
   <entry key="IT-32-BZ">Sud-Tiròl</entry>
-  <entry key="IT-32-BZ-01">Val Müstair Alps</entry>
+  <entry key="IT-32-BZ-01">Alps de Val Müstair</entry>
   <entry key="IT-32-BZ-02">Langtaufers</entry>
   <entry key="IT-32-BZ-03">Val Senales</entry>
   <entry key="IT-32-BZ-04">Alps deth sud de Stubai</entry>
@@ -49,7 +49,7 @@
   <entry key="IT-32-BZ-15">Val der Ulten</entry>
   <entry key="IT-32-BZ-16">Alps der èst de Nonsberger</entry>
   <entry key="IT-32-BZ-17">Dolomites deth nòrd de Fiemme</entry>
-  <entry key="IT-32-BZ-18">Gröden Dolomites</entry>
+  <entry key="IT-32-BZ-18">Dolomites de Gröden</entry>
   <entry key="IT-32-BZ-19">Dolomites de Prags</entry>
   <entry key="IT-32-BZ-20">Dolomites de Sexten</entry>
   <entry key="IT-32-TN">Trentin</entry>

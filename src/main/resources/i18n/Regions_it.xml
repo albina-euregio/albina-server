@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="AT-07">Tirolo</entry>
-  <entry key="AT-07-01">Allgäu Alps</entry>
+  <entry key="AT-07-01">Alpi dell'Allgäu</entry>
   <entry key="AT-07-02">Alpi della Lechtal orientali - Alpi dell'Ammergau</entry>
   <entry key="AT-07-03">Monti di Mieming</entry>
   <entry key="AT-07-04">Monti del Karwendel</entry>
@@ -18,10 +18,10 @@
   <entry key="AT-07-14">Alpi della Valle Oetz e dello Stubai settentrionali</entry>
   <entry key="AT-07-15">Alpi del Tux occidentali</entry>
   <entry key="AT-07-16">Alpi del Tux orientali</entry>
-  <entry key="AT-07-17">Western Kitzbühel Alps</entry>
-  <entry key="AT-07-18">Eastern Kitzbühel Alps</entry>
+  <entry key="AT-07-17">Alpi di Kitzbühel occidentali</entry>
+  <entry key="AT-07-18">Alpi di Kitzbühel orientali</entry>
   <entry key="AT-07-19">Gruppo della Punta della Gallina</entry>
-  <entry key="AT-07-20">Weißkugel Range</entry>
+  <entry key="AT-07-20">Gruppo della Palla Bianca</entry>
   <entry key="AT-07-21">Alpi Passirie</entry>
   <entry key="AT-07-22">Alpi dello Stubai centrali</entry>
   <entry key="AT-07-23">Alpi della Zillertal settentrionali</entry>
@@ -32,7 +32,7 @@
   <entry key="AT-07-28">Gruppo dello Schober</entry>
   <entry key="AT-07-29">Dolomiti di Lienz</entry>
   <entry key="IT-32-BZ">Alto Adige</entry>
-  <entry key="IT-32-BZ-01">Val Müstair Alps</entry>
+  <entry key="IT-32-BZ-01">Alpi della Val Müstair</entry>
   <entry key="IT-32-BZ-02">Vallelunga</entry>
   <entry key="IT-32-BZ-03">Cresta di Senales</entry>
   <entry key="IT-32-BZ-04">Alpi dello Stubai meridionali</entry>
@@ -49,7 +49,7 @@
   <entry key="IT-32-BZ-15">Val d'Ultimo</entry>
   <entry key="IT-32-BZ-16">Alpi della Val di Non orientali</entry>
   <entry key="IT-32-BZ-17">Dolomiti di Fiemme settentrionali</entry>
-  <entry key="IT-32-BZ-18">Gröden Dolomites</entry>
+  <entry key="IT-32-BZ-18">Dolomiti di Gardena</entry>
   <entry key="IT-32-BZ-19">Dolomiti di Braies</entry>
   <entry key="IT-32-BZ-20">Dolomiti di Sesto</entry>
   <entry key="IT-32-TN">Trentino</entry>
