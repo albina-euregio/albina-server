@@ -477,14 +477,7 @@ public class PublicationController {
 			throws Exception {
 		logger.info("Map production started");
 
-		// map production only for EUREGIO
-		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			if (avalancheBulletin.affectsRegionOnlyPublished(GlobalVariables.codeEuregio))
-				regionBulletins.add(avalancheBulletin);
-		}
-
-		if (!regionBulletins.isEmpty()) {
+		if (!bulletins.isEmpty()) {
 			MapUtil.createDangerRatingMaps(bulletins);
 			if (GlobalVariables.isMapProductionUrlUnivie())
 				AlbinaUtil.runCopyMapsUnivieScript(validityDateString, publicationTimeString);
