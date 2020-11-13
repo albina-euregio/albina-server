@@ -135,7 +135,7 @@
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
 				<albina.conf.univie-maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm/</albina.conf.univie-maps-path>
 				<albina.conf.maps-path>/mnt/albina_files</albina.conf.maps-path>
-				<albina.conf.map-production-url>http://data1.geo.univie.ac.at/projects/albina2/tools/awm/create_albina_maps/create_albina_maps2.php</albina.conf.map-production-url>
+				<albina.conf.map-production-url>/opt/avalanche-warning-maps/</albina.conf.map-production-url>
 				<albina.conf.pdf-directory>/mnt/albina_files</albina.conf.pdf-directory>
 				<albina.conf.html-directory>/mnt/simple</albina.conf.html-directory>
 				<albina.conf.publish-at-5-pm>true</albina.conf.publish-at-5-pm>
