@@ -12,8 +12,6 @@ cp -r $1/$2/fd_overlay/* $1/latest/fd_overlay/
 cp -r $1/$2/am_overlay/* $1/latest/am_overlay/
 cp -r $1/$2/pm_overlay/* $1/latest/pm_overlay/
 
-chmod -R 755 $1/latest/
-
 rm $3/de.html
 rm $3/it.html
 rm $3/en.html
@@ -150,5 +148,21 @@ mv $1/latest/$2_ES-CT-L_es_bw.pdf $1/latest/ES-CT-L_es_bw.pdf
 mv $1/latest/$2_ES-CT-L_ca_bw.pdf $1/latest/ES-CT-L_ca_bw.pdf
 mv $1/latest/$2_ES-CT-L_oc_bw.pdf $1/latest/ES-CT-L_oc_bw.pdf
 
+mv $1/latest/$2_de.xml $1/latest/de.xml
+mv $1/latest/$2_it.xml $1/latest/it.xml
+mv $1/latest/$2_en.xml $1/latest/en.xml
+mv $1/latest/$2_fr.xml $1/latest/fr.xml
+mv $1/latest/$2_es.xml $1/latest/es.xml
+mv $1/latest/$2_ca.xml $1/latest/ca.xml
+mv $1/latest/$2_oc.xml $1/latest/oc.xml
+mv $1/latest/$2_de_CAAMLv6.xml $1/latest/de_CAAMLv6.xml
+mv $1/latest/$2_it_CAAMLv6.xml $1/latest/it_CAAMLv6.xml
+mv $1/latest/$2_en_CAAMLv6.xml $1/latest/en_CAAMLv6.xml
+mv $1/latest/$2_fr_CAAMLv6.xml $1/latest/fr_CAAMLv6.xml
+mv $1/latest/$2_es_CAAMLv6.xml $1/latest/es_CAAMLv6.xml
+mv $1/latest/$2_ca_CAAMLv6.xml $1/latest/ca_CAAMLv6.xml
+mv $1/latest/$2_oc_CAAMLv6.xml $1/latest/oc_CAAMLv6.xml
+
 chmod 755 $3/*.html
+chmod -R 755 $1/latest/
 
