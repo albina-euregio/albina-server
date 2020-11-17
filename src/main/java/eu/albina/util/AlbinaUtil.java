@@ -49,6 +49,7 @@ import eu.albina.model.enumerations.LanguageCode;
 public class AlbinaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
+	private static final ClassLoader classLoader = AlbinaUtil.class.getClassLoader();
 
 	// REGION
 	public static final int regionCountTyrol = 29;
@@ -361,8 +362,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateMapsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateMaps.sh",
-					GlobalVariables.getMapsPath(), date, publicationTime).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateMaps.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getMapsPath(), date,
+					publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps for {} copied using {}", date, pb.command());
@@ -373,9 +375,9 @@ public class AlbinaUtil {
 
 	public static void runCopyMapsUnivieScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyMapsUnivie.sh",
-					GlobalVariables.getMapsPath(), date, publicationTime, GlobalVariables.getUnivieMapsPath())
-							.inheritIO();
+			final File file = new File(classLoader.getResource("scripts/copyMapsUnivie.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getMapsPath(), date,
+					publicationTime, GlobalVariables.getUnivieMapsPath()).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps for {} copied from Univie using {}", date, pb.command());
@@ -386,8 +388,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateFiles.sh",
-					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateFiles.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(), date,
+					publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Files updated for {} using {}", date, pb.command());
@@ -398,8 +401,9 @@ public class AlbinaUtil {
 
 	public static void runUpdatePdfsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updatePdfs.sh",
-					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updatePdfs.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(), date,
+					publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PDFs updated in date directory for {} using {}", date, pb.command());
@@ -410,8 +414,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateLatestPdfsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestPdfs.sh",
-					GlobalVariables.getPdfDirectory(), date).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateLatestPdfs.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(), date)
+					.inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PDFs for {} updated in latest directory using {}", date, pb.command());
@@ -422,8 +427,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateJsonScript(String validityDateString, String publicationTimeString) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateJson.sh",
-					GlobalVariables.getPdfDirectory(), validityDateString, publicationTimeString).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateJson.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(),
+					validityDateString, publicationTimeString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("JSON updated in date directory for {} using {}", validityDateString, pb.command());
@@ -434,8 +440,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateXmlsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateXmls.sh",
-					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateXmls.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(), date,
+					publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("XMLs updated in date directory for {} using {}", date, pb.command());
@@ -446,8 +453,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateLatestJsonScript(String validityDateString) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestJson.sh",
-					GlobalVariables.getPdfDirectory(), validityDateString).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateLatestJson.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(),
+					validityDateString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("JSON for {} updated in latest directory using {}", validityDateString, pb.command());
@@ -458,8 +466,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateLatestXmlsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestXmls.sh",
-					GlobalVariables.getPdfDirectory(), date).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateLatestXmls.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(), date)
+					.inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("XMLs for {} update in latest directory using {}", date, pb.command());
@@ -470,8 +479,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateStaticWidgetsScript(String date, String publicationTime) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "copyPngs.sh",
-					GlobalVariables.getPdfDirectory(), date, publicationTime).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateStaticWidgets.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(), date,
+					publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PNGs updated in date directory for {} using {}", date, pb.command());
@@ -482,9 +492,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateLatestStaticWidgetsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					GlobalVariables.scriptsPath + "updateLatestStaticWidgets.sh", GlobalVariables.getPdfDirectory(),
-					date).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateLatestStaticWidgets.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(), date)
+					.inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PNGs for {} updated in latest directory using {}", date, pb.command());
@@ -495,8 +505,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateLatestMapsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestMaps.sh",
-					GlobalVariables.getMapsPath(), date).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateLatestMaps.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getMapsPath(), date)
+					.inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps for {} updated in latest directory using {}", date, pb.command());
@@ -507,8 +518,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateLatestFilesScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestFiles.sh",
-					GlobalVariables.getPdfDirectory(), date, GlobalVariables.getHtmlDirectory()).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateLatestFiles.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getPdfDirectory(), date,
+					GlobalVariables.getHtmlDirectory()).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Latest files updated using {}", pb.command());
@@ -519,8 +531,9 @@ public class AlbinaUtil {
 
 	public static void runUpdateLatestHtmlsScript(String date) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh", GlobalVariables.scriptsPath + "updateLatestHtmls.sh",
-					GlobalVariables.getHtmlDirectory(), date).inheritIO();
+			final File file = new File(classLoader.getResource("scripts/updateLatestHtmls.sh").getFile());
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh", file.getPath(), GlobalVariables.getHtmlDirectory(), date)
+					.inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("HTMLs for {} updated in latest directory using {}", date, pb.command());
