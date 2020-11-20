@@ -226,9 +226,11 @@ public class XmlUtil {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
-		dateTimeReport.appendChild(
-				doc.createTextNode(dateTime.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
-		metaData.appendChild(dateTimeReport);
+		if (dateTime != null) {
+			dateTimeReport.appendChild(doc
+					.createTextNode(dateTime.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
+			metaData.appendChild(dateTimeReport);
+		}
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");
 		Element name = doc.createElement("name");
