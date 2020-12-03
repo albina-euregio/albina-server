@@ -191,6 +191,20 @@ public class GlobalVariables {
 		}
 	};
 
+	// LANG
+	public static List<LanguageCode> socialMediaLanguages = new ArrayList<LanguageCode>() {
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add(LanguageCode.de);
+			add(LanguageCode.it);
+			add(LanguageCode.en);
+		}
+	};
+
 	public static String avalancheReportUsername = "info@avalanche.report";
 
 	// TODO create secret

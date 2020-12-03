@@ -48,7 +48,7 @@ public class TelegramChannelUtil {
 	}
 
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
-		for (LanguageCode lang : GlobalVariables.languages) {
+		for (LanguageCode lang : GlobalVariables.socialMediaLanguages) {
 			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
 					new XMLResourceBundleControl());
 

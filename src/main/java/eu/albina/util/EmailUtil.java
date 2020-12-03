@@ -111,7 +111,7 @@ public class EmailUtil {
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
-		for (LanguageCode lang : GlobalVariables.languages) {
+		for (LanguageCode lang : GlobalVariables.socialMediaLanguages) {
 			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
 					new XMLResourceBundleControl());
 
@@ -254,7 +254,7 @@ public class EmailUtil {
 			else
 				text.put("publishedAt", messages.getString("published"));
 			text.put("date", AlbinaUtil.getDate(bulletins, messages));
-			text.put("title", messages.getString("title"));
+			text.put("title", messages.getString("headline"));
 			if (update)
 				text.put("headline", messages.getString("headline.update"));
 			else
