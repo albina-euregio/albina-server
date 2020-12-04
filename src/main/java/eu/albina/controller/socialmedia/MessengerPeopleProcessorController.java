@@ -167,7 +167,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 	public HttpResponse sendNewsLetter(MessengerPeopleConfig config, LanguageCode language, String message,
 			String attachmentUrl) throws IOException, AlbinaException {
 		Integer targeting = getTargeting(config.getRegionConfiguration().getRegion().getId(), language);
-		if (targeting < 0) {
+		if (targeting > 0) {
 			StringBuilder data = new StringBuilder();
 			data.append("{ \"text\": \"");
 			data.append(message);
