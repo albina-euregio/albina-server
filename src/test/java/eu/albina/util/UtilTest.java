@@ -75,6 +75,7 @@ public class UtilTest {
 		names.add("Marco Gadotti");
 		names.add("Walter Beozzo");
 		names.add("Gianluca Tognoni");
+		names.add("Andrea Piazza");
 		names.add("Günther Geier");
 		names.add("Fabio Gheser");
 		names.add("Lukas Rastner");
@@ -106,6 +107,7 @@ public class UtilTest {
 		passwords.add("Marco");
 		passwords.add("Walter");
 		passwords.add("Gianluca");
+		passwords.add("Andrea");
 		passwords.add("Günther");
 		passwords.add("Fabio");
 		passwords.add("Lukas");
@@ -242,7 +244,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 25; i < 30; i++) {
+		for (int i = 4; i < 6; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
