@@ -316,6 +316,7 @@ public class MapUtil {
 				put("scalebar", Map.overlay.equals(map) ? "off" : "on");
 				put("copyright", Map.overlay.equals(map) ? "off" : "on");
 				put("interreg", Map.fullmap.equals(map) ? "on" : "off");
+				put("logo", Map.fullmap.equals(map) ? "on" : "off");
 				put("bulletin_id", bulletinId != null ? bulletinIndex : map.name());
 			}
 		};
@@ -352,9 +353,12 @@ public class MapUtil {
 		new ProcessBuilder("convert", outputFilePng, outputFileJpg).inheritIO().start().waitFor();
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletinId == null) {
 			// create combined am/pm maps
-			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, grayscale, "jpg")).toString();
-			final String pmFile = outputDirectory.resolve(map.filename(DaytimeDependency.pm, grayscale, "jpg")).toString();
-			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, grayscale, "jpg")).toString();
+			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, grayscale, "jpg"))
+					.toString();
+			final String pmFile = outputDirectory.resolve(map.filename(DaytimeDependency.pm, grayscale, "jpg"))
+					.toString();
+			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, grayscale, "jpg"))
+					.toString();
 			logger.info("Combining {} and {} to {}", amFile, pmFile, fdFile);
 			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
