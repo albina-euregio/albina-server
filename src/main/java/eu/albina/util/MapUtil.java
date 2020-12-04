@@ -343,6 +343,10 @@ public class MapUtil {
 		logger.info("Converting {} to {}", outputFile, outputFilePng);
 		new ProcessBuilder("gs", "-sDEVICE=png16m", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
 				outputFilePng, outputFile.toString()).inheritIO().start().waitFor();
+		// create transparency
+		if (Map.overlay.equals(map))
+			new ProcessBuilder("convert", "-transparent white", outputFilePng, outputFilePng).inheritIO().start()
+					.waitFor();
 
 		// convert to webp
 		logger.info("Converting {} to {}", outputFilePng, outputFileWebp);
