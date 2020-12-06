@@ -390,7 +390,11 @@ public class EmailUtil {
 				}
 
 				Map<String, Object> tendency = new HashMap<>();
-				tendency.put("text", avalancheBulletin.getTendency().toString(lang.getLocale()));
+				if (avalancheBulletin.getTendency() == null) {
+					tendency.put("text", avalancheBulletin.getTendency().toString(lang.getLocale()));
+				} else {
+					tendency.put("text", "");
+				}
 				if (avalancheBulletin.getTendency() == Tendency.decreasing) {
 					tendency.put("symbol",
 							GlobalVariables.getServerImagesUrl() + "tendency/tendency_decreasing_blue.png");
