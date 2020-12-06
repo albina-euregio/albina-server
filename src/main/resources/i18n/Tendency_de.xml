@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="decreasing">Tendenz: Lawinengefahr nimm ab</entry>
+  <entry key="decreasing">Tendenz: Lawinengefahr nimmt ab</entry>
   <entry key="steady">Tendenz: Lawinengefahr bleibt gleich</entry>
   <entry key="increasing">Tendenz: Lawinengefahr steigt</entry>
 </properties>
