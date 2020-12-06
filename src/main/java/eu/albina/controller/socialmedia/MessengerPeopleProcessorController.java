@@ -183,8 +183,8 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 			data.append(config.getApiKey());
 			data.append("\" }");
 
-			logger.info(
-					"Publishing report on messengerpeople for " + config.getRegionConfiguration().getRegion().getId());
+			logger.info("Publishing report on messengerpeople for "
+					+ config.getRegionConfiguration().getRegion().getId() + " in " + language);
 
 			String url = baseUrl + "/content";
 			Request request = Request.Post(url).addHeader("Content-Type", "application/json")
@@ -195,7 +195,7 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 			// Go ahead only if success
 			if (response.getStatusLine().getStatusCode() != 200) {
 				logger.warn("Error publishing report on messengerpeople for "
-						+ config.getRegionConfiguration().getRegion().getId() + "(error code "
+						+ config.getRegionConfiguration().getRegion().getId() + " in " + language + " (error code "
 						+ response.getStatusLine().getStatusCode() + ")");
 
 				String body = response.getEntity() != null
