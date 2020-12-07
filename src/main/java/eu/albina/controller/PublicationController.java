@@ -156,7 +156,7 @@ public class PublicationController {
 				// publish on telegram channel
 				if (GlobalVariables.isPublishToTelegramChannel()) {
 					Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins,
-							GlobalVariables.regionsEuregio, true);
+							GlobalVariables.regionsEuregio, false);
 					triggerTelegramChannelThread.start();
 				}
 			} catch (InterruptedException e) {
