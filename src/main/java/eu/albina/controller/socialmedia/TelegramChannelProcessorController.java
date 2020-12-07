@@ -49,6 +49,8 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 		urlString = String.format(urlString, config.getApiToken(), config.getChatId(),
 				URLEncoder.encode(message, "UTF-8"), URLEncoder.encode(attachmentUrl, "UTF-8"));
 
+		logger.info("URL: " + urlString);
+
 		Request request = Request.Get(urlString).connectTimeout(CONNECTION_TIMEOUT).socketTimeout(SOCKET_TIMEOUT);
 		HttpResponse response = request.execute().returnResponse();
 

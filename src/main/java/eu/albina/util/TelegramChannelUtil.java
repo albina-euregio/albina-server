@@ -78,13 +78,16 @@ public class TelegramChannelUtil {
 				}
 
 				if (config != null) {
+					logger.info("Publishing report on telegram channel for "
+							+ config.getRegionConfiguration().getRegion().getId() + " in " + lang);
 					ctTc.sendNewsletter(config, message, attachmentUrl);
 				} else {
 					throw new AlbinaException(
 							"No configuration for telegram channel found (" + region + ", " + lang + ")");
 				}
 			} catch (IOException | AlbinaException e) {
-				logger.error("Error while sending bulletin newsletter in " + lang + " for region " + region, e);
+				logger.error("Error while sending bulletin newsletter to telegram channel in " + lang + " for region "
+						+ region, e);
 			}
 		}
 	}
