@@ -346,7 +346,7 @@ public class MapUtil {
 		// create transparency
 		if (Map.overlay.equals(map)) {
 			logger.info("Creating transparency for {}", outputFilePng);
-			new ProcessBuilder("convert", "-transparent white", outputFilePng, outputFilePng).inheritIO().start()
+			new ProcessBuilder("convert", "-transparent", "white", outputFilePng, outputFilePng).inheritIO().start()
 					.waitFor();
 		}
 
