@@ -201,6 +201,8 @@ public class MessengerPeopleProcessorController extends CommonProcessor {
 				String body = response.getEntity() != null
 						? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
 						: null;
+				logger.warn(body);
+
 				ShipmentController.getInstance().saveShipment(createActivityRow(config, language.toString(),
 						"message=" + message + ", attachmentUrl=" + attachmentUrl, body, null));
 				return response;
