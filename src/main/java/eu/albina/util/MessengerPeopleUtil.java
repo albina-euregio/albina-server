@@ -64,7 +64,7 @@ public class MessengerPeopleUtil {
 		for (String region : regions) {
 			try {
 				String attachmentUrl = GlobalVariables.getMapsUrl(messages) + "/" + validityDate + "/" + publicationTime
-						+ "/" + AlbinaUtil.getRegionOverviewMapFilename("");
+						+ "/" + AlbinaUtil.getRegionOverviewMapFilename("", "jpg");
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 				ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);
 			} catch (IOException | AlbinaException e) {

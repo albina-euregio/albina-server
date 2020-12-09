@@ -237,25 +237,25 @@ public class AlbinaUtil {
 					+ AlbinaUtil.getNextValidityDateString(bulletins) + "/" + lang.toString() + ".html";
 	}
 
-	public static String getRegionOverviewMapFilename(String region, boolean isAfternoon) {
+	public static String getRegionOverviewMapFilename(String region, boolean isAfternoon, String fileExtension) {
 		StringBuilder sb = new StringBuilder();
 		if (isAfternoon)
 			sb.append("pm_");
 		else
 			sb.append("am_");
-		sb.append(getMapFilename(region));
+		sb.append(getMapFilename(region, fileExtension));
 		return sb.toString();
 	}
 
-	public static String getRegionOverviewMapFilename(String region) {
+	public static String getRegionOverviewMapFilename(String region, String fileExtension) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("fd_");
-		sb.append(getMapFilename(region));
+		sb.append(getMapFilename(region, fileExtension));
 		return sb.toString();
 	}
 
 	// REGION: only regions supported by map production
-	private static String getMapFilename(String region) {
+	private static String getMapFilename(String region, String fileExtension) {
 		StringBuilder sb = new StringBuilder();
 		switch (region) {
 		case GlobalVariables.codeTyrol:
@@ -271,7 +271,8 @@ public class AlbinaUtil {
 			sb.append("albina");
 			break;
 		}
-		sb.append("_map.jpg");
+		sb.append("_map.");
+		sb.append(fileExtension);
 		return sb.toString();
 	}
 
