@@ -77,6 +77,7 @@ public class GlobalVariables {
 	public static String avalancheReportBulletinUrl = "/bulletin/";
 	public static String avalancheReportSimpleUrl = "/simple/";
 
+	private static String serverMainUrl = "https://avalanche.report";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
@@ -406,6 +407,10 @@ public class GlobalVariables {
 		default:
 			return false;
 		}
+	}
+
+	public static String getServerMainUrl() {
+		return serverMainUrl;
 	}
 
 	public static String getScriptsPath() {
