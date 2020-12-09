@@ -19,8 +19,10 @@ package eu.albina.controller.socialmedia;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +61,9 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 			logger.warn("Error publishing report on telegram channel for "
 					+ config.getRegionConfiguration().getRegion().getId() + " (error code "
 					+ response.getStatusLine().getStatusCode() + ")");
+			HttpEntity entity = response.getEntity();
+			String content = EntityUtils.toString(entity);
+			logger.warn(content);
 		}
 
 		return response;
