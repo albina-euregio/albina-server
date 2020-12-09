@@ -522,7 +522,7 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("Simple HTML production started");
-					for (String region : GlobalVariables.regionsEuregio)
+					for (String region : GlobalVariables.regions)
 						SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating simple HTML", e);
