@@ -17,6 +17,9 @@
 package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.After;
@@ -24,20 +27,33 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.google.common.io.Resources;
+
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.TelegramConfig;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.TelegramChannelUtil;
 
 public class TelegramChannelControllerTest {
 
 	// private static Logger logger =
 	// LoggerFactory.getLogger(TelegramChannelControllerTest.class);
+	private List<AvalancheBulletin> bulletins;
 
 	@Before
 	public void setUp() throws Exception {
 		HibernateUtil.getInstance().setUp();
+
+		// Load valid avalanche bulletin JSON from resources
+		bulletins = new ArrayList<AvalancheBulletin>();
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_2.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json")));
+		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
 	}
 
 	@After
@@ -62,5 +78,13 @@ public class TelegramChannelControllerTest {
 				tcc.sendNewsletter(telegramConfig, message, attachmentUrl);
 			}
 		}
+	}
+
+	@Ignore
+	@Test
+	public void sendBulletin() throws URISyntaxException, IOException {
+		List<String> regions = new ArrayList<String>();
+		regions.add(GlobalVariables.codeTrentino);
+		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, true);
 	}
 }
