@@ -195,14 +195,6 @@ public class UtilTest {
 		SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 	}
 
-	@Ignore
-	@Test
-	public void sendMessengerPeopleNewsletter() throws IOException, URISyntaxException {
-		List<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTrentino);
-		MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, false);
-	}
-
 	@Test
 	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException, TemplateException {
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, "");
