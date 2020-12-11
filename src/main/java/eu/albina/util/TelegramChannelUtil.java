@@ -65,8 +65,9 @@ public class TelegramChannelUtil {
 		TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 		for (String region : regions) {
 			try {
-				String attachmentUrl = GlobalVariables.getServerMainUrl() + "/" + validityDate + "/" + publicationTime
-						+ "/" + AlbinaUtil.getRegionOverviewMapFilename("", "jpg");
+				String attachmentUrl = GlobalVariables.getServerMainUrl() + "/"
+						+ GlobalVariables.avalancheReportFilesUrl + "/" + validityDate + "/" + publicationTime + "/"
+						+ AlbinaUtil.getRegionOverviewMapFilename("", "jpg");
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 				Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
 				TelegramConfig config = null;
