@@ -139,26 +139,6 @@ public class PublicationController {
 						logger.error(key + " thread interrupted", e);
 					}
 				}
-
-				// send emails
-				if (GlobalVariables.isSendEmails()) {
-					Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.regionsEuregio, false);
-					sendEmailsThread.start();
-				}
-
-				// publish on social media
-				if (GlobalVariables.isPublishToMessengerpeople()) {
-					Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins,
-							GlobalVariables.regionsEuregio, false);
-					triggerMessengerpeopleThread.start();
-				}
-
-				// publish on telegram channel
-				if (GlobalVariables.isPublishToTelegramChannel()) {
-					Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins,
-							GlobalVariables.regionsEuregio, false);
-					triggerTelegramChannelThread.start();
-				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
 			} catch (Exception e1) {
@@ -169,6 +149,26 @@ public class PublicationController {
 			AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
+
+			// send emails
+			if (GlobalVariables.isSendEmails()) {
+				Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.regionsEuregio, false);
+				sendEmailsThread.start();
+			}
+
+			// publish on social media
+			if (GlobalVariables.isPublishToMessengerpeople()) {
+				Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, GlobalVariables.regionsEuregio,
+						false);
+				triggerMessengerpeopleThread.start();
+			}
+
+			// publish on telegram channel
+			if (GlobalVariables.isPublishToTelegramChannel()) {
+				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.regionsEuregio,
+						false);
+				triggerTelegramChannelThread.start();
+			}
 		}
 	}
 
@@ -244,24 +244,6 @@ public class PublicationController {
 						logger.error(key + " thread interrupted", e);
 					}
 				}
-
-				// send emails to regions
-				if (GlobalVariables.isSendEmails()) {
-					Thread sendEmailsThread = sendEmails(bulletins, regions, true);
-					sendEmailsThread.start();
-				}
-
-				// publish on social media
-				if (GlobalVariables.isPublishToMessengerpeople()) {
-					Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, regions, true);
-					triggerMessengerpeopleThread.start();
-				}
-
-				// publish on telegram channel
-				if (GlobalVariables.isPublishToTelegramChannel()) {
-					Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true);
-					triggerTelegramChannelThread.start();
-				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
 			} catch (Exception e1) {
@@ -272,6 +254,24 @@ public class PublicationController {
 			AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
+
+			// send emails to regions
+			if (GlobalVariables.isSendEmails()) {
+				Thread sendEmailsThread = sendEmails(bulletins, regions, true);
+				sendEmailsThread.start();
+			}
+
+			// publish on social media
+			if (GlobalVariables.isPublishToMessengerpeople()) {
+				Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, regions, true);
+				triggerMessengerpeopleThread.start();
+			}
+
+			// publish on telegram channel
+			if (GlobalVariables.isPublishToTelegramChannel()) {
+				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true);
+				triggerTelegramChannelThread.start();
+			}
 		}
 	}
 
