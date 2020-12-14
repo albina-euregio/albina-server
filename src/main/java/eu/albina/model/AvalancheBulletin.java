@@ -1634,8 +1634,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 		final AvalancheBulletin other = (AvalancheBulletin) obj;
 
-		// TODO textcat ids will be different for italian and german
-
 		if ((this.validFrom == null) ? (other.validFrom != null) : !this.validFrom.equals(other.validFrom))
 			return false;
 		if ((this.validUntil == null) ? (other.validUntil != null) : !this.validUntil.equals(other.validUntil))
