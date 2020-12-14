@@ -288,8 +288,6 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		}
 		final AvalancheSituation other = (AvalancheSituation) obj;
 
-		// TODO textcat ids will be different for italian and german
-
 		if (this.avalancheSituation != other.avalancheSituation)
 			return false;
 		if (!this.aspects.containsAll(other.getAspects()) || !other.getAspects().containsAll(this.aspects))

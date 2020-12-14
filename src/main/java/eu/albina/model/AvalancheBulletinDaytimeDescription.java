@@ -468,8 +468,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 		final AvalancheBulletinDaytimeDescription other = (AvalancheBulletinDaytimeDescription) obj;
 
-		// TODO textcat ids will be different for italian and german
-
 		if (this.hasElevationDependency != other.hasElevationDependency)
 			return false;
 		if (this.elevation != other.elevation)
