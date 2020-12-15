@@ -43,7 +43,6 @@
 				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
 				<albina.conf.server-images-url-localhost>http://admin.avalanche.report/images/</albina.conf.server-images-url-localhost>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.univie-maps-path></albina.conf.univie-maps-path>
 				<albina.conf.maps-path>/mnt/albina_files_local</albina.conf.maps-path>
 				<albina.conf.map-production-url></albina.conf.map-production-url>
 				<albina.conf.pdf-directory>/mnt/albina_files_local</albina.conf.pdf-directory>
@@ -88,7 +87,6 @@
 				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
 				<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.univie-maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm_dev/</albina.conf.univie-maps-path>
 				<albina.conf.maps-path>/mnt/albina_files_dev</albina.conf.maps-path>
 				<albina.conf.map-production-url>/opt/avalanche-warning-maps_dev/</albina.conf.map-production-url>
 				<albina.conf.pdf-directory>/mnt/albina_files_dev</albina.conf.pdf-directory>
@@ -133,7 +131,6 @@
 				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
 				<albina.conf.server-images-url-localhost>http://localhost:8080/images/</albina.conf.server-images-url-localhost>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.univie-maps-path>http://data1.geo.univie.ac.at/exchange/albina2/awm/</albina.conf.univie-maps-path>
 				<albina.conf.maps-path>/mnt/albina_files</albina.conf.maps-path>
 				<albina.conf.map-production-url>/opt/avalanche-warning-maps/</albina.conf.map-production-url>
 				<albina.conf.pdf-directory>/mnt/albina_files</albina.conf.pdf-directory>

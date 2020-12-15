@@ -376,20 +376,6 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static void runCopyMapsUnivieScript(String date, String publicationTime) {
-		try {
-			final File file = new File(classLoader.getResource("scripts/copyMapsUnivie.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(),
-					date, publicationTime, GlobalVariables.getUnivieMapsPath()).inheritIO();
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("Maps for {} copied from Univie using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("Maps could not be copied from Univie to directory for " + date + "!", e);
-		}
-	}
-
 	public static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateFiles.sh").getFile());

@@ -479,8 +479,6 @@ public class PublicationController {
 
 		if (!bulletins.isEmpty()) {
 			MapUtil.createDangerRatingMaps(bulletins);
-			if (GlobalVariables.isMapProductionUrlUnivie())
-				AlbinaUtil.runCopyMapsUnivieScript(validityDateString, publicationTimeString);
 			logger.info("Map production finished");
 		}
 	}

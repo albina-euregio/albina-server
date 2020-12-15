@@ -82,7 +82,6 @@ public class GlobalVariables {
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
 	private static String htmlDirectory = "/mnt/simple_local";
-	private static String univieMapsPath = "";
 	private static String mapsPath = "/mnt/albina_files_local";
 	public static String mapProductionUrl = "";
 	public static String scriptsPath = "/opt/local/";
@@ -458,15 +457,6 @@ public class GlobalVariables {
 		setConfigProperty("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
 	}
 
-	public static String getUnivieMapsPath() {
-		return univieMapsPath;
-	}
-
-	public static void setUnivieMapsPath(String univieMapsPath) throws ConfigurationException {
-		GlobalVariables.univieMapsPath = univieMapsPath;
-		setConfigProperty("univieMapsPath", univieMapsPath);
-	}
-
 	public static String getMapsPath() {
 		return mapsPath;
 	}
@@ -478,10 +468,6 @@ public class GlobalVariables {
 
 	public static String getMapProductionUrl() {
 		return mapProductionUrl;
-	}
-
-	public static boolean isMapProductionUrlUnivie() {
-		return getMapProductionUrl().startsWith("http://data1.geo.univie.ac.at/");
 	}
 
 	public static void setMapProductionUrl(String mapProductionUrl) throws ConfigurationException {
@@ -582,8 +568,6 @@ public class GlobalVariables {
 				serverImagesUrl = config.getString("serverImagesUrl");
 			if (config.containsKey("serverImagesUrlLocalhost"))
 				serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
-			if (config.containsKey("univieMapsPath"))
-				univieMapsPath = config.getString("univieMapsPath");
 			if (config.containsKey("mapsPath"))
 				mapsPath = config.getString("mapsPath");
 			if (config.containsKey("mapProductionUrl"))
@@ -643,8 +627,6 @@ public class GlobalVariables {
 			json.put("serverImagesUrl", serverImagesUrl);
 		if (serverImagesUrlLocalhost != null)
 			json.put("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
-		if (univieMapsPath != null)
-			json.put("univieMapsPath", univieMapsPath);
 		if (mapsPath != null)
 			json.put("mapsPath", mapsPath);
 		if (mapProductionUrl != null)

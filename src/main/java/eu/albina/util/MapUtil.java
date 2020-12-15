@@ -16,13 +16,7 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -40,7 +34,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.script.SimpleBindings;
-import javax.xml.transform.TransformerException;
 
 import org.joda.time.DateTimeZone;
 import org.mapyrus.ContextStack;
@@ -49,7 +42,6 @@ import org.mapyrus.Interpreter;
 import org.mapyrus.MapyrusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vividsolutions.jts.geom.PrecisionModel;
@@ -65,7 +57,6 @@ import eu.albina.model.AvalancheSituation;
 import eu.albina.model.Region;
 import eu.albina.model.Regions;
 import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.LanguageCode;
 
 public class MapUtil {
 
@@ -99,26 +90,13 @@ public class MapUtil {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());
-		if (GlobalVariables.isMapProductionUrlUnivie()) {
-			createDangerRatingMapsUnivie(bulletins);
-		} else {
-			try {
-				createMapyrusMaps(bulletins);
-			} catch (Exception ex) {
-				logger.error("Failed to create mapyrus maps", ex);
-				throw ex;
-			}
+		try {
+			createMapyrusMaps(bulletins);
+		} catch (Exception ex) {
+			logger.error("Failed to create mapyrus maps", ex);
+			throw ex;
 		}
 		logger.info("Creating danger rating maps done in {} ms", System.currentTimeMillis() - start);
-	}
-
-	private static void createDangerRatingMapsUnivie(List<AvalancheBulletin> bulletins) {
-		try {
-			Document doc = XmlUtil.createCaamlv5(bulletins, LanguageCode.en);
-			triggerMapProductionUnivie(XmlUtil.convertDocToString(doc));
-		} catch (AlbinaException | TransformerException e) {
-			logger.error("Error producing maps", e);
-		}
 	}
 
 	static String createMayrusInput(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency) {
@@ -413,51 +391,5 @@ public class MapUtil {
 	private static String getAvalancheSituationString(AvalancheSituation avalancheSituation) {
 		return Optional.ofNullable(avalancheSituation).map(AvalancheSituation::getAvalancheSituation)
 				.map(eu.albina.model.enumerations.AvalancheSituation::toCaamlv5String).orElse("false");
-	}
-
-	public static String triggerMapProductionUnivie(String caaml) throws AlbinaException {
-		HttpURLConnection connection = null;
-
-		try {
-			// Create connection
-			URL url = new URL(GlobalVariables.mapProductionUrl);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-			connection.setRequestProperty("Content-Length", Integer.toString(caaml.getBytes().length));
-			connection.setRequestProperty("Content-Language", "en-US");
-
-			connection.setUseCaches(false);
-			connection.setDoOutput(true);
-
-			// Send request
-			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-			wr.writeBytes(caaml);
-			wr.close();
-
-			// Get Response
-			InputStream is = connection.getInputStream();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-			StringBuilder response = new StringBuilder();
-			String line;
-			while ((line = rd.readLine()) != null) {
-				response.append(line);
-				response.append('\r');
-			}
-			rd.close();
-
-			if (connection.getResponseCode() != 200 && connection.getResponseCode() != 200)
-				throw new AlbinaException("Error while triggering map production!");
-
-			return response.toString();
-		} catch (Exception e) {
-			logger.warn("Failed to trigger map production", e);
-			throw new AlbinaException(e.getMessage());
-		} finally {
-			if (connection != null) {
-				connection.disconnect();
-			}
-		}
 	}
 }
