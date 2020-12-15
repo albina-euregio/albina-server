@@ -151,20 +151,20 @@ public class PublicationController {
 				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
 
 			// send emails
-			if (GlobalVariables.isSendEmails()) {
+			if (GlobalVariables.isCreateMaps() && GlobalVariables.isSendEmails()) {
 				Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.regionsEuregio, false);
 				sendEmailsThread.start();
 			}
 
 			// publish on social media
-			if (GlobalVariables.isPublishToMessengerpeople()) {
+			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToMessengerpeople()) {
 				Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, GlobalVariables.regionsEuregio,
 						false);
 				triggerMessengerpeopleThread.start();
 			}
 
 			// publish on telegram channel
-			if (GlobalVariables.isPublishToTelegramChannel()) {
+			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToTelegramChannel()) {
 				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.regionsEuregio,
 						false);
 				triggerTelegramChannelThread.start();
@@ -256,19 +256,19 @@ public class PublicationController {
 				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
 
 			// send emails to regions
-			if (GlobalVariables.isSendEmails()) {
+			if (GlobalVariables.isCreateMaps() && GlobalVariables.isSendEmails()) {
 				Thread sendEmailsThread = sendEmails(bulletins, regions, true);
 				sendEmailsThread.start();
 			}
 
 			// publish on social media
-			if (GlobalVariables.isPublishToMessengerpeople()) {
+			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToMessengerpeople()) {
 				Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, regions, true);
 				triggerMessengerpeopleThread.start();
 			}
 
 			// publish on telegram channel
-			if (GlobalVariables.isPublishToTelegramChannel()) {
+			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToTelegramChannel()) {
 				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true);
 				triggerTelegramChannelThread.start();
 			}
