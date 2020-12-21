@@ -434,7 +434,7 @@ public class EmailUtil {
 			Map<String, Object> links = new HashMap<>();
 			links.put("website", messages.getString("avalanche-report.url") + "/bulletin/"
 					+ AlbinaUtil.getValidityDateString(bulletins));
-			links.put("unsubscribe", GlobalVariables.getUnsubscribeLink(lang, region));
+			links.put("unsubscribe", "{%link_unsubscribe}");
 			links.put("pdf",
 					GlobalVariables.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region, messages));
 			links.put("imprint", GlobalVariables.getImprintLink(messages));

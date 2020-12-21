@@ -114,18 +114,6 @@ public class GlobalVariables {
 	public static int targetingTrentinoEn = 17541;
 	public static int targetingTest = 17274;
 
-	// LANG
-	// REGION
-	private static String unsubscribeLinkTyrolDe = "https://t271d3041.emailsys1a.net/38/2221/61ad34fba0/unsubscribe/form.html";
-	private static String unsubscribeLinkTyrolIt = "https://t271d3041.emailsys1a.net/38/2219/5b3f174f66/unsubscribe/form.html";
-	private static String unsubscribeLinkTyrolEn = "https://t271d3041.emailsys1a.net/38/2223/bc01e461f6/unsubscribe/form.html";
-	private static String unsubscribeLinkSouthTyrolDe = "https://t271d3041.emailsys1a.net/38/2215/da5e036304/unsubscribe/form.html";
-	private static String unsubscribeLinkSouthTyrolIt = "https://t271d3041.emailsys1a.net/38/2213/e8b5e15ee4/unsubscribe/form.html";
-	private static String unsubscribeLinkSouthTyrolEn = "https://t271d3041.emailsys1a.net/38/2217/2fce2c512f/unsubscribe/form.html";
-	private static String unsubscribeLinkTrentinoDe = "https://t271d3041.emailsys1a.net/38/2209/3a7fe947b4/unsubscribe/form.html";
-	private static String unsubscribeLinkTrentinoIt = "https://t271d3041.emailsys1a.net/38/2207/bc2b53964c/unsubscribe/form.html";
-	private static String unsubscribeLinkTrentinoEn = "https://t271d3041.emailsys1a.net/38/2211/361ad0a282/unsubscribe/form.html";
-
 	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
 	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
 	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
@@ -771,57 +759,6 @@ public class GlobalVariables {
 				result = highestDangerRating;
 		}
 		return result;
-	}
-
-	// LANG: rapid mail support
-	// REGION: rapid mail support
-	public static String getUnsubscribeLink(LanguageCode lang, String region) {
-		switch (lang) {
-		case de:
-			switch (region) {
-			case GlobalVariables.codeTyrol:
-				return unsubscribeLinkTyrolDe;
-			case GlobalVariables.codeSouthTyrol:
-				return unsubscribeLinkSouthTyrolDe;
-			case GlobalVariables.codeTrentino:
-				return unsubscribeLinkTrentinoDe;
-			default:
-				return "";
-			}
-		case it:
-			switch (region) {
-			case GlobalVariables.codeTyrol:
-				return unsubscribeLinkTyrolIt;
-			case GlobalVariables.codeSouthTyrol:
-				return unsubscribeLinkSouthTyrolIt;
-			case GlobalVariables.codeTrentino:
-				return unsubscribeLinkTrentinoIt;
-			default:
-				return "";
-			}
-		case en:
-			switch (region) {
-			case GlobalVariables.codeTyrol:
-				return unsubscribeLinkTyrolEn;
-			case GlobalVariables.codeSouthTyrol:
-				return unsubscribeLinkSouthTyrolEn;
-			case GlobalVariables.codeTrentino:
-				return unsubscribeLinkTrentinoEn;
-			default:
-				return "";
-			}
-		default:
-			switch (region) {
-			case GlobalVariables.codeTyrol:
-				return unsubscribeLinkTyrolEn;
-			case GlobalVariables.codeSouthTyrol:
-				return unsubscribeLinkSouthTyrolEn;
-			case GlobalVariables.codeTrentino:
-				return unsubscribeLinkTrentinoEn;
-			default:
-				return "";
-			}
-		}
 	}
 
 	// REGION
