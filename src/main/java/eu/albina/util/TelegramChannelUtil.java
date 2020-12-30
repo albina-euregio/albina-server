@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.joda.time.DateTime;
@@ -49,19 +48,16 @@ public class TelegramChannelUtil {
 
 	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.socialMediaLanguages) {
-			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
-					new XMLResourceBundleControl());
-
 			DateTime date = AlbinaUtil.getDate(bulletins);
-			String message = GlobalVariables.getSocialMediaText(date, update, messages);
+			String message = GlobalVariables.getSocialMediaText(date, update, lang);
 			String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions, messages);
+			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
 		}
 	}
 
 	private void sendBulletinNewsletter(String message, List<AvalancheBulletin> bulletins, String validityDate,
-			String publicationTime, LanguageCode lang, List<String> regions, ResourceBundle messages) {
+										String publicationTime, LanguageCode lang, List<String> regions) {
 		TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 		for (String region : regions) {
 			try {

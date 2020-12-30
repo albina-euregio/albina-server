@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -52,7 +51,6 @@ import eu.albina.rest.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.XMLResourceBundleControl;
 import eu.albina.util.XmlUtil;
 
 /**
@@ -744,14 +742,6 @@ public class AvalancheBulletinController {
 		boolean missingDangerRating = false;
 		boolean incompleteTranslation = false;
 
-		// LANG
-		ResourceBundle messagesDe = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
-				new XMLResourceBundleControl());
-		ResourceBundle messagesIt = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.it.getLocale(),
-				new XMLResourceBundleControl());
-		ResourceBundle messagesEn = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.en.getLocale(),
-				new XMLResourceBundleControl());
-
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
@@ -807,40 +797,40 @@ public class AvalancheBulletinController {
 
 				if ((bulletin.getAvActivityHighlightsIn(LanguageCode.de) != null
 						&& bulletin.getAvActivityHighlightsIn(LanguageCode.de)
-								.equals(messagesDe.getString("cop.incomplete-translation")))
+								.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityHighlightsIn(LanguageCode.it) != null
 								&& bulletin.getAvActivityHighlightsIn(LanguageCode.it)
-										.equals(messagesIt.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityHighlightsIn(LanguageCode.en) != null
 								&& bulletin.getAvActivityHighlightsIn(LanguageCode.en)
-										.equals(messagesEn.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityCommentIn(LanguageCode.de) != null
 								&& bulletin.getAvActivityCommentIn(LanguageCode.de)
-										.equals(messagesDe.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityCommentIn(LanguageCode.it) != null
 								&& bulletin.getAvActivityCommentIn(LanguageCode.it)
-										.equals(messagesIt.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getAvActivityCommentIn(LanguageCode.en) != null
 								&& bulletin.getAvActivityCommentIn(LanguageCode.en)
-										.equals(messagesEn.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.de) != null
 								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.de)
-										.equals(messagesDe.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.it) != null
 								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.it)
-										.equals(messagesIt.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.en) != null
 								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.en)
-										.equals(messagesEn.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getTendencyCommentIn(LanguageCode.de) != null
 								&& bulletin.getTendencyCommentIn(LanguageCode.de)
-										.equals(messagesDe.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getTendencyCommentIn(LanguageCode.it) != null
 								&& bulletin.getTendencyCommentIn(LanguageCode.it)
-										.equals(messagesIt.getString("cop.incomplete-translation")))
+										.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
 						|| (bulletin.getTendencyCommentIn(LanguageCode.en) != null
 								&& bulletin.getTendencyCommentIn(LanguageCode.en)
-										.equals(messagesEn.getString("cop.incomplete-translation")))) {
+										.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))) {
 					incompleteTranslation = true;
 				}
 			}

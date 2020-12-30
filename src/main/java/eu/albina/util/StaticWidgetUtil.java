@@ -93,13 +93,10 @@ public class StaticWidgetUtil {
 			int width = 600;
 			int height = 800;
 
-			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
-					new XMLResourceBundleControl());
-			ResourceBundle staticWidgetBundle = ResourceBundle.getBundle("i18n.StaticWidget", lang.getLocale(),
-					new XMLResourceBundleControl());
+			ResourceBundle staticWidgetBundle = lang.getBundle("i18n.StaticWidget");
 
 			DangerRating highestDangerRating = GlobalVariables.getHighestDangerRating(bulletins);
-			String date = AlbinaUtil.getDate(bulletins, messages);
+			String date = AlbinaUtil.getDate(bulletins, lang);
 
 			// TYPE_INT_ARGB specifies the image format: 8-bit RGBA packed
 			// into integer pixels
@@ -204,7 +201,7 @@ public class StaticWidgetUtil {
 			ig2.drawString(asFourthLine.getIterator(), 30, 718);
 
 			// Blue button at bottom
-			String urlLine = messages.getString("avalanche-report.url.capitalized");
+			String urlLine = lang.getBundleString("avalanche-report.url.capitalized");
 			AttributedString asUrlLine = new AttributedString(urlLine);
 			asUrlLine.addAttribute(TextAttribute.FONT, openSansBoldFont);
 			asUrlLine.addAttribute(TextAttribute.FOREGROUND, whiteColor);

@@ -45,6 +45,10 @@ public enum LanguageCode {
 		return ResourceBundle.getBundle(name, locale, new XMLResourceBundleControl());
 	}
 
+	public String getBundleString(String key) {
+		return getBundle("i18n.MessagesBundle").getString(key);
+	}
+
 	public static LanguageCode fromString(String text) {
 		if (text != null) {
 			for (LanguageCode type : LanguageCode.values()) {

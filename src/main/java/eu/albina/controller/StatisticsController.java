@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -44,7 +43,6 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.XMLResourceBundleControl;
 
 /**
  * Controller for statistics.
@@ -58,14 +56,10 @@ public class StatisticsController {
 
 	private static StatisticsController instance = null;
 
-	private final ResourceBundle messages;
-
 	/**
 	 * Private constructor.
 	 */
 	private StatisticsController() {
-		messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.en.getLocale(),
-				new XMLResourceBundleControl());
 	}
 
 	/**
@@ -218,7 +212,7 @@ public class StatisticsController {
 					sb.append("JSON string empty: ");
 					if (avalancheReport.getDate() != null) {
 						sb.append(
-								avalancheReport.getDate().toString(messages.getString("date-time-format.publication")));
+								avalancheReport.getDate().toString(LanguageCode.en.getBundleString("date-time-format.publication")));
 						sb.append(", ");
 					}
 					sb.append(avalancheReport.getRegion());
@@ -237,7 +231,7 @@ public class StatisticsController {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Error parsing report JSON: ");
 				if (avalancheReport.getDate() != null) {
-					sb.append(avalancheReport.getDate().toString(messages.getString("date-time-format.publication")));
+					sb.append(avalancheReport.getDate().toString(LanguageCode.en.getBundleString("date-time-format.publication")));
 					sb.append(", ");
 				}
 				sb.append(avalancheReport.getRegion());
@@ -465,7 +459,7 @@ public class StatisticsController {
 				sb.append(GlobalVariables.notAvailableString);
 			else {
 				if (daytimeDescription.getTreeline())
-					sb.append(messages.getString("elevation.treeline"));
+					sb.append(LanguageCode.en.getBundleString("elevation.treeline"));
 				else
 					sb.append(daytimeDescription.getElevation());
 			}
@@ -619,7 +613,7 @@ public class StatisticsController {
 			sb.append(avalancheSituation.getAvalancheSituation().toStringId());
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheSituation.getTreelineLow())
-				sb.append(messages.getString("elevation.treeline"));
+				sb.append(LanguageCode.en.getBundleString("elevation.treeline"));
 			else {
 				if (avalancheSituation.getElevationLow() <= 0)
 					sb.append(GlobalVariables.notAvailableString);
@@ -628,7 +622,7 @@ public class StatisticsController {
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheSituation.getTreelineHigh())
-				sb.append(messages.getString("elevation.treeline"));
+				sb.append(LanguageCode.en.getBundleString("elevation.treeline"));
 			else {
 				if (avalancheSituation.getElevationHigh() <= 0)
 					sb.append(GlobalVariables.notAvailableString);
