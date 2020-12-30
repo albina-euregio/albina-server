@@ -193,7 +193,7 @@ public class BlogController extends CommonProcessor {
 			ResourceBundle messages) {
 		logger.info("Sending new blog post to messengerpeople ...");
 
-		String message = messages.getString("avalanche-report.name") + ": "
+		String message = object.getString("title") + ": "
 				+ getBlogPostLink(object, region, lang, messages);
 
 		String attachmentUrl = null;
@@ -218,7 +218,7 @@ public class BlogController extends CommonProcessor {
 			ResourceBundle messages) {
 		logger.info("Sending new blog post to telegram channel ...");
 
-		String message = messages.getString("avalanche-report.name") + ": "
+		String message = object.getString("title") + ": "
 				+ getBlogPostLink(object, region, lang, messages);
 
 		String attachmentUrl = null;
@@ -256,7 +256,7 @@ public class BlogController extends CommonProcessor {
 			ResourceBundle messages) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
-		String subject = messages.getString("avalanche-report.name");
+		String subject = object.getString("title");
 		String blogPostId = object.getString("id");
 
 		try {
