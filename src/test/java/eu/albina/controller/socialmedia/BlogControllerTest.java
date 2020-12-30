@@ -21,19 +21,21 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.github.openjson.JSONObject;
-
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.XMLResourceBundleControl;
+
+import static org.junit.Assert.assertTrue;
 
 public class BlogControllerTest {
 
@@ -50,6 +52,19 @@ public class BlogControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
+	@Test
+	public void testBlogPosts() throws Exception {
+		BlogController.getInstance().lastFetch.put(GlobalVariables.codeTyrol, new DateTime(0L));
+		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(GlobalVariables.codeTyrol, LanguageCode.de);
+		assertTrue("size=" + blogPosts.size(), blogPosts.size() > 5);
+	}
+
+	@Test
+	public void testBlogPost() throws Exception {
+		String blogPost = BlogController.getInstance().getBlogPost("1227558273754407795", GlobalVariables.codeTyrol, LanguageCode.de);
+		assertTrue(blogPost, blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
+	}
+
 	@Ignore
 	@Test
 	public void sendBlogPostsTest() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
@@ -59,8 +74,8 @@ public class BlogControllerTest {
 
 	@Ignore
 	@Test
-	public void testTicket150() {
-		final JSONObject blog = new JSONObject("{\n" + "  \"replies\": {},\n" + "  \"kind\": \"blogger#post\",\n"
+	public void testTicket150() throws Exception {
+		final String blog = "{\n" + "  \"replies\": {},\n" + "  \"kind\": \"blogger#post\",\n"
 				+ "  \"author\": {},\n"
 				+ "  \"etag\": \"\\\"dGltZXN0YW1wOiAxNTc1NTYxNTg5NzM2Cm9mZnNldDogMz YwMDAwMAo\\\"\",\n"
 				+ "  \"id\": \"4564885875858452565\",\n" + "  \"published\": \"2019-12-05T16:59:00+01:00\",\n"
@@ -69,11 +84,12 @@ public class BlogControllerTest {
 				+ "  \"url\": \"http ://lawinensuedtirol.blogspot.com/2019/12/sonnige-woche.html\",\n"
 				+ "  \"content\": \"\",\n"
 				+ "  \"selfLink\": \"https://www.googleapis.com/blogger/v3/blogs/1263754381945501754/posts/4564885875858452565\"\n"
-				+ "}\n");
+				+ "}\n";
 
 		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
 				new XMLResourceBundleControl());
 
-		BlogController.getInstance().sendNewBlogPostToMessengerpeople(blog, "IT-32-BZ", LanguageCode.de, messages);
+		Blogger.Item item = new CommonProcessor().fromJson(blog, Blogger.Item.class);
+		BlogController.getInstance().sendNewBlogPostToMessengerpeople(item, "IT-32-BZ", LanguageCode.de, messages);
 	}
 }

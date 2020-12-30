@@ -19,13 +19,14 @@ package eu.albina.controller.socialmedia;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -34,9 +35,6 @@ import org.apache.http.util.EntityUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.LanguageCode;
@@ -53,12 +51,11 @@ public class BlogController extends CommonProcessor {
 	private static final int BLOGGER_CONNECTION_TIMEOUT = 10000;
 
 	private static BlogController instance = null;
-	private HashMap<String, DateTime> lastFetch;
+	protected final HashMap<String, DateTime> lastFetch = new HashMap<>();
 	private Executor executor;
 
 	private BlogController() {
 		executor = Executor.newInstance(sslHttpClient());
-		lastFetch = new HashMap<String, DateTime>();
 		DateTime date = new DateTime();
 		// REGION
 		lastFetch.put("Test", date);
@@ -85,7 +82,7 @@ public class BlogController extends CommonProcessor {
 		return HttpClients.custom().build();
 	}
 
-	private JSONArray getBlogPosts(String region, LanguageCode lang) throws ClientProtocolException, IOException {
+	protected List<Blogger.Item> getBlogPosts(String region, LanguageCode lang) throws IOException {
 		String blogId = getBlogId(region, lang);
 		if (blogId != null) {
 			String uri = GlobalVariables.blogApiUrl + blogId + "/posts?key=" + GlobalVariables.googleApiKey
@@ -101,30 +98,24 @@ public class BlogController extends CommonProcessor {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
-				JSONObject jsonObject = new JSONObject(entityString);
-				if (jsonObject.has("items"))
-					return jsonObject.getJSONArray("items");
-				else
-					return new JSONArray();
+				return new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
 			}
 		}
-		return new JSONArray();
+		return Collections.emptyList();
 	}
 
-	private String getBlogPost(String blogPostId, String region, LanguageCode lang)
-			throws ClientProtocolException, IOException {
+	protected String getBlogPost(String blogPostId, String region, LanguageCode lang) throws IOException {
 		String blogId = getBlogId(region, lang);
 		if (blogId != null) {
 			Request request = Request
-					.Get(GlobalVariables.blogApiUrl + "/" + blogId + "/posts/" + blogPostId + "?key="
+					.Get(GlobalVariables.blogApiUrl + blogId + "/posts/" + blogPostId + "?key="
 							+ GlobalVariables.googleApiKey)
 					.connectTimeout(BLOGGER_CONNECTION_TIMEOUT).socketTimeout(BLOGGER_SOCKET_TIMEOUT);
 			HttpResponse response = executor.execute(request).returnResponse();
 			if (response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
-				JSONObject jsonObject = new JSONObject(entityString);
-				return jsonObject.getString("content");
+				return new CommonProcessor().fromJson(entityString, Blogger.Item.class).content;
 			}
 		}
 		return null;
@@ -171,17 +162,15 @@ public class BlogController extends CommonProcessor {
 	public void sendNewBlogPosts(String region, LanguageCode lang) {
 		if (getBlogId(region, lang) != null) {
 			try {
-				JSONArray blogPosts = getBlogPosts(region, lang);
+				List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
 				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
 						new XMLResourceBundleControl());
 
-				logger.info("Found " + blogPosts.length() + " new blog posts!");
-				for (Object object : blogPosts)
-					if (object instanceof JSONObject) {
-						logger.info(((JSONObject) object).toString());
-						sendNewBlogPostToMessengerpeople((JSONObject) object, region, lang, messages);
-						sendNewBlogPostToRapidmail((JSONObject) object, region, lang, messages);
-						sendNewBlogPostToTelegramChannel((JSONObject) object, region, lang, messages);
+				logger.info("Found " + blogPosts.size() + " new blog posts!");
+				for (Blogger.Item object : blogPosts) {
+						sendNewBlogPostToMessengerpeople(object, region, lang, messages);
+						sendNewBlogPostToRapidmail(object, region, lang, messages);
+						sendNewBlogPostToTelegramChannel(object, region, lang, messages);
 					}
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
@@ -189,19 +178,12 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	void sendNewBlogPostToMessengerpeople(JSONObject object, String region, LanguageCode lang,
+	void sendNewBlogPostToMessengerpeople(Blogger.Item item, String region, LanguageCode lang,
 			ResourceBundle messages) {
 		logger.info("Sending new blog post to messengerpeople ...");
 
-		String message = object.getString("title") + ": "
-				+ getBlogPostLink(object, region, lang, messages);
-
-		String attachmentUrl = null;
-		if (object.has("images")) {
-			JSONArray imagesArray = object.getJSONArray("images");
-			JSONObject image = (JSONObject) imagesArray.get(0);
-			attachmentUrl = image.getString("url");
-		}
+		String message = getBlogMessage(item, region, lang, messages);
+		String attachmentUrl = getAttachmentUrl(item);
 
 		try {
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
@@ -214,19 +196,12 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	void sendNewBlogPostToTelegramChannel(JSONObject object, String region, LanguageCode lang,
+	void sendNewBlogPostToTelegramChannel(Blogger.Item item, String region, LanguageCode lang,
 			ResourceBundle messages) {
 		logger.info("Sending new blog post to telegram channel ...");
 
-		String message = object.getString("title") + ": "
-				+ getBlogPostLink(object, region, lang, messages);
-
-		String attachmentUrl = null;
-		if (object.has("images")) {
-			JSONArray imagesArray = object.getJSONArray("images");
-			JSONObject image = (JSONObject) imagesArray.get(0);
-			attachmentUrl = image.getString("url");
-		}
+		String message = getBlogMessage(item, region, lang, messages);
+		String attachmentUrl = getAttachmentUrl(item);
 
 		try {
 			TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
@@ -252,12 +227,12 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(JSONObject object, String region, LanguageCode lang,
+	private void sendNewBlogPostToRapidmail(Blogger.Item item, String region, LanguageCode lang,
 			ResourceBundle messages) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
-		String subject = object.getString("title");
-		String blogPostId = object.getString("id");
+		String subject = item.title;
+		String blogPostId = item.id;
 
 		try {
 			String htmlString = getBlogPost(blogPostId, region, lang);
@@ -270,9 +245,16 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private String getBlogPostLink(JSONObject object, String region, LanguageCode lang, ResourceBundle messages) {
-		return GlobalVariables.getAvalancheReportFullBlogUrl(messages) + getBlogUrl(region, lang) + "/"
-				+ object.getString("id");
+	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang, ResourceBundle messages) {
+		return item.title + ": " + GlobalVariables.getAvalancheReportFullBlogUrl(messages) + getBlogUrl(region, lang) + "/" + item.id;
+	}
+
+	private String getAttachmentUrl(Blogger.Item item) {
+		if (item.images != null && !item.images.isEmpty()) {
+			return item.images.get(0).url;
+		} else {
+			return null;
+		}
 	}
 
 	// LANG: only languages which a blog exists for
