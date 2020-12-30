@@ -28,7 +28,6 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
@@ -159,10 +158,8 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
-				new XMLResourceBundleControl());
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-				GlobalVariables.codeTyrol, false, false, messages);
+				GlobalVariables.codeTyrol, false, false);
 		System.out.println(html);
 	}
 
@@ -204,24 +201,19 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void retrieveTranslationTest() throws UnsupportedEncodingException {
-		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.ca.getLocale(),
-				new XMLResourceBundleControl());
-		String string = messages.getString("headline.tendency");
+		String string = LanguageCode.ca.getBundleString("headline.tendency");
 		System.out.println(string);
 	}
 
 	@Ignore
 	@Test
 	public void createPdf() throws IOException, URISyntaxException {
-		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
-				new XMLResourceBundleControl());
-
 		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
 		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
 		// PdfUtil.getInstance().createRegionPdfs(bulletins, GlobalVariables.codeTyrol);
 
 		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, GlobalVariables.codeTyrol, false, false,
-				"2030-02-16", "2030-02-16_00-00-00", messages);
+				"2030-02-16", "2030-02-16_00-00-00");
 	}
 
 	@Ignore

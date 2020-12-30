@@ -27,7 +27,6 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
@@ -81,13 +80,11 @@ public class AlbinaUtil {
 		if ("".equals(regionId)) {
 			return "";
 		}
-		ResourceBundle regions = ResourceBundle.getBundle("i18n.Regions", lang.getLocale(),
-				new XMLResourceBundleControl());
-		return regions.getString(regionId);
+		return lang.getBundle("i18n.Regions").getString(regionId);
 	}
 
-	public static String getDaytimeString(ResourceBundle messages, String type) {
-		return messages.getString("daytime." + type);
+	public static String getDaytimeString(LanguageCode lang, String type) {
+		return lang.getBundleString("daytime." + type);
 	}
 
 	public static String getDangerPatternText(DangerPattern dp, LanguageCode lang) {
@@ -103,7 +100,7 @@ public class AlbinaUtil {
 					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 	}
 
-	public static String getTendencyDate(List<AvalancheBulletin> bulletins, ResourceBundle messages) {
+	public static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			DateTime bulletinDate = avalancheBulletin.getValidUntil();
@@ -115,9 +112,9 @@ public class AlbinaUtil {
 
 		if (date != null) {
 			StringBuilder result = new StringBuilder();
-			result.append(messages.getString("tendency.binding-word"));
-			result.append(messages.getString("day." + date.getDayOfWeek()));
-			result.append(date.toString(messages.getString("date-time-format.tendency")));
+			result.append(lang.getBundleString("tendency.binding-word"));
+			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
+			result.append(date.toString(lang.getBundleString("date-time-format.tendency")));
 			return result.toString();
 		} else {
 			return "";
@@ -149,13 +146,13 @@ public class AlbinaUtil {
 		return encodedfile;
 	}
 
-	public static String getDate(List<AvalancheBulletin> bulletins, ResourceBundle messages) {
+	public static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		StringBuilder result = new StringBuilder();
 		DateTime date = getDate(bulletins);
 		if (date != null) {
-			result.append(messages.getString("day." + date.getDayOfWeek()));
+			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
 			result.append(" ");
-			result.append(date.toString(messages.getString("date-time-format")));
+			result.append(date.toString(lang.getBundleString("date-time-format")));
 		} else {
 			// TODO what if no date is given (should not happen)
 			result.append("-");
@@ -193,16 +190,16 @@ public class AlbinaUtil {
 		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
-	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, ResourceBundle messages) {
+	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getValidityDate(bulletins);
 		date = date.minusDays(1);
-		return date.toString(messages.getString("date-time-format")).trim();
+		return date.toString(lang.getBundleString("date-time-format")).trim();
 	}
 
-	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins, ResourceBundle messages) {
+	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getValidityDate(bulletins);
 		date = date.plusDays(1);
-		return date.toString(messages.getString("date-time-format")).trim();
+		return date.toString(lang.getBundleString("date-time-format")).trim();
 	}
 
 	private static DateTime getValidityDate(List<AvalancheBulletin> bulletins) {
@@ -212,27 +209,25 @@ public class AlbinaUtil {
 		return date;
 	}
 
-	public static String getPreviousDayLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region,
-			ResourceBundle messages) {
+	public static String getPreviousDayLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		if (region != null && !region.isEmpty())
-			return messages.getString("avalanche-report.url") + "/"
+			return lang.getBundleString("avalanche-report.url") + "/"
 					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
 					+ AlbinaUtil.getPreviousValidityDateString(bulletins) + "/" + region + "_" + lang.toString()
 					+ ".html";
 		else
-			return messages.getString("avalanche-report.url") + "/"
+			return lang.getBundleString("avalanche-report.url") + "/"
 					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
 					+ AlbinaUtil.getPreviousValidityDateString(bulletins) + "/" + lang.toString() + ".html";
 	}
 
-	public static String getNextDayLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region,
-			ResourceBundle messages) {
+	public static String getNextDayLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		if (region != null && !region.isEmpty())
-			return messages.getString("avalanche-report.url") + "/"
+			return lang.getBundleString("avalanche-report.url") + "/"
 					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
 					+ AlbinaUtil.getNextValidityDateString(bulletins) + "/" + region + "_" + lang.toString() + ".html";
 		else
-			return messages.getString("avalanche-report.url") + "/"
+			return lang.getBundleString("avalanche-report.url") + "/"
 					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
 					+ AlbinaUtil.getNextValidityDateString(bulletins) + "/" + lang.toString() + ".html";
 	}
@@ -302,10 +297,10 @@ public class AlbinaUtil {
 		return date;
 	}
 
-	public static String getPublicationDate(List<AvalancheBulletin> bulletins, ResourceBundle messages) {
+	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getPublicationDate(bulletins);
 		if (date != null)
-			return date.toString(messages.getString("date-time-format.publication"));
+			return date.toString(lang.getBundleString("date-time-format.publication"));
 		else
 			return "";
 	}

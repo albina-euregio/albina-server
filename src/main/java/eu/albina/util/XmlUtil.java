@@ -26,7 +26,6 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -167,21 +166,18 @@ public class XmlUtil {
 			Document doc = docBuilder.newDocument();
 			Element rootElement = CaamlVersion.V6.setNamespaceAttributes(doc.createElement("bulletins"));
 
-			ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", language.getLocale(),
-					new XMLResourceBundleControl());
-
 			// create meta data
 			if (bulletins != null && !bulletins.isEmpty()) {
 
 				// metaData
 				Element metaData = doc.createElement("metaData");
-				for (Element extFile : createObsCollectionExtFiles(doc, bulletins, language, messages)) {
+				for (Element extFile : createObsCollectionExtFiles(doc, bulletins, language)) {
 					metaData.appendChild(extFile);
 				}
 				rootElement.appendChild(metaData);
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv6(doc, language, messages);
+					List<Element> caaml = bulletin.toCAAMLv6(doc, language);
 					if (caaml != null)
 						for (Element element : caaml) {
 							if (element != null)
@@ -243,30 +239,29 @@ public class XmlUtil {
 		return metaDataProperty;
 	}
 
-	private static List<Element> createObsCollectionExtFiles(Document doc, List<AvalancheBulletin> bulletins,
-			LanguageCode lang, ResourceBundle messages) {
+	private static List<Element> createObsCollectionExtFiles(Document doc, List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		List<Element> extFiles = new ArrayList<Element>();
 
 		boolean hasDaytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		String baseUri = GlobalVariables.getMapsUrl(messages) + "/" + validityDateString + "/" + publicationTime + "/";
+		String baseUri = GlobalVariables.getMapsUrl(lang) + "/" + validityDateString + "/" + publicationTime + "/";
 
-		extFiles.add(createExtFile(doc, "link", messages.getString("ext-file.website-link.description"),
-				messages.getString("avalanche-report.url") + "/bulletin/" + validityDateString));
-		extFiles.add(createExtFile(doc, "simple_link", messages.getString("ext-file.simple-link.description"),
-				GlobalVariables.getAvalancheReportSimpleBaseUrl(messages) + validityDateString + "/" + lang.toString()
+		extFiles.add(createExtFile(doc, "link", lang.getBundleString("ext-file.website-link.description"),
+				lang.getBundleString("avalanche-report.url") + "/bulletin/" + validityDateString));
+		extFiles.add(createExtFile(doc, "simple_link", lang.getBundleString("ext-file.simple-link.description"),
+				GlobalVariables.getAvalancheReportSimpleBaseUrl(lang) + validityDateString + "/" + lang.toString()
 						+ ".html"));
 		extFiles.add(createExtFile(doc, "fd_albina_map.jpg",
-				GlobalVariables.getExtFileMapDescription(lang, "fd", "", messages), baseUri + "fd_albina_map.jpg"));
+				GlobalVariables.getExtFileMapDescription(lang, "fd", ""), baseUri + "fd_albina_map.jpg"));
 		extFiles.add(createExtFile(doc, "fd_tyrol_map.jpg",
-				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTyrol, messages),
+				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTyrol),
 				baseUri + "fd_tyrol_map.jpg"));
 		extFiles.add(createExtFile(doc, "fd_southtyrol_map.jpg",
-				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeSouthTyrol, messages),
+				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeSouthTyrol),
 				baseUri + "fd_southtyrol_map.jpg"));
 		extFiles.add(createExtFile(doc, "fd_trentino_map.jpg",
-				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTrentino, messages),
+				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTrentino),
 				baseUri + "fd_trentino_map.jpg"));
 		extFiles.add(createExtFile(doc, "pdf", GlobalVariables.getExtFilePdfDescription(lang, ""),
 				baseUri + validityDateString + "_" + lang.toString() + ".pdf"));
@@ -282,40 +277,40 @@ public class XmlUtil {
 
 		if (!hasDaytimeDependency) {
 			extFiles.add(createExtFile(doc, "fd_overlay.png",
-					GlobalVariables.getExtFileOverlayDescription("fd", messages), baseUri + "fd_overlay.png"));
+					GlobalVariables.getExtFileOverlayDescription(lang, "fd"), baseUri + "fd_overlay.png"));
 			extFiles.add(createExtFile(doc, "fd_regions.json",
-					GlobalVariables.getExtFileRegionsDescription(messages, "fd"), baseUri + "fd_regions.json"));
+					GlobalVariables.getExtFileRegionsDescription(lang, "fd"), baseUri + "fd_regions.json"));
 		} else {
 			extFiles.add(createExtFile(doc, "am_albina_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "am", "", messages), baseUri + "am_albina_map.jpg"));
+					GlobalVariables.getExtFileMapDescription(lang, "am", ""), baseUri + "am_albina_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_tyrol_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeTyrol, messages),
+					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeTyrol),
 					baseUri + "am_tyrol_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_southtyrol_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeSouthTyrol, messages),
+					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeSouthTyrol),
 					baseUri + "am_southtyrol_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_trentino_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeTrentino, messages),
+					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeTrentino),
 					baseUri + "am_trentino_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_albina_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "pm", "", messages), baseUri + "pm_albina_map.jpg"));
+					GlobalVariables.getExtFileMapDescription(lang, "pm", ""), baseUri + "pm_albina_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_tyrol_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTyrol, messages),
+					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTyrol),
 					baseUri + "pm_tyrol_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_southtyrol_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeSouthTyrol, messages),
+					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeSouthTyrol),
 					baseUri + "pm_southtyrol_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_trentino_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTrentino, messages),
+					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTrentino),
 					baseUri + "pm_trentino_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_overlay.png",
-					GlobalVariables.getExtFileOverlayDescription("am", messages), baseUri + "am_overlay.png"));
+					GlobalVariables.getExtFileOverlayDescription(lang, "am"), baseUri + "am_overlay.png"));
 			extFiles.add(createExtFile(doc, "pm_overlay.png",
-					GlobalVariables.getExtFileOverlayDescription("pm", messages), baseUri + "pm_overlay.png"));
+					GlobalVariables.getExtFileOverlayDescription(lang, "pm"), baseUri + "pm_overlay.png"));
 			extFiles.add(createExtFile(doc, "am_regions.json",
-					GlobalVariables.getExtFileRegionsDescription(messages, "am"), baseUri + "am_regions.json"));
+					GlobalVariables.getExtFileRegionsDescription(lang, "am"), baseUri + "am_regions.json"));
 			extFiles.add(createExtFile(doc, "pm_regions.json",
-					GlobalVariables.getExtFileRegionsDescription(messages, "pm"), baseUri + "pm_regions.json"));
+					GlobalVariables.getExtFileRegionsDescription(lang, "pm"), baseUri + "pm_regions.json"));
 		}
 
 		return extFiles;

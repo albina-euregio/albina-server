@@ -22,7 +22,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -33,7 +32,6 @@ import org.junit.Test;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.XMLResourceBundleControl;
 
 import static org.junit.Assert.assertTrue;
 
@@ -86,10 +84,7 @@ public class BlogControllerTest {
 				+ "  \"selfLink\": \"https://www.googleapis.com/blogger/v3/blogs/1263754381945501754/posts/4564885875858452565\"\n"
 				+ "}\n";
 
-		ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", LanguageCode.de.getLocale(),
-				new XMLResourceBundleControl());
-
 		Blogger.Item item = new CommonProcessor().fromJson(blog, Blogger.Item.class);
-		BlogController.getInstance().sendNewBlogPostToMessengerpeople(item, "IT-32-BZ", LanguageCode.de, messages);
+		BlogController.getInstance().sendNewBlogPostToMessengerpeople(item, "IT-32-BZ", LanguageCode.de);
 	}
 }

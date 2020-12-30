@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -1229,8 +1228,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return rootElement;
 	}
 
-	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon,
-			ResourceBundle messages) {
+	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
 
 		AvalancheBulletinDaytimeDescription bulletinDaytimeDescription;
 
@@ -1261,20 +1259,20 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (date != null)
 			publicationTime = utcTime.toString(GlobalVariables.publicationTime);
 		if (!isAfternoon) {
-			String fileReferenceURI = GlobalVariables.getMapsUrl(messages) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ publicationTime + "/" + getId() + ".jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
-					messages.getString("ext-file.thumbnail.description"), fileReferenceURI));
+					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
-			String fileReferenceURI = GlobalVariables.getMapsUrl(messages) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ publicationTime + "/" + getId() + "_PM.jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
-					messages.getString("ext-file.thumbnail.description"), fileReferenceURI));
+					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		}
-		String linkReferenceURI = messages.getString("avalanche-report.url") + "/bulletin/" + getValidityDateString()
+		String linkReferenceURI = languageCode.getBundleString("avalanche-report.url") + "/bulletin/" + getValidityDateString()
 				+ "?region=" + getId();
 		metaData.appendChild(XmlUtil.createExtFile(doc, "website",
-				messages.getString("ext-file.region-link.description"), linkReferenceURI));
+				languageCode.getBundleString("ext-file.region-link.description"), linkReferenceURI));
 
 		// publication time
 		Element pubTime = doc.createElement("publicationTime");
@@ -1309,10 +1307,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element source = doc.createElement("source");
 		Element operation = doc.createElement("operation");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode(messages.getString("avalanche-report.name")));
+		name.appendChild(doc.createTextNode(languageCode.getBundleString("avalanche-report.name")));
 		operation.appendChild(name);
 		Element website = doc.createElement("website");
-		website.appendChild(doc.createTextNode(messages.getString("avalanche-report.url")));
+		website.appendChild(doc.createTextNode(languageCode.getBundleString("avalanche-report.url")));
 		operation.appendChild(website);
 		source.appendChild(operation);
 		rootElement.appendChild(source);
@@ -1632,13 +1630,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			return null;
 	}
 
-	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode, ResourceBundle messages) {
+	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode) {
 		if (publishedRegions != null && !publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLv6Bulletin(doc, languageCode, false, messages));
+			result.add(createCAAMLv6Bulletin(doc, languageCode, false));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLv6Bulletin(doc, languageCode, true, messages));
+				result.add(createCAAMLv6Bulletin(doc, languageCode, true));
 
 			return result;
 		} else

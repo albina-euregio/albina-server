@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -210,12 +209,12 @@ public class GlobalVariables {
 
 	public static String notAvailableString = "N/A";
 
-	public static String getAvalancheReportSimpleBaseUrl(ResourceBundle messages) {
-		return messages.getString("avalanche-report.url") + avalancheReportSimpleUrl;
+	public static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
+		return lang.getBundleString("avalanche-report.url") + avalancheReportSimpleUrl;
 	}
 
-	public static String getAvalancheReportFullBlogUrl(ResourceBundle messages) {
-		return messages.getString("avalanche-report.url") + avalancheReportBlogUrl;
+	public static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
+		return lang.getBundleString("avalanche-report.url") + avalancheReportBlogUrl;
 	}
 
 	public static boolean isCreateMaps() {
@@ -502,24 +501,24 @@ public class GlobalVariables {
 		setConfigProperty("bulletinCaamlSchemaFileString", bulletinCaamlSchemaFileString);
 	}
 
-	public static String getMapsUrl(ResourceBundle messages) {
-		return messages.getString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
+	public static String getMapsUrl(LanguageCode lang) {
+		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
 	}
 
-	public static String getSocialMediaText(DateTime date, boolean update, ResourceBundle messages) {
-		String dateString = messages.getString("day." + date.getDayOfWeek())
-				+ date.toString(messages.getString("date-time-format"));
+	public static String getSocialMediaText(DateTime date, boolean update, LanguageCode lang) {
+		String dateString = lang.getBundleString("day." + date.getDayOfWeek())
+				+ date.toString(lang.getBundleString("date-time-format"));
 		if (update) {
-			return MessageFormat.format(messages.getString("social-media.message.update"),
-					messages.getString("avalanche-report.name"), dateString, getBulletinUrl(messages, date));
+			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
+					lang.getBundleString("avalanche-report.name"), dateString, getBulletinUrl(lang, date));
 		} else {
-			return MessageFormat.format(messages.getString("social-media.message"),
-					messages.getString("avalanche-report.name"), dateString, getBulletinUrl(messages, date));
+			return MessageFormat.format(lang.getBundleString("social-media.message"),
+					lang.getBundleString("avalanche-report.name"), dateString, getBulletinUrl(lang, date));
 		}
 	}
 
-	public static String getBulletinUrl(ResourceBundle messages, DateTime date) {
-		return messages.getString("avalanche-report.url") + avalancheReportBulletinUrl
+	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
+		return lang.getBundleString("avalanche-report.url") + avalancheReportBulletinUrl
 				+ date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
 	}
 
@@ -530,8 +529,8 @@ public class GlobalVariables {
 			return "logo/color/euregio.png";
 	}
 
-	public static String getCopyrightText(ResourceBundle messages) {
-		// return AlbinaUtil.getYear(bulletins) + messages.getString("copyright");
+	public static String getCopyrightText(LanguageCode lang) {
+		// return AlbinaUtil.getYear(bulletins) + lang.getBundleString("copyright");
 		return "";
 	}
 
@@ -762,9 +761,9 @@ public class GlobalVariables {
 	}
 
 	// REGION
-	public static String getPdfLink(String date, LanguageCode lang, String region, ResourceBundle messages) {
+	public static String getPdfLink(String date, LanguageCode lang, String region) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(messages.getString("avalanche-report.url"));
+		sb.append(lang.getBundleString("avalanche-report.url"));
 		sb.append(avalancheReportFilesUrl);
 		sb.append(date);
 		sb.append("/");
@@ -777,29 +776,24 @@ public class GlobalVariables {
 		return sb.toString();
 	}
 
-	public static String getImprintLink(ResourceBundle messages) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(messages.getString("avalanche-report.url"));
-		sb.append("/");
-		sb.append("imprint");
-		return sb.toString();
+	public static String getImprintLink(LanguageCode lang) {
+		return lang.getBundleString("avalanche-report.url") + "/imprint";
 	}
 
-	public static String getExtFileMapDescription(LanguageCode lang, String type, String region,
-			ResourceBundle messages) {
+	public static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
 		String regionName = AlbinaUtil.getRegionName(lang, region);
-		String timeString = AlbinaUtil.getDaytimeString(messages, type);
-		return MessageFormat.format(messages.getString("ext-file.map.description"), regionName, timeString);
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		return MessageFormat.format(lang.getBundleString("ext-file.map.description"), regionName, timeString);
 	}
 
-	public static String getExtFileOverlayDescription(String type, ResourceBundle messages) {
-		String timeString = AlbinaUtil.getDaytimeString(messages, type);
-		return MessageFormat.format(messages.getString("ext-file.overlay.description"), timeString);
+	public static String getExtFileOverlayDescription(LanguageCode lang, String type) {
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		return MessageFormat.format(lang.getBundleString("ext-file.overlay.description"), timeString);
 	}
 
-	public static String getExtFileRegionsDescription(ResourceBundle messages, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(messages, type);
-		return MessageFormat.format(messages.getString("ext-file.regions.description"), timeString);
+	public static String getExtFileRegionsDescription(LanguageCode lang, String type) {
+		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		return MessageFormat.format(lang.getBundleString("ext-file.regions.description"), timeString);
 	}
 
 	public static String getExtFilePdfDescription(LanguageCode lang, String region) {

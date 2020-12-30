@@ -22,7 +22,6 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
@@ -42,7 +41,6 @@ import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.TelegramConfig;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.XMLResourceBundleControl;
 
 public class BlogController extends CommonProcessor {
 	private static Logger logger = LoggerFactory.getLogger(BlogController.class);
@@ -163,14 +161,11 @@ public class BlogController extends CommonProcessor {
 		if (getBlogId(region, lang) != null) {
 			try {
 				List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
-				ResourceBundle messages = ResourceBundle.getBundle("i18n.MessagesBundle", lang.getLocale(),
-						new XMLResourceBundleControl());
-
 				logger.info("Found " + blogPosts.size() + " new blog posts!");
 				for (Blogger.Item object : blogPosts) {
-						sendNewBlogPostToMessengerpeople(object, region, lang, messages);
-						sendNewBlogPostToRapidmail(object, region, lang, messages);
-						sendNewBlogPostToTelegramChannel(object, region, lang, messages);
+						sendNewBlogPostToMessengerpeople(object, region, lang);
+						sendNewBlogPostToRapidmail(object, region, lang);
+						sendNewBlogPostToTelegramChannel(object, region, lang);
 					}
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
@@ -178,11 +173,10 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	void sendNewBlogPostToMessengerpeople(Blogger.Item item, String region, LanguageCode lang,
-			ResourceBundle messages) {
+	void sendNewBlogPostToMessengerpeople(Blogger.Item item, String region, LanguageCode lang) {
 		logger.info("Sending new blog post to messengerpeople ...");
 
-		String message = getBlogMessage(item, region, lang, messages);
+		String message = getBlogMessage(item, region, lang);
 		String attachmentUrl = getAttachmentUrl(item);
 
 		try {
@@ -196,11 +190,10 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	void sendNewBlogPostToTelegramChannel(Blogger.Item item, String region, LanguageCode lang,
-			ResourceBundle messages) {
+	void sendNewBlogPostToTelegramChannel(Blogger.Item item, String region, LanguageCode lang) {
 		logger.info("Sending new blog post to telegram channel ...");
 
-		String message = getBlogMessage(item, region, lang, messages);
+		String message = getBlogMessage(item, region, lang);
 		String attachmentUrl = getAttachmentUrl(item);
 
 		try {
@@ -227,8 +220,7 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(Blogger.Item item, String region, LanguageCode lang,
-			ResourceBundle messages) {
+	private void sendNewBlogPostToRapidmail(Blogger.Item item, String region, LanguageCode lang) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
 		String subject = item.title;
@@ -237,7 +229,7 @@ public class BlogController extends CommonProcessor {
 		try {
 			String htmlString = getBlogPost(blogPostId, region, lang);
 			if (htmlString != null && !htmlString.isEmpty())
-				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject, messages);
+				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject);
 		} catch (IOException e) {
 			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString(), e);
 		} catch (URISyntaxException e) {
@@ -245,8 +237,8 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang, ResourceBundle messages) {
-		return item.title + ": " + GlobalVariables.getAvalancheReportFullBlogUrl(messages) + getBlogUrl(region, lang) + "/" + item.id;
+	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang) {
+		return item.title + ": " + GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/" + item.id;
 	}
 
 	private String getAttachmentUrl(Blogger.Item item) {
