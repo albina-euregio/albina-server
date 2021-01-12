@@ -51,8 +51,9 @@ public class PushNotificationService {
 	@Path("/unsubscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response unsubscribe(PushSubscription subscriber) {
-		// TODO
+	public Response unsubscribe(PushSubscription subscription) {
+		logger.info("Unsubscribing {}", subscription);
+		PushSubscriptionController.delete(subscription);
 		return Response.ok().build();
 	}
 }

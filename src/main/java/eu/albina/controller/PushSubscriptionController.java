@@ -16,6 +16,10 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.HibernateException;
 
 import eu.albina.model.PushSubscription;
@@ -27,6 +31,19 @@ public interface PushSubscriptionController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.persist(subscription);
 			return subscription.getId();
+		});
+	}
+
+	static void delete(PushSubscription subscription) throws HibernateException {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaDelete<PushSubscription> delete = criteriaBuilder.createCriteriaDelete(PushSubscription.class);
+			Root<PushSubscription> root = delete.from(PushSubscription.class);
+			delete.where(criteriaBuilder.equal(root.get("endpoint"), subscription.getEndpoint()));
+			delete.where(criteriaBuilder.equal(root.get("auth"), subscription.getAuth()));
+			delete.where(criteriaBuilder.equal(root.get("p256dh"), subscription.getP256dh()));
+			entityManager.createQuery(delete).executeUpdate();
+			return null;
 		});
 	}
 }
