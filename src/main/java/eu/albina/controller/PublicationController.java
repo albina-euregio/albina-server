@@ -41,6 +41,7 @@ import eu.albina.util.JsonUtil;
 import eu.albina.util.MapUtil;
 import eu.albina.util.MessengerPeopleUtil;
 import eu.albina.util.PdfUtil;
+import eu.albina.util.PushNotificationUtil;
 import eu.albina.util.SimpleHtmlUtil;
 import eu.albina.util.StaticWidgetUtil;
 import eu.albina.util.TelegramChannelUtil;
@@ -168,6 +169,11 @@ public class PublicationController {
 				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.regionsEuregio,
 						false);
 				triggerTelegramChannelThread.start();
+			}
+
+			// publish via push notifications
+			if (GlobalVariables.isCreateMaps()) {
+				new Thread(() -> triggerPushNotifications(bulletins, GlobalVariables.regionsEuregio, false)).start();
 			}
 		}
 	}
@@ -617,6 +623,15 @@ public class PublicationController {
 				}
 			}
 		});
+	}
+
+	private void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+		try {
+			logger.info("Push notifications triggered");
+			PushNotificationUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
+		} finally {
+			logger.info("Push notifications finished");
+		}
 	}
 
 }
