@@ -28,6 +28,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -54,7 +55,7 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 		payload.put("body", message);
 		payload.put("icon", attachmentUrl);
 
-		List<PushSubscription> subscriptions = Collections.emptyList(); // TODO
+		List<PushSubscription> subscriptions = PushSubscriptionController.get(lang);
 		logger.info("Sending {} push notifications for language={}: {}", subscriptions.size(), lang, payload);
 		for (PushSubscription subscription : subscriptions) {
 			sendPushMessage(subscription, payload);

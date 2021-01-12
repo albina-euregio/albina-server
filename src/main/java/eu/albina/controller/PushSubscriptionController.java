@@ -16,13 +16,17 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.HibernateException;
 
 import eu.albina.model.PushSubscription;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.HibernateUtil;
 
 public interface PushSubscriptionController {
@@ -31,6 +35,16 @@ public interface PushSubscriptionController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.persist(subscription);
 			return subscription.getId();
+		});
+	}
+
+	static List<PushSubscription> get(LanguageCode lang) throws HibernateException {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<PushSubscription> select = criteriaBuilder.createQuery(PushSubscription.class);
+			Root<PushSubscription> root = select.from(PushSubscription.class);
+			select.where(criteriaBuilder.equal(root.get("language"), lang));
+			return entityManager.createQuery(select).getResultList();
 		});
 	}
 
