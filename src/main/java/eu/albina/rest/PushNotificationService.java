@@ -27,6 +27,7 @@ import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
 import eu.albina.util.PushNotificationUtil;
 
@@ -41,6 +42,7 @@ public class PushNotificationService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response subscribe(PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
+		PushSubscriptionController.create(subscription);
 		PushNotificationUtil.getInstance().sendWelcomePushMessage(subscription);
 		return Response.ok().build();
 	}

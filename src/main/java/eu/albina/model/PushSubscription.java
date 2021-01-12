@@ -16,7 +16,10 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,12 +35,23 @@ public class PushSubscription {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long id;
 
+	@Column(name = "AUTH")
 	private String auth;
+
+	@Column(name = "KEY")
 	private String key;
+
+	@Column(name = "ENDPOINT", length = 1023)
 	private String endpoint;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE_CODE")
 	private LanguageCode language;
+
+	@Column(name = "REGION_ID")
 	private String region;
 
 	public Long getId() {
