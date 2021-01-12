@@ -77,7 +77,7 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
 			Notification notification = new Notification(
 				subscription.getEndpoint(),
-				subscription.getKey(),
+				subscription.getP256dh(),
 				subscription.getAuth(),
 				payload
 			);

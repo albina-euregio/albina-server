@@ -41,8 +41,8 @@ public class PushSubscription {
 	@Column(name = "AUTH")
 	private String auth;
 
-	@Column(name = "KEY")
-	private String key;
+	@Column(name = "P256DH")
+	private String p256dh;
 
 	@Column(name = "ENDPOINT", length = 1023)
 	private String endpoint;
@@ -70,12 +70,12 @@ public class PushSubscription {
 		this.auth = auth;
 	}
 
-	public String getKey() {
-		return key;
+	public String getP256dh() {
+		return p256dh;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setP256dh(String p256dh) {
+		this.p256dh = p256dh;
 	}
 
 	public String getEndpoint() {
@@ -107,7 +107,7 @@ public class PushSubscription {
 		return MoreObjects.toStringHelper(this)
 			.add("id", id)
 			.add("auth", auth)
-			.add("key", key)
+			.add("p256dh", p256dh)
 			.add("endpoint", endpoint)
 			.add("language", language)
 			.add("region", region)
