@@ -505,18 +505,6 @@ public class GlobalVariables {
 		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
 	}
 
-	public static String getSocialMediaText(DateTime date, boolean update, LanguageCode lang) {
-		String dateString = lang.getBundleString("day." + date.getDayOfWeek())
-				+ date.toString(lang.getBundleString("date-time-format"));
-		if (update) {
-			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
-					lang.getBundleString("avalanche-report.name"), dateString, getBulletinUrl(lang, date));
-		} else {
-			return MessageFormat.format(lang.getBundleString("social-media.message"),
-					lang.getBundleString("avalanche-report.name"), dateString, getBulletinUrl(lang, date));
-		}
-	}
-
 	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
 		return lang.getBundleString("avalanche-report.url") + avalancheReportBulletinUrl
 				+ date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
