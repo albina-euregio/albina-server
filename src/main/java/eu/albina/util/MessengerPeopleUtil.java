@@ -20,18 +20,16 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.socialmedia.MessengerPeopleProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.socialmedia.RegionConfiguration;
 
-public class MessengerPeopleUtil {
+public class MessengerPeopleUtil implements SocialMediaUtil {
 
 	private static MessengerPeopleUtil instance = null;
 
@@ -44,25 +42,11 @@ public class MessengerPeopleUtil {
 		return instance;
 	}
 
-	public void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
-		DateTime date = AlbinaUtil.getDate(bulletins);
-		String validityDate = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-
-		for (LanguageCode lang : GlobalVariables.socialMediaLanguages) {
-			String message = GlobalVariables.getSocialMediaText(date, update, lang);
-			sendBulletinNewsletter(message, bulletins, validityDate, publicationTime, lang, regions);
-		}
-	}
-
-	private void sendBulletinNewsletter(String message, List<AvalancheBulletin> bulletins, String validityDate,
-			String publicationTime, LanguageCode lang, List<String> regions) {
+	@Override
+	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl) {
 		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
 		for (String region : regions) {
 			try {
-				String attachmentUrl = GlobalVariables.getServerMainUrl() + GlobalVariables.avalancheReportFilesUrl
-						+ validityDate + "/" + publicationTime + "/"
-						+ AlbinaUtil.getRegionOverviewMapFilename("", "jpg");
 				logger.info("Attachment URL: " + attachmentUrl);
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 				ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), lang, message, attachmentUrl);

@@ -53,6 +53,8 @@ public class GlobalVariables {
 	private static boolean sendEmails = false;
 	private static boolean publishToMessengerpeople = false;
 	private static boolean publishToTelegramChannel = false;
+	private static String vapidPublicKey;
+	private static String vapidPrivateKey;
 	private static boolean publishAt5PM = false;
 	private static boolean publishAt8AM = false;
 	private static String localImagesPath = "images/";
@@ -269,6 +271,14 @@ public class GlobalVariables {
 	public static void setPublishToTelegramChannel(boolean publishToTelegramChannel) throws ConfigurationException {
 		GlobalVariables.publishToTelegramChannel = publishToTelegramChannel;
 		setConfigProperty("publishToTelegramChannel", publishToTelegramChannel);
+	}
+
+	public static String getVapidPublicKey() {
+		return vapidPublicKey;
+	}
+
+	public static String getVapidPrivateKey() {
+		return vapidPrivateKey;
 	}
 
 	public static boolean isPublishAt5PM() {
@@ -505,18 +515,6 @@ public class GlobalVariables {
 		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
 	}
 
-	public static String getSocialMediaText(DateTime date, boolean update, LanguageCode lang) {
-		String dateString = lang.getBundleString("day." + date.getDayOfWeek())
-				+ date.toString(lang.getBundleString("date-time-format"));
-		if (update) {
-			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
-					lang.getBundleString("avalanche-report.name"), dateString, getBulletinUrl(lang, date));
-		} else {
-			return MessageFormat.format(lang.getBundleString("social-media.message"),
-					lang.getBundleString("avalanche-report.name"), dateString, getBulletinUrl(lang, date));
-		}
-	}
-
 	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
 		return lang.getBundleString("avalanche-report.url") + avalancheReportBulletinUrl
 				+ date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
@@ -593,6 +591,10 @@ public class GlobalVariables {
 				publishBlogsSouthTyrol = config.getBoolean("publishBlogsSouthTyrol");
 			if (config.containsKey("publishBlogsTrentino"))
 				publishBlogsTrentino = config.getBoolean("publishBlogsTrentino");
+			if (config.containsKey("vapidPublicKey"))
+				vapidPublicKey = config.getString("vapidPublicKey");
+			if (config.containsKey("vapidPrivateKey"))
+				vapidPrivateKey = config.getString("vapidPrivateKey");
 			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration file could not be loaded!", e);

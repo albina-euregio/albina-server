@@ -16,9 +16,16 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +70,29 @@ public class HibernateUtil {
 
 	public EntityManagerFactory getEntityManagerFactory() {
 		return entityManagerFactory;
+	}
+
+	public <T> T runTransaction(Consumer<EntityManager> execution, Supplier<T> returnSupplier) {
+		return runTransaction(entityManager -> {
+			execution.accept(entityManager);
+			return returnSupplier.get();
+		});
+	}
+
+	public <T> T runTransaction(Function<EntityManager, T> function) {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			final T result = function.apply(entityManager);
+			transaction.commit();
+			return result;
+		} catch (HibernateException e) {
+			transaction.rollback();
+			throw e;
+		} finally {
+			entityManager.close();
+		}
 	}
 
 	public void shutDown() {
