@@ -1,5 +1,6 @@
 CREATE TABLE `push_subscriptions` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `SUBSCRIBE_DATE` datetime NOT NULL,
   `AUTH` varchar(255) NOT NULL,
   `P256DH` varchar(255) NOT NULL,
   `ENDPOINT` varchar(1023) NOT NULL,
