@@ -60,6 +60,9 @@ public class PushSubscription {
 	@Column(name = "REGION_ID")
 	private String region;
 
+	@Column(name = "FAILED_COUNT")
+	private int failedCount;
+
 	public Long getId() {
 		return id;
 	}
@@ -116,6 +119,14 @@ public class PushSubscription {
 		this.region = region;
 	}
 
+	public int getFailedCount() {
+		return failedCount;
+	}
+
+	public void setFailedCount(int failedCount) {
+		this.failedCount = failedCount;
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
@@ -126,6 +137,7 @@ public class PushSubscription {
 			.add("endpoint", endpoint)
 			.add("language", language)
 			.add("region", region)
+			.add("failedCount", failedCount)
 			.toString();
 	}
 }

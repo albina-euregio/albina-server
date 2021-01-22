@@ -6,5 +6,6 @@ CREATE TABLE `push_subscriptions` (
   `ENDPOINT` varchar(1023) NOT NULL,
   `LANGUAGE_CODE` varchar(255) DEFAULT NULL,
   `REGION_ID` varchar(255) DEFAULT NULL,
+  `FAILED_COUNT` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
 )
