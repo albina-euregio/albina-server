@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -207,26 +206,6 @@ public class UtilTest {
 
 	@Ignore
 	@Test
-	public void createPdf() throws IOException, URISyntaxException {
-		// PdfUtil.getInstance().createOverviewPdfs(bulletins);
-		// PdfUtil.getInstance().createOverviewPdfs(bulletinsAmPm);
-		// PdfUtil.getInstance().createRegionPdfs(bulletins, GlobalVariables.codeTyrol);
-
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, GlobalVariables.codeTyrol, false, false,
-				"2030-02-16", "2030-02-16_00-00-00");
-	}
-
-	@Ignore
-	@Test
-	public void createSpecificPdfs() throws IOException, URISyntaxException {
-		String filename = "2030-02-16";
-		int count = 5;
-		List<AvalancheBulletin> list = loadBulletins(filename, count);
-		PdfUtil.getInstance().createRegionPdfs(list, GlobalVariables.codeEuregio, "2030-02-16", "2030-02-16_00-00-00");
-	}
-
-	@Ignore
-	@Test
 	public void encodeImageAndPassword() {
 		for (int i = 4; i < 6; i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
@@ -269,16 +248,5 @@ public class UtilTest {
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
 		JsonUtil.createJsonFile(bulletins, "2019-12-30", "2019-12-30_17-15-30");
-	}
-
-	private List<AvalancheBulletin> loadBulletins(String filename, int count) throws IOException {
-		List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-		for (int i = 1; i <= count; i++) {
-			bulletins = new ArrayList<AvalancheBulletin>();
-			URL resource = Resources.getResource(filename + "_" + i + ".json");
-			AvalancheBulletin bulletin = AvalancheBulletin.readBulletin(resource);
-			result.add(bulletin);
-		}
-		return result;
 	}
 }

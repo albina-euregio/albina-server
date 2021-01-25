@@ -283,6 +283,12 @@ public class AlbinaUtil {
 		return date;
 	}
 
+	public static boolean isUpdate(List<AvalancheBulletin> bulletins) {
+		DateTime publicationDate = getPublicationDate(bulletins);
+		int time = publicationDate.getSecondOfDay();
+		return (time == 61200) ? false : true;
+	}
+
 	private static DateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
 		DateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {

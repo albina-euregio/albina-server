@@ -92,10 +92,16 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 					.setColor(blue, true).showText(date).endText();
 
 			String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
-			if (!publicationDate.isEmpty())
-				pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
-						.setColor(greyDarkColor, true).showText(lang.getBundleString("published") + publicationDate)
-						.endText();
+			if (!publicationDate.isEmpty()) {
+				if (AlbinaUtil.isUpdate(bulletins))
+					pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
+							.setColor(greyDarkColor, true).showText(lang.getBundleString("updated") + publicationDate)
+							.endText();
+				else
+					pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
+							.setColor(greyDarkColor, true).showText(lang.getBundleString("published") + publicationDate)
+							.endText();
+			}
 
 			Canvas canvas = new Canvas(pdfCanvas, pdfDoc, page.getPageSize());
 
