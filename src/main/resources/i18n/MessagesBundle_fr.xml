@@ -38,7 +38,7 @@
   <entry key="elevation.above.pre-string">au-dessus</entry>
   <entry key="elevation.below.pre-string">au-dessous</entry>
   <entry key="social-media.message">{0} pour {1}: {2}</entry>
-  <entry key="social-media.message.update">UDPATE du {0} pour {1}: {2}</entry>
+  <entry key="social-media.message.update">UPDATE du {0} pour {1}: {2}</entry>
   <entry key="headline">Bulletin d'avalanche</entry>
   <entry key="headline.update">UPDATE du Bulletin d'avalanche</entry>
   <entry key="headline.tendency">Tendance</entry>
@@ -56,4 +56,5 @@
   <entry key="pdf.page-number">Page {0}</entry>
   <entry key="cop.incomplete-translation">Attendre la traduction en cours ....</entry>
   <entry key="published">Publié </entry>
+  <entry key="updated">Update du </entry>
 </properties>

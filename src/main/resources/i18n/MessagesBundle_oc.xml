@@ -56,4 +56,5 @@
   <entry key="pdf.page-number">Pagina {0}</entry>
   <entry key="cop.incomplete-translation">Demore era revirada en cors ...</entry>
   <entry key="published">Publicat </entry>
+  <entry key="updated">Actualizaction en </entry>
 </properties>

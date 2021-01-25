@@ -56,4 +56,5 @@
   <entry key="pdf.page-number">Pagina {0}</entry>
   <entry key="cop.incomplete-translation">Attendere traduzione in corso....</entry>
   <entry key="published">Pubblicato il </entry>
+  <entry key="updated">Aggiornamento sulla </entry>
 </properties>
