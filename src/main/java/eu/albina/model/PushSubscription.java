@@ -28,6 +28,8 @@ import javax.persistence.Table;
 import com.google.common.base.MoreObjects;
 
 import eu.albina.model.enumerations.LanguageCode;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 @Entity
 @Table(name = "push_subscriptions")
@@ -37,6 +39,10 @@ public class PushSubscription {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
+
+	@Column(name = "SUBSCRIBE_DATE")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	private org.joda.time.DateTime subscribeDate = DateTime.now();
 
 	@Column(name = "AUTH")
 	private String auth;
@@ -54,12 +60,23 @@ public class PushSubscription {
 	@Column(name = "REGION_ID")
 	private String region;
 
+	@Column(name = "FAILED_COUNT")
+	private int failedCount;
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public DateTime getSubscribeDate() {
+		return subscribeDate;
+	}
+
+	public void setSubscribeDate(DateTime subscribeDate) {
+		this.subscribeDate = subscribeDate;
 	}
 
 	public String getAuth() {
@@ -102,15 +119,25 @@ public class PushSubscription {
 		this.region = region;
 	}
 
+	public int getFailedCount() {
+		return failedCount;
+	}
+
+	public void setFailedCount(int failedCount) {
+		this.failedCount = failedCount;
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
 			.add("id", id)
+			.add("subscribeDate", subscribeDate)
 			.add("auth", auth)
 			.add("p256dh", p256dh)
 			.add("endpoint", endpoint)
 			.add("language", language)
 			.add("region", region)
+			.add("failedCount", failedCount)
 			.toString();
 	}
 }

@@ -84,6 +84,11 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 			pushService.send(notification);
 		} catch (Exception e) {
 			logger.warn("Failed to send push notification to " + subscription.getEndpoint(), e);
+			try {
+				PushSubscriptionController.incrementFailedCount(subscription);
+			} catch (Exception e2) {
+				logger.warn("Failed to increment failed fount for " + subscription.getEndpoint(), e);
+			}
 		}
 	}
 
