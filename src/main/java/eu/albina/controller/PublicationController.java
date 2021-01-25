@@ -278,6 +278,11 @@ public class PublicationController {
 				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true);
 				triggerTelegramChannelThread.start();
 			}
+
+			// publish via push notifications
+			if (GlobalVariables.isCreateMaps()) {
+				new Thread(() -> triggerPushNotifications(bulletins, regions, true)).start();
+			}
 		}
 	}
 

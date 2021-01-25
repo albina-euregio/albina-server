@@ -18,19 +18,19 @@ package eu.albina.util;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
-import java.util.Collections;
 import java.util.List;
 
-import com.github.openjson.JSONObject;
-import nl.martijndwars.webpush.Notification;
-import nl.martijndwars.webpush.PushService;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONObject;
+
 import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
+import nl.martijndwars.webpush.Notification;
+import nl.martijndwars.webpush.PushService;
 
 public final class PushNotificationUtil implements SocialMediaUtil {
 
@@ -76,12 +76,8 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 	private void sendPushMessage(PushSubscription subscription, byte[] payload) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
-			Notification notification = new Notification(
-				subscription.getEndpoint(),
-				subscription.getP256dh(),
-				subscription.getAuth(),
-				payload
-			);
+			Notification notification = new Notification(subscription.getEndpoint(), subscription.getP256dh(),
+					subscription.getAuth(), payload);
 			PushService pushService = new PushService();
 			pushService.setPublicKey(GlobalVariables.getVapidPublicKey());
 			pushService.setPrivateKey(GlobalVariables.getVapidPrivateKey());
