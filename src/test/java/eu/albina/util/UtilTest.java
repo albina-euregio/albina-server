@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.mail.MessagingException;
 import javax.xml.transform.TransformerException;
 
 import org.joda.time.DateTime;
@@ -152,22 +151,6 @@ public class UtilTest {
 	@After
 	public void shutDown() {
 		// HibernateUtil.getInstance().shutDown();
-	}
-
-	@Ignore
-	@Test
-	public void createFreemarker() throws IOException, URISyntaxException {
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-				GlobalVariables.codeTyrol, false, false);
-		System.out.println(html);
-	}
-
-	@Ignore
-	@Test
-	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
-		ArrayList<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTyrol);
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false);
 	}
 
 	@Ignore
