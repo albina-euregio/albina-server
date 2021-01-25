@@ -37,6 +37,7 @@ import com.github.openjson.JSONObject;
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheSituation;
+import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
@@ -775,6 +776,23 @@ public class GlobalVariables {
 		sb.append("_");
 		sb.append(lang.toString());
 		sb.append(".pdf");
+		return sb.toString();
+	}
+
+	public static String getDangerPatternLink(LanguageCode lang, DangerPattern dangerPattern) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(lang.getBundleString("avalanche-report.url"));
+		sb.append("/education/danger-patterns#");
+		sb.append(DangerPattern.getCAAMLv6String(dangerPattern));
+		return sb.toString();
+	}
+
+	public static String getAvalancheSituationLink(LanguageCode lang,
+			eu.albina.model.enumerations.AvalancheSituation avalancheSituation) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(lang.getBundleString("avalanche-report.url"));
+		sb.append("/education/avalanche-problems#");
+		sb.append(avalancheSituation.toCaamlv6String());
 		return sb.toString();
 	}
 

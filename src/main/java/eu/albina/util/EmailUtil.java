@@ -328,17 +328,23 @@ public class EmailUtil {
 							if (avalancheBulletin.getDangerPattern1() != null) {
 								bulletin.put("dangerPattern1",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
+								bulletin.put("dangerPatternLink1", GlobalVariables.getDangerPatternLink(lang,
+										avalancheBulletin.getDangerPattern1()));
 								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
 							} else {
 								bulletin.put("dangerPattern1", "");
+								bulletin.put("dangerPatternLink1", "");
 								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
 							}
 							if (avalancheBulletin.getDangerPattern2() != null) {
 								bulletin.put("dangerPattern2",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
+								bulletin.put("dangerPatternLink2", GlobalVariables.getDangerPatternLink(lang,
+										avalancheBulletin.getDangerPattern2()));
 								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
 							} else {
 								bulletin.put("dangerPattern2", "");
+								bulletin.put("dangerPatternLink2", "");
 								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 							}
 						} else {
@@ -347,6 +353,8 @@ public class EmailUtil {
 							bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 							bulletin.put("dangerPattern1", "");
 							bulletin.put("dangerPattern2", "");
+							bulletin.put("dangerPatternLink1", "");
+							bulletin.put("dangerPatternLink2", "");
 						}
 					} else {
 						bulletin.put("snowpackStructureHeadline", "");
@@ -355,6 +363,8 @@ public class EmailUtil {
 						bulletin.put("dangerPatternsHeadline", "");
 						bulletin.put("dangerPattern1", "");
 						bulletin.put("dangerPattern2", "");
+						bulletin.put("dangerPatternLink1", "");
+						bulletin.put("dangerPatternLink2", "");
 						bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
 						bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 					}
@@ -375,6 +385,8 @@ public class EmailUtil {
 					bulletin.put("dangerPatternsHeadline", "");
 					bulletin.put("dangerPattern1", "");
 					bulletin.put("dangerPattern2", "");
+					bulletin.put("dangerPatternLink1", "");
+					bulletin.put("dangerPatternLink2", "");
 					bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
 					bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 					bulletin.put("tendencyHeadline", "");
@@ -421,8 +433,8 @@ public class EmailUtil {
 			root.put("bulletins", arrayList);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("website", lang.getBundleString("avalanche-report.url") + "/bulletin/"
-					+ AlbinaUtil.getValidityDateString(bulletins));
+			links.put("website", lang.getBundleString("avalanche-report.url")
+					+ GlobalVariables.avalancheReportBulletinUrl + AlbinaUtil.getValidityDateString(bulletins));
 			links.put("unsubscribe", "{%link_unsubscribe}");
 			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region));
 			links.put("imprint", GlobalVariables.getImprintLink(lang));
@@ -505,10 +517,13 @@ public class EmailUtil {
 				// .getAvalancheSituation1().getAvalancheSituation().toStringId());
 				avalancheSituation1.put("text",
 						daytimeBulletin.getAvalancheSituation1().getAvalancheSituation().toString(lang.getLocale()));
+				avalancheSituation1.put("link", GlobalVariables.getAvalancheSituationLink(lang,
+						daytimeBulletin.getAvalancheSituation1().getAvalancheSituation()));
 			} else {
 				avalancheSituation1.put("symbol",
 						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
 				avalancheSituation1.put("text", "");
+				avalancheSituation1.put("link", "");
 			}
 
 			Map<String, Object> elevation = new HashMap<>();
@@ -575,6 +590,7 @@ public class EmailUtil {
 			avalancheSituation1.put("symbol",
 					GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
 			avalancheSituation1.put("text", "");
+			avalancheSituation1.put("link", "");
 
 			String path = getAspectsImagePath(null);
 			avalancheSituation1.put("aspects", GlobalVariables.getServerImagesUrl() + path);
@@ -599,10 +615,13 @@ public class EmailUtil {
 				// .getAvalancheSituation2().getAvalancheSituation().toStringId());
 				avalancheSituation2.put("text",
 						daytimeBulletin.getAvalancheSituation2().getAvalancheSituation().toString(lang.getLocale()));
+				avalancheSituation2.put("link", GlobalVariables.getAvalancheSituationLink(lang,
+						daytimeBulletin.getAvalancheSituation2().getAvalancheSituation()));
 			} else {
 				avalancheSituation2.put("symbol",
 						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
 				avalancheSituation2.put("text", "");
+				avalancheSituation2.put("link", "");
 			}
 
 			String path = getAspectsImagePath(daytimeBulletin.getAvalancheSituation2().getAspects());
@@ -657,6 +676,7 @@ public class EmailUtil {
 			avalancheSituation2.put("symbol",
 					GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
 			avalancheSituation2.put("text", "");
+			avalancheSituation2.put("link", "");
 
 			String path = getAspectsImagePath(null);
 			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
