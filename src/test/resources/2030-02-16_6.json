@@ -26,7 +26,7 @@
 				"ne",
 				"n"
 			],
-			"avalancheSituation": "persistent_weak_layers"
+			"avalancheSituation": "wet_snow"
 		},
 		"avalancheSituation1": {
 			"treelineLow": true,
@@ -41,7 +41,7 @@
 				"sw",
 				"w"
 			],
-			"avalancheSituation": "wind_drifted_snow"
+			"avalancheSituation": "new_snow"
 		},
 		"id": "9a351c23-4111-4092-bde0-2c086363792f",
 		"dangerRatingAbove": "considerable"

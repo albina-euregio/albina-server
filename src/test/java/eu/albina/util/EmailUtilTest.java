@@ -67,7 +67,7 @@ public class EmailUtilTest {
 
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
+		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletinsAmPm, LanguageCode.de,
 				GlobalVariables.codeTyrol, false, false);
 		System.out.println(html);
 	}
