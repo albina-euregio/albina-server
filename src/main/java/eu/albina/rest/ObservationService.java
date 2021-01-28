@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -62,7 +63,16 @@ public class ObservationService {
 	public Long postObservation(Observation observation) {
 		observation.setId(null);
 		logger.info("Creating observation {}", observation);
-		return ObservationController.save(observation);
+		return ObservationController.create(observation);
+	}
+
+	@PUT
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Path("/{id}")
+	public Long putObservation(@PathParam("id") long id, Observation observation) {
+		observation.setId(id);
+		logger.info("Updating observation {}", observation);
+		return ObservationController.update(observation);
 	}
 
 }
