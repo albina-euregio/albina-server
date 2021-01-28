@@ -22,8 +22,11 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -33,6 +36,8 @@ import java.util.List;
 @Path("/observations")
 @Api(value = "/observations")
 public class ObservationService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ObservationService.class);
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
@@ -50,6 +55,14 @@ public class ObservationService {
 	@Path("/{id}")
 	public Observation getObservation(@PathParam("id") long id) {
 		return ObservationController.get(id);
+	}
+
+	@POST
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	public Long postObservation(Observation observation) {
+		observation.setId(null);
+		logger.info("Creating observation {}", observation);
+		return ObservationController.save(observation);
 	}
 
 }

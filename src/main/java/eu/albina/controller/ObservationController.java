@@ -28,6 +28,13 @@ import java.util.List;
 
 public interface ObservationController {
 
+	static Long save(Observation observation) throws HibernateException {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			entityManager.persist(observation);
+			return observation.getId();
+		});
+	}
+
 	static Observation get(long id) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager ->
 			entityManager.find(Observation.class, id));

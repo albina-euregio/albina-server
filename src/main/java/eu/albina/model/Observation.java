@@ -16,6 +16,10 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.OffsetTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.EventType;
@@ -44,9 +48,13 @@ public class Observation {
 	private EventType eventType;
 
 	@Column(name = "EVENT_DATE")
+	@JsonSerialize(using = OffsetDateTimeSerializer.class)
+	@JsonDeserialize(using = OffsetTimeDeserializer.class)
 	private OffsetDateTime eventDate;
 
 	@Column(name = "REPORT_DATE")
+	@JsonSerialize(using = OffsetDateTimeSerializer.class)
+	@JsonDeserialize(using = OffsetTimeDeserializer.class)
 	private OffsetDateTime reportDate;
 
 	@Column(name = "AUTHOR_NAME")
