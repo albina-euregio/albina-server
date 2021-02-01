@@ -28,17 +28,17 @@ import java.util.List;
 
 public interface ObservationController {
 
-	static Long create(Observation observation) throws HibernateException {
+	static Observation create(Observation observation) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.persist(observation);
-			return observation.getId();
+			return observation;
 		});
 	}
 
-	static Long update(Observation observation) throws HibernateException {
+	static Observation update(Observation observation) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.merge(observation);
-			return observation.getId();
+			return observation;
 		});
 	}
 

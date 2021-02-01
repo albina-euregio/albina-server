@@ -61,7 +61,7 @@ public class ObservationService {
 
 	@POST
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
-	public Long postObservation(Observation observation) {
+	public Observation postObservation(Observation observation) {
 		observation.setId(null);
 		logger.info("Creating observation {}", observation);
 		return ObservationController.create(observation);
@@ -70,7 +70,7 @@ public class ObservationService {
 	@PUT
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@Path("/{id}")
-	public Long putObservation(@PathParam("id") long id, Observation observation) {
+	public Observation putObservation(@PathParam("id") long id, Observation observation) {
 		observation.setId(id);
 		logger.info("Updating observation {}", observation);
 		return ObservationController.update(observation);
