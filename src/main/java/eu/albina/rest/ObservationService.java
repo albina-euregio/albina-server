@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -73,6 +74,14 @@ public class ObservationService {
 		observation.setId(id);
 		logger.info("Updating observation {}", observation);
 		return ObservationController.update(observation);
+	}
+
+	@DELETE
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Path("/{id}")
+	public void deleteObservation(@PathParam("id") long id) {
+		logger.info("Deleting observation {}", id);
+		ObservationController.delete(id);
 	}
 
 }

@@ -56,4 +56,12 @@ public interface ObservationController {
 			return entityManager.createQuery(select).getResultList();
 		});
 	}
+
+	static void delete(long id) throws HibernateException {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Observation observation = entityManager.find(Observation.class, id);
+			entityManager.remove(observation);
+			return null;
+		});
+	}
 }
