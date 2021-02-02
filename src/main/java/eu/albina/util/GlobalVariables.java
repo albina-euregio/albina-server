@@ -704,6 +704,12 @@ public class GlobalVariables {
 			setPublishBulletinsAran(configuration.getBoolean("publishBulletinsAran"));
 		if (configuration.has("scriptsPath"))
 			setScriptsPath(configuration.getString("scriptsPath"));
+		if (configuration.has("publishBlogsTyrol"))
+			setPublishBlogsTyrol(configuration.getBoolean("publishBlogsTyrol"));
+		if (configuration.has("publishBlogsSouthTyrol"))
+			setPublishBlogsSouthTyrol(configuration.getBoolean("publishBlogsSouthTyrol"));
+		if (configuration.has("publishBlogsTrentino"))
+			setPublishBlogsTrentino(configuration.getBoolean("publishBlogsTrentino"));
 	}
 
 	public static String getTendencySymbolPath(Tendency tendency, boolean grayscale) {
