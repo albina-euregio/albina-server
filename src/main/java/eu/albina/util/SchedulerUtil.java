@@ -78,7 +78,7 @@ public class SchedulerUtil {
 			// start blog job (every 5 min)
 			JobDetail blogJob = newJob(BlogJob.class).withIdentity("jobBlog", "groupAlbina").build();
 			Trigger blogTrigger = newTrigger().withIdentity("triggerBlog", "groupAlbina").startNow()
-					.withSchedule(cronSchedule("0 0/5 * * * ?")).build();
+					.withSchedule(cronSchedule("0 0/10 * * * ?")).build();
 			scheduler.scheduleJob(blogJob, blogTrigger);
 
 		} catch (SchedulerException e) {
