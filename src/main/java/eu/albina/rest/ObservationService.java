@@ -32,6 +32,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class ObservationService {
 		@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
 		@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
 
-		OffsetDateTime startDate = OffsetDateTime.parse(start);
-		OffsetDateTime endDate = OffsetDateTime.parse(end);
+		LocalDateTime startDate = OffsetDateTime.parse(start).toLocalDateTime();
+		LocalDateTime endDate = OffsetDateTime.parse(end).toLocalDateTime();
 		return ObservationController.get(startDate, endDate);
 	}
 

@@ -18,8 +18,8 @@ package eu.albina.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.OffsetTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.EventType;
@@ -32,7 +32,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "observations")
@@ -48,14 +48,14 @@ public class Observation {
 	private EventType eventType;
 
 	@Column(name = "EVENT_DATE")
-	@JsonSerialize(using = OffsetDateTimeSerializer.class)
-	@JsonDeserialize(using = OffsetTimeDeserializer.class)
-	private OffsetDateTime eventDate;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime eventDate;
 
 	@Column(name = "REPORT_DATE")
-	@JsonSerialize(using = OffsetDateTimeSerializer.class)
-	@JsonDeserialize(using = OffsetTimeDeserializer.class)
-	private OffsetDateTime reportDate;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime reportDate;
 
 	@Column(name = "AUTHOR_NAME")
 	private String authorName;
@@ -98,19 +98,19 @@ public class Observation {
 		this.eventType = eventType;
 	}
 
-	public OffsetDateTime getEventDate() {
+	public LocalDateTime getEventDate() {
 		return eventDate;
 	}
 
-	public void setEventDate(OffsetDateTime eventDate) {
+	public void setEventDate(LocalDateTime eventDate) {
 		this.eventDate = eventDate;
 	}
 
-	public OffsetDateTime getReportDate() {
+	public LocalDateTime getReportDate() {
 		return reportDate;
 	}
 
-	public void setReportDate(OffsetDateTime reportDate) {
+	public void setReportDate(LocalDateTime reportDate) {
 		this.reportDate = reportDate;
 	}
 

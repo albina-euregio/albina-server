@@ -23,7 +23,7 @@ import org.hibernate.HibernateException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ObservationController {
@@ -47,7 +47,7 @@ public interface ObservationController {
 			entityManager.find(Observation.class, id));
 	}
 
-	static List<Observation> get(OffsetDateTime startDate, OffsetDateTime endDate) throws HibernateException {
+	static List<Observation> get(LocalDateTime startDate, LocalDateTime endDate) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<Observation> select = criteriaBuilder.createQuery(Observation.class);
