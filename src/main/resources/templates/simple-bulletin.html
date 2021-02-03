@@ -159,78 +159,196 @@ section:after {
 				</table>
 				${bulletin.forenoon.text.avalancheProblem}
 				<table>
-					<tr>
-						<td style="margin-right: 10px;" >
-							<table>
-								<tr>
-									<td style="text-align: center;">
-										<img height="50" src="${bulletin.forenoon.avalancheProblem1.avalancheProblemIcon}"/>
-									</td>
-								</tr>
-								<tr>
-									<td style="text-align: center; font-size: small; max-width: 80px;">
-										${bulletin.forenoon.avalancheProblem1.avalancheProblemText}
-									</td>
-								</tr>
-							</table>
-						</td>
-						<td>
-							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem1.elevationIcon}"/>
-						</td>
-						<td>
-							<table>
-								<tr>
-									<td>
-										${bulletin.forenoon.avalancheProblem1.elevationHigh}
-									</td>
-								</tr>
-								<tr>
-									<td>
-										${bulletin.forenoon.avalancheProblem1.elevationLow}
-									</td>
-								</tr>
-							</table>
-						</td>
-						<td>
-							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem1.aspectsIcon}"/>
-						</td>
-					</tr>
-					<tr>
-						<td style="margin-right: 10px;" >
-							<table>
-								<tr>
-									<td style="text-align: center;">
-										<img height="50" src="${bulletin.forenoon.avalancheProblem2.avalancheProblemIcon}"/>
-									</td>
-								</tr>
-								<tr>
-									<td style="text-align: center; font-size: small; max-width: 80px;">
-										${bulletin.forenoon.avalancheProblem2.avalancheProblemText}
-									</td>
-								</tr>
-							</table>
-						</td>
-						<td>
-							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem2.elevationIcon}"/>
-						</td>
-						<td>
-							<table>
-								<tr>
-									<td>
-										${bulletin.forenoon.avalancheProblem2.elevationHigh}
-									</td>
-								</tr>
-								<tr>
-									<td>
-										${bulletin.forenoon.avalancheProblem2.elevationLow}
-									</td>
-								</tr>
-							</table>
-						</td>
-						<td>
-							<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem2.aspectsIcon}"/>
-						</td>
-					</tr>
+					<#if bulletin.forenoon.avalancheProblem1.exist>
+						<tr>
+							<td style="margin-right: 10px;" >
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img height="50" src="${bulletin.forenoon.avalancheProblem1.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.forenoon.avalancheProblem1.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem1.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem1.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem1.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem1.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
+					<#if bulletin.forenoon.avalancheProblem2.exist>
+						<tr>
+							<td style="margin-right: 10px;" >
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img height="50" src="${bulletin.forenoon.avalancheProblem2.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.forenoon.avalancheProblem2.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem2.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem2.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem2.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem2.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
+					<#if bulletin.forenoon.avalancheProblem3.exist>
+						<tr>
+							<td style="margin-right: 10px;" >
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img height="50" src="${bulletin.forenoon.avalancheProblem3.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.forenoon.avalancheProblem3.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem3.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem3.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem3.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem3.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
+					<#if bulletin.forenoon.avalancheProblem4.exist>
+						<tr>
+							<td style="margin-right: 10px;" >
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img height="50" src="${bulletin.forenoon.avalancheProblem4.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.forenoon.avalancheProblem4.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem4.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem4.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem4.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem4.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
+					<#if bulletin.forenoon.avalancheProblem5.exist>
+						<tr>
+							<td style="margin-right: 10px;" >
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img height="50" src="${bulletin.forenoon.avalancheProblem5.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.forenoon.avalancheProblem5.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem5.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem5.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.forenoon.avalancheProblem5.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.avalancheProblem5.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
 				</table>
 			</p>
 			<p ${bulletin.heightPMSmall}>
@@ -249,78 +367,196 @@ section:after {
 				</table>
 				${bulletin.afternoon.text.avalancheProblem}
 				<table ${bulletin.fontSize}>
-					<tr>
-						<td style="margin-right: 10px;" >
-							<table>
-								<tr>
-									<td style="text-align: center;">
-										<img ${bulletin.heightPMSmall} src="${bulletin.afternoon.avalancheProblem1.avalancheProblemIcon}"/>
-									</td>
-								</tr>
-								<tr>
-									<td style="text-align: center; font-size: small; max-width: 80px;">
-										${bulletin.afternoon.avalancheProblem1.avalancheProblemText}
-									</td>
-								</tr>
-							</table>
-						</td>
-						<td>
-							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem1.elevationIcon}"/>
-						</td>
-						<td>
-							<table>
-								<tr>
-									<td>
-										${bulletin.afternoon.avalancheProblem1.elevationHigh}
-									</td>
-								</tr>
-								<tr>
-									<td>
-										${bulletin.afternoon.avalancheProblem1.elevationLow}
-									</td>
-								</tr>
-							</table>
-						</td>
-						<td>
-							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem1.aspectsIcon}"/>
-						</td>
-					</tr>
-					<tr>
-						<td style="margin-right: 10px;">
-							<table>
-								<tr>
-									<td style="text-align: center;">
-										<img ${bulletin.heightPMSmall} src="${bulletin.afternoon.avalancheProblem2.avalancheProblemIcon}"/>
-									</td>
-								</tr>
-								<tr>
-									<td style="text-align: center; font-size: small; max-width: 80px;">
-										${bulletin.afternoon.avalancheProblem2.avalancheProblemText}
-									</td>
-								</tr>
-							</table>
-						</td>
-						<td>
-							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem2.elevationIcon}"/>
-						</td>
-						<td>
-							<table>
-								<tr>
-									<td>
-										${bulletin.afternoon.avalancheProblem2.elevationHigh}
-									</td>
-								</tr>
-								<tr>
-									<td>
-										${bulletin.afternoon.avalancheProblem2.elevationLow}
-									</td>
-								</tr>
-							</table>
-						</td>
-						<td>
-							<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem2.aspectsIcon}"/>
-						</td>
-					</tr>
+					<#if bulletin.afternoon.avalancheProblem1.exist>
+						<tr>
+							<td style="margin-right: 10px;" >
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img ${bulletin.heightPMSmall} src="${bulletin.afternoon.avalancheProblem1.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.afternoon.avalancheProblem1.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem1.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem1.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem1.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem1.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
+					<#if bulletin.afternoon.avalancheProblem2.exist>
+						<tr>
+							<td style="margin-right: 10px;">
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img ${bulletin.heightPMSmall} src="${bulletin.afternoon.avalancheProblem2.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.afternoon.avalancheProblem2.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem2.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem2.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem2.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem2.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
+					<#if bulletin.afternoon.avalancheProblem3.exist>
+						<tr>
+							<td style="margin-right: 10px;">
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img ${bulletin.heightPMSmall} src="${bulletin.afternoon.avalancheProblem3.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.afternoon.avalancheProblem3.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem3.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem3.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem3.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem3.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
+					<#if bulletin.afternoon.avalancheProblem4.exist>
+						<tr>
+							<td style="margin-right: 10px;">
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img ${bulletin.heightPMSmall} src="${bulletin.afternoon.avalancheProblem4.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.afternoon.avalancheProblem4.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem4.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem4.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem4.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem4.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
+					<#if bulletin.afternoon.avalancheProblem5.exist>
+						<tr>
+							<td style="margin-right: 10px;">
+								<table>
+									<tr>
+										<td style="text-align: center;">
+											<img ${bulletin.heightPMSmall} src="${bulletin.afternoon.avalancheProblem5.avalancheProblemIcon}"/>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center; font-size: small; max-width: 80px;">
+											${bulletin.afternoon.avalancheProblem5.avalancheProblemText}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem5.elevationIcon}"/>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem5.elevationHigh}
+										</td>
+									</tr>
+									<tr>
+										<td>
+											${bulletin.afternoon.avalancheProblem5.elevationLow}
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<img ${bulletin.heightPMSmall} style="margin-right: 10px;" src="${bulletin.afternoon.avalancheProblem5.aspectsIcon}"/>
+							</td>
+						</tr>
+					</#if>
 				</table>
 			</p>
 		</p>

@@ -48,7 +48,6 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
-import freemarker.template.TemplateException;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UtilTest {
@@ -172,12 +171,6 @@ public class UtilTest {
 		subscriber.setRegions(regions);
 
 		SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
-	}
-
-	@Test
-	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException, TemplateException {
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, "");
-		System.out.println(htmlString);
 	}
 
 	@Ignore

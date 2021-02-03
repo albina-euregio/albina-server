@@ -29,13 +29,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -46,7 +44,6 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import freemarker.core.ParseException;
 import freemarker.template.Configuration;
@@ -192,8 +189,7 @@ public class SimpleHtmlUtil {
 
 		Map<String, Object> text = new HashMap<>();
 		text.put("standardView", lang.getBundleString("avalanche-report.standard.link.text"));
-		text.put("tabtitle",
-				lang.getBundleString("avalanche-report.name") + " " + AlbinaUtil.getDate(bulletins, lang));
+		text.put("tabtitle", lang.getBundleString("avalanche-report.name") + " " + AlbinaUtil.getDate(bulletins, lang));
 		text.put("title", lang.getBundleString("avalanche-report.name"));
 		text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
 		String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
@@ -266,8 +262,10 @@ public class SimpleHtmlUtil {
 				bulletin.put("forenoon", getDaytime(avalancheBulletin.getForenoon(), lang));
 				if (avalancheBulletin.isHasDaytimeDependency()) {
 					bulletin.put("afternoon", getDaytime(avalancheBulletin.getAfternoon(), lang));
-					bulletin.put("am", "<b>" + lang.getBundleString("daytime.am.capitalized").toUpperCase() + "</b><br>");
-					bulletin.put("pm", "<b>" + lang.getBundleString("daytime.pm.capitalized").toUpperCase() + "</b><br>");
+					bulletin.put("am",
+							"<b>" + lang.getBundleString("daytime.am.capitalized").toUpperCase() + "</b><br>");
+					bulletin.put("pm",
+							"<b>" + lang.getBundleString("daytime.pm.capitalized").toUpperCase() + "</b><br>");
 				} else {
 					bulletin.put("afternoon", getEmptyDaytime());
 					bulletin.put("am", "");
@@ -336,11 +334,15 @@ public class SimpleHtmlUtil {
 		result.put("dangerLevel", dangerLevel);
 		result.put("avalancheProblem1", getEmptyAvalancheSituation());
 		result.put("avalancheProblem2", getEmptyAvalancheSituation());
+		result.put("avalancheProblem3", getEmptyAvalancheSituation());
+		result.put("avalancheProblem4", getEmptyAvalancheSituation());
+		result.put("avalancheProblem5", getEmptyAvalancheSituation());
 		return result;
 	}
 
 	private Map<String, Object> getEmptyAvalancheSituation() {
 		Map<String, Object> result = new HashMap<>();
+		result.put("exist", false);
 		result.put("avalancheProblemIcon", "");
 		result.put("avalancheProblemText", "");
 		result.put("elevationIcon", "");
@@ -360,7 +362,13 @@ public class SimpleHtmlUtil {
 		if ((daytimeDescription.getAvalancheSituation1() != null
 				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null)
 				|| (daytimeDescription.getAvalancheSituation2() != null
-						&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null))
+						&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null)
+				|| (daytimeDescription.getAvalancheSituation3() != null
+						&& daytimeDescription.getAvalancheSituation3().getAvalancheSituation() != null)
+				|| (daytimeDescription.getAvalancheSituation4() != null
+						&& daytimeDescription.getAvalancheSituation4().getAvalancheSituation() != null)
+				|| (daytimeDescription.getAvalancheSituation5() != null
+						&& daytimeDescription.getAvalancheSituation5().getAvalancheSituation() != null))
 			text.put("avalancheProblem", "<b>" + lang.getBundleString("headline.avalanche-problem") + "</b><br>");
 		else
 			text.put("avalancheProblem", "");
@@ -368,23 +376,36 @@ public class SimpleHtmlUtil {
 
 		dangerLevel.put("warningPicto", GlobalVariables.getServerImagesUrl() + "/warning_pictos/color/level_"
 				+ AlbinaUtil.getWarningLevelId(daytimeDescription) + ".png");
-		dangerLevel.put("elevation", getElevationString(daytimeDescription.getElevation(),
-				daytimeDescription.getTreeline(), lang));
+		dangerLevel.put("elevation",
+				getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang));
 
 		result.put("dangerLevel", dangerLevel);
 
 		if (daytimeDescription.getAvalancheSituation1() != null
 				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null) {
-			result.put("avalancheProblem1",
-					getAvalancheSituation(daytimeDescription.getAvalancheSituation1(), lang));
+			result.put("avalancheProblem1", getAvalancheSituation(daytimeDescription.getAvalancheSituation1(), lang));
 		} else
 			result.put("avalancheProblem1", getEmptyAvalancheSituation());
 		if (daytimeDescription.getAvalancheSituation2() != null
 				&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null) {
-			result.put("avalancheProblem2",
-					getAvalancheSituation(daytimeDescription.getAvalancheSituation2(), lang));
+			result.put("avalancheProblem2", getAvalancheSituation(daytimeDescription.getAvalancheSituation2(), lang));
 		} else
 			result.put("avalancheProblem2", getEmptyAvalancheSituation());
+		if (daytimeDescription.getAvalancheSituation3() != null
+				&& daytimeDescription.getAvalancheSituation3().getAvalancheSituation() != null) {
+			result.put("avalancheProblem3", getAvalancheSituation(daytimeDescription.getAvalancheSituation3(), lang));
+		} else
+			result.put("avalancheProblem3", getEmptyAvalancheSituation());
+		if (daytimeDescription.getAvalancheSituation4() != null
+				&& daytimeDescription.getAvalancheSituation4().getAvalancheSituation() != null) {
+			result.put("avalancheProblem4", getAvalancheSituation(daytimeDescription.getAvalancheSituation4(), lang));
+		} else
+			result.put("avalancheProblem4", getEmptyAvalancheSituation());
+		if (daytimeDescription.getAvalancheSituation5() != null
+				&& daytimeDescription.getAvalancheSituation5().getAvalancheSituation() != null) {
+			result.put("avalancheProblem5", getAvalancheSituation(daytimeDescription.getAvalancheSituation5(), lang));
+		} else
+			result.put("avalancheProblem5", getEmptyAvalancheSituation());
 
 		return result;
 	}
@@ -392,12 +413,11 @@ public class SimpleHtmlUtil {
 	private Map<String, Object> getAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang) {
 		Map<String, Object> result = new HashMap<>();
 
+		result.put("exist", true);
 		result.put("avalancheProblemIcon", GlobalVariables.getServerImagesUrl()
 				+ GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, false));
-		result.put("avalancheProblemText",
-				avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
-		result.put("elevationIcon",
-				GlobalVariables.getServerImagesUrl() + getElevationIcon(avalancheSituation));
+		result.put("avalancheProblemText", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
+		result.put("elevationIcon", GlobalVariables.getServerImagesUrl() + getElevationIcon(avalancheSituation));
 		result.put("elevationLow", getElevationLowText(avalancheSituation, lang));
 		result.put("elevationHigh", getElevationHighText(avalancheSituation, lang));
 		result.put("aspectsIcon", GlobalVariables.getServerImagesUrl()
@@ -474,45 +494,6 @@ public class SimpleHtmlUtil {
 		}
 	}
 
-	private String getAvalancheSituationString(AvalancheSituation avalancheSituation, LanguageCode lang) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
-		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
-			if (avalancheSituation.getTreelineHigh()) {
-				sb.append(lang.getBundleString("elevation.treeline.below.pre-string"));
-				sb.append(lang.getBundleString("elevation.treeline"));
-			} else if (avalancheSituation.getElevationHigh() > 0) {
-				sb.append(lang.getBundleString("elevation.below.pre-string"));
-				sb.append(avalancheSituation.getElevationHigh());
-				sb.append("m");
-			}
-		}
-		if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
-			if (avalancheSituation.getTreelineLow()) {
-				sb.append(lang.getBundleString("elevation.treeline.above.pre-string"));
-				sb.append(lang.getBundleString("elevation.treeline"));
-			} else if (avalancheSituation.getElevationLow() > 0) {
-				sb.append(lang.getBundleString("elevation.above.pre-string"));
-				sb.append(avalancheSituation.getElevationLow());
-				sb.append("m");
-			}
-		}
-
-		if (avalancheSituation.getAspects() != null && !avalancheSituation.getAspects().isEmpty()) {
-			sb.append(", ");
-			Set<Aspect> aspects = avalancheSituation.getAspects();
-			ArrayList<Aspect> array = new ArrayList<Aspect>(aspects);
-			Collections.sort(array);
-			sb.append(array.get(0).toUpperCaseString());
-			for (int i = 1; i < array.size(); i++) {
-				sb.append("-");
-				sb.append(array.get(i).toUpperCaseString());
-			}
-		}
-		sb.append("<br>");
-		return sb.toString();
-	}
-
 	private int getAspectsCode(Set<Aspect> aspects) {
 		int result = 0b00000000;
 		Iterator<Aspect> iterator = aspects.iterator();
@@ -548,58 +529,6 @@ public class SimpleHtmlUtil {
 			}
 		}
 		return result;
-	}
-
-	private String getDangerRatingLineString(DangerRating dangerRating, int elevation, boolean treeline,
-			LanguageCode lang, ResourceBundle messages, boolean above) {
-		StringBuilder sb = new StringBuilder();
-		String tag;
-		switch (dangerRating) {
-		case low:
-			tag = "rating1";
-			break;
-		case moderate:
-			tag = "rating2";
-			break;
-		case considerable:
-			tag = "rating3";
-			break;
-		case high:
-			tag = "rating4";
-			break;
-		case very_high:
-			tag = "rating5";
-			break;
-		default:
-			tag = "rating0";
-			break;
-		}
-		sb.append("<");
-		sb.append(tag);
-		sb.append(">");
-		sb.append(dangerRating.toString(lang.getLocale(), true));
-		sb.append("</");
-		sb.append(tag);
-		sb.append(">");
-
-		if (treeline) {
-			if (above)
-				lang.getBundleString("elevation.treeline.above.pre-string");
-			else
-				lang.getBundleString("elevation.treeline.below.pre-string");
-			sb.append(lang.getBundleString("elevation.treeline"));
-		} else if (elevation > 0) {
-			if (above)
-				sb.append(lang.getBundleString("elevation.above.pre-string"));
-			else
-				sb.append(lang.getBundleString("elevation.below.pre-string"));
-			sb.append(elevation);
-			sb.append("m");
-		}
-
-		sb.append("<br>");
-
-		return sb.toString();
 	}
 
 	private String getElevationString(int elevation, boolean treeline, LanguageCode lang) {
