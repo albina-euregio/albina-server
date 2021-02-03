@@ -271,8 +271,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer,
-					grayscale));
+			cell = new Cell(1, 1)
+					.add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer, grayscale));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -311,8 +311,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, true, lang, tendencyDate, pdf, document, writer,
-					grayscale));
+			cell = new Cell(1, 1)
+					.add(createSymbols(avalancheBulletin, true, lang, tendencyDate, pdf, document, writer, grayscale));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -346,8 +346,8 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			secondTable.addCell(cell);
-			cell = new Cell(1, 1).add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer,
-					grayscale));
+			cell = new Cell(1, 1)
+					.add(createSymbols(avalancheBulletin, false, lang, tendencyDate, pdf, document, writer, grayscale));
 			cell.setBorder(Border.NO_BORDER);
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
@@ -522,7 +522,8 @@ public class PdfUtil {
 	}
 
 	private Table createSymbols(AvalancheBulletin avalancheBulletin, boolean isAfternoon, LanguageCode lang,
-			String tendencyDate, PdfDocument pdf, Document document, PdfWriter writer, boolean grayscale) throws MalformedURLException {
+			String tendencyDate, PdfDocument pdf, Document document, PdfWriter writer, boolean grayscale)
+			throws MalformedURLException {
 		AvalancheBulletinDaytimeDescription daytimeBulletin;
 		int height = 30;
 
@@ -647,6 +648,24 @@ public class PdfUtil {
 				&& daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
 			createAvalancheSituation(daytimeBulletin.getAvalancheSituation2(), lang, table, true, document, writer,
+					isAfternoon, hasDaytime, grayscale);
+		}
+		if (daytimeBulletin.getAvalancheSituation3() != null
+				&& daytimeBulletin.getAvalancheSituation3().getAvalancheSituation() != null) {
+			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
+			createAvalancheSituation(daytimeBulletin.getAvalancheSituation3(), lang, table, true, document, writer,
+					isAfternoon, hasDaytime, grayscale);
+		}
+		if (daytimeBulletin.getAvalancheSituation4() != null
+				&& daytimeBulletin.getAvalancheSituation4().getAvalancheSituation() != null) {
+			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
+			createAvalancheSituation(daytimeBulletin.getAvalancheSituation4(), lang, table, true, document, writer,
+					isAfternoon, hasDaytime, grayscale);
+		}
+		if (daytimeBulletin.getAvalancheSituation5() != null
+				&& daytimeBulletin.getAvalancheSituation5().getAvalancheSituation() != null) {
+			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
+			createAvalancheSituation(daytimeBulletin.getAvalancheSituation5(), lang, table, true, document, writer,
 					isAfternoon, hasDaytime, grayscale);
 		}
 
