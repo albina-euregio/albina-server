@@ -75,7 +75,7 @@ public class SchedulerUtil {
 					.withSchedule(cronSchedule("0 0 8 * * ?")).build();
 			scheduler.scheduleJob(updateJob, updateTrigger);
 
-			// start blog job (every 5 min)
+			// start blog job (every 10 min)
 			JobDetail blogJob = newJob(BlogJob.class).withIdentity("jobBlog", "groupAlbina").build();
 			Trigger blogTrigger = newTrigger().withIdentity("triggerBlog", "groupAlbina").startNow()
 					.withSchedule(cronSchedule("0 0/10 * * * ?")).build();
