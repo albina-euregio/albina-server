@@ -63,7 +63,7 @@ public class TelegramChannelControllerTest {
 
 	@Ignore
 	@Test
-	public void sendMessageTest() throws IOException, AlbinaException {
+	public void sendMessageTest() throws Exception {
 		TelegramChannelProcessorController tcc = TelegramChannelProcessorController.getInstance();
 		RegionConfigurationController rcc = RegionConfigurationController.getInstance();
 

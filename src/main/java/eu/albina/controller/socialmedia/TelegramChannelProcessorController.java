@@ -17,11 +17,14 @@
 package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,15 +48,16 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 	public TelegramChannelProcessorController() {
 	}
 
-	public HttpResponse sendNewsletter(TelegramConfig config, String message, String attachmentUrl) throws IOException {
-		String urlString = "https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s&photo=%s";
-
-		urlString = String.format(urlString, config.getApiToken(), config.getChatId(),
-				URLEncoder.encode(message, "UTF-8"), URLEncoder.encode(attachmentUrl, "UTF-8"));
-
-		logger.info("URL: " + urlString);
-
-		Request request = Request.Get(urlString).connectTimeout(CONNECTION_TIMEOUT).socketTimeout(SOCKET_TIMEOUT);
+	public HttpResponse sendNewsletter(TelegramConfig config, String message, String attachmentUrl) throws IOException, URISyntaxException {
+		URIBuilder uriBuilder = new URIBuilder(String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
+			.addParameter("chat_id", config.getChatId())
+			.addParameter("caption", message);
+		if (attachmentUrl != null) {
+			uriBuilder.addParameter("photo", attachmentUrl);
+		}
+		URI uri = uriBuilder.build();
+		logger.info("URL: {}", uri);
+		Request request = Request.Get(uri).connectTimeout(CONNECTION_TIMEOUT).socketTimeout(SOCKET_TIMEOUT);
 		HttpResponse response = request.execute().returnResponse();
 
 		// Go ahead only if success

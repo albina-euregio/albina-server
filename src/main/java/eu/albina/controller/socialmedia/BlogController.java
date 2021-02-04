@@ -215,7 +215,7 @@ public class BlogController extends CommonProcessor {
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + region + ", " + lang.toString(), e);
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + region + "," + lang.toString(), e);
 		}
 	}

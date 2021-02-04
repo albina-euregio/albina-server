@@ -67,7 +67,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 					throw new AlbinaException(
 							"No configuration for telegram channel found (" + region + ", " + lang + ")");
 				}
-			} catch (IOException | AlbinaException e) {
+			} catch (IOException | URISyntaxException | AlbinaException e) {
 				logger.error("Error while sending bulletin newsletter to telegram channel in " + lang + " for region "
 						+ region, e);
 			}
