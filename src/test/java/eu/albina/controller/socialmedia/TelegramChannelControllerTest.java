@@ -75,7 +75,7 @@ public class TelegramChannelControllerTest {
 			Set<TelegramConfig> telegramConfigs = regionConfiguration.getTelegramConfigs();
 			for (TelegramConfig telegramConfig : telegramConfigs) {
 				message = region + " - " + telegramConfig.getLanguageCode();
-				tcc.sendNewsletter(telegramConfig, message, attachmentUrl);
+				tcc.sendPhoto(telegramConfig, message, attachmentUrl);
 			}
 		}
 	}

@@ -48,10 +48,11 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 	public TelegramChannelProcessorController() {
 	}
 
-	public HttpResponse sendNewsletter(TelegramConfig config, String message, String attachmentUrl) throws IOException, URISyntaxException {
-		URIBuilder uriBuilder = new URIBuilder(String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
-			.addParameter("chat_id", config.getChatId())
-			.addParameter("caption", message);
+	public HttpResponse sendPhoto(TelegramConfig config, String message, String attachmentUrl)
+			throws IOException, URISyntaxException {
+		URIBuilder uriBuilder = new URIBuilder(
+				String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
+						.addParameter("chat_id", config.getChatId()).addParameter("caption", message);
 		if (attachmentUrl != null) {
 			uriBuilder.addParameter("photo", attachmentUrl);
 		}
@@ -62,7 +63,29 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 200) {
-			logger.warn("Error publishing report on telegram channel for "
+			logger.warn("Error publishing photo on telegram channel for "
+					+ config.getRegionConfiguration().getRegion().getId() + " (error code "
+					+ response.getStatusLine().getStatusCode() + ")");
+			HttpEntity entity = response.getEntity();
+			String content = EntityUtils.toString(entity);
+			logger.warn(content);
+		}
+
+		return response;
+	}
+
+	public HttpResponse sendMessage(TelegramConfig config, String message) throws IOException, URISyntaxException {
+		URIBuilder uriBuilder = new URIBuilder(
+				String.format("https://api.telegram.org/bot%s/sendMessage", config.getApiToken()))
+						.addParameter("chat_id", config.getChatId()).addParameter("text", message);
+		URI uri = uriBuilder.build();
+		logger.info("URL: {}", uri);
+		Request request = Request.Get(uri).connectTimeout(CONNECTION_TIMEOUT).socketTimeout(SOCKET_TIMEOUT);
+		HttpResponse response = request.execute().returnResponse();
+
+		// Go ahead only if success
+		if (response.getStatusLine().getStatusCode() != 200) {
+			logger.warn("Error publishing message on telegram channel for "
 					+ config.getRegionConfiguration().getRegion().getId() + " (error code "
 					+ response.getStatusLine().getStatusCode() + ")");
 			HttpEntity entity = response.getEntity();

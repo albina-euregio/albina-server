@@ -163,10 +163,10 @@ public class BlogController extends CommonProcessor {
 				List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
 				logger.info("Found " + blogPosts.size() + " new blog posts!");
 				for (Blogger.Item object : blogPosts) {
-						sendNewBlogPostToMessengerpeople(object, region, lang);
-						sendNewBlogPostToRapidmail(object, region, lang);
-						sendNewBlogPostToTelegramChannel(object, region, lang);
-					}
+					sendNewBlogPostToMessengerpeople(object, region, lang);
+					sendNewBlogPostToRapidmail(object, region, lang);
+					sendNewBlogPostToTelegramChannel(object, region, lang);
+				}
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
 			}
@@ -209,7 +209,11 @@ public class BlogController extends CommonProcessor {
 			}
 
 			if (config != null) {
-				ctTc.sendNewsletter(config, message, attachmentUrl);
+				if (attachmentUrl != null) {
+					ctTc.sendPhoto(config, message, attachmentUrl);
+				} else {
+					ctTc.sendMessage(config, message);
+				}
 			} else {
 				throw new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")");
 			}
@@ -238,7 +242,8 @@ public class BlogController extends CommonProcessor {
 	}
 
 	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang) {
-		return item.title + ": " + GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/" + item.id;
+		return item.title + ": " + GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/"
+				+ item.id;
 	}
 
 	private String getAttachmentUrl(Blogger.Item item) {
