@@ -428,6 +428,11 @@
 			<artifactId>sentry</artifactId>
 			<version>1.7.27</version>
 		</dependency>
+		<dependency>
+			<groupId>io.sentry</groupId>
+			<artifactId>sentry-log4j</artifactId>
+			<version>1.7.27</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.vividsolutions</groupId>
