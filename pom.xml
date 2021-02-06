@@ -445,10 +445,16 @@
 			<version>1.802</version>
 		</dependency>
 
+		<!-- web-push -->
 		<dependency>
 			<groupId>nl.martijndwars</groupId>
 			<artifactId>web-push</artifactId>
 			<version>5.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.68</version>
 		</dependency>
 
 	</dependencies>
