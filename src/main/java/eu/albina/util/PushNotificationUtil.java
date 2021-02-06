@@ -20,6 +20,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.util.List;
 
+import eu.albina.exception.AlbinaException;
+import nl.martijndwars.webpush.Encoding;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +42,7 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 
 	private static final PushNotificationUtil INSTANCE = new PushNotificationUtil();
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
+	private final HttpClient httpClient = HttpClientBuilder.create().build();
 
 	public static PushNotificationUtil getInstance() {
 		return INSTANCE;
@@ -81,7 +88,11 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 			PushService pushService = new PushService();
 			pushService.setPublicKey(GlobalVariables.getVapidPublicKey());
 			pushService.setPrivateKey(GlobalVariables.getVapidPrivateKey());
-			pushService.send(notification);
+			HttpPost httpPost = pushService.preparePost(notification, Encoding.AES128GCM);
+			HttpResponse response = httpClient.execute(httpPost);
+			if (response.getStatusLine().getStatusCode() != 200) {
+				throw new AlbinaException(response.getStatusLine().toString());
+			}
 		} catch (Exception e) {
 			logger.warn("Failed to send push notification to " + subscription.getEndpoint(), e);
 			try {
