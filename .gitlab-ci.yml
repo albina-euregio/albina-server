@@ -11,9 +11,6 @@ cache:
 production build:
     stage: build
     script: mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
-    artifacts:
-        paths:
-            - target/albina.war
 
 deploy to development:
     stage: deploy
