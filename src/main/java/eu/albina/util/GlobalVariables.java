@@ -16,8 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -199,8 +197,8 @@ public class GlobalVariables {
 
 	public static String avalancheReportUsername = "info@avalanche.report";
 
-	public static String tokenEncodingSecret = new BigInteger(512, new SecureRandom()).toString(36);
-	public static String tokenEncodingIssuer = "albina";
+	public static final String tokenEncodingIssuer = "albina";
+
 	public static long accessTokenExpirationDuration = 1000 * 60 * 60 * 24;
 	public static long refreshTokenExpirationDuration = 1000 * 60 * 60 * 24 * 7;
 	public static long confirmationTokenExpirationDuration = 1000 * 60 * 60 * 24 * 3;

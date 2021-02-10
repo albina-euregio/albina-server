@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
@@ -28,6 +29,12 @@ public class AuthenticationControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
+	}
+
+	@Test
+	public void testAccessToken() {
+		String token = AuthenticationController.getInstance().issueAccessToken("foobar");
+		Assert.assertNotNull(token);
 	}
 
 	@Test

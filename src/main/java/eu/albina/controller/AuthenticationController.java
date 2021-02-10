@@ -17,6 +17,8 @@
 package eu.albina.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -44,15 +46,20 @@ import eu.albina.util.HibernateUtil;
  */
 public class AuthenticationController {
 	private static AuthenticationController instance = null;
-	private Algorithm algorithm;
-	private JWTVerifier verifier;
+
+	private final Algorithm algorithm;
+	private final JWTVerifier verifier;
 
 	/**
 	 * Private constructor. Initializing the used algorithm.
 	 */
 	private AuthenticationController() {
 		try {
-			algorithm = Algorithm.HMAC256(GlobalVariables.tokenEncodingSecret);
+			String tokenEncodingSecret = System.getenv("ALBINA_JWT_SECRET");
+			if (tokenEncodingSecret == null || tokenEncodingSecret.length() < 32) {
+				tokenEncodingSecret = new BigInteger(512, new SecureRandom()).toString(36);
+			}
+			algorithm = Algorithm.HMAC256(tokenEncodingSecret);
 			verifier = JWT.require(algorithm).withIssuer(GlobalVariables.tokenEncodingIssuer).build();
 		} catch (IllegalArgumentException | UnsupportedEncodingException e) {
 			throw new IllegalStateException("Failed to initialize controller", e);
