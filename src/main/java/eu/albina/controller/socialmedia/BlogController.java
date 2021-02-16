@@ -149,7 +149,7 @@ public class BlogController extends CommonProcessor {
 			case de:
 				return GlobalVariables.blogIdSouthTyrolDe;
 			case it:
-				return GlobalVariables.blogIdSouthTyrolDe;
+				return GlobalVariables.blogIdSouthTyrolIt;
 			default:
 				return null;
 			}
