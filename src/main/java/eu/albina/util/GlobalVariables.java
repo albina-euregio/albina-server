@@ -46,6 +46,8 @@ public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
 
+	public static String version;
+
 	/*---- Defined in configuration file -----*/
 	private static boolean createMaps = false;
 	private static boolean createPdf = false;
@@ -541,6 +543,8 @@ public class GlobalVariables {
 		Configuration config;
 		try {
 			config = configs.properties(propertiesFilePath);
+			if (config.containsKey("gitVersion"))
+				version = config.getString("gitVersion");
 			if (config.containsKey("localImagesPath"))
 				localImagesPath = config.getString("localImagesPath");
 			if (config.containsKey("localFontsPath"))

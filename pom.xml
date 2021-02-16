@@ -32,6 +32,7 @@
 				<hibernate.show-sql>false</hibernate.show-sql>
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+				<albina.conf.git.version>SNAPSHOT</albina.conf.git.version>
 				<albina.conf.create-caaml>false</albina.conf.create-caaml>
 				<albina.conf.create-maps>false</albina.conf.create-maps>
 				<albina.conf.create-pdf>false</albina.conf.create-pdf>
@@ -78,6 +79,7 @@
 				<hibernate.show-sql>false</hibernate.show-sql>
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina_dev/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina_dev/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
 				<albina.conf.create-caaml>true</albina.conf.create-caaml>
 				<albina.conf.create-maps>true</albina.conf.create-maps>
 				<albina.conf.create-pdf>true</albina.conf.create-pdf>
@@ -124,6 +126,7 @@
 				<hibernate.show-sql>false</hibernate.show-sql>
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
 				<albina.conf.create-caaml>true</albina.conf.create-caaml>
 				<albina.conf.create-maps>true</albina.conf.create-maps>
 				<albina.conf.create-pdf>true</albina.conf.create-pdf>
