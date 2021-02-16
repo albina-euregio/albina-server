@@ -29,6 +29,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -83,10 +84,16 @@ public class BlogController extends CommonProcessor {
 
 	protected List<Blogger.Item> getBlogPosts(String region, LanguageCode lang) throws IOException {
 		String blogId = getBlogId(region, lang);
-		if (blogId != null) {
-			String uri = GlobalVariables.blogApiUrl + blogId + "/posts?key=" + GlobalVariables.googleApiKey
-					+ "&startDate="
-					+ URLEncoder.encode(lastFetch.get(region).toString(GlobalVariables.formatterDateTime), "UTF-8");
+		if (blogId == null) {
+			return Collections.emptyList();
+		}
+		try {
+			String uri = new URIBuilder(GlobalVariables.blogApiUrl + blogId + "/posts")
+				.addParameter("key", GlobalVariables.googleApiKey)
+				.addParameter("startDate", lastFetch.get(region).toString(GlobalVariables.formatterDateTime))
+				.addParameter("fetchBodies", Boolean.TRUE.toString())
+				.addParameter("fetchImages", Boolean.TRUE.toString())
+				.toString();
 			logger.debug("URI: " + uri);
 			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
@@ -99,6 +106,8 @@ public class BlogController extends CommonProcessor {
 				String entityString = EntityUtils.toString(entity, "UTF-8");
 				return new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
 			}
+		} catch (URISyntaxException ex) {
+			throw new IllegalStateException(ex);
 		}
 		return Collections.emptyList();
 	}
