@@ -22,6 +22,7 @@ import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
@@ -200,22 +201,14 @@ public class BlogController extends CommonProcessor {
 			TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 			Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
-			TelegramConfig config = null;
-			for (TelegramConfig telegramConfig : telegramConfigs) {
-				if (telegramConfig.getLanguageCode().equals(lang)) {
-					config = telegramConfig;
-					break;
-				}
-			}
-
-			if (config != null) {
-				if (attachmentUrl != null) {
-					ctTc.sendPhoto(config, message, attachmentUrl);
-				} else {
-					ctTc.sendMessage(config, message);
-				}
+			TelegramConfig config = telegramConfigs.stream()
+				.filter(telegramConfig -> Objects.equals(telegramConfig.getLanguageCode(), lang))
+				.findFirst()
+				.orElseThrow(() -> new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")"));
+			if (attachmentUrl != null) {
+				ctTc.sendPhoto(config, message, attachmentUrl);
 			} else {
-				throw new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")");
+				ctTc.sendMessage(config, message);
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + region + ", " + lang.toString(), e);
