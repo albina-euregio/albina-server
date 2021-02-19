@@ -476,6 +476,10 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.68</version>
+			<!-- https://github.com/wultra/powerauth-server/blob/master/docs/Installing-Bouncy-Castle.md -->
+			<!-- /opt/tomcat/lib/bcprov-jdk15on-1.68.jar -->
+			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
