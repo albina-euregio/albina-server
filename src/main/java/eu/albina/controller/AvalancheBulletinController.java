@@ -487,11 +487,9 @@ public class AvalancheBulletinController {
 				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 		for (AvalancheBulletin bulletin : bulletins) {
-			for (String region : regions)
-				if (bulletin.affectsRegion(region)) {
-					results.add(bulletin);
-					break;
-				}
+			if (regions.stream().anyMatch(bulletin::affectsRegion)) {
+				results.add(bulletin);
+			}
 		}
 
 		for (AvalancheBulletin bulletin : results)

@@ -321,11 +321,7 @@ public class AlbinaUtil {
 	}
 
 	public static boolean hasDaytimeDependency(List<AvalancheBulletin> bulletins) {
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			if (avalancheBulletin.isHasDaytimeDependency())
-				return true;
-		}
-		return false;
+		return bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 	}
 
 	public static void setFilePermissions(String fileName) throws IOException {

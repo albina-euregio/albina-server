@@ -123,13 +123,7 @@ public class ChatController {
 	 *            the user do be added
 	 */
 	public synchronized void addActiveUser(User user) {
-		boolean found = false;
-		for (User u : activeUsers) {
-			if (u.getEmail().equals(user.getEmail())) {
-				found = true;
-				break;
-			}
-		}
+		boolean found = activeUsers.stream().anyMatch(u -> u.getEmail().equals(user.getEmail()));
 		if (!found)
 			activeUsers.add(user);
 	}
