@@ -51,13 +51,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 			try {
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 				Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
-				TelegramConfig config = null;
-				for (TelegramConfig telegramConfig : telegramConfigs) {
-					if (telegramConfig.getLanguageCode().equals(lang)) {
-						config = telegramConfig;
-						break;
-					}
-				}
+				TelegramConfig config = telegramConfigs.stream().filter(telegramConfig -> telegramConfig.getLanguageCode().equals(lang)).findFirst().orElse(null);
 
 				if (config != null) {
 					logger.info("Publishing report on telegram channel for "

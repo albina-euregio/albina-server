@@ -16,15 +16,14 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
+
 public enum HazardSiteDistribution {
 	single, some, many, many_most, moderately_steep;
 
 	public static HazardSiteDistribution fromString(String text) {
 		if (text != null) {
-			for (HazardSiteDistribution type : HazardSiteDistribution.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(HazardSiteDistribution.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

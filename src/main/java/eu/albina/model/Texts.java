@@ -55,11 +55,7 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 	}
 
 	public String getText(LanguageCode languageCode) {
-		for (Text text : texts) {
-			if (text.getLanguage() == languageCode)
-				return text.getText();
-		}
-		return null;
+		return texts.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
 	}
 
 	public void setTexts(Set<Text> texts) {

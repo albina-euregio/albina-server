@@ -16,15 +16,14 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
+
 public enum Aspect {
 	N, NE, E, SE, S, SW, W, NW;
 
 	public static Aspect fromString(String text) {
 		if (text != null) {
-			for (Aspect type : Aspect.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(Aspect.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

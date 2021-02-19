@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -30,10 +31,7 @@ public enum DangerPattern {
 
 	public static DangerPattern fromString(String text) {
 		if (text != null) {
-			for (DangerPattern type : DangerPattern.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(DangerPattern.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

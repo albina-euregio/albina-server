@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -51,10 +52,7 @@ public enum LanguageCode {
 
 	public static LanguageCode fromString(String text) {
 		if (text != null) {
-			for (LanguageCode type : LanguageCode.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(LanguageCode.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

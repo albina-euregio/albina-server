@@ -16,15 +16,14 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
+
 public enum TextPart {
 	highlights, synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment, tendencyComment;
 
 	public static TextPart fromString(String text) {
 		if (text != null) {
-			for (TextPart type : TextPart.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(TextPart.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

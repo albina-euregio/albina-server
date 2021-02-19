@@ -16,15 +16,14 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
+
 public enum Role {
 	ADMIN, FORECASTER, FOREMAN, OBSERVER;
 
 	public static Role fromString(String text) {
 		if (text != null) {
-			for (Role role : Role.values()) {
-				if (text.equalsIgnoreCase(role.toString()))
-					return role;
-			}
+			return Arrays.stream(Role.values()).filter(role -> text.equalsIgnoreCase(role.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

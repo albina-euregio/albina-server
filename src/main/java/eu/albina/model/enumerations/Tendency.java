@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -30,10 +31,7 @@ public enum Tendency {
 
 	public static Tendency fromString(String text) {
 		if (text != null) {
-			for (Tendency type : Tendency.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(Tendency.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}
