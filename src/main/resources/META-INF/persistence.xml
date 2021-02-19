@@ -32,13 +32,6 @@
 			<property name="hibernate.connection.username" value="ais"/>
 			<property name="hibernate.connection.password" value="MD>5:X*n%)1V"/> -->
 
-			<!-- Hibernate ENVERS Configuration -->
-			<property name="org.hibernate.envers.audit_table_suffix" value="_audit"/>
-			<property name="org.hibernate.envers.revision_field_name" value="REVISION_ID"/>
-			<property name="org.hibernate.envers.revision_type_field_name" value="REVTYPE"/>
-			<property name="org.hibernate.envers.do_not_audit_optimistic_locking_field" value="true"/>
-			<property name="org.hibernate.envers.default_schema" value="ROCC"/>
-
 			<!-- c3p0 connection pool -->
 			<property name="hibernate.c3p0.min_size" value="5"/>
 			<property name="hibernate.c3p0.max_size" value="20"/>
