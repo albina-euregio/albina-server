@@ -18,10 +18,12 @@ package eu.albina.util;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -66,7 +68,8 @@ public class SimpleHtmlUtilTest {
 
 	@Test
 	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException, TemplateException {
+		String expected = Resources.toString(Resources.getResource("2030-02-16.simple.html"), StandardCharsets.UTF_8).trim();
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.de, "");
-		System.out.println(htmlString);
+		Assert.assertEquals(expected, htmlString);
 	}
 }
