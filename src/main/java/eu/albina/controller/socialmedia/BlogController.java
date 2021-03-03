@@ -18,7 +18,6 @@ package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +42,7 @@ import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.TelegramConfig;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.PushNotificationUtil;
 
 public class BlogController extends CommonProcessor {
 	private static Logger logger = LoggerFactory.getLogger(BlogController.class);
@@ -182,6 +182,7 @@ public class BlogController extends CommonProcessor {
 					sendNewBlogPostToMessengerpeople(object, region, lang);
 					sendNewBlogPostToRapidmail(object, region, lang);
 					sendNewBlogPostToTelegramChannel(object, region, lang);
+					sendNewBlogPostToPushNotification(region, lang, object);
 				}
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
@@ -249,9 +250,20 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
+	private void sendNewBlogPostToPushNotification(String region, LanguageCode lang, Blogger.Item object) {
+		String message = getBlogMessage(object, region, lang);
+		String attachmentUrl = getAttachmentUrl(object);
+		String blogUrl = getBlogUrl(object, region, lang);
+		PushNotificationUtil pushNotificationUtil = PushNotificationUtil.getInstance();
+		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl);
+	}
+
 	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang) {
-		return item.title + ": " + GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/"
-				+ item.id;
+		return item.title + ": " + getBlogUrl(item, region, lang);
+	}
+
+	private String getBlogUrl(Blogger.Item item, String region, LanguageCode lang) {
+		return GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/" + item.id;
 	}
 
 	private String getAttachmentUrl(Blogger.Item item) {
