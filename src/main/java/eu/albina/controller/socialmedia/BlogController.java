@@ -57,15 +57,8 @@ public class BlogController extends CommonProcessor {
 	private BlogController() {
 		executor = Executor.newInstance(sslHttpClient());
 		DateTime date = new DateTime();
-		// REGION
-		lastFetch.put("Test", date);
-		for (String region : GlobalVariables.regionsEuregio) {
-			for (LanguageCode lang : GlobalVariables.languages) {
-				String blogId = getBlogId(region, lang);
-				if (blogId != null) {
-					lastFetch.put(blogId, date);
-				}
-			}
+		for (String blogId : GlobalVariables.blogIds.values()) {
+			lastFetch.put(blogId, date);
 		}
 	}
 
@@ -135,49 +128,15 @@ public class BlogController extends CommonProcessor {
 		return null;
 	}
 
-	// LANG: only languages for which a blog exists
-	// REGION: only regions that have a blog
 	private String getBlogId(String region, LanguageCode lang) {
-		switch (region) {
-		case GlobalVariables.codeTyrol:
-			switch (lang) {
-			case de:
-				return GlobalVariables.blogIdTyrolDe;
-			case it:
-				return GlobalVariables.blogIdTyrolIt;
-			case en:
-				return GlobalVariables.blogIdTyrolEn;
-			default:
-				return null;
-			}
-		case GlobalVariables.codeSouthTyrol:
-			switch (lang) {
-			case de:
-				return GlobalVariables.blogIdSouthTyrolDe;
-			case it:
-				return GlobalVariables.blogIdSouthTyrolIt;
-			default:
-				return null;
-			}
-		case GlobalVariables.codeTrentino:
-			switch (lang) {
-			case it:
-				return GlobalVariables.blogIdTrentinoIt;
-			default:
-				return null;
-			}
-		case "Test":
-			return GlobalVariables.blogIdTest;
-		default:
-			return null;
-		}
+		return GlobalVariables.blogIds.get(region, lang);
 	}
 
 	public void sendNewBlogPosts(String region, LanguageCode lang) {
 		if (getBlogId(region, lang) != null) {
 			try {
 				List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
-				logger.info("Found " + blogPosts.size() + " new blog posts!");
+				logger.info("Found {} new blog posts for {}, {}!", blogPosts.size(), region, lang);
 				for (Blogger.Item object : blogPosts) {
 					sendNewBlogPostToMessengerpeople(object, region, lang);
 					sendNewBlogPostToRapidmail(object, region, lang);
@@ -274,39 +233,7 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	// LANG: only languages which a blog exists for
-	// REGION: only regions that have a blog
 	private String getBlogUrl(String region, LanguageCode lang) {
-		switch (region) {
-		case GlobalVariables.codeTyrol:
-			switch (lang) {
-			case de:
-				return GlobalVariables.blogUrlTyrolDe;
-			case it:
-				return GlobalVariables.blogUrlTyrolIt;
-			case en:
-				return GlobalVariables.blogUrlTyrolEn;
-			default:
-				return null;
-			}
-		case GlobalVariables.codeSouthTyrol:
-			switch (lang) {
-			case de:
-				return GlobalVariables.blogUrlSouthTyrolDe;
-			case it:
-				return GlobalVariables.blogUrlSouthTyrolIt;
-			default:
-				return null;
-			}
-		case GlobalVariables.codeTrentino:
-			switch (lang) {
-			case it:
-				return GlobalVariables.blogUrlTrentinoIt;
-			default:
-				return null;
-			}
-		default:
-			return null;
-		}
+		return GlobalVariables.blogUrls.get(region, lang);
 	}
 }

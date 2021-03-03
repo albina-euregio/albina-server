@@ -52,7 +52,7 @@ public class BlogControllerTest {
 
 	@Test
 	public void testBlogPosts() throws Exception {
-		BlogController.getInstance().lastFetch.put(GlobalVariables.blogIdTyrolDe, new DateTime(0L));
+		BlogController.getInstance().lastFetch.put(GlobalVariables.blogIds.get(GlobalVariables.codeTyrol, LanguageCode.de), new DateTime(0L));
 		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(GlobalVariables.codeTyrol, LanguageCode.de);
 		assertTrue("size=" + blogPosts.size(), blogPosts.size() > 5);
 		assertTrue("one blog has image", blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()));
