@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -210,8 +211,8 @@ public class SimpleHtmlUtil {
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", lang.getBundleString("avalanche-report.url") + "/bulletin/"
 				+ AlbinaUtil.getValidityDateString(bulletins));
-		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region));
-		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region));
+		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.days(-1)));
+		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.days(1)));
 		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_de.html");
 		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
