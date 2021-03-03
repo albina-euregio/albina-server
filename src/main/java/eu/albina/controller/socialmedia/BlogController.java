@@ -59,8 +59,14 @@ public class BlogController extends CommonProcessor {
 		DateTime date = new DateTime();
 		// REGION
 		lastFetch.put("Test", date);
-		for (String region : GlobalVariables.regionsEuregio)
-			lastFetch.put(region, date);
+		for (String region : GlobalVariables.regionsEuregio) {
+			for (LanguageCode lang : GlobalVariables.languages) {
+				String blogId = getBlogId(region, lang);
+				if (blogId != null) {
+					lastFetch.put(blogId, date);
+				}
+			}
+		}
 	}
 
 	/**
@@ -90,17 +96,17 @@ public class BlogController extends CommonProcessor {
 		try {
 			String uri = new URIBuilder(GlobalVariables.blogApiUrl + blogId + "/posts")
 				.addParameter("key", GlobalVariables.googleApiKey)
-				.addParameter("startDate", lastFetch.get(region).toString(GlobalVariables.formatterDateTime))
+				.addParameter("startDate", lastFetch.get(blogId).toString(GlobalVariables.formatterDateTime))
 				.addParameter("fetchBodies", Boolean.TRUE.toString())
 				.addParameter("fetchImages", Boolean.TRUE.toString())
 				.toString();
 			logger.debug("URI: " + uri);
 			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-			logger.debug("Start date for " + region + ": " + lastFetch.get(region).toString());
-			lastFetch.put(region, new DateTime());
+			logger.debug("Start date for " + region + ": " + lastFetch.get(blogId).toString());
+			lastFetch.put(blogId, new DateTime());
 			HttpResponse response = executor.execute(request).returnResponse();
-			logger.debug("New start date for " + region + ": " + lastFetch.get(region).toString());
+			logger.debug("New start date for " + region + ": " + lastFetch.get(blogId).toString());
 			if (response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
