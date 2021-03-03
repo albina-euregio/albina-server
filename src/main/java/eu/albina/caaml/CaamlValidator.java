@@ -33,7 +33,7 @@ import org.xml.sax.SAXException;
 
 public class CaamlValidator {
 
-	private static Logger logger = LoggerFactory.getLogger(CaamlValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(CaamlValidator.class);
 
 	/**
 	 * Validates a CAAML string against the CAAML Bulletin schema.

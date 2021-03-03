@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 /* @ WebFilter(asyncSupported = true, urlPatterns = { "/*" }) */
 public class CorsFilter implements Filter {
 
-	private static Logger logger = LoggerFactory.getLogger(CorsFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(CorsFilter.class);
 
 	/**
 	 * Default constructor.

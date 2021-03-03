@@ -41,7 +41,7 @@ import eu.albina.controller.AuthenticationController;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
 
-	private static Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) {

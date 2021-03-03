@@ -53,7 +53,7 @@ import eu.albina.util.JsonUtil;
  */
 public class AvalancheReportController {
 
-	private static Logger logger = LoggerFactory.getLogger(AvalancheReportController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AvalancheReportController.class);
 
 	private static AvalancheReportController instance = null;
 

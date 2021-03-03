@@ -43,7 +43,7 @@ public class ChatController {
 	// LoggerFactory.getLogger(ChatController.class);
 
 	private static ChatController instance = null;
-	private List<User> activeUsers;
+	private final List<User> activeUsers;
 
 	/**
 	 * Private constructor.

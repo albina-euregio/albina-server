@@ -42,10 +42,10 @@ import eu.albina.util.BulletinLockEncoder;
 @ServerEndpoint(value = "/bulletin/{username}", decoders = BulletinLockDecoder.class, encoders = BulletinLockEncoder.class)
 public class AvalancheBulletinEndpoint {
 
-	private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinEndpoint.class);
+	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEndpoint.class);
 
 	private Session session;
-	private static Set<AvalancheBulletinEndpoint> bulletinEndpoints = new CopyOnWriteArraySet<>();
+	private static final Set<AvalancheBulletinEndpoint> bulletinEndpoints = new CopyOnWriteArraySet<>();
 
 	@OnOpen
 	public void onOpen(Session session, @PathParam("username") String username) {

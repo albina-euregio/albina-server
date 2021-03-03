@@ -65,7 +65,7 @@ public class AvalancheBulletinController {
 	// LoggerFactory.getLogger(AvalancheBulletinController.class);
 
 	private static AvalancheBulletinController instance = null;
-	private List<BulletinLock> bulletinLocks;
+	private final List<BulletinLock> bulletinLocks;
 
 	/**
 	 * Private constructor.

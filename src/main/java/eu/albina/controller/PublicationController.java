@@ -55,7 +55,7 @@ import eu.albina.util.XmlUtil;
  */
 public class PublicationController {
 
-	private static Logger logger = LoggerFactory.getLogger(PublicationController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PublicationController.class);
 
 	private static PublicationController instance = null;
 

@@ -38,7 +38,7 @@ import eu.albina.model.socialmedia.RegionConfiguration;
 
 public class MessengerPeopleProcessorTest {
 
-	private static Logger logger = LoggerFactory.getLogger(MessengerPeopleProcessorTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(MessengerPeopleProcessorTest.class);
 	private MessengerPeopleConfig messengerPeopleConfig;
 
 	@Before

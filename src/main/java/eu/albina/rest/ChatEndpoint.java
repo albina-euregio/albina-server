@@ -43,11 +43,11 @@ import eu.albina.util.ChatMessageEncoder;
 @ServerEndpoint(value = "/chat/{username}", decoders = ChatMessageDecoder.class, encoders = ChatMessageEncoder.class)
 public class ChatEndpoint {
 
-	private static Logger logger = LoggerFactory.getLogger(ChatEndpoint.class);
+	private static final Logger logger = LoggerFactory.getLogger(ChatEndpoint.class);
 
 	private Session session;
-	private static Set<ChatEndpoint> chatEndpoints = new CopyOnWriteArraySet<>();
-	private static HashMap<String, String> users = new HashMap<>();
+	private static final Set<ChatEndpoint> chatEndpoints = new CopyOnWriteArraySet<>();
+	private static final HashMap<String, String> users = new HashMap<>();
 
 	@OnOpen
 	public void onOpen(Session session, @PathParam("username") String username) {

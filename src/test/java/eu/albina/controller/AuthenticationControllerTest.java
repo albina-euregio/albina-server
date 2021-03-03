@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 public class AuthenticationControllerTest {
 
-	private static Logger logger = LoggerFactory.getLogger(AuthenticationControllerTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationControllerTest.class);
 
 	@Before
 	public void setUp() throws Exception {

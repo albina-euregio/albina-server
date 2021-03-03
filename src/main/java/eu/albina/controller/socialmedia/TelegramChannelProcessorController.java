@@ -32,11 +32,11 @@ import org.slf4j.LoggerFactory;
 import eu.albina.model.socialmedia.TelegramConfig;
 
 public class TelegramChannelProcessorController extends CommonProcessor {
-	private static Logger logger = LoggerFactory.getLogger(TelegramChannelProcessorController.class);
+	private static final Logger logger = LoggerFactory.getLogger(TelegramChannelProcessorController.class);
 
 	private static TelegramChannelProcessorController instance = null;
-	private int CONNECTION_TIMEOUT = 10000;
-	private int SOCKET_TIMEOUT = 10000;
+	private final int CONNECTION_TIMEOUT = 10000;
+	private final int SOCKET_TIMEOUT = 10000;
 
 	public static TelegramChannelProcessorController getInstance() {
 		if (instance == null) {

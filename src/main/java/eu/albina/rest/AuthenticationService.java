@@ -48,7 +48,7 @@ import io.swagger.annotations.Api;
 @Api(value = "/authentication")
 public class AuthenticationService {
 
-	private static Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
 	@Context
 	UriInfo uri;

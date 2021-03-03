@@ -53,7 +53,7 @@ import io.swagger.annotations.Api;
 @Api(value = "/configuration")
 public class ConfigurationService {
 
-	private static Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
 
 	// private static Logger logger =
 	// LoggerFactory.getLogger(ConfigurationService.class);

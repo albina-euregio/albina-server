@@ -57,9 +57,9 @@ public class RapidMailProcessorController extends CommonProcessor {
 	private static final int RAPIDMAIL_SOCKET_TIMEOUT = 10000;
 	private static final int RAPIDMAIL_CONNECTION_TIMEOUT = 10000;
 	private static RapidMailProcessorController instance = null;
-	private String baseUrl = "https://apiv3.emailsys.net";
-	private ObjectMapper objectMapper = new ObjectMapper();
-	private Executor executor;
+	private final String baseUrl = "https://apiv3.emailsys.net";
+	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final Executor executor;
 
 	public static RapidMailProcessorController getInstance() throws CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, IOException, KeyManagementException {

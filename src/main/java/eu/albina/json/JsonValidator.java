@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JsonValidator {
 
-	private static Logger logger = LoggerFactory.getLogger(JsonValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(JsonValidator.class);
 
 	/**
 	 * Validates a JSON string against the avalanche bulletin JSON schema.

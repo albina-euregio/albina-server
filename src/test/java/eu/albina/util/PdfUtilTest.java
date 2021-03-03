@@ -39,7 +39,7 @@ import eu.albina.model.enumerations.LanguageCode;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PdfUtilTest {
 
-	private static Logger logger = LoggerFactory.getLogger(PdfUtilTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(PdfUtilTest.class);
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;

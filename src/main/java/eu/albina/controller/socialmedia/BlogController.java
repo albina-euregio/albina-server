@@ -45,14 +45,14 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.util.PushNotificationUtil;
 
 public class BlogController extends CommonProcessor {
-	private static Logger logger = LoggerFactory.getLogger(BlogController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
 
 	private static final int BLOGGER_SOCKET_TIMEOUT = 10000;
 	private static final int BLOGGER_CONNECTION_TIMEOUT = 10000;
 
 	private static BlogController instance = null;
 	protected final HashMap<String, DateTime> lastFetch = new HashMap<>();
-	private Executor executor;
+	private final Executor executor;
 
 	private BlogController() {
 		executor = Executor.newInstance(sslHttpClient());

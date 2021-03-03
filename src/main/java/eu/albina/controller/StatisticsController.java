@@ -52,7 +52,7 @@ import eu.albina.util.HibernateUtil;
  */
 public class StatisticsController {
 
-	private static Logger logger = LoggerFactory.getLogger(StatisticsController.class);
+	private static final Logger logger = LoggerFactory.getLogger(StatisticsController.class);
 
 	private static StatisticsController instance = null;
 

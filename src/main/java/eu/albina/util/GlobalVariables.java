@@ -83,7 +83,7 @@ public class GlobalVariables {
 	public static String avalancheReportBulletinUrl = "/bulletin/";
 	public static String avalancheReportSimpleUrl = "/simple/";
 
-	private static String serverMainUrl = "https://avalanche.report";
+	private static final String serverMainUrl = "https://avalanche.report";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
@@ -219,7 +219,7 @@ public class GlobalVariables {
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = CaamlVersion.V5.schemaLocation();
 
-	private static String emailEncoding = "UTF-8";
+	private static final String emailEncoding = "UTF-8";
 
 	public static String notAvailableString = "N/A";
 
