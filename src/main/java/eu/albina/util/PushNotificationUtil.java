@@ -95,10 +95,19 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 			}
 		} catch (Exception e) {
 			logger.warn("Failed to send push notification to " + subscription.getEndpoint(), e);
-			try {
-				PushSubscriptionController.incrementFailedCount(subscription);
-			} catch (Exception e2) {
-				logger.warn("Failed to increment failed fount for " + subscription.getEndpoint(), e);
+			if (subscription.getFailedCount() >= 10) {
+				try {
+					logger.warn("Deleting subscription {} with failed count {}", subscription.getEndpoint(), subscription.getFailedCount());
+					PushSubscriptionController.delete(subscription);
+				} catch (Exception e2) {
+					logger.warn("Failed to delete subscription " + subscription.getEndpoint(), e2);
+				}
+			} else {
+				try {
+					PushSubscriptionController.incrementFailedCount(subscription);
+				} catch (Exception e2) {
+					logger.warn("Failed to increment failed fount for " + subscription.getEndpoint(), e2);
+				}
 			}
 		}
 	}
