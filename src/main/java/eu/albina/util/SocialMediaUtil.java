@@ -31,7 +31,8 @@ interface SocialMediaUtil {
 			DateTime date = AlbinaUtil.getDate(bulletins);
 			String message = getSocialMediaText(date, update, lang);
 			String attachmentUrl = getSocialMediaAttachmentUrl(bulletins);
-			sendBulletinNewsletter(message, lang, regions, attachmentUrl);
+			String bulletinUrl = GlobalVariables.getBulletinUrl(lang, date);
+			sendBulletinNewsletter(message, lang, regions, attachmentUrl, bulletinUrl);
 		}
 	}
 
@@ -55,5 +56,5 @@ interface SocialMediaUtil {
 			+ AlbinaUtil.getRegionOverviewMapFilename("", "jpg").replace("map.jpg", "thumbnail.jpg");
 	}
 
-	void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl);
+	void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl);
 }

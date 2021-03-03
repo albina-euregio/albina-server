@@ -45,7 +45,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl) {
 		TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 		for (String region : regions) {
 			try {
