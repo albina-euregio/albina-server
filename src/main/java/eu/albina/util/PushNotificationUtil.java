@@ -60,7 +60,7 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 		final JSONObject payload = new JSONObject();
 		payload.put("title", lang.getBundleString("avalanche-report.name"));
 		payload.put("body", message);
-		payload.put("icon", attachmentUrl);
+		payload.put("image", attachmentUrl);
 		payload.put("url", bulletinUrl);
 
 		List<PushSubscription> subscriptions = PushSubscriptionController.get(lang);
