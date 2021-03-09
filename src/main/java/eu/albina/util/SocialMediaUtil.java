@@ -53,7 +53,7 @@ interface SocialMediaUtil {
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 		return GlobalVariables.getServerMainUrl() + GlobalVariables.avalancheReportFilesUrl
 			+ validityDate + "/" + publicationTime + "/"
-			+ AlbinaUtil.getRegionOverviewMapFilename("", "jpg").replace("map.jpg", "thumbnail.jpg");
+			+ AlbinaUtil.getRegionOverviewMapFilename("", "jpg");
 	}
 
 	void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl);
