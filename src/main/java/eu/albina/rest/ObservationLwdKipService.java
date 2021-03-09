@@ -41,7 +41,7 @@ import java.net.URI;
 public class ObservationLwdKipService {
 
 	private static final String ARCGIS_API = "https://gis.tirol.gv.at/arcgis/";
-	private static final Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ObservationLwdKipService.class);
 	private static Token token;
 
 	static class Token {
