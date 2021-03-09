@@ -61,6 +61,7 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 		payload.put("title", lang.getBundleString("avalanche-report.name"));
 		payload.put("body", message);
 		payload.put("image", attachmentUrl);
+		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
 		payload.put("url", bulletinUrl);
 
 		List<PushSubscription> subscriptions = PushSubscriptionController.get(lang);
