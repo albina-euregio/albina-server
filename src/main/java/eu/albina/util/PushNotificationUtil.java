@@ -64,8 +64,8 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
 		payload.put("url", bulletinUrl);
 
-		List<PushSubscription> subscriptions = PushSubscriptionController.get(lang);
-		logger.info("Sending {} push notifications for language={}: {}", subscriptions.size(), lang, payload);
+		List<PushSubscription> subscriptions = PushSubscriptionController.get(lang, regions);
+		logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, regions, payload);
 		for (PushSubscription subscription : subscriptions) {
 			sendPushMessage(subscription, payload);
 		}
