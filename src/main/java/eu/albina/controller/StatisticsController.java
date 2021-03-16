@@ -332,6 +332,22 @@ public class StatisticsController {
 		sb.append("AvalancheProblem1AspectW");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvalancheProblem1AspectNW");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem1ArtificialDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem1ArtificialAvalancheSize");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem1ArtificialAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem1ArtificialHazardSiteDistribution");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem1NaturalDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem1NaturalAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem1NaturalHazardSiteDistribution");
+		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvalancheProblem2");
 		sb.append(GlobalVariables.csvDeliminator);
@@ -354,6 +370,136 @@ public class StatisticsController {
 		sb.append("AvalancheProblem2AspectW");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("AvalancheProblem2AspectNW");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem2ArtificialDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem2ArtificialAvalancheSize");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem2ArtificialAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem2ArtificialHazardSiteDistribution");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem2NaturalDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem2NaturalAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem2NaturalHazardSiteDistribution");
+		}
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3ElevationAbove");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3ElevationBelow");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3AspectN");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3AspectNE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3AspectE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3AspectSE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3AspectS");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3AspectSW");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3AspectW");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem3AspectNW");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem3ArtificialDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem3ArtificialAvalancheSize");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem3ArtificialAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem3ArtificialHazardSiteDistribution");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem3NaturalDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem3NaturalAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem3NaturalHazardSiteDistribution");
+		}
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4ElevationAbove");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4ElevationBelow");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4AspectN");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4AspectNE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4AspectE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4AspectSE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4AspectS");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4AspectSW");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4AspectW");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem4AspectNW");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem4ArtificialDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem4ArtificialAvalancheSize");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem4ArtificialAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem4ArtificialHazardSiteDistribution");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem4NaturalDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem4NaturalAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem4NaturalHazardSiteDistribution");
+		}
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5ElevationAbove");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5ElevationBelow");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5AspectN");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5AspectNE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5AspectE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5AspectSE");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5AspectS");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5AspectSW");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5AspectW");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AvalancheProblem5AspectNW");
+		if (extended) {
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem5ArtificialDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem5ArtificialAvalancheSize");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem5ArtificialAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem5ArtificialHazardSiteDistribution");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem5NaturalDangerRating");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem5NaturalAvalancheReleaseProbability");
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append("AvalancheProblem5NaturalHazardSiteDistribution");
+		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("Tendency");
 		sb.append(GlobalVariables.csvDeliminator);
@@ -465,8 +611,11 @@ public class StatisticsController {
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation1());
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation2());
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation1(), extended);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation2(), extended);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation3(), extended);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation4(), extended);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation5(), extended);
 
 			if (avalancheBulletin.getTendency() != null)
 				sb.append(avalancheBulletin.getTendency().toString());
@@ -608,7 +757,7 @@ public class StatisticsController {
 	 *            the {@code AvalancheSituation} that should be added to the
 	 *            {@code StringBuilder} instance
 	 */
-	private void addCsvAvalancheSituation(StringBuilder sb, AvalancheSituation avalancheSituation) {
+	private void addCsvAvalancheSituation(StringBuilder sb, AvalancheSituation avalancheSituation, boolean extended) {
 		if (avalancheSituation != null && avalancheSituation.getAvalancheSituation() != null) {
 			sb.append(avalancheSituation.getAvalancheSituation().toStringId());
 			sb.append(GlobalVariables.csvDeliminator);
@@ -676,6 +825,9 @@ public class StatisticsController {
 					sb.append(GlobalVariables.notAvailableString);
 					sb.append(GlobalVariables.csvDeliminator);
 				}
+			}
+			if (extended) {
+				addMatrixInformation(sb, avalancheSituation.getMatrixInformation());
 			}
 		} else {
 			for (int i = 0; i < 11; i++) {
