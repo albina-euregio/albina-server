@@ -634,6 +634,8 @@ public class PublicationController {
 		try {
 			logger.info("Push notifications triggered");
 			PushNotificationUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
+		} catch (Exception e) {
+			logger.error("Error sending push notifications", e);
 		} finally {
 			logger.info("Push notifications finished");
 		}
