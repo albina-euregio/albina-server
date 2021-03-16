@@ -67,7 +67,7 @@ public interface PushSubscriptionController {
 	static void incrementFailedCount(PushSubscription subscription) throws HibernateException {
 		subscription.setFailedCount(subscription.getFailedCount() + 1);
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			entityManager.persist(subscription);
+			entityManager.merge(subscription);
 			return null;
 		});
 	}
