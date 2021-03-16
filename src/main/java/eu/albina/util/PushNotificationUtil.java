@@ -92,7 +92,7 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 			pushService.setPrivateKey(GlobalVariables.getVapidPrivateKey());
 			HttpPost httpPost = pushService.preparePost(notification, Encoding.AES128GCM);
 			HttpResponse response = httpClient.execute(httpPost);
-			if (response.getStatusLine().getStatusCode() != 200) {
+			if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
 				throw new AlbinaException(response.getStatusLine().toString());
 			}
 		} catch (Exception e) {
