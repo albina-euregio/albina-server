@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.Security;
 import java.util.List;
 
@@ -38,21 +39,22 @@ import eu.albina.model.enumerations.LanguageCode;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 
-public final class PushNotificationUtil implements SocialMediaUtil {
+public class PushNotificationUtil implements SocialMediaUtil {
 
-	private static final PushNotificationUtil INSTANCE = new PushNotificationUtil();
+	private static final PushNotificationUtil INSTANCE = new PushNotificationUtil(HttpClientBuilder.create().build());
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
-	private final HttpClient httpClient = HttpClientBuilder.create().build();
+	private final HttpClient httpClient;
 
 	public static PushNotificationUtil getInstance() {
 		return INSTANCE;
 	}
 
-	private PushNotificationUtil() {
+	protected PushNotificationUtil(HttpClient httpClient) {
 		// Add BouncyCastle as an algorithm provider
 		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new BouncyCastleProvider());
 		}
+		this.httpClient = httpClient;
 	}
 
 	@Override
@@ -87,9 +89,7 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
 			Notification notification = new Notification(subscription.getEndpoint(), subscription.getP256dh(),
 					subscription.getAuth(), payload);
-			PushService pushService = new PushService();
-			pushService.setPublicKey(GlobalVariables.getVapidPublicKey());
-			pushService.setPrivateKey(GlobalVariables.getVapidPrivateKey());
+			PushService pushService = getPushService();
 			HttpPost httpPost = pushService.preparePost(notification, Encoding.AES128GCM);
 			HttpResponse response = httpClient.execute(httpPost);
 			if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
@@ -114,4 +114,10 @@ public final class PushNotificationUtil implements SocialMediaUtil {
 		}
 	}
 
+	protected PushService getPushService() throws GeneralSecurityException {
+		PushService pushService = new PushService();
+		pushService.setPublicKey(GlobalVariables.getVapidPublicKey());
+		pushService.setPrivateKey(GlobalVariables.getVapidPrivateKey());
+		return pushService;
+	}
 }
