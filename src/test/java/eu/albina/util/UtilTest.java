@@ -154,12 +154,6 @@ public class UtilTest {
 
 	@Ignore
 	@Test
-	public void createMaps() throws Exception {
-		MapUtil.createDangerRatingMaps(bulletins);
-	}
-
-	@Ignore
-	@Test
 	public void addSubscriber() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, AlbinaException, IOException, Exception {
 		ArrayList<String> regions = new ArrayList<String>();

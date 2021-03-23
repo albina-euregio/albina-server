@@ -2,6 +2,8 @@ package eu.albina.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -9,8 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import eu.albina.ImageTestUtils;
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -21,14 +25,18 @@ import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Regions;
 
+import javax.imageio.ImageIO;
+
 public class MapUtilTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
 
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 		GlobalVariables.loadConfigProperties();
+		GlobalVariables.setMapsPath("../albina_files_local");
+		GlobalVariables.setMapProductionUrl("../avalanche-warning-maps/");
 	}
 
 	@Test
@@ -47,43 +55,51 @@ public class MapUtilTest {
 	}
 
 	private void assumeMapsPath() {
-		Assume.assumeTrue(Files.isDirectory(Paths.get(GlobalVariables.getMapsPath())));
+		Assume.assumeTrue(Files.isDirectory(Paths.get(GlobalVariables.getMapProductionUrl())));
 	}
 
 	@Test
 	public void testMapyrusMaps() throws Exception {
 		assumeMapsPath();
-		HibernateUtil.getInstance().setUp();
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regions);
+
+		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		BufferedImage actual = ImageIO.read(new File(
+			GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 	}
 
 	@Test
+	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		assumeMapsPath();
-		HibernateUtil.getInstance().setUp();
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regions);
 	}
 
 	@Test
+	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime1() throws Exception {
 		assumeMapsPath();
-		HibernateUtil.getInstance().setUp();
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regions);
 	}
 
 	@Test
+	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime2() throws Exception {
 		assumeMapsPath();
-		HibernateUtil.getInstance().setUp();
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regions);
 	}
 
 	@Test

@@ -10,7 +10,17 @@ cache:
 
 production build:
     stage: build
-    script: mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
+    script:
+        - apt-get update -y
+        - apt-get install -y ghostscript imagemagick webp
+        - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
+        - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
+    artifacts:
+        when: always
+        reports:
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
 
 deploy to development:
     stage: deploy
