@@ -27,8 +27,10 @@ public class MapUtilTest {
 	public TemporaryFolder folder = new TemporaryFolder();
 
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 		GlobalVariables.loadConfigProperties();
+		GlobalVariables.setMapsPath("../albina_files_local");
+		GlobalVariables.setMapProductionUrl("../avalanche-warning-maps/");
 	}
 
 	@Test
@@ -47,7 +49,7 @@ public class MapUtilTest {
 	}
 
 	private void assumeMapsPath() {
-		Assume.assumeTrue(Files.isDirectory(Paths.get(GlobalVariables.getMapsPath())));
+		Assume.assumeTrue(Files.isDirectory(Paths.get(GlobalVariables.getMapProductionUrl())));
 	}
 
 	@Test
