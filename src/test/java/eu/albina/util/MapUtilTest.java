@@ -2,6 +2,8 @@ package eu.albina.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -9,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import eu.albina.ImageTestUtils;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +23,8 @@ import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Regions;
+
+import javax.imageio.ImageIO;
 
 public class MapUtilTest {
 
@@ -59,6 +64,11 @@ public class MapUtilTest {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		MapUtil.createMapyrusMaps(bulletins, regions);
+
+		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		BufferedImage actual = ImageIO.read(new File(
+			GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 	}
 
 	@Test
