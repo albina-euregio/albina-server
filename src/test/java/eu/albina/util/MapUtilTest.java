@@ -14,6 +14,7 @@ import java.util.List;
 import eu.albina.ImageTestUtils;
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -72,6 +73,7 @@ public class MapUtilTest {
 	}
 
 	@Test
+	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		assumeMapsPath();
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
@@ -81,6 +83,7 @@ public class MapUtilTest {
 	}
 
 	@Test
+	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime1() throws Exception {
 		assumeMapsPath();
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
@@ -90,6 +93,7 @@ public class MapUtilTest {
 	}
 
 	@Test
+	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime2() throws Exception {
 		assumeMapsPath();
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
