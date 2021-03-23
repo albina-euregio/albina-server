@@ -53,37 +53,37 @@ public class MapUtilTest {
 	@Test
 	public void testMapyrusMaps() throws Exception {
 		assumeMapsPath();
-		HibernateUtil.getInstance().setUp();
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regions);
 	}
 
 	@Test
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		assumeMapsPath();
-		HibernateUtil.getInstance().setUp();
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regions);
 	}
 
 	@Test
 	public void testMapyrusMapsDaylightSavingTime1() throws Exception {
 		assumeMapsPath();
-		HibernateUtil.getInstance().setUp();
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regions);
 	}
 
 	@Test
 	public void testMapyrusMapsDaylightSavingTime2() throws Exception {
 		assumeMapsPath();
-		HibernateUtil.getInstance().setUp();
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regions);
 	}
 
 	@Test

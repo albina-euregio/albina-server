@@ -489,7 +489,7 @@ public class PublicationController {
 		logger.info("Map production started");
 
 		if (!bulletins.isEmpty()) {
-			MapUtil.createDangerRatingMaps(bulletins);
+			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions());
 			logger.info("Map production finished");
 		}
 	}
