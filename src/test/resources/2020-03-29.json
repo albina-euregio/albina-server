@@ -1,0 +1,407 @@
+[
+	{
+		"tendencyCommentTextcat": "210[18979,21491,22885,22215,29660,24567]",
+		"regions": [
+			"IT-32-TN-09",
+			"IT-32-TN-02",
+			"IT-32-TN-13",
+			"IT-32-TN-01",
+			"IT-32-TN-12",
+			"IT-32-TN-04",
+			"IT-32-TN-15",
+			"IT-32-TN-03",
+			"IT-32-TN-14",
+			"IT-32-TN-17",
+			"IT-32-TN-06",
+			"IT-32-TN-05",
+			"IT-32-TN-16",
+			"IT-32-TN-19",
+			"IT-32-TN-08",
+			"IT-32-TN-18",
+			"IT-32-TN-07",
+			"IT-32-TN-20",
+			"IT-32-TN-11",
+			"IT-32-TN-10",
+			"IT-32-TN-21"
+		],
+		"tendency": "increasing",
+		"forenoon": {
+			"avalancheSituation2": {},
+			"avalancheSituation1": {
+				"treelineLow": true
+			},
+			"id": "eb5a3e23-3e74-4d8c-a843-ef17f7984fa8",
+			"dangerRatingAbove": "low"
+		},
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "de"
+			}
+		],
+		"hasElevationDependency": false,
+		"avActivityHighlightsTextcat": "135[25660,18963,21093,24697,21092,24567].129[25416,18889[15523]].211[26853,22539,24979[24372,25036,22209],24567]",
+		"hasDaytimeDependency": false,
+		"avActivityCommentTextcat": "220[22329,21617,28305].231[21942].140[16364,22888[25486,20976[19186,18749]],24567].180[16327[24355],21656,21268,24496,21657,22056].226[21769,22109[30274],22722,22531,24936,25820,24567].186[15438,24329,16339,25361].231[21942].228[26518[27351,30287],27482,26563[18774],18723].152[23652,21014,15823,29673,24828,15734,24827,17784,24567].226[21770,22110[30273],22722,22531,24923,25820,24567].210[18982,21491,22885,22215,29660,24567].206[21411,14941,25371,30329]",
+		"avActivityComment": [
+			{
+				"text": " The Avalanche Warning Service currently has only a small amount of information that has been collected in the field. <br/> The wind slabs must be evaluated with care and prudence at high altitudes and in high Alpine regions. These can in very isolated cases be released, in particular by large loads, especially on very steep shady slopes in pass areas. Mostly the avalanches are small. <br/> Intermediate altitudes and below approximately 2200 m: As a consequence of warming during the day and solar radiation there will be only a slight increase in the danger of gliding avalanches and moist snow slides, in particular on steep sunny slopes. Gradual increase in avalanche danger as the snowfall becomes more intense. The prevalence of avalanche prone locations will increase during the course of the night.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Der Lawinenwarndienst hat derzeit wenig Informationen aus dem Gelände. <br/> Die Triebschneeansammlungen müssen in hohen Lagen und im Hochgebirge vorsichtig beurteilt werden. Diese können sehr vereinzelt vor allem mit großer Belastung ausgelöst werden, besonders an sehr steilen Schattenhängen in Passlagen. Die Lawinen sind meist klein. <br/> Mittlere Lagen und unterhalb von rund 2200 m: Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung steigt die Gefahr von Gleitschneelawinen und feuchten Rutschen etwas an, vor allem an steilen Sonnenhängen. Allmählicher Anstieg der Lawinengefahr mit der Intensivierung der Schneefälle. Die Gefahrenstellen nehmen im Verlaufe der Nacht zu.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Le service de prévisions d'avalanches n'a pas beaucoup d'informations actuellement en provenance du terrain. <br/> Les accumulations de neige soufflée doivent être évaluées avec précaution à haute altitude et en haute montagne. Celles-ci peuvent de manière très isolée être déclenchées surtout avec une surcharge importante, notamment sur les pentes très raides à l'ombre à proximité des cols. Les avalanches sont généralement petites. <br/> Aux altitudes moyennes et en dessous d'environ 2200 m: Avec le réchauffement diurne et le rayonnement solaire le danger d'avalanches de glissement et de coulées humides augmente un peu, surtout sur les pentes raides ensoleillées. Augmentation progressive du danger d'avalanches avec l'intensification des chutes de neige. Les endroits dangereux augmentent en cours de nuit.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Attualmente il servizio di previsione valanghe dispone di informazioni limitate dal territorio. <br/> Gli accumuli di neve ventata devono essere valutati con attenzione ad alta quota e in alta montagna. Questi possono a livello molto isolato distaccarsi soprattutto in seguito a un forte sovraccarico, soprattutto sui pendii ombreggiati molto ripidi nelle zone in prossimità dei passi. Le valanghe sono per lo più di piccole dimensioni. <br/> Alle quote di media montagna e al di sotto dei 2200 m circa: Con il rialzo termico e l'irradiazione solare diurni, il pericolo di valanghe per scivolamento di neve e colate umide aumenterà leggermente, specialmente sui pendii soleggiati ripidi. Con l'intensificarsi delle nevicate, progressivo aumento del pericolo di valanghe. I punti pericolosi aumenteranno nel corso della notte.",
+				"languageCode": "it"
+			}
+		],
+		"tendencyComment": [
+			{
+				"text": " Gradual increase in avalanche danger as a consequence of the snowfall.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Con le nevicate, progressivo aumento del pericolo di valanghe.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Augmentation progressive du danger d'avalanches avec la chute de neige.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Allmählicher Anstieg der Lawinengefahr mit dem Schneefall.",
+				"languageCode": "de"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"text": " Il manto nevoso è piuttosto stabile. Neve fresca verso sera. Con questo il pericolo aumenterà.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Die Schneedecke ist recht stabil. Neuschnee gegen Abend. Damit steigt die Gefahr an.",
+				"languageCode": "de"
+			},
+			{
+				"text": " The snowpack will be quite stable. Fresh snow towards the evening. For this reason the danger will increase.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Le manteau neigeux est assez stable. Neige fraîche en soirée. Ainsi le danger d'avalanches augmente.",
+				"languageCode": "fr"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"text": " Sur les pentes très raides à l'ombre: Les accumulations de neige soufflée reposent sur des couches meubles. Dans le manteau neigeux ancien des couches fragiles très isolées sont présentes, surtout sur les pentes raides à l'ombre au-dessus d'environ 2200 m. <br/> Sur les pentes exposées à l'est, au sud et à l'ouest: Les accumulations de neige soufflée reposent sur une surface croûtée. La surface de la neige regèle et devient porteuse et se ramollit en cours de journée. <br/> À basse altitude il n'y a pas de neige. La nuit: Il tombe au-dessus d'environ 1000 m de 10 à 20 cm de neige, localement plus.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Very steep shady slopes: The wind slabs are lying on soft layers. In very isolated cases weak layers exist in the old snowpack, in particular on steep shady slopes above approximately 2200 m. <br/> East, south and west facing slopes: The wind slabs are lying on a crust. The surface of the snowpack will freeze to form a strong crust and will soften during the day. <br/> At low altitude no snow is lying. Night: 10 to 20 cm of snow, and even more in some localities, will fall above approximately 1000 m.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Sui pendii molto ripidi ombreggiati: Gli accumuli di neve ventata poggiano su strati soffici. All'interno del manto di neve vecchia si trovano, a livello molto isolato, strati fragili, principalmente sui pendii ombreggiati ripidi al di sopra dei 2200 m circa. <br/> Sui pendii esposti a est, sud e ovest: Gli accumuli di neve ventata poggiano su una crosta. La superficie del manto nevoso riuscirà a rigelarsi e a essere portante e si ammorbidirà nel corso della giornata. <br/> A bassa quota non c'è neve. Notte: Cadranno da 10 a 20 cm di neve al di sopra dei 1000 m circa, localmente anche di più.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Sehr steile Schattenhänge: Die Triebschneeansammlungen liegen auf weichen Schichten. In der Altschneedecke sind sehr vereinzelt Schwachschichten vorhanden, v.a. an steilen Schattenhängen oberhalb von rund 2200 m. <br/> Ost-, Süd- und Westhänge: Die Triebschneeansammlungen liegen auf einer Kruste. Die Schneeoberfläche gefriert tragfähig und weicht im Tagesverlauf auf. <br/> In tiefen Lagen liegt kein Schnee. Nacht: Es fallen oberhalb von rund 1000 m 10 bis 20 cm Schnee, lokal auch mehr.",
+				"languageCode": "de"
+			}
+		],
+		"id": "7a3ecfab-6549-4906-8c1b-516ad3b7617a",
+		"validity": {
+			"from": "2020-03-28T23:00:00Z",
+			"until": "2020-03-29T23:00:00Z"
+		},
+		"snowpackStructureCommentTextcat": "228[26489[27351,15737],27480,26535,18723].140[16364,22916[25486,20973],24567].146[21516,20977,18720,16482,20972,16481,21497,24567].226[21771,22109[30273],22723[22156,18774],22531,24923,25820,24567].231[21942].228[26488[27351,15735,22716,18711,15759],27480,26535,18723].139[21303,19129,20934,19128,15807,22369[25486,20973],24567].158[21403,30266,15664,29678].231[21942].190[17978[18744,22951]].240[15525,21116].216[18736,17952,17768[22163,24716,23603],25672[18762],27472]",
+		"publicationDate": "2020-03-28T16:00:00Z"
+	},
+	{
+		"tendencyCommentTextcat": "210[18979,21491,22885,22215,29660,24567]",
+		"regions": [
+			"AT-07-20",
+			"AT-07-10",
+			"AT-07-22",
+			"AT-07-11",
+			"AT-07-23",
+			"AT-07-01",
+			"AT-07-12",
+			"AT-07-24",
+			"AT-07-13",
+			"AT-07-02",
+			"IT-32-BZ-05",
+			"AT-07-14",
+			"AT-07-03",
+			"AT-07-15",
+			"AT-07-04",
+			"AT-07-16",
+			"AT-07-05",
+			"AT-07-17",
+			"AT-07-06",
+			"AT-07-18",
+			"AT-07-07",
+			"AT-07-08",
+			"AT-07-19",
+			"AT-07-09"
+		],
+		"tendency": "increasing",
+		"forenoon": {
+			"avalancheSituation2": {},
+			"avalancheSituation1": {
+				"treelineLow": true
+			},
+			"id": "0c2a50f5-c460-4138-b3a9-0554a07eca7f",
+			"dangerRatingAbove": "low"
+		},
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			}
+		],
+		"hasElevationDependency": false,
+		"avActivityHighlightsTextcat": "11[10387,3976,6035,9543].5[10164,3902[575]].87[11552,7412,9784[9218,9842,7094],9413]",
+		"hasDaytimeDependency": false,
+		"avActivityCommentTextcat": "96[7202,6533,12930].107[6827].16[1428,7752[10213,5932[4170,3769]],9413].56[1391[9201],6562,9342,6191,6941].62[502,9182,1403,10109].107[6827].104[11243[12003,14885],12134,11286[3794],3743].28[8505,798,14271,5966,9653,887,2815,9413].102[6665,6995[14871],7595,7404,9728,10547,9413].86[6414,7749,7100,14258,3995,9413].82[6334,5,10123,14927]",
+		"avActivityComment": [
+			{
+				"text": " The Avalanche Warning Service currently has only a small amount of information that has been collected in the field. <br/> The wind slabs must be evaluated with care and prudence at high altitudes and in high Alpine regions. These can in very isolated cases be released, in particular by large loads. Mostly the avalanches are small. <br/> Intermediate altitudes and below approximately 2200 m: As a consequence of warming during the day and solar radiation there will be only a slight increase in the danger of gliding avalanches and moist snow slides, in particular on steep sunny slopes. Gradual increase in avalanche danger as the snowfall becomes more intense. The prevalence of avalanche prone locations will increase as the day progresses.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Attualmente il servizio di previsione valanghe dispone di informazioni limitate dal territorio. <br/> Gli accumuli di neve ventata devono essere valutati con attenzione ad alta quota e in alta montagna. Questi possono a livello molto isolato distaccarsi soprattutto in seguito a un forte sovraccarico. Le valanghe sono per lo più di piccole dimensioni. <br/> Alle quote di media montagna e al di sotto dei 2200 m circa: Con il rialzo termico e l'irradiazione solare diurni, il pericolo di valanghe per scivolamento di neve e colate umide aumenterà leggermente, specialmente sui pendii soleggiati ripidi. Con l'intensificarsi delle nevicate, progressivo aumento del pericolo di valanghe. I punti pericolosi aumenteranno nel corso della giornata.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Le service de prévisions d'avalanches n'a pas beaucoup d'informations actuellement en provenance du terrain. <br/> Les accumulations de neige soufflée doivent être évaluées avec précaution à haute altitude et en haute montagne. Celles-ci peuvent de manière très isolée être déclenchées surtout avec une surcharge importante. Les avalanches sont généralement petites. <br/> Aux altitudes moyennes et en dessous d'environ 2200 m: Avec le réchauffement diurne et le rayonnement solaire le danger d'avalanches de glissement et de coulées humides augmente un peu, surtout sur les pentes raides ensoleillées. Augmentation progressive du danger d'avalanches avec l'intensification des chutes de neige. Les endroits dangereux augmentent en cours de journée.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Der Lawinenwarndienst hat derzeit wenig Informationen aus dem Gelände. <br/> Die Triebschneeansammlungen müssen in hohen Lagen und im Hochgebirge vorsichtig beurteilt werden. Diese können sehr vereinzelt vor allem mit großer Belastung ausgelöst werden. Die Lawinen sind meist klein. <br/> Mittlere Lagen und unterhalb von rund 2200 m: Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung steigt die Gefahr von Gleitschneelawinen und feuchten Rutschen etwas an, vor allem an steilen Sonnenhängen. Allmählicher Anstieg der Lawinengefahr mit der Intensivierung der Schneefälle. Die Gefahrenstellen nehmen im Tagesverlauf zu.",
+				"languageCode": "de"
+			}
+		],
+		"tendencyComment": [
+			{
+				"text": " Gradual increase in avalanche danger as a consequence of the snowfall.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Con le nevicate, progressivo aumento del pericolo di valanghe.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Allmählicher Anstieg der Lawinengefahr mit dem Schneefall.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Augmentation progressive du danger d'avalanches avec la chute de neige.",
+				"languageCode": "fr"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"text": " Le manteau neigeux est assez stable. Neige fraîche en cours de journée. Ainsi le danger d'avalanches augmente un peu.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " The snowpack will be quite stable. Fresh snow as the day progresses. For this reason the danger will increase a little.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Il manto nevoso è piuttosto stabile. Neve fresca nel corso della giornata. Con questo il pericolo aumenterà leggermente.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Die Schneedecke ist recht stabil. Neuschnee im Tagesverlauf. Damit steigt die Gefahr etwas an.",
+				"languageCode": "de"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"text": " Very steep shady slopes: The somewhat older wind slabs are lying on soft layers. In very isolated cases weak layers exist in the old snowpack, in particular on steep shady slopes above approximately 2200 m. <br/> East, south and west facing slopes: The wind slabs are lying on a crust. <br/> At low altitude no snow is lying. During the day: 10 to 20 cm of snow, and even more in some localities, will fall above approximately 1000 m.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Sur les pentes très raides à l'ombre: Les accumulations déjà plus anciennes de neige soufflée reposent sur des couches meubles. Dans le manteau neigeux ancien des couches fragiles très isolées sont présentes, surtout sur les pentes raides à l'ombre au-dessus d'environ 2200 m. <br/> Sur les pentes exposées à l'est, au sud et à l'ouest: Les accumulations de neige soufflée reposent sur une surface croûtée. <br/> À basse altitude il n'y a pas de neige. En cours de journée: Il tombe au-dessus d'environ 1000 m de 10 à 20 cm de neige, localement plus.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Sui pendii molto ripidi ombreggiati: Gli accumuli di neve ventata meno recenti poggiano su strati soffici. All'interno del manto di neve vecchia si trovano, a livello molto isolato, strati fragili, principalmente sui pendii ombreggiati ripidi al di sopra dei 2200 m circa. <br/> Sui pendii esposti a est, sud e ovest: Gli accumuli di neve ventata poggiano su una crosta. <br/> A bassa quota non c'è neve. Nel corso della giornata: Cadranno da 10 a 20 cm di neve al di sopra dei 1000 m circa, localmente anche di più.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Sehr steile Schattenhänge: Die schon etwas älteren Triebschneeansammlungen liegen auf weichen Schichten. In der Altschneedecke sind sehr vereinzelt Schwachschichten vorhanden, v.a. an steilen Schattenhängen oberhalb von rund 2200 m. <br/> Ost-, Süd- und Westhänge: Die Triebschneeansammlungen liegen auf einer Kruste. <br/> In tiefen Lagen liegt kein Schnee. Tagesverlauf: Es fallen oberhalb von rund 1000 m 10 bis 20 cm Schnee, lokal auch mehr.",
+				"languageCode": "de"
+			}
+		],
+		"id": "b3ec07ff-a796-4d0f-8e26-4358ebda31ef",
+		"validity": {
+			"from": "2020-03-28T23:00:00Z",
+			"until": "2020-03-29T23:00:00Z"
+		},
+		"snowpackStructureCommentTextcat": "104[11214[12003,801],12132,11258,3743].16[1438,7780[10213,5929],9413].22[5933,3740,5928,6439,1537,6420].102[6666,6994[14871],7596[7041,3794],7404,9728,10547,9413].107[6827].104[11213[12003,799,7589,3731,823],12132,11258,3743].15[6226,4141,5890,871,7242[10213,5929],9413].107[6827].66[3002[3764,7815]].116[594,6048].92[2976,3756,10399[3782],2799[7048,9562,8456],12124]",
+		"publicationDate": "2020-03-28T16:40:14Z"
+	},
+	{
+		"tendencyCommentTextcat": "86[6415,7749,7100,14258,3991,9413]",
+		"regions": [
+			"IT-32-BZ-20",
+			"IT-32-BZ-01",
+			"IT-32-BZ-02",
+			"IT-32-BZ-03",
+			"IT-32-BZ-04",
+			"IT-32-BZ-06",
+			"IT-32-BZ-07",
+			"IT-32-BZ-08",
+			"IT-32-BZ-09",
+			"IT-32-BZ-10",
+			"IT-32-BZ-11",
+			"IT-32-BZ-12",
+			"AT-07-21",
+			"IT-32-BZ-13",
+			"IT-32-BZ-14",
+			"IT-32-BZ-15",
+			"IT-32-BZ-16",
+			"AT-07-25",
+			"IT-32-BZ-17",
+			"AT-07-26",
+			"IT-32-BZ-18",
+			"AT-07-27",
+			"IT-32-BZ-19",
+			"AT-07-28",
+			"AT-07-29"
+		],
+		"tendency": "increasing",
+		"forenoon": {
+			"avalancheSituation2": {
+				"elevationLow": 2400
+			},
+			"avalancheSituation1": {
+				"elevationLow": 2400
+			},
+			"id": "1aa3813e-3935-4e06-b3a5-c6f9d2c6e54c",
+			"dangerRatingAbove": "low"
+		},
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			}
+		],
+		"hasElevationDependency": false,
+		"avActivityHighlightsTextcat": "91[9599[6255],11778,3918,9413]",
+		"hasDaytimeDependency": false,
+		"avActivityCommentTextcat": "96[7202,6533,12930].107[6827].7[6431[500,1452],9413].28[8505,798,14271,5966,9653,887,2815,9413].102[6665,6995[14871],7595,7404,9728,10547,9413].107[6827].16[1438,7766[10218[9257,7498],5930[3796],3907],9413].62[502,9182,1403,10109].28[8487,798,14258,5967,9653,887,2815,9413]",
+		"avActivityComment": [
+			{
+				"text": " Der Lawinenwarndienst hat derzeit wenig Informationen aus dem Gelände. <br/> Nassschnee ist die Hauptgefahr. Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung steigt die Gefahr von Gleitschneelawinen und feuchten Rutschen etwas an, vor allem an steilen Sonnenhängen. <br/> Die schon etwas älteren Triebschneeansammlungen können besonders an steilen Schattenhängen oberhalb von rund 2400 m vor allem mit großer Zusatzbelastung ausgelöst werden. Die Lawinen sind meist klein. Mit dem Schneefall steigt die Lawinengefahr in der Nacht etwas an.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Attualmente il servizio di previsione valanghe dispone di informazioni limitate dal territorio. <br/> La neve bagnata è la principale fonte di pericolo. Con il rialzo termico e l'irradiazione solare diurni, il pericolo di valanghe per scivolamento di neve e colate umide aumenterà leggermente, specialmente sui pendii soleggiati ripidi. <br/> Gli accumuli di neve ventata meno recenti possono subire un distacco soprattutto in caso di forte sovraccarico soprattutto sui pendii ripidi ombreggiati al di sopra dei 2400 m circa. Le valanghe sono per lo più di piccole dimensioni. Con le nevicate, durante la notte il pericolo di valanghe aumenterà leggermente.",
+				"languageCode": "it"
+			},
+			{
+				"text": " The Avalanche Warning Service currently has only a small amount of information that has been collected in the field. <br/> Wet snow represents the main danger. As a consequence of warming during the day and solar radiation there will be only a slight increase in the danger of gliding avalanches and moist snow slides, in particular on steep sunny slopes. <br/> The somewhat older wind slabs can be released, especially by large additional loads, especially on steep shady slopes above approximately 2400 m. Mostly the avalanches are small. During the night as a consequence of the snowfall there will be only a slight increase in the avalanche danger.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Le service de prévisions d'avalanches n'a pas beaucoup d'informations actuellement en provenance du terrain. <br/> Neige mouillée constituant le danger principal. Avec le réchauffement diurne et le rayonnement solaire le danger d'avalanches de glissement et de coulées humides augmente un peu, surtout sur les pentes raides ensoleillées. <br/> Les accumulations déjà plus anciennes de neige soufflée peuvent être déclenchées surtout avec une surcharge importante particulièrement sur les pentes raides à l'ombre au-dessus d'environ 2400 m. Les avalanches sont généralement petites. Avec la chute de neige le danger d'avalanches augmente un peu pendant la nuit.",
+				"languageCode": "fr"
+			}
+		],
+		"tendencyComment": [
+			{
+				"text": " Leichter Anstieg der Lawinengefahr mit dem Neuschnee.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Slight increase in avalanche danger as a consequence of the fresh snow.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Augmentation légère du danger d'avalanches avec la neige fraîche.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Con la neve fresca, leggero aumento del pericolo di valanghe.",
+				"languageCode": "it"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"text": " Am Abend fällt gebietsweise etwas Schnee.",
+				"languageCode": "de"
+			},
+			{
+				"text": " In alcune regioni, durante la sera cadrà un po' di neve.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Le soir il tombera un peu de neige dans certaines régions.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Some snow will fall in the evening in some regions.",
+				"languageCode": "en"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"text": " 0 to 5 cm of snow, and even more in some localities, will fall in the evening. Very steep shady slopes: The wind slabs are lying on soft layers. In very isolated cases weak layers exist in the old snowpack, in particular on steep, little used shady slopes above approximately 2200 m. <br/> At low altitude no snow is lying.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Durante la sera cadranno da 0 a 5 cm di neve, localmente anche di più. Sui pendii molto ripidi ombreggiati: Gli accumuli di neve ventata poggiano su strati soffici. All'interno del manto di neve vecchia si trovano, a livello molto isolato, strati fragili, principalmente sui pendii ombreggiati ripidi e poco frequentati al di sopra dei 2200 m circa. <br/> A bassa quota non c'è neve.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Am Abend fallen 0 bis 5 cm Schnee, lokal auch mehr. Sehr steile Schattenhänge: Die Triebschneeansammlungen liegen auf weichen Schichten. In der Altschneedecke sind sehr vereinzelt Schwachschichten vorhanden, v.a. an steilen, wenig befahrenen Schattenhängen oberhalb von rund 2200 m. <br/> In tiefen Lagen liegt kein Schnee.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Le soir il tombera de 0 à 5 cm de neige, localement plus. Sur les pentes très raides à l'ombre: Les accumulations de neige soufflée reposent sur des couches meubles. Dans le manteau neigeux ancien des couches fragiles très isolées sont présentes, surtout sur les pentes raides peu fréquentées à l'ombre au-dessus d'environ 2200 m. <br/> À basse altitude il n'y a pas de neige.",
+				"languageCode": "fr"
+			}
+		],
+		"id": "f7a5a38f-8b0e-443e-ad41-fcddc7be216d",
+		"validity": {
+			"from": "2020-03-28T23:00:00Z",
+			"until": "2020-03-29T23:00:00Z"
+		},
+		"snowpackStructureCommentTextcat": "92[2977[6255],3756,10398,2799[7048,9559,8453],12124].104[11214[12003,801],12132,11258,3743].16[1428,7780[10213,5929],9413].22[5933,3740,5928,6439,1537,6420].102[6666,6994[14876],7596[7041,3794],7404,9728,10547,9413].107[6827].66[3002[3764,7815]]",
+		"publicationDate": "2020-03-28T16:40:14Z"
+	}
+]
