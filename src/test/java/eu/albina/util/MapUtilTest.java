@@ -6,10 +6,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -45,9 +46,13 @@ public class MapUtilTest {
 				MapUtil.getOverviewMapFilename(GlobalVariables.codeTrentino, false, false, true));
 	}
 
+	private void assumeMapsPath() {
+		Assume.assumeTrue(Files.isDirectory(Paths.get(GlobalVariables.getMapsPath())));
+	}
+
 	@Test
-	@Ignore("requires albina-euregio/avalanche-warning-maps")
 	public void testMapyrusMaps() throws Exception {
+		assumeMapsPath();
 		HibernateUtil.getInstance().setUp();
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -55,8 +60,8 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore("requires albina-euregio/avalanche-warning-maps")
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
+		assumeMapsPath();
 		HibernateUtil.getInstance().setUp();
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
