@@ -103,7 +103,9 @@ public class BlogController extends CommonProcessor {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
-				return new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
+				List<Blogger.Item> blogPosts = new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
+				logger.info("Found {} new blog posts for region={} lang={} url={}", blogPosts.size(), region, lang, uri);
+				return blogPosts;
 			} else {
 				throw new IOException("Failed to fetch blog posts: " + response);
 			}
@@ -137,7 +139,6 @@ public class BlogController extends CommonProcessor {
 		if (getBlogId(region, lang) != null) {
 			try {
 				List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
-				logger.info("Found {} new blog posts for {}, {}!", blogPosts.size(), region, lang);
 				for (Blogger.Item object : blogPosts) {
 					sendNewBlogPostToMessengerpeople(object, region, lang);
 					sendNewBlogPostToRapidmail(object, region, lang);
