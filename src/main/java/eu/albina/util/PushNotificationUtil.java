@@ -91,10 +91,13 @@ public class PushNotificationUtil implements SocialMediaUtil {
 					subscription.getAuth(), payload);
 			PushService pushService = getPushService();
 			HttpPost httpPost = pushService.preparePost(notification, Encoding.AES128GCM);
+			logger.debug("Sending POST request: {}", httpPost);
 			HttpResponse response = httpClient.execute(httpPost);
+			logger.debug("Received response on POST: {}", response);
 			if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
 				throw new AlbinaException(response.getStatusLine().toString());
 			}
+			logger.debug("Successfully sent push notification to {}", subscription.getEndpoint());
 		} catch (Exception e) {
 			logger.warn("Failed to send push notification to " + subscription.getEndpoint(), e);
 			if (subscription.getFailedCount() >= 10) {
