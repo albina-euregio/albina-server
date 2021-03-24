@@ -104,11 +104,12 @@ public class BlogController extends CommonProcessor {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
 				return new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
+			} else {
+				throw new IOException("Failed to fetch blog posts: " + response);
 			}
 		} catch (URISyntaxException ex) {
 			throw new IllegalStateException(ex);
 		}
-		return Collections.emptyList();
 	}
 
 	protected String getBlogPost(String blogPostId, String region, LanguageCode lang) throws IOException {
