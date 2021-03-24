@@ -96,10 +96,10 @@ public class BlogController extends CommonProcessor {
 			logger.debug("URI: " + uri);
 			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-			logger.debug("Start date for " + region + ": " + lastFetch.get(blogId).toString());
+			logger.debug("Start date for {}: {}", blogId, lastFetch.get(blogId).toString());
 			lastFetch.put(blogId, new DateTime());
 			HttpResponse response = executor.execute(request).returnResponse();
-			logger.debug("New start date for " + region + ": " + lastFetch.get(blogId).toString());
+			logger.debug("New start date for {}: {}", blogId, lastFetch.get(blogId).toString());
 			if (response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
