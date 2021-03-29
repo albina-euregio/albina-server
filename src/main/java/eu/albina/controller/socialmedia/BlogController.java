@@ -215,7 +215,7 @@ public class BlogController extends CommonProcessor {
 		String message = getBlogMessage(object, region, lang);
 		String attachmentUrl = getAttachmentUrl(object);
 		String blogUrl = getBlogUrl(object, region, lang);
-		PushNotificationUtil pushNotificationUtil = PushNotificationUtil.getInstance();
+		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
 		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl);
 	}
 

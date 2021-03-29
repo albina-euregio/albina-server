@@ -633,7 +633,7 @@ public class PublicationController {
 	private void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		try {
 			logger.info("Push notifications triggered");
-			PushNotificationUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
+			new PushNotificationUtil().sendBulletinNewsletters(bulletins, regions, update);
 		} catch (Exception e) {
 			logger.error("Error sending push notifications", e);
 		} finally {

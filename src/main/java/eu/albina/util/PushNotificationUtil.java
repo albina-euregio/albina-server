@@ -26,7 +26,7 @@ import nl.martijndwars.webpush.Encoding;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,12 +41,11 @@ import nl.martijndwars.webpush.PushService;
 
 public class PushNotificationUtil implements SocialMediaUtil {
 
-	private static final PushNotificationUtil INSTANCE = new PushNotificationUtil(HttpClientBuilder.create().build());
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
 	private final HttpClient httpClient;
 
-	public static PushNotificationUtil getInstance() {
-		return INSTANCE;
+	public PushNotificationUtil() {
+		this(HttpClients.createDefault());
 	}
 
 	protected PushNotificationUtil(HttpClient httpClient) {
