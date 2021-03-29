@@ -59,6 +59,6 @@ public class PushNotificationUtilTest {
 
 		Assert.assertEquals("POST", httpPost.getMethod());
 		Assert.assertEquals(URI.create(subscription.getEndpoint()), httpPost.getURI());
-		Assert.assertNotNull(bytes.toString());
+		Assert.assertTrue(bytes.toByteArray().length > 140);
 	}
 }
