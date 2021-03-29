@@ -40,7 +40,7 @@ public class PushNotificationUtilTest {
 		HttpClient httpClient = mock(HttpClient.class);
 		when(httpClient.execute(any())).thenReturn(httpResponse);
 
-		new PushNotificationUtil(httpClient) {
+		new PushNotificationUtil(() -> httpClient) {
 			@Override
 			protected PushService getPushService() throws GeneralSecurityException {
 				return new PushService(

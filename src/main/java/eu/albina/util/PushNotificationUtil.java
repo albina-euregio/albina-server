@@ -20,13 +20,14 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.Security;
 import java.util.List;
+import java.util.function.Supplier;
 
 import eu.albina.exception.AlbinaException;
 import nl.martijndwars.webpush.Encoding;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,20 +42,20 @@ import nl.martijndwars.webpush.PushService;
 
 public class PushNotificationUtil implements SocialMediaUtil {
 
-	private static final PushNotificationUtil INSTANCE = new PushNotificationUtil(HttpClientBuilder.create().build());
+	private static final PushNotificationUtil INSTANCE = new PushNotificationUtil(HttpClients::createDefault);
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
-	private final HttpClient httpClient;
+	private final Supplier<HttpClient> httpClientSupplier;
 
 	public static PushNotificationUtil getInstance() {
 		return INSTANCE;
 	}
 
-	protected PushNotificationUtil(HttpClient httpClient) {
+	protected PushNotificationUtil(Supplier<HttpClient> httpClientSupplier) {
 		// Add BouncyCastle as an algorithm provider
 		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
 			Security.addProvider(new BouncyCastleProvider());
 		}
-		this.httpClient = httpClient;
+		this.httpClientSupplier = httpClientSupplier;
 	}
 
 	@Override
@@ -92,6 +93,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 			PushService pushService = getPushService();
 			HttpPost httpPost = pushService.preparePost(notification, Encoding.AES128GCM);
 			logger.debug("Sending POST request: {}", httpPost);
+			HttpClient httpClient = httpClientSupplier.get();
 			HttpResponse response = httpClient.execute(httpPost);
 			logger.debug("Received response on POST: {}", response);
 			if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
