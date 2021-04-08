@@ -19,6 +19,8 @@ import eu.albina.util.GlobalVariables;
  */
 public class Regions extends ArrayList<Region> implements AvalancheInformationObject {
 
+	private static final long serialVersionUID = 1L;
+
 	public Regions() {
 	}
 

@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -49,7 +48,6 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.union.UnaryUnionOp;
 import com.vividsolutions.jts.precision.GeometryPrecisionReducer;
 
-import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -63,6 +61,9 @@ public class MapUtil {
 	private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
 	public static class AlbinaMapException extends RuntimeException {
+
+		private static final long serialVersionUID = 1L;
+
 		public AlbinaMapException(String message, Throwable cause) {
 			super(message, cause);
 		}
@@ -225,7 +226,6 @@ public class MapUtil {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
 		final boolean hasDaytimeDependency = bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
-		final List<Callable<Object>> mapTasks = new ArrayList<>();
 		for (DaytimeDependency daytimeDependency : hasDaytimeDependency
 				? EnumSet.of(DaytimeDependency.am, DaytimeDependency.pm)
 				: EnumSet.of(DaytimeDependency.fd)) {
@@ -278,6 +278,9 @@ public class MapUtil {
 						: map.filename(daytimeDependency, grayscale, "pdf"));
 		final Path tempDirectory = Files.createTempDirectory("mapyrus");
 		final TreeMap<String, Object> bindings = new TreeMap<String, Object>() {
+
+			private static final long serialVersionUID = 1L;
+
 			{
 				put("xmax", map.xmax);
 				put("xmin", map.xmin);
