@@ -235,17 +235,24 @@ public class SimpleHtmlUtil {
 
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("mapAM", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", GlobalVariables.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapPM", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
+					bulletin.put("mapPMjpg", GlobalVariables.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
+					bulletin.put("mapPMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.webp");
 					bulletin.put("widthPM", "width=\"150\"");
 					bulletin.put("heightPMSmall", "height=\"50\"");
 					bulletin.put("fontSize", "");
 				} else {
-					bulletin.put("mapAM", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", GlobalVariables.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapPM", GlobalVariables.getServerImagesUrl() + "empty.png");
+					bulletin.put("mapAMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
+					bulletin.put("mapPMjpg", GlobalVariables.getServerImagesUrl() + "empty.png");
+					bulletin.put("mapPMwebp", GlobalVariables.getServerImagesUrl() + "empty.webp");
 					bulletin.put("widthPM", "width=\"0\"");
 					bulletin.put("heightPMSmall", "style=\"height: 0; margin: 0\"");
 					bulletin.put("fontSize", "style=\"font-size: 0\"");

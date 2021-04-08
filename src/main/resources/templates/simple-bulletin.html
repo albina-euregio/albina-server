@@ -145,7 +145,10 @@ section:after {
 		<p>
 			<p>
 				${bulletin.am}
-				<img style="margin-right: 10px;" src="${bulletin.mapAM}"/><br>
+				<picture>
+					<source type="image/webp" srcset="${bulletin.mapAMwebp}">
+					<img style="margin-right: 10px;" src="${bulletin.mapAMjpg}">
+				</picture><br>
 				${bulletin.forenoon.text.dangerLevel}
 				<table>
 					<tr>
@@ -353,7 +356,10 @@ section:after {
 			</p>
 			<p ${bulletin.heightPMSmall}>
 				${bulletin.pm}
-				<img style="margin-right: 10px;" src="${bulletin.mapPM}"/><br>
+				<picture>
+					<source type="image/webp" srcset="${bulletin.mapPMwebp}">
+					<img style="margin-right: 10px;" src="${bulletin.mapPMjpg}">
+				</picture><br>
 				${bulletin.afternoon.text.dangerLevel}
 				<table ${bulletin.fontSize}>
 					<tr>
