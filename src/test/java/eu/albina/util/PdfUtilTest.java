@@ -28,8 +28,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Resources;
 
@@ -38,8 +36,6 @@ import eu.albina.model.enumerations.LanguageCode;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PdfUtilTest {
-
-	private static final Logger logger = LoggerFactory.getLogger(PdfUtilTest.class);
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;

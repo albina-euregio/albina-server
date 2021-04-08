@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import com.google.common.io.Resources;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.TelegramConfig;

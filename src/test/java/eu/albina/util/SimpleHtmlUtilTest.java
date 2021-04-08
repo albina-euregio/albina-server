@@ -26,8 +26,6 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Resources;
 
@@ -37,8 +35,6 @@ import freemarker.template.TemplateException;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SimpleHtmlUtilTest {
-
-	private static final Logger logger = LoggerFactory.getLogger(SimpleHtmlUtilTest.class);
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;

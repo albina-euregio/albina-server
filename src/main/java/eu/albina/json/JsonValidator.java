@@ -27,8 +27,6 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 import com.networknt.schema.ValidationMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Provide static helper methods to validate against different JSON schema
@@ -38,8 +36,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class JsonValidator {
-
-	private static final Logger logger = LoggerFactory.getLogger(JsonValidator.class);
 
 	/**
 	 * Validates a JSON string against the avalanche bulletin JSON schema.

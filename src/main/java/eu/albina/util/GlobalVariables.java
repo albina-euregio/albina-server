@@ -761,9 +761,9 @@ public class GlobalVariables {
 	public static String getAspectSymbolPath(int result, boolean grayscale) {
 		if (result > -1) {
 			if (grayscale)
-				return "aspects/grey/" + new Integer(result).toString() + ".png";
+				return "aspects/grey/" + Integer.valueOf(result).toString() + ".png";
 			else
-				return "aspects/color/" + new Integer(result).toString() + ".png";
+				return "aspects/color/" + Integer.valueOf(result).toString() + ".png";
 		} else {
 			if (grayscale)
 				return "aspects/grey/empty.png";

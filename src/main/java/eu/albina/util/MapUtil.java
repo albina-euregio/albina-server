@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -49,7 +48,6 @@ import com.vividsolutions.jts.operation.buffer.BufferOp;
 import com.vividsolutions.jts.operation.union.UnaryUnionOp;
 import com.vividsolutions.jts.precision.GeometryPrecisionReducer;
 
-import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -225,7 +223,6 @@ public class MapUtil {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
 		final boolean hasDaytimeDependency = bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
-		final List<Callable<Object>> mapTasks = new ArrayList<>();
 		for (DaytimeDependency daytimeDependency : hasDaytimeDependency
 				? EnumSet.of(DaytimeDependency.am, DaytimeDependency.pm)
 				: EnumSet.of(DaytimeDependency.fd)) {
