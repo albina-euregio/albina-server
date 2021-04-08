@@ -61,6 +61,9 @@ public class MapUtil {
 	private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
 	public static class AlbinaMapException extends RuntimeException {
+
+		private static final long serialVersionUID = 1L;
+
 		public AlbinaMapException(String message, Throwable cause) {
 			super(message, cause);
 		}
@@ -275,6 +278,9 @@ public class MapUtil {
 						: map.filename(daytimeDependency, grayscale, "pdf"));
 		final Path tempDirectory = Files.createTempDirectory("mapyrus");
 		final TreeMap<String, Object> bindings = new TreeMap<String, Object>() {
+
+			private static final long serialVersionUID = 1L;
+
 			{
 				put("xmax", map.xmax);
 				put("xmin", map.xmin);

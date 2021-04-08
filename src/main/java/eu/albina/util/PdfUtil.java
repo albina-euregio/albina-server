@@ -1236,9 +1236,4 @@ public class PdfUtil {
 	private String replaceLinebreaks(String text) {
 		return text.replaceAll("[ ]*<br\\/>[ ]*", "\n");
 	}
-
-	private String replaceLinks(String text) {
-		// TODO implement
-		return null;
-	}
 }

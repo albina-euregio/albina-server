@@ -486,7 +486,6 @@ public class AvalancheBulletinService {
 			AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
 
 			JSONObject jsonObject = new JSONObject();
-			// TODO return some meaningful path
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 					.entity(jsonObject.toString()).build();
 		} catch (AlbinaException e) {

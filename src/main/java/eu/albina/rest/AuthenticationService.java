@@ -110,7 +110,6 @@ public class AuthenticationService {
 		if (!UserController.getInstance().userExists(user.getEmail())) {
 			UserController.getInstance().createUser(user);
 			JSONObject jsonObject = new JSONObject();
-			// TODO return some meaningful path
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 					.entity(jsonObject.toString()).build();
 		} else {
