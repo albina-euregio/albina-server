@@ -1,0 +1,12 @@
+{
+  "i18n-ally.localesPaths": "src/main/resources/i18n",
+  "i18n-ally.regex.usageMatchAppend": [
+    "\\b(?:lang\\.getBundleString)\\(['\"`]({key})['\"`]",
+  ],
+  "i18n-ally.enabledParsers": [
+    "properties"
+  ],
+  "i18n-ally.keystyle": "flat",
+  "i18n-ally.keysInUse": [
+  ]
+}
