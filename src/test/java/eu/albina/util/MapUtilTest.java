@@ -35,8 +35,8 @@ public class MapUtilTest {
 	@Before
 	public void setUp() throws Exception {
 		GlobalVariables.loadConfigProperties();
-		GlobalVariables.setMapsPath("../albina_files_local");
-		GlobalVariables.setMapProductionUrl("../avalanche-warning-maps/");
+		GlobalVariables.mapsPath = "../albina_files_local";
+		GlobalVariables.mapProductionUrl = "../avalanche-warning-maps/";
 	}
 
 	@Test
