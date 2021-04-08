@@ -45,7 +45,7 @@ import io.swagger.annotations.Api;
 @Api(value = "/email")
 public class SubscriptionService {
 
-	private static Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
 
 	@Context
 	UriInfo uri;

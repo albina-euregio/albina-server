@@ -19,6 +19,7 @@ package eu.albina.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -42,7 +43,7 @@ public class ChatController {
 	// LoggerFactory.getLogger(ChatController.class);
 
 	private static ChatController instance = null;
-	private List<User> activeUsers;
+	private final List<User> activeUsers;
 
 	/**
 	 * Private constructor.
@@ -123,13 +124,7 @@ public class ChatController {
 	 *            the user do be added
 	 */
 	public synchronized void addActiveUser(User user) {
-		boolean found = false;
-		for (User u : activeUsers) {
-			if (u.getEmail().equals(user.getEmail())) {
-				found = true;
-				break;
-			}
-		}
+		boolean found = activeUsers.stream().anyMatch(u -> u.getEmail().equals(user.getEmail()));
 		if (!found)
 			activeUsers.add(user);
 	}
@@ -141,12 +136,6 @@ public class ChatController {
 	 *            the user to be deleted
 	 */
 	public void deleteActiveUser(User user) {
-		List<User> remove = new ArrayList<User>();
-		for (User u : activeUsers) {
-			if (u.getEmail().equals(user.getEmail()))
-				remove.add(u);
-		}
-		for (User u2 : remove)
-			activeUsers.remove(u2);
+		activeUsers.removeIf(u -> u.getEmail().equals(user.getEmail()));
 	}
 }

@@ -18,16 +18,17 @@ package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -41,24 +42,24 @@ import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.TelegramConfig;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.PushNotificationUtil;
 
 public class BlogController extends CommonProcessor {
-	private static Logger logger = LoggerFactory.getLogger(BlogController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
 
 	private static final int BLOGGER_SOCKET_TIMEOUT = 10000;
 	private static final int BLOGGER_CONNECTION_TIMEOUT = 10000;
 
 	private static BlogController instance = null;
 	protected final HashMap<String, DateTime> lastFetch = new HashMap<>();
-	private Executor executor;
+	private final Executor executor;
 
 	private BlogController() {
 		executor = Executor.newInstance(sslHttpClient());
 		DateTime date = new DateTime();
-		// REGION
-		lastFetch.put("Test", date);
-		for (String region : GlobalVariables.regionsEuregio)
-			lastFetch.put(region, date);
+		for (String blogId : GlobalVariables.blogIds.values()) {
+			lastFetch.put(blogId, date);
+		}
 	}
 
 	/**
@@ -82,24 +83,35 @@ public class BlogController extends CommonProcessor {
 
 	protected List<Blogger.Item> getBlogPosts(String region, LanguageCode lang) throws IOException {
 		String blogId = getBlogId(region, lang);
-		if (blogId != null) {
-			String uri = GlobalVariables.blogApiUrl + blogId + "/posts?key=" + GlobalVariables.googleApiKey
-					+ "&startDate="
-					+ URLEncoder.encode(lastFetch.get(region).toString(GlobalVariables.formatterDateTime), "UTF-8");
+		if (blogId == null) {
+			return Collections.emptyList();
+		}
+		try {
+			String uri = new URIBuilder(GlobalVariables.blogApiUrl + blogId + "/posts")
+				.addParameter("key", GlobalVariables.googleApiKey)
+				.addParameter("startDate", lastFetch.get(blogId).toString(GlobalVariables.formatterDateTime))
+				.addParameter("fetchBodies", Boolean.TRUE.toString())
+				.addParameter("fetchImages", Boolean.TRUE.toString())
+				.toString();
 			logger.debug("URI: " + uri);
 			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-			logger.debug("Start date for " + region + ": " + lastFetch.get(region).toString());
-			lastFetch.put(region, new DateTime());
+			logger.debug("Start date for {}: {}", blogId, lastFetch.get(blogId).toString());
+			lastFetch.put(blogId, new DateTime());
 			HttpResponse response = executor.execute(request).returnResponse();
-			logger.debug("New start date for " + region + ": " + lastFetch.get(region).toString());
+			logger.debug("New start date for {}: {}", blogId, lastFetch.get(blogId).toString());
 			if (response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
-				return new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
+				List<Blogger.Item> blogPosts = new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
+				logger.info("Found {} new blog posts for region={} lang={} url={}", blogPosts.size(), region, lang, uri);
+				return blogPosts;
+			} else {
+				throw new IOException("Failed to fetch blog posts: " + response);
 			}
+		} catch (URISyntaxException ex) {
+			throw new IllegalStateException(ex);
 		}
-		return Collections.emptyList();
 	}
 
 	protected String getBlogPost(String blogPostId, String region, LanguageCode lang) throws IOException {
@@ -119,53 +131,19 @@ public class BlogController extends CommonProcessor {
 		return null;
 	}
 
-	// LANG: only languages for which a blog exists
-	// REGION: only regions that have a blog
 	private String getBlogId(String region, LanguageCode lang) {
-		switch (region) {
-		case GlobalVariables.codeTyrol:
-			switch (lang) {
-			case de:
-				return GlobalVariables.blogIdTyrolDe;
-			case it:
-				return GlobalVariables.blogIdTyrolIt;
-			case en:
-				return GlobalVariables.blogIdTyrolEn;
-			default:
-				return null;
-			}
-		case GlobalVariables.codeSouthTyrol:
-			switch (lang) {
-			case de:
-				return GlobalVariables.blogIdSouthTyrolDe;
-			case it:
-				return GlobalVariables.blogIdSouthTyrolDe;
-			default:
-				return null;
-			}
-		case GlobalVariables.codeTrentino:
-			switch (lang) {
-			case it:
-				return GlobalVariables.blogIdTrentinoIt;
-			default:
-				return null;
-			}
-		case "Test":
-			return GlobalVariables.blogIdTest;
-		default:
-			return null;
-		}
+		return GlobalVariables.blogIds.get(region, lang);
 	}
 
 	public void sendNewBlogPosts(String region, LanguageCode lang) {
 		if (getBlogId(region, lang) != null) {
 			try {
 				List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
-				logger.info("Found " + blogPosts.size() + " new blog posts!");
 				for (Blogger.Item object : blogPosts) {
 					sendNewBlogPostToMessengerpeople(object, region, lang);
 					sendNewBlogPostToRapidmail(object, region, lang);
 					sendNewBlogPostToTelegramChannel(object, region, lang);
+					sendNewBlogPostToPushNotification(region, lang, object);
 				}
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
@@ -200,22 +178,14 @@ public class BlogController extends CommonProcessor {
 			TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 			Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
-			TelegramConfig config = null;
-			for (TelegramConfig telegramConfig : telegramConfigs) {
-				if (telegramConfig.getLanguageCode().equals(lang)) {
-					config = telegramConfig;
-					break;
-				}
-			}
-
-			if (config != null) {
-				if (attachmentUrl != null) {
-					ctTc.sendPhoto(config, message, attachmentUrl);
-				} else {
-					ctTc.sendMessage(config, message);
-				}
+			TelegramConfig config = telegramConfigs.stream()
+				.filter(telegramConfig -> Objects.equals(telegramConfig.getLanguageCode(), lang))
+				.findFirst()
+				.orElseThrow(() -> new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")"));
+			if (attachmentUrl != null) {
+				ctTc.sendPhoto(config, message, attachmentUrl);
 			} else {
-				throw new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")");
+				ctTc.sendMessage(config, message);
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + region + ", " + lang.toString(), e);
@@ -241,9 +211,20 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
+	private void sendNewBlogPostToPushNotification(String region, LanguageCode lang, Blogger.Item object) {
+		String message = getBlogMessage(object, region, lang);
+		String attachmentUrl = getAttachmentUrl(object);
+		String blogUrl = getBlogUrl(object, region, lang);
+		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
+		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl);
+	}
+
 	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang) {
-		return item.title + ": " + GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/"
-				+ item.id;
+		return item.title + ": " + getBlogUrl(item, region, lang);
+	}
+
+	private String getBlogUrl(Blogger.Item item, String region, LanguageCode lang) {
+		return GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/" + item.id;
 	}
 
 	private String getAttachmentUrl(Blogger.Item item) {
@@ -254,39 +235,7 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	// LANG: only languages which a blog exists for
-	// REGION: only regions that have a blog
 	private String getBlogUrl(String region, LanguageCode lang) {
-		switch (region) {
-		case GlobalVariables.codeTyrol:
-			switch (lang) {
-			case de:
-				return GlobalVariables.blogUrlTyrolDe;
-			case it:
-				return GlobalVariables.blogUrlTyrolIt;
-			case en:
-				return GlobalVariables.blogUrlTyrolEn;
-			default:
-				return null;
-			}
-		case GlobalVariables.codeSouthTyrol:
-			switch (lang) {
-			case de:
-				return GlobalVariables.blogUrlSouthTyrolDe;
-			case it:
-				return GlobalVariables.blogUrlSouthTyrolIt;
-			default:
-				return null;
-			}
-		case GlobalVariables.codeTrentino:
-			switch (lang) {
-			case it:
-				return GlobalVariables.blogUrlTrentinoIt;
-			default:
-				return null;
-			}
-		default:
-			return null;
-		}
+		return GlobalVariables.blogUrls.get(region, lang);
 	}
 }

@@ -38,7 +38,7 @@ import freemarker.template.TemplateException;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SimpleHtmlUtilTest {
 
-	private static Logger logger = LoggerFactory.getLogger(SimpleHtmlUtilTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(SimpleHtmlUtilTest.class);
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;

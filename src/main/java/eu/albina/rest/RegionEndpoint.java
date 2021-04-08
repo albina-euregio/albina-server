@@ -42,10 +42,10 @@ import eu.albina.util.RegionLockEncoder;
 @ServerEndpoint(value = "/region/{username}", decoders = RegionLockDecoder.class, encoders = RegionLockEncoder.class)
 public class RegionEndpoint {
 
-	private static Logger logger = LoggerFactory.getLogger(RegionEndpoint.class);
+	private static final Logger logger = LoggerFactory.getLogger(RegionEndpoint.class);
 
 	private Session session;
-	private static Set<RegionEndpoint> regionEndpoints = new CopyOnWriteArraySet<>();
+	private static final Set<RegionEndpoint> regionEndpoints = new CopyOnWriteArraySet<>();
 
 	@OnOpen
 	public void onOpen(Session session, @PathParam("username") String username) {

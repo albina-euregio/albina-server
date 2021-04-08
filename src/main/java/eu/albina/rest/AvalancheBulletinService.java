@@ -70,7 +70,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "/bulletins")
 public class AvalancheBulletinService {
 
-	private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
 
 	@Context
 	UriInfo uri;

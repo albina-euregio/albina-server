@@ -224,11 +224,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	}
 
 	public String getTerrainFeature(LanguageCode languageCode) {
-		for (Text text : terrainFeature) {
-			if (text.getLanguage() == languageCode)
-				return text.getText();
-		}
-		return null;
+		return terrainFeature.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
 	}
 
 	public void setTerrainFeature(Set<Text> terrainFeature) {

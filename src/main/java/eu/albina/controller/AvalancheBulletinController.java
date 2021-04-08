@@ -65,7 +65,7 @@ public class AvalancheBulletinController {
 	// LoggerFactory.getLogger(AvalancheBulletinController.class);
 
 	private static AvalancheBulletinController instance = null;
-	private List<BulletinLock> bulletinLocks;
+	private final List<BulletinLock> bulletinLocks;
 
 	/**
 	 * Private constructor.
@@ -487,11 +487,9 @@ public class AvalancheBulletinController {
 				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 		for (AvalancheBulletin bulletin : bulletins) {
-			for (String region : regions)
-				if (bulletin.affectsRegion(region)) {
-					results.add(bulletin);
-					break;
-				}
+			if (regions.stream().anyMatch(bulletin::affectsRegion)) {
+				results.add(bulletin);
+			}
 		}
 
 		for (AvalancheBulletin bulletin : results)

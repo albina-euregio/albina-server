@@ -243,11 +243,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public String getTerrainFeatureAbove(LanguageCode languageCode) {
-		for (Text text : terrainFeatureAbove) {
-			if (text.getLanguage() == languageCode)
-				return text.getText();
-		}
-		return null;
+		return terrainFeatureAbove.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
 	}
 
 	public void setTerrainFeatureAbove(Set<Text> terrainFeature) {
@@ -287,11 +283,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public String getTerrainFeatureBelow(LanguageCode languageCode) {
-		for (Text text : terrainFeatureBelow) {
-			if (text.getLanguage() == languageCode)
-				return text.getText();
-		}
-		return null;
+		return terrainFeatureBelow.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
 	}
 
 	public void setTerrainFeatureBelow(Set<Text> terrainFeature) {

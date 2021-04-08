@@ -11,7 +11,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class XMLResourceBundleControl extends ResourceBundle.Control {
-	private static String XML = "xml";
+	private static final String XML = "xml";
 
 	public List<String> getFormats(String baseName) {
 		return Collections.singletonList(XML);

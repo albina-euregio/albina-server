@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -210,20 +211,29 @@ public class SimpleHtmlUtil {
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", lang.getBundleString("avalanche-report.url") + "/bulletin/"
 				+ AlbinaUtil.getValidityDateString(bulletins));
-		link.put("previousDay", AlbinaUtil.getPreviousDayLink(bulletins, lang, region));
-		link.put("nextDay", AlbinaUtil.getNextDayLink(bulletins, lang, region));
+		String regionString;
+		String underscore;
+		if (region.equalsIgnoreCase(GlobalVariables.codeEuregio)) {
+			regionString = "";
+			underscore = "";
+		} else {
+			regionString = region;
+			underscore = "_";
+		}
+		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.days(-1)));
+		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.days(1)));
 		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_de.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "de.html");
 		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_it.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "it.html");
 		link.put("linkEn", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_en.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "en.html");
 		link.put("linkEs", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_es.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "es.html");
 		link.put("linkCa", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_ca.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ca.html");
 		link.put("linkAr", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region + "_ar.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ar.html");
 
 		root.put("link", link);
 

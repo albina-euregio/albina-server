@@ -32,6 +32,7 @@
 				<hibernate.show-sql>false</hibernate.show-sql>
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+				<albina.conf.git.version>SNAPSHOT</albina.conf.git.version>
 				<albina.conf.create-caaml>false</albina.conf.create-caaml>
 				<albina.conf.create-maps>false</albina.conf.create-maps>
 				<albina.conf.create-pdf>false</albina.conf.create-pdf>
@@ -44,8 +45,8 @@
 				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
 				<albina.conf.server-images-url-localhost>http://admin.avalanche.report/images/</albina.conf.server-images-url-localhost>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.maps-path>/mnt/albina_files_local</albina.conf.maps-path>
-				<albina.conf.map-production-url></albina.conf.map-production-url>
+				<albina.conf.maps-path>../albina_files_local</albina.conf.maps-path>
+				<albina.conf.map-production-url>../avalanche-warning-maps/</albina.conf.map-production-url>
 				<albina.conf.pdf-directory>/mnt/albina_files_local</albina.conf.pdf-directory>
 				<albina.conf.html-directory>/mnt/simple_local</albina.conf.html-directory>
 				<albina.conf.publish-at-5-pm>false</albina.conf.publish-at-5-pm>
@@ -78,6 +79,7 @@
 				<hibernate.show-sql>false</hibernate.show-sql>
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina_dev/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina_dev/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
 				<albina.conf.create-caaml>true</albina.conf.create-caaml>
 				<albina.conf.create-maps>true</albina.conf.create-maps>
 				<albina.conf.create-pdf>true</albina.conf.create-pdf>
@@ -104,6 +106,8 @@
 				<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
 				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
 				<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
+				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
+				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix>DEV</albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
 				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
@@ -122,6 +126,7 @@
 				<hibernate.show-sql>false</hibernate.show-sql>
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
+				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
 				<albina.conf.create-caaml>true</albina.conf.create-caaml>
 				<albina.conf.create-maps>true</albina.conf.create-maps>
 				<albina.conf.create-pdf>true</albina.conf.create-pdf>
@@ -148,6 +153,8 @@
 				<albina.conf.publish-blogs-south-tyrol>true</albina.conf.publish-blogs-south-tyrol>
 				<albina.conf.publish-blogs-trentino>true</albina.conf.publish-blogs-trentino>
 				<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
+				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
+				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix></albina.log.prefix>
 				<albina.log.level>INFO</albina.log.level>
 				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
@@ -278,9 +285,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.fge</groupId>
+			<groupId>com.networknt</groupId>
 			<artifactId>json-schema-validator</artifactId>
-			<version>2.2.6</version>
+			<version>1.0.48</version>
 		</dependency>
 
 		<!-- logging -->
@@ -336,7 +343,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.12</version>
+			<version>8.0.23</version>
 		</dependency>
 
 		<dependency>
@@ -350,6 +357,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.6.9</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -445,10 +458,33 @@
 			<version>1.802</version>
 		</dependency>
 
+		<!-- web-push -->
 		<dependency>
 			<groupId>nl.martijndwars</groupId>
 			<artifactId>web-push</artifactId>
 			<version>5.1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpasyncclient</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.asynchttpclient</groupId>
+					<artifactId>async-http-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.beust</groupId>
+					<artifactId>jcommander</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.68</version>
+			<!-- https://github.com/wultra/powerauth-server/blob/master/docs/Installing-Bouncy-Castle.md -->
+			<!-- /opt/tomcat/lib/bcprov-jdk15on-1.68.jar -->
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
@@ -492,7 +528,7 @@
 				<version>2.2</version>
 				<configuration>
 					<url>https://admin.avalanche.report/manager/text</url>
-					<path>${env.TOMCAT_PATH}##${env.GIT_VERSION}</path>
+					<path>${env.TOMCAT_PATH}</path>
 					<username>${env.TOMCAT_USERNAME}</username>
 					<password>${env.TOMCAT_PASSWORD}</password>
 					<update>true</update>

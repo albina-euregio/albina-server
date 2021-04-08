@@ -16,15 +16,14 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
+
 public enum NaturalAvalancheReleaseProbability {
 	one, two, three, four;
 
 	public static NaturalAvalancheReleaseProbability fromString(String text) {
 		if (text != null) {
-			for (NaturalAvalancheReleaseProbability type : NaturalAvalancheReleaseProbability.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(NaturalAvalancheReleaseProbability.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

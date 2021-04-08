@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -38,12 +39,14 @@ public interface PushSubscriptionController {
 		});
 	}
 
-	static List<PushSubscription> get(LanguageCode lang) throws HibernateException {
+	static List<PushSubscription> get(LanguageCode lang, Collection<String> regions) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<PushSubscription> select = criteriaBuilder.createQuery(PushSubscription.class);
 			Root<PushSubscription> root = select.from(PushSubscription.class);
-			select.where(criteriaBuilder.equal(root.get("language"), lang));
+			select.where(
+				criteriaBuilder.equal(root.get("language"), lang),
+				root.get("region").in(regions));
 			return entityManager.createQuery(select).getResultList();
 		});
 	}
@@ -64,7 +67,7 @@ public interface PushSubscriptionController {
 	static void incrementFailedCount(PushSubscription subscription) throws HibernateException {
 		subscription.setFailedCount(subscription.getFailedCount() + 1);
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			entityManager.persist(subscription);
+			entityManager.merge(subscription);
 			return null;
 		});
 	}

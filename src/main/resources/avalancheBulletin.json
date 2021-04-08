@@ -210,7 +210,7 @@
 			"properties" : {
 				"artificialDangerRating" : { "$ref" : "#/definitions/dangerRating" },
 				"artificialAvalancheSize" : { "$ref" : "#/definitions/avalancheSize" },
-				"artificialAvalancheReleaseProbability" : { "$ref" : "#/definitions/avalancheReleaseProbability" },
+				"artificialAvalancheReleaseProbability" : { "$ref" : "#/definitions/artificialAvalancheReleaseProbability" },
 				"artificialHazardSiteDistribution" : { "$ref" : "#/definitions/hazardSiteDistribution" },
 				"naturalDangerRating" : { "$ref" : "#/definitions/dangerRating" },
 				"naturalAvalancheReleaseProbability" : { "$ref" : "#/definitions/naturalAvalancheReleaseProbability" },

@@ -39,10 +39,10 @@ import eu.albina.util.BulletinUpdateEncoder;
 @ServerEndpoint(value = "/update/{username}", decoders = BulletinUpdateDecoder.class, encoders = BulletinUpdateEncoder.class)
 public class AvalancheBulletinUpdateEndpoint {
 
-	private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinUpdateEndpoint.class);
+	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinUpdateEndpoint.class);
 
 	private Session session;
-	private static Set<AvalancheBulletinUpdateEndpoint> updateEndpoints = new CopyOnWriteArraySet<>();
+	private static final Set<AvalancheBulletinUpdateEndpoint> updateEndpoints = new CopyOnWriteArraySet<>();
 
 	@OnOpen
 	public void onOpen(Session session, @PathParam("username") String username) {

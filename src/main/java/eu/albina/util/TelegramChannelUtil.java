@@ -45,19 +45,13 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl) {
 		TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 		for (String region : regions) {
 			try {
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 				Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
-				TelegramConfig config = null;
-				for (TelegramConfig telegramConfig : telegramConfigs) {
-					if (telegramConfig.getLanguageCode().equals(lang)) {
-						config = telegramConfig;
-						break;
-					}
-				}
+				TelegramConfig config = telegramConfigs.stream().filter(telegramConfig -> telegramConfig.getLanguageCode().equals(lang)).findFirst().orElse(null);
 
 				if (config != null) {
 					logger.info("Publishing report on telegram channel for "

@@ -41,7 +41,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "/statistics")
 public class StatisticsService {
 
-	private static Logger logger = LoggerFactory.getLogger(StatisticsService.class);
+	private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);
 
 	@Context
 	UriInfo uri;

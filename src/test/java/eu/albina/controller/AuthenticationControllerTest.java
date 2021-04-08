@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
@@ -24,10 +25,16 @@ import org.slf4j.LoggerFactory;
 
 public class AuthenticationControllerTest {
 
-	private static Logger logger = LoggerFactory.getLogger(AuthenticationControllerTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationControllerTest.class);
 
 	@Before
 	public void setUp() throws Exception {
+	}
+
+	@Test
+	public void testAccessToken() {
+		String token = AuthenticationController.getInstance().issueAccessToken("foobar");
+		Assert.assertNotNull(token);
 	}
 
 	@Test

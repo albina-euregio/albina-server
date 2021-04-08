@@ -52,15 +52,15 @@ import eu.albina.model.enumerations.LanguageCode;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UtilTest {
 
-	private static Logger logger = LoggerFactory.getLogger(UtilTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(UtilTest.class);
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;
 
-	private String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
-	private List<String> names = new ArrayList<String>();
-	private List<String> passwords = new ArrayList<String>();
-	private List<String> recipients = new ArrayList<String>();
+	private final String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
+	private final List<String> names = new ArrayList<String>();
+	private final List<String> passwords = new ArrayList<String>();
+	private final List<String> recipients = new ArrayList<String>();
 
 	@Before
 	public void setUp() throws IOException {
@@ -150,12 +150,6 @@ public class UtilTest {
 	@After
 	public void shutDown() {
 		// HibernateUtil.getInstance().shutDown();
-	}
-
-	@Ignore
-	@Test
-	public void createMaps() throws Exception {
-		MapUtil.createDangerRatingMaps(bulletins);
 	}
 
 	@Ignore

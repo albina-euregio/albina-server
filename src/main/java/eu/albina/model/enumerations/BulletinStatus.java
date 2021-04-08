@@ -16,15 +16,14 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
+
 public enum BulletinStatus {
 	republished, resubmitted, updated, published, submitted, draft, missing;
 
 	public static BulletinStatus fromString(String text) {
 		if (text != null) {
-			for (BulletinStatus type : BulletinStatus.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(BulletinStatus.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

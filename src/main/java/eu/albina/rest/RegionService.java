@@ -56,7 +56,7 @@ import io.swagger.annotations.Api;
 @Api(value = "/regions")
 public class RegionService {
 
-	private static Logger logger = LoggerFactory.getLogger(RegionService.class);
+	private static final Logger logger = LoggerFactory.getLogger(RegionService.class);
 
 	@Context
 	UriInfo uri;

@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "/chat")
 public class ChatService {
 
-	private static Logger logger = LoggerFactory.getLogger(ChatService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ChatService.class);
 
 	@Context
 	UriInfo uri;

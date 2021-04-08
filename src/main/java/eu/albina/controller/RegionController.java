@@ -46,7 +46,7 @@ public class RegionController {
 	// LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
-	private List<RegionLock> regionLocks;
+	private final List<RegionLock> regionLocks;
 
 	/**
 	 * Private constructor.

@@ -16,12 +16,12 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Table;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -47,6 +47,8 @@ import eu.albina.model.enumerations.Tendency;
 public class GlobalVariables {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalVariables.class);
+
+	public static String version;
 
 	/*---- Defined in configuration file -----*/
 	private static boolean createMaps = false;
@@ -81,7 +83,7 @@ public class GlobalVariables {
 	public static String avalancheReportBulletinUrl = "/bulletin/";
 	public static String avalancheReportSimpleUrl = "/simple/";
 
-	private static String serverMainUrl = "https://avalanche.report";
+	private static final String serverMainUrl = "https://avalanche.report";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
@@ -92,19 +94,27 @@ public class GlobalVariables {
 
 	public static String blogApiUrl = "https://www.googleapis.com/blogger/v3/blogs/";
 	public static String googleApiKey = "AIzaSyBN0GUcRlTfoVnarVFVpA1hUEnDcDjuXQY";
-	public static String blogIdTyrolDe = "7062477220886068374";
-	public static String blogIdTyrolIt = "6964779683196470218";
-	public static String blogIdTyrolEn = "2617650030094227041";
-	public static String blogIdSouthTyrolDe = "1263754381945501754";
-	public static String blogIdSouthTyrolIt = "8922564068473612459";
-	public static String blogIdTrentinoIt = "232334535081247038";
-	public static String blogIdTest = "7136072879615998197";
-	public static String blogUrlTyrolDe = "lawinenwarndienst.blogspot.com";
-	public static String blogUrlTyrolIt = "servizio-valanghe-tirolo.blogspot.com";
-	public static String blogUrlTyrolEn = "avalanche-warning-service-tirol.blogspot.com";
-	public static String blogUrlSouthTyrolDe = "lawinensuedtirol.blogspot.com";
-	public static String blogUrlSouthTyrolIt = "valanghealtoadige.blogspot.com";
-	public static String blogUrlTrentinoIt = "trentinovalanghe.blogspot.com";
+	// LANG: only languages for which a blog exists
+	// REGION: only regions that have a blog
+	public static final Table<String, LanguageCode, String> blogIds = ImmutableTable.<String, LanguageCode, String>builder()
+		.put(GlobalVariables.codeTyrol, LanguageCode.de, "7062477220886068374")
+		.put(GlobalVariables.codeTyrol, LanguageCode.it, "6964779683196470218")
+		.put(GlobalVariables.codeTyrol, LanguageCode.en, "2617650030094227041")
+		.put(GlobalVariables.codeSouthTyrol, LanguageCode.de, "1263754381945501754")
+		.put(GlobalVariables.codeSouthTyrol, LanguageCode.it, "8922564068473612459")
+		.put(GlobalVariables.codeTrentino, LanguageCode.it, "232334535081247038")
+		.put("Test", LanguageCode.en, "7136072879615998197")
+		.build();
+	// LANG: only languages for which a blog exists
+	// REGION: only regions that have a blog
+	public static final Table<String, LanguageCode, String> blogUrls = ImmutableTable.<String, LanguageCode, String>builder()
+		.put(GlobalVariables.codeTyrol, LanguageCode.de, "lawinenwarndienst.blogspot.com")
+		.put(GlobalVariables.codeTyrol, LanguageCode.it, "servizio-valanghe-tirolo.blogspot.com")
+		.put(GlobalVariables.codeTyrol, LanguageCode.en, "avalanche-warning-service-tirol.blogspot.com")
+		.put(GlobalVariables.codeSouthTyrol, LanguageCode.de, "lawinensuedtirol.blogspot.com")
+		.put(GlobalVariables.codeSouthTyrol, LanguageCode.it, "valanghealtoadige.blogspot.com")
+		.put(GlobalVariables.codeTrentino, LanguageCode.it, "trentinovalanghe.blogspot.com")
+		.build();
 
 	// TODO shift this to social media config
 	public static int targetingTyrolDe = 17519;
@@ -199,8 +209,8 @@ public class GlobalVariables {
 
 	public static String avalancheReportUsername = "info@avalanche.report";
 
-	public static String tokenEncodingSecret = new BigInteger(512, new SecureRandom()).toString(36);
-	public static String tokenEncodingIssuer = "albina";
+	public static final String tokenEncodingIssuer = "albina";
+
 	public static long accessTokenExpirationDuration = 1000 * 60 * 60 * 24;
 	public static long refreshTokenExpirationDuration = 1000 * 60 * 60 * 24 * 7;
 	public static long confirmationTokenExpirationDuration = 1000 * 60 * 60 * 24 * 3;
@@ -209,7 +219,7 @@ public class GlobalVariables {
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = CaamlVersion.V5.schemaLocation();
 
-	private static String emailEncoding = "UTF-8";
+	private static final String emailEncoding = "UTF-8";
 
 	public static String notAvailableString = "N/A";
 
@@ -543,6 +553,8 @@ public class GlobalVariables {
 		Configuration config;
 		try {
 			config = configs.properties(propertiesFilePath);
+			if (config.containsKey("gitVersion"))
+				version = config.getString("gitVersion");
 			if (config.containsKey("localImagesPath"))
 				localImagesPath = config.getString("localImagesPath");
 			if (config.containsKey("localFontsPath"))

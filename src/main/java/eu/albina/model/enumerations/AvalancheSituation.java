@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -34,10 +35,7 @@ public enum AvalancheSituation {
 		if (text != null) {
 			if (text.equalsIgnoreCase("weak_persistent_layer"))
 				return persistent_weak_layers;
-			for (AvalancheSituation type : AvalancheSituation.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(AvalancheSituation.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

@@ -55,7 +55,7 @@ import eu.albina.util.XmlUtil;
  */
 public class PublicationController {
 
-	private static Logger logger = LoggerFactory.getLogger(PublicationController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PublicationController.class);
 
 	private static PublicationController instance = null;
 
@@ -489,7 +489,7 @@ public class PublicationController {
 		logger.info("Map production started");
 
 		if (!bulletins.isEmpty()) {
-			MapUtil.createDangerRatingMaps(bulletins);
+			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions());
 			logger.info("Map production finished");
 		}
 	}
@@ -633,7 +633,9 @@ public class PublicationController {
 	private void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		try {
 			logger.info("Push notifications triggered");
-			PushNotificationUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
+			new PushNotificationUtil().sendBulletinNewsletters(bulletins, regions, update);
+		} catch (Exception e) {
+			logger.error("Error sending push notifications", e);
 		} finally {
 			logger.info("Push notifications finished");
 		}

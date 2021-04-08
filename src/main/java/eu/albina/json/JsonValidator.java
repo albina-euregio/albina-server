@@ -17,22 +17,18 @@
 package eu.albina.json;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
-import java.util.Iterator;
+import java.util.Set;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersion;
+import com.networknt.schema.ValidationMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.github.fge.jackson.JsonLoader;
-import com.github.fge.jsonschema.core.exceptions.ProcessingException;
-import com.github.fge.jsonschema.core.report.ProcessingMessage;
-import com.github.fge.jsonschema.core.report.ProcessingReport;
-import com.github.fge.jsonschema.main.JsonSchema;
-import com.github.fge.jsonschema.main.JsonSchemaFactory;
 
 /**
  * Provide static helper methods to validate against different JSON schema
@@ -43,7 +39,7 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
  */
 public class JsonValidator {
 
-	private static Logger logger = LoggerFactory.getLogger(JsonValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(JsonValidator.class);
 
 	/**
 	 * Validates a JSON string against the avalanche bulletin JSON schema.
@@ -53,7 +49,7 @@ public class JsonValidator {
 	 * @return Returns a JSON object containing the error messages (or empty for
 	 *         success).
 	 */
-	public static JSONObject validateAvalancheBulletin(String avalancheBulletin) {
+	public static Set<ValidationMessage> validateAvalancheBulletin(String avalancheBulletin) {
 		return validate(avalancheBulletin, Resources.getResource("avalancheBulletin.json"));
 	}
 
@@ -65,7 +61,7 @@ public class JsonValidator {
 	 * @return Returns a JSON object containing the error messages (or empty for
 	 *         success).
 	 */
-	public static JSONObject validateAvalancheIncident(String avalancheIncident) {
+	public static Set<ValidationMessage> validateAvalancheIncident(String avalancheIncident) {
 		return validate(avalancheIncident, Resources.getResource("avalancheIncident.json"));
 	}
 
@@ -77,7 +73,7 @@ public class JsonValidator {
 	 * @return Returns a JSON object containing the error messages (or empty for
 	 *         success).
 	 */
-	public static JSONObject validateSnowProfile(String snowProfile) {
+	public static Set<ValidationMessage> validateSnowProfile(String snowProfile) {
 		return validate(snowProfile, Resources.getResource("snowProfile.json"));
 	}
 
@@ -89,7 +85,7 @@ public class JsonValidator {
 	 * @return Returns a JSON object containing the error messages (or empty for
 	 *         success).
 	 */
-	public static JSONObject validateNews(String news) {
+	public static Set<ValidationMessage> validateNews(String news) {
 		return validate(news, Resources.getResource("news.json"));
 	}
 
@@ -104,33 +100,13 @@ public class JsonValidator {
 	 * @return Returns a JSON object containing the error messages (or empty for
 	 *         success).
 	 */
-	private static JSONObject validate(String jsonData, URL jsonSchema) {
-		JSONObject result = new JSONObject();
-		ProcessingReport report = null;
+	private static Set<ValidationMessage> validate(String jsonData, URL jsonSchema) {
 		try {
-			logger.debug("Applying schema: @<@<" + jsonSchema + ">@>@ to data: #<#<" + jsonData + ">#>#");
-			JsonNode schemaNode = JsonLoader.fromURL(jsonSchema);
-			JsonNode data = JsonLoader.fromString(jsonData);
-			JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
-			JsonSchema schema = factory.getJsonSchema(schemaNode);
-			report = schema.validate(data);
-
-			if (report != null && !report.isSuccess()) {
-				JSONArray errors = new JSONArray();
-				Iterator<ProcessingMessage> iter = report.iterator();
-				while (iter.hasNext()) {
-					ProcessingMessage pm = iter.next();
-					errors.put(pm.getMessage());
-					logger.error("Processing Message: " + pm.getMessage());
-				}
-				result.append("errors", errors);
-			}
-		} catch (IOException | ProcessingException ex) {
-			result.put("message", ex.getMessage());
-			logger.error(ex.getMessage(), ex);
-			return result;
+			JsonSchemaFactory jsonSchemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
+			JsonSchema jsonSchema1 = jsonSchemaFactory.getSchema(jsonSchema.openStream());
+			return jsonSchema1.validate(new ObjectMapper().readTree(jsonData));
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
 		}
-
-		return result;
 	}
 }

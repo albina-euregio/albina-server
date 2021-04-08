@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.util.Arrays;
+
 /**
  * The enum contains the ISO 3166-1 alpha-2 codes for all countries.
  *
@@ -27,10 +29,7 @@ public enum CountryCode {
 
 	public static CountryCode fromString(String text) {
 		if (text != null) {
-			for (CountryCode type : CountryCode.values()) {
-				if (text.equalsIgnoreCase(type.toString()))
-					return type;
-			}
+			return Arrays.stream(CountryCode.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}

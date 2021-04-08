@@ -50,7 +50,7 @@ import eu.albina.model.socialmedia.Shipment;
 import eu.albina.util.GlobalVariables;
 
 public class MessengerPeopleProcessorController extends CommonProcessor {
-	private static Logger logger = LoggerFactory.getLogger(MessengerPeopleProcessorController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MessengerPeopleProcessorController.class);
 
 	private static MessengerPeopleProcessorController instance = null;
 

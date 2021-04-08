@@ -33,7 +33,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
+import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -168,26 +168,19 @@ public class AlbinaUtil {
 	public static String getFilenameDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		DateTime date = getDate(bulletins);
 		if (date != null)
-			return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd")) + "_" + lang.toString();
+			return date.toLocalDate() + "_" + lang.toString();
 		else
 			return "_" + lang.toString();
 	}
 
 	public static String getValidityDateString(List<AvalancheBulletin> bulletins) {
-		DateTime date = getValidityDate(bulletins);
-		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+		return getValidityDateString(bulletins, Period.ZERO);
 	}
 
-	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins) {
+	public static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset) {
 		DateTime date = getValidityDate(bulletins);
-		date = date.minusDays(1);
-		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
-	}
-
-	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins) {
-		DateTime date = getValidityDate(bulletins);
-		date = date.plusDays(1);
-		return date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+		date = date.plus(offset);
+		return date.toLocalDate().toString();
 	}
 
 	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
@@ -209,27 +202,16 @@ public class AlbinaUtil {
 		return date;
 	}
 
-	public static String getPreviousDayLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
+	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, Period offset) {
 		if (region != null && !region.isEmpty())
 			return lang.getBundleString("avalanche-report.url") + "/"
 					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
-					+ AlbinaUtil.getPreviousValidityDateString(bulletins) + "/" + region + "_" + lang.toString()
+					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region + "_" + lang.toString()
 					+ ".html";
 		else
 			return lang.getBundleString("avalanche-report.url") + "/"
 					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
-					+ AlbinaUtil.getPreviousValidityDateString(bulletins) + "/" + lang.toString() + ".html";
-	}
-
-	public static String getNextDayLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
-		if (region != null && !region.isEmpty())
-			return lang.getBundleString("avalanche-report.url") + "/"
-					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
-					+ AlbinaUtil.getNextValidityDateString(bulletins) + "/" + region + "_" + lang.toString() + ".html";
-		else
-			return lang.getBundleString("avalanche-report.url") + "/"
-					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
-					+ AlbinaUtil.getNextValidityDateString(bulletins) + "/" + lang.toString() + ".html";
+					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + lang.toString() + ".html";
 	}
 
 	public static String getRegionOverviewMapFilename(String region, boolean isAfternoon, String fileExtension) {
@@ -321,11 +303,7 @@ public class AlbinaUtil {
 	}
 
 	public static boolean hasDaytimeDependency(List<AvalancheBulletin> bulletins) {
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			if (avalancheBulletin.isHasDaytimeDependency())
-				return true;
-		}
-		return false;
+		return bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 	}
 
 	public static void setFilePermissions(String fileName) throws IOException {

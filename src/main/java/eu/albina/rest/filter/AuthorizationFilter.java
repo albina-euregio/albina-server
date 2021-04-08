@@ -43,7 +43,7 @@ import eu.albina.model.enumerations.Role;
 @Priority(Priorities.AUTHORIZATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
 
-	private static Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
 
 	@Context
 	private ResourceInfo resourceInfo;

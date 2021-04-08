@@ -43,7 +43,7 @@ public class PushNotificationService {
 	public Response subscribe(PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
 		PushSubscriptionController.create(subscription);
-		PushNotificationUtil.getInstance().sendWelcomePushMessage(subscription);
+		new PushNotificationUtil().sendWelcomePushMessage(subscription);
 		return Response.ok().build();
 	}
 

@@ -83,15 +83,17 @@ public class MapUtil {
 	 *
 	 * @param bulletins
 	 *            The bulletins to create the maps from.
+	 * @param regions
+	 *            The regions for the bulletin
 	 * @throws Exception
 	 *             an error occurred during map production
 	 */
-	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins) throws Exception {
+	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Regions regions) throws Exception {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());
 		try {
-			createMapyrusMaps(bulletins);
+			createMapyrusMaps(bulletins, regions);
 		} catch (Exception ex) {
 			logger.error("Failed to create mapyrus maps", ex);
 			throw ex;
@@ -207,7 +209,13 @@ public class MapUtil {
 		fd, am, pm
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) {
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions) {
+		try {
+			// load patched class to fix performance issue, see https://gitlab.com/albina-euregio/albina-server/-/issues/216
+			Class.forName("org.mapyrus.font.OpenTypeFont");
+		} catch (ClassNotFoundException e) {
+			throw new IllegalStateException(e);
+		}
 		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
 				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 		try {
@@ -224,8 +232,7 @@ public class MapUtil {
 			try {
 				final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
 				logger.info("Creating region file {}", regionFile);
-				createBulletinRegions(bulletins, daytimeDependency, regionFile,
-						RegionController.getInstance().getRegions());
+				createBulletinRegions(bulletins, daytimeDependency, regionFile, regions);
 			} catch (IOException | AlbinaException ex) {
 				throw new AlbinaMapException("Failed to create region file", ex);
 			}

@@ -151,9 +151,7 @@ public class Subscriber {
 
 	public boolean affectsRegion(String region) {
 		if (getRegions() != null)
-			for (String entry : getRegions())
-				if (entry.startsWith(region))
-					return true;
+			return getRegions().stream().anyMatch(entry -> entry.startsWith(region));
 		return false;
 	}
 }

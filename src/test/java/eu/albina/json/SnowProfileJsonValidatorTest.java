@@ -33,7 +33,7 @@ public class SnowProfileJsonValidatorTest {
 	public void testValidateSnowProfileJSONValid() throws IOException {
 		final URL resource = Resources.getResource("validSnowProfile.json");
 		final String validSnowProfileStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		assertEquals(0, JsonValidator.validateSnowProfile(validSnowProfileStringFromResource).length());
+		assertEquals(0, JsonValidator.validateSnowProfile(validSnowProfileStringFromResource).size());
 	}
 
 	@Ignore
@@ -41,7 +41,7 @@ public class SnowProfileJsonValidatorTest {
 	public void testValidateSnowProfileJSONInvalid() throws IOException {
 		final URL resource = Resources.getResource("invalidSnowProfile.json");
 		final String invalidSnowProfileStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		assertEquals(1, JsonValidator.validateSnowProfile(invalidSnowProfileStringFromResource).length());
+		assertEquals(1, JsonValidator.validateSnowProfile(invalidSnowProfileStringFromResource).size());
 	}
 
 }

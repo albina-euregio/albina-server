@@ -40,7 +40,7 @@ import eu.albina.model.enumerations.LanguageCode;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmailUtilTest {
 
-	private static Logger logger = LoggerFactory.getLogger(EmailUtilTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(EmailUtilTest.class);
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;

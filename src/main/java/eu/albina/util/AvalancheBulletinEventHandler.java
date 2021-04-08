@@ -46,9 +46,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEventHandler.class);
 
-	private List<AvalancheBulletin> bulletins;
-	private LanguageCode lang;
-	private boolean grayscale;
+	private final List<AvalancheBulletin> bulletins;
+	private final LanguageCode lang;
+	private final boolean grayscale;
 
 	public static final Color blueColor = new DeviceRgb(0, 172, 251);
 	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
