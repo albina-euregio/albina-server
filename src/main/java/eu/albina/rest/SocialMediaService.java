@@ -43,7 +43,6 @@ import org.apache.http.message.BasicHttpResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import eu.albina.controller.socialmedia.MessengerPeopleProcessorController;
 import eu.albina.controller.socialmedia.RapidMailProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.controller.socialmedia.ShipmentController;
@@ -177,44 +176,6 @@ public class SocialMediaService {
 		RegionConfiguration rc = ctRc.getRegionConfiguration(regionId);
 		BasicHttpResponse response = ctTw.createTweet(rc.getTwitterConfig(), language, status, previousId);
 		return Response.status(response.getStatusLine().getStatusCode()).entity(response.getEntity().getContent())
-				.header(response.getEntity().getContentType().getName(),
-						response.getEntity().getContentType().getValue())
-				.build();
-	}
-
-	@POST
-	@Path("/messenger-people/send-message/{region-id}/{language}")
-	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendMessengerPeople(@PathParam("region-id") @ApiParam("Region id") String regionId,
-			@PathParam("language") @ApiParam("Language id") String language,
-			@ApiParam("Send message content") @QueryParam("message") String message,
-			@ApiParam("Send message content") @QueryParam("attachment") String attachmentUrl)
-			throws IOException, AlbinaException {
-		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
-		RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(regionId);
-		HttpResponse response = ctMp.sendNewsLetter(rc.getMessengerPeopleConfig(), LanguageCode.fromString(language),
-				message, attachmentUrl);
-		return Response.status(response.getStatusLine().getStatusCode())
-				.entity(IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8))
-				.header(response.getEntity().getContentType().getName(),
-						response.getEntity().getContentType().getValue())
-				.build();
-	}
-
-	@GET
-	@Path("/messenger-people/stats-user/{region-id}")
-	@Secured({ Role.ADMIN })
-	@Produces(MediaType.WILDCARD)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getUserStats(@PathParam("region-id") @ApiParam("region-id") String regionId)
-			throws AlbinaException, IOException {
-		MessengerPeopleProcessorController ctMp = MessengerPeopleProcessorController.getInstance();
-		RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(regionId);
-		HttpResponse response = ctMp.getUsersStats(rc.getMessengerPeopleConfig());
-		return Response.status(response.getStatusLine().getStatusCode())
-				.entity(IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8))
 				.header(response.getEntity().getContentType().getName(),
 						response.getEntity().getContentType().getValue())
 				.build();

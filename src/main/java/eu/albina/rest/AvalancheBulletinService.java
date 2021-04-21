@@ -1021,44 +1021,6 @@ public class AvalancheBulletinService {
 
 	@POST
 	@Secured({ Role.ADMIN })
-	@Path("/publish/messengerpeople")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response triggerMessengerpeople(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
-			@Context SecurityContext securityContext) {
-		logger.debug("POST trigger messengerpeople for " + region + " [" + date + "]");
-
-		try {
-			if (region == null)
-				throw new AlbinaException("No region defined!");
-
-			List<String> regions = new ArrayList<String>();
-			regions.add(region);
-
-			DateTime startDate = null;
-
-			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
-			else
-				throw new AlbinaException("No date!");
-
-			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
-
-			Thread triggerMessengerpeopleThread = PublicationController.getInstance().triggerMessengerpeople(bulletins,
-					regions, false);
-			triggerMessengerpeopleThread.start();
-
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
-		} catch (AlbinaException e) {
-			logger.warn("Error triggering messengerpeople", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		}
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
 	@Path("/publish/telegram")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

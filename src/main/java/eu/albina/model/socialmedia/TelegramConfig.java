@@ -66,7 +66,7 @@ public class TelegramConfig implements Serializable {
 	@JoinColumn(name = "PROVIDER_ID")
 	private Provider provider;
 
-	@JsonIgnoreProperties(value = { "region", "messengerPeopleConfig", "twitterConfig", "rapidMailConfig",
+	@JsonIgnoreProperties(value = { "region", "twitterConfig", "rapidMailConfig",
 			"telegramConfigs", "shipments", "channels" }, allowSetters = true)
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(unique = true, name = "REGION_CONFIGURATION_ID")

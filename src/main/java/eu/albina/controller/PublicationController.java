@@ -39,7 +39,6 @@ import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
 import eu.albina.util.MapUtil;
-import eu.albina.util.MessengerPeopleUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.PushNotificationUtil;
 import eu.albina.util.SimpleHtmlUtil;
@@ -157,13 +156,6 @@ public class PublicationController {
 				sendEmailsThread.start();
 			}
 
-			// publish on social media
-			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToMessengerpeople()) {
-				Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, GlobalVariables.regionsEuregio,
-						false);
-				triggerMessengerpeopleThread.start();
-			}
-
 			// publish on telegram channel
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToTelegramChannel()) {
 				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.regionsEuregio,
@@ -265,12 +257,6 @@ public class PublicationController {
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isSendEmails()) {
 				Thread sendEmailsThread = sendEmails(bulletins, regions, true);
 				sendEmailsThread.start();
-			}
-
-			// publish on social media
-			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToMessengerpeople()) {
-				Thread triggerMessengerpeopleThread = triggerMessengerpeople(bulletins, regions, true);
-				triggerMessengerpeopleThread.start();
 			}
 
 			// publish on telegram channel
@@ -589,27 +575,6 @@ public class PublicationController {
 					logger.error("Error preparing emails", e);
 				} finally {
 					logger.info("Email production finished");
-				}
-			}
-		});
-	}
-
-	/**
-	 * Trigger the sending of the messages via messengerpeople.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the messages
-	 */
-	public Thread triggerMessengerpeople(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
-		return new Thread(new Runnable() {
-			public void run() {
-				try {
-					logger.info("Messengerpeople triggered");
-					MessengerPeopleUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
-				} catch (IOException | URISyntaxException e) {
-					logger.error("Error preparing messengerpeople", e);
-				} finally {
-					logger.info("Messengerpeople finished");
 				}
 			}
 		});

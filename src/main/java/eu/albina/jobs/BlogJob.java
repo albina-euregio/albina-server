@@ -27,7 +27,7 @@ import eu.albina.util.GlobalVariables;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
- * automatically publish blog posts per email and messengerpeople.
+ * automatically publish blog posts.
  *
  * @author Norbert Lanzanasto
  *
@@ -37,8 +37,7 @@ public class BlogJob implements org.quartz.Job {
 	private static final Logger logger = LoggerFactory.getLogger(BlogJob.class);
 
 	/**
-	 * Execute all necessary tasks to publish new blog posts per email and
-	 * messengerpeople.
+	 * Execute all necessary tasks to publish new blog posts.
 	 *
 	 * @param arg0
 	 */

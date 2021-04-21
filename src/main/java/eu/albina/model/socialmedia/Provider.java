@@ -67,10 +67,6 @@ public class Provider implements Serializable {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
-	private Set<MessengerPeopleConfig> messengerPeopleConfigs = new HashSet<>();
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
 	private Set<TwitterConfig> twitterConfigs = new HashSet<>();
 
 	public Long getId() {
@@ -167,31 +163,6 @@ public class Provider implements Serializable {
 
 	public void setRapidMailConfigs(Set<RapidMailConfig> rapidMailConfigs) {
 		this.rapidMailConfigs = rapidMailConfigs;
-	}
-
-	public Set<MessengerPeopleConfig> getMessengerPeopleConfigs() {
-		return messengerPeopleConfigs;
-	}
-
-	public Provider messengerPeopleConfigs(Set<MessengerPeopleConfig> messengerPeopleConfigs) {
-		this.messengerPeopleConfigs = messengerPeopleConfigs;
-		return this;
-	}
-
-	public Provider addMessengerPeopleConfig(MessengerPeopleConfig messengerPeopleConfig) {
-		this.messengerPeopleConfigs.add(messengerPeopleConfig);
-		messengerPeopleConfig.setProvider(this);
-		return this;
-	}
-
-	public Provider removeMessengerPeopleConfig(MessengerPeopleConfig messengerPeopleConfig) {
-		this.messengerPeopleConfigs.remove(messengerPeopleConfig);
-		messengerPeopleConfig.setProvider(null);
-		return this;
-	}
-
-	public void setMessengerPeopleConfigs(Set<MessengerPeopleConfig> messengerPeopleConfigs) {
-		this.messengerPeopleConfigs = messengerPeopleConfigs;
 	}
 
 	public Set<TwitterConfig> getTwitterConfigs() {

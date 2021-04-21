@@ -63,9 +63,6 @@ public class RegionConfiguration implements Serializable {
 	private Region region;
 
 	@OneToOne(mappedBy = "regionConfiguration")
-	private MessengerPeopleConfig messengerPeopleConfig;
-
-	@OneToOne(mappedBy = "regionConfiguration")
 	private TwitterConfig twitterConfig;
 
 	@OneToOne(mappedBy = "regionConfiguration")
@@ -102,19 +99,6 @@ public class RegionConfiguration implements Serializable {
 	public RegionConfiguration region(Region region) {
 		this.region = region;
 		return this;
-	}
-
-	public MessengerPeopleConfig getMessengerPeopleConfig() {
-		return messengerPeopleConfig;
-	}
-
-	public RegionConfiguration messengerPeopleConfig(MessengerPeopleConfig messengerPeopleConfig) {
-		this.messengerPeopleConfig = messengerPeopleConfig;
-		return this;
-	}
-
-	public void setMessengerPeopleConfig(MessengerPeopleConfig messengerPeopleConfig) {
-		this.messengerPeopleConfig = messengerPeopleConfig;
 	}
 
 	public TwitterConfig getTwitterConfig() {

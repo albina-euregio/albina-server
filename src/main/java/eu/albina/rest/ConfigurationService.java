@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import eu.albina.controller.socialmedia.MessengerPeopleProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.Role;
@@ -81,47 +80,5 @@ public class ConfigurationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getConfigurationParameters() {
 		return Response.ok(GlobalVariables.getConfigProperties().toString(), MediaType.APPLICATION_JSON).build();
-	}
-
-	@POST
-	@Path("/region")
-	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response setRegionConfiguration(String json) {
-		MessengerPeopleProcessorController ct = MessengerPeopleProcessorController.getInstance();
-		RegionConfigurationController rc = RegionConfigurationController.getInstance();
-		try {
-			RegionConfiguration regionConfiguration = ct.fromJson(json, RegionConfiguration.class);
-			rc.saveRegionConfiguration(regionConfiguration);
-			return Response.ok().build();
-		} catch (HibernateException | JSONException | IOException | AlbinaException e) {
-			logger.warn("Error subscribe", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
-		}
-
-	}
-
-	@GET
-	@Path("/region")
-	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getRegionConfiguration(@QueryParam("regionId") String regionId)
-			throws JsonProcessingException, AlbinaException {
-		MessengerPeopleProcessorController ct = MessengerPeopleProcessorController.getInstance();
-		RegionConfigurationController rcc = RegionConfigurationController.getInstance();
-		RegionConfiguration regionConfiguration = rcc.getRegionConfiguration(regionId);
-		return Response.ok(ct.toJson(regionConfiguration), MediaType.APPLICATION_JSON).build();
-	}
-
-	@GET
-	@Path("/channels")
-	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getChannels() throws AlbinaException, JsonProcessingException {
-		RegionConfigurationController ct = RegionConfigurationController.getInstance();
-		List<Channel> channelList = ct.getChannels();
-		return Response.ok(ct.toJson(channelList), MediaType.APPLICATION_JSON).build();
 	}
 }
