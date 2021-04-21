@@ -16,34 +16,20 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.io.IOException;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.hibernate.HibernateException;
-import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import eu.albina.controller.socialmedia.RegionConfigurationController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.Role;
-import eu.albina.model.socialmedia.Channel;
-import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
@@ -51,11 +37,6 @@ import io.swagger.annotations.Api;
 @Path("/configuration")
 @Api(value = "/configuration")
 public class ConfigurationService {
-
-	private static final Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
-
-	// private static Logger logger =
-	// LoggerFactory.getLogger(ConfigurationService.class);
 
 	@Context
 	UriInfo uri;

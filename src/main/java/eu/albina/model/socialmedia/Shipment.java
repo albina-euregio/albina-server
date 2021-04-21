@@ -74,7 +74,7 @@ public class Shipment implements Serializable {
 	private String response;
 
 	@ManyToOne
-	@JsonIgnoreProperties({ "shipments", "twitterConfig", "rapidMailConfig", "channels" })
+	@JsonIgnoreProperties({ "shipments", "rapidMailConfig", "channels" })
 	@JoinColumn(name = "REGION_ID")
 	private RegionConfiguration region;
 

@@ -63,9 +63,6 @@ public class RegionConfiguration implements Serializable {
 	private Region region;
 
 	@OneToOne(mappedBy = "regionConfiguration")
-	private TwitterConfig twitterConfig;
-
-	@OneToOne(mappedBy = "regionConfiguration")
 	private RapidMailConfig rapidMailConfig;
 
 	@OneToMany(mappedBy = "regionConfiguration", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -99,19 +96,6 @@ public class RegionConfiguration implements Serializable {
 	public RegionConfiguration region(Region region) {
 		this.region = region;
 		return this;
-	}
-
-	public TwitterConfig getTwitterConfig() {
-		return twitterConfig;
-	}
-
-	public RegionConfiguration twitterConfig(TwitterConfig twitterConfig) {
-		this.twitterConfig = twitterConfig;
-		return this;
-	}
-
-	public void setTwitterConfig(TwitterConfig twitterConfig) {
-		this.twitterConfig = twitterConfig;
 	}
 
 	public RapidMailConfig getRapidMailConfig() {

@@ -17,7 +17,6 @@
 package eu.albina.rest;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -37,18 +36,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
-import org.apache.http.message.BasicHttpResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import eu.albina.controller.socialmedia.RapidMailProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
 import eu.albina.controller.socialmedia.ShipmentController;
-import eu.albina.controller.socialmedia.TwitterProcessorController;
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
@@ -61,8 +56,6 @@ import io.swagger.annotations.ApiParam;
 @Path("/social-media")
 @Api(value = "/social-media")
 public class SocialMediaService {
-	// private static Logger logger =
-	// LoggerFactory.getLogger(SocialMediaService.class);
 
 	@Context
 	UriInfo uri;
@@ -155,26 +148,6 @@ public class SocialMediaService {
 		RegionConfiguration rc = ctRc.getRegionConfiguration(regionId);
 		RapidMailProcessorController ctRm = RapidMailProcessorController.getInstance();
 		HttpResponse response = ctRm.getRecipients(rc.getRapidMailConfig(), recipientListId);
-		return Response.status(response.getStatusLine().getStatusCode()).entity(response.getEntity().getContent())
-				.header(response.getEntity().getContentType().getName(),
-						response.getEntity().getContentType().getValue())
-				.build();
-	}
-
-	@POST
-	@Path("/twitter/send-message/{region-id}/{language}")
-	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.TEXT_HTML)
-	public Response sendTwitter(@PathParam("region-id") @ApiParam("Region id") String regionId,
-			@PathParam("language") @ApiParam("Language id") String language, @QueryParam("previous_id") Long previousId,
-			@ApiParam("Send message content") String status)
-			throws IOException, AlbinaException, IllegalAccessException {
-
-		TwitterProcessorController ctTw = TwitterProcessorController.getInstance();
-		RegionConfigurationController ctRc = RegionConfigurationController.getInstance();
-		RegionConfiguration rc = ctRc.getRegionConfiguration(regionId);
-		BasicHttpResponse response = ctTw.createTweet(rc.getTwitterConfig(), language, status, previousId);
 		return Response.status(response.getStatusLine().getStatusCode()).entity(response.getEntity().getContent())
 				.header(response.getEntity().getContentType().getName(),
 						response.getEntity().getContentType().getValue())

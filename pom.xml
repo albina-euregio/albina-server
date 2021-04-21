@@ -399,13 +399,6 @@
 			<version>1.9.3</version>
 		</dependency>
 
-		<!--  twitter  -->
-		<dependency>
-			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-stream</artifactId>
-			<version>4.0.7</version>
-		</dependency>
-
 		<!--  json  -->
 		<!--need 2.9.7 minimun to solve-->
 		<!--https://github.com/FasterXML/jackson-databind/commit/ca990655cf91c1061ffbc5afaabe42bb3333ba6a-->

@@ -150,38 +150,30 @@ insert into user_region (USER_EMAIL, USER_REGION) values ('lukas.rastner@provinz
 
 /* SOCIAL MEDIA */
 INSERT INTO ais.socialmedia_provider (ID,NAME) VALUES(1,'Rapid Mail');
-INSERT INTO ais.socialmedia_provider (ID,NAME) VALUES(2,'Twitter');
-INSERT INTO ais.socialmedia_provider (ID,NAME) VALUES(3,'Telegram');
+INSERT INTO ais.socialmedia_provider (ID,NAME) VALUES(2,'Telegram');
 INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(1,'Email',1);
-INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(2,'Twitter',2);
-INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(3,'TelegramChannel',3);
+INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(2,'TelegramChannel',3);
 
 INSERT INTO ais.socialmedia_region (ID,REGION_ID) VALUES(1,'IT-32-TN');
 INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(1, 1);
 INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(2, 1);
-INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(3, 1);
 INSERT INTO ais.socialmedia_rapid_mail_config (ID, PASSWORD, USERNAME, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(1, '093e1d3d97fd98ff6eb7879f3d4f7594b6bb6307', 'edc268e5e1a9abb27400ff967f40bdf2e95967d1', 1,1);
-INSERT INTO ais.socialmedia_twitter_config (ID, ACCESS_KEY, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(1, 'r1_ak1', 'r1_as1', 'r1_ck1', 'r1_cs1', 2,1);
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('1', '', '@lawinenwarndienst_trentino', 'de', '3', '2');
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('2', '', '@servizio_valanghe_trentino', 'it', '3', '2');
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('3', '', '@avalanche_warning_service_trentino', 'en', '3', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('1', '', '@lawinenwarndienst_trentino', 'de', '2', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('2', '', '@servizio_valanghe_trentino', 'it', '2', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('3', '', '@avalanche_warning_service_trentino', 'en', '2', '2');
 
 INSERT INTO ais.socialmedia_region (ID,REGION_ID) VALUES(2,'AT-07');
 INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(1, 2);
 INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(2, 2);
-INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(3, 2);
 INSERT INTO ais.socialmedia_rapid_mail_config (ID, PASSWORD, USERNAME, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(2, '093e1d3d97fd98ff6eb7879f3d4f7594b6bb6307', 'edc268e5e1a9abb27400ff967f40bdf2e95967d1', 1,2);
-INSERT INTO ais.socialmedia_twitter_config (ID, ACCESS_KEY, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(2, 'r2_ak', 'r2_as', 'r2_ck', 'r2_cs1', 2,2);
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('1', '', '@lawinenwarndienst_tirol', 'de', '3', '2');
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('2', '', '@servizio_valanghe_tirolo', 'it', '3', '2');
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('3', '', '@avalanche_warning_service_tirol', 'en', '3', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('1', '', '@lawinenwarndienst_tirol', 'de', '2', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('2', '', '@servizio_valanghe_tirolo', 'it', '2', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('3', '', '@avalanche_warning_service_tirol', 'en', '2', '2');
 
 INSERT INTO ais.socialmedia_region (ID,REGION_ID) VALUES(3,'IT-32-BZ');
 INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(1, 3);
 INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(2, 3);
-INSERT INTO ais.socialmedia_channel_region (CHANNEL_ID, REGION_ID) VALUES(3, 3);
 INSERT INTO ais.socialmedia_rapid_mail_config (ID, PASSWORD, USERNAME, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(3, '093e1d3d97fd98ff6eb7879f3d4f7594b6bb6307', 'edc268e5e1a9abb27400ff967f40bdf2e95967d1', 1,3);
-INSERT INTO ais.socialmedia_twitter_config (ID, ACCESS_KEY, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES(3, 'r3_ak', 'r3_as', 'r3_ck', 'r3_cs1', 2,3);
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('1', '', '@lawinenwarndienst_südtirol', 'de', '3', '2');
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('2', '', '@servizio_valanghe_alto_adige', 'it', '3', '2');
-INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('3', '', '@aws_south_tyrol', 'en', '3', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('1', '', '@lawinenwarndienst_südtirol', 'de', '2', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('2', '', '@servizio_valanghe_alto_adige', 'it', '2', '2');
+INSERT INTO ais.socialmedia_telegram_config (ID, API_TOKEN, CHAT_ID, LANGUAGE_CODE, PROVIDER_ID, REGION_CONFIGURATION_ID) VALUES ('3', '', '@aws_south_tyrol', 'en', '2', '2');
