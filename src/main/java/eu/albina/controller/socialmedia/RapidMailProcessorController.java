@@ -23,7 +23,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -46,12 +45,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequestDestination;
-import eu.albina.model.rapidmail.mailings.PostMailingsResponse;
 import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponse;
 import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponseItem;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
 import eu.albina.model.socialmedia.RapidMailConfig;
-import eu.albina.model.socialmedia.Shipment;
 
 public class RapidMailProcessorController extends CommonProcessor {
 	private static final int RAPIDMAIL_SOCKET_TIMEOUT = 10000;
@@ -165,18 +162,9 @@ public class RapidMailProcessorController extends CommonProcessor {
 		HttpResponse response = executor.execute(request).returnResponse();
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
-			String body = response.getEntity() != null
-					? IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8)
-					: null;
-			ShipmentController.getInstance()
-					.saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, null));
 			return response;
 		}
-		String body = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
 		response.getEntity().getContent().reset();
-		PostMailingsResponse bodyObject = objectMapper.readValue(body, PostMailingsResponse.class);
-		ShipmentController.getInstance()
-				.saveShipment(createActivityRow(config, language, toJson(mailingsPost), body, "" + bodyObject.getId()));
 		return response;
 	}
 
@@ -190,13 +178,6 @@ public class RapidMailProcessorController extends CommonProcessor {
 				.map(RapidMailRecipientListResponseItem::getId).findFirst().orElseThrow(() -> new Exception(
 						"Invalid recipientList name '" + recipientName + "'. Please check configuration"));
 		return recipientId;
-	}
-
-	private Shipment createActivityRow(RapidMailConfig config, String language, String request, String response,
-			String idRm) {
-		return new Shipment().date(ZonedDateTime.now()).name(config.getRegionConfiguration().getRegion().getNameEn())
-				.language(language).idMp(null).idRm(idRm).idTw(null).request(request).response(response)
-				.region(config.getRegionConfiguration()).provider(config.getProvider());
 	}
 
 	private String getResponseContent(HttpResponse response) throws IOException {

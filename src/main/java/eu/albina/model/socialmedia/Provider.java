@@ -57,11 +57,6 @@ public class Provider implements Serializable {
 	private Set<Channel> channels = new HashSet<>();
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "provider")
-	@Transient
-	private Set<Shipment> shipments = new HashSet<>();
-
-	@JsonIgnore
 	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
 	private Set<RapidMailConfig> rapidMailConfigs = new HashSet<>();
 
@@ -109,31 +104,6 @@ public class Provider implements Serializable {
 
 	public void setChannels(Set<Channel> channels) {
 		this.channels = channels;
-	}
-
-	public Set<Shipment> getShipments() {
-		return shipments;
-	}
-
-	public Provider shipments(Set<Shipment> shipments) {
-		this.shipments = shipments;
-		return this;
-	}
-
-	public Provider addShipment(Shipment shipment) {
-		this.shipments.add(shipment);
-		shipment.setProvider(this);
-		return this;
-	}
-
-	public Provider removeShipment(Shipment shipment) {
-		this.shipments.remove(shipment);
-		shipment.setProvider(null);
-		return this;
-	}
-
-	public void setShipments(Set<Shipment> shipments) {
-		this.shipments = shipments;
 	}
 
 	public Set<RapidMailConfig> getRapidMailConfigs() {

@@ -17,7 +17,6 @@
 		<class>eu.albina.model.socialmedia.Provider</class>
 		<class>eu.albina.model.socialmedia.RapidMailConfig</class>
 		<class>eu.albina.model.socialmedia.RegionConfiguration</class>
-		<class>eu.albina.model.socialmedia.Shipment</class>
 
 		<properties>
 

@@ -21,7 +21,6 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -38,17 +37,13 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.http.HttpResponse;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import eu.albina.controller.socialmedia.RapidMailProcessorController;
 import eu.albina.controller.socialmedia.RegionConfigurationController;
-import eu.albina.controller.socialmedia.ShipmentController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.Role;
 import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
 import eu.albina.model.socialmedia.RegionConfiguration;
-import eu.albina.model.socialmedia.Shipment;
 import eu.albina.rest.filter.Secured;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -152,16 +147,6 @@ public class SocialMediaService {
 				.header(response.getEntity().getContentType().getName(),
 						response.getEntity().getContentType().getValue())
 				.build();
-	}
-
-	@GET
-	@Path("/shipments")
-	@Secured({ Role.ADMIN })
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getShipmentsList() throws AlbinaException, JsonProcessingException {
-		ShipmentController ctSp = ShipmentController.getInstance();
-		List<Shipment> shipmentsList = ShipmentController.getInstance().shipmentsList();
-		return Response.ok(ctSp.toJson(shipmentsList), MediaType.APPLICATION_JSON).build();
 	}
 
 	// --------------------------------------

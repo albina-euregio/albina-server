@@ -3,7 +3,6 @@ create table socialmedia_channel_region (REGION_ID bigint not null, CHANNEL_ID b
 create table socialmedia_provider (ID bigint not null auto_increment, NAME varchar(255), primary key (ID)) engine=InnoDB;
 create table socialmedia_rapid_mail_config (ID bigint not null auto_increment, PASSWORD varchar(255), USERNAME varchar(255), PROVIDER_ID bigint, REGION_CONFIGURATION_ID bigint, primary key (ID)) engine=InnoDB;
 create table socialmedia_region (ID bigint not null auto_increment, REGION_ID varchar(255), primary key (ID)) engine=InnoDB;
-create table socialmedia_shipment (id bigint not null auto_increment, REQUEST longtext, RESPONSE longtext, DATE datetime, ID_MP varchar(255), ID_RM varchar(255), ID_TW varchar(255), LANGUAGE varchar(255), NAME varchar(255), PROVIDER_ID bigint, REGION_ID bigint, primary key (id)) engine=InnoDB;
 alter table socialmedia_rapid_mail_config add constraint UK_9nrw6e7krov3rpbscrsgcb2f4 unique (REGION_CONFIGURATION_ID);
 alter table socialmedia_channel add constraint FKk91qceqhcsb647cvfqemq761u foreign key (PROVIDER_ID) references socialmedia_provider (ID);
 alter table socialmedia_channel_region add constraint FKloji4gp4hhwl44gu7gskff1we foreign key (CHANNEL_ID) references socialmedia_channel (ID);
@@ -11,8 +10,6 @@ alter table socialmedia_channel_region add constraint FK568w5848nw13cwulpgywgcg7
 alter table socialmedia_rapid_mail_config add constraint FKnn0je2nbyeuqg768wtitomuks foreign key (PROVIDER_ID) references socialmedia_provider (ID);
 alter table socialmedia_rapid_mail_config add constraint FK85jh34k3wrhfk7fivg9huu46s foreign key (REGION_CONFIGURATION_ID) references socialmedia_region (ID);
 alter table socialmedia_region add constraint FKo8thusqux8xfm0hf0ku7akr1 foreign key (REGION_ID) references regions (ID);
-alter table socialmedia_shipment add constraint FK16idaq3mka4lx7k7lr2rg2fex foreign key (PROVIDER_ID) references socialmedia_provider (ID);
-alter table socialmedia_shipment add constraint FKm7wkc3jjerlkk8qlh2atuj2cb foreign key (REGION_ID) references socialmedia_region (ID);
 
 INSERT INTO ais.socialmedia_provider (ID,NAME) VALUES(1,'Rapid Mail');
 INSERT INTO ais.socialmedia_channel (ID,NAME,PROVIDER_ID) VALUES(1,'Email',1);

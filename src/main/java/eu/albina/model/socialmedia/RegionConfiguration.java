@@ -68,11 +68,6 @@ public class RegionConfiguration implements Serializable {
 	@OneToMany(mappedBy = "regionConfiguration", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<TelegramConfig> telegramConfigs;
 
-	@OneToMany(mappedBy = "regionConfiguration")
-	@JsonIgnore
-	@Transient
-	private Set<Shipment> shipments = new HashSet<>();
-
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "socialmedia_channel_region", joinColumns = @JoinColumn(name = "REGION_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "CHANNEL_ID", referencedColumnName = "ID"))
 	private Set<Channel> channels = new HashSet<>();
@@ -122,31 +117,6 @@ public class RegionConfiguration implements Serializable {
 
 	public void setTelegramConfigs(Set<TelegramConfig> telegramConfigs) {
 		this.telegramConfigs = telegramConfigs;
-	}
-
-	public Set<Shipment> getShipments() {
-		return shipments;
-	}
-
-	public RegionConfiguration shipments(Set<Shipment> shipments) {
-		this.shipments = shipments;
-		return this;
-	}
-
-	public RegionConfiguration addShipment(Shipment shipment) {
-		this.shipments.add(shipment);
-		shipment.setRegion(this);
-		return this;
-	}
-
-	public RegionConfiguration removeShipment(Shipment shipment) {
-		this.shipments.remove(shipment);
-		shipment.setRegion(null);
-		return this;
-	}
-
-	public void setShipments(Set<Shipment> shipments) {
-		this.shipments = shipments;
 	}
 
 	public Set<Channel> getChannels() {
