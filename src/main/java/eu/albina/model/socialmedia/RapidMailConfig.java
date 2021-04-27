@@ -59,8 +59,8 @@ public class RapidMailConfig implements Serializable {
 	@JoinColumn(name = "PROVIDER_ID")
 	private Provider provider;
 
-	@JsonIgnoreProperties(value = { "region", "messengerPeopleConfig", "twitterConfig", "rapidMailConfig",
-			"telegramConfigs", "shipments", "channels" }, allowSetters = true)
+	@JsonIgnoreProperties(value = { "region", "rapidMailConfig",
+			"telegramConfigs", "channels" }, allowSetters = true)
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(unique = true, name = "REGION_CONFIGURATION_ID")
 	private RegionConfiguration regionConfiguration;

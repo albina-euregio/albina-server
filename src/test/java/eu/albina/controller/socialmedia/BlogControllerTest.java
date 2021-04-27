@@ -86,6 +86,5 @@ public class BlogControllerTest {
 				+ "}\n";
 
 		Blogger.Item item = new CommonProcessor().fromJson(blog, Blogger.Item.class);
-		BlogController.getInstance().sendNewBlogPostToMessengerpeople(item, "IT-32-BZ", LanguageCode.de);
 	}
 }

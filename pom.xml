@@ -38,7 +38,6 @@
 				<albina.conf.create-pdf>false</albina.conf.create-pdf>
 				<albina.conf.create-static-widget>false</albina.conf.create-static-widget>
 				<albina.conf.create-simple-html>false</albina.conf.create-simple-html>
-				<albina.conf.publish-to-messengerpeople>false</albina.conf.publish-to-messengerpeople>
 				<albina.conf.publish-to-telegram-channel>false</albina.conf.publish-to-telegram-channel>
 				<albina.conf.send-emails>false</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
@@ -85,7 +84,6 @@
 				<albina.conf.create-pdf>true</albina.conf.create-pdf>
 				<albina.conf.create-static-widget>true</albina.conf.create-static-widget>
 				<albina.conf.create-simple-html>true</albina.conf.create-simple-html>
-				<albina.conf.publish-to-messengerpeople>false</albina.conf.publish-to-messengerpeople>
 				<albina.conf.publish-to-telegram-channel>false</albina.conf.publish-to-telegram-channel>
 				<albina.conf.send-emails>false</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
@@ -132,7 +130,6 @@
 				<albina.conf.create-pdf>true</albina.conf.create-pdf>
 				<albina.conf.create-static-widget>true</albina.conf.create-static-widget>
 				<albina.conf.create-simple-html>true</albina.conf.create-simple-html>
-				<albina.conf.publish-to-messengerpeople>true</albina.conf.publish-to-messengerpeople>
 				<albina.conf.publish-to-telegram-channel>true</albina.conf.publish-to-telegram-channel>
 				<albina.conf.send-emails>true</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
@@ -207,7 +204,7 @@
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
-			<version>2.2.2</version>
+			<version>2.3.2</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>c3p0</artifactId>
@@ -394,19 +391,12 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-configuration2</artifactId>
-			<version>2.2</version>
+			<version>2.7</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>1.9.3</version>
-		</dependency>
-
-		<!--  twitter  -->
-		<dependency>
-			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-stream</artifactId>
-			<version>4.0.7</version>
+			<version>1.9.4</version>
 		</dependency>
 
 		<!--  json  -->

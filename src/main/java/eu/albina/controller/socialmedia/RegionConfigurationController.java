@@ -30,10 +30,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.socialmedia.Channel;
-import eu.albina.model.socialmedia.MessengerPeopleConfig;
 import eu.albina.model.socialmedia.RapidMailConfig;
 import eu.albina.model.socialmedia.RegionConfiguration;
-import eu.albina.model.socialmedia.TwitterConfig;
 import eu.albina.util.HibernateUtil;
 
 public class RegionConfigurationController extends CommonProcessor {
@@ -68,12 +66,6 @@ public class RegionConfigurationController extends CommonProcessor {
 				throw new AlbinaException("No configuration with ID: " + regionConfigurationId);
 			}
 			transaction.commit();
-			if (regionConfiguration.getMessengerPeopleConfig() == null) {
-				regionConfiguration.setMessengerPeopleConfig(new MessengerPeopleConfig());
-			}
-			if (regionConfiguration.getTwitterConfig() == null) {
-				regionConfiguration.setTwitterConfig(new TwitterConfig());
-			}
 			if (regionConfiguration.getRapidMailConfig() == null) {
 				regionConfiguration.setRapidMailConfig(new RapidMailConfig());
 			}
@@ -92,9 +84,7 @@ public class RegionConfigurationController extends CommonProcessor {
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			transaction.begin();
-			entityManager.merge(regionConfiguration.getMessengerPeopleConfig());
 			entityManager.merge(regionConfiguration.getRapidMailConfig());
-			entityManager.merge(regionConfiguration.getTwitterConfig());
 			entityManager.merge(regionConfiguration);
 			transaction.commit();
 			return regionConfiguration.getId();

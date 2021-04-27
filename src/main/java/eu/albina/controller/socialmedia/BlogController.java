@@ -140,7 +140,6 @@ public class BlogController extends CommonProcessor {
 			try {
 				List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
 				for (Blogger.Item object : blogPosts) {
-					sendNewBlogPostToMessengerpeople(object, region, lang);
 					sendNewBlogPostToRapidmail(object, region, lang);
 					sendNewBlogPostToTelegramChannel(object, region, lang);
 					sendNewBlogPostToPushNotification(region, lang, object);
@@ -148,23 +147,6 @@ public class BlogController extends CommonProcessor {
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
 			}
-		}
-	}
-
-	void sendNewBlogPostToMessengerpeople(Blogger.Item item, String region, LanguageCode lang) {
-		logger.info("Sending new blog post to messengerpeople ...");
-
-		String message = getBlogMessage(item, region, lang);
-		String attachmentUrl = getAttachmentUrl(item);
-
-		try {
-			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-			MessengerPeopleProcessorController.getInstance().sendNewsLetter(rc.getMessengerPeopleConfig(), lang,
-					message, attachmentUrl);
-		} catch (AlbinaException e) {
-			logger.warn("Blog post could not be sent to messengerpeople: " + region + ", " + lang.toString(), e);
-		} catch (IOException e) {
-			logger.warn("Blog post could not be sent to messengerpeople: " + region + "," + lang.toString(), e);
 		}
 	}
 

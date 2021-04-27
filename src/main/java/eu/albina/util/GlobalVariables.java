@@ -56,7 +56,6 @@ public class GlobalVariables {
 	private static boolean createStaticWidget = false;
 	private static boolean createSimpleHtml = false;
 	private static boolean sendEmails = false;
-	private static boolean publishToMessengerpeople = false;
 	private static boolean publishToTelegramChannel = false;
 	private static String vapidPublicKey;
 	private static String vapidPrivateKey;
@@ -265,15 +264,6 @@ public class GlobalVariables {
 	public static void setSendEmails(boolean sendEmails) throws ConfigurationException {
 		GlobalVariables.sendEmails = sendEmails;
 		setConfigProperty("sendEmails", sendEmails);
-	}
-
-	public static boolean isPublishToMessengerpeople() {
-		return publishToMessengerpeople;
-	}
-
-	public static void setPublishToMessengerpeople(boolean publishToMessengerpeople) throws ConfigurationException {
-		GlobalVariables.publishToMessengerpeople = publishToMessengerpeople;
-		setConfigProperty("publishToMessengerpeople", publishToMessengerpeople);
 	}
 
 	public static boolean isPublishToTelegramChannel() {
@@ -583,8 +573,6 @@ public class GlobalVariables {
 				createStaticWidget = config.getBoolean("createStaticWidget");
 			if (config.containsKey("sendEmails"))
 				sendEmails = config.getBoolean("sendEmails");
-			if (config.containsKey("publishToMessengerpeople"))
-				publishToMessengerpeople = config.getBoolean("publishToMessengerpeople");
 			if (config.containsKey("publishToTelegramChannel"))
 				publishToTelegramChannel = config.getBoolean("publishToTelegramChannel");
 			if (config.containsKey("publishAt5PM"))
@@ -641,7 +629,6 @@ public class GlobalVariables {
 		json.put("createSimpleHtml", createSimpleHtml);
 		json.put("createStaticWidget", createStaticWidget);
 		json.put("sendEmails", sendEmails);
-		json.put("publishToMessengerpeople", publishToMessengerpeople);
 		json.put("publishToTelegramChannel", publishToTelegramChannel);
 		json.put("publishAt5PM", publishAt5PM);
 		json.put("publishAt8AM", publishAt8AM);
@@ -699,8 +686,6 @@ public class GlobalVariables {
 			setCreateStaticWidget(configuration.getBoolean("createStaticWidget"));
 		if (configuration.has("sendEmails"))
 			setSendEmails(configuration.getBoolean("sendEmails"));
-		if (configuration.has("publishToMessengerpeople"))
-			setPublishToMessengerpeople(configuration.getBoolean("publishToMessengerpeople"));
 		if (configuration.has("publishToTelegramChannel"))
 			setPublishToTelegramChannel(configuration.getBoolean("publishToTelegramChannel"));
 		if (configuration.has("publishAt5PM"))

@@ -57,21 +57,8 @@ public class Provider implements Serializable {
 	private Set<Channel> channels = new HashSet<>();
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "provider")
-	@Transient
-	private Set<Shipment> shipments = new HashSet<>();
-
-	@JsonIgnore
 	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
 	private Set<RapidMailConfig> rapidMailConfigs = new HashSet<>();
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
-	private Set<MessengerPeopleConfig> messengerPeopleConfigs = new HashSet<>();
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
-	private Set<TwitterConfig> twitterConfigs = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -119,31 +106,6 @@ public class Provider implements Serializable {
 		this.channels = channels;
 	}
 
-	public Set<Shipment> getShipments() {
-		return shipments;
-	}
-
-	public Provider shipments(Set<Shipment> shipments) {
-		this.shipments = shipments;
-		return this;
-	}
-
-	public Provider addShipment(Shipment shipment) {
-		this.shipments.add(shipment);
-		shipment.setProvider(this);
-		return this;
-	}
-
-	public Provider removeShipment(Shipment shipment) {
-		this.shipments.remove(shipment);
-		shipment.setProvider(null);
-		return this;
-	}
-
-	public void setShipments(Set<Shipment> shipments) {
-		this.shipments = shipments;
-	}
-
 	public Set<RapidMailConfig> getRapidMailConfigs() {
 		return rapidMailConfigs;
 	}
@@ -167,56 +129,6 @@ public class Provider implements Serializable {
 
 	public void setRapidMailConfigs(Set<RapidMailConfig> rapidMailConfigs) {
 		this.rapidMailConfigs = rapidMailConfigs;
-	}
-
-	public Set<MessengerPeopleConfig> getMessengerPeopleConfigs() {
-		return messengerPeopleConfigs;
-	}
-
-	public Provider messengerPeopleConfigs(Set<MessengerPeopleConfig> messengerPeopleConfigs) {
-		this.messengerPeopleConfigs = messengerPeopleConfigs;
-		return this;
-	}
-
-	public Provider addMessengerPeopleConfig(MessengerPeopleConfig messengerPeopleConfig) {
-		this.messengerPeopleConfigs.add(messengerPeopleConfig);
-		messengerPeopleConfig.setProvider(this);
-		return this;
-	}
-
-	public Provider removeMessengerPeopleConfig(MessengerPeopleConfig messengerPeopleConfig) {
-		this.messengerPeopleConfigs.remove(messengerPeopleConfig);
-		messengerPeopleConfig.setProvider(null);
-		return this;
-	}
-
-	public void setMessengerPeopleConfigs(Set<MessengerPeopleConfig> messengerPeopleConfigs) {
-		this.messengerPeopleConfigs = messengerPeopleConfigs;
-	}
-
-	public Set<TwitterConfig> getTwitterConfigs() {
-		return twitterConfigs;
-	}
-
-	public Provider twitterConfigs(Set<TwitterConfig> twitterConfigs) {
-		this.twitterConfigs = twitterConfigs;
-		return this;
-	}
-
-	public Provider addTwitterConfig(TwitterConfig twitterConfig) {
-		this.twitterConfigs.add(twitterConfig);
-		twitterConfig.setProvider(this);
-		return this;
-	}
-
-	public Provider removeTwitterConfig(TwitterConfig twitterConfig) {
-		this.twitterConfigs.remove(twitterConfig);
-		twitterConfig.setProvider(null);
-		return this;
-	}
-
-	public void setTwitterConfigs(Set<TwitterConfig> twitterConfigs) {
-		this.twitterConfigs = twitterConfigs;
 	}
 
 	@Override

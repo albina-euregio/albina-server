@@ -41,8 +41,6 @@ import eu.albina.model.enumerations.LanguageCode;
  */
 @Entity
 @Table(name = "socialmedia_telegram_config")
-// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-// property = "id",scope = TwitterConfig.class)
 public class TelegramConfig implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -66,8 +64,8 @@ public class TelegramConfig implements Serializable {
 	@JoinColumn(name = "PROVIDER_ID")
 	private Provider provider;
 
-	@JsonIgnoreProperties(value = { "region", "messengerPeopleConfig", "twitterConfig", "rapidMailConfig",
-			"telegramConfigs", "shipments", "channels" }, allowSetters = true)
+	@JsonIgnoreProperties(value = { "region", "rapidMailConfig",
+			"telegramConfigs", "channels" }, allowSetters = true)
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(unique = true, name = "REGION_CONFIGURATION_ID")
 	private RegionConfiguration regionConfiguration;
