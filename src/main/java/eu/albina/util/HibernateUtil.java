@@ -47,6 +47,7 @@ public class HibernateUtil {
 	public static String queryGetSubregions = "from Region as r where r.parentRegion.id = :regionId";
 	public static String queryGetChatMessages = "from ChatMessage as cm";
 	public static String queryGetChatMessagesDate = "from ChatMessage as cm where cm.dateTime >= :date";
+	public static String queryGetUsers = "from User as u";
 
 	public static String queryGetReportsForDayAndRegion = "from AvalancheReport as r where r.date = :date and r.region = :region)";
 	public static String queryGetReportsForTimePeriodAndRegion = "from AvalancheReport as r where r.date between :startDate and :endDate and r.region = :region)";

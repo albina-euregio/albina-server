@@ -17,10 +17,14 @@
 package eu.albina.controller;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import com.github.openjson.JSONArray;
+
+import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import eu.albina.exception.AlbinaException;
@@ -99,6 +103,42 @@ public class UserController {
 
 		return user;
 	}
+
+	/**
+	 * Return all {@code User}.
+	 *
+	 * @return list of all {@code User}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<User> getUsers() throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+			List<User> users = null;
+			users = entityManager.createQuery(HibernateUtil.queryGetUsers).getResultList();
+			transaction.commit();
+			return users;
+		} catch (HibernateException he) {
+			if (transaction != null)
+				transaction.rollback();
+			throw new AlbinaException(he.getMessage());
+		} finally {
+			entityManager.close();
+		}
+	}
+
+public JSONArray getUsersJson() throws AlbinaException {
+	List<User> users = this.getUsers();
+	if (users != null) {
+		JSONArray jsonResult = new JSONArray();
+		for (User user : users)
+			jsonResult.put(user.toJSON());
+
+		return jsonResult;
+	} else
+		throw new AlbinaException("Users could not be loaded!");
+}
 
 	/**
 	 * Save a {@code user} to the database.
