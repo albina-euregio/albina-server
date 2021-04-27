@@ -116,4 +116,29 @@ public class UserService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
+
+	@PUT
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@Path("/check")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response checkPassword(String data, @Context SecurityContext securityContext) {
+		logger.debug("GET JSON check password");
+		try {
+			JSONObject dataJson = new JSONObject(data);
+
+			Principal principal = securityContext.getUserPrincipal();
+			String username = principal.getName();
+
+			if (dataJson.has("password")
+					&& UserController.getInstance().checkPassword(username, dataJson.getString("password")))
+				return Response.ok(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
+						.build();
+			else
+				return Response.status(400).type(MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error checking password", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
 }

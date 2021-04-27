@@ -21,7 +21,6 @@ import java.security.Principal;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -30,14 +29,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.openjson.JSONObject;
 
 import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.Credentials;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -48,7 +43,7 @@ import io.swagger.annotations.Api;
 @Api(value = "/authentication")
 public class AuthenticationService {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+	// private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
 	@Context
 	UriInfo uri;
@@ -93,31 +88,6 @@ public class AuthenticationService {
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
-		}
-	}
-
-	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
-	@Path("/check")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response checkPassword(String data, @Context SecurityContext securityContext) {
-		logger.debug("GET JSON check password");
-		try {
-			JSONObject dataJson = new JSONObject(data);
-
-			Principal principal = securityContext.getUserPrincipal();
-			String username = principal.getName();
-
-			if (dataJson.has("password")
-					&& UserController.getInstance().checkPassword(username, dataJson.getString("password")))
-				return Response.ok(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-						.build();
-			else
-				return Response.status(400).type(MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error checking password", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
 }

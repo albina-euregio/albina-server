@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -27,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
-import eu.albina.util.HibernateUtil;
 
 public class UserControllerTest {
 
@@ -35,10 +35,11 @@ public class UserControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
+		// HibernateUtil.getInstance().setUp();
 	}
 
 	@Test
+	@Ignore
 	public void getUsersTest() throws AlbinaException {
 		List<User> users = UserController.getInstance().getUsers();
 		for (User user : users) {
@@ -47,6 +48,7 @@ public class UserControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void getUserTest() throws AlbinaException {
 		User user = UserController.getInstance().getUser("info@avalanche.report");
 		logger.info(user.getEmail());
