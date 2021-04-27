@@ -101,16 +101,6 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse getRecipients(RapidMailConfig config, String recipientListId) throws IOException {
-		HttpResponse response = executor
-				.execute(Request.Get(baseUrl + "/recipients?recipientlist_id=" + recipientListId)
-						.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
-						.addHeader("Accept", "application/json").connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
-						.socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT))
-				.returnResponse();
-		return response;
-	}
-
 	public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient,
 			String sendActivationmail, String language) throws Exception {
 		if (recipient.getRecipientlistId() == null) {
