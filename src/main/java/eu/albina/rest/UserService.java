@@ -19,10 +19,12 @@ package eu.albina.rest;
 import java.security.Principal;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -130,6 +132,34 @@ public class UserService {
 	}
 
 	@PUT
+	@Secured({ Role.ADMIN })
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response udpateUser(String userString, @Context SecurityContext securityContext) {
+		logger.debug("PUT JSON user");
+		try {
+			JSONObject userJson = new JSONObject(userString);
+			User user = new User(userJson);
+
+			// check if email already exists
+			if (UserController.getInstance().userExists(user.getEmail())) {
+				UserController.getInstance().updateUser(user);
+				JSONObject jsonObject = new JSONObject();
+				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
+						.entity(jsonObject.toString()).build();
+			} else {
+				logger.warn("Error updating user - User does not exist");
+				JSONObject json = new JSONObject();
+				json.append("message", "Error updating user - User does not exists");
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+			}
+		} catch (AlbinaException e) {
+			logger.warn("Error updating user", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
+
+	@PUT
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Path("/change")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -176,5 +206,15 @@ public class UserService {
 			logger.warn("Error checking password", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
+	}
+
+	@DELETE
+	@Secured({ Role.ADMIN })
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void deleteObservation(@PathParam("id") String id) {
+		logger.info("DELETE JSON user {}", id);
+		UserController.delete(id);
 	}
 }

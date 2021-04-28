@@ -194,6 +194,7 @@ public class User {
 		json.put("email", getEmail());
 		json.put("name", getName());
 		json.put("image", getImage());
+		json.put("organization", getOrganization());
 
 		if (roles != null && roles.size() > 0) {
 			JSONArray jsonRoles = new JSONArray();

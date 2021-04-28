@@ -86,6 +86,27 @@ public class UserController {
 		return true;
 	}
 
+	public User updateUser(User user) throws AlbinaException {
+		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		User originalUser = entityManager.find(User.class, user.getEmail());
+		if (originalUser == null) {
+			transaction.rollback();
+			throw new AlbinaException("No user with username: " + user.getEmail());
+		}
+		originalUser.setName(user.getName());
+		originalUser.setOrganization(user.getOrganization());
+		originalUser.setRoles(user.getRoles());
+		originalUser.setRegions(user.getRegions());
+		entityManager.persist(originalUser);
+
+		transaction.commit();
+		entityManager.close();
+
+		return user;
+	}
+
 	/**
 	 * Return the {@code User} with the specified {@code username}.
 	 *
@@ -242,5 +263,13 @@ public class UserController {
 		entityManager.close();
 
 		return result;
+	}
+
+	public static void delete(String id) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			User user = entityManager.find(User.class, id);
+			entityManager.remove(user);
+			return null;
+		});
 	}
 }
