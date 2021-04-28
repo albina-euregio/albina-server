@@ -89,28 +89,29 @@ public class User {
 	}
 
 	public User(JSONObject json) {
+		this();
 		if (json.has("email") && !json.isNull("email"))
 			this.email = json.getString("email");
 		if (json.has("password") && !json.isNull("password"))
 			this.password = json.getString("password");
 		if (json.has("name") && !json.isNull("name"))
 			this.name = json.getString("name");
-		if (json.has("roles")) {
-			JSONArray roles = json.getJSONArray("roles");
-			for (Object entry : roles) {
-				this.roles.add(Role.fromString((String) entry));
-			}
-		}
-		if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("regions");
-			for (Object region : regions) {
-				this.regions.add(region.toString());
-			}
-		}
 		if (json.has("image") && !json.isNull("image"))
 			this.image = json.getString("image");
 		if (json.has("organization") && !json.isNull("organization"))
 			this.organization = json.getString("organization");
+		if (json.has("regions")) {
+			JSONArray regions = json.getJSONArray("regions");
+			for (Object region : regions) {
+				this.regions.add((String) region);
+			}
+		}
+		if (json.has("roles")) {
+			JSONArray roles = json.getJSONArray("roles");
+			for (Object role : roles) {
+				this.roles.add(Role.fromString((String) role));
+			}
+		}
 	}
 
 	public List<AvalancheBulletin> getBulletins() {
