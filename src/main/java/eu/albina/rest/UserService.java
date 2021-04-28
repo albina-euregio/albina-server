@@ -71,6 +71,7 @@ public class UserService {
 
 	@GET
 	@Secured({ Role.ADMIN })
+	@Path("/roles")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getRoles(@Context SecurityContext securityContext) {
@@ -88,6 +89,7 @@ public class UserService {
 
 	@GET
 	@Secured({ Role.ADMIN })
+	@Path("/regions")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getRegions(@Context SecurityContext securityContext) {
