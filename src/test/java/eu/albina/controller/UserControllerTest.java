@@ -18,6 +18,8 @@ package eu.albina.controller;
 
 import java.util.List;
 
+import com.github.openjson.JSONArray;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -52,5 +54,17 @@ public class UserControllerTest {
 	public void getUserTest() throws AlbinaException {
 		User user = UserController.getInstance().getUser("info@avalanche.report");
 		logger.info(user.getEmail());
+	}
+
+	@Test
+	public void getRegionsTest() throws AlbinaException {
+		JSONArray regionsJson = UserController.getInstance().getRegionsJson();
+		logger.info(regionsJson.toString());
+	}
+
+	@Test
+	public void getRolesTest() throws AlbinaException {
+		JSONArray rolesJson = UserController.getInstance().getRolesJson();
+		logger.info(rolesJson.toString());
 	}
 }

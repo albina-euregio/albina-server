@@ -161,6 +161,21 @@ public class GlobalVariables {
 	};
 
 	// REGION
+	public static List<String> awsRegions = new ArrayList<String>() {
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
+		{
+			add(codeTyrol);
+			add(codeSouthTyrol);
+			add(codeTrentino);
+			add(codeAran);
+		}
+	};
+
+	// REGION
 	public static List<String> regionsEuregio = new ArrayList<String>() {
 		/**
 		 *

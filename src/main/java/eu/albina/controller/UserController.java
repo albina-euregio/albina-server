@@ -18,6 +18,8 @@ package eu.albina.controller;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -29,6 +31,8 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
+import eu.albina.model.enumerations.Role;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -128,17 +132,38 @@ public class UserController {
 		}
 	}
 
-public JSONArray getUsersJson() throws AlbinaException {
-	List<User> users = this.getUsers();
-	if (users != null) {
-		JSONArray jsonResult = new JSONArray();
-		for (User user : users)
-			jsonResult.put(user.toJSON());
+	public JSONArray getUsersJson() throws AlbinaException {
+		List<User> users = this.getUsers();
+		if (users != null) {
+			JSONArray jsonResult = new JSONArray();
+			for (User user : users)
+				jsonResult.put(user.toJSON());
 
+			return jsonResult;
+		} else
+			throw new AlbinaException("Users could not be loaded!");
+	}
+
+	public JSONArray getRolesJson() throws AlbinaException {
+		List<String> roles = Stream.of(Role.values())
+                               .map(Enum::name)
+                               .collect(Collectors.toList());
+		if (roles != null) {
+			JSONArray jsonResult = new JSONArray();
+			for (String role : roles)
+				jsonResult.put(role);
+
+			return jsonResult;
+		} else
+			throw new AlbinaException("Roles could not be loaded!");
+	}
+
+	public JSONArray getRegionsJson() throws AlbinaException {
+		JSONArray jsonResult = new JSONArray();
+		for (String region : GlobalVariables.awsRegions)
+			jsonResult.put(region);
 		return jsonResult;
-	} else
-		throw new AlbinaException("Users could not be loaded!");
-}
+	}
 
 	/**
 	 * Save a {@code user} to the database.

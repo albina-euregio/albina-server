@@ -69,6 +69,40 @@ public class UserService {
 		}
 	}
 
+	@GET
+	@Secured({ Role.ADMIN })
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getRoles(@Context SecurityContext securityContext) {
+		logger.debug("GET JSON roles");
+		try {
+			JSONArray jsonArray = UserController.getInstance().getRolesJson();
+			return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading roles", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (Exception e) {
+			return Response.status(Response.Status.UNAUTHORIZED).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN })
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getRegions(@Context SecurityContext securityContext) {
+		logger.debug("GET JSON regions");
+		try {
+			JSONArray jsonArray = UserController.getInstance().getRegionsJson();
+			return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading regions", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (Exception e) {
+			return Response.status(Response.Status.UNAUTHORIZED).build();
+		}
+	}
+
 	@POST
 	@Secured({ Role.ADMIN })
 	@Path("/create")
