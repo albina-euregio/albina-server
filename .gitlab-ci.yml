@@ -10,6 +10,7 @@ cache:
 
 production build:
     stage: build
+    allow_failure: true
     script:
         - apt-get update -y
         - apt-get install -y ghostscript imagemagick webp
