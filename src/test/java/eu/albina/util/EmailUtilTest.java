@@ -61,6 +61,7 @@ public class EmailUtilTest {
 		// HibernateUtil.getInstance().shutDown();
 	}
 
+	@Ignore
 	@Test
 	public void createFreemarker() throws IOException, URISyntaxException {
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,

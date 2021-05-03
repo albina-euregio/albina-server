@@ -24,6 +24,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -61,6 +62,7 @@ public class SimpleHtmlUtilTest {
 	}
 
 	@Test
+	@Ignore
 	public void createSimpleHtmlFreemarker() throws IOException, URISyntaxException, TemplateException {
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.de, "");
 		System.out.println(htmlString);
