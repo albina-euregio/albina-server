@@ -16,7 +16,7 @@
 		<jackson.version>2.11.3</jackson.version>
 		<log4j.version>2.14.1</log4j.version>
 		<slf4j.version>1.7.30</slf4j.version>
-		<hibernate.version>5.2.9.Final</hibernate.version>
+		<hibernate.version>5.5.0.Alpha1</hibernate.version>
 		<itextpdf.version>7.0.4</itextpdf.version>
 	</properties>
 
@@ -315,12 +315,6 @@
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-spatial</artifactId>
 			<version>${hibernate.version}</version>
 			<exclusions>
@@ -329,6 +323,12 @@
 					<artifactId>slf4j-simple</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>${hibernate.version}</version>
 		</dependency>
 
 		<dependency>
@@ -341,12 +341,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.23</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-			<version>${hibernate.version}</version>
 		</dependency>
 
 		<!-- testing -->
@@ -398,7 +392,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
+			<version>2.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
