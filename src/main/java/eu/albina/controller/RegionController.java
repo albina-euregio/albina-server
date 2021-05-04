@@ -129,7 +129,7 @@ public class RegionController {
 		try {
 			transaction.begin();
 			List<Region> regions = null;
-			if (regionId == null || regionId == "")
+			if (regionId == null || regionId.isBlank())
 				regions = entityManager.createQuery(HibernateUtil.queryGetTopLevelRegions).getResultList();
 			else
 				regions = entityManager.createQuery(HibernateUtil.queryGetSubregions).setParameter("regionId", regionId)
