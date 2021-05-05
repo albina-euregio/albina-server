@@ -16,11 +16,11 @@
  ******************************************************************************/
 package eu.albina.jobs;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.DateTime;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -71,10 +71,10 @@ public class PublicationJob implements org.quartz.Job {
 			try {
 				User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
 
-				DateTime startDate = new DateTime().plusDays(1).withTimeAtStartOfDay();
-				DateTime endDate = startDate.plusDays(1).withTimeAtStartOfDay();
+				ZonedDateTime startDate = ZonedDateTime.now().plusDays(1).withTimeAtStartOfDay();
+				ZonedDateTime endDate = startDate.plusDays(1).withTimeAtStartOfDay();
 
-				DateTime publicationDate = new DateTime();
+				ZonedDateTime publicationDate = ZonedDateTime.now();
 
 				// Set publication date
 				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()

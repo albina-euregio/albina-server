@@ -24,13 +24,13 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -190,7 +190,7 @@ public class UtilTest {
 	@Ignore
 	@Test
 	public void testIsLatest() {
-		DateTime dateTime = (new DateTime()).minusDays(0);
+		ZonedDateTime dateTime = (ZonedDateTime.now()).minusDays(0);
 		System.out.println(AlbinaUtil.isLatest(dateTime));
 	}
 

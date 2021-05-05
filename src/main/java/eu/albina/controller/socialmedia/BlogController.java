@@ -18,6 +18,7 @@ package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,12 +51,12 @@ public class BlogController extends CommonProcessor {
 	private static final int BLOGGER_CONNECTION_TIMEOUT = 10000;
 
 	private static BlogController instance = null;
-	protected final HashMap<String, DateTime> lastFetch = new HashMap<>();
+	protected final HashMap<String, ZonedDateTime> lastFetch = new HashMap<>();
 	private final Executor executor;
 
 	private BlogController() {
 		executor = Executor.newInstance(sslHttpClient());
-		DateTime date = new DateTime();
+		ZonedDateTime date = ZonedDateTime.now();
 		for (String blogId : GlobalVariables.blogIds.values()) {
 			lastFetch.put(blogId, date);
 		}
@@ -89,7 +89,7 @@ public class BlogController extends CommonProcessor {
 		try {
 			String uri = new URIBuilder(GlobalVariables.blogApiUrl + blogId + "/posts")
 				.addParameter("key", GlobalVariables.googleApiKey)
-				.addParameter("startDate", lastFetch.get(blogId).toString(GlobalVariables.formatterDateTime))
+				.addParameter("startDate", lastFetch.get(blogId).format(GlobalVariables.formatterDateTime))
 				.addParameter("fetchBodies", Boolean.TRUE.toString())
 				.addParameter("fetchImages", Boolean.TRUE.toString())
 				.toString();
@@ -97,7 +97,7 @@ public class BlogController extends CommonProcessor {
 			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
 			logger.debug("Start date for {}: {}", blogId, lastFetch.get(blogId).toString());
-			lastFetch.put(blogId, new DateTime());
+			lastFetch.put(blogId, ZonedDateTime.now());
 			HttpResponse response = executor.execute(request).returnResponse();
 			logger.debug("New start date for {}: {}", blogId, lastFetch.get(blogId).toString());
 			if (response.getStatusLine().getStatusCode() == 200) {

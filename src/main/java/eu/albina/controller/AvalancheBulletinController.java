@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,7 +34,6 @@ import javax.xml.transform.TransformerException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.joda.time.DateTime;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -175,8 +175,8 @@ public class AvalancheBulletinController {
 	 *             is an error saving the bulletins
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> bulletins, DateTime startDate,
-			DateTime endDate, String region, DateTime publicationDate) throws AlbinaException {
+	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> bulletins, ZonedDateTime startDate,
+			ZonedDateTime endDate, String region, ZonedDateTime publicationDate) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
 		if (checkBulletinsForDuplicateRegion(bulletins, region))
@@ -334,7 +334,7 @@ public class AvalancheBulletinController {
 	 * @throws ParserConfigurationException
 	 *             if the XML document can not be initialized
 	 */
-	public String getPublishedBulletinsCaaml(DateTime date, List<String> regions, LanguageCode language,
+	public String getPublishedBulletinsCaaml(ZonedDateTime date, List<String> regions, LanguageCode language,
 			CaamlVersion version) throws TransformerException, AlbinaException, ParserConfigurationException {
 		ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				regions);
@@ -365,7 +365,7 @@ public class AvalancheBulletinController {
 	 * @throws ParserConfigurationException
 	 *             if the XML document can not be initialized
 	 */
-	public String getAinevaBulletinsCaaml(DateTime startDate, DateTime endDate, List<String> regions,
+	public String getAinevaBulletinsCaaml(ZonedDateTime startDate, ZonedDateTime endDate, List<String> regions,
 			LanguageCode language) throws TransformerException, ParserConfigurationException {
 		List<AvalancheBulletin> bulletins = getBulletins(startDate, endDate, regions);
 
@@ -422,7 +422,7 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 *             if the published bulletins can not be loaded from DB
 	 */
-	public JSONArray getPublishedBulletinsJson(DateTime date, List<String> regions) throws AlbinaException {
+	public JSONArray getPublishedBulletinsJson(ZonedDateTime date, List<String> regions) throws AlbinaException {
 		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				regions);
 
@@ -450,7 +450,7 @@ public class AvalancheBulletinController {
 	 *             if the published bulletins for this time period and in this
 	 *             region could not be loaded
 	 */
-	public DangerRating getHighestDangerRating(DateTime date, List<String> regions) throws AlbinaException {
+	public DangerRating getHighestDangerRating(ZonedDateTime date, List<String> regions) throws AlbinaException {
 		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				regions);
 
@@ -478,7 +478,7 @@ public class AvalancheBulletinController {
 	 * @return the most recent bulletins for the given time period and regions
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletins(DateTime startDate, DateTime endDate, List<String> regions) {
+	public List<AvalancheBulletin> getBulletins(ZonedDateTime startDate, ZonedDateTime endDate, List<String> regions) {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 
@@ -517,7 +517,7 @@ public class AvalancheBulletinController {
 	 * @return a list of all affected bulletins
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> submitBulletins(DateTime startDate, DateTime endDate, String region, User user) {
+	public List<AvalancheBulletin> submitBulletins(ZonedDateTime startDate, ZonedDateTime endDate, String region, User user) {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 
@@ -578,8 +578,8 @@ public class AvalancheBulletinController {
 	 *            the user who publishes the bulletins
 	 * @return a map of all affected bulletin ids and bulletins
 	 */
-	public Map<String, AvalancheBulletin> publishBulletins(DateTime startDate, DateTime endDate, List<String> regions,
-			DateTime publicationDate, User user) throws AlbinaException {
+	public Map<String, AvalancheBulletin> publishBulletins(ZonedDateTime startDate, ZonedDateTime endDate, List<String> regions,
+			ZonedDateTime publicationDate, User user) throws AlbinaException {
 		Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
 
 		for (String region : regions) {
@@ -615,8 +615,8 @@ public class AvalancheBulletinController {
 	 * @return a list of all affected bulletins
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> publishBulletins(DateTime startDate, DateTime endDate, String region,
-			DateTime publicationDate, User user) throws AlbinaException {
+	public List<AvalancheBulletin> publishBulletins(ZonedDateTime startDate, ZonedDateTime endDate, String region,
+			ZonedDateTime publicationDate, User user) throws AlbinaException {
 		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -730,7 +730,7 @@ public class AvalancheBulletinController {
 	 * @return a JSON array containing all warnings (empty if no warning was found)
 	 */
 	@SuppressWarnings("unchecked")
-	public JSONArray checkBulletins(DateTime startDate, DateTime endDate, String region) {
+	public JSONArray checkBulletins(ZonedDateTime startDate, ZonedDateTime endDate, String region) {
 		JSONArray json = new JSONArray();
 		boolean missingAvActivityHighlights = false;
 		boolean missingAvActivityComment = false;
@@ -867,7 +867,7 @@ public class AvalancheBulletinController {
 	 */
 	public void lockBulletin(BulletinLock lock) throws AlbinaException {
 		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (bulletinLock.getDate().getMillis() == lock.getDate().getMillis()
+			if (bulletinLock.getDate().equals(lock.getDate())
 					&& bulletinLock.getBulletin().equals(lock.getBulletin()))
 				throw new AlbinaException("Bulletin already locked!");
 		}
@@ -896,12 +896,10 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 *             if the bulletin was not locked
 	 */
-	public void unlockBulletin(String bulletin, DateTime date) throws AlbinaException {
-		date = date.withTimeAtStartOfDay();
-
+	public void unlockBulletin(String bulletin, ZonedDateTime date) throws AlbinaException {
 		BulletinLock hit = null;
 		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (bulletinLock.getDate().getMillis() == date.getMillis() && bulletinLock.getBulletin().equals(bulletin))
+			if (bulletinLock.getDate().toInstant().toEpochMilli() == date.toInstant().toEpochMilli() && bulletinLock.getBulletin().equals(bulletin))
 				hit = bulletinLock;
 		}
 

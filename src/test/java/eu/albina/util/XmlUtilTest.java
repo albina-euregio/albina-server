@@ -5,11 +5,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -69,19 +70,19 @@ public class XmlUtilTest {
 	@Test
 	public void createOldCaamlFiles() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		for (LocalDate date = new LocalDate("2018-12-04"); date
-				.isBefore(new LocalDate("2019-05-07")); date = date.plusDays(1)) {
+		for (LocalDate date = LocalDate.parse("2018-12-04"); date
+				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
 			createOldCaamlFiles(date);
 		}
-		for (LocalDate date = new LocalDate("2019-11-16"); date
-				.isBefore(new LocalDate("2020-05-04")); date = date.plusDays(1)) {
+		for (LocalDate date = LocalDate.parse("2019-11-16"); date
+				.isBefore(LocalDate.parse("2020-05-04")); date = date.plusDays(1)) {
 			createOldCaamlFiles(date);
 		}
 	}
 
 	private void createOldCaamlFiles(LocalDate date) throws Exception {
 		List<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(
-				date.toDateTimeAtStartOfDay().withZone(DateTimeZone.UTC), GlobalVariables.regionsEuregio);
+				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UCT")), GlobalVariables.regionsEuregio);
 		for (LanguageCode language : Arrays.asList(LanguageCode.de, LanguageCode.en, LanguageCode.it)) {
 			Path path = Paths.get("/tmp/albina_files" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
 			Document caamlDoc = XmlUtil.createCaaml(result, language, CaamlVersion.V6);

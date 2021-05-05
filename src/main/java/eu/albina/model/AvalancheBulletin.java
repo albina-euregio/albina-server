@@ -19,6 +19,8 @@ package eu.albina.model;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -48,9 +50,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -98,15 +97,15 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	@Column(name = "PUBLICATION_DATE")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private org.joda.time.DateTime publicationDate;
+	private ZonedDateTime publicationDate;
 
 	/** Validity of the avalanche bulletin */
 	@Column(name = "VALID_FROM")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private org.joda.time.DateTime validFrom;
+	private ZonedDateTime validFrom;
 	@Column(name = "VALID_UNTIL")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private org.joda.time.DateTime validUntil;
+	private ZonedDateTime validUntil;
 
 	/** The recommended regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -281,12 +280,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 
 		if (json.has("publicationDate"))
-			this.publicationDate = new org.joda.time.DateTime(json.getString("publicationDate"));
+			this.publicationDate = ZonedDateTime.parse(json.getString("publicationDate"));
 
 		if (json.has("validity")) {
 			JSONObject validity = json.getJSONObject("validity");
-			this.validFrom = new org.joda.time.DateTime(validity.getString("from"));
-			this.validUntil = new org.joda.time.DateTime(validity.getString("until"));
+			this.validFrom = ZonedDateTime.parse(validity.getString("from"));
+			this.validUntil = ZonedDateTime.parse(validity.getString("until"));
 		}
 
 		if (json.has("suggestedRegions")) {
@@ -624,27 +623,27 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.dangerPattern2 = dangerPattern;
 	}
 
-	public org.joda.time.DateTime getPublicationDate() {
+	public ZonedDateTime getPublicationDate() {
 		return publicationDate;
 	}
 
-	public void setPublicationDate(org.joda.time.DateTime publicationDate) {
+	public void setPublicationDate(ZonedDateTime publicationDate) {
 		this.publicationDate = publicationDate;
 	}
 
-	public org.joda.time.DateTime getValidFrom() {
+	public ZonedDateTime getValidFrom() {
 		return validFrom;
 	}
 
-	public void setValidFrom(org.joda.time.DateTime validFrom) {
+	public void setValidFrom(ZonedDateTime validFrom) {
 		this.validFrom = validFrom;
 	}
 
-	public org.joda.time.DateTime getValidUntil() {
+	public ZonedDateTime getValidUntil() {
 		return validUntil;
 	}
 
-	public void setValidUntil(org.joda.time.DateTime validUntil) {
+	public void setValidUntil(ZonedDateTime validUntil) {
 		this.validUntil = validUntil;
 	}
 
@@ -877,15 +876,15 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return sum;
 	}
 
-	public DateTime getValidityDate() {
-		DateTime date = validFrom.withTimeAtStartOfDay();
-		if (validFrom.getHourOfDay() > 12)
+	public ZonedDateTime getValidityDate() {
+		ZonedDateTime date = validFrom.withTimeAtStartOfDay();
+		if (validFrom.getHour() > 12)
 			date = date.plusDays(1);
 		return date;
 	}
 
 	public String getValidityDateString() {
-		return getValidityDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+		return getValidityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 
 	@Override
@@ -947,11 +946,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		if (publicationDate != null)
 			json.put("publicationDate",
-					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
+					publicationDate.format(GlobalVariables.formatterDateTime));
 
 		JSONObject validity = new JSONObject();
-		validity.put("from", validFrom.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
-		validity.put("until", validUntil.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
+		validity.put("from", validFrom.format(GlobalVariables.formatterDateTime));
+		validity.put("until", validUntil.format(GlobalVariables.formatterDateTime));
 		json.put("validity", validity);
 
 		json.put("suggestedRegions", suggestedRegions);
@@ -1013,11 +1012,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		if (publicationDate != null)
 			json.put("publicationDate",
-					publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
+					publicationDate.format(GlobalVariables.formatterDateTime));
 
 		JSONObject validity = new JSONObject();
-		validity.put("from", validFrom.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
-		validity.put("until", validUntil.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
+		validity.put("from", validFrom.format(GlobalVariables.formatterDateTime));
+		validity.put("until", validUntil.format(GlobalVariables.formatterDateTime));
 		json.put("validity", validity);
 
 		json.put("regions", publishedRegions);
@@ -1061,8 +1060,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		// validTime
 		if (validFrom != null && validUntil != null) {
 
-			DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
-			DateTime end = new DateTime(validUntil).withZone(DateTimeZone.UTC);
+			ZonedDateTime start = validFrom;
+			ZonedDateTime end = validUntil;
 
 			if (hasDaytimeDependency) {
 				if (isAfternoon)
@@ -1074,10 +1073,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			Element validTime = doc.createElement("validTime");
 			Element timePeriod = doc.createElement("TimePeriod");
 			Element beginPosition = doc.createElement("beginPosition");
-			beginPosition.appendChild(doc.createTextNode(start.toString(GlobalVariables.formatterDateTime)));
+			beginPosition.appendChild(doc.createTextNode(start.format(GlobalVariables.formatterDateTime)));
 			timePeriod.appendChild(beginPosition);
 			Element endPosition = doc.createElement("endPosition");
-			endPosition.appendChild(doc.createTextNode(end.toString(GlobalVariables.formatterDateTime)));
+			endPosition.appendChild(doc.createTextNode(end.format(GlobalVariables.formatterDateTime)));
 			timePeriod.appendChild(endPosition);
 			validTime.appendChild(timePeriod);
 			rootElement.appendChild(validTime);
@@ -1186,8 +1185,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			tendencyElement.appendChild(type);
 
 			if (validFrom != null && validUntil != null) {
-				DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
-				DateTime end = new DateTime(validUntil).withZone(DateTimeZone.UTC);
+				ZonedDateTime start = validFrom;
+				ZonedDateTime end = validUntil;
 
 				start = start.plusDays(1);
 				end = end.plusDays(1);
@@ -1195,10 +1194,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				Element validTime = doc.createElement("validTime");
 				Element timePeriod = doc.createElement("TimePeriod");
 				Element beginPosition = doc.createElement("beginPosition");
-				beginPosition.appendChild(doc.createTextNode(start.toString(GlobalVariables.formatterDateTime)));
+				beginPosition.appendChild(doc.createTextNode(start.format(GlobalVariables.formatterDateTime)));
 				timePeriod.appendChild(beginPosition);
 				Element endPosition = doc.createElement("endPosition");
-				endPosition.appendChild(doc.createTextNode(end.toString(GlobalVariables.formatterDateTime)));
+				endPosition.appendChild(doc.createTextNode(end.format(GlobalVariables.formatterDateTime)));
 				timePeriod.appendChild(endPosition);
 				validTime.appendChild(timePeriod);
 				tendencyElement.appendChild(validTime);
@@ -1254,10 +1253,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element metaData = doc.createElement("metaData");
 		rootElement.appendChild(metaData);
 		String publicationTime = "";
-		DateTime date = getPublicationDate();
-		DateTime utcTime = new DateTime(date, DateTimeZone.UTC);
+		ZonedDateTime date = getPublicationDate();
 		if (date != null)
-			publicationTime = utcTime.toString(GlobalVariables.publicationTime);
+			publicationTime = date.format(GlobalVariables.formatterPublicationTime);
 		if (!isAfternoon) {
 			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ publicationTime + "/" + getId() + ".jpg";
@@ -1277,14 +1275,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		// publication time
 		Element pubTime = doc.createElement("publicationTime");
 		pubTime.appendChild(doc.createTextNode(
-				publicationDate.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
+				publicationDate.format(GlobalVariables.formatterDateTime)));
 		rootElement.appendChild(pubTime);
 
 		// validTime
 		if (validFrom != null && validUntil != null) {
 
-			DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
-			DateTime end = new DateTime(validUntil).withZone(DateTimeZone.UTC);
+			ZonedDateTime start = validFrom;
+			ZonedDateTime end = validUntil;
 
 			if (hasDaytimeDependency) {
 				if (isAfternoon)
@@ -1295,10 +1293,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 			Element validTime = doc.createElement("validTime");
 			Element beginPosition = doc.createElement("startTime");
-			beginPosition.appendChild(doc.createTextNode(start.toString(GlobalVariables.formatterDateTime)));
+			beginPosition.appendChild(doc.createTextNode(start.format(GlobalVariables.formatterDateTime)));
 			validTime.appendChild(beginPosition);
 			Element endPosition = doc.createElement("endTime");
-			endPosition.appendChild(doc.createTextNode(end.toString(GlobalVariables.formatterDateTime)));
+			endPosition.appendChild(doc.createTextNode(end.format(GlobalVariables.formatterDateTime)));
 			validTime.appendChild(endPosition);
 			rootElement.appendChild(validTime);
 		}
@@ -1425,18 +1423,18 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			tendencyElement.appendChild(type);
 
 			if (validFrom != null && validUntil != null) {
-				DateTime start = new DateTime(validFrom).withZone(DateTimeZone.UTC);
-				DateTime end = new DateTime(validUntil).withZone(DateTimeZone.UTC);
+				ZonedDateTime start = validFrom;
+				ZonedDateTime end = validUntil;
 
 				start = start.plusDays(1);
 				end = end.plusDays(1);
 
 				Element validTime = doc.createElement("validTime");
 				Element startTime = doc.createElement("startTime");
-				startTime.appendChild(doc.createTextNode(start.toString(GlobalVariables.formatterDateTime)));
+				startTime.appendChild(doc.createTextNode(start.format(GlobalVariables.formatterDateTime)));
 				validTime.appendChild(startTime);
 				Element endTime = doc.createElement("endTime");
-				endTime.appendChild(doc.createTextNode(end.toString(GlobalVariables.formatterDateTime)));
+				endTime.appendChild(doc.createTextNode(end.format(GlobalVariables.formatterDateTime)));
 				validTime.appendChild(endTime);
 				tendencyElement.appendChild(validTime);
 			}

@@ -16,7 +16,8 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
+
 import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.BulletinStatus;
@@ -25,10 +26,10 @@ import eu.albina.util.GlobalVariables;
 public class BulletinUpdate {
 
 	private String region;
-	private DateTime date;
+	private ZonedDateTime date;
 	private BulletinStatus status;
 
-	public BulletinUpdate(String region, DateTime date, BulletinStatus status) {
+	public BulletinUpdate(String region, ZonedDateTime date, BulletinStatus status) {
 		this.region = region;
 		this.date = date;
 		this.status = status;
@@ -39,7 +40,7 @@ public class BulletinUpdate {
 			this.region = json.getString("region");
 
 		if (json.has("date"))
-			this.date = new org.joda.time.DateTime(json.getString("date"));
+			this.date = ZonedDateTime.parse(json.getString("date"));
 
 		if (json.has("status"))
 			this.status = BulletinStatus.fromString(json.getString("status"));
@@ -53,11 +54,11 @@ public class BulletinUpdate {
 		this.region = region;
 	}
 
-	public DateTime getDate() {
+	public ZonedDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(DateTime date) {
+	public void setDate(ZonedDateTime date) {
 		this.date = date;
 	}
 
@@ -75,7 +76,7 @@ public class BulletinUpdate {
 		if (region != null)
 			json.put("region", region);
 		if (date != null)
-			json.put("date", date.toString(GlobalVariables.formatterDateTime));
+			json.put("date", date.format(GlobalVariables.formatterDateTime));
 		if (status != null)
 			json.put("status", status.toString());
 

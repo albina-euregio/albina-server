@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -26,7 +28,6 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +97,7 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, String region,
+	public String getDangerRatingStatistics(ZonedDateTime startDate, ZonedDateTime endDate, LanguageCode lang, String region,
 			boolean extended, boolean duplicateBulletinForenoon) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -136,7 +137,7 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(DateTime startDate, DateTime endDate, LanguageCode lang, boolean extended,
+	public String getDangerRatingStatistics(ZonedDateTime startDate, ZonedDateTime endDate, LanguageCode lang, boolean extended,
 			boolean duplicateBulletinForenoon) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -212,7 +213,7 @@ public class StatisticsController {
 					sb.append("JSON string empty: ");
 					if (avalancheReport.getDate() != null) {
 						sb.append(
-								avalancheReport.getDate().toString(LanguageCode.en.getBundleString("date-time-format.publication")));
+								avalancheReport.getDate().format(DateTimeFormatter.ofPattern(LanguageCode.en.getBundleString("date-time-format.publication"))));
 						sb.append(", ");
 					}
 					sb.append(avalancheReport.getRegion());
@@ -231,7 +232,7 @@ public class StatisticsController {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Error parsing report JSON: ");
 				if (avalancheReport.getDate() != null) {
-					sb.append(avalancheReport.getDate().toString(LanguageCode.en.getBundleString("date-time-format.publication")));
+					sb.append(avalancheReport.getDate().format(DateTimeFormatter.ofPattern(LanguageCode.en.getBundleString("date-time-format.publication"))));
 					sb.append(", ");
 				}
 				sb.append(avalancheReport.getRegion());

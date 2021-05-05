@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.rest;
 
+import java.time.ZonedDateTime;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -26,7 +28,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.joda.time.DateTime;
 import com.github.openjson.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +56,8 @@ public class RegionService {
 		logger.debug("GET JSON locked regions");
 
 		JSONArray json = new JSONArray();
-		for (DateTime date : RegionController.getInstance().getLockedRegions(region))
-			json.put(date.toString(GlobalVariables.formatterDateTime));
+		for (ZonedDateTime date : RegionController.getInstance().getLockedRegions(region))
+			json.put(date.format(GlobalVariables.formatterDateTime));
 		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 	}
 }

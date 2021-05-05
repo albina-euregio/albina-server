@@ -16,11 +16,11 @@
  ******************************************************************************/
 package eu.albina.jobs;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.DateTime;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -60,8 +60,8 @@ public class UpdateJob implements org.quartz.Job {
 		try {
 			User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
 
-			DateTime startDate = new DateTime().withTimeAtStartOfDay();
-			DateTime endDate = startDate.plusDays(1).withTimeAtStartOfDay();
+			ZonedDateTime startDate = ZonedDateTime.now().withTimeAtStartOfDay();
+			ZonedDateTime endDate = startDate.plusDays(1).withTimeAtStartOfDay();
 
 			List<String> changedRegions = new ArrayList<String>();
 			if (GlobalVariables.isPublishBulletinsTyrol()
@@ -77,7 +77,7 @@ public class UpdateJob implements org.quartz.Job {
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeAran))
 				changedRegions.add(GlobalVariables.codeAran);
 
-			DateTime publicationDate = new DateTime();
+			ZonedDateTime publicationDate = ZonedDateTime.now();
 
 			if (!changedRegions.isEmpty()) {
 				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()

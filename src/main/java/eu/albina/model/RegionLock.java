@@ -16,7 +16,8 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
+
 import com.github.openjson.JSONObject;
 
 import eu.albina.util.GlobalVariables;
@@ -26,10 +27,10 @@ public class RegionLock {
 	private String sessionId;
 	private String username;
 	private String region;
-	private DateTime date;
+	private ZonedDateTime date;
 	private boolean lock;
 
-	public RegionLock(String username, String region, DateTime date, boolean lock) {
+	public RegionLock(String username, String region, ZonedDateTime date, boolean lock) {
 		this.username = username;
 		this.region = region;
 		this.date = date;
@@ -44,7 +45,7 @@ public class RegionLock {
 		if (json.has("region"))
 			this.region = json.getString("region");
 		if (json.has("date"))
-			this.date = new org.joda.time.DateTime(json.getString("date"));
+			this.date = ZonedDateTime.parse(json.getString("date"));
 		this.lock = json.getBoolean("lock");
 	}
 
@@ -72,11 +73,11 @@ public class RegionLock {
 		this.region = region;
 	}
 
-	public DateTime getDate() {
+	public ZonedDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(DateTime date) {
+	public void setDate(ZonedDateTime date) {
 		this.date = date;
 	}
 
@@ -98,7 +99,7 @@ public class RegionLock {
 		if (region != null)
 			json.put("region", region);
 		if (date != null)
-			json.put("date", date.toString(GlobalVariables.formatterDateTime));
+			json.put("date", date.format(GlobalVariables.formatterDateTime));
 		json.put("lock", lock);
 
 		return json;

@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +38,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
-import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -220,8 +220,8 @@ public class SimpleHtmlUtil {
 			regionString = region;
 			underscore = "_";
 		}
-		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.days(-1)));
-		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.days(1)));
+		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(-1)));
+		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(1)));
 		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "de.html");
 		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)

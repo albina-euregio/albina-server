@@ -17,6 +17,8 @@
 package eu.albina.util;
 
 import java.text.MessageFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +29,6 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,10 +125,9 @@ public class GlobalVariables {
 	public static int targetingTrentinoEn = 17541;
 	public static int targetingTest = 17274;
 
-	public static DateTimeFormatter formatterDateTime = ISODateTimeFormat.dateTimeNoMillis();
-	public static DateTimeFormatter formatterDate = ISODateTimeFormat.date();
-	public static DateTimeFormatter parserDateTime = ISODateTimeFormat.dateTimeParser();
-	public static DateTimeFormatter publicationTime = DateTimeFormat.forPattern("yyyy-MM-dd_HH-mm-ss");
+	public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ISO_DATE_TIME;
+	public static DateTimeFormatter formatterDate = DateTimeFormatter.ISO_DATE;
+	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 
 	// REGION
 	public final static String codeTrentino = "IT-32-TN";
@@ -532,9 +529,9 @@ public class GlobalVariables {
 		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
 	}
 
-	public static String getBulletinUrl(LanguageCode lang, DateTime date) {
+	public static String getBulletinUrl(LanguageCode lang, ZonedDateTime date) {
 		return lang.getBundleString("avalanche-report.url") + avalancheReportBulletinUrl
-				+ date.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
+				+ date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 
 	public static String getEuregioLogoPath(boolean grayscale) {

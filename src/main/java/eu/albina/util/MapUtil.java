@@ -34,7 +34,6 @@ import java.util.stream.IntStream;
 
 import javax.script.SimpleBindings;
 
-import org.joda.time.DateTimeZone;
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.Interpreter;
@@ -371,7 +370,7 @@ public class MapUtil {
 			Path regionFile, Regions regions) throws IOException, AlbinaException {
 		final GeoJson.FeatureCollection featureCollection = new GeoJson.FeatureCollection();
 		featureCollection.properties.put("creation_date", bulletins.get(0).getPublicationDate()
-				.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
+				.format(GlobalVariables.formatterDateTime));
 		featureCollection.properties.put("valid_date", bulletins.get(0).getValidityDateString());
 		featureCollection.properties.put("valid_daytime", daytimeDependency.name());
 		for (AvalancheBulletin bulletin : bulletins) {

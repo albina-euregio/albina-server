@@ -16,6 +16,9 @@
  ******************************************************************************/
 package eu.albina.rest;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,8 +41,6 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,13 +86,13 @@ public class AvalancheBulletinService {
 			@QueryParam("regions") List<String> regions) {
 		logger.debug("GET JSON bulletins");
 
-		DateTime startDate = null;
-		DateTime endDate = null;
+		ZonedDateTime startDate = null;
+		ZonedDateTime endDate = null;
 
 		if (date != null)
-			startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+			startDate = ZonedDateTime.parse(date);
 		else
-			startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+			startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 
 		endDate = startDate.plusDays(1);
 
@@ -121,7 +122,7 @@ public class AvalancheBulletinService {
 			@QueryParam("version") CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
-		DateTime startDate = null;
+		ZonedDateTime startDate = null;
 
 		if (regions.isEmpty()) {
 			regions = GlobalVariables.regionsEuregio;
@@ -129,9 +130,9 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
-				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+				startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, regions,
 					language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
@@ -165,8 +166,8 @@ public class AvalancheBulletinService {
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published XML bulletins");
 
-		DateTime startDate = null;
-		DateTime endDate = null;
+		ZonedDateTime startDate = null;
+		ZonedDateTime endDate = null;
 
 		if (regions.isEmpty()) {
 			logger.warn("No region defined.");
@@ -175,9 +176,9 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
-				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+				startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 			endDate = startDate.plusDays(1);
 
 			String caaml = AvalancheBulletinController.getInstance().getAinevaBulletinsCaaml(startDate, endDate,
@@ -201,10 +202,10 @@ public class AvalancheBulletinService {
 	public Response getLatest() {
 		logger.debug("GET latest date");
 		try {
-			DateTime date = AvalancheReportController.getInstance().getLatestDate();
+			ZonedDateTime date = AvalancheReportController.getInstance().getLatestDate();
 
 			JSONObject json = new JSONObject();
-			json.put("date", date.toString(GlobalVariables.formatterDateTime));
+			json.put("date", date.format(GlobalVariables.formatterDateTime));
 
 			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
@@ -221,7 +222,7 @@ public class AvalancheBulletinService {
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published JSON bulletins");
 
-		DateTime startDate = null;
+		ZonedDateTime startDate = null;
 
 		if (regions.isEmpty()) {
 			regions = GlobalVariables.regionsEuregio;
@@ -229,9 +230,9 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
-				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+				startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 
 			JSONArray jsonResult = AvalancheBulletinController.getInstance().getPublishedBulletinsJson(startDate,
 					regions);
@@ -252,7 +253,7 @@ public class AvalancheBulletinService {
 			@QueryParam("regions") List<String> regions) {
 		logger.debug("GET highest danger rating");
 
-		DateTime startDate = null;
+		ZonedDateTime startDate = null;
 
 		if (regions.isEmpty()) {
 			logger.warn("No region defined.");
@@ -261,9 +262,9 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
-				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+				startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 
 			DangerRating highestDangerRating = AvalancheBulletinController.getInstance()
 					.getHighestDangerRating(startDate, regions);
@@ -284,19 +285,19 @@ public class AvalancheBulletinService {
 	public Response getStatus(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
-		DateTime startDate = null;
-		DateTime endDate = null;
+		ZonedDateTime startDate = null;
+		ZonedDateTime endDate = null;
 
 		try {
 			if (start != null)
-				startDate = DateTime.parse(start).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(start);
 			else
-				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+				startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 
 			if (end != null)
-				endDate = DateTime.parse(end).toDateTime(DateTimeZone.UTC);
+				endDate = ZonedDateTime.parse(end);
 
-			Map<DateTime, BulletinStatus> status;
+			Map<ZonedDateTime, BulletinStatus> status;
 			// if no region is defined, get status for EUREGIO
 			if (region == null || region.isEmpty())
 				status = AvalancheReportController.getInstance().getStatus(startDate, endDate,
@@ -306,9 +307,9 @@ public class AvalancheBulletinService {
 
 			JSONArray jsonResult = new JSONArray();
 
-			for (Entry<DateTime, BulletinStatus> entry : status.entrySet()) {
+			for (Entry<ZonedDateTime, BulletinStatus> entry : status.entrySet()) {
 				JSONObject json = new JSONObject();
-				json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
+				json.put("date", entry.getKey().format(GlobalVariables.formatterDateTime));
 				json.put("status", entry.getValue().toString());
 				jsonResult.put(json);
 			}
@@ -328,25 +329,25 @@ public class AvalancheBulletinService {
 	public Response getInternalStatus(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
-		DateTime startDate = null;
-		DateTime endDate = null;
+		ZonedDateTime startDate = null;
+		ZonedDateTime endDate = null;
 
 		try {
 			if (start != null)
-				startDate = DateTime.parse(start).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(start);
 			else
-				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+				startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 
 			if (end != null)
-				endDate = DateTime.parse(end).toDateTime(DateTimeZone.UTC);
+				endDate = ZonedDateTime.parse(end);
 
-			Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
+			Map<ZonedDateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 					endDate, region);
 			JSONArray jsonResult = new JSONArray();
 
-			for (Entry<DateTime, BulletinStatus> entry : status.entrySet()) {
+			for (Entry<ZonedDateTime, BulletinStatus> entry : status.entrySet()) {
 				JSONObject json = new JSONObject();
-				json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
+				json.put("date", entry.getKey().format(GlobalVariables.formatterDateTime));
 				json.put("status", entry.getValue().toString());
 				jsonResult.put(json);
 			}
@@ -366,24 +367,24 @@ public class AvalancheBulletinService {
 	public Response getPublicationsStatus(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
-		DateTime startDate = null;
-		DateTime endDate = null;
+		ZonedDateTime startDate = null;
+		ZonedDateTime endDate = null;
 
 		if (start != null)
-			startDate = DateTime.parse(start).toDateTime(DateTimeZone.UTC);
+			startDate = ZonedDateTime.parse(start);
 		else
-			startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+			startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 
 		if (end != null)
-			endDate = DateTime.parse(end).toDateTime(DateTimeZone.UTC);
+			endDate = ZonedDateTime.parse(end);
 
-		Map<DateTime, AvalancheReport> status = AvalancheReportController.getInstance().getPublicationStatus(startDate,
+		Map<ZonedDateTime, AvalancheReport> status = AvalancheReportController.getInstance().getPublicationStatus(startDate,
 				endDate, region);
 		JSONArray jsonResult = new JSONArray();
 
-		for (Entry<DateTime, AvalancheReport> entry : status.entrySet()) {
+		for (Entry<ZonedDateTime, AvalancheReport> entry : status.entrySet()) {
 			JSONObject json = new JSONObject();
-			json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
+			json.put("date", entry.getKey().format(GlobalVariables.formatterDateTime));
 			json.put("report", entry.getValue().toJSON());
 			jsonResult.put(json);
 		}
@@ -398,18 +399,18 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublicationStatus(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
-		DateTime startDate = null;
-		DateTime endDate = null;
+		ZonedDateTime startDate = null;
+		ZonedDateTime endDate = null;
 
 		try {
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
-				startDate = new DateTime().withTimeAtStartOfDay().toDateTime(DateTimeZone.UTC);
+				startDate = LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC"));
 
 			endDate = startDate;
 
-			Map<DateTime, AvalancheReport> status = AvalancheReportController.getInstance()
+			Map<ZonedDateTime, AvalancheReport> status = AvalancheReportController.getInstance()
 					.getPublicationStatus(startDate, endDate, region);
 
 			if (status.size() > 1)
@@ -417,9 +418,9 @@ public class AvalancheBulletinService {
 			else if (status.isEmpty())
 				throw new AlbinaException("No publication found!");
 
-			Map.Entry<DateTime, AvalancheReport> entry = status.entrySet().iterator().next();
+			Map.Entry<ZonedDateTime, AvalancheReport> entry = status.entrySet().iterator().next();
 			JSONObject json = new JSONObject();
-			json.put("date", entry.getKey().toString(GlobalVariables.formatterDateTime));
+			json.put("date", entry.getKey().format(GlobalVariables.formatterDateTime));
 			json.put("report", entry.getValue().toJSON());
 
 			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
@@ -462,10 +463,10 @@ public class AvalancheBulletinService {
 		logger.debug("POST JSON bulletins");
 
 		try {
-			DateTime startDate = null;
-			DateTime endDate = null;
+			ZonedDateTime startDate = null;
+			ZonedDateTime endDate = null;
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 			endDate = startDate.plusDays(1);
@@ -505,10 +506,10 @@ public class AvalancheBulletinService {
 		logger.debug("POST JSON bulletins change");
 
 		try {
-			DateTime startDate = null;
-			DateTime endDate = null;
+			ZonedDateTime startDate = null;
+			ZonedDateTime endDate = null;
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 			endDate = startDate.plusDays(1);
@@ -526,8 +527,8 @@ public class AvalancheBulletinService {
 			}
 
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
-					new DateTime());
-			DateTime publicationDate = new DateTime();
+				ZonedDateTime.now());
+			ZonedDateTime publicationDate = ZonedDateTime.now();
 			AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
 			List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().publishBulletins(startDate,
 					endDate, region, publicationDate, user);
@@ -562,11 +563,11 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region != null && user.hasPermissionForRegion(region)) {
-				DateTime startDate = null;
-				DateTime endDate = null;
+				ZonedDateTime startDate = null;
+				ZonedDateTime endDate = null;
 
 				if (date != null)
-					startDate = DateTime.parse(date);
+					startDate = ZonedDateTime.parse(date);
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plusDays(1);
@@ -608,16 +609,16 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region != null && user.hasPermissionForRegion(region)) {
-				DateTime startDate = null;
-				DateTime endDate = null;
+				ZonedDateTime startDate = null;
+				ZonedDateTime endDate = null;
 
 				if (date != null)
-					startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+					startDate = ZonedDateTime.parse(date);
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plusDays(1);
 
-				DateTime publicationDate = new DateTime();
+				ZonedDateTime publicationDate = ZonedDateTime.now();
 
 				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance()
 						.publishBulletins(startDate, endDate, region, publicationDate, user);
@@ -677,16 +678,16 @@ public class AvalancheBulletinService {
 				try {
 					User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
-					DateTime startDate = null;
-					DateTime endDate = null;
+					ZonedDateTime startDate = null;
+					ZonedDateTime endDate = null;
 
 					if (date != null)
-						startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+						startDate = ZonedDateTime.parse(date);
 					else
 						throw new AlbinaException("No date!");
 					endDate = startDate.plusDays(1);
 
-					DateTime publicationDate = new DateTime();
+					ZonedDateTime publicationDate = ZonedDateTime.now();
 
 					// Set publication date
 					Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
@@ -734,10 +735,10 @@ public class AvalancheBulletinService {
 		logger.debug("POST create PDF [" + date + "]");
 
 		try {
-			DateTime startDate = null;
+			ZonedDateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 
@@ -786,10 +787,10 @@ public class AvalancheBulletinService {
 		logger.debug("POST create HTML [" + date + "]");
 
 		try {
-			DateTime startDate = null;
+			ZonedDateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 
@@ -827,10 +828,10 @@ public class AvalancheBulletinService {
 		logger.debug("POST create static widget [" + date + "]");
 
 		try {
-			DateTime startDate = null;
+			ZonedDateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 
@@ -873,10 +874,10 @@ public class AvalancheBulletinService {
 		logger.debug("POST create map [" + date + "]");
 
 		try {
-			DateTime startDate = null;
+			ZonedDateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 
@@ -917,10 +918,10 @@ public class AvalancheBulletinService {
 		logger.debug("POST create caaml [" + date + "]");
 
 		try {
-			DateTime startDate = null;
+			ZonedDateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 
@@ -955,10 +956,10 @@ public class AvalancheBulletinService {
 		logger.debug("POST create json [" + date + "]");
 
 		try {
-			DateTime startDate = null;
+			ZonedDateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 
@@ -999,10 +1000,10 @@ public class AvalancheBulletinService {
 			List<String> regions = new ArrayList<String>();
 			regions.add(region);
 
-			DateTime startDate = null;
+			ZonedDateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 
@@ -1036,10 +1037,10 @@ public class AvalancheBulletinService {
 			List<String> regions = new ArrayList<String>();
 			regions.add(region);
 
-			DateTime startDate = null;
+			ZonedDateTime startDate = null;
 
 			if (date != null)
-				startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+				startDate = ZonedDateTime.parse(date);
 			else
 				throw new AlbinaException("No date!");
 
@@ -1071,11 +1072,11 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region != null && user.hasPermissionForRegion(region)) {
-				DateTime startDate = null;
-				DateTime endDate = null;
+				ZonedDateTime startDate = null;
+				ZonedDateTime endDate = null;
 
 				if (date != null)
-					startDate = DateTime.parse(date).toDateTime(DateTimeZone.UTC);
+					startDate = ZonedDateTime.parse(date);
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plusDays(1);

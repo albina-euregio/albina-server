@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,6 @@ import javax.persistence.EntityTransaction;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.joda.time.DateTime;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -158,7 +158,7 @@ public class RegionController {
 	 */
 	public void lockRegion(RegionLock lock) throws AlbinaException {
 		for (RegionLock regionLock : regionLocks) {
-			if (regionLock.getDate().getMillis() == lock.getDate().getMillis()
+			if (regionLock.getDate().toInstant().toEpochMilli() == lock.getDate().toInstant().toEpochMilli()
 					&& regionLock.getRegion().equals(lock.getRegion()))
 				throw new AlbinaException("Region already locked!");
 		}
@@ -176,7 +176,7 @@ public class RegionController {
 	public void unlockRegion(RegionLock lock) throws AlbinaException {
 		RegionLock hit = null;
 		for (RegionLock regionLock : regionLocks)
-			if ((regionLock.getDate().getMillis() == lock.getDate().getMillis())
+			if ((regionLock.getDate().toInstant().toEpochMilli() == lock.getDate().toInstant().toEpochMilli())
 					&& (regionLock.getRegion().equals(lock.getRegion())))
 				hit = regionLock;
 
@@ -212,8 +212,8 @@ public class RegionController {
 	 *            the region of interest
 	 * @return all dates that are locked for {@code region}
 	 */
-	public List<DateTime> getLockedRegions(String region) {
-		List<DateTime> result = new ArrayList<DateTime>();
+	public List<ZonedDateTime> getLockedRegions(String region) {
+		List<ZonedDateTime> result = new ArrayList<ZonedDateTime>();
 		for (RegionLock regionLock : regionLocks) {
 			if (regionLock.getRegion().equals(region))
 				result.add(regionLock.getDate());
