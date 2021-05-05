@@ -149,7 +149,7 @@ public class AvalancheReportController {
 			throws AlbinaException {
 		Map<DateTime, BulletinStatus> result = new HashMap<DateTime, BulletinStatus>();
 
-		if (region == null || region == "")
+		if (region == null || region.isEmpty())
 			throw new AlbinaException("No region defined!");
 
 		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
