@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.jobs;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +62,8 @@ public class UpdateJob implements org.quartz.Job {
 		try {
 			User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
 
-			ZonedDateTime startDate = ZonedDateTime.now().withTimeAtStartOfDay();
-			ZonedDateTime endDate = startDate.plusDays(1).withTimeAtStartOfDay();
+			ZonedDateTime startDate = LocalDate.now().atStartOfDay().atZone(ZoneId.of("UTC"));
+			ZonedDateTime endDate = LocalDate.now().plusDays(1L).atStartOfDay().atZone(ZoneId.of("UTC"));
 
 			List<String> changedRegions = new ArrayList<String>();
 			if (GlobalVariables.isPublishBulletinsTyrol()
