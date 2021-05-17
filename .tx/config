@@ -42,3 +42,9 @@ source_file = src/main/resources/i18n/Regions.xml
 source_lang = en
 type = PROPERTIESXML
 file_filter = src/main/resources/i18n/Regions_<lang>.xml
+
+[albina-server.aspect]
+source_file = src/main/resources/i18n/Aspect.xml
+source_lang = en
+type = PROPERTIESXML
+file_filter = src/main/resources/i18n/Aspect_<lang>.xml
