@@ -24,7 +24,7 @@ production build:
 
 production build java 11:
     stage: build
-    image: maven:3-openjdk-11
+    image: maven:3-adoptopenjdk-11
     allow_failure: true
     script:
         - apt-get update -y
@@ -40,7 +40,7 @@ production build java 11:
 
 production build java 16:
     stage: build
-    image: maven:3-openjdk-16
+    image: maven:3-adoptopenjdk-16
     allow_failure: true
     script:
         - apt-get update -y
