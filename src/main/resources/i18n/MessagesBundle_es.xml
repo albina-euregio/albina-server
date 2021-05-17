@@ -8,6 +8,7 @@
   <entry key="avalanche-report.logo.path.bw">logo/grey/avalanche_report.png</entry>
   <entry key="avalanche-report.logo.path">logo/color/avalanche_report.png</entry>
   <entry key="avalanche-report.standard.link.text">Cargar vista estandar</entry>
+  <entry key="danger-rating.elevation">{0} por debajo de {1}, {2} por encima de {3}</entry>
   <entry key="day.1">Lunes</entry>
   <entry key="day.2">Martes</entry>
   <entry key="day.3">Miércoles</entry>
@@ -33,10 +34,11 @@
   <entry key="ext-file.region-link.description">Enlace a la región en la web</entry>
   <entry key="elevation.treeline">límite del bosque</entry>
   <entry key="elevation.treeline.capitalized">Límite del bosque</entry>
-  <entry key="elevation.treeline.above.pre-string">por encima de</entry>
-  <entry key="elevation.treeline.below.pre-string">por debajo de</entry>
-  <entry key="elevation.above.pre-string">por encima</entry>
-  <entry key="elevation.below.pre-string">por debajo</entry>
+  <entry key="elevation.all">Todas las elevaciones</entry>
+  <entry key="elevation.below">Por debajo de {0}</entry>
+  <entry key="elevation.above">Por encima de {0}</entry>
+  <entry key="elevation.band">Entre {0} y {1}</entry>
+  <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} por {1}: {2}</entry>
   <entry key="social-media.message.update">ACTUALIZACIÓN en {0} por {1}: {2}</entry>
   <entry key="headline">Predicción de Aludes</entry>

@@ -8,6 +8,7 @@
   <entry key="avalanche-report.logo.path.bw">logo/grey/avalanche_report.png</entry>
   <entry key="avalanche-report.logo.path">logo/color/avalanche_report.png</entry>
   <entry key="avalanche-report.standard.link.text">Carrega vista normal</entry>
+  <entry key="danger-rating.elevation">{0} below {1}, {2} above {3}</entry>
   <entry key="day.1">Dilluns</entry>
   <entry key="day.2">Dimarts</entry>
   <entry key="day.3">Dimecres</entry>
@@ -33,10 +34,11 @@
   <entry key="ext-file.region-link.description">Enllaç a la regió al web</entry>
   <entry key="elevation.treeline">límit del bosc</entry>
   <entry key="elevation.treeline.capitalized">Límit del bosc</entry>
-  <entry key="elevation.treeline.above.pre-string">per sobre de</entry>
-  <entry key="elevation.treeline.below.pre-string">per sota de</entry>
-  <entry key="elevation.above.pre-string">per sobre</entry>
-  <entry key="elevation.below.pre-string">per sota</entry>
+  <entry key="elevation.all">All elevations</entry>
+  <entry key="elevation.below">Below {0}</entry>
+  <entry key="elevation.above">Above {0}</entry>
+  <entry key="elevation.band">Between {0} and {1}</entry>
+  <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} per {1}: {2}</entry>
   <entry key="social-media.message.update">ACTUALITZACIÓ en {0} per {1}: {2}</entry>
   <entry key="headline">Predicció d'allaus</entry>

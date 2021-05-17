@@ -25,13 +25,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -41,6 +46,8 @@ import eu.albina.controller.AvalancheReportController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.AvalancheSituation;
+import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
@@ -267,8 +274,9 @@ public class AlbinaUtil {
 
 	public static boolean isUpdate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime publicationDate = getPublicationDate(bulletins);
-		int time = publicationDate.getSecondOfDay();
-		return (time == 61200) ? false : true;
+		LocalDateTime localDateTime = publicationDate.withZoneSameInstant(ZoneId.of("Europe/Paris")).toLocalDateTime();
+		int secondOfDay = localDateTime.toLocalTime().toSecondOfDay();
+		return (secondOfDay == 61200) ? false : true;
 	}
 
 	private static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
@@ -521,5 +529,87 @@ public class AlbinaUtil {
 			logger.error("HTMLs for " + date + " could not be udpated in latest directory!", e);
 		}
 	}
+
+	public static String getDangerRatingText(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang) {
+		String dangerRatingBelow;
+		String dangerRatingAbove;
+		if (daytimeBulletin.getDangerRatingBelow() == null || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.missing) || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.no_rating) || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.no_snow)) {
+			dangerRatingBelow = DangerRating.no_rating.toString(lang.getLocale(), true);
+		} else {
+			dangerRatingBelow = daytimeBulletin.getDangerRatingBelow().toString(lang.getLocale(), true);
+		}
+		if (daytimeBulletin.getDangerRatingAbove() == null || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.missing) || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.no_rating) || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.no_snow)) {
+			dangerRatingAbove = DangerRating.no_rating.toString(lang.getLocale(), true);
+		} else {
+			dangerRatingAbove = daytimeBulletin.getDangerRatingAbove().toString(lang.getLocale(), true);
+		}
+	
+		if (daytimeBulletin.getTreeline()) {
+			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, lang.getBundleString("elevation.treeline"), dangerRatingAbove, lang.getBundleString("elevation.treeline"));
+		} else if (daytimeBulletin.getElevation() > 0) {
+			String elevation = daytimeBulletin.getElevation() + lang.getBundleString("unit.meter");
+			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, elevation, dangerRatingAbove, elevation);
+		} else {
+			return dangerRatingAbove;
+		}
+	}
+
+	public static String getElevationString(AvalancheSituation avalancheSituation, LanguageCode lang) {
+		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
+			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+				// elevation high and low set
+				String low = "";
+				String high = "";
+				if (avalancheSituation.getTreelineLow()) {
+					// elevation low treeline
+					low = lang.getBundleString("elevation.treeline");
+				} else if (avalancheSituation.getElevationLow() > 0) {
+					// elevation low number
+					low = avalancheSituation.getElevationLow() + lang.getBundleString("unit.meter");
+				}
+				if (avalancheSituation.getTreelineHigh()) {
+					// elevation high treeline
+					high = lang.getBundleString("elevation.treeline");
+				} else if (avalancheSituation.getElevationHigh() > 0) {
+					// elevation high number
+					high = avalancheSituation.getElevationHigh() + lang.getBundleString("unit.meter");
+				}
+				return MessageFormat.format(lang.getBundleString("elevation.band"), low, high);
+			} else {
+				// elevation high set
+				String high = "";
+				if (avalancheSituation.getTreelineHigh()) {
+					// elevation high treeline
+					high = lang.getBundleString("elevation.treeline");
+				} else if (avalancheSituation.getElevationHigh() > 0) {
+					// elevation high number
+					high = avalancheSituation.getElevationHigh() + lang.getBundleString("unit.meter");
+				}
+				return MessageFormat.format(lang.getBundleString("elevation.below"), high);
+			}
+		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			// elevation low set
+			String low = "";
+			if (avalancheSituation.getTreelineLow()) {
+				// elevation low treeline
+				low = lang.getBundleString("elevation.treeline");
+			} else if (avalancheSituation.getElevationLow() > 0) {
+				// elevation low number
+				low = avalancheSituation.getElevationLow() + lang.getBundleString("unit.meter");
+			}
+			return MessageFormat.format(lang.getBundleString("elevation.above"), low);
+		} else {
+			// no elevation set
+			return lang.getBundleString("elevation.all");
+		}
+	}
+
+    public static String getAspectString(Set<Aspect> aspects, Locale locale) {
+		StringJoiner aspectString = new StringJoiner(", ");
+		for (Aspect aspect : aspects) {
+			aspectString.add(aspect.toString(locale));
+		}
+		return aspectString.toString();
+    }
 
 }

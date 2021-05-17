@@ -17,9 +17,18 @@
 package eu.albina.model.enumerations;
 
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import eu.albina.util.XMLResourceBundleControl;
 
 public enum Aspect {
 	N, NE, E, SE, S, SW, W, NW;
+
+	public String toString(Locale locale) {
+		return ResourceBundle.getBundle("i18n.Aspect", locale, new XMLResourceBundleControl())
+				.getString(name());
+	}
 
 	public static Aspect fromString(String text) {
 		if (text != null) {

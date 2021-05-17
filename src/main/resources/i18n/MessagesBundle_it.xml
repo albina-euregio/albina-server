@@ -8,6 +8,7 @@
   <entry key="avalanche-report.logo.path.bw">logo/grey/valanghe_report.png</entry>
   <entry key="avalanche-report.logo.path">logo/color/valanghe_report.png</entry>
   <entry key="avalanche-report.standard.link.text">Vista standard del carico</entry>
+  <entry key="danger-rating.elevation">{0} sotto i {1}, {2} sopra i {3}</entry>
   <entry key="day.1">Lunedì</entry>
   <entry key="day.2">Martedì</entry>
   <entry key="day.3">Mercoledì</entry>
@@ -33,10 +34,11 @@
   <entry key="ext-file.region-link.description">Link alla regione sul sito web</entry>
   <entry key="elevation.treeline">linea del bosco</entry>
   <entry key="elevation.treeline.capitalized">Linea del bosco</entry>
-  <entry key="elevation.treeline.above.pre-string"> sopra la </entry>
-  <entry key="elevation.treeline.below.pre-string"> sotto la </entry>
-  <entry key="elevation.above.pre-string"> sopra i </entry>
-  <entry key="elevation.below.pre-string"> sotto i </entry>
+  <entry key="elevation.all">Tutte le elevazioni</entry>
+  <entry key="elevation.below">Sotto i {0}</entry>
+  <entry key="elevation.above">Sopra i {0}</entry>
+  <entry key="elevation.band">Tra {0} e {1}</entry>
+  <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} per {1}: {2}</entry>
   <entry key="social-media.message.update">AGGIORNAMENTO sulla {0} per {1}: {2}</entry>
   <entry key="headline">Previsione Valanghe</entry>

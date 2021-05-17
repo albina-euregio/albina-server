@@ -37,6 +37,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.locationtech.jts.util.Assert;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,6 +193,11 @@ public class UtilTest {
 	public void testIsLatest() {
 		ZonedDateTime dateTime = (ZonedDateTime.now()).minusDays(0);
 		System.out.println(AlbinaUtil.isLatest(dateTime));
+	}
+
+	@Test
+	public void testIsUpdate() {
+		Assert.isTrue(!AlbinaUtil.isUpdate(bulletins));
 	}
 
 	@Ignore

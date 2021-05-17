@@ -37,9 +37,12 @@ import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfDocumentInfo;
 import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfString;
+import com.itextpdf.kernel.pdf.PdfViewerPreferences;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.WriterProperties;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.Document;
@@ -144,8 +147,13 @@ public class PdfUtil {
 			else
 				logger.debug("File " + filename + " already exists.");
 
-			writer = new PdfWriter(file);
+			writer = new PdfWriter(filename, new WriterProperties().addXmpMetadata());
 			pdf = new PdfDocument(writer);
+			pdf.setTagged();
+			pdf.getCatalog().setLang(new PdfString(lang.toString()));
+			pdf.getCatalog().setViewerPreferences(new PdfViewerPreferences().setDisplayDocTitle(true));
+			PdfDocumentInfo info = pdf.getDocumentInfo();
+			info.setTitle(lang.getBundleString("avalanche-report.name"));
 
 			openSansRegularFont = PdfFontFactory.createFont(
 					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Regular.ttf", PdfEncodings.WINANSI, true);
@@ -265,6 +273,7 @@ public class PdfUtil {
 						+ System.getProperty("file.separator") + publicationTimeString
 						+ System.getProperty("file.separator") + avalancheBulletin.getId() + ".jpg");
 			Image regionAMImg = new Image(regionAMImageDate);
+			regionAMImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionAMImg.scaleToFit(regionMapSize, regionMapSize);
 			regionAMImg.setMarginRight(10);
 			cell = new Cell(1, 1).add(regionAMImg);
@@ -305,6 +314,7 @@ public class PdfUtil {
 						+ System.getProperty("file.separator") + publicationTimeString
 						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_PM.jpg");
 			Image regionPMImg = new Image(regionPMImageDate);
+			regionPMImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionPMImg.scaleToFit(regionMapSize, regionMapSize);
 			regionPMImg.setMarginRight(10);
 			cell = new Cell(1, 1).add(regionPMImg);
@@ -340,6 +350,7 @@ public class PdfUtil {
 								+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 								+ System.getProperty("file.separator") + avalancheBulletin.getId() + ".jpg");
 			Image regionImg = new Image(regionImageDate);
+			regionImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionImg.scaleToFit(regionMapSize, regionMapSize);
 			regionImg.setMarginRight(10);
 			cell = new Cell(1, 1).add(regionImg);
@@ -547,6 +558,7 @@ public class PdfUtil {
 			regionImg = getImage(
 					"warning_pictos/color/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		if (regionImg != null) {
+			regionImg.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getDangerRatingText(daytimeBulletin, lang));
 			regionImg.scaleToFit(70, 30);
 			firstRow.add(regionImg);
 		}
@@ -609,6 +621,7 @@ public class PdfUtil {
 			Image tendencyImg = getImage(
 					GlobalVariables.getTendencySymbolPath(avalancheBulletin.getTendency(), grayscale));
 			if (tendencyImg != null) {
+				tendencyImg.getAccessibilityProperties().setAlternateDescription(avalancheBulletin.getTendency().toString(lang.getLocale()));
 				tendencyImg.scaleToFit(25, 20);
 				tendencyImg.setMarginLeft(5);
 				cell.add(tendencyImg);
@@ -701,6 +714,7 @@ public class PdfUtil {
 				avalancheSituationTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
 				img = getImage(GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, grayscale));
 				if (img != null) {
+					img.getAccessibilityProperties().setAlternateDescription(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 					img.scaleToFit(60, 35);
 					if (isSecond)
 						img.setMarginLeft(5);
@@ -766,6 +780,7 @@ public class PdfUtil {
 
 				img = getImage(GlobalVariables.getAspectSymbolPath(result, grayscale));
 				if (img != null) {
+					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(avalancheSituation.getAspects(), lang.getLocale()));
 					img.scaleToFit(30, 30);
 					cell = new Cell(1, 1).add(img);
 					cell.setBorder(Border.NO_BORDER);
@@ -785,6 +800,7 @@ public class PdfUtil {
 					else
 						img = getImage("elevation/color/levels_middle_two.png");
 					if (img != null) {
+						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 						img.scaleToFit(70, 25);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -847,6 +863,7 @@ public class PdfUtil {
 					else
 						img = getImage("elevation/color/levels_below.png");
 					if (img != null) {
+						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 						img.scaleToFit(70, 25);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -886,6 +903,7 @@ public class PdfUtil {
 				else
 					img = getImage("elevation/color/levels_above.png");
 				if (img != null) {
+					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 					img.scaleToFit(70, 25);
 					img.setMarginLeft(5);
 					cell = new Cell(1, 1);
@@ -925,6 +943,7 @@ public class PdfUtil {
 				else
 					img = getImage("elevation/color/levels_all.png");
 				if (img != null) {
+					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 					img.scaleToFit(70, 25);
 					img.setMarginLeft(5);
 					cell = new Cell(1, 1);
@@ -1078,6 +1097,7 @@ public class PdfUtil {
 					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, false, true, grayscale));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
+			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
 			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY + mapHeight + 40);
 			canvas.add(overviewMapAMImg);
@@ -1090,6 +1110,7 @@ public class PdfUtil {
 					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, true, true, grayscale));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
+			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
 			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY);
 			canvas.add(overviewMapPMImg);
@@ -1102,6 +1123,7 @@ public class PdfUtil {
 					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
+			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			if (region.equals(GlobalVariables.codeEuregio)) {
 				mapY = 250;
 				overviewMapImg.scaleToFit(420, 500);

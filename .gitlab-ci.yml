@@ -1,4 +1,4 @@
-image: maven:3-jdk-8
+image: maven:3-openjdk-8
 
 variables:
     MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
@@ -10,7 +10,6 @@ cache:
 
 production build:
     stage: build
-    allow_failure: true
     script:
         - apt-get update -y
         - apt-get install -y ghostscript imagemagick webp
@@ -25,7 +24,23 @@ production build:
 
 production build java 11:
     stage: build
-    image: maven:3-jdk-11
+    image: maven:3-adoptopenjdk-11
+    allow_failure: true
+    script:
+        - apt-get update -y
+        - apt-get install -y ghostscript imagemagick webp
+        - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
+        - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
+    artifacts:
+        when: always
+        reports:
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
+
+production build java 16:
+    stage: build
+    image: maven:3-adoptopenjdk-16
     allow_failure: true
     script:
         - apt-get update -y
