@@ -9,6 +9,7 @@
 	<entry key="avalanche-report.logo.path.bw">logo/grey/avalanche_report.png</entry>
 	<entry key="avalanche-report.logo.path">logo/color/avalanche_report.png</entry>
 	<entry key="avalanche-report.standard.link.text">Load standard view</entry>
+	<entry key="danger-rating.elevation">{0} below {1}, {2} above {3}</entry>
 	<entry key="day.1">Monday</entry>
 	<entry key="day.2">Tuesday</entry>
 	<entry key="day.3">Wednesday</entry>
@@ -34,10 +35,11 @@
 	<entry key="ext-file.region-link.description">Link to region on the website</entry>
 	<entry key="elevation.treeline">treeline</entry>
 	<entry key="elevation.treeline.capitalized">Treeline</entry>
-	<entry key="elevation.treeline.above.pre-string"> above the </entry>
-	<entry key="elevation.treeline.below.pre-string"> below the </entry>
-	<entry key="elevation.above.pre-string"> above </entry>
-	<entry key="elevation.below.pre-string"> below </entry>
+	<entry key="elevation.all">All elevations</entry>
+	<entry key="elevation.below">Below {0}</entry>
+	<entry key="elevation.above">Above {0}</entry>
+	<entry key="elevation.band">Between {0} and {1}</entry>
+	<entry key="unit.meter">m</entry>
 	<entry key="social-media.message">{0} for {1}: {2}</entry>
 	<entry key="social-media.message.update">UDPATE on {0} for {1}: {2}</entry>
 	<entry key="headline">Avalanche Forecast</entry>

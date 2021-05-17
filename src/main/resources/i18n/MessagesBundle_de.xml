@@ -8,6 +8,7 @@
   <entry key="avalanche-report.logo.path.bw">logo/grey/lawinen_report.png</entry>
   <entry key="avalanche-report.logo.path">logo/color/lawinen_report.png</entry>
   <entry key="avalanche-report.standard.link.text">Standardansicht laden</entry>
+  <entry key="danger-rating.elevation">{0} unter {1}, {2} über {3}</entry>
   <entry key="day.1">Montag</entry>
   <entry key="day.2">Dienstag</entry>
   <entry key="day.3">Mittwoch</entry>
@@ -33,10 +34,11 @@
   <entry key="ext-file.region-link.description">Link zur Region auf der Webseite</entry>
   <entry key="elevation.treeline">Waldgrenze</entry>
   <entry key="elevation.treeline.capitalized">Waldgrenze</entry>
-  <entry key="elevation.treeline.above.pre-string"> über der </entry>
-  <entry key="elevation.treeline.below.pre-string"> unter der </entry>
-  <entry key="elevation.above.pre-string"> über </entry>
-  <entry key="elevation.below.pre-string"> unter </entry>
+  <entry key="elevation.all">Alle Höhenlagen</entry>
+  <entry key="elevation.below">Unter {0}</entry>
+  <entry key="elevation.above">Über {0}</entry>
+  <entry key="elevation.band">Zwischen {0} und {1}</entry>
+  <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} für {1}: {2}</entry>
   <entry key="social-media.message.update">UPDATE zum {0} für {1}: {2}</entry>
   <entry key="headline">Lawinenvorhersage</entry>
