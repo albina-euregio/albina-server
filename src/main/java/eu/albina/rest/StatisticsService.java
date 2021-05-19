@@ -17,7 +17,6 @@
 package eu.albina.rest;
 
 import java.io.ByteArrayInputStream;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import javax.ws.rs.GET;
