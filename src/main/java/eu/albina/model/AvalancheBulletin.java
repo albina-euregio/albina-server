@@ -877,7 +877,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public ZonedDateTime getValidityDate() {
-		ZonedDateTime date = validFrom.withTimeAtStartOfDay();
+		ZonedDateTime date = validFrom;
 		if (validFrom.getHour() > 12)
 			date = date.plusDays(1);
 		return date;
