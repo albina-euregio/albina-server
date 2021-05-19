@@ -30,6 +30,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
@@ -39,8 +41,7 @@ import static org.junit.Assert.assertTrue;
 
 public class BlogControllerTest {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(BlogControllerTest.class);
+	private static Logger logger = LoggerFactory.getLogger(BlogControllerTest.class);
 
 	@Before
 	public void setUp() throws Exception {
@@ -88,5 +89,6 @@ public class BlogControllerTest {
 				+ "}\n";
 
 		Blogger.Item item = new CommonProcessor().fromJson(blog, Blogger.Item.class);
+		logger.debug(item.title);
 	}
 }
