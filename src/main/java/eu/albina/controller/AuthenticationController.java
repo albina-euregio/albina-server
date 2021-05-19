@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Date;
