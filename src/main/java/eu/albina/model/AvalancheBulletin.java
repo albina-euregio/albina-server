@@ -49,7 +49,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -96,15 +95,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private Set<String> additionalAuthors;
 
 	@Column(name = "PUBLICATION_DATE")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private ZonedDateTime publicationDate;
 
 	/** Validity of the avalanche bulletin */
 	@Column(name = "VALID_FROM")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private ZonedDateTime validFrom;
 	@Column(name = "VALID_UNTIL")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private ZonedDateTime validUntil;
 
 	/** The recommended regions the avalanche bulletin is for. */
