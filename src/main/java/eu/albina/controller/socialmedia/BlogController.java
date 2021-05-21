@@ -18,7 +18,7 @@ package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -51,12 +51,12 @@ public class BlogController extends CommonProcessor {
 	private static final int BLOGGER_CONNECTION_TIMEOUT = 10000;
 
 	private static BlogController instance = null;
-	protected final HashMap<String, ZonedDateTime> lastFetch = new HashMap<>();
+	protected final HashMap<String, Instant> lastFetch = new HashMap<>();
 	private final Executor executor;
 
 	private BlogController() {
 		executor = Executor.newInstance(sslHttpClient());
-		ZonedDateTime date = ZonedDateTime.now();
+		Instant date = Instant.now();
 		for (String blogId : GlobalVariables.blogIds.values()) {
 			lastFetch.put(blogId, date);
 		}
@@ -89,7 +89,7 @@ public class BlogController extends CommonProcessor {
 		try {
 			String uri = new URIBuilder(GlobalVariables.blogApiUrl + blogId + "/posts")
 				.addParameter("key", GlobalVariables.googleApiKey)
-				.addParameter("startDate", lastFetch.get(blogId).format(GlobalVariables.formatterDateTime))
+				.addParameter("startDate", lastFetch.get(blogId).toString())
 				.addParameter("fetchBodies", Boolean.TRUE.toString())
 				.addParameter("fetchImages", Boolean.TRUE.toString())
 				.toString();
@@ -97,7 +97,7 @@ public class BlogController extends CommonProcessor {
 			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
 			logger.debug("Start date for {}: {}", blogId, lastFetch.get(blogId).toString());
-			lastFetch.put(blogId, ZonedDateTime.now());
+			lastFetch.put(blogId, Instant.now());
 			HttpResponse response = executor.execute(request).returnResponse();
 			logger.debug("New start date for {}: {}", blogId, lastFetch.get(blogId).toString());
 			if (response.getStatusLine().getStatusCode() == 200) {

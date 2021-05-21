@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -212,11 +212,11 @@ public class RegionController {
 	 *            the region of interest
 	 * @return all dates that are locked for {@code region}
 	 */
-	public List<ZonedDateTime> getLockedRegions(String region) {
-		List<ZonedDateTime> result = new ArrayList<ZonedDateTime>();
+	public List<Instant> getLockedRegions(String region) {
+		List<Instant> result = new ArrayList<Instant>();
 		for (RegionLock regionLock : regionLocks) {
 			if (regionLock.getRegion().equals(region))
-				result.add(regionLock.getDate());
+				result.add(regionLock.getDate().toInstant());
 		}
 		return result;
 	}

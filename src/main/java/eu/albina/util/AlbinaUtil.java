@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -128,14 +129,30 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static boolean hasBulletinChanged(ZonedDateTime startDate, String region) throws AlbinaException {
+	public static boolean hasBulletinChanged(Instant startDate, String region) throws AlbinaException {
 		boolean result = false;
-		Map<ZonedDateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
+		Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 				startDate, region);
 		if (status.size() == 1 && status.get(startDate) != BulletinStatus.published
 				&& status.get(startDate) != BulletinStatus.republished)
 			result = true;
 		return result;
+	}
+
+	public static Instant getInstantStartOfDay() {
+		return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0).atZone(ZoneId.of("UTC")).toInstant();
+	}
+
+	public static Instant getInstantNow() {
+		return LocalDateTime.now().atZone(ZoneId.of("UTC")).toInstant();
+	}
+
+	public static ZonedDateTime getZonedDateTimeNow() {
+		return AlbinaUtil.getInstantNow().atZone(ZoneId.of("UTC"));
+	}
+
+	public static ZonedDateTime getZonedDateTimeUtc(Instant instant) {
+		return ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"));
 	}
 
 	public static String encodeFileToBase64Binary(File file) {

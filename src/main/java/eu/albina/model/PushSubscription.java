@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
@@ -70,12 +72,12 @@ public class PushSubscription {
 		this.id = id;
 	}
 
-	public ZonedDateTime getSubscribeDate() {
-		return subscribeDate;
+	public Instant getSubscribeDate() {
+		return subscribeDate.toInstant();
 	}
 
-	public void setSubscribeDate(ZonedDateTime subscribeDate) {
-		this.subscribeDate = subscribeDate;
+	public void setSubscribeDate(Instant subscribeDate) {
+		this.subscribeDate = ZonedDateTime.ofInstant(subscribeDate, ZoneId.of("UTC"));
 	}
 
 	public String getAuth() {

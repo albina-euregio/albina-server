@@ -18,7 +18,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -357,8 +357,8 @@ public class PublicationController {
 	 * @param startDate
 	 */
 	public void startUpdateThread(List<AvalancheBulletin> allBulletins, List<String> regions,
-			List<AvalancheBulletin> publishedBulletins, ZonedDateTime startDate, String region, User user,
-			ZonedDateTime publicationDate) {
+			List<AvalancheBulletin> publishedBulletins, Instant startDate, String region, User user,
+			Instant publicationDate) {
 		new Thread(new Runnable() {
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
@@ -394,7 +394,7 @@ public class PublicationController {
 	 * @param publishedBulletins
 	 */
 	public void startChangeThread(List<AvalancheBulletin> allBulletins, List<AvalancheBulletin> publishedBulletins,
-			ZonedDateTime startDate, String region, User user) {
+			Instant startDate, String region, User user) {
 		new Thread(new Runnable() {
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();

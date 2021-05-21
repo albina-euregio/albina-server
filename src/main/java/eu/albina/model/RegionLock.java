@@ -17,10 +17,9 @@
 package eu.albina.model;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.github.openjson.JSONObject;
-
-import eu.albina.util.GlobalVariables;
 
 public class RegionLock {
 
@@ -99,7 +98,7 @@ public class RegionLock {
 		if (region != null)
 			json.put("region", region);
 		if (date != null)
-			json.put("date", date.format(GlobalVariables.formatterDateTime));
+			json.put("date", DateTimeFormatter.ISO_INSTANT.format(date));
 		json.put("lock", lock);
 
 		return json;

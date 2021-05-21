@@ -17,7 +17,8 @@
 package eu.albina.rest;
 
 import java.io.ByteArrayInputStream;
-import java.time.ZonedDateTime;
+import java.time.Instant;
+import java.time.OffsetDateTime;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -54,15 +55,15 @@ public class StatisticsService {
 			@QueryParam("duplicate") boolean duplicate) {
 		logger.debug("GET CSV bulletins");
 
-		ZonedDateTime start = null;
-		ZonedDateTime end = null;
+		Instant start = null;
+		Instant end = null;
 
 		if (startDate != null)
-			start = ZonedDateTime.parse(startDate);
+			start = OffsetDateTime.parse(startDate).toInstant();
 		else
 			return Response.notAcceptable(null).build();
 		if (endDate != null)
-			end = ZonedDateTime.parse(endDate);
+			end = OffsetDateTime.parse(endDate).toInstant();
 		else
 			return Response.notAcceptable(null).build();
 

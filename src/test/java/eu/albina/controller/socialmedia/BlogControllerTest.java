@@ -22,8 +22,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.junit.After;
@@ -55,7 +53,7 @@ public class BlogControllerTest {
 
 	@Test
 	public void testBlogPosts() throws Exception {
-		BlogController.getInstance().lastFetch.put(GlobalVariables.blogIds.get(GlobalVariables.codeTyrol, LanguageCode.de), ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.of("UTC")));
+		BlogController.getInstance().lastFetch.put(GlobalVariables.blogIds.get(GlobalVariables.codeTyrol, LanguageCode.de), Instant.ofEpochMilli(0L));
 		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(GlobalVariables.codeTyrol, LanguageCode.de);
 		assertTrue("size=" + blogPosts.size(), blogPosts.size() > 5);
 		assertTrue("one blog has image", blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()));

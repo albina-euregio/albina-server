@@ -16,20 +16,17 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.time.ZonedDateTime;
-
+import java.time.Instant;
 import com.github.openjson.JSONObject;
-
-import eu.albina.util.GlobalVariables;
 
 public class BulletinLock {
 
 	private String sessionId;
 	private boolean lock;
 	private String bulletin;
-	private ZonedDateTime date;
+	private Instant date;
 
-	public BulletinLock(String sessionId, String bulletin, ZonedDateTime date, boolean lock) {
+	public BulletinLock(String sessionId, String bulletin, Instant date, boolean lock) {
 		this.sessionId = sessionId;
 		this.bulletin = bulletin;
 		this.date = date;
@@ -44,7 +41,7 @@ public class BulletinLock {
 			this.bulletin = json.getString("bulletin");
 
 		if (json.has("date"))
-			this.date = ZonedDateTime.parse(json.getString("date"));
+			this.date = Instant.parse(json.getString("date"));
 
 		if (json.has("lock"))
 			this.lock = json.getBoolean("lock");
@@ -66,11 +63,11 @@ public class BulletinLock {
 		this.bulletin = bulletin;
 	}
 
-	public ZonedDateTime getDate() {
+	public Instant getDate() {
 		return date;
 	}
 
-	public void setDate(ZonedDateTime date) {
+	public void setDate(Instant date) {
 		this.date = date;
 	}
 
@@ -90,7 +87,7 @@ public class BulletinLock {
 		if (bulletin != null)
 			json.put("bulletin", bulletin);
 		if (date != null)
-			json.put("date", date.format(GlobalVariables.formatterDateTime));
+			json.put("date", date.toString());
 		json.put("lock", lock);
 
 		return json;

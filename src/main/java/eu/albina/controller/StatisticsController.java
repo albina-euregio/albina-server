@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,7 +97,7 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(ZonedDateTime startDate, ZonedDateTime endDate, LanguageCode lang, String region,
+	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, String region,
 			boolean extended, boolean duplicateBulletinForenoon) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -137,7 +137,7 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(ZonedDateTime startDate, ZonedDateTime endDate, LanguageCode lang, boolean extended,
+	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, boolean extended,
 			boolean duplicateBulletinForenoon) {
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();

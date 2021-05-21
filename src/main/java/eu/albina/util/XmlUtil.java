@@ -26,6 +26,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -225,7 +226,7 @@ public class XmlUtil {
 		Element dateTimeReport = doc.createElement("dateTimeReport");
 		if (dateTime != null) {
 			dateTimeReport.appendChild(doc
-					.createTextNode(dateTime.format(GlobalVariables.formatterDateTime)));
+					.createTextNode(DateTimeFormatter.ISO_INSTANT.format(dateTime)));
 			metaData.appendChild(dateTimeReport);
 		}
 		Element srcRef = doc.createElement("srcRef");

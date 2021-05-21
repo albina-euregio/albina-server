@@ -941,12 +941,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			json.put("dangerPattern2", this.dangerPattern2.toString());
 
 		if (publicationDate != null)
-			json.put("publicationDate",
-					publicationDate.format(GlobalVariables.formatterDateTime));
+			json.put("publicationDate",	DateTimeFormatter.ISO_INSTANT.format(publicationDate));
 
 		JSONObject validity = new JSONObject();
-		validity.put("from", validFrom.format(GlobalVariables.formatterDateTime));
-		validity.put("until", validUntil.format(GlobalVariables.formatterDateTime));
+		validity.put("from", DateTimeFormatter.ISO_INSTANT.format(validFrom));
+		validity.put("until", DateTimeFormatter.ISO_INSTANT.format(validUntil));
 		json.put("validity", validity);
 
 		json.put("suggestedRegions", suggestedRegions);
@@ -1008,11 +1007,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 		if (publicationDate != null)
 			json.put("publicationDate",
-					publicationDate.format(GlobalVariables.formatterDateTime));
+				DateTimeFormatter.ISO_INSTANT.format(publicationDate));
 
 		JSONObject validity = new JSONObject();
-		validity.put("from", validFrom.format(GlobalVariables.formatterDateTime));
-		validity.put("until", validUntil.format(GlobalVariables.formatterDateTime));
+		validity.put("from", DateTimeFormatter.ISO_INSTANT.format(validFrom));
+		validity.put("until", DateTimeFormatter.ISO_INSTANT.format(validUntil));
 		json.put("validity", validity);
 
 		json.put("regions", publishedRegions);
@@ -1069,10 +1068,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			Element validTime = doc.createElement("validTime");
 			Element timePeriod = doc.createElement("TimePeriod");
 			Element beginPosition = doc.createElement("beginPosition");
-			beginPosition.appendChild(doc.createTextNode(start.format(GlobalVariables.formatterDateTime)));
+			beginPosition.appendChild(doc.createTextNode(DateTimeFormatter.ISO_INSTANT.format(start)));
 			timePeriod.appendChild(beginPosition);
 			Element endPosition = doc.createElement("endPosition");
-			endPosition.appendChild(doc.createTextNode(end.format(GlobalVariables.formatterDateTime)));
+			endPosition.appendChild(doc.createTextNode(DateTimeFormatter.ISO_INSTANT.format(end)));
 			timePeriod.appendChild(endPosition);
 			validTime.appendChild(timePeriod);
 			rootElement.appendChild(validTime);
@@ -1190,10 +1189,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				Element validTime = doc.createElement("validTime");
 				Element timePeriod = doc.createElement("TimePeriod");
 				Element beginPosition = doc.createElement("beginPosition");
-				beginPosition.appendChild(doc.createTextNode(start.format(GlobalVariables.formatterDateTime)));
+				beginPosition.appendChild(doc.createTextNode(DateTimeFormatter.ISO_INSTANT.format(start)));
 				timePeriod.appendChild(beginPosition);
 				Element endPosition = doc.createElement("endPosition");
-				endPosition.appendChild(doc.createTextNode(end.format(GlobalVariables.formatterDateTime)));
+				endPosition.appendChild(doc.createTextNode(DateTimeFormatter.ISO_INSTANT.format(end)));
 				timePeriod.appendChild(endPosition);
 				validTime.appendChild(timePeriod);
 				tendencyElement.appendChild(validTime);
@@ -1271,7 +1270,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		// publication time
 		Element pubTime = doc.createElement("publicationTime");
 		pubTime.appendChild(doc.createTextNode(
-				publicationDate.format(GlobalVariables.formatterDateTime)));
+				DateTimeFormatter.ISO_INSTANT.format(publicationDate)));
 		rootElement.appendChild(pubTime);
 
 		// validTime
@@ -1289,10 +1288,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 			Element validTime = doc.createElement("validTime");
 			Element beginPosition = doc.createElement("startTime");
-			beginPosition.appendChild(doc.createTextNode(start.format(GlobalVariables.formatterDateTime)));
+			beginPosition.appendChild(doc.createTextNode(DateTimeFormatter.ISO_INSTANT.format(start)));
 			validTime.appendChild(beginPosition);
 			Element endPosition = doc.createElement("endTime");
-			endPosition.appendChild(doc.createTextNode(end.format(GlobalVariables.formatterDateTime)));
+			endPosition.appendChild(doc.createTextNode(DateTimeFormatter.ISO_INSTANT.format(end)));
 			validTime.appendChild(endPosition);
 			rootElement.appendChild(validTime);
 		}
@@ -1427,10 +1426,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 				Element validTime = doc.createElement("validTime");
 				Element startTime = doc.createElement("startTime");
-				startTime.appendChild(doc.createTextNode(start.format(GlobalVariables.formatterDateTime)));
+				startTime.appendChild(doc.createTextNode(DateTimeFormatter.ISO_INSTANT.format(start)));
 				validTime.appendChild(startTime);
 				Element endTime = doc.createElement("endTime");
-				endTime.appendChild(doc.createTextNode(end.format(GlobalVariables.formatterDateTime)));
+				endTime.appendChild(doc.createTextNode(DateTimeFormatter.ISO_INSTANT.format(end)));
 				validTime.appendChild(endTime);
 				tendencyElement.appendChild(validTime);
 			}

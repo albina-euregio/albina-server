@@ -16,7 +16,8 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -35,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.RegionController;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 
 @Path("/regions")
@@ -56,8 +56,8 @@ public class RegionService {
 		logger.debug("GET JSON locked regions");
 
 		JSONArray json = new JSONArray();
-		for (ZonedDateTime date : RegionController.getInstance().getLockedRegions(region))
-			json.put(date.format(GlobalVariables.formatterDateTime));
+		for (Instant date : RegionController.getInstance().getLockedRegions(region))
+			json.put(DateTimeFormatter.ISO_INSTANT.format(date));
 		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 	}
 }

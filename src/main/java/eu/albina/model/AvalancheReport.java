@@ -17,6 +17,7 @@
 package eu.albina.model;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +36,6 @@ import org.w3c.dom.Element;
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.GlobalVariables;
 
 /**
  * This class holds all information about one avalanche report.
@@ -276,10 +276,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			json.put("region", region);
 
 		if (date != null)
-			json.put("date", date.format(GlobalVariables.formatterDateTime));
+			json.put("date", DateTimeFormatter.ISO_INSTANT.format(date));
 
 		if (timestamp != null)
-			json.put("timestamp", timestamp.format(GlobalVariables.formatterDateTime));
+			json.put("timestamp", DateTimeFormatter.ISO_INSTANT.format(timestamp));
 
 		if (status != null)
 			json.put("status", status.toString());

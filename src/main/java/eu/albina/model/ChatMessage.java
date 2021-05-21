@@ -17,14 +17,13 @@
 package eu.albina.model;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.github.openjson.JSONObject;
-
-import eu.albina.util.GlobalVariables;
 
 @Entity
 @Table(name = "chat_message")
@@ -103,7 +102,7 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 		if (username != null)
 			json.put("username", username);
 		if (dateTime != null)
-			json.put("time", dateTime.format(GlobalVariables.formatterDateTime));
+			json.put("time", DateTimeFormatter.ISO_INSTANT.format(dateTime));
 		if (chatId > -1)
 			json.put("chatId", chatId);
 

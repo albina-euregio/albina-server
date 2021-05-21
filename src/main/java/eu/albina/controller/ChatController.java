@@ -17,7 +17,7 @@
 package eu.albina.controller;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +27,7 @@ import javax.persistence.EntityTransaction;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.ChatMessage;
 import eu.albina.model.User;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -81,14 +82,14 @@ public class ChatController {
 	 * @return all chat messages starting from a specific {@code date}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ChatMessage> getChatMessages(ZonedDateTime date) throws AlbinaException {
+	public List<ChatMessage> getChatMessages(Instant date) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 
 		List<ChatMessage> chatMessages = null;
 		if (date != null)
-			chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessagesDate).setParameter("date", date)
+			chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessagesDate).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 					.getResultList();
 		else
 			chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessages).getResultList();
