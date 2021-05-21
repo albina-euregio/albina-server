@@ -20,11 +20,9 @@ import java.util.List;
 
 import com.github.openjson.JSONArray;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

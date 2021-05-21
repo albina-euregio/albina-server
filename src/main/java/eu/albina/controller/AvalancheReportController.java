@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,7 +31,6 @@ import javax.persistence.EntityTransaction;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.proxy.HibernateProxy;
-import org.joda.time.DateTime;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
@@ -42,6 +43,7 @@ import eu.albina.model.BulletinUpdate;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.rest.AvalancheBulletinUpdateEndpoint;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
 
@@ -92,9 +94,9 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if no {@code region} was defined
 	 */
-	public Map<DateTime, BulletinStatus> getInternalStatus(DateTime startDate, DateTime endDate, String region)
+	public Map<Instant, BulletinStatus> getInternalStatus(Instant startDate, Instant endDate, String region)
 			throws AlbinaException {
-		Map<DateTime, BulletinStatus> result = new HashMap<DateTime, BulletinStatus>();
+		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
 
 		if (region == null || region.isEmpty())
 			throw new AlbinaException("No region defined!");
@@ -103,7 +105,7 @@ public class AvalancheReportController {
 
 		for (AvalancheReport report : reports) {
 			if (report.getStatus() != null)
-				result.put(report.getDate(), report.getStatus());
+				result.put(report.getDate().toInstant(), report.getStatus());
 		}
 
 		return result;
@@ -120,7 +122,7 @@ public class AvalancheReportController {
 	 * @return the actual status of the bulletins of this day or null if no report
 	 *         was found
 	 */
-	public BulletinStatus getInternalStatusForDay(DateTime date, String region) {
+	public BulletinStatus getInternalStatusForDay(Instant date, String region) {
 		AvalancheReport report = getInternalReport(date, region);
 		if (report != null)
 			return report.getStatus();
@@ -145,16 +147,16 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if no region was defined
 	 */
-	public Map<DateTime, BulletinStatus> getStatus(DateTime startDate, DateTime endDate, String region)
+	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, String region)
 			throws AlbinaException {
-		Map<DateTime, BulletinStatus> result = new HashMap<DateTime, BulletinStatus>();
+		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
 
 		if (region == null || region.isEmpty())
 			throw new AlbinaException("No region defined!");
 
 		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
 		for (AvalancheReport avalancheReport : reports)
-			result.put(avalancheReport.getDate(), avalancheReport.getStatus());
+			result.put(avalancheReport.getDate().toInstant(), avalancheReport.getStatus());
 
 		return result;
 	}
@@ -176,9 +178,9 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if no region was defined
 	 */
-	public Map<DateTime, BulletinStatus> getStatus(DateTime startDate, DateTime endDate, List<String> regions)
+	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, List<String> regions)
 			throws AlbinaException {
-		Map<DateTime, BulletinStatus> result = new HashMap<DateTime, BulletinStatus>();
+		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
 
 		if (regions == null || regions.isEmpty())
 			throw new AlbinaException("No region defined!");
@@ -186,11 +188,11 @@ public class AvalancheReportController {
 		for (String region : regions) {
 			Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
 			for (AvalancheReport avalancheReport : reports) {
-				if (result.containsKey(avalancheReport.getDate())) {
-					if (result.get(avalancheReport.getDate()).comparePublicationStatus(avalancheReport.getStatus()) < 0)
-						result.put(avalancheReport.getDate(), avalancheReport.getStatus());
+				if (result.containsKey(avalancheReport.getDate().toInstant())) {
+					if (result.get(avalancheReport.getDate().toInstant()).comparePublicationStatus(avalancheReport.getStatus()) < 0)
+						result.put(avalancheReport.getDate().toInstant(), avalancheReport.getStatus());
 				} else
-					result.put(avalancheReport.getDate(), avalancheReport.getStatus());
+					result.put(avalancheReport.getDate().toInstant(), avalancheReport.getStatus());
 			}
 		}
 
@@ -212,9 +214,9 @@ public class AvalancheReportController {
 	 *         bulletins of this day if it is {@code republished} or
 	 *         {@code published}
 	 */
-	public Map<DateTime, AvalancheReport> getPublicationStatus(DateTime startDate, DateTime endDate, String region) {
-		Map<DateTime, AvalancheReport> result = new HashMap<DateTime, AvalancheReport>();
-		DateTime date = startDate;
+	public Map<Instant, AvalancheReport> getPublicationStatus(Instant startDate, Instant endDate, String region) {
+		Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
+		Instant date = startDate;
 
 		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
 
@@ -238,7 +240,7 @@ public class AvalancheReportController {
 	 * @return all public reports for a specific time period and {@code region}
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<AvalancheReport> getPublicReports(DateTime startDate, DateTime endDate, String region) {
+	public Collection<AvalancheReport> getPublicReports(Instant startDate, Instant endDate, String region) {
 		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -247,7 +249,7 @@ public class AvalancheReportController {
 
 		if (region != null && region != "") {
 			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate)
+					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 					.setParameter("region", region).getResultList();
 
 			for (AvalancheReport avalancheReport : reports) {
@@ -259,7 +261,7 @@ public class AvalancheReportController {
 			entityManager.close();
 		}
 
-		Map<DateTime, AvalancheReport> result = getHighestStatusMap(reports);
+		Map<Instant, AvalancheReport> result = getHighestStatusMap(reports);
 
 		return result.values();
 	}
@@ -276,7 +278,7 @@ public class AvalancheReportController {
 	 *         null if not report was found
 	 */
 	@SuppressWarnings("unchecked")
-	private AvalancheReport getPublicReport(DateTime date, String region) {
+	private AvalancheReport getPublicReport(Instant date, String region) {
 		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -284,7 +286,7 @@ public class AvalancheReportController {
 		transaction.begin();
 
 		if (region != null && region != "") {
-			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", date)
+			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 					.setParameter("region", region).getResultList();
 
 			for (AvalancheReport avalancheReport : reports) {
@@ -318,21 +320,21 @@ public class AvalancheReportController {
 		return result;
 	}
 
-	private Map<DateTime, AvalancheReport> getHighestStatusMap(List<AvalancheReport> reports) {
-		Map<DateTime, AvalancheReport> result = new HashMap<DateTime, AvalancheReport>();
+	private Map<Instant, AvalancheReport> getHighestStatusMap(List<AvalancheReport> reports) {
+		Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
 		for (AvalancheReport avalancheReport : reports)
-			if (result.containsKey(avalancheReport.getDate())) {
+			if (result.containsKey(avalancheReport.getDate().toInstant())) {
 				if (avalancheReport.getStatus() == null)
 					continue;
-				if (result.get(avalancheReport.getDate()).getStatus() == null)
-					result.put(avalancheReport.getDate(), avalancheReport);
-				else if (result.get(avalancheReport.getDate()).getStatus()
+				if (result.get(avalancheReport.getDate().toInstant()).getStatus() == null)
+					result.put(avalancheReport.getDate().toInstant(), avalancheReport);
+				else if (result.get(avalancheReport.getDate().toInstant()).getStatus()
 						.comparePublicationStatus(avalancheReport.getStatus()) <= 0
-						&& result.get(avalancheReport.getDate()).getTimestamp()
+						&& result.get(avalancheReport.getDate().toInstant()).getTimestamp()
 								.isBefore(avalancheReport.getTimestamp()))
-					result.put(avalancheReport.getDate(), avalancheReport);
+					result.put(avalancheReport.getDate().toInstant(), avalancheReport);
 			} else
-				result.put(avalancheReport.getDate(), avalancheReport);
+				result.put(avalancheReport.getDate().toInstant(), avalancheReport);
 		return result;
 	}
 
@@ -348,8 +350,8 @@ public class AvalancheReportController {
 	 * @return all most recent reports for a specific time period and {@code region}
 	 */
 	@SuppressWarnings("unchecked")
-	private Collection<AvalancheReport> getInternalReports(DateTime startDate, DateTime endDate, String region) {
-		Map<DateTime, AvalancheReport> result = new HashMap<DateTime, AvalancheReport>();
+	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, String region) {
+		Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
 		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
@@ -358,7 +360,7 @@ public class AvalancheReportController {
 
 		if (region != null && region != "") {
 			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
-					.setParameter("startDate", startDate).setParameter("endDate", endDate)
+					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 					.setParameter("region", region).getResultList();
 
 			transaction.commit();
@@ -367,11 +369,11 @@ public class AvalancheReportController {
 
 		// select most recent report
 		for (AvalancheReport avalancheReport : reports)
-			if (result.containsKey(avalancheReport.getDate())) {
-				if (result.get(avalancheReport.getDate()).getTimestamp().isBefore(avalancheReport.getTimestamp()))
-					result.put(avalancheReport.getDate(), avalancheReport);
+			if (result.containsKey(avalancheReport.getDate().toInstant())) {
+				if (result.get(avalancheReport.getDate().toInstant()).getTimestamp().isBefore(avalancheReport.getTimestamp()))
+					result.put(avalancheReport.getDate().toInstant(), avalancheReport);
 			} else
-				result.put(avalancheReport.getDate(), avalancheReport);
+				result.put(avalancheReport.getDate().toInstant(), avalancheReport);
 
 		return result.values();
 	}
@@ -388,7 +390,7 @@ public class AvalancheReportController {
 	 *         or null if no report was found
 	 */
 	@SuppressWarnings("unchecked")
-	private AvalancheReport getInternalReport(DateTime date, String region) {
+	private AvalancheReport getInternalReport(Instant date, String region) {
 		AvalancheReport result = null;
 		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
@@ -397,7 +399,7 @@ public class AvalancheReportController {
 			EntityTransaction transaction = entityManager.getTransaction();
 			transaction.begin();
 
-			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", date)
+			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 					.setParameter("region", region).getResultList();
 
 			transaction.commit();
@@ -434,7 +436,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if more than one report was found for the given day
 	 */
-	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, DateTime date, String region, User user)
+	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, String region, User user)
 			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -445,9 +447,9 @@ public class AvalancheReportController {
 			BulletinStatus latestStatus = getInternalStatusForDay(date, region);
 
 			AvalancheReport avalancheReport = new AvalancheReport();
-			avalancheReport.setTimestamp(new DateTime());
+			avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNow());
 			avalancheReport.setUser(user);
-			avalancheReport.setDate(date);
+			avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
 			avalancheReport.setRegion(region);
 			if (latestStatus != null)
 				switch (latestStatus) {
@@ -517,7 +519,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if the report can not be loaded from the DB
 	 */
-	public String changeReport(List<AvalancheBulletin> publishedBulletins, DateTime startDate, String region, User user)
+	public String changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, String region, User user)
 			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -526,9 +528,9 @@ public class AvalancheReportController {
 			if (latestReport != null) {
 				transaction.begin();
 				AvalancheReport avalancheReport = new AvalancheReport();
-				avalancheReport.setTimestamp(new DateTime());
+				avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNow());
 				avalancheReport.setUser(user);
-				avalancheReport.setDate(startDate);
+				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 				avalancheReport.setRegion(region);
 				avalancheReport.setStatus(latestReport.getStatus());
 
@@ -573,8 +575,8 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if more than one report was found
 	 */
-	public List<String> publishReport(Collection<AvalancheBulletin> bulletins, DateTime startDate, List<String> regions,
-			User user, DateTime publicationDate) throws AlbinaException {
+	public List<String> publishReport(Collection<AvalancheBulletin> bulletins, Instant startDate, List<String> regions,
+			User user, Instant publicationDate) throws AlbinaException {
 		List<String> avalancheReportIds = new ArrayList<String>();
 		for (String region : regions) {
 			String avalancheReportId = publishReport(bulletins, startDate, region, user, publicationDate);
@@ -604,8 +606,8 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if more than one report was found
 	 */
-	public String publishReport(Collection<AvalancheBulletin> bulletins, DateTime startDate, String region, User user,
-			DateTime publicationDate) throws AlbinaException {
+	public String publishReport(Collection<AvalancheBulletin> bulletins, Instant startDate, String region, User user,
+			Instant publicationDate) throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
@@ -616,9 +618,9 @@ public class AvalancheReportController {
 			BulletinUpdate bulletinUpdate = null;
 
 			AvalancheReport avalancheReport = new AvalancheReport();
-			avalancheReport.setTimestamp(publicationDate);
+			avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
 			avalancheReport.setUser(user);
-			avalancheReport.setDate(startDate);
+			avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 			avalancheReport.setRegion(region);
 			if (report == null) {
 				avalancheReport.setStatus(BulletinStatus.missing);
@@ -693,7 +695,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if more than one report was found
 	 */
-	public void submitReport(List<AvalancheBulletin> bulletins, DateTime startDate, String region, User user)
+	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, String region, User user)
 			throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
@@ -703,9 +705,9 @@ public class AvalancheReportController {
 			BulletinUpdate bulletinUpdate = null;
 
 			AvalancheReport avalancheReport = new AvalancheReport();
-			avalancheReport.setTimestamp(new DateTime());
+			avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNow());
 			avalancheReport.setUser(user);
-			avalancheReport.setDate(startDate);
+			avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 			avalancheReport.setRegion(region);
 			if (report == null) {
 				avalancheReport.setStatus(BulletinStatus.missing);
@@ -770,7 +772,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if the report could not be loaded from the DB
 	 */
-	public ArrayList<AvalancheBulletin> getPublishedBulletins(DateTime date, List<String> regions)
+	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, List<String> regions)
 			throws AlbinaException {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
@@ -831,7 +833,7 @@ public class AvalancheReportController {
 	 * @return id of reports for a specific time period and regions with status
 	 *         {@code published} or {@code republished}
 	 */
-	public List<String> getPublishedReportIds(DateTime date, List<String> regions) {
+	public List<String> getPublishedReportIds(Instant date, List<String> regions) {
 		List<String> ids = new ArrayList<String>();
 
 		for (String region : regions) {
@@ -854,7 +856,7 @@ public class AvalancheReportController {
 	 *            the region of interest
 	 * @return all published bulletins for a specific time period and region
 	 */
-	private List<AvalancheBulletin> getPublishedBulletinsForRegion(DateTime date, String region) {
+	private List<AvalancheBulletin> getPublishedBulletinsForRegion(Instant date, String region) {
 		// get report for date and region
 		AvalancheReport report = getPublicReport(date, region);
 
@@ -1119,7 +1121,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if no report was found
 	 */
-	public DateTime getLatestDate() throws AlbinaException {
+	public Instant getLatestDate() throws AlbinaException {
 		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 
@@ -1130,7 +1132,7 @@ public class AvalancheReportController {
 		entityManager.close();
 
 		if (report != null)
-			return report.getDate();
+			return report.getDate().toInstant();
 		else
 			throw new AlbinaException("No report found!");
 	}

@@ -16,14 +16,14 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
 import com.github.openjson.JSONObject;
-
-import eu.albina.util.GlobalVariables;
 
 @Entity
 @Table(name = "chat_message")
@@ -36,8 +36,7 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 	private String username;
 
 	@Column(name = "DATETIME")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private org.joda.time.DateTime dateTime;
+	private ZonedDateTime dateTime;
 
 	@Column(name = "CHAT_ID")
 	private int chatId;
@@ -56,7 +55,7 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 			this.text = json.getString("text");
 
 		if (json.has("time"))
-			this.dateTime = new org.joda.time.DateTime(json.getString("time"));
+			this.dateTime = ZonedDateTime.parse(json.getString("time"));
 
 		if (json.has("chatId"))
 			this.chatId = json.getInt("chatId");
@@ -78,11 +77,11 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 		this.username = username;
 	}
 
-	public org.joda.time.DateTime getDateTime() {
+	public ZonedDateTime getDateTime() {
 		return dateTime;
 	}
 
-	public void setDateTime(org.joda.time.DateTime dateTime) {
+	public void setDateTime(ZonedDateTime dateTime) {
 		this.dateTime = dateTime;
 	}
 
@@ -103,7 +102,7 @@ public class ChatMessage extends AbstractPersistentObject implements AvalancheIn
 		if (username != null)
 			json.put("username", username);
 		if (dateTime != null)
-			json.put("time", dateTime.toString(GlobalVariables.formatterDateTime));
+			json.put("time", DateTimeFormatter.ISO_INSTANT.format(dateTime));
 		if (chatId > -1)
 			json.put("chatId", chatId);
 

@@ -17,9 +17,9 @@
 package eu.albina.util;
 
 import java.text.MessageFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
@@ -28,7 +28,7 @@ interface SocialMediaUtil {
 
 	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : GlobalVariables.socialMediaLanguages) {
-			DateTime date = AlbinaUtil.getDate(bulletins);
+			ZonedDateTime date = AlbinaUtil.getDate(bulletins);
 			String message = getSocialMediaText(date, update, lang);
 			String attachmentUrl = getSocialMediaAttachmentUrl(bulletins);
 			String bulletinUrl = GlobalVariables.getBulletinUrl(lang, date);
@@ -36,9 +36,9 @@ interface SocialMediaUtil {
 		}
 	}
 
-	static String getSocialMediaText(DateTime date, boolean update, LanguageCode lang) {
+	static String getSocialMediaText(ZonedDateTime date, boolean update, LanguageCode lang) {
 		String dateString = lang.getBundleString("day." + date.getDayOfWeek())
-			+ date.toString(lang.getBundleString("date-time-format"));
+			+ date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format")));
 		if (update) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
 				lang.getBundleString("avalanche-report.name"), dateString, GlobalVariables.getBulletinUrl(lang, date));

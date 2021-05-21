@@ -23,6 +23,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,8 +42,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -112,7 +114,7 @@ public class XmlUtil {
 			Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
 
 			// create meta data
-			DateTime publicationDate = null;
+			ZonedDateTime publicationDate = null;
 			if (bulletins != null && !bulletins.isEmpty()) {
 				for (AvalancheBulletin bulletin : bulletins) {
 					if (bulletin.getPublicationDate() != null) {
@@ -213,18 +215,18 @@ public class XmlUtil {
 		Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("LocationCollection"));
 		doc.appendChild(rootElement);
 
-		Element metaDataProperty = createMetaDataProperty(doc, new DateTime().withTimeAtStartOfDay());
+		Element metaDataProperty = createMetaDataProperty(doc, LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC")));
 		rootElement.appendChild(metaDataProperty);
 		return rootElement;
 	}
 
-	public static Element createMetaDataProperty(Document doc, DateTime dateTime) {
+	public static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime) {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
 		if (dateTime != null) {
 			dateTimeReport.appendChild(doc
-					.createTextNode(dateTime.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime)));
+					.createTextNode(DateTimeFormatter.ISO_INSTANT.format(dateTime)));
 			metaData.appendChild(dateTimeReport);
 		}
 		Element srcRef = doc.createElement("srcRef");

@@ -21,13 +21,15 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.time.Instant;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
@@ -37,8 +39,7 @@ import static org.junit.Assert.assertTrue;
 
 public class BlogControllerTest {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(BlogControllerTest.class);
+	private static Logger logger = LoggerFactory.getLogger(BlogControllerTest.class);
 
 	@Before
 	public void setUp() throws Exception {
@@ -52,7 +53,7 @@ public class BlogControllerTest {
 
 	@Test
 	public void testBlogPosts() throws Exception {
-		BlogController.getInstance().lastFetch.put(GlobalVariables.blogIds.get(GlobalVariables.codeTyrol, LanguageCode.de), new DateTime(0L));
+		BlogController.getInstance().lastFetch.put(GlobalVariables.blogIds.get(GlobalVariables.codeTyrol, LanguageCode.de), Instant.ofEpochMilli(0L));
 		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(GlobalVariables.codeTyrol, LanguageCode.de);
 		assertTrue("size=" + blogPosts.size(), blogPosts.size() > 5);
 		assertTrue("one blog has image", blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()));
@@ -86,5 +87,6 @@ public class BlogControllerTest {
 				+ "}\n";
 
 		Blogger.Item item = new CommonProcessor().fromJson(blog, Blogger.Item.class);
+		logger.debug(item.title);
 	}
 }

@@ -22,6 +22,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -34,7 +35,6 @@ import java.util.stream.IntStream;
 
 import javax.script.SimpleBindings;
 
-import org.joda.time.DateTimeZone;
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.Interpreter;
@@ -370,8 +370,7 @@ public class MapUtil {
 	static void createBulletinRegions(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency,
 			Path regionFile, Regions regions) throws IOException, AlbinaException {
 		final GeoJson.FeatureCollection featureCollection = new GeoJson.FeatureCollection();
-		featureCollection.properties.put("creation_date", bulletins.get(0).getPublicationDate()
-				.withZone(DateTimeZone.UTC).toString(GlobalVariables.formatterDateTime));
+		featureCollection.properties.put("creation_date", DateTimeFormatter.ISO_INSTANT.format(bulletins.get(0).getPublicationDate()));
 		featureCollection.properties.put("valid_date", bulletins.get(0).getValidityDateString());
 		featureCollection.properties.put("valid_daytime", daytimeDependency.name());
 		for (AvalancheBulletin bulletin : bulletins) {

@@ -16,6 +16,10 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -28,8 +32,6 @@ import javax.persistence.Table;
 import com.google.common.base.MoreObjects;
 
 import eu.albina.model.enumerations.LanguageCode;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
 
 @Entity
 @Table(name = "push_subscriptions")
@@ -41,8 +43,7 @@ public class PushSubscription {
 	private Long id;
 
 	@Column(name = "SUBSCRIBE_DATE")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private org.joda.time.DateTime subscribeDate = DateTime.now();
+	private ZonedDateTime subscribeDate = ZonedDateTime.now();
 
 	@Column(name = "AUTH")
 	private String auth;
@@ -71,12 +72,12 @@ public class PushSubscription {
 		this.id = id;
 	}
 
-	public DateTime getSubscribeDate() {
-		return subscribeDate;
+	public Instant getSubscribeDate() {
+		return subscribeDate.toInstant();
 	}
 
-	public void setSubscribeDate(DateTime subscribeDate) {
-		this.subscribeDate = subscribeDate;
+	public void setSubscribeDate(Instant subscribeDate) {
+		this.subscribeDate = ZonedDateTime.ofInstant(subscribeDate, ZoneId.of("UTC"));
 	}
 
 	public String getAuth() {

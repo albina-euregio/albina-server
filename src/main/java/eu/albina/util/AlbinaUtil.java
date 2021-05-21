@@ -24,6 +24,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
@@ -33,10 +40,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 import org.apache.commons.codec.binary.Base64;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,9 +109,9 @@ public class AlbinaUtil {
 	}
 
 	public static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		DateTime date = null;
+		ZonedDateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DateTime bulletinDate = avalancheBulletin.getValidUntil();
+			ZonedDateTime bulletinDate = avalancheBulletin.getValidUntil();
 			if (date == null)
 				date = bulletinDate;
 			else if (bulletinDate.isAfter(date))
@@ -119,21 +122,37 @@ public class AlbinaUtil {
 			StringBuilder result = new StringBuilder();
 			result.append(lang.getBundleString("tendency.binding-word"));
 			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
-			result.append(date.toString(lang.getBundleString("date-time-format.tendency")));
+			result.append(date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.tendency"))));
 			return result.toString();
 		} else {
 			return "";
 		}
 	}
 
-	public static boolean hasBulletinChanged(DateTime startDate, String region) throws AlbinaException {
+	public static boolean hasBulletinChanged(Instant startDate, String region) throws AlbinaException {
 		boolean result = false;
-		Map<DateTime, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
+		Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 				startDate, region);
 		if (status.size() == 1 && status.get(startDate) != BulletinStatus.published
 				&& status.get(startDate) != BulletinStatus.republished)
 			result = true;
 		return result;
+	}
+
+	public static Instant getInstantStartOfDay() {
+		return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0).atZone(ZoneId.of("UTC")).toInstant();
+	}
+
+	public static Instant getInstantNow() {
+		return LocalDateTime.now().atZone(ZoneId.of("UTC")).toInstant();
+	}
+
+	public static ZonedDateTime getZonedDateTimeNow() {
+		return AlbinaUtil.getInstantNow().atZone(ZoneId.of("UTC"));
+	}
+
+	public static ZonedDateTime getZonedDateTimeUtc(Instant instant) {
+		return ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"));
 	}
 
 	public static String encodeFileToBase64Binary(File file) {
@@ -153,11 +172,11 @@ public class AlbinaUtil {
 
 	public static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		StringBuilder result = new StringBuilder();
-		DateTime date = getDate(bulletins);
+		ZonedDateTime date = getDate(bulletins);
 		if (date != null) {
 			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
 			result.append(" ");
-			result.append(date.toString(lang.getBundleString("date-time-format")));
+			result.append(date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
 		} else {
 			// TODO what if no date is given (should not happen)
 			result.append("-");
@@ -171,7 +190,7 @@ public class AlbinaUtil {
 	}
 
 	public static String getFilenameDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		DateTime date = getDate(bulletins);
+		ZonedDateTime date = getDate(bulletins);
 		if (date != null)
 			return date.toLocalDate() + "_" + lang.toString();
 		else
@@ -183,26 +202,26 @@ public class AlbinaUtil {
 	}
 
 	public static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset) {
-		DateTime date = getValidityDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.plus(offset);
 		return date.toLocalDate().toString();
 	}
 
 	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		DateTime date = getValidityDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.minusDays(1);
-		return date.toString(lang.getBundleString("date-time-format")).trim();
+		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
 	}
 
 	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		DateTime date = getValidityDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.plusDays(1);
-		return date.toString(lang.getBundleString("date-time-format")).trim();
+		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
 	}
 
-	private static DateTime getValidityDate(List<AvalancheBulletin> bulletins) {
-		DateTime date = getDate(bulletins);
-		if (date.getHourOfDay() > 12)
+	private static ZonedDateTime getValidityDate(List<AvalancheBulletin> bulletins) {
+		ZonedDateTime date = getDate(bulletins);
+		if (date.getHour() > 12)
 			date = date.plusDays(1);
 		return date;
 	}
@@ -258,10 +277,10 @@ public class AlbinaUtil {
 		return sb.toString();
 	}
 
-	public static DateTime getDate(List<AvalancheBulletin> bulletins) {
-		DateTime date = null;
+	public static ZonedDateTime getDate(List<AvalancheBulletin> bulletins) {
+		ZonedDateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DateTime bulletinDate = avalancheBulletin.getValidFrom();
+			ZonedDateTime bulletinDate = avalancheBulletin.getValidFrom();
 			if (date == null)
 				date = bulletinDate;
 			else if (bulletinDate.isAfter(date))
@@ -271,15 +290,16 @@ public class AlbinaUtil {
 	}
 
 	public static boolean isUpdate(List<AvalancheBulletin> bulletins) {
-		DateTime publicationDate = getPublicationDate(bulletins);
-		int time = publicationDate.getSecondOfDay();
-		return (time == 61200) ? false : true;
+		ZonedDateTime publicationDate = getPublicationDate(bulletins);
+		LocalDateTime localDateTime = publicationDate.withZoneSameInstant(ZoneId.of("Europe/Paris")).toLocalDateTime();
+		int secondOfDay = localDateTime.toLocalTime().toSecondOfDay();
+		return (secondOfDay == 61200) ? false : true;
 	}
 
-	private static DateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
-		DateTime date = null;
+	private static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
+		ZonedDateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DateTime bulletinDate = avalancheBulletin.getPublicationDate();
+			ZonedDateTime bulletinDate = avalancheBulletin.getPublicationDate();
 			if (bulletinDate != null) {
 				if (date == null)
 					date = bulletinDate;
@@ -291,18 +311,17 @@ public class AlbinaUtil {
 	}
 
 	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		DateTime date = getPublicationDate(bulletins);
+		ZonedDateTime date = getPublicationDate(bulletins);
 		if (date != null)
-			return date.toString(lang.getBundleString("date-time-format.publication"));
+			return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication")));
 		else
 			return "";
 	}
 
 	public static String getPublicationTime(List<AvalancheBulletin> bulletins) {
-		DateTime date = getPublicationDate(bulletins);
-		DateTime utcTime = new DateTime(date, DateTimeZone.UTC);
-		if (date != null)
-			return utcTime.toString(GlobalVariables.publicationTime);
+		ZonedDateTime utcTime = getPublicationDate(bulletins);
+		if (utcTime != null)
+			return utcTime.format(GlobalVariables.formatterPublicationTime);
 		else
 			return "";
 	}
@@ -331,15 +350,15 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static boolean isLatest(DateTime date) {
-		DateTime now = new DateTime();
+	public static boolean isLatest(ZonedDateTime date) {
+		ZonedDateTime now = ZonedDateTime.now();
 
-		if (now.getHourOfDay() >= 17) {
-			if ((new LocalDate()).plusDays(1).equals(date.toLocalDate())) {
+		if (now.getHour() >= 17) {
+			if ((LocalDate.now()).plusDays(1).equals(date.toLocalDate())) {
 				return true;
 			}
 		} else {
-			if (date.toLocalDate().equals(new LocalDate())) {
+			if (date.toLocalDate().equals(LocalDate.now())) {
 				return true;
 			}
 		}

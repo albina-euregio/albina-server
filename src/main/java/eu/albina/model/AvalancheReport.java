@@ -16,6 +16,9 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +28,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
 import com.github.openjson.JSONObject;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -34,7 +36,6 @@ import org.w3c.dom.Element;
 import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.GlobalVariables;
 
 /**
  * This class holds all information about one avalanche report.
@@ -57,12 +58,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	private String region;
 
 	@Column(name = "DATE")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private org.joda.time.DateTime date;
+	private ZonedDateTime date;
 
 	@Column(name = "TIMESTAMP")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	private org.joda.time.DateTime timestamp;
+	private ZonedDateTime timestamp;
 
 	@Column(name = "STATUS")
 	private BulletinStatus status;
@@ -122,10 +121,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			this.region = json.getString("region");
 
 		if (json.has("date"))
-			this.date = new org.joda.time.DateTime(json.getString("date"));
+			this.date = ZonedDateTime.parse(json.getString("date"));
 
 		if (json.has("timestamp"))
-			this.timestamp = new org.joda.time.DateTime(json.getString("timestamp"));
+			this.timestamp = ZonedDateTime.parse(json.getString("timestamp"));
 
 		if (json.has("status"))
 			this.status = BulletinStatus.fromString(json.getString("status"));
@@ -167,19 +166,19 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.region = region;
 	}
 
-	public org.joda.time.DateTime getDate() {
+	public ZonedDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(org.joda.time.DateTime date) {
+	public void setDate(ZonedDateTime date) {
 		this.date = date;
 	}
 
-	public org.joda.time.DateTime getTimestamp() {
+	public ZonedDateTime getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(org.joda.time.DateTime timestamp) {
+	public void setTimestamp(ZonedDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -277,10 +276,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			json.put("region", region);
 
 		if (date != null)
-			json.put("date", date.toString(GlobalVariables.formatterDateTime));
+			json.put("date", DateTimeFormatter.ISO_INSTANT.format(date));
 
 		if (timestamp != null)
-			json.put("timestamp", timestamp.toString(GlobalVariables.formatterDateTime));
+			json.put("timestamp", DateTimeFormatter.ISO_INSTANT.format(timestamp));
 
 		if (status != null)
 			json.put("status", status.toString());

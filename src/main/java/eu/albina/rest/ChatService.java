@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.rest;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,7 +31,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.joda.time.DateTime;
 import com.github.openjson.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,11 +60,11 @@ public class ChatService {
 			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
 		logger.debug("GET JSON chat messages");
 
-		DateTime dateTime = null;
+		Instant dateTime = null;
 
 		try {
 			if (date != null)
-				dateTime = DateTime.parse(date);
+				dateTime = OffsetDateTime.parse(date).toInstant();
 
 			List<ChatMessage> chatMessages = ChatController.getInstance().getChatMessages(dateTime);
 			JSONArray json = new JSONArray();
