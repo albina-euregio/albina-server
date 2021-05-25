@@ -144,7 +144,7 @@ public class AlbinaUtil {
 	}
 
 	public static Instant getInstantNow() {
-		return LocalDateTime.now().atZone(ZoneId.of("UTC")).toInstant();
+		return ZonedDateTime.now().toInstant();
 	}
 
 	public static ZonedDateTime getZonedDateTimeNow() {
