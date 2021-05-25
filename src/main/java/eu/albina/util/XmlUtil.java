@@ -23,8 +23,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -209,15 +207,6 @@ public class XmlUtil {
 			else
 				return "ElevationRange_" + elevation + "Lw";
 		}
-	}
-
-	public static Element createRegionHeaderCaaml(Document doc) throws ParserConfigurationException {
-		Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("LocationCollection"));
-		doc.appendChild(rootElement);
-
-		Element metaDataProperty = createMetaDataProperty(doc, LocalDate.now(ZoneId.of("UTC")).atStartOfDay(ZoneId.of("UTC")));
-		rootElement.appendChild(metaDataProperty);
-		return rootElement;
 	}
 
 	public static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime) {
