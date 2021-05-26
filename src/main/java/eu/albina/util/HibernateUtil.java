@@ -62,9 +62,10 @@ public class HibernateUtil {
 	}
 
 	public HibernateUtil() {
+		this.setUp();
 	}
 
-	public void setUp() {
+	private void setUp() {
 		entityManagerFactory = Persistence.createEntityManagerFactory("eu.albina");
 		logger.info("Entity manager factory created!");
 	}

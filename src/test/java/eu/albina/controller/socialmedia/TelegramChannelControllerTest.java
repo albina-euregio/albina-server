@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,7 +32,6 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.model.socialmedia.TelegramConfig;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.HibernateUtil;
 import eu.albina.util.TelegramChannelUtil;
 
 public class TelegramChannelControllerTest {
@@ -44,8 +42,6 @@ public class TelegramChannelControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
-
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")));
@@ -53,11 +49,6 @@ public class TelegramChannelControllerTest {
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")));
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json")));
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
-	}
-
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Ignore

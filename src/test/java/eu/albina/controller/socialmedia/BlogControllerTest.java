@@ -24,8 +24,6 @@ import java.security.cert.CertificateException;
 import java.time.Instant;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -33,23 +31,12 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.HibernateUtil;
 
 import static org.junit.Assert.assertTrue;
 
 public class BlogControllerTest {
 
 	private static Logger logger = LoggerFactory.getLogger(BlogControllerTest.class);
-
-	@Before
-	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
-	}
-
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
-	}
 
 	@Test
 	public void testBlogPosts() throws Exception {

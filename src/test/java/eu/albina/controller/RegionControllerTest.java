@@ -18,30 +18,17 @@ package eu.albina.controller;
 
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.HibernateUtil;
 
 public class RegionControllerTest {
 
 	// private static Logger logger =
 	// LoggerFactory.getLogger(RegionControllerTest.class);
-
-	@Before
-	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
-	}
-
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
-	}
 
 	@Test
 	public void getTopLevelRegionsTest() throws AlbinaException {

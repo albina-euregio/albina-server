@@ -69,7 +69,6 @@ public class XmlUtilTest {
 	@Ignore
 	@Test
 	public void createOldCaamlFiles() throws Exception {
-		HibernateUtil.getInstance().setUp();
 		for (LocalDate date = LocalDate.parse("2018-12-04"); date
 				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
 			createOldCaamlFiles(date);
