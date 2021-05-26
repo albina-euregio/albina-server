@@ -78,7 +78,7 @@ public class UpdateJob implements org.quartz.Job {
 					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeAran))
 				changedRegions.add(GlobalVariables.codeAran);
 
-			Instant publicationDate = AlbinaUtil.getInstantNow();
+			Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 
 			if (!changedRegions.isEmpty()) {
 				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()

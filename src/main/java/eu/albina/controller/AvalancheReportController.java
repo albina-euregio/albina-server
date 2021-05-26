@@ -447,7 +447,7 @@ public class AvalancheReportController {
 			BulletinStatus latestStatus = getInternalStatusForDay(date, region);
 
 			AvalancheReport avalancheReport = new AvalancheReport();
-			avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNow());
+			avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
 			avalancheReport.setUser(user);
 			avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
 			avalancheReport.setRegion(region);
@@ -528,7 +528,7 @@ public class AvalancheReportController {
 			if (latestReport != null) {
 				transaction.begin();
 				AvalancheReport avalancheReport = new AvalancheReport();
-				avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNow());
+				avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
 				avalancheReport.setUser(user);
 				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 				avalancheReport.setRegion(region);
@@ -705,7 +705,7 @@ public class AvalancheReportController {
 			BulletinUpdate bulletinUpdate = null;
 
 			AvalancheReport avalancheReport = new AvalancheReport();
-			avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNow());
+			avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
 			avalancheReport.setUser(user);
 			avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 			avalancheReport.setRegion(region);
