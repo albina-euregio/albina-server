@@ -45,9 +45,9 @@
 				<albina.conf.local-fonts-path>/mnt/daten1/fonts/</albina.conf.local-fonts-path>
 				<albina.conf.server-images-url-localhost>http://admin.avalanche.report/images/</albina.conf.server-images-url-localhost>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.maps-path>../albina_files_local</albina.conf.maps-path>
+				<albina.conf.maps-path>D:\mnt\albina_files_local</albina.conf.maps-path>
 				<albina.conf.map-production-url>../avalanche-warning-maps/</albina.conf.map-production-url>
-				<albina.conf.pdf-directory>/mnt/albina_files_local</albina.conf.pdf-directory>
+				<albina.conf.pdf-directory>D:\mnt\albina_files_local</albina.conf.pdf-directory>
 				<albina.conf.html-directory>/mnt/simple_local</albina.conf.html-directory>
 				<albina.conf.publish-at-5-pm>false</albina.conf.publish-at-5-pm>
 				<albina.conf.publish-at-8-am>false</albina.conf.publish-at-8-am>
@@ -291,6 +291,11 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
 
