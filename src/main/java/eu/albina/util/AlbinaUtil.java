@@ -143,12 +143,12 @@ public class AlbinaUtil {
 		return LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0).atZone(ZoneId.of("UTC")).toInstant();
 	}
 
-	public static Instant getInstantNow() {
-		return ZonedDateTime.now().toInstant();
+	public static Instant getInstantNowNoNanos() {
+		return ZonedDateTime.now().withNano(0).toInstant();
 	}
 
-	public static ZonedDateTime getZonedDateTimeNow() {
-		return AlbinaUtil.getInstantNow().atZone(ZoneId.of("UTC"));
+	public static ZonedDateTime getZonedDateTimeNowNoNanos() {
+		return AlbinaUtil.getInstantNowNoNanos().atZone(ZoneId.of("UTC"));
 	}
 
 	public static ZonedDateTime getZonedDateTimeUtc(Instant instant) {

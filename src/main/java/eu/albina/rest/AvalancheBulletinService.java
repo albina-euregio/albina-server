@@ -527,7 +527,7 @@ public class AvalancheBulletinService {
 					bulletins.add(bulletin);
 			}
 
-			Instant publicationTime = AlbinaUtil.getInstantNow();
+			Instant publicationTime = AlbinaUtil.getInstantNowNoNanos();
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
 				publicationTime);
 			AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
@@ -619,7 +619,7 @@ public class AvalancheBulletinService {
 					throw new AlbinaException("No date!");
 				endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				Instant publicationDate = AlbinaUtil.getInstantNow();
+				Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 
 				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance()
 						.publishBulletins(startDate, endDate, region, publicationDate, user);
@@ -688,7 +688,7 @@ public class AvalancheBulletinService {
 						throw new AlbinaException("No date!");
 					endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-					Instant publicationDate = AlbinaUtil.getInstantNow();
+					Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 
 					// Set publication date
 					Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
