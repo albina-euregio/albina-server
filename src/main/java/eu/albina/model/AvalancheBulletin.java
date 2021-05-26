@@ -1314,6 +1314,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			Element nameElement = doc.createElement("name");
 			nameElement.appendChild(doc.createTextNode(AlbinaUtil.getRegionName(languageCode, region)));
 			regionElement.appendChild(nameElement);
+			// TODO add polygon
 			regionElement.setAttribute("id", region);
 			rootElement.appendChild(regionElement);
 		}
