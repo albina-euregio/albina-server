@@ -40,7 +40,7 @@ public class RegionControllerTest {
 
 	@After
 	public void shutDown() {
-		//HibernateUtil.getInstance().shutDown();
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test
