@@ -25,7 +25,6 @@
 			<property name="hibernate.connection.url" value="${hibernate.connection.url}"/>
 			<property name="hibernate.connection.username" value="${hibernate.connection.username}"/>
 			<property name="hibernate.connection.password" value="${hibernate.connection.password}"/>
-			<property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
 
 			<!-- c3p0 connection pool -->
 			<property name="hibernate.c3p0.min_size" value="5"/>
