@@ -5,8 +5,8 @@ import java.nio.charset.StandardCharsets;
 
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.io.WKTReader;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.io.WKTReader;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 

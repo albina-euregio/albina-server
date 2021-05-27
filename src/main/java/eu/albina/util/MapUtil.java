@@ -43,10 +43,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vividsolutions.jts.geom.PrecisionModel;
-import com.vividsolutions.jts.operation.buffer.BufferOp;
-import com.vividsolutions.jts.operation.union.UnaryUnionOp;
-import com.vividsolutions.jts.precision.GeometryPrecisionReducer;
+import org.locationtech.jts.geom.PrecisionModel;
+import org.locationtech.jts.operation.buffer.BufferOp;
+import org.locationtech.jts.operation.union.UnaryUnionOp;
+import org.locationtech.jts.precision.GeometryPrecisionReducer;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;

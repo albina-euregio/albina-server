@@ -48,8 +48,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Polygon;
 
 import eu.albina.util.GlobalVariables;
 
