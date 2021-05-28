@@ -1222,7 +1222,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return rootElement;
 	}
 
-	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
+	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon, String reportPublicationTime) {
 
 		AvalancheBulletinDaytimeDescription bulletinDaytimeDescription;
 
@@ -1247,18 +1247,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		// metaData
 		Element metaData = doc.createElement("metaData");
 		rootElement.appendChild(metaData);
-		String publicationTime = "";
-		ZonedDateTime date = getPublicationDate();
-		if (date != null)
-			publicationTime = date.format(GlobalVariables.formatterPublicationTime);
 		if (!isAfternoon) {
 			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
-					+ publicationTime + "/" + getId() + ".jpg";
+					+ reportPublicationTime + "/" + getId() + ".jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
 			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
-					+ publicationTime + "/" + getId() + "_PM.jpg";
+					+ reportPublicationTime + "/" + getId() + "_PM.jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		}
@@ -1622,13 +1618,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			return null;
 	}
 
-	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode) {
+	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode, String reportPublicationTime) {
 		if (publishedRegions != null && !publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLv6Bulletin(doc, languageCode, false));
+			result.add(createCAAMLv6Bulletin(doc, languageCode, false, reportPublicationTime));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLv6Bulletin(doc, languageCode, true));
+				result.add(createCAAMLv6Bulletin(doc, languageCode, true, reportPublicationTime));
 
 			return result;
 		} else

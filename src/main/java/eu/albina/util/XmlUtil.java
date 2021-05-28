@@ -176,8 +176,10 @@ public class XmlUtil {
 				}
 				rootElement.appendChild(metaData);
 
+				String reportPublicationTime = AlbinaUtil.getPublicationTime(bulletins);
+
 				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv6(doc, language);
+					List<Element> caaml = bulletin.toCAAMLv6(doc, language, reportPublicationTime);
 					if (caaml != null)
 						for (Element element : caaml) {
 							if (element != null)
