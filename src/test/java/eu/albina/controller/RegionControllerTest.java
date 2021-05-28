@@ -21,6 +21,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.albina.exception.AlbinaException;
@@ -43,12 +44,14 @@ public class RegionControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
+	@Ignore
 	@Test
 	public void getTopLevelRegionsTest() throws AlbinaException {
 		List<Region> regions = RegionController.getInstance().getRegions("");
 		Assert.assertEquals(4, regions.size());
 	}
 
+	@Ignore
 	@Test
 	public void getSubregionsTest() throws AlbinaException {
 		List<Region> regions = RegionController.getInstance().getRegions(GlobalVariables.codeTrentino);
