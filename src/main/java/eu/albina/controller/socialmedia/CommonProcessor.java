@@ -18,12 +18,13 @@ package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
 
-import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import org.n52.jackson.datatype.jts.JtsModule;
 
 public class CommonProcessor {
 	private final ObjectMapper objectMapper = new ObjectMapper();

@@ -24,10 +24,6 @@ import javax.persistence.TypedQuery;
 
 import org.hibernate.HibernateException;
 
-import com.bedatadriven.jackson.datatype.jts.JtsModule;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.socialmedia.Channel;
 import eu.albina.model.socialmedia.RapidMailConfig;
@@ -35,7 +31,6 @@ import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.util.HibernateUtil;
 
 public class RegionConfigurationController extends CommonProcessor {
-	ObjectMapper objectMapper = new ObjectMapper();
 
 	private static RegionConfigurationController instance = null;
 
@@ -47,8 +42,6 @@ public class RegionConfigurationController extends CommonProcessor {
 	}
 
 	public RegionConfigurationController() {
-		objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
-		objectMapper.registerModule(new JtsModule());
 	}
 
 	public RegionConfiguration getRegionConfiguration(String regionConfigurationId) throws AlbinaException {

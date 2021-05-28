@@ -34,12 +34,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Polygon;
+import org.n52.jackson.datatype.jts.GeometryDeserializer;
+import org.n52.jackson.datatype.jts.GeometrySerializer;
+import org.n52.jackson.datatype.jts.JtsModule;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.bedatadriven.jackson.datatype.jts.JtsModule;
-import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
-import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,8 +50,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Polygon;
 
 import eu.albina.util.GlobalVariables;
 
