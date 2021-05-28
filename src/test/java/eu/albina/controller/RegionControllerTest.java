@@ -48,7 +48,7 @@ public class RegionControllerTest {
 	@Test
 	public void getTopLevelRegionsTest() throws AlbinaException {
 		List<Region> regions = RegionController.getInstance().getRegions("");
-		Assert.assertEquals(6, regions.size());
+		Assert.assertEquals(4, regions.size());
 	}
 
 	@Ignore

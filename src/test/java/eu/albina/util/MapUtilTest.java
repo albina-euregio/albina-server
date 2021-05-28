@@ -114,7 +114,9 @@ public class MapUtilTest {
 
 		final String expected = Resources.toString(Resources.getResource("2019-01-17.regions.json"),
 				StandardCharsets.UTF_8);
-		assertEquals(new JSONObject(expected).toString(4), new JSONObject(actual).toString(4));
+		String expectedResult = new JSONObject(expected).toString(4);
+		String actualResult = new JSONObject(actual).toString(4);
+		assertEquals(expectedResult, actualResult);
 	}
 
 	@Test
