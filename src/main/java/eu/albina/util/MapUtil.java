@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -35,6 +36,7 @@ import java.util.stream.IntStream;
 
 import javax.script.SimpleBindings;
 
+import com.google.common.io.Resources;
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.Interpreter;
@@ -303,15 +305,19 @@ public class MapUtil {
 			}
 		};
 		context.setBindings(new SimpleBindings(bindings));
-		final List<String> mapyrusFiles = new ArrayList<>();
-		mapyrusFiles.add("fontdefinition.mapyrus");
-		mapyrusFiles.add("albina_functions.mapyrus");
-		mapyrusFiles.add("albina_styles.mapyrus");
-		mapyrusFiles.add(Map.overlay.equals(map) ? "albina_overlaymap.mapyrus" : "albina_drawmap.mapyrus");
+		final List<URL> mapyrusFiles = new ArrayList<>();
+		mapyrusFiles.add(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
+		mapyrusFiles.add(Resources.getResource("mapyrus/albina_functions.mapyrus"));
+		mapyrusFiles.add(Resources.getResource("mapyrus/albina_styles.mapyrus"));
+		if (Map.overlay.equals(map)) {
+			mapyrusFiles.add(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
+		} else {
+			mapyrusFiles.add(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
+		}
 		logger.info("Creating map {} using {} and {} with bindings {}", outputFile, dangerRatingMapFile, mapyrusFiles,
 				bindings);
-		for (String mapyrusFile : mapyrusFiles) {
-			final FileOrURL file = new FileOrURL(mapProductionUrl + "mapyrus/" + mapyrusFile);
+		for (URL mapyrusFile : mapyrusFiles) {
+			final FileOrURL file = new FileOrURL(mapyrusFile.toString());
 			mapyrus.interpret(context, file, System.in, System.out);
 		}
 		deleteDirectoryWithContents(tempDirectory);
