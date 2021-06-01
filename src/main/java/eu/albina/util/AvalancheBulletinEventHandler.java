@@ -23,14 +23,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.events.Event;
 import com.itextpdf.kernel.events.IEventHandler;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfPage;
@@ -76,12 +74,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			else
 				blue = blueColor;
 
-			PdfFont openSansRegularFont = PdfFontFactory.createFont(
-					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Regular.ttf", PdfEncodings.WINANSI, true);
-			PdfFont openSansBoldFont = PdfFontFactory.createFont(
-					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Bold.ttf", PdfEncodings.WINANSI, true);
-			PdfFont openSansLightFont = PdfFontFactory.createFont(
-					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Light.ttf", PdfEncodings.WINANSI, true);
+			PdfFont openSansRegularFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Regular.ttf");
+			PdfFont openSansBoldFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Bold.ttf");
+			PdfFont openSansLightFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Light.ttf");
 
 			// Add headline
 			String headline = lang.getBundleString("avalanche-report.name");

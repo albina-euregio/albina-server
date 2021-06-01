@@ -60,7 +60,6 @@ public class GlobalVariables {
 	private static boolean publishAt5PM = false;
 	private static boolean publishAt8AM = false;
 	private static String localImagesPath = "images/";
-	private static String localFontsPath = "./src/main/resources/fonts/";
 	// REGION
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
@@ -331,15 +330,6 @@ public class GlobalVariables {
 		setConfigProperty("localImagesPath", localImagesPath);
 	}
 
-	public static String getLocalFontsPath() {
-		return localFontsPath;
-	}
-
-	public static void setLocalFontsPath(String localFontsPath) throws ConfigurationException {
-		GlobalVariables.localFontsPath = localFontsPath;
-		setConfigProperty("localFontsPath", localFontsPath);
-	}
-
 	public static boolean isPublishBulletinsTyrol() {
 		return publishBulletinsTyrol;
 	}
@@ -559,8 +549,6 @@ public class GlobalVariables {
 				version = config.getString("gitVersion");
 			if (config.containsKey("localImagesPath"))
 				localImagesPath = config.getString("localImagesPath");
-			if (config.containsKey("localFontsPath"))
-				localFontsPath = config.getString("localFontsPath");
 			if (config.containsKey("pdfDirectory"))
 				pdfDirectory = config.getString("pdfDirectory");
 			if (config.containsKey("htmlDirectory"))
@@ -620,8 +608,6 @@ public class GlobalVariables {
 
 		if (localImagesPath != null)
 			json.put("localImagesPath", localImagesPath);
-		if (localFontsPath != null)
-			json.put("localFontsPath", localFontsPath);
 		if (pdfDirectory != null)
 			json.put("pdfDirectory", pdfDirectory);
 		if (htmlDirectory != null)
@@ -674,8 +660,6 @@ public class GlobalVariables {
 	public static void setConfigurationParameters(JSONObject configuration) throws ConfigurationException {
 		if (configuration.has("localImagesPath"))
 			setLocalImagesPath(configuration.getString("localImagesPath"));
-		if (configuration.has("localFontsPath"))
-			setLocalFontsPath(configuration.getString("localFontsPath"));
 		if (configuration.has("pdfDirectory"))
 			setPdfDirectory(configuration.getString("pdfDirectory"));
 		if (configuration.has("htmlDirectory"))
