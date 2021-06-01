@@ -1,0 +1,39 @@
+print "========================================="
+print "Mapyrus.time.stamp = ", Mapyrus.time.stamp
+print "Mapyrus.version    = ", Mapyrus.version
+print "-----------------------------------------"
+print "Kartenerstelleung Overlay ALBINA"
+print "-----------------------------------------"
+
+# Shapefile-Input
+let reg_euregio_ha = geodata_dir . "regionen_euregio_ha.shp"
+
+###################################################################
+# --- Define NEWPAGE
+# -------------------------------------------------------------
+newpage image_type, mapFile, pagesize_x, pagesize_y, extras  
+print extras
+
+let mx1 = 0
+let my1 = 0
+let mx2 = pagesize_x
+let my2 = pagesize_y
+
+
+###################################################################
+# EBENEN
+###################################################################
+
+# --- Regionen Lawinengefahrenstufen
+polygon_feature_danger_levels reg_euregio_ha, drm_file, level
+
+
+###############################################################	
+###############################################################	
+###############################################################	
+
+print "-----------------------------------------"
+print "End time = ", Mapyrus.time.stamp
+print "-----------------------------------------"
+
+endpage

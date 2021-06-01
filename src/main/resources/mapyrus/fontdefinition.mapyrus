@@ -1,0 +1,31 @@
+# -------------------------------------------------------------
+# --- Font Definition
+# -------------------------------------------------------------
+### Font
+
+# --- ff = font file
+let ff_01 = font_dir . "OpenSans"
+let fn_01 = "OpenSans"
+let ff_02 = font_dir . "OpenSans-Italic"
+let fn_02 = "OpenSans-Italic"
+let ff_03 = font_dir . "OpenSans-Bold"
+let fn_03 = "OpenSans-Bold"
+let ff_04 = font_dir . "OpenSans-BoldItalic"
+let fn_04 = "OpenSans-BoldItalic"
+let ff_05 = font_dir . "OpenSans-Semibold"
+let fn_05 = "OpenSans-Semibold"
+let ff_06 = font_dir . "OpenSans-SemiboldItalic"
+let fn_06 = "OpenSans-SemiboldItalic"
+
+let otf_mapyrus = " otffiles=". ff_01 .".otf,". ff_02 .".otf,". ff_03 .".otf,". ff_04 .".otf," . ff_05 .".otf,". ff_06 .".otf "
+
+let resolution = " resolution=1200 background=white "
+let extras = otf_mapyrus . resolution
+
+# Fonts
+let font_reg = "OpenSans"
+let font_italic = "OpenSans-Italic"
+let font_semibold = "OpenSans-Semibold"
+let font_semibold_italic = "OpenSans-SemiboldItalic"
+let font_bold = "OpenSans-Bold"
+let font_bold_italic = "OpenSans-BoldItalic"
