@@ -211,12 +211,6 @@ public class MapUtil {
 	}
 
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions) {
-		try {
-			// load patched class to fix performance issue, see https://gitlab.com/albina-euregio/albina-server/-/issues/216
-			Class.forName("org.mapyrus.font.OpenTypeFont");
-		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException(e);
-		}
 		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
 				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 		try {
