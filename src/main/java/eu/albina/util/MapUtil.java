@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
@@ -289,7 +290,6 @@ public class MapUtil {
 				put("pagesize_y", size.width / map.aspectRatio());
 				put("map_xsize", size.width);
 				put("working_dir", tempDirectory + "/");
-				put("font_dir", mapProductionUrl + "mapyrus/fonts/");
 				put("geodata_dir", mapProductionUrl + "geodata/");
 				put("image_dir", mapProductionUrl + "images/");
 				put("region", "Euregio");
@@ -306,6 +306,14 @@ public class MapUtil {
 		};
 		context.setBindings(new SimpleBindings(bindings));
 		final List<URL> mapyrusFiles = new ArrayList<>();
+		final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
+			Resources.getResource("fonts/open-sans/OpenSans.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-Italic.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-Bold.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-BoldItalic.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-Semibold.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-SemiboldItalic.otf").getFile());
+		mapyrus.interpret(context, new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"), System.in, System.out);
 		mapyrusFiles.add(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
 		mapyrusFiles.add(Resources.getResource("mapyrus/albina_functions.mapyrus"));
 		mapyrusFiles.add(Resources.getResource("mapyrus/albina_styles.mapyrus"));
