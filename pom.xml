@@ -57,7 +57,6 @@
 				<albina.conf.publish-blogs-tyrol>false</albina.conf.publish-blogs-tyrol>
 				<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
 				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
-				<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
 				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
 				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix>LOCAL</albina.log.prefix>
@@ -102,7 +101,6 @@
 				<albina.conf.publish-blogs-tyrol>false</albina.conf.publish-blogs-tyrol>
 				<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
 				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
-				<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
 				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
 				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix>DEV</albina.log.prefix>
@@ -147,7 +145,6 @@
 				<albina.conf.publish-blogs-tyrol>true</albina.conf.publish-blogs-tyrol>
 				<albina.conf.publish-blogs-south-tyrol>true</albina.conf.publish-blogs-south-tyrol>
 				<albina.conf.publish-blogs-trentino>true</albina.conf.publish-blogs-trentino>
-				<albina.conf.scripts-path>/opt/</albina.conf.scripts-path>
 				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
 				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix></albina.log.prefix>

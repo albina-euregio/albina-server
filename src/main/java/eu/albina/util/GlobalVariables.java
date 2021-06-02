@@ -86,7 +86,6 @@ public class GlobalVariables {
 	private static String htmlDirectory = "/mnt/simple_local";
 	public static String mapsPath = "/mnt/albina_files_local";
 	public static String mapProductionUrl = "";
-	public static String scriptsPath = "/opt/local/";
 
 	public static String blogApiUrl = "https://www.googleapis.com/blogger/v3/blogs/";
 	public static String googleApiKey = "AIzaSyBN0GUcRlTfoVnarVFVpA1hUEnDcDjuXQY";
@@ -413,15 +412,6 @@ public class GlobalVariables {
 		return serverMainUrl;
 	}
 
-	public static String getScriptsPath() {
-		return scriptsPath;
-	}
-
-	public static void setScriptsPath(String scriptsPath) throws ConfigurationException {
-		GlobalVariables.scriptsPath = scriptsPath;
-		setConfigProperty("scriptsPath", scriptsPath);
-	}
-
 	public static String getPdfDirectory() {
 		return pdfDirectory;
 	}
@@ -561,8 +551,6 @@ public class GlobalVariables {
 				mapsPath = config.getString("mapsPath");
 			if (config.containsKey("mapProductionUrl"))
 				mapProductionUrl = config.getString("mapProductionUrl");
-			if (config.containsKey("scriptsPath"))
-				scriptsPath = config.getString("scriptsPath");
 			if (config.containsKey("createMaps"))
 				createMaps = config.getBoolean("createMaps");
 			if (config.containsKey("createPdf"))
@@ -620,8 +608,6 @@ public class GlobalVariables {
 			json.put("mapsPath", mapsPath);
 		if (mapProductionUrl != null)
 			json.put("mapProductionUrl", mapProductionUrl);
-		if (scriptsPath != null)
-			json.put("scriptsPath", scriptsPath);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createSimpleHtml", createSimpleHtml);
@@ -696,8 +682,6 @@ public class GlobalVariables {
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
 		if (configuration.has("publishBulletinsAran"))
 			setPublishBulletinsAran(configuration.getBoolean("publishBulletinsAran"));
-		if (configuration.has("scriptsPath"))
-			setScriptsPath(configuration.getString("scriptsPath"));
 		if (configuration.has("publishBlogsTyrol"))
 			setPublishBlogsTyrol(configuration.getBoolean("publishBlogsTyrol"));
 		if (configuration.has("publishBlogsSouthTyrol"))
