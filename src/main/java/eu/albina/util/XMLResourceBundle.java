@@ -16,10 +16,12 @@ class XMLResourceBundle extends ResourceBundle {
 		props.loadFromXML(stream);
 	}
 
+	@Override
 	protected Object handleGetObject(String key) {
 		return props.getProperty(key);
 	}
 
+	@Override
 	public Enumeration<String> getKeys() {
 		Set<String> handleKeys = props.stringPropertyNames();
 		return Collections.enumeration(handleKeys);

@@ -360,6 +360,7 @@ public class PublicationController {
 			List<AvalancheBulletin> publishedBulletins, Instant startDate, String region, User user,
 			Instant publicationDate) {
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
 				for (AvalancheBulletin avalancheBulletin : allBulletins) {
@@ -396,6 +397,7 @@ public class PublicationController {
 	public void startChangeThread(List<AvalancheBulletin> allBulletins, List<AvalancheBulletin> publishedBulletins,
 			Instant startDate, String region, User user) {
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
 				for (AvalancheBulletin avalancheBulletin : allBulletins) {
@@ -493,6 +495,7 @@ public class PublicationController {
 	public Thread createPdf(List<AvalancheBulletin> bulletins, String validityDateString,
 			String publicationTimeString) {
 		return new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					logger.info("PDF production started");
@@ -514,6 +517,7 @@ public class PublicationController {
 	 */
 	public Thread createSimpleHtml(List<AvalancheBulletin> bulletins) {
 		return new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					logger.info("Simple HTML production started");
@@ -545,6 +549,7 @@ public class PublicationController {
 	public Thread createStaticWidgets(List<AvalancheBulletin> bulletins, String validityDateString,
 			String publicationTimeString) {
 		return new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					logger.info("Static widget production started");
@@ -567,6 +572,7 @@ public class PublicationController {
 	 */
 	public Thread sendEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		return new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					logger.info("Email production started");
@@ -582,6 +588,7 @@ public class PublicationController {
 
 	public Thread triggerTelegramChannel(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		return new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					logger.info("Telegram channel triggered");

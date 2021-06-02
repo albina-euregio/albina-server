@@ -60,6 +60,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 		this.grayscale = grayscale;
 	}
 
+	@Override
 	public void handleEvent(Event event) {
 		try {
 			PdfDocumentEvent docEvent = (PdfDocumentEvent) event;
