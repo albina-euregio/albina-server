@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -155,10 +156,8 @@ public class PdfUtil {
 			PdfDocumentInfo info = pdf.getDocumentInfo();
 			info.setTitle(lang.getBundleString("avalanche-report.name"));
 
-			openSansRegularFont = PdfFontFactory.createFont(
-					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Regular.ttf", PdfEncodings.WINANSI, true);
-			openSansBoldFont = PdfFontFactory.createFont(
-					GlobalVariables.getLocalFontsPath() + "open-sans/OpenSans-Bold.ttf", PdfEncodings.WINANSI, true);
+			openSansRegularFont = createFont("fonts/open-sans/OpenSans-Regular.ttf");
+			openSansBoldFont = createFont("fonts/open-sans/OpenSans-Bold.ttf");
 
 			pdf.addEventHandler(PdfDocumentEvent.END_PAGE,
 					new AvalancheBulletinEventHandler(lang, bulletins, grayscale));
@@ -185,6 +184,11 @@ public class PdfUtil {
 			logger.error("PDF could not be created", e);
 			return false;
 		}
+	}
+
+	public static PdfFont createFont(String resource) throws IOException {
+		final byte[] ttf = Resources.toByteArray(Resources.getResource(resource));
+		return PdfFontFactory.createFont(ttf, PdfEncodings.WINANSI, true);
 	}
 
 	/**

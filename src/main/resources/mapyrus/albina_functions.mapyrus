@@ -1,0 +1,1214 @@
+# -------------------------------------------------------------
+# --- Content		
+# -------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------
+# Prozedur für punktbezogene Schriftplatzierung
+# --------------------------------------------->
+
+begin LABEL_POINT color, font, size, outlinecolor, outlinewidth, ext_o, inn_o, x_off, y_off, angle, spacing, label
+
+	if level == 1 then
+		let x = 0.9 * zf		# Standardoffset in x-Richtung bei Labelplatzierung 
+		let y = 1.0	* zf	# Standardoffset in y-Richtung bei Labelplatzierung 
+	elif level == 2 or level == 3 then
+		let x = 1.0 * zf		# Standardoffset in x-Richtung bei Labelplatzierung 
+		let y = 1.15	* zf	# Standardoffset in y-Richtung bei Labelplatzierung 
+	endif
+
+	# -- Verschiebungsfaktoren in x und y bei ---------
+	let x_pos[1] = -1 , y_pos[1] = -1		# ext_o = 1
+	let x_pos[2] = 	0 , y_pos[2] = -1		# ext_o = 2
+	let x_pos[3] =  1 , y_pos[3] = -1		# ext_o = 3
+	let x_pos[4] =  1 , y_pos[4] =  0		# ext_o = 4
+	let x_pos[5] =  1 , y_pos[5] =  1		# ext_o = 5
+	let x_pos[6] =  0 , y_pos[6] =  1		# ext_o = 6
+	let x_pos[7] = -1 , y_pos[7] =  1		# ext_o = 7
+	let x_pos[8] = -1 , y_pos[8] =  0		# ext_o = 8
+	let x_pos[9] =  0 , y_pos[9] =  0		# ext_o = 9
+	let x_position = (x * x_pos[ext_o]) + x_off			# Verschiebungswert in x (+ zusätzl. x-Offset)
+	let y_position = (y * y_pos[ext_o]) + y_off			# Verschiebungswert in y (+ zusätzl. y-Offset)
+
+	move x_position, y_position							# Verschiebung in x und y (externe Orientierung)
+	
+	font font, size										# Import des jew. Schriftfonts und der -größe
+	let char_count = length(label)						# Anzahl der Zeichen des jew. Labels
+	let label_len = stringwidth(label) + (spacing * (char_count - 1))  # Berechnen der tatsächl. Labelweite
+	
+	let cosinus = cos(angle) * label_len				# Berechnen des rel. Labelpfadendpkt. (x-Koord.)
+	let sinus = sin(angle) * label_len					# Berechnen des rel. Labelpfadendpkt. (y-Koord.)
+
+	rdraw cosinus, sinus						# Zeichen des vorläufigen Labelpfads (Startpkt = move pos.)
+
+	let half_cos = cosinus / 2					# 1/2 Verschiebungswert in x-Richtung
+	let half_sin = sinus / 2					# 1/2 Verschiebungswert in y-Richtung
+
+	# -------- Verschiebungswerte des gesamten Labelpfads bei --------- (horizontale Ausrichtung)
+	let shift_x[1] =  0			, shift_y[1] =  0			# inn_o = 1
+	let shift_x[2] = -half_cos	, shift_y[2] = -half_sin	# inn_o = 2
+	let shift_x[3] = -cosinus	, shift_y[3] = -sinus		# inn_o = 3	
+	let shift_x[4] = -cosinus	, shift_y[4] = -sinus		# inn_o = 4
+	let shift_x[5] = -cosinus	, shift_y[5] = -sinus		# inn_o = 5
+	let shift_x[6] = -half_cos	, shift_y[6] = -half_sin	# inn_o = 6
+	let shift_x[7] =  0			, shift_y[7] =  0			# inn_o = 7
+	let shift_x[8] =  0			, shift_y[8] =  0			# inn_o = 8
+	let shift_x[9] = -half_cos	, shift_y[9] = -half_sin	# inn_o = 9
+	
+	shiftpath shift_x[inn_o], shift_y[inn_o]	# Verschiebung des Labelpfads
+
+	let type_height = size * 0.7			# tatsächl. Schriftgr. (Schriftgr. ohne Ober- & Unterlänge)
+	let label_top = type_height				# vert. Textausrichtung: oben
+	let label_mid = type_height / 2			# vert. Textausrichtung: mittig
+	let label_bot = 0						# vert. Textausrichtung: unten
+
+	# --------- vertikale Ausrichtung bei ---------
+	let just_ver[1] = label_bot			# inn_o = 1
+	let just_ver[2] = label_bot			# inn_o = 2
+	let just_ver[3] = label_bot			# inn_o = 3
+	let just_ver[4] = label_mid			# inn_o = 4
+	let just_ver[5] = label_top			# inn_o = 5
+	let just_ver[6] = label_top			# inn_o = 6
+	let just_ver[7] = label_top			# inn_o = 7
+	let just_ver[8] = label_mid			# inn_o = 8
+	let just_ver[9] = label_mid			# inn_o = 9
+	
+	parallelpath just_ver[inn_o]		# Übergabe der vertikalen Ausrichtungsvariable
+
+	
+	#print "label = ", label
+
+	font font, size, outlinewidth				# Schriftfont, -größe & Stärke des Halo (s. TEXT_LOOKUP)
+	eval outlinecolor							# Halofarbe (s. TEXT_LOOKUP)		
+	flowlabel spacing, 0, "rotate=false", label					# Labelplatzierung
+###label label
+	
+	font font, size								# Schriftfont und -größe (s. TEXT_LOOKUP)
+	eval color									# Farbe (s. TEXT_LOOKUP)
+	flowlabel spacing, 0, "rotate=false", label					# Labelplatzierung
+###label label
+	clearpath
+
+end
+
+# ---------------------------------------------------------------------------------------------------------
+# Prozedur für linienbezogene Schriftplatzierung
+# --------------------------------------------->
+
+begin LABEL_LINE color, font, size, outlinecolor, outlinewidth, inn_o, x_off, y_off, spacing, label
+
+	#--- decode label if containing special characters
+	#let label = label_decoding(label)
+	
+	let type_height = size * 0.7				# tatsächl. Schriftgr. (Schriftgr. ohne Ober-, Unterlänge)
+	let label_top = type_height + y_off			# vert. Textausrichtung: oben (+ zusätzl. y-Offset)
+	let label_mid = type_height / 2 + y_off		# vert. Textausrichtung: mittig (+ zusätzl. y-Offset)
+	let label_bot = 0 + y_off					# vert. Textausrichtung: unten (+ zusätzl. y-Offset)
+
+	let path_beg = 0 + x_off		# Flowlabel-Offset(FO) bei linksb. Textausrichtung (+zusätzl. x-Offset)
+	let path_mid = Mapyrus.path.length / 2 + x_off	# FO bei zent. Textausrichtung (+ zusätzl. x-Offset)
+	let path_end = Mapyrus.path.length + x_off		# FO bei rechtsb. Ausrichtung (+ zusätzl. x-Offset)
+
+	#---vertikale Ausrichtung---,---horiz. Ausrichtung---,-Ausrichungsstartpunkt--------------------------
+	let just_ver[1] = label_bot , just_hor[1] = "left"   , flow_off[1] = path_beg	# Variablen: inn_o = 1
+	let just_ver[2] = label_bot , just_hor[2] = "center" , flow_off[2] = path_mid	# Variablen: inn_o = 2
+	let just_ver[3] = label_bot , just_hor[3] = "right"  , flow_off[3] = path_end	# Variablen: inn_o = 3
+	let just_ver[4] = label_mid , just_hor[4] = "right"  , flow_off[4] = path_end	# Variablen: inn_o = 4
+	let just_ver[5] = label_top , just_hor[5] = "right"  , flow_off[5] = path_end	# Variablen: inn_o = 5
+	let just_ver[6] = label_top , just_hor[6] = "center" , flow_off[6] = path_mid	# Variablen: inn_o = 6
+	let just_ver[7] = label_top , just_hor[7] = "left"   , flow_off[7] = path_beg	# Variablen: inn_o = 7
+	let just_ver[8] = label_mid , just_hor[8] = "left"   , flow_off[8] = path_beg	# Variablen: inn_o = 8
+	let just_ver[9] = label_mid , just_hor[9] = "center" , flow_off[9] = path_mid	# Variablen: inn_o = 9
+	
+	parallelpath just_ver[inn_o]	# Übergabe der vertikalen Ausrichtungsvariable
+
+	justify just_hor[inn_o]			# Übergabe der horizontalen Ausrichtungsvariable (für Halo)
+	font font, size, outlinewidth	# Schriftfont, -größe & Stärke des Halo (s. TEXT_LOOKUP)
+	eval outlinecolor				# Halofarbe (s. TEXT_LOOKUP)
+	
+	let space_len = Mapyrus.path.length - stringwidth(label)	# aufzuteilende Gesamtsperrungslänge
+	let char_count = length(label)								# Anzahl der Zeichen des jew. Labels	
+	let line_spacing = space_len / (char_count -1)				# Sperrung bei Aufteilung auf Linie	
+	
+	if spacing == -1 then							# Schleife zur Labelplatzierung: 
+		flowlabel line_spacing, 0, "rotate=false", label			# wenn die Sperrung -1 ist, wird die Schrift
+	else											# auf die gesamte Linie aufgeteilt;
+		flowlabel spacing, flow_off[inn_o], "rotate=false", label 	# in allen anderen Fällen (Sperrung >= 0) wird
+	endif											# der Sperrungswert des Shapefiles übergeben.
+	
+	justify just_hor[inn_o]		# wiederholte Übergabe der horizontalen Ausrichtungsvariable
+	font font, size				# Schriftfont und -größe (s. TEXT_LOOKUP)
+	eval color					# Farbe (s. TEXT_LOOKUP)
+	
+	if spacing == -1 then							# Schleife zur Labelplatzierung (s. Kommentar oben)
+		flowlabel line_spacing, 0, "rotate=false", label
+	else
+		flowlabel spacing, flow_off[inn_o], "rotate=false", label
+	endif
+	
+	clearpath
+	
+end
+
+# -------------------------------------------------------------
+# --- Schummerung ---
+# -------------------------------------------------------------
+
+begin image_feature file
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	if draw_raster eq "true" then
+		clip "inside"
+        geoimage file
+	endif
+	
+	print "Schummerung gezeichnet"
+	
+end
+
+
+# -------------------------------------------------------------
+# --- Passe partout ---
+# -------------------------------------------------------------
+
+begin polygon_feature_pp file, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			if level == 1 or level == 2 or level == 3 then
+				eval pp_color
+				fill
+			endif
+		done	
+		
+	print "Passepartout gezeichnet"
+	
+end
+
+
+# Schattenbegrenzung für Schwarz-Weiß
+begin polygon_feature_shadow_bw file, level, linewidth
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Multiply"
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			if level == 1 or level == 2 or level == 3 then
+				eval shadow_color
+				linestyle linewidth
+				stroke
+			endif
+		done	
+		
+	print "Schatten gezeichnet"
+	
+end
+
+
+# -------------------------------------------------------------
+# --- Seen & Flüsse---
+# -------------------------------------------------------------
+
+begin line_feature_rivers file, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			if level == 1 and ALBINA_1== 1 then
+				eval river_line_color
+				eval river_line_1
+				stroke
+			elif level == 2 and ALBINA_2== 1 then
+				eval river_line_color
+				eval river_line_2
+				stroke
+			elif level == 3 and ALBINA_3== 1 then
+				eval river_line_color
+				eval river_line_3
+				stroke
+			endif
+		done	
+		
+	print "Fluesse gezeichnet"
+	
+end
+
+
+begin polygon_feature_lakes file, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			if level == 1 and ALBINA_1== 1 then
+				eval lake_color
+				fill
+				eval lake_line_color
+				eval lake_line
+				stroke
+			elif level == 2 and ALBINA_2== 1 then
+				eval lake_color
+				fill
+				eval lake_line_color
+				eval lake_line
+				stroke
+			elif level == 3 and ALBINA_3== 1 then
+				eval lake_color
+				fill
+				eval lake_line_color
+				eval lake_line
+				stroke
+			endif
+		done	
+		
+	print "Seen gezeichnet"
+	
+end
+
+# -------------------------------------------------------------
+# --- Einfärbung Euregio bei Bulletin Karten ---
+# -------------------------------------------------------------
+
+begin polygon_feature_euregio file
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	
+	dataset "shapefile", file, ""
+		while Mapyrus.fetch.more
+				do
+					fetch
+					clearpath
+					addpath GEOMETRY
+					linestyle 0.01
+					if colormode eq "bw" then
+						CROSSHATCH rest_color, rest_stroke
+					elif colormode eq "col" then
+						eval rest_color
+						fill
+						if level == 1 then
+							stroke
+						endif
+					endif
+		done
+	
+	print "Euregio gezeichnet"
+end
+
+# -------------------------------------------------------------
+# --- Gefahrenstufen ---
+# -------------------------------------------------------------
+
+begin polygon_feature_danger_levels file, txtfile, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	if level >= 2 and bulletin_id ne "overlay" and colormode ne "bw" then
+		blend "Multiply"
+	endif
+	
+	define_albina_value_arrays_from_datafile txtfile, "1", "id_h", "danger_h", "aspect_h", "problem_h", "bul_id_h", "elevation_h", "id_l", "danger_l", "aspect_l", "problem_l", "bul_id_l"
+	
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+			do
+				fetch
+				clearpath
+				addpath GEOMETRY
+				eval reg_line
+				eval reg_line_color
+				if dynamic_region eq "one" and colormode eq "bw" then
+					if bul_id_h[ALB_ID] eq bulletin_id or bul_id_l[ALB_ID] eq bulletin_id then
+						stroke
+					endif
+				endif
+			done	
+	
+	print "---------------------------------"
+	print "--- Gefahrenstufeneinfaerbung ---"
+	
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+			do
+				fetch
+				clearpath
+				addpath GEOMETRY
+				linestyle 0.01
+				if dynamic_region eq "all" then
+					if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
+						print "1 = " . ALB_ID
+						eval danger_color[1]
+						fill
+						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+							stroke
+						endif
+					elif (danger_h[ALB_ID] eq 2 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 2 then
+						print "2 = " . ALB_ID
+						eval danger_color[2]
+						fill
+						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+							stroke
+						endif						
+					elif (danger_h[ALB_ID] eq 3 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 3 then
+						print "3 = " . ALB_ID
+						eval danger_color[3]
+						fill
+						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+							stroke
+						endif
+					elif (danger_h[ALB_ID] eq 4 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 4 then
+						print "4 = " . ALB_ID
+						eval danger_color[4]
+						fill
+						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+							stroke
+						endif
+						#let dr_4_5 = "yes"
+					elif (danger_h[ALB_ID] eq 5 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 5 then
+						print "5 = " . ALB_ID
+						eval danger_color[4]
+						fill
+						if level == 1 then
+							CHESSBORD_LWD5_SMALL danger_color[5]
+						else
+							CHESSBORD_LWD5 danger_color[5]
+						endif
+						#HALFFILL danger_color[4], danger_color[5], danger_color[5], danger_color[4], 0.5
+						let dr_4_5 = "yes" 
+					elif (danger_h[ALB_ID] eq 0 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 0 then
+						print "0 = " . ALB_ID
+						eval danger_color[0]
+						fill
+						if level == 1 then
+							stroke
+						endif
+					elif threshold < elevation_h[ALB_ID] then
+						let alb_id_low = code ."-l"
+						let high_color = danger_l[alb_id_low]
+						print high_color . " = " . ALB_ID
+						if high_color eq 5 then
+							eval danger_color[4]
+							fill
+							if level == 1 then
+								CHESSBORD_LWD5_SMALL danger_color[5]
+							else
+								CHESSBORD_LWD5 danger_color[5]
+							endif
+							let dr_4_5 = "yes"
+						else
+							eval danger_color[high_color]
+							fill
+							if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+								stroke
+							endif
+						endif
+					endif					
+				elif dynamic_region eq "one" then
+					if bul_id_h[ALB_ID] eq bulletin_id or bul_id_l[ALB_ID] eq bulletin_id then
+						if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
+							print "1 = " . ALB_ID
+							eval danger_color[1]
+							fill
+							if level == 1 then
+								stroke
+							endif
+						elif (danger_h[ALB_ID] eq 2 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 2 then
+							print "2 = " . ALB_ID
+							eval danger_color[2]
+							fill
+							if level == 1 then
+								stroke
+							endif					
+						elif (danger_h[ALB_ID] eq 3 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 3 then
+							print "3 = " . ALB_ID
+							eval danger_color[3]
+							fill
+							if level == 1 then
+								stroke
+							endif
+						elif (danger_h[ALB_ID] eq 4 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 4 then
+							print "4 = " . ALB_ID
+							eval danger_color[4]
+							fill
+							if level == 1 then
+								stroke
+							endif
+							#let dr_4_5 = "yes"
+						elif (danger_h[ALB_ID] eq 5 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 5 then
+							print "5 = " . ALB_ID
+							eval danger_color[4]
+							fill
+							if level == 1 then
+								CHESSBORD_LWD5_SMALL danger_color[5]
+							else
+								CHESSBORD_LWD5 danger_color[5]
+							endif
+							#HALFFILL danger_color[4], danger_color[5], danger_color[5], danger_color[4], 0.5
+							let dr_4_5 = "yes"
+						elif (danger_h[ALB_ID] eq 0 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 0 then
+							print "0 = " . ALB_ID
+							eval danger_color[0]
+							fill
+							if level == 1 then
+								stroke
+							endif
+						elif threshold < elevation_h[ALB_ID] then
+							let alb_id_low = code ."-l"
+							let high_color = danger_l[alb_id_low]
+							print high_color . " = " . ALB_ID
+							if high_color eq 5 then
+								eval danger_color[4]
+								fill
+								if level == 1 then
+									CHESSBORD_LWD5_SMALL danger_color[5]
+								else
+									CHESSBORD_LWD5 danger_color[5]
+								endif
+								let dr_4_5 = "yes"
+							else
+								eval danger_color[high_color]
+								fill
+								if level == 1 then
+									stroke
+								endif
+							endif
+						endif	
+					endif
+				endif
+			done		
+
+	print "---------------------------------"
+	print "Gefahrenstufen gezeichnet"
+	
+end
+
+
+# -------------------------------------------------------------
+# --- Regionsgrenzen ---
+# -------------------------------------------------------------
+
+begin line_feature_regions file, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+			do
+				fetch
+				clearpath
+				addpath GEOMETRY
+				eval reg_line_color
+				if level == 1 then
+					eval reg_line_1
+				elif level == 2 then
+					eval reg_line_2	
+				elif level == 3 then
+					eval reg_line_3	
+				endif
+				if style == 2150 then 
+					stroke
+				endif
+			done				
+			
+	print "Regionsgrenzen gezeichnet"
+	
+end
+
+
+# -------------------------------------------------------------
+# --- Staatsgrenzen ---
+# -------------------------------------------------------------
+
+begin line_feature_country file, level, in_out
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+			do
+				fetch
+				clearpath
+				addpath GEOMETRY
+				eval country_line_color
+				if EUREGIO == in_out then
+					if level == 1 then
+						eval country_line_1
+					elif level == 2 then
+						eval country_line_2	
+					elif level == 3 then
+						eval country_line_3	
+					endif
+					if style == 2100 then 
+						stroke
+					endif
+				endif
+			done				
+			
+	print "Staatsgrenzen gezeichnet"
+	
+end
+
+# -------------------------------------------------------------
+# --- Provinzgrenzen ---
+# -------------------------------------------------------------
+
+begin line_feature_provinces file, level, in_out
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, ""
+	while Mapyrus.fetch.more
+			do
+				fetch
+				clearpath
+				addpath GEOMETRY
+				eval prov_line_color
+				if EUREGIO == in_out and style == 2110 then
+					if level == 1 then
+						eval prov_line_1
+					elif level == 2 then
+						eval prov_line_2	
+					elif level == 3 then
+						eval prov_line_3	
+					endif
+					stroke
+				elif EUREGIO == in_out and style == 2111 then
+					if level == 1 then
+						eval autonom_line_1
+					elif level == 2 then
+						eval autonom_line_2	
+					elif level == 3 then
+						eval autonom_line_3	
+					endif
+					stroke
+				endif
+			done				
+			
+	print "Provinzgrenzen gezeichnet"
+	
+end
+
+# -------------------------------------------------------------
+# --- Crosshatch ---
+# -------------------------------------------------------------
+
+begin crosshatch_lines angle
+	# Makes stripes through polygon.  Used for cross-hatching
+	# so that original path is saved in calling function
+	# and can be re-used for second set of hatch lines.
+	#
+	stripepath 0.3, angle
+	stroke
+end
+
+begin CROSSHATCH hatchcolor, linewidth
+	# Fill polygon with crosshatching.
+	#
+	eval hatchcolor
+	eval linewidth
+	#stroke
+	clip "inside"
+	#stroke
+	#crosshatch_lines 45
+	crosshatch_lines -45
+end
+
+###############################################################
+
+begin halffill_box c1, c2, c3, c4
+	# Draw a square with the 4 quadrants in different colors.
+	#
+	box -1, -1, 0, 0
+	eval c1
+	fill
+
+	clearpath
+	box -1, 0, 0, 1
+	eval c2
+	fill
+
+	clearpath
+	box 0, -1, 1, 0
+	eval c3
+	fill
+
+	clearpath
+	box 0, 0, 1, 1
+	eval c4
+	fill
+end
+
+begin HALFFILL c1, c2, c3, c4, scalefactor
+	# Fill polygon with squares of alternating colours.
+	#
+	scale scalefactor
+	clip "inside"
+	stripepath 2, 0
+	samplepath 2, 0
+	halffill_box c1, c2, c3, c4
+end
+
+# -------------------------------------------------------------
+# --- procedure draw gefahrenkarte warnstufe 5
+# -------------------------------------------------------------
+begin CHESSBORD_LWD5 fillcolor
+  clip "inside"
+  eval fillcolor
+  let square_size = "0.75"
+  move 0, 0
+  chessboard mx1, my1, mx2, my2, square_size
+  fill
+end
+
+begin CHESSBORD_LWD5_SMALL fillcolor
+  clip "inside"
+  eval fillcolor
+  let square_size = "0.3"
+  move 0, 0
+  chessboard mx1, my1, mx2, my2, square_size
+  fill
+end
+
+# -------------------------------------------------------------
+# --- Städte mit Marker und Labels ---
+# -------------------------------------------------------------
+
+begin SQUAREMARKER scalefactor, fillcolor, strokecolor, linewidth
+	scale scalefactor
+	box -1, -1, 1, 1
+	eval fillcolor
+	fill
+	eval strokecolor
+	eval linewidth
+	stroke	
+end
+
+begin CIRCLEMARKER scalefactor, fillcolor, strokecolor, linewidth
+	scale scalefactor
+	circle 0, 0, 1
+	eval fillcolor
+	fill
+	eval strokecolor
+	eval linewidth
+	stroke	
+end
+
+begin point_feature_city_marker file, level					#, in_out
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, "encoding=UTF-8"
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			#if EUREGIO == in_out then
+				if (level == 1 and ALBINA_1 == 1) then
+					if category <= 3 then
+						SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
+						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+							LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+						else
+							LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+						endif
+					endif	
+				elif (level == 2 and ALBINA_2 == 1 and bulletin_id ne not_in_map) or (level == 3 and ALBINA_3 == 1) then
+					if category <= 3 then
+						SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
+						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+							LABEL_POINT city_label_color, font_bold, cap_city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+						else
+							LABEL_POINT city_label_color, font_bold, cap_city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+						endif
+					else
+						CIRCLEMARKER marker_scale, marker_color, marker_line_color, marker_line
+						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+							LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+						else	
+							LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+						endif
+					endif
+				endif
+			#endif
+		done		
+
+	print "Staedte gezeichnet"
+
+end
+
+# -------------------------------------------------------------
+# --- Labels ---
+# -------------------------------------------------------------
+
+begin point_feature_labels file, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, "encoding=UTF-8"
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			if (level == 1 and ALBINA_1 == 1) or (level == 2 and ALBINA_2 == 1) or (level == 3 and ALBINA_3 == 1) then
+				if style == 5100 then
+					LABEL_POINT country_label_color, font_semibold, country_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+				elif style == 5110 then
+					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+						LABEL_POINT prov_label_color, font_semibold, prov_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+					else	
+						LABEL_POINT prov_label_color, font_semibold, prov_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+					endif
+				endif
+			endif
+		done		
+
+	print "Namengut (P) gezeichnet"
+
+end
+
+begin line_feature_labels file, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, "encoding=UTF-8"
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			if (level == 1 and ALBINA_1 == 1) or (level == 2 and ALBINA_2 == 1) or (level == 3 and ALBINA_3 == 1) then
+				if style == 5010 then
+					LABEL_LINE prov_label_color, font_semibold, prov_font_size, label_halo_color, no_label_halo, l_inn_o, l_x_off, l_y_off, l_spacing, label
+				elif style >= 6000 then
+					LABEL_LINE range_label_color, font_semibold_italic, range_font_size, label_halo_color, no_label_halo, l_inn_o, l_x_off, l_y_off, l_spacing, label
+				endif
+			endif
+		done		
+
+	print "Namengut (L) gezeichnet"
+
+end
+
+
+###############################################################
+# Symbol Berg
+###############################################################
+
+begin MOUNTAIN scalefactor, fillcolor, linecolor, line
+	clearpath
+	scale scalefactor
+	triangle 0, 0, 1.2, 0
+	eval fillcolor
+	fill
+	eval linecolor
+	eval line
+	stroke
+end
+
+begin point_feature_peaks file, level
+
+	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
+	clip "inside"
+	blend "Normal"
+	dataset "shapefile", file, "encoding=UTF-8"
+	while Mapyrus.fetch.more
+        do
+			fetch
+			clearpath
+			addpath GEOMETRY
+			if (level == 1 and ALBINA_1 == 1) or (level == 2 and ALBINA_2 == 1) or (level == 3 and ALBINA_3 == 1) then
+				MOUNTAIN peak_scale, peak_color, peak_line_color, peak_line
+				LABEL_POINT peak_label_color, font_semibold_italic, peak_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+				LABEL_POINT peak_label_color, font_semibold_italic, peak_font_size, label_halo_background_color, label_halo_width, h_ext_o, h_inn_o, h_x_off, h_y_off, h_angle, h_spacing, height
+			endif
+		done		
+
+	print "Berggipfel gezeichnet"
+
+end
+
+###############################################################
+# Rahmen
+###############################################################
+
+
+begin draw_frame stroke_color, line_style
+
+	worlds px1, py1, px2, py2
+	clearpath
+	box px1, py1, px2, py2
+	eval stroke_color
+	eval line_style
+	stroke
+	
+end
+
+
+###############################################################
+# Maßstabsleiste
+###############################################################
+
+begin draw_scalebar km_value, bar_color, bar_style, font, fontsize
+	
+	let scalebar_len = km_value / ((xmax - xmin) / map_xsize / 1000) * (96/72)
+	
+	worlds px1, py1, px2, py2
+	clearpath
+	move mx1 + (mx2 / 50), my1 + (mx2 / 50)
+	rdraw scalebar_len, 0
+	eval bar_color
+	eval bar_style
+	stroke
+	
+	clearpath
+	move mx1 + (mx2 / 50) + (scalebar_len / 2),  my1 + (mx2 / 50) + (mx2 / 100)
+	justify "center, bottom"
+	font font, fontsize
+	label km_value . " km"
+end
+
+###############################################################
+# Copyright
+###############################################################
+
+begin draw_copyright copyright_txt, font, fontsize, fontcolor
+
+	worlds px1, py1, px2, py2
+	clearpath
+
+	move mx2 - (mx2 / 50), my1 + (mx2 / 50)
+	eval fontcolor
+	justify "right, bottom"
+	font font, fontsize
+	label copyright_txt
+	
+end
+
+###############################################################
+# INTERREG-Logo
+###############################################################
+
+begin place_interreg_logo
+
+	worlds px1, py1, px2, py2
+	clearpath
+	move mx2 - (interreg_image_size / 2) - 2, my1 + 21.0
+	icon interreg_image_file, interreg_image_size
+
+end
+
+###############################################################
+# EUREGIO-Logo
+###############################################################
+
+begin place_euregio_logo
+
+	worlds px1, py1, px2, py2
+	clearpath
+	move mx2 - (euregio_image_size / 2) - 2, my1 + 19.0
+	icon euregio_image_file, euregio_image_size
+
+end
+
+########################################################################
+# F U N C T I O N S
+########################################################################
+
+# ======================================================================
+function define_albina_value_arrays_from_datafile infile, header, index_h_array, value1_h_array, value2_h_array, value3_h_array, value4_h_array, value5_h_array, index_l_array, value1_l_array, value2_l_array, value3_l_array, value4_l_array
+
+# ----------------------------------
+# --- define value-array and index-array
+# ----------------------------------
+let v1_h = "let " . value1_h_array . "[index_h] = dr_h"
+let v2_h = "let " . value2_h_array . "[index_h] = exp_h"
+let v3_h = "let " . value3_h_array . "[index_h] = snow_h"
+let v4_h = "let " . value4_h_array . "[index_h] = bul_h"
+let v5_h = "let " . value5_h_array . "[index_h] = elev_h"
+let nr_h = "let " . index_h_array . "[m_h] = index_h"
+
+let v1_l = "let " . value1_l_array . "[index_l] = dr_l"
+let v2_l = "let " . value2_l_array . "[index_l] = exp_l"
+let v3_l = "let " . value3_l_array . "[index_l] = snow_l"
+let v4_l = "let " . value4_l_array . "[index_l] = bul_l"
+let nr_l = "let " . index_l_array . "[m_l] = index_l"
+
+# ----------------------------------
+# --- read data from textfile and create value-array and index-array
+# ----------------------------------
+let n = 1
+dataset "textfile", infile , "delimiter=;"
+while Mapyrus.fetch.more
+do
+  fetch
+  let arr = split($0,";")
+  let numvar = length(arr)
+  if n > header then
+	let m_h = n - header
+	let index_h = $3 . "-h"
+	let dr_h = $7
+	let exp_h = $9
+	let snow_h = $11
+	let bul_h = $1
+	let elev_h = $6
+
+	let m_l = m_h + 1	
+	let index_l = $3 . "-l"
+	let dr_l = $8
+	let exp_l = $10
+	let snow_l = $12 
+	let bul_l = $1
+
+	eval nr_h	 
+	eval v1_h
+	eval v2_h
+	eval v3_h
+	eval v4_h
+	eval v5_h
+	
+	eval nr_l
+	eval v1_l
+	eval v2_l
+	eval v3_l
+	eval v4_l
+
+  endif
+  let n = n + 2
+done
+let numlines = m_l / 2
+let numlines_h = m_h
+let numlines_l = m_l
+
+#/*
+print "==================================="
+print "define data arrays from input file "
+print "input file: " . infile
+print "==================================="
+
+print "==================================="
+print "index_h-array: ", index_h_array
+print "-----------------------------------"
+let n = -1
+let print_arr_h = "print n+2, " . index_h_array . "[n+2]"
+while n < numlines_h do
+	eval print_arr_h ; let n = n + 2
+done
+
+print "==================================="
+print "value_h-array: ", value1_h_array
+print "-----------------------------------"
+let for1_h = "for key in " . value1_h_array ." do " . "print key, " . value1_h_array . "[key]" . "; done"
+eval for1_h
+
+print "==================================="
+print "value_h-array: ", value2_h_array
+print "-----------------------------------"
+let for2_h = "for key in " . value2_h_array ." do " . "print key, " . value2_h_array . "[key]" . "; done"
+eval for2_h
+
+print "==================================="
+print "value_h-array: ", value3_h_array
+print "-----------------------------------"
+let for3_h = "for key in " . value3_h_array ." do " . "print key, " . value3_h_array . "[key]" . "; done"
+eval for3_h
+
+print "==================================="
+print "value_h-array: ", value4_h_array
+print "-----------------------------------"
+let for4_h = "for key in " . value4_h_array ." do " . "print key, " . value4_h_array . "[key]" . "; done"
+eval for4_h
+
+print "==================================="
+print "value_h-array: ", value5_h_array
+print "-----------------------------------"
+let for5_h = "for key in " . value5_h_array ." do " . "print key, " . value5_h_array . "[key]" . "; done"
+eval for5_h
+
+
+print "==================================="
+print "index_l-array: ", index_l_array
+print "-----------------------------------"
+let n = 0
+let print_arr_l = "print n+2, " . index_l_array . "[n+2]"
+while n < numlines_l do
+	eval print_arr_l ; let n = n + 2
+done
+
+print "==================================="
+print "value_l-array: ", value1_l_array
+print "-----------------------------------"
+let for1_l = "for key in " . value1_l_array ." do " . "print key, " . value1_l_array . "[key]" . "; done"
+eval for1_l
+
+print "==================================="
+print "value_l-array: ", value2_l_array
+print "-----------------------------------"
+let for2_l = "for key in " . value2_l_array ." do " . "print key, " . value2_l_array . "[key]" . "; done"
+eval for2_l
+
+print "==================================="
+print "value_l-array: ", value3_l_array
+print "-----------------------------------"
+let for3_l = "for key in " . value3_l_array ." do " . "print key, " . value3_l_array . "[key]" . "; done"
+eval for3_l
+
+print "==================================="
+print "value_l-array: ", value4_l_array
+print "-----------------------------------"
+let for4_l = "for key in " . value4_l_array ." do " . "print key, " . value4_l_array . "[key]" . "; done"
+eval for4_l
+print "==================================="
+#*/
+return numlines
+end
+# ======================================================================
+
+
+# ======================================================================
+function define_albina_graphic_value_arrays_from_datafile infile, header, index_array, elev_array, value1_array, value2_array, value3_array, value4_array, value5_array, value6_array
+# ----------------------------------
+# --- defines data arrays from input file
+# ----------------------------------
+#
+#   infile = input data file (4 columns id; value1; value2; value3) 
+#   header = number of header rows that will not be included in array
+#   value1_array = array [column1] = value1
+#   value2_array = array [column1] = value2
+#   value3_array = array [column1] = value3
+#   index_array = array [sequential number] = column1
+
+# ----------------------------------
+# --- define value-array and index-array
+# ----------------------------------
+
+let bul = "let " . index_array . "[m] = index"
+let elev = "let " . elev_array . "[index] = elev_m"
+let v1 = "let " . value1_array . "[index] = dr_h"
+let v2 = "let " . value2_array . "[index] = dr_l"
+let v3 = "let " . value3_array . "[index] = exp_h"
+let v4 = "let " . value4_array . "[index] = exp_l"
+let v5 = "let " . value5_array . "[index] = snow_h"
+let v6 = "let " . value6_array . "[index] = snow_l"
+
+# ----------------------------------
+# --- read data from textfile and create value-array and index-array
+# ----------------------------------
+let n = 1
+dataset "textfile", infile , "delimiter=;"
+while Mapyrus.fetch.more
+do
+  fetch
+  let arr = split($0,";")
+  let numvar = length(arr)
+  if n > header then
+	let m = n - header
+	let index = $1
+	let elev_m = $6
+	let dr_h = $7
+	let dr_l = $8
+	let exp_h = $9
+	let exp_l = $10
+	let snow_h = $11
+	let snow_l = $12
+
+	eval bul	
+ 	eval elev
+	eval v1
+	eval v2
+	eval v3
+	eval v4
+	eval v5
+	eval v6
+
+  endif
+  let n = n + 1
+done
+let numlines = m
+
+#/*
+print "==================================="
+print "define graphic data arrays from input file "
+print "input file: " . infile
+print "==================================="
+
+print "==================================="
+print "value-array: ", elev_array
+print "-----------------------------------"
+let for0b = "for key in " . elev_array ." do " . "print key, " . elev_array . "[key]" . "; done"
+eval for0b
+
+print "==================================="
+print "value-array: ", value1_array
+print "-----------------------------------"
+let for1 = "for key in " . value1_array ." do " . "print key, " . value1_array . "[key]" . "; done"
+eval for1
+
+print "==================================="
+print "value-array: ", value2_array
+print "-----------------------------------"
+let for2 = "for key in " . value2_array ." do " . "print key, " . value2_array . "[key]" . "; done"
+eval for2
+
+print "==================================="
+print "value-array: ", value3_array
+print "-----------------------------------"
+let for3 = "for key in " . value3_array ." do " . "print key, " . value3_array . "[key]" . "; done"
+eval for3
+
+print "==================================="
+print "value-array: ", value4_array
+print "-----------------------------------"
+let for4 = "for key in " . value4_array ." do " . "print key, " . value4_array . "[key]" . "; done"
+eval for4
+
+print "==================================="
+print "value-array: ", value5_array
+print "-----------------------------------"
+let for5 = "for key in " . value5_array ." do " . "print key, " . value5_array . "[key]" . "; done"
+eval for5
+
+print "==================================="
+print "value-array: ", value6_array
+print "-----------------------------------"
+let for6 = "for key in " . value6_array ." do " . "print key, " . value6_array . "[key]" . "; done"
+eval for6
+
+return numlines
+end
+# ======================================================================
+
+
+
+# ======================================================================

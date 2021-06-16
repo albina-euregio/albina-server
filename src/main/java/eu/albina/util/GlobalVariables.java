@@ -60,7 +60,6 @@ public class GlobalVariables {
 	private static boolean publishAt5PM = false;
 	private static boolean publishAt8AM = false;
 	private static String localImagesPath = "images/";
-	private static String localFontsPath = "./src/main/resources/fonts/";
 	// REGION
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
@@ -87,7 +86,6 @@ public class GlobalVariables {
 	private static String htmlDirectory = "/mnt/simple_local";
 	public static String mapsPath = "/mnt/albina_files_local";
 	public static String mapProductionUrl = "";
-	public static String scriptsPath = "/opt/local/";
 
 	public static String blogApiUrl = "https://www.googleapis.com/blogger/v3/blogs/";
 	public static String googleApiKey = "AIzaSyBN0GUcRlTfoVnarVFVpA1hUEnDcDjuXQY";
@@ -331,15 +329,6 @@ public class GlobalVariables {
 		setConfigProperty("localImagesPath", localImagesPath);
 	}
 
-	public static String getLocalFontsPath() {
-		return localFontsPath;
-	}
-
-	public static void setLocalFontsPath(String localFontsPath) throws ConfigurationException {
-		GlobalVariables.localFontsPath = localFontsPath;
-		setConfigProperty("localFontsPath", localFontsPath);
-	}
-
 	public static boolean isPublishBulletinsTyrol() {
 		return publishBulletinsTyrol;
 	}
@@ -421,15 +410,6 @@ public class GlobalVariables {
 
 	public static String getServerMainUrl() {
 		return serverMainUrl;
-	}
-
-	public static String getScriptsPath() {
-		return scriptsPath;
-	}
-
-	public static void setScriptsPath(String scriptsPath) throws ConfigurationException {
-		GlobalVariables.scriptsPath = scriptsPath;
-		setConfigProperty("scriptsPath", scriptsPath);
 	}
 
 	public static String getPdfDirectory() {
@@ -559,8 +539,6 @@ public class GlobalVariables {
 				version = config.getString("gitVersion");
 			if (config.containsKey("localImagesPath"))
 				localImagesPath = config.getString("localImagesPath");
-			if (config.containsKey("localFontsPath"))
-				localFontsPath = config.getString("localFontsPath");
 			if (config.containsKey("pdfDirectory"))
 				pdfDirectory = config.getString("pdfDirectory");
 			if (config.containsKey("htmlDirectory"))
@@ -573,8 +551,6 @@ public class GlobalVariables {
 				mapsPath = config.getString("mapsPath");
 			if (config.containsKey("mapProductionUrl"))
 				mapProductionUrl = config.getString("mapProductionUrl");
-			if (config.containsKey("scriptsPath"))
-				scriptsPath = config.getString("scriptsPath");
 			if (config.containsKey("createMaps"))
 				createMaps = config.getBoolean("createMaps");
 			if (config.containsKey("createPdf"))
@@ -620,8 +596,6 @@ public class GlobalVariables {
 
 		if (localImagesPath != null)
 			json.put("localImagesPath", localImagesPath);
-		if (localFontsPath != null)
-			json.put("localFontsPath", localFontsPath);
 		if (pdfDirectory != null)
 			json.put("pdfDirectory", pdfDirectory);
 		if (htmlDirectory != null)
@@ -634,8 +608,6 @@ public class GlobalVariables {
 			json.put("mapsPath", mapsPath);
 		if (mapProductionUrl != null)
 			json.put("mapProductionUrl", mapProductionUrl);
-		if (scriptsPath != null)
-			json.put("scriptsPath", scriptsPath);
 		json.put("createMaps", createMaps);
 		json.put("createPdf", createPdf);
 		json.put("createSimpleHtml", createSimpleHtml);
@@ -674,8 +646,6 @@ public class GlobalVariables {
 	public static void setConfigurationParameters(JSONObject configuration) throws ConfigurationException {
 		if (configuration.has("localImagesPath"))
 			setLocalImagesPath(configuration.getString("localImagesPath"));
-		if (configuration.has("localFontsPath"))
-			setLocalFontsPath(configuration.getString("localFontsPath"));
 		if (configuration.has("pdfDirectory"))
 			setPdfDirectory(configuration.getString("pdfDirectory"));
 		if (configuration.has("htmlDirectory"))
@@ -712,8 +682,6 @@ public class GlobalVariables {
 			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
 		if (configuration.has("publishBulletinsAran"))
 			setPublishBulletinsAran(configuration.getBoolean("publishBulletinsAran"));
-		if (configuration.has("scriptsPath"))
-			setScriptsPath(configuration.getString("scriptsPath"));
 		if (configuration.has("publishBlogsTyrol"))
 			setPublishBlogsTyrol(configuration.getBoolean("publishBlogsTyrol"));
 		if (configuration.has("publishBlogsSouthTyrol"))

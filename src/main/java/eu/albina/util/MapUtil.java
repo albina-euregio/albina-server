@@ -17,6 +17,8 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -35,6 +37,7 @@ import java.util.stream.IntStream;
 
 import javax.script.SimpleBindings;
 
+import com.google.common.io.Resources;
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.Interpreter;
@@ -211,12 +214,6 @@ public class MapUtil {
 	}
 
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions) {
-		try {
-			// load patched class to fix performance issue, see https://gitlab.com/albina-euregio/albina-server/-/issues/216
-			Class.forName("org.mapyrus.font.OpenTypeFont");
-		} catch (ClassNotFoundException e) {
-			throw new IllegalStateException(e);
-		}
 		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
 				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 		try {
@@ -293,7 +290,6 @@ public class MapUtil {
 				put("pagesize_y", size.width / map.aspectRatio());
 				put("map_xsize", size.width);
 				put("working_dir", tempDirectory + "/");
-				put("font_dir", mapProductionUrl + "mapyrus/fonts/");
 				put("geodata_dir", mapProductionUrl + "geodata/");
 				put("image_dir", mapProductionUrl + "images/");
 				put("region", "Euregio");
@@ -309,15 +305,27 @@ public class MapUtil {
 			}
 		};
 		context.setBindings(new SimpleBindings(bindings));
-		final List<String> mapyrusFiles = new ArrayList<>();
-		mapyrusFiles.add("fontdefinition.mapyrus");
-		mapyrusFiles.add("albina_functions.mapyrus");
-		mapyrusFiles.add("albina_styles.mapyrus");
-		mapyrusFiles.add(Map.overlay.equals(map) ? "albina_overlaymap.mapyrus" : "albina_drawmap.mapyrus");
+		final List<URL> mapyrusFiles = new ArrayList<>();
+		final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
+			Resources.getResource("fonts/open-sans/OpenSans.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-Italic.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-Bold.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-BoldItalic.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-Semibold.otf").getFile(),
+			Resources.getResource("fonts/open-sans/OpenSans-SemiboldItalic.otf").getFile());
+		mapyrus.interpret(context, new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"), System.in, System.out);
+		mapyrusFiles.add(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
+		mapyrusFiles.add(Resources.getResource("mapyrus/albina_functions.mapyrus"));
+		mapyrusFiles.add(Resources.getResource("mapyrus/albina_styles.mapyrus"));
+		if (Map.overlay.equals(map)) {
+			mapyrusFiles.add(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
+		} else {
+			mapyrusFiles.add(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
+		}
 		logger.info("Creating map {} using {} and {} with bindings {}", outputFile, dangerRatingMapFile, mapyrusFiles,
 				bindings);
-		for (String mapyrusFile : mapyrusFiles) {
-			final FileOrURL file = new FileOrURL(mapProductionUrl + "mapyrus/" + mapyrusFile);
+		for (URL mapyrusFile : mapyrusFiles) {
+			final FileOrURL file = new FileOrURL(mapyrusFile.toString());
 			mapyrus.interpret(context, file, System.in, System.out);
 		}
 		deleteDirectoryWithContents(tempDirectory);

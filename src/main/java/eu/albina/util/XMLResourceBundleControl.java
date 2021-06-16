@@ -13,10 +13,12 @@ import java.util.ResourceBundle;
 public class XMLResourceBundleControl extends ResourceBundle.Control {
 	private static final String XML = "xml";
 
+	@Override
 	public List<String> getFormats(String baseName) {
 		return Collections.singletonList(XML);
 	}
 
+	@Override
 	public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
 			throws IllegalAccessException, InstantiationException, IOException {
 
