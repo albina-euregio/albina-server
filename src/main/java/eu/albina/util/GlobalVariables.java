@@ -81,7 +81,6 @@ public class GlobalVariables {
 
 	private static final String serverMainUrl = "https://avalanche.report";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
-	private static String serverImagesUrlLocalhost = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
 	private static String htmlDirectory = "/mnt/simple_local";
 	public static String mapsPath = "/mnt/albina_files_local";
@@ -439,15 +438,6 @@ public class GlobalVariables {
 		setConfigProperty("serverImagesUrl", serverImagesUrl);
 	}
 
-	public static String getServerImagesUrlLocalhost() {
-		return serverImagesUrlLocalhost;
-	}
-
-	public static void setServerImagesUrlLocalhost(String serverImagesUrlLocalhost) throws ConfigurationException {
-		GlobalVariables.serverImagesUrlLocalhost = serverImagesUrlLocalhost;
-		setConfigProperty("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
-	}
-
 	public static String getMapsPath() {
 		return mapsPath;
 	}
@@ -545,8 +535,6 @@ public class GlobalVariables {
 				htmlDirectory = config.getString("htmlDirectory");
 			if (config.containsKey("serverImagesUrl"))
 				serverImagesUrl = config.getString("serverImagesUrl");
-			if (config.containsKey("serverImagesUrlLocalhost"))
-				serverImagesUrlLocalhost = config.getString("serverImagesUrlLocalhost");
 			if (config.containsKey("mapsPath"))
 				mapsPath = config.getString("mapsPath");
 			if (config.containsKey("mapProductionUrl"))
@@ -602,8 +590,6 @@ public class GlobalVariables {
 			json.put("htmlDirectory", htmlDirectory);
 		if (serverImagesUrl != null)
 			json.put("serverImagesUrl", serverImagesUrl);
-		if (serverImagesUrlLocalhost != null)
-			json.put("serverImagesUrlLocalhost", serverImagesUrlLocalhost);
 		if (mapsPath != null)
 			json.put("mapsPath", mapsPath);
 		if (mapProductionUrl != null)
@@ -652,8 +638,6 @@ public class GlobalVariables {
 			setHtmlDirectory(configuration.getString("htmlDirectory"));
 		if (configuration.has("serverImagesUrl"))
 			setServerImagesUrl(configuration.getString("serverImagesUrl"));
-		if (configuration.has("serverImagesUrlLocalhost"))
-			setServerImagesUrlLocalhost(configuration.getString("serverImagesUrlLocalhost"));
 		if (configuration.has("mapsPath"))
 			setMapsPath(configuration.getString("mapsPath"));
 		if (configuration.has("mapProductionUrl"))
