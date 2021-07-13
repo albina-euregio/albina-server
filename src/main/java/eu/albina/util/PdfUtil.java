@@ -19,6 +19,7 @@ package eu.albina.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -557,10 +558,9 @@ public class PdfUtil {
 
 		Image regionImg;
 		if (grayscale)
-			regionImg = getImage("warning_pictos/grey/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
+			regionImg = getImage("images/warning_pictos/grey/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		else
-			regionImg = getImage(
-					"warning_pictos/color/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
+			regionImg = getImage("images/warning_pictos/color/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		if (regionImg != null) {
 			regionImg.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getDangerRatingText(daytimeBulletin, lang));
 			regionImg.scaleToFit(70, 30);
@@ -623,7 +623,7 @@ public class PdfUtil {
 			cell.setHeight(height);
 			cell.setBorder(Border.NO_BORDER);
 			Image tendencyImg = getImage(
-					GlobalVariables.getTendencySymbolPath(avalancheBulletin.getTendency(), grayscale));
+				"images/" + GlobalVariables.getTendencySymbolPath(avalancheBulletin.getTendency(), grayscale));
 			if (tendencyImg != null) {
 				tendencyImg.getAccessibilityProperties().setAlternateDescription(avalancheBulletin.getTendency().toString(lang.getLocale()));
 				tendencyImg.scaleToFit(25, 20);
@@ -689,14 +689,10 @@ public class PdfUtil {
 		return table;
 	}
 
-	public Image getImage(String path) {
-		try {
-			ImageData imageData = ImageDataFactory.create(GlobalVariables.getServerImagesUrlLocalhost() + path);
-			return new Image(imageData);
-		} catch (IOException e) {
-			logger.warn("Image could not be loaded", e);
-			return null;
-		}
+	public Image getImage(String resourceName) {
+		URL resource = Resources.getResource(resourceName);
+		ImageData imageData = ImageDataFactory.create(resource);
+		return new Image(imageData);
 	}
 
 	private void createAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, Table table,
@@ -716,7 +712,7 @@ public class PdfUtil {
 				avalancheSituationTable.setMarginTop(5);
 				avalancheSituationTable.setWidth(60);
 				avalancheSituationTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
-				img = getImage(GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, grayscale));
+				img = getImage("images/" + GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, grayscale));
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 					img.scaleToFit(60, 35);
@@ -782,7 +778,7 @@ public class PdfUtil {
 					}
 				}
 
-				img = getImage(GlobalVariables.getAspectSymbolPath(result, grayscale));
+				img = getImage("images/" + GlobalVariables.getAspectSymbolPath(result, grayscale));
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(avalancheSituation.getAspects(), lang.getLocale()));
 					img.scaleToFit(30, 30);
@@ -800,9 +796,9 @@ public class PdfUtil {
 				if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 					// elevation high and low set
 					if (grayscale)
-						img = getImage("elevation/grey/levels_middle_two.png");
+						img = getImage("images/elevation/grey/levels_middle_two.png");
 					else
-						img = getImage("elevation/color/levels_middle_two.png");
+						img = getImage("images/elevation/color/levels_middle_two.png");
 					if (img != null) {
 						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 						img.scaleToFit(70, 25);
@@ -863,9 +859,9 @@ public class PdfUtil {
 				} else {
 					// elevation high set
 					if (grayscale)
-						img = getImage("elevation/grey/levels_below.png");
+						img = getImage("images/elevation/grey/levels_below.png");
 					else
-						img = getImage("elevation/color/levels_below.png");
+						img = getImage("images/elevation/color/levels_below.png");
 					if (img != null) {
 						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 						img.scaleToFit(70, 25);
@@ -903,9 +899,9 @@ public class PdfUtil {
 			} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 				// elevation low set
 				if (grayscale)
-					img = getImage("elevation/grey/levels_above.png");
+					img = getImage("images/elevation/grey/levels_above.png");
 				else
-					img = getImage("elevation/color/levels_above.png");
+					img = getImage("images/elevation/color/levels_above.png");
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 					img.scaleToFit(70, 25);
@@ -943,9 +939,9 @@ public class PdfUtil {
 			} else {
 				// no elevation set
 				if (grayscale)
-					img = getImage("elevation/grey/levels_all.png");
+					img = getImage("images/elevation/grey/levels_all.png");
 				else
-					img = getImage("elevation/color/levels_all.png");
+					img = getImage("images/elevation/color/levels_all.png");
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 					img.scaleToFit(70, 25);
