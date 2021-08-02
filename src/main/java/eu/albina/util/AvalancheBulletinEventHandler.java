@@ -121,9 +121,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add CI
 			Image ciImg;
 			if (grayscale)
-				ciImg = PdfUtil.getInstance().getImage("logo/grey/colorbar.gif");
+				ciImg = PdfUtil.getInstance().getImage("images/logo/grey/colorbar.gif");
 			else
-				ciImg = PdfUtil.getInstance().getImage("logo/color/colorbar.gif");
+				ciImg = PdfUtil.getInstance().getImage("images/logo/color/colorbar.gif");
 			ciImg.scaleAbsolute(pageSize.getWidth(), 4);
 			ciImg.setFixedPosition(0, pageSize.getHeight() - 4);
 			canvas.add(ciImg);
@@ -131,15 +131,15 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add logo
 			Image logoImg;
 			if (grayscale)
-				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("avalanche-report.logo.path.bw"));
+				logoImg = PdfUtil.getInstance().getImage("images/" + lang.getBundleString("avalanche-report.logo.path.bw"));
 			else
-				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("avalanche-report.logo.path"));
+				logoImg = PdfUtil.getInstance().getImage("images/" + lang.getBundleString("avalanche-report.logo.path"));
 			logoImg.scaleToFit(130, 55);
 			logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
 			canvas.add(logoImg);
 
 			// Add EUREGIO logo
-			Image euregioImg = PdfUtil.getInstance().getImage(GlobalVariables.getEuregioLogoPath(grayscale));
+			Image euregioImg = PdfUtil.getInstance().getImage("images/" + GlobalVariables.getEuregioLogoPath(grayscale));
 			euregioImg.scaleToFit(120, 40);
 			euregioImg.setFixedPosition(15, 5);
 			canvas.add(euregioImg);

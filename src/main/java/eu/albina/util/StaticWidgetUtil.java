@@ -35,6 +35,7 @@ import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
+import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,7 +119,7 @@ public class StaticWidgetUtil {
 			ig2.fill(new Rectangle2D.Double(0, 569, 600, 1));
 
 			BufferedImage ci = resize(
-					loadImageFromUrl(GlobalVariables.getServerImagesUrlLocalhost() + "logo/color/colorbar.gif"), 600,
+				loadImageFromPath("images/logo/color/colorbar.gif"), 600,
 					15);
 
 			BufferedImage overviewThumbnail;
@@ -163,7 +164,7 @@ public class StaticWidgetUtil {
 			AttributedString asThirdLine;
 			AttributedString asFourthLine;
 
-			logo = loadImageFromPath(GlobalVariables.getLocalImagesPath() + "logo/color/lawinen_report.png");
+			logo = loadImageFromPath("images/logo/color/lawinen_report.png");
 
 			firstLine = staticWidgetBundle.getString("line.1");
 			asFirstLine = new AttributedString(firstLine);
@@ -230,8 +231,7 @@ public class StaticWidgetUtil {
 			else
 				ig2.drawImage(overviewThumbnail, 100, 170, null);
 
-			BufferedImage euregioLogo = loadImageFromPath(
-					GlobalVariables.getLocalImagesPath() + "logo/color/euregio.png");
+			BufferedImage euregioLogo = loadImageFromPath("images/logo/color/euregio.png");
 			euregioLogo = resizeHeight(euregioLogo, 110);
 			ig2.drawImage(euregioLogo, 330, 35, null);
 
@@ -294,22 +294,13 @@ public class StaticWidgetUtil {
 		return dimg;
 	}
 
-	private BufferedImage loadImageFromUrl(String path) {
+	private BufferedImage loadImageFromPath(String resourceName) {
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new URL(path).openStream());
+			URL resource = Resources.getResource(resourceName);
+			img = ImageIO.read(resource);
 		} catch (IOException e) {
-			logger.error("Error loading image: " + path, e);
-		}
-		return img;
-	}
-
-	private BufferedImage loadImageFromPath(String path) {
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(getClass().getResource(path));
-		} catch (IOException e) {
-			logger.error("Error loading image: " + path, e);
+			logger.error("Error loading image: " + resourceName, e);
 		}
 		return img;
 	}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+	<Appenders>
+		<Console name="STDOUT">
+			<PatternLayout pattern="${albina.log.prefix} %date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
+		</Console>
+		<RollingFile name="FILE"
+					 fileName="/opt/tomcat/logs/albina_dev.log"
+					 filePattern="/opt/tomcat/logs/albina_dev.log.%d{yyyy-MM-dd}.log.gz">
+			<PatternLayout pattern="${albina.log.prefix} %date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
+			<TimeBasedTriggeringPolicy/>
+			<DefaultRolloverStrategy/>
+		</RollingFile>
+		<Sentry name="SENTRY"/>
+	</Appenders>
+
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="STDOUT"/>
+			<AppenderRef ref="FILE"/>
+			<AppenderRef ref="SENTRY"/>
+		</Root>
+		<Logger name="org.hibernate" level="${albina.log.level.sql}"/>
+		<Logger name="com.mchange.v2.c3p0" level="${albina.log.level.c3p0}"/>
+		<Logger name="eu.albina.controller.socialmedia.BlogController" level="DEBUG"/>
+		<Logger name="eu.albina.util.PushNotificationUtil" level="DEBUG"/>
+	</Loggers>
+
+</Configuration>
