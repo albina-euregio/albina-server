@@ -590,17 +590,23 @@ public class StatisticsController {
 			sb.append(GlobalVariables.csvDeliminator);
 			if (!daytimeDescription.isHasElevationDependency()) {
 				sb.append(daytimeDescription.getDangerRatingAbove().toString());
-				if (extended)
+				if (extended) {
+					sb.append(GlobalVariables.csvDeliminator);
 					addMatrixInformation(sb, daytimeDescription.getMatrixInformationAbove());
+				}
 			} else {
 				sb.append(daytimeDescription.getDangerRatingBelow().toString());
-				if (extended)
+				if (extended) {
+					sb.append(GlobalVariables.csvDeliminator);
 					addMatrixInformation(sb, daytimeDescription.getMatrixInformationBelow());
+				}
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(daytimeDescription.getDangerRatingAbove().toString());
-			if (extended)
+			if (extended) {
+				sb.append(GlobalVariables.csvDeliminator);
 				addMatrixInformation(sb, daytimeDescription.getMatrixInformationAbove());
+			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (!daytimeDescription.isHasElevationDependency())
 				sb.append(GlobalVariables.notAvailableString);
@@ -695,7 +701,6 @@ public class StatisticsController {
 
 	private void addMatrixInformation(StringBuilder sb, MatrixInformation matrixInformation) {
 		if (matrixInformation != null) {
-			sb.append(GlobalVariables.csvDeliminator);
 			if (matrixInformation.getArtificialDangerRating() != null)
 				sb.append(matrixInformation.getArtificialDangerRating());
 			else
@@ -731,7 +736,6 @@ public class StatisticsController {
 			else
 				sb.append(GlobalVariables.notAvailableString);
 		} else {
-			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(GlobalVariables.notAvailableString);
 			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(GlobalVariables.notAvailableString);
@@ -829,11 +833,18 @@ public class StatisticsController {
 			}
 			if (extended) {
 				addMatrixInformation(sb, avalancheSituation.getMatrixInformation());
+				sb.append(GlobalVariables.csvDeliminator);
 			}
 		} else {
 			for (int i = 0; i < 11; i++) {
 				sb.append(GlobalVariables.notAvailableString);
 				sb.append(GlobalVariables.csvDeliminator);
+			}
+			if (extended) {
+				for (int i = 0; i < 7; i++) {
+					sb.append(GlobalVariables.notAvailableString);
+					sb.append(GlobalVariables.csvDeliminator);
+				}
 			}
 		}
 	}
