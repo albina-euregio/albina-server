@@ -2,6 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="avalanche-report.name">Avalanche.report</entry>
+  <entry key="avalanche-report.preview"> - VISTA PREVIA</entry>
   <entry key="avalanche-report.url">https://avalanche.report</entry>
   <entry key="avalanche-report.url.capitalized">WWW.AVALANCHE.REPORT</entry>
   <entry key="avalanche-report.email">info@avalanche.report</entry>
@@ -9,13 +10,13 @@
   <entry key="avalanche-report.logo.path">logo/color/avalanche_report.png</entry>
   <entry key="avalanche-report.standard.link.text">Cargar vista estandar</entry>
   <entry key="danger-rating.elevation">{0} por debajo de {1}, {2} por encima de {3}</entry>
-  <entry key="day.1">Lunes</entry>
-  <entry key="day.2">Martes</entry>
-  <entry key="day.3">Miércoles</entry>
-  <entry key="day.4">Jueves</entry>
-  <entry key="day.5">Viernes</entry>
-  <entry key="day.6">Sábado</entry>
-  <entry key="day.7">Domingo</entry>
+  <entry key="day.MONDAY">Lunes</entry>
+  <entry key="day.TUESDAY">Martes</entry>
+  <entry key="day.WEDNESDAY">Miércoles</entry>
+  <entry key="day.THURSDAY">Jueves</entry>
+  <entry key="day.FRIDAY">Viernes</entry>
+  <entry key="day.SATURDAY">Sábado</entry>
+  <entry key="day.SUNDAY">Domingo</entry>
   <entry key="date-time-format">dd.MM.yyyy</entry>
   <entry key="date-time-format.publication">dd MM yyyy, HH:mm</entry>
   <entry key="date-time-format.tendency">dd MM yyyy</entry>
