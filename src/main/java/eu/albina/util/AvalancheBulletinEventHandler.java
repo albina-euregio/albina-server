@@ -47,17 +47,20 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 	private final List<AvalancheBulletin> bulletins;
 	private final LanguageCode lang;
 	private final boolean grayscale;
+	private final boolean preview;
 
 	public static final Color blueColor = new DeviceRgb(0, 172, 251);
 	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
 	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
 	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
+	public static final Color redColor = new DeviceRgb(255, 0, 0);
 
-	public AvalancheBulletinEventHandler(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean grayscale) {
+	public AvalancheBulletinEventHandler(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
 		this.lang = lang;
 		this.bulletins = bulletins;
 		this.grayscale = grayscale;
+		this.preview = preview;
 	}
 
 	@Override
@@ -84,8 +87,14 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 					.setColor(greyDarkColor, true).showText(headline).endText();
 			String date = AlbinaUtil.getDate(bulletins, lang);
-			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
-					.setColor(blue, true).showText(date).endText();
+			if (preview) {
+				String preview = lang.getBundleString("avalanche-report.preview");
+				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
+				.setColor(redColor, true).showText(date + preview).endText();
+			} else {
+				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
+				.setColor(blue, true).showText(date).endText();
+			}
 
 			String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
 			if (!publicationDate.isEmpty()) {

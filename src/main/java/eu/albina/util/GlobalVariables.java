@@ -438,8 +438,12 @@ public class GlobalVariables {
 		setConfigProperty("serverImagesUrl", serverImagesUrl);
 	}
 
-	public static String getMapsPath() {
-		return mapsPath;
+	public static String getMapsPath(boolean preview) {
+		if (preview) {
+			return System.getProperty("java.io.tmpdir");
+		} else {
+			return mapsPath;
+		}
 	}
 
 	public static void setMapsPath(String mapsPath) throws ConfigurationException {
@@ -496,7 +500,7 @@ public class GlobalVariables {
 	}
 
 	public static String getMapsUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
+		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath(false).substring(directoryOffset);
 	}
 
 	public static String getBulletinUrl(LanguageCode lang, ZonedDateTime date) {

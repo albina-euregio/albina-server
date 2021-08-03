@@ -477,7 +477,7 @@ public class PublicationController {
 		logger.info("Map production started");
 
 		if (!bulletins.isEmpty()) {
-			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions());
+			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions(), AlbinaUtil.getPublicationTime(bulletins), false);
 			logger.info("Map production finished");
 		}
 	}

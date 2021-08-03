@@ -714,6 +714,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return result;
 	}
 
+	public Set<String> getPublishedAndSavedRegions() {
+		Set<String> result = new LinkedHashSet<>();
+		result.addAll(savedRegions);
+		result.addAll(publishedRegions);
+		return result;
+	}
+
 	public boolean isHasDaytimeDependency() {
 		return hasDaytimeDependency;
 	}

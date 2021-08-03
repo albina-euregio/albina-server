@@ -3,6 +3,7 @@
 
 <properties>
 	<entry key="avalanche-report.name">Avalanche.report</entry>
+	<entry key="avalanche-report.preview"> - PREVIEW</entry>
 	<entry key="avalanche-report.url">https://avalanche.report</entry>
 	<entry key="avalanche-report.url.capitalized">WWW.AVALANCHE.REPORT</entry>
 	<entry key="avalanche-report.email">info@avalanche.report</entry>

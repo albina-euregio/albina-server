@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.rest;
 
+import java.io.File;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +36,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -54,6 +56,7 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.UserController;
+import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -65,6 +68,8 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.MapUtil;
+import eu.albina.util.PdfUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
@@ -428,6 +433,55 @@ public class AvalancheBulletinService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+    @Path("/preview")
+    @Produces("application/pdf")
+    public Response getPreviewPdf(@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date, @QueryParam("region") String region, @QueryParam("lang") LanguageCode language) {
+  
+		logger.debug("GET PDF preview [" + date + "]");
+
+		try {
+			Instant startDate = null;
+
+			if (date != null)
+				startDate = OffsetDateTime.parse(date).toInstant();
+			else
+				throw new AlbinaException("No date!");
+
+			Collection<AvalancheBulletin> result = AvalancheBulletinController.getInstance().getBulletins(startDate, startDate, GlobalVariables.regionsEuregio);
+			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin b : result) {
+				if (b.affectsRegion(region))
+					bulletins.add(b);
+			}
+			Collections.sort(bulletins);
+
+			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+			String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
+
+			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions(), publicationTimeString, true);
+
+			PdfUtil.getInstance().createPdf(bulletins, language, GlobalVariables.codeEuregio, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
+						publicationTimeString, true);
+
+			String filename = validityDateString + "_" + language.toString() + ".pdf";
+
+			File file = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator")
+			+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+			+ System.getProperty("file.separator") + filename);
+  
+			return Response.ok(file).header(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=\"" + filename + "\"").header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
+		} catch (AlbinaException e) {
+			logger.warn("Error creating PDFs", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (Exception e) {
+			logger.warn("Error creating PDFs", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 

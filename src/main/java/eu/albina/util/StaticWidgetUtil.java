@@ -124,10 +124,10 @@ public class StaticWidgetUtil {
 
 			BufferedImage overviewThumbnail;
 			if (AlbinaUtil.hasDaytimeDependency(bulletins))
-				overviewThumbnail = resizeWidth(loadImageFromFile(GlobalVariables.getMapsPath() + "/"
+				overviewThumbnail = resizeWidth(loadImageFromFile(GlobalVariables.getMapsPath(false) + "/"
 						+ validityDateString + "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 600);
 			else
-				overviewThumbnail = resizeHeight(loadImageFromFile(GlobalVariables.getMapsPath() + "/"
+				overviewThumbnail = resizeHeight(loadImageFromFile(GlobalVariables.getMapsPath(false) + "/"
 						+ validityDateString + "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 400);
 
 			if (highestDangerRating != DangerRating.very_high) {

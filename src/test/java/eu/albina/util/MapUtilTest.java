@@ -64,11 +64,24 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions);
+		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		BufferedImage actual = ImageIO.read(new File(
-			GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+			GlobalVariables.getMapsPath(false) + "/2019-01-17/2019-01-16_16-00-00/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
+	}
+
+	@Test
+	public void testPreviewMaps() throws Exception {
+		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), true);
+
+		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		BufferedImage actual = ImageIO.read(new File(
+			GlobalVariables.getMapsPath(true) + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 	}
 
@@ -79,7 +92,7 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions);
+		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
 	}
 
 	@Test
@@ -89,7 +102,7 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions);
+		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
 	}
 
 	@Test
@@ -99,7 +112,7 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions);
+		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
 	}
 
 	@Test
@@ -109,7 +122,7 @@ public class MapUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final Path path = folder.newFile("regions.json").toPath();
 
-		MapUtil.createBulletinRegions(bulletins, MapUtil.DaytimeDependency.fd, path, regions);
+		MapUtil.createBulletinRegions(bulletins, MapUtil.DaytimeDependency.fd, path, regions, false);
 		final String actual = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
 
 		final String expected = Resources.toString(Resources.getResource("2019-01-17.regions.json"),
@@ -123,7 +136,7 @@ public class MapUtilTest {
 	public void testMayrusInput() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		final String input = MapUtil.createMayrusInput(bulletins, MapUtil.DaytimeDependency.fd);
+		final String input = MapUtil.createMayrusInput(bulletins, MapUtil.DaytimeDependency.fd, false);
 		assertEquals("" + "sys_bid;bid;region;date;am_pm;validelevation;dr_h;dr_l;aspect_h;aspect_l;avprob_h;avprob_l\n"
 				+ "0;6385c958-018d-4c89-aa67-5eddc31ada5a;AT-07-10;2019-01-17;;0;3;3;0;0;0;0\n"
 				+ "0;6385c958-018d-4c89-aa67-5eddc31ada5a;AT-07-11;2019-01-17;;0;3;3;0;0;0;0\n"

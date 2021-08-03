@@ -92,12 +92,12 @@ public class MapUtil {
 	 * @throws Exception
 	 *             an error occurred during map production
 	 */
-	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Regions regions) throws Exception {
+	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) throws Exception {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());
 		try {
-			createMapyrusMaps(bulletins, regions);
+			createMapyrusMaps(bulletins, regions, publicationTime, preview);
 		} catch (Exception ex) {
 			logger.error("Failed to create mapyrus maps", ex);
 			throw ex;
@@ -105,18 +105,31 @@ public class MapUtil {
 		logger.info("Creating danger rating maps done in {} ms", System.currentTimeMillis() - start);
 	}
 
-	static String createMayrusInput(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency) {
+	static String createMayrusInput(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, boolean preview) {
 		final String header = "sys_bid;bid;region;date;am_pm;validelevation;dr_h;dr_l;aspect_h;aspect_l;avprob_h;avprob_l\n";
-		return header + IntStream.range(0, bulletins.size()).boxed()
-				.flatMap(index -> bulletins.get(index).getPublishedRegions().stream().map(region -> {
-					final AvalancheBulletin bulletin = bulletins.get(index);
-					final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin,
-							daytimeDependency);
-					return String.join(";", Integer.toString(index), bulletin.getId(), region,
-							bulletin.getValidityDateString(), "", Integer.toString(description.getElevation()),
-							getDangerRatingString(bulletin, description, true),
-							getDangerRatingString(bulletin, description, false), "0", "0", "0", "0");
-				})).collect(Collectors.joining("\n"));
+		if (preview) {
+			return header + IntStream.range(0, bulletins.size()).boxed()
+					.flatMap(index -> bulletins.get(index).getPublishedAndSavedRegions().stream().map(region -> {
+						final AvalancheBulletin bulletin = bulletins.get(index);
+						final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin,
+								daytimeDependency);
+						return String.join(";", Integer.toString(index), bulletin.getId(), region,
+								bulletin.getValidityDateString(), "", Integer.toString(description.getElevation()),
+								getDangerRatingString(bulletin, description, true),
+								getDangerRatingString(bulletin, description, false), "0", "0", "0", "0");
+					})).collect(Collectors.joining("\n"));
+		} else {
+			return header + IntStream.range(0, bulletins.size()).boxed()
+					.flatMap(index -> bulletins.get(index).getPublishedRegions().stream().map(region -> {
+						final AvalancheBulletin bulletin = bulletins.get(index);
+						final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin,
+								daytimeDependency);
+						return String.join(";", Integer.toString(index), bulletin.getId(), region,
+								bulletin.getValidityDateString(), "", Integer.toString(description.getElevation()),
+								getDangerRatingString(bulletin, description, true),
+								getDangerRatingString(bulletin, description, false), "0", "0", "0", "0");
+					})).collect(Collectors.joining("\n"));
+		}
 	}
 
 	private static AvalancheBulletinDaytimeDescription getBulletinDaytimeDescription(AvalancheBulletin bulletin,
@@ -213,9 +226,10 @@ public class MapUtil {
 		fd, am, pm
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions) {
-		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
-				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) {
+		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(preview),
+				AlbinaUtil.getValidityDateString(bulletins), publicationTime);
+
 		try {
 			logger.info("Creating directory {}", outputDirectory);
 			Files.createDirectories(outputDirectory);
@@ -229,7 +243,7 @@ public class MapUtil {
 			try {
 				final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
 				logger.info("Creating region file {}", regionFile);
-				createBulletinRegions(bulletins, daytimeDependency, regionFile, regions);
+				createBulletinRegions(bulletins, daytimeDependency, regionFile, regions, preview);
 			} catch (IOException | AlbinaException ex) {
 				throw new AlbinaMapException("Failed to create region file", ex);
 			}
@@ -237,22 +251,27 @@ public class MapUtil {
 			try {
 				drmFile = outputDirectory.resolve(daytimeDependency + ".txt");
 				logger.info("Creating mapyrus input file {}", drmFile);
-				Files.write(drmFile, createMayrusInput(bulletins, daytimeDependency).getBytes(StandardCharsets.UTF_8));
+				Files.write(drmFile, createMayrusInput(bulletins, daytimeDependency, preview).getBytes(StandardCharsets.UTF_8));
 			} catch (IOException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus input file", ex);
 			}
 			try {
-				for (Map map : Map.values()) {
-					createMapyrusMaps(map, daytimeDependency, null, 0, false, drmFile);
-					createMapyrusMaps(map, daytimeDependency, null, 0, true, drmFile);
+				if (!preview) {
+					for (Map map : Map.values()) {
+						createMapyrusMaps(map, daytimeDependency, null, 0, false, drmFile, preview);
+						createMapyrusMaps(map, daytimeDependency, null, 0, true, drmFile, preview);
+					}
+				} else {
+					createMapyrusMaps(Map.fullmap, daytimeDependency, null, 0, false, drmFile, preview);
 				}
 				for (int i = 0; i < bulletins.size(); i++) {
 					final AvalancheBulletin bulletin = bulletins.get(i);
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, false, drmFile);
-					createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, true, drmFile);
+					createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, false, drmFile, preview);
+					if (!preview)
+						createMapyrusMaps(Map.fullmap_small, daytimeDependency, bulletin.getId(), i, true, drmFile, preview);
 				}
 			} catch (IOException | MapyrusException | InterruptedException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
@@ -261,7 +280,7 @@ public class MapUtil {
 	}
 
 	static void createMapyrusMaps(Map map, DaytimeDependency daytimeDependency, String bulletinId, int bulletinIndex,
-			boolean grayscale, Path dangerRatingMapFile) throws IOException, MapyrusException, InterruptedException {
+			boolean grayscale, Path dangerRatingMapFile, boolean preview) throws IOException, MapyrusException, InterruptedException {
 		final MapSize size = Map.overlay.equals(map) ? MapSize.overlay
 				: Map.fullmap_small.equals(map) ? MapSize.thumbnail_map : MapSize.standard_map;
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
@@ -346,13 +365,9 @@ public class MapUtil {
 					.waitFor();
 		}
 
-		// convert to webp
-		logger.info("Converting {} to {}", outputFilePng, outputFileWebp);
-		new ProcessBuilder("cwebp", outputFilePng, "-o", outputFileWebp).inheritIO().start().waitFor();
-
 		// convert to jpg
 		logger.info("Converting {} to {}", outputFile, outputFileJpg);
-		new ProcessBuilder("convert", outputFilePng, outputFileJpg).inheritIO().start().waitFor();
+		new ProcessBuilder("magick", outputFilePng, outputFileJpg).inheritIO().start().waitFor();
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletinId == null) {
 			// create combined am/pm maps
 			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, grayscale, "jpg"))
@@ -362,7 +377,13 @@ public class MapUtil {
 			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, grayscale, "jpg"))
 					.toString();
 			logger.info("Combining {} and {} to {}", amFile, pmFile, fdFile);
-			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
+			new ProcessBuilder("magick convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
+		}
+
+		if (!preview) {
+			// convert to webp
+			logger.info("Converting {} to {}", outputFilePng, outputFileWebp);
+			new ProcessBuilder("cwebp", outputFilePng, "-o", outputFileWebp).inheritIO().start().waitFor();
 		}
 	}
 
@@ -376,9 +397,11 @@ public class MapUtil {
 	}
 
 	static void createBulletinRegions(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency,
-			Path regionFile, Regions regions) throws IOException, AlbinaException {
+			Path regionFile, Regions regions, boolean preview) throws IOException, AlbinaException {
 		final GeoJson.FeatureCollection featureCollection = new GeoJson.FeatureCollection();
-		featureCollection.properties.put("creation_date", DateTimeFormatter.ISO_INSTANT.format(bulletins.get(0).getPublicationDate()));
+		if (bulletins.get(0).getPublicationDate() != null) {
+			featureCollection.properties.put("creation_date", DateTimeFormatter.ISO_INSTANT.format(bulletins.get(0).getPublicationDate()));
+		}
 		featureCollection.properties.put("valid_date", bulletins.get(0).getValidityDateString());
 		featureCollection.properties.put("valid_daytime", daytimeDependency.name());
 		for (AvalancheBulletin bulletin : bulletins) {
@@ -393,7 +416,7 @@ public class MapUtil {
 			feature.properties.put("problem_1", getAvalancheSituationString(description.getAvalancheSituation1()));
 			feature.properties.put("problem_2", getAvalancheSituationString(description.getAvalancheSituation2()));
 			final double bufferDistance = 1e-4;
-			feature.geometry = regions.getRegionsForBulletin(bulletin).map(Region::getPolygon)
+			feature.geometry = regions.getRegionsForBulletin(bulletin, preview).map(Region::getPolygon)
 					// use buffer to avoid artifacts when building polygon union
 					.map(polygon -> BufferOp.bufferOp(polygon, bufferDistance))
 					.collect(Collectors.collectingAndThen(Collectors.toList(), UnaryUnionOp::union));

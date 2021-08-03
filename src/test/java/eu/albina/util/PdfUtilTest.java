@@ -68,7 +68,7 @@ public class PdfUtilTest {
 		// PdfUtil.getInstance().createRegionPdfs(bulletins, GlobalVariables.codeTyrol);
 
 		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.de, GlobalVariables.codeTyrol, false, false,
-				"2030-02-16", "2030-02-16_00-00-00");
+				"2030-02-16", "2030-02-16_00-00-00", false);
 	}
 
 	@Ignore
