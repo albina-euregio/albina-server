@@ -59,7 +59,6 @@ public class GlobalVariables {
 	private static String vapidPrivateKey;
 	private static boolean publishAt5PM = false;
 	private static boolean publishAt8AM = false;
-	private static String localImagesPath = "images/";
 	// REGION
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
@@ -319,15 +318,6 @@ public class GlobalVariables {
 		setConfigProperty("createSimpleHtml", createSimpleHtml);
 	}
 
-	public static String getLocalImagesPath() {
-		return localImagesPath;
-	}
-
-	public static void setLocalImagesPath(String localImagesPath) throws ConfigurationException {
-		GlobalVariables.localImagesPath = localImagesPath;
-		setConfigProperty("localImagesPath", localImagesPath);
-	}
-
 	public static boolean isPublishBulletinsTyrol() {
 		return publishBulletinsTyrol;
 	}
@@ -531,8 +521,6 @@ public class GlobalVariables {
 			config = configs.properties(propertiesFilePath);
 			if (config.containsKey("gitVersion"))
 				version = config.getString("gitVersion");
-			if (config.containsKey("localImagesPath"))
-				localImagesPath = config.getString("localImagesPath");
 			if (config.containsKey("pdfDirectory"))
 				pdfDirectory = config.getString("pdfDirectory");
 			if (config.containsKey("htmlDirectory"))
@@ -586,8 +574,6 @@ public class GlobalVariables {
 	public static JSONObject getConfigProperties() {
 		JSONObject json = new JSONObject();
 
-		if (localImagesPath != null)
-			json.put("localImagesPath", localImagesPath);
 		if (pdfDirectory != null)
 			json.put("pdfDirectory", pdfDirectory);
 		if (htmlDirectory != null)
@@ -634,8 +620,6 @@ public class GlobalVariables {
 	}
 
 	public static void setConfigurationParameters(JSONObject configuration) throws ConfigurationException {
-		if (configuration.has("localImagesPath"))
-			setLocalImagesPath(configuration.getString("localImagesPath"));
 		if (configuration.has("pdfDirectory"))
 			setPdfDirectory(configuration.getString("pdfDirectory"));
 		if (configuration.has("htmlDirectory"))
