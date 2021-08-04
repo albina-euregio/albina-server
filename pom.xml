@@ -86,10 +86,10 @@
 				<albina.conf.send-emails>false</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.maps-path>/mnt/albina_files_dev</albina.conf.maps-path>
+				<albina.conf.maps-path>/var/www/avalanche.report/albina_files_dev</albina.conf.maps-path>
 				<albina.conf.map-production-url>/opt/avalanche-warning-maps_dev/</albina.conf.map-production-url>
-				<albina.conf.pdf-directory>/mnt/albina_files_dev</albina.conf.pdf-directory>
-				<albina.conf.html-directory>/mnt/simple_dev</albina.conf.html-directory>
+				<albina.conf.pdf-directory>/var/www/avalanche.report/albina_files_dev</albina.conf.pdf-directory>
+				<albina.conf.html-directory>/var/www/avalanche.report/simple_dev</albina.conf.html-directory>
 				<albina.conf.publish-at-5-pm>false</albina.conf.publish-at-5-pm>
 				<albina.conf.publish-at-8-am>false</albina.conf.publish-at-8-am>
 				<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
@@ -129,10 +129,10 @@
 				<albina.conf.send-emails>true</albina.conf.send-emails>
 				<albina.conf.local-images-path>/images/</albina.conf.local-images-path>
 				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.maps-path>/mnt/albina_files</albina.conf.maps-path>
+				<albina.conf.maps-path>/var/www/avalanche.report/albina_files</albina.conf.maps-path>
 				<albina.conf.map-production-url>/opt/avalanche-warning-maps/</albina.conf.map-production-url>
-				<albina.conf.pdf-directory>/mnt/albina_files</albina.conf.pdf-directory>
-				<albina.conf.html-directory>/mnt/simple</albina.conf.html-directory>
+				<albina.conf.pdf-directory>/var/www/avalanche.report/albina_files</albina.conf.pdf-directory>
+				<albina.conf.html-directory>/var/www/avalanche.report/simple</albina.conf.html-directory>
 				<albina.conf.publish-at-5-pm>true</albina.conf.publish-at-5-pm>
 				<albina.conf.publish-at-8-am>true</albina.conf.publish-at-8-am>
 				<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
