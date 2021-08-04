@@ -32,12 +32,12 @@ import java.util.List;
 import javax.xml.transform.TransformerException;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.locationtech.jts.util.Assert;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,7 +197,7 @@ public class UtilTest {
 
 	@Test
 	public void testIsUpdate() {
-		Assert.isTrue(!AlbinaUtil.isUpdate(bulletins));
+		Assert.assertTrue(AlbinaUtil.isUpdate(bulletins));
 	}
 
 	@Ignore
