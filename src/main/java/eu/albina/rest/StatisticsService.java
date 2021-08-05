@@ -16,15 +16,19 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -47,7 +51,7 @@ public class StatisticsService {
 	UriInfo uri;
 
 	@GET
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Produces("text/csv")
 	public Response getBulletinCsv(
 			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String startDate,
 			@ApiParam(value = "End date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String endDate,
@@ -69,6 +73,36 @@ public class StatisticsService {
 
 		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, extended,
 				duplicate);
-		return Response.ok(new ByteArrayInputStream(statistics.getBytes()), MediaType.APPLICATION_OCTET_STREAM).build();
+
+		StringBuilder sbFilename = new StringBuilder();
+		sbFilename.append("statistic_");
+		sbFilename.append(OffsetDateTime.parse(startDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		sbFilename.append("_");
+		sbFilename.append(OffsetDateTime.parse(endDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		if (duplicate || extended) {
+			sbFilename.append("_");
+			if (duplicate) {
+				sbFilename.append("d");
+			}
+			if (extended) {
+				sbFilename.append("e");
+			}
+		}
+		sbFilename.append("_");
+		sbFilename.append(language.toString());
+		String filename = sbFilename.toString();
+
+		try {
+			File tmpFile = File.createTempFile(filename.toString(), ".csv");
+			FileWriter writer = new FileWriter(tmpFile);
+			writer.write(statistics);
+			writer.close();
+
+			return Response.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + filename.toString() + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv").build();
+		} catch (IOException e) {
+			logger.warn("Error creating statistics", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		}
 	}
 }
