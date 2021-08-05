@@ -367,7 +367,7 @@ public class MapUtil {
 
 		// convert to jpg
 		logger.info("Converting {} to {}", outputFile, outputFileJpg);
-		new ProcessBuilder("magick", outputFilePng, outputFileJpg).inheritIO().start().waitFor();
+		new ProcessBuilder("convert", outputFilePng, outputFileJpg).inheritIO().start().waitFor();
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletinId == null) {
 			// create combined am/pm maps
 			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, grayscale, "jpg"))
@@ -377,7 +377,7 @@ public class MapUtil {
 			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, grayscale, "jpg"))
 					.toString();
 			logger.info("Combining {} and {} to {}", amFile, pmFile, fdFile);
-			new ProcessBuilder("magick convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
+			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
 
 		if (!preview) {
