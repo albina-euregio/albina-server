@@ -69,7 +69,7 @@
 		<profile>
 			<id>env-dev</id>
 			<properties>
-				<hibernate.connection.url>jdbc:mysql://albina1rz:3306/albina_dev?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
+				<hibernate.connection.url>jdbc:mysql://localhost:3306/albina_dev?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
@@ -111,7 +111,7 @@
 		<profile>
 			<id>env-prod</id>
 			<properties>
-				<hibernate.connection.url>jdbc:mysql://albina1rz:3306/albina?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
+				<hibernate.connection.url>jdbc:mysql://localhost:3306/albina?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
