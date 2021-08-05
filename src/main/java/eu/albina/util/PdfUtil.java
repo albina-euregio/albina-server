@@ -189,8 +189,12 @@ public class PdfUtil {
 			logger.error("PDF could not be created", e);
 			return false;
 		} finally {
-			document.close();
-			pdf.close();
+			if (document != null) {
+				document.close();
+			}
+			if (pdf != null) {
+				pdf.close();
+			}
 			try {
 				writer.close();
 			} catch (IOException e) {
