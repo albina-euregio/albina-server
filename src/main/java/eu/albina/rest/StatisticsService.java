@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.StatisticsController;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.Role;
+import eu.albina.rest.filter.Secured;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
@@ -51,7 +53,8 @@ public class StatisticsService {
 	UriInfo uri;
 
 	@GET
-    @Produces("text/csv")
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@Produces("text/csv")
 	public Response getBulletinCsv(
 			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String startDate,
 			@ApiParam(value = "End date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String endDate,
