@@ -275,40 +275,8 @@ public class StatisticsController {
 		sb.append("Subregion");
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("DangerRatingBelow");
-		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingBelowArtificialDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingBelowArtificialAvalancheSize");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingBelowArtificialAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingBelowArtificialHazardSiteDistribution");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingBelowNaturalDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingBelowNaturalAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingBelowNaturalHazardSiteDistribution");
-		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("DangerRatingAbove");
-		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingAboveArtificialDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingAboveArtificialAvalancheSize");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingAboveArtificialAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingAboveArtificialHazardSiteDistribution");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingAboveNaturalDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingAboveNaturalAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append("DangerRatingAboveNaturalHazardSiteDistribution");
-		}
 		sb.append(GlobalVariables.csvDeliminator);
 		sb.append("DangerRatingElevation");
 		sb.append(GlobalVariables.csvDeliminator);
@@ -590,23 +558,11 @@ public class StatisticsController {
 			sb.append(GlobalVariables.csvDeliminator);
 			if (!daytimeDescription.isHasElevationDependency()) {
 				sb.append(daytimeDescription.getDangerRatingAbove().toString());
-				if (extended) {
-					sb.append(GlobalVariables.csvDeliminator);
-					addMatrixInformation(sb, daytimeDescription.getMatrixInformationAbove());
-				}
 			} else {
 				sb.append(daytimeDescription.getDangerRatingBelow().toString());
-				if (extended) {
-					sb.append(GlobalVariables.csvDeliminator);
-					addMatrixInformation(sb, daytimeDescription.getMatrixInformationBelow());
-				}
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 			sb.append(daytimeDescription.getDangerRatingAbove().toString());
-			if (extended) {
-				sb.append(GlobalVariables.csvDeliminator);
-				addMatrixInformation(sb, daytimeDescription.getMatrixInformationAbove());
-			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (!daytimeDescription.isHasElevationDependency())
 				sb.append(GlobalVariables.notAvailableString);
