@@ -470,7 +470,7 @@ public class AvalancheBulletinService {
 
 			String filename = validityDateString + "_" + language.toString() + ".pdf";
 
-			File file = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator")
+			File file = new File(GlobalVariables.getTmpPdfDirectory() + System.getProperty("file.separator")
 			+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 			+ System.getProperty("file.separator") + filename);
   

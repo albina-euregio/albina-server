@@ -369,7 +369,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateMaps.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(false),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -509,7 +509,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestMaps.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(false),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(),
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();

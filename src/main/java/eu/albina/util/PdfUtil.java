@@ -115,11 +115,14 @@ public class PdfUtil {
 		PdfDocument pdf = null;
 		PdfWriter writer = null;
 
-		String filePath;
+		String pdfPath;
+		String mapsPath;
 		if (preview) {
-			filePath = System.getProperty("java.io.tmpdir");
+			pdfPath = GlobalVariables.getTmpPdfDirectory();
+			mapsPath = GlobalVariables.getTmpMapsPath();
 		} else {
-			filePath = GlobalVariables.getPdfDirectory();
+			pdfPath = GlobalVariables.getPdfDirectory();
+			mapsPath = GlobalVariables.getMapsPath();
 		}
 
 		try {
@@ -127,24 +130,24 @@ public class PdfUtil {
 
 			if (region.equals(GlobalVariables.codeEuregio)) {
 				if (grayscale) {
-					filename = filePath + System.getProperty("file.separator")
+					filename = pdfPath + System.getProperty("file.separator")
 							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
 							+ "_bw.pdf";
 				} else {
-					filename = filePath + System.getProperty("file.separator")
+					filename = pdfPath + System.getProperty("file.separator")
 							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
 							+ ".pdf";
 				}
 			} else {
 				if (grayscale) {
-					filename = filePath + System.getProperty("file.separator")
+					filename = pdfPath + System.getProperty("file.separator")
 							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
 							+ lang.toString() + "_bw.pdf";
 				} else {
-					filename = filePath + System.getProperty("file.separator")
+					filename = pdfPath + System.getProperty("file.separator")
 							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
 							+ lang.toString() + ".pdf";
@@ -175,12 +178,12 @@ public class PdfUtil {
 			document.setMargins(110, 30, 60, 50);
 
 			createPdfFrontPage(bulletins, lang, document, pdf, region, grayscale, daytimeDependency, validityDateString,
-					publicationTimeString, preview);
+					publicationTimeString, mapsPath);
 
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				createPdfBulletinPage(avalancheBulletin, lang, document, pdf,
 						AlbinaUtil.getTendencyDate(bulletins, lang), writer, grayscale, validityDateString,
-						publicationTimeString, preview);
+						publicationTimeString, mapsPath);
 			}
 
 			AlbinaUtil.setFilePermissions(filename);
@@ -249,7 +252,7 @@ public class PdfUtil {
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
 			PdfDocument pdf, String tendencyDate, PdfWriter writer, boolean grayscale, String validityDateString,
-			String publicationTimeString, boolean preview) throws IOException {
+			String publicationTimeString, String mapsPath) throws IOException {
 		document.add(new AreaBreak());
 
 		float leadingHeadline = 1.f;
@@ -286,12 +289,12 @@ public class PdfUtil {
 			secondTable.addCell(cell);
 			ImageData regionAMImageDate;
 			if (grayscale)
-				regionAMImageDate = ImageDataFactory.create(GlobalVariables.getMapsPath(preview)
+				regionAMImageDate = ImageDataFactory.create(mapsPath
 						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
 						+ System.getProperty("file.separator") + publicationTimeString
 						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_bw.jpg");
 			else
-				regionAMImageDate = ImageDataFactory.create(GlobalVariables.getMapsPath(preview)
+				regionAMImageDate = ImageDataFactory.create(mapsPath
 						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
 						+ System.getProperty("file.separator") + publicationTimeString
 						+ System.getProperty("file.separator") + avalancheBulletin.getId() + ".jpg");
@@ -327,12 +330,12 @@ public class PdfUtil {
 			secondTable.addCell(cell);
 			ImageData regionPMImageDate;
 			if (grayscale)
-				regionPMImageDate = ImageDataFactory.create(GlobalVariables.getMapsPath(preview)
+				regionPMImageDate = ImageDataFactory.create(mapsPath
 						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
 						+ System.getProperty("file.separator") + publicationTimeString
 						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_PM_bw.jpg");
 			else
-				regionPMImageDate = ImageDataFactory.create(GlobalVariables.getMapsPath(preview)
+				regionPMImageDate = ImageDataFactory.create(mapsPath
 						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
 						+ System.getProperty("file.separator") + publicationTimeString
 						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_PM.jpg");
@@ -364,12 +367,12 @@ public class PdfUtil {
 			ImageData regionImageDate;
 			if (grayscale)
 				regionImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath(preview) + System.getProperty("file.separator")
+						.create(mapsPath + System.getProperty("file.separator")
 								+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 								+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_bw.jpg");
 			else
 				regionImageDate = ImageDataFactory
-						.create(GlobalVariables.getMapsPath(preview) + System.getProperty("file.separator")
+						.create(mapsPath + System.getProperty("file.separator")
 								+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 								+ System.getProperty("file.separator") + avalancheBulletin.getId() + ".jpg");
 			Image regionImg = new Image(regionImageDate);
@@ -1088,7 +1091,7 @@ public class PdfUtil {
 
 	private void createPdfFrontPage(List<AvalancheBulletin> bulletins, LanguageCode lang, Document document,
 			PdfDocument pdf, String region, boolean grayscale, boolean daytimeDependency, String validityDateString,
-			String publicationTimeString, boolean preview) throws MalformedURLException {
+			String publicationTimeString, String mapsPath) throws MalformedURLException {
 		PdfPage page = pdf.addNewPage();
 		Rectangle pageSize = page.getPageSize();
 		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdf);
@@ -1110,7 +1113,7 @@ public class PdfUtil {
 				mapHeight = mapWidth / 3 * 2;
 			}
 
-			ImageData overviewMapAMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath(preview)
+			ImageData overviewMapAMImageData = ImageDataFactory.create(mapsPath
 					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
 					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, false, true, grayscale));
@@ -1123,7 +1126,7 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
 					.showText(lang.getBundleString("daytime.am.capitalized")).endText();
 
-			ImageData overviewMapPMImageData = ImageDataFactory.create(GlobalVariables.getMapsPath(preview)
+			ImageData overviewMapPMImageData = ImageDataFactory.create(mapsPath
 					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
 					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, true, true, grayscale));
@@ -1136,7 +1139,7 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(blackColor, true)
 					.showText(lang.getBundleString("daytime.pm.capitalized")).endText();
 		} else {
-			ImageData overviewMapImageData = ImageDataFactory.create(GlobalVariables.getMapsPath(preview)
+			ImageData overviewMapImageData = ImageDataFactory.create(mapsPath
 					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
 					+ publicationTimeString + System.getProperty("file.separator")
 					+ MapUtil.getOverviewMapFilename(region, false, daytimeDependency, grayscale));

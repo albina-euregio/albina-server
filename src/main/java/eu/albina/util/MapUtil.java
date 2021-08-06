@@ -227,8 +227,14 @@ public class MapUtil {
 	}
 
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) {
-		final Path outputDirectory = Paths.get(GlobalVariables.getMapsPath(preview),
+		Path outputDirectory;
+		if (preview) {
+		 	outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(),
 				AlbinaUtil.getValidityDateString(bulletins), publicationTime);
+		} else {
+			outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
+				AlbinaUtil.getValidityDateString(bulletins), publicationTime);
+		}
 
 		try {
 			logger.info("Creating directory {}", outputDirectory);

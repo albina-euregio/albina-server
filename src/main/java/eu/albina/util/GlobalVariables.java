@@ -215,6 +215,7 @@ public class GlobalVariables {
 	};
 
 	public static String avalancheReportUsername = "info@avalanche.report";
+	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 
 	public static final String tokenEncodingIssuer = "albina";
 
@@ -405,6 +406,10 @@ public class GlobalVariables {
 		return pdfDirectory;
 	}
 
+	public static String getTmpPdfDirectory() {
+		return tmpDirectory;
+	}
+
 	public static void setPdfDirectory(String pdfDirectory) throws ConfigurationException {
 		GlobalVariables.pdfDirectory = pdfDirectory;
 		setConfigProperty("pdfDirectory", pdfDirectory);
@@ -428,12 +433,12 @@ public class GlobalVariables {
 		setConfigProperty("serverImagesUrl", serverImagesUrl);
 	}
 
-	public static String getMapsPath(boolean preview) {
-		if (preview) {
-			return System.getProperty("java.io.tmpdir");
-		} else {
-			return mapsPath;
-		}
+	public static String getMapsPath() {
+		return mapsPath;
+	}
+
+	public static String getTmpMapsPath() {
+		return tmpDirectory;
 	}
 
 	public static void setMapsPath(String mapsPath) throws ConfigurationException {
@@ -490,7 +495,7 @@ public class GlobalVariables {
 	}
 
 	public static String getMapsUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath(false).substring(directoryOffset);
+		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
 	}
 
 	public static String getBulletinUrl(LanguageCode lang, ZonedDateTime date) {
