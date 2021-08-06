@@ -196,7 +196,9 @@ public class PdfUtil {
 				pdf.close();
 			}
 			try {
-				writer.close();
+				if (writer != null) {
+					writer.close();
+				}
 			} catch (IOException e) {
 				logger.warn("PDF writer could not be closed!", e);
 			}
