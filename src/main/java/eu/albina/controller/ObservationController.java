@@ -17,13 +17,19 @@
 package eu.albina.controller;
 
 import eu.albina.model.Observation;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
+
+import org.apache.commons.text.StringEscapeUtils;
 import org.hibernate.HibernateException;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 
 public interface ObservationController {
@@ -63,5 +69,109 @@ public interface ObservationController {
 			entityManager.remove(observation);
 			return null;
 		});
+	}
+
+	static String getCsv(LocalDateTime start, LocalDateTime end) {
+		List<Observation> observations = get(start, end);
+
+		// sort observations by event date
+		observations.sort(Comparator.comparing(Observation::getEventDate));
+
+		StringBuilder sb = new StringBuilder();
+
+		// add header
+		sb.append("EventDate");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("EventTime");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("EventType");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("ReportDate");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("AuthorName");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("LocationName");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("Latitude");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("Longitude");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("Elevation");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("Aspect");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("Region");
+		sb.append(GlobalVariables.csvDeliminator);
+		sb.append("Content");
+		sb.append(GlobalVariables.csvLineBreak);
+
+		for (Observation observation : observations) {
+			addCsvLines(sb, observation);
+		}
+
+		return sb.toString();
+	}
+
+	static void addCsvLines(StringBuilder sb, Observation observation) {
+		if (observation.getEventDate() != null) {
+			sb.append(observation.getEventDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(observation.getEventDate().format(DateTimeFormatter.ofPattern("HH:mm")));
+		} else {
+			sb.append(GlobalVariables.notAvailableString);
+			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(GlobalVariables.notAvailableString);
+		}
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getEventType() != null)
+			sb.append(observation.getEventType());
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getReportDate() != null)
+			sb.append(observation.getReportDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getAuthorName() != null)
+			sb.append(StringEscapeUtils.escapeCsv(observation.getAuthorName()));
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getLocationName() != null)
+			sb.append(StringEscapeUtils.escapeCsv(observation.getLocationName()));
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getLatitude() != null)
+			sb.append(observation.getLatitude());
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getLongitude() != null)
+			sb.append(observation.getLongitude());
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getElevation() != null)
+			sb.append(observation.getElevation());
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getAspect() != null)
+			sb.append(observation.getAspect());
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getRegion() != null)
+			sb.append(observation.getRegion());
+		else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvDeliminator);
+		if (observation.getContent() != null) {
+			sb.append(StringEscapeUtils.escapeCsv(observation.getContent()));
+		} else
+			sb.append(GlobalVariables.notAvailableString);
+		sb.append(GlobalVariables.csvLineBreak);
 	}
 }

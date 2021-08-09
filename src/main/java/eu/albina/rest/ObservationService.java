@@ -31,9 +31,18 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Path("/observations")
@@ -85,4 +94,48 @@ public class ObservationService {
 		ObservationController.delete(id);
 	}
 
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@Path("/export")
+	@Produces("text/csv")
+	public Response getBulletinCsv(
+			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String startDate,
+			@ApiParam(value = "End date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String endDate
+			) {
+		logger.debug("GET CSV observations");
+
+		LocalDateTime start = null;
+		LocalDateTime end = null;
+
+		if (startDate != null)
+			start = OffsetDateTime.parse(startDate).toLocalDateTime();
+		else
+			return Response.notAcceptable(null).build();
+		if (endDate != null)
+			end = OffsetDateTime.parse(endDate).toLocalDateTime();
+		else
+			return Response.notAcceptable(null).build();
+
+		String statistics = ObservationController.getCsv(start, end);
+
+		StringBuilder sbFilename = new StringBuilder();
+		sbFilename.append("observations_");
+		sbFilename.append(OffsetDateTime.parse(startDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		sbFilename.append("_");
+		sbFilename.append(OffsetDateTime.parse(endDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		String filename = sbFilename.toString();
+
+		try {
+			File tmpFile = File.createTempFile(filename.toString(), ".csv");
+			FileWriter writer = new FileWriter(tmpFile);
+			writer.write(statistics);
+			writer.close();
+
+			return Response.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + filename.toString() + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv").build();
+		} catch (IOException e) {
+			logger.warn("Error creating statistics", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		}
+	}
 }

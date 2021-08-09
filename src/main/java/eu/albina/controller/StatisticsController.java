@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.text.StringEscapeUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -598,7 +599,7 @@ public class StatisticsController {
 			sb.append(GlobalVariables.csvDeliminator);
 
 			if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
-				sb.append(avalancheBulletin.getAvActivityHighlightsIn(lang));
+				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getAvActivityHighlightsIn(lang)));
 			else
 				sb.append(GlobalVariables.notAvailableString);
 			if (extended) {
@@ -610,7 +611,7 @@ public class StatisticsController {
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getAvActivityCommentIn(lang) != null)
-				sb.append(avalancheBulletin.getAvActivityCommentIn(lang));
+				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getAvActivityCommentIn(lang)));
 			else
 				sb.append(GlobalVariables.notAvailableString);
 			if (extended) {
@@ -622,7 +623,7 @@ public class StatisticsController {
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
-				sb.append(avalancheBulletin.getSnowpackStructureCommentIn(lang));
+				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getSnowpackStructureCommentIn(lang)));
 			else
 				sb.append(GlobalVariables.notAvailableString);
 			if (extended) {
@@ -634,7 +635,7 @@ public class StatisticsController {
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheBulletin.getTendencyCommentIn(lang) != null)
-				sb.append(avalancheBulletin.getTendencyCommentIn(lang));
+				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getTendencyCommentIn(lang)));
 			else
 				sb.append(GlobalVariables.notAvailableString);
 			if (extended) {
