@@ -32,7 +32,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.script.SimpleBindings;
 
@@ -105,29 +104,21 @@ public interface MapUtil {
 
 	static String createMayrusInput(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, boolean preview) {
 		final String header = "sys_bid;bid;region;date;am_pm;validelevation;dr_h;dr_l;aspect_h;aspect_l;avprob_h;avprob_l\n";
-		if (preview) {
-			return header + IntStream.range(0, bulletins.size()).boxed()
-					.flatMap(index -> bulletins.get(index).getPublishedAndSavedRegions().stream().map(region -> {
-						final AvalancheBulletin bulletin = bulletins.get(index);
-						final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin,
-								daytimeDependency);
-						return String.join(";", Integer.toString(index), bulletin.getId(), region,
-								bulletin.getValidityDateString(), "", Integer.toString(description.getElevation()),
-								getDangerRatingString(bulletin, description, true),
-								getDangerRatingString(bulletin, description, false), "0", "0", "0", "0");
-					})).collect(Collectors.joining("\n"));
-		} else {
-			return header + IntStream.range(0, bulletins.size()).boxed()
-					.flatMap(index -> bulletins.get(index).getPublishedRegions().stream().map(region -> {
-						final AvalancheBulletin bulletin = bulletins.get(index);
-						final AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin,
-								daytimeDependency);
-						return String.join(";", Integer.toString(index), bulletin.getId(), region,
-								bulletin.getValidityDateString(), "", Integer.toString(description.getElevation()),
-								getDangerRatingString(bulletin, description, true),
-								getDangerRatingString(bulletin, description, false), "0", "0", "0", "0");
-					})).collect(Collectors.joining("\n"));
+		final StringBuilder sb = new StringBuilder(header);
+		int index = 0;
+		for (AvalancheBulletin bulletin : bulletins) {
+			Iterable<String> regions = preview ? bulletin.getPublishedAndSavedRegions() : bulletin.getPublishedRegions();
+			for (String region : regions) {
+				AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin, daytimeDependency);
+				String line = String.join(";", Integer.toString(index), bulletin.getId(), region,
+					bulletin.getValidityDateString(), "", Integer.toString(description.getElevation()),
+					getDangerRatingString(bulletin, description, true),
+					getDangerRatingString(bulletin, description, false), "0", "0", "0", "0");
+				sb.append(line).append("\n");
+			}
+			index++;
 		}
+		return sb.toString();
 	}
 
 	static AvalancheBulletinDaytimeDescription getBulletinDaytimeDescription(AvalancheBulletin bulletin,
