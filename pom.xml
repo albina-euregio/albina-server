@@ -59,7 +59,7 @@
 				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix>LOCAL</albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
-				<albina.log.level.c3p0>SEVERE</albina.log.level.c3p0>
+				<albina.log.level.c3p0>ERROR</albina.log.level.c3p0>
 				<albina.log.level.sql>INFO</albina.log.level.sql>
 				<albina.log.filepath>/opt/local/logs/</albina.log.filepath>
 				<albina.log.filename>albina_local.log</albina.log.filename>
