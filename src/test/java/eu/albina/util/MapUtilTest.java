@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import eu.albina.ImageTestUtils;
@@ -66,10 +67,12 @@ public class MapUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
 
-		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
-		BufferedImage actual = ImageIO.read(new File(
-			GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
-		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
+		for (String name : Arrays.asList("fd_albina_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
+			BufferedImage expected = ImageIO.read(Resources.getResource(name));
+			BufferedImage actual = ImageIO.read(new File(
+				GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
+			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
+		}
 	}
 
 	@Test
