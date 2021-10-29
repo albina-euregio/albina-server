@@ -46,28 +46,18 @@ if region eq "Euregio" then
 	endif
 endif
 
-if bulletin_id eq "tyrol" then 
+if bulletin_id eq "tyrol" then
 	let pp_region = geodata_dir . "pp_tirol.shp"
-elif bulletin_id eq "southtyrol" then 
+elif bulletin_id eq "southtyrol" then
 	let pp_region = geodata_dir . "pp_suedtirol.shp"
 elif bulletin_id eq "trentino" then
-	let pp_region = geodata_dir . "pp_trentino.shp" 
+	let pp_region = geodata_dir . "pp_trentino.shp"
 endif
 
-let cities = geodata_dir . "albina_orte_p.shp" 
-let peaks = geodata_dir . "albina_hoehenpunkte_p.shp" 
-let names_p = geodata_dir . "albina_namengut_p.shp" 
-let names_l = geodata_dir . "albina_namengut_l.shp" 
-
-define_albina_graphic_value_arrays_from_datafile drm_file, "1", "bul_id", "icon_elev", "icon_danger_h", "icon_danger_l", "icon_asp_h", "icon_asp_l", "icon_prob_h", "icon_prob_l"
-
-let elevation_level = icon_elev[bulletin_id]
-	
-let danger_rating_high = icon_danger_h[bulletin_id]
-let danger_rating_low = icon_danger_l[bulletin_id]
-	
-let aspect_high = icon_asp_h[bulletin_id]
-let aspect_low = icon_asp_l[bulletin_id]
+let cities = geodata_dir . "albina_orte_p.shp"
+let peaks = geodata_dir . "albina_hoehenpunkte_p.shp"
+let names_p = geodata_dir . "albina_namengut_p.shp"
+let names_l = geodata_dir . "albina_namengut_l.shp"
 
 if icon_prob_h[bulletin_id] eq "drifting snow" then
 	let problem_icon_h = image_dir . "drifting_snow" . icon_color . icon_ext
@@ -84,7 +74,7 @@ elif icon_prob_h[bulletin_id] eq "favourable situation" then
 elif icon_prob_h[bulletin_id] eq "n/a" then
 	let problem_icon_h = image_dir . "n_a" . icon_color . icon_ext
 endif
-	
+
 if icon_prob_l[bulletin_id] eq "drifting snow" then
 	let problem_icon_l = image_dir . "drifting_snow" . icon_color . icon_ext
 elif icon_prob_l[bulletin_id] eq "gliding snow" then
@@ -106,14 +96,14 @@ let interreg_image_file = image_dir . "interrreg_logo.png"
 
 # EUREGIO-Logo
 let euregio_image_file = image_dir . "euregio_logo.png"
-if colormode eq "bw" then	
+if colormode eq "bw" then
 	let euregio_image_file = image_dir . "euregio_logo_bw.png"
-endif		
-	
+endif
+
 ###################################################################
 # --- Define NEWPAGE
 # -------------------------------------------------------------
-newpage image_type, mapFile, pagesize_x, pagesize_y, extras 
+newpage image_type, mapFile, pagesize_x, pagesize_y, extras
 print extras
 
 let px1 = 0
@@ -121,7 +111,7 @@ let py1 = 0
 let px2 = pagesize_x
 let py2 = pagesize_y
 
-# Aufhängungspunkte für Karte 
+# Aufhängungspunkte für Karte
 let mx1 = px1
 let my1 = py1
 let mx2 = px2
@@ -147,11 +137,11 @@ polygon_feature_danger_levels reg_euregio_ha, drm_file, level
 # Flüsse & Seen
 line_feature_rivers rivers, level
 polygon_feature_lakes lakes, level
-	
+
 # Provinz- und Staatsgrenzen (außerhalb)
 line_feature_country country_l, level, 0
 
-# Städte 
+# Städte
 point_feature_city_marker cities, level
 
 # Linienlabels
@@ -161,7 +151,7 @@ endif
 
 # Punktlabels
 point_feature_labels names_p, level
-	
+
 # Absoftung
 polygon_feature_pp pp_region, level
 
@@ -190,9 +180,9 @@ endif
 draw_frame frame_stroke_color, frame_line_style
 
 
-###############################################################	
-###############################################################	
-###############################################################	
+###############################################################
+###############################################################
+###############################################################
 
 print "-----------------------------------------"
 print "End time = ", Mapyrus.time.stamp
