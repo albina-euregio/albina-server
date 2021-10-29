@@ -216,6 +216,10 @@ public interface MapUtil {
 		}
 
 		final int width;
+
+		static MapSize of(Map map) {
+			return Map.overlay.equals(map) ? overlay : Map.fullmap_small.equals(map) ? thumbnail_map : standard_map;
+		}
 	}
 
 	enum DaytimeDependency {
@@ -303,8 +307,8 @@ public interface MapUtil {
 
 	static void createMapyrusMaps(Map map, DaytimeDependency daytimeDependency, String bulletinId, int bulletinIndex,
 			boolean grayscale, Path dangerRatingMapFile, boolean preview) throws IOException, MapyrusException, InterruptedException {
-		final MapSize size = Map.overlay.equals(map) ? MapSize.overlay
-				: Map.fullmap_small.equals(map) ? MapSize.thumbnail_map : MapSize.standard_map;
+
+		final MapSize size = MapSize.of(map);
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
 		final Path outputDirectory = dangerRatingMapFile.getParent();
 		final Path outputFile = outputDirectory.resolve(
