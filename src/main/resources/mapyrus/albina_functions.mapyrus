@@ -1,5 +1,5 @@
 # -------------------------------------------------------------
-# --- Content		
+# --- Content
 # -------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------------
@@ -9,11 +9,11 @@
 begin LABEL_POINT color, font, size, outlinecolor, outlinewidth, ext_o, inn_o, x_off, y_off, angle, spacing, label
 
 	if level == 1 then
-		let x = 0.9 * zf		# Standardoffset in x-Richtung bei Labelplatzierung 
-		let y = 1.0	* zf	# Standardoffset in y-Richtung bei Labelplatzierung 
+		let x = 0.9 * zf		# Standardoffset in x-Richtung bei Labelplatzierung
+		let y = 1.0	* zf	# Standardoffset in y-Richtung bei Labelplatzierung
 	elif level == 2 or level == 3 then
-		let x = 1.0 * zf		# Standardoffset in x-Richtung bei Labelplatzierung 
-		let y = 1.15	* zf	# Standardoffset in y-Richtung bei Labelplatzierung 
+		let x = 1.0 * zf		# Standardoffset in x-Richtung bei Labelplatzierung
+		let y = 1.15	* zf	# Standardoffset in y-Richtung bei Labelplatzierung
 	endif
 
 	# -- Verschiebungsfaktoren in x und y bei ---------
@@ -30,11 +30,11 @@ begin LABEL_POINT color, font, size, outlinecolor, outlinewidth, ext_o, inn_o, x
 	let y_position = (y * y_pos[ext_o]) + y_off			# Verschiebungswert in y (+ zusätzl. y-Offset)
 
 	move x_position, y_position							# Verschiebung in x und y (externe Orientierung)
-	
+
 	font font, size										# Import des jew. Schriftfonts und der -größe
 	let char_count = length(label)						# Anzahl der Zeichen des jew. Labels
 	let label_len = stringwidth(label) + (spacing * (char_count - 1))  # Berechnen der tatsächl. Labelweite
-	
+
 	let cosinus = cos(angle) * label_len				# Berechnen des rel. Labelpfadendpkt. (x-Koord.)
 	let sinus = sin(angle) * label_len					# Berechnen des rel. Labelpfadendpkt. (y-Koord.)
 
@@ -46,14 +46,14 @@ begin LABEL_POINT color, font, size, outlinecolor, outlinewidth, ext_o, inn_o, x
 	# -------- Verschiebungswerte des gesamten Labelpfads bei --------- (horizontale Ausrichtung)
 	let shift_x[1] =  0			, shift_y[1] =  0			# inn_o = 1
 	let shift_x[2] = -half_cos	, shift_y[2] = -half_sin	# inn_o = 2
-	let shift_x[3] = -cosinus	, shift_y[3] = -sinus		# inn_o = 3	
+	let shift_x[3] = -cosinus	, shift_y[3] = -sinus		# inn_o = 3
 	let shift_x[4] = -cosinus	, shift_y[4] = -sinus		# inn_o = 4
 	let shift_x[5] = -cosinus	, shift_y[5] = -sinus		# inn_o = 5
 	let shift_x[6] = -half_cos	, shift_y[6] = -half_sin	# inn_o = 6
 	let shift_x[7] =  0			, shift_y[7] =  0			# inn_o = 7
 	let shift_x[8] =  0			, shift_y[8] =  0			# inn_o = 8
 	let shift_x[9] = -half_cos	, shift_y[9] = -half_sin	# inn_o = 9
-	
+
 	shiftpath shift_x[inn_o], shift_y[inn_o]	# Verschiebung des Labelpfads
 
 	let type_height = size * 0.7			# tatsächl. Schriftgr. (Schriftgr. ohne Ober- & Unterlänge)
@@ -71,17 +71,17 @@ begin LABEL_POINT color, font, size, outlinecolor, outlinewidth, ext_o, inn_o, x
 	let just_ver[7] = label_top			# inn_o = 7
 	let just_ver[8] = label_mid			# inn_o = 8
 	let just_ver[9] = label_mid			# inn_o = 9
-	
+
 	parallelpath just_ver[inn_o]		# Übergabe der vertikalen Ausrichtungsvariable
 
-	
+
 	#print "label = ", label
 
 	font font, size, outlinewidth				# Schriftfont, -größe & Stärke des Halo (s. TEXT_LOOKUP)
-	eval outlinecolor							# Halofarbe (s. TEXT_LOOKUP)		
+	eval outlinecolor							# Halofarbe (s. TEXT_LOOKUP)
 	flowlabel spacing, 0, "rotate=false", label					# Labelplatzierung
 ###label label
-	
+
 	font font, size								# Schriftfont und -größe (s. TEXT_LOOKUP)
 	eval color									# Farbe (s. TEXT_LOOKUP)
 	flowlabel spacing, 0, "rotate=false", label					# Labelplatzierung
@@ -98,7 +98,7 @@ begin LABEL_LINE color, font, size, outlinecolor, outlinewidth, inn_o, x_off, y_
 
 	#--- decode label if containing special characters
 	#let label = label_decoding(label)
-	
+
 	let type_height = size * 0.7				# tatsächl. Schriftgr. (Schriftgr. ohne Ober-, Unterlänge)
 	let label_top = type_height + y_off			# vert. Textausrichtung: oben (+ zusätzl. y-Offset)
 	let label_mid = type_height / 2 + y_off		# vert. Textausrichtung: mittig (+ zusätzl. y-Offset)
@@ -118,35 +118,35 @@ begin LABEL_LINE color, font, size, outlinecolor, outlinewidth, inn_o, x_off, y_
 	let just_ver[7] = label_top , just_hor[7] = "left"   , flow_off[7] = path_beg	# Variablen: inn_o = 7
 	let just_ver[8] = label_mid , just_hor[8] = "left"   , flow_off[8] = path_beg	# Variablen: inn_o = 8
 	let just_ver[9] = label_mid , just_hor[9] = "center" , flow_off[9] = path_mid	# Variablen: inn_o = 9
-	
+
 	parallelpath just_ver[inn_o]	# Übergabe der vertikalen Ausrichtungsvariable
 
 	justify just_hor[inn_o]			# Übergabe der horizontalen Ausrichtungsvariable (für Halo)
 	font font, size, outlinewidth	# Schriftfont, -größe & Stärke des Halo (s. TEXT_LOOKUP)
 	eval outlinecolor				# Halofarbe (s. TEXT_LOOKUP)
-	
+
 	let space_len = Mapyrus.path.length - stringwidth(label)	# aufzuteilende Gesamtsperrungslänge
-	let char_count = length(label)								# Anzahl der Zeichen des jew. Labels	
-	let line_spacing = space_len / (char_count -1)				# Sperrung bei Aufteilung auf Linie	
-	
-	if spacing == -1 then							# Schleife zur Labelplatzierung: 
+	let char_count = length(label)								# Anzahl der Zeichen des jew. Labels
+	let line_spacing = space_len / (char_count -1)				# Sperrung bei Aufteilung auf Linie
+
+	if spacing == -1 then							# Schleife zur Labelplatzierung:
 		flowlabel line_spacing, 0, "rotate=false", label			# wenn die Sperrung -1 ist, wird die Schrift
 	else											# auf die gesamte Linie aufgeteilt;
 		flowlabel spacing, flow_off[inn_o], "rotate=false", label 	# in allen anderen Fällen (Sperrung >= 0) wird
 	endif											# der Sperrungswert des Shapefiles übergeben.
-	
+
 	justify just_hor[inn_o]		# wiederholte Übergabe der horizontalen Ausrichtungsvariable
 	font font, size				# Schriftfont und -größe (s. TEXT_LOOKUP)
 	eval color					# Farbe (s. TEXT_LOOKUP)
-	
+
 	if spacing == -1 then							# Schleife zur Labelplatzierung (s. Kommentar oben)
 		flowlabel line_spacing, 0, "rotate=false", label
 	else
 		flowlabel spacing, flow_off[inn_o], "rotate=false", label
 	endif
-	
+
 	clearpath
-	
+
 end
 
 # -------------------------------------------------------------
@@ -160,9 +160,9 @@ begin image_feature file
 		clip "inside"
         geoimage file
 	endif
-	
+
 	print "Schummerung gezeichnet"
-	
+
 end
 
 
@@ -185,10 +185,10 @@ begin polygon_feature_pp file, level
 				eval pp_color
 				fill
 			endif
-		done	
-		
+		done
+
 	print "Passepartout gezeichnet"
-	
+
 end
 
 
@@ -209,10 +209,10 @@ begin polygon_feature_shadow_bw file, level, linewidth
 				linestyle linewidth
 				stroke
 			endif
-		done	
-		
+		done
+
 	print "Schatten gezeichnet"
-	
+
 end
 
 
@@ -244,10 +244,10 @@ begin line_feature_rivers file, level
 				eval river_line_3
 				stroke
 			endif
-		done	
-		
+		done
+
 	print "Fluesse gezeichnet"
-	
+
 end
 
 
@@ -281,10 +281,10 @@ begin polygon_feature_lakes file, level
 				eval lake_line
 				stroke
 			endif
-		done	
-		
+		done
+
 	print "Seen gezeichnet"
-	
+
 end
 
 # -------------------------------------------------------------
@@ -296,7 +296,7 @@ begin polygon_feature_euregio file
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
 	blend "Normal"
-	
+
 	dataset "shapefile", file, ""
 		while Mapyrus.fetch.more
 				do
@@ -314,7 +314,7 @@ begin polygon_feature_euregio file
 						endif
 					endif
 		done
-	
+
 	print "Euregio gezeichnet"
 end
 
@@ -330,9 +330,9 @@ begin polygon_feature_danger_levels file, txtfile, level
 	if level >= 2 and bulletin_id ne "overlay" and colormode ne "bw" then
 		blend "Multiply"
 	endif
-	
+
 	define_albina_value_arrays_from_datafile txtfile, "1", "id_h", "danger_h", "aspect_h", "problem_h", "bul_id_h", "elevation_h", "id_l", "danger_l", "aspect_l", "problem_l", "bul_id_l"
-	
+
 	dataset "shapefile", file, ""
 	while Mapyrus.fetch.more
 			do
@@ -346,11 +346,11 @@ begin polygon_feature_danger_levels file, txtfile, level
 						stroke
 					endif
 				endif
-			done	
-	
+			done
+
 	print "---------------------------------"
 	print "--- Gefahrenstufeneinfaerbung ---"
-	
+
 	dataset "shapefile", file, ""
 	while Mapyrus.fetch.more
 			do
@@ -360,28 +360,24 @@ begin polygon_feature_danger_levels file, txtfile, level
 				linestyle 0.01
 				if dynamic_region eq "all" then
 					if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
-						print "1 = " . ALB_ID
 						eval danger_color[1]
 						fill
 						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
 							stroke
 						endif
 					elif (danger_h[ALB_ID] eq 2 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 2 then
-						print "2 = " . ALB_ID
 						eval danger_color[2]
 						fill
 						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
 							stroke
-						endif						
+						endif
 					elif (danger_h[ALB_ID] eq 3 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 3 then
-						print "3 = " . ALB_ID
 						eval danger_color[3]
 						fill
 						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
 							stroke
 						endif
 					elif (danger_h[ALB_ID] eq 4 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 4 then
-						print "4 = " . ALB_ID
 						eval danger_color[4]
 						fill
 						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
@@ -389,7 +385,6 @@ begin polygon_feature_danger_levels file, txtfile, level
 						endif
 						#let dr_4_5 = "yes"
 					elif (danger_h[ALB_ID] eq 5 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 5 then
-						print "5 = " . ALB_ID
 						eval danger_color[4]
 						fill
 						if level == 1 then
@@ -398,9 +393,8 @@ begin polygon_feature_danger_levels file, txtfile, level
 							CHESSBORD_LWD5 danger_color[5]
 						endif
 						#HALFFILL danger_color[4], danger_color[5], danger_color[5], danger_color[4], 0.5
-						let dr_4_5 = "yes" 
+						let dr_4_5 = "yes"
 					elif (danger_h[ALB_ID] eq 0 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 0 then
-						print "0 = " . ALB_ID
 						eval danger_color[0]
 						fill
 						if level == 1 then
@@ -409,7 +403,6 @@ begin polygon_feature_danger_levels file, txtfile, level
 					elif threshold < elevation_h[ALB_ID] then
 						let alb_id_low = code ."-l"
 						let high_color = danger_l[alb_id_low]
-						print high_color . " = " . ALB_ID
 						if high_color eq 5 then
 							eval danger_color[4]
 							fill
@@ -426,32 +419,28 @@ begin polygon_feature_danger_levels file, txtfile, level
 								stroke
 							endif
 						endif
-					endif					
+					endif
 				elif dynamic_region eq "one" then
 					if bul_id_h[ALB_ID] eq bulletin_id or bul_id_l[ALB_ID] eq bulletin_id then
 						if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
-							print "1 = " . ALB_ID
 							eval danger_color[1]
 							fill
 							if level == 1 then
 								stroke
 							endif
 						elif (danger_h[ALB_ID] eq 2 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 2 then
-							print "2 = " . ALB_ID
 							eval danger_color[2]
 							fill
 							if level == 1 then
 								stroke
-							endif					
+							endif
 						elif (danger_h[ALB_ID] eq 3 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 3 then
-							print "3 = " . ALB_ID
 							eval danger_color[3]
 							fill
 							if level == 1 then
 								stroke
 							endif
 						elif (danger_h[ALB_ID] eq 4 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 4 then
-							print "4 = " . ALB_ID
 							eval danger_color[4]
 							fill
 							if level == 1 then
@@ -459,7 +448,6 @@ begin polygon_feature_danger_levels file, txtfile, level
 							endif
 							#let dr_4_5 = "yes"
 						elif (danger_h[ALB_ID] eq 5 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 5 then
-							print "5 = " . ALB_ID
 							eval danger_color[4]
 							fill
 							if level == 1 then
@@ -470,7 +458,6 @@ begin polygon_feature_danger_levels file, txtfile, level
 							#HALFFILL danger_color[4], danger_color[5], danger_color[5], danger_color[4], 0.5
 							let dr_4_5 = "yes"
 						elif (danger_h[ALB_ID] eq 0 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 0 then
-							print "0 = " . ALB_ID
 							eval danger_color[0]
 							fill
 							if level == 1 then
@@ -479,7 +466,6 @@ begin polygon_feature_danger_levels file, txtfile, level
 						elif threshold < elevation_h[ALB_ID] then
 							let alb_id_low = code ."-l"
 							let high_color = danger_l[alb_id_low]
-							print high_color . " = " . ALB_ID
 							if high_color eq 5 then
 								eval danger_color[4]
 								fill
@@ -496,14 +482,14 @@ begin polygon_feature_danger_levels file, txtfile, level
 									stroke
 								endif
 							endif
-						endif	
+						endif
 					endif
 				endif
-			done		
+			done
 
 	print "---------------------------------"
 	print "Gefahrenstufen gezeichnet"
-	
+
 end
 
 
@@ -526,17 +512,17 @@ begin line_feature_regions file, level
 				if level == 1 then
 					eval reg_line_1
 				elif level == 2 then
-					eval reg_line_2	
+					eval reg_line_2
 				elif level == 3 then
-					eval reg_line_3	
+					eval reg_line_3
 				endif
-				if style == 2150 then 
+				if style == 2150 then
 					stroke
 				endif
-			done				
-			
+			done
+
 	print "Regionsgrenzen gezeichnet"
-	
+
 end
 
 
@@ -560,18 +546,18 @@ begin line_feature_country file, level, in_out
 					if level == 1 then
 						eval country_line_1
 					elif level == 2 then
-						eval country_line_2	
+						eval country_line_2
 					elif level == 3 then
-						eval country_line_3	
+						eval country_line_3
 					endif
-					if style == 2100 then 
+					if style == 2100 then
 						stroke
 					endif
 				endif
-			done				
-			
+			done
+
 	print "Staatsgrenzen gezeichnet"
-	
+
 end
 
 # -------------------------------------------------------------
@@ -594,25 +580,25 @@ begin line_feature_provinces file, level, in_out
 					if level == 1 then
 						eval prov_line_1
 					elif level == 2 then
-						eval prov_line_2	
+						eval prov_line_2
 					elif level == 3 then
-						eval prov_line_3	
+						eval prov_line_3
 					endif
 					stroke
 				elif EUREGIO == in_out and style == 2111 then
 					if level == 1 then
 						eval autonom_line_1
 					elif level == 2 then
-						eval autonom_line_2	
+						eval autonom_line_2
 					elif level == 3 then
-						eval autonom_line_3	
+						eval autonom_line_3
 					endif
 					stroke
 				endif
-			done				
-			
+			done
+
 	print "Provinzgrenzen gezeichnet"
-	
+
 end
 
 # -------------------------------------------------------------
@@ -707,7 +693,7 @@ begin SQUAREMARKER scalefactor, fillcolor, strokecolor, linewidth
 	fill
 	eval strokecolor
 	eval linewidth
-	stroke	
+	stroke
 end
 
 begin CIRCLEMARKER scalefactor, fillcolor, strokecolor, linewidth
@@ -717,7 +703,7 @@ begin CIRCLEMARKER scalefactor, fillcolor, strokecolor, linewidth
 	fill
 	eval strokecolor
 	eval linewidth
-	stroke	
+	stroke
 end
 
 begin point_feature_city_marker file, level					#, in_out
@@ -740,7 +726,7 @@ begin point_feature_city_marker file, level					#, in_out
 						else
 							LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 						endif
-					endif	
+					endif
 				elif (level == 2 and ALBINA_2 == 1 and bulletin_id ne not_in_map) or (level == 3 and ALBINA_3 == 1) then
 					if category <= 3 then
 						SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
@@ -753,13 +739,13 @@ begin point_feature_city_marker file, level					#, in_out
 						CIRCLEMARKER marker_scale, marker_color, marker_line_color, marker_line
 						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
 							LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
-						else	
+						else
 							LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 						endif
 					endif
 				endif
 			#endif
-		done		
+		done
 
 	print "Staedte gezeichnet"
 
@@ -786,12 +772,12 @@ begin point_feature_labels file, level
 				elif style == 5110 then
 					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
 						LABEL_POINT prov_label_color, font_semibold, prov_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
-					else	
+					else
 						LABEL_POINT prov_label_color, font_semibold, prov_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 					endif
 				endif
 			endif
-		done		
+		done
 
 	print "Namengut (P) gezeichnet"
 
@@ -815,7 +801,7 @@ begin line_feature_labels file, level
 					LABEL_LINE range_label_color, font_semibold_italic, range_font_size, label_halo_color, no_label_halo, l_inn_o, l_x_off, l_y_off, l_spacing, label
 				endif
 			endif
-		done		
+		done
 
 	print "Namengut (L) gezeichnet"
 
@@ -853,7 +839,7 @@ begin point_feature_peaks file, level
 				LABEL_POINT peak_label_color, font_semibold_italic, peak_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 				LABEL_POINT peak_label_color, font_semibold_italic, peak_font_size, label_halo_background_color, label_halo_width, h_ext_o, h_inn_o, h_x_off, h_y_off, h_angle, h_spacing, height
 			endif
-		done		
+		done
 
 	print "Berggipfel gezeichnet"
 
@@ -872,7 +858,7 @@ begin draw_frame stroke_color, line_style
 	eval stroke_color
 	eval line_style
 	stroke
-	
+
 end
 
 
@@ -881,9 +867,9 @@ end
 ###############################################################
 
 begin draw_scalebar km_value, bar_color, bar_style, font, fontsize
-	
+
 	let scalebar_len = km_value / ((xmax - xmin) / map_xsize / 1000) * (96/72)
-	
+
 	worlds px1, py1, px2, py2
 	clearpath
 	move mx1 + (mx2 / 50), my1 + (mx2 / 50)
@@ -891,7 +877,7 @@ begin draw_scalebar km_value, bar_color, bar_style, font, fontsize
 	eval bar_color
 	eval bar_style
 	stroke
-	
+
 	clearpath
 	move mx1 + (mx2 / 50) + (scalebar_len / 2),  my1 + (mx2 / 50) + (mx2 / 100)
 	justify "center, bottom"
@@ -913,7 +899,7 @@ begin draw_copyright copyright_txt, font, fontsize, fontcolor
 	justify "right, bottom"
 	font font, fontsize
 	label copyright_txt
-	
+
 end
 
 ###############################################################
@@ -984,20 +970,20 @@ do
 	let bul_h = $1
 	let elev_h = $6
 
-	let m_l = m_h + 1	
+	let m_l = m_h + 1
 	let index_l = $3 . "-l"
 	let dr_l = $8
 	let exp_l = $10
-	let snow_l = $12 
+	let snow_l = $12
 	let bul_l = $1
 
-	eval nr_h	 
+	eval nr_h
 	eval v1_h
 	eval v2_h
 	eval v3_h
 	eval v4_h
 	eval v5_h
-	
+
 	eval nr_l
 	eval v1_l
 	eval v2_l
@@ -1007,91 +993,6 @@ do
   endif
   let n = n + 2
 done
-let numlines = m_l / 2
-let numlines_h = m_h
-let numlines_l = m_l
-
-#/*
-print "==================================="
-print "define data arrays from input file "
-print "input file: " . infile
-print "==================================="
-
-print "==================================="
-print "index_h-array: ", index_h_array
-print "-----------------------------------"
-let n = -1
-let print_arr_h = "print n+2, " . index_h_array . "[n+2]"
-while n < numlines_h do
-	eval print_arr_h ; let n = n + 2
-done
-
-print "==================================="
-print "value_h-array: ", value1_h_array
-print "-----------------------------------"
-let for1_h = "for key in " . value1_h_array ." do " . "print key, " . value1_h_array . "[key]" . "; done"
-eval for1_h
-
-print "==================================="
-print "value_h-array: ", value2_h_array
-print "-----------------------------------"
-let for2_h = "for key in " . value2_h_array ." do " . "print key, " . value2_h_array . "[key]" . "; done"
-eval for2_h
-
-print "==================================="
-print "value_h-array: ", value3_h_array
-print "-----------------------------------"
-let for3_h = "for key in " . value3_h_array ." do " . "print key, " . value3_h_array . "[key]" . "; done"
-eval for3_h
-
-print "==================================="
-print "value_h-array: ", value4_h_array
-print "-----------------------------------"
-let for4_h = "for key in " . value4_h_array ." do " . "print key, " . value4_h_array . "[key]" . "; done"
-eval for4_h
-
-print "==================================="
-print "value_h-array: ", value5_h_array
-print "-----------------------------------"
-let for5_h = "for key in " . value5_h_array ." do " . "print key, " . value5_h_array . "[key]" . "; done"
-eval for5_h
-
-
-print "==================================="
-print "index_l-array: ", index_l_array
-print "-----------------------------------"
-let n = 0
-let print_arr_l = "print n+2, " . index_l_array . "[n+2]"
-while n < numlines_l do
-	eval print_arr_l ; let n = n + 2
-done
-
-print "==================================="
-print "value_l-array: ", value1_l_array
-print "-----------------------------------"
-let for1_l = "for key in " . value1_l_array ." do " . "print key, " . value1_l_array . "[key]" . "; done"
-eval for1_l
-
-print "==================================="
-print "value_l-array: ", value2_l_array
-print "-----------------------------------"
-let for2_l = "for key in " . value2_l_array ." do " . "print key, " . value2_l_array . "[key]" . "; done"
-eval for2_l
-
-print "==================================="
-print "value_l-array: ", value3_l_array
-print "-----------------------------------"
-let for3_l = "for key in " . value3_l_array ." do " . "print key, " . value3_l_array . "[key]" . "; done"
-eval for3_l
-
-print "==================================="
-print "value_l-array: ", value4_l_array
-print "-----------------------------------"
-let for4_l = "for key in " . value4_l_array ." do " . "print key, " . value4_l_array . "[key]" . "; done"
-eval for4_l
-print "==================================="
-#*/
-return numlines
 end
 # ======================================================================
 
@@ -1102,7 +1003,7 @@ function define_albina_graphic_value_arrays_from_datafile infile, header, index_
 # --- defines data arrays from input file
 # ----------------------------------
 #
-#   infile = input data file (4 columns id; value1; value2; value3) 
+#   infile = input data file (4 columns id; value1; value2; value3)
 #   header = number of header rows that will not be included in array
 #   value1_array = array [column1] = value1
 #   value2_array = array [column1] = value2
@@ -1143,7 +1044,7 @@ do
 	let snow_h = $11
 	let snow_l = $12
 
-	eval bul	
+	eval bul
  	eval elev
 	eval v1
 	eval v2
@@ -1155,57 +1056,6 @@ do
   endif
   let n = n + 1
 done
-let numlines = m
-
-#/*
-print "==================================="
-print "define graphic data arrays from input file "
-print "input file: " . infile
-print "==================================="
-
-print "==================================="
-print "value-array: ", elev_array
-print "-----------------------------------"
-let for0b = "for key in " . elev_array ." do " . "print key, " . elev_array . "[key]" . "; done"
-eval for0b
-
-print "==================================="
-print "value-array: ", value1_array
-print "-----------------------------------"
-let for1 = "for key in " . value1_array ." do " . "print key, " . value1_array . "[key]" . "; done"
-eval for1
-
-print "==================================="
-print "value-array: ", value2_array
-print "-----------------------------------"
-let for2 = "for key in " . value2_array ." do " . "print key, " . value2_array . "[key]" . "; done"
-eval for2
-
-print "==================================="
-print "value-array: ", value3_array
-print "-----------------------------------"
-let for3 = "for key in " . value3_array ." do " . "print key, " . value3_array . "[key]" . "; done"
-eval for3
-
-print "==================================="
-print "value-array: ", value4_array
-print "-----------------------------------"
-let for4 = "for key in " . value4_array ." do " . "print key, " . value4_array . "[key]" . "; done"
-eval for4
-
-print "==================================="
-print "value-array: ", value5_array
-print "-----------------------------------"
-let for5 = "for key in " . value5_array ." do " . "print key, " . value5_array . "[key]" . "; done"
-eval for5
-
-print "==================================="
-print "value-array: ", value6_array
-print "-----------------------------------"
-let for6 = "for key in " . value6_array ." do " . "print key, " . value6_array . "[key]" . "; done"
-eval for6
-
-return numlines
 end
 # ======================================================================
 
