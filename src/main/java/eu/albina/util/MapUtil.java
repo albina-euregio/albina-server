@@ -74,8 +74,7 @@ public interface MapUtil {
 	// REGION
 	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
 			boolean grayscale) {
-		final DaytimeDependency daytimeDependency = !hasDaytimeDependency ? DaytimeDependency.fd
-				: isAfternoon ? DaytimeDependency.pm : DaytimeDependency.am;
+		final DaytimeDependency daytimeDependency = DaytimeDependency.of(isAfternoon, hasDaytimeDependency);
 		return Map.forRegion(region).orElse(Map.fullmap).filename(daytimeDependency, null, grayscale, "jpg");
 	}
 
@@ -231,7 +230,12 @@ public interface MapUtil {
 		/**
 		 * full day
 		 */
-		fd, am, pm
+		fd, am, pm;
+
+		static DaytimeDependency of(boolean isAfternoon, boolean hasDaytimeDependency) {
+			return !hasDaytimeDependency ? fd
+					: isAfternoon ? pm : am;
+		}
 	}
 
 	class MapyrusInterpreter {
