@@ -54,7 +54,7 @@ enum MapType {
 		}
 	}
 
-	String filename(DaytimeDependency daytimeDependency, AvalancheBulletin bulletin, boolean grayscale, String format) {
+	String filename(DaytimeDependency daytimeDependency, AvalancheBulletin bulletin, boolean grayscale, MapImageFormat format) {
 		StringBuilder sb = new StringBuilder();
 		if (bulletin == null) {
 			sb.append(daytimeDependency.name());

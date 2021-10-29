@@ -65,7 +65,7 @@ public interface MapUtil {
 	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
 			boolean grayscale) {
 		final DaytimeDependency daytimeDependency = DaytimeDependency.of(isAfternoon, hasDaytimeDependency);
-		return MapType.forRegion(region).orElse(MapType.fullmap).filename(daytimeDependency, null, grayscale, "jpg");
+		return MapType.forRegion(region).orElse(MapType.fullmap).filename(daytimeDependency, null, grayscale, MapImageFormat.jpg);
 	}
 
 	/**
@@ -190,7 +190,7 @@ public interface MapUtil {
 
 		final MapSize size = MapSize.of(map);
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
-		final Path outputFile = outputDirectory.resolve(map.filename(daytimeDependency, bulletin, grayscale, "pdf"));
+		final Path outputFile = outputDirectory.resolve(map.filename(daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
 		final Path tempDirectory = Files.createTempDirectory("mapyrus");
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		bindings.put("xmax", map.xmax);
@@ -246,38 +246,23 @@ public interface MapUtil {
 		}
 		deleteDirectoryWithContents(tempDirectory);
 
-		final int dpi = 300;
-		final String outputFileJpg = outputFile.toString().replaceFirst("pdf$", "jpg");
-		final String outputFilePng = outputFile.toString().replaceFirst("pdf$", "png");
-		final String outputFileWebp = outputFile.toString().replaceFirst("pdf$", "webp");
-
-		// convert to png
-		logger.info("Converting {} to {}", outputFile, outputFilePng);
-		new ProcessBuilder("gs", "-sDEVICE=png16m", "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-r" + dpi, "-o",
-				outputFilePng, outputFile.toString()).inheritIO().start().waitFor();
-		// create transparency
+		final Path outputFilePng = MapImageFormat.png.convertFrom(outputFile);
 		if (MapType.overlay.equals(map)) {
-			logger.info("Creating transparency for {}", outputFilePng);
-			new ProcessBuilder("convert", "-transparent", "white", outputFilePng, outputFilePng).inheritIO().start()
-					.waitFor();
+			MapImageFormat.pngTransparent.convertFrom(outputFilePng);
 		}
 
-		// convert to jpg
-		logger.info("Converting {} to {}", outputFile, outputFileJpg);
-		new ProcessBuilder("convert", outputFilePng, outputFileJpg).inheritIO().start().waitFor();
+		MapImageFormat.jpg.convertFrom(outputFilePng);
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletin == null) {
 			// create combined am/pm maps
-			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, null, grayscale, "jpg")).toString();
-			final String pmFile = outputDirectory.resolve(map.filename(DaytimeDependency.pm, null, grayscale, "jpg")).toString();
-			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, null, grayscale, "jpg")).toString();
+			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, null, grayscale, MapImageFormat.jpg)).toString();
+			final String pmFile = outputDirectory.resolve(map.filename(DaytimeDependency.pm, null, grayscale, MapImageFormat.jpg)).toString();
+			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, null, grayscale, MapImageFormat.jpg)).toString();
 			logger.info("Combining {} and {} to {}", amFile, pmFile, fdFile);
 			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
 
 		if (!preview) {
-			// convert to webp
-			logger.info("Converting {} to {}", outputFilePng, outputFileWebp);
-			new ProcessBuilder("cwebp", outputFilePng, "-o", outputFileWebp).inheritIO().start().waitFor();
+			MapImageFormat.webp.convertFrom(outputFilePng);
 		}
 	}
 
