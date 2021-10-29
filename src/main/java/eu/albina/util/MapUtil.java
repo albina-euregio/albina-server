@@ -59,13 +59,13 @@ import eu.albina.model.Region;
 import eu.albina.model.Regions;
 import eu.albina.model.enumerations.DangerRating;
 
-public class MapUtil {
+public interface MapUtil {
 
-	private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
+	Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
-	public static class AlbinaMapException extends RuntimeException {
+	class AlbinaMapException extends RuntimeException {
 
-		private static final long serialVersionUID = 1L;
+		static final long serialVersionUID = 1L;
 
 		public AlbinaMapException(String message, Throwable cause) {
 			super(message, cause);
@@ -92,7 +92,7 @@ public class MapUtil {
 	 * @throws Exception
 	 *             an error occurred during map production
 	 */
-	public static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) throws Exception {
+	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) throws Exception {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());
@@ -132,14 +132,14 @@ public class MapUtil {
 		}
 	}
 
-	private static AvalancheBulletinDaytimeDescription getBulletinDaytimeDescription(AvalancheBulletin bulletin,
+	static AvalancheBulletinDaytimeDescription getBulletinDaytimeDescription(AvalancheBulletin bulletin,
 			DaytimeDependency daytimeDependency) {
 		return bulletin.isHasDaytimeDependency() && DaytimeDependency.pm.equals(daytimeDependency)
 				? bulletin.getAfternoon()
 				: bulletin.getForenoon();
 	}
 
-	private static String getDangerRatingString(AvalancheBulletin bulletin,
+	static String getDangerRatingString(AvalancheBulletin bulletin,
 			AvalancheBulletinDaytimeDescription description, boolean above) {
 		return DangerRating
 				.getString(description.isHasElevationDependency() && !above ? description.getDangerRatingBelow()
@@ -301,7 +301,7 @@ public class MapUtil {
 		final Path tempDirectory = Files.createTempDirectory("mapyrus");
 		final TreeMap<String, Object> bindings = new TreeMap<String, Object>() {
 
-			private static final long serialVersionUID = 1L;
+			static final long serialVersionUID = 1L;
 
 			{
 				put("xmax", map.xmax);
@@ -393,7 +393,7 @@ public class MapUtil {
 		}
 	}
 
-	private static void deleteDirectoryWithContents(Path directory) throws IOException {
+	static void deleteDirectoryWithContents(Path directory) throws IOException {
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
 			for (Path path : directoryStream) {
 				Files.delete(path);
@@ -434,7 +434,7 @@ public class MapUtil {
 		new ObjectMapper().writeValue(regionFile.toFile(), featureCollection);
 	}
 
-	private static String getAvalancheSituationString(AvalancheSituation avalancheSituation) {
+	static String getAvalancheSituationString(AvalancheSituation avalancheSituation) {
 		return Optional.ofNullable(avalancheSituation).map(AvalancheSituation::getAvalancheSituation)
 				.map(eu.albina.model.enumerations.AvalancheSituation::toCaamlv5String).orElse("false");
 	}
