@@ -23,9 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -52,7 +50,6 @@ import org.locationtech.jts.precision.GeometryPrecisionReducer;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.AvalancheSituation;
 import eu.albina.model.Region;
 import eu.albina.model.Regions;
 import eu.albina.model.enumerations.DangerRating;
@@ -102,8 +99,8 @@ public interface MapUtil {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
 				bindings.put("bul_id_h", region + "-h", index);
 				bindings.put("bul_id_l", region + "-l", index);
-				bindings.put("danger_h", region + "-h", getDangerRatingInt(description, true));
-				bindings.put("danger_l", region + "-l", getDangerRatingInt(description, false));
+				bindings.put("danger_h", region + "-h", DangerRating.getInt(description.dangerRating(true)));
+				bindings.put("danger_l", region + "-l", DangerRating.getInt(description.dangerRating(false)));
 				bindings.put("elevation_h", region + "-h", description.getElevation());
 			}
 			index++;
@@ -115,22 +112,6 @@ public interface MapUtil {
 			simpleBindings.put(key, argument);
 		});
 		return simpleBindings;
-	}
-
-	static String getDangerRatingString(AvalancheBulletinDaytimeDescription description, boolean above) {
-		if (description.isHasElevationDependency() && !above) {
-			return DangerRating.getString(description.getDangerRatingBelow());
-		} else {
-			return DangerRating.getString(description.getDangerRatingAbove());
-		}
-	}
-
-	static int getDangerRatingInt(AvalancheBulletinDaytimeDescription description, boolean above) {
-		if (description.isHasElevationDependency() && !above) {
-			return DangerRating.getInt(description.getDangerRatingBelow());
-		} else {
-			return DangerRating.getInt(description.getDangerRatingAbove());
-		}
 	}
 
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) {
@@ -149,10 +130,7 @@ public interface MapUtil {
 		} catch (IOException ex) {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
-		final boolean hasDaytimeDependency = bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
-		for (DaytimeDependency daytimeDependency : hasDaytimeDependency
-				? EnumSet.of(DaytimeDependency.am, DaytimeDependency.pm)
-				: EnumSet.of(DaytimeDependency.fd)) {
+		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(bulletins)) {
 			try {
 				final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
 				logger.info("Creating region file {}", regionFile);
@@ -237,8 +215,8 @@ public interface MapUtil {
 			if (bulletin != null) {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
 				mapyrus.context.getBindings().put("elevation_level", description.getElevation());
-				mapyrus.context.getBindings().put("danger_rating_low", getDangerRatingString(description, false));
-				mapyrus.context.getBindings().put("danger_rating_high", getDangerRatingString(description, true));
+				mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.dangerRating(false)));
+				mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.dangerRating(true)));
 				mapyrus.context.getBindings().put("problem_icon_l", "0");
 				mapyrus.context.getBindings().put("problem_icon_h", "0");
 			}
@@ -289,10 +267,10 @@ public interface MapUtil {
 			feature.properties.put("bid", bulletin.getId());
 			feature.properties.put("daytime", daytimeDependency.name());
 			feature.properties.put("elevation", description.getElevation());
-			feature.properties.put("dl_hi", getDangerRatingString(description, true));
-			feature.properties.put("dl_lo", getDangerRatingString(description, false));
-			feature.properties.put("problem_1", getAvalancheSituationString(description.getAvalancheSituation1()));
-			feature.properties.put("problem_2", getAvalancheSituationString(description.getAvalancheSituation2()));
+			feature.properties.put("dl_hi", DangerRating.getString(description.dangerRating(true)));
+			feature.properties.put("dl_lo", DangerRating.getString(description.dangerRating(false)));
+			feature.properties.put("problem_1", eu.albina.model.enumerations.AvalancheSituation.toCaamlv5String(description.getAvalancheSituation1()));
+			feature.properties.put("problem_2", eu.albina.model.enumerations.AvalancheSituation.toCaamlv5String(description.getAvalancheSituation2()));
 			final double bufferDistance = 1e-4;
 			feature.geometry = regions.getRegionsForBulletin(bulletin, preview).map(Region::getPolygon)
 					// use buffer to avoid artifacts when building polygon union
@@ -306,8 +284,4 @@ public interface MapUtil {
 		new ObjectMapper().writeValue(regionFile.toFile(), featureCollection);
 	}
 
-	static String getAvalancheSituationString(AvalancheSituation avalancheSituation) {
-		return Optional.ofNullable(avalancheSituation).map(AvalancheSituation::getAvalancheSituation)
-				.map(eu.albina.model.enumerations.AvalancheSituation::toCaamlv5String).orElse("false");
-	}
 }

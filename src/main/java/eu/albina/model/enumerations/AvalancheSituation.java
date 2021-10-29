@@ -18,6 +18,7 @@ package eu.albina.model.enumerations;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import eu.albina.util.XMLResourceBundleControl;
@@ -58,6 +59,11 @@ public enum AvalancheSituation {
 		default:
 			return null;
 		}
+	}
+
+	public static String toCaamlv5String(eu.albina.model.AvalancheSituation avalancheSituation) {
+		return Optional.ofNullable(avalancheSituation).map(eu.albina.model.AvalancheSituation::getAvalancheSituation)
+			.map(AvalancheSituation::toCaamlv5String).orElse("false");
 	}
 
 	public String toCaamlv6String() {
