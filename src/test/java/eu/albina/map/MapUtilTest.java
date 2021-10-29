@@ -129,7 +129,7 @@ public class MapUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final Path path = folder.newFile("regions.json").toPath();
 
-		MapUtil.createBulletinRegions(bulletins, MapUtil.DaytimeDependency.fd, path, regions, false);
+		MapUtil.createBulletinRegions(bulletins, DaytimeDependency.fd, path, regions, false);
 		final String actual = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
 
 		final String expected = Resources.toString(Resources.getResource("2019-01-17.regions.json"),
@@ -143,7 +143,7 @@ public class MapUtilTest {
 	public void testMayrusBindings() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		final Map<String, Object> bindings = MapUtil.createMayrusBindings(bulletins, MapUtil.DaytimeDependency.fd, false);
+		final Map<String, Object> bindings = MapUtil.createMayrusBindings(bulletins, DaytimeDependency.fd, false);
 		String expected = "{\"AT-07-01-h\": 0, \"AT-07-02-h\": 0, \"AT-07-03-h\": 0, \"AT-07-04-h\": 0, \"AT-07-05-h\": 0, \"AT-07-06-h\": 0, \"AT-07-07-h\": 0, \"AT-07-08-h\": 0, \"AT-07-09-h\": 2, \"AT-07-10-h\": 0, \"AT-07-11-h\": 0, \"AT-07-12-h\": 0, \"AT-07-13-h\": 0, \"AT-07-14-h\": 2, \"AT-07-15-h\": 2, \"AT-07-16-h\": 2, \"AT-07-17-h\": 0, \"AT-07-18-h\": 0, \"AT-07-19-h\": 2, \"AT-07-20-h\": 2, \"AT-07-21-h\": 2, \"AT-07-22-h\": 2, \"AT-07-23-h\": 2, \"AT-07-24-h\": 0, \"AT-07-25-h\": 1, \"AT-07-26-h\": 0, \"AT-07-27-h\": 1, \"AT-07-28-h\": 1, \"AT-07-29-h\": 8, \"IT-32-BZ-01-h\": 7, \"IT-32-BZ-02-h\": 7, \"IT-32-BZ-03-h\": 7, \"IT-32-BZ-04-h\": 7, \"IT-32-BZ-05-h\": 7, \"IT-32-BZ-06-h\": 7, \"IT-32-BZ-07-h\": 7, \"IT-32-BZ-08-h\": 9, \"IT-32-BZ-09-h\": 7, \"IT-32-BZ-10-h\": 7, \"IT-32-BZ-11-h\": 7, \"IT-32-BZ-12-h\": 7, \"IT-32-BZ-13-h\": 7, \"IT-32-BZ-14-h\": 4, \"IT-32-BZ-15-h\": 9, \"IT-32-BZ-16-h\": 6, \"IT-32-BZ-17-h\": 6, \"IT-32-BZ-18-h\": 9, \"IT-32-BZ-19-h\": 9, \"IT-32-BZ-20-h\": 9, \"IT-32-TN-01-h\": 3, \"IT-32-TN-02-h\": 3, \"IT-32-TN-03-h\": 5, \"IT-32-TN-04-h\": 3, \"IT-32-TN-05-h\": 3, \"IT-32-TN-06-h\": 5, \"IT-32-TN-07-h\": 3, \"IT-32-TN-08-h\": 5, \"IT-32-TN-09-h\": 3, \"IT-32-TN-10-h\": 5, \"IT-32-TN-11-h\": 5, \"IT-32-TN-12-h\": 5, \"IT-32-TN-13-h\": 3, \"IT-32-TN-14-h\": 5, \"IT-32-TN-15-h\": 5, \"IT-32-TN-16-h\": 3, \"IT-32-TN-17-h\": 5, \"IT-32-TN-18-h\": 5, \"IT-32-TN-19-h\": 3, \"IT-32-TN-20-h\": 3, \"IT-32-TN-21-h\": 5}";
 		assertEquals(expected, bindings.get("bul_id_h").toString());
 		expected = expected.replace("-h", "-l");
