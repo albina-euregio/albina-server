@@ -112,8 +112,8 @@ public interface MapUtil {
 				AvalancheBulletinDaytimeDescription description = getBulletinDaytimeDescription(bulletin, daytimeDependency);
 				String line = String.join(";", Integer.toString(index), bulletin.getId(), region,
 					bulletin.getValidityDateString(), "", Integer.toString(description.getElevation()),
-					getDangerRatingString(bulletin, description, true),
-					getDangerRatingString(bulletin, description, false), "0", "0", "0", "0");
+					getDangerRatingString(description, true),
+					getDangerRatingString(description, false), "0", "0", "0", "0");
 				sb.append(line).append("\n");
 			}
 			index++;
@@ -128,11 +128,12 @@ public interface MapUtil {
 				: bulletin.getForenoon();
 	}
 
-	static String getDangerRatingString(AvalancheBulletin bulletin,
-			AvalancheBulletinDaytimeDescription description, boolean above) {
-		return DangerRating
-				.getString(description.isHasElevationDependency() && !above ? description.getDangerRatingBelow()
-						: description.getDangerRatingAbove());
+	static String getDangerRatingString(AvalancheBulletinDaytimeDescription description, boolean above) {
+		if (description.isHasElevationDependency() && !above) {
+			return DangerRating.getString(description.getDangerRatingBelow());
+		} else {
+			return DangerRating.getString(description.getDangerRatingAbove());
+		}
 	}
 
 	enum Map {
@@ -418,8 +419,8 @@ public interface MapUtil {
 			feature.properties.put("bid", bulletin.getId());
 			feature.properties.put("daytime", daytimeDependency.name());
 			feature.properties.put("elevation", description.getElevation());
-			feature.properties.put("dl_hi", getDangerRatingString(bulletin, description, true));
-			feature.properties.put("dl_lo", getDangerRatingString(bulletin, description, false));
+			feature.properties.put("dl_hi", getDangerRatingString(description, true));
+			feature.properties.put("dl_lo", getDangerRatingString(description, false));
 			feature.properties.put("problem_1", getAvalancheSituationString(description.getAvalancheSituation1()));
 			feature.properties.put("problem_2", getAvalancheSituationString(description.getAvalancheSituation2()));
 			final double bufferDistance = 1e-4;
