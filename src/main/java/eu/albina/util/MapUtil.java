@@ -76,7 +76,7 @@ public interface MapUtil {
 			boolean grayscale) {
 		final DaytimeDependency daytimeDependency = !hasDaytimeDependency ? DaytimeDependency.fd
 				: isAfternoon ? DaytimeDependency.pm : DaytimeDependency.am;
-		return Map.forRegion(region).orElse(Map.fullmap).filename(daytimeDependency, grayscale, "jpg");
+		return Map.forRegion(region).orElse(Map.fullmap).filename(daytimeDependency, null, grayscale, "jpg");
 	}
 
 	/**
@@ -189,11 +189,16 @@ public interface MapUtil {
 			}
 		}
 
-		String filename(DaytimeDependency daytimeDependency, boolean grayscale, String format) {
+		String filename(DaytimeDependency daytimeDependency, String bulletinId, boolean grayscale, String format) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(daytimeDependency.name());
-			sb.append("_");
-			sb.append(this.filename());
+			if (bulletinId == null) {
+				sb.append(daytimeDependency.name());
+				sb.append("_");
+				sb.append(this.filename());
+			} else {
+				sb.append(bulletinId);
+				sb.append(DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "");
+			}
 
 			if (grayscale)
 				sb.append("_bw");
@@ -311,11 +316,7 @@ public interface MapUtil {
 		final MapSize size = MapSize.of(map);
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
 		final Path outputDirectory = dangerRatingMapFile.getParent();
-		final Path outputFile = outputDirectory.resolve(
-				bulletinId != null
-						? bulletinId + (DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "")
-								+ (grayscale ? "_bw.pdf" : ".pdf")
-						: map.filename(daytimeDependency, grayscale, "pdf"));
+		final Path outputFile = outputDirectory.resolve(map.filename(daytimeDependency, bulletinId, grayscale, "pdf"));
 		final Path tempDirectory = Files.createTempDirectory("mapyrus");
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		bindings.put("xmax", map.xmax);
@@ -384,12 +385,9 @@ public interface MapUtil {
 		new ProcessBuilder("convert", outputFilePng, outputFileJpg).inheritIO().start().waitFor();
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletinId == null) {
 			// create combined am/pm maps
-			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, grayscale, "jpg"))
-					.toString();
-			final String pmFile = outputDirectory.resolve(map.filename(DaytimeDependency.pm, grayscale, "jpg"))
-					.toString();
-			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, grayscale, "jpg"))
-					.toString();
+			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, null, grayscale, "jpg")).toString();
+			final String pmFile = outputDirectory.resolve(map.filename(DaytimeDependency.pm, null, grayscale, "jpg")).toString();
+			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, null, grayscale, "jpg")).toString();
 			logger.info("Combining {} and {} to {}", amFile, pmFile, fdFile);
 			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
