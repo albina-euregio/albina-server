@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.jobs.BlogJob;
 import eu.albina.jobs.PublicationJob;
+import eu.albina.jobs.TmpDeletionJob;
 import eu.albina.jobs.UpdateJob;
 
 public class SchedulerUtil {
@@ -80,6 +81,12 @@ public class SchedulerUtil {
 			Trigger blogTrigger = newTrigger().withIdentity("triggerBlog", "groupAlbina").startNow()
 					.withSchedule(cronSchedule("0 0/10 * * * ?")).build();
 			scheduler.scheduleJob(blogJob, blogTrigger);
+
+			// start tmp deletion job (3AM)
+			JobDetail tmpDeletionJob = newJob(TmpDeletionJob.class).withIdentity("tmpDeletionJob", "groupAlbina").build();
+			Trigger tmpDeletionTrigger = newTrigger().withIdentity("triggerTmpDeletion", "groupAlbina").startNow()
+					.withSchedule(cronSchedule("0 0 3 * * ?")).build();
+			scheduler.scheduleJob(tmpDeletionJob, tmpDeletionTrigger);
 
 		} catch (SchedulerException e) {
 			logger.error("Scheduler could not be started", e);
