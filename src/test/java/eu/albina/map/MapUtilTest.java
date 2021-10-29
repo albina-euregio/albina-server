@@ -1,4 +1,4 @@
-package eu.albina.util;
+package eu.albina.map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import eu.albina.ImageTestUtils;
+import eu.albina.util.AlbinaUtil;
+import eu.albina.util.GlobalVariables;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;

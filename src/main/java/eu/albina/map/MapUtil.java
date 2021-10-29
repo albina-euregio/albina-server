@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.util;
+package eu.albina.map;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -37,6 +37,9 @@ import javax.script.SimpleBindings;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
+import eu.albina.util.AlbinaUtil;
+import eu.albina.util.GeoJson;
+import eu.albina.util.GlobalVariables;
 import org.mapyrus.Argument;
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
