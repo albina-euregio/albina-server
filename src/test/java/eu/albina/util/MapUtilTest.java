@@ -30,12 +30,12 @@ import javax.imageio.ImageIO;
 public class MapUtilTest {
 
 	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
+	public TemporaryFolder folder = TemporaryFolder.builder().assureDeletion().build();
 
 	@Before
 	public void setUp() throws Exception {
 		GlobalVariables.loadConfigProperties();
-		GlobalVariables.mapsPath = "../albina_files_local";
+		GlobalVariables.mapsPath = folder.toString();
 		GlobalVariables.mapProductionUrl = "../avalanche-warning-maps/";
 	}
 
