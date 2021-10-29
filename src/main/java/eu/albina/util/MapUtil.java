@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -226,6 +225,23 @@ public interface MapUtil {
 		fd, am, pm
 	}
 
+	class MapyrusInterpreter {
+		final Interpreter interpreter = new Interpreter();
+		final ContextStack context = new ContextStack();
+
+		MapyrusInterpreter(SimpleBindings bindings) {
+			context.setBindings(bindings);
+		}
+
+		void interpret(FileOrURL fileOrURL) throws MapyrusException, IOException, InterruptedException {
+			interpreter.interpret(context, fileOrURL, System.in, System.out);
+		}
+
+		void interpret(URL resource) throws MapyrusException, IOException, InterruptedException {
+			interpret(new FileOrURL(resource.toString()));
+		}
+	}
+
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) {
 		Path outputDirectory;
 		if (preview) {
@@ -290,8 +306,6 @@ public interface MapUtil {
 		final MapSize size = Map.overlay.equals(map) ? MapSize.overlay
 				: Map.fullmap_small.equals(map) ? MapSize.thumbnail_map : MapSize.standard_map;
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
-		final Interpreter mapyrus = new Interpreter();
-		final ContextStack context = new ContextStack();
 		final Path outputDirectory = dangerRatingMapFile.getParent();
 		final Path outputFile = outputDirectory.resolve(
 				bulletinId != null
@@ -323,8 +337,7 @@ public interface MapUtil {
 		bindings.put("interreg", Map.fullmap.equals(map) ? "on" : "off");
 		bindings.put("logo", Map.fullmap.equals(map) ? "on" : "off");
 		bindings.put("bulletin_id", bulletinId != null ? bulletinIndex : map.name());
-		context.setBindings(bindings);
-		final List<URL> mapyrusFiles = new ArrayList<>();
+
 		final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
 			Resources.getResource("fonts/open-sans/OpenSans.otf").getFile(),
 			Resources.getResource("fonts/open-sans/OpenSans-Italic.otf").getFile(),
@@ -332,20 +345,17 @@ public interface MapUtil {
 			Resources.getResource("fonts/open-sans/OpenSans-BoldItalic.otf").getFile(),
 			Resources.getResource("fonts/open-sans/OpenSans-Semibold.otf").getFile(),
 			Resources.getResource("fonts/open-sans/OpenSans-SemiboldItalic.otf").getFile());
-		mapyrus.interpret(context, new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"), System.in, System.out);
-		mapyrusFiles.add(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
-		mapyrusFiles.add(Resources.getResource("mapyrus/albina_functions.mapyrus"));
-		mapyrusFiles.add(Resources.getResource("mapyrus/albina_styles.mapyrus"));
+
+		logger.info("Creating map {} using {} with bindings {}", outputFile, dangerRatingMapFile, bindings);
+		final MapyrusInterpreter mapyrus = new MapyrusInterpreter(bindings);
+		mapyrus.interpret(new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"));
+		mapyrus.interpret(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
+		mapyrus.interpret(Resources.getResource("mapyrus/albina_functions.mapyrus"));
+		mapyrus.interpret(Resources.getResource("mapyrus/albina_styles.mapyrus"));
 		if (Map.overlay.equals(map)) {
-			mapyrusFiles.add(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
+			mapyrus.interpret(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
 		} else {
-			mapyrusFiles.add(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
-		}
-		logger.info("Creating map {} using {} and {} with bindings {}", outputFile, dangerRatingMapFile, mapyrusFiles,
-				bindings);
-		for (URL mapyrusFile : mapyrusFiles) {
-			final FileOrURL file = new FileOrURL(mapyrusFile.toString());
-			mapyrus.interpret(context, file, System.in, System.out);
+			mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 		}
 		deleteDirectoryWithContents(tempDirectory);
 
