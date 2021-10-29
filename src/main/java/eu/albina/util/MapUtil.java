@@ -299,37 +299,31 @@ public interface MapUtil {
 								+ (grayscale ? "_bw.pdf" : ".pdf")
 						: map.filename(daytimeDependency, grayscale, "pdf"));
 		final Path tempDirectory = Files.createTempDirectory("mapyrus");
-		final TreeMap<String, Object> bindings = new TreeMap<String, Object>() {
-
-			static final long serialVersionUID = 1L;
-
-			{
-				put("xmax", map.xmax);
-				put("xmin", map.xmin);
-				put("ymax", map.ymax);
-				put("ymin", map.ymin);
-				put("image_type", "pdf");
-				put("drm_file", dangerRatingMapFile);
-				put("mapFile", outputFile);
-				put("pagesize_x", size.width);
-				put("pagesize_y", size.width / map.aspectRatio());
-				put("map_xsize", size.width);
-				put("working_dir", tempDirectory + "/");
-				put("geodata_dir", mapProductionUrl + "geodata/");
-				put("image_dir", mapProductionUrl + "images/");
-				put("region", "Euregio");
-				put("level", size.ordinal() + 1);
-				put("colormode", grayscale ? "bw" : "col");
-				put("dynamic_region", bulletinId != null ? "one" : "all");
-				put("language", "en");
-				put("scalebar", Map.overlay.equals(map) ? "off" : "on");
-				put("copyright", Map.overlay.equals(map) ? "off" : "on");
-				put("interreg", Map.fullmap.equals(map) ? "on" : "off");
-				put("logo", Map.fullmap.equals(map) ? "on" : "off");
-				put("bulletin_id", bulletinId != null ? bulletinIndex : map.name());
-			}
-		};
-		context.setBindings(new SimpleBindings(bindings));
+		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
+		bindings.put("xmax", map.xmax);
+		bindings.put("xmin", map.xmin);
+		bindings.put("ymax", map.ymax);
+		bindings.put("ymin", map.ymin);
+		bindings.put("image_type", "pdf");
+		bindings.put("drm_file", dangerRatingMapFile);
+		bindings.put("mapFile", outputFile);
+		bindings.put("pagesize_x", size.width);
+		bindings.put("pagesize_y", size.width / map.aspectRatio());
+		bindings.put("map_xsize", size.width);
+		bindings.put("working_dir", tempDirectory + "/");
+		bindings.put("geodata_dir", mapProductionUrl + "geodata/");
+		bindings.put("image_dir", mapProductionUrl + "images/");
+		bindings.put("region", "Euregio");
+		bindings.put("level", size.ordinal() + 1);
+		bindings.put("colormode", grayscale ? "bw" : "col");
+		bindings.put("dynamic_region", bulletinId != null ? "one" : "all");
+		bindings.put("language", "en");
+		bindings.put("scalebar", Map.overlay.equals(map) ? "off" : "on");
+		bindings.put("copyright", Map.overlay.equals(map) ? "off" : "on");
+		bindings.put("interreg", Map.fullmap.equals(map) ? "on" : "off");
+		bindings.put("logo", Map.fullmap.equals(map) ? "on" : "off");
+		bindings.put("bulletin_id", bulletinId != null ? bulletinIndex : map.name());
+		context.setBindings(bindings);
 		final List<URL> mapyrusFiles = new ArrayList<>();
 		final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
 			Resources.getResource("fonts/open-sans/OpenSans.otf").getFile(),
