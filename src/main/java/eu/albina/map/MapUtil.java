@@ -184,7 +184,6 @@ public interface MapUtil {
 		bindings.put("level", size.ordinal() + 1);
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
-		bindings.put("language", "en");
 		bindings.put("scalebar", MapType.overlay.equals(map) ? "off" : "on");
 		bindings.put("copyright", MapType.overlay.equals(map) ? "off" : "on");
 		bindings.put("interreg", MapType.fullmap.equals(map) ? "on" : "off");
