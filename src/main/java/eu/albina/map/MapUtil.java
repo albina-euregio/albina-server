@@ -186,7 +186,6 @@ public interface MapUtil {
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
 		bindings.put("scalebar", MapType.overlay.equals(map) ? "off" : "on");
 		bindings.put("copyright", MapType.overlay.equals(map) ? "off" : "on");
-		bindings.put("interreg", MapType.fullmap.equals(map) ? "on" : "off");
 		bindings.put("logo", MapType.fullmap.equals(map) ? "on" : "off");
 		bindings.put("bulletin_id", bulletin != null ? bulletinIndex : map.name());
 		bindings.putAll(dangerBindings);

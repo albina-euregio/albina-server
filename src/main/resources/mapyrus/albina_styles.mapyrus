@@ -6,20 +6,20 @@ let level = level
 let pf = 1
 
 if level == 1 then
-	let zf = 1.0 * pf	
+	let zf = 1.0 * pf
 elif level == 2 then
-	let zf = 1.0 * pf	
+	let zf = 1.0 * pf
 elif level == 3 then
-	let zf = 1.0 * pf 		
+	let zf = 1.0 * pf
 endif
 
 # -------------------------------------------------------------
-# --- Schummerung			
-# -------------------------------------------------------------																
+# --- Schummerung
+# -------------------------------------------------------------
 let draw_raster = "true"												# Schummerung true/false
 
 # -------------------------------------------------------------
-# --- Lawinengefahrenstufen Regionen			
+# --- Lawinengefahrenstufen Regionen
 # -------------------------------------------------------------
 
 # Farben der Gefahrenstufen (Icon Style)
@@ -41,7 +41,7 @@ let danger_color[3] = "color '#FF9900'"									# orange
 let danger_color[4] = "color '#FF0000'"									# rot
 let danger_color[5] = "color '#666666'"									# dunkelgrau
 if level == 1 or bulletin_id eq "overlay" then
-	let danger_color[5] = "color '#660000'"		
+	let danger_color[5] = "color '#660000'"
 endif
 
 #*/
@@ -79,43 +79,43 @@ if colormode eq "bw" then
 	let danger_color[4] = "color '#888888'"									# rot
 	let danger_color[5] = "color '#666666'"									# dunkelgrau
 	if level == 1 or bulletin_id eq "overlay" then
-		let danger_color[5] = "color '#454545'"		
+		let danger_color[5] = "color '#454545'"
 	endif
-	let rest_color = "color '#999999'"	
+	let rest_color = "color '#999999'"
 endif
 
 
 # Regionslinie
-let reg_line_color = "color '#FFFFFF'"	
-let reg_line = "linestyle " . 0.3  * zf . ", 'round', 'round'"								
-let reg_line_1 = "linestyle " . 0.075  * zf . ", 'round', 'round'"	
-let reg_line_2 = "linestyle " . 0.1  * zf . ", 'round', 'round'"	
-let reg_line_3 = "linestyle " . 0.15  * zf . ", 'round', 'round'"		
+let reg_line_color = "color '#FFFFFF'"
+let reg_line = "linestyle " . 0.3  * zf . ", 'round', 'round'"
+let reg_line_1 = "linestyle " . 0.075  * zf . ", 'round', 'round'"
+let reg_line_2 = "linestyle " . 0.1  * zf . ", 'round', 'round'"
+let reg_line_3 = "linestyle " . 0.15  * zf . ", 'round', 'round'"
 
 # Staatsgrenze
-let country_line_color = "color '#777777'"									
-let country_line_1 = "linestyle " . 0.2  * zf . ", 'round', 'round'"	
-let country_line_2 = "linestyle " . 0.3  * zf . ", 'round', 'round'"	
+let country_line_color = "color '#777777'"
+let country_line_1 = "linestyle " . 0.2  * zf . ", 'round', 'round'"
+let country_line_2 = "linestyle " . 0.3  * zf . ", 'round', 'round'"
 let country_line_3 = "linestyle " . 0.4  * zf . ", 'round', 'round'"
 
 # Provinzgrenze
-let prov_line_color = "color '#777777'"									
-let prov_line_1 = "linestyle " . 0.1  * zf . ", 'round', 'round'"	
-let prov_line_2 = "linestyle " . 0.15  * zf . ", 'round', 'round'"	
-let prov_line_3 = "linestyle " . 0.2  * zf . ", 'round', 'round'"	
+let prov_line_color = "color '#777777'"
+let prov_line_1 = "linestyle " . 0.1  * zf . ", 'round', 'round'"
+let prov_line_2 = "linestyle " . 0.15  * zf . ", 'round', 'round'"
+let prov_line_3 = "linestyle " . 0.2  * zf . ", 'round', 'round'"
 
-let autonom_line_1 = "linestyle " . 0.05  * zf . ", 'round', 'round'"	
-let autonom_line_2 = "linestyle " . 0.075  * zf . ", 'round', 'round'"	
-let autonom_line_3 = "linestyle " . 0.2  * zf . ", 'round', 'round'"	
+let autonom_line_1 = "linestyle " . 0.05  * zf . ", 'round', 'round'"
+let autonom_line_2 = "linestyle " . 0.075  * zf . ", 'round', 'round'"
+let autonom_line_3 = "linestyle " . 0.2  * zf . ", 'round', 'round'"
 
 # Absoftbereich
 let pp_color = "color '#FFFFFF', 0.5"
 
 # Flüsse
-let river_line_color = "color '#19ABFF'"			#488cca						
-let river_line_1 = "linestyle " . 0.125  * zf . ", 'round', 'round'"	
-let river_line_2 = "linestyle " . 0.15  * zf . ", 'round', 'round'"	
-let river_line_3 = "linestyle " . 0.2  * zf . ", 'round', 'round'"	
+let river_line_color = "color '#19ABFF'"			#488cca
+let river_line_1 = "linestyle " . 0.125  * zf . ", 'round', 'round'"
+let river_line_2 = "linestyle " . 0.15  * zf . ", 'round', 'round'"
+let river_line_3 = "linestyle " . 0.2  * zf . ", 'round', 'round'"
 
 # Seen
 let lake_color = "color '#99DAFF'"		#d8f0fc
@@ -129,7 +129,7 @@ let marker_line_color = "color '#222222'"
 if level == 1 then
 	let marker_line_color = "color '#444444'"
 endif
-let marker_line = "linestyle " . 0.25  * zf . ", 'round', 'round'"	
+let marker_line = "linestyle " . 0.25  * zf . ", 'round', 'round'"
 
 # Städtenamen
 let city_label_color = "color '#222222'"
@@ -137,12 +137,12 @@ let cap_city_font_size = 2.2 * zf
 let city_font_size = 1.9 * zf
 if level == 1 then
 	let label_halo_background_color = "color '#FFFFFF'"
-	let label_halo_width = "outlinewidth=" . 0.0 * zf 
-	let label_halo_width5 = "outlinewidth=" . 0.325 * zf 
+	let label_halo_width = "outlinewidth=" . 0.0 * zf
+	let label_halo_width5 = "outlinewidth=" . 0.325 * zf
 else
 	let label_halo_background_color = "color '#FFFFFF'"
-	let label_halo_width = "outlinewidth=" . 0.0 * zf 
-	let label_halo_width5 = "outlinewidth=" . 0.325 * zf 
+	let label_halo_width = "outlinewidth=" . 0.0 * zf
+	let label_halo_width5 = "outlinewidth=" . 0.325 * zf
 endif
 
 # Gipfelmarker
@@ -163,7 +163,7 @@ let prov_font_size = 2.0 * zf
 let range_label_color = "color '#000000'"
 let range_font_size = 2.5 * zf
 let label_halo_color = "color '#333333'"
-let no_label_halo = "outlinewidth=" . 0.0 * zf 
+let no_label_halo = "outlinewidth=" . 0.0 * zf
 
 # Rahmenbreite
 if level == 1 then
@@ -195,9 +195,6 @@ elif level == 3 then
 	let c_fontsize = 1.8
 	let scale_fontsize = 2.2
 endif
-
-# INTERREG-Logo Size
-let interreg_image_size = 54
 
 # EUREGIO-Logo Size
 let euregio_image_size = 52
