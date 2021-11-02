@@ -3,7 +3,6 @@ package eu.albina;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -94,11 +93,11 @@ public interface ImageTestUtils {
 		}
 
 		if (differencePoints.size() > thresholdPixels) {
-			fail(MessageFormat.format("Images differ at {1} points, threshold is {2}: {3}",
-				differencePoints.size(), thresholdPixels, differences.toString()));
+			fail(String.format("Images differ at %d points, threshold is %d: %s",
+				differencePoints.size(), thresholdPixels, differences));
 		} else {
-			fail(MessageFormat.format("Images differ too much in color, value is {1}, permitted threshold is {2}: {3}",
-				colorDiffSum, thresholdTotalColorDiff, differences.toString()));
+			fail(String.format("Images differ too much in color, value is %d, permitted threshold is %d: %s",
+				colorDiffSum, thresholdTotalColorDiff, differences));
 		}
 	}
 }
