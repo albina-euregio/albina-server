@@ -59,38 +59,6 @@ let peaks = geodata_dir . "albina_hoehenpunkte_p.shp"
 let names_p = geodata_dir . "albina_namengut_p.shp"
 let names_l = geodata_dir . "albina_namengut_l.shp"
 
-if icon_prob_h[bulletin_id] eq "drifting snow" then
-	let problem_icon_h = image_dir . "drifting_snow" . icon_color . icon_ext
-elif icon_prob_h[bulletin_id] eq "gliding snow" then
-	let problem_icon_h = image_dir . "gliding_snow" . icon_color . icon_ext
-elif icon_prob_h[bulletin_id] eq "new snow" then
-	let problem_icon_h = image_dir . "new_snow" . icon_color . icon_ext
-elif icon_prob_h[bulletin_id] eq "old snow" then
-	let problem_icon_h = image_dir . "old_snow" . icon_color . icon_ext
-elif icon_prob_h[bulletin_id] eq "wet snow" then
-	let problem_icon_h = image_dir . "wet_snow" . icon_color . icon_ext
-elif icon_prob_h[bulletin_id] eq "favourable situation" then
-	let problem_icon_h = image_dir . "favourable_situation" . icon_color . icon_ext
-elif icon_prob_h[bulletin_id] eq "n/a" then
-	let problem_icon_h = image_dir . "n_a" . icon_color . icon_ext
-endif
-
-if icon_prob_l[bulletin_id] eq "drifting snow" then
-	let problem_icon_l = image_dir . "drifting_snow" . icon_color . icon_ext
-elif icon_prob_l[bulletin_id] eq "gliding snow" then
-	let problem_icon_l = image_dir . "gliding_snow" . icon_color . icon_ext
-elif icon_prob_l[bulletin_id] eq "new snow" then
-	let problem_icon_l = image_dir . "new_snow" . icon_color . icon_ext
-elif icon_prob_l[bulletin_id] eq "old snow" then
-	let problem_icon_l = image_dir . "old_snow" . icon_color . icon_ext
-elif icon_prob_l[bulletin_id] eq "wet snow" then
-	let problem_icon_l = image_dir . "wet_snow" . icon_color . icon_ext
-elif icon_prob_l[bulletin_id] eq "favourable situation" then
-	let problem_icon_l = image_dir . "favourable_situation" . icon_color . icon_ext
-elif icon_prob_l[bulletin_id] eq "n/a" then
-	let problem_icon_l = image_dir . "n_a" . icon_color . icon_ext
-endif
-
 # INTERREG-Logo
 let interreg_image_file = image_dir . "interrreg_logo.png"
 

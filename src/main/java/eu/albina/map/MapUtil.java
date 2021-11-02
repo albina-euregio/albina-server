@@ -213,8 +213,6 @@ public interface MapUtil {
 				mapyrus.context.getBindings().put("elevation_level", description.getElevation());
 				mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.dangerRating(false)));
 				mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.dangerRating(true)));
-				mapyrus.context.getBindings().put("problem_icon_l", "0");
-				mapyrus.context.getBindings().put("problem_icon_h", "0");
 			}
 			mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 		}
