@@ -18,7 +18,6 @@ package eu.albina.map;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -169,7 +168,6 @@ public interface MapUtil {
 		final MapSize size = MapSize.of(map);
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
 		final Path outputFile = outputDirectory.resolve(map.filename(daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
-		final Path tempDirectory = Files.createTempDirectory("mapyrus");
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		bindings.put("xmax", map.xmax);
 		bindings.put("xmin", map.xmin);
@@ -180,7 +178,6 @@ public interface MapUtil {
 		bindings.put("pagesize_x", size.width);
 		bindings.put("pagesize_y", size.width / map.aspectRatio());
 		bindings.put("map_xsize", size.width);
-		bindings.put("working_dir", tempDirectory + "/");
 		bindings.put("geodata_dir", mapProductionUrl + "geodata/");
 		bindings.put("image_dir", mapProductionUrl + "images/");
 		bindings.put("region", "Euregio");
@@ -222,7 +219,6 @@ public interface MapUtil {
 			}
 			mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 		}
-		deleteDirectoryWithContents(tempDirectory);
 
 		final Path outputFilePng = MapImageFormat.png.convertFrom(outputFile);
 		if (MapType.overlay.equals(map)) {
@@ -242,15 +238,6 @@ public interface MapUtil {
 		if (!preview) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
 		}
-	}
-
-	static void deleteDirectoryWithContents(Path directory) throws IOException {
-		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directory)) {
-			for (Path path : directoryStream) {
-				Files.delete(path);
-			}
-		}
-		Files.delete(directory);
 	}
 
 	static void createBulletinRegions(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency,
