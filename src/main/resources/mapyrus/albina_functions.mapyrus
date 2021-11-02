@@ -96,9 +96,6 @@ end
 
 begin LABEL_LINE color, font, size, outlinecolor, outlinewidth, inn_o, x_off, y_off, spacing, label
 
-	#--- decode label if containing special characters
-	#let label = label_decoding(label)
-
 	let type_height = size * 0.7				# tatsächl. Schriftgr. (Schriftgr. ohne Ober-, Unterlänge)
 	let label_top = type_height + y_off			# vert. Textausrichtung: oben (+ zusätzl. y-Offset)
 	let label_mid = type_height / 2 + y_off		# vert. Textausrichtung: mittig (+ zusätzl. y-Offset)

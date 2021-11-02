@@ -136,7 +136,6 @@ let city_label_color = "color '#222222'"
 let cap_city_font_size = 2.2 * zf
 let city_font_size = 1.9 * zf
 if level == 1 then
-	#let label_halo_background_color = "color '#BBBBBB', 0.5"
 	let label_halo_background_color = "color '#FFFFFF'"
 	let label_halo_width = "outlinewidth=" . 0.0 * zf 
 	let label_halo_width5 = "outlinewidth=" . 0.325 * zf 
@@ -204,9 +203,6 @@ let interreg_image_size = 54
 let euregio_image_size = 52
 
 # Copyrightvariabel
-#let copyright_txt = "\u00A9 Map UniVie ". Mapyrus.time.year
-#let copyright_txt = "CC-BY Map UniVie"
-#let copyright_txt = "(CC)BY Map UniVie"
 let copyright_txt = "(CC)BY avalanche.report"
 let c_font = font_semibold
 let c_fontcolor = "color '#444444'"
