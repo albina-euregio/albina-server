@@ -176,7 +176,6 @@ public interface MapUtil {
 		bindings.put("mapFile", outputFile);
 		bindings.put("pagesize_x", size.width);
 		bindings.put("pagesize_y", size.width / map.aspectRatio());
-		bindings.put("map_xsize", size.width);
 		bindings.put("geodata_dir", mapProductionUrl + "geodata/");
 		bindings.put("image_dir", mapProductionUrl + "images/");
 		bindings.put("region", "Euregio");

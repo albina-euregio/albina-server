@@ -859,7 +859,7 @@ end
 
 begin draw_scalebar km_value, bar_color, bar_style, font, fontsize
 
-	let scalebar_len = km_value / ((xmax - xmin) / map_xsize / 1000) * (96/72)
+	let scalebar_len = km_value / ((xmax - xmin) / pagesize_x / 1000) * (96/72)
 
 	worlds px1, py1, px2, py2
 	clearpath
