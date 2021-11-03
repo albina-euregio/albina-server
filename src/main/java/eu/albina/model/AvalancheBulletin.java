@@ -321,6 +321,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			this.afternoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("afternoon"));
 	}
 
+	public Set<String> regions(boolean preview) {
+		return preview ? getPublishedAndSavedRegions() : getPublishedRegions();
+	}
+
 	public User getUser() {
 		return user;
 	}

@@ -29,15 +29,9 @@ public class Regions extends ArrayList<Region> implements AvalancheInformationOb
 	}
 
 	public Stream<Region> getRegionsForBulletin(AvalancheBulletin bulletin, boolean preview) {
-		if (preview) {
-			return stream()
-					.flatMap(region -> Stream.concat(Stream.of(region), region.getSubregions().stream()))
-					.filter(region -> (bulletin.getPublishedAndSavedRegions().contains(region.getId())));
-		} else {
-			return stream()
-					.flatMap(region -> Stream.concat(Stream.of(region), region.getSubregions().stream()))
-					.filter(region -> bulletin.getPublishedRegions().contains(region.getId()));
-		}
+		return stream()
+			.flatMap(region -> Stream.concat(Stream.of(region), region.getSubregions().stream()))
+			.filter(region -> bulletin.regions(preview).contains(region.getId()));
 	}
 
 	@Override

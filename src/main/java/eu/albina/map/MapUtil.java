@@ -93,8 +93,7 @@ public interface MapUtil {
 		Table<String, String, Integer> bindings = TreeBasedTable.create();
 		int index = 0;
 		for (AvalancheBulletin bulletin : bulletins) {
-			Iterable<String> regions = preview ? bulletin.getPublishedAndSavedRegions() : bulletin.getPublishedRegions();
-			for (String region : regions) {
+			for (String region : bulletin.regions(preview)) {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
 				bindings.put("bul_id_h", region + "-h", index);
 				bindings.put("bul_id_l", region + "-l", index);
