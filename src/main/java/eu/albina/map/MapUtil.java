@@ -90,23 +90,21 @@ public interface MapUtil {
 	}
 
 	static SimpleBindings createMayrusBindings(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, boolean preview) {
-		Table<String, String, Integer> bindings = TreeBasedTable.create();
-		int index = 0;
+		Table<String, String, Argument> bindings = TreeBasedTable.create();
 		for (AvalancheBulletin bulletin : bulletins) {
 			for (String region : bulletin.regions(preview)) {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
-				bindings.put("bul_id_h", region + "-h", index);
-				bindings.put("bul_id_l", region + "-l", index);
-				bindings.put("danger_h", region + "-h", DangerRating.getInt(description.dangerRating(true)));
-				bindings.put("danger_l", region + "-l", DangerRating.getInt(description.dangerRating(false)));
-				bindings.put("elevation_h", region + "-h", description.getElevation());
+				bindings.put("bulletin_ids", region + "-h", new Argument(Argument.STRING, bulletin.getId()));
+				bindings.put("bulletin_ids", region + "-l", new Argument(Argument.STRING, bulletin.getId()));
+				bindings.put("danger_h", region + "-h", new Argument(DangerRating.getInt(description.dangerRating(true))));
+				bindings.put("danger_l", region + "-l", new Argument(DangerRating.getInt(description.dangerRating(false))));
+				bindings.put("elevation_h", region + "-h", new Argument(description.getElevation()));
 			}
-			index++;
 		}
 		SimpleBindings simpleBindings = new SimpleBindings();
 		bindings.rowMap().forEach((key, stringObjectMap) -> {
 			Argument argument = new Argument();
-			stringObjectMap.forEach((region, value) -> argument.addHashMapEntry(region, new Argument(value)));
+			stringObjectMap.forEach(argument::addHashMapEntry);
 			simpleBindings.put(key, argument);
 		});
 		return simpleBindings;
@@ -143,20 +141,19 @@ public interface MapUtil {
 				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, preview);
 				if (!preview) {
 					for (MapType map : MapType.values()) {
-						createMapyrusMaps(map, daytimeDependency, null, 0, false, bindings, outputDirectory, preview);
-						createMapyrusMaps(map, daytimeDependency, null, 0, true, bindings, outputDirectory, preview);
+						createMapyrusMaps(map, daytimeDependency, null, false, bindings, outputDirectory, preview);
+						createMapyrusMaps(map, daytimeDependency, null, true, bindings, outputDirectory, preview);
 					}
 				} else {
-					createMapyrusMaps(MapType.fullmap, daytimeDependency, null, 0, false, bindings, outputDirectory, preview);
+					createMapyrusMaps(MapType.fullmap, daytimeDependency, null, false, bindings, outputDirectory, preview);
 				}
-				for (int i = 0; i < bulletins.size(); i++) {
-					final AvalancheBulletin bulletin = bulletins.get(i);
+				for (final AvalancheBulletin bulletin : bulletins) {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					createMapyrusMaps(MapType.fullmap_small, daytimeDependency, bulletin, i, false, bindings, outputDirectory, preview);
+					createMapyrusMaps(MapType.fullmap_small, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
 					if (!preview)
-						createMapyrusMaps(MapType.fullmap_small, daytimeDependency, bulletin, i, true, bindings, outputDirectory, preview);
+						createMapyrusMaps(MapType.fullmap_small, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
 				}
 			} catch (IOException | MapyrusException | InterruptedException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
@@ -164,7 +161,7 @@ public interface MapUtil {
 		}
 	}
 
-	static void createMapyrusMaps(MapType map, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin, int bulletinIndex,
+	static void createMapyrusMaps(MapType map, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
 								  boolean grayscale, SimpleBindings dangerBindings, Path outputDirectory, boolean preview) throws IOException, MapyrusException, InterruptedException {
 
 		final MapSize size = MapSize.of(map);
@@ -189,7 +186,7 @@ public interface MapUtil {
 		bindings.put("scalebar", MapType.overlay.equals(map) ? "off" : "on");
 		bindings.put("copyright", MapType.overlay.equals(map) ? "off" : "on");
 		bindings.put("logo", MapType.fullmap.equals(map) ? "on" : "off");
-		bindings.put("bulletin_id", bulletin != null ? bulletinIndex : map.name());
+		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : map.name());
 		bindings.putAll(dangerBindings);
 
 		final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",

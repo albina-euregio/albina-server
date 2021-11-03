@@ -337,7 +337,7 @@ begin polygon_feature_danger_levels file, txtfile, level
 				eval reg_line
 				eval reg_line_color
 				if dynamic_region eq "one" and colormode eq "bw" then
-					if bul_id_h[ALB_ID] eq bulletin_id or bul_id_l[ALB_ID] eq bulletin_id then
+					if bulletin_ids[ALB_ID] eq bulletin_id then
 						stroke
 					endif
 				endif
@@ -416,7 +416,7 @@ begin polygon_feature_danger_levels file, txtfile, level
 						endif
 					endif
 				elif dynamic_region eq "one" then
-					if bul_id_h[ALB_ID] eq bulletin_id or bul_id_l[ALB_ID] eq bulletin_id then
+					if bulletin_ids[ALB_ID] eq bulletin_id then
 						if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
 							eval danger_color[1]
 							fill
