@@ -113,14 +113,12 @@ public interface MapUtil {
 		return simpleBindings;
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) {
-		Path outputDirectory;
+	static Path getOutputDirectory(String publicationTime, String validityDateString, boolean preview) {
+		final Path outputDirectory;
 		if (preview) {
-		 	outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(),
-				AlbinaUtil.getValidityDateString(bulletins), publicationTime);
+			outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTime);
 		} else {
-			outputDirectory = Paths.get(GlobalVariables.getMapsPath(),
-				AlbinaUtil.getValidityDateString(bulletins), publicationTime);
+			outputDirectory = Paths.get(GlobalVariables.getMapsPath(), validityDateString, publicationTime);
 		}
 
 		try {
@@ -129,6 +127,11 @@ public interface MapUtil {
 		} catch (IOException ex) {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
+		return outputDirectory;
+	}
+
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) {
+		final Path outputDirectory = getOutputDirectory(publicationTime, AlbinaUtil.getValidityDateString(bulletins), preview);
 		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(bulletins)) {
 			try {
 				final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");
