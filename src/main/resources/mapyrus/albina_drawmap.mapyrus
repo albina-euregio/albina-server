@@ -9,16 +9,16 @@ print "Bulletin-ID/Karte: " . bulletin_id
 print "######################################################"
 
 # Raster-Input
-if level == 1 then
+if map_level eq "thumbnail" then
 	let raster = geodata_dir . "alpes_srtm250_n_gm_hs_light.png"
-elif level == 2 then
+elif map_level eq "standard" then
 	let raster = geodata_dir . "alpes_srtm250_n_gm_hs_v1.png"
-elif level == 3 then
+elif map_level eq "overlay" then
 	let raster = geodata_dir . "srtm90_albina_EPSG_3395_hs.png"
 endif
 
 # Shapefile-Input
-if level == 1 then
+if map_level eq "thumbnail" then
 	let country_l = geodata_dir . "simple_geom_staat_l.shp"
 	let provinces_l = geodata_dir . "simple_geom_provinzen_l.shp"
 	let reg_euregio_ha = geodata_dir . "simple_geom_regionen_euregio_ha.shp"
@@ -35,13 +35,13 @@ endif
 let region_l = geodata_dir . "regionen_euregio_l.shp"
 
 let euregio = geodata_dir . "euregio_a.shp"
-if level == 1 then
+if map_level eq "thumbnail" then
 	let euregio = geodata_dir . "simple_geom_euregio_a.shp"
 endif
 
 if region eq "Euregio" then
 	let pp_region = geodata_dir . "pp_euregio.shp"
-	if level == 1 then
+	if map_level eq "thumbnail" then
 		let pp_region = geodata_dir . "simple_geom_pp_euregio.shp"
 	endif
 endif
@@ -87,7 +87,7 @@ let my2 = py2
 # EBENEN
 ###################################################################
 # Raster
-if level >= 2 and colormode ne "bw" then
+if (map_level eq "standard" or map_level eq "overlay") and colormode ne "bw" then
 	image_feature raster
 endif
 
@@ -97,7 +97,7 @@ if dynamic_region eq "one" then
 endif
 
 # Regionen Lawinengefahrenstufen
-polygon_feature_danger_levels reg_euregio_ha, drm_file, level
+polygon_feature_danger_levels reg_euregio_ha
 
 # Flüsse & Seen
 line_feature_rivers rivers, level
@@ -110,7 +110,7 @@ line_feature_country country_l, level, 0
 point_feature_city_marker cities, level
 
 # Linienlabels
-if level >= 2 and dynamic_region eq "all" then
+if map_level eq "standard" and dynamic_region eq "all" then
 	line_feature_labels names_l, level
 endif
 

@@ -8,10 +8,10 @@
 
 begin LABEL_POINT color, font, size, outlinecolor, outlinewidth, ext_o, inn_o, x_off, y_off, angle, spacing, label
 
-	if level == 1 then
+	if map_level eq "thumbnail" then
 		let x = 0.9 * zf		# Standardoffset in x-Richtung bei Labelplatzierung
 		let y = 1.0	* zf	# Standardoffset in y-Richtung bei Labelplatzierung
-	elif level == 2 or level == 3 then
+	elif map_level eq "standard" or map_level eq "overlay" then
 		let x = 1.0 * zf		# Standardoffset in x-Richtung bei Labelplatzierung
 		let y = 1.15	* zf	# Standardoffset in y-Richtung bei Labelplatzierung
 	endif
@@ -178,10 +178,8 @@ begin polygon_feature_pp file, level
 			fetch
 			clearpath
 			addpath GEOMETRY
-			if level == 1 or level == 2 or level == 3 then
-				eval pp_color
-				fill
-			endif
+            eval pp_color
+            fill
 		done
 
 	print "Passepartout gezeichnet"
@@ -201,11 +199,9 @@ begin polygon_feature_shadow_bw file, level, linewidth
 			fetch
 			clearpath
 			addpath GEOMETRY
-			if level == 1 or level == 2 or level == 3 then
-				eval shadow_color
-				linestyle linewidth
-				stroke
-			endif
+            eval shadow_color
+            linestyle linewidth
+            stroke
 		done
 
 	print "Schatten gezeichnet"
@@ -228,15 +224,15 @@ begin line_feature_rivers file, level
 			fetch
 			clearpath
 			addpath GEOMETRY
-			if level == 1 and ALBINA_1== 1 then
+			if map_level eq "thumbnail" and ALBINA_1== 1 then
 				eval river_line_color
 				eval river_line_1
 				stroke
-			elif level == 2 and ALBINA_2== 1 then
+			elif map_level eq "standard" and ALBINA_2== 1 then
 				eval river_line_color
 				eval river_line_2
 				stroke
-			elif level == 3 and ALBINA_3== 1 then
+			elif map_level eq "overlay" and ALBINA_3== 1 then
 				eval river_line_color
 				eval river_line_3
 				stroke
@@ -259,19 +255,19 @@ begin polygon_feature_lakes file, level
 			fetch
 			clearpath
 			addpath GEOMETRY
-			if level == 1 and ALBINA_1== 1 then
+			if map_level eq "thumbnail" and ALBINA_1== 1 then
 				eval lake_color
 				fill
 				eval lake_line_color
 				eval lake_line
 				stroke
-			elif level == 2 and ALBINA_2== 1 then
+			elif map_level eq "standard" and ALBINA_2== 1 then
 				eval lake_color
 				fill
 				eval lake_line_color
 				eval lake_line
 				stroke
-			elif level == 3 and ALBINA_3== 1 then
+			elif map_level eq "overlay" and ALBINA_3== 1 then
 				eval lake_color
 				fill
 				eval lake_line_color
@@ -306,7 +302,7 @@ begin polygon_feature_euregio file
 					elif colormode eq "col" then
 						eval rest_color
 						fill
-						if level == 1 then
+						if map_level eq "thumbnail" then
 							stroke
 						endif
 					endif
@@ -319,12 +315,12 @@ end
 # --- Gefahrenstufen ---
 # -------------------------------------------------------------
 
-begin polygon_feature_danger_levels file, txtfile, level
+begin polygon_feature_danger_levels file
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
 	blend "Normal"
-	if level >= 2 and bulletin_id ne "overlay" and colormode ne "bw" then
+	if (map_level eq "standard" or map_level eq "overlay") and bulletin_id ne "overlay" and colormode ne "bw" then
 		blend "Multiply"
 	endif
 
@@ -357,32 +353,32 @@ begin polygon_feature_danger_levels file, txtfile, level
 					if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
 						eval danger_color[1]
 						fill
-						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+						if map_level eq "thumbnail" or map_level eq "overlay" then
 							stroke
 						endif
 					elif (danger_h[ALB_ID] eq 2 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 2 then
 						eval danger_color[2]
 						fill
-						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+						if map_level eq "thumbnail" or map_level eq "overlay" then
 							stroke
 						endif
 					elif (danger_h[ALB_ID] eq 3 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 3 then
 						eval danger_color[3]
 						fill
-						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+						if map_level eq "thumbnail" or map_level eq "overlay" then
 							stroke
 						endif
 					elif (danger_h[ALB_ID] eq 4 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 4 then
 						eval danger_color[4]
 						fill
-						if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+						if map_level eq "thumbnail" or map_level eq "overlay" then
 							stroke
 						endif
 						#let dr_4_5 = "yes"
 					elif (danger_h[ALB_ID] eq 5 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 5 then
 						eval danger_color[4]
 						fill
-						if level == 1 then
+						if map_level eq "thumbnail" then
 							CHESSBORD_LWD5_SMALL danger_color[5]
 						else
 							CHESSBORD_LWD5 danger_color[5]
@@ -392,7 +388,7 @@ begin polygon_feature_danger_levels file, txtfile, level
 					elif (danger_h[ALB_ID] eq 0 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 0 then
 						eval danger_color[0]
 						fill
-						if level == 1 then
+						if map_level eq "thumbnail" then
 							stroke
 						endif
 					elif threshold < elevation_h[ALB_ID] then
@@ -401,7 +397,7 @@ begin polygon_feature_danger_levels file, txtfile, level
 						if high_color eq 5 then
 							eval danger_color[4]
 							fill
-							if level == 1 then
+							if map_level eq "thumbnail" then
 								CHESSBORD_LWD5_SMALL danger_color[5]
 							else
 								CHESSBORD_LWD5 danger_color[5]
@@ -410,7 +406,7 @@ begin polygon_feature_danger_levels file, txtfile, level
 						else
 							eval danger_color[high_color]
 							fill
-							if level == 1 or (level == 3 and bulletin_id eq "overlay") then
+							if map_level eq "thumbnail" or map_level eq "overlay" then
 								stroke
 							endif
 						endif
@@ -420,32 +416,32 @@ begin polygon_feature_danger_levels file, txtfile, level
 						if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
 							eval danger_color[1]
 							fill
-							if level == 1 then
+							if map_level eq "thumbnail" then
 								stroke
 							endif
 						elif (danger_h[ALB_ID] eq 2 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 2 then
 							eval danger_color[2]
 							fill
-							if level == 1 then
+							if map_level eq "thumbnail" then
 								stroke
 							endif
 						elif (danger_h[ALB_ID] eq 3 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 3 then
 							eval danger_color[3]
 							fill
-							if level == 1 then
+							if map_level eq "thumbnail" then
 								stroke
 							endif
 						elif (danger_h[ALB_ID] eq 4 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 4 then
 							eval danger_color[4]
 							fill
-							if level == 1 then
+							if map_level eq "thumbnail" then
 								stroke
 							endif
 							#let dr_4_5 = "yes"
 						elif (danger_h[ALB_ID] eq 5 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 5 then
 							eval danger_color[4]
 							fill
-							if level == 1 then
+							if map_level eq "thumbnail" then
 								CHESSBORD_LWD5_SMALL danger_color[5]
 							else
 								CHESSBORD_LWD5 danger_color[5]
@@ -455,7 +451,7 @@ begin polygon_feature_danger_levels file, txtfile, level
 						elif (danger_h[ALB_ID] eq 0 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 0 then
 							eval danger_color[0]
 							fill
-							if level == 1 then
+							if map_level eq "thumbnail" then
 								stroke
 							endif
 						elif threshold < elevation_h[ALB_ID] then
@@ -464,7 +460,7 @@ begin polygon_feature_danger_levels file, txtfile, level
 							if high_color eq 5 then
 								eval danger_color[4]
 								fill
-								if level == 1 then
+								if map_level eq "thumbnail" then
 									CHESSBORD_LWD5_SMALL danger_color[5]
 								else
 									CHESSBORD_LWD5 danger_color[5]
@@ -473,7 +469,7 @@ begin polygon_feature_danger_levels file, txtfile, level
 							else
 								eval danger_color[high_color]
 								fill
-								if level == 1 then
+								if map_level eq "thumbnail" then
 									stroke
 								endif
 							endif
@@ -504,11 +500,11 @@ begin line_feature_regions file, level
 				clearpath
 				addpath GEOMETRY
 				eval reg_line_color
-				if level == 1 then
+				if map_level eq "thumbnail" then
 					eval reg_line_1
-				elif level == 2 then
+				elif map_level eq "standard" then
 					eval reg_line_2
-				elif level == 3 then
+				elif map_level eq "overlay" then
 					eval reg_line_3
 				endif
 				if style == 2150 then
@@ -538,11 +534,11 @@ begin line_feature_country file, level, in_out
 				addpath GEOMETRY
 				eval country_line_color
 				if EUREGIO == in_out then
-					if level == 1 then
+					if map_level eq "thumbnail" then
 						eval country_line_1
-					elif level == 2 then
+					elif map_level eq "standard" then
 						eval country_line_2
-					elif level == 3 then
+					elif map_level eq "overlay" then
 						eval country_line_3
 					endif
 					if style == 2100 then
@@ -572,20 +568,20 @@ begin line_feature_provinces file, level, in_out
 				addpath GEOMETRY
 				eval prov_line_color
 				if EUREGIO == in_out and style == 2110 then
-					if level == 1 then
+					if map_level eq "thumbnail" then
 						eval prov_line_1
-					elif level == 2 then
+					elif map_level eq "standard" then
 						eval prov_line_2
-					elif level == 3 then
+					elif map_level eq "overlay" then
 						eval prov_line_3
 					endif
 					stroke
 				elif EUREGIO == in_out and style == 2111 then
-					if level == 1 then
+					if map_level eq "thumbnail" then
 						eval autonom_line_1
-					elif level == 2 then
+					elif map_level eq "standard" then
 						eval autonom_line_2
-					elif level == 3 then
+					elif map_level eq "overlay" then
 						eval autonom_line_3
 					endif
 					stroke
@@ -713,7 +709,7 @@ begin point_feature_city_marker file, level					#, in_out
 			clearpath
 			addpath GEOMETRY
 			#if EUREGIO == in_out then
-				if (level == 1 and ALBINA_1 == 1) then
+				if (map_level eq "thumbnail" and ALBINA_1 == 1) then
 					if category <= 3 then
 						SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
 						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
@@ -722,7 +718,7 @@ begin point_feature_city_marker file, level					#, in_out
 							LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 						endif
 					endif
-				elif (level == 2 and ALBINA_2 == 1 and bulletin_id ne not_in_map) or (level == 3 and ALBINA_3 == 1) then
+				elif (map_level eq "standard" and ALBINA_2 == 1 and bulletin_id ne not_in_map) or (map_level eq "overlay" and ALBINA_3 == 1) then
 					if category <= 3 then
 						SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
 						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
@@ -761,7 +757,7 @@ begin point_feature_labels file, level
 			fetch
 			clearpath
 			addpath GEOMETRY
-			if (level == 1 and ALBINA_1 == 1) or (level == 2 and ALBINA_2 == 1) or (level == 3 and ALBINA_3 == 1) then
+			if (map_level eq "thumbnail" and ALBINA_1 == 1) or (map_level eq "standard" and ALBINA_2 == 1) or (map_level eq "overlay" and ALBINA_3 == 1) then
 				if style == 5100 then
 					LABEL_POINT country_label_color, font_semibold, country_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 				elif style == 5110 then
@@ -789,7 +785,7 @@ begin line_feature_labels file, level
 			fetch
 			clearpath
 			addpath GEOMETRY
-			if (level == 1 and ALBINA_1 == 1) or (level == 2 and ALBINA_2 == 1) or (level == 3 and ALBINA_3 == 1) then
+			if (map_level eq "thumbnail" and ALBINA_1 == 1) or (map_level eq "standard" and ALBINA_2 == 1) or (map_level eq "overlay" and ALBINA_3 == 1) then
 				if style == 5010 then
 					LABEL_LINE prov_label_color, font_semibold, prov_font_size, label_halo_color, no_label_halo, l_inn_o, l_x_off, l_y_off, l_spacing, label
 				elif style >= 6000 then
@@ -829,7 +825,7 @@ begin point_feature_peaks file, level
 			fetch
 			clearpath
 			addpath GEOMETRY
-			if (level == 1 and ALBINA_1 == 1) or (level == 2 and ALBINA_2 == 1) or (level == 3 and ALBINA_3 == 1) then
+			if (map_level eq "thumbnail" and ALBINA_1 == 1) or (map_level eq "standard" and ALBINA_2 == 1) or (map_level eq "overlay" and ALBINA_3 == 1) then
 				MOUNTAIN peak_scale, peak_color, peak_line_color, peak_line
 				LABEL_POINT peak_label_color, font_semibold_italic, peak_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 				LABEL_POINT peak_label_color, font_semibold_italic, peak_font_size, label_halo_background_color, label_halo_width, h_ext_o, h_inn_o, h_x_off, h_y_off, h_angle, h_spacing, height

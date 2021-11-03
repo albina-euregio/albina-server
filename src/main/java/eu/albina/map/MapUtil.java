@@ -164,7 +164,7 @@ public interface MapUtil {
 	static void createMapyrusMaps(MapType map, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
 								  boolean grayscale, SimpleBindings dangerBindings, Path outputDirectory, boolean preview) throws IOException, MapyrusException, InterruptedException {
 
-		final MapSize size = MapSize.of(map);
+		final MapLevel size = MapLevel.of(map);
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
 		final Path outputFile = outputDirectory.resolve(map.filename(daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
@@ -180,7 +180,7 @@ public interface MapUtil {
 		bindings.put("geodata_dir", mapProductionUrl + "geodata/");
 		bindings.put("image_dir", mapProductionUrl + "images/");
 		bindings.put("region", "Euregio");
-		bindings.put("level", size.ordinal() + 1);
+		bindings.put("map_level", size.name());
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
 		bindings.put("scalebar", MapType.overlay.equals(map) ? "off" : "on");

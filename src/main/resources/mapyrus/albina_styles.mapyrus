@@ -5,11 +5,11 @@
 let level = level
 let pf = 1
 
-if level == 1 then
+if map_level eq "thumbnail" then
 	let zf = 1.0 * pf
-elif level == 2 then
+elif map_level eq "standard" then
 	let zf = 1.0 * pf
-elif level == 3 then
+elif map_level eq "overlay" then
 	let zf = 1.0 * pf
 endif
 
@@ -40,7 +40,7 @@ let danger_color[2] = "color '#FFFF00'"									# gelb
 let danger_color[3] = "color '#FF9900'"									# orange
 let danger_color[4] = "color '#FF0000'"									# rot
 let danger_color[5] = "color '#666666'"									# dunkelgrau
-if level == 1 or bulletin_id eq "overlay" then
+if map_level eq "thumbnail" or bulletin_id eq "overlay" then
 	let danger_color[5] = "color '#660000'"
 endif
 
@@ -78,7 +78,7 @@ if colormode eq "bw" then
 	let danger_color[3] = "color '#B0B0B0'"									# orange
 	let danger_color[4] = "color '#888888'"									# rot
 	let danger_color[5] = "color '#666666'"									# dunkelgrau
-	if level == 1 or bulletin_id eq "overlay" then
+	if map_level eq "thumbnail" or bulletin_id eq "overlay" then
 		let danger_color[5] = "color '#454545'"
 	endif
 	let rest_color = "color '#999999'"
@@ -126,7 +126,7 @@ let lake_line = "linestyle " . 0.1  * zf . ", 'round', 'round'"
 let marker_scale = 0.5 * zf
 let marker_color = "color '#FFFFFF'"
 let marker_line_color = "color '#222222'"
-if level == 1 then
+if map_level eq "thumbnail" then
 	let marker_line_color = "color '#444444'"
 endif
 let marker_line = "linestyle " . 0.25  * zf . ", 'round', 'round'"
@@ -135,7 +135,7 @@ let marker_line = "linestyle " . 0.25  * zf . ", 'round', 'round'"
 let city_label_color = "color '#222222'"
 let cap_city_font_size = 2.2 * zf
 let city_font_size = 1.9 * zf
-if level == 1 then
+if map_level eq "thumbnail" then
 	let label_halo_background_color = "color '#FFFFFF'"
 	let label_halo_width = "outlinewidth=" . 0.0 * zf
 	let label_halo_width5 = "outlinewidth=" . 0.325 * zf
@@ -166,11 +166,11 @@ let label_halo_color = "color '#333333'"
 let no_label_halo = "outlinewidth=" . 0.0 * zf
 
 # Rahmenbreite
-if level == 1 then
+if map_level eq "thumbnail" then
 	let frame_width = 0.1
-elif level == 2 then
+elif map_level eq "standard" then
 	let frame_width = 0.15
-elif level == 3 then
+elif map_level eq "overlay" then
 	let frame_width = 0.2
 endif
 
@@ -185,13 +185,13 @@ let scale_bar_style = "linestyle " . frame_width . ", 'butt', 'round'"
 let scale_font = font_semibold
 
 # Fontsize Maßstab und Copyright
-if level == 1 then
+if map_level eq "thumbnail" then
 	let c_fontsize = 0.8
 	let scale_fontsize = 0.8
-elif level == 2 then
+elif map_level eq "standard" then
 	let c_fontsize = 1.8
 	let scale_fontsize = 2.0
-elif level == 3 then
+elif map_level eq "overlay" then
 	let c_fontsize = 1.8
 	let scale_fontsize = 2.2
 endif
