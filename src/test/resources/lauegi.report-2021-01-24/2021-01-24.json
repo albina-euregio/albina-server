@@ -1,0 +1,260 @@
+[
+	{
+		"$url": "https://api.lauegi.report/api/bulletins?date=2021-01-23T23:00:00Z&regions=ES-CT-L",
+		"id": "4ee8b2bb-9951-447f-97ff-7063a2941ebe",
+		"avActivityHighlightsTextcat": "[{\"curlyName\":\"Flash03\",\"line\":0,\"args\":{\"Flash03§Muster\":{\"curlyName\":\"Flash03§Muster\",\"line\":7,\"args\":{\"Triebschnee3\":{\"curlyName\":\"Triebschnee3\",\"line\":1},\"mehrere_Muster3\":{\"curlyName\":\"mehrere_Muster3\",\"line\":4},\"Hauptgefahr_Höhenlage1\":{\"curlyName\":\"Hauptgefahr_Höhenlage1\",\"line\":0},\"Triebschnee1\":{\"curlyName\":\"Triebschnee1\",\"line\":0},\"Triebschnee2\":{\"curlyName\":\"Triebschnee2\",\"line\":1},\"beachten_meiden_beurteilen1\":{\"curlyName\":\"beachten_meiden_beurteilen1\",\"line\":0},\"mehrere_Muster1\":{\"curlyName\":\"mehrere_Muster1\",\"line\":4},\"Hauptgefahr_Höhenlage3\":{\"curlyName\":\"Hauptgefahr_Höhenlage3\",\"line\":0},\"mehrere_Muster2\":{\"curlyName\":\"mehrere_Muster2\",\"line\":4},\"beachten_meiden_beurteilen3\":{\"curlyName\":\"beachten_meiden_beurteilen3\",\"line\":2}}}}},{\"curlyName\":\"Verhältnisse04\",\"line\":0,\"args\":{\"Verhältnisse04§wo_wann3\":{\"curlyName\":\"Verhältnisse04§wo_wann3\",\"line\":12},\"teils_gefährliche\":{\"curlyName\":\"teils_gefährliche\",\"line\":1,\"args\":{\"zeitweise\":{\"curlyName\":\"zeitweise\",\"line\":1},\"gefährliche\":{\"curlyName\":\"gefährliche\",\"line\":6}}}}}]",
+		"avActivityCommentTextcat": "[{\"curlyName\":\"Triebschnee15\",\"line\":0,\"args\":{\"wann_optional\":{\"curlyName\":\"wann_optional\",\"line\":2,\"args\":{\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":6},\"am_seit_bis\":{\"curlyName\":\"am_seit_bis\",\"line\":1},\"Tag2\":{\"curlyName\":\"Tag2\",\"line\":2},\"Datum\":{\"curlyName\":\"Datum\",\"line\":0},\"Anzahl\":{\"curlyName\":\"Anzahl\",\"line\":0}}},\"warum\":{\"curlyName\":\"warum\",\"line\":0,\"args\":{\"Neuschnee_und\":{\"curlyName\":\"Neuschnee_und\",\"line\":1},\"Wind_Richtung\":{\"curlyName\":\"Wind_Richtung\",\"line\":9},\"zunehmendem\":{\"curlyName\":\"zunehmendem\",\"line\":6}}},\"entstehen\":{\"curlyName\":\"entstehen\",\"line\":1},\"Triebschnee_Beschreibung2\":{\"curlyName\":\"Triebschnee_Beschreibung2\",\"line\":11},\"wo_optional\":{\"curlyName\":\"wo_optional\",\"line\":2,\"args\":{\"an_kammnahen\":{\"curlyName\":\"an_kammnahen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":0},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":0},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":3}}}}},{\"curlyName\":\"Auslösung03\",\"line\":0,\"args\":{\"Auslösung03§Trockene_Lawinen_können\":{\"curlyName\":\"Auslösung03§Trockene_Lawinen_können\",\"line\":3,\"args\":{\"diese=diese-Lawinen\":{\"curlyName\":\"diese=diese-Lawinen\",\"line\":0}}},\"oft\":{\"curlyName\":\"oft\",\"line\":3},\"Belastung\":{\"curlyName\":\"Belastung\",\"line\":4},\"Auslösung03§Grösse\":{\"curlyName\":\"Auslösung03§Grösse\",\"line\":1}}},{\"curlyName\":\"Gefahrenstellen05\",\"line\":0,\"args\":{\"Gefahrenstellen05§Gefahrenstellen\":{\"curlyName\":\"Gefahrenstellen05§Gefahrenstellen\",\"line\":0},\"Gefahrenstellen05§an_Expositionen\":{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":7,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":2},\"steilen\":{\"curlyName\":\"steilen\",\"line\":2},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":0},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":5},\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":1}}},\"Höhe_Höhenlage\":{\"curlyName\":\"Höhe_Höhenlage\",\"line\":7},\"Gefahrenstellen05§und_an\":{\"curlyName\":\"Gefahrenstellen05§und_an\",\"line\":12,\"args\":{\"aller_Expositionen\":{\"curlyName\":\"aller_Expositionen\",\"line\":0},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":0}}}}},{\"curlyName\":\"Gefahrenstellen04\",\"line\":0,\"args\":{\"Höhe_Gebiet\":{\"curlyName\":\"Höhe_Gebiet\",\"line\":5,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"im_Gebiet\":{\"curlyName\":\"im_Gebiet\",\"line\":630},\"und_im_Gebiet\":{\"curlyName\":\"und_im_Gebiet\",\"line\":633},\"im_Gebiet2_optional\":{\"curlyName\":\"im_Gebiet2_optional\",\"line\":0}}},\"und_Höhe_Gebiet\":{\"curlyName\":\"und_Höhe_Gebiet\",\"line\":0},\"diese\":{\"curlyName\":\"diese\",\"line\":1},\"Gefahrenstellen04§häufig\":{\"curlyName\":\"Gefahrenstellen04§häufig\",\"line\":1},\"Gefahrenstellen04§Gefahr_höher.\":{\"curlyName\":\"Gefahrenstellen04§Gefahr_höher.\",\"line\":0}}},{\"curlyName\":\"Zeilenumbruch01\",\"line\":0},{\"curlyName\":\"Zeilenumbruch01\",\"line\":0},{\"curlyName\":\"Triebschnee01\",\"line\":0,\"args\":{\"Triebschnee_Beschreibung1\":{\"curlyName\":\"Triebschnee_Beschreibung1\",\"line\":27},\"vom_Tag\":{\"curlyName\":\"vom_Tag\",\"line\":0,\"args\":{\"Anzahl\":{\"curlyName\":\"Anzahl\",\"line\":0}}},\"Eigenschaft_Triebschnee.\":{\"curlyName\":\"Eigenschaft_Triebschnee.\",\"line\":12,\"args\":{\"schon1\":{\"curlyName\":\"schon1\",\"line\":0},\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":0},\"steilen\":{\"curlyName\":\"steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":1},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":3},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":5},\"Expo°2\":{\"curlyName\":\"Expo°2\",\"line\":6},\"über_Nord\":{\"curlyName\":\"über_Nord\",\"line\":4}}},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":16},\"und\":{\"curlyName\":\"und\",\"line\":1},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":3}}},\"in_Randbereichen3\":{\"curlyName\":\"in_Randbereichen3\",\"line\":1},\"teilweise_noch\":{\"curlyName\":\"teilweise_noch\",\"line\":3},\"teils3\":{\"curlyName\":\"teils3\",\"line\":2}}}}},{\"curlyName\":\"Altschnee04\",\"line\":0,\"args\":{\"Altschnee04§Lawinen_können\":{\"curlyName\":\"Altschnee04§Lawinen_können\",\"line\":0,\"args\":{\"diese=diese-Lawinen\":{\"curlyName\":\"diese=diese-Lawinen\",\"line\":0},\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":1},\"trockene\":{\"curlyName\":\"trockene\",\"line\":0},\"auch1\":{\"curlyName\":\"auch1\",\"line\":1},\"teils\":{\"curlyName\":\"teils\",\"line\":0}}},\"Altschnee04§Altschnee_Durchreissen\":{\"curlyName\":\"Altschnee04§Altschnee_Durchreissen\",\"line\":4},\"Altschnee04§und\":{\"curlyName\":\"Altschnee04§und\",\"line\":1},\"wo_gross_werden\":{\"curlyName\":\"wo_gross_werden\",\"line\":1,\"args\":{\"gross_werden\":{\"curlyName\":\"gross_werden\",\"line\":0},\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":1},\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":6},\"Expo\":{\"curlyName\":\"Expo\",\"line\":7},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":3}}}}},{\"curlyName\":\"Auslösung07\",\"line\":0,\"args\":{\"Auslösung07§möglich.\":{\"curlyName\":\"Auslösung07§möglich.\",\"line\":0},\"Auslösung07§Fernauslösungen_sind\":{\"curlyName\":\"Auslösung07§Fernauslösungen_sind\",\"line\":1}}},{\"curlyName\":\"Gefahrenstellen01\",\"line\":0,\"args\":{\"Gefahrenstellen01§Besonders\":{\"curlyName\":\"Gefahrenstellen01§Besonders\",\"line\":1},\"Gefahrenstellen01§gefährlich\":{\"curlyName\":\"Gefahrenstellen01§gefährlich\",\"line\":0},\"Gefahrenstellen01§Stellen\":{\"curlyName\":\"Gefahrenstellen01§Stellen\",\"line\":2,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0}}},\"Gefahrenstellen01§Problem.\":{\"curlyName\":\"Gefahrenstellen01§Problem.\",\"line\":3}}}]",
+		"snowpackStructureCommentTextcat": "[{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"Exposition\":{\"curlyName\":\"Exposition\",\"line\":4},\"und_im_Exposition\":{\"curlyName\":\"und_im_Exposition\",\"line\":0}}},\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":0},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":1,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":3},\"Zahl°2\":{\"curlyName\":\"Zahl°2\",\"line\":4},\"verbreitet2\":{\"curlyName\":\"verbreitet2\",\"line\":0}}},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":6}}}}},{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":4},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":3},\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0}}},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":0},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":0}}},{\"curlyName\":\"Wetter06\",\"line\":0,\"args\":{\"Wetter06§Der_Wind\":{\"curlyName\":\"Wetter06§Der_Wind\",\"line\":0},\"Wetter06§wie_stark\":{\"curlyName\":\"Wetter06§wie_stark\",\"line\":4,\"args\":{\"teilweise\":{\"curlyName\":\"teilweise\",\"line\":0}}},\"Wetter06§Gebiet0\":{\"curlyName\":\"Wetter06§Gebiet0\",\"line\":2,\"args\":{\"im_Gebiet\":{\"curlyName\":\"im_Gebiet\",\"line\":608},\"im_Gebiet2_optional\":{\"curlyName\":\"im_Gebiet2_optional\",\"line\":0},\"und_im_Gebiet\":{\"curlyName\":\"und_im_Gebiet\",\"line\":0},\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":3}}}}},{\"curlyName\":\"Zeilenumbruch01\",\"line\":0},{\"curlyName\":\"Zeilenumbruch01\",\"line\":0},{\"curlyName\":\"Schneedecke02\",\"line\":0,\"args\":{\"Schneedecke02§oft2\":{\"curlyName\":\"Schneedecke02§oft2\",\"line\":1},\"Schneedecke02§Der_Neuschnee_liegt\":{\"curlyName\":\"Schneedecke02§Der_Neuschnee_liegt\",\"line\":3},\"Schneedecke02§Untergrund.\":{\"curlyName\":\"Schneedecke02§Untergrund.\",\"line\":4}}},{\"curlyName\":\"Schneedecke07\",\"line\":0,\"args\":{\"Beweis\":{\"curlyName\":\"Beweis\",\"line\":7},\"Beweis_optional\":{\"curlyName\":\"Beweis_optional\",\"line\":6},\"bestätigen_bestätigten\":{\"curlyName\":\"bestätigen_bestätigten\",\"line\":0},\"dies_Situation\":{\"curlyName\":\"dies_Situation\",\"line\":7,\"args\":{\"wo_optional2\":{\"curlyName\":\"wo_optional2\",\"line\":11,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":1}}}}}}},{\"curlyName\":\"Zeilenumbruch01\",\"line\":0},{\"curlyName\":\"Zeilenumbruch01\",\"line\":0},{\"curlyName\":\"Empfehlung04\",\"line\":0,\"args\":{\"Touren_erfordern\":{\"curlyName\":\"Touren_erfordern\",\"line\":10},\"Zurückhaltung\":{\"curlyName\":\"Zurückhaltung\",\"line\":5,\"args\":{\"viel2\":{\"curlyName\":\"viel2\",\"line\":1}}}}}]",
+		"tendencyCommentTextcat": "[{\"curlyName\":\"Änderung06\",\"line\":0,\"args\":{\"warum_Ort_wann\":{\"curlyName\":\"warum_Ort_wann\",\"line\":8},\"Änderung06§Anstieg\":{\"curlyName\":\"Änderung06§Anstieg\",\"line\":1},\"Änderung06§Wie_starker\":{\"curlyName\":\"Änderung06§Wie_starker\",\"line\":5},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":1}}}]",
+		"highlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "de"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "oc",
+				"text": "Era nhèu ventada e es coches febles persistentes les cau avalorar damb atencion. Enes pales damb acumulacions de nhèu ventada era situacion de lauegi qu'ei encara delicada."
+			},
+			{
+				"languageCode": "es",
+				"text": "La nieve venteada y las capas débiles persistentes deben evaluarse con atención. En las laderas con acumulaciones de nieve venteada la situación de aludes es aún delicada."
+			},
+			{
+				"languageCode": "en",
+				"text": "Wind slabs and weakly bonded old snow are to be assessed with care and prudence. On wind-loaded slopes a precarious avalanche situation will persist."
+			},
+			{
+				"languageCode": "it",
+				"text": "La neve ventata e la neve vecchia a debole coesione devono essere valutate con attenzione. Sui pendii carichi di neve ventata, la situazione valanghiva è ancora delicata."
+			},
+			{
+				"languageCode": "ca",
+				"text": "La neu ventada i les capes febles persistents han de ser avaluades amb atenció. Als vessants amb acumulacions de neu ventada la situació d'allaus és encara delicada."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Neige soufflée et neige ancienne fragile à évaluer avec précaution. Sur les versants où s'est accumulée la neige soufflée situation avalancheuse toujours délicate."
+			},
+			{
+				"languageCode": "de",
+				"text": "Triebschnee und schwachen Altschnee vorsichtig beurteilen. An Triebschneehängen weiterhin heikle Lawinensituation."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "ca",
+				"text": "Durant els darrers dies, amb la neu recent i el vent de direcció variable de moderat a fort , s'han format plaques de vent inestables en totes les orientacions. Aquestes poden en alguns indrets ser desencadenades al pas d'un muntanyenc i assolir mida mitjana. Els indrets perillosos es troben sobretot en terreny inclinat a cotes miges i altes i també prop de carenes, en canals i cubetes. A les valls de Molières i Conangles i a les valls que limiten amb l’Ésera i la Ribagorçana, aquests indrets perillosos són més freqüents. <br/> <br/> Les plaques de vent més antigues poden, de manera aïllada, desencadenar-se al pas d'un sol muntanyenc en totes les orientacions per sobre dels 2000 m aproximadament, especialment als seus marges. Les allaus poden desencadenar-se a les capes més profundes i atènyer mides mitjanes. De manera aïllada són possibles desencadenaments a distància i allaus naturals. Són especialment perillosos els indrets de pas de poca a molta neu, on les capes dures descansen sobre un mantell de neu vella feblement consolidat."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Damb era nhèu recenta e eth vent de moderat a fòrt de direccion variabla , ath long des darrèri dies, en totes es orientacions s'an format inestables. Aguestes pòden en quauqui endrets desencadenar-se ath pas d'un montanhaire e arténher mida mejana. Es endrets perilhosi se tròben sustot en terren arribent en còtes mejanes e nautes e tanben apròp de crestes, en canaus e conques. Enes vals de Molières e Conangles e enes zònes dehòra de pista dera estacion d’esquí, aguesti endrets perilhosi son mès freqüenti. <br/> <br/> Es plaques de vent mès antigues se pòden desencadenar, de manèra isolada, ath pas d'un unic montanhaire en totes es orientacions per dessús des 2000 m aproximativament, especiaument enes sòns marges. Es lauegi pòden desencadenar-se enes coches mès pregones e arténher mides mejanes. De manèra isolada son possibles desencadenaments a distància e lauegi naturaus. Especiaument perilhosi son es endrets de pas de pòca a molta nhèu, a on es coches dures repòsen sus un mantèth de nhèu vielha feblament consolidat."
+			},
+			{
+				"languageCode": "en",
+				"text": "As a consequence of new snow and a moderate to strong wind from variable directions, avalanche prone wind slabs formed in the last few days in all aspects. These can in some places be released by a single winter sport participant and reach medium size. The avalanche prone locations are to be found in particular in steep terrain at intermediate and high altitudes and adjacent to ridgelines and in gullies and bowls. In the valleys of Molières and Conangles and in the valleys of Ruda, Aiguamòg and Valarties these avalanche prone locations are more prevalent. <br/> <br/> The older wind slabs can be released by a single winter sport participant in isolated cases in all aspects above approximately 2000 m, especially at their margins. Avalanches can be triggered in deep layers and reach medium size. Remotely triggered and natural avalanches are possible in isolated cases. Transitions from a shallow to a deep snowpack where hard layers are lying on a weakly bonded old snowpack are especially dangerous."
+			},
+			{
+				"languageCode": "de",
+				"text": "Mit Neuschnee und mäßigem bis starkem Wind aus wechselnden Richtungen entstanden in den letzten Tagen an allen Expositionen störanfällige Triebschneeansammlungen. Diese können stellenweise von einzelnen Wintersportlern ausgelöst werden und mittlere Größe erreichen. Die Gefahrenstellen liegen vor allem im Steilgelände in mittleren und hohen Lagen sowie in Kammlagen, Rinnen und Mulden. Im Molières- und Conanglestal und in Gebieten abseits der Pisten des Skiegebiets sind diese Gefahrenstellen häufiger. <br/> <br/> Die älteren Triebschneeansammlungen können an allen Expositionen oberhalb von rund 2000 m vereinzelt von einzelnen Wintersportlern ausgelöst werden, besonders in ihren Randbereichen. Lawinen können in tiefen Schichten anreißen und mittlere Größe erreichen. Fernauslösungen und spontane Lawinen sind vereinzelt möglich. Besonders gefährlich sind Übergänge von wenig zu viel Schnee, wo harte Schichten auf schwach verfestigtem Altschnee liegen."
+			},
+			{
+				"languageCode": "it",
+				"text": "Con neve fresca e vento da moderato a forte proveniente da direzioni vartiabili negli ultimi giorni a tutte le esposizioni si sono formati accumuli di neve ventata instabili. Queste possono in alcuni punti distaccarsi in seguito al passaggio di un singolo appassionato di sport invernali e raggiungere dimensioni medie. I punti pericolosi si trovano soprattutto nelle zone ripide alle quote medie e alte come pure nelle zone in prossimità delle creste, nei canaloni e nelle conche. Nelle valli di Molières e Conangles e nelle zone di fuoripista del comprensorio sciistico, questi punti pericolosi sono più frequenti. <br/> <br/> Gli accumuli di neve ventata meno recenti possono, a livello isolato, subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali a tutte le esposizioni al di sopra dei 2000 m circa, soprattutto nelle zone marginali. Le valanghe possono distaccarsi negli strati più profondi e raggiungere dimensioni medie. A livello isolato sono possibili distacchi a distanza e valanghe spontanee. Particolarmente pericolosi sono i punti di passaggio da poca a molta neve, dove strati duri poggiano su un manto di neve vecchia debolmente consolidato."
+			},
+			{
+				"languageCode": "es",
+				"text": "Durante los últimos días, con la nieve reciente y el viento de moderado a fuerte de dirección variable , se han formado placas de viento inestables en todas las orientaciones. Estos pueden en algunos lugares ser desencadenadas al paso de un montañero y alcanzar un tamaño mediano. Los lugares peligrosos se encuentran sobre todo en terreno inclinado en cotas medias y altas y cerca de cordales, en canales y cubetas. En los valles de Molières y Conangles y en las zonas de fuera pista de la estación de esquí, estos lugares peligrosos son más frecuentes. <br/> <br/> Las placas de viento más antiguas pueden, de manera aislada, desencadenarse al paso de un solo montañero en todas las orientaciones por encima de los 2000 m aproximadamente, especialmente en los márgenes. Los aludes pueden desencadenarse en las capas más profundas y alcanzar tamaños medianos. De manera aislada son posibles desencadenamientos a distancia y aludes naturales. Son especialmente peligrosas las zonas de transición de poca a mucha nieve, donde las capas duras descansan sobre un manto de nieve antigua débilmente consolidado."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Des accumulations de neige soufflée susceptibles d'être déclenchées se sont formées avec la neige fraîche et le vent de direction variable modéré à fort dans les derniers jours à toutes les expositions. Celles-ci peuvent par endroits être déclenchées par un seul amateur de sports d'hiver et atteindre une taille moyenne. Les endroits dangereux se situent surtout en terrain raide à moyenne et haute altitude ainsi que près des crêtes, combes et couloirs. Dans les vallées de Molières et Conangles et dans les vallées que limitent avec l'Ésera et l'Haute Garonne ces endroits dangereux sont plus fréquents. <br/> <br/> Les accumulations de neige soufflée relativement anciennes peuvent être déclenchées de manière isolée par un seul amateur de sports d'hiver à toutes les expositions au-dessus d'environ 2000 m, surtout à leur périphérie. Des avalanches peuvent se déclencher dans les couches profondes du manteau neigeux et atteindre une taille moyenne. Des déclenchements à distance et des avalanches spontanées sont possibles de manière isolée. Ce sont les transitions entre les endroits peu enneigés et les endroits très enneigés où des couches dures reposent sur une neige ancienne mal consolidée qui sont particulièrement dangereuses."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "ca"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "de",
+				"text": "Es fielen verbreitet oberhalb von rund 1800 m 10 bis 15 cm Schnee, lokal bis zu 25 cm. Es fallen oberhalb von rund 1300 m 10 cm Schnee. Der Wind blies besonders auf den Gipfeln und Kämmen im Gebiet des Esera - Rigoraçana Grenzkamms mäßig. <br/> <br/> Verschiedene Triebschneeschichten liegen verbreitet auf grobkörnigem Altschnee. Lawinenabgänge und Stabilitätstests bestätigen den vor allem in Kammlagen aller Expositionen ungünstigen Schneedeckenaufbau. <br/> <br/> Die aktuelle Lawinensituation erfordert viel Erfahrung in der Beurteilung der Lawinengefahr und eine vorsichtige Routenwahl."
+			},
+			{
+				"languageCode": "ca",
+				"text": "En una zona àmplia han caigut de 10 a 15 cm de neu per sobre dels 1800 m aproximadament, localment fins a 25 cm. Es preveuen 10 cm de neu per sobre dels 1300 m aproximadament. El vent ha estat moderat especialment als cims i les carenes de la divisòria amb l’Ésera i la Rigoraçana. <br/> <br/> En molts indrets diverses capes de neu ventada descansen a sobre d'un mantell de neu vella de cristalls grossos i angulosos. Els desencadenaments d'allaus i els tests d'estabilitat confirmen l'estructura desfavorable del mantell de neu sobretot als vessants prop de les carenes de totes les orientacions. <br/> <br/> L'actual situació d'allaus requereix molta experiència en l'avaluació del perill d'allaus i una curosa sel·lecció de l'itinerari."
+			},
+			{
+				"languageCode": "it",
+				"text": "In molte regioni sono caduti da 10 a 15 cm di neve al di sopra dei 1800 m circa, localmente sino a 25 cm. Cadranno 10 cm di neve al di sopra dei 1300 m circa. Principalmente sulle cime e crinali della cresta di confine con l’Ésera e la Rigoraçana, il vento è stato moderato. <br/> <br/> In molti punti diversi strati di neve ventata poggiano su un manto di neve vecchia a grani grossi. I distacchi di valanghe e i test di stabilità confermano la sfavorevole struttura del manto nevoso soprattutto sui pendii in prossimità delle creste esposti in tutte le direzioni. <br/> <br/> L'attuale situazione valanghiva richiede molta esperienza nella valutazione del pericolo di valanghe e una prudente scelta dell'itinerario."
+			},
+			{
+				"languageCode": "en",
+				"text": "Over a wide area 10 to 15 cm of snow, and up to 25 cm in some localities, has fallen above approximately 1800 m. 10 cm of snow will fall above approximately 1300 m. The wind was moderate especially on the peaks and ridges of the divide with the Esera basin and the Rigorçana basin. <br/> <br/> Over a wide area various wind slab layers are lying on old snow containing large grains. Released avalanches and stability tests confirm the unfavourable bonding of the snowpack in particular adjacent to ridgelines in all aspects. <br/> <br/> The current avalanche situation calls for extensive experience in the assessment of avalanche danger and careful route selection."
+			},
+			{
+				"languageCode": "oc",
+				"text": "En ua zòna grana an queigut de 10 a 15 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 25 cm. Queiràn 10 cm de nhèu per dessús des 1300 m aproximativament. Especiaument enes soms e es crestes der aiguavèrs damb er Ésera e era Ribagorçana eth vent a estat moderat. <br/> <br/> En fòrça endrets diuèrses coches de nhèu ventada arrepòsen ath dessús d'un mantèth de nhèu vielha de cristaus gròssi e angulosi. Es desencadenaments de lauegi e es tèsti d'estabilitat confirmen era estructura desfavorabla deth mantèth de nhèu sustot enes pales apròp des crestes de totes es orientacions. <br/> <br/> Era actuau situacion de lauegi requerís fòrça experiéncia ena avaloracion deth perilh de lauegi e ua seleccion suenhada der itinerari."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Il est tombé en général au-dessus d'environ 1800 m de 10 à 15 cm de neige, localement jusqu'à 25 cm. Il tombe au-dessus d'environ 1300 m 10 cm de neige. Le vent a soufflé modérément spécialement aux sommets et les crêtes de la divisoire avec l'Ésera et la Ribagorçana. <br/> <br/> Différentes couches de neige soufflée reposent en général sur une neige ancienne à gros grains. Les départs d'avalanches et les tests de stabilité confirment la structure défavorable du manteau neigeux surtout à proximité des crêtes à toutes expositions. <br/> <br/> La situation avalancheuse actuelle demande beaucoup d' expérience dans l'évaluation du danger d'avalanche et un choix prudent des itinéraires."
+			},
+			{
+				"languageCode": "es",
+				"text": "En una zona amplia se han acumulado de 10 a 15 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 25 cm. Se prevén 10 cm de nieve por encima de los 1300 m aproximadamente. El viento ha soplado moderado especialmente en las cumbres y los cordales de la divisoria con el Ésera y la Ribagorçana. <br/> <br/> En muchos lugares diversas capas de nieve venteada descansan encima de un manto de nieve antiguo de cristales grandes y angulosos. Los desencadenamientos de aludes y los tests de estabilidad confirman la estructura desfavorable del manto de nieve sobre todo en las laderas cercanas a los cordales de todas las orientaciones. <br/> <br/> La actual situación de aludes requiere mucha experiencia en la evaluación del peligro de aludes y una cuidadosa elección del itinerario."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "es",
+				"text": "Con la atenuación de las precipitaciones, progresivo descenso del peligro de aludes."
+			},
+			{
+				"languageCode": "en",
+				"text": "Gradual decrease in avalanche danger as the precipitation eases."
+			},
+			{
+				"languageCode": "it",
+				"text": "Con l'attenuarsi delle precipitazioni, progressivo calo del pericolo di valanghe."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Diminution progressive du danger d'avalanches avec la diminution des précipitations."
+			},
+			{
+				"languageCode": "de",
+				"text": "Allmählicher Rückgang der Lawinengefahr mit dem Abklingen des Niederschlags."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Amb l'atenuació de les precipitacions, afebliment progressiu del perill d'allaus."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Damb era atenuacion des precipitacions, progressiu afebliment deth perilh de lauegi."
+			}
+		],
+		"tendency": "steady",
+		"publicationDate": "2021-01-23T16:00:00Z",
+		"validity": {
+			"from": "2021-01-23T23:00:00Z",
+			"until": "2021-01-24T23:00:00Z"
+		},
+		"regions": [
+			"ES-CT-L-02",
+			"ES-CT-L-03",
+			"ES-CT-L-01"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "3ca32ba8-2a4a-4e19-bb5d-f8dd87b5b3d3",
+			"hasElevationDependency": true,
+			"elevation": 2000,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "moderate",
+			"avalancheSituation1": {
+				"avalancheSituation": "wind_drifted_snow",
+				"aspects": [
+					"NW",
+					"SW",
+					"E",
+					"S",
+					"W",
+					"SE",
+					"N",
+					"NE"
+				],
+				"elevationLow": 2000,
+				"matrixInformation": {
+					"artificialDangerRating": "considerable",
+					"artificialAvalancheSize": "medium",
+					"artificialAvalancheReleaseProbability": "three",
+					"artificialHazardSiteDistribution": "many",
+					"naturalDangerRating": "moderate",
+					"naturalAvalancheReleaseProbability": "one",
+					"naturalHazardSiteDistribution": "some"
+				}
+			},
+			"avalancheSituation2": {
+				"avalancheSituation": "persistent_weak_layers",
+				"aspects": [
+					"NW",
+					"SW",
+					"E",
+					"S",
+					"W",
+					"SE",
+					"N",
+					"NE"
+				],
+				"elevationLow": 2000,
+				"matrixInformation": {
+					"artificialDangerRating": "moderate",
+					"artificialAvalancheSize": "medium",
+					"artificialAvalancheReleaseProbability": "two",
+					"artificialHazardSiteDistribution": "many"
+				}
+			},
+			"avalancheSituation3": {
+				"avalancheSituation": "new_snow",
+				"aspects": [
+					"NW",
+					"SW",
+					"E",
+					"S",
+					"W",
+					"SE",
+					"N",
+					"NE"
+				],
+				"matrixInformation": {
+					"artificialDangerRating": "moderate",
+					"artificialAvalancheSize": "small",
+					"artificialAvalancheReleaseProbability": "three",
+					"artificialHazardSiteDistribution": "many",
+					"naturalDangerRating": "moderate",
+					"naturalAvalancheReleaseProbability": "one",
+					"naturalHazardSiteDistribution": "some"
+				}
+			}
+		}
+	}
+]

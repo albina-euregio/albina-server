@@ -7,10 +7,14 @@ import java.util.*;
 
 enum MapType {
 	euregio(GlobalVariables.codeEuregio, 1464000, 1104000, 6047000, 5687000),
+	aran(GlobalVariables.codeAran, 120500, 66200, 5266900, 5215700),
 	tyrol(GlobalVariables.codeTyrol, 1452000, 1116000, 6053000, 5829000),
 	southtyrol(GlobalVariables.codeSouthTyrol, 1400000, 1145000, 5939000, 5769000),
 	trentino(GlobalVariables.codeTrentino, 1358000, 1133000, 5842000, 5692000);
 
+	/**
+	 * Bounding box in https://epsg.io/3395
+	 */
 	MapType(String region, int xmax, int xmin, int ymax, int ymin) {
 		this.region = region;
 		this.xmax = xmax;
@@ -39,11 +43,26 @@ enum MapType {
 			mapTypes.add(euregio);
 			mapTypes.add(trentino);
 		}
+		if (GlobalVariables.isPublishBulletinsAran()) {
+			mapTypes.add(aran);
+		}
 		return mapTypes;
 	}
 
+	String geodata() {
+		if (this == MapType.aran) {
+			return GlobalVariables.getMapProductionUrl() + "geodata.Aran/";
+		} else {
+			return GlobalVariables.getMapProductionUrl() + "geodata.Euregio/";
+		}
+	}
+
 	String region() {
-		return "Euregio";
+		if (this == MapType.aran) {
+			return "Aran";
+		} else {
+			return "Euregio";
+		}
 	}
 
 	double width(MapLevel mapLevel) {
@@ -72,6 +91,15 @@ enum MapType {
 						return "albina_thumbnail";
 					case overlay:
 						return "overlay";
+				}
+			case aran:
+				switch (mapLevel) {
+					case standard:
+						return "aran_map";
+					case thumbnail:
+						return "aran_thumbnail";
+					case overlay:
+						return "aran_overlay";
 				}
 			default:
 				return null;

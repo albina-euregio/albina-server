@@ -36,6 +36,7 @@ public class MapUtilTest {
 		GlobalVariables.loadConfigProperties();
 		GlobalVariables.mapsPath = folder.toString();
 		GlobalVariables.mapProductionUrl = "../avalanche-warning-maps/";
+		GlobalVariables.pdfDirectory = GlobalVariables.mapsPath;
 	}
 
 	@Test
@@ -70,6 +71,19 @@ public class MapUtilTest {
 				GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
 			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 		}
+	}
+
+	@Test
+	public void testMapyrusMapsAran() throws Exception {
+		assumeMapsPath();
+		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		MapUtil.createMapyrusMaps(bulletins);
+
+		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_aran_thumbnail.png"));
+		BufferedImage actual = ImageIO.read(new File(
+			GlobalVariables.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_aran_thumbnail.png"));
+		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 	}
 
 	@Test
