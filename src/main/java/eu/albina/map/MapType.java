@@ -33,6 +33,29 @@ enum MapType {
 	final int ymax;
 	final int ymin;
 
+	String region() {
+		return "Euregio";
+	}
+
+	MapLevel mapLevel() {
+		switch (this) {
+			case overlay:
+				return MapLevel.overlay;
+			case fullmap_small:
+				return MapLevel.thumbnail;
+			default:
+				return MapLevel.standard;
+		}
+	}
+
+	double width() {
+		return mapLevel().width;
+	}
+
+	double height() {
+		return mapLevel().width / aspectRatio();
+	}
+
 	double aspectRatio() {
 		return ((double) xmax - (double) xmin) / ((double) ymax - (double) ymin);
 	}
