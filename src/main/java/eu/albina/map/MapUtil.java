@@ -22,8 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.script.SimpleBindings;
@@ -61,7 +60,7 @@ public interface MapUtil {
 	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
 			boolean grayscale) {
 		final DaytimeDependency daytimeDependency = DaytimeDependency.of(isAfternoon, hasDaytimeDependency);
-		return MapType.forRegion(region).orElse(MapType.fullmap).filename(daytimeDependency, null, grayscale, MapImageFormat.jpg);
+		return MapType.forRegion(region).orElse(MapType.euregio).filename(MapLevel.standard, daytimeDependency, null, grayscale, MapImageFormat.jpg);
 	}
 
 	/**
@@ -140,20 +139,24 @@ public interface MapUtil {
 			try {
 				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, preview);
 				if (!preview) {
-					for (MapType map : MapType.values()) {
-						createMapyrusMaps(map, daytimeDependency, null, false, bindings, outputDirectory, preview);
-						createMapyrusMaps(map, daytimeDependency, null, true, bindings, outputDirectory, preview);
+					for (MapType map : MapType.forGlobalVariablesPublishBulletins()) {
+						final MapLevel[] mapLevels = MapType.euregio.equals(map) ? MapLevel.values() : new MapLevel[]{MapLevel.standard};
+						for (MapLevel mapLevel : mapLevels) {
+							createMapyrusMaps(map, mapLevel, daytimeDependency, null, false, bindings, outputDirectory, preview);
+							createMapyrusMaps(map, mapLevel, daytimeDependency, null, true, bindings, outputDirectory, preview);
+						}
 					}
 				} else {
-					createMapyrusMaps(MapType.fullmap, daytimeDependency, null, false, bindings, outputDirectory, preview);
+					createMapyrusMaps(MapType.euregio, MapLevel.standard, daytimeDependency, null, false, bindings, outputDirectory, preview);
 				}
 				for (final AvalancheBulletin bulletin : bulletins) {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					createMapyrusMaps(MapType.fullmap_small, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
-					if (!preview)
-						createMapyrusMaps(MapType.fullmap_small, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
+					createMapyrusMaps(MapType.euregio, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
+					if (!preview) {
+						createMapyrusMaps(MapType.euregio, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
+					}
 				}
 			} catch (IOException | MapyrusException | InterruptedException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
@@ -161,11 +164,11 @@ public interface MapUtil {
 		}
 	}
 
-	static void createMapyrusMaps(MapType map, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
+	static void createMapyrusMaps(MapType map, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
 								  boolean grayscale, SimpleBindings dangerBindings, Path outputDirectory, boolean preview) throws IOException, MapyrusException, InterruptedException {
 
 		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
-		final Path outputFile = outputDirectory.resolve(map.filename(daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
+		final Path outputFile = outputDirectory.resolve(map.filename(mapLevel, daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		bindings.put("xmax", map.xmax);
 		bindings.put("xmin", map.xmin);
@@ -173,17 +176,17 @@ public interface MapUtil {
 		bindings.put("ymin", map.ymin);
 		bindings.put("image_type", "pdf");
 		bindings.put("mapFile", outputFile);
-		bindings.put("pagesize_x", map.width());
-		bindings.put("pagesize_y", map.height());
+		bindings.put("pagesize_x", map.width(mapLevel));
+		bindings.put("pagesize_y", map.height(mapLevel));
 		bindings.put("geodata_dir", mapProductionUrl + "geodata/");
 		bindings.put("image_dir", mapProductionUrl + "images/");
 		bindings.put("region", map.region());
-		bindings.put("map_level", map.mapLevel().name());
+		bindings.put("map_level", mapLevel.name());
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
-		bindings.put("scalebar", MapType.overlay.equals(map) ? "off" : "on");
-		bindings.put("copyright", MapType.overlay.equals(map) ? "off" : "on");
-		bindings.put("logo", MapType.fullmap.equals(map) ? "on" : "off");
+		bindings.put("scalebar", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
+		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
+		bindings.put("logo", MapLevel.standard.equals(mapLevel) ? "on" : "off");
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : map.name());
 		bindings.putAll(dangerBindings);
 
@@ -201,7 +204,7 @@ public interface MapUtil {
 		mapyrus.interpret(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
 		mapyrus.interpret(Resources.getResource("mapyrus/albina_functions.mapyrus"));
 		mapyrus.interpret(Resources.getResource("mapyrus/albina_styles.mapyrus"));
-		if (MapType.overlay.equals(map)) {
+		if (MapLevel.overlay.equals(mapLevel)) {
 			mapyrus.interpret(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
 		} else {
 			if (bulletin != null) {
@@ -214,16 +217,16 @@ public interface MapUtil {
 		}
 
 		final Path outputFilePng = MapImageFormat.png.convertFrom(outputFile);
-		if (MapType.overlay.equals(map)) {
+		if (MapLevel.overlay.equals(mapLevel)) {
 			MapImageFormat.pngTransparent.convertFrom(outputFilePng);
 		}
 
 		MapImageFormat.jpg.convertFrom(outputFilePng);
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletin == null) {
 			// create combined am/pm maps
-			final String amFile = outputDirectory.resolve(map.filename(DaytimeDependency.am, null, grayscale, MapImageFormat.jpg)).toString();
-			final String pmFile = outputDirectory.resolve(map.filename(DaytimeDependency.pm, null, grayscale, MapImageFormat.jpg)).toString();
-			final String fdFile = outputDirectory.resolve(map.filename(DaytimeDependency.fd, null, grayscale, MapImageFormat.jpg)).toString();
+			final String amFile = outputDirectory.resolve(map.filename(mapLevel, DaytimeDependency.am, null, grayscale, MapImageFormat.jpg)).toString();
+			final String pmFile = outputDirectory.resolve(map.filename(mapLevel, DaytimeDependency.pm, null, grayscale, MapImageFormat.jpg)).toString();
+			final String fdFile = outputDirectory.resolve(map.filename(mapLevel, DaytimeDependency.fd, null, grayscale, MapImageFormat.jpg)).toString();
 			logger.info("Combining {} and {} to {}", amFile, pmFile, fdFile);
 			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
