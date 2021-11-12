@@ -151,12 +151,12 @@ public class EmailUtil {
 	}
 
 	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
-		logger.debug("Sending bulletin email in " + lang + " for " + region + "...");
+		logger.info("Sending bulletin email in " + lang + " for " + region + "...");
 		return sendEmail(lang, region, emailHtml, subject);
 	}
 
 	public HttpResponse sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
-		logger.debug("Sending blog post email in " + lang + " for " + region + "...");
+		logger.info("Sending blog post email in " + lang + " for " + region + "...");
 		return sendEmail(lang, region, emailHtml, subject);
 	}
 
