@@ -126,33 +126,7 @@ public class PdfUtil {
 		}
 
 		try {
-			String filename;
-
-			if (region.equals(GlobalVariables.codeEuregio)) {
-				if (grayscale) {
-					filename = pdfPath + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
-							+ "_bw.pdf";
-				} else {
-					filename = pdfPath + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
-							+ ".pdf";
-				}
-			} else {
-				if (grayscale) {
-					filename = pdfPath + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
-							+ lang.toString() + "_bw.pdf";
-				} else {
-					filename = pdfPath + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
-							+ lang.toString() + ".pdf";
-				}
-			}
+			String filename = getFilename(lang, region, grayscale, validityDateString, publicationTimeString, pdfPath);
 
 			File file = new File(filename);
 			if (file.createNewFile())
@@ -205,6 +179,20 @@ public class PdfUtil {
 			} catch (IOException e) {
 				logger.warn("PDF writer could not be closed!", e);
 			}
+		}
+	}
+
+	private String getFilename(LanguageCode lang, String region, boolean grayscale, String validityDateString, String publicationTimeString, String pdfPath) {
+		if (region.equals(GlobalVariables.codeEuregio)) {
+			return pdfPath + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
+							+ (grayscale ? "_bw" : "") + ".pdf";
+		} else {
+			return pdfPath + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
+							+ lang.toString() + (grayscale ? "_bw" : "") + ".pdf";
 		}
 	}
 
