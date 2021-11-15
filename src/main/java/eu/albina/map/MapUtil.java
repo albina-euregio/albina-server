@@ -75,12 +75,12 @@ public interface MapUtil {
 	 * @throws Exception
 	 *             an error occurred during map production
 	 */
-	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) throws Exception {
+	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Regions regions, boolean preview) throws Exception {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());
 		try {
-			createMapyrusMaps(bulletins, regions, publicationTime, preview);
+			createMapyrusMaps(bulletins, regions, preview);
 		} catch (Exception ex) {
 			logger.error("Failed to create mapyrus maps", ex);
 			throw ex;
@@ -109,7 +109,9 @@ public interface MapUtil {
 		return simpleBindings;
 	}
 
-	static Path getOutputDirectory(String publicationTime, String validityDateString, boolean preview) {
+	static Path getOutputDirectory(List<AvalancheBulletin> bulletins, boolean preview) {
+		final String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		final String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 		final Path outputDirectory;
 		if (preview) {
 			outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTime);
@@ -126,8 +128,8 @@ public interface MapUtil {
 		return outputDirectory;
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions, String publicationTime, boolean preview) {
-		final Path outputDirectory = getOutputDirectory(publicationTime, AlbinaUtil.getValidityDateString(bulletins), preview);
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Regions regions, boolean preview) {
+		final Path outputDirectory = getOutputDirectory(bulletins, preview);
 		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(bulletins)) {
 			try {
 				final Path regionFile = outputDirectory.resolve(daytimeDependency + "_regions.json");

@@ -464,7 +464,7 @@ public class AvalancheBulletinService {
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
 
-			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions(), publicationTimeString, true);
+			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions(), true);
 
 			PdfUtil.getInstance().createPdf(bulletins, language, GlobalVariables.codeEuregio, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 						publicationTimeString, true);

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import eu.albina.ImageTestUtils;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import org.junit.Assume;
 import org.junit.Before;
@@ -68,7 +67,7 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
+		MapUtil.createMapyrusMaps(bulletins, regions, false);
 
 		for (String name : Arrays.asList("fd_albina_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
@@ -84,7 +83,7 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), true);
+		MapUtil.createMapyrusMaps(bulletins, regions, true);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		BufferedImage actual = ImageIO.read(new File(
@@ -99,7 +98,7 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
+		MapUtil.createMapyrusMaps(bulletins, regions, false);
 	}
 
 	@Test
@@ -109,7 +108,7 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
+		MapUtil.createMapyrusMaps(bulletins, regions, false);
 	}
 
 	@Test
@@ -119,7 +118,7 @@ public class MapUtilTest {
 		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, AlbinaUtil.getPublicationTime(bulletins), false);
+		MapUtil.createMapyrusMaps(bulletins, regions, false);
 	}
 
 	@Test
