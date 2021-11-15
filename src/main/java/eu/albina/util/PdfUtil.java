@@ -108,8 +108,8 @@ public class PdfUtil {
 		return instance;
 	}
 
-	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
-			boolean daytimeDependency, String validityDateString, String publicationTimeString, boolean preview) {
+	public void createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
+			boolean daytimeDependency, String validityDateString, String publicationTimeString, boolean preview) throws IOException {
 		String pdfPath;
 		String mapsPath;
 		if (preview) {
@@ -148,10 +148,8 @@ public class PdfUtil {
 			}
 
 			AlbinaUtil.setFilePermissions(filename);
-			return true;
-		} catch (com.itextpdf.io.IOException | IOException e) {
-			logger.error("PDF could not be created", e);
-			return false;
+		} catch (com.itextpdf.io.IOException e) {
+			throw new IOException(e);
 		}
 	}
 
@@ -187,28 +185,26 @@ public class PdfUtil {
 	 * @param validityDateString
 	 *            the start of the validity of the report
 	 */
-	public boolean createRegionPdfs(List<AvalancheBulletin> bulletins, String region, String validityDateString,
-			String publicationTimeString) {
+	public void createRegionPdfs(List<AvalancheBulletin> bulletins, String region, String validityDateString, String publicationTimeString) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
-		boolean result = true;
 
 		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			if (avalancheBulletin.affectsRegionOnlyPublished(region))
 				regionBulletins.add(avalancheBulletin);
 		}
+		if (regionBulletins.isEmpty()) {
+			return;
+		}
 
-		if (!regionBulletins.isEmpty())
-			for (LanguageCode lang : LanguageCode.ENABLED) {
-				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString,
-						publicationTimeString, false))
-					result = false;
-				if (!createPdf(regionBulletins, lang, region, true, daytimeDependency, validityDateString,
-						publicationTimeString, false))
-					result = false;
+		for (LanguageCode lang : LanguageCode.ENABLED) {
+			try {
+				createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString, publicationTimeString, false);
+				createPdf(regionBulletins, lang, region, true, daytimeDependency, validityDateString, publicationTimeString, false);
+			} catch (IOException e) {
+				logger.error("PDF could not be created", e);
 			}
-
-		return result;
+		}
 	}
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
