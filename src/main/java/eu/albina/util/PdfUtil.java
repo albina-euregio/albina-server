@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -111,10 +110,6 @@ public class PdfUtil {
 
 	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
 			boolean daytimeDependency, String validityDateString, String publicationTimeString, boolean preview) {
-		Document document = null;
-		PdfDocument pdf = null;
-		PdfWriter writer = null;
-
 		String pdfPath;
 		String mapsPath;
 		if (preview) {
@@ -124,18 +119,11 @@ public class PdfUtil {
 			pdfPath = GlobalVariables.getPdfDirectory();
 			mapsPath = GlobalVariables.getMapsPath();
 		}
+		String filename = getFilename(lang, region, grayscale, validityDateString, publicationTimeString, pdfPath);
 
-		try {
-			String filename = getFilename(lang, region, grayscale, validityDateString, publicationTimeString, pdfPath);
-
-			File file = new File(filename);
-			if (file.createNewFile())
-				logger.debug("File " + filename + " created.");
-			else
-				logger.debug("File " + filename + " already exists.");
-
-			writer = new PdfWriter(filename, new WriterProperties().addXmpMetadata());
-			pdf = new PdfDocument(writer);
+		try (PdfWriter writer = new PdfWriter(filename, new WriterProperties().addXmpMetadata());
+			 PdfDocument pdf = new PdfDocument(writer);
+			 Document document = new Document(pdf)) {
 			pdf.setTagged();
 			pdf.getCatalog().setLang(new PdfString(lang.toString()));
 			pdf.getCatalog().setViewerPreferences(new PdfViewerPreferences().setDisplayDocTitle(true));
@@ -147,7 +135,6 @@ public class PdfUtil {
 
 			pdf.addEventHandler(PdfDocumentEvent.END_PAGE,
 					new AvalancheBulletinEventHandler(lang, bulletins, grayscale, preview));
-			document = new Document(pdf);
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 
@@ -165,20 +152,6 @@ public class PdfUtil {
 		} catch (com.itextpdf.io.IOException | IOException e) {
 			logger.error("PDF could not be created", e);
 			return false;
-		} finally {
-			if (document != null) {
-				document.close();
-			}
-			if (pdf != null) {
-				pdf.close();
-			}
-			try {
-				if (writer != null) {
-					writer.close();
-				}
-			} catch (IOException e) {
-				logger.warn("PDF writer could not be closed!", e);
-			}
 		}
 	}
 
