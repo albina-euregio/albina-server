@@ -28,7 +28,7 @@ public class BulletinRegionsTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final Path path = folder.newFile("regions.json").toPath();
 
-		BulletinRegions.createBulletinRegions(bulletins, DaytimeDependency.fd, path, regions, false);
+		BulletinRegions.createBulletinRegions(bulletins, DaytimeDependency.fd, path, regions);
 		final String actual = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
 
 		final String expected = Resources.toString(Resources.getResource("2019-01-17.regions.json"),

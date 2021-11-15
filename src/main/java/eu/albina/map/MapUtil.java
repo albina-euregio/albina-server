@@ -69,12 +69,12 @@ public interface MapUtil {
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());
 		try {
-			createMapyrusMaps(bulletins, preview);
+			createMapyrusMaps(bulletins);
 		} catch (Exception ex) {
 			logger.error("Failed to create mapyrus maps", ex);
 			throw ex;
 		}
-		BulletinRegions.createBulletinRegions(bulletins, regions, preview);
+		BulletinRegions.createBulletinRegions(bulletins, regions);
 		logger.info("Creating danger rating maps done in {} ms", System.currentTimeMillis() - start);
 	}
 
@@ -99,27 +99,25 @@ public interface MapUtil {
 		return simpleBindings;
 	}
 
-	static Path getOutputDirectory(List<AvalancheBulletin> bulletins, boolean preview) {
+	static Path getOutputDirectory(List<AvalancheBulletin> bulletins) {
 		final String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		final String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		final Path outputDirectory;
-		if (preview) {
-			outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTime);
-		} else {
-			outputDirectory = Paths.get(GlobalVariables.getMapsPath(), validityDateString, publicationTime);
-		}
+		return Paths.get(GlobalVariables.getMapsPath(), validityDateString, publicationTime);
+	}
 
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) {
+		final Path outputDirectory = getOutputDirectory(bulletins);
+		createMapyrusMaps(bulletins, false, outputDirectory);
+	}
+
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, boolean preview, Path outputDirectory) {
 		try {
 			logger.info("Creating directory {}", outputDirectory);
 			Files.createDirectories(outputDirectory);
 		} catch (IOException ex) {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
-		return outputDirectory;
-	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, boolean preview) {
-		final Path outputDirectory = getOutputDirectory(bulletins, preview);
 		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(bulletins)) {
 			try {
 				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, preview);

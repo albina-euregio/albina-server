@@ -17,6 +17,7 @@
 package eu.albina.rest;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -56,7 +57,6 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.UserController;
-import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -463,8 +463,9 @@ public class AvalancheBulletinService {
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
+			java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
 
-			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions(), true);
+			MapUtil.createMapyrusMaps(bulletins, true, outputDirectory);
 
 			PdfUtil.getInstance().createPdf(bulletins, language, GlobalVariables.codeEuregio, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 						publicationTimeString, true);

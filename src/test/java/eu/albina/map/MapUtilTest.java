@@ -62,7 +62,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, false);
+		MapUtil.createMapyrusMaps(bulletins);
 
 		for (String name : Arrays.asList("fd_albina_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
@@ -77,7 +77,7 @@ public class MapUtilTest {
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, true);
+		MapUtil.createMapyrusMaps(bulletins);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		BufferedImage actual = ImageIO.read(new File(
@@ -91,7 +91,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, false);
+		MapUtil.createMapyrusMaps(bulletins);
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, false);
+		MapUtil.createMapyrusMaps(bulletins);
 	}
 
 	@Test
@@ -109,7 +109,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, false);
+		MapUtil.createMapyrusMaps(bulletins);
 	}
 
 	@Test
