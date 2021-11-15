@@ -1028,7 +1028,7 @@ public class PdfUtil {
 
 		// Add overview maps
 		if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-			if (region.equals(GlobalVariables.codeEuregio)) {
+			if (region.equals(GlobalVariables.codeEuregio) || region.equals(GlobalVariables.codeAran)) {
 				mapY = 130;
 				mapWidth = 270;
 				mapHeight = mapWidth;
@@ -1070,7 +1070,7 @@ public class PdfUtil {
 					+ MapUtil.getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
-			if (region.equals(GlobalVariables.codeEuregio)) {
+			if (region.equals(GlobalVariables.codeEuregio) || region.equals(GlobalVariables.codeAran)) {
 				mapY = 250;
 				overviewMapImg.scaleToFit(420, 500);
 				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 210, mapY);
