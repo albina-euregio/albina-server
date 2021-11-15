@@ -5,9 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -22,11 +20,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.Regions;
 
 import javax.imageio.ImageIO;
 
@@ -64,10 +60,9 @@ public class MapUtilTest {
 	@Test
 	public void testMapyrusMaps() throws Exception {
 		assumeMapsPath();
-		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, false);
+		MapUtil.createMapyrusMaps(bulletins, false);
 
 		for (String name : Arrays.asList("fd_albina_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
@@ -80,10 +75,9 @@ public class MapUtilTest {
 	@Test
 	@Ignore("fix path")
 	public void testPreviewMaps() throws Exception {
-		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, true);
+		MapUtil.createMapyrusMaps(bulletins, true);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		BufferedImage actual = ImageIO.read(new File(
@@ -95,47 +89,27 @@ public class MapUtilTest {
 	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		assumeMapsPath();
-		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, false);
+		MapUtil.createMapyrusMaps(bulletins, false);
 	}
 
 	@Test
 	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime1() throws Exception {
 		assumeMapsPath();
-		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, false);
+		MapUtil.createMapyrusMaps(bulletins, false);
 	}
 
 	@Test
 	@Ignore("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime2() throws Exception {
 		assumeMapsPath();
-		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regions, false);
-	}
-
-	@Test
-	public void testRegionsFile() throws Exception {
-		final Regions regions = Regions.readRegions(Resources.getResource("regions.geojson"));
-		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		final Path path = folder.newFile("regions.json").toPath();
-
-		MapUtil.createBulletinRegions(bulletins, DaytimeDependency.fd, path, regions, false);
-		final String actual = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-
-		final String expected = Resources.toString(Resources.getResource("2019-01-17.regions.json"),
-				StandardCharsets.UTF_8);
-		String expectedResult = new JSONObject(expected).toString(4);
-		String actualResult = new JSONObject(actual).toString(4);
-		assertEquals(expectedResult, actualResult);
+		MapUtil.createMapyrusMaps(bulletins, false);
 	}
 
 	@Test
