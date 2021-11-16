@@ -166,7 +166,7 @@ public interface MapUtil {
 		bindings.put("pagesize_y", map.height(mapLevel));
 		bindings.put("geodata_dir", map.geodata());
 		bindings.put("image_dir", mapProductionUrl + "images/");
-		bindings.put("region", map.region());
+		bindings.put("region", map.realm());
 		bindings.put("map_level", mapLevel.name());
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");

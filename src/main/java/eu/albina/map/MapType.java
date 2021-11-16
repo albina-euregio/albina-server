@@ -57,7 +57,7 @@ enum MapType {
 		}
 	}
 
-	String region() {
+	String realm() {
 		if (this == MapType.aran) {
 			return "Aran";
 		} else {
