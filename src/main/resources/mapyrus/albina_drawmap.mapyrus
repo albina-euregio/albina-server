@@ -80,12 +80,6 @@ let peaks = geodata_dir . "albina_hoehenpunkte_p.shp"
 let names_p = geodata_dir . "albina_namengut_p.shp"
 let names_l = geodata_dir . "albina_namengut_l.shp"
 
-# EUREGIO-Logo
-let euregio_image_file = image_dir . "euregio_logo.png"
-if colormode eq "bw" then
-	let euregio_image_file = image_dir . "euregio_logo_bw.png"
-endif
-
 ###################################################################
 # --- Define NEWPAGE
 # -------------------------------------------------------------
@@ -157,7 +151,7 @@ if copyright eq "on" then
 endif
 
 # Logo bei Karten
-if logo eq "on" then
+if euregio_image_file ne "" then
 	place_euregio_logo
 endif
 

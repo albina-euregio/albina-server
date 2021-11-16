@@ -1,5 +1,6 @@
 package eu.albina.map;
 
+import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.util.GlobalVariables;
 
@@ -62,6 +63,18 @@ enum MapType {
 			return "Aran";
 		} else {
 			return "Euregio";
+		}
+	}
+
+	String logo(MapLevel mapLevel, boolean grayscale) {
+		if (!MapLevel.standard.equals(mapLevel)) {
+			return "";
+		} else if (this == MapType.aran) {
+			return "";
+		} else {
+			return grayscale
+				? Resources.getResource("images/logo/grey/euregio_map.png").toString()
+				: Resources.getResource("images/logo/color/euregio_map.png").toString();
 		}
 	}
 
