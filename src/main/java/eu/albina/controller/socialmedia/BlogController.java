@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import eu.albina.util.LinkUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Executor;
@@ -206,7 +207,7 @@ public class BlogController extends CommonProcessor {
 	}
 
 	private String getBlogUrl(Blogger.Item item, String region, LanguageCode lang) {
-		return GlobalVariables.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/" + item.id;
+		return LinkUtil.getAvalancheReportFullBlogUrl(lang) + getBlogUrl(region, lang) + "/" + item.id;
 	}
 
 	private String getAttachmentUrl(Blogger.Item item) {

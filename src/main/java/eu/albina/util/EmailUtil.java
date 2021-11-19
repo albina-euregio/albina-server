@@ -325,7 +325,7 @@ public class EmailUtil {
 							if (avalancheBulletin.getDangerPattern1() != null) {
 								bulletin.put("dangerPattern1",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
-								bulletin.put("dangerPatternLink1", GlobalVariables.getDangerPatternLink(lang,
+								bulletin.put("dangerPatternLink1", LinkUtil.getDangerPatternLink(lang,
 										avalancheBulletin.getDangerPattern1()));
 								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
 							} else {
@@ -336,7 +336,7 @@ public class EmailUtil {
 							if (avalancheBulletin.getDangerPattern2() != null) {
 								bulletin.put("dangerPattern2",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
-								bulletin.put("dangerPatternLink2", GlobalVariables.getDangerPatternLink(lang,
+								bulletin.put("dangerPatternLink2", LinkUtil.getDangerPatternLink(lang,
 										avalancheBulletin.getDangerPattern2()));
 								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
 							} else {
@@ -433,8 +433,8 @@ public class EmailUtil {
 			links.put("website", lang.getBundleString("avalanche-report.url")
 					+ GlobalVariables.avalancheReportBulletinUrl + AlbinaUtil.getValidityDateString(bulletins));
 			links.put("unsubscribe", "{%link_unsubscribe}");
-			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region));
-			links.put("imprint", GlobalVariables.getImprintLink(lang));
+			links.put("pdf", LinkUtil.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region));
+			links.put("imprint", LinkUtil.getImprintLink(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook", lang.getBundleString("avalanche-report.url") + "/#followDialog");
 			socialMediaLinks.put("instagram", lang.getBundleString("avalanche-report.url") + "/#followDialog");
@@ -520,7 +520,7 @@ public class EmailUtil {
 						+ avalancheSituation.getAvalancheSituation().toStringId() + ".png");
 				avalancheSituation2.put("text", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 				avalancheSituation2.put("link",
-						GlobalVariables.getAvalancheSituationLink(lang, avalancheSituation.getAvalancheSituation()));
+						LinkUtil.getAvalancheSituationLink(lang, avalancheSituation.getAvalancheSituation()));
 			} else {
 				avalancheSituation2.put("symbol",
 						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");

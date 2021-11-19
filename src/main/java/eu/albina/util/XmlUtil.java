@@ -243,67 +243,67 @@ public class XmlUtil {
 		extFiles.add(createExtFile(doc, "link", lang.getBundleString("ext-file.website-link.description"),
 				lang.getBundleString("avalanche-report.url") + "/bulletin/" + validityDateString));
 		extFiles.add(createExtFile(doc, "simple_link", lang.getBundleString("ext-file.simple-link.description"),
-				GlobalVariables.getAvalancheReportSimpleBaseUrl(lang) + validityDateString + "/" + lang.toString()
+				LinkUtil.getAvalancheReportSimpleBaseUrl(lang) + validityDateString + "/" + lang.toString()
 						+ ".html"));
 		extFiles.add(createExtFile(doc, "fd_albina_map.jpg",
-				GlobalVariables.getExtFileMapDescription(lang, "fd", ""), baseUri + "fd_albina_map.jpg"));
+				LinkUtil.getExtFileMapDescription(lang, "fd", ""), baseUri + "fd_albina_map.jpg"));
 		extFiles.add(createExtFile(doc, "fd_tyrol_map.jpg",
-				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTyrol),
+				LinkUtil.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTyrol),
 				baseUri + "fd_tyrol_map.jpg"));
 		extFiles.add(createExtFile(doc, "fd_southtyrol_map.jpg",
-				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeSouthTyrol),
+				LinkUtil.getExtFileMapDescription(lang, "fd", GlobalVariables.codeSouthTyrol),
 				baseUri + "fd_southtyrol_map.jpg"));
 		extFiles.add(createExtFile(doc, "fd_trentino_map.jpg",
-				GlobalVariables.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTrentino),
+				LinkUtil.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTrentino),
 				baseUri + "fd_trentino_map.jpg"));
-		extFiles.add(createExtFile(doc, "pdf", GlobalVariables.getExtFilePdfDescription(lang, ""),
+		extFiles.add(createExtFile(doc, "pdf", LinkUtil.getExtFilePdfDescription(lang, ""),
 				baseUri + validityDateString + "_" + lang.toString() + ".pdf"));
 		extFiles.add(createExtFile(doc, "tyrol_pdf",
-				GlobalVariables.getExtFilePdfDescription(lang, GlobalVariables.codeTyrol),
+				LinkUtil.getExtFilePdfDescription(lang, GlobalVariables.codeTyrol),
 				baseUri + validityDateString + "_" + GlobalVariables.codeTyrol + "_" + lang.toString() + ".pdf"));
 		extFiles.add(createExtFile(doc, "southtyrol_pdf",
-				GlobalVariables.getExtFilePdfDescription(lang, GlobalVariables.codeSouthTyrol),
+				LinkUtil.getExtFilePdfDescription(lang, GlobalVariables.codeSouthTyrol),
 				baseUri + validityDateString + "_" + GlobalVariables.codeSouthTyrol + "_" + lang.toString() + ".pdf"));
 		extFiles.add(createExtFile(doc, "trentino_pdf",
-				GlobalVariables.getExtFilePdfDescription(lang, GlobalVariables.codeTrentino),
+				LinkUtil.getExtFilePdfDescription(lang, GlobalVariables.codeTrentino),
 				baseUri + validityDateString + "_" + GlobalVariables.codeTrentino + "_" + lang.toString() + ".pdf"));
 
 		if (!hasDaytimeDependency) {
 			extFiles.add(createExtFile(doc, "fd_overlay.png",
-					GlobalVariables.getExtFileOverlayDescription(lang, "fd"), baseUri + "fd_overlay.png"));
+					LinkUtil.getExtFileOverlayDescription(lang, "fd"), baseUri + "fd_overlay.png"));
 			extFiles.add(createExtFile(doc, "fd_regions.json",
-					GlobalVariables.getExtFileRegionsDescription(lang, "fd"), baseUri + "fd_regions.json"));
+					LinkUtil.getExtFileRegionsDescription(lang, "fd"), baseUri + "fd_regions.json"));
 		} else {
 			extFiles.add(createExtFile(doc, "am_albina_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "am", ""), baseUri + "am_albina_map.jpg"));
+					LinkUtil.getExtFileMapDescription(lang, "am", ""), baseUri + "am_albina_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_tyrol_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeTyrol),
+					LinkUtil.getExtFileMapDescription(lang, "am", GlobalVariables.codeTyrol),
 					baseUri + "am_tyrol_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_southtyrol_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeSouthTyrol),
+					LinkUtil.getExtFileMapDescription(lang, "am", GlobalVariables.codeSouthTyrol),
 					baseUri + "am_southtyrol_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_trentino_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "am", GlobalVariables.codeTrentino),
+					LinkUtil.getExtFileMapDescription(lang, "am", GlobalVariables.codeTrentino),
 					baseUri + "am_trentino_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_albina_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "pm", ""), baseUri + "pm_albina_map.jpg"));
+					LinkUtil.getExtFileMapDescription(lang, "pm", ""), baseUri + "pm_albina_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_tyrol_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTyrol),
+					LinkUtil.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTyrol),
 					baseUri + "pm_tyrol_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_southtyrol_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeSouthTyrol),
+					LinkUtil.getExtFileMapDescription(lang, "pm", GlobalVariables.codeSouthTyrol),
 					baseUri + "pm_southtyrol_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_trentino_map.jpg",
-					GlobalVariables.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTrentino),
+					LinkUtil.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTrentino),
 					baseUri + "pm_trentino_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_overlay.png",
-					GlobalVariables.getExtFileOverlayDescription(lang, "am"), baseUri + "am_overlay.png"));
+					LinkUtil.getExtFileOverlayDescription(lang, "am"), baseUri + "am_overlay.png"));
 			extFiles.add(createExtFile(doc, "pm_overlay.png",
-					GlobalVariables.getExtFileOverlayDescription(lang, "pm"), baseUri + "pm_overlay.png"));
+					LinkUtil.getExtFileOverlayDescription(lang, "pm"), baseUri + "pm_overlay.png"));
 			extFiles.add(createExtFile(doc, "am_regions.json",
-					GlobalVariables.getExtFileRegionsDescription(lang, "am"), baseUri + "am_regions.json"));
+					LinkUtil.getExtFileRegionsDescription(lang, "am"), baseUri + "am_regions.json"));
 			extFiles.add(createExtFile(doc, "pm_regions.json",
-					GlobalVariables.getExtFileRegionsDescription(lang, "pm"), baseUri + "pm_regions.json"));
+					LinkUtil.getExtFileRegionsDescription(lang, "pm"), baseUri + "pm_regions.json"));
 		}
 
 		return extFiles;

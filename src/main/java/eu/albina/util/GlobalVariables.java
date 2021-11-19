@@ -16,8 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.text.MessageFormat;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class GlobalVariables {
@@ -74,7 +71,6 @@ public class GlobalVariables {
 	public static String avalancheReportBulletinUrl = "/bulletin/";
 	public static String avalancheReportSimpleUrl = "/simple/";
 
-	private static final String serverMainUrl = "https://avalanche.report";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
 	private static String htmlDirectory = "/mnt/simple_local";
@@ -182,14 +178,6 @@ public class GlobalVariables {
 	private static final String emailEncoding = "UTF-8";
 
 	public static String notAvailableString = "N/A";
-
-	public static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + avalancheReportSimpleUrl;
-	}
-
-	public static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + avalancheReportBlogUrl;
-	}
 
 	public static boolean isCreateMaps() {
 		return createMaps;
@@ -350,10 +338,6 @@ public class GlobalVariables {
 		}
 	}
 
-	public static String getServerMainUrl() {
-		return serverMainUrl;
-	}
-
 	public static String getPdfDirectory() {
 		return pdfDirectory;
 	}
@@ -448,11 +432,6 @@ public class GlobalVariables {
 
 	public static String getMapsUrl(LanguageCode lang) {
 		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
-	}
-
-	public static String getBulletinUrl(LanguageCode lang, ZonedDateTime date) {
-		return lang.getBundleString("avalanche-report.url") + avalancheReportBulletinUrl
-				+ date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 
 	public static String getEuregioLogoPath(boolean grayscale) {
@@ -617,63 +596,5 @@ public class GlobalVariables {
 			setPublishBlogsSouthTyrol(configuration.getBoolean("publishBlogsSouthTyrol"));
 		if (configuration.has("publishBlogsTrentino"))
 			setPublishBlogsTrentino(configuration.getBoolean("publishBlogsTrentino"));
-	}
-
-	// REGION
-	public static String getPdfLink(String date, LanguageCode lang, String region) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append(avalancheReportFilesUrl);
-		sb.append(date);
-		sb.append("/");
-		sb.append(date);
-		sb.append("_");
-		sb.append(region);
-		sb.append("_");
-		sb.append(lang.toString());
-		sb.append(".pdf");
-		return sb.toString();
-	}
-
-	public static String getDangerPatternLink(LanguageCode lang, DangerPattern dangerPattern) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append("/education/danger-patterns#");
-		sb.append(DangerPattern.getCAAMLv6String(dangerPattern));
-		return sb.toString();
-	}
-
-	public static String getAvalancheSituationLink(LanguageCode lang,
-			eu.albina.model.enumerations.AvalancheSituation avalancheSituation) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append("/education/avalanche-problems#");
-		sb.append(avalancheSituation.toCaamlv6String());
-		return sb.toString();
-	}
-
-	public static String getImprintLink(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + "/imprint";
-	}
-
-	public static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
-		String regionName = AlbinaUtil.getRegionName(lang, region);
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		return MessageFormat.format(lang.getBundleString("ext-file.map.description"), regionName, timeString);
-	}
-
-	public static String getExtFileOverlayDescription(LanguageCode lang, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		return MessageFormat.format(lang.getBundleString("ext-file.overlay.description"), timeString);
-	}
-
-	public static String getExtFileRegionsDescription(LanguageCode lang, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		return MessageFormat.format(lang.getBundleString("ext-file.regions.description"), timeString);
-	}
-
-	public static String getExtFilePdfDescription(LanguageCode lang, String region) {
-		String regionName = AlbinaUtil.getRegionName(lang, region);
-		return "PDF " + regionName;
 	}
 }

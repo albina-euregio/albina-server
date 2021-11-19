@@ -30,8 +30,8 @@ interface SocialMediaUtil {
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 			ZonedDateTime date = AlbinaUtil.getDate(bulletins);
 			String message = getSocialMediaText(date, update, lang);
-			String attachmentUrl = getSocialMediaAttachmentUrl(bulletins);
-			String bulletinUrl = GlobalVariables.getBulletinUrl(lang, date);
+			String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(bulletins);
+			String bulletinUrl = LinkUtil.getBulletinUrl(lang, date);
 			sendBulletinNewsletter(message, lang, regions, attachmentUrl, bulletinUrl);
 		}
 	}
@@ -41,19 +41,11 @@ interface SocialMediaUtil {
 			+ date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format")));
 		if (update) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
-				lang.getBundleString("avalanche-report.name"), dateString, GlobalVariables.getBulletinUrl(lang, date));
+				lang.getBundleString("avalanche-report.name"), dateString, LinkUtil.getBulletinUrl(lang, date));
 		} else {
 			return MessageFormat.format(lang.getBundleString("social-media.message"),
-				lang.getBundleString("avalanche-report.name"), dateString, GlobalVariables.getBulletinUrl(lang, date));
+				lang.getBundleString("avalanche-report.name"), dateString, LinkUtil.getBulletinUrl(lang, date));
 		}
-	}
-
-	static String getSocialMediaAttachmentUrl(List<AvalancheBulletin> bulletins) {
-		String validityDate = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		return GlobalVariables.getServerMainUrl() + GlobalVariables.avalancheReportFilesUrl
-			+ validityDate + "/" + publicationTime + "/"
-			+ AlbinaUtil.getRegionOverviewMapFilename("", "jpg");
 	}
 
 	void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl);
