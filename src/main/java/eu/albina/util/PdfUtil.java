@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -763,42 +762,7 @@ public class PdfUtil {
 
 			if (avalancheSituation.getAspects() != null && avalancheSituation.getAspects().size() > 0) {
 				Set<Aspect> aspects = avalancheSituation.getAspects();
-
-				int result = 0b00000000;
-				Iterator<Aspect> iterator = aspects.iterator();
-				while (iterator.hasNext()) {
-					switch (iterator.next()) {
-					case N:
-						result = result | 0b10000000;
-						break;
-					case NE:
-						result = result | 0b01000000;
-						break;
-					case E:
-						result = result | 0b00100000;
-						break;
-					case SE:
-						result = result | 0b00010000;
-						break;
-					case S:
-						result = result | 0b00001000;
-						break;
-					case SW:
-						result = result | 0b00000100;
-						break;
-					case W:
-						result = result | 0b00000010;
-						break;
-					case NW:
-						result = result | 0b00000001;
-						break;
-
-					default:
-						break;
-					}
-				}
-
-				img = getImage("images/" + GlobalVariables.getAspectSymbolPath(result, grayscale));
+				img = getImage("images/" + Aspect.getSymbolPath(aspects, grayscale));
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(avalancheSituation.getAspects(), lang.getLocale()));
 					img.scaleToFit(30, 30);

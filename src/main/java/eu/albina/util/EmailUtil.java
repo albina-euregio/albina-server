@@ -27,10 +27,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -530,7 +528,7 @@ public class EmailUtil {
 				avalancheSituation2.put("link", "");
 			}
 
-			String path = getAspectsImagePath(avalancheSituation.getAspects());
+			String path = Aspect.getSymbolPath(avalancheSituation.getAspects(), false);
 			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
 
 			Map<String, Object> elevation = new HashMap<>();
@@ -582,7 +580,7 @@ public class EmailUtil {
 			avalancheSituation2.put("text", "");
 			avalancheSituation2.put("link", "");
 
-			String path = getAspectsImagePath(null);
+			String path = Aspect.getSymbolPath(null, false);
 			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
 
 			Map<String, Object> elevation = new HashMap<>();
@@ -592,47 +590,6 @@ public class EmailUtil {
 			avalancheSituation2.put("elevation", elevation);
 		}
 		return avalancheSituation2;
-	}
-
-	private String getAspectsImagePath(Set<Aspect> aspects) {
-		int result = 0b00000000;
-		if (aspects != null && !aspects.isEmpty()) {
-			Iterator<Aspect> iterator = aspects.iterator();
-			while (iterator.hasNext()) {
-				switch (iterator.next()) {
-				case N:
-					result = result | 0b10000000;
-					break;
-				case NE:
-					result = result | 0b01000000;
-					break;
-				case E:
-					result = result | 0b00100000;
-					break;
-				case SE:
-					result = result | 0b00010000;
-					break;
-				case S:
-					result = result | 0b00001000;
-					break;
-				case SW:
-					result = result | 0b00000100;
-					break;
-				case W:
-					result = result | 0b00000010;
-					break;
-				case NW:
-					result = result | 0b00000001;
-					break;
-
-				default:
-					break;
-				}
-			}
-			return GlobalVariables.getAspectSymbolPath(result, false);
-		} else {
-			return GlobalVariables.getAspectSymbolPath(-1, false);
-		}
 	}
 
 	private String getDangerRatingColorStyle(DangerRating dangerRating) {

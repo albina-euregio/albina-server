@@ -19,6 +19,7 @@ package eu.albina.model.enumerations;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import eu.albina.util.XMLResourceBundleControl;
 
@@ -86,6 +87,40 @@ public enum Aspect {
 
 		default:
 			return null;
+		}
+	}
+
+	public static String getSymbolPath(Set<Aspect> aspects, boolean grayscale) {
+		if (aspects == null || aspects.isEmpty()) {
+			return "aspects/color/empty.png";
+		}
+		int bitmask = aspects.stream().mapToInt(Aspect::bitmask).reduce(0b00000000, (a, b) -> a | b);
+		if (grayscale)
+			return "aspects/grey/" + Integer.valueOf(bitmask).toString() + ".png";
+		else
+			return "aspects/color/" + Integer.valueOf(bitmask).toString() + ".png";
+	}
+
+	private static int bitmask(Aspect aspect) {
+		switch (aspect) {
+			case N:
+				return 0b10000000;
+			case NE:
+				return 0b01000000;
+			case E:
+				return 0b00100000;
+			case SE:
+				return 0b00010000;
+			case S:
+				return 0b00001000;
+			case SW:
+				return 0b00000100;
+			case W:
+				return 0b00000010;
+			case NW:
+				return 0b00000001;
+			default:
+				return 0;
 		}
 	}
 }

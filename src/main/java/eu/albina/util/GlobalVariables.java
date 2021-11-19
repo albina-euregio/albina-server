@@ -619,20 +619,6 @@ public class GlobalVariables {
 			setPublishBlogsTrentino(configuration.getBoolean("publishBlogsTrentino"));
 	}
 
-	public static String getAspectSymbolPath(int result, boolean grayscale) {
-		if (result > -1) {
-			if (grayscale)
-				return "aspects/grey/" + Integer.valueOf(result).toString() + ".png";
-			else
-				return "aspects/color/" + Integer.valueOf(result).toString() + ".png";
-		} else {
-			if (grayscale)
-				return "aspects/grey/empty.png";
-			else
-				return "aspects/color/empty.png";
-		}
-	}
-
 	// REGION
 	public static String getPdfLink(String date, LanguageCode lang, String region) {
 		StringBuilder sb = new StringBuilder();
