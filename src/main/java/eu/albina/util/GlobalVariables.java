@@ -107,18 +107,6 @@ public class GlobalVariables {
 		.put(GlobalVariables.codeTrentino, LanguageCode.it, "trentinovalanghe.blogspot.com")
 		.build();
 
-	// TODO shift this to social media config
-	public static int targetingTyrolDe = 17519;
-	public static int targetingTyrolIt = 17524;
-	public static int targetingTyrolEn = 17522;
-	public static int targetingSouthTyrolDe = 17533;
-	public static int targetingSouthTyrolIt = 17534;
-	public static int targetingSouthTyrolEn = 17536;
-	public static int targetingTrentinoDe = 17539;
-	public static int targetingTrentinoIt = 17537;
-	public static int targetingTrentinoEn = 17541;
-	public static int targetingTest = 17274;
-
 	public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ISO_DATE_TIME;
 	public static DateTimeFormatter formatterDate = DateTimeFormatter.ISO_DATE;
 	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
