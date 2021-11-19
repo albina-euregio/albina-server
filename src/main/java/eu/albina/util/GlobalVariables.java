@@ -38,7 +38,6 @@ import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.Tendency;
 
 public class GlobalVariables {
 
@@ -619,32 +618,6 @@ public class GlobalVariables {
 			setPublishBlogsSouthTyrol(configuration.getBoolean("publishBlogsSouthTyrol"));
 		if (configuration.has("publishBlogsTrentino"))
 			setPublishBlogsTrentino(configuration.getBoolean("publishBlogsTrentino"));
-	}
-
-	public static String getTendencySymbolPath(Tendency tendency, boolean grayscale) {
-		if (grayscale) {
-			switch (tendency) {
-			case increasing:
-				return "tendency/tendency_increasing_black.png";
-			case steady:
-				return "tendency/tendency_steady_black.png";
-			case decreasing:
-				return "tendency/tendency_decreasing_black.png";
-			default:
-				return null;
-			}
-		} else {
-			switch (tendency) {
-			case increasing:
-				return "tendency/tendency_increasing_blue.png";
-			case steady:
-				return "tendency/tendency_steady_blue.png";
-			case decreasing:
-				return "tendency/tendency_decreasing_blue.png";
-			default:
-				return null;
-			}
-		}
 	}
 
 	public static String getAvalancheSituationSymbolPath(AvalancheSituation avalancheSituation, boolean grayscale) {

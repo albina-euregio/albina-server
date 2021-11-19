@@ -643,8 +643,7 @@ public class PdfUtil {
 			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 			cell.setHeight(height);
 			cell.setBorder(Border.NO_BORDER);
-			Image tendencyImg = getImage(
-				"images/" + GlobalVariables.getTendencySymbolPath(avalancheBulletin.getTendency(), grayscale));
+			Image tendencyImg = getImage(avalancheBulletin.getTendency().getSymbolPath(grayscale));
 			if (tendencyImg != null) {
 				tendencyImg.getAccessibilityProperties().setAlternateDescription(avalancheBulletin.getTendency().toString(lang.getLocale()));
 				tendencyImg.scaleToFit(25, 20);
