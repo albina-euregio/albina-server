@@ -126,7 +126,7 @@ public class SimpleHtmlUtil {
 		}
 
 		if (!regionBulletins.isEmpty())
-			for (LanguageCode lang : GlobalVariables.languages) {
+			for (LanguageCode lang : LanguageCode.ENABLED) {
 				if (!createSimpleHtml(regionBulletins, lang, region))
 					result = false;
 			}

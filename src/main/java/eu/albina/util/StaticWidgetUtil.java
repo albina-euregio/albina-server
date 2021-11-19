@@ -84,7 +84,7 @@ public class StaticWidgetUtil {
 	 */
 	public void createStaticWidgets(List<AvalancheBulletin> bulletins, String validityDateString,
 			String publicationTimeString) {
-		for (LanguageCode lang : GlobalVariables.languages)
+		for (LanguageCode lang : LanguageCode.ENABLED)
 			createStaticWidget(bulletins, lang, validityDateString, publicationTimeString);
 	}
 

@@ -238,7 +238,7 @@ public class PdfUtil {
 		}
 
 		if (!regionBulletins.isEmpty())
-			for (LanguageCode lang : GlobalVariables.languages) {
+			for (LanguageCode lang : LanguageCode.ENABLED) {
 				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString,
 						publicationTimeString, false))
 					result = false;

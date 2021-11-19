@@ -27,7 +27,7 @@ import eu.albina.model.enumerations.LanguageCode;
 interface SocialMediaUtil {
 
 	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
-		for (LanguageCode lang : GlobalVariables.socialMediaLanguages) {
+		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 			ZonedDateTime date = AlbinaUtil.getDate(bulletins);
 			String message = getSocialMediaText(date, update, lang);
 			String attachmentUrl = getSocialMediaAttachmentUrl(bulletins);

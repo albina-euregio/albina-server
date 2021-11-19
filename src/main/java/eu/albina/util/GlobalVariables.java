@@ -182,38 +182,6 @@ public class GlobalVariables {
 		}
 	};
 
-	// LANG
-	public static List<LanguageCode> languages = new ArrayList<LanguageCode>() {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			add(LanguageCode.de);
-			add(LanguageCode.it);
-			add(LanguageCode.en);
-			add(LanguageCode.fr);
-			add(LanguageCode.es);
-			add(LanguageCode.ca);
-			add(LanguageCode.oc);
-		}
-	};
-
-	// LANG
-	public static List<LanguageCode> socialMediaLanguages = new ArrayList<LanguageCode>() {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			add(LanguageCode.de);
-			add(LanguageCode.it);
-			add(LanguageCode.en);
-		}
-	};
-
 	public static String avalancheReportUsername = "info@avalanche.report";
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 

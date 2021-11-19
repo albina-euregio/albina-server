@@ -109,7 +109,7 @@ public class EmailUtil {
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
-		for (LanguageCode lang : GlobalVariables.socialMediaLanguages) {
+		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 			String subject;
 			if (update)
 				subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);

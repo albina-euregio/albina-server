@@ -81,7 +81,7 @@ public class XmlUtil {
 			logger.warn("File permissions could not be set!");
 		}
 
-		for (LanguageCode lang : GlobalVariables.languages) {
+		for (LanguageCode lang : LanguageCode.ENABLED) {
 			Document doc = createCaaml(bulletins, lang, version);
 			String caamlString = XmlUtil.convertDocToString(doc);
 			String fileName;
