@@ -732,7 +732,7 @@ public class PdfUtil {
 				avalancheSituationTable.setMarginTop(5);
 				avalancheSituationTable.setWidth(60);
 				avalancheSituationTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
-				img = getImage("images/" + GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, grayscale));
+				img = getImage("images/" + avalancheSituation.getAvalancheSituation().getSymbolPath(grayscale));
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 					img.scaleToFit(60, 35);

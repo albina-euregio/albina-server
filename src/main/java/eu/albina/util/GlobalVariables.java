@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -618,13 +617,6 @@ public class GlobalVariables {
 			setPublishBlogsSouthTyrol(configuration.getBoolean("publishBlogsSouthTyrol"));
 		if (configuration.has("publishBlogsTrentino"))
 			setPublishBlogsTrentino(configuration.getBoolean("publishBlogsTrentino"));
-	}
-
-	public static String getAvalancheSituationSymbolPath(AvalancheSituation avalancheSituation, boolean grayscale) {
-		if (grayscale)
-			return "avalanche_situations/grey/" + avalancheSituation.getAvalancheSituation().toStringId() + ".png";
-		else
-			return "avalanche_situations/color/" + avalancheSituation.getAvalancheSituation().toStringId() + ".png";
 	}
 
 	public static String getAspectSymbolPath(int result, boolean grayscale) {

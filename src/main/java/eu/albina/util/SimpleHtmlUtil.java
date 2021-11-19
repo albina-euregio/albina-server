@@ -432,7 +432,7 @@ public class SimpleHtmlUtil {
 
 		result.put("exist", true);
 		result.put("avalancheProblemIcon", GlobalVariables.getServerImagesUrl()
-				+ GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, false));
+				+ avalancheSituation.getAvalancheSituation().getSymbolPath(false));
 		result.put("avalancheProblemText", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 		result.put("elevationIcon", GlobalVariables.getServerImagesUrl() + getElevationIcon(avalancheSituation));
 		result.put("elevationLow", getElevationLowText(avalancheSituation, lang));
