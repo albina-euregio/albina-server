@@ -35,10 +35,8 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.enumerations.DangerPattern;
-import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 
@@ -680,16 +678,6 @@ public class GlobalVariables {
 			else
 				return "aspects/color/empty.png";
 		}
-	}
-
-	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
-		DangerRating result = DangerRating.missing;
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DangerRating highestDangerRating = avalancheBulletin.getHighestDangerRating();
-			if (highestDangerRating.compareTo(result) > 0)
-				result = highestDangerRating;
-		}
-		return result;
 	}
 
 	// REGION

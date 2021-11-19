@@ -23,6 +23,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -829,6 +830,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			}
 		}
 		return false;
+	}
+
+	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
+		return bulletins.stream()
+			.map(AvalancheBulletin::getHighestDangerRating)
+			.max(Comparator.naturalOrder())
+			.orElse(DangerRating.missing);
 	}
 
 	public DangerRating getHighestDangerRating() {
