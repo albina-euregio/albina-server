@@ -17,9 +17,11 @@
 package eu.albina.model.enumerations;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import eu.albina.util.XMLResourceBundleControl;
 
@@ -33,10 +35,10 @@ public enum LanguageCode {
 			new Locale("ca")), oc(new Locale("oc"));
 
 	// LANG
-	public static List<LanguageCode> ENABLED = List.of(de, it, en, fr, es, ca, oc);
+	public static Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(de, it, en, fr, es, ca, oc));
 
 	// LANG
-	public static List<LanguageCode> SOCIAL_MEDIA = List.of(de, it, en);
+	public static Set<LanguageCode> SOCIAL_MEDIA = Collections.unmodifiableSet(EnumSet.of(de, it, en));
 
 	private final Locale locale;
 
