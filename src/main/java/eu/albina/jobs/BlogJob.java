@@ -46,7 +46,7 @@ public class BlogJob implements org.quartz.Job {
 		for (String region : GlobalVariables.regions) {
 			if (GlobalVariables.isPublishBlogs(region)) {
 				logger.info("Blog job triggered for " + region + "!");
-				for (LanguageCode lang : GlobalVariables.languages)
+				for (LanguageCode lang : LanguageCode.ENABLED)
 					BlogController.getInstance().sendNewBlogPosts(region, lang);
 			}
 		}

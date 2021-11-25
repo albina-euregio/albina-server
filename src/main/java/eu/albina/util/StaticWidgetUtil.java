@@ -84,7 +84,7 @@ public class StaticWidgetUtil {
 	 */
 	public void createStaticWidgets(List<AvalancheBulletin> bulletins, String validityDateString,
 			String publicationTimeString) {
-		for (LanguageCode lang : GlobalVariables.languages)
+		for (LanguageCode lang : LanguageCode.ENABLED)
 			createStaticWidget(bulletins, lang, validityDateString, publicationTimeString);
 	}
 
@@ -96,7 +96,7 @@ public class StaticWidgetUtil {
 
 			ResourceBundle staticWidgetBundle = lang.getBundle("i18n.StaticWidget");
 
-			DangerRating highestDangerRating = GlobalVariables.getHighestDangerRating(bulletins);
+			DangerRating highestDangerRating = AvalancheBulletin.getHighestDangerRating(bulletins);
 			String date = AlbinaUtil.getDate(bulletins, lang);
 
 			// TYPE_INT_ARGB specifies the image format: 8-bit RGBA packed

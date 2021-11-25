@@ -32,7 +32,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -126,7 +125,7 @@ public class SimpleHtmlUtil {
 		}
 
 		if (!regionBulletins.isEmpty())
-			for (LanguageCode lang : GlobalVariables.languages) {
+			for (LanguageCode lang : LanguageCode.ENABLED) {
 				if (!createSimpleHtml(regionBulletins, lang, region))
 					result = false;
 			}
@@ -222,17 +221,17 @@ public class SimpleHtmlUtil {
 		}
 		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(-1)));
 		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(1)));
-		link.put("linkDe", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkDe", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "de.html");
-		link.put("linkIt", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkIt", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "it.html");
-		link.put("linkEn", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkEn", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "en.html");
-		link.put("linkEs", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkEs", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "es.html");
-		link.put("linkCa", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkCa", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ca.html");
-		link.put("linkAr", GlobalVariables.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkAr", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ar.html");
 
 		root.put("link", link);
@@ -432,13 +431,13 @@ public class SimpleHtmlUtil {
 
 		result.put("exist", true);
 		result.put("avalancheProblemIcon", GlobalVariables.getServerImagesUrl()
-				+ GlobalVariables.getAvalancheSituationSymbolPath(avalancheSituation, false));
+				+ avalancheSituation.getAvalancheSituation().getSymbolPath(false));
 		result.put("avalancheProblemText", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 		result.put("elevationIcon", GlobalVariables.getServerImagesUrl() + getElevationIcon(avalancheSituation));
 		result.put("elevationLow", getElevationLowText(avalancheSituation, lang));
 		result.put("elevationHigh", getElevationHighText(avalancheSituation, lang));
 		result.put("aspectsIcon", GlobalVariables.getServerImagesUrl()
-				+ GlobalVariables.getAspectSymbolPath(getAspectsCode(avalancheSituation.getAspects()), false));
+				+ Aspect.getSymbolPath(avalancheSituation.getAspects(), false));
 
 		return result;
 	}
@@ -509,43 +508,6 @@ public class SimpleHtmlUtil {
 		} else {
 			return "";
 		}
-	}
-
-	private int getAspectsCode(Set<Aspect> aspects) {
-		int result = 0b00000000;
-		Iterator<Aspect> iterator = aspects.iterator();
-		while (iterator.hasNext()) {
-			switch (iterator.next()) {
-			case N:
-				result = result | 0b10000000;
-				break;
-			case NE:
-				result = result | 0b01000000;
-				break;
-			case E:
-				result = result | 0b00100000;
-				break;
-			case SE:
-				result = result | 0b00010000;
-				break;
-			case S:
-				result = result | 0b00001000;
-				break;
-			case SW:
-				result = result | 0b00000100;
-				break;
-			case W:
-				result = result | 0b00000010;
-				break;
-			case NW:
-				result = result | 0b00000001;
-				break;
-
-			default:
-				break;
-			}
-		}
-		return result;
 	}
 
 	private String getElevationString(int elevation, boolean treeline, LanguageCode lang) {

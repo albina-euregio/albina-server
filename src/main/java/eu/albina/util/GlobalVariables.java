@@ -16,8 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.text.MessageFormat;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheSituation;
-import eu.albina.model.enumerations.DangerPattern;
-import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.Tendency;
 
 public class GlobalVariables {
 
@@ -78,7 +71,6 @@ public class GlobalVariables {
 	public static String avalancheReportBulletinUrl = "/bulletin/";
 	public static String avalancheReportSimpleUrl = "/simple/";
 
-	private static final String serverMainUrl = "https://avalanche.report";
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	private static String pdfDirectory = "/mnt/albina_files_local";
 	private static String htmlDirectory = "/mnt/simple_local";
@@ -108,18 +100,6 @@ public class GlobalVariables {
 		.put(GlobalVariables.codeSouthTyrol, LanguageCode.it, "valanghealtoadige.blogspot.com")
 		.put(GlobalVariables.codeTrentino, LanguageCode.it, "trentinovalanghe.blogspot.com")
 		.build();
-
-	// TODO shift this to social media config
-	public static int targetingTyrolDe = 17519;
-	public static int targetingTyrolIt = 17524;
-	public static int targetingTyrolEn = 17522;
-	public static int targetingSouthTyrolDe = 17533;
-	public static int targetingSouthTyrolIt = 17534;
-	public static int targetingSouthTyrolEn = 17536;
-	public static int targetingTrentinoDe = 17539;
-	public static int targetingTrentinoIt = 17537;
-	public static int targetingTrentinoEn = 17541;
-	public static int targetingTest = 17274;
 
 	public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ISO_DATE_TIME;
 	public static DateTimeFormatter formatterDate = DateTimeFormatter.ISO_DATE;
@@ -182,38 +162,6 @@ public class GlobalVariables {
 		}
 	};
 
-	// LANG
-	public static List<LanguageCode> languages = new ArrayList<LanguageCode>() {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			add(LanguageCode.de);
-			add(LanguageCode.it);
-			add(LanguageCode.en);
-			add(LanguageCode.fr);
-			add(LanguageCode.es);
-			add(LanguageCode.ca);
-			add(LanguageCode.oc);
-		}
-	};
-
-	// LANG
-	public static List<LanguageCode> socialMediaLanguages = new ArrayList<LanguageCode>() {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			add(LanguageCode.de);
-			add(LanguageCode.it);
-			add(LanguageCode.en);
-		}
-	};
-
 	public static String avalancheReportUsername = "info@avalanche.report";
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 
@@ -230,14 +178,6 @@ public class GlobalVariables {
 	private static final String emailEncoding = "UTF-8";
 
 	public static String notAvailableString = "N/A";
-
-	public static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + avalancheReportSimpleUrl;
-	}
-
-	public static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + avalancheReportBlogUrl;
-	}
 
 	public static boolean isCreateMaps() {
 		return createMaps;
@@ -398,10 +338,6 @@ public class GlobalVariables {
 		}
 	}
 
-	public static String getServerMainUrl() {
-		return serverMainUrl;
-	}
-
 	public static String getPdfDirectory() {
 		return pdfDirectory;
 	}
@@ -496,11 +432,6 @@ public class GlobalVariables {
 
 	public static String getMapsUrl(LanguageCode lang) {
 		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
-	}
-
-	public static String getBulletinUrl(LanguageCode lang, ZonedDateTime date) {
-		return lang.getBundleString("avalanche-report.url") + avalancheReportBulletinUrl
-				+ date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 	}
 
 	public static String getEuregioLogoPath(boolean grayscale) {
@@ -665,120 +596,5 @@ public class GlobalVariables {
 			setPublishBlogsSouthTyrol(configuration.getBoolean("publishBlogsSouthTyrol"));
 		if (configuration.has("publishBlogsTrentino"))
 			setPublishBlogsTrentino(configuration.getBoolean("publishBlogsTrentino"));
-	}
-
-	public static String getTendencySymbolPath(Tendency tendency, boolean grayscale) {
-		if (grayscale) {
-			switch (tendency) {
-			case increasing:
-				return "tendency/tendency_increasing_black.png";
-			case steady:
-				return "tendency/tendency_steady_black.png";
-			case decreasing:
-				return "tendency/tendency_decreasing_black.png";
-			default:
-				return null;
-			}
-		} else {
-			switch (tendency) {
-			case increasing:
-				return "tendency/tendency_increasing_blue.png";
-			case steady:
-				return "tendency/tendency_steady_blue.png";
-			case decreasing:
-				return "tendency/tendency_decreasing_blue.png";
-			default:
-				return null;
-			}
-		}
-	}
-
-	public static String getAvalancheSituationSymbolPath(AvalancheSituation avalancheSituation, boolean grayscale) {
-		if (grayscale)
-			return "avalanche_situations/grey/" + avalancheSituation.getAvalancheSituation().toStringId() + ".png";
-		else
-			return "avalanche_situations/color/" + avalancheSituation.getAvalancheSituation().toStringId() + ".png";
-	}
-
-	public static String getAspectSymbolPath(int result, boolean grayscale) {
-		if (result > -1) {
-			if (grayscale)
-				return "aspects/grey/" + Integer.valueOf(result).toString() + ".png";
-			else
-				return "aspects/color/" + Integer.valueOf(result).toString() + ".png";
-		} else {
-			if (grayscale)
-				return "aspects/grey/empty.png";
-			else
-				return "aspects/color/empty.png";
-		}
-	}
-
-	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
-		DangerRating result = DangerRating.missing;
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			DangerRating highestDangerRating = avalancheBulletin.getHighestDangerRating();
-			if (highestDangerRating.compareTo(result) > 0)
-				result = highestDangerRating;
-		}
-		return result;
-	}
-
-	// REGION
-	public static String getPdfLink(String date, LanguageCode lang, String region) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append(avalancheReportFilesUrl);
-		sb.append(date);
-		sb.append("/");
-		sb.append(date);
-		sb.append("_");
-		sb.append(region);
-		sb.append("_");
-		sb.append(lang.toString());
-		sb.append(".pdf");
-		return sb.toString();
-	}
-
-	public static String getDangerPatternLink(LanguageCode lang, DangerPattern dangerPattern) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append("/education/danger-patterns#");
-		sb.append(DangerPattern.getCAAMLv6String(dangerPattern));
-		return sb.toString();
-	}
-
-	public static String getAvalancheSituationLink(LanguageCode lang,
-			eu.albina.model.enumerations.AvalancheSituation avalancheSituation) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append("/education/avalanche-problems#");
-		sb.append(avalancheSituation.toCaamlv6String());
-		return sb.toString();
-	}
-
-	public static String getImprintLink(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + "/imprint";
-	}
-
-	public static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
-		String regionName = AlbinaUtil.getRegionName(lang, region);
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		return MessageFormat.format(lang.getBundleString("ext-file.map.description"), regionName, timeString);
-	}
-
-	public static String getExtFileOverlayDescription(LanguageCode lang, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		return MessageFormat.format(lang.getBundleString("ext-file.overlay.description"), timeString);
-	}
-
-	public static String getExtFileRegionsDescription(LanguageCode lang, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
-		return MessageFormat.format(lang.getBundleString("ext-file.regions.description"), timeString);
-	}
-
-	public static String getExtFilePdfDescription(LanguageCode lang, String region) {
-		String regionName = AlbinaUtil.getRegionName(lang, region);
-		return "PDF " + regionName;
 	}
 }

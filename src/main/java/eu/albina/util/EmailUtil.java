@@ -27,10 +27,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -109,7 +107,7 @@ public class EmailUtil {
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
-		for (LanguageCode lang : GlobalVariables.socialMediaLanguages) {
+		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 			String subject;
 			if (update)
 				subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
@@ -327,7 +325,7 @@ public class EmailUtil {
 							if (avalancheBulletin.getDangerPattern1() != null) {
 								bulletin.put("dangerPattern1",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
-								bulletin.put("dangerPatternLink1", GlobalVariables.getDangerPatternLink(lang,
+								bulletin.put("dangerPatternLink1", LinkUtil.getDangerPatternLink(lang,
 										avalancheBulletin.getDangerPattern1()));
 								bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
 							} else {
@@ -338,7 +336,7 @@ public class EmailUtil {
 							if (avalancheBulletin.getDangerPattern2() != null) {
 								bulletin.put("dangerPattern2",
 										AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
-								bulletin.put("dangerPatternLink2", GlobalVariables.getDangerPatternLink(lang,
+								bulletin.put("dangerPatternLink2", LinkUtil.getDangerPatternLink(lang,
 										avalancheBulletin.getDangerPattern2()));
 								bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
 							} else {
@@ -435,8 +433,8 @@ public class EmailUtil {
 			links.put("website", lang.getBundleString("avalanche-report.url")
 					+ GlobalVariables.avalancheReportBulletinUrl + AlbinaUtil.getValidityDateString(bulletins));
 			links.put("unsubscribe", "{%link_unsubscribe}");
-			links.put("pdf", GlobalVariables.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region));
-			links.put("imprint", GlobalVariables.getImprintLink(lang));
+			links.put("pdf", LinkUtil.getPdfLink(AlbinaUtil.getValidityDateString(bulletins), lang, region));
+			links.put("imprint", LinkUtil.getImprintLink(lang));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook", lang.getBundleString("avalanche-report.url") + "/#followDialog");
 			socialMediaLinks.put("instagram", lang.getBundleString("avalanche-report.url") + "/#followDialog");
@@ -522,7 +520,7 @@ public class EmailUtil {
 						+ avalancheSituation.getAvalancheSituation().toStringId() + ".png");
 				avalancheSituation2.put("text", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 				avalancheSituation2.put("link",
-						GlobalVariables.getAvalancheSituationLink(lang, avalancheSituation.getAvalancheSituation()));
+						LinkUtil.getAvalancheSituationLink(lang, avalancheSituation.getAvalancheSituation()));
 			} else {
 				avalancheSituation2.put("symbol",
 						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
@@ -530,7 +528,7 @@ public class EmailUtil {
 				avalancheSituation2.put("link", "");
 			}
 
-			String path = getAspectsImagePath(avalancheSituation.getAspects());
+			String path = Aspect.getSymbolPath(avalancheSituation.getAspects(), false);
 			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
 
 			Map<String, Object> elevation = new HashMap<>();
@@ -582,7 +580,7 @@ public class EmailUtil {
 			avalancheSituation2.put("text", "");
 			avalancheSituation2.put("link", "");
 
-			String path = getAspectsImagePath(null);
+			String path = Aspect.getSymbolPath(null, false);
 			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
 
 			Map<String, Object> elevation = new HashMap<>();
@@ -592,47 +590,6 @@ public class EmailUtil {
 			avalancheSituation2.put("elevation", elevation);
 		}
 		return avalancheSituation2;
-	}
-
-	private String getAspectsImagePath(Set<Aspect> aspects) {
-		int result = 0b00000000;
-		if (aspects != null && !aspects.isEmpty()) {
-			Iterator<Aspect> iterator = aspects.iterator();
-			while (iterator.hasNext()) {
-				switch (iterator.next()) {
-				case N:
-					result = result | 0b10000000;
-					break;
-				case NE:
-					result = result | 0b01000000;
-					break;
-				case E:
-					result = result | 0b00100000;
-					break;
-				case SE:
-					result = result | 0b00010000;
-					break;
-				case S:
-					result = result | 0b00001000;
-					break;
-				case SW:
-					result = result | 0b00000100;
-					break;
-				case W:
-					result = result | 0b00000010;
-					break;
-				case NW:
-					result = result | 0b00000001;
-					break;
-
-				default:
-					break;
-				}
-			}
-			return GlobalVariables.getAspectSymbolPath(result, false);
-		} else {
-			return GlobalVariables.getAspectSymbolPath(-1, false);
-		}
 	}
 
 	private String getDangerRatingColorStyle(DangerRating dangerRating) {

@@ -99,4 +99,11 @@ public enum AvalancheSituation {
 		}
 	}
 
+	public String getSymbolPath(boolean grayscale) {
+		if (grayscale)
+			return "avalanche_situations/grey/" + toStringId() + ".png";
+		else
+			return "avalanche_situations/color/" + toStringId() + ".png";
+	}
+
 }
