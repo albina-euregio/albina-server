@@ -74,6 +74,7 @@ public class PdfUtil {
 	private static PdfUtil instance = null;
 
 	public static final Color blueColor = new DeviceRgb(0, 172, 251);
+	public static final Color aranColor = new DeviceRgb(0xa2, 0x0d, 0x2d);
 	public static final Color blackColor = Color.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
 	public static final Color whiteColor = Color.WHITE;
@@ -135,7 +136,7 @@ public class PdfUtil {
 			openSansBoldFont = createFont("fonts/open-sans/OpenSans-Bold.ttf");
 
 			pdf.addEventHandler(PdfDocumentEvent.END_PAGE,
-					new AvalancheBulletinEventHandler(lang, bulletins, grayscale, preview));
+					new AvalancheBulletinEventHandler(lang, region, bulletins, grayscale, preview));
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 
@@ -213,7 +214,8 @@ public class PdfUtil {
 			String publicationTimeString, String mapsPath) throws IOException {
 		document.add(new AreaBreak());
 
-		final Color blue = grayscale ? blueColorBw : blueColor;
+		final boolean isAran = avalancheBulletin.affectsRegion(GlobalVariables.codeAran);
+		final Color blue = grayscale ? blueColorBw : isAran ? aranColor : blueColor;
 		final Color greyVeryVeryLight = grayscale ? greyVeryVeryLightColorBw : greyVeryVeryLightColor;
 
 		float leadingHeadline = 1.f;
