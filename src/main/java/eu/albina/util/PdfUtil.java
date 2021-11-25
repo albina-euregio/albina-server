@@ -212,6 +212,9 @@ public class PdfUtil {
 			String publicationTimeString, String mapsPath) throws IOException {
 		document.add(new AreaBreak());
 
+		final Color blue = grayscale ? blueColorBw : blueColor;
+		final Color greyVeryVeryLight = grayscale ? greyVeryVeryLightColorBw : greyVeryVeryLightColor;
+
 		float leadingHeadline = 1.f;
 		float leadingText = 1.2f;
 		float paddingLeft = 10.f;
@@ -236,8 +239,9 @@ public class PdfUtil {
 				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
 		table.addCell(cell);
 
+		float[] secondColumnWidths;
 		if (avalancheBulletin.isHasDaytimeDependency()) {
-			float[] secondColumnWidths = { 1, 1, 1 };
+			secondColumnWidths = new float[]{1, 1, 1};
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			Paragraph am = new Paragraph("AM:").setFont(openSansBoldFont).setFontSize(14).setFontColor(blackColor);
 			cell = new Cell(1, 1).add(am);
@@ -310,16 +314,8 @@ public class PdfUtil {
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
 			cell.add(secondTable);
-			cell.setVerticalAlignment(VerticalAlignment.TOP);
-			cell.setTextAlignment(TextAlignment.LEFT);
-			cell.setPaddingLeft(paddingLeft);
-			cell.setPaddingRight(5);
-			cell.setBorder(Border.NO_BORDER);
-			cell.setBorderLeft(
-					new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
-			table.addCell(cell);
 		} else {
-			float[] secondColumnWidths = { 1, 1 };
+			secondColumnWidths = new float[]{1, 1};
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			ImageData regionImageDate;
 			if (grayscale)
@@ -346,15 +342,15 @@ public class PdfUtil {
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
 			cell.add(secondTable);
-			cell.setVerticalAlignment(VerticalAlignment.TOP);
-			cell.setTextAlignment(TextAlignment.LEFT);
-			cell.setPaddingLeft(paddingLeft);
-			cell.setPaddingRight(5);
-			cell.setBorder(Border.NO_BORDER);
-			cell.setBorderLeft(
-					new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
-			table.addCell(cell);
 		}
+		cell.setVerticalAlignment(VerticalAlignment.TOP);
+		cell.setTextAlignment(TextAlignment.LEFT);
+		cell.setPaddingLeft(paddingLeft);
+		cell.setPaddingRight(5);
+		cell.setBorder(Border.NO_BORDER);
+		cell.setBorderLeft(
+				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
+		table.addCell(cell);
 
 		// avalanche activity
 		if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null) {
@@ -399,13 +395,8 @@ public class PdfUtil {
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
 				cell.setBorder(Border.NO_BORDER);
-				if (grayscale) {
-					cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColorBw);
-				} else {
-					cell.setBorderLeft(new SolidBorder(blueColor, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColor);
-				}
+				cell.setBorderLeft(new SolidBorder(blue, 4));
+				cell.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(cell);
 
 				// add danger patterns
@@ -446,13 +437,8 @@ public class PdfUtil {
 					cell.setTextAlignment(TextAlignment.LEFT);
 					cell.setPaddingLeft(paddingLeft);
 					cell.setBorder(Border.NO_BORDER);
-					if (grayscale) {
-						cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-						cell.setBackgroundColor(greyVeryVeryLightColorBw);
-					} else {
-						cell.setBorderLeft(new SolidBorder(blueColor, 4));
-						cell.setBackgroundColor(greyVeryVeryLightColor);
-					}
+					cell.setBorderLeft(new SolidBorder(blue, 4));
+					cell.setBackgroundColor(greyVeryVeryLight);
 					table.addCell(cell);
 				}
 
@@ -465,13 +451,8 @@ public class PdfUtil {
 					cell.setTextAlignment(TextAlignment.LEFT);
 					cell.setPaddingLeft(paddingLeft);
 					cell.setBorder(Border.NO_BORDER);
-					if (grayscale) {
-						cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-						cell.setBackgroundColor(greyVeryVeryLightColorBw);
-					} else {
-						cell.setBorderLeft(new SolidBorder(blueColor, 4));
-						cell.setBackgroundColor(greyVeryVeryLightColor);
-					}
+					cell.setBorderLeft(new SolidBorder(blue, 4));
+					cell.setBackgroundColor(greyVeryVeryLight);
 					table.addCell(cell);
 				}
 			}
@@ -484,13 +465,8 @@ public class PdfUtil {
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
 				cell.setBorder(Border.NO_BORDER);
-				if (grayscale) {
-					cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColorBw);
-				} else {
-					cell.setBorderLeft(new SolidBorder(blueColor, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColor);
-				}
+				cell.setBorderLeft(new SolidBorder(blue, 4));
+				cell.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(cell);
 
 				Paragraph tendencyComment = new Paragraph(
@@ -501,13 +477,8 @@ public class PdfUtil {
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
 				cell.setBorder(Border.NO_BORDER);
-				if (grayscale) {
-					cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColorBw);
-				} else {
-					cell.setBorderLeft(new SolidBorder(blueColor, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColor);
-				}
+				cell.setBorderLeft(new SolidBorder(blue, 4));
+				cell.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(cell);
 			}
 		}
