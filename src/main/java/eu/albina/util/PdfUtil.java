@@ -74,10 +74,11 @@ public class PdfUtil {
 	private static PdfUtil instance = null;
 
 	public static final Color blueColor = new DeviceRgb(0, 172, 251);
-	public static final Color blackColor = new DeviceRgb(0, 0, 0);
+	public static final Color blackColor = Color.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
-	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
+	public static final Color whiteColor = Color.WHITE;
 	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
+	public static final Color redColor = Color.RED;
 
 	public static final Color dangerLevel1Color = new DeviceRgb(197, 255, 118);
 	public static final Color dangerLevel2Color = new DeviceRgb(255, 255, 70);

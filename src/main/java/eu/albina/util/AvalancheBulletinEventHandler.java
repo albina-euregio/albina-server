@@ -40,6 +40,12 @@ import com.itextpdf.layout.element.Image;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
 
+import static eu.albina.util.PdfUtil.blueColor;
+import static eu.albina.util.PdfUtil.blueColorBw;
+import static eu.albina.util.PdfUtil.greyDarkColor;
+import static eu.albina.util.PdfUtil.redColor;
+import static eu.albina.util.PdfUtil.whiteColor;
+
 public class AvalancheBulletinEventHandler implements IEventHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEventHandler.class);
@@ -49,14 +55,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 	private final boolean grayscale;
 	private final boolean preview;
 
-	public static final Color blueColor = new DeviceRgb(0, 172, 251);
-	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
-	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
-	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
-	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
-	public static final Color redColor = new DeviceRgb(255, 0, 0);
-
-	public AvalancheBulletinEventHandler(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
+	public AvalancheBulletinEventHandler(LanguageCode lang, String region, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
 		this.lang = lang;
 		this.bulletins = bulletins;
 		this.grayscale = grayscale;
