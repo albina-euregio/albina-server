@@ -70,7 +70,9 @@ enum MapType {
 		if (!MapLevel.standard.equals(mapLevel)) {
 			return "";
 		} else if (this == MapType.aran) {
-			return "";
+			return grayscale
+				? Resources.getResource("images/logo/grey/lauegi_map.png").toString()
+				: Resources.getResource("images/logo/color/lauegi_map.png").toString();
 		} else {
 			return grayscale
 				? Resources.getResource("images/logo/grey/euregio_map.png").toString()
