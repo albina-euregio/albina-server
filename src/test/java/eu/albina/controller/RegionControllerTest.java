@@ -29,10 +29,8 @@ import eu.albina.model.Region;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
+@Ignore
 public class RegionControllerTest {
-
-	// private static Logger logger =
-	// LoggerFactory.getLogger(RegionControllerTest.class);
 
 	@Before
 	public void setUp() throws Exception {
@@ -44,14 +42,12 @@ public class RegionControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
-	@Ignore
 	@Test
 	public void getTopLevelRegionsTest() throws AlbinaException {
 		List<Region> regions = RegionController.getInstance().getRegions("");
 		Assert.assertEquals(4, regions.size());
 	}
 
-	@Ignore
 	@Test
 	public void getSubregionsTest() throws AlbinaException {
 		List<Region> regions = RegionController.getInstance().getRegions(GlobalVariables.codeTrentino);

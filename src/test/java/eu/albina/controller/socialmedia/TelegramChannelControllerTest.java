@@ -36,10 +36,9 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.TelegramChannelUtil;
 
+@Ignore
 public class TelegramChannelControllerTest {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(TelegramChannelControllerTest.class);
 	private List<AvalancheBulletin> bulletins;
 
 	@Before
@@ -60,7 +59,6 @@ public class TelegramChannelControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
-	@Ignore
 	@Test
 	public void sendMessageTest() throws Exception {
 		TelegramChannelProcessorController tcc = TelegramChannelProcessorController.getInstance();
@@ -79,7 +77,6 @@ public class TelegramChannelControllerTest {
 		}
 	}
 
-	@Ignore
 	@Test
 	public void sendBulletin() throws URISyntaxException, IOException {
 		List<String> regions = new ArrayList<String>();
