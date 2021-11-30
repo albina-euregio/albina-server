@@ -25,6 +25,8 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -53,6 +55,8 @@ import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UtilTest {
@@ -252,5 +256,11 @@ public class UtilTest {
 			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de));
 		assertEquals("https://lawinen.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
 			LinkUtil.getPdfLink(bulletins, LanguageCode.de, GlobalVariables.codeTyrol));
+		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
+			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
+		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
+			Clock.fixed(Instant.parse("2019-01-17T10:40:00Z"), AlbinaUtil.localZone())));
+		assertFalse(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
+			Clock.fixed(Instant.parse("2019-01-17T16:00:00Z"), AlbinaUtil.localZone())));
 	}
 }

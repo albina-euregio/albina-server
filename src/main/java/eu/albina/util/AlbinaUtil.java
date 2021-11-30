@@ -24,8 +24,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
+import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -352,18 +352,18 @@ public class AlbinaUtil {
 	}
 
 	public static boolean isLatest(ZonedDateTime date) {
-		ZonedDateTime now = ZonedDateTime.now();
+		return isLatest(date, Clock.system(localZone()));
+	}
+
+	public static boolean isLatest(ZonedDateTime date, Clock clock) {
+		date = date.withZoneSameInstant(localZone());
+		ZonedDateTime now = ZonedDateTime.now(clock);
 
 		if (now.getHour() >= 17) {
-			if ((LocalDate.now()).plusDays(1).equals(date.toLocalDate())) {
-				return true;
-			}
+			return date.toLocalDate().equals(now.toLocalDate().plusDays(1));
 		} else {
-			if (date.toLocalDate().equals(LocalDate.now())) {
-				return true;
-			}
+			return date.toLocalDate().equals(now.toLocalDate());
 		}
-		return false;
 	}
 
 	public static void runUpdateMapsScript(String date, String publicationTime) {
