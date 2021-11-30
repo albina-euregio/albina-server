@@ -24,6 +24,7 @@
 		<Logger name="org.hibernate" level="${albina.log.level.sql}"/>
 		<Logger name="com.mchange.v2.c3p0" level="${albina.log.level.c3p0}"/>
 		<Logger name="eu.albina.controller.socialmedia.BlogController" level="DEBUG"/>
+		<Logger name="eu.albina.controller.socialmedia.RapidMailProcessorController" level="DEBUG"/>
 		<Logger name="eu.albina.util.PushNotificationUtil" level="DEBUG"/>
 	</Loggers>
 

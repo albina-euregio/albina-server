@@ -49,8 +49,11 @@ import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponse;
 import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponseItem;
 import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
 import eu.albina.model.socialmedia.RapidMailConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RapidMailProcessorController extends CommonProcessor {
+	private static final Logger logger = LoggerFactory.getLogger(RapidMailProcessorController.class);
 	private static final int RAPIDMAIL_SOCKET_TIMEOUT = 10000;
 	private static final int RAPIDMAIL_CONNECTION_TIMEOUT = 10000;
 	private static RapidMailProcessorController instance = null;
@@ -149,7 +152,9 @@ public class RapidMailProcessorController extends CommonProcessor {
 				.addHeader("Content-Type", "application/json").addHeader("Accept", "application/hal+json")
 				.bodyString(toJson(mailingsPost), ContentType.APPLICATION_JSON)
 				.connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT).socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT);
+		logger.debug("Sending {} using request {}", mailingsPost, request);
 		HttpResponse response = executor.execute(request).returnResponse();
+		logger.debug("... returned {}", response.getStatusLine());
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
 			return response;
