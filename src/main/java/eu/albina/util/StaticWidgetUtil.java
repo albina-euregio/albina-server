@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.AttributedString;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -166,11 +167,12 @@ public class StaticWidgetUtil {
 
 			logo = loadImageFromPath("images/logo/color/lawinen_report.png");
 
-			firstLine = staticWidgetBundle.getString("line.1");
+			firstLine = MessageFormat.format(staticWidgetBundle.getString("line.1"), date);
+			int dateIndex = firstLine.indexOf(date);
 			asFirstLine = new AttributedString(firstLine);
 			asFirstLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-			asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 4, 4 + date.length());
-			asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 4, 4 + date.length());
+			asFirstLine.addAttribute(TextAttribute.FONT, openSansBoldFont, dateIndex, dateIndex + date.length());
+			asFirstLine.addAttribute(TextAttribute.FOREGROUND, blueColor, dateIndex, dateIndex + date.length());
 
 			secondLine = highestDangerRating.toString(lang.getLocale(), true);
 			asSecondLine = new AttributedString(secondLine);
@@ -180,8 +182,6 @@ public class StaticWidgetUtil {
 			thirdLine = staticWidgetBundle.getString("line.3");
 			asThirdLine = new AttributedString(thirdLine);
 			asThirdLine.addAttribute(TextAttribute.FONT, openSansRegularFont);
-			asThirdLine.addAttribute(TextAttribute.FONT, openSansBoldFont, 14, 31);
-			asThirdLine.addAttribute(TextAttribute.FOREGROUND, blueColor, 14, 31);
 
 			fourthLine = staticWidgetBundle.getString("line.4");
 			asFourthLine = new AttributedString(fourthLine);
