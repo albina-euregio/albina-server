@@ -57,7 +57,7 @@
 				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
 				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
 				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
-				<albina.log.prefix>LOCAL</albina.log.prefix>
+				<albina.log.prefix>LOCAL </albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
 				<albina.log.level.c3p0>ERROR</albina.log.level.c3p0>
 				<albina.log.level.sql>INFO</albina.log.level.sql>
@@ -99,7 +99,7 @@
 				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
 				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
 				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
-				<albina.log.prefix>DEV</albina.log.prefix>
+				<albina.log.prefix>DEV </albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
 				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
 				<albina.log.level.sql>ERROR</albina.log.level.sql>
