@@ -20,10 +20,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +51,8 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
+
+import static org.junit.Assert.assertEquals;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UtilTest {
@@ -224,5 +228,29 @@ public class UtilTest {
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
 		JsonUtil.createJsonFile(bulletins, "2019-12-30", "2019-12-30_17-15-30");
+	}
+
+	@Test
+	public void testDates() throws Exception {
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
+		assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
+		assertEquals("Donnerstag  17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
+		assertEquals("am Freitag, den 18.01.2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
+		assertEquals("16.01.2019", AlbinaUtil.getPreviousValidityDateString(bulletins, LanguageCode.de));
+		assertEquals("18.01.2019", AlbinaUtil.getNextValidityDateString(bulletins, LanguageCode.de));
+		assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
+		assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
+		assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
+		assertEquals("Lawinen.report für Donnerstag  17.01.2019: https://lawinen.report/bulletin/2019-01-17",
+			SocialMediaUtil.getSocialMediaText(bulletins, false, LanguageCode.de));
+		assertEquals("UPDATE zum Lawinen.report für Donnerstag  17.01.2019: https://lawinen.report/bulletin/2019-01-17",
+			SocialMediaUtil.getSocialMediaText(bulletins, true, LanguageCode.de));
+		assertEquals("https://lawinen.report/bulletin/2019-01-17",
+			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de));
+		assertEquals("https://lawinen.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
+			LinkUtil.getPdfLink(bulletins, LanguageCode.de, GlobalVariables.codeTyrol));
 	}
 }

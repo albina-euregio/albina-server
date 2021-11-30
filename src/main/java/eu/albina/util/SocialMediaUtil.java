@@ -18,7 +18,6 @@ package eu.albina.util;
 
 import java.text.MessageFormat;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import eu.albina.model.AvalancheBulletin;
@@ -28,23 +27,22 @@ interface SocialMediaUtil {
 
 	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
-			ZonedDateTime date = AlbinaUtil.getDate(bulletins);
-			String message = getSocialMediaText(date, update, lang);
+			String message = getSocialMediaText(bulletins, update, lang);
 			String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(bulletins);
-			String bulletinUrl = LinkUtil.getBulletinUrl(lang, date);
+			String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
 			sendBulletinNewsletter(message, lang, regions, attachmentUrl, bulletinUrl);
 		}
 	}
 
-	static String getSocialMediaText(ZonedDateTime date, boolean update, LanguageCode lang) {
-		String dateString = lang.getBundleString("day." + date.getDayOfWeek())
-			+ date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format")));
+	static String getSocialMediaText(List<AvalancheBulletin> bulletins, boolean update, LanguageCode lang) {
+		String dateString = AlbinaUtil.getDate(bulletins, lang);
+		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
 		if (update) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
-				lang.getBundleString("avalanche-report.name"), dateString, LinkUtil.getBulletinUrl(lang, date));
+				lang.getBundleString("avalanche-report.name"), dateString, bulletinUrl);
 		} else {
 			return MessageFormat.format(lang.getBundleString("social-media.message"),
-				lang.getBundleString("avalanche-report.name"), dateString, LinkUtil.getBulletinUrl(lang, date));
+				lang.getBundleString("avalanche-report.name"), dateString, bulletinUrl);
 		}
 	}
 

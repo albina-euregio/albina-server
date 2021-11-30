@@ -91,6 +91,10 @@ public class AlbinaUtil {
 		return lang.getBundle("i18n.Regions").getString(regionId);
 	}
 
+	public static ZoneId localZone() {
+		return ZoneId.of("Europe/Vienna");
+	}
+
 	public static String getDaytimeString(LanguageCode lang, String type) {
 		return lang.getBundleString("daytime." + type);
 	}
@@ -119,6 +123,7 @@ public class AlbinaUtil {
 		}
 
 		if (date != null) {
+			date = date.withZoneSameInstant(localZone());
 			StringBuilder result = new StringBuilder();
 			result.append(lang.getBundleString("tendency.binding-word"));
 			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
@@ -174,6 +179,7 @@ public class AlbinaUtil {
 		StringBuilder result = new StringBuilder();
 		ZonedDateTime date = getDate(bulletins);
 		if (date != null) {
+			date = date.withZoneSameInstant(localZone());
 			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
 			result.append(" ");
 			result.append(date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
@@ -202,28 +208,24 @@ public class AlbinaUtil {
 	}
 
 	public static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset) {
-		ZonedDateTime date = getValidityDate(bulletins);
+		ZonedDateTime date = getDate(bulletins);
+		date = date.withZoneSameInstant(localZone());
 		date = date.plus(offset);
 		return date.toLocalDate().toString();
 	}
 
 	public static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getValidityDate(bulletins);
+		ZonedDateTime date = getDate(bulletins);
+		date = date.withZoneSameInstant(localZone());
 		date = date.minusDays(1);
 		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
 	}
 
 	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getValidityDate(bulletins);
+		ZonedDateTime date = getDate(bulletins);
+		date = date.withZoneSameInstant(localZone());
 		date = date.plusDays(1);
 		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
-	}
-
-	private static ZonedDateTime getValidityDate(List<AvalancheBulletin> bulletins) {
-		ZonedDateTime date = getDate(bulletins);
-		if (date.getHour() > 12)
-			date = date.plusDays(1);
-		return date;
 	}
 
 	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, Period offset) {
@@ -289,7 +291,7 @@ public class AlbinaUtil {
 
 	public static boolean isUpdate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime publicationDate = getPublicationDate(bulletins);
-		LocalDateTime localDateTime = publicationDate.withZoneSameInstant(ZoneId.of("Europe/Paris")).toLocalDateTime();
+		LocalDateTime localDateTime = publicationDate.withZoneSameInstant(localZone()).toLocalDateTime();
 		int secondOfDay = localDateTime.toLocalTime().toSecondOfDay();
 		return (secondOfDay == 61200) ? false : true;
 	}
@@ -310,9 +312,10 @@ public class AlbinaUtil {
 
 	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		ZonedDateTime date = getPublicationDate(bulletins);
-		if (date != null)
+		if (date != null) {
+			date = date.withZoneSameInstant(localZone());
 			return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication")));
-		else
+		} else
 			return "";
 	}
 
@@ -558,7 +561,7 @@ public class AlbinaUtil {
 		} else {
 			dangerRatingAbove = daytimeBulletin.getDangerRatingAbove().toString(lang.getLocale(), true);
 		}
-	
+
 		if (daytimeBulletin.getTreeline()) {
 			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, lang.getBundleString("elevation.treeline"), dangerRatingAbove, lang.getBundleString("elevation.treeline"));
 		} else if (daytimeBulletin.getElevation() > 0) {

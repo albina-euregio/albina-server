@@ -5,8 +5,6 @@ import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
 import java.text.MessageFormat;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -22,13 +20,14 @@ public interface LinkUtil {
 		return lang.getBundleString("avalanche-report.url") + GlobalVariables.avalancheReportBlogUrl;
 	}
 
-	static String getBulletinUrl(LanguageCode lang, ZonedDateTime date) {
-		return lang.getBundleString("avalanche-report.url") + GlobalVariables.avalancheReportBulletinUrl
-			+ date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	static String getBulletinUrl(List<AvalancheBulletin> bulletins, LanguageCode lang) {
+		String date = AlbinaUtil.getValidityDateString(bulletins);
+		return lang.getBundleString("avalanche-report.url") + GlobalVariables.avalancheReportBulletinUrl + date;
 	}
 
 	// REGION
-	static String getPdfLink(String date, LanguageCode lang, String region) {
+	static String getPdfLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
+		String date = AlbinaUtil.getValidityDateString(bulletins);
 		StringBuilder sb = new StringBuilder();
 		sb.append(lang.getBundleString("avalanche-report.url"));
 		sb.append(GlobalVariables.avalancheReportFilesUrl);
