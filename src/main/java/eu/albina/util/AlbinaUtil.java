@@ -228,13 +228,11 @@ public class AlbinaUtil {
 
 	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, Period offset) {
 		if (region != null && !region.isEmpty())
-			return lang.getBundleString("avalanche-report.url") + "/"
-					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
+			return GlobalVariables.getSimpleHtmlUrl(lang) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region + "_" + lang.toString()
 					+ ".html";
 		else
-			return lang.getBundleString("avalanche-report.url") + "/"
-					+ GlobalVariables.getHtmlDirectory().substring(GlobalVariables.directoryOffset) + "/"
+			return GlobalVariables.getSimpleHtmlUrl(lang) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + lang.toString() + ".html";
 	}
 

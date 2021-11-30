@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +63,6 @@ public class GlobalVariables {
 	private static boolean publishBlogsSouthTyrol = false;
 	private static boolean publishBlogsTrentino = false;
 	/*---- Defined in configuration file -----*/
-
-	// TODO: find better solution how to get the URL for simple html and images
-	public static int directoryOffset = 5;
 
 	public static String avalancheReportBlogUrl = "/blog/";
 	public static String avalancheReportFilesUrl = "/albina_files/";
@@ -431,7 +429,13 @@ public class GlobalVariables {
 	}
 
 	public static String getMapsUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + "/" + getMapsPath().substring(directoryOffset);
+		String mapsDirectory = Paths.get(GlobalVariables.getMapsPath()).getFileName().toString();
+		return lang.getBundleString("avalanche-report.url") + "/" + mapsDirectory;
+	}
+
+	public static String getSimpleHtmlUrl(LanguageCode lang) {
+		String htmlDirectory = Paths.get(GlobalVariables.getHtmlDirectory()).getFileName().toString();
+		return lang.getBundleString("avalanche-report.url") + "/" + htmlDirectory;
 	}
 
 	public static String getEuregioLogoPath(boolean grayscale) {
