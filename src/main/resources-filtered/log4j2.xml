@@ -6,8 +6,8 @@
 			<PatternLayout pattern="${albina.log.prefix} %date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
 		</Console>
 		<RollingFile name="FILE"
-					 fileName="/opt/tomcat/logs/albina_dev.log"
-					 filePattern="/opt/tomcat/logs/albina_dev.log.%d{yyyy-MM-dd}.log.gz">
+					 fileName="${albina.log.filepath}${albina.log.filename}"
+					 filePattern="${albina.log.filepath}${albina.log.filename}.%d{yyyy-MM-dd}.log.gz">
 			<PatternLayout pattern="${albina.log.prefix} %date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
 			<TimeBasedTriggeringPolicy/>
 			<DefaultRolloverStrategy/>
