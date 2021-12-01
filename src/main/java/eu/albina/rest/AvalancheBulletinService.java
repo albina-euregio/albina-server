@@ -67,6 +67,7 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.MapUtil;
 import eu.albina.util.PdfUtil;
@@ -1083,7 +1084,7 @@ public class AvalancheBulletinService {
 	public Response sendTestEmail(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST send emails for " + region + " [" + date + "]");
+		logger.debug("POST send test emails for " + region + " [" + date + "]");
 
 		try {
 			if (region == null)
@@ -1105,13 +1106,15 @@ public class AvalancheBulletinService {
 			logger.debug("startDate: " + startDate.toString());
 			logger.debug("#bulletins: " + bulletins.size());
 
-			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false, true);
-			sendEmailsThread.start();
+			EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
-			logger.warn("Error sending emails", e);
+			logger.warn("Error sending test emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (Exception e) {
+			logger.warn("Error sending test emails", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
