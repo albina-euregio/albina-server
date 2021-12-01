@@ -27,6 +27,8 @@
 		<Logger name="eu.albina.controller.socialmedia.BlogController" level="DEBUG"/>
 		<Logger name="eu.albina.controller.socialmedia.RapidMailProcessorController" level="DEBUG"/>
 		<Logger name="eu.albina.util.PushNotificationUtil" level="DEBUG"/>
+		<Logger name="eu.albina.rest.AvalancheBulletinService" level="DEBUG"/>
+		<Logger name="eu.albina.util.EmailUtil" level="DEBUG"/>
 	</Loggers>
 
 </Configuration>

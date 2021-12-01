@@ -120,6 +120,7 @@ public class EmailUtil {
 						regionBulletins.add(avalancheBulletin);
 				}
 				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
+				logger.debug("HTML size: " + emailHtml.length());
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
 			}
 		}

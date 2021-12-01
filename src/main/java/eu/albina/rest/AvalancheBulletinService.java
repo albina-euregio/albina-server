@@ -1102,6 +1102,9 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 
+			logger.debug("startDate: " + startDate.toString());
+			logger.debug("#bulletins: " + bulletins.size());
+
 			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false, true);
 			sendEmailsThread.start();
 
