@@ -19,6 +19,7 @@ package eu.albina.util;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,7 @@ import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class EmailUtilTest {
@@ -67,10 +69,20 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
 				GlobalVariables.codeTyrol, false, false);
+		assertEquals("162 kB", 162, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 		assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag  17.01.2019</h2>"));
 		assertTrue(html.contains("Veröffentlicht am <b>16.01.2019 um 17:00</b>"));
 		assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
 		assertTrue(html.contains("Tendenz: Lawinengefahr nimmt ab</p><p style=\"text-align: left; margin-bottom: 0;\">am Freitag, den 18.01.2019"));
+	}
+
+	@Test
+	public void createBulletinEmailHtml2021() throws IOException, URISyntaxException {
+		final URL resource = Resources.getResource("2021-12-01.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
+			GlobalVariables.codeTyrol, false, false);
+		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
 	@Ignore
