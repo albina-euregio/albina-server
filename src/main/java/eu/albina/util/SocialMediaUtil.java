@@ -17,7 +17,6 @@
 package eu.albina.util;
 
 import java.text.MessageFormat;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import eu.albina.model.AvalancheBulletin;
