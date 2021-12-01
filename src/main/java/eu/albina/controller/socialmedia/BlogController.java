@@ -186,7 +186,7 @@ public class BlogController extends CommonProcessor {
 		try {
 			String htmlString = getBlogPost(blogPostId, region, lang);
 			if (htmlString != null && !htmlString.isEmpty())
-				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject);
+				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject, false);
 		} catch (IOException e) {
 			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString(), e);
 		} catch (URISyntaxException e) {

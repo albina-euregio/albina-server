@@ -105,7 +105,7 @@ public class EmailUtil {
 		return cfg;
 	}
 
-	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 			String subject;
@@ -120,7 +120,7 @@ public class EmailUtil {
 						regionBulletins.add(avalancheBulletin);
 				}
 				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
-				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
+				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
 			}
 		}
 	}
@@ -148,17 +148,17 @@ public class EmailUtil {
 		}
 	}
 
-	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
+	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
 		logger.info("Sending bulletin email in " + lang + " for " + region + "...");
-		return sendEmail(lang, region, emailHtml, subject);
+		return sendEmail(lang, region, emailHtml, subject, test);
 	}
 
-	public HttpResponse sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject) {
+	public HttpResponse sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
 		logger.info("Sending blog post email in " + lang + " for " + region + "...");
-		return sendEmail(lang, region, emailHtml, subject);
+		return sendEmail(lang, region, emailHtml, subject, test);
 	}
 
-	private HttpResponse sendEmail(LanguageCode lang, String region, String emailHtml, String subject) {
+	private HttpResponse sendEmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
 		try {
 			RapidMailProcessorController rmc = RapidMailProcessorController.getInstance();
 			RegionConfigurationController rcc = RegionConfigurationController.getInstance();
@@ -169,7 +169,7 @@ public class EmailUtil {
 					new PostMailingsRequest().fromEmail(lang.getBundleString("avalanche-report.email"))
 							.fromName(lang.getBundleString("avalanche-report.name")).subject(subject)
 							.file(new PostMailingsRequestPostFile().description("mail-content.zip")
-									.type("application/zip").content(createZipFile(emailHtml, null))));
+									.type("application/zip").content(createZipFile(emailHtml, null))), test);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region, e);
 			return null;

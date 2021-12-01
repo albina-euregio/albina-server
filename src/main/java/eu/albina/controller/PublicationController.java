@@ -576,7 +576,7 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("Email production started");
-					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update);
+					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, false);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing emails", e);
 				} finally {
