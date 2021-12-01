@@ -17,12 +17,14 @@
 package eu.albina.rest;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,17 @@ import eu.albina.util.PushNotificationUtil;
 @Api(value = "/push")
 public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
+
+	static class VapidKey {
+		public String vapidPublicKey = GlobalVariables.getVapidPublicKey();
+	}
+
+	@GET
+	@Path("/key")
+	@Produces(MediaType.APPLICATION_JSON)
+	public VapidKey key() {
+		return new VapidKey();
+	}
 
 	@POST
 	@Path("/subscribe")
