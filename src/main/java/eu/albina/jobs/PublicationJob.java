@@ -60,14 +60,22 @@ public class PublicationJob implements org.quartz.Job {
 
 		// REGION
 		List<String> regions = new ArrayList<String>();
-		if (GlobalVariables.isPublishBulletinsTyrol())
+		if (GlobalVariables.isPublishBulletinsTyrol()) {
+			logger.debug("Region: " + GlobalVariables.codeTyrol);
 			regions.add(GlobalVariables.codeTyrol);
-		if (GlobalVariables.isPublishBulletinsSouthTyrol())
+		}
+		if (GlobalVariables.isPublishBulletinsSouthTyrol()) {
+			logger.debug("Region: " + GlobalVariables.codeSouthTyrol);
 			regions.add(GlobalVariables.codeSouthTyrol);
-		if (GlobalVariables.isPublishBulletinsTrentino())
+		}
+		if (GlobalVariables.isPublishBulletinsTrentino()) {
+			logger.debug("Region: " + GlobalVariables.codeTrentino);
 			regions.add(GlobalVariables.codeTrentino);
-		if (GlobalVariables.isPublishBulletinsAran())
+		}
+		if (GlobalVariables.isPublishBulletinsAran()) {
+			logger.debug("Region: " + GlobalVariables.codeAran);
 			regions.add(GlobalVariables.codeAran);
+		}
 
 		if (!regions.isEmpty()) {
 			try {
@@ -76,7 +84,12 @@ public class PublicationJob implements org.quartz.Job {
 				Instant startDate = AlbinaUtil.getInstantStartOfDay().plus(1, ChronoUnit.DAYS);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
+				logger.debug("Start date: " + startDate.toString());
+				logger.debug("End date: " + endDate.toString());
+
 				Instant publicationDate = Instant.now();
+
+				logger.debug("Publication date: " + publicationDate.toString());
 
 				// Set publication date
 				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
@@ -89,8 +102,11 @@ public class PublicationJob implements org.quartz.Job {
 								&& !avalancheBulletin.getPublishedRegions().isEmpty())
 							result.add(avalancheBulletin);
 					}
-					if (result != null && !result.isEmpty())
+					if (result != null && !result.isEmpty()) {
 						PublicationController.getInstance().publishAutomatically(result);
+					} else {
+						logger.debug("No bulletins to publish!");
+					}
 				}
 
 				List<String> avalancheReportIds = new ArrayList<String>();
