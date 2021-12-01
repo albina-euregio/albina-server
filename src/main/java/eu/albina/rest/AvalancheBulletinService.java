@@ -1065,7 +1065,44 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
 
-			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false);
+			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false, false);
+			sendEmailsThread.start();
+
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+		} catch (AlbinaException e) {
+			logger.warn("Error sending emails", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
+	@Path("/publish/email/test")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response sendTestEmail(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@Context SecurityContext securityContext) {
+		logger.debug("POST send emails for " + region + " [" + date + "]");
+
+		try {
+			if (region == null)
+				throw new AlbinaException("No region defined!");
+
+			List<String> regions = new ArrayList<String>();
+			regions.add(region);
+
+			Instant startDate = null;
+
+			if (date != null)
+				startDate = ZonedDateTime.parse(date).toInstant();
+			else
+				throw new AlbinaException("No date!");
+
+			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+
+			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false, true);
 			sendEmailsThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();

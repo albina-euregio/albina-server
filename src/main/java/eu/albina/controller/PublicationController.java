@@ -152,7 +152,7 @@ public class PublicationController {
 
 			// send emails
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isSendEmails()) {
-				Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.regionsEuregio, false);
+				Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.regionsEuregio, false, false);
 				sendEmailsThread.start();
 			}
 
@@ -255,7 +255,7 @@ public class PublicationController {
 
 			// send emails to regions
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isSendEmails()) {
-				Thread sendEmailsThread = sendEmails(bulletins, regions, true);
+				Thread sendEmailsThread = sendEmails(bulletins, regions, true, false);
 				sendEmailsThread.start();
 			}
 
@@ -570,13 +570,13 @@ public class PublicationController {
 	 * @param bulletins
 	 *            the bulletins contained in the emails
 	 */
-	public Thread sendEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+	public Thread sendEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
 		return new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					logger.info("Email production started");
-					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, false);
+					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, test);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing emails", e);
 				} finally {
