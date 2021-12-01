@@ -165,8 +165,8 @@ public class StaticWidgetUtil {
 			AttributedString asThirdLine;
 			AttributedString asFourthLine;
 
-			logo = loadImageFromPath("images/logo/color/lawinen_report.png");
-
+			logo = loadImageFromPath(GlobalVariables.getAvalancheReportLogoPath(lang));
+	
 			firstLine = MessageFormat.format(staticWidgetBundle.getString("line.1"), date);
 			int dateIndex = firstLine.indexOf(date);
 			asFirstLine = new AttributedString(firstLine);

@@ -445,6 +445,19 @@ public class GlobalVariables {
 			return "logo/color/euregio.png";
 	}
 
+	public static String getAvalancheReportLogoPath(LanguageCode lang) {
+		switch (lang) {
+			case de:
+				return "images/logo/color/lawinen_report.png";
+			case it:
+				return "images/logo/color/valanghe_report.png";
+			case en:
+				return "images/logo/color/avalanche_report.png";
+			default:
+				return "images/logo/color/avalanche_report.png";
+		}
+	}
+
 	public static String getCopyrightText(LanguageCode lang) {
 		// return AlbinaUtil.getYear(bulletins) + lang.getBundleString("copyright");
 		return "";
