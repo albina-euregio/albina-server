@@ -195,10 +195,9 @@ public class AlbinaUtil {
 		return getDate(bulletins).getYear();
 	}
 
-	public static String getFilenameDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getDate(bulletins);
-		if (date != null)
-			return date.toLocalDate() + "_" + lang.toString();
+	public static String getStaticWidgetFilename(String validityDateString, LanguageCode lang) {
+		if (validityDateString != null)
+			return validityDateString + "_" + lang.toString();
 		else
 			return "_" + lang.toString();
 	}

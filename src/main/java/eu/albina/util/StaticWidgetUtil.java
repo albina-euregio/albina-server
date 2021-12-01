@@ -236,7 +236,7 @@ public class StaticWidgetUtil {
 			ig2.drawImage(euregioLogo, 330, 35, null);
 
 			String filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString
-					+ "/" + AlbinaUtil.getFilenameDate(bulletins, lang) + ".png";
+					+ "/" + AlbinaUtil.getStaticWidgetFilename(validityDateString, lang) + ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
