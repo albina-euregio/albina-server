@@ -152,9 +152,11 @@ public class RapidMailProcessorController extends CommonProcessor {
 				.addHeader("Content-Type", "application/json").addHeader("Accept", "application/hal+json")
 				.bodyString(toJson(mailingsPost), ContentType.APPLICATION_JSON)
 				.connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT).socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT);
-		logger.debug("Sending {} using request {}", mailingsPost, request);
+		logger.info("Sending {} using request {}", mailingsPost, request);
 		HttpResponse response = executor.execute(request).returnResponse();
-		logger.debug("... returned {}", response.getStatusLine());
+		logger.info("... returned {}", response.getStatusLine());
+		logger.info("RESPONSE: " + response.toString());
+		logger.info("CONTENT: " + response.getEntity().getContent().toString());
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
 			return response;
