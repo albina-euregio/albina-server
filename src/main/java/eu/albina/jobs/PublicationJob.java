@@ -74,7 +74,7 @@ public class PublicationJob implements org.quartz.Job {
 				User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
 
 				Instant startDate = AlbinaUtil.getInstantStartOfDay().plus(1, ChronoUnit.DAYS);
-				Instant endDate = AlbinaUtil.getInstantStartOfDay().plus(2, ChronoUnit.DAYS);
+				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 				Instant publicationDate = Instant.now();
 
