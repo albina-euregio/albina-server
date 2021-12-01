@@ -12,6 +12,7 @@
 			<TimeBasedTriggeringPolicy/>
 			<DefaultRolloverStrategy/>
 		</RollingFile>
+		<!-- System Environment Variable SENTRY_DSN -->
 		<Sentry name="SENTRY" minimumEventLevel="WARN"/>
 	</Appenders>
 
