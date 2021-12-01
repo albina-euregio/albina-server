@@ -163,6 +163,14 @@ mv $1/latest/$2_es_CAAMLv6.xml $1/latest/es_CAAMLv6.xml
 mv $1/latest/$2_ca_CAAMLv6.xml $1/latest/ca_CAAMLv6.xml
 mv $1/latest/$2_oc_CAAMLv6.xml $1/latest/oc_CAAMLv6.xml
 
+mv $1/latest/$2_de.png $1/latest/de.png
+mv $1/latest/$2_it.png $1/latest/it.png
+mv $1/latest/$2_en.png $1/latest/en.png
+mv $1/latest/$2_fr.png $1/latest/fr.png
+mv $1/latest/$2_es.png $1/latest/es.png
+mv $1/latest/$2_ca.png $1/latest/ca.png
+mv $1/latest/$2_oc.png $1/latest/oc.png
+
 chmod 755 $3/*.html
 chmod -R 755 $1/latest/
 
