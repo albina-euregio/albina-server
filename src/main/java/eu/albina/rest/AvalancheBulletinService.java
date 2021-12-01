@@ -18,7 +18,7 @@ package eu.albina.rest;
 
 import java.io.File;
 import java.time.Instant;
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class AvalancheBulletinService {
 		Instant endDate = null;
 
 		if (date != null)
-			startDate = OffsetDateTime.parse(date).toInstant();
+			startDate = ZonedDateTime.parse(date).toInstant();
 		else
 			startDate = AlbinaUtil.getInstantStartOfDay();
 
@@ -136,7 +136,7 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				startDate = AlbinaUtil.getInstantStartOfDay();
 
@@ -182,7 +182,7 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				startDate = AlbinaUtil.getInstantStartOfDay();
 			endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -236,7 +236,7 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				startDate = AlbinaUtil.getInstantStartOfDay();
 
@@ -268,7 +268,7 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				startDate = AlbinaUtil.getInstantStartOfDay();
 
@@ -296,12 +296,12 @@ public class AvalancheBulletinService {
 
 		try {
 			if (start != null)
-				startDate = OffsetDateTime.parse(start).toInstant();
+				startDate = ZonedDateTime.parse(start).toInstant();
 			else
 				startDate = AlbinaUtil.getInstantStartOfDay();
 
 			if (end != null)
-				endDate = OffsetDateTime.parse(end).toInstant();
+				endDate = ZonedDateTime.parse(end).toInstant();
 
 			Map<Instant, BulletinStatus> status;
 			// if no region is defined, get status for EUREGIO
@@ -340,12 +340,12 @@ public class AvalancheBulletinService {
 
 		try {
 			if (start != null)
-				startDate = OffsetDateTime.parse(start).toInstant();
+				startDate = ZonedDateTime.parse(start).toInstant();
 			else
 				startDate = AlbinaUtil.getInstantStartOfDay();
 
 			if (end != null)
-				endDate = OffsetDateTime.parse(end).toInstant();
+				endDate = ZonedDateTime.parse(end).toInstant();
 
 			Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 					endDate, region);
@@ -377,12 +377,12 @@ public class AvalancheBulletinService {
 		Instant endDate = null;
 
 		if (start != null)
-			startDate = OffsetDateTime.parse(start).toInstant();
+			startDate = ZonedDateTime.parse(start).toInstant();
 		else
 			startDate = AlbinaUtil.getInstantStartOfDay();
 
 		if (end != null)
-			endDate = OffsetDateTime.parse(end).toInstant();
+			endDate = ZonedDateTime.parse(end).toInstant();
 
 		Map<Instant, AvalancheReport> status = AvalancheReportController.getInstance().getPublicationStatus(startDate,
 				endDate, region);
@@ -410,7 +410,7 @@ public class AvalancheBulletinService {
 
 		try {
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				startDate = AlbinaUtil.getInstantStartOfDay();
 
@@ -448,7 +448,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -521,7 +521,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 			Instant endDate = null;
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 			endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -564,7 +564,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 			Instant endDate = null;
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 			endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -622,7 +622,7 @@ public class AvalancheBulletinService {
 				Instant endDate = null;
 
 				if (date != null)
-					startDate = OffsetDateTime.parse(date).toInstant();
+					startDate = ZonedDateTime.parse(date).toInstant();
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -668,7 +668,7 @@ public class AvalancheBulletinService {
 				Instant endDate = null;
 
 				if (date != null)
-					startDate = OffsetDateTime.parse(date).toInstant();
+					startDate = ZonedDateTime.parse(date).toInstant();
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -737,7 +737,7 @@ public class AvalancheBulletinService {
 					Instant endDate = null;
 
 					if (date != null)
-						startDate = OffsetDateTime.parse(date).toInstant();
+						startDate = ZonedDateTime.parse(date).toInstant();
 					else
 						throw new AlbinaException("No date!");
 					endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -793,7 +793,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -845,7 +845,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -886,7 +886,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -932,7 +932,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -976,7 +976,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -1014,7 +1014,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -1058,7 +1058,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -1095,7 +1095,7 @@ public class AvalancheBulletinService {
 			Instant startDate = null;
 
 			if (date != null)
-				startDate = OffsetDateTime.parse(date).toInstant();
+				startDate = ZonedDateTime.parse(date).toInstant();
 			else
 				throw new AlbinaException("No date!");
 
@@ -1131,7 +1131,7 @@ public class AvalancheBulletinService {
 				Instant endDate = null;
 
 				if (date != null)
-					startDate = OffsetDateTime.parse(date).toInstant();
+					startDate = ZonedDateTime.parse(date).toInstant();
 				else
 					throw new AlbinaException("No date!");
 				endDate = startDate.plus(1, ChronoUnit.DAYS);
