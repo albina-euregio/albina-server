@@ -141,8 +141,8 @@ public class RapidMailProcessorController extends CommonProcessor {
 		logger.info("Sending {} using request {}", mailingsPost, request);
 		HttpResponse response = executor.execute(request).returnResponse();
 		logger.info("... returned {}", response.getStatusLine());
-		logger.info("RESPONSE: " + response.toString());
-		logger.info("CONTENT: " + response.getEntity().getContent().toString());
+		logger.debug("RESPONSE: " + response.toString());
+		logger.debug("CONTENT: " + response.getEntity().getContent().toString());
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
 			return response;
