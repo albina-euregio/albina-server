@@ -22,7 +22,6 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.time.OffsetDateTime;
 import java.util.Base64;
 import java.util.Collections;
 
@@ -129,9 +128,6 @@ public class RapidMailProcessorController extends CommonProcessor {
 					new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
 		}
 
-		if (mailingsPost.getSendAt() == null) {
-			mailingsPost.setSendAt(OffsetDateTime.now().toString());
-		}
 		if (mailingsPost.getStatus() == null) {
 			mailingsPost.setStatus("scheduled");
 		}
