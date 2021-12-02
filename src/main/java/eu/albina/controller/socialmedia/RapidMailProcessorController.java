@@ -25,6 +25,7 @@ import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.Collections;
 
+import eu.albina.model.enumerations.LanguageCode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
@@ -90,7 +91,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 	}
 
 	public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient,
-			String sendActivationmail, String language) throws Exception {
+			String sendActivationmail, LanguageCode language) throws Exception {
 		if (recipient.getRecipientlistId() == null) {
 			String recipientName = getRecipientName(config, language);
 			Integer recipientListId = getRecipientId(config, recipientName);
@@ -119,7 +120,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse sendMessage(RapidMailConfig config, String language, PostMailingsRequest mailingsPost, boolean test)
+	public HttpResponse sendMessage(RapidMailConfig config, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
 			throws Exception {
 		if (mailingsPost.getDestinations() == null) {
 			String recipientName = test ? "TEST" : getRecipientName(config, language);
@@ -151,8 +152,8 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return response;
 	}
 
- 	private String getRecipientName(RapidMailConfig config, String language) {
-		return config.getRegionConfiguration().getRegion().getId() + "_" + language.toUpperCase();
+ 	private String getRecipientName(RapidMailConfig config, LanguageCode language) {
+		return config.getRegionConfiguration().getRegion().getId() + "_" + language.name().toUpperCase();
 	}
 
 	public int getRecipientId(RapidMailConfig config, String recipientName) throws Exception {

@@ -165,7 +165,7 @@ public class EmailUtil {
 			RegionConfiguration regionConfiguration = rcc.getRegionConfiguration(region);
 			RapidMailConfig rmConfig = regionConfiguration.getRapidMailConfig();
 
-			rmc.sendMessage(rmConfig, lang.name().toUpperCase(),
+			rmc.sendMessage(rmConfig, lang,
 					new PostMailingsRequest().fromEmail(lang.getBundleString("avalanche-report.email"))
 							.fromName(lang.getBundleString("avalanche-report.name")).subject(subject)
 							.file(new PostMailingsRequestPostFile().description("mail-content.zip")
