@@ -86,7 +86,6 @@ public class EmailUtilTest {
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
 	}
 	
-	@Ignore
 	@Test
 	public void langTest() {
 		assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
