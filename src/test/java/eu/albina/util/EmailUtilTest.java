@@ -25,8 +25,6 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -44,16 +42,6 @@ public class EmailUtilTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(EmailUtilTest.class);
 
-	@Before
-	public void setUp() throws IOException {
-		//HibernateUtil.getInstance().setUp();
-	}
-
-	@After
-	public void shutDown() {
-		//HibernateUtil.getInstance().shutDown();
-	}
-	
 	@Test
 	public void createBulletinEmailHtml() throws IOException, URISyntaxException {
 		final URL resource = Resources.getResource("2019-01-17.json");
@@ -93,8 +81,10 @@ public class EmailUtilTest {
 		assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
 	}
 
+	@Ignore
 	@Test
 	public void sendLangEmail() throws MessagingException, IOException, URISyntaxException {
+		HibernateUtil.getInstance().setUp();
 		final URL resource = Resources.getResource("2021-12-02.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final boolean update = false;
@@ -119,5 +109,6 @@ public class EmailUtilTest {
 			String emailHtml = EmailUtil.getInstance().createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
 			EmailUtil.getInstance().sendBulletinEmailRapidmail(lang, region, emailHtml, subject, true);
 		}
+		HibernateUtil.getInstance().shutDown();
 	}
 }
