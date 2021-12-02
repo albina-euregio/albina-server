@@ -93,7 +93,8 @@ public class RapidMailProcessorController extends CommonProcessor {
 	public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient,
 			String sendActivationmail, String language) throws Exception {
 		if (recipient.getRecipientlistId() == null) {
-			Integer recipientListId = resolveRecipientListIdByName(config, language, false);
+			String recipientName = getRecipientName(config, language);
+			Integer recipientListId = getRecipientId(config, recipientName);
 			recipient.setRecipientlistId(recipientListId);
 		}
 		String url = baseUrl + "/recipients";
@@ -122,7 +123,8 @@ public class RapidMailProcessorController extends CommonProcessor {
 	public HttpResponse sendMessage(RapidMailConfig config, String language, PostMailingsRequest mailingsPost, boolean test)
 			throws Exception {
 		if (mailingsPost.getDestinations() == null) {
-			int recipientListId = resolveRecipientListIdByName(config, language, test);
+			String recipientName = test ? "TEST" : getRecipientName(config, language);
+			int recipientListId = getRecipientId(config, recipientName);
 			mailingsPost.setDestinations(Collections.singletonList(
 					new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
 		}
@@ -153,15 +155,11 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return response;
 	}
 
- 	private String getRecipientName(RapidMailConfig config, String language, boolean test) {
-		if (test)
-			return "TEST";
-		else
-			return config.getRegionConfiguration().getRegion().getId() + "_" + language.toUpperCase();
+ 	private String getRecipientName(RapidMailConfig config, String language) {
+		return config.getRegionConfiguration().getRegion().getId() + "_" + language.toUpperCase();
 	}
 
-	private int resolveRecipientListIdByName(RapidMailConfig config, String language, boolean test) throws Exception {
-		String recipientName = getRecipientName(config, language, test);
+	public int getRecipientId(RapidMailConfig config, String recipientName) throws Exception {
 		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(config);
 		return recipientListResponse.getEmbedded().getRecipientlists().stream()
 			.filter(x -> StringUtils.equalsIgnoreCase(x.getName(), recipientName))
