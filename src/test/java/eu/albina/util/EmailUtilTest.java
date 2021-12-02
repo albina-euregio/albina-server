@@ -100,6 +100,7 @@ public class EmailUtilTest {
 			subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
 		else
 			subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
+		subject = System.getProperty("java.version") + " " + subject;
 		for (String region : regions) {
 			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
