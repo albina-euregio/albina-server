@@ -153,18 +153,21 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	private int resolveRecipientListIdByName(RapidMailConfig config, String language, boolean test) throws Exception {
-		String recipientName;
+ 	private String getRecipientName(RapidMailConfig config, String language, boolean test) {
 		if (test)
-			recipientName = "TEST";
+			return "TEST";
 		else
-			recipientName = config.getRegionConfiguration().getRegion().getId() + "_" + language.toUpperCase();
+			return config.getRegionConfiguration().getRegion().getId() + "_" + language.toUpperCase();
+	}
+
+	private int resolveRecipientListIdByName(RapidMailConfig config, String language, boolean test) throws Exception {
+		String recipientName = getRecipientName(config, language, test);
 		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(config);
-		Integer recipientId = recipientListResponse.getEmbedded().getRecipientlists().stream()
-				.filter(x -> StringUtils.equalsIgnoreCase(x.getName(), recipientName))
-				.map(RapidMailRecipientListResponseItem::getId).findFirst().orElseThrow(() -> new Exception(
-						"Invalid recipientList name '" + recipientName + "'. Please check configuration"));
-		return recipientId;
+		return recipientListResponse.getEmbedded().getRecipientlists().stream()
+			.filter(x -> StringUtils.equalsIgnoreCase(x.getName(), recipientName))
+			.mapToInt(RapidMailRecipientListResponseItem::getId)
+			.findFirst()
+			.orElseThrow(() -> new Exception("Invalid recipientList name '" + recipientName + "'. Please check configuration"));
 	}
 
 	private String getResponseContent(HttpResponse response) throws IOException {
