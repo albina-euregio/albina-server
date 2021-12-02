@@ -85,6 +85,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 	}
 
 	public HttpResponse getRecipientsList(RapidMailConfig config, String regionId) throws IOException {
+		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/get_recipientlists
 		Request request = Request.Get(baseUrl + "/recipientlists")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 				.addHeader("Accept", "application/hal+json").connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
@@ -125,6 +126,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 	}
 
 	public HttpResponse deleteRecipient(RapidMailConfig config, Integer recipientId) throws IOException {
+		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/delete_recipientlists__recipientlist_id_
 		HttpResponse response = executor.execute(Request.Delete(baseUrl + "/recipients/" + recipientId)
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 				.addHeader("Accept", "application/json").connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
@@ -147,6 +149,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 			mailingsPost.setStatus("scheduled");
 		}
 
+		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Mailings#/Mailings/post_mailings
 		Request request = Request.Post(baseUrl + "/mailings")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 				.addHeader("Content-Type", "application/json").addHeader("Accept", "application/hal+json")
