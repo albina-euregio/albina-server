@@ -59,9 +59,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class UtilTest {
+public class AlbinaUtilTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(UtilTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtilTest.class);
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;
