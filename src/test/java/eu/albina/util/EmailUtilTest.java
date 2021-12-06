@@ -25,10 +25,10 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Resources;
 
@@ -40,29 +40,8 @@ import static org.junit.Assert.assertTrue;
 
 public class EmailUtilTest {
 
-	private List<AvalancheBulletin> bulletins;
-	private List<AvalancheBulletin> bulletinsAmPm;
+	private static final Logger logger = LoggerFactory.getLogger(EmailUtilTest.class);
 
-	@Before
-	public void setUp() throws IOException {
-		HibernateUtil.getInstance().setUp();
-		// Load valid avalanche bulletin JSON from resources
-		bulletins = new ArrayList<AvalancheBulletin>();
-		bulletinsAmPm = new ArrayList<AvalancheBulletin>();
-		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")));
-		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_2.json")));
-		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")));
-		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json")));
-		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
-		bulletinsAmPm.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_6.json")));
-		bulletinsAmPm.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_7.json")));
-	}
-
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
-	}
-	
 	@Test
 	public void createBulletinEmailHtml() throws IOException, URISyntaxException {
 		final URL resource = Resources.getResource("2019-01-17.json");
@@ -85,11 +64,52 @@ public class EmailUtilTest {
 		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
-	@Ignore
 	@Test
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
+		final URL resource = Resources.getResource("2021-12-02.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		logger.info("#bulletins: " + bulletins.size());
+		ArrayList<String> regions = new ArrayList<String>();
+		regions.add(GlobalVariables.codeTrentino);
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
+	}
+	
+	@Test
+	public void langTest() {
+		assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
+		assertEquals("Tutte le elevazioni", LanguageCode.it.getBundleString("elevation.all"));
+		assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
+	}
+
+	@Ignore
+	@Test
+	public void sendLangEmail() throws MessagingException, IOException, URISyntaxException {
+		HibernateUtil.getInstance().setUp();
+		final URL resource = Resources.getResource("2021-12-02.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final boolean update = false;
+		final LanguageCode lang = LanguageCode.en;
 		ArrayList<String> regions = new ArrayList<String>();
 		regions.add(GlobalVariables.codeTyrol);
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
+		regions.add(GlobalVariables.codeSouthTyrol);
+		regions.add(GlobalVariables.codeTrentino);
+
+		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
+		String subject;
+		if (update)
+			subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
+		else
+			subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
+		subject = System.getProperty("java.version") + " " + subject;
+		for (String region : regions) {
+			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin avalancheBulletin : bulletins) {
+				if (avalancheBulletin.affectsRegionOnlyPublished(region))
+					regionBulletins.add(avalancheBulletin);
+			}
+			String emailHtml = EmailUtil.getInstance().createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
+			EmailUtil.getInstance().sendBulletinEmailRapidmail(lang, region, emailHtml, subject, true);
+		}
+		HibernateUtil.getInstance().shutDown();
 	}
 }

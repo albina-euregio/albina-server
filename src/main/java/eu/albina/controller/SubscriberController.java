@@ -292,7 +292,7 @@ public class SubscriberController {
 			PostRecipientsRequest recipient = new PostRecipientsRequest();
 			recipient.setEmail(subscriber.getEmail());
 
-			ctRm.createRecipient(rc.getRapidMailConfig(), recipient, null, subscriber.getLanguage().toString());
+			ctRm.createRecipient(rc.getRapidMailConfig(), recipient, null, subscriber.getLanguage());
 		}
 	}
 }

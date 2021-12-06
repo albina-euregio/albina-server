@@ -22,22 +22,18 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.time.OffsetDateTime;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
+import eu.albina.model.enumerations.LanguageCode;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHttpResponse;
 import org.n52.jackson.datatype.jts.JtsModule;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -84,30 +80,21 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return "Basic " + Base64.getEncoder().encodeToString((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
 	}
 
-	public HttpResponse getRecipientsList(RapidMailConfig config, String regionId) throws IOException {
+	public RapidMailRecipientListResponse getRecipientsList(RapidMailConfig config) throws IOException {
+		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/get_recipientlists
 		Request request = Request.Get(baseUrl + "/recipientlists")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 				.addHeader("Accept", "application/hal+json").connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
 				.socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT);
 		HttpResponse response = executor.execute(request).returnResponse();
-		if (regionId != null && response.getStatusLine().getStatusCode() == 200) {
-			RapidMailRecipientListResponse recipientListResponse = objectMapper.readValue(getResponseContent(response),
-					RapidMailRecipientListResponse.class);
-			List<RapidMailRecipientListResponseItem> list = recipientListResponse.getEmbedded().getRecipientlists();
-			recipientListResponse.getEmbedded().setRecipientlists(
-					list.stream().filter(x -> x.getName().startsWith(regionId + "_")).collect(Collectors.toList()));
-			BasicHttpResponse newResp = new BasicHttpResponse(response.getStatusLine());
-			newResp.setEntity(new StringEntity(toJson(recipientListResponse)));
-			newResp.setHeaders(response.getAllHeaders());
-			response = newResp;
-		}
-		return response;
+		return objectMapper.readValue(getResponseContent(response), RapidMailRecipientListResponse.class);
 	}
 
 	public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient,
-			String sendActivationmail, String language) throws Exception {
+			String sendActivationmail, LanguageCode language) throws Exception {
 		if (recipient.getRecipientlistId() == null) {
-			Integer recipientListId = resolveRecipientListIdByName(config, language, false);
+			String recipientName = getRecipientName(config, language);
+			Integer recipientListId = getRecipientId(config, recipientName);
 			recipient.setRecipientlistId(recipientListId);
 		}
 		String url = baseUrl + "/recipients";
@@ -125,6 +112,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 	}
 
 	public HttpResponse deleteRecipient(RapidMailConfig config, Integer recipientId) throws IOException {
+		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/delete_recipientlists__recipientlist_id_
 		HttpResponse response = executor.execute(Request.Delete(baseUrl + "/recipients/" + recipientId)
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 				.addHeader("Accept", "application/json").connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
@@ -132,21 +120,20 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse sendMessage(RapidMailConfig config, String language, PostMailingsRequest mailingsPost, boolean test)
+	public HttpResponse sendMessage(RapidMailConfig config, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
 			throws Exception {
 		if (mailingsPost.getDestinations() == null) {
-			int recipientListId = resolveRecipientListIdByName(config, language, test);
+			String recipientName = test ? "TEST" : getRecipientName(config, language);
+			int recipientListId = getRecipientId(config, recipientName);
 			mailingsPost.setDestinations(Collections.singletonList(
 					new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
 		}
 
-		if (mailingsPost.getSendAt() == null) {
-			mailingsPost.setSendAt(OffsetDateTime.now().toString());
-		}
 		if (mailingsPost.getStatus() == null) {
 			mailingsPost.setStatus("scheduled");
 		}
 
+		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Mailings#/Mailings/post_mailings
 		Request request = Request.Post(baseUrl + "/mailings")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 				.addHeader("Content-Type", "application/json").addHeader("Accept", "application/hal+json")
@@ -155,8 +142,8 @@ public class RapidMailProcessorController extends CommonProcessor {
 		logger.info("Sending {} using request {}", mailingsPost, request);
 		HttpResponse response = executor.execute(request).returnResponse();
 		logger.info("... returned {}", response.getStatusLine());
-		logger.info("RESPONSE: " + response.toString());
-		logger.info("CONTENT: " + response.getEntity().getContent().toString());
+		logger.debug("RESPONSE: " + response.toString());
+		logger.debug("CONTENT: " + response.getEntity().getContent().toString());
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
 			return response;
@@ -165,20 +152,17 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	private int resolveRecipientListIdByName(RapidMailConfig config, String language, boolean test) throws Exception {
-		String recipientName;
-		if (test)
-			recipientName = "TEST";
-		else
-			recipientName = config.getRegionConfiguration().getRegion().getId() + "_" + language.toUpperCase();
-		HttpResponse resp = getRecipientsList(config, null);
-		RapidMailRecipientListResponse recipientListResponse = objectMapper.readValue(getResponseContent(resp),
-				RapidMailRecipientListResponse.class);
-		Integer recipientId = recipientListResponse.getEmbedded().getRecipientlists().stream()
-				.filter(x -> StringUtils.equalsIgnoreCase(x.getName(), recipientName))
-				.map(RapidMailRecipientListResponseItem::getId).findFirst().orElseThrow(() -> new Exception(
-						"Invalid recipientList name '" + recipientName + "'. Please check configuration"));
-		return recipientId;
+ 	private String getRecipientName(RapidMailConfig config, LanguageCode language) {
+		return config.getRegionConfiguration().getRegion().getId() + "_" + language.name().toUpperCase();
+	}
+
+	public int getRecipientId(RapidMailConfig config, String recipientName) throws Exception {
+		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(config);
+		return recipientListResponse.getEmbedded().getRecipientlists().stream()
+			.filter(x -> StringUtils.equalsIgnoreCase(x.getName(), recipientName))
+			.mapToInt(RapidMailRecipientListResponseItem::getId)
+			.findFirst()
+			.orElseThrow(() -> new Exception("Invalid recipientList name '" + recipientName + "'. Please check configuration"));
 	}
 
 	private String getResponseContent(HttpResponse response) throws IOException {
