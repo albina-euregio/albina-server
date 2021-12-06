@@ -19,6 +19,7 @@ package eu.albina.model;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -474,40 +475,29 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			return false;
 		if (this.treeline != other.treeline)
 			return false;
-		if ((this.dangerRatingAbove == null) ? (other.dangerRatingAbove != null)
-				: !this.dangerRatingAbove.equals(other.dangerRatingAbove))
+		if (!Objects.equals(this.dangerRatingAbove, other.dangerRatingAbove))
 			return false;
-		if ((this.matrixInformationAbove == null) ? (other.matrixInformationAbove != null)
-				: !this.matrixInformationAbove.equals(other.matrixInformationAbove))
+		if (!Objects.equals(this.matrixInformationAbove, other.matrixInformationAbove))
 			return false;
-		if ((this.terrainFeatureAboveTextcat == null) ? (other.terrainFeatureAboveTextcat != null)
-				: !this.terrainFeatureAboveTextcat.equals(other.terrainFeatureAboveTextcat))
+		if (!Objects.equals(this.terrainFeatureAboveTextcat, other.terrainFeatureAboveTextcat))
 			return false;
-		if ((this.dangerRatingBelow == null) ? (other.dangerRatingBelow != null)
-				: !this.dangerRatingBelow.equals(other.dangerRatingBelow))
+		if (!Objects.equals(this.dangerRatingBelow, other.dangerRatingBelow))
 			return false;
-		if ((this.matrixInformationBelow == null) ? (other.matrixInformationBelow != null)
-				: !this.matrixInformationBelow.equals(other.matrixInformationBelow))
+		if (!Objects.equals(this.matrixInformationBelow, other.matrixInformationBelow))
 			return false;
-		if ((this.terrainFeatureBelowTextcat == null) ? (other.terrainFeatureBelowTextcat != null)
-				: !this.terrainFeatureBelowTextcat.equals(other.terrainFeatureBelowTextcat))
+		if (!Objects.equals(this.terrainFeatureBelowTextcat, other.terrainFeatureBelowTextcat))
 			return false;
-		if ((this.complexity == null) ? (other.complexity != null) : !this.complexity.equals(other.complexity))
+		if (!Objects.equals(this.complexity, other.complexity))
 			return false;
-		if ((this.avalancheSituation1 == null) ? (other.avalancheSituation1 != null)
-				: !this.avalancheSituation1.equals(other.avalancheSituation1))
+		if (!Objects.equals(this.avalancheSituation1, other.avalancheSituation1))
 			return false;
-		if ((this.avalancheSituation2 == null) ? (other.avalancheSituation2 != null)
-				: !this.avalancheSituation2.equals(other.avalancheSituation2))
+		if (!Objects.equals(this.avalancheSituation2, other.avalancheSituation2))
 			return false;
-		if ((this.avalancheSituation3 == null) ? (other.avalancheSituation3 != null)
-				: !this.avalancheSituation3.equals(other.avalancheSituation3))
+		if (!Objects.equals(this.avalancheSituation3, other.avalancheSituation3))
 			return false;
-		if ((this.avalancheSituation4 == null) ? (other.avalancheSituation4 != null)
-				: !this.avalancheSituation4.equals(other.avalancheSituation4))
+		if (!Objects.equals(this.avalancheSituation4, other.avalancheSituation4))
 			return false;
-		if ((this.avalancheSituation5 == null) ? (other.avalancheSituation5 != null)
-				: !this.avalancheSituation5.equals(other.avalancheSituation5))
+		if (!Objects.equals(this.avalancheSituation5, other.avalancheSituation5))
 			return false;
 
 		return true;

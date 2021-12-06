@@ -17,6 +17,7 @@
 package eu.albina.model;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -292,14 +293,11 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 			return false;
 		if (this.elevationLow != other.elevationLow)
 			return false;
-		if ((this.dangerRatingDirection == null) ? (other.dangerRatingDirection != null)
-				: !this.dangerRatingDirection.equals(other.dangerRatingDirection))
+		if (!Objects.equals(this.dangerRatingDirection, other.dangerRatingDirection))
 			return false;
-		if ((this.matrixInformation == null) ? (other.matrixInformation != null)
-				: !this.matrixInformation.equals(other.matrixInformation))
+		if (!Objects.equals(this.matrixInformation, other.matrixInformation))
 			return false;
-		if ((this.terrainFeatureTextcat == null) ? (other.terrainFeatureTextcat != null)
-				: !this.terrainFeatureTextcat.equals(other.terrainFeatureTextcat))
+		if (!Objects.equals(this.terrainFeatureTextcat, other.terrainFeatureTextcat))
 			return false;
 
 		return true;
