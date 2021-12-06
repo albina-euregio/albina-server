@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.nio.file.Paths;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,9 +100,7 @@ public class GlobalVariables {
 		.put(GlobalVariables.codeTrentino, LanguageCode.it, "trentinovalanghe.blogspot.com")
 		.build();
 
-	public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ISO_DATE_TIME;
-	public static DateTimeFormatter formatterDate = DateTimeFormatter.ISO_DATE;
-	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
 
 	// REGION
 	public final static String codeTrentino = "IT-32-TN";

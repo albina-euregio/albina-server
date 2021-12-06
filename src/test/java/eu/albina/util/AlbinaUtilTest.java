@@ -28,6 +28,7 @@ import java.security.cert.CertificateException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.Period;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
+import eu.albina.controller.AvalancheBulletinController;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -262,5 +264,26 @@ public class AlbinaUtilTest {
 			Clock.fixed(Instant.parse("2019-01-17T10:40:00Z"), AlbinaUtil.localZone())));
 		assertFalse(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-17T16:00:00Z"), AlbinaUtil.localZone())));
+
+		// should yield strings in correct timezone, even if publication date is in a different timezone
+		assertEquals("2019-01-16T16:00Z", bulletins.get(0).getPublicationDate().toString());
+		bulletins.forEach(b -> b.setPublicationDate(b.getPublicationDate().withZoneSameInstant(ZoneId.of("Canada/Mountain"))));
+		assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.get(0).getPublicationDate().toString());
+		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
+		assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+	}
+
+	@Test
+	@Ignore
+	public void testDatesHibernate() throws Exception {
+		HibernateUtil.getInstance().setUp();
+		final AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin("4e5bbd7c-7ccf-4a2a-8ac7-5a0bfc322a14");
+		HibernateUtil.getInstance().shutDown();
+		final List<AvalancheBulletin> bulletins = Collections.singletonList(bulletin);
+
+		// Hibernate/MySQL returns timestamps in Europe/Vienna zone?!
+		assertEquals("2021-12-05T17:00+01:00[Europe/Vienna]", bulletin.getPublicationDate().toString());
+		assertEquals("05.12.2021 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
+		assertEquals("2021-12-05_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
 	}
 }
