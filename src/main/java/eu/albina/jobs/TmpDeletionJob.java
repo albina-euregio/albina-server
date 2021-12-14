@@ -17,9 +17,11 @@
 package eu.albina.jobs;
 
 import java.io.IOException;
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
+import com.google.common.io.MoreFiles;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -47,9 +49,10 @@ public class TmpDeletionJob implements org.quartz.Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		logger.info("TmpDeletion job triggered!");
 		try {
-			File tmpDir = new File(GlobalVariables.getTmpMapsPath());
-			if (tmpDir.exists())
-				FileUtils.cleanDirectory(tmpDir);
+			Path tmpDir = Paths.get(GlobalVariables.getTmpMapsPath());
+			if (Files.exists(tmpDir)) {
+				MoreFiles.deleteDirectoryContents(tmpDir);
+			}
 			logger.info("Temporary files deleted.");
 		} catch (IOException e) {
 			logger.warn("Temporary files could not be deleted!");
