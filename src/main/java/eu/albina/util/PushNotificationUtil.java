@@ -16,18 +16,19 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.security.Security;
 import java.util.List;
 
+import ch.rasc.webpush.CryptoService;
+import ch.rasc.webpush.PushController;
+import ch.rasc.webpush.ServerKeys;
+import ch.rasc.webpush.dto.Subscription;
+import ch.rasc.webpush.dto.SubscriptionKeys;
 import eu.albina.exception.AlbinaException;
-import nl.martijndwars.webpush.Encoding;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Request;
 import org.apache.http.impl.client.HttpClients;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +37,6 @@ import com.github.openjson.JSONObject;
 import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
-import nl.martijndwars.webpush.Notification;
-import nl.martijndwars.webpush.PushService;
 
 public class PushNotificationUtil implements SocialMediaUtil {
 
@@ -49,10 +48,6 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	}
 
 	protected PushNotificationUtil(HttpClient httpClient) {
-		// Add BouncyCastle as an algorithm provider
-		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-			Security.addProvider(new BouncyCastleProvider());
-		}
 		this.httpClient = httpClient;
 	}
 
@@ -80,18 +75,16 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	}
 
 	public void sendPushMessage(PushSubscription subscription, JSONObject payload) {
-		sendPushMessage(subscription, payload.toString().getBytes(StandardCharsets.UTF_8));
-	}
-
-	private void sendPushMessage(PushSubscription subscription, byte[] payload) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
-			Notification notification = new Notification(subscription.getEndpoint(), subscription.getP256dh(),
-					subscription.getAuth(), payload);
-			PushService pushService = getPushService();
-			HttpPost httpPost = pushService.preparePost(notification, Encoding.AES128GCM);
+			final ServerKeys serverKeys = new ServerKeys(GlobalVariables.getVapidPublicKey(), GlobalVariables.getVapidPrivateKey());
+			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
+			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
+			final byte[] encrypted = new CryptoService().encrypt(payload.toString(), subscriptionKeys, 0);
+			Request httpPost = new PushController(serverKeys).prepareRequest(subscription1, encrypted);
 			logger.debug("Sending POST request: {}", httpPost);
-			HttpResponse response = httpClient.execute(httpPost);
+			final Executor executor = Executor.newInstance(httpClient);
+			HttpResponse response = executor.execute(httpPost).returnResponse();
 			logger.debug("Received response on POST: {}", response);
 			if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
 				throw new AlbinaException(response.getStatusLine().toString());
@@ -116,10 +109,4 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		}
 	}
 
-	protected PushService getPushService() throws GeneralSecurityException {
-		PushService pushService = new PushService();
-		pushService.setPublicKey(GlobalVariables.getVapidPublicKey());
-		pushService.setPrivateKey(GlobalVariables.getVapidPrivateKey());
-		return pushService;
-	}
 }

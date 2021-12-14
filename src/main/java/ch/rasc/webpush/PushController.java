@@ -1,13 +1,13 @@
 package ch.rasc.webpush;
 
 import java.net.URI;
-import java.net.http.HttpRequest;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import ch.rasc.webpush.dto.Subscription;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.apache.http.client.fluent.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,14 +42,14 @@ public class PushController {
 		return "vapid t=" + token + ", k=" + this.serverKeys.getPublicKeyBase64();
 	}
 
-	public HttpRequest.Builder prepareRequest(Subscription subscription, byte[] encryptedPayload) {
+	public Request prepareRequest(Subscription subscription, byte[] encryptedPayload) {
 		URI endpointURI = URI.create(subscription.getEndpoint());
-		return HttpRequest.newBuilder(endpointURI)
-			.POST(HttpRequest.BodyPublishers.ofByteArray(encryptedPayload))
-			.header("Content-Type", "application/octet-stream")
-			.header("Content-Encoding", "aes128gcm")
-			.header("TTL", "180")
-			.header("Authorization", getAuthorization(endpointURI));
+		return Request.Post(endpointURI)
+			.bodyByteArray(encryptedPayload)
+			.addHeader("Content-Type", "application/octet-stream")
+			.addHeader("Content-Encoding", "aes128gcm")
+			.addHeader("TTL", "180")
+			.addHeader("Authorization", getAuthorization(endpointURI));
 	}
 
 }

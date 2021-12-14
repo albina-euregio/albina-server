@@ -50,8 +50,8 @@ public class GlobalVariables {
 	private static boolean createSimpleHtml = false;
 	private static boolean sendEmails = false;
 	private static boolean publishToTelegramChannel = false;
-	private static String vapidPublicKey;
-	private static String vapidPrivateKey;
+	static String vapidPublicKey;
+	static String vapidPrivateKey;
 	private static boolean publishAt5PM = false;
 	private static boolean publishAt8AM = false;
 	// REGION
