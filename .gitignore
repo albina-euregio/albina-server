@@ -5,6 +5,7 @@ target/
 WebContent/
 logs/
 debug-backup*
+org.junit.rules.TemporaryFolder*
 
 # JetBrains IntelliJ
 .idea/
