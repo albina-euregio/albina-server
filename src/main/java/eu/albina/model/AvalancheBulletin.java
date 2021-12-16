@@ -740,7 +740,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			return false;
 		}
 		return regions.stream().anyMatch(entry -> region.equals(GlobalVariables.codeEuregio)
-			? GlobalVariables.regionsEuregio.stream().anyMatch(entry::startsWith)
+			? entry.startsWith(GlobalVariables.codeTyrol) || entry.startsWith(GlobalVariables.codeSouthTyrol) || entry.startsWith(GlobalVariables.codeTrentino)
 			: entry.startsWith(region));
 	}
 

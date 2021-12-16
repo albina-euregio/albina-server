@@ -109,6 +109,10 @@ public class GlobalVariables {
 	public static String csvLineBreak = "\n";
 
 	// REGION
+	/**
+	 * @deprecated Use {@link #getPublishRegions()}
+	 */
+	@Deprecated
 	public static List<String> regions = new ArrayList<String>() {
 		/**
 		 *
@@ -140,6 +144,10 @@ public class GlobalVariables {
 	};
 
 	// REGION
+	/**
+	 * @deprecated Use {@link #getPublishRegions()}
+	 */
+	@Deprecated
 	public static List<String> regionsEuregio = new ArrayList<String>() {
 		/**
 		 *

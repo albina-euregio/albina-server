@@ -80,7 +80,7 @@ public class XmlUtilTest {
 
 	private void createOldCaamlFiles(LocalDate date) throws Exception {
 		List<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(
-				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UTC")).toInstant(), GlobalVariables.regionsEuregio);
+				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UTC")).toInstant(), GlobalVariables.getPublishRegions());
 		for (LanguageCode language : Arrays.asList(LanguageCode.de, LanguageCode.en, LanguageCode.it)) {
 			Path path = Paths.get("/tmp/albina_files" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
 			Document caamlDoc = XmlUtil.createCaaml(result, language, CaamlVersion.V6);

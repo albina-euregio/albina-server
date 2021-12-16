@@ -67,7 +67,7 @@ public class TelegramChannelControllerTest {
 		String attachmentUrl = "https://avalanche.report/albina_files_dev/2020-01-26/fd_albina_map.jpg";
 		String message;
 
-		for (String region : GlobalVariables.regionsEuregio) {
+		for (String region : GlobalVariables.getPublishRegions()) {
 			RegionConfiguration regionConfiguration = rcc.getRegionConfiguration(region);
 			Set<TelegramConfig> telegramConfigs = regionConfiguration.getTelegramConfigs();
 			for (TelegramConfig telegramConfig : telegramConfigs) {
