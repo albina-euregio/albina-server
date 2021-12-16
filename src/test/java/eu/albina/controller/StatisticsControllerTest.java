@@ -21,9 +21,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.albina.util.GlobalVariables;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.io.Resources;
@@ -46,20 +46,18 @@ public class StatisticsControllerTest {
 				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_7.json")));
 	}
 
-	@Ignore
 	@Test
 	public void getCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.csv"),
-				StandardCharsets.UTF_8);
+				StandardCharsets.UTF_8).replaceAll("\r?\n", GlobalVariables.csvLineBreak);
 		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, false, false);
 		Assert.assertEquals(expected, csvString);
 	}
 
-	@Ignore
 	@Test
 	public void getExtendedCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.extended.csv"),
-				StandardCharsets.UTF_8);
+				StandardCharsets.UTF_8).replaceAll("\r?\n", GlobalVariables.csvLineBreak);
 		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, true, false);
 		Assert.assertEquals(expected, csvString);
 	}
