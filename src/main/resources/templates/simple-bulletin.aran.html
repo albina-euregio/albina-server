@@ -103,7 +103,7 @@ rating5 {
   text-transform: uppercase;
   font-size: x-large;
 }
-    
+
 .previous-day {
 	float: left;
 }
@@ -118,26 +118,13 @@ section:after {
   clear: both;
 }
 </style>
-<link rel="stylesheet" href="https://conselharan2.cyberneticos.net/simple/bstyle.css" >
+<link rel="stylesheet" href="/simple/bstyle.css" >
 </head>
 <body>
 
 <header>
-  <!-- <p class="top-link">
-    <a class="previous-day" href="${link.website}">${text.standardView}</a>
-    <a class="next-day" href="${link.linkDe}">DE&nbsp;</a>
-    <a class="next-day" href="${link.linkIt}">IT&nbsp;</a>
-    <a class="next-day" href="${link.linkEn}">EN&nbsp;</a>
-    <a class="next-day" href="${link.linkEs}">ES&nbsp;</a>
-    <a class="next-day" href="${link.linkCa}">CA&nbsp;</a>
-    <a class="next-day" href="${link.linkAr}">AR&nbsp;</a>
-  </p>-->
-  <!-- <h4><a href="${link.website}">${text.title}</a></h4> -->
   <div class="bTitle">${text.subtitle}</div>
   <div class="bSubtittle">${text.publishedAt}<b>${text.publicationDate}</b></div>
-  <!-- <p class="day-link">
-  	<a class="previous-day" href="${link.previousDay}">${text.previousDay}</a><a class="next-day" href="${link.nextDay}">${text.nextDay}</a>
-  </p>-->
 </header>
 
 <section>
@@ -145,9 +132,9 @@ section:after {
 	  <article>
 		<!-- Showing forenoon map -->
 		<div class="bGraphics">
-			<div class="bMap">${bulletin.am} <img style="margin-right: 10px;" src="${bulletin.mapAM}" /></div>
+			<div class="bMap">${bulletin.am}<img style="margin-right: 10px;" src="${bulletin.mapAMjpg}" /></div>
 			<div class="binfoContainer">
-				<!-- DANGER INFO -->	
+				<!-- DANGER INFO -->
 				<div class="dangerContainer">
 					<div class="dangerTitle">${bulletin.forenoon.text.dangerLevel}</div>
 					<div class="dangerImg"><img height="50" style="margin-right: 10px;" src="${bulletin.forenoon.dangerLevel.warningPicto}" /></div>
@@ -184,9 +171,11 @@ section:after {
 		<div class="bulletinSeparator">&nbsp;</div>
 		<div class="bGraphics">
 			<!-- Showing afternoon map -->
-			<div class="bMap">${bulletin.pm} <img style="margin-right: 10px;" src="${bulletin.mapPM}" /></div>
+			<div class="bMap">${bulletin.pm}
+				<img style="margin-right: 10px;" src="${bulletin.mapPMjpg}" />
+			</div>
 			<div class="binfoContainer">
-				<!-- DANGER INFO -->	
+				<!-- DANGER INFO -->
 				<div class="dangerContainer">
 					<div class="dangerTitle">${bulletin.afternoon.text.dangerLevel}</div>
 					<div class="dangerImg"><img height="50" style="margin-right: 10px;" src="${bulletin.afternoon.dangerLevel.warningPicto}" /></div>

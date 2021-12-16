@@ -52,4 +52,13 @@ public class SimpleHtmlUtilTest {
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
 		Assert.assertEquals(expected.trim(), htmlString.trim());
 	}
+
+	@Test
+	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
+		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, GlobalVariables.codeAran);
+		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
+		Assert.assertEquals(expected.trim(), htmlString.trim());
+	}
 }
