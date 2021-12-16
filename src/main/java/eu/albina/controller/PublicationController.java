@@ -38,7 +38,7 @@ import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
-import eu.albina.util.MapUtil;
+import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.PushNotificationUtil;
 import eu.albina.util.SimpleHtmlUtil;
@@ -477,7 +477,7 @@ public class PublicationController {
 		logger.info("Map production started");
 
 		if (!bulletins.isEmpty()) {
-			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions(), AlbinaUtil.getPublicationTime(bulletins), false);
+			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions(), false);
 			logger.info("Map production finished");
 		}
 	}

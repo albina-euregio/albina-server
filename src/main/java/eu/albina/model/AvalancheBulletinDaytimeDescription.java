@@ -347,6 +347,14 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 				avalancheSituation5);
 	}
 
+	public DangerRating dangerRating(boolean above) {
+		if (isHasElevationDependency() && !above) {
+			return getDangerRatingBelow();
+		} else {
+			return getDangerRatingAbove();
+		}
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();

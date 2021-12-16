@@ -11,7 +11,7 @@ let reg_euregio_ha = geodata_dir . "regionen_euregio_ha.shp"
 ###################################################################
 # --- Define NEWPAGE
 # -------------------------------------------------------------
-newpage image_type, mapFile, pagesize_x, pagesize_y, extras  
+newpage image_type, mapFile, pagesize_x, pagesize_y, extras
 print extras
 
 let mx1 = 0
@@ -25,12 +25,12 @@ let my2 = pagesize_y
 ###################################################################
 
 # --- Regionen Lawinengefahrenstufen
-polygon_feature_danger_levels reg_euregio_ha, drm_file, level
+polygon_feature_danger_levels reg_euregio_ha
 
 
-###############################################################	
-###############################################################	
-###############################################################	
+###############################################################
+###############################################################
+###############################################################
 
 print "-----------------------------------------"
 print "End time = ", Mapyrus.time.stamp

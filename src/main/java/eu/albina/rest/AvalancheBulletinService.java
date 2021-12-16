@@ -17,6 +17,7 @@
 package eu.albina.rest;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -56,7 +57,6 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.UserController;
-import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -69,7 +69,7 @@ import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.MapUtil;
+import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -442,7 +442,7 @@ public class AvalancheBulletinService {
     @Path("/preview")
     @Produces("application/pdf")
     public Response getPreviewPdf(@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date, @QueryParam("region") String region, @QueryParam("lang") LanguageCode language) {
-  
+
 		logger.debug("GET PDF preview [" + date + "]");
 
 		try {
@@ -463,8 +463,9 @@ public class AvalancheBulletinService {
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
+			java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
 
-			MapUtil.createDangerRatingMaps(bulletins, RegionController.getInstance().getRegions(), publicationTimeString, true);
+			MapUtil.createMapyrusMaps(bulletins, true, outputDirectory);
 
 			PdfUtil.getInstance().createPdf(bulletins, language, GlobalVariables.codeEuregio, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 						publicationTimeString, true);
@@ -474,7 +475,7 @@ public class AvalancheBulletinService {
 			File file = new File(GlobalVariables.getTmpPdfDirectory() + System.getProperty("file.separator")
 			+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 			+ System.getProperty("file.separator") + filename);
-  
+
 			return Response.ok(file).header(HttpHeaders.CONTENT_DISPOSITION,
 				"attachment; filename=\"" + filename + "\"").header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
 		} catch (AlbinaException e) {
