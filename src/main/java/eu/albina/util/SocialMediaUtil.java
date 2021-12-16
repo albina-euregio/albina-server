@@ -27,7 +27,7 @@ interface SocialMediaUtil {
 	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 			String message = getSocialMediaText(bulletins, update, lang);
-			String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(bulletins);
+			String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(lang, bulletins);
 			String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
 			sendBulletinNewsletter(message, lang, regions, attachmentUrl, bulletinUrl);
 		}

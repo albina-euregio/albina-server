@@ -65,11 +65,6 @@ public class GlobalVariables {
 	private static boolean publishBlogsTrentino = false;
 	/*---- Defined in configuration file -----*/
 
-	public static String avalancheReportBlogUrl = "/blog/";
-	public static String avalancheReportFilesUrl = "/albina_files/";
-	public static String avalancheReportBulletinUrl = "/bulletin/";
-	public static String avalancheReportSimpleUrl = "/simple/";
-
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	public static String pdfDirectory = "/mnt/albina_files_local";
 	private static String htmlDirectory = "/mnt/simple_local";

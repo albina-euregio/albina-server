@@ -14,55 +14,43 @@ import java.util.List;
  */
 public interface LinkUtil {
 
+	static String getWebsite(LanguageCode lang) {
+		return lang.getBundleString("avalanche-report.url");
+	}
+
 	static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + GlobalVariables.avalancheReportSimpleUrl;
+		return String.format("%s/simple/", getWebsite(lang));
 	}
 
 	static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + GlobalVariables.avalancheReportBlogUrl;
+		return String.format("%s/blog/", getWebsite(lang));
 	}
 
 	static String getBulletinUrl(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		String date = AlbinaUtil.getValidityDateString(bulletins);
-		return lang.getBundleString("avalanche-report.url") + GlobalVariables.avalancheReportBulletinUrl + date;
+		return String.format("%s/bulletin/%s", getWebsite(lang), date);
 	}
 
 	// REGION
 	static String getPdfLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		String date = AlbinaUtil.getValidityDateString(bulletins);
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append(GlobalVariables.avalancheReportFilesUrl);
-		sb.append(date);
-		sb.append("/");
-		sb.append(date);
-		sb.append("_");
-		sb.append(region);
-		sb.append("_");
-		sb.append(lang.toString());
-		sb.append(".pdf");
-		return sb.toString();
+		return String.format("%s/%s/%s/%s_%s_%s.pdf",
+			getWebsite(lang), "albina_files", date, date, region, lang);
 	}
 
 	static String getDangerPatternLink(LanguageCode lang, DangerPattern dangerPattern) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append("/education/danger-patterns#");
-		sb.append(DangerPattern.getCAAMLv6String(dangerPattern));
-		return sb.toString();
+		return String.format("%s/education/danger-patterns#%s",
+			getWebsite(lang), DangerPattern.getCAAMLv6String(dangerPattern));
 	}
 
 	static String getAvalancheSituationLink(LanguageCode lang,
 											eu.albina.model.enumerations.AvalancheSituation avalancheSituation) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lang.getBundleString("avalanche-report.url"));
-		sb.append("/education/avalanche-problems#");
-		sb.append(avalancheSituation.toCaamlv6String());
-		return sb.toString();
+		return String.format("%s/education/avalanche-problems#%s",
+			getWebsite(lang), avalancheSituation.toCaamlv6String());
 	}
 
 	static String getImprintLink(LanguageCode lang) {
-		return lang.getBundleString("avalanche-report.url") + "/imprint";
+		return String.format("%s/imprint", getWebsite(lang));
 	}
 
 	static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
@@ -86,15 +74,10 @@ public interface LinkUtil {
 		return "PDF " + regionName;
 	}
 
-	static String getSocialMediaAttachmentUrl(List<AvalancheBulletin> bulletins) {
+	static String getSocialMediaAttachmentUrl(LanguageCode lang, List<AvalancheBulletin> bulletins) {
 		String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		return getServerMainUrl() + GlobalVariables.avalancheReportFilesUrl
-			+ validityDate + "/" + publicationTime + "/"
-			+ MapUtil.getOverviewMapFilename("", DaytimeDependency.fd, false);
-	}
-
-	static String getServerMainUrl() {
-		return "https://avalanche.report";
+		return String.format("%s/albina_files/%s/%s/%s",
+			getWebsite(lang), validityDate, publicationTime, MapUtil.getOverviewMapFilename("", DaytimeDependency.fd, false));
 	}
 }
