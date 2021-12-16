@@ -64,7 +64,12 @@ public class GlobalVariables {
 	private static boolean publishBlogsTrentino = false;
 	/*---- Defined in configuration file -----*/
 
-	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
+	static String serverImagesUrl = "https://admin.avalanche.report/images/";
+	static String serverMapsUrl = "";
+	static String serverPdfUrl = "";
+	static String serverSimpleHtmlUrl = "";
+	static String serverWebsiteUrl = "";
+
 	public static String pdfDirectory = "/mnt/albina_files_local";
 	public static String htmlDirectory = "/mnt/simple_local";
 	public static String mapsPath = "/mnt/albina_files_local";
@@ -469,6 +474,16 @@ public class GlobalVariables {
 				htmlDirectory = config.getString("htmlDirectory");
 			if (config.containsKey("serverImagesUrl"))
 				serverImagesUrl = config.getString("serverImagesUrl");
+			if (config.containsKey("serverMapsUrl"))
+				serverMapsUrl = config.getString("serverMapsUrl");
+			if (config.containsKey("serverMapsUrl"))
+				serverMapsUrl = config.getString("serverMapsUrl");
+			if (config.containsKey("serverSimpleHtmlUrl"))
+				serverSimpleHtmlUrl = config.getString("serverSimpleHtmlUrl");
+			if (config.containsKey("serverPdfUrl"))
+				serverPdfUrl = config.getString("serverPdfUrl");
+			if (config.containsKey("serverWebsiteUrl"))
+				serverWebsiteUrl = config.getString("serverWebsiteUrl");
 			if (config.containsKey("mapsPath"))
 				mapsPath = config.getString("mapsPath");
 			if (config.containsKey("mapProductionUrl"))

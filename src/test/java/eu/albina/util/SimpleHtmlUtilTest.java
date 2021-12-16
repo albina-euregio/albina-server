@@ -55,10 +55,21 @@ public class SimpleHtmlUtilTest {
 
 	@Test
 	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
-		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, GlobalVariables.codeAran);
-		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
-		Assert.assertEquals(expected.trim(), htmlString.trim());
+		final String serverImagesUrl = GlobalVariables.serverImagesUrl;
+		try {
+			GlobalVariables.serverImagesUrl = "https://static.lauegi.report/images/";
+			GlobalVariables.serverMapsUrl = "https://static.lauegi.report/albina_files";
+			GlobalVariables.serverWebsiteUrl = "https://www.lauegi.report/";
+			URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
+			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+			String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, GlobalVariables.codeAran);
+			String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
+			Assert.assertEquals(expected.trim(), htmlString.trim());
+		} finally {
+			GlobalVariables.serverImagesUrl = serverImagesUrl;
+			GlobalVariables.serverMapsUrl = "";
+			GlobalVariables.serverWebsiteUrl = "";
+		}
 	}
 }
+
