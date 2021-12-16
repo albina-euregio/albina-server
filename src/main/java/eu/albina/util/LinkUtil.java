@@ -85,7 +85,7 @@ public interface LinkUtil {
 	static String getSocialMediaAttachmentUrl(LanguageCode lang, List<AvalancheBulletin> bulletins) {
 		String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		return String.format("%s/albina_files/%s/%s/%s",
-			getWebsite(lang), validityDate, publicationTime, MapUtil.getOverviewMapFilename("", DaytimeDependency.fd, false));
+		return String.format("%s/%s/%s/%s",
+			getMapsUrl(lang), validityDate, publicationTime, MapUtil.getOverviewMapFilename("", DaytimeDependency.fd, false));
 	}
 }
