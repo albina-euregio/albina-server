@@ -308,26 +308,14 @@ public class GlobalVariables {
 		setConfigProperty("publishBulletinsAran", publishBulletinsAran);
 	}
 
-	public static boolean isPublishBlogsTyrol() {
-		return publishBlogsTyrol;
-	}
-
 	public static void setPublishBlogsTyrol(boolean publishBlogsTyrol) throws ConfigurationException {
 		GlobalVariables.publishBlogsTyrol = publishBlogsTyrol;
 		setConfigProperty("publishBlogsTyrol", publishBlogsTyrol);
 	}
 
-	public static boolean isPublishBlogsSouthTyrol() {
-		return publishBlogsSouthTyrol;
-	}
-
 	public static void setPublishBlogsSouthTyrol(boolean publishBlogsSouthTyrol) throws ConfigurationException {
 		GlobalVariables.publishBlogsSouthTyrol = publishBlogsSouthTyrol;
 		setConfigProperty("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
-	}
-
-	public static boolean isPublishBlogsTrentino() {
-		return publishBlogsTrentino;
 	}
 
 	public static void setPublishBlogsTrentino(boolean publishBlogsTrentino) throws ConfigurationException {
@@ -336,19 +324,15 @@ public class GlobalVariables {
 	}
 
 	// REGION
-	public static boolean isPublishBlogs(String region) {
-		switch (region) {
-		case codeTyrol:
-			return publishBlogsTyrol;
-		case codeSouthTyrol:
-			return publishBlogsSouthTyrol;
-		case codeTrentino:
-			return publishBlogsTrentino;
-		case codeAran:
-			return false;
-		default:
-			return false;
-		}
+	public static List<String> getPublishBlogRegions() {
+		List<String> regions = new ArrayList<String>();
+		if (publishBlogsTyrol)
+			regions.add(codeTyrol);
+		if (publishBlogsSouthTyrol)
+			regions.add(codeSouthTyrol);
+		if (publishBlogsTrentino)
+			regions.add(codeTrentino);
+		return regions;
 	}
 
 	public static String getPdfDirectory() {
