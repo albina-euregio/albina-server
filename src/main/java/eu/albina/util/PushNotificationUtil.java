@@ -26,8 +26,7 @@ import ch.rasc.webpush.dto.SubscriptionKeys;
 import eu.albina.exception.AlbinaException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,10 +80,9 @@ public class PushNotificationUtil implements SocialMediaUtil {
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
 			final byte[] encrypted = new CryptoService().encrypt(payload.toString(), subscriptionKeys, 0);
-			Request httpPost = new PushController(serverKeys).prepareRequest(subscription1, encrypted);
+			HttpUriRequest httpPost = new PushController(serverKeys).prepareRequest(subscription1, encrypted);
 			logger.debug("Sending POST request: {}", httpPost);
-			final Executor executor = Executor.newInstance(httpClient);
-			HttpResponse response = executor.execute(httpPost).returnResponse();
+			HttpResponse response = httpClient.execute(httpPost);
 			logger.debug("Received response on POST: {}", response);
 			if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
 				throw new AlbinaException(response.getStatusLine().toString());

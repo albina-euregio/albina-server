@@ -42,7 +42,7 @@ public class PushNotificationUtilTest {
 		new PushNotificationUtil(httpClient).sendWelcomePushMessage(subscription);
 
 		ArgumentCaptor<HttpUriRequest> argument = ArgumentCaptor.forClass(HttpUriRequest.class);
-		verify(httpClient).execute(argument.capture(), (HttpContext) any());
+		verify(httpClient).execute(argument.capture());
 		verifyNoMoreInteractions(httpClient);
 
 		HttpUriRequest httpPost = argument.getValue();
