@@ -93,6 +93,17 @@ public class MapUtilTest {
 	}
 
 	@Test
+	@Ignore
+	public void testMapyrusMapsAranVeryHigh() throws Exception {
+		assumeMapsPath();
+		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		MapUtil.createMapyrusMaps(bulletins);
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, GlobalVariables.codeAran, false, false,
+			"2021-12-10", "2021-12-09_16-06-27", false);
+	}
+
+	@Test
 	@Ignore("fix path")
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
