@@ -64,6 +64,7 @@ public class EmailUtilTest {
 		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
+	@Ignore
 	@Test
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
 		final URL resource = Resources.getResource("2021-12-02.json");
@@ -73,7 +74,7 @@ public class EmailUtilTest {
 		regions.add(GlobalVariables.codeTrentino);
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
 	}
-	
+
 	@Test
 	public void langTest() {
 		assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
