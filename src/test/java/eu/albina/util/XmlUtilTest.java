@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,11 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class XmlUtilTest {
+	@Before
+	public void setUp() throws Exception {
+		GlobalVariables.htmlDirectory = "/foo/bar/baz/simple/";
+		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files/";
+	}
 
 	private String createCaaml(CaamlVersion version) throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
@@ -80,7 +86,7 @@ public class XmlUtilTest {
 
 	private void createOldCaamlFiles(LocalDate date) throws Exception {
 		List<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(
-				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UTC")).toInstant(), GlobalVariables.regionsEuregio);
+				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UTC")).toInstant(), GlobalVariables.getPublishRegions());
 		for (LanguageCode language : Arrays.asList(LanguageCode.de, LanguageCode.en, LanguageCode.it)) {
 			Path path = Paths.get("/tmp/albina_files" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
 			Document caamlDoc = XmlUtil.createCaaml(result, language, CaamlVersion.V6);

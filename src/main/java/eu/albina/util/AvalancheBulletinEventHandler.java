@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.itextpdf.kernel.color.Color;
-import com.itextpdf.kernel.color.DeviceRgb;
 import com.itextpdf.kernel.events.Event;
 import com.itextpdf.kernel.events.IEventHandler;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
@@ -40,6 +39,13 @@ import com.itextpdf.layout.element.Image;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.LanguageCode;
 
+import static eu.albina.util.PdfUtil.aranColor;
+import static eu.albina.util.PdfUtil.blueColor;
+import static eu.albina.util.PdfUtil.blueColorBw;
+import static eu.albina.util.PdfUtil.greyDarkColor;
+import static eu.albina.util.PdfUtil.redColor;
+import static eu.albina.util.PdfUtil.whiteColor;
+
 public class AvalancheBulletinEventHandler implements IEventHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEventHandler.class);
@@ -48,19 +54,14 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 	private final LanguageCode lang;
 	private final boolean grayscale;
 	private final boolean preview;
+	private final boolean isAran;
 
-	public static final Color blueColor = new DeviceRgb(0, 172, 251);
-	public static final Color blueColorBw = new DeviceRgb(142, 142, 142);
-	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
-	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
-	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
-	public static final Color redColor = new DeviceRgb(255, 0, 0);
-
-	public AvalancheBulletinEventHandler(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
+	public AvalancheBulletinEventHandler(LanguageCode lang, String region, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
 		this.lang = lang;
 		this.bulletins = bulletins;
 		this.grayscale = grayscale;
 		this.preview = preview;
+		this.isAran = GlobalVariables.codeAran.equals(region);
 	}
 
 	@Override
@@ -72,18 +73,14 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Rectangle pageSize = page.getPageSize();
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
-			Color blue;
-			if (grayscale)
-				blue = blueColorBw;
-			else
-				blue = blueColor;
+			Color blue = grayscale ? blueColorBw : isAran ? aranColor : blueColor;
 
 			PdfFont openSansRegularFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Regular.ttf");
 			PdfFont openSansBoldFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Bold.ttf");
 			PdfFont openSansLightFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Light.ttf");
 
 			// Add headline
-			String headline = lang.getBundleString("avalanche-report.name");
+			String headline = isAran ? "Centre de Lauegi Val d'Aran" : lang.getBundleString("avalanche-report.name");
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 					.setColor(greyDarkColor, true).showText(headline).endText();
 			String date = AlbinaUtil.getDate(bulletins, lang);
@@ -115,7 +112,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
 					.showText(copyright).endText();
 
-			String urlString = lang.getBundleString("avalanche-report.url.capitalized");
+			String urlString = isAran ? "WWW.LAUEGI.REPORT" : lang.getBundleString("avalanche-report.url.capitalized");
 			Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
 			pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)
@@ -131,6 +128,8 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Image ciImg;
 			if (grayscale)
 				ciImg = PdfUtil.getInstance().getImage("images/logo/grey/colorbar.gif");
+			else if (isAran)
+				ciImg = PdfUtil.getInstance().getImage("images/logo/color/colorbar.Aran.gif");
 			else
 				ciImg = PdfUtil.getInstance().getImage("images/logo/color/colorbar.gif");
 			ciImg.scaleAbsolute(pageSize.getWidth(), 4);
@@ -141,6 +140,8 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Image logoImg;
 			if (grayscale)
 				logoImg = PdfUtil.getInstance().getImage("images/" + lang.getBundleString("avalanche-report.logo.path.bw"));
+			else if (isAran)
+				logoImg = PdfUtil.getInstance().getImage("images/logo/color/lauegi.png");
 			else
 				logoImg = PdfUtil.getInstance().getImage("images/" + lang.getBundleString("avalanche-report.logo.path"));
 			logoImg.scaleToFit(130, 55);
@@ -148,16 +149,18 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			canvas.add(logoImg);
 
 			// Add EUREGIO logo
-			Image euregioImg = PdfUtil.getInstance().getImage("images/" + GlobalVariables.getEuregioLogoPath(grayscale));
-			euregioImg.scaleToFit(120, 40);
-			euregioImg.setFixedPosition(15, 5);
-			canvas.add(euregioImg);
+			if (!isAran) {
+				Image euregioImg = PdfUtil.getInstance().getImage("images/" + GlobalVariables.getEuregioLogoPath(grayscale));
+				euregioImg.scaleToFit(120, 40);
+				euregioImg.setFixedPosition(15, 5);
+				canvas.add(euregioImg);
+			}
 
 			// Add page number
 			int pageNumber = docEvent.getDocument().getPageNumber(page);
 			String pageText = MessageFormat.format(lang.getBundleString("pdf.page-number"), pageNumber);
 			double width = openSansRegularFont.getContentWidth(new PdfString(pageText)) * 0.001f * 12 / 2;
-			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 12)
+			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 9)
 					.moveText(pageSize.getWidth() / 2 - width / 2, 20).setColor(greyDarkColor, true).showText(pageText)
 					.endText();
 

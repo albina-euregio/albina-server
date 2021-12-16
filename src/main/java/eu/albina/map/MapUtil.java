@@ -49,6 +49,10 @@ public interface MapUtil {
 	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
 			boolean grayscale) {
 		final DaytimeDependency daytimeDependency = DaytimeDependency.of(isAfternoon, hasDaytimeDependency);
+		return getOverviewMapFilename(region, daytimeDependency, grayscale);
+	}
+
+	static String getOverviewMapFilename(String region, DaytimeDependency daytimeDependency, boolean grayscale) {
 		return MapType.forRegion(region).orElse(MapType.euregio).filename(MapLevel.standard, daytimeDependency, null, grayscale, MapImageFormat.jpg);
 	}
 
@@ -123,7 +127,8 @@ public interface MapUtil {
 				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, preview);
 				if (!preview) {
 					for (MapType map : MapType.forGlobalVariablesPublishBulletins()) {
-						final MapLevel[] mapLevels = MapType.euregio.equals(map) ? MapLevel.values() : new MapLevel[]{MapLevel.standard};
+						final MapLevel[] mapLevels = MapType.euregio.equals(map) || MapType.aran.equals(map)
+							? MapLevel.values() : new MapLevel[]{MapLevel.standard};
 						for (MapLevel mapLevel : mapLevels) {
 							createMapyrusMaps(map, mapLevel, daytimeDependency, null, false, bindings, outputDirectory, preview);
 							createMapyrusMaps(map, mapLevel, daytimeDependency, null, true, bindings, outputDirectory, preview);
@@ -136,9 +141,11 @@ public interface MapUtil {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					createMapyrusMaps(MapType.euregio, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
+					final MapType map = AvalancheBulletin.affectsRegion(MapType.aran.region, bulletin.regions(preview))
+						? MapType.aran : MapType.euregio;
+					createMapyrusMaps(map, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
 					if (!preview) {
-						createMapyrusMaps(MapType.euregio, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
+						createMapyrusMaps(map, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
 					}
 				}
 			} catch (IOException | MapyrusException | InterruptedException ex) {
@@ -150,7 +157,6 @@ public interface MapUtil {
 	static void createMapyrusMaps(MapType map, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
 								  boolean grayscale, SimpleBindings dangerBindings, Path outputDirectory, boolean preview) throws IOException, MapyrusException, InterruptedException {
 
-		final String mapProductionUrl = GlobalVariables.getMapProductionUrl();
 		final Path outputFile = outputDirectory.resolve(map.filename(mapLevel, daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		bindings.put("xmax", map.xmax);
@@ -161,15 +167,14 @@ public interface MapUtil {
 		bindings.put("mapFile", outputFile);
 		bindings.put("pagesize_x", map.width(mapLevel));
 		bindings.put("pagesize_y", map.height(mapLevel));
-		bindings.put("geodata_dir", mapProductionUrl + "geodata/");
-		bindings.put("image_dir", mapProductionUrl + "images/");
-		bindings.put("region", map.region());
+		bindings.put("geodata_dir", map.geodata());
+		bindings.put("region", map.realm());
 		bindings.put("map_level", mapLevel.name());
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
-		bindings.put("scalebar", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
+		bindings.put("scalebar",  MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
-		bindings.put("logo", MapLevel.standard.equals(mapLevel) ? "on" : "off");
+		bindings.put("euregio_image_file", map.logo(mapLevel, grayscale));
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : map.name());
 		bindings.putAll(dangerBindings);
 

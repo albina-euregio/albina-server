@@ -152,20 +152,20 @@ public class PublicationController {
 
 			// send emails
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isSendEmails()) {
-				Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.regionsEuregio, false, false);
+				Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.getPublishRegions(), false, false);
 				sendEmailsThread.start();
 			}
 
 			// publish on telegram channel
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToTelegramChannel()) {
-				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.regionsEuregio,
+				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.getPublishRegions(),
 						false);
 				triggerTelegramChannelThread.start();
 			}
 
 			// publish via push notifications
 			if (GlobalVariables.isCreateMaps()) {
-				new Thread(() -> triggerPushNotifications(bulletins, GlobalVariables.regionsEuregio, false)).start();
+				new Thread(() -> triggerPushNotifications(bulletins, GlobalVariables.getPublishRegions(), false)).start();
 			}
 		}
 	}
@@ -499,7 +499,7 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("PDF production started");
-					for (String region : GlobalVariables.regions)
+					for (String region : GlobalVariables.getPublishRegions())
 						PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
 								publicationTimeString);
 				} finally {
@@ -521,7 +521,7 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("Simple HTML production started");
-					for (String region : GlobalVariables.regions)
+					for (String region : GlobalVariables.getPublishRegions())
 						SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating simple HTML", e);

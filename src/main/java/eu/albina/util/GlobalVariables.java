@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -65,14 +64,14 @@ public class GlobalVariables {
 	private static boolean publishBlogsTrentino = false;
 	/*---- Defined in configuration file -----*/
 
-	public static String avalancheReportBlogUrl = "/blog/";
-	public static String avalancheReportFilesUrl = "/albina_files/";
-	public static String avalancheReportBulletinUrl = "/bulletin/";
-	public static String avalancheReportSimpleUrl = "/simple/";
+	static String serverImagesUrl = "https://admin.avalanche.report/images/";
+	static String serverMapsUrl = "";
+	static String serverPdfUrl = "";
+	static String serverSimpleHtmlUrl = "";
+	static String serverWebsiteUrl = "";
 
-	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
-	private static String pdfDirectory = "/mnt/albina_files_local";
-	private static String htmlDirectory = "/mnt/simple_local";
+	public static String pdfDirectory = "/mnt/albina_files_local";
+	public static String htmlDirectory = "/mnt/simple_local";
 	public static String mapsPath = "/mnt/albina_files_local";
 	public static String mapProductionUrl = "";
 
@@ -115,6 +114,10 @@ public class GlobalVariables {
 	public static String csvLineBreak = "\n";
 
 	// REGION
+	/**
+	 * @deprecated Use {@link #getPublishRegions()}
+	 */
+	@Deprecated
 	public static List<String> regions = new ArrayList<String>() {
 		/**
 		 *
@@ -146,6 +149,10 @@ public class GlobalVariables {
 	};
 
 	// REGION
+	/**
+	 * @deprecated Use {@link #getPublishRegions()}
+	 */
+	@Deprecated
 	public static List<String> regionsEuregio = new ArrayList<String>() {
 		/**
 		 *
@@ -158,6 +165,20 @@ public class GlobalVariables {
 			add(codeTrentino);
 		}
 	};
+
+	// REGION
+	public static List<String> getPublishRegions() {
+		List<String> regions = new ArrayList<String>();
+		if (isPublishBulletinsTyrol())
+			regions.add(codeTyrol);
+		if (isPublishBulletinsSouthTyrol())
+			regions.add(codeSouthTyrol);
+		if (isPublishBulletinsTrentino())
+			regions.add(codeTrentino);
+		if (isPublishBulletinsAran())
+			regions.add(codeAran);
+		return regions;
+	}
 
 	public static String avalancheReportUsername = "info@avalanche.report";
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
@@ -292,26 +313,14 @@ public class GlobalVariables {
 		setConfigProperty("publishBulletinsAran", publishBulletinsAran);
 	}
 
-	public static boolean isPublishBlogsTyrol() {
-		return publishBlogsTyrol;
-	}
-
 	public static void setPublishBlogsTyrol(boolean publishBlogsTyrol) throws ConfigurationException {
 		GlobalVariables.publishBlogsTyrol = publishBlogsTyrol;
 		setConfigProperty("publishBlogsTyrol", publishBlogsTyrol);
 	}
 
-	public static boolean isPublishBlogsSouthTyrol() {
-		return publishBlogsSouthTyrol;
-	}
-
 	public static void setPublishBlogsSouthTyrol(boolean publishBlogsSouthTyrol) throws ConfigurationException {
 		GlobalVariables.publishBlogsSouthTyrol = publishBlogsSouthTyrol;
 		setConfigProperty("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
-	}
-
-	public static boolean isPublishBlogsTrentino() {
-		return publishBlogsTrentino;
 	}
 
 	public static void setPublishBlogsTrentino(boolean publishBlogsTrentino) throws ConfigurationException {
@@ -320,19 +329,15 @@ public class GlobalVariables {
 	}
 
 	// REGION
-	public static boolean isPublishBlogs(String region) {
-		switch (region) {
-		case codeTyrol:
-			return publishBlogsTyrol;
-		case codeSouthTyrol:
-			return publishBlogsSouthTyrol;
-		case codeTrentino:
-			return publishBlogsTrentino;
-		case codeAran:
-			return false;
-		default:
-			return false;
-		}
+	public static List<String> getPublishBlogRegions() {
+		List<String> regions = new ArrayList<String>();
+		if (publishBlogsTyrol)
+			regions.add(codeTyrol);
+		if (publishBlogsSouthTyrol)
+			regions.add(codeSouthTyrol);
+		if (publishBlogsTrentino)
+			regions.add(codeTrentino);
+		return regions;
 	}
 
 	public static String getPdfDirectory() {
@@ -427,16 +432,6 @@ public class GlobalVariables {
 		setConfigProperty("bulletinCaamlSchemaFileString", bulletinCaamlSchemaFileString);
 	}
 
-	public static String getMapsUrl(LanguageCode lang) {
-		String mapsDirectory = Paths.get(GlobalVariables.getMapsPath()).getFileName().toString();
-		return lang.getBundleString("avalanche-report.url") + "/" + mapsDirectory;
-	}
-
-	public static String getSimpleHtmlUrl(LanguageCode lang) {
-		String htmlDirectory = Paths.get(GlobalVariables.getHtmlDirectory()).getFileName().toString();
-		return lang.getBundleString("avalanche-report.url") + "/" + htmlDirectory;
-	}
-
 	public static String getEuregioLogoPath(boolean grayscale) {
 		if (grayscale)
 			return "logo/grey/euregio.png";
@@ -479,6 +474,16 @@ public class GlobalVariables {
 				htmlDirectory = config.getString("htmlDirectory");
 			if (config.containsKey("serverImagesUrl"))
 				serverImagesUrl = config.getString("serverImagesUrl");
+			if (config.containsKey("serverMapsUrl"))
+				serverMapsUrl = config.getString("serverMapsUrl");
+			if (config.containsKey("serverMapsUrl"))
+				serverMapsUrl = config.getString("serverMapsUrl");
+			if (config.containsKey("serverSimpleHtmlUrl"))
+				serverSimpleHtmlUrl = config.getString("serverSimpleHtmlUrl");
+			if (config.containsKey("serverPdfUrl"))
+				serverPdfUrl = config.getString("serverPdfUrl");
+			if (config.containsKey("serverWebsiteUrl"))
+				serverWebsiteUrl = config.getString("serverWebsiteUrl");
 			if (config.containsKey("mapsPath"))
 				mapsPath = config.getString("mapsPath");
 			if (config.containsKey("mapProductionUrl"))

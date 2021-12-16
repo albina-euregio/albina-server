@@ -221,17 +221,17 @@ public class SimpleHtmlUtil {
 		}
 		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(-1)));
 		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(1)));
-		link.put("linkDe", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkDe", LinkUtil.getSimpleHtmlUrl(lang) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "de.html");
-		link.put("linkIt", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkIt", LinkUtil.getSimpleHtmlUrl(lang) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "it.html");
-		link.put("linkEn", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkEn", LinkUtil.getSimpleHtmlUrl(lang) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "en.html");
-		link.put("linkEs", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkEs", LinkUtil.getSimpleHtmlUrl(lang) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "es.html");
-		link.put("linkCa", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkCa", LinkUtil.getSimpleHtmlUrl(lang) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ca.html");
-		link.put("linkAr", LinkUtil.getAvalancheReportSimpleBaseUrl(lang)
+		link.put("linkAr", LinkUtil.getSimpleHtmlUrl(lang) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ar.html");
 
 		root.put("link", link);
@@ -244,21 +244,21 @@ public class SimpleHtmlUtil {
 
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("mapAMjpg", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapAMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
-					bulletin.put("mapPMjpg", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
-					bulletin.put("mapPMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.webp");
 					bulletin.put("widthPM", "width=\"150\"");
 					bulletin.put("heightPMSmall", "height=\"50\"");
 					bulletin.put("fontSize", "");
 				} else {
-					bulletin.put("mapAMjpg", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapAMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
 					bulletin.put("mapPMjpg", GlobalVariables.getServerImagesUrl() + "empty.png");
 					bulletin.put("mapPMwebp", GlobalVariables.getServerImagesUrl() + "empty.webp");
@@ -329,7 +329,8 @@ public class SimpleHtmlUtil {
 		root.put("bulletins", arrayList);
 
 		// Get template
-		Template temp = cfg.getTemplate("simple-bulletin.min.html");
+		boolean isAran = GlobalVariables.codeAran.equals(region);
+		Template temp = cfg.getTemplate(isAran ? "simple-bulletin.aran.html" : "simple-bulletin.min.html");
 
 		// Merge template and model
 		Writer out = new StringWriter();
@@ -390,7 +391,7 @@ public class SimpleHtmlUtil {
 			text.put("avalancheProblem", "");
 		result.put("text", text);
 
-		dangerLevel.put("warningPicto", GlobalVariables.getServerImagesUrl() + "/warning_pictos/color/level_"
+		dangerLevel.put("warningPicto", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
 				+ AlbinaUtil.getWarningLevelId(daytimeDescription) + ".png");
 		dangerLevel.put("elevation",
 				getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang));

@@ -38,6 +38,11 @@ import eu.albina.model.enumerations.LanguageCode;
 import freemarker.template.TemplateException;
 
 public class SimpleHtmlUtilTest {
+	@Before
+	public void setUp() throws Exception {
+		GlobalVariables.htmlDirectory = "/foo/bar/baz/simple/";
+		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files/";
+	}
 
 	@Test
 	public void createSimpleHtmlString() throws IOException, URISyntaxException, TemplateException {
@@ -47,4 +52,24 @@ public class SimpleHtmlUtilTest {
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
 		Assert.assertEquals(expected.trim(), htmlString.trim());
 	}
+
+	@Test
+	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
+		final String serverImagesUrl = GlobalVariables.serverImagesUrl;
+		try {
+			GlobalVariables.serverImagesUrl = "https://static.lauegi.report/images/";
+			GlobalVariables.serverMapsUrl = "https://static.lauegi.report/albina_files";
+			GlobalVariables.serverWebsiteUrl = "https://www.lauegi.report/";
+			URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
+			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+			String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, GlobalVariables.codeAran);
+			String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
+			Assert.assertEquals(expected.trim(), htmlString.trim());
+		} finally {
+			GlobalVariables.serverImagesUrl = serverImagesUrl;
+			GlobalVariables.serverMapsUrl = "";
+			GlobalVariables.serverWebsiteUrl = "";
+		}
+	}
 }
+

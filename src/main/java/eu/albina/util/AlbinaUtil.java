@@ -230,51 +230,12 @@ public class AlbinaUtil {
 
 	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, Period offset) {
 		if (region != null && !region.isEmpty())
-			return GlobalVariables.getSimpleHtmlUrl(lang) + "/"
+			return LinkUtil.getSimpleHtmlUrl(lang) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region + "_" + lang.toString()
 					+ ".html";
 		else
-			return GlobalVariables.getSimpleHtmlUrl(lang) + "/"
+			return LinkUtil.getSimpleHtmlUrl(lang) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + lang.toString() + ".html";
-	}
-
-	public static String getRegionOverviewMapFilename(String region, boolean isAfternoon, String fileExtension) {
-		StringBuilder sb = new StringBuilder();
-		if (isAfternoon)
-			sb.append("pm_");
-		else
-			sb.append("am_");
-		sb.append(getMapFilename(region, fileExtension));
-		return sb.toString();
-	}
-
-	public static String getRegionOverviewMapFilename(String region, String fileExtension) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("fd_");
-		sb.append(getMapFilename(region, fileExtension));
-		return sb.toString();
-	}
-
-	// REGION: only regions supported by map production
-	private static String getMapFilename(String region, String fileExtension) {
-		StringBuilder sb = new StringBuilder();
-		switch (region) {
-		case GlobalVariables.codeTyrol:
-			sb.append("tyrol");
-			break;
-		case GlobalVariables.codeSouthTyrol:
-			sb.append("southtyrol");
-			break;
-		case GlobalVariables.codeAran:
-			sb.append("trentino");
-			break;
-		default:
-			sb.append("albina");
-			break;
-		}
-		sb.append("_map.");
-		sb.append(fileExtension);
-		return sb.toString();
 	}
 
 	public static ZonedDateTime getDate(List<AvalancheBulletin> bulletins) {

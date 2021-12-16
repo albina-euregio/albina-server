@@ -6,7 +6,11 @@ print "Kartenerstelleung Overlay ALBINA"
 print "-----------------------------------------"
 
 # Shapefile-Input
-let reg_euregio_ha = geodata_dir . "regionen_euregio_ha.shp"
+if region eq "Euregio" then
+	let reg_euregio_ha = geodata_dir . "regionen_euregio_ha.shp"
+elif region eq "Aran" then
+	let reg_euregio_ha = geodata_dir . "regions-elevation.aran.shp"
+endif
 
 ###################################################################
 # --- Define NEWPAGE

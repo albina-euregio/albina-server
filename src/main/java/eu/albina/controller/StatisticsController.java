@@ -146,7 +146,7 @@ public class StatisticsController {
 		transaction.begin();
 
 		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-		for (String region : GlobalVariables.regionsEuregio) {
+		for (String region : GlobalVariables.getPublishRegions()) {
 			// get latest reports
 			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
 					endDate, region);

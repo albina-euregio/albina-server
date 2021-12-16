@@ -1,5 +1,6 @@
 package eu.albina.map;
 
+import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.util.GlobalVariables;
 
@@ -7,10 +8,14 @@ import java.util.*;
 
 enum MapType {
 	euregio(GlobalVariables.codeEuregio, 1464000, 1104000, 6047000, 5687000),
+	aran(GlobalVariables.codeAran, 120500, 66200, 5266900, 5215700),
 	tyrol(GlobalVariables.codeTyrol, 1452000, 1116000, 6053000, 5829000),
 	southtyrol(GlobalVariables.codeSouthTyrol, 1400000, 1145000, 5939000, 5769000),
 	trentino(GlobalVariables.codeTrentino, 1358000, 1133000, 5842000, 5692000);
 
+	/**
+	 * Bounding box in https://epsg.io/3395
+	 */
 	MapType(String region, int xmax, int xmin, int ymax, int ymin) {
 		this.region = region;
 		this.xmax = xmax;
@@ -39,11 +44,40 @@ enum MapType {
 			mapTypes.add(euregio);
 			mapTypes.add(trentino);
 		}
+		if (GlobalVariables.isPublishBulletinsAran()) {
+			mapTypes.add(aran);
+		}
 		return mapTypes;
 	}
 
-	String region() {
-		return "Euregio";
+	String geodata() {
+		if (this == MapType.aran) {
+			return GlobalVariables.getMapProductionUrl() + "geodata.Aran/";
+		} else {
+			return GlobalVariables.getMapProductionUrl() + "geodata.Euregio/";
+		}
+	}
+
+	String realm() {
+		if (this == MapType.aran) {
+			return "Aran";
+		} else {
+			return "Euregio";
+		}
+	}
+
+	String logo(MapLevel mapLevel, boolean grayscale) {
+		if (!MapLevel.standard.equals(mapLevel)) {
+			return "";
+		} else if (this == MapType.aran) {
+			return grayscale
+				? Resources.getResource("images/logo/grey/lauegi_map.png").toString()
+				: Resources.getResource("images/logo/color/lauegi_map.png").toString();
+		} else {
+			return grayscale
+				? Resources.getResource("images/logo/grey/euregio_map.png").toString()
+				: Resources.getResource("images/logo/color/euregio_map.png").toString();
+		}
 	}
 
 	double width(MapLevel mapLevel) {
@@ -72,6 +106,15 @@ enum MapType {
 						return "albina_thumbnail";
 					case overlay:
 						return "overlay";
+				}
+			case aran:
+				switch (mapLevel) {
+					case standard:
+						return "aran_map";
+					case thumbnail:
+						return "aran_thumbnail";
+					case overlay:
+						return "aran_overlay";
 				}
 			default:
 				return null;

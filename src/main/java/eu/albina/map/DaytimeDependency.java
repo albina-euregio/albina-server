@@ -7,7 +7,7 @@ import eu.albina.util.AlbinaUtil;
 import java.util.EnumSet;
 import java.util.List;
 
-enum DaytimeDependency {
+public enum DaytimeDependency {
 	/**
 	 * full day
 	 */

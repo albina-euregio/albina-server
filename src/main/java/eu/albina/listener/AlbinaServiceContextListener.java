@@ -33,7 +33,6 @@ import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.SchedulerUtil;
-import io.sentry.Sentry;
 
 /**
  * A {@code ServletContextListener} used to initialize the application.
@@ -58,7 +57,6 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		GlobalVariables.loadConfigProperties();
 
 		HibernateUtil.getInstance().setUp();
-		Sentry.init();
 
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		Driver d = null;

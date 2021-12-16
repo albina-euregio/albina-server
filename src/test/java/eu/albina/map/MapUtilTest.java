@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import eu.albina.ImageTestUtils;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.PdfUtil;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -36,6 +38,7 @@ public class MapUtilTest {
 		GlobalVariables.loadConfigProperties();
 		GlobalVariables.mapsPath = folder.toString();
 		GlobalVariables.mapProductionUrl = "../avalanche-warning-maps/";
+		GlobalVariables.pdfDirectory = GlobalVariables.mapsPath;
 	}
 
 	@Test
@@ -70,6 +73,34 @@ public class MapUtilTest {
 				GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
 			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 		}
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.en, GlobalVariables.codeEuregio, false, false,
+			"2019-01-17", "2019-01-16_16-00-00", false);
+	}
+
+	@Test
+	public void testMapyrusMapsAran() throws Exception {
+		assumeMapsPath();
+		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		MapUtil.createMapyrusMaps(bulletins);
+
+		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_aran_thumbnail.png"));
+		BufferedImage actual = ImageIO.read(new File(
+			GlobalVariables.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_aran_thumbnail.png"));
+		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, GlobalVariables.codeAran, false, false,
+			"2021-01-24", "2021-01-23_16-00-00", false);
+	}
+
+	@Test
+	@Ignore
+	public void testMapyrusMapsAranVeryHigh() throws Exception {
+		assumeMapsPath();
+		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		MapUtil.createMapyrusMaps(bulletins);
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, GlobalVariables.codeAran, false, false,
+			"2021-12-10", "2021-12-09_16-06-27", false);
 	}
 
 	@Test

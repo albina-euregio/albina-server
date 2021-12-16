@@ -50,6 +50,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import eu.albina.util.LinkUtil;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -734,106 +735,28 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.hasDaytimeDependency = hasDaytimeDependency;
 	}
 
+	public static boolean affectsRegion(String region, Set<String> regions) {
+		if (regions == null) {
+			return false;
+		}
+		return regions.stream().anyMatch(entry -> region.equals(GlobalVariables.codeEuregio)
+			? entry.startsWith(GlobalVariables.codeTyrol) || entry.startsWith(GlobalVariables.codeSouthTyrol) || entry.startsWith(GlobalVariables.codeTrentino)
+			: entry.startsWith(region));
+	}
+
 	public boolean affectsRegion(String region) {
-		if (getSuggestedRegions() != null) {
-			for (String entry : getSuggestedRegions()) {
-				if (region.equals(GlobalVariables.codeEuregio)) {
-					for (String reg : GlobalVariables.regionsEuregio) {
-						if (entry.startsWith(reg)) {
-							return true;
-						}
-					}
-				} else {
-					if (entry.startsWith(region)) {
-						return true;
-					}
-				}
-			}
-		}
-		if (getSavedRegions() != null) {
-			for (String entry : getSavedRegions()) {
-				if (region.equals(GlobalVariables.codeEuregio)) {
-					for (String reg : GlobalVariables.regionsEuregio) {
-						if (entry.startsWith(reg)) {
-							return true;
-						}
-					}
-				} else {
-					if (entry.startsWith(region)) {
-						return true;
-					}
-				}
-			}
-		}
-		if (getPublishedRegions() != null) {
-			for (String entry : getPublishedRegions()) {
-				if (region.equals(GlobalVariables.codeEuregio)) {
-					for (String reg : GlobalVariables.regionsEuregio) {
-						if (entry.startsWith(reg)) {
-							return true;
-						}
-					}
-				} else {
-					if (entry.startsWith(region)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		return affectsRegion(region, getSuggestedRegions())
+			|| affectsRegion(region, getSavedRegions())
+			|| affectsRegion(region, getPublishedRegions());
 	}
 
 	public boolean affectsRegionWithoutSuggestions(String region) {
-		if (getSavedRegions() != null) {
-			for (String entry : getSavedRegions()) {
-				if (region.equals(GlobalVariables.codeEuregio)) {
-					for (String reg : GlobalVariables.regionsEuregio) {
-						if (entry.startsWith(reg)) {
-							return true;
-						}
-					}
-				} else {
-					if (entry.startsWith(region)) {
-						return true;
-					}
-				}
-			}
-		}
-		if (getPublishedRegions() != null) {
-			for (String entry : getPublishedRegions()) {
-				if (region.equals(GlobalVariables.codeEuregio)) {
-					for (String reg : GlobalVariables.regionsEuregio) {
-						if (entry.startsWith(reg)) {
-							return true;
-						}
-					}
-				} else {
-					if (entry.startsWith(region)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		return affectsRegion(region, getSavedRegions())
+			|| affectsRegion(region, getPublishedRegions());
 	}
 
 	public boolean affectsRegionOnlyPublished(String region) {
-		if (getPublishedRegions() != null) {
-			for (String entry : getPublishedRegions()) {
-				if (region.equals(GlobalVariables.codeEuregio)) {
-					for (String reg : GlobalVariables.regionsEuregio) {
-						if (entry.startsWith(reg)) {
-							return true;
-						}
-					}
-				} else {
-					if (entry.startsWith(region)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		return affectsRegion(region, getPublishedRegions());
 	}
 
 	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
@@ -1267,12 +1190,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element metaData = doc.createElement("metaData");
 		rootElement.appendChild(metaData);
 		if (!isAfternoon) {
-			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + getId() + ".jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
-			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + getId() + "_PM.jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));

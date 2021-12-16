@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -75,10 +74,12 @@ public class PdfUtil {
 	private static PdfUtil instance = null;
 
 	public static final Color blueColor = new DeviceRgb(0, 172, 251);
-	public static final Color blackColor = new DeviceRgb(0, 0, 0);
+	public static final Color aranColor = new DeviceRgb(0xa2, 0x0d, 0x2d);
+	public static final Color blackColor = Color.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
-	public static final Color whiteColor = new DeviceRgb(255, 255, 255);
+	public static final Color whiteColor = Color.WHITE;
 	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
+	public static final Color redColor = Color.RED;
 
 	public static final Color dangerLevel1Color = new DeviceRgb(197, 255, 118);
 	public static final Color dangerLevel2Color = new DeviceRgb(255, 255, 70);
@@ -109,12 +110,8 @@ public class PdfUtil {
 		return instance;
 	}
 
-	public boolean createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
-			boolean daytimeDependency, String validityDateString, String publicationTimeString, boolean preview) {
-		Document document = null;
-		PdfDocument pdf = null;
-		PdfWriter writer = null;
-
+	public void createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, boolean grayscale,
+			boolean daytimeDependency, String validityDateString, String publicationTimeString, boolean preview) throws IOException {
 		String pdfPath;
 		String mapsPath;
 		if (preview) {
@@ -124,44 +121,11 @@ public class PdfUtil {
 			pdfPath = GlobalVariables.getPdfDirectory();
 			mapsPath = GlobalVariables.getMapsPath();
 		}
+		String filename = getFilename(lang, region, grayscale, validityDateString, publicationTimeString, pdfPath);
 
-		try {
-			String filename;
-
-			if (region.equals(GlobalVariables.codeEuregio)) {
-				if (grayscale) {
-					filename = pdfPath + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
-							+ "_bw.pdf";
-				} else {
-					filename = pdfPath + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
-							+ ".pdf";
-				}
-			} else {
-				if (grayscale) {
-					filename = pdfPath + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
-							+ lang.toString() + "_bw.pdf";
-				} else {
-					filename = pdfPath + System.getProperty("file.separator")
-							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
-							+ lang.toString() + ".pdf";
-				}
-			}
-
-			File file = new File(filename);
-			if (file.createNewFile())
-				logger.debug("File " + filename + " created.");
-			else
-				logger.debug("File " + filename + " already exists.");
-
-			writer = new PdfWriter(filename, new WriterProperties().addXmpMetadata());
-			pdf = new PdfDocument(writer);
+		try (PdfWriter writer = new PdfWriter(filename, new WriterProperties().addXmpMetadata());
+			 PdfDocument pdf = new PdfDocument(writer);
+			 Document document = new Document(pdf)) {
 			pdf.setTagged();
 			pdf.getCatalog().setLang(new PdfString(lang.toString()));
 			pdf.getCatalog().setViewerPreferences(new PdfViewerPreferences().setDisplayDocTitle(true));
@@ -172,8 +136,7 @@ public class PdfUtil {
 			openSansBoldFont = createFont("fonts/open-sans/OpenSans-Bold.ttf");
 
 			pdf.addEventHandler(PdfDocumentEvent.END_PAGE,
-					new AvalancheBulletinEventHandler(lang, bulletins, grayscale, preview));
-			document = new Document(pdf);
+					new AvalancheBulletinEventHandler(lang, region, bulletins, grayscale, preview));
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 
@@ -187,24 +150,22 @@ public class PdfUtil {
 			}
 
 			AlbinaUtil.setFilePermissions(filename);
-			return true;
-		} catch (com.itextpdf.io.IOException | IOException e) {
-			logger.error("PDF could not be created", e);
-			return false;
-		} finally {
-			if (document != null) {
-				document.close();
-			}
-			if (pdf != null) {
-				pdf.close();
-			}
-			try {
-				if (writer != null) {
-					writer.close();
-				}
-			} catch (IOException e) {
-				logger.warn("PDF writer could not be closed!", e);
-			}
+		} catch (com.itextpdf.io.IOException e) {
+			throw new IOException(e);
+		}
+	}
+
+	private String getFilename(LanguageCode lang, String region, boolean grayscale, String validityDateString, String publicationTimeString, String pdfPath) {
+		if (region.equals(GlobalVariables.codeEuregio)) {
+			return pdfPath + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + lang.toString()
+							+ (grayscale ? "_bw" : "") + ".pdf";
+		} else {
+			return pdfPath + System.getProperty("file.separator")
+							+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+							+ System.getProperty("file.separator") + validityDateString + "_" + region + "_"
+							+ lang.toString() + (grayscale ? "_bw" : "") + ".pdf";
 		}
 	}
 
@@ -226,34 +187,36 @@ public class PdfUtil {
 	 * @param validityDateString
 	 *            the start of the validity of the report
 	 */
-	public boolean createRegionPdfs(List<AvalancheBulletin> bulletins, String region, String validityDateString,
-			String publicationTimeString) {
+	public void createRegionPdfs(List<AvalancheBulletin> bulletins, String region, String validityDateString, String publicationTimeString) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
-		boolean result = true;
 
 		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			if (avalancheBulletin.affectsRegionOnlyPublished(region))
 				regionBulletins.add(avalancheBulletin);
 		}
+		if (regionBulletins.isEmpty()) {
+			return;
+		}
 
-		if (!regionBulletins.isEmpty())
-			for (LanguageCode lang : LanguageCode.ENABLED) {
-				if (!createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString,
-						publicationTimeString, false))
-					result = false;
-				if (!createPdf(regionBulletins, lang, region, true, daytimeDependency, validityDateString,
-						publicationTimeString, false))
-					result = false;
+		for (LanguageCode lang : LanguageCode.ENABLED) {
+			try {
+				createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString, publicationTimeString, false);
+				createPdf(regionBulletins, lang, region, true, daytimeDependency, validityDateString, publicationTimeString, false);
+			} catch (IOException e) {
+				logger.error("PDF could not be created", e);
 			}
-
-		return result;
+		}
 	}
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, LanguageCode lang, Document document,
 			PdfDocument pdf, String tendencyDate, PdfWriter writer, boolean grayscale, String validityDateString,
 			String publicationTimeString, String mapsPath) throws IOException {
 		document.add(new AreaBreak());
+
+		final boolean isAran = avalancheBulletin.affectsRegion(GlobalVariables.codeAran);
+		final Color blue = grayscale ? blueColorBw : isAran ? aranColor : blueColor;
+		final Color greyVeryVeryLight = grayscale ? greyVeryVeryLightColorBw : greyVeryVeryLightColor;
 
 		float leadingHeadline = 1.f;
 		float leadingText = 1.2f;
@@ -279,8 +242,9 @@ public class PdfUtil {
 				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
 		table.addCell(cell);
 
+		float[] secondColumnWidths;
 		if (avalancheBulletin.isHasDaytimeDependency()) {
-			float[] secondColumnWidths = { 1, 1, 1 };
+			secondColumnWidths = new float[]{1, 1, 1};
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			Paragraph am = new Paragraph("AM:").setFont(openSansBoldFont).setFontSize(14).setFontColor(blackColor);
 			cell = new Cell(1, 1).add(am);
@@ -353,16 +317,8 @@ public class PdfUtil {
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
 			cell.add(secondTable);
-			cell.setVerticalAlignment(VerticalAlignment.TOP);
-			cell.setTextAlignment(TextAlignment.LEFT);
-			cell.setPaddingLeft(paddingLeft);
-			cell.setPaddingRight(5);
-			cell.setBorder(Border.NO_BORDER);
-			cell.setBorderLeft(
-					new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
-			table.addCell(cell);
 		} else {
-			float[] secondColumnWidths = { 1, 1 };
+			secondColumnWidths = new float[]{1, 1};
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			ImageData regionImageDate;
 			if (grayscale)
@@ -389,15 +345,15 @@ public class PdfUtil {
 			secondTable.addCell(cell);
 			cell = new Cell(1, 10);
 			cell.add(secondTable);
-			cell.setVerticalAlignment(VerticalAlignment.TOP);
-			cell.setTextAlignment(TextAlignment.LEFT);
-			cell.setPaddingLeft(paddingLeft);
-			cell.setPaddingRight(5);
-			cell.setBorder(Border.NO_BORDER);
-			cell.setBorderLeft(
-					new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
-			table.addCell(cell);
 		}
+		cell.setVerticalAlignment(VerticalAlignment.TOP);
+		cell.setTextAlignment(TextAlignment.LEFT);
+		cell.setPaddingLeft(paddingLeft);
+		cell.setPaddingRight(5);
+		cell.setBorder(Border.NO_BORDER);
+		cell.setBorderLeft(
+				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
+		table.addCell(cell);
 
 		// avalanche activity
 		if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null) {
@@ -442,13 +398,8 @@ public class PdfUtil {
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
 				cell.setBorder(Border.NO_BORDER);
-				if (grayscale) {
-					cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColorBw);
-				} else {
-					cell.setBorderLeft(new SolidBorder(blueColor, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColor);
-				}
+				cell.setBorderLeft(new SolidBorder(blue, 4));
+				cell.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(cell);
 
 				// add danger patterns
@@ -489,13 +440,8 @@ public class PdfUtil {
 					cell.setTextAlignment(TextAlignment.LEFT);
 					cell.setPaddingLeft(paddingLeft);
 					cell.setBorder(Border.NO_BORDER);
-					if (grayscale) {
-						cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-						cell.setBackgroundColor(greyVeryVeryLightColorBw);
-					} else {
-						cell.setBorderLeft(new SolidBorder(blueColor, 4));
-						cell.setBackgroundColor(greyVeryVeryLightColor);
-					}
+					cell.setBorderLeft(new SolidBorder(blue, 4));
+					cell.setBackgroundColor(greyVeryVeryLight);
 					table.addCell(cell);
 				}
 
@@ -508,13 +454,8 @@ public class PdfUtil {
 					cell.setTextAlignment(TextAlignment.LEFT);
 					cell.setPaddingLeft(paddingLeft);
 					cell.setBorder(Border.NO_BORDER);
-					if (grayscale) {
-						cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-						cell.setBackgroundColor(greyVeryVeryLightColorBw);
-					} else {
-						cell.setBorderLeft(new SolidBorder(blueColor, 4));
-						cell.setBackgroundColor(greyVeryVeryLightColor);
-					}
+					cell.setBorderLeft(new SolidBorder(blue, 4));
+					cell.setBackgroundColor(greyVeryVeryLight);
 					table.addCell(cell);
 				}
 			}
@@ -527,13 +468,8 @@ public class PdfUtil {
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
 				cell.setBorder(Border.NO_BORDER);
-				if (grayscale) {
-					cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColorBw);
-				} else {
-					cell.setBorderLeft(new SolidBorder(blueColor, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColor);
-				}
+				cell.setBorderLeft(new SolidBorder(blue, 4));
+				cell.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(cell);
 
 				Paragraph tendencyComment = new Paragraph(
@@ -544,13 +480,8 @@ public class PdfUtil {
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
 				cell.setBorder(Border.NO_BORDER);
-				if (grayscale) {
-					cell.setBorderLeft(new SolidBorder(blueColorBw, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColorBw);
-				} else {
-					cell.setBorderLeft(new SolidBorder(blueColor, 4));
-					cell.setBackgroundColor(greyVeryVeryLightColor);
-				}
+				cell.setBorderLeft(new SolidBorder(blue, 4));
+				cell.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(cell);
 			}
 		}
@@ -1067,7 +998,7 @@ public class PdfUtil {
 
 		// Add overview maps
 		if (AlbinaUtil.hasDaytimeDependency(bulletins)) {
-			if (region.equals(GlobalVariables.codeEuregio)) {
+			if (region.equals(GlobalVariables.codeEuregio) || region.equals(GlobalVariables.codeAran)) {
 				mapY = 130;
 				mapWidth = 270;
 				mapHeight = mapWidth;
@@ -1109,7 +1040,7 @@ public class PdfUtil {
 					+ MapUtil.getOverviewMapFilename(region, false, daytimeDependency, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
-			if (region.equals(GlobalVariables.codeEuregio)) {
+			if (region.equals(GlobalVariables.codeEuregio) || region.equals(GlobalVariables.codeAran)) {
 				mapY = 250;
 				overviewMapImg.scaleToFit(420, 500);
 				overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - 210, mapY);
