@@ -37,6 +37,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.google.common.base.Strings;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -262,7 +263,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		if (matrixInformation != null)
 			json.put("matrixInformation", matrixInformation.toJSON());
 
-		if (terrainFeatureTextcat != null && terrainFeatureTextcat != "")
+		if (!Strings.isNullOrEmpty(terrainFeatureTextcat))
 			json.put("terrainFeatureTextcat", terrainFeatureTextcat);
 		if (terrainFeature != null && !terrainFeature.isEmpty()) {
 			JSONArray array = new JSONArray();

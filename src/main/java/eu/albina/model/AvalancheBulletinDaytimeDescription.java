@@ -373,7 +373,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
 		if (matrixInformationAbove != null)
 			json.put("matrixInformationAbove", matrixInformationAbove.toJSON());
-		if (terrainFeatureAboveTextcat != null && terrainFeatureAboveTextcat != "")
+		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureAboveTextcat))
 			json.put("terrainFeatureAboveTextcat", terrainFeatureAboveTextcat);
 		if (terrainFeatureAbove != null && !terrainFeatureAbove.isEmpty()) {
 			JSONArray arrayAbove = new JSONArray();
@@ -386,7 +386,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			json.put("dangerRatingBelow", this.dangerRatingBelow.toString());
 		if (matrixInformationBelow != null)
 			json.put("matrixInformationBelow", matrixInformationBelow.toJSON());
-		if (terrainFeatureBelowTextcat != null && terrainFeatureBelowTextcat != "")
+		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureBelowTextcat))
 			json.put("terrainFeatureBelowTextcat", terrainFeatureBelowTextcat);
 		if (terrainFeatureBelow != null && !terrainFeatureBelow.isEmpty()) {
 			JSONArray arrayBelow = new JSONArray();
@@ -424,7 +424,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 		if (dangerRatingAbove != null)
 			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
-		if (terrainFeatureAboveTextcat != null && terrainFeatureAboveTextcat != "")
+		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureAboveTextcat))
 			json.put("terrainFeatureAboveTextcat", terrainFeatureAboveTextcat);
 		if (terrainFeatureAbove != null && !terrainFeatureAbove.isEmpty()) {
 			JSONArray arrayAbove = new JSONArray();
@@ -435,7 +435,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 		if (dangerRatingBelow != null)
 			json.put("dangerRatingBelow", this.dangerRatingBelow.toString());
-		if (terrainFeatureBelowTextcat != null && terrainFeatureBelowTextcat != "")
+		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureBelowTextcat))
 			json.put("terrainFeatureBelowTextcat", terrainFeatureBelowTextcat);
 		if (terrainFeatureBelow != null && !terrainFeatureBelow.isEmpty()) {
 			JSONArray arrayBelow = new JSONArray();

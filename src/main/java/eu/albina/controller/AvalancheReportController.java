@@ -28,6 +28,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import com.google.common.base.Strings;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.proxy.HibernateProxy;
@@ -247,7 +248,7 @@ public class AvalancheReportController {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 
-		if (region != null && region != "") {
+		if (!Strings.isNullOrEmpty(region)) {
 			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 					.setParameter("region", region).getResultList();
@@ -285,7 +286,7 @@ public class AvalancheReportController {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 
-		if (region != null && region != "") {
+		if (!Strings.isNullOrEmpty(region)) {
 			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 					.setParameter("region", region).getResultList();
 
@@ -358,7 +359,7 @@ public class AvalancheReportController {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 
-		if (region != null && region != "") {
+		if (!Strings.isNullOrEmpty(region)) {
 			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 					.setParameter("region", region).getResultList();
@@ -394,7 +395,7 @@ public class AvalancheReportController {
 		AvalancheReport result = null;
 		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
-		if (region != null && region != "") {
+		if (!Strings.isNullOrEmpty(region)) {
 			EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
 			EntityTransaction transaction = entityManager.getTransaction();
 			transaction.begin();

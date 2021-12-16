@@ -24,6 +24,7 @@ import javax.persistence.Lob;
 
 import com.github.openjson.JSONObject;
 
+import com.google.common.base.Strings;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Embeddable
@@ -70,7 +71,7 @@ public class Text implements AvalancheInformationObject {
 		JSONObject json = new JSONObject();
 		if (languageCode != null)
 			json.put("languageCode", this.languageCode.toString());
-		if (text != null && text != "")
+		if (!Strings.isNullOrEmpty(text))
 			json.put("text", this.text);
 
 		return json;

@@ -29,6 +29,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.github.openjson.JSONObject;
+import com.google.common.base.Strings;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -266,13 +267,13 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 
-		if (id != null && id != "")
+		if (!Strings.isNullOrEmpty(id))
 			json.put("id", id);
 
-		if (user != null && user.getName() != null && user.getName() != "")
+		if (user != null && !Strings.isNullOrEmpty(user.getName()))
 			json.put("user", user.getName());
 
-		if (region != null && region != "")
+		if (!Strings.isNullOrEmpty(region))
 			json.put("region", region);
 
 		if (date != null)
