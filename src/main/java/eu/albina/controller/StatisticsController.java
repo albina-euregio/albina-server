@@ -110,7 +110,7 @@ public class StatisticsController {
 				endDate, region);
 
 		// get bulletins from report json
-		List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports);
+		List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports, lang);
 
 		List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
@@ -151,7 +151,7 @@ public class StatisticsController {
 			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
 					endDate, region);
 			// get bulletins from report json
-			bulletins.addAll(getPublishedBulletinsFromReports(reports));
+			bulletins.addAll(getPublishedBulletinsFromReports(reports, lang));
 		}
 
 		List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
@@ -205,7 +205,7 @@ public class StatisticsController {
 		return new ArrayList<AvalancheBulletin>(resultMap.values());
 	}
 
-	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports) {
+	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports, LanguageCode lang) {
 		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 		for (AvalancheReport avalancheReport : reports) {
 			try {
@@ -214,7 +214,7 @@ public class StatisticsController {
 					sb.append("JSON string empty: ");
 					if (avalancheReport.getDate() != null) {
 						sb.append(
-								avalancheReport.getDate().format(DateTimeFormatter.ofPattern(LanguageCode.en.getBundleString("date-time-format.publication"))));
+								avalancheReport.getDate().format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication"))));
 						sb.append(", ");
 					}
 					sb.append(avalancheReport.getRegion());
@@ -233,7 +233,7 @@ public class StatisticsController {
 				StringBuilder sb = new StringBuilder();
 				sb.append("Error parsing report JSON: ");
 				if (avalancheReport.getDate() != null) {
-					sb.append(avalancheReport.getDate().format(DateTimeFormatter.ofPattern(LanguageCode.en.getBundleString("date-time-format.publication"))));
+					sb.append(avalancheReport.getDate().format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication"))));
 					sb.append(", ");
 				}
 				sb.append(avalancheReport.getRegion());
@@ -569,17 +569,17 @@ public class StatisticsController {
 				sb.append(GlobalVariables.notAvailableString);
 			else {
 				if (daytimeDescription.getTreeline())
-					sb.append(LanguageCode.en.getBundleString("elevation.treeline"));
+					sb.append(lang.getBundleString("elevation.treeline"));
 				else
 					sb.append(daytimeDescription.getElevation());
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation1(), extended);
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation2(), extended);
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation3(), extended);
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation4(), extended);
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation5(), extended);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation1(), extended, lang);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation2(), extended, lang);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation3(), extended, lang);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation4(), extended, lang);
+			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation5(), extended, lang);
 
 			if (avalancheBulletin.getTendency() != null)
 				sb.append(avalancheBulletin.getTendency().toString());
@@ -712,19 +712,19 @@ public class StatisticsController {
 	/**
 	 * Add a CSV string to a {@code StringBuilder} instance representing the
 	 * {@code avalancheSituation}.
-	 *
-	 * @param sb
+	 *  @param sb
 	 *            the string builder instance the new string should be added to
 	 * @param avalancheSituation
 	 *            the {@code AvalancheSituation} that should be added to the
 	 *            {@code StringBuilder} instance
+	 * @param lang
 	 */
-	private void addCsvAvalancheSituation(StringBuilder sb, AvalancheSituation avalancheSituation, boolean extended) {
+	private void addCsvAvalancheSituation(StringBuilder sb, AvalancheSituation avalancheSituation, boolean extended, LanguageCode lang) {
 		if (avalancheSituation != null && avalancheSituation.getAvalancheSituation() != null) {
 			sb.append(avalancheSituation.getAvalancheSituation().toStringId());
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheSituation.getTreelineLow())
-				sb.append(LanguageCode.en.getBundleString("elevation.treeline"));
+				sb.append(lang.getBundleString("elevation.treeline"));
 			else {
 				if (avalancheSituation.getElevationLow() <= 0)
 					sb.append(GlobalVariables.notAvailableString);
@@ -733,7 +733,7 @@ public class StatisticsController {
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 			if (avalancheSituation.getTreelineHigh())
-				sb.append(LanguageCode.en.getBundleString("elevation.treeline"));
+				sb.append(lang.getBundleString("elevation.treeline"));
 			else {
 				if (avalancheSituation.getElevationHigh() <= 0)
 					sb.append(GlobalVariables.notAvailableString);
