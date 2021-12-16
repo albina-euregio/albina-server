@@ -153,6 +153,20 @@ public class GlobalVariables {
 		}
 	};
 
+	// REGION
+	public static List<String> getPublishRegions() {
+		List<String> regions = new ArrayList<String>();
+		if (isPublishBulletinsTyrol())
+			regions.add(codeTyrol);
+		if (isPublishBulletinsSouthTyrol())
+			regions.add(codeSouthTyrol);
+		if (isPublishBulletinsTrentino())
+			regions.add(codeTrentino);
+		if (isPublishBulletinsAran())
+			regions.add(codeAran);
+		return regions;
+	}
+
 	public static String avalancheReportUsername = "info@avalanche.report";
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 

@@ -21,6 +21,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -64,19 +65,15 @@ public class UpdateJob implements org.quartz.Job {
 			Instant startDate = AlbinaUtil.getInstantStartOfDay();
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			List<String> changedRegions = new ArrayList<String>();
-			if (GlobalVariables.isPublishBulletinsTyrol()
-					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeTyrol))
-				changedRegions.add(GlobalVariables.codeTyrol);
-			if (GlobalVariables.isPublishBulletinsSouthTyrol()
-					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeSouthTyrol))
-				changedRegions.add(GlobalVariables.codeSouthTyrol);
-			if (GlobalVariables.isPublishBulletinsTrentino()
-					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeTrentino))
-				changedRegions.add(GlobalVariables.codeTrentino);
-			if (GlobalVariables.isPublishBulletinsAran()
-					&& AlbinaUtil.hasBulletinChanged(startDate, GlobalVariables.codeAran))
-				changedRegions.add(GlobalVariables.codeAran);
+			List<String> changedRegions = GlobalVariables.getPublishRegions().stream()
+				.filter(region -> {
+					try {
+						return AlbinaUtil.hasBulletinChanged(startDate, region);
+					} catch (AlbinaException e) {
+						logger.error("Failed hasBulletinChanged", e);
+						return false;
+					}
+				}).collect(Collectors.toList());
 
 			Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 

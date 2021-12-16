@@ -721,15 +721,7 @@ public class AvalancheBulletinService {
 
 		try {
 			// REGION
-			List<String> regions = new ArrayList<String>();
-			if (GlobalVariables.isPublishBulletinsTyrol())
-				regions.add(GlobalVariables.codeTyrol);
-			if (GlobalVariables.isPublishBulletinsSouthTyrol())
-				regions.add(GlobalVariables.codeSouthTyrol);
-			if (GlobalVariables.isPublishBulletinsTrentino())
-				regions.add(GlobalVariables.codeTrentino);
-			if (GlobalVariables.isPublishBulletinsAran())
-				regions.add(GlobalVariables.codeAran);
+			List<String> regions = GlobalVariables.getPublishRegions();
 
 			if (!regions.isEmpty()) {
 				try {

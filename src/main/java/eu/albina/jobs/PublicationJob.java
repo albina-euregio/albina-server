@@ -58,25 +58,7 @@ public class PublicationJob implements org.quartz.Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		logger.info("Publication job triggered!");
 
-		// REGION
-		List<String> regions = new ArrayList<String>();
-		if (GlobalVariables.isPublishBulletinsTyrol()) {
-			logger.debug("Region: " + GlobalVariables.codeTyrol);
-			regions.add(GlobalVariables.codeTyrol);
-		}
-		if (GlobalVariables.isPublishBulletinsSouthTyrol()) {
-			logger.debug("Region: " + GlobalVariables.codeSouthTyrol);
-			regions.add(GlobalVariables.codeSouthTyrol);
-		}
-		if (GlobalVariables.isPublishBulletinsTrentino()) {
-			logger.debug("Region: " + GlobalVariables.codeTrentino);
-			regions.add(GlobalVariables.codeTrentino);
-		}
-		if (GlobalVariables.isPublishBulletinsAran()) {
-			logger.debug("Region: " + GlobalVariables.codeAran);
-			regions.add(GlobalVariables.codeAran);
-		}
-
+		List<String> regions = GlobalVariables.getPublishRegions();
 		if (!regions.isEmpty()) {
 			try {
 				User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
