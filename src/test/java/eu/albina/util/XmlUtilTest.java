@@ -34,7 +34,7 @@ public class XmlUtilTest {
 		return XmlUtil.convertDocToString(doc);
 	}
 
-	@Ignore
+	@Ignore("<Operation> needs gml:id")
 	@Test
 	public void createValidCaamlv5() throws Exception {
 		final String xml = createCaaml(CaamlVersion.V5);
@@ -45,10 +45,9 @@ public class XmlUtilTest {
 	@Test
 	public void createValidCaamlv6() throws Exception {
 		final String xml = createCaaml(CaamlVersion.V6);
-		CaamlValidator.validateCaamlBulletinLocalV6(xml);
+		CaamlValidator.validateCaamlBulletin(xml, CaamlVersion.V6);
 	}
 
-	@Ignore
 	@Test
 	public void createExpectedCaamlv5() throws Exception {
 		final String expected = Resources
@@ -57,7 +56,6 @@ public class XmlUtilTest {
 		Assert.assertEquals(expected, xml);
 	}
 
-	@Ignore
 	@Test
 	public void createExpectedCaamlV6() throws Exception {
 		final String expected = Resources
