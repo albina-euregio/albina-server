@@ -58,7 +58,12 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		GlobalVariables.loadConfigProperties();
 
 		HibernateUtil.getInstance().setUp();
-		Sentry.init();
+
+		try {
+			Sentry.init();
+		} catch (Exception e) {
+			logger.warn("Failed to initialize Sentry!", e);
+		}
 
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		Driver d = null;
