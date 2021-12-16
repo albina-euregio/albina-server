@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import eu.albina.map.DaytimeDependency;
+import eu.albina.map.MapUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -210,23 +212,23 @@ public class EmailUtil {
 				mapImage.put("overview",
 						GlobalVariables.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 								+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-								+ AlbinaUtil.getRegionOverviewMapFilename(region, false, "jpg"));
+								+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
 				mapImage.put("overviewPM",
 						GlobalVariables.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 								+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-								+ AlbinaUtil.getRegionOverviewMapFilename(region, true, "jpg"));
+								+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false));
 				mapImage.put("widthPM", "width=\"600\"");
 			} else {
 				if (daytimeDependency)
 					mapImage.put("overview",
 							GlobalVariables.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-									+ AlbinaUtil.getRegionOverviewMapFilename(region, false, "jpg"));
+									+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
 				else
 					mapImage.put("overview",
 							GlobalVariables.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-									+ AlbinaUtil.getRegionOverviewMapFilename(region, "jpg"));
+									+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
 				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
 				mapImage.put("widthPM", "");
 			}

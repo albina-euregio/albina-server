@@ -1,5 +1,7 @@
 package eu.albina.util;
 
+import eu.albina.map.DaytimeDependency;
+import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
@@ -89,7 +91,7 @@ public interface LinkUtil {
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 		return getServerMainUrl() + GlobalVariables.avalancheReportFilesUrl
 			+ validityDate + "/" + publicationTime + "/"
-			+ AlbinaUtil.getRegionOverviewMapFilename("", "jpg");
+			+ MapUtil.getOverviewMapFilename("", DaytimeDependency.fd, false);
 	}
 
 	static String getServerMainUrl() {

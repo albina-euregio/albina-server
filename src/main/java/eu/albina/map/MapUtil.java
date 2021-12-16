@@ -49,6 +49,10 @@ public interface MapUtil {
 	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
 			boolean grayscale) {
 		final DaytimeDependency daytimeDependency = DaytimeDependency.of(isAfternoon, hasDaytimeDependency);
+		return getOverviewMapFilename(region, daytimeDependency, grayscale);
+	}
+
+	static String getOverviewMapFilename(String region, DaytimeDependency daytimeDependency, boolean grayscale) {
 		return MapType.forRegion(region).orElse(MapType.euregio).filename(MapLevel.standard, daytimeDependency, null, grayscale, MapImageFormat.jpg);
 	}
 
