@@ -38,6 +38,11 @@ import eu.albina.model.enumerations.LanguageCode;
 import freemarker.template.TemplateException;
 
 public class SimpleHtmlUtilTest {
+	@Before
+	public void setUp() throws Exception {
+		GlobalVariables.htmlDirectory = "/foo/bar/baz/simple/";
+		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files/";
+	}
 
 	@Test
 	public void createSimpleHtmlString() throws IOException, URISyntaxException, TemplateException {

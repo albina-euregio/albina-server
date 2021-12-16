@@ -66,7 +66,7 @@ public class GlobalVariables {
 
 	private static String serverImagesUrl = "https://admin.avalanche.report/images/";
 	public static String pdfDirectory = "/mnt/albina_files_local";
-	private static String htmlDirectory = "/mnt/simple_local";
+	public static String htmlDirectory = "/mnt/simple_local";
 	public static String mapsPath = "/mnt/albina_files_local";
 	public static String mapProductionUrl = "";
 
