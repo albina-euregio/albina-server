@@ -13,7 +13,7 @@ production build:
     script:
         - apt-get update -y
         - apt-get install -y ghostscript imagemagick webp
-        - git clone --depth 1 --branch map-aran https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
+        - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
         - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
     artifacts:
         when: always
