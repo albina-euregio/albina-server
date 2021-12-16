@@ -132,7 +132,7 @@ public class AvalancheBulletinService {
 		Instant startDate = null;
 
 		if (regions.isEmpty()) {
-			regions = GlobalVariables.regionsEuregio;
+			regions = GlobalVariables.getPublishRegions();
 		}
 
 		try {
@@ -232,7 +232,7 @@ public class AvalancheBulletinService {
 		Instant startDate = null;
 
 		if (regions.isEmpty()) {
-			regions = GlobalVariables.regionsEuregio;
+			regions = GlobalVariables.getPublishRegions();
 		}
 
 		try {
@@ -308,7 +308,7 @@ public class AvalancheBulletinService {
 			// if no region is defined, get status for EUREGIO
 			if (region == null || region.isEmpty())
 				status = AvalancheReportController.getInstance().getStatus(startDate, endDate,
-						GlobalVariables.regionsEuregio);
+						GlobalVariables.getPublishRegions());
 			else
 				status = AvalancheReportController.getInstance().getStatus(startDate, endDate, region);
 
@@ -453,7 +453,7 @@ public class AvalancheBulletinService {
 			else
 				throw new AlbinaException("No date!");
 
-			Collection<AvalancheBulletin> result = AvalancheBulletinController.getInstance().getBulletins(startDate, startDate, GlobalVariables.regionsEuregio);
+			Collection<AvalancheBulletin> result = AvalancheBulletinController.getInstance().getBulletins(startDate, startDate, GlobalVariables.getPublishRegions());
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result) {
 				if (b.affectsRegion(region))
@@ -792,7 +792,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result)
@@ -844,7 +844,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(bulletins);
 			createSimpleHtmlThread.start();
@@ -885,7 +885,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
@@ -931,7 +931,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
@@ -975,7 +975,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
@@ -1013,7 +1013,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
@@ -1057,7 +1057,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			Thread sendEmailsThread = PublicationController.getInstance().sendEmails(bulletins, regions, false, false);
 			sendEmailsThread.start();
@@ -1094,7 +1094,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			logger.debug("startDate: " + startDate.toString());
 			logger.debug("#bulletins: " + bulletins.size());
@@ -1136,7 +1136,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("No date!");
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, GlobalVariables.regionsEuregio);
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			Thread triggerTelegramChannelThread = PublicationController.getInstance().triggerTelegramChannel(bulletins,
 					regions, false);
