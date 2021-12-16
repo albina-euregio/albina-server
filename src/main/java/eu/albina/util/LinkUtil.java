@@ -24,10 +24,6 @@ public interface LinkUtil {
 		return String.format("%s/%s", getWebsite(lang), htmlDirectory);
 	}
 
-	static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
-		return String.format("%s/simple/", getWebsite(lang));
-	}
-
 	static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
 		return String.format("%s/blog/", getWebsite(lang));
 	}

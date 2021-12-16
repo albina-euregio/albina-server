@@ -243,7 +243,7 @@ public class XmlUtil {
 		extFiles.add(createExtFile(doc, "link", lang.getBundleString("ext-file.website-link.description"),
 				lang.getBundleString("avalanche-report.url") + "/bulletin/" + validityDateString));
 		extFiles.add(createExtFile(doc, "simple_link", lang.getBundleString("ext-file.simple-link.description"),
-				LinkUtil.getAvalancheReportSimpleBaseUrl(lang) + validityDateString + "/" + lang.toString()
+				LinkUtil.getSimpleHtmlUrl(lang) + "/" + validityDateString + "/" + lang.toString()
 						+ ".html"));
 		extFiles.add(createExtFile(doc, "fd_albina_map.jpg",
 				LinkUtil.getExtFileMapDescription(lang, "fd", ""), baseUri + "fd_albina_map.jpg"));
