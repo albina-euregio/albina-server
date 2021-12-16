@@ -19,9 +19,13 @@ public interface LinkUtil {
 		return lang.getBundleString("avalanche-report.url");
 	}
 
+	static String getWebsiteStaticFiles(LanguageCode lang) {
+		return lang.getBundleString("avalanche-report.url");
+	}
+
 	static String getSimpleHtmlUrl(LanguageCode lang) {
 		String htmlDirectory = Paths.get(GlobalVariables.getHtmlDirectory()).getFileName().toString();
-		return String.format("%s/%s", getWebsite(lang), htmlDirectory);
+		return String.format("%s/%s", getWebsiteStaticFiles(lang), htmlDirectory);
 	}
 
 	static String getAvalancheReportFullBlogUrl(LanguageCode lang) {
@@ -35,7 +39,7 @@ public interface LinkUtil {
 
 	static String getMapsUrl(LanguageCode lang) {
 		String mapsDirectory = Paths.get(GlobalVariables.getMapsPath()).getFileName().toString();
-		return String.format("%s/%s", getWebsite(lang), mapsDirectory);
+		return String.format("%s/%s", getWebsiteStaticFiles(lang), mapsDirectory);
 	}
 
 	// REGION
@@ -43,7 +47,7 @@ public interface LinkUtil {
 		String pdfDirectory = Paths.get(GlobalVariables.getPdfDirectory()).getFileName().toString();
 		String date = AlbinaUtil.getValidityDateString(bulletins);
 		return String.format("%s/%s/%s/%s_%s_%s.pdf",
-			getWebsite(lang), pdfDirectory, date, date, region, lang);
+			getWebsiteStaticFiles(lang), pdfDirectory, date, date, region, lang);
 	}
 
 	static String getDangerPatternLink(LanguageCode lang, DangerPattern dangerPattern) {
