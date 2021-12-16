@@ -230,11 +230,11 @@ public class AlbinaUtil {
 
 	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, Period offset) {
 		if (region != null && !region.isEmpty())
-			return GlobalVariables.getSimpleHtmlUrl(lang) + "/"
+			return LinkUtil.getSimpleHtmlUrl(lang) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region + "_" + lang.toString()
 					+ ".html";
 		else
-			return GlobalVariables.getSimpleHtmlUrl(lang) + "/"
+			return LinkUtil.getSimpleHtmlUrl(lang) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + lang.toString() + ".html";
 	}
 

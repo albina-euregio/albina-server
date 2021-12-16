@@ -50,6 +50,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import eu.albina.util.LinkUtil;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1189,12 +1190,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element metaData = doc.createElement("metaData");
 		rootElement.appendChild(metaData);
 		if (!isAfternoon) {
-			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + getId() + ".jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
-			String fileReferenceURI = GlobalVariables.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + getId() + "_PM.jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));

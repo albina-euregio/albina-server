@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -420,16 +419,6 @@ public class GlobalVariables {
 			throws ConfigurationException {
 		GlobalVariables.bulletinCaamlSchemaFileString = bulletinCaamlSchemaFileString;
 		setConfigProperty("bulletinCaamlSchemaFileString", bulletinCaamlSchemaFileString);
-	}
-
-	public static String getMapsUrl(LanguageCode lang) {
-		String mapsDirectory = Paths.get(GlobalVariables.getMapsPath()).getFileName().toString();
-		return lang.getBundleString("avalanche-report.url") + "/" + mapsDirectory;
-	}
-
-	public static String getSimpleHtmlUrl(LanguageCode lang) {
-		String htmlDirectory = Paths.get(GlobalVariables.getHtmlDirectory()).getFileName().toString();
-		return lang.getBundleString("avalanche-report.url") + "/" + htmlDirectory;
 	}
 
 	public static String getEuregioLogoPath(boolean grayscale) {

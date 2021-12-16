@@ -244,21 +244,21 @@ public class SimpleHtmlUtil {
 
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("mapAMjpg", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapAMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
-					bulletin.put("mapPMjpg", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
-					bulletin.put("mapPMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.webp");
 					bulletin.put("widthPM", "width=\"150\"");
 					bulletin.put("heightPMSmall", "height=\"50\"");
 					bulletin.put("fontSize", "");
 				} else {
-					bulletin.put("mapAMjpg", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapAMwebp", GlobalVariables.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
 					bulletin.put("mapPMjpg", GlobalVariables.getServerImagesUrl() + "empty.png");
 					bulletin.put("mapPMwebp", GlobalVariables.getServerImagesUrl() + "empty.webp");

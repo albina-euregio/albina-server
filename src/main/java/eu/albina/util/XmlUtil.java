@@ -238,7 +238,7 @@ public class XmlUtil {
 		boolean hasDaytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		String baseUri = GlobalVariables.getMapsUrl(lang) + "/" + validityDateString + "/" + publicationTime + "/";
+		String baseUri = LinkUtil.getMapsUrl(lang) + "/" + validityDateString + "/" + publicationTime + "/";
 
 		extFiles.add(createExtFile(doc, "link", lang.getBundleString("ext-file.website-link.description"),
 				lang.getBundleString("avalanche-report.url") + "/bulletin/" + validityDateString));

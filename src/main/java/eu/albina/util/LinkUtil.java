@@ -6,6 +6,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
+import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -16,6 +17,11 @@ public interface LinkUtil {
 
 	static String getWebsite(LanguageCode lang) {
 		return lang.getBundleString("avalanche-report.url");
+	}
+
+	static String getSimpleHtmlUrl(LanguageCode lang) {
+		String htmlDirectory = Paths.get(GlobalVariables.getHtmlDirectory()).getFileName().toString();
+		return String.format("%s/%s", getWebsite(lang), htmlDirectory);
 	}
 
 	static String getAvalancheReportSimpleBaseUrl(LanguageCode lang) {
@@ -29,6 +35,11 @@ public interface LinkUtil {
 	static String getBulletinUrl(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		String date = AlbinaUtil.getValidityDateString(bulletins);
 		return String.format("%s/bulletin/%s", getWebsite(lang), date);
+	}
+
+	static String getMapsUrl(LanguageCode lang) {
+		String mapsDirectory = Paths.get(GlobalVariables.getMapsPath()).getFileName().toString();
+		return String.format("%s/%s", getWebsite(lang), mapsDirectory);
 	}
 
 	// REGION
