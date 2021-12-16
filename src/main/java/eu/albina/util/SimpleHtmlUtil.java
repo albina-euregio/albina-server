@@ -391,7 +391,7 @@ public class SimpleHtmlUtil {
 			text.put("avalancheProblem", "");
 		result.put("text", text);
 
-		dangerLevel.put("warningPicto", GlobalVariables.getServerImagesUrl() + "/warning_pictos/color/level_"
+		dangerLevel.put("warningPicto", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
 				+ AlbinaUtil.getWarningLevelId(daytimeDescription) + ".png");
 		dangerLevel.put("elevation",
 				getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang));
