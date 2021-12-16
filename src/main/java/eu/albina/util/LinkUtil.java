@@ -40,9 +40,10 @@ public interface LinkUtil {
 
 	// REGION
 	static String getPdfLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
+		String pdfDirectory = Paths.get(GlobalVariables.getPdfDirectory()).getFileName().toString();
 		String date = AlbinaUtil.getValidityDateString(bulletins);
 		return String.format("%s/%s/%s/%s_%s_%s.pdf",
-			getWebsite(lang), "albina_files", date, date, region, lang);
+			getWebsite(lang), pdfDirectory, date, date, region, lang);
 	}
 
 	static String getDangerPatternLink(LanguageCode lang, DangerPattern dangerPattern) {

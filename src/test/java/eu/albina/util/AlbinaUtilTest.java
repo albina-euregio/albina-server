@@ -238,6 +238,8 @@ public class AlbinaUtilTest {
 
 	@Test
 	public void testDates() throws Exception {
+		GlobalVariables.pdfDirectory = "/foo/bar/baz/albina_files";
+		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files";
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
