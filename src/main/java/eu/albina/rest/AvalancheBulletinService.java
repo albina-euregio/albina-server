@@ -19,6 +19,7 @@ package eu.albina.rest;
 import java.io.File;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -316,7 +317,9 @@ public class AvalancheBulletinService {
 
 			for (Entry<Instant, BulletinStatus> entry : status.entrySet()) {
 				JSONObject json = new JSONObject();
-				json.put("date", DateTimeFormatter.ISO_INSTANT.format(entry.getKey()));
+				final ZonedDateTime dateTime = entry.getKey().atZone(AlbinaUtil.localZone());
+				final String iso8601 = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(dateTime);
+				json.put("date", iso8601);
 				json.put("status", entry.getValue().toString());
 				jsonResult.put(json);
 			}
