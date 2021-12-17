@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.rest;
+package eu.albina.rest.websocket;
 
 import java.io.IOException;
 import java.util.Set;
@@ -33,8 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.BulletinUpdate;
-import eu.albina.util.BulletinUpdateDecoder;
-import eu.albina.util.BulletinUpdateEncoder;
 
 @ServerEndpoint(value = "/update/{username}", decoders = BulletinUpdateDecoder.class, encoders = BulletinUpdateEncoder.class)
 public class AvalancheBulletinUpdateEndpoint {

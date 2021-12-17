@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.rest;
+package eu.albina.rest.websocket;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -35,76 +33,58 @@ import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.ChatController;
-import eu.albina.model.ChatMessage;
-import eu.albina.util.ChatMessageDecoder;
-import eu.albina.util.ChatMessageEncoder;
+import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.BulletinLock;
 
-@ServerEndpoint(value = "/chat/{username}", decoders = ChatMessageDecoder.class, encoders = ChatMessageEncoder.class)
-public class ChatEndpoint {
+@ServerEndpoint(value = "/bulletin/{username}", decoders = BulletinLockDecoder.class, encoders = BulletinLockEncoder.class)
+public class AvalancheBulletinEndpoint {
 
-	private static final Logger logger = LoggerFactory.getLogger(ChatEndpoint.class);
+	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEndpoint.class);
 
 	private Session session;
-	private static final Set<ChatEndpoint> chatEndpoints = new CopyOnWriteArraySet<>();
-	private static final HashMap<String, String> users = new HashMap<>();
+	private static final Set<AvalancheBulletinEndpoint> bulletinEndpoints = new CopyOnWriteArraySet<>();
 
 	@OnOpen
 	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
-		chatEndpoints.add(this);
-		users.put(session.getId(), username);
-
-		// ChatMessage message = new ChatMessage();
-		// message.setDateTime(new DateTime());
-		// message.setUsername(username);
-		// message.setText("CONNECTED");
-
+		bulletinEndpoints.add(this);
 		logger.info("Client connected: " + username);
-
-		// broadcast(message);
 	}
 
 	@OnMessage
-	public void onMessage(Session session, String message) {
-		ChatMessage chatMessage = new ChatMessage(new JSONObject(message));
-		ChatController.getInstance().saveChatMessage(chatMessage);
-		broadcast(chatMessage);
+	public void onMessage(Session session, String lock) throws AlbinaException {
+		BulletinLock bulletinLock = new BulletinLock(new JSONObject(lock));
+		bulletinLock.setSessionId(session.getId());
+		if (bulletinLock.getLock())
+			AvalancheBulletinController.getInstance().lockBulletin(bulletinLock);
+		else
+			AvalancheBulletinController.getInstance().unlockBulletin(bulletinLock);
+		broadcast(bulletinLock);
 	}
 
 	@OnClose
 	public void onClose(Session session) {
-		chatEndpoints.remove(this);
-
-		// ChatMessage message = new ChatMessage();
-		// message.setDateTime(new DateTime());
-		// message.setUsername(users.get(session.getId()));
-		// message.setText("DISCONNECTED");
-
-		logger.info("Client disconnected: " + users.get(session.getId()));
-
-		// broadcast(message);
+		bulletinEndpoints.remove(this);
+		AvalancheBulletinController.getInstance().unlockBulletins(session.getId());
+		logger.info("Client disconnected: " + session.getId());
 	}
 
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		// Do error handling here
-		logger.error("Chat error", throwable);
+		logger.error("Bulletin lock error", throwable);
 	}
 
-	private static void broadcast(ChatMessage message) {
-		chatEndpoints.forEach(endpoint -> {
+	public static void broadcast(BulletinLock lock) {
+		bulletinEndpoints.forEach(endpoint -> {
 			synchronized (endpoint) {
 				try {
-					endpoint.session.getBasicRemote().sendObject(message);
+					endpoint.session.getBasicRemote().sendObject(lock);
 				} catch (IOException | EncodeException e) {
 					logger.warn("Broadcasting error", e);
 				}
 			}
 		});
-	}
-
-	public static Collection<String> getActiveUsers() {
-		return users.values();
 	}
 }

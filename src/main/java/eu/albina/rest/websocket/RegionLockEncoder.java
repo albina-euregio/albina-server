@@ -14,19 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.util;
+package eu.albina.rest.websocket;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-import eu.albina.model.ChatMessage;
+import eu.albina.model.RegionLock;
 
-public class ChatMessageEncoder implements Encoder.Text<ChatMessage> {
+public class RegionLockEncoder implements Encoder.Text<RegionLock> {
 
 	@Override
-	public String encode(ChatMessage message) throws EncodeException {
-		return message.toJSON().toString();
+	public String encode(RegionLock lock) throws EncodeException {
+		return lock.toJSON().toString();
 	}
 
 	@Override

@@ -14,18 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.util;
+package eu.albina.rest.websocket;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-import eu.albina.model.RegionLock;
+import eu.albina.model.BulletinUpdate;
 
-public class RegionLockEncoder implements Encoder.Text<RegionLock> {
+public class BulletinUpdateEncoder implements Encoder.Text<BulletinUpdate> {
 
 	@Override
-	public String encode(RegionLock lock) throws EncodeException {
+	public String encode(BulletinUpdate lock) throws EncodeException {
 		return lock.toJSON().toString();
 	}
 

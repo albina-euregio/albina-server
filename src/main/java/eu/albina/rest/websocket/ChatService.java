@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.rest;
+package eu.albina.rest.websocket;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.rest;
+package eu.albina.rest.websocket;
 
 import java.io.IOException;
 import java.util.Set;
@@ -36,8 +36,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.RegionLock;
-import eu.albina.util.RegionLockDecoder;
-import eu.albina.util.RegionLockEncoder;
 
 @ServerEndpoint(value = "/region/{username}", decoders = RegionLockDecoder.class, encoders = RegionLockEncoder.class)
 public class RegionEndpoint {

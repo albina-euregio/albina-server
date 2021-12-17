@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.util;
+package eu.albina.rest.websocket;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
@@ -22,13 +22,13 @@ import javax.websocket.EndpointConfig;
 
 import com.github.openjson.JSONObject;
 
-import eu.albina.model.RegionLock;
+import eu.albina.model.BulletinLock;
 
-public class RegionLockDecoder implements Decoder.Text<RegionLock> {
+public class BulletinLockDecoder implements Decoder.Text<BulletinLock> {
 
 	@Override
-	public RegionLock decode(String s) throws DecodeException {
-		return new RegionLock(new JSONObject(s));
+	public BulletinLock decode(String s) throws DecodeException {
+		return new BulletinLock(new JSONObject(s));
 	}
 
 	@Override

@@ -14,19 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.util;
+package eu.albina.rest.websocket;
 
-import javax.websocket.EncodeException;
-import javax.websocket.Encoder;
+import javax.websocket.DecodeException;
+import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import eu.albina.model.BulletinLock;
+import com.github.openjson.JSONObject;
 
-public class BulletinLockEncoder implements Encoder.Text<BulletinLock> {
+import eu.albina.model.BulletinUpdate;
+
+public class BulletinUpdateDecoder implements Decoder.Text<BulletinUpdate> {
 
 	@Override
-	public String encode(BulletinLock lock) throws EncodeException {
-		return lock.toJSON().toString();
+	public BulletinUpdate decode(String s) throws DecodeException {
+		return new BulletinUpdate(new JSONObject(s));
+	}
+
+	@Override
+	public boolean willDecode(String s) {
+		return (s != null);
 	}
 
 	@Override
