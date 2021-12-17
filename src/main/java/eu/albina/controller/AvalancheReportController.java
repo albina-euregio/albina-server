@@ -43,7 +43,7 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.BulletinUpdate;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.rest.AvalancheBulletinUpdateEndpoint;
+import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;

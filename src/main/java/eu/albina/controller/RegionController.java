@@ -31,7 +31,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
 import eu.albina.model.Regions;
-import eu.albina.rest.RegionEndpoint;
+import eu.albina.rest.websocket.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
 /**
