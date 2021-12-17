@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -51,6 +52,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import eu.albina.util.LinkUtil;
+import com.google.common.base.Strings;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -829,10 +831,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 
-		if (id != null && id != "")
+		if (!Strings.isNullOrEmpty(id))
 			json.put("id", id);
 
-		if (user != null && user.getName() != null && user.getName() != "")
+		if (user != null && !Strings.isNullOrEmpty(user.getName()))
 			json.put("author", user.toSmallJSON());
 
 		if (additionalAuthors != null && additionalAuthors.size() > 0) {
@@ -846,28 +848,28 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (user != null && user.getRoles() != null)
 			json.put("ownerRegion", ownerRegion);
 
-		if (highlightsTextcat != null && highlightsTextcat != "")
+		if (!Strings.isNullOrEmpty(highlightsTextcat))
 			json.put("highlightsTextcat", highlightsTextcat);
-		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
+		if (!Strings.isNullOrEmpty(avActivityHighlightsTextcat))
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
-		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
+		if (!Strings.isNullOrEmpty(avActivityCommentTextcat))
 			json.put("avActivityCommentTextcat", avActivityCommentTextcat);
-		if (snowpackStructureHighlightsTextcat != null && snowpackStructureHighlightsTextcat != "")
+		if (!Strings.isNullOrEmpty(snowpackStructureHighlightsTextcat))
 			json.put("snowpackStructureHighlightsTextcat", snowpackStructureHighlightsTextcat);
-		if (snowpackStructureCommentTextcat != null && snowpackStructureCommentTextcat != "")
+		if (!Strings.isNullOrEmpty(snowpackStructureCommentTextcat))
 			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
-		if (tendencyCommentTextcat != null && tendencyCommentTextcat != "")
+		if (!Strings.isNullOrEmpty(tendencyCommentTextcat))
 			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
 
-		if (avActivityHighlightsNotes != null && avActivityHighlightsNotes != "")
+		if (!Strings.isNullOrEmpty(avActivityHighlightsNotes))
 			json.put("avActivityHighlightsNotes", avActivityHighlightsNotes);
-		if (avActivityCommentNotes != null && avActivityCommentNotes != "")
+		if (!Strings.isNullOrEmpty(avActivityCommentNotes))
 			json.put("avActivityCommentNotes", avActivityCommentNotes);
-		if (snowpackStructureHighlightsNotes != null && snowpackStructureHighlightsNotes != "")
+		if (!Strings.isNullOrEmpty(snowpackStructureHighlightsNotes))
 			json.put("snowpackStructureHighlightsNotes", snowpackStructureHighlightsNotes);
-		if (snowpackStructureCommentNotes != null && snowpackStructureCommentNotes != "")
+		if (!Strings.isNullOrEmpty(snowpackStructureCommentNotes))
 			json.put("snowpackStructureCommentNotes", snowpackStructureCommentNotes);
-		if (tendencyCommentNotes != null && tendencyCommentNotes != "")
+		if (!Strings.isNullOrEmpty(tendencyCommentNotes))
 			json.put("tendencyCommentNotes", tendencyCommentNotes);
 
 		for (TextPart part : TextPart.values())
@@ -908,31 +910,31 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	public JSONObject toSmallJSON() {
 		JSONObject json = new JSONObject();
 
-		if (id != null && id != "")
+		if (!Strings.isNullOrEmpty(id))
 			json.put("id", id);
 
-		if (highlightsTextcat != null && highlightsTextcat != "")
+		if (!Strings.isNullOrEmpty(highlightsTextcat))
 			json.put("highlightsTextcat", highlightsTextcat);
-		if (avActivityHighlightsTextcat != null && avActivityHighlightsTextcat != "")
+		if (!Strings.isNullOrEmpty(avActivityHighlightsTextcat))
 			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
-		if (avActivityCommentTextcat != null && avActivityCommentTextcat != "")
+		if (!Strings.isNullOrEmpty(avActivityCommentTextcat))
 			json.put("avActivityCommentTextcat", avActivityCommentTextcat);
-		if (snowpackStructureHighlightsTextcat != null && snowpackStructureHighlightsTextcat != "")
+		if (!Strings.isNullOrEmpty(snowpackStructureHighlightsTextcat))
 			json.put("snowpackStructureHighlightsTextcat", snowpackStructureHighlightsTextcat);
-		if (snowpackStructureCommentTextcat != null && snowpackStructureCommentTextcat != "")
+		if (!Strings.isNullOrEmpty(snowpackStructureCommentTextcat))
 			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
-		if (tendencyCommentTextcat != null && tendencyCommentTextcat != "")
+		if (!Strings.isNullOrEmpty(tendencyCommentTextcat))
 			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
 
-		if (avActivityHighlightsNotes != null && avActivityHighlightsNotes != "")
+		if (!Strings.isNullOrEmpty(avActivityHighlightsNotes))
 			json.put("avActivityHighlightsNotes", avActivityHighlightsNotes);
-		if (avActivityCommentNotes != null && avActivityCommentNotes != "")
+		if (!Strings.isNullOrEmpty(avActivityCommentNotes))
 			json.put("avActivityCommentNotes", avActivityCommentNotes);
-		if (snowpackStructureHighlightsNotes != null && snowpackStructureHighlightsNotes != "")
+		if (!Strings.isNullOrEmpty(snowpackStructureHighlightsNotes))
 			json.put("snowpackStructureHighlightsNotes", snowpackStructureHighlightsNotes);
-		if (snowpackStructureCommentNotes != null && snowpackStructureCommentNotes != "")
+		if (!Strings.isNullOrEmpty(snowpackStructureCommentNotes))
 			json.put("snowpackStructureCommentNotes", snowpackStructureCommentNotes);
-		if (tendencyCommentNotes != null && tendencyCommentNotes != "")
+		if (!Strings.isNullOrEmpty(tendencyCommentNotes))
 			json.put("tendencyCommentNotes", tendencyCommentNotes);
 
 		for (TextPart part : TextPart.values())
@@ -1660,41 +1662,33 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 		final AvalancheBulletin other = (AvalancheBulletin) obj;
 
-		if ((this.validFrom == null) ? (other.validFrom != null) : !this.validFrom.equals(other.validFrom))
+		if (!Objects.equals(this.validFrom, other.validFrom))
 			return false;
-		if ((this.validUntil == null) ? (other.validUntil != null) : !this.validUntil.equals(other.validUntil))
+		if (!Objects.equals(this.validUntil, other.validUntil))
 			return false;
 		if (this.hasDaytimeDependency != other.hasDaytimeDependency)
 			return false;
-		if ((this.forenoon == null) ? (other.forenoon != null) : !this.forenoon.equals(other.forenoon))
+		if (!Objects.equals(this.forenoon, other.forenoon))
 			return false;
-		if ((this.afternoon == null) ? (other.afternoon != null) : !this.afternoon.equals(other.afternoon))
+		if (!Objects.equals(this.afternoon, other.afternoon))
 			return false;
-		if ((this.highlightsTextcat == null) ? (other.highlightsTextcat != null)
-				: !this.highlightsTextcat.equals(other.highlightsTextcat))
+		if (!Objects.equals(this.highlightsTextcat, other.highlightsTextcat))
 			return false;
-		if ((this.avActivityHighlightsTextcat == null) ? (other.avActivityHighlightsTextcat != null)
-				: !this.avActivityHighlightsTextcat.equals(other.avActivityHighlightsTextcat))
+		if (!Objects.equals(this.avActivityHighlightsTextcat, other.avActivityHighlightsTextcat))
 			return false;
-		if ((this.avActivityCommentTextcat == null) ? (other.avActivityCommentTextcat != null)
-				: !this.avActivityCommentTextcat.equals(other.avActivityCommentTextcat))
+		if (!Objects.equals(this.avActivityCommentTextcat, other.avActivityCommentTextcat))
 			return false;
-		if ((this.snowpackStructureHighlightsTextcat == null) ? (other.snowpackStructureHighlightsTextcat != null)
-				: !this.snowpackStructureHighlightsTextcat.equals(other.snowpackStructureHighlightsTextcat))
+		if (!Objects.equals(this.snowpackStructureHighlightsTextcat, other.snowpackStructureHighlightsTextcat))
 			return false;
-		if ((this.snowpackStructureCommentTextcat == null) ? (other.snowpackStructureCommentTextcat != null)
-				: !this.snowpackStructureCommentTextcat.equals(other.snowpackStructureCommentTextcat))
+		if (!Objects.equals(this.snowpackStructureCommentTextcat, other.snowpackStructureCommentTextcat))
 			return false;
-		if ((this.tendencyCommentTextcat == null) ? (other.tendencyCommentTextcat != null)
-				: !this.tendencyCommentTextcat.equals(other.tendencyCommentTextcat))
+		if (!Objects.equals(this.tendencyCommentTextcat, other.tendencyCommentTextcat))
 			return false;
-		if ((this.tendency == null) ? (other.tendency != null) : !this.tendency.equals(other.tendency))
+		if (!Objects.equals(this.tendency, other.tendency))
 			return false;
-		if ((this.dangerPattern1 == null) ? (other.dangerPattern1 != null)
-				: !this.dangerPattern1.equals(other.dangerPattern1))
+		if (!Objects.equals(this.dangerPattern1, other.dangerPattern1))
 			return false;
-		if ((this.dangerPattern2 == null) ? (other.dangerPattern2 != null)
-				: !this.dangerPattern2.equals(other.dangerPattern2))
+		if (!Objects.equals(this.dangerPattern2, other.dangerPattern2))
 			return false;
 
 		return true;
