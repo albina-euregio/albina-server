@@ -19,6 +19,7 @@ package eu.albina.rest;
 import java.io.File;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -45,6 +46,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -290,6 +292,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStatus(@QueryParam("region") String region,
+			@QueryParam("timezone") String timezone,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
 		Instant startDate = null;
@@ -304,6 +307,11 @@ public class AvalancheBulletinService {
 			if (end != null)
 				endDate = ZonedDateTime.parse(end).toInstant();
 
+			ZoneId zoneId = AlbinaUtil.localZone();
+			if (!Strings.isNullOrEmpty(timezone)) {
+				zoneId = ZoneId.of(timezone);
+			}
+
 			Map<Instant, BulletinStatus> status;
 			// if no region is defined, get status for EUREGIO
 			if (region == null || region.isEmpty())
@@ -316,7 +324,9 @@ public class AvalancheBulletinService {
 
 			for (Entry<Instant, BulletinStatus> entry : status.entrySet()) {
 				JSONObject json = new JSONObject();
-				json.put("date", DateTimeFormatter.ISO_INSTANT.format(entry.getKey()));
+				final ZonedDateTime dateTime = entry.getKey().atZone(zoneId);
+				final String iso8601 = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(dateTime);
+				json.put("date", iso8601);
 				json.put("status", entry.getValue().toString());
 				jsonResult.put(json);
 			}
