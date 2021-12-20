@@ -1157,12 +1157,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		bulletinResultsOf.appendChild(bulletinMeasurements);
 		rootElement.appendChild(bulletinResultsOf);
 
-		for (String region : publishedRegions) {
-			Element locRef = doc.createElement("locRef");
-			locRef.setAttribute("xlink:href", region);
-			rootElement.appendChild(locRef);
-		}
-
 		return rootElement;
 	}
 
