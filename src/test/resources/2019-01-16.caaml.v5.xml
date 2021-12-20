@@ -33,14 +33,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-BZ-07"/>
-      <locRef xlink:href="IT-32-BZ-11"/>
-      <locRef xlink:href="IT-32-BZ-12"/>
-      <locRef xlink:href="IT-32-BZ-01"/>
-      <locRef xlink:href="IT-32-BZ-02"/>
-      <locRef xlink:href="IT-32-BZ-03"/>
-      <locRef xlink:href="IT-32-BZ-04"/>
-      <locRef xlink:href="IT-32-BZ-05"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -124,14 +116,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-BZ-07"/>
-      <locRef xlink:href="IT-32-BZ-11"/>
-      <locRef xlink:href="IT-32-BZ-12"/>
-      <locRef xlink:href="IT-32-BZ-01"/>
-      <locRef xlink:href="IT-32-BZ-02"/>
-      <locRef xlink:href="IT-32-BZ-03"/>
-      <locRef xlink:href="IT-32-BZ-04"/>
-      <locRef xlink:href="IT-32-BZ-05"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -202,9 +186,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-BZ-18"/>
-      <locRef xlink:href="IT-32-BZ-19"/>
-      <locRef xlink:href="IT-32-BZ-20"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -270,10 +251,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-TN-02"/>
-      <locRef xlink:href="IT-32-TN-01"/>
-      <locRef xlink:href="IT-32-TN-04"/>
-      <locRef xlink:href="IT-32-TN-05"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -351,31 +328,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="AT-07-10"/>
-      <locRef xlink:href="AT-07-11"/>
-      <locRef xlink:href="AT-07-12"/>
-      <locRef xlink:href="AT-07-13"/>
-      <locRef xlink:href="AT-07-14"/>
-      <locRef xlink:href="AT-07-15"/>
-      <locRef xlink:href="AT-07-16"/>
-      <locRef xlink:href="AT-07-17"/>
-      <locRef xlink:href="AT-07-18"/>
-      <locRef xlink:href="AT-07-19"/>
-      <locRef xlink:href="AT-07-20"/>
-      <locRef xlink:href="AT-07-21"/>
-      <locRef xlink:href="AT-07-22"/>
-      <locRef xlink:href="AT-07-23"/>
-      <locRef xlink:href="AT-07-01"/>
-      <locRef xlink:href="AT-07-24"/>
-      <locRef xlink:href="AT-07-02"/>
-      <locRef xlink:href="AT-07-03"/>
-      <locRef xlink:href="AT-07-04"/>
-      <locRef xlink:href="AT-07-26"/>
-      <locRef xlink:href="AT-07-05"/>
-      <locRef xlink:href="AT-07-06"/>
-      <locRef xlink:href="AT-07-07"/>
-      <locRef xlink:href="AT-07-08"/>
-      <locRef xlink:href="AT-07-09"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -485,7 +437,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="AT-07-29"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -552,9 +503,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-BZ-08"/>
-      <locRef xlink:href="IT-32-BZ-14"/>
-      <locRef xlink:href="IT-32-BZ-15"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -622,12 +570,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-TN-13"/>
-      <locRef xlink:href="IT-32-TN-16"/>
-      <locRef xlink:href="IT-32-TN-19"/>
-      <locRef xlink:href="IT-32-TN-07"/>
-      <locRef xlink:href="IT-32-TN-09"/>
-      <locRef xlink:href="IT-32-TN-20"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -707,17 +649,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-TN-12"/>
-      <locRef xlink:href="IT-32-TN-15"/>
-      <locRef xlink:href="IT-32-TN-03"/>
-      <locRef xlink:href="IT-32-TN-14"/>
-      <locRef xlink:href="IT-32-TN-17"/>
-      <locRef xlink:href="IT-32-TN-06"/>
-      <locRef xlink:href="IT-32-TN-08"/>
-      <locRef xlink:href="IT-32-TN-18"/>
-      <locRef xlink:href="IT-32-TN-11"/>
-      <locRef xlink:href="IT-32-TN-10"/>
-      <locRef xlink:href="IT-32-TN-21"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -785,10 +716,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-BZ-09"/>
-      <locRef xlink:href="IT-32-BZ-10"/>
-      <locRef xlink:href="IT-32-BZ-13"/>
-      <locRef xlink:href="IT-32-BZ-06"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -869,9 +796,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="AT-07-27"/>
-      <locRef xlink:href="AT-07-28"/>
-      <locRef xlink:href="AT-07-25"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -959,8 +883,6 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
-      <locRef xlink:href="IT-32-BZ-16"/>
-      <locRef xlink:href="IT-32-BZ-17"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
