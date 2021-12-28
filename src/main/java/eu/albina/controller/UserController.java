@@ -78,12 +78,11 @@ public class UserController {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		User user = entityManager.find(User.class, username);
-		if (user == null)
-			return false;
+		// Do not forget to complete the application-managed em transaction.
 		transaction.commit();
 		entityManager.close();
 
-		return true;
+		return user != null;
 	}
 
 	public User updateUser(User user) throws AlbinaException {
