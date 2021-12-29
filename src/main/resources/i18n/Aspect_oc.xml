@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="N">North</entry>
-  <entry key="NE">North-East</entry>
-  <entry key="E">East</entry>
-  <entry key="SE">South-East</entry>
-  <entry key="S">South</entry>
-  <entry key="SW">South-West</entry>
-  <entry key="W">West</entry>
-  <entry key="NW">North-West</entry>
+  <entry key="N">Nòrd</entry>
+  <entry key="NE">Nòrd-èst</entry>
+  <entry key="E">Èst</entry>
+  <entry key="SE">Sud-èst</entry>
+  <entry key="S">Sud</entry>
+  <entry key="SW">Sud-oèst</entry>
+  <entry key="W">Oèst</entry>
+  <entry key="NW">Nòrd-oèst</entry>
 </properties>

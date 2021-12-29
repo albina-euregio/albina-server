@@ -2,14 +2,14 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="avalanche-report.name">Avalanche.report</entry>
-  <entry key="avalanche-report.preview"> - PREVIEW</entry>
+  <entry key="avalanche-report.preview"> - PREVISUALITZACIÓ</entry>
   <entry key="avalanche-report.url">https://avalanche.report</entry>
   <entry key="avalanche-report.url.capitalized">WWW.AVALANCHE.REPORT</entry>
   <entry key="avalanche-report.email">info@avalanche.report</entry>
   <entry key="avalanche-report.logo.path.bw">logo/grey/avalanche_report.png</entry>
   <entry key="avalanche-report.logo.path">logo/color/avalanche_report.png</entry>
   <entry key="avalanche-report.standard.link.text">Carrega vista normal</entry>
-  <entry key="danger-rating.elevation">{0} below {1}, {2} above {3}</entry>
+  <entry key="danger-rating.elevation">{0} a sota {1}, {2} a sobre {3}</entry>
   <entry key="day.MONDAY">Dilluns</entry>
   <entry key="day.TUESDAY">Dimarts</entry>
   <entry key="day.WEDNESDAY">Dimecres</entry>
@@ -35,10 +35,10 @@
   <entry key="ext-file.region-link.description">Enllaç a la regió al web</entry>
   <entry key="elevation.treeline">límit del bosc</entry>
   <entry key="elevation.treeline.capitalized">Límit del bosc</entry>
-  <entry key="elevation.all">All elevations</entry>
-  <entry key="elevation.below">Below {0}</entry>
-  <entry key="elevation.above">Above {0}</entry>
-  <entry key="elevation.band">Between {0} and {1}</entry>
+  <entry key="elevation.all">Totes les altituds</entry>
+  <entry key="elevation.below">Sota {0}</entry>
+  <entry key="elevation.above">Sobre {0}</entry>
+  <entry key="elevation.band">Entre {0} i {1}</entry>
   <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} per {1}: {2}</entry>
   <entry key="social-media.message.update">ACTUALITZACIÓ en {0} per {1}: {2}</entry>
