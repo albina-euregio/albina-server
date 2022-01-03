@@ -125,17 +125,13 @@ public interface MapUtil {
 		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(bulletins)) {
 			try {
 				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, preview);
-				if (!preview) {
-					for (MapType map : MapType.forGlobalVariablesPublishBulletins()) {
-						final MapLevel[] mapLevels = MapType.euregio.equals(map) || MapType.aran.equals(map)
-							? MapLevel.values() : new MapLevel[]{MapLevel.standard};
-						for (MapLevel mapLevel : mapLevels) {
-							createMapyrusMaps(map, mapLevel, daytimeDependency, null, false, bindings, outputDirectory, preview);
-							createMapyrusMaps(map, mapLevel, daytimeDependency, null, true, bindings, outputDirectory, preview);
-						}
+				for (MapType map : MapType.forGlobalVariablesPublishBulletins()) {
+					final MapLevel[] mapLevels = MapType.euregio.equals(map) || MapType.aran.equals(map)
+						? MapLevel.values() : new MapLevel[]{MapLevel.standard};
+					for (MapLevel mapLevel : mapLevels) {
+						createMapyrusMaps(map, mapLevel, daytimeDependency, null, false, bindings, outputDirectory, preview);
+						createMapyrusMaps(map, mapLevel, daytimeDependency, null, true, bindings, outputDirectory, preview);
 					}
-				} else {
-					createMapyrusMaps(MapType.euregio, MapLevel.standard, daytimeDependency, null, false, bindings, outputDirectory, preview);
 				}
 				for (final AvalancheBulletin bulletin : bulletins) {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
@@ -144,9 +140,7 @@ public interface MapUtil {
 					final MapType map = AvalancheBulletin.affectsRegion(MapType.aran.region, bulletin.regions(preview))
 						? MapType.aran : MapType.euregio;
 					createMapyrusMaps(map, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
-					if (!preview) {
-						createMapyrusMaps(map, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
-					}
+					createMapyrusMaps(map, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
 				}
 			} catch (IOException | MapyrusException | InterruptedException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
