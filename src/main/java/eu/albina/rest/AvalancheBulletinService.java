@@ -477,7 +477,7 @@ public class AvalancheBulletinService {
 
 			MapUtil.createMapyrusMaps(bulletins, true, outputDirectory);
 
-			PdfUtil.getInstance().createPdf(bulletins, language, GlobalVariables.codeEuregio, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
+			PdfUtil.getInstance().createPdf(bulletins, language, region, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 						publicationTimeString, true);
 
 			String filename = validityDateString + "_" + language.toString() + ".pdf";
