@@ -168,6 +168,11 @@ public class GlobalVariables {
 
 	// REGION
 	public static List<String> getPublishRegions() {
+		return getPublishRegions(false);
+	}
+
+	// REGION
+	public static List<String> getPublishRegions(boolean includeEuregio) {
 		List<String> regions = new ArrayList<String>();
 		if (isPublishBulletinsTyrol())
 			regions.add(codeTyrol);
@@ -177,6 +182,8 @@ public class GlobalVariables {
 			regions.add(codeTrentino);
 		if (isPublishBulletinsAran())
 			regions.add(codeAran);
+		if (includeEuregio && (regions.contains(codeTyrol) || regions.contains(codeSouthTyrol) || regions.contains(codeTrentino)))
+			regions.add(codeEuregio);
 		return regions;
 	}
 

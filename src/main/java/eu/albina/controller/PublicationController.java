@@ -499,7 +499,7 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("PDF production started");
-					for (String region : GlobalVariables.getPublishRegions())
+					for (String region : GlobalVariables.getPublishRegions(true))
 						PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
 								publicationTimeString);
 				} finally {
@@ -521,7 +521,7 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("Simple HTML production started");
-					for (String region : GlobalVariables.getPublishRegions())
+					for (String region : GlobalVariables.getPublishRegions(true))
 						SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error creating simple HTML", e);
