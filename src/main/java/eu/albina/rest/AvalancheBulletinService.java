@@ -480,7 +480,7 @@ public class AvalancheBulletinService {
 			PdfUtil.getInstance().createPdf(bulletins, language, region, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 						publicationTimeString, true);
 
-			String filename = validityDateString + "_" + language.toString() + ".pdf";
+			String filename = validityDateString + "_" + region + "_" + language.toString() + ".pdf";
 
 			File file = new File(GlobalVariables.getTmpPdfDirectory() + System.getProperty("file.separator")
 			+ validityDateString + System.getProperty("file.separator") + publicationTimeString
