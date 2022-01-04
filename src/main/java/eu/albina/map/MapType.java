@@ -73,10 +73,12 @@ enum MapType {
 			return grayscale
 				? Resources.getResource("images/logo/grey/lauegi_map.png").toString()
 				: Resources.getResource("images/logo/color/lauegi_map.png").toString();
-		} else {
+		} else if (this == MapType.euregio) {
 			return grayscale
 				? Resources.getResource("images/logo/grey/euregio_map.png").toString()
 				: Resources.getResource("images/logo/color/euregio_map.png").toString();
+		} else {
+			return "";
 		}
 	}
 
