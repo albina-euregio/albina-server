@@ -78,9 +78,6 @@ public class SubscriptionService {
 		try {
 			SubscriberController.getInstance().deleteSubscriber(json.getString("email"));
 			return Response.ok().build();
-		} catch (AlbinaException e) {
-			logger.warn("Error unsubscribe", e);
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (HibernateException | JSONException he) {
 			logger.warn("Error unsubscribe", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();

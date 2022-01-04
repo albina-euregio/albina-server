@@ -89,6 +89,7 @@ public class HibernateUtil {
 			transaction.commit();
 			return result;
 		} catch (HibernateException e) {
+			logger.warn("HibernateException: " + e.getMessage());
 			transaction.rollback();
 			throw e;
 		} finally {

@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.text.StringEscapeUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,24 +97,18 @@ public class StatisticsController {
 	 */
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, String region,
 			boolean extended, boolean duplicateBulletinForenoon) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			// get latest reports
+			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
+					endDate, region);
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+			// get bulletins from report json
+			List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports, lang);
 
-		// get latest reports
-		Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
-				endDate, region);
+			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
-		// get bulletins from report json
-		List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports, lang);
-
-		List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
-
-		transaction.commit();
-		entityManager.close();
-
-		return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon);
+			return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon);
+		});
 	}
 
 	/**
@@ -140,26 +131,20 @@ public class StatisticsController {
 	 */
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, boolean extended,
 			boolean duplicateBulletinForenoon) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
+			for (String region : GlobalVariables.getPublishRegions()) {
+				// get latest reports
+				Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
+						endDate, region);
+				// get bulletins from report json
+				bulletins.addAll(getPublishedBulletinsFromReports(reports, lang));
+			}
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
-		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-		for (String region : GlobalVariables.getPublishRegions()) {
-			// get latest reports
-			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
-					endDate, region);
-			// get bulletins from report json
-			bulletins.addAll(getPublishedBulletinsFromReports(reports, lang));
-		}
-
-		List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
-
-		transaction.commit();
-		entityManager.close();
-
-		return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon);
+			return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon);
+		});
 	}
 
 	private List<AvalancheBulletin> mergeBulletins(List<AvalancheBulletin> bulletins) {

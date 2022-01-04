@@ -25,9 +25,6 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 
@@ -80,29 +77,17 @@ public class SubscriberController {
 	 * @param email
 	 *            the email address of the desired subscriber
 	 * @return the {@code Subscriber} object with {@code email} as primary key
-	 * @throws AlbinaException
+	 * @throws HibernateException
 	 *             if the subscriber could not be found
 	 */
-	public Subscriber getSubscriber(String email) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+	public Subscriber getSubscriber(String email) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Subscriber subscriber = entityManager.find(Subscriber.class, email);
 			if (subscriber == null) {
-				transaction.rollback();
-				throw new AlbinaException("No subscriber with email: " + email);
+				throw new HibernateException("No subscriber with email: " + email);
 			}
-			transaction.commit();
-
 			return subscriber;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -124,20 +109,10 @@ public class SubscriberController {
 		} catch (Exception e) {
 		}
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.persist(subscriber);
-			transaction.commit();
 			return subscriber.getEmail();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw he;
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -146,31 +121,16 @@ public class SubscriberController {
 	 * @param email
 	 *            the email address of the {@code Subscriber} who should be deleted
 	 * @return the email address of the deleted subscriber
-	 * @throws AlbinaException
-	 *             if the no {@code Subscriber} with {@code email} could be found
-	 * @throws HibernateException
-	 *             if the {@code Subscriber} could not be deleted
 	 */
-	public Serializable deleteSubscriber(String email) throws AlbinaException, HibernateException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+	public Serializable deleteSubscriber(String email) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Subscriber subscriber = entityManager.find(Subscriber.class, email);
 			if (subscriber == null) {
-				transaction.rollback();
-				throw new AlbinaException("No subscriber with email: " + email);
+				throw new HibernateException("No subscriber with email: " + email);
 			}
 			entityManager.remove(subscriber);
-			transaction.commit();
 			return subscriber.getEmail();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw he;
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -179,18 +139,14 @@ public class SubscriberController {
 	 *
 	 * @param email
 	 *            the email address of the subscriber to be confirmed
-	 * @throws AlbinaException
-	 *             if the subscriber could not be found
 	 */
 	public void confirmSubscriber(String email) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		Subscriber subscriber = getSubscriber(email);
-		subscriber.setConfirmed(true);
-		entityManager.merge(subscriber);
-		transaction.commit();
-		entityManager.close();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Subscriber subscriber = getSubscriber(email);
+			subscriber.setConfirmed(true);
+			entityManager.merge(subscriber);
+			return null;
+		});
 	}
 
 	/**
@@ -207,27 +163,23 @@ public class SubscriberController {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Subscriber> getSubscribers(LanguageCode lang, List<String> regions) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage)
+					.setParameter("language", lang).getResultList();
+			List<Subscriber> results = new ArrayList<Subscriber>();
+			for (Subscriber subscriber : subscribers) {
+				for (String region : regions)
+					if (subscriber.affectsRegion(region)) {
+						results.add(subscriber);
+						break;
+					}
+			}
 
-		List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage)
-				.setParameter("language", lang).getResultList();
-		List<Subscriber> results = new ArrayList<Subscriber>();
-		for (Subscriber subscriber : subscribers) {
-			for (String region : regions)
-				if (subscriber.affectsRegion(region)) {
-					results.add(subscriber);
-					break;
-				}
-		}
+			for (Subscriber subscriber : results)
+				initializeSubscriber(subscriber);
 
-		for (Subscriber subscriber : results)
-			initializeSubscriber(subscriber);
-
-		transaction.commit();
-		entityManager.close();
-		return results;
+			return results;
+		});
 	}
 
 	/**

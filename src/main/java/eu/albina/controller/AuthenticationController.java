@@ -20,9 +20,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Date;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
+import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.auth0.jwt.JWT;
@@ -44,6 +42,7 @@ import eu.albina.util.HibernateUtil;
  *
  */
 public class AuthenticationController {
+	// private static final Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
 	private static AuthenticationController instance = null;
 
 	private final Algorithm algorithm;
@@ -176,20 +175,12 @@ public class AuthenticationController {
 	 * @return <code>true</code> if the user is in the given role
 	 */
 	public boolean isUserInRole(String role, String username) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			User user = entityManager.find(User.class, username);
 			if (user == null) {
-				transaction.rollback();
-				return false;
+				throw new HibernateException("No user with username: " + username);
 			}
-			transaction.commit();
-
 			return user.getRoles().stream().anyMatch(userRole -> userRole.equals(Role.fromString(role)));
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 }

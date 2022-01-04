@@ -32,11 +32,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.github.openjson.JSONArray;
+
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.ChatController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.ChatMessage;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
@@ -72,9 +73,9 @@ public class ChatService {
 				json.put(entry.toJSON());
 			}
 			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
+		} catch (HibernateException e) {
 			logger.warn("Error loading chat messages", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
