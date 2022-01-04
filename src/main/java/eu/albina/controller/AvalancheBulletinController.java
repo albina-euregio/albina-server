@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -594,7 +595,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : results) {
 
 				// set author
-				if (user.getEmail() != GlobalVariables.avalancheReportUsername) {
+				if (!Objects.equals(user.getEmail(), GlobalVariables.avalancheReportUsername)) {
 					if (!bulletin.getAdditionalAuthors().contains(user.getName()))
 						bulletin.addAdditionalAuthor(user.getName());
 					bulletin.setUser(user);
@@ -864,7 +865,7 @@ public class AvalancheBulletinController {
 	public void unlockBulletins(String sessionId) {
 		List<BulletinLock> hits = new ArrayList<BulletinLock>();
 		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (bulletinLock.getSessionId() == sessionId)
+			if (Objects.equals(bulletinLock.getSessionId(), sessionId))
 				hits.add(bulletinLock);
 		}
 		for (BulletinLock bulletinLock : hits) {

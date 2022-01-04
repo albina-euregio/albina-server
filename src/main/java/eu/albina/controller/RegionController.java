@@ -19,6 +19,7 @@ package eu.albina.controller;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -172,7 +173,7 @@ public class RegionController {
 	public void unlockRegions(String sessionId) {
 		List<RegionLock> hits = new ArrayList<RegionLock>();
 		for (RegionLock regionLock : regionLocks) {
-			if (regionLock.getSessionId() == sessionId)
+			if (Objects.equals(regionLock.getSessionId(), sessionId))
 				hits.add(regionLock);
 		}
 		for (RegionLock regionLock : hits) {
