@@ -214,14 +214,13 @@ public class AvalancheReportController {
 	 */
 	public Map<Instant, AvalancheReport> getPublicationStatus(Instant startDate, Instant endDate, String region) {
 		Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
-		Instant date = startDate;
 
 		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
 
 		for (AvalancheReport avalancheReport : reports)
 			if (avalancheReport.getStatus() == BulletinStatus.published
 					|| avalancheReport.getStatus() == BulletinStatus.republished)
-				result.put(date, avalancheReport);
+				result.put(startDate, avalancheReport);
 
 		return result;
 	}
@@ -283,8 +282,7 @@ public class AvalancheReportController {
 				}
 			}
 
-			AvalancheReport result = getHighestStatus(reports);
-			return result;
+			return getHighestStatus(reports);
 		});
 	}
 

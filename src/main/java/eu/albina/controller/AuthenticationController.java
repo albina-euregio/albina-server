@@ -107,9 +107,8 @@ public class AuthenticationController {
 		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
 		Date expirationTime = new Date(time);
 		Date issuedAt = new Date();
-		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
+		return JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
 				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
-		return token;
 	}
 
 	/**
@@ -125,9 +124,8 @@ public class AuthenticationController {
 		long time = System.currentTimeMillis() + GlobalVariables.refreshTokenExpirationDuration;
 		Date expirationTime = new Date(time);
 		Date issuedAt = new Date();
-		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
+		return JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
 				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
-		return token;
 	}
 
 	/**
@@ -160,9 +158,8 @@ public class AuthenticationController {
 		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
 		Date expirationTime = new Date(time);
 		Date issuedAt = new Date();
-		String token = JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
+		return JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
 				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
-		return token;
 	}
 
 	/**

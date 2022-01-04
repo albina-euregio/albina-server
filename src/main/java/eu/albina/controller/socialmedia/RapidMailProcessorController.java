@@ -101,23 +101,21 @@ public class RapidMailProcessorController extends CommonProcessor {
 		if (sendActivationmail == null)
 			sendActivationmail = "yes";
 		url += "?send_activationmail=" + sendActivationmail;
-		HttpResponse response = executor
+        return executor
 				.execute(Request.Post(url)
 						.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 						.addHeader("Accept", "application/hal+json").addHeader("Content-Type", "application/json")
 						.bodyString(toJson(recipient), ContentType.APPLICATION_JSON)
 						.connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT).socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT))
 				.returnResponse();
-		return response;
 	}
 
 	public HttpResponse deleteRecipient(RapidMailConfig config, Integer recipientId) throws IOException {
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/delete_recipientlists__recipientlist_id_
-		HttpResponse response = executor.execute(Request.Delete(baseUrl + "/recipients/" + recipientId)
+		return executor.execute(Request.Delete(baseUrl + "/recipients/" + recipientId)
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
 				.addHeader("Accept", "application/json").connectTimeout(RAPIDMAIL_CONNECTION_TIMEOUT)
 				.socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)).returnResponse();
-		return response;
 	}
 
 	public HttpResponse sendMessage(RapidMailConfig config, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)

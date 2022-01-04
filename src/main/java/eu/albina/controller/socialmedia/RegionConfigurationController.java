@@ -70,8 +70,7 @@ public class RegionConfigurationController extends CommonProcessor {
 	public List<Channel> getChannels() throws AlbinaException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			TypedQuery<Channel> query = entityManager.createQuery("SELECT c FROM Channel c", Channel.class);
-			List<Channel> channelList = query.getResultList();
-			return channelList;
+			return query.getResultList();
 		});
 	}
 
