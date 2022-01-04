@@ -33,8 +33,6 @@ import javax.xml.transform.TransformerException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -62,7 +60,7 @@ import eu.albina.util.XmlUtil;
  */
 public class AvalancheBulletinController {
 
-	private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
+	// private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
 
 	private static AvalancheBulletinController instance = null;
 	private final List<BulletinLock> bulletinLocks;
