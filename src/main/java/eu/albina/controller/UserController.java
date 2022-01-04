@@ -21,9 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
 import com.github.openjson.JSONArray;
 
 import org.hibernate.HibernateException;
@@ -42,8 +39,7 @@ import eu.albina.util.HibernateUtil;
  *
  */
 public class UserController {
-	// private static Logger logger =
-	// LoggerFactory.getLogger(UserController.class);
+	// private static Logger logger = LoggerFactory.getLogger(UserController.class);
 	private static UserController instance = null;
 
 	/**
@@ -74,36 +70,26 @@ public class UserController {
 	 * @return {@code true} if the user with {@code username} exists
 	 */
 	public boolean userExists(String username) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		User user = entityManager.find(User.class, username);
-		// Do not forget to complete the application-managed em transaction.
-		transaction.commit();
-		entityManager.close();
-
-		return user != null;
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			User user = entityManager.find(User.class, username);
+			return user != null;
+		});
 	}
 
 	public User updateUser(User user) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		User originalUser = entityManager.find(User.class, user.getEmail());
-		if (originalUser == null) {
-			transaction.rollback();
-			throw new AlbinaException("No user with username: " + user.getEmail());
-		}
-		originalUser.setName(user.getName());
-		originalUser.setOrganization(user.getOrganization());
-		originalUser.setRoles(user.getRoles());
-		originalUser.setRegions(user.getRegions());
-		entityManager.persist(originalUser);
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			User originalUser = entityManager.find(User.class, user.getEmail());
+			if (originalUser == null) {
+				throw new HibernateException("No user with username: " + user.getEmail());
+			}
+			originalUser.setName(user.getName());
+			originalUser.setOrganization(user.getOrganization());
+			originalUser.setRoles(user.getRoles());
+			originalUser.setRegions(user.getRegions());
+			entityManager.persist(originalUser);
 
-		transaction.commit();
-		entityManager.close();
-
-		return user;
+			return user;
+		});
 	}
 
 	/**
@@ -114,18 +100,13 @@ public class UserController {
 	 * @return the {@code User} with the specified {@code username}
 	 */
 	public User getUser(String username) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		User user = entityManager.find(User.class, username);
-		if (user == null) {
-			transaction.rollback();
-			throw new AlbinaException("No user with username: " + username);
-		}
-		transaction.commit();
-		entityManager.close();
-
-		return user;
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			User user = entityManager.find(User.class, username);
+			if (user == null) {
+				throw new HibernateException("No user with username: " + username);
+			}
+			return user;
+		});
 	}
 
 	/**
@@ -135,21 +116,11 @@ public class UserController {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<User> getUsers() throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<User> users = null;
 			users = entityManager.createQuery(HibernateUtil.queryGetUsers).getResultList();
-			transaction.commit();
 			return users;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	public JSONArray getUsersJson() throws AlbinaException {
@@ -193,13 +164,10 @@ public class UserController {
 	 * @return the email address of the saved user
 	 */
 	public Serializable createUser(User user) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		entityManager.persist(user);
-		transaction.commit();
-		entityManager.close();
-		return user.getEmail();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			entityManager.persist(user);
+			return user.getEmail();
+		});
 	}
 
 	/**
@@ -216,23 +184,18 @@ public class UserController {
 	 *             if the user does not exist or the password is wrong
 	 */
 	public Serializable changePassword(String username, String oldPassword, String newPassword) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		User user = entityManager.find(User.class, username);
-		if (user == null) {
-			transaction.rollback();
-			throw new AlbinaException("No user with username: " + username);
-		}
-		if (BCrypt.checkpw(oldPassword, user.getPassword())) {
-			user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
-			transaction.commit();
-		} else {
-			transaction.rollback();
-			throw new AlbinaException("Password incorrect");
-		}
-		entityManager.close();
-		return user.getEmail();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			User user = entityManager.find(User.class, username);
+			if (user == null) {
+				throw new HibernateException("No user with username: " + username);
+			}
+			if (BCrypt.checkpw(oldPassword, user.getPassword())) {
+				user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+			} else {
+				throw new HibernateException("Password incorrect");
+			}
+			return user.getEmail();
+		});
 	}
 
 	/**
@@ -243,25 +206,15 @@ public class UserController {
 	 * @param password
 	 *            the password
 	 * @return {@code true} if the password is correct
-	 * @throws AlbinaException
-	 *             if no user with {@code username} could be found
 	 */
-	public boolean checkPassword(String username, String password) throws AlbinaException {
-		boolean result = false;
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		User user = entityManager.find(User.class, username);
-		if (user == null) {
-			transaction.rollback();
-			throw new AlbinaException("No user with username: " + username);
-		}
-		if (BCrypt.checkpw(password, user.getPassword()))
-			result = true;
-		transaction.commit();
-		entityManager.close();
-
-		return result;
+	public boolean checkPassword(String username, String password) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			User user = entityManager.find(User.class, username);
+			if (user == null) {
+				throw new HibernateException("No user with username: " + username);
+			}
+			return BCrypt.checkpw(password, user.getPassword());
+		});
 	}
 
 	public static void delete(String id) {

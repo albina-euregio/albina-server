@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -202,9 +203,9 @@ public class UserService {
 						.build();
 			else
 				return Response.status(400).type(MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
+		} catch (HibernateException e) {
 			logger.warn("Error checking password", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 

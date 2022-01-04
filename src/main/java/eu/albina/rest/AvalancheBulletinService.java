@@ -47,6 +47,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import com.google.common.base.Strings;
+
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -514,9 +516,9 @@ public class AvalancheBulletinService {
 			}
 			String json = bulletin.toJSON().toString();
 			return Response.ok(json, MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
+		} catch (HibernateException e) {
 			logger.warn("Error loading bulletin", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.TEXT_PLAIN).entity(e.toString().toString()).build();
 		}
 	}
 

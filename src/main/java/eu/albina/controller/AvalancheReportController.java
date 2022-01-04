@@ -25,9 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
 import com.google.common.base.Strings;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -242,29 +239,23 @@ public class AvalancheReportController {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<AvalancheReport> getPublicReports(Instant startDate, Instant endDate, String region) {
-		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+			if (!Strings.isNullOrEmpty(region)) {
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
+						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
+						.setParameter("region", region).getResultList();
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-
-		if (!Strings.isNullOrEmpty(region)) {
-			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
-					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
-					.setParameter("region", region).getResultList();
-
-			for (AvalancheReport avalancheReport : reports) {
-				initializeAndUnproxy(avalancheReport);
-				initializeAndUnproxy(avalancheReport.getUser());
+				for (AvalancheReport avalancheReport : reports) {
+					initializeAndUnproxy(avalancheReport);
+					initializeAndUnproxy(avalancheReport.getUser());
+				}
 			}
 
-			transaction.commit();
-			entityManager.close();
-		}
+			Map<Instant, AvalancheReport> result = getHighestStatusMap(reports);
 
-		Map<Instant, AvalancheReport> result = getHighestStatusMap(reports);
-
-		return result.values();
+			return result.values();
+		});
 	}
 
 	/**
@@ -280,27 +271,21 @@ public class AvalancheReportController {
 	 */
 	@SuppressWarnings("unchecked")
 	private AvalancheReport getPublicReport(Instant date, String region) {
-		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+			if (!Strings.isNullOrEmpty(region)) {
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+						.setParameter("region", region).getResultList();
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-
-		if (!Strings.isNullOrEmpty(region)) {
-			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
-					.setParameter("region", region).getResultList();
-
-			for (AvalancheReport avalancheReport : reports) {
-				initializeAndUnproxy(avalancheReport);
-				initializeAndUnproxy(avalancheReport.getUser());
+				for (AvalancheReport avalancheReport : reports) {
+					initializeAndUnproxy(avalancheReport);
+					initializeAndUnproxy(avalancheReport.getUser());
+				}
 			}
 
-			transaction.commit();
-			entityManager.close();
-		}
-
-		AvalancheReport result = getHighestStatus(reports);
-		return result;
+			AvalancheReport result = getHighestStatus(reports);
+			return result;
+		});
 	}
 
 	private AvalancheReport getHighestStatus(List<AvalancheReport> reports) {
@@ -352,31 +337,26 @@ public class AvalancheReportController {
 	 */
 	@SuppressWarnings("unchecked")
 	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, String region) {
-		Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
-		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+	
+			if (!Strings.isNullOrEmpty(region)) {
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
+						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
+						.setParameter("region", region).getResultList();
+			}
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-
-		if (!Strings.isNullOrEmpty(region)) {
-			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
-					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
-					.setParameter("region", region).getResultList();
-
-			transaction.commit();
-			entityManager.close();
-		}
-
-		// select most recent report
-		for (AvalancheReport avalancheReport : reports)
-			if (result.containsKey(avalancheReport.getDate().toInstant())) {
-				if (result.get(avalancheReport.getDate().toInstant()).getTimestamp().isBefore(avalancheReport.getTimestamp()))
+			// select most recent report
+			for (AvalancheReport avalancheReport : reports)
+				if (result.containsKey(avalancheReport.getDate().toInstant())) {
+					if (result.get(avalancheReport.getDate().toInstant()).getTimestamp().isBefore(avalancheReport.getTimestamp()))
+						result.put(avalancheReport.getDate().toInstant(), avalancheReport);
+				} else
 					result.put(avalancheReport.getDate().toInstant(), avalancheReport);
-			} else
-				result.put(avalancheReport.getDate().toInstant(), avalancheReport);
 
-		return result.values();
+			return result.values();
+		});
 	}
 
 	/**
@@ -392,29 +372,24 @@ public class AvalancheReportController {
 	 */
 	@SuppressWarnings("unchecked")
 	private AvalancheReport getInternalReport(Instant date, String region) {
-		AvalancheReport result = null;
-		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			AvalancheReport result = null;
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
-		if (!Strings.isNullOrEmpty(region)) {
-			EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-			EntityTransaction transaction = entityManager.getTransaction();
-			transaction.begin();
+			if (!Strings.isNullOrEmpty(region)) {
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+						.setParameter("region", region).getResultList();
+			}
 
-			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
-					.setParameter("region", region).getResultList();
+			// select most recent report
+			for (AvalancheReport avalancheReport : reports)
+				if (result == null)
+					result = avalancheReport;
+				else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
+					result = avalancheReport;
 
-			transaction.commit();
-			entityManager.close();
-		}
-
-		// select most recent report
-		for (AvalancheReport avalancheReport : reports)
-			if (result == null)
-				result = avalancheReport;
-			else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
-				result = avalancheReport;
-
-		return result;
+			return result;
+		});
 	}
 
 	/**
@@ -439,10 +414,7 @@ public class AvalancheReportController {
 	 */
 	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, String region, User user)
 			throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			BulletinUpdate bulletinUpdate = null;
 
 			BulletinStatus latestStatus = getInternalStatusForDay(date, region);
@@ -488,19 +460,12 @@ public class AvalancheReportController {
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, date, avalancheReport.getStatus());
 
-			transaction.commit();
-
 			if (bulletinUpdate != null) {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -517,17 +482,13 @@ public class AvalancheReportController {
 	 * @param user
 	 *            the user who changes the report
 	 * @return the id of the report
-	 * @throws AlbinaException
+	 * @throws HibernateException
 	 *             if the report can not be loaded from the DB
 	 */
-	public String changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, String region, User user)
-			throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
+	public String changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, String region, User user) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport latestReport = getInternalReport(startDate, region);
 			if (latestReport != null) {
-				transaction.begin();
 				AvalancheReport avalancheReport = new AvalancheReport();
 				avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
 				avalancheReport.setUser(user);
@@ -537,22 +498,11 @@ public class AvalancheReportController {
 
 				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region, false).toString());
 				entityManager.persist(avalancheReport);
-				transaction.commit();
 				return avalancheReport.getId();
 			} else {
-				throw new AlbinaException("Report error!");
+				throw new HibernateException("Report error!");
 			}
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} catch (AlbinaException ae) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(ae.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -608,12 +558,8 @@ public class AvalancheReportController {
 	 *             if more than one report was found
 	 */
 	public String publishReport(Collection<AvalancheBulletin> bulletins, Instant startDate, String region, User user,
-			Instant publicationDate) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
-
+			Instant publicationDate) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport report = getInternalReport(startDate, region);
 
 			BulletinUpdate bulletinUpdate = null;
@@ -661,21 +607,12 @@ public class AvalancheReportController {
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 
-			transaction.commit();
-
 			if (bulletinUpdate != null) {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
 			return avalancheReport.getId();
-
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -693,15 +630,9 @@ public class AvalancheReportController {
 	 *            the region that should be submitted
 	 * @param user
 	 *            the user who submits the report
-	 * @throws AlbinaException
-	 *             if more than one report was found
 	 */
-	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, String region, User user)
-			throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, String region, User user) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport report = getInternalReport(startDate, region);
 			BulletinUpdate bulletinUpdate = null;
 
@@ -746,19 +677,12 @@ public class AvalancheReportController {
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
 
-			transaction.commit();
-
 			if (bulletinUpdate != null) {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -906,23 +830,14 @@ public class AvalancheReportController {
 	 *            the ids of the reports for whom the flag should be set
 	 */
 	public void setAvalancheReportEmailFlag(List<String> avalancheReportIds) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setEmailCreated(true);
 			}
 			entityManager.flush();
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			logger.error("Email flag could not be set!");
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -933,23 +848,14 @@ public class AvalancheReportController {
 	 *            the ids of the reports for whom the flag should be set
 	 */
 	public void setAvalancheReportPdfFlag(List<String> avalancheReportIds) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setPdfCreated(true);
 			}
 			entityManager.flush();
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			logger.error("PDF flag could not be set!");
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -960,23 +866,14 @@ public class AvalancheReportController {
 	 *            the ids of the reports for whom the flag should be set
 	 */
 	public void setAvalancheReportHtmlFlag(List<String> avalancheReportIds) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setHtmlCreated(true);
 			}
 			entityManager.flush();
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			logger.error("HTML flag could not be set!");
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -988,23 +885,14 @@ public class AvalancheReportController {
 	 *            the ids of the reports for whom the flag should be set
 	 */
 	public void setAvalancheReportStaticWidgetFlag(List<String> avalancheReportIds) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setStaticWidgetCreated(true);
 			}
 			entityManager.flush();
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			logger.error("Static widget flag could not be set!");
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -1015,23 +903,14 @@ public class AvalancheReportController {
 	 *            the ids of the reports for whom the flag should be set
 	 */
 	public void setAvalancheReportMapFlag(List<String> avalancheReportIds) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setMapCreated(true);
 			}
 			entityManager.flush();
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			logger.error("Map flag could not be set!");
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -1042,23 +921,14 @@ public class AvalancheReportController {
 	 *            the ids of the reports for whom the flag should be set
 	 */
 	public void setAvalancheReportCaamlFlag(List<String> avalancheReportIds) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setCaamlCreated(true);
 			}
 			entityManager.flush();
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			logger.error("Map flag could not be set!");
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -1069,23 +939,14 @@ public class AvalancheReportController {
 	 *            the ids of the reports for whom the flag should be set
 	 */
 	public void setAvalancheReportWhatsappFlag(List<String> avalancheReportIds) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setWhatsappSent(true);
 			}
 			entityManager.flush();
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			logger.error("Whatsapp flag could not be set!");
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
@@ -1096,45 +957,32 @@ public class AvalancheReportController {
 	 *            the ids of the reports for whom the flag should be set
 	 */
 	public void setAvalancheReportTelegramFlag(List<String> avalancheReportIds) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setTelegramSent(true);
 			}
 			entityManager.flush();
-			transaction.commit();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			logger.error("Telegram flag could not be set!");
-		} finally {
-			entityManager.close();
-		}
+			return null;
+		});
 	}
 
 	/**
 	 * Returns the date of the latest published bulletin.
 	 *
 	 * @return the date of the latest published bulletin
-	 * @throws AlbinaException
+	 * @throws HibernateException
 	 *             if no report was found
 	 */
 	public Instant getLatestDate() throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			AvalancheReport report = (AvalancheReport) entityManager.createQuery(HibernateUtil.queryGetLatestDate)
+					.setMaxResults(1).getSingleResult();
 
-		transaction.begin();
-		AvalancheReport report = (AvalancheReport) entityManager.createQuery(HibernateUtil.queryGetLatestDate)
-				.setMaxResults(1).getSingleResult();
-		transaction.commit();
-		entityManager.close();
-
-		if (report != null)
-			return report.getDate().toInstant();
-		else
-			throw new AlbinaException("No report found!");
+			if (report != null)
+				return report.getDate().toInstant();
+			else
+				throw new HibernateException("No report found!");
+		});
 	}
 }

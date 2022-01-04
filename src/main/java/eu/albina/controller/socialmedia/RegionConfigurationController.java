@@ -18,8 +18,6 @@ package eu.albina.controller.socialmedia;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
 import org.hibernate.HibernateException;
@@ -45,67 +43,36 @@ public class RegionConfigurationController extends CommonProcessor {
 	}
 
 	public RegionConfiguration getRegionConfiguration(String regionConfigurationId) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			TypedQuery<Long> query = entityManager.createQuery(
 					"SELECT c.id FROM RegionConfiguration c WHERE c.region.id='" + regionConfigurationId + "'",
 					Long.class);
 			Long id = query.getSingleResult();
 			RegionConfiguration regionConfiguration = entityManager.find(RegionConfiguration.class, id);
 			if (regionConfiguration == null) {
-				transaction.rollback();
-				throw new AlbinaException("No configuration with ID: " + regionConfigurationId);
+				throw new HibernateException("No configuration with ID: " + regionConfigurationId);
 			}
-			transaction.commit();
 			if (regionConfiguration.getRapidMailConfig() == null) {
 				regionConfiguration.setRapidMailConfig(new RapidMailConfig());
 			}
 			return regionConfiguration;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	public Long saveRegionConfiguration(RegionConfiguration regionConfiguration) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.merge(regionConfiguration.getRapidMailConfig());
 			entityManager.merge(regionConfiguration);
-			transaction.commit();
 			return regionConfiguration.getId();
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	public List<Channel> getChannels() throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			TypedQuery<Channel> query = entityManager.createQuery("SELECT c FROM Channel c", Channel.class);
 			List<Channel> channelList = query.getResultList();
-			transaction.commit();
 			return channelList;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 }

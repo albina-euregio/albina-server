@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
@@ -372,13 +371,9 @@ public class PublicationController {
 					PublicationController.getInstance().update(result, regions);
 
 				List<String> avalancheReportIds = new ArrayList<String>();
-				try {
-					String avalancheReportId = AvalancheReportController.getInstance().publishReport(publishedBulletins,
-							startDate, region, user, publicationDate);
-					avalancheReportIds.add(avalancheReportId);
-				} catch (AlbinaException e) {
-					logger.warn("Error updating bulletins", e);
-				}
+				String avalancheReportId = AvalancheReportController.getInstance().publishReport(publishedBulletins,
+						startDate, region, user, publicationDate);
+				avalancheReportIds.add(avalancheReportId);
 			}
 		}).start();
 	}
@@ -408,14 +403,10 @@ public class PublicationController {
 				if (result != null && !result.isEmpty())
 					PublicationController.getInstance().change(result);
 
-				try {
-					List<String> avalancheReportIds = new ArrayList<String>();
-					String avalancheReportId = AvalancheReportController.getInstance().changeReport(publishedBulletins,
-							startDate, region, user);
-					avalancheReportIds.add(avalancheReportId);
-				} catch (AlbinaException e) {
-					logger.warn("Error changing bulletins", e);
-				}
+				List<String> avalancheReportIds = new ArrayList<String>();
+				String avalancheReportId = AvalancheReportController.getInstance().changeReport(publishedBulletins,
+						startDate, region, user);
+				avalancheReportIds.add(avalancheReportId);
 			}
 		}).start();
 	}

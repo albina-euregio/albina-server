@@ -21,10 +21,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.ChatMessage;
 import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
@@ -82,21 +78,17 @@ public class ChatController {
 	 * @return all chat messages starting from a specific {@code date}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ChatMessage> getChatMessages(Instant date) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+	public List<ChatMessage> getChatMessages(Instant date) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<ChatMessage> chatMessages = null;
+			if (date != null)
+				chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessagesDate).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+						.getResultList();
+			else
+				chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessages).getResultList();
 
-		List<ChatMessage> chatMessages = null;
-		if (date != null)
-			chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessagesDate).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
-					.getResultList();
-		else
-			chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessages).getResultList();
-
-		transaction.commit();
-		entityManager.close();
-		return chatMessages;
+			return chatMessages;
+		});
 	}
 
 	/**
@@ -107,13 +99,10 @@ public class ChatController {
 	 * @return the id of the saved chat message
 	 */
 	public Serializable saveChatMessage(ChatMessage chatMessage) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		entityManager.persist(chatMessage);
-		transaction.commit();
-		entityManager.close();
-		return chatMessage.getId();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			entityManager.persist(chatMessage);
+			return chatMessage.getId();
+		});
 	}
 
 	/**

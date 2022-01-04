@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -79,25 +77,14 @@ public class RegionController {
 	 *             if the {@code Region} object could not be initialized
 	 */
 	public Region getRegion(String regionId) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Region region = entityManager.find(Region.class, regionId);
 			if (region == null) {
-				transaction.rollback();
-				throw new AlbinaException("No region with ID: " + regionId);
+				throw new HibernateException("No region with ID: " + regionId);
 			}
 			Hibernate.initialize(region.getSubregions());
-			transaction.commit();
 			return region;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -124,10 +111,7 @@ public class RegionController {
 	@SuppressWarnings("unchecked")
 	@Nonnull
 	public Regions getRegions(String regionId) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<Region> regions = null;
 			if (regionId == null || regionId.isEmpty())
 				regions = entityManager.createQuery(HibernateUtil.queryGetTopLevelRegions).getResultList();
@@ -137,15 +121,8 @@ public class RegionController {
 			for (Region region : regions) {
 				Hibernate.initialize(region.getSubregions());
 			}
-			transaction.commit();
 			return new Regions(regions);
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**

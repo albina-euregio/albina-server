@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,6 +33,8 @@ import javax.xml.transform.TransformerException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -62,8 +62,7 @@ import eu.albina.util.XmlUtil;
  */
 public class AvalancheBulletinController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(AvalancheBulletinController.class);
+	private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
 
 	private static AvalancheBulletinController instance = null;
 	private final List<BulletinLock> bulletinLocks;
@@ -95,29 +94,16 @@ public class AvalancheBulletinController {
 	 * @param bulletinId
 	 *            The ID of the desired avalanche bulletin.
 	 * @return The avalanche bulletin with the given ID.
-	 * @throws AlbinaException
-	 *             if the bulletin id could not be found
 	 */
-	public AvalancheBulletin getBulletin(String bulletinId) throws AlbinaException {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+	public AvalancheBulletin getBulletin(String bulletinId) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheBulletin bulletin = entityManager.find(AvalancheBulletin.class, bulletinId);
 			if (bulletin == null) {
-				transaction.rollback();
-				throw new AlbinaException("No bulletin with ID: " + bulletinId);
+				throw new HibernateException("No bulletin with ID: " + bulletinId);
 			}
 			initializeBulletin(bulletin);
-			transaction.commit();
 			return bulletin;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -172,8 +158,7 @@ public class AvalancheBulletinController {
 	 *            the publication date of the bulletins
 	 * @return a map of all affected bulletin ids and bulletins
 	 * @throws AlbinaException
-	 *             if a micro region is defined twice in the bulletins or if there
-	 *             is an error saving the bulletins
+	 *             if a micro region is defined twice in the bulletins
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> bulletins, Instant startDate,
@@ -183,11 +168,7 @@ public class AvalancheBulletinController {
 		if (checkBulletinsForDuplicateRegion(bulletins, region))
 			throw new AlbinaException("duplicateRegion");
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
-
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> originalBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 			Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
@@ -301,15 +282,8 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : resultBulletins.values())
 				initializeBulletin(bulletin);
 
-			transaction.commit();
 			return resultBulletins;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -480,26 +454,21 @@ public class AvalancheBulletinController {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<String> regions) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-
-		transaction.begin();
-		List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
-		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-		for (AvalancheBulletin bulletin : bulletins) {
-			if (regions.stream().anyMatch(bulletin::affectsRegion)) {
-				results.add(bulletin);
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin bulletin : bulletins) {
+				if (regions.stream().anyMatch(bulletin::affectsRegion)) {
+					results.add(bulletin);
+				}
 			}
-		}
 
-		for (AvalancheBulletin bulletin : results)
-			initializeBulletin(bulletin);
+			for (AvalancheBulletin bulletin : results)
+				initializeBulletin(bulletin);
 
-		transaction.commit();
-		entityManager.close();
-
-		return results;
+			return results;
+		});
 	}
 
 	/**
@@ -519,47 +488,41 @@ public class AvalancheBulletinController {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> submitBulletins(Instant startDate, Instant endDate, String region, User user) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
-		transaction.begin();
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 
-		List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
-				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+			// select bulletins within the region
+			for (AvalancheBulletin bulletin : bulletins)
+				if (bulletin.affectsRegion(region))
+					results.add(bulletin);
 
-		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			Set<String> result = new HashSet<String>();
+			for (AvalancheBulletin bulletin : results) {
 
-		// select bulletins within the region
-		for (AvalancheBulletin bulletin : bulletins)
-			if (bulletin.affectsRegion(region))
-				results.add(bulletin);
+				// set author
+				if (!bulletin.getAdditionalAuthors().contains(user.getName()))
+					bulletin.addAdditionalAuthor(user.getName());
+				bulletin.setUser(user);
 
-		Set<String> result = new HashSet<String>();
-		for (AvalancheBulletin bulletin : results) {
+				// delete suggestions within the region
+				result = new HashSet<String>();
+				for (String entry : bulletin.getSuggestedRegions())
+					if (entry.startsWith(region))
+						result.add(entry);
+				for (String entry : result)
+					bulletin.getSuggestedRegions().remove(entry);
 
-			// set author
-			if (!bulletin.getAdditionalAuthors().contains(user.getName()))
-				bulletin.addAdditionalAuthor(user.getName());
-			bulletin.setUser(user);
+				entityManager.merge(bulletin);
+			}
 
-			// delete suggestions within the region
-			result = new HashSet<String>();
-			for (String entry : bulletin.getSuggestedRegions())
-				if (entry.startsWith(region))
-					result.add(entry);
-			for (String entry : result)
-				bulletin.getSuggestedRegions().remove(entry);
+			for (AvalancheBulletin avalancheBulletin : bulletins)
+				initializeBulletin(avalancheBulletin);
 
-			entityManager.merge(bulletin);
-		}
-
-		for (AvalancheBulletin avalancheBulletin : bulletins)
-			initializeBulletin(avalancheBulletin);
-
-		transaction.commit();
-		entityManager.close();
-
-		return results;
+			return results;
+		});
 	}
 
 	/**
@@ -617,13 +580,10 @@ public class AvalancheBulletinController {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, String region,
-			Instant publicationDate, User user) throws AlbinaException {
-		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			Instant publicationDate, User user) {
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		try {
-			transaction.begin();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
@@ -659,16 +619,8 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin avalancheBulletin : bulletins)
 				initializeBulletin(avalancheBulletin);
 
-			transaction.commit();
-
 			return bulletins;
-		} catch (HibernateException he) {
-			if (transaction != null)
-				transaction.rollback();
-			throw new AlbinaException(he.getMessage());
-		} finally {
-			entityManager.close();
-		}
+		});
 	}
 
 	/**
@@ -732,130 +684,125 @@ public class AvalancheBulletinController {
 	 */
 	@SuppressWarnings("unchecked")
 	public JSONArray checkBulletins(Instant startDate, Instant endDate, String region) {
-		JSONArray json = new JSONArray();
-		boolean missingAvActivityHighlights = false;
-		boolean missingAvActivityComment = false;
-		boolean missingSnowpackStructureHighlights = false;
-		boolean missingSnowpackStructureComment = false;
-		boolean pendingSuggestions = false;
-		boolean missingDangerRating = false;
-		boolean incompleteTranslation = false;
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			JSONArray json = new JSONArray();
+			boolean missingAvActivityHighlights = false;
+			boolean missingAvActivityComment = false;
+			boolean missingSnowpackStructureHighlights = false;
+			boolean missingSnowpackStructureComment = false;
+			boolean pendingSuggestions = false;
+			boolean missingDangerRating = false;
+			boolean incompleteTranslation = false;
 
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
-		List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
-				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			// select bulletins within the region
+			for (AvalancheBulletin bulletin : bulletins)
+				if (bulletin.affectsRegion(region))
+					results.add(bulletin);
 
-		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-		// select bulletins within the region
-		for (AvalancheBulletin bulletin : bulletins)
-			if (bulletin.affectsRegion(region))
-				results.add(bulletin);
+			if (checkBulletinsForDuplicateRegion(bulletins, region))
+				json.put("duplicateRegion");
 
-		if (checkBulletinsForDuplicateRegion(bulletins, region))
-			json.put("duplicateRegion");
+			Set<String> definedRegions = new HashSet<String>();
+			for (AvalancheBulletin bulletin : results) {
+				definedRegions.addAll(getOwnRegions(bulletin.getSavedRegions(), region));
+				definedRegions.addAll(getOwnRegions(bulletin.getPublishedRegions(), region));
 
-		Set<String> definedRegions = new HashSet<String>();
-		for (AvalancheBulletin bulletin : results) {
-			definedRegions.addAll(getOwnRegions(bulletin.getSavedRegions(), region));
-			definedRegions.addAll(getOwnRegions(bulletin.getPublishedRegions(), region));
+				if (!pendingSuggestions)
+					for (String entry : bulletin.getSuggestedRegions())
+						if (entry.startsWith(region))
+							pendingSuggestions = true;
 
-			if (!pendingSuggestions)
-				for (String entry : bulletin.getSuggestedRegions())
-					if (entry.startsWith(region))
-						pendingSuggestions = true;
+				if (bulletin.affectsRegionWithoutSuggestions(region)) {
+					if (missingAvActivityHighlights || bulletin.getAvActivityHighlightsTextcat() == null
+							|| bulletin.getAvActivityHighlightsTextcat().isEmpty())
+						missingAvActivityHighlights = true;
+					if (missingAvActivityComment || bulletin.getAvActivityCommentTextcat() == null
+							|| bulletin.getAvActivityCommentTextcat().isEmpty())
+						missingAvActivityComment = true;
+					if (missingSnowpackStructureComment || bulletin.getSnowpackStructureCommentTextcat() == null
+							|| bulletin.getSnowpackStructureCommentTextcat().isEmpty())
+						missingSnowpackStructureComment = true;
 
-			if (bulletin.affectsRegionWithoutSuggestions(region)) {
-				if (missingAvActivityHighlights || bulletin.getAvActivityHighlightsTextcat() == null
-						|| bulletin.getAvActivityHighlightsTextcat().isEmpty())
-					missingAvActivityHighlights = true;
-				if (missingAvActivityComment || bulletin.getAvActivityCommentTextcat() == null
-						|| bulletin.getAvActivityCommentTextcat().isEmpty())
-					missingAvActivityComment = true;
-				if (missingSnowpackStructureComment || bulletin.getSnowpackStructureCommentTextcat() == null
-						|| bulletin.getSnowpackStructureCommentTextcat().isEmpty())
-					missingSnowpackStructureComment = true;
+					if (bulletin.getForenoon() == null
+							|| bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
+							|| (bulletin.getForenoon() != null && bulletin.getForenoon().isHasElevationDependency()
+									&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
+						missingDangerRating = true;
+					}
 
-				if (bulletin.getForenoon() == null
-						|| bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
-						|| (bulletin.getForenoon() != null && bulletin.getForenoon().isHasElevationDependency()
-								&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
-					missingDangerRating = true;
-				}
+					if (missingDangerRating || (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() == null)
+							|| (bulletin.isHasDaytimeDependency()
+									&& bulletin.getAfternoon().getDangerRatingAbove() == DangerRating.missing)
+							|| (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() != null
+									&& bulletin.getAfternoon().isHasElevationDependency()
+									&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
+						missingDangerRating = true;
+					}
 
-				if (missingDangerRating || (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() == null)
-						|| (bulletin.isHasDaytimeDependency()
-								&& bulletin.getAfternoon().getDangerRatingAbove() == DangerRating.missing)
-						|| (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() != null
-								&& bulletin.getAfternoon().isHasElevationDependency()
-								&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
-					missingDangerRating = true;
-				}
-
-				if ((bulletin.getAvActivityHighlightsIn(LanguageCode.de) != null
-						&& bulletin.getAvActivityHighlightsIn(LanguageCode.de)
-								.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getAvActivityHighlightsIn(LanguageCode.it) != null
-								&& bulletin.getAvActivityHighlightsIn(LanguageCode.it)
-										.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getAvActivityHighlightsIn(LanguageCode.en) != null
-								&& bulletin.getAvActivityHighlightsIn(LanguageCode.en)
-										.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getAvActivityCommentIn(LanguageCode.de) != null
-								&& bulletin.getAvActivityCommentIn(LanguageCode.de)
-										.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getAvActivityCommentIn(LanguageCode.it) != null
-								&& bulletin.getAvActivityCommentIn(LanguageCode.it)
-										.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getAvActivityCommentIn(LanguageCode.en) != null
-								&& bulletin.getAvActivityCommentIn(LanguageCode.en)
-										.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.de) != null
-								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.de)
-										.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.it) != null
-								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.it)
-										.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.en) != null
-								&& bulletin.getSnowpackStructureCommentIn(LanguageCode.en)
-										.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getTendencyCommentIn(LanguageCode.de) != null
-								&& bulletin.getTendencyCommentIn(LanguageCode.de)
-										.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getTendencyCommentIn(LanguageCode.it) != null
-								&& bulletin.getTendencyCommentIn(LanguageCode.it)
-										.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
-						|| (bulletin.getTendencyCommentIn(LanguageCode.en) != null
-								&& bulletin.getTendencyCommentIn(LanguageCode.en)
-										.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))) {
-					incompleteTranslation = true;
+					if ((bulletin.getAvActivityHighlightsIn(LanguageCode.de) != null
+							&& bulletin.getAvActivityHighlightsIn(LanguageCode.de)
+									.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getAvActivityHighlightsIn(LanguageCode.it) != null
+									&& bulletin.getAvActivityHighlightsIn(LanguageCode.it)
+											.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getAvActivityHighlightsIn(LanguageCode.en) != null
+									&& bulletin.getAvActivityHighlightsIn(LanguageCode.en)
+											.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getAvActivityCommentIn(LanguageCode.de) != null
+									&& bulletin.getAvActivityCommentIn(LanguageCode.de)
+											.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getAvActivityCommentIn(LanguageCode.it) != null
+									&& bulletin.getAvActivityCommentIn(LanguageCode.it)
+											.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getAvActivityCommentIn(LanguageCode.en) != null
+									&& bulletin.getAvActivityCommentIn(LanguageCode.en)
+											.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.de) != null
+									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.de)
+											.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.it) != null
+									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.it)
+											.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.en) != null
+									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.en)
+											.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getTendencyCommentIn(LanguageCode.de) != null
+									&& bulletin.getTendencyCommentIn(LanguageCode.de)
+											.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getTendencyCommentIn(LanguageCode.it) != null
+									&& bulletin.getTendencyCommentIn(LanguageCode.it)
+											.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
+							|| (bulletin.getTendencyCommentIn(LanguageCode.en) != null
+									&& bulletin.getTendencyCommentIn(LanguageCode.en)
+											.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))) {
+						incompleteTranslation = true;
+					}
 				}
 			}
-		}
 
-		if (definedRegions.size() < AlbinaUtil.getRegionCount(region))
-			json.put("missingRegion");
-		if (missingAvActivityHighlights)
-			json.put("missingAvActivityHighlights");
-		if (missingAvActivityComment)
-			json.put("missingAvActivityComment");
-		if (missingSnowpackStructureHighlights)
-			json.put("missingSnowpackStructureHighlights");
-		if (missingSnowpackStructureComment)
-			json.put("missingSnowpackStructureComment");
-		if (pendingSuggestions)
-			json.put("pendingSuggestions");
-		if (missingDangerRating)
-			json.put("missingDangerRating");
-		if (incompleteTranslation)
-			json.put("incompleteTranslation");
+			if (definedRegions.size() < AlbinaUtil.getRegionCount(region))
+				json.put("missingRegion");
+			if (missingAvActivityHighlights)
+				json.put("missingAvActivityHighlights");
+			if (missingAvActivityComment)
+				json.put("missingAvActivityComment");
+			if (missingSnowpackStructureHighlights)
+				json.put("missingSnowpackStructureHighlights");
+			if (missingSnowpackStructureComment)
+				json.put("missingSnowpackStructureComment");
+			if (pendingSuggestions)
+				json.put("pendingSuggestions");
+			if (missingDangerRating)
+				json.put("missingDangerRating");
+			if (incompleteTranslation)
+				json.put("incompleteTranslation");
 
-		transaction.commit();
-		entityManager.close();
-
-		return json;
+			return json;
+		});
 	}
 
 	/**
