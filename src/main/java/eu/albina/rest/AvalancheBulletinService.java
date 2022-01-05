@@ -455,7 +455,7 @@ public class AvalancheBulletinService {
     @Produces("application/pdf")
     public Response getPreviewPdf(@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date, @QueryParam("region") String region, @QueryParam("lang") LanguageCode language) {
 
-		logger.debug("GET PDF preview [" + date + "]");
+		logger.debug("GET PDF preview [" + date + ", " + region + "]");
 
 		try {
 			Instant startDate = null;
@@ -475,32 +475,31 @@ public class AvalancheBulletinService {
 				for (Object object : jsonArray) {
 					if (object instanceof JSONObject) {
 						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
-						// only add bulletins with published regions
-						if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
-							bulletins.add(bulletin);
+						bulletins.add(bulletin);
 					}
 				}
+				Collections.sort(bulletins);
+
+				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+				String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
+				java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
+	
+				MapUtil.createMapyrusMaps(bulletins, true, outputDirectory);
+	
+				PdfUtil.getInstance().createPdf(bulletins, language, region, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
+							publicationTimeString, true);
+	
+				String filename = validityDateString + "_" + region + "_" + language.toString() + ".pdf";
+	
+				File file = new File(GlobalVariables.getTmpPdfDirectory() + System.getProperty("file.separator")
+				+ validityDateString + System.getProperty("file.separator") + publicationTimeString
+				+ System.getProperty("file.separator") + filename);
+	
+				return Response.ok(file).header(HttpHeaders.CONTENT_DISPOSITION,
+					"attachment; filename=\"" + filename + "\"").header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
+			} else {
+				return Response.noContent().build();
 			}
-
-			Collections.sort(bulletins);
-
-			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-			String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
-			java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
-
-			MapUtil.createMapyrusMaps(bulletins, true, outputDirectory);
-
-			PdfUtil.getInstance().createPdf(bulletins, language, region, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
-						publicationTimeString, true);
-
-			String filename = validityDateString + "_" + region + "_" + language.toString() + ".pdf";
-
-			File file = new File(GlobalVariables.getTmpPdfDirectory() + System.getProperty("file.separator")
-			+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-			+ System.getProperty("file.separator") + filename);
-
-			return Response.ok(file).header(HttpHeaders.CONTENT_DISPOSITION,
-				"attachment; filename=\"" + filename + "\"").header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating PDFs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
