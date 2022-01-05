@@ -468,12 +468,20 @@ public class AvalancheBulletinService {
 			List<String> regions = new ArrayList<String>();
 			regions.add(region);
 
-			Collection<AvalancheBulletin> result = AvalancheBulletinController.getInstance().getBulletins(startDate, startDate, regions);
+			AvalancheReport report = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin b : result) {
-				if (b.affectsRegion(region))
-					bulletins.add(b);
+			if (report != null	&& report.getJsonString() != null) {
+				JSONArray jsonArray = new JSONArray(report.getJsonString());
+				for (Object object : jsonArray) {
+					if (object instanceof JSONObject) {
+						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+						// only add bulletins with published regions
+						if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
+							bulletins.add(bulletin);
+					}
+				}
 			}
+
 			Collections.sort(bulletins);
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);

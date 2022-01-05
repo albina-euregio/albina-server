@@ -458,7 +458,7 @@ public class AvalancheBulletinController {
 				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin bulletin : bulletins) {
-				if (regions.stream().anyMatch(bulletin::affectsRegion)) {
+				if (regions.stream().anyMatch(bulletin::affectsRegionWithoutSuggestions)) {
 					results.add(bulletin);
 				}
 			}

@@ -369,7 +369,7 @@ public class AvalancheReportController {
 	 *         or null if no report was found
 	 */
 	@SuppressWarnings("unchecked")
-	private AvalancheReport getInternalReport(Instant date, String region) {
+	public AvalancheReport getInternalReport(Instant date, String region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport result = null;
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
