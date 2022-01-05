@@ -465,7 +465,10 @@ public class AvalancheBulletinService {
 			else
 				throw new AlbinaException("No date!");
 
-			Collection<AvalancheBulletin> result = AvalancheBulletinController.getInstance().getBulletins(startDate, startDate, GlobalVariables.getPublishRegions());
+			List<String> regions = new ArrayList<String>();
+			regions.add(region);
+
+			Collection<AvalancheBulletin> result = AvalancheBulletinController.getInstance().getBulletins(startDate, startDate, regions);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin b : result) {
 				if (b.affectsRegion(region))
