@@ -465,9 +465,6 @@ public class AvalancheBulletinService {
 			else
 				throw new AlbinaException("No date!");
 
-			List<String> regions = new ArrayList<String>();
-			regions.add(region);
-
 			AvalancheReport report = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			if (report != null	&& report.getJsonString() != null) {
@@ -475,7 +472,9 @@ public class AvalancheBulletinService {
 				for (Object object : jsonArray) {
 					if (object instanceof JSONObject) {
 						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
-						bulletins.add(bulletin);
+						if (bulletin.affectsRegionWithoutSuggestions(region)) {
+							bulletins.add(bulletin);
+						}
 					}
 				}
 				Collections.sort(bulletins);
