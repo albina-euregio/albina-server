@@ -71,7 +71,7 @@ public class EmailUtilTest {
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
 		final URL resource = Resources.getResource("2021-12-02.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		logger.info("#bulletins: " + bulletins.size());
+		logger.info("#bulletins: {}", bulletins.size());
 		ArrayList<String> regions = new ArrayList<String>();
 		regions.add(GlobalVariables.codeTrentino);
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);

@@ -46,7 +46,7 @@ public class AvalancheBulletinUpdateEndpoint {
 	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
 		updateEndpoints.add(this);
-		logger.info("Client connected: " + username);
+        logger.info("Client connected: {}", username);
 	}
 
 	@OnMessage
@@ -58,7 +58,7 @@ public class AvalancheBulletinUpdateEndpoint {
 	@OnClose
 	public void onClose(Session session) {
 		updateEndpoints.remove(this);
-		logger.info("Client disconnected: " + session.getId());
+        logger.info("Client disconnected: {}", session.getId());
 	}
 
 	@OnError

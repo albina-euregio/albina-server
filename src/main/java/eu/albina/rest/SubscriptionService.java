@@ -73,7 +73,7 @@ public class SubscriptionService {
 	// @Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteSubscriber(String email) {
 		JSONObject json = new JSONObject(email);
-		logger.debug("DELETE JSON subscriber: " + json.getString("email"));
+        logger.debug("DELETE JSON subscriber: {}", json.getString("email"));
 
 		try {
 			SubscriberController.getInstance().deleteSubscriber(json.getString("email"));
@@ -91,7 +91,7 @@ public class SubscriptionService {
 	public Response confirmSubscription(String token) {
 		try {
 			JSONObject json = new JSONObject(token);
-			logger.debug("POST JSON confirm: " + json.getString("token"));
+            logger.debug("POST JSON confirm: {}", json.getString("token"));
 			DecodedJWT decodedToken = AuthenticationController.getInstance().decodeToken(json.getString("token"));
 			Date currentDate = new Date();
 			if (currentDate.after(decodedToken.getExpiresAt())) {

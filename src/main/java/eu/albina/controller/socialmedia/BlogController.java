@@ -94,7 +94,7 @@ public class BlogController extends CommonProcessor {
 				.addParameter("fetchBodies", Boolean.TRUE.toString())
 				.addParameter("fetchImages", Boolean.TRUE.toString())
 				.toString();
-			logger.debug("URI: " + uri);
+            logger.debug("URI: {}", uri);
 			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
 					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
 			logger.debug("Start date for {}: {}", blogId, lastFetch.get(blogId).toString());

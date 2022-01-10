@@ -121,7 +121,7 @@ public class EmailUtil {
 						regionBulletins.add(avalancheBulletin);
 				}
 				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
-				logger.info("HTML size: " + emailHtml.length());
+				logger.info("HTML size: {}", emailHtml.length());
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
 			}
 		}
@@ -151,12 +151,12 @@ public class EmailUtil {
 	}
 
 	public void sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
-		logger.info("Sending bulletin email in " + lang + " for " + region + "...");
+		logger.info("Sending bulletin email in {} for {}...", lang, region);
 		sendEmail(lang, region, emailHtml, subject, test);
 	}
 
 	public void sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
-		logger.info("Sending blog post email in " + lang + " for " + region + "...");
+		logger.info("Sending blog post email in {} for {}...", lang, region);
 		sendEmail(lang, region, emailHtml, subject, test);
 	}
 

@@ -455,7 +455,7 @@ public class AvalancheBulletinService {
     @Produces("application/pdf")
     public Response getPreviewPdf(@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date, @QueryParam("region") String region, @QueryParam("lang") LanguageCode language) {
 
-		logger.debug("GET PDF preview [" + date + ", " + region + "]");
+		logger.debug("GET PDF preview [{}, {}]", date, region);
 
 		try {
 			Instant startDate = null;
@@ -482,18 +482,18 @@ public class AvalancheBulletinService {
 				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 				String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
 				java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
-	
+
 				MapUtil.createMapyrusMaps(bulletins, true, outputDirectory);
-	
+
 				PdfUtil.getInstance().createPdf(bulletins, language, region, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 							publicationTimeString, true);
-	
+
 				String filename = validityDateString + "_" + region + "_" + language.toString() + ".pdf";
-	
+
 				File file = new File(GlobalVariables.getTmpPdfDirectory() + System.getProperty("file.separator")
 				+ validityDateString + System.getProperty("file.separator") + publicationTimeString
 				+ System.getProperty("file.separator") + filename);
-	
+
 				return Response.ok(file).header(HttpHeaders.CONTENT_DISPOSITION,
 					"attachment; filename=\"" + filename + "\"").header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
 			} else {
@@ -514,7 +514,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletin(@PathParam("bulletinId") String bulletinId) {
-		logger.debug("GET JSON bulletin: " + bulletinId);
+		logger.debug("GET JSON bulletin: {}", bulletinId);
 
 		try {
 			AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin(bulletinId);
@@ -802,7 +802,7 @@ public class AvalancheBulletinService {
 	public Response createPdf(
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST create PDF [" + date + "]");
+		logger.debug("POST create PDF [{}]", date);
 
 		try {
 			Instant startDate = null;
@@ -854,7 +854,7 @@ public class AvalancheBulletinService {
 	public Response createHtml(
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST create HTML [" + date + "]");
+		logger.debug("POST create HTML [{}]", date);
 
 		try {
 			Instant startDate = null;
@@ -895,7 +895,7 @@ public class AvalancheBulletinService {
 	public Response createStaticWidget(
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST create static widget [" + date + "]");
+		logger.debug("POST create static widget [{}]", date);
 
 		try {
 			Instant startDate = null;
@@ -941,7 +941,7 @@ public class AvalancheBulletinService {
 	public Response createMap(
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST create map [" + date + "]");
+		logger.debug("POST create map [{}]", date);
 
 		try {
 			Instant startDate = null;
@@ -985,7 +985,7 @@ public class AvalancheBulletinService {
 	public Response createCaaml(
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST create caaml [" + date + "]");
+		logger.debug("POST create caaml [{}]", date);
 
 		try {
 			Instant startDate = null;
@@ -1023,7 +1023,7 @@ public class AvalancheBulletinService {
 	public Response createJson(
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST create json [" + date + "]");
+		logger.debug("POST create json [{}]", date);
 
 		try {
 			Instant startDate = null;
@@ -1061,7 +1061,7 @@ public class AvalancheBulletinService {
 	public Response sendEmail(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST send emails for " + region + " [" + date + "]");
+		logger.debug("POST send emails for {} [{}]", region, date);
 
 		try {
 			if (region == null)
@@ -1098,7 +1098,7 @@ public class AvalancheBulletinService {
 	public Response sendTestEmail(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST send test emails for " + region + " [" + date + "]");
+		logger.debug("POST send test emails for {} [{}]", region, date);
 
 		try {
 			if (region == null)
@@ -1117,8 +1117,8 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
-			logger.debug("startDate: " + startDate.toString());
-			logger.debug("#bulletins: " + bulletins.size());
+			logger.debug("startDate: {}", startDate.toString());
+			logger.debug("#bulletins: {}", bulletins.size());
 
 			EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
 
@@ -1140,7 +1140,7 @@ public class AvalancheBulletinService {
 	public Response triggerTelegramChannel(@QueryParam("region") String region,
 			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST trigger telegram channel for " + region + " [" + date + "]");
+		logger.debug("POST trigger telegram channel for {} [{}]", region, date);
 
 		try {
 			if (region == null)
