@@ -123,6 +123,7 @@ public class RapidMailProcessorController extends CommonProcessor {
 		if (mailingsPost.getDestinations() == null) {
 			String recipientName = test ? "TEST" : getRecipientName(config, language);
 			int recipientListId = getRecipientId(config, recipientName);
+			logger.info("Obtaining recipient for {} -> {}", recipientName, recipientListId);
 			mailingsPost.setDestinations(Collections.singletonList(
 					new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
 		}
