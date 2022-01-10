@@ -77,6 +77,17 @@ public class EmailUtilTest {
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
 	}
 
+	@Ignore
+	@Test
+	public void sendEmailIssue232() throws Exception {
+		HibernateUtil.getInstance().setUp();
+		final URL resource = new URL("https://static.avalanche.report/bulletins/2022-01-10/avalanche_report.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		logger.info("#bulletins: {}", bulletins.size());
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, GlobalVariables.regionsEuregio, false, false);
+		HibernateUtil.getInstance().shutDown();
+	}
+
 	@Test
 	public void langTest() {
 		assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
