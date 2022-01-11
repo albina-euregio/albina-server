@@ -166,11 +166,16 @@ public class EmailUtil {
 			RegionConfiguration regionConfiguration = rcc.getRegionConfiguration(region);
 			RapidMailConfig rmConfig = regionConfiguration.getRapidMailConfig();
 
-			rmc.sendMessage(rmConfig, lang,
-					new PostMailingsRequest().fromEmail(lang.getBundleString("avalanche-report.email"))
-							.fromName(lang.getBundleString("avalanche-report.name")).subject(subject)
-							.file(new PostMailingsRequestPostFile().description("mail-content.zip")
-									.type("application/zip").content(createZipFile(emailHtml, null))), test);
+			PostMailingsRequestPostFile file = new PostMailingsRequestPostFile()
+				.description("mail-content.zip")
+				.type("application/zip")
+				.content(createZipFile(emailHtml, null));
+			PostMailingsRequest request = new PostMailingsRequest()
+				.fromEmail(lang.getBundleString("avalanche-report.email"))
+				.fromName(lang.getBundleString("avalanche-report.name"))
+				.subject(subject)
+				.file(file);
+			rmc.sendMessage(rmConfig, lang, request, test);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region, e);
 		}
