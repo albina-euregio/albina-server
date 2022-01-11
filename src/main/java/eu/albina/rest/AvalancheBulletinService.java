@@ -46,8 +46,6 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import com.google.common.base.Strings;
-
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,19 +91,12 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions) {
 		logger.debug("GET JSON bulletins");
 
-		Instant startDate = null;
-		Instant endDate = null;
-
-		if (date != null)
-			startDate = ZonedDateTime.parse(date).toInstant();
-		else
-			startDate = AlbinaUtil.getInstantStartOfDay();
-
-		endDate = startDate.plus(1, ChronoUnit.DAYS);
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
+		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 		if (regions.isEmpty()) {
 			logger.warn("No region defined.");
@@ -128,23 +119,18 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getPublishedXMLBulletins(
-			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language,
 			@QueryParam("version") CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
-		Instant startDate = null;
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 
 		if (regions.isEmpty()) {
 			regions = GlobalVariables.getPublishRegions();
 		}
 
 		try {
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				startDate = AlbinaUtil.getInstantStartOfDay();
-
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, regions,
 					language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
@@ -173,12 +159,12 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getAinevaXMLBulletins(
-			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published XML bulletins");
 
-		Instant startDate = null;
-		Instant endDate = null;
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
+		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 		if (regions.isEmpty()) {
 			logger.warn("No region defined.");
@@ -186,12 +172,6 @@ public class AvalancheBulletinService {
 		}
 
 		try {
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				startDate = AlbinaUtil.getInstantStartOfDay();
-			endDate = startDate.plus(1, ChronoUnit.DAYS);
-
 			String caaml = AvalancheBulletinController.getInstance().getAinevaBulletinsCaaml(startDate, endDate,
 					regions, language);
 			if (caaml != null) {
@@ -229,22 +209,17 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublishedJSONBulletins(
-			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published JSON bulletins");
 
-		Instant startDate = null;
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 
 		if (regions.isEmpty()) {
 			regions = GlobalVariables.getPublishRegions();
 		}
 
 		try {
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				startDate = AlbinaUtil.getInstantStartOfDay();
-
 			JSONArray jsonResult = AvalancheBulletinController.getInstance().getPublishedBulletinsJson(startDate,
 					regions);
 
@@ -260,11 +235,11 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getHighestDangerRating(
-			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions) {
 		logger.debug("GET highest danger rating");
 
-		Instant startDate = null;
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 
 		if (regions.isEmpty()) {
 			logger.warn("No region defined.");
@@ -272,10 +247,6 @@ public class AvalancheBulletinService {
 		}
 
 		try {
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				startDate = AlbinaUtil.getInstantStartOfDay();
 
 			DangerRating highestDangerRating = AvalancheBulletinController.getInstance()
 					.getHighestDangerRating(startDate, regions);
@@ -295,25 +266,14 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStatus(@QueryParam("region") String region,
 			@QueryParam("timezone") String timezone,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
-		Instant startDate = null;
-		Instant endDate = null;
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+
+		Instant startDate = DateControllerUtil.parseDateOrToday(start);
+		Instant endDate = DateControllerUtil.parseDateOrNull(end);
+		ZoneId zoneId = DateControllerUtil.parseTimezoneOrLocal(timezone);
 
 		try {
-			if (start != null)
-				startDate = ZonedDateTime.parse(start).toInstant();
-			else
-				startDate = AlbinaUtil.getInstantStartOfDay();
-
-			if (end != null)
-				endDate = ZonedDateTime.parse(end).toInstant();
-
-			ZoneId zoneId = AlbinaUtil.localZone();
-			if (!Strings.isNullOrEmpty(timezone)) {
-				zoneId = ZoneId.of(timezone);
-			}
-
 			Map<Instant, BulletinStatus> status;
 			// if no region is defined, get status for EUREGIO
 			if (region == null || region.isEmpty())
@@ -346,20 +306,13 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getInternalStatus(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
-		Instant startDate = null;
-		Instant endDate = null;
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+
+		Instant startDate = DateControllerUtil.parseDateOrToday(start);
+		Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
 		try {
-			if (start != null)
-				startDate = ZonedDateTime.parse(start).toInstant();
-			else
-				startDate = AlbinaUtil.getInstantStartOfDay();
-
-			if (end != null)
-				endDate = ZonedDateTime.parse(end).toInstant();
-
 			Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 					endDate, region);
 			JSONArray jsonResult = new JSONArray();
@@ -384,18 +337,11 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublicationsStatus(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String start,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String end) {
-		Instant startDate = null;
-		Instant endDate = null;
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
-		if (start != null)
-			startDate = ZonedDateTime.parse(start).toInstant();
-		else
-			startDate = AlbinaUtil.getInstantStartOfDay();
-
-		if (end != null)
-			endDate = ZonedDateTime.parse(end).toInstant();
+		Instant startDate = DateControllerUtil.parseDateOrToday(start);
+		Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
 		Map<Instant, AvalancheReport> status = AvalancheReportController.getInstance().getPublicationStatus(startDate,
 				endDate, region);
@@ -417,18 +363,12 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublicationStatus(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
-		Instant startDate = null;
-		Instant endDate = null;
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date) {
+
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
+		Instant endDate = startDate;
 
 		try {
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				startDate = AlbinaUtil.getInstantStartOfDay();
-
-			endDate = startDate;
-
 			Map<Instant, AvalancheReport> status = AvalancheReportController.getInstance()
 					.getPublicationStatus(startDate, endDate, region);
 
@@ -453,18 +393,12 @@ public class AvalancheBulletinService {
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
     @Path("/preview")
     @Produces("application/pdf")
-    public Response getPreviewPdf(@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date, @QueryParam("region") String region, @QueryParam("lang") LanguageCode language) {
+    public Response getPreviewPdf(@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("region") String region, @QueryParam("lang") LanguageCode language) {
 
 		logger.debug("GET PDF preview [{}, {}]", date, region);
 
 		try {
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			AvalancheReport report = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			if (report != null	&& report.getJsonString() != null) {
@@ -536,18 +470,13 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletins(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			String bulletinsString, @QueryParam("region") String region, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins");
 
 		try {
-			Instant startDate = null;
-			Instant endDate = null;
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-			endDate = startDate.plus(1, ChronoUnit.DAYS);
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
@@ -579,18 +508,13 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeBulletins(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			String bulletinsString, @QueryParam("region") String region, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins change");
 
 		try {
-			Instant startDate = null;
-			Instant endDate = null;
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-			endDate = startDate.plus(1, ChronoUnit.DAYS);
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
@@ -633,23 +557,17 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response submitBulletins(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST submit bulletins");
 
 		try {
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region != null && user.hasPermissionForRegion(region)) {
-				Instant startDate = null;
-				Instant endDate = null;
-
-				if (date != null)
-					startDate = ZonedDateTime.parse(date).toInstant();
-				else
-					throw new AlbinaException("No date!");
-				endDate = startDate.plus(1, ChronoUnit.DAYS);
-
 				List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
 						endDate, region, user);
 				AvalancheReportController.getInstance().submitReport(bulletins, startDate, region, user);
@@ -679,23 +597,17 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response publishBulletins(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST publish bulletins");
 
 		try {
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region != null && user.hasPermissionForRegion(region)) {
-				Instant startDate = null;
-				Instant endDate = null;
-
-				if (date != null)
-					startDate = ZonedDateTime.parse(date).toInstant();
-				else
-					throw new AlbinaException("No date!");
-				endDate = startDate.plus(1, ChronoUnit.DAYS);
-
 				Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 
 				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance()
@@ -736,26 +648,20 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response publishAllBulletins(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST publish all bulletins");
 
 		try {
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+
 			// REGION
 			List<String> regions = GlobalVariables.getPublishRegions();
 
 			if (!regions.isEmpty()) {
 				try {
 					User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
-
-					Instant startDate = null;
-					Instant endDate = null;
-
-					if (date != null)
-						startDate = ZonedDateTime.parse(date).toInstant();
-					else
-						throw new AlbinaException("No date!");
-					endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 					Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 
@@ -800,18 +706,12 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPdf(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create PDF [{}]", date);
 
 		try {
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Collection<AvalancheBulletin> result = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -852,18 +752,12 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createHtml(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create HTML [{}]", date);
 
 		try {
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -893,18 +787,12 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createStaticWidget(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create static widget [{}]", date);
 
 		try {
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -939,18 +827,12 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createMap(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create map [{}]", date);
 
 		try {
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -983,18 +865,12 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createCaaml(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create caaml [{}]", date);
 
 		try {
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -1021,18 +897,12 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createJson(
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create json [{}]", date);
 
 		try {
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -1059,7 +929,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response sendEmail(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST send emails for {} [{}]", region, date);
 
@@ -1070,13 +940,7 @@ public class AvalancheBulletinService {
 			List<String> regions = new ArrayList<String>();
 			regions.add(region);
 
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -1096,7 +960,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response sendTestEmail(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST send test emails for {} [{}]", region, date);
 
@@ -1107,13 +971,7 @@ public class AvalancheBulletinService {
 			List<String> regions = new ArrayList<String>();
 			regions.add(region);
 
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -1138,7 +996,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response triggerTelegramChannel(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST trigger telegram channel for {} [{}]", region, date);
 
@@ -1149,13 +1007,7 @@ public class AvalancheBulletinService {
 			List<String> regions = new ArrayList<String>();
 			regions.add(region);
 
-			Instant startDate = null;
-
-			if (date != null)
-				startDate = ZonedDateTime.parse(date).toInstant();
-			else
-				throw new AlbinaException("No date!");
-
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
@@ -1176,23 +1028,17 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response checkBulletins(@QueryParam("region") String region,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST publish bulletins");
 
 		try {
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region != null && user.hasPermissionForRegion(region)) {
-				Instant startDate = null;
-				Instant endDate = null;
-
-				if (date != null)
-					startDate = ZonedDateTime.parse(date).toInstant();
-				else
-					throw new AlbinaException("No date!");
-				endDate = startDate.plus(1, ChronoUnit.DAYS);
-
 				JSONArray result = AvalancheBulletinController.getInstance().checkBulletins(startDate, endDate, region);
 				return Response.ok(result.toString(), MediaType.APPLICATION_JSON).build();
 			} else
