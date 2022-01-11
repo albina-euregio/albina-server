@@ -26,7 +26,9 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class BlogControllerTest {
@@ -40,9 +42,15 @@ public class BlogControllerTest {
 	}
 
 	@Test
+	public void testLatestBlogPost() throws Exception {
+		Blogger.Item blogPost = BlogController.getInstance().getLatestBlogPost(GlobalVariables.codeTyrol, LanguageCode.de);
+		assertTrue("blog >100 chars", blogPost.content.length() > 100);
+	}
+
+	@Test
 	public void testBlogPost() throws Exception {
 		String blogPost = BlogController.getInstance().getBlogPost("1227558273754407795", GlobalVariables.codeTyrol, LanguageCode.de);
-		assertTrue(blogPost, blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
+		assertThat(blogPost, containsString("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
 	}
 
 	@Ignore
@@ -55,18 +63,7 @@ public class BlogControllerTest {
 
 	@Test
 	public void testTicket150() throws Exception {
-		final String blog = "{\n" + "  \"replies\": {},\n" + "  \"kind\": \"blogger#post\",\n"
-				+ "  \"author\": {},\n"
-				+ "  \"etag\": \"\\\"dGltZXN0YW1wOiAxNTc1NTYxNTg5NzM2Cm9mZnNldDogMz YwMDAwMAo\\\"\",\n"
-				+ "  \"id\": \"4564885875858452565\",\n" + "  \"published\": \"2019-12-05T16:59:00+01:00\",\n"
-				+ "  \"blog\": {\"id\": \"1263754381945501754\"},\n" + "  \"title\": \"Sonnige Woche\",\n"
-				+ "  \"updated\": \"2019-12-05T16:59:49+01:00\",\n"
-				+ "  \"url\": \"http ://lawinensuedtirol.blogspot.com/2019/12/sonnige-woche.html\",\n"
-				+ "  \"content\": \"\",\n"
-				+ "  \"selfLink\": \"https://www.googleapis.com/blogger/v3/blogs/1263754381945501754/posts/4564885875858452565\"\n"
-				+ "}\n";
-
-		Blogger.Item item = new CommonProcessor().fromJson(blog, Blogger.Item.class);
-		assertEquals("Sonnige Woche", item.title);
+		String blogPost = BlogController.getInstance().getBlogPost("4564885875858452565", GlobalVariables.codeSouthTyrol, LanguageCode.de);
+		assertThat(blogPost, containsString("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
 	}
 }
