@@ -128,10 +128,6 @@ public class RapidMailProcessorController extends CommonProcessor {
 					new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
 		}
 
-		if (mailingsPost.getStatus() == null) {
-			mailingsPost.setStatus("scheduled");
-		}
-
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Mailings#/Mailings/post_mailings
 		Request request = Request.Post(baseUrl + "/mailings")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))

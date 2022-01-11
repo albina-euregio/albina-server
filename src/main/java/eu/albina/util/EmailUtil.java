@@ -174,6 +174,7 @@ public class EmailUtil {
 				.fromEmail(lang.getBundleString("avalanche-report.email"))
 				.fromName(lang.getBundleString("avalanche-report.name"))
 				.subject(subject)
+				.status("scheduled")
 				.file(file);
 			rmc.sendMessage(rmConfig, lang, request, test);
 		} catch (Exception e) {
