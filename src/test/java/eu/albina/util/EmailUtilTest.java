@@ -84,7 +84,7 @@ public class EmailUtilTest {
 		final URL resource = new URL("https://static.avalanche.report/bulletins/2022-01-10/avalanche_report.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		logger.info("#bulletins: {}", bulletins.size());
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, GlobalVariables.regionsEuregio, false, false);
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, GlobalVariables.regionsEuregio, false, true);
 		HibernateUtil.getInstance().shutDown();
 	}
 
