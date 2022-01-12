@@ -54,8 +54,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 				TelegramConfig config = telegramConfigs.stream().filter(telegramConfig -> telegramConfig.getLanguageCode().equals(lang)).findFirst().orElse(null);
 
 				if (config != null) {
-					logger.info("Publishing report on telegram channel for "
-							+ config.getRegionConfiguration().getRegion().getId() + " in " + lang);
+                    logger.info("Publishing report on telegram channel for {} in {}", config.getRegionConfiguration().getRegion().getId(), lang);
 					ctTc.sendPhoto(config, message, attachmentUrl);
 				} else {
 					throw new AlbinaException(

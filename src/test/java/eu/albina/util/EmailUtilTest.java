@@ -72,12 +72,23 @@ public class EmailUtilTest {
 		HibernateUtil.getInstance().setUp();
 		final URL resource = Resources.getResource("2021-12-02.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		logger.info("#bulletins: " + bulletins.size());
+		logger.info("#bulletins: {}", bulletins.size());
 		ArrayList<String> regions = new ArrayList<String>();
 		regions.add(GlobalVariables.codeTyrol);
 		regions.add(GlobalVariables.codeSouthTyrol);
 		regions.add(GlobalVariables.codeTrentino);
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
+		HibernateUtil.getInstance().shutDown();
+	}
+
+	@Ignore
+	@Test
+	public void sendEmailIssue232() throws Exception {
+		HibernateUtil.getInstance().setUp();
+		final URL resource = new URL("https://static.avalanche.report/bulletins/2022-01-10/avalanche_report.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		logger.info("#bulletins: {}", bulletins.size());
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, GlobalVariables.regionsEuregio, false, true);
 		HibernateUtil.getInstance().shutDown();
 	}
 

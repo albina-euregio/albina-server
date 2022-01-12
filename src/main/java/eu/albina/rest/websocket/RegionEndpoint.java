@@ -49,7 +49,7 @@ public class RegionEndpoint {
 	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
 		regionEndpoints.add(this);
-		logger.info("Client connected: " + username);
+        logger.info("Client connected: {}", username);
 	}
 
 	@OnMessage
@@ -67,7 +67,7 @@ public class RegionEndpoint {
 	public void onClose(Session session) {
 		regionEndpoints.remove(this);
 		RegionController.getInstance().unlockRegions(session.getId());
-		logger.info("Client disconnected: " + session.getId());
+        logger.info("Client disconnected: {}", session.getId());
 	}
 
 	@OnError

@@ -58,7 +58,7 @@ public class ChatEndpoint {
 		// message.setUsername(username);
 		// message.setText("CONNECTED");
 
-		logger.info("Client connected: " + username);
+        logger.info("Client connected: {}", username);
 
 		// broadcast(message);
 	}
@@ -79,7 +79,7 @@ public class ChatEndpoint {
 		// message.setUsername(users.get(session.getId()));
 		// message.setText("DISCONNECTED");
 
-		logger.info("Client disconnected: " + users.get(session.getId()));
+        logger.info("Client disconnected: {}", users.get(session.getId()));
 
 		// broadcast(message);
 	}

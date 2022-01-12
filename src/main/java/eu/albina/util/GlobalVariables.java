@@ -576,7 +576,7 @@ public class GlobalVariables {
 			configuration = propertiesBuilder.getConfiguration();
 			configuration.setProperty(key, value);
 			propertiesBuilder.save();
-			logger.info("[Configuration saved] " + key + ": " + value);
+			logger.info("[Configuration saved] {}: {}", key, value);
 		} catch (ConfigurationException e) {
 			logger.error("Configuration could not be saved!", e);
 			throw e;

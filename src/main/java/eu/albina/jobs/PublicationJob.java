@@ -66,12 +66,12 @@ public class PublicationJob implements org.quartz.Job {
 				Instant startDate = AlbinaUtil.getInstantStartOfDay().plus(1, ChronoUnit.DAYS);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				logger.debug("Start date: " + startDate.toString());
-				logger.debug("End date: " + endDate.toString());
+                logger.debug("Start date: {}", startDate.toString());
+                logger.debug("End date: {}", endDate.toString());
 
 				Instant publicationDate = Instant.now();
 
-				logger.debug("Publication date: " + publicationDate.toString());
+                logger.debug("Publication date: {}", publicationDate.toString());
 
 				// Set publication date
 				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()

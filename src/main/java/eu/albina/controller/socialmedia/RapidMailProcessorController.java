@@ -123,12 +123,9 @@ public class RapidMailProcessorController extends CommonProcessor {
 		if (mailingsPost.getDestinations() == null) {
 			String recipientName = test ? "TEST" : getRecipientName(config, language);
 			int recipientListId = getRecipientId(config, recipientName);
+			logger.info("Obtaining recipient for {} -> {}", recipientName, recipientListId);
 			mailingsPost.setDestinations(Collections.singletonList(
 					new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
-		}
-
-		if (mailingsPost.getStatus() == null) {
-			mailingsPost.setStatus("scheduled");
 		}
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Mailings#/Mailings/post_mailings
@@ -140,8 +137,8 @@ public class RapidMailProcessorController extends CommonProcessor {
 		logger.info("Sending {} using request {}", mailingsPost, request);
 		HttpResponse response = executor.execute(request).returnResponse();
 		logger.info("... returned {}", response.getStatusLine());
-		logger.debug("RESPONSE: " + response.toString());
-		logger.debug("CONTENT: " + response.getEntity().getContent().toString());
+		logger.debug("RESPONSE: {}", response.toString());
+		logger.debug("CONTENT: {}", response.getEntity().getContent().toString());
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 201) {
 			return response;

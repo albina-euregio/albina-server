@@ -49,7 +49,7 @@ public class AvalancheBulletinEndpoint {
 	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
 		bulletinEndpoints.add(this);
-		logger.info("Client connected: " + username);
+        logger.info("Client connected: {}", username);
 	}
 
 	@OnMessage
@@ -67,7 +67,7 @@ public class AvalancheBulletinEndpoint {
 	public void onClose(Session session) {
 		bulletinEndpoints.remove(this);
 		AvalancheBulletinController.getInstance().unlockBulletins(session.getId());
-		logger.info("Client disconnected: " + session.getId());
+        logger.info("Client disconnected: {}", session.getId());
 	}
 
 	@OnError
