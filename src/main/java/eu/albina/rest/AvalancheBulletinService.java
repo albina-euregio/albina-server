@@ -771,7 +771,7 @@ public class AvalancheBulletinService {
 								result.add(avalancheBulletin);
 						}
 						if (result != null && !result.isEmpty())
-							PublicationController.getInstance().publishAutomatically(result);
+							PublicationController.getInstance().publish(result);
 					}
 
 					List<String> avalancheReportIds = new ArrayList<String>();

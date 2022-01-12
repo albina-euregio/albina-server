@@ -90,7 +90,7 @@ public class PublicationController {
 			publish(bulletins);
 	}
 
-	private void publish(List<AvalancheBulletin> bulletins) {
+	public void publish(List<AvalancheBulletin> bulletins) {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
