@@ -593,7 +593,7 @@ public class PublicationController {
 		});
 	}
 
-	private void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+	public void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
 		try {
 			logger.info("Push notifications triggered");
 			new PushNotificationUtil().sendBulletinNewsletters(bulletins, regions, update);

@@ -1170,6 +1170,43 @@ public class AvalancheBulletinService {
 		}
 	}
 
+	@POST
+	@Secured({ Role.ADMIN })
+	@Path("/publish/push")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response triggerPushNotifications(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
+			@Context SecurityContext securityContext) {
+		logger.debug("POST trigger push notifications for " + region + " [" + date + "]");
+
+		try {
+			if (region == null)
+				throw new AlbinaException("No region defined!");
+
+			List<String> regions = new ArrayList<String>();
+			regions.add(region);
+
+			Instant startDate = null;
+
+			if (date != null)
+				startDate = ZonedDateTime.parse(date).toInstant();
+			else
+				throw new AlbinaException("No date!");
+
+			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
+
+			PublicationController.getInstance().triggerPushNotifications(bulletins,
+					regions, false);
+
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+		} catch (AlbinaException e) {
+			logger.warn("Error triggering push notifications", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
 	@GET
 	@Secured({ Role.FORECASTER, Role.FOREMAN })
 	@Path("/check")
