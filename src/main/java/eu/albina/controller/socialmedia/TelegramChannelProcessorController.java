@@ -77,7 +77,7 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 	}
 
 	public HttpResponse sendMessage(TelegramConfig config, String message, boolean test) throws IOException, URISyntaxException {
-		String chatId = test ? config.getChatId() : "aws_test";
+		String chatId = test ? "aws_test" : config.getChatId();
 		URIBuilder uriBuilder = new URIBuilder(
 			String.format("https://api.telegram.org/bot%s/sendMessage", config.getApiToken()))
 					.addParameter("chat_id", chatId).addParameter("text", message);
@@ -102,7 +102,7 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 	public HttpResponse sendFile(TelegramConfig config, String message, String attachmentUrl, boolean test) throws IOException {
 		String urlString = "https://api.telegram.org/bot%s/sendDocument?chat_id=%s&caption=%s&document=%s";
 
-		String chatId = test ? config.getChatId() : "aws_test";
+		String chatId = test ? "aws_test" : config.getChatId();
 
 		urlString = String.format(urlString, config.getApiToken(), chatId,
 				URLEncoder.encode(message, "UTF-8"), URLEncoder.encode(attachmentUrl, "UTF-8"));
