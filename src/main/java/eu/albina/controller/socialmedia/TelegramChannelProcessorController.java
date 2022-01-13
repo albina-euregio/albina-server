@@ -50,7 +50,7 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 
 	public HttpResponse sendPhoto(TelegramConfig config, String message, String attachmentUrl, boolean test)
 			throws IOException, URISyntaxException {
-		String chatId = test ? config.getChatId() : "aws_test";
+		String chatId = test ? "aws_test" : config.getChatId();
 
 		URIBuilder uriBuilder = new URIBuilder(
 				String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
