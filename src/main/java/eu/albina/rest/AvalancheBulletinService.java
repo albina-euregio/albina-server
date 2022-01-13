@@ -972,7 +972,7 @@ public class AvalancheBulletinService {
 			if (region == null)
 				throw new AlbinaException("No region defined!");
 
-			logger.debug("POST send test emails for {} in {} [{}]", region, language, date);
+			logger.debug("POST send TEST emails for {} in {} [{}]", region, language, date);
 
 			List<String> regions = new ArrayList<String>();
 			regions.add(region);
@@ -991,10 +991,10 @@ public class AvalancheBulletinService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
-			logger.warn("Error sending test emails", e);
+			logger.warn("Error sending TEST emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (Exception e) {
-			logger.warn("Error sending test emails", e);
+			logger.warn("Error sending TEST emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -1021,12 +1021,44 @@ public class AvalancheBulletinService {
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			Thread triggerTelegramChannelThread = PublicationController.getInstance().triggerTelegramChannel(bulletins,
-					regions, false, language);
+					regions, false, language, false);
 			triggerTelegramChannelThread.start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering telegram channel", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
+	@Path("/publish/telegram/test")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response triggerTestTelegramChannel(@QueryParam("region") String region,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@Context SecurityContext securityContext) {
+		try {
+			if (region == null)
+				throw new AlbinaException("No region defined!");
+
+			logger.debug("POST trigger TEST telegram channel for {} in {} [{}]", region, language, date);
+
+			List<String> regions = new ArrayList<String>();
+			regions.add(region);
+
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
+
+			Thread triggerTelegramChannelThread = PublicationController.getInstance().triggerTelegramChannel(bulletins,
+					regions, false, language, true);
+			triggerTelegramChannelThread.start();
+
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+		} catch (AlbinaException e) {
+			logger.warn("Error triggering TEST telegram channel", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}
@@ -1059,11 +1091,48 @@ public class AvalancheBulletinService {
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
 			PublicationController.getInstance().triggerPushNotifications(bulletins,
-					regions, false, language);
+					regions, false, language, false);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering push notifications", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
+	@Path("/publish/push/test")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response triggerTestPushNotifications(@QueryParam("region") String region,
+			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@Context SecurityContext securityContext) {
+		try {
+			if (region == null)
+				throw new AlbinaException("No region defined!");
+
+			logger.debug("POST trigger TEST push notifications for {} in {} [{}]", region, language, date);
+
+			List<String> regions = new ArrayList<String>();
+			regions.add(region);
+
+			Instant startDate = null;
+
+			if (date != null)
+				startDate = ZonedDateTime.parse(date).toInstant();
+			else
+				throw new AlbinaException("No date!");
+
+			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
+					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
+
+			PublicationController.getInstance().triggerPushNotifications(bulletins,
+					regions, false, language, true);
+
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+		} catch (AlbinaException e) {
+			logger.warn("Error triggering TEST push notifications", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}

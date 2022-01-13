@@ -24,17 +24,17 @@ import eu.albina.model.enumerations.LanguageCode;
 
 interface SocialMediaUtil {
 
-	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
-			sendBulletinNewsletters(bulletins, regions, update, lang);
+			sendBulletinNewsletters(bulletins, regions, update, lang, test);
 		}
 	}
 
-	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode lang) {
+	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode lang, boolean test) {
 		String message = getSocialMediaText(bulletins, update, lang);
 		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(lang, bulletins);
 		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
-		sendBulletinNewsletter(message, lang, regions, attachmentUrl, bulletinUrl);
+		sendBulletinNewsletter(message, lang, regions, attachmentUrl, bulletinUrl, test);
 	}
 
 	static String getSocialMediaText(List<AvalancheBulletin> bulletins, boolean update, LanguageCode lang) {
@@ -49,5 +49,5 @@ interface SocialMediaUtil {
 		}
 	}
 
-	void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl);
+	void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl, boolean test);
 }

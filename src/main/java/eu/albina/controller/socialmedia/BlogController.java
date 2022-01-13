@@ -166,9 +166,9 @@ public class BlogController extends CommonProcessor {
 				.findFirst()
 				.orElseThrow(() -> new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")"));
 			if (attachmentUrl != null) {
-				ctTc.sendPhoto(config, message, attachmentUrl);
+				ctTc.sendPhoto(config, message, attachmentUrl, false);
 			} else {
-				ctTc.sendMessage(config, message);
+				ctTc.sendMessage(config, message, false);
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + region + ", " + lang.toString(), e);
@@ -199,7 +199,7 @@ public class BlogController extends CommonProcessor {
 		String attachmentUrl = getAttachmentUrl(object);
 		String blogUrl = getBlogUrl(object, region, lang);
 		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
-		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl);
+		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl, false);
 	}
 
 	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang) {

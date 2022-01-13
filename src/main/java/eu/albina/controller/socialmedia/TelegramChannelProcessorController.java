@@ -48,11 +48,13 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 	public TelegramChannelProcessorController() {
 	}
 
-	public HttpResponse sendPhoto(TelegramConfig config, String message, String attachmentUrl)
+	public HttpResponse sendPhoto(TelegramConfig config, String message, String attachmentUrl, boolean test)
 			throws IOException, URISyntaxException {
+		String chatId = test ? config.getChatId() : "aws_test";
+
 		URIBuilder uriBuilder = new URIBuilder(
 				String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
-						.addParameter("chat_id", config.getChatId()).addParameter("caption", message);
+						.addParameter("chat_id", chatId).addParameter("caption", message);
 		if (attachmentUrl != null) {
 			uriBuilder.addParameter("photo", attachmentUrl);
 		}
@@ -74,10 +76,11 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse sendMessage(TelegramConfig config, String message) throws IOException, URISyntaxException {
+	public HttpResponse sendMessage(TelegramConfig config, String message, boolean test) throws IOException, URISyntaxException {
+		String chatId = test ? config.getChatId() : "aws_test";
 		URIBuilder uriBuilder = new URIBuilder(
-				String.format("https://api.telegram.org/bot%s/sendMessage", config.getApiToken()))
-						.addParameter("chat_id", config.getChatId()).addParameter("text", message);
+			String.format("https://api.telegram.org/bot%s/sendMessage", config.getApiToken()))
+					.addParameter("chat_id", chatId).addParameter("text", message);
 		URI uri = uriBuilder.build();
 		logger.info("URL: {}", uri);
 		Request request = Request.Get(uri).connectTimeout(CONNECTION_TIMEOUT).socketTimeout(SOCKET_TIMEOUT);
@@ -96,10 +99,12 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse sendFile(TelegramConfig config, String message, String attachmentUrl) throws IOException {
+	public HttpResponse sendFile(TelegramConfig config, String message, String attachmentUrl, boolean test) throws IOException {
 		String urlString = "https://api.telegram.org/bot%s/sendDocument?chat_id=%s&caption=%s&document=%s";
 
-		urlString = String.format(urlString, config.getApiToken(), config.getChatId(),
+		String chatId = test ? config.getChatId() : "aws_test";
+
+		urlString = String.format(urlString, config.getApiToken(), chatId,
 				URLEncoder.encode(message, "UTF-8"), URLEncoder.encode(attachmentUrl, "UTF-8"));
 
 		Request request = Request.Get(urlString).connectTimeout(CONNECTION_TIMEOUT).socketTimeout(SOCKET_TIMEOUT);

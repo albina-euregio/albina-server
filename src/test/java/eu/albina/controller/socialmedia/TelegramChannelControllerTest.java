@@ -72,7 +72,7 @@ public class TelegramChannelControllerTest {
 			Set<TelegramConfig> telegramConfigs = regionConfiguration.getTelegramConfigs();
 			for (TelegramConfig telegramConfig : telegramConfigs) {
 				message = region + " - " + telegramConfig.getLanguageCode();
-				tcc.sendPhoto(telegramConfig, message, attachmentUrl);
+				tcc.sendPhoto(telegramConfig, message, attachmentUrl, true);
 			}
 		}
 	}
@@ -81,6 +81,6 @@ public class TelegramChannelControllerTest {
 	public void sendBulletin() throws URISyntaxException, IOException {
 		List<String> regions = new ArrayList<String>();
 		regions.add(GlobalVariables.codeTrentino);
-		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, true);
+		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, true, true);
 	}
 }

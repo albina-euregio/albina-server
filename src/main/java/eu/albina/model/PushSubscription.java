@@ -19,6 +19,8 @@ package eu.albina.model;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +34,7 @@ import javax.persistence.Table;
 import com.google.common.base.MoreObjects;
 
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.GlobalVariables;
 
 @Entity
 @Table(name = "push_subscriptions")
@@ -140,5 +143,20 @@ public class PushSubscription {
 			.add("region", region)
 			.add("failedCount", failedCount)
 			.toString();
+	}
+
+	public static List<PushSubscription> getTestSubscriptions(LanguageCode language) {
+		List<PushSubscription> subscriptions = new ArrayList<PushSubscription>();
+		PushSubscription subscription = new PushSubscription();
+		subscription.setAuth("rObvUclXOeAWwjfjn9J7Aw");
+		subscription.setEndpoint("https://fcm.googleapis.com/fcm/send/cRdhlR3U36w:APA91bGjFKRktO65yjf3PGB1VZAoLLkRo2OgwahMG5u17GtWy82BJavc4Hfuo-zuxHT0SWEjODNEF07PSD6DFgtWgtc3DhZf2LKGvsKK2B7p29Q4pv6Kd_-9uaoxTD5JGX1RzDSFQJNg");
+		subscription.setFailedCount(0);
+		subscription.setId(24L);
+		subscription.setLanguage(language);
+		subscription.setP256dh("BH9E3G1nCGH1RP3WrW7c0j93OUeY4yswq_Tbw0KOpMViVPgkgzT-S-PSc1SCOooO72PjiYCQE50cXCSueDELzmE");
+		subscription.setRegion(GlobalVariables.codeTyrol);
+		subscription.setSubscribeDate(Instant.now());
+		subscriptions.add(subscription);
+		return subscriptions;
 	}
 }

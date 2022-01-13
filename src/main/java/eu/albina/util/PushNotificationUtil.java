@@ -51,7 +51,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl, boolean test) {
 		final JSONObject payload = new JSONObject();
 		payload.put("title", lang.getBundleString("avalanche-report.name"));
 		payload.put("body", message);
@@ -59,7 +59,8 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
 		payload.put("url", bulletinUrl);
 
-		List<PushSubscription> subscriptions = PushSubscriptionController.get(lang, regions);
+		List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, regions);
+
 		logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, regions, payload);
 		for (PushSubscription subscription : subscriptions) {
 			sendPushMessage(subscription, payload);

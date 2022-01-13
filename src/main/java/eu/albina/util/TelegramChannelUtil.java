@@ -45,7 +45,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl, boolean test) {
 		TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
 		for (String region : regions) {
 			try {
@@ -55,7 +55,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 
 				if (config != null) {
                     logger.info("Publishing report on telegram channel for {} in {}", config.getRegionConfiguration().getRegion().getId(), lang);
-					ctTc.sendPhoto(config, message, attachmentUrl);
+					ctTc.sendPhoto(config, message, attachmentUrl, test);
 				} else {
 					throw new AlbinaException(
 							"No configuration for telegram channel found (" + region + ", " + lang + ")");
