@@ -107,22 +107,27 @@ public class EmailUtil {
 	}
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
-		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
-			String subject;
-			if (update)
-				subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
-			else
-				subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
-			for (String region : regions) {
-				ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : bulletins) {
-					if (avalancheBulletin.affectsRegionOnlyPublished(region))
-						regionBulletins.add(avalancheBulletin);
-				}
-				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
-				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
+			sendBulletinEmails(bulletins, regions, update, test, lang);
+		}
+	}
+
+	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test,
+			LanguageCode lang) {
+		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
+		String subject;
+		if (update)
+			subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
+		else
+			subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
+		for (String region : regions) {
+			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin avalancheBulletin : bulletins) {
+				if (avalancheBulletin.affectsRegionOnlyPublished(region))
+					regionBulletins.add(avalancheBulletin);
 			}
+			String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
+			sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
 		}
 	}
 

@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.User;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
@@ -158,13 +159,13 @@ public class PublicationController {
 			// publish on telegram channel
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToTelegramChannel()) {
 				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.getPublishRegions(),
-						false);
+						false, null);
 				triggerTelegramChannelThread.start();
 			}
 
 			// publish via push notifications
 			if (GlobalVariables.isCreateMaps()) {
-				new Thread(() -> triggerPushNotifications(bulletins, GlobalVariables.getPublishRegions(), false)).start();
+				new Thread(() -> triggerPushNotifications(bulletins, GlobalVariables.getPublishRegions(), false, null)).start();
 			}
 		}
 	}
@@ -260,13 +261,13 @@ public class PublicationController {
 
 			// publish on telegram channel
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToTelegramChannel()) {
-				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true);
+				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true, null);
 				triggerTelegramChannelThread.start();
 			}
 
 			// publish via push notifications
 			if (GlobalVariables.isCreateMaps()) {
-				new Thread(() -> triggerPushNotifications(bulletins, regions, true)).start();
+				new Thread(() -> triggerPushNotifications(bulletins, regions, true, null)).start();
 			}
 		}
 	}
@@ -577,13 +578,38 @@ public class PublicationController {
 		});
 	}
 
-	public Thread triggerTelegramChannel(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+	/**
+	 * Trigger the sending of the emails.
+	 *
+	 * @param bulletins
+	 *            the bulletins contained in the emails
+	 */
+	public Thread sendEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test, LanguageCode language) {
+		return new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					logger.info("Email production started");
+					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, test, language);
+				} catch (IOException | URISyntaxException e) {
+					logger.error("Error preparing emails", e);
+				} finally {
+					logger.info("Email production finished");
+				}
+			}
+		});
+	}
+
+	public Thread triggerTelegramChannel(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode language) {
 		return new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					logger.info("Telegram channel triggered");
-					TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
+					if (language == null)
+						TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update);
+					else
+						TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update, language);
 				} catch (IOException | URISyntaxException e) {
 					logger.error("Error preparing telegram channel", e);
 				} finally {
@@ -593,15 +619,17 @@ public class PublicationController {
 		});
 	}
 
-	public void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<String> regions, boolean update) {
+	public void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode language) {
 		try {
 			logger.info("Push notifications triggered");
-			new PushNotificationUtil().sendBulletinNewsletters(bulletins, regions, update);
+			if (language == null)
+				new PushNotificationUtil().sendBulletinNewsletters(bulletins, regions, update);
+			else
+				new PushNotificationUtil().sendBulletinNewsletters(bulletins, regions, update, language);
 		} catch (Exception e) {
 			logger.error("Error sending push notifications", e);
 		} finally {
 			logger.info("Push notifications finished");
 		}
 	}
-
 }
