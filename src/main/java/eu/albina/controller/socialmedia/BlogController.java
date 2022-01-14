@@ -115,6 +115,39 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
+	protected Blogger.Item getLatestBlogPost(String region, LanguageCode lang) throws IOException {
+		String blogId = getBlogId(region, lang);
+		if (blogId == null) {
+			throw new IOException("Blog ID not found");
+		}
+		try {
+			String uri = new URIBuilder(GlobalVariables.blogApiUrl + blogId + "/posts")
+				.addParameter("key", GlobalVariables.googleApiKey)
+				.addParameter("fetchBodies", Boolean.TRUE.toString())
+				.addParameter("fetchImages", Boolean.TRUE.toString())
+				.addParameter("maxResults", "1")
+				.toString();
+            logger.debug("URI: {}", uri);
+			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
+					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
+			HttpResponse response = executor.execute(request).returnResponse();
+			if (response.getStatusLine().getStatusCode() == 200) {
+				HttpEntity entity = response.getEntity();
+				String entityString = EntityUtils.toString(entity, "UTF-8");
+				List<Blogger.Item> blogPosts = new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
+				logger.info("Fetched latest blog post for region={} lang={} url={}", blogPosts.size(), region, lang, uri);
+				if (blogPosts.size() > 0)
+					return blogPosts.get(0);
+				else
+					throw new IOException("No blog post found");
+			} else {
+				throw new IOException("Failed to fetch latest blog post: " + response);
+			}
+		} catch (URISyntaxException ex) {
+			throw new IllegalStateException(ex);
+		}
+	}
+
 	protected String getBlogPost(String blogPostId, String region, LanguageCode lang) throws IOException {
 		String blogId = getBlogId(region, lang);
 		if (blogId != null) {
@@ -141,9 +174,9 @@ public class BlogController extends CommonProcessor {
 			try {
 				List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
 				for (Blogger.Item object : blogPosts) {
-					sendNewBlogPostToRapidmail(object, region, lang);
-					sendNewBlogPostToTelegramChannel(object, region, lang);
-					sendNewBlogPostToPushNotification(region, lang, object);
+					sendNewBlogPostToRapidmail(object, region, lang, false);
+					sendNewBlogPostToTelegramChannel(object, region, lang, false);
+					sendNewBlogPostToPushNotification(region, lang, object, false);
 				}
 			} catch (IOException e) {
 				logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
@@ -151,7 +184,53 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	void sendNewBlogPostToTelegramChannel(Blogger.Item item, String region, LanguageCode lang) {
+	public void sendLatestBlogPost(String region, LanguageCode lang, boolean test) {
+		if (getBlogId(region, lang) != null) {
+			try {
+				Blogger.Item blogPost = getLatestBlogPost(region, lang);
+				sendNewBlogPostToRapidmail(blogPost, region, lang, test);
+				sendNewBlogPostToTelegramChannel(blogPost, region, lang, test);
+				sendNewBlogPostToPushNotification(region, lang, blogPost, test);
+			} catch (IOException e) {
+				logger.warn("Latest blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+			}
+		}
+	}
+
+	public void sendLatestBlogPostEmail(String region, LanguageCode lang, boolean test) {
+		if (getBlogId(region, lang) != null) {
+			try {
+				Blogger.Item blogPost = getLatestBlogPost(region, lang);
+				sendNewBlogPostToRapidmail(blogPost, region, lang, test);
+			} catch (IOException e) {
+				logger.warn("Latest blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+			}
+		}
+	}
+
+	public void sendLatestBlogPostTelegram(String region, LanguageCode lang, boolean test) {
+		if (getBlogId(region, lang) != null) {
+			try {
+				Blogger.Item blogPost = getLatestBlogPost(region, lang);
+				sendNewBlogPostToTelegramChannel(blogPost, region, lang, test);
+			} catch (IOException e) {
+				logger.warn("Latest blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+			}
+		}
+	}
+
+	public void sendLatestBlogPostPush(String region, LanguageCode lang, boolean test) {
+		if (getBlogId(region, lang) != null) {
+			try {
+				Blogger.Item blogPost = getLatestBlogPost(region, lang);
+				sendNewBlogPostToPushNotification(region, lang, blogPost, test);
+			} catch (IOException e) {
+				logger.warn("Latest blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+			}
+		}
+	}
+
+	void sendNewBlogPostToTelegramChannel(Blogger.Item item, String region, LanguageCode lang, boolean test) {
 		logger.info("Sending new blog post to telegram channel ...");
 
 		String message = getBlogMessage(item, region, lang);
@@ -166,9 +245,9 @@ public class BlogController extends CommonProcessor {
 				.findFirst()
 				.orElseThrow(() -> new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")"));
 			if (attachmentUrl != null) {
-				ctTc.sendPhoto(config, message, attachmentUrl, false);
+				ctTc.sendPhoto(config, message, attachmentUrl, test);
 			} else {
-				ctTc.sendMessage(config, message, false);
+				ctTc.sendMessage(config, message, test);
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + region + ", " + lang.toString(), e);
@@ -177,7 +256,7 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(Blogger.Item item, String region, LanguageCode lang) {
+	private void sendNewBlogPostToRapidmail(Blogger.Item item, String region, LanguageCode lang, boolean test) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
 		String subject = item.title;
@@ -186,7 +265,7 @@ public class BlogController extends CommonProcessor {
 		try {
 			String htmlString = getBlogPost(blogPostId, region, lang);
 			if (htmlString != null && !htmlString.isEmpty())
-				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject, false);
+				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject, test);
 		} catch (IOException e) {
 			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString(), e);
 		} catch (URISyntaxException e) {
@@ -194,12 +273,12 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToPushNotification(String region, LanguageCode lang, Blogger.Item object) {
+	private void sendNewBlogPostToPushNotification(String region, LanguageCode lang, Blogger.Item object, boolean test) {
 		String message = getBlogMessage(object, region, lang);
 		String attachmentUrl = getAttachmentUrl(object);
 		String blogUrl = getBlogUrl(object, region, lang);
 		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
-		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl, false);
+		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl, test);
 	}
 
 	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang) {
