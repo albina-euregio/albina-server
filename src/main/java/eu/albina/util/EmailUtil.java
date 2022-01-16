@@ -114,6 +114,7 @@ public class EmailUtil {
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test,
 			LanguageCode lang) {
+		logger.info("Sending {} bulletin email", lang);
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		String subject;
 		if (update)
