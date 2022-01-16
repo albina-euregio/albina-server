@@ -35,7 +35,6 @@ import java.util.zip.ZipOutputStream;
 import eu.albina.map.DaytimeDependency;
 import eu.albina.map.MapUtil;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,12 +107,8 @@ public class EmailUtil {
 	}
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
-		try {
-			for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
-				sendBulletinEmails(bulletins, regions, update, test, lang);
-			}
-		} catch (Exception e) {
-			logger.warn("Error sending bulletin emails: " + e);
+		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+			sendBulletinEmails(bulletins, regions, update, test, lang);
 		}
 	}
 
@@ -161,17 +156,17 @@ public class EmailUtil {
 		}
 	}
 
-	public HttpResponse sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
+	public void sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
 		logger.info("Sending bulletin email in {} for {} ({} bytes)...", lang, region, emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		return sendEmail(lang, region, emailHtml, subject, test);
+		sendEmail(lang, region, emailHtml, subject, test);
 	}
 
-	public HttpResponse sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
+	public void sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
 		logger.info("Sending blog post email in {} for {} ({} bytes)...", lang, region, emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		return sendEmail(lang, region, emailHtml, subject, test);
+		sendEmail(lang, region, emailHtml, subject, test);
 	}
 
-	private HttpResponse sendEmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
+	private void sendEmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
 		try {
 			RapidMailProcessorController rmc = RapidMailProcessorController.getInstance();
 			RegionConfigurationController rcc = RegionConfigurationController.getInstance();
@@ -188,10 +183,9 @@ public class EmailUtil {
 				.subject(subject)
 				.status("scheduled")
 				.file(file);
-			return rmc.sendMessage(rmConfig, lang, request, test);
+			rmc.sendMessage(rmConfig, lang, request, test);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region, e);
-			return null;
 		}
 	}
 
