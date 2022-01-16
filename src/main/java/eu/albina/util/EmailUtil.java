@@ -122,6 +122,7 @@ public class EmailUtil {
 		else
 			subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
 		for (String region : regions) {
+			logger.info("Sending {} bulletin email for {}", lang, region);
 			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				if (avalancheBulletin.affectsRegionOnlyPublished(region))
@@ -190,6 +191,7 @@ public class EmailUtil {
 
 	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region,
 			boolean update, boolean daytimeDependency) {
+		logger.info("Create email HTML in {} for {}", lang, region);
 		try {
 			// Create data model
 			Map<String, Object> root = new HashMap<>();
