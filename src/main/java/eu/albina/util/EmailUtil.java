@@ -126,8 +126,10 @@ public class EmailUtil {
 				if (avalancheBulletin.affectsRegionOnlyPublished(region))
 					regionBulletins.add(avalancheBulletin);
 			}
-			String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
-			sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
+			if (regionBulletins != null && !regionBulletins.isEmpty()) {
+				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
+				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
+			}
 		}
 	}
 
