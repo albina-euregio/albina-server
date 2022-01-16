@@ -152,16 +152,15 @@ public class PublicationController {
 
 			// send emails
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isSendEmails()) {
-				// Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.getPublishRegions(), false, false);
-				// sendEmailsThread.start();
-				sendEmailsNoThread(bulletins, GlobalVariables.getPublishRegions(), false, false);
+				Thread sendEmailsThread = sendEmails(bulletins, GlobalVariables.getPublishRegions(), false, false);
+				sendEmailsThread.start();
 			}
 
 			// publish on telegram channel
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToTelegramChannel()) {
-				// Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.getPublishRegions(),	false, null, false);
-				// triggerTelegramChannelThread.start();
-				triggerTelegramChannelNoThread(bulletins, GlobalVariables.getPublishRegions(), false, null, false);
+				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, GlobalVariables.getPublishRegions(),
+						false, null, false);
+				triggerTelegramChannelThread.start();
 			}
 
 			// publish via push notifications
@@ -256,16 +255,14 @@ public class PublicationController {
 
 			// send emails to regions
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isSendEmails()) {
-				// Thread sendEmailsThread = sendEmails(bulletins, regions, true, false);
-				// sendEmailsThread.start();
-				sendEmailsNoThread(bulletins, regions, true, false);
+				Thread sendEmailsThread = sendEmails(bulletins, regions, true, false);
+				sendEmailsThread.start();
 			}
 
 			// publish on telegram channel
 			if (GlobalVariables.isCreateMaps() && GlobalVariables.isPublishToTelegramChannel()) {
-				// Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true, null, false);
-				// triggerTelegramChannelThread.start();
-				triggerTelegramChannelNoThread(bulletins, regions, true, null, false);
+				Thread triggerTelegramChannelThread = triggerTelegramChannel(bulletins, regions, true, null, false);
+				triggerTelegramChannelThread.start();
 			}
 
 			// publish via push notifications
@@ -587,23 +584,6 @@ public class PublicationController {
 	 * @param bulletins
 	 *            the bulletins contained in the emails
 	 */
-	public void sendEmailsNoThread(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
-		try {
-			logger.info("Email production started");
-			EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, test);
-		} catch (IOException | URISyntaxException e) {
-			logger.error("Error preparing emails", e);
-		} finally {
-			logger.info("Email production finished");
-		}
-	}
-
-	/**
-	 * Trigger the sending of the emails.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the emails
-	 */
 	public Thread sendEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test, LanguageCode language) {
 		return new Thread(new Runnable() {
 			@Override
@@ -618,23 +598,6 @@ public class PublicationController {
 				}
 			}
 		});
-	}
-
-	/**
-	 * Trigger the sending of the emails.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the emails
-	 */
-	public void sendEmailsNoThread(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test, LanguageCode language) {
-		try {
-			logger.info("Email production started");
-			EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, test, language);
-		} catch (IOException | URISyntaxException e) {
-			logger.error("Error preparing emails", e);
-		} finally {
-			logger.info("Email production finished");
-		}
 	}
 
 	public Thread triggerTelegramChannel(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode language, boolean test) {
@@ -654,20 +617,6 @@ public class PublicationController {
 				}
 			}
 		});
-	}
-
-	public void triggerTelegramChannelNoThread(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode language, boolean test) {
-		try {
-			logger.info("Telegram channel triggered");
-			if (language == null)
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update, test);
-			else
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update, language, test);
-		} catch (IOException | URISyntaxException e) {
-			logger.error("Error preparing telegram channel", e);
-		} finally {
-			logger.info("Telegram channel finished");
-		}
 	}
 
 	public void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode language, boolean test) {
