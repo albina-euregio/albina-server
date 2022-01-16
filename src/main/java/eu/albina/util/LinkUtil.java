@@ -78,7 +78,7 @@ public interface LinkUtil {
 	}
 
 	static String getImprintLink(LanguageCode lang) {
-		return String.format("%s/imprint", getWebsite(lang));
+		return String.format("%s/more/imprint", getWebsite(lang));
 	}
 
 	static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
