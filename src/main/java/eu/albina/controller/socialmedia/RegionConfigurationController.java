@@ -28,7 +28,7 @@ import eu.albina.model.socialmedia.RapidMailConfig;
 import eu.albina.model.socialmedia.RegionConfiguration;
 import eu.albina.util.HibernateUtil;
 
-public class RegionConfigurationController extends CommonProcessor {
+public class RegionConfigurationController {
 
 	private static RegionConfigurationController instance = null;
 
