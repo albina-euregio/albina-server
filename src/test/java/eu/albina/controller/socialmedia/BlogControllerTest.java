@@ -28,7 +28,6 @@ import eu.albina.util.HibernateUtil;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class BlogControllerTest {
@@ -44,7 +43,7 @@ public class BlogControllerTest {
 	@Test
 	public void testLatestBlogPost() throws Exception {
 		Blogger.Item blogPost = BlogController.getInstance().getLatestBlogPost(GlobalVariables.codeTyrol, LanguageCode.de);
-		assertTrue("blog >100 chars", blogPost.content.length() > 100);
+		assertTrue("blog has >100 chars", blogPost.content.length() > 100);
 	}
 
 	@Test
