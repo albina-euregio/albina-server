@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.Regions;
 import eu.albina.model.enumerations.DangerRating;
 
 public interface MapUtil {
@@ -68,7 +67,7 @@ public interface MapUtil {
 	 * @throws Exception
 	 *             an error occurred during map production
 	 */
-	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Regions regions, boolean preview) throws Exception {
+	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, boolean preview) throws Exception {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());

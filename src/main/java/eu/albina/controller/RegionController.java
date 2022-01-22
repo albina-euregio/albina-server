@@ -23,15 +23,9 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
-import eu.albina.model.Regions;
 import eu.albina.rest.websocket.RegionEndpoint;
-import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for regions.
@@ -69,26 +63,6 @@ public class RegionController {
 	}
 
 	/**
-	 * Retrieve a region from the database by ID.
-	 *
-	 * @param regionId
-	 *            the ID of the desired region
-	 * @return the region with the given ID.
-	 * @throws AlbinaException
-	 *             if the {@code Region} object could not be initialized
-	 */
-	public Region getRegion(String regionId) throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			Region region = entityManager.find(Region.class, regionId);
-			if (region == null) {
-				throw new HibernateException("No region with ID: " + regionId);
-			}
-			Hibernate.initialize(region.getSubregions());
-			return region;
-		});
-	}
-
-	/**
 	 * Return all top-level regions (no parent region is available).
 	 *
 	 * @return all top-level regions
@@ -96,7 +70,7 @@ public class RegionController {
 	 *             if the {@code Region} objects could not be initialized
 	 */
 	@Nonnull
-	public Regions getRegions() throws AlbinaException {
+	public List<String> getAvailableRegions() throws AlbinaException {
 		return getRegions(null);
 	}
 
@@ -109,21 +83,11 @@ public class RegionController {
 	 * @throws AlbinaException
 	 *             if the {@code Region} objects could not be initialized
 	 */
-	@SuppressWarnings("unchecked")
 	@Nonnull
-	public Regions getRegions(String regionId) throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<Region> regions = null;
-			if (regionId == null || regionId.isEmpty())
-				regions = entityManager.createQuery(HibernateUtil.queryGetTopLevelRegions).getResultList();
-			else
-				regions = entityManager.createQuery(HibernateUtil.queryGetSubregions).setParameter("regionId", regionId)
-						.getResultList();
-			for (Region region : regions) {
-				Hibernate.initialize(region.getSubregions());
-			}
-			return new Regions(regions);
-		});
+	public List<String> getRegions(String regionId) throws AlbinaException {
+		// TODO implement
+		// return all regions with name starting with regionID or all region IDs from eaws-regions outline
+		return null;
 	}
 
 	/**

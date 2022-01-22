@@ -19,39 +19,21 @@ package eu.albina.model;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Polygon;
-import org.n52.jackson.datatype.jts.GeometryDeserializer;
-import org.n52.jackson.datatype.jts.GeometrySerializer;
-import org.n52.jackson.datatype.jts.JtsModule;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
-
-import eu.albina.util.GlobalVariables;
 
 /**
  * This class holds all information about one region.
@@ -72,55 +54,16 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "VERSION")
 	private Integer version;
 
-	@Column(name = "NAME_DE")
-	private String nameDe;
-
-	@Column(name = "NAME_IT")
-	private String nameIt;
-
-	@Column(name = "NAME_EN")
-	private String nameEn;
-
-	@JsonSerialize(using = GeometrySerializer.class)
-	@JsonDeserialize(contentUsing = GeometryDeserializer.class)
-	@Column(name = "POLYGON")
-	private Polygon polygon;
-
-	@ManyToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "PARENTREGION_ID")
-	private Region parentRegion;
-
-	@OneToMany(mappedBy = "parentRegion", fetch = FetchType.EAGER)
-	private Set<Region> subregions;
-
-	@ManyToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "AGGREGATEDREGION_ID")
-	private Region aggregatedRegion;
-
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
 	public Region() {
-		subregions = new LinkedHashSet<>();
 	}
 
 	public Region(JSONObject object) {
 		this();
-		if (!"Feature".equals(object.getString("type"))) {
-			throw new IllegalArgumentException("Expecting type=Feature");
-		}
 		final JSONObject properties = object.getJSONObject("properties");
-		nameDe = properties.getString("nameDe");
-		nameIt = properties.getString("nameIt");
-		nameEn = properties.getString("nameEn");
 		id = properties.getString("id");
-
-		try {
-			polygon = new ObjectMapper().registerModule(new JtsModule())
-					.readValue(object.getJSONObject("geometry").toString(), Polygon.class);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
 	}
 
 	public String getId() {
@@ -139,95 +82,11 @@ public class Region implements AvalancheInformationObject {
 		this.version = version;
 	}
 
-	public String getNameDe() {
-		return nameDe;
-	}
-
-	public void setNameDe(String name) {
-		this.nameDe = name;
-	}
-
-	public String getNameIt() {
-		return nameIt;
-	}
-
-	public void setNameIt(String name) {
-		this.nameIt = name;
-	}
-
-	public String getNameEn() {
-		return nameEn;
-	}
-
-	public void setNameEn(String name) {
-		this.nameEn = name;
-	}
-
-	public Polygon getPolygon() {
-		return polygon;
-	}
-
-	public void setPolygon(Polygon polygon) {
-		this.polygon = polygon;
-	}
-
-	public Region getParentRegion() {
-		return parentRegion;
-	}
-
-	public void setParentRegion(Region parentRegion) {
-		this.parentRegion = parentRegion;
-	}
-
-	public Region getAggregatedRegion() {
-		return aggregatedRegion;
-	}
-
-	public void setAggregatedRegion(Region aggregatedRegion) {
-		this.aggregatedRegion = aggregatedRegion;
-	}
-
-	public Set<Region> getSubregions() {
-		return subregions;
-	}
-
-	public void setSubregions(Set<Region> subregions) {
-		this.subregions = subregions;
-	}
-
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
-		Element regionNameDe = doc.createElement("nameDe");
-		regionNameDe.appendChild(doc.createTextNode(nameDe));
-		Element regionNameIt = doc.createElement("nameIt");
-		regionNameIt.appendChild(doc.createTextNode(nameIt));
-		Element regionNameEn = doc.createElement("nameEn");
-		regionNameEn.appendChild(doc.createTextNode(nameEn));
-		region.appendChild(regionNameDe);
 		Element regionSubType = doc.createElement("regionSubType");
 		region.appendChild(regionSubType);
-		Element outline = doc.createElement("outline");
-		Element polygon = doc.createElement("gml:Polygon");
-		polygon.setAttribute("gml:id", getId());
-		polygon.setAttribute("srsDimension", "2");
-		polygon.setAttribute("srsName", GlobalVariables.referenceSystemUrn);
-		Element exterior = doc.createElement("gml:exterior");
-		Element linearRing = doc.createElement("gml:LinearRing");
-		Element posList = doc.createElement("gml:posList");
-
-		if (this.polygon != null && this.polygon.getCoordinates() != null) {
-			StringBuilder sb = new StringBuilder();
-			for (Coordinate coordinate : this.polygon.getCoordinates())
-				sb.append(coordinate.x + " " + coordinate.y + " ");
-			posList.appendChild(doc.createTextNode(sb.toString()));
-		}
-
-		linearRing.appendChild(posList);
-		exterior.appendChild(linearRing);
-		polygon.appendChild(exterior);
-		outline.appendChild(polygon);
-		region.appendChild(outline);
 		return region;
 	}
 
@@ -237,33 +96,9 @@ public class Region implements AvalancheInformationObject {
 
 		feature.put("type", "Feature");
 		JSONObject featureProperties = new JSONObject();
-		featureProperties.put("nameDe", nameDe);
-		featureProperties.put("nameIt", nameIt);
-		featureProperties.put("nameEn", nameEn);
 		featureProperties.put("id", getId());
-		if (getParentRegion() != null)
-			featureProperties.put("parentRegion", getParentRegion().getId());
-		if (getAggregatedRegion() != null)
-			featureProperties.put("aggregatedRegion", getAggregatedRegion().getId());
 		feature.put("properties", featureProperties);
 
-		JSONObject geometry = new JSONObject();
-		geometry.put("type", "Polygon");
-		JSONArray coordinates = new JSONArray();
-		JSONArray innerCoordinates = new JSONArray();
-
-		if (polygon != null && polygon.getCoordinates() != null) {
-			for (Coordinate coordinate : polygon.getCoordinates()) {
-				JSONArray entry = new JSONArray();
-				entry.put(coordinate.x);
-				entry.put(coordinate.y);
-				innerCoordinates.put(entry);
-			}
-		}
-
-		coordinates.put(innerCoordinates);
-		geometry.put("coordinates", coordinates);
-		feature.put("geometry", geometry);
 		return feature;
 	}
 
@@ -274,14 +109,12 @@ public class Region implements AvalancheInformationObject {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Region region = (Region) o;
-		return Objects.equals(id, region.id) && Objects.equals(version, region.version)
-				&& Objects.equals(nameDe, region.nameDe) && Objects.equals(nameIt, region.nameIt)
-				&& Objects.equals(nameEn, region.nameEn) && Objects.equals(polygon, region.polygon);
+		return Objects.equals(id, region.id) && Objects.equals(version, region.version);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, version, nameDe, nameIt, nameEn, polygon);
+		return Objects.hash(id, version);
 	}
 
 	public static Region readRegion(final URL resource) throws IOException {
