@@ -14,45 +14,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.rapidmail.recipientlist;
+package eu.albina.model.publication.rapidmail.mailings;
 
 import javax.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
-public class RapidMailRecipientListResponseLinks {
+public class RapidMailMailingsResponseLinks {
 
 	@JsonProperty("self")
-	private RapidMailRecipientListResponseHref self;
+	private RapidMailMailingsResponseHref self;
 
 	@JsonProperty("first")
-	private RapidMailRecipientListResponseHref first;
+	private RapidMailMailingsResponseHref first;
 
 	@JsonProperty("last")
-	private RapidMailRecipientListResponseHref last;
+	private RapidMailMailingsResponseHref last;
 
-	public void setSelf(RapidMailRecipientListResponseHref self) {
+	public void setSelf(RapidMailMailingsResponseHref self) {
 		this.self = self;
 	}
 
-	public RapidMailRecipientListResponseHref getSelf() {
+	public RapidMailMailingsResponseHref getSelf() {
 		return self;
 	}
 
-	public void setFirst(RapidMailRecipientListResponseHref first) {
+	public void setFirst(RapidMailMailingsResponseHref first) {
 		this.first = first;
 	}
 
-	public RapidMailRecipientListResponseHref getFirst() {
+	public RapidMailMailingsResponseHref getFirst() {
 		return first;
 	}
 
-	public void setLast(RapidMailRecipientListResponseHref last) {
+	public void setLast(RapidMailMailingsResponseHref last) {
 		this.last = last;
 	}
 
-	public RapidMailRecipientListResponseHref getLast() {
+	public RapidMailMailingsResponseHref getLast() {
 		return last;
 	}
 

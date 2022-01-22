@@ -14,28 +14,66 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.rapidmail.recipients.get;
+package eu.albina.model.publication.rapidmail.mailings;
 
 import javax.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
-public class GetRecipientsResponseHref {
+public class PostMailingsRequestDestination {
 
-	@JsonProperty("href")
-	private String href;
+	@JsonProperty("action")
+	private String action;
 
-	public void setHref(String href) {
-		this.href = href;
+	@JsonProperty("id")
+	private Integer id;
+
+	@JsonProperty("type")
+	private String type;
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 
-	public String getHref() {
-		return href;
+	public String getAction() {
+		return action;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getType() {
+		return type;
 	}
 
 	@Override
 	public String toString() {
-		return "Self{" + "href = '" + href + '\'' + "}";
+		return "DestinationsItem{" + "action = '" + action + '\'' + ",id = '" + id + '\'' + ",type = '" + type + '\''
+				+ "}";
+	}
+
+	public PostMailingsRequestDestination action(String action) {
+		this.action = action;
+		return this;
+	}
+
+	public PostMailingsRequestDestination id(Integer id) {
+		this.id = id;
+		return this;
+	}
+
+	public PostMailingsRequestDestination type(String type) {
+		this.type = type;
+		return this;
 	}
 }

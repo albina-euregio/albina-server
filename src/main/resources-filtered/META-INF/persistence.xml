@@ -12,11 +12,9 @@
 		<class>eu.albina.model.AvalancheBulletinDaytimeDescription</class>
 		<class>eu.albina.model.AvalancheBulletin</class>
 		<class>eu.albina.model.ChatMessage</class>
-		<class>eu.albina.model.socialmedia.Channel</class>
-		<class>eu.albina.model.socialmedia.TelegramConfig</class>
-		<class>eu.albina.model.socialmedia.Provider</class>
-		<class>eu.albina.model.socialmedia.RapidMailConfig</class>
-		<class>eu.albina.model.socialmedia.RegionConfiguration</class>
+		<class>eu.albina.model.publication.TelegramConfiguration</class>
+		<class>eu.albina.model.publication.PublicationProvider</class>
+		<class>eu.albina.model.publication.RapidMailConfiguration</class>
 
 		<properties>
 

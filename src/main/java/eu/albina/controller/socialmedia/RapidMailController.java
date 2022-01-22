@@ -26,6 +26,14 @@ import java.util.Base64;
 import java.util.Collections;
 
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.model.publication.rapidmail.mailings.PostMailingsRequest;
+import eu.albina.model.publication.rapidmail.mailings.PostMailingsRequestDestination;
+import eu.albina.model.publication.rapidmail.recipientlist.RapidMailRecipientListResponse;
+import eu.albina.model.publication.rapidmail.recipientlist.RapidMailRecipientListResponseItem;
+import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
+import eu.albina.util.HibernateUtil;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
@@ -34,41 +42,53 @@ import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.hibernate.HibernateException;
 import org.n52.jackson.datatype.jts.JtsModule;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 
-import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
-import eu.albina.model.rapidmail.mailings.PostMailingsRequestDestination;
-import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponse;
-import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponseItem;
-import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
-import eu.albina.model.socialmedia.RapidMailConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RapidMailProcessorController extends CommonProcessor {
-	private static final Logger logger = LoggerFactory.getLogger(RapidMailProcessorController.class);
+public class RapidMailController extends CommonProcessor {
+	private static final Logger logger = LoggerFactory.getLogger(RapidMailController.class);
 	private static final int RAPIDMAIL_SOCKET_TIMEOUT = 10000;
 	private static final int RAPIDMAIL_CONNECTION_TIMEOUT = 10000;
-	private static RapidMailProcessorController instance = null;
+	private static RapidMailController instance = null;
 	private final String baseUrl = "https://apiv3.emailsys.net";
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final Executor executor;
 
-	public static RapidMailProcessorController getInstance() throws CertificateException, NoSuchAlgorithmException,
+	public static RapidMailController getInstance() throws CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, IOException, KeyManagementException {
 		if (instance == null) {
-			instance = new RapidMailProcessorController();
+			instance = new RapidMailController();
 		}
 		return instance;
 	}
 
-	public RapidMailProcessorController() {
+	public RapidMailController() {
 		objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
 		objectMapper.registerModule(new JtsModule());
 		executor = Executor.newInstance(sslHttpClient());
+	}
+
+	private RapidMailConfiguration getConfiguration(String regionId) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			RapidMailConfiguration result = null;
+			if (!Strings.isNullOrEmpty(regionId)) {
+				result = (RapidMailConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
+				.setParameter("regionId", regionId).getSingleResult();
+			} else {
+				throw new HibernateException("No region defined!");
+			}
+			if (result != null)
+				return result;
+			else
+				throw new HibernateException("No rapid mail configuration found for " + regionId);
+		});
 	}
 
 	public CloseableHttpClient sslHttpClient() {
@@ -80,7 +100,9 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return "Basic " + Base64.getEncoder().encodeToString((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
 	}
 
-	public RapidMailRecipientListResponse getRecipientsList(RapidMailConfig config) throws IOException {
+	public RapidMailRecipientListResponse getRecipientsList(String region) throws IOException, HibernateException {
+		RapidMailConfiguration config = this.getConfiguration(region);
+
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/get_recipientlists
 		Request request = Request.Get(baseUrl + "/recipientlists")
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
@@ -90,11 +112,13 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return objectMapper.readValue(getResponseContent(response), RapidMailRecipientListResponse.class);
 	}
 
-	public HttpResponse createRecipient(RapidMailConfig config, PostRecipientsRequest recipient,
-			String sendActivationmail, LanguageCode language) throws Exception {
+	public HttpResponse createRecipient(String region, PostRecipientsRequest recipient,
+			String sendActivationmail, LanguageCode language) throws Exception, HibernateException {
+		RapidMailConfiguration config = this.getConfiguration(region);
+
 		if (recipient.getRecipientlistId() == null) {
-			String recipientName = getRecipientName(config, language);
-			Integer recipientListId = getRecipientId(config, recipientName);
+			String recipientName = getRecipientName(region, language);
+			Integer recipientListId = getRecipientId(region, recipientName);
 			recipient.setRecipientlistId(recipientListId);
 		}
 		String url = baseUrl + "/recipients";
@@ -110,7 +134,9 @@ public class RapidMailProcessorController extends CommonProcessor {
 				.returnResponse();
 	}
 
-	public HttpResponse deleteRecipient(RapidMailConfig config, Integer recipientId) throws IOException {
+	public HttpResponse deleteRecipient(String region, Integer recipientId) throws IOException, HibernateException {
+		RapidMailConfiguration config = this.getConfiguration(region);
+
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/delete_recipientlists__recipientlist_id_
 		return executor.execute(Request.Delete(baseUrl + "/recipients/" + recipientId)
 				.addHeader("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
@@ -118,11 +144,13 @@ public class RapidMailProcessorController extends CommonProcessor {
 				.socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)).returnResponse();
 	}
 
-	public HttpResponse sendMessage(RapidMailConfig config, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
-			throws Exception {
+	public HttpResponse sendMessage(String region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
+			throws Exception, HibernateException {
+		RapidMailConfiguration config = this.getConfiguration(region);
+
 		if (mailingsPost.getDestinations() == null) {
-			String recipientName = test ? "TEST" : getRecipientName(config, language);
-			int recipientListId = getRecipientId(config, recipientName);
+			String recipientName = test ? "TEST" : getRecipientName(region, language);
+			int recipientListId = getRecipientId(region, recipientName);
 			logger.info("Obtaining recipient for {} -> {}", recipientName, recipientListId);
 			mailingsPost.setDestinations(Collections.singletonList(
 					new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
@@ -147,12 +175,13 @@ public class RapidMailProcessorController extends CommonProcessor {
 		return response;
 	}
 
- 	private String getRecipientName(RapidMailConfig config, LanguageCode language) {
-		return config.getRegionConfiguration().getRegion().getId() + "_" + language.name().toUpperCase();
+ 	private String getRecipientName(String region, LanguageCode language) throws HibernateException {
+		RapidMailConfiguration config = this.getConfiguration(region);
+		return config.getRegion().getId() + "_" + language.name().toUpperCase();
 	}
 
-	public int getRecipientId(RapidMailConfig config, String recipientName) throws Exception {
-		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(config);
+	public int getRecipientId(String region, String recipientName) throws Exception {
+		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(region);
 		return recipientListResponse.getEmbedded().getRecipientlists().stream()
 			.filter(x -> StringUtils.equalsIgnoreCase(x.getName(), recipientName))
 			.mapToInt(RapidMailRecipientListResponseItem::getId)

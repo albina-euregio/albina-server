@@ -14,30 +14,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.rapidmail.recipientlist;
-
-import java.util.List;
+package eu.albina.model.publication.rapidmail.recipientlist;
 
 import javax.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
-public class RapidMailRecipientListResponseEmbedded {
+public class RapidMailRecipientListResponseLinks {
 
-	@JsonProperty("recipientlists")
-	private List<RapidMailRecipientListResponseItem> recipientlists;
+	@JsonProperty("self")
+	private RapidMailRecipientListResponseHref self;
 
-	public void setRecipientlists(List<RapidMailRecipientListResponseItem> recipientlists) {
-		this.recipientlists = recipientlists;
+	@JsonProperty("first")
+	private RapidMailRecipientListResponseHref first;
+
+	@JsonProperty("last")
+	private RapidMailRecipientListResponseHref last;
+
+	public void setSelf(RapidMailRecipientListResponseHref self) {
+		this.self = self;
 	}
 
-	public List<RapidMailRecipientListResponseItem> getRecipientlists() {
-		return recipientlists;
+	public RapidMailRecipientListResponseHref getSelf() {
+		return self;
+	}
+
+	public void setFirst(RapidMailRecipientListResponseHref first) {
+		this.first = first;
+	}
+
+	public RapidMailRecipientListResponseHref getFirst() {
+		return first;
+	}
+
+	public void setLast(RapidMailRecipientListResponseHref last) {
+		this.last = last;
+	}
+
+	public RapidMailRecipientListResponseHref getLast() {
+		return last;
 	}
 
 	@Override
 	public String toString() {
-		return "Embedded{" + "recipientlists = '" + recipientlists + '\'' + "}";
+		return "Links{" + "self = '" + self + '\'' + "first = '" + first + '\'' + "last = '" + last + '\'' + "}";
 	}
 }

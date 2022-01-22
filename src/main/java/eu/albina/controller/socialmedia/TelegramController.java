@@ -21,35 +21,59 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
+import com.google.common.base.Strings;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.util.EntityUtils;
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.model.socialmedia.TelegramConfig;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.TelegramConfiguration;
+import eu.albina.util.HibernateUtil;
 
-public class TelegramChannelProcessorController extends CommonProcessor {
-	private static final Logger logger = LoggerFactory.getLogger(TelegramChannelProcessorController.class);
+public class TelegramController extends CommonProcessor {
+	private static final Logger logger = LoggerFactory.getLogger(TelegramController.class);
 
-	private static TelegramChannelProcessorController instance = null;
+	private static TelegramController instance = null;
 	private final int CONNECTION_TIMEOUT = 10000;
 	private final int SOCKET_TIMEOUT = 10000;
 
-	public static TelegramChannelProcessorController getInstance() {
+	public static TelegramController getInstance() {
 		if (instance == null) {
-			instance = new TelegramChannelProcessorController();
+			instance = new TelegramController();
 		}
 		return instance;
 	}
 
-	public TelegramChannelProcessorController() {
+	public TelegramController() {
 	}
 
-	public HttpResponse sendPhoto(TelegramConfig config, String message, String attachmentUrl, boolean test)
-			throws IOException, URISyntaxException {
+	private TelegramConfiguration getConfiguration(String regionId, LanguageCode languageCode) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			TelegramConfiguration result = null;
+			if (!Strings.isNullOrEmpty(regionId)) {
+				result = (TelegramConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
+				.setParameter("regionId", regionId)
+				.setParameter("lang", languageCode).getSingleResult();
+			} else {
+				throw new HibernateException("No region defined!");
+			}
+			if (result != null)
+				return result;
+			else
+				throw new HibernateException("No telegram configuration found for " + regionId + " [" + languageCode + "]");
+		});
+	}
+
+	public HttpResponse sendPhoto(String region, LanguageCode lang, String message, String attachmentUrl, boolean test)
+			throws IOException, URISyntaxException, HibernateException {
+		TelegramConfiguration config = this.getConfiguration(region, lang);
+
 		String chatId = test ? "aws_test" : config.getChatId();
 
 		URIBuilder uriBuilder = new URIBuilder(
@@ -66,7 +90,7 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 200) {
 			logger.warn("Error publishing photo on telegram channel for "
-					+ config.getRegionConfiguration().getRegion().getId() + " (error code "
+					+ config.getRegion().getId() + " (error code "
 					+ response.getStatusLine().getStatusCode() + ")");
 			HttpEntity entity = response.getEntity();
 			String content = EntityUtils.toString(entity);
@@ -76,7 +100,9 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse sendMessage(TelegramConfig config, String message, boolean test) throws IOException, URISyntaxException {
+	public HttpResponse sendMessage(String region, LanguageCode lang, String message, boolean test) throws IOException, URISyntaxException, HibernateException {
+		TelegramConfiguration config = this.getConfiguration(region, lang);
+
 		String chatId = test ? "aws_test" : config.getChatId();
 		URIBuilder uriBuilder = new URIBuilder(
 			String.format("https://api.telegram.org/bot%s/sendMessage", config.getApiToken()))
@@ -89,7 +115,7 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 200) {
 			logger.warn("Error publishing message on telegram channel for "
-					+ config.getRegionConfiguration().getRegion().getId() + " (error code "
+					+ config.getRegion().getId() + " (error code "
 					+ response.getStatusLine().getStatusCode() + ")");
 			HttpEntity entity = response.getEntity();
 			String content = EntityUtils.toString(entity);
@@ -99,7 +125,8 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse sendFile(TelegramConfig config, String message, String attachmentUrl, boolean test) throws IOException {
+	public HttpResponse sendFile(String region, LanguageCode lang, String message, String attachmentUrl, boolean test) throws IOException, HibernateException {
+		TelegramConfiguration config = this.getConfiguration(region, lang);
 		String urlString = "https://api.telegram.org/bot%s/sendDocument?chat_id=%s&caption=%s&document=%s";
 
 		String chatId = test ? "aws_test" : config.getChatId();
@@ -113,7 +140,7 @@ public class TelegramChannelProcessorController extends CommonProcessor {
 		// Go ahead only if success
 		if (response.getStatusLine().getStatusCode() != 200) {
 			logger.warn("Error publishing report on telegram channel for "
-					+ config.getRegionConfiguration().getRegion().getId() + " (error code "
+					+ config.getRegion().getId() + " (error code "
 					+ response.getStatusLine().getStatusCode() + ")");
 		}
 

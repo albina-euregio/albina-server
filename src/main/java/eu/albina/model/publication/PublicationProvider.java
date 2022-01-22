@@ -14,32 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.socialmedia;
+package eu.albina.model.publication;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * A Provider.
  */
 @Entity
-@Table(name = "socialmedia_provider")
-// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-// property = "id",scope = Provider.class)
-public class Provider implements Serializable {
+@Table(name = "publication_providers")
+public class PublicationProvider implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,14 +42,6 @@ public class Provider implements Serializable {
 
 	@Column(name = "NAME", updatable = false, insertable = false)
 	private String name;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
-	private Set<Channel> channels = new HashSet<>();
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
-	private Set<RapidMailConfig> rapidMailConfigs = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -71,63 +55,13 @@ public class Provider implements Serializable {
 		return name;
 	}
 
-	public Provider name(String name) {
+	public PublicationProvider name(String name) {
 		this.name = name;
 		return this;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Set<Channel> getChannels() {
-		return channels;
-	}
-
-	public Provider channels(Set<Channel> channels) {
-		this.channels = channels;
-		return this;
-	}
-
-	public Provider addChannel(Channel channel) {
-		this.channels.add(channel);
-		channel.setProvider(this);
-		return this;
-	}
-
-	public Provider removeChannel(Channel channel) {
-		this.channels.remove(channel);
-		channel.setProvider(null);
-		return this;
-	}
-
-	public void setChannels(Set<Channel> channels) {
-		this.channels = channels;
-	}
-
-	public Set<RapidMailConfig> getRapidMailConfigs() {
-		return rapidMailConfigs;
-	}
-
-	public Provider rapidMailConfigs(Set<RapidMailConfig> rapidMailConfigs) {
-		this.rapidMailConfigs = rapidMailConfigs;
-		return this;
-	}
-
-	public Provider addRapidMailConfig(RapidMailConfig rapidMailConfig) {
-		this.rapidMailConfigs.add(rapidMailConfig);
-		rapidMailConfig.setProvider(this);
-		return this;
-	}
-
-	public Provider removeRapidMailConfig(RapidMailConfig rapidMailConfig) {
-		this.rapidMailConfigs.remove(rapidMailConfig);
-		rapidMailConfig.setProvider(null);
-		return this;
-	}
-
-	public void setRapidMailConfigs(Set<RapidMailConfig> rapidMailConfigs) {
-		this.rapidMailConfigs = rapidMailConfigs;
 	}
 
 	@Override
@@ -138,7 +72,7 @@ public class Provider implements Serializable {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		Provider provider = (Provider) o;
+		PublicationProvider provider = (PublicationProvider) o;
 		if (provider.getId() == null || getId() == null) {
 			return false;
 		}

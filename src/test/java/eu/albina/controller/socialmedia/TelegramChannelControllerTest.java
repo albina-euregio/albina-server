@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,8 +29,7 @@ import org.junit.Test;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.socialmedia.RegionConfiguration;
-import eu.albina.model.socialmedia.TelegramConfig;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.TelegramChannelUtil;
@@ -59,24 +57,23 @@ public class TelegramChannelControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
+	@Ignore
 	@Test
 	public void sendMessageTest() throws Exception {
-		TelegramChannelProcessorController tcc = TelegramChannelProcessorController.getInstance();
-		RegionConfigurationController rcc = RegionConfigurationController.getInstance();
+		TelegramController telegramController = TelegramController.getInstance();
 
 		String attachmentUrl = "https://avalanche.report/albina_files_dev/2020-01-26/fd_albina_map.jpg";
 		String message;
 
 		for (String region : GlobalVariables.getPublishRegions()) {
-			RegionConfiguration regionConfiguration = rcc.getRegionConfiguration(region);
-			Set<TelegramConfig> telegramConfigs = regionConfiguration.getTelegramConfigs();
-			for (TelegramConfig telegramConfig : telegramConfigs) {
-				message = region + " - " + telegramConfig.getLanguageCode();
-				tcc.sendPhoto(telegramConfig, message, attachmentUrl, true);
+			for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+				message = region + " - " + lang;
+				telegramController.sendPhoto(region, lang, message, attachmentUrl, true);
 			}
 		}
 	}
 
+	@Ignore
 	@Test
 	public void sendBulletin() throws URISyntaxException, IOException {
 		List<String> regions = new ArrayList<String>();

@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
 import eu.albina.rest.websocket.RegionEndpoint;
+import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for regions.
@@ -62,32 +62,17 @@ public class RegionController {
 		return instance;
 	}
 
-	/**
-	 * Return all top-level regions (no parent region is available).
-	 *
-	 * @return all top-level regions
-	 * @throws AlbinaException
-	 *             if the {@code Region} objects could not be initialized
-	 */
-	@Nonnull
-	public List<String> getAvailableRegions() throws AlbinaException {
-		return getRegions(null);
-	}
-
-	/**
-	 * Return all sub-regions that have {@code regionId} as parent.
-	 *
-	 * @param regionId
-	 *            the id of the parent region of all desired regions
-	 * @return all sub-regions that have {@code regionId} as parent
-	 * @throws AlbinaException
-	 *             if the {@code Region} objects could not be initialized
-	 */
-	@Nonnull
-	public List<String> getRegions(String regionId) throws AlbinaException {
+	public List<String> getAvailableRegions(String regionId) throws AlbinaException {
 		// TODO implement
 		// return all regions with name starting with regionID or all region IDs from eaws-regions outline
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Region> getActiveRegions() throws AlbinaException {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			return entityManager.createQuery(HibernateUtil.queryGetRegions).getResultList();
+		});
 	}
 
 	/**

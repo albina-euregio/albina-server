@@ -14,17 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.socialmedia;
+package eu.albina.model.publication;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,16 +30,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
-/**
- * A TelegramConfig.
- */
 @Entity
-@Table(name = "socialmedia_telegram_config")
-public class TelegramConfig implements Serializable {
+@Table(name = "telegram_configurations")
+public class TelegramConfiguration implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,6 +44,13 @@ public class TelegramConfig implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@ManyToOne
+	@JoinColumn(name = "PROVIDER_ID")
+	private PublicationProvider provider;
+
+	@ManyToOne
+	@JoinColumn(name = "REGION_ID")
+	private Region region;
 	@Column(name = "API_TOKEN")
 	private String apiToken;
 
@@ -60,16 +61,6 @@ public class TelegramConfig implements Serializable {
 	@Column(name = "LANGUAGE_CODE")
 	private LanguageCode lang;
 
-	@ManyToOne
-	@JoinColumn(name = "PROVIDER_ID")
-	private Provider provider;
-
-	@JsonIgnoreProperties(value = { "region", "rapidMailConfig",
-			"telegramConfigs", "channels" }, allowSetters = true)
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(unique = true, name = "REGION_CONFIGURATION_ID")
-	private RegionConfiguration regionConfiguration;
-
 	public Long getId() {
 		return id;
 	}
@@ -78,11 +69,35 @@ public class TelegramConfig implements Serializable {
 		this.id = id;
 	}
 
-	public String getApiToken() {
+	public PublicationProvider getProvider() {
+		return provider;
+	}
+
+	public TelegramConfiguration provider(PublicationProvider provider) {
+		this.provider = provider;
+		return this;
+	}
+
+	public void setProvider(PublicationProvider provider) {
+		this.provider = provider;
+	}
+
+	public Region getRegion() {
+		return region;
+	}
+
+	public TelegramConfiguration region(Region region) {
+		this.region = region;
+		return this;
+	}
+
+	public void setRegion(Region region) {
+		this.region = region;
+	}	public String getApiToken() {
 		return apiToken;
 	}
 
-	public TelegramConfig apiToken(String apiToken) {
+	public TelegramConfiguration apiToken(String apiToken) {
 		this.apiToken = apiToken;
 		return this;
 	}
@@ -95,7 +110,7 @@ public class TelegramConfig implements Serializable {
 		return chatId;
 	}
 
-	public TelegramConfig chatId(String chatId) {
+	public TelegramConfiguration chatId(String chatId) {
 		this.chatId = chatId;
 		return this;
 	}
@@ -108,39 +123,13 @@ public class TelegramConfig implements Serializable {
 		return lang;
 	}
 
-	public TelegramConfig languageCode(LanguageCode languageCode) {
+	public TelegramConfiguration languageCode(LanguageCode languageCode) {
 		this.lang = languageCode;
 		return this;
 	}
 
 	public void setLanguageCodeId(LanguageCode languageCode) {
 		this.lang = languageCode;
-	}
-
-	public RegionConfiguration getRegionConfiguration() {
-		return regionConfiguration;
-	}
-
-	public TelegramConfig regionConfiguration(RegionConfiguration regionConfiguration) {
-		this.regionConfiguration = regionConfiguration;
-		return this;
-	}
-
-	public void setRegionConfiguration(RegionConfiguration regionConfiguration) {
-		this.regionConfiguration = regionConfiguration;
-	}
-
-	public Provider getProvider() {
-		return provider;
-	}
-
-	public TelegramConfig provider(Provider provider) {
-		this.provider = provider;
-		return this;
-	}
-
-	public void setProvider(Provider provider) {
-		this.provider = provider;
 	}
 
 	@Override
@@ -151,7 +140,7 @@ public class TelegramConfig implements Serializable {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		TelegramConfig telegramConfig = (TelegramConfig) o;
+		TelegramConfiguration telegramConfig = (TelegramConfiguration) o;
 		if (telegramConfig.getId() == null || getId() == null) {
 			return false;
 		}

@@ -14,30 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.rapidmail.recipients.get;
-
-import java.util.List;
+package eu.albina.model.publication.rapidmail.mailings;
 
 import javax.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
-public class GetRecipientsResponseEmbedded {
+public class RapidMailMailingsResponseHref {
 
-	@JsonProperty("recipients")
-	private List<GetRecipientsResponseItem> recipients;
+	@JsonProperty("href")
+	private String href;
 
-	public void setRecipients(List<GetRecipientsResponseItem> recipients) {
-		this.recipients = recipients;
+	public void setHref(String href) {
+		this.href = href;
 	}
 
-	public List<GetRecipientsResponseItem> getRecipients() {
-		return recipients;
+	public String getHref() {
+		return href;
 	}
 
 	@Override
 	public String toString() {
-		return "Embedded{" + "recipients = '" + recipients + '\'' + "}";
+		return "{" + "href = '" + href + '\'' + "}";
 	}
 }

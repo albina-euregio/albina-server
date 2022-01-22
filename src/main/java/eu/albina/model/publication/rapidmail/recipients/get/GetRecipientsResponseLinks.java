@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.rapidmail.recipients.get;
+package eu.albina.model.publication.rapidmail.recipients.get;
 
 import javax.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import eu.albina.model.rapidmail.recipientlist.RapidMailRecipientListResponseHref;
+import eu.albina.model.publication.rapidmail.recipientlist.RapidMailRecipientListResponseHref;
 
 @Generated("com.robohorse.robopojogenerator")
 public class GetRecipientsResponseLinks {

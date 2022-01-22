@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.rapidmail.mailings;
+package eu.albina.model.publication.rapidmail.recipients.get;
 
 import javax.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
-public class RapidMailMailingsResponseHref {
+public class GetRecipientsResponseHref {
 
 	@JsonProperty("href")
 	private String href;
@@ -36,6 +36,6 @@ public class RapidMailMailingsResponseHref {
 
 	@Override
 	public String toString() {
-		return "{" + "href = '" + href + '\'' + "}";
+		return "Self{" + "href = '" + href + '\'' + "}";
 	}
 }

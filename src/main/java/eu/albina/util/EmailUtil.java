@@ -38,18 +38,15 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.socialmedia.RapidMailProcessorController;
-import eu.albina.controller.socialmedia.RegionConfigurationController;
+import eu.albina.controller.socialmedia.RapidMailController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
-import eu.albina.model.rapidmail.mailings.PostMailingsRequest;
-import eu.albina.model.rapidmail.mailings.PostMailingsRequestPostFile;
-import eu.albina.model.socialmedia.RapidMailConfig;
-import eu.albina.model.socialmedia.RegionConfiguration;
+import eu.albina.model.publication.rapidmail.mailings.PostMailingsRequest;
+import eu.albina.model.publication.rapidmail.mailings.PostMailingsRequestPostFile;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -168,11 +165,6 @@ public class EmailUtil {
 
 	private void sendEmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
 		try {
-			RapidMailProcessorController rmc = RapidMailProcessorController.getInstance();
-			RegionConfigurationController rcc = RegionConfigurationController.getInstance();
-			RegionConfiguration regionConfiguration = rcc.getRegionConfiguration(region);
-			RapidMailConfig rmConfig = regionConfiguration.getRapidMailConfig();
-
 			PostMailingsRequestPostFile file = new PostMailingsRequestPostFile()
 				.description("mail-content.zip")
 				.type("application/zip")
@@ -183,7 +175,7 @@ public class EmailUtil {
 				.subject(subject)
 				.status("scheduled")
 				.file(file);
-			rmc.sendMessage(rmConfig, lang, request, test);
+			RapidMailController.getInstance().sendMessage(region, lang, request, test);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region, e);
 		}

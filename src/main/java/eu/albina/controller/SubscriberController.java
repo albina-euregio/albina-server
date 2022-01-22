@@ -28,13 +28,11 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 
-import eu.albina.controller.socialmedia.RapidMailProcessorController;
-import eu.albina.controller.socialmedia.RegionConfigurationController;
+import eu.albina.controller.socialmedia.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.rapidmail.recipients.post.PostRecipientsRequest;
-import eu.albina.model.socialmedia.RegionConfiguration;
+import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -237,14 +235,10 @@ public class SubscriberController {
 		if (subscriber.getLanguage() == null)
 			throw new AlbinaException("No language defined!");
 		for (String region : subscriber.getRegions()) {
-			RegionConfigurationController ctRc = RegionConfigurationController.getInstance();
-			RegionConfiguration rc = ctRc.getRegionConfiguration(region);
-			RapidMailProcessorController ctRm = RapidMailProcessorController.getInstance();
-
 			PostRecipientsRequest recipient = new PostRecipientsRequest();
 			recipient.setEmail(subscriber.getEmail());
 
-			ctRm.createRecipient(rc.getRapidMailConfig(), recipient, null, subscriber.getLanguage());
+			RapidMailController.getInstance().createRecipient(region, recipient, null, subscriber.getLanguage());
 		}
 	}
 }

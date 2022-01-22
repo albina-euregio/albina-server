@@ -52,6 +52,10 @@ public class HibernateUtil {
 
 	public static String queryGetLatestDate = "from AvalancheReport as r where r.status = 3 or r.status = 0 order by r.date desc";
 
+	public static String queryGetRegions = "from Region as r";
+	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :regionId and c.lang = :lang";
+	public static String queryGetRapidMailConfiguration = "from RapidMailConfiguration as c where c.region = :regionId";
+
 	public static HibernateUtil getInstance() {
 		if (instance == null) {
 			instance = new HibernateUtil();

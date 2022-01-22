@@ -22,8 +22,6 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import eu.albina.util.LinkUtil;
 import org.apache.http.HttpEntity;
@@ -37,10 +35,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.socialmedia.RegionConfiguration;
-import eu.albina.model.socialmedia.TelegramConfig;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.PushNotificationUtil;
@@ -237,20 +232,13 @@ public class BlogController extends CommonProcessor {
 		String attachmentUrl = getAttachmentUrl(item);
 
 		try {
-			TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
-			RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-			Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
-			TelegramConfig config = telegramConfigs.stream()
-				.filter(telegramConfig -> Objects.equals(telegramConfig.getLanguageCode(), lang))
-				.findFirst()
-				.orElseThrow(() -> new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")"));
+			TelegramController telegramController = TelegramController.getInstance();
+
 			if (attachmentUrl != null) {
-				ctTc.sendPhoto(config, message, attachmentUrl, test);
+				telegramController.sendPhoto(region, lang, message, attachmentUrl, test);
 			} else {
-				ctTc.sendMessage(config, message, test);
+				telegramController.sendMessage(region, lang, message, test);
 			}
-		} catch (AlbinaException e) {
-			logger.warn("Blog post could not be sent to telegram channel: " + region + ", " + lang.toString(), e);
 		} catch (IOException | URISyntaxException e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + region + "," + lang.toString(), e);
 		}

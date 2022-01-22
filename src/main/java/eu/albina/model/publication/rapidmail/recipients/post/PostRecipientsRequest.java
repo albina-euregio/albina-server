@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.model.rapidmail.recipients.post;
+package eu.albina.model.publication.rapidmail.recipients.post;
 
 import javax.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
-public class PostRecipientsResponse {
+public class PostRecipientsRequest {
 
 	@JsonProperty("mailtype")
 	private String mailtype;
@@ -65,29 +65,20 @@ public class PostRecipientsResponse {
 	@JsonProperty("extra5")
 	private String extra5;
 
-	@JsonProperty("id")
-	private int id;
-
 	@JsonProperty("extra10")
 	private String extra10;
 
 	@JsonProperty("email")
 	private String email;
 
-	@JsonProperty("created_hostname")
-	private String createdHostname;
-
 	@JsonProperty("zip")
-	private int zip;
+	private String zip;
 
 	@JsonProperty("extrabig9")
 	private String extrabig9;
 
 	@JsonProperty("extrabig8")
 	private String extrabig8;
-
-	@JsonProperty("created")
-	private String created;
 
 	@JsonProperty("extrabig5")
 	private String extrabig5;
@@ -114,25 +105,19 @@ public class PostRecipientsResponse {
 	private String extrabig2;
 
 	@JsonProperty("foreign_id")
-	private int foreignId;
+	private String foreignId;
 
 	@JsonProperty("recipientlist_id")
-	private int recipientlistId;
+	private Integer recipientlistId;
 
 	@JsonProperty("extrabig10")
 	private String extrabig10;
-
-	@JsonProperty("updated")
-	private String updated;
 
 	@JsonProperty("created_ip")
 	private String createdIp;
 
 	@JsonProperty("activated")
 	private String activated;
-
-	@JsonProperty("status")
-	private String status;
 
 	public void setMailtype(String mailtype) {
 		this.mailtype = mailtype;
@@ -246,14 +231,6 @@ public class PostRecipientsResponse {
 		return extra5;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getId() {
-		return id;
-	}
-
 	public void setExtra10(String extra10) {
 		this.extra10 = extra10;
 	}
@@ -270,19 +247,11 @@ public class PostRecipientsResponse {
 		return email;
 	}
 
-	public void setCreatedHostname(String createdHostname) {
-		this.createdHostname = createdHostname;
-	}
-
-	public String getCreatedHostname() {
-		return createdHostname;
-	}
-
-	public void setZip(int zip) {
+	public void setZip(String zip) {
 		this.zip = zip;
 	}
 
-	public int getZip() {
+	public String getZip() {
 		return zip;
 	}
 
@@ -300,14 +269,6 @@ public class PostRecipientsResponse {
 
 	public String getExtrabig8() {
 		return extrabig8;
-	}
-
-	public void setCreated(String created) {
-		this.created = created;
-	}
-
-	public String getCreated() {
-		return created;
 	}
 
 	public void setExtrabig5(String extrabig5) {
@@ -374,19 +335,19 @@ public class PostRecipientsResponse {
 		return extrabig2;
 	}
 
-	public void setForeignId(int foreignId) {
+	public void setForeignId(String foreignId) {
 		this.foreignId = foreignId;
 	}
 
-	public int getForeignId() {
+	public String getForeignId() {
 		return foreignId;
 	}
 
-	public void setRecipientlistId(int recipientlistId) {
+	public void setRecipientlistId(Integer recipientlistId) {
 		this.recipientlistId = recipientlistId;
 	}
 
-	public int getRecipientlistId() {
+	public Integer getRecipientlistId() {
 		return recipientlistId;
 	}
 
@@ -396,14 +357,6 @@ public class PostRecipientsResponse {
 
 	public String getExtrabig10() {
 		return extrabig10;
-	}
-
-	public void setUpdated(String updated) {
-		this.updated = updated;
-	}
-
-	public String getUpdated() {
-		return updated;
 	}
 
 	public void setCreatedIp(String createdIp) {
@@ -422,29 +375,20 @@ public class PostRecipientsResponse {
 		return activated;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
 	@Override
 	public String toString() {
-		return "RecipientsResponse{" + "mailtype = '" + mailtype + '\'' + ",firstname = '" + firstname + '\''
+		return "RapidMailRecipient{" + "mailtype = '" + mailtype + '\'' + ",firstname = '" + firstname + '\''
 				+ ",extra8 = '" + extra8 + '\'' + ",birthdate = '" + birthdate + '\'' + ",extra9 = '" + extra9 + '\''
 				+ ",gender = '" + gender + '\'' + ",extra2 = '" + extra2 + '\'' + ",extra3 = '" + extra3 + '\''
 				+ ",extra1 = '" + extra1 + '\'' + ",title = '" + title + '\'' + ",extra6 = '" + extra6 + '\''
 				+ ",extra7 = '" + extra7 + '\'' + ",extra4 = '" + extra4 + '\'' + ",extra5 = '" + extra5 + '\''
-				+ ",id = '" + id + '\'' + ",extra10 = '" + extra10 + '\'' + ",email = '" + email + '\''
-				+ ",created_hostname = '" + createdHostname + '\'' + ",zip = '" + zip + '\'' + ",extrabig9 = '"
-				+ extrabig9 + '\'' + ",extrabig8 = '" + extrabig8 + '\'' + ",created = '" + created + '\''
-				+ ",extrabig5 = '" + extrabig5 + '\'' + ",extrabig4 = '" + extrabig4 + '\'' + ",extrabig7 = '"
-				+ extrabig7 + '\'' + ",extrabig6 = '" + extrabig6 + '\'' + ",extrabig1 = '" + extrabig1 + '\''
-				+ ",extrabig3 = '" + extrabig3 + '\'' + ",lastname = '" + lastname + '\'' + ",extrabig2 = '" + extrabig2
-				+ '\'' + ",foreign_id = '" + foreignId + '\'' + ",recipientlist_id = '" + recipientlistId + '\''
-				+ ",extrabig10 = '" + extrabig10 + '\'' + ",updated = '" + updated + '\'' + ",created_ip = '"
-				+ createdIp + '\'' + ",activated = '" + activated + '\'' + ",status = '" + status + '\'' + "}";
+				+ ",extra10 = '" + extra10 + '\'' + ",email = '" + email + '\'' + ",zip = '" + zip + '\''
+				+ ",extrabig9 = '" + extrabig9 + '\'' + ",extrabig8 = '" + extrabig8 + '\'' + ",extrabig5 = '"
+				+ extrabig5 + '\'' + ",extrabig4 = '" + extrabig4 + '\'' + ",extrabig7 = '" + extrabig7 + '\''
+				+ ",extrabig6 = '" + extrabig6 + '\'' + ",extrabig1 = '" + extrabig1 + '\'' + ",extrabig3 = '"
+				+ extrabig3 + '\'' + ",lastname = '" + lastname + '\'' + ",extrabig2 = '" + extrabig2 + '\''
+				+ ",foreign_id = '" + foreignId + '\'' + ",recipientlist_id = '" + recipientlistId + '\''
+				+ ",extrabig10 = '" + extrabig10 + '\'' + ",created_ip = '" + createdIp + '\'' + ",activated = '"
+				+ activated + '\'' + "}";
 	}
 }
