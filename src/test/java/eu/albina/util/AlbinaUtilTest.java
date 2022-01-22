@@ -68,78 +68,12 @@ public class AlbinaUtilTest {
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;
 
-	private final String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
-	private final List<String> names = new ArrayList<String>();
-	private final List<String> passwords = new ArrayList<String>();
+	private final String imgBaseUrl = "D:/norbert/vs_workspace/albina-server/src/test/resources/images/";
 	private final List<String> recipients = new ArrayList<String>();
 
 	@Before
 	public void setUp() throws IOException {
 		// HibernateUtil.getInstance().setUp();
-
-		names.add("Sergio Benigni");
-		names.add("Paolo Cestari");
-		names.add("Marco Gadotti");
-		names.add("Walter Beozzo");
-		names.add("Gianluca Tognoni");
-		names.add("Andrea Piazza");
-		names.add("Günther Geier");
-		names.add("Fabio Gheser");
-		names.add("Lukas Rastner");
-		names.add("Sarah Graf");
-		names.add("Rudi Mair");
-		names.add("Patrick Nairz");
-		names.add("Christoph Mitterer");
-		names.add("Norbert Lanzanasto");
-		names.add("Jürg Schweizer");
-		names.add("Matthias Gerber");
-		names.add("Thomas Stucki");
-		names.add("Kurt Winkler");
-		names.add("Ulrich Niederer");
-		names.add("Marc Ruesch");
-		names.add("Simon Legner");
-		names.add("Bernhard Niedermoser");
-		names.add("Michael Butschek");
-		names.add("Claudia Riedl");
-		names.add("Astrid Maschits");
-		names.add("Harald Timons");
-		names.add("Jordi Gavaldà Bordes");
-		names.add("Ivan Moner Seira");
-		names.add("Montse Bacardit");
-		names.add("David Broto");
-		names.add("AINEVA");
-
-		passwords.add("Sergio");
-		passwords.add("Paolo");
-		passwords.add("Marco");
-		passwords.add("Walter");
-		passwords.add("Gianluca");
-		passwords.add("Andrea");
-		passwords.add("Günther");
-		passwords.add("Fabio");
-		passwords.add("Lukas");
-		passwords.add("Sarah");
-		passwords.add("Rudi");
-		passwords.add("Patrick");
-		passwords.add("Christoph");
-		passwords.add("Norbert");
-		passwords.add("Jürg");
-		passwords.add("Matthias");
-		passwords.add("Thomas");
-		passwords.add("Kurt");
-		passwords.add("Ulrich");
-		passwords.add("Marc");
-		passwords.add("Simon");
-		passwords.add("Bernhard");
-		passwords.add("Michael");
-		passwords.add("Claudia");
-		passwords.add("Astrid");
-		passwords.add("Harald");
-		passwords.add("Jordi");
-		passwords.add("Ivan");
-		passwords.add("Montse");
-		passwords.add("David");
-		passwords.add("aineva");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -185,10 +119,12 @@ public class AlbinaUtilTest {
 		System.out.println(string);
 	}
 
-	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 4; i < 6; i++) {
+		List<String> names = new ArrayList<String>();
+		List<String> passwords = new ArrayList<String>();
+
+		for (int i = 0; i < names.size(); i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
