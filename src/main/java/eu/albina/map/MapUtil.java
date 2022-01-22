@@ -78,7 +78,6 @@ public interface MapUtil {
 			logger.error("Failed to create mapyrus maps", ex);
 			throw ex;
 		}
-		BulletinRegions.createBulletinRegions(bulletins, regions);
 		logger.info("Creating danger rating maps done in {} ms", System.currentTimeMillis() - start);
 	}
 
