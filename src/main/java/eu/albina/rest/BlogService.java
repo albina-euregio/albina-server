@@ -30,7 +30,7 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.socialmedia.BlogController;
+import eu.albina.controller.publication.BlogController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.controller.socialmedia;
+package eu.albina.controller.publication;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +25,7 @@ import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.Collections;
 
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.rapidmail.mailings.PostMailingsRequest;
@@ -113,7 +114,7 @@ public class RapidMailController extends CommonProcessor {
 	}
 
 	public HttpResponse createRecipient(String region, PostRecipientsRequest recipient,
-			String sendActivationmail, LanguageCode language) throws Exception, HibernateException {
+			String sendActivationmail, LanguageCode language) throws AlbinaException, IOException, HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
 		if (recipient.getRecipientlistId() == null) {
@@ -145,7 +146,7 @@ public class RapidMailController extends CommonProcessor {
 	}
 
 	public HttpResponse sendMessage(String region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
-			throws Exception, HibernateException {
+			throws AlbinaException, IOException, HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
 		if (mailingsPost.getDestinations() == null) {
@@ -180,13 +181,13 @@ public class RapidMailController extends CommonProcessor {
 		return config.getRegion().getId() + "_" + language.name().toUpperCase();
 	}
 
-	public int getRecipientId(String region, String recipientName) throws Exception {
+	public int getRecipientId(String region, String recipientName) throws AlbinaException, HibernateException, IOException {
 		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(region);
 		return recipientListResponse.getEmbedded().getRecipientlists().stream()
 			.filter(x -> StringUtils.equalsIgnoreCase(x.getName(), recipientName))
 			.mapToInt(RapidMailRecipientListResponseItem::getId)
 			.findFirst()
-			.orElseThrow(() -> new Exception("Invalid recipientList name '" + recipientName + "'. Please check configuration"));
+			.orElseThrow(() -> new AlbinaException("Invalid recipientList name '" + recipientName + "'. Please check configuration"));
 	}
 
 	private String getResponseContent(HttpResponse response) throws IOException {

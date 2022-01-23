@@ -34,8 +34,8 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
-@Table(name = "telegram_configurations")
-public class TelegramConfiguration implements Serializable {
+@Table(name = "google_blogger_configurations")
+public class GoogleBloggerConfiguration implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -52,11 +52,17 @@ public class TelegramConfiguration implements Serializable {
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@Column(name = "API_TOKEN")
-	private String apiToken;
+	@Column(name = "API_KEY")
+	private String apiKey;
 
-	@Column(name = "CHAT_ID")
-	private String chatId;
+	@Column(name = "BLOG_ID")
+	private String blogId;
+
+	@Column(name = "BLOG_URL")
+	private String blogUrl;
+
+	@Column(name = "BLOG_API_URL")
+	private String blogApiUrl;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE_CODE")
@@ -74,7 +80,7 @@ public class TelegramConfiguration implements Serializable {
 		return provider;
 	}
 
-	public TelegramConfiguration provider(PublicationProvider provider) {
+	public GoogleBloggerConfiguration provider(PublicationProvider provider) {
 		this.provider = provider;
 		return this;
 	}
@@ -87,7 +93,7 @@ public class TelegramConfiguration implements Serializable {
 		return region;
 	}
 
-	public TelegramConfiguration region(Region region) {
+	public GoogleBloggerConfiguration region(Region region) {
 		this.region = region;
 		return this;
 	}
@@ -96,37 +102,63 @@ public class TelegramConfiguration implements Serializable {
 		this.region = region;
 	}
 	
-	public String getApiToken() {
-		return apiToken;
+	public String getApiKey() {
+		return apiKey;
 	}
 
-	public TelegramConfiguration apiToken(String apiToken) {
-		this.apiToken = apiToken;
+	public GoogleBloggerConfiguration apiKey(String apiKey) {
+		this.apiKey = apiKey;
 		return this;
 	}
 
-	public void setApiToken(String apiToken) {
-		this.apiToken = apiToken;
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
 	}
 
-	public String getChatId() {
-		return chatId;
+	public String getBlogId() {
+		return blogId;
 	}
 
-	public TelegramConfiguration chatId(String chatId) {
-		this.chatId = chatId;
+	public GoogleBloggerConfiguration blogId(String blogId) {
+		this.blogId = blogId;
 		return this;
 	}
 
-	public void setChatId(String chatId) {
-		this.chatId = chatId;
+	public void setBlogId(String blogId) {
+		this.blogId = blogId;
+	}
+
+	public String getBlogUrl() {
+		return blogUrl;
+	}
+
+	public GoogleBloggerConfiguration blogUrl(String blogUrl) {
+		this.blogUrl = blogUrl;
+		return this;
+	}
+
+	public void setBlogUrl(String blogUrl) {
+		this.blogUrl = blogUrl;
+	}
+
+	public String getBlogApiUrl() {
+		return blogApiUrl;
+	}
+
+	public GoogleBloggerConfiguration blogApiUrl(String blogApiUrl) {
+		this.blogApiUrl = blogApiUrl;
+		return this;
+	}
+
+	public void setBlogApiUrl(String blogApiUrl) {
+		this.blogApiUrl = blogApiUrl;
 	}
 
 	public LanguageCode getLanguageCode() {
 		return lang;
 	}
 
-	public TelegramConfiguration languageCode(LanguageCode languageCode) {
+	public GoogleBloggerConfiguration languageCode(LanguageCode languageCode) {
 		this.lang = languageCode;
 		return this;
 	}
@@ -157,7 +189,7 @@ public class TelegramConfiguration implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TelegramConfig{" + "id=" + getId() + ", apiToken='" + getApiToken() + "'" + ", chatId='" + getChatId()
+		return "TelegramConfig{" + "id=" + getId() + ", apiToken='" + getBlogId() + "'" + ", chatId='" + getBlogUrl()
 				+ "'" + ", lanugageCode='" + getLanguageCode() + "'" + "}";
 	}
 }

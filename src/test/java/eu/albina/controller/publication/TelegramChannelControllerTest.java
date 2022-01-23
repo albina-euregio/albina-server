@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.controller.socialmedia;
+package eu.albina.controller.publication;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

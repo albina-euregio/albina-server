@@ -21,13 +21,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Table;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,21 +46,10 @@ public class GlobalVariables {
 	private static boolean createPdf = false;
 	private static boolean createStaticWidget = false;
 	private static boolean createSimpleHtml = false;
-	private static boolean sendEmails = false;
-	private static boolean publishToTelegramChannel = false;
 	static String vapidPublicKey;
 	static String vapidPrivateKey;
 	private static boolean publishAt5PM = false;
 	private static boolean publishAt8AM = false;
-	// REGION
-	private static boolean publishBulletinsTyrol = true;
-	private static boolean publishBulletinsSouthTyrol = true;
-	private static boolean publishBulletinsTrentino = true;
-	private static boolean publishBulletinsAran = true;
-	// REGION
-	private static boolean publishBlogsTyrol = false;
-	private static boolean publishBlogsSouthTyrol = false;
-	private static boolean publishBlogsTrentino = false;
 	/*---- Defined in configuration file -----*/
 
 	static String serverImagesUrl = "https://admin.avalanche.report/images/";
@@ -75,37 +63,18 @@ public class GlobalVariables {
 	public static String mapsPath = "/mnt/albina_files_local";
 	public static String mapProductionUrl = "";
 
-	public static String blogApiUrl = "https://www.googleapis.com/blogger/v3/blogs/";
-	public static String googleApiKey = "AIzaSyBN0GUcRlTfoVnarVFVpA1hUEnDcDjuXQY";
-	// LANG: only languages for which a blog exists
-	// REGION: only regions that have a blog
-	public static final Table<String, LanguageCode, String> blogIds = ImmutableTable.<String, LanguageCode, String>builder()
-		.put(GlobalVariables.codeTyrol, LanguageCode.de, "7062477220886068374")
-		.put(GlobalVariables.codeTyrol, LanguageCode.it, "6964779683196470218")
-		.put(GlobalVariables.codeTyrol, LanguageCode.en, "2617650030094227041")
-		.put(GlobalVariables.codeSouthTyrol, LanguageCode.de, "1263754381945501754")
-		.put(GlobalVariables.codeSouthTyrol, LanguageCode.it, "8922564068473612459")
-		.put(GlobalVariables.codeTrentino, LanguageCode.it, "232334535081247038")
-		.put("Test", LanguageCode.en, "7136072879615998197")
-		.build();
-	// LANG: only languages for which a blog exists
-	// REGION: only regions that have a blog
-	public static final Table<String, LanguageCode, String> blogUrls = ImmutableTable.<String, LanguageCode, String>builder()
-		.put(GlobalVariables.codeTyrol, LanguageCode.de, "lawinenwarndienst.blogspot.com")
-		.put(GlobalVariables.codeTyrol, LanguageCode.it, "servizio-valanghe-tirolo.blogspot.com")
-		.put(GlobalVariables.codeTyrol, LanguageCode.en, "avalanche-warning-service-tirol.blogspot.com")
-		.put(GlobalVariables.codeSouthTyrol, LanguageCode.de, "lawinensuedtirol.blogspot.com")
-		.put(GlobalVariables.codeSouthTyrol, LanguageCode.it, "valanghealtoadige.blogspot.com")
-		.put(GlobalVariables.codeTrentino, LanguageCode.it, "trentinovalanghe.blogspot.com")
-		.build();
-
 	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
 
 	// REGION
+	@Deprecated
 	public final static String codeTrentino = "IT-32-TN";
+	@Deprecated
 	public final static String codeSouthTyrol = "IT-32-BZ";
+	@Deprecated
 	public final static String codeTyrol = "AT-07";
+	@Deprecated
 	public final static String codeEuregio = "EUREGIO";
+	@Deprecated
 	public final static String codeAran = "ES-CT-L";
 
 	public static String propertiesFilePath = "META-INF/config.properties";
@@ -173,6 +142,11 @@ public class GlobalVariables {
 
 	// REGION
 	public static List<String> getPublishRegions(boolean includeEuregio) {
+		// TODO implement
+		// get regions and flag from DB
+		throw new NotImplementedException("Not implemented!");
+
+		/*
 		List<String> regions = new ArrayList<String>();
 		if (isPublishBulletinsTyrol())
 			regions.add(codeTyrol);
@@ -185,6 +159,7 @@ public class GlobalVariables {
 		if (includeEuregio && (regions.contains(codeTyrol) || regions.contains(codeSouthTyrol) || regions.contains(codeTrentino)))
 			regions.add(codeEuregio);
 		return regions;
+		*/
 	}
 
 	public static String avalancheReportUsername = "info@avalanche.report";
@@ -231,24 +206,6 @@ public class GlobalVariables {
 		setConfigProperty("createStaticWidget", createStaticWidget);
 	}
 
-	public static boolean isSendEmails() {
-		return sendEmails;
-	}
-
-	public static void setSendEmails(boolean sendEmails) throws ConfigurationException {
-		GlobalVariables.sendEmails = sendEmails;
-		setConfigProperty("sendEmails", sendEmails);
-	}
-
-	public static boolean isPublishToTelegramChannel() {
-		return publishToTelegramChannel;
-	}
-
-	public static void setPublishToTelegramChannel(boolean publishToTelegramChannel) throws ConfigurationException {
-		GlobalVariables.publishToTelegramChannel = publishToTelegramChannel;
-		setConfigProperty("publishToTelegramChannel", publishToTelegramChannel);
-	}
-
 	public static String getVapidPublicKey() {
 		return vapidPublicKey;
 	}
@@ -284,67 +241,10 @@ public class GlobalVariables {
 		setConfigProperty("createSimpleHtml", createSimpleHtml);
 	}
 
-	public static boolean isPublishBulletinsTyrol() {
-		return publishBulletinsTyrol;
-	}
-
-	public static void setPublishBulletinsTyrol(boolean publishBulletinsTyrol) throws ConfigurationException {
-		GlobalVariables.publishBulletinsTyrol = publishBulletinsTyrol;
-		setConfigProperty("publishBulletinsTyrol", publishBulletinsTyrol);
-	}
-
-	public static boolean isPublishBulletinsSouthTyrol() {
-		return publishBulletinsSouthTyrol;
-	}
-
-	public static void setPublishBulletinsSouthTyrol(boolean publishBulletinsSouthTyrol) throws ConfigurationException {
-		GlobalVariables.publishBulletinsSouthTyrol = publishBulletinsSouthTyrol;
-		setConfigProperty("publishBulletinsSouthTyrol", publishBulletinsSouthTyrol);
-	}
-
-	public static boolean isPublishBulletinsTrentino() {
-		return publishBulletinsTrentino;
-	}
-
-	public static void setPublishBulletinsTrentino(boolean publishBulletinsTrentino) throws ConfigurationException {
-		GlobalVariables.publishBulletinsTrentino = publishBulletinsTrentino;
-		setConfigProperty("publishBulletinsTrentino", publishBulletinsTrentino);
-	}
-
-	public static boolean isPublishBulletinsAran() {
-		return publishBulletinsAran;
-	}
-
-	public static void setPublishBulletinsAran(boolean publishBulletinsAran) throws ConfigurationException {
-		GlobalVariables.publishBulletinsAran = publishBulletinsAran;
-		setConfigProperty("publishBulletinsAran", publishBulletinsAran);
-	}
-
-	public static void setPublishBlogsTyrol(boolean publishBlogsTyrol) throws ConfigurationException {
-		GlobalVariables.publishBlogsTyrol = publishBlogsTyrol;
-		setConfigProperty("publishBlogsTyrol", publishBlogsTyrol);
-	}
-
-	public static void setPublishBlogsSouthTyrol(boolean publishBlogsSouthTyrol) throws ConfigurationException {
-		GlobalVariables.publishBlogsSouthTyrol = publishBlogsSouthTyrol;
-		setConfigProperty("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
-	}
-
-	public static void setPublishBlogsTrentino(boolean publishBlogsTrentino) throws ConfigurationException {
-		GlobalVariables.publishBlogsTrentino = publishBlogsTrentino;
-		setConfigProperty("publishBlogsTrentino", publishBlogsTrentino);
-	}
-
-	// REGION
 	public static List<String> getPublishBlogRegions() {
-		List<String> regions = new ArrayList<String>();
-		if (publishBlogsTyrol)
-			regions.add(codeTyrol);
-		if (publishBlogsSouthTyrol)
-			regions.add(codeSouthTyrol);
-		if (publishBlogsTrentino)
-			regions.add(codeTrentino);
-		return regions;
+		// TODO implement
+		// get regions and flag from DB
+		throw new NotImplementedException("Not implemented!");
 	}
 
 	public static String getPdfDirectory() {
@@ -503,28 +403,10 @@ public class GlobalVariables {
 				createSimpleHtml = config.getBoolean("createSimpleHtml");
 			if (config.containsKey("createStaticWidget"))
 				createStaticWidget = config.getBoolean("createStaticWidget");
-			if (config.containsKey("sendEmails"))
-				sendEmails = config.getBoolean("sendEmails");
-			if (config.containsKey("publishToTelegramChannel"))
-				publishToTelegramChannel = config.getBoolean("publishToTelegramChannel");
 			if (config.containsKey("publishAt5PM"))
 				publishAt5PM = config.getBoolean("publishAt5PM");
 			if (config.containsKey("publishAt8AM"))
 				publishAt8AM = config.getBoolean("publishAt8AM");
-			if (config.containsKey("publishBulletinsTyrol"))
-				publishBulletinsTyrol = config.getBoolean("publishBulletinsTyrol");
-			if (config.containsKey("publishBulletinsSouthTyrol"))
-				publishBulletinsSouthTyrol = config.getBoolean("publishBulletinsSouthTyrol");
-			if (config.containsKey("publishBulletinsTrentino"))
-				publishBulletinsTrentino = config.getBoolean("publishBulletinsTrentino");
-			if (config.containsKey("publishBulletinsAran"))
-				publishBulletinsAran = config.getBoolean("publishBulletinsAran");
-			if (config.containsKey("publishBlogsTyrol"))
-				publishBlogsTyrol = config.getBoolean("publishBlogsTyrol");
-			if (config.containsKey("publishBlogsSouthTyrol"))
-				publishBlogsSouthTyrol = config.getBoolean("publishBlogsSouthTyrol");
-			if (config.containsKey("publishBlogsTrentino"))
-				publishBlogsTrentino = config.getBoolean("publishBlogsTrentino");
 			if (config.containsKey("vapidPublicKey"))
 				vapidPublicKey = config.getString("vapidPublicKey");
 			if (config.containsKey("vapidPrivateKey"))
@@ -552,17 +434,8 @@ public class GlobalVariables {
 		json.put("createPdf", createPdf);
 		json.put("createSimpleHtml", createSimpleHtml);
 		json.put("createStaticWidget", createStaticWidget);
-		json.put("sendEmails", sendEmails);
-		json.put("publishToTelegramChannel", publishToTelegramChannel);
 		json.put("publishAt5PM", publishAt5PM);
 		json.put("publishAt8AM", publishAt8AM);
-		json.put("publishBulletinsTyrol", publishBulletinsTyrol);
-		json.put("publishBulletinsSouthTyrol", publishBulletinsSouthTyrol);
-		json.put("publishBulletinsTrentino", publishBulletinsTrentino);
-		json.put("publishBulletinsAran", publishBulletinsAran);
-		json.put("publishBlogsTyrol", publishBlogsTyrol);
-		json.put("publishBlogsSouthTyrol", publishBlogsSouthTyrol);
-		json.put("publishBlogsTrentino", publishBlogsTrentino);
 
 		return json;
 	}
@@ -602,27 +475,9 @@ public class GlobalVariables {
 			setCreateSimpleHtml(configuration.getBoolean("createSimpleHtml"));
 		if (configuration.has("createStaticWidget"))
 			setCreateStaticWidget(configuration.getBoolean("createStaticWidget"));
-		if (configuration.has("sendEmails"))
-			setSendEmails(configuration.getBoolean("sendEmails"));
-		if (configuration.has("publishToTelegramChannel"))
-			setPublishToTelegramChannel(configuration.getBoolean("publishToTelegramChannel"));
 		if (configuration.has("publishAt5PM"))
 			setPublishAt5PM(configuration.getBoolean("publishAt5PM"));
 		if (configuration.has("publishAt8AM"))
 			setPublishAt8AM(configuration.getBoolean("publishAt8AM"));
-		if (configuration.has("publishBulletinsTyrol"))
-			setPublishBulletinsTyrol(configuration.getBoolean("publishBulletinsTyrol"));
-		if (configuration.has("publishBulletinsSouthTyrol"))
-			setPublishBulletinsSouthTyrol(configuration.getBoolean("publishBulletinsSouthTyrol"));
-		if (configuration.has("publishBulletinsTrentino"))
-			setPublishBulletinsTrentino(configuration.getBoolean("publishBulletinsTrentino"));
-		if (configuration.has("publishBulletinsAran"))
-			setPublishBulletinsAran(configuration.getBoolean("publishBulletinsAran"));
-		if (configuration.has("publishBlogsTyrol"))
-			setPublishBlogsTyrol(configuration.getBoolean("publishBlogsTyrol"));
-		if (configuration.has("publishBlogsSouthTyrol"))
-			setPublishBlogsSouthTyrol(configuration.getBoolean("publishBlogsSouthTyrol"));
-		if (configuration.has("publishBlogsTrentino"))
-			setPublishBlogsTrentino(configuration.getBoolean("publishBlogsTrentino"));
 	}
 }

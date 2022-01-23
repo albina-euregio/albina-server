@@ -21,7 +21,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.socialmedia.BlogController;
+import eu.albina.controller.publication.BlogController;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 

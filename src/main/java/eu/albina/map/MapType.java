@@ -1,6 +1,8 @@
 package eu.albina.map;
 
 import com.google.common.io.Resources;
+
+import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.util.GlobalVariables;
 
@@ -32,19 +34,20 @@ enum MapType {
 
 	public static Collection<MapType> forGlobalVariablesPublishBulletins() {
 		final EnumSet<MapType> mapTypes = EnumSet.noneOf(MapType.class);
-		if (GlobalVariables.isPublishBulletinsTyrol()) {
+
+		if (RegionController.getInstance().isPublishBulletins(GlobalVariables.codeTyrol)) {
 			mapTypes.add(euregio);
 			mapTypes.add(tyrol);
 		}
-		if (GlobalVariables.isPublishBulletinsSouthTyrol()) {
+		if (RegionController.getInstance().isPublishBulletins(GlobalVariables.codeSouthTyrol)) {
 			mapTypes.add(euregio);
 			mapTypes.add(southtyrol);
 		}
-		if (GlobalVariables.isPublishBulletinsTrentino()) {
+		if (RegionController.getInstance().isPublishBulletins(GlobalVariables.codeTrentino)) {
 			mapTypes.add(euregio);
 			mapTypes.add(trentino);
 		}
-		if (GlobalVariables.isPublishBulletinsAran()) {
+		if (RegionController.getInstance().isPublishBulletins(GlobalVariables.codeAran)) {
 			mapTypes.add(aran);
 		}
 		return mapTypes;

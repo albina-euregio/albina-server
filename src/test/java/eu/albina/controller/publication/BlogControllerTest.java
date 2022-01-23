@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.controller.socialmedia;
+package eu.albina.controller.publication;
 
 import java.time.Instant;
 import java.util.List;
@@ -23,6 +23,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.GoogleBloggerConfiguration;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
@@ -33,7 +34,8 @@ public class BlogControllerTest {
 
 	@Test
 	public void testBlogPosts() throws Exception {
-		BlogController.getInstance().lastFetch.put(GlobalVariables.blogIds.get(GlobalVariables.codeTyrol, LanguageCode.de), Instant.ofEpochMilli(0L));
+		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(GlobalVariables.codeTyrol, LanguageCode.de);
+		BlogController.getInstance().lastFetch.put(config.getBlogId(), Instant.ofEpochMilli(0L));
 		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(GlobalVariables.codeTyrol, LanguageCode.de);
 		assertTrue("size=" + blogPosts.size(), blogPosts.size() > 5);
 		assertTrue("one blog has image", blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()));

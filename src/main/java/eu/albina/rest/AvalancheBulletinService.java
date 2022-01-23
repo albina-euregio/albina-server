@@ -1020,9 +1020,8 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
-			Thread triggerTelegramChannelThread = PublicationController.getInstance().triggerTelegramChannel(bulletins,
-					regions, false, language, false);
-			triggerTelegramChannelThread.start();
+			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(bulletins,
+					regions, false, language, false)).start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1052,9 +1051,8 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, GlobalVariables.getPublishRegions());
 
-			Thread triggerTelegramChannelThread = PublicationController.getInstance().triggerTelegramChannel(bulletins,
-					regions, false, language, true);
-			triggerTelegramChannelThread.start();
+			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(bulletins,
+					regions, false, language, true)).start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {

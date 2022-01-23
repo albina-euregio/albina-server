@@ -31,9 +31,11 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.RegionController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
@@ -65,15 +67,15 @@ public class UpdateJob implements org.quartz.Job {
 			Instant startDate = AlbinaUtil.getInstantStartOfDay();
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			List<String> changedRegions = GlobalVariables.getPublishRegions().stream()
+			List<String> changedRegions = RegionController.getInstance().getActiveRegions().stream()
 				.filter(region -> {
 					try {
-						return AlbinaUtil.hasBulletinChanged(startDate, region);
+						return AlbinaUtil.hasBulletinChanged(startDate, region.getId());
 					} catch (AlbinaException e) {
 						logger.error("Failed hasBulletinChanged", e);
 						return false;
 					}
-				}).collect(Collectors.toList());
+				}).map(Region::getId).collect(Collectors.toList());
 
 			Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 

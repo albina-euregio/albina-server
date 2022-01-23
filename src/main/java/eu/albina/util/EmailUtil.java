@@ -38,7 +38,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.socialmedia.RapidMailController;
+import eu.albina.controller.RegionController;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.enumerations.Aspect;
@@ -118,14 +119,16 @@ public class EmailUtil {
 		else
 			subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
 		for (String region : regions) {
-			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin avalancheBulletin : bulletins) {
-				if (avalancheBulletin.affectsRegionOnlyPublished(region))
-					regionBulletins.add(avalancheBulletin);
-			}
-			if (regionBulletins != null && !regionBulletins.isEmpty()) {
-				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
-				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
+			if (RegionController.getInstance().isSendEmails(region)) {
+				ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+				for (AvalancheBulletin avalancheBulletin : bulletins) {
+					if (avalancheBulletin.affectsRegionOnlyPublished(region))
+						regionBulletins.add(avalancheBulletin);
+				}
+				if (regionBulletins != null && !regionBulletins.isEmpty()) {
+					String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
+					sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
+				}
 			}
 		}
 	}

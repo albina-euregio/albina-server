@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.rasc.webpush.CryptoService;
 import ch.rasc.webpush.PushController;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 import eu.albina.controller.PushSubscriptionController;
+import eu.albina.controller.RegionController;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -59,7 +61,9 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
 		payload.put("url", bulletinUrl);
 
-		List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, regions);
+		List<String> publishRegions = regions.stream().filter(region -> RegionController.getInstance().isSendPushNotifications(region)).collect(Collectors.toList());
+
+		List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, publishRegions);
 
 		logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, regions, payload);
 		for (PushSubscription subscription : subscriptions) {

@@ -54,6 +54,21 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "VERSION")
 	private Integer version;
 
+	@Column(name = "PUBLISH_BULLETINS")
+	private boolean publishBulletins;
+
+	@Column(name = "PUBLISH_BLOGS")
+	private boolean publishBlogs;
+
+	@Column(name = "SEND_EMAILS")
+	private boolean sendEmails;
+
+	@Column(name = "SEND_TELEGRAM_MESSAGES")
+	private boolean sendTelegramMessages;
+
+	@Column(name = "SEND_PUSH_NOTIFICATIONS")
+	private boolean sendPushNotifications;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -80,6 +95,46 @@ public class Region implements AvalancheInformationObject {
 
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	public boolean isPublishBulletins() {
+		return publishBulletins;
+	}
+
+	public void setPublishBulletins(boolean publishBulletins) {
+		this.publishBulletins = publishBulletins;
+	}
+
+	public boolean isPublishBlogs() {
+		return publishBlogs;
+	}
+
+	public void setPublishBlogs(boolean publishBlogs) {
+		this.publishBlogs = publishBlogs;
+	}
+
+	public boolean isSendEmails() {
+		return sendEmails;
+	}
+
+	public void setSendEmails(boolean sendEmails) {
+		this.sendEmails = sendEmails;
+	}
+
+	public boolean isSendTelegramMessages() {
+		return sendTelegramMessages;
+	}
+
+	public void setSendTelegramMessages(boolean sendTelegramMessages) {
+		this.sendTelegramMessages = sendTelegramMessages;
+	}
+
+	public boolean isSendPushNotifications() {
+		return sendPushNotifications;
+	}
+
+	public void setSendPushNotifications(boolean sendPushNotifications) {
+		this.sendPushNotifications = sendPushNotifications;
 	}
 
 	public Element toCAAML(Document doc) {

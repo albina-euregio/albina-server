@@ -28,7 +28,7 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 
-import eu.albina.controller.socialmedia.RapidMailController;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;

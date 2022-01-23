@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.HibernateException;
+
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
@@ -73,6 +75,36 @@ public class RegionController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			return entityManager.createQuery(HibernateUtil.queryGetRegions).getResultList();
 		});
+	}
+
+    public Region getRegion(String regionId) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Region region = entityManager.find(Region.class, regionId);
+			if (region == null) {
+				throw new HibernateException("No region with ID: " + regionId);
+			}
+			return region;
+		});
+    }
+
+    public boolean isPublishBulletins(String regionId) {
+		return this.getRegion(regionId).isPublishBulletins();
+	}
+
+    public boolean isPublishBlogs(String regionId) {
+		return this.getRegion(regionId).isPublishBlogs();
+	}
+
+    public boolean isSendEmails(String regionId) {
+		return this.getRegion(regionId).isSendEmails();
+	}
+
+    public boolean isSendTelegramMessages(String regionId) {
+		return this.getRegion(regionId).isSendTelegramMessages();
+	}
+
+    public boolean isSendPushNotifications(String regionId) {
+		return this.getRegion(regionId).isSendPushNotifications();
 	}
 
 	/**
