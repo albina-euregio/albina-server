@@ -66,7 +66,7 @@ public class User {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_region", joinColumns = @JoinColumn(name = "USER_EMAIL"))
 	@Column(name = "USER_REGION")
-	private Set<String> regions;
+	private Set<Region> regions;
 
 	/** Image of the user **/
 	@Column(name = "IMAGE", columnDefinition = "LONGBLOB")
@@ -84,7 +84,7 @@ public class User {
 	 * Standard constructor for a user.
 	 */
 	public User() {
-		regions = new HashSet<String>();
+		regions = new HashSet<Region>();
 		roles = new ArrayList<Role>();
 	}
 
@@ -103,7 +103,7 @@ public class User {
 		if (json.has("regions")) {
 			JSONArray regions = json.getJSONArray("regions");
 			for (Object region : regions) {
-				this.regions.add((String) region);
+				this.regions.add(new Region((JSONObject) region));
 			}
 		}
 		if (json.has("roles")) {
@@ -159,15 +159,15 @@ public class User {
 			this.roles.add(role);
 	}
 
-	public Set<String> getRegions() {
+	public Set<Region> getRegions() {
 		return regions;
 	}
 
-	public void setRegions(Set<String> regions) {
+	public void setRegions(Set<Region> regions) {
 		this.regions = regions;
 	}
 
-	public void addRegion(String region) {
+	public void addRegion(Region region) {
 		if (!this.regions.contains(region))
 			this.regions.add(region);
 	}
@@ -206,8 +206,8 @@ public class User {
 
 		if (regions != null && regions.size() > 0) {
 			JSONArray jsonRegions = new JSONArray();
-			for (String region : regions) {
-				jsonRegions.put(region.toString());
+			for (Region region : regions) {
+				jsonRegions.put(region.toJSON());
 			}
 			json.put("regions", jsonRegions);
 		}
@@ -241,7 +241,7 @@ public class User {
 		return operation;
 	}
 
-	public boolean hasPermissionForRegion(String region) {
-		return getRegions().contains(region);
+	public boolean hasPermissionForRegion(String regionId) {
+		return getRegions().stream().anyMatch(region -> region.getId().equals(regionId));
 	}
 }
