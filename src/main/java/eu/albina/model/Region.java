@@ -21,9 +21,13 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.w3c.dom.Document;
@@ -49,6 +53,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ID")
 	private String id;
 
+	@Column(name = "MICRO_REGIONS")
+	private int microRegions;
+
 	@Column(name = "PUBLISH_BULLETINS")
 	private boolean publishBulletins;
 
@@ -64,11 +71,12 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "SEND_PUSH_NOTIFICATIONS")
 	private boolean sendPushNotifications;
 
-	@Column(name = "EXTERNAL")
-	private boolean external;
+	@Column(name = "EXTERNAL_INSTANCE")
+	private boolean externalInstance;
 
-	@Column(name = "EXTERNAL_API_URL")
-	private String externalApiUrl;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "SERVER_INSTANCE_ID")
+	private ServerInstance serverInstance;
 
 	/**
 	 * Default constructor. Initializes all collections of the region.
@@ -80,6 +88,8 @@ public class Region implements AvalancheInformationObject {
 		this();
 		if (json.has("id") && !json.isNull("id"))
 			this.id = json.getString("id");
+		if (json.has("microRegions") && !json.isNull("microRegions"))
+			this.microRegions = json.getInt("microRegions");
 		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
 			this.publishBulletins = json.getBoolean("publishBulletins");
 		if (json.has("publishBlogs") && !json.isNull("publishBlogs"))
@@ -90,10 +100,10 @@ public class Region implements AvalancheInformationObject {
 			this.sendTelegramMessages = json.getBoolean("sendTelegramMessages");
 		if (json.has("sendPushNotifications") && !json.isNull("sendPushNotifications"))
 			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
-		if (json.has("external") && !json.isNull("external"))
-			this.external = json.getBoolean("external");
-		if (json.has("externalApiUrl") && !json.isNull("externalApiUrl"))
-			this.externalApiUrl = json.getString("externalApiUrl");
+		if (json.has("externalInstance") && !json.isNull("externalInstance"))
+			this.externalInstance = json.getBoolean("external");
+		if (json.has("serverInstance") && !json.isNull("serverInstance"))
+			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"));
 	}
 
 	public String getId() {
@@ -102,6 +112,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public int getMicroRegions() {
+		return microRegions;
+	}
+
+	public void setMicroRegions(int microRegions) {
+		this.microRegions = microRegions;
 	}
 
 	public boolean isPublishBulletins() {
@@ -144,20 +162,20 @@ public class Region implements AvalancheInformationObject {
 		this.sendPushNotifications = sendPushNotifications;
 	}
 
-	public boolean isExternal() {
-		return external;
+	public boolean isExternalInstance() {
+		return externalInstance;
 	}
 
-	public void setExternal(boolean external) {
-		this.external = external;
+	public void setExternalInstance(boolean externalInstance) {
+		this.externalInstance = externalInstance;
 	}
 
-	public String getExternalApiUrl() {
-		return externalApiUrl;
+	public ServerInstance getServerInstance() {
+		return serverInstance;
 	}
 
-	public void setExternalApiUrl(String externalApiUrl) {
-		this.externalApiUrl = externalApiUrl;
+	public void setServerInstance(ServerInstance serverInstance) {
+		this.serverInstance = serverInstance;
 	}
 
 	public Element toCAAML(Document doc) {
@@ -170,21 +188,19 @@ public class Region implements AvalancheInformationObject {
 
 	@Override
 	public JSONObject toJSON() {
-		JSONObject feature = new JSONObject();
+		JSONObject json = new JSONObject();
 
-		feature.put("type", "Feature");
-		JSONObject featureProperties = new JSONObject();
-		featureProperties.put("id", getId());
-		featureProperties.put("publishBulletins", isPublishBulletins());
-		featureProperties.put("publishBlogs", isPublishBlogs());
-		featureProperties.put("sendEmails", isSendEmails());
-		featureProperties.put("sendTelegramMessages", isSendTelegramMessages());
-		featureProperties.put("sendPushNotifications", isSendPushNotifications());
-		featureProperties.put("external", isExternal());
-		featureProperties.put("externalApiUrl", getExternalApiUrl());
-		feature.put("properties", featureProperties);
+		json.put("id", getId());
+		json.put("microRegions", getMicroRegions());
+		json.put("publishBulletins", isPublishBulletins());
+		json.put("publishBlogs", isPublishBlogs());
+		json.put("sendEmails", isSendEmails());
+		json.put("sendTelegramMessages", isSendTelegramMessages());
+		json.put("sendPushNotifications", isSendPushNotifications());
+		json.put("externalInstance", isExternalInstance());
+		json.put("serverInstance", getServerInstance().toJSON());
 
-		return feature;
+		return json;
 	}
 
 	@Override

@@ -20,19 +20,22 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
 import eu.albina.caaml.CaamlVersion;
+import eu.albina.controller.RegionController;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class GlobalVariables {
@@ -65,7 +68,6 @@ public class GlobalVariables {
 
 	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
 
-	// REGION
 	@Deprecated
 	public final static String codeTrentino = "IT-32-TN";
 	@Deprecated
@@ -82,84 +84,21 @@ public class GlobalVariables {
 	public static String csvDeliminator = ";";
 	public static String csvLineBreak = "\n";
 
-	// REGION
-	/**
-	 * @deprecated Use {@link #getPublishRegions()}
-	 */
-	@Deprecated
-	public static List<String> regions = new ArrayList<String>() {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			add(codeTyrol);
-			add(codeSouthTyrol);
-			add(codeTrentino);
-			add(codeEuregio);
-			add(codeAran);
-		}
-	};
-
-	// REGION
-	public static List<String> awsRegions = new ArrayList<String>() {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			add(codeTyrol);
-			add(codeSouthTyrol);
-			add(codeTrentino);
-			add(codeAran);
-		}
-	};
-
-	// REGION
-	/**
-	 * @deprecated Use {@link #getPublishRegions()}
-	 */
-	@Deprecated
-	public static List<String> regionsEuregio = new ArrayList<String>() {
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		{
-			add(codeTyrol);
-			add(codeSouthTyrol);
-			add(codeTrentino);
-		}
-	};
-
-	// REGION
 	public static List<String> getPublishRegions() {
 		return getPublishRegions(false);
 	}
 
-	// REGION
 	public static List<String> getPublishRegions(boolean includeEuregio) {
-		// TODO implement
-		// get regions and flag from DB
-		throw new NotImplementedException("Not implemented!");
-
-		/*
-		List<String> regions = new ArrayList<String>();
-		if (isPublishBulletinsTyrol())
-			regions.add(codeTyrol);
-		if (isPublishBulletinsSouthTyrol())
-			regions.add(codeSouthTyrol);
-		if (isPublishBulletinsTrentino())
-			regions.add(codeTrentino);
-		if (isPublishBulletinsAran())
-			regions.add(codeAran);
-		if (includeEuregio && (regions.contains(codeTyrol) || regions.contains(codeSouthTyrol) || regions.contains(codeTrentino)))
-			regions.add(codeEuregio);
-		return regions;
-		*/
+		try {
+			List<String> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBulletins()).map(Region::getId).collect(Collectors.toList());
+			if (includeEuregio) {
+				result.add(GlobalVariables.codeEuregio);
+			}
+			return result;
+		} catch (AlbinaException ae) {
+			logger.warn("Active regions could not be loaded!", ae);
+			return new ArrayList<String>();
+		}
 	}
 
 	public static String avalancheReportUsername = "info@avalanche.report";
@@ -242,9 +181,12 @@ public class GlobalVariables {
 	}
 
 	public static List<String> getPublishBlogRegions() {
-		// TODO implement
-		// get regions and flag from DB
-		throw new NotImplementedException("Not implemented!");
+		try {
+			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBlogs()).map(Region::getId).collect(Collectors.toList());
+		} catch (AlbinaException ae) {
+			logger.warn("Active regions could not be loaded!", ae);
+			return new ArrayList<String>();
+		}
 	}
 
 	public static String getPdfDirectory() {

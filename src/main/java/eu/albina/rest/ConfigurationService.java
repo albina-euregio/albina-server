@@ -42,7 +42,7 @@ public class ConfigurationService {
 	UriInfo uri;
 
 	@POST
-	@Secured({ Role.ADMIN })
+	@Secured({ Role.SUPERADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response setConfigurationParameter(String configuration) {
@@ -56,7 +56,7 @@ public class ConfigurationService {
 	}
 
 	@GET
-	@Secured({ Role.ADMIN })
+	@Secured({ Role.SUPERADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getConfigurationParameters() {

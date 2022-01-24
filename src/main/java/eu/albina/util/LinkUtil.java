@@ -60,7 +60,6 @@ public interface LinkUtil {
 		return String.format("%s/bulletin/%s", getWebsite(lang), date);
 	}
 
-	// REGION
 	static String getPdfLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
 		String date = AlbinaUtil.getValidityDateString(bulletins);
 		return String.format("%s/%s/%s_%s_%s.pdf", getPdfUrl(lang), date, date, region, lang);

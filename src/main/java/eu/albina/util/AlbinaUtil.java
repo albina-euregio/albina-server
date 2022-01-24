@@ -60,30 +60,7 @@ public class AlbinaUtil {
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
 	private static final ClassLoader classLoader = AlbinaUtil.class.getClassLoader();
 
-	// REGION
-	public static final int regionCountTyrol = 29;
-	public static final int regionCountSouthTyrol = 20;
-	public static final int regionCountTrentino = 21;
-	public static final int regionCountAran = 3;
-
 	public static final String greyDarkColor = "#565F61";
-
-	// REGION
-	public static int getRegionCount(String region) {
-		switch (region) {
-		case GlobalVariables.codeTyrol:
-			return regionCountTyrol;
-		case GlobalVariables.codeSouthTyrol:
-			return regionCountSouthTyrol;
-		case GlobalVariables.codeTrentino:
-			return regionCountTrentino;
-		case GlobalVariables.codeAran:
-			return regionCountAran;
-
-		default:
-			return -1;
-		}
-	}
 
 	public static String getRegionName(LanguageCode lang, String regionId) {
 		if ("".equals(regionId)) {

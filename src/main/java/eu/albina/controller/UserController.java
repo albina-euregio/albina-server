@@ -27,9 +27,9 @@ import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -151,8 +151,8 @@ public class UserController {
 
 	public JSONArray getRegionsJson() throws AlbinaException {
 		JSONArray jsonResult = new JSONArray();
-		for (String region : GlobalVariables.awsRegions)
-			jsonResult.put(region);
+		for (String regionId : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance()).map(Region::getId).collect(Collectors.toList()))
+			jsonResult.put(regionId);
 		return jsonResult;
 	}
 

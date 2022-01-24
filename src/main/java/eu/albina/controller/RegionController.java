@@ -104,8 +104,8 @@ public class RegionController {
 			originalRegion.setSendEmails(region.isSendEmails());
 			originalRegion.setSendTelegramMessages(region.isSendTelegramMessages());
 			originalRegion.setSendPushNotifications(region.isSendPushNotifications());
-			originalRegion.setExternal(region.isExternal());
-			originalRegion.setExternalApiUrl(region.getExternalApiUrl());
+			originalRegion.setExternalInstance(region.isExternalInstance());
+			originalRegion.setServerInstance(region.getServerInstance());
 			entityManager.persist(originalRegion);
 
 			return region;
@@ -115,7 +115,7 @@ public class RegionController {
 	public List<String> getAvailableRegions(String regionId) throws AlbinaException {
 		// TODO implement
 		// return all regions with name starting with regionID or all region IDs from eaws-regions outline
-		return null;
+		return new ArrayList<String>();
 	}
 
 	@SuppressWarnings("unchecked")

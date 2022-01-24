@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Strings;
 
@@ -39,10 +40,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.RegionController;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.GoogleBloggerConfiguration;
 import eu.albina.util.EmailUtil;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.PushNotificationUtil;
 
@@ -58,18 +60,22 @@ public class BlogController extends CommonProcessor {
 
 	private BlogController() {
 		executor = Executor.newInstance(sslHttpClient());
-		Instant date = Instant.now();
-
-		for (String region : GlobalVariables.regionsEuregio) {
-			for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
-				try {
-					GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
-					if (config != null)
-						lastFetch.put(config.getBlogId(), date);
-				} catch (Exception e) {
-					logger.info("No Google Blogger configuration for " + region  + " [" + lang + "]");
+		try {
+			Instant date = Instant.now();
+			for (String region : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBlogs()).map(Region::getId).collect(Collectors.toList())) {
+				for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+					try {
+						GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+						if (config != null)
+							lastFetch.put(config.getBlogId(), date);
+					} catch (Exception e) {
+						logger.info("No Google Blogger configuration for " + region  + " [" + lang + "]");
+					}
 				}
 			}
+		} catch (AlbinaException e) {
+			logger.warn("Active regions could not be loaded!", e);
+			e.printStackTrace();
 		}
 	}
 

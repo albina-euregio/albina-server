@@ -783,7 +783,7 @@ public class AvalancheBulletinController {
 				}
 			}
 
-			if (definedRegions.size() < AlbinaUtil.getRegionCount(region))
+			if (definedRegions.size() < RegionController.getInstance().getRegion(region).getMicroRegions())
 				json.put("missingRegion");
 			if (missingAvActivityHighlights)
 				json.put("missingAvActivityHighlights");

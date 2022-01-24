@@ -656,7 +656,6 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			// REGION
 			List<String> regions = GlobalVariables.getPublishRegions();
 
 			if (!regions.isEmpty()) {

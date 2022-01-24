@@ -56,7 +56,7 @@ public class RegionService {
 	UriInfo uri;
 
 	@GET
-	@Secured({ Role.ADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Path("/configuration")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -75,11 +75,14 @@ public class RegionService {
 	}
 
 	@PUT
-	@Secured({ Role.ADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response udpateRegion(String regionString, @Context SecurityContext securityContext) {
 		logger.debug("PUT JSON region");
+
+		// TODO check if user has ADMIN rights for this region
+
 		try {
 			JSONObject regionJson = new JSONObject(regionString);
 			Region region = new Region(regionJson);
@@ -106,7 +109,7 @@ public class RegionService {
 	}
 
 	@POST
-	@Secured({ Role.ADMIN })
+	@Secured({ Role.SUPERADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRegion(String regionString, @Context SecurityContext securityContext) {

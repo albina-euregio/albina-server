@@ -44,7 +44,6 @@ public interface MapUtil {
 
 	Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
-	// REGION
 	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
 			boolean grayscale) {
 		final DaytimeDependency daytimeDependency = DaytimeDependency.of(isAfternoon, hasDaytimeDependency);

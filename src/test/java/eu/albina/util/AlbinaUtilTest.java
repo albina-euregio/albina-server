@@ -259,7 +259,7 @@ public class AlbinaUtilTest {
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
 			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de));
 		assertEquals("https://lawinen.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
-			LinkUtil.getPdfLink(bulletins, LanguageCode.de, GlobalVariables.codeTyrol));
+			LinkUtil.getPdfLink(bulletins, LanguageCode.de, "AT-07"));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
