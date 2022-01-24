@@ -69,6 +69,12 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "SEND_PUSH_NOTIFICATIONS")
 	private boolean sendPushNotifications;
 
+	@Column(name = "EXTERNAL")
+	private boolean external;
+
+	@Column(name = "EXTERNAL_API_URL")
+	private String externalApiUrl;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -137,6 +143,22 @@ public class Region implements AvalancheInformationObject {
 		this.sendPushNotifications = sendPushNotifications;
 	}
 
+	public boolean isExternal() {
+		return external;
+	}
+
+	public void setExternal(boolean external) {
+		this.external = external;
+	}
+
+	public String getExternalApiUrl() {
+		return externalApiUrl;
+	}
+
+	public void setExternalApiUrl(String externalApiUrl) {
+		this.externalApiUrl = externalApiUrl;
+	}
+
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
@@ -152,6 +174,13 @@ public class Region implements AvalancheInformationObject {
 		feature.put("type", "Feature");
 		JSONObject featureProperties = new JSONObject();
 		featureProperties.put("id", getId());
+		featureProperties.put("publishBulletins", isPublishBulletins());
+		featureProperties.put("publishBlogs", isPublishBlogs());
+		featureProperties.put("sendEmails", isSendEmails());
+		featureProperties.put("sendTelegramMessages", isSendTelegramMessages());
+		featureProperties.put("sendPushNotifications", isSendPushNotifications());
+		featureProperties.put("external", isExternal());
+		featureProperties.put("externalApiUrl", getExternalApiUrl());
 		feature.put("properties", featureProperties);
 
 		return feature;
