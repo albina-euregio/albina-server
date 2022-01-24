@@ -67,7 +67,7 @@ public class BlogController extends CommonProcessor {
 					if (config != null)
 						lastFetch.put(config.getBlogId(), date);
 				} catch (Exception e) {
-					logger.info("No Google Blogger configuration for " + region  + "[" + lang + "]");
+					logger.info("No Google Blogger configuration for " + region  + " [" + lang + "]");
 				}
 			}
 		}
