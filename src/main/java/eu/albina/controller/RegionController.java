@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,53 @@ public class RegionController {
 			instance = new RegionController();
 		}
 		return instance;
+	}
+
+	/**
+	 * Return {@code true} if the region with {@code id} exists.
+	 *
+	 * @param id
+	 *            the id of the desired region
+	 * @return {@code true} if the region with {@code id} exists
+	 */
+	public boolean regionExists(String id) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Region region = entityManager.find(Region.class, id);
+			return region != null;
+		});
+	}
+
+	/**
+	 * Save a {@code region} to the database.
+	 *
+	 * @param region
+	 *            the region to be saved
+	 * @return the id of the saved region
+	 */
+	public Serializable createRegion(Region region) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			entityManager.persist(region);
+			return region.getId();
+		});
+	}
+
+	public Region updateRegion(Region region) throws AlbinaException {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Region originalRegion = entityManager.find(Region.class, region.getId());
+			if (originalRegion == null) {
+				throw new HibernateException("No region with id: " + region.getId());
+			}
+			originalRegion.setPublishBulletins(region.isPublishBulletins());
+			originalRegion.setPublishBlogs(region.isPublishBlogs());
+			originalRegion.setSendEmails(region.isSendEmails());
+			originalRegion.setSendTelegramMessages(region.isSendTelegramMessages());
+			originalRegion.setSendPushNotifications(region.isSendPushNotifications());
+			originalRegion.setExternal(region.isExternal());
+			originalRegion.setExternalApiUrl(region.getExternalApiUrl());
+			entityManager.persist(originalRegion);
+
+			return region;
+		});
 	}
 
 	public List<String> getAvailableRegions(String regionId) throws AlbinaException {

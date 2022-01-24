@@ -25,7 +25,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -49,10 +48,6 @@ public class Region implements AvalancheInformationObject {
 	@Id
 	@Column(name = "ID")
 	private String id;
-
-	@Version
-	@Column(name = "VERSION")
-	private Integer version;
 
 	@Column(name = "PUBLISH_BULLETINS")
 	private boolean publishBulletins;
@@ -81,10 +76,24 @@ public class Region implements AvalancheInformationObject {
 	public Region() {
 	}
 
-	public Region(JSONObject object) {
+	public Region(JSONObject json) {
 		this();
-		final JSONObject properties = object.getJSONObject("properties");
-		id = properties.getString("id");
+		if (json.has("id") && !json.isNull("id"))
+			this.id = json.getString("id");
+		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
+			this.publishBulletins = json.getBoolean("publishBulletins");
+		if (json.has("publishBlogs") && !json.isNull("publishBlogs"))
+			this.publishBlogs = json.getBoolean("publishBlogs");
+		if (json.has("sendEmails") && !json.isNull("sendEmails"))
+			this.sendEmails = json.getBoolean("sendEmails");
+		if (json.has("sendTelegramMessages") && !json.isNull("sendTelegramMessages"))
+			this.sendTelegramMessages = json.getBoolean("sendTelegramMessages");
+		if (json.has("sendPushNotifications") && !json.isNull("sendPushNotifications"))
+			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
+		if (json.has("external") && !json.isNull("external"))
+			this.external = json.getBoolean("external");
+		if (json.has("externalApiUrl") && !json.isNull("externalApiUrl"))
+			this.externalApiUrl = json.getString("externalApiUrl");
 	}
 
 	public String getId() {
@@ -93,14 +102,6 @@ public class Region implements AvalancheInformationObject {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public boolean isPublishBulletins() {
@@ -193,12 +194,12 @@ public class Region implements AvalancheInformationObject {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Region region = (Region) o;
-		return Objects.equals(id, region.id) && Objects.equals(version, region.version);
+		return Objects.equals(id, region.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, version);
+		return Objects.hash(id);
 	}
 
 	public static Region readRegion(final URL resource) throws IOException {
