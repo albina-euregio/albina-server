@@ -27,6 +27,7 @@ import org.hibernate.HibernateException;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
+import eu.albina.model.ServerInstance;
 import eu.albina.rest.websocket.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
@@ -153,6 +154,13 @@ public class RegionController {
 
     public boolean isSendPushNotifications(String regionId) {
 		return this.getRegion(regionId).isSendPushNotifications();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ServerInstance> getExternalServerInstances() {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			return entityManager.createQuery(HibernateUtil.queryGetServerInstances).getResultList();
+		});
 	}
 
 	/**
