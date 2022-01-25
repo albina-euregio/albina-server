@@ -168,7 +168,7 @@ public class AlbinaUtilTest {
 	public void addSubscriber() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, AlbinaException, IOException, Exception {
 		ArrayList<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTyrol);
+		regions.add("AT-07");
 
 		Subscriber subscriber = new Subscriber();
 		subscriber.setEmail("n.lanzanasto@gmail.com");

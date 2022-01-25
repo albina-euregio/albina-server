@@ -47,7 +47,7 @@ public class EmailUtilTest {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-				GlobalVariables.codeTyrol, false, false);
+				"AT-07", false, false);
 		assertEquals("162 kB", 162, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 		assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag  17.01.2019</h2>"));
 		assertTrue(html.contains("Veröffentlicht am <b>16.01.2019 um 17:00</b>"));
@@ -62,7 +62,7 @@ public class EmailUtilTest {
 		final URL resource = Resources.getResource("2021-12-01.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-			GlobalVariables.codeTyrol, false, false);
+			"AT-07", false, false);
 		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
@@ -74,9 +74,9 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		logger.info("#bulletins: {}", bulletins.size());
 		ArrayList<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTyrol);
-		regions.add(GlobalVariables.codeSouthTyrol);
-		regions.add(GlobalVariables.codeTrentino);
+		regions.add("AT-07");
+		regions.add("IT-32-BZ");
+		regions.add("IT-32-TN");
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
 		HibernateUtil.getInstance().shutDown();
 	}
@@ -97,9 +97,9 @@ public class EmailUtilTest {
 		final boolean update = false;
 		final LanguageCode lang = LanguageCode.en;
 		ArrayList<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTyrol);
-		regions.add(GlobalVariables.codeSouthTyrol);
-		regions.add(GlobalVariables.codeTrentino);
+		regions.add("AT-07");
+		regions.add("IT-32-BZ");
+		regions.add("IT-32-TN");
 
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		String subject;

@@ -24,7 +24,6 @@ import org.junit.Test;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.GoogleBloggerConfiguration;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 import static org.junit.Assert.assertEquals;
@@ -34,16 +33,16 @@ public class BlogControllerTest {
 
 	@Test
 	public void testBlogPosts() throws Exception {
-		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(GlobalVariables.codeTyrol, LanguageCode.de);
+		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration("AT-07", LanguageCode.de);
 		BlogController.getInstance().lastFetch.put(config.getBlogId(), Instant.ofEpochMilli(0L));
-		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(GlobalVariables.codeTyrol, LanguageCode.de);
+		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts("AT-07", LanguageCode.de);
 		assertTrue("size=" + blogPosts.size(), blogPosts.size() > 5);
 		assertTrue("one blog has image", blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()));
 	}
 
 	@Test
 	public void testBlogPost() throws Exception {
-		String blogPost = BlogController.getInstance().getBlogPost("1227558273754407795", GlobalVariables.codeTyrol, LanguageCode.de);
+		String blogPost = BlogController.getInstance().getBlogPost("1227558273754407795", "AT-07", LanguageCode.de);
 		assertTrue(blogPost, blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
 	}
 
@@ -51,7 +50,7 @@ public class BlogControllerTest {
 	@Test
 	public void sendBlogPostsTest() {
 		HibernateUtil.getInstance().setUp();
-		BlogController.getInstance().sendNewBlogPosts(GlobalVariables.codeTyrol, LanguageCode.de);
+		BlogController.getInstance().sendNewBlogPosts("AT-07", LanguageCode.de);
 		HibernateUtil.getInstance().shutDown();
 	}
 
