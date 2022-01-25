@@ -152,13 +152,12 @@ public class AvalancheBulletinService {
 		}
 	}
 
-	// TODO enable authentication
 	@GET
 	@Path("/aineva")
-	// @Secured({ Role.ADMIN, Role.FORECASTER })
+	@Secured({ Role.ADMIN, Role.FORECASTER })
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getAinevaXMLBulletins(
+	public Response getInternalXMLBulletins(
 			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regions, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published XML bulletins");
