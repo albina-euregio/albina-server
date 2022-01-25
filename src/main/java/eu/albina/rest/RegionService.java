@@ -81,7 +81,7 @@ public class RegionService {
 	public Response udpateRegion(String regionString, @Context SecurityContext securityContext) {
 		logger.debug("PUT JSON region");
 
-		// TODO check if user has ADMIN rights for this region
+		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
 
 		try {
 			JSONObject regionJson = new JSONObject(regionString);

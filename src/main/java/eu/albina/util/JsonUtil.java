@@ -42,6 +42,7 @@ public class JsonUtil {
 
 		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			// TODO is it necessary to use codeEuregio?
 			if (avalancheBulletin.affectsRegionOnlyPublished(GlobalVariables.codeEuregio))
 				regionBulletins.add(avalancheBulletin);
 		}
@@ -50,6 +51,7 @@ public class JsonUtil {
 			JSONArray jsonArray = JsonUtil.createJSONString(regionBulletins, "", true);
 			String jsonString = jsonArray.toString();
 
+			// TODO define generic filename
 			String fileName = dirPath + "/avalanche_report.json";
 			Files.write(Paths.get(fileName), jsonString.getBytes(StandardCharsets.UTF_8));
 			AlbinaUtil.setFilePermissions(fileName);

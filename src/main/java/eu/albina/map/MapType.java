@@ -26,6 +26,7 @@ enum MapType {
 		this.ymin = ymin;
 	}
 
+	// TODO move to region class
 	final String region;
 	final int xmax;
 	final int xmin;
