@@ -29,6 +29,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.User;
+import eu.albina.model.UserRegionRoleLink;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.HibernateUtil;
 
@@ -222,6 +223,17 @@ public class UserController {
 			User user = entityManager.find(User.class, id);
 			entityManager.remove(user);
 			return null;
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean isUserInRegionRole(String userEmail, String regionId, Role role) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks)
+				.setParameter("userEmail", userEmail)
+				.setParameter("regionId", regionId)
+				.getResultList();
+			return links.stream().anyMatch(link -> link.getRole().equals(role));
 		});
 	}
 }
