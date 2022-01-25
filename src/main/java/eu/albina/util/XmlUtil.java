@@ -247,26 +247,8 @@ public class XmlUtil {
 						+ ".html"));
 		extFiles.add(createExtFile(doc, "fd_albina_map.jpg",
 				LinkUtil.getExtFileMapDescription(lang, "fd", ""), baseUri + "fd_albina_map.jpg"));
-		extFiles.add(createExtFile(doc, "fd_tyrol_map.jpg",
-				LinkUtil.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTyrol),
-				baseUri + "fd_tyrol_map.jpg"));
-		extFiles.add(createExtFile(doc, "fd_southtyrol_map.jpg",
-				LinkUtil.getExtFileMapDescription(lang, "fd", GlobalVariables.codeSouthTyrol),
-				baseUri + "fd_southtyrol_map.jpg"));
-		extFiles.add(createExtFile(doc, "fd_trentino_map.jpg",
-				LinkUtil.getExtFileMapDescription(lang, "fd", GlobalVariables.codeTrentino),
-				baseUri + "fd_trentino_map.jpg"));
 		extFiles.add(createExtFile(doc, "pdf", LinkUtil.getExtFilePdfDescription(lang, ""),
 				baseUri + validityDateString + "_" + lang.toString() + ".pdf"));
-		extFiles.add(createExtFile(doc, "tyrol_pdf",
-				LinkUtil.getExtFilePdfDescription(lang, GlobalVariables.codeTyrol),
-				baseUri + validityDateString + "_" + GlobalVariables.codeTyrol + "_" + lang.toString() + ".pdf"));
-		extFiles.add(createExtFile(doc, "southtyrol_pdf",
-				LinkUtil.getExtFilePdfDescription(lang, GlobalVariables.codeSouthTyrol),
-				baseUri + validityDateString + "_" + GlobalVariables.codeSouthTyrol + "_" + lang.toString() + ".pdf"));
-		extFiles.add(createExtFile(doc, "trentino_pdf",
-				LinkUtil.getExtFilePdfDescription(lang, GlobalVariables.codeTrentino),
-				baseUri + validityDateString + "_" + GlobalVariables.codeTrentino + "_" + lang.toString() + ".pdf"));
 
 		if (!hasDaytimeDependency) {
 			extFiles.add(createExtFile(doc, "fd_overlay.png",
@@ -274,26 +256,8 @@ public class XmlUtil {
 		} else {
 			extFiles.add(createExtFile(doc, "am_albina_map.jpg",
 					LinkUtil.getExtFileMapDescription(lang, "am", ""), baseUri + "am_albina_map.jpg"));
-			extFiles.add(createExtFile(doc, "am_tyrol_map.jpg",
-					LinkUtil.getExtFileMapDescription(lang, "am", GlobalVariables.codeTyrol),
-					baseUri + "am_tyrol_map.jpg"));
-			extFiles.add(createExtFile(doc, "am_southtyrol_map.jpg",
-					LinkUtil.getExtFileMapDescription(lang, "am", GlobalVariables.codeSouthTyrol),
-					baseUri + "am_southtyrol_map.jpg"));
-			extFiles.add(createExtFile(doc, "am_trentino_map.jpg",
-					LinkUtil.getExtFileMapDescription(lang, "am", GlobalVariables.codeTrentino),
-					baseUri + "am_trentino_map.jpg"));
 			extFiles.add(createExtFile(doc, "pm_albina_map.jpg",
 					LinkUtil.getExtFileMapDescription(lang, "pm", ""), baseUri + "pm_albina_map.jpg"));
-			extFiles.add(createExtFile(doc, "pm_tyrol_map.jpg",
-					LinkUtil.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTyrol),
-					baseUri + "pm_tyrol_map.jpg"));
-			extFiles.add(createExtFile(doc, "pm_southtyrol_map.jpg",
-					LinkUtil.getExtFileMapDescription(lang, "pm", GlobalVariables.codeSouthTyrol),
-					baseUri + "pm_southtyrol_map.jpg"));
-			extFiles.add(createExtFile(doc, "pm_trentino_map.jpg",
-					LinkUtil.getExtFileMapDescription(lang, "pm", GlobalVariables.codeTrentino),
-					baseUri + "pm_trentino_map.jpg"));
 			extFiles.add(createExtFile(doc, "am_overlay.png",
 					LinkUtil.getExtFileOverlayDescription(lang, "am"), baseUri + "am_overlay.png"));
 			extFiles.add(createExtFile(doc, "pm_overlay.png",
