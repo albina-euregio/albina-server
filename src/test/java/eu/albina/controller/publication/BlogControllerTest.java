@@ -19,6 +19,8 @@ package eu.albina.controller.publication;
 import java.time.Instant;
 import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -30,6 +32,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class BlogControllerTest {
+
+	@Before
+	public void setUp() throws Exception {
+		HibernateUtil.getInstance().setUp();
+	}
+
+	@After
+	public void shutDown() {
+		HibernateUtil.getInstance().shutDown();
+	}
 
 	@Test
 	public void testBlogPosts() throws Exception {

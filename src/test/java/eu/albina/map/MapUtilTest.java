@@ -14,7 +14,10 @@ import java.util.Map;
 import eu.albina.ImageTestUtils;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.HibernateUtil;
 import eu.albina.util.PdfUtil;
+
+import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -35,10 +38,17 @@ public class MapUtilTest {
 
 	@Before
 	public void setUp() throws Exception {
+		HibernateUtil.getInstance().setUp();
+
 		GlobalVariables.loadConfigProperties();
 		GlobalVariables.mapsPath = folder.toString();
 		GlobalVariables.mapProductionUrl = "../avalanche-warning-maps/";
 		GlobalVariables.pdfDirectory = GlobalVariables.mapsPath;
+	}
+
+	@After
+	public void shutDown() {
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test
