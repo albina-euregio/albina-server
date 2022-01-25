@@ -271,8 +271,6 @@ public class XmlUtil {
 		if (!hasDaytimeDependency) {
 			extFiles.add(createExtFile(doc, "fd_overlay.png",
 					LinkUtil.getExtFileOverlayDescription(lang, "fd"), baseUri + "fd_overlay.png"));
-			extFiles.add(createExtFile(doc, "fd_regions.json",
-					LinkUtil.getExtFileRegionsDescription(lang, "fd"), baseUri + "fd_regions.json"));
 		} else {
 			extFiles.add(createExtFile(doc, "am_albina_map.jpg",
 					LinkUtil.getExtFileMapDescription(lang, "am", ""), baseUri + "am_albina_map.jpg"));
@@ -300,10 +298,6 @@ public class XmlUtil {
 					LinkUtil.getExtFileOverlayDescription(lang, "am"), baseUri + "am_overlay.png"));
 			extFiles.add(createExtFile(doc, "pm_overlay.png",
 					LinkUtil.getExtFileOverlayDescription(lang, "pm"), baseUri + "pm_overlay.png"));
-			extFiles.add(createExtFile(doc, "am_regions.json",
-					LinkUtil.getExtFileRegionsDescription(lang, "am"), baseUri + "am_regions.json"));
-			extFiles.add(createExtFile(doc, "pm_regions.json",
-					LinkUtil.getExtFileRegionsDescription(lang, "pm"), baseUri + "pm_regions.json"));
 		}
 
 		return extFiles;
