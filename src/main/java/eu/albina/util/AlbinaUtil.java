@@ -62,6 +62,7 @@ public class AlbinaUtil {
 
 	public static final String greyDarkColor = "#565F61";
 
+	// TODO use region names from eaws-region repository
 	public static String getRegionName(LanguageCode lang, String regionId) {
 		if ("".equals(regionId)) {
 			return "";
