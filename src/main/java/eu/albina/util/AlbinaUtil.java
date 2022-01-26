@@ -167,7 +167,7 @@ public class AlbinaUtil {
 			FileInputStream fileInputStreamReader = new FileInputStream(file);
 			byte[] bytes = new byte[(int) file.length()];
 			fileInputStreamReader.read(bytes);
-			encodedfile = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
+			encodedfile = Base64.getEncoder().encodeToString(bytes);
 			fileInputStreamReader.close();
 		} catch (IOException e) {
 			logger.error("Failed to encode to base64", e);
