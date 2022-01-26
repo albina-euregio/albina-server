@@ -16,12 +16,10 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
+import eu.albina.util.HttpClientUtil;
 import io.swagger.annotations.Api;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,12 +27,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
 @Path("/observations/lwdkip")
 @Api(value = "/observations/lwdkip")
@@ -43,6 +43,7 @@ public class ObservationLwdKipService {
 	private static final String ARCGIS_API = "https://gis.tirol.gv.at/arcgis/";
 	private static final Logger logger = LoggerFactory.getLogger(ObservationLwdKipService.class);
 	private static Token token;
+	private final Client client = HttpClientUtil.newClientBuilder().build();
 
 	static class Token {
 		public String token;
@@ -60,13 +61,14 @@ public class ObservationLwdKipService {
 	public Response get(@PathParam("layer") String layer, @Context UriInfo uriInfo) throws Exception {
 		if (token == null || token.isExpired()) {
 			try {
-				Request tokenRequest = Request.Post(ARCGIS_API + "tokens/").bodyForm(
-					new BasicNameValuePair("username", System.getenv("ALBINA_LWDKIP_USERNAME")),
-					new BasicNameValuePair("password", System.getenv("ALBINA_LWDKIP_PASSWORD")),
-					new BasicNameValuePair("client", "requestip"),
-					new BasicNameValuePair("f", "json"));
-				String tokenJson = tokenRequest.execute().returnContent().asString();
-				token = new ObjectMapper().readValue(tokenJson, Token.class);
+				Form form = new Form();
+				form.param("username", System.getenv("ALBINA_LWDKIP_USERNAME"));
+				form.param("password", System.getenv("ALBINA_LWDKIP_PASSWORD"));
+				form.param("client", "requestip");
+				form.param("f", "json");
+				Entity<Form> entity = Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE);
+				WebTarget target = client.target(ARCGIS_API + "tokens/");
+				token = target.request().post(entity, Token.class);
 			} catch (Exception ex) {
 				logger.warn("Failed to obtain ArcGis token", ex);
 				return Response.serverError().build();
@@ -74,11 +76,10 @@ public class ObservationLwdKipService {
 		}
 
 		try {
-			UriBuilder uriBuilder = UriBuilder.fromUri(ARCGIS_API + "rest/services/APPS_DVT/lwdkip/mapserver/" + layer + "/query");
-			uriBuilder.queryParam("token", token.token);
-			uriInfo.getQueryParameters().forEach((key, values) -> uriBuilder.queryParam(key, values.toArray()));
-			URI uri = uriBuilder.build();
-			String json = Request.Get(uri).execute().returnContent().asString();
+			WebTarget target = client.target(ARCGIS_API + "rest/services/APPS_DVT/lwdkip/mapserver/" + layer + "/query");
+			target.queryParam("token", ObservationLwdKipService.token.token);
+			uriInfo.getQueryParameters().forEach((key, values) -> target.queryParam(key, values.toArray()));
+			Object json = target.request().get().getEntity();
 			return Response.ok(json).build();
 		} catch (Exception ex) {
 			logger.warn("Failed to perform ArcGis query", ex);

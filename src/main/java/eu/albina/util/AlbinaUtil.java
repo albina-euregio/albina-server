@@ -33,6 +33,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.text.MessageFormat;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +41,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,7 +167,7 @@ public class AlbinaUtil {
 			FileInputStream fileInputStreamReader = new FileInputStream(file);
 			byte[] bytes = new byte[(int) file.length()];
 			fileInputStreamReader.read(bytes);
-			encodedfile = new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
+			encodedfile = new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
 			fileInputStreamReader.close();
 		} catch (IOException e) {
 			logger.error("Failed to encode to base64", e);

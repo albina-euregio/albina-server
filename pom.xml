@@ -417,12 +417,6 @@
 			<version>1.2.7</version>
 		</dependency>
 
-		<!--  http  -->
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>fluent-hc</artifactId>
-			<version>4.5.13</version>
-		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
