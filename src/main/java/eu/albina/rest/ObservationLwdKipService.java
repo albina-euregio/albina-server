@@ -20,6 +20,7 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.HttpClientUtil;
 import io.swagger.annotations.Api;
+import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,8 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 @Path("/observations/lwdkip")
 @Api(value = "/observations/lwdkip")
@@ -43,7 +46,9 @@ public class ObservationLwdKipService {
 	private static final String ARCGIS_API = "https://gis.tirol.gv.at/arcgis/";
 	private static final Logger logger = LoggerFactory.getLogger(ObservationLwdKipService.class);
 	private static Token token;
-	private final Client client = HttpClientUtil.newClientBuilder().build();
+	private final Client client = HttpClientUtil.newClientBuilder()
+		.register(PatchedJacksonJsonProvider.class)
+		.build();
 
 	static class Token {
 		public String token;
@@ -51,6 +56,15 @@ public class ObservationLwdKipService {
 
 		boolean isExpired() {
 			return expires < System.currentTimeMillis() + 5_000;
+		}
+	}
+
+	static class PatchedJacksonJsonProvider extends JacksonJsonProvider {
+		@Override
+		public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+			// fix for MessageBodyReader not found for media type=text/plain;charset=utf-8
+			return super.isReadable(type, genericType, annotations, mediaType)
+				|| super.isReadable(type, genericType, annotations, MediaType.APPLICATION_JSON_TYPE);
 		}
 	}
 
