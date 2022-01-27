@@ -38,6 +38,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Map;
 
 @Path("/observations/lwdkip")
 @Api(value = "/observations/lwdkip")
@@ -91,10 +93,12 @@ public class ObservationLwdKipService {
 
 		try {
 			WebTarget target = client.target(ARCGIS_API + "rest/services/APPS_DVT/lwdkip/mapserver/" + layer + "/query");
-			target.queryParam("token", ObservationLwdKipService.token.token);
-			uriInfo.getQueryParameters().forEach((key, values) -> target.queryParam(key, values.toArray()));
-			Object json = target.request().get().getEntity();
-			return Response.ok(json).build();
+			target = target.queryParam("token", ObservationLwdKipService.token.token);
+			for (Map.Entry<String, List<String>> queryParameter : uriInfo.getQueryParameters().entrySet()) {
+				target = target.queryParam(queryParameter.getKey(), queryParameter.getValue().toArray());
+			}
+			Object json = target.request().get(String.class);
+			return Response.ok(json, MediaType.APPLICATION_JSON).build();
 		} catch (Exception ex) {
 			logger.warn("Failed to perform ArcGis query", ex);
 			return Response.serverError().build();
