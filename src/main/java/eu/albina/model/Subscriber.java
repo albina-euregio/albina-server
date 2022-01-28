@@ -76,7 +76,7 @@ public class Subscriber {
 		if (json.has("confirmed") && !json.isNull("confirmed"))
 			this.confirmed = json.getBoolean("confirmed");
 		if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("roles");
+			JSONArray regions = json.getJSONArray("regions");
 			for (Object entry : regions) {
 				this.regions.add((String) entry);
 			}
