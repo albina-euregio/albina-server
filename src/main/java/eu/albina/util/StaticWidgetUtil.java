@@ -240,10 +240,6 @@ public class StaticWidgetUtil {
 			String filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString
 					+ "/" + AlbinaUtil.getStaticWidgetFilename(validityDateString, region, lang) + ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
-			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
-			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
-			// ImageIO.write(bi, "gif", new File("c:\\yourImageName.GIF"));
-			// ImageIO.write(bi, "BMP", new File("c:\\yourImageName.BMP"));
 
 			AlbinaUtil.setFilePermissions(filename);
 		} catch (IOException ie) {
