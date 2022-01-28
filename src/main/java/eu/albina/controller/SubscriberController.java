@@ -154,21 +154,21 @@ public class SubscriberController {
 	 *
 	 * @param lang
 	 *            the returned subscribers have to subscribed for this language
-	 * @param regions
+	 * @param regionIds
 	 *            the returned subscribers have to be subscribed for at least one of
 	 *            these regions
 	 * @return all subscribers for the language {@code lang} and the specified
 	 *         {@code regions}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Subscriber> getSubscribers(LanguageCode lang, List<String> regions) {
+	public List<Subscriber> getSubscribers(LanguageCode lang, List<String> regionIds) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage)
 					.setParameter("language", lang).getResultList();
 			List<Subscriber> results = new ArrayList<Subscriber>();
 			for (Subscriber subscriber : subscribers) {
-				for (String region : regions)
-					if (subscriber.affectsRegion(region)) {
+				for (String regionId : regionIds)
+					if (subscriber.affectsRegion(RegionController.getInstance().getRegion(regionId))) {
 						results.add(subscriber);
 						break;
 					}
@@ -235,11 +235,9 @@ public class SubscriberController {
 			CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, Exception {
 		if (subscriber.getLanguage() == null)
 			throw new AlbinaException("No language defined!");
-		for (String regionId : subscriber.getRegions()) {
+		for (Region region : subscriber.getRegions()) {
 			PostRecipientsRequest recipient = new PostRecipientsRequest();
 			recipient.setEmail(subscriber.getEmail());
-
-			Region region = RegionController.getInstance().getRegion(regionId);
 
 			RapidMailController.getInstance().createRecipient(region, recipient, null, subscriber.getLanguage());
 		}

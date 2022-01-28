@@ -31,6 +31,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class AlbinaUtilTest {
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;
 
-	private Region testRegion;
+	private Region regionTirol;
 
 	private final String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
 	private final List<String> names = new ArrayList<String>();
@@ -80,8 +81,8 @@ public class AlbinaUtilTest {
 	public void setUp() throws IOException {
 		// HibernateUtil.getInstance().setUp();
 
-		testRegion = new Region();
-		testRegion.setId("AT-07");
+		regionTirol = new Region();
+		regionTirol.setId("AT-07");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -109,13 +110,10 @@ public class AlbinaUtilTest {
 	@Test
 	public void addSubscriber() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, AlbinaException, IOException, Exception {
-		ArrayList<String> regions = new ArrayList<String>();
-		regions.add("AT-07");
-
 		Subscriber subscriber = new Subscriber();
 		subscriber.setEmail("n.lanzanasto@gmail.com");
 		subscriber.setLanguage(LanguageCode.it);
-		subscriber.setRegions(regions);
+		subscriber.setRegions(Arrays.asList(regionTirol));
 
 		SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 	}
@@ -155,7 +153,7 @@ public class AlbinaUtilTest {
 	@Ignore
 	@Test
 	public void createStaticWidget() throws IOException, URISyntaxException {
-		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en, testRegion,
+		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en, regionTirol,
 				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 	}
 
@@ -175,7 +173,7 @@ public class AlbinaUtilTest {
 	@Ignore
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
-		JsonUtil.createJsonFile(bulletins, testRegion, "2019-12-30", "2019-12-30_17-15-30");
+		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30");
 	}
 
 	@Test
@@ -201,7 +199,7 @@ public class AlbinaUtilTest {
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
 			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de));
 		assertEquals("https://lawinen.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
-			LinkUtil.getPdfLink(bulletins, LanguageCode.de, testRegion));
+			LinkUtil.getPdfLink(bulletins, LanguageCode.de, regionTirol));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),

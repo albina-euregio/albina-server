@@ -515,7 +515,6 @@ public class Region implements AvalancheInformationObject {
 		return subRegions.stream().anyMatch(subRegion -> regionId.startsWith(subRegion.getId()));
 	}
 
-	// TODO handle superRegions and subRegions
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();

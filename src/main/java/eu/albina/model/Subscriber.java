@@ -19,20 +19,20 @@ package eu.albina.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
+import eu.albina.controller.RegionController;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
@@ -47,11 +47,12 @@ public class Subscriber {
 	@Column(name = "CONFIRMED")
 	private boolean confirmed;
 
-	// TODO use region table
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "subscriber_regions", joinColumns = @JoinColumn(name = "SUBSCRIBER_ID"))
-	@Column(name = "REGION_ID")
-	private List<String> regions;
+	@ManyToMany
+	@JoinTable(name="subscriber_regions",
+	 joinColumns=@JoinColumn(name="SUBSCRIBER_ID"),
+	 inverseJoinColumns=@JoinColumn(name="REGION_ID")
+	)
+	private List<Region> regions;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE")
@@ -64,7 +65,7 @@ public class Subscriber {
 	 * Standard constructor for a subscriber.
 	 */
 	public Subscriber() {
-		regions = new ArrayList<String>();
+		regions = new ArrayList<Region>();
 		pdfAttachment = false;
 		confirmed = false;
 	}
@@ -78,7 +79,7 @@ public class Subscriber {
 		if (json.has("regions")) {
 			JSONArray regions = json.getJSONArray("regions");
 			for (Object entry : regions) {
-				this.regions.add((String) entry);
+				this.regions.add(RegionController.getInstance().getRegion((String) entry));
 			}
 		}
 		if (json.has("language") && !json.isNull("language"))
@@ -103,15 +104,15 @@ public class Subscriber {
 		this.confirmed = confirmed;
 	}
 
-	public List<String> getRegions() {
+	public List<Region> getRegions() {
 		return regions;
 	}
 
-	public void setRegions(List<String> regions) {
+	public void setRegions(List<Region> regions) {
 		this.regions = regions;
 	}
 
-	public void addRole(String region) {
+	public void addRole(Region region) {
 		if (!this.regions.contains(region))
 			this.regions.add(region);
 	}
@@ -139,8 +140,8 @@ public class Subscriber {
 		json.put("confirmed", getConfirmed());
 		if (regions != null && regions.size() > 0) {
 			JSONArray jsonRegions = new JSONArray();
-			for (String region : regions) {
-				jsonRegions.put(region);
+			for (Region region : regions) {
+				jsonRegions.put(region.getId());
 			}
 			json.put("regions", jsonRegions);
 		}
@@ -150,9 +151,9 @@ public class Subscriber {
 		return json;
 	}
 
-	public boolean affectsRegion(String region) {
+	public boolean affectsRegion(Region region) {
 		if (getRegions() != null)
-			return getRegions().stream().anyMatch(entry -> entry.startsWith(region));
+			return getRegions().stream().anyMatch(entry -> entry.getId().startsWith(region.getId()));
 		return false;
 	}
 }
