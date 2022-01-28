@@ -176,6 +176,14 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "MAP_Y_MIN")
 	private int mapYmin;
 
+	// EUREGIO simple-bulletin.min.html
+	// ES-CT-L simple-bulletin.aran.html
+	// AT-07 simple-bulletin.min.html
+	// IT-32-BZ simple-bulletin.min.html
+	// IT-32-TN simple-bulletin.min.html
+	@Column(name = "SIMPLE_HTML_TEMPLATE_NAME")
+	private String simpleHtmlTemplateName;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -242,6 +250,8 @@ public class Region implements AvalancheInformationObject {
 			this.mapYmax = json.getInt("mapYmax");
 		if (json.has("mapYmin") && !json.isNull("mapYmin"))
 			this.mapYmin = json.getInt("mapYmin");
+		if (json.has("simpleHtmlTemplateName") && !json.isNull("simpleHtmlTemplateName"))
+			this.simpleHtmlTemplateName = json.getString("simpleHtmlTemplateName");
 	}
 
 	public String getId() {
@@ -468,6 +478,14 @@ public class Region implements AvalancheInformationObject {
 		this.mapYmin = mapYmin;
 	}
 
+	public String getSimpleHtmlTemplateName() {
+		return simpleHtmlTemplateName;
+	}
+
+	public void setSimpleHtmlTemplateName(String simpleHtmlTemplateName) {
+		this.simpleHtmlTemplateName = simpleHtmlTemplateName;
+	}
+
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
@@ -513,6 +531,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("mapXmin", getMapXmin());
 		json.put("mapYmax", getMapXmax());
 		json.put("mapYmin", getMapXmin());
+		json.put("simpleHtmlTemplateName", getSimpleHtmlTemplateName());
 
 		return json;
 	}

@@ -313,8 +313,7 @@ public class SimpleHtmlUtil {
 		root.put("bulletins", arrayList);
 
 		// Get template
-		boolean isAran = GlobalVariables.codeAran.equals(region.getId());
-		Template temp = cfg.getTemplate(isAran ? "simple-bulletin.aran.html" : "simple-bulletin.min.html");
+		Template temp = cfg.getTemplate(region.getSimpleHtmlTemplateName());
 
 		// Merge template and model
 		Writer out = new StringWriter();
