@@ -100,19 +100,7 @@ public class RegionController {
 
 	public Region updateRegion(Region region) throws AlbinaException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			Region originalRegion = entityManager.find(Region.class, region.getId());
-			if (originalRegion == null) {
-				throw new HibernateException("No region with id: " + region.getId());
-			}
-			originalRegion.setPublishBulletins(region.isPublishBulletins());
-			originalRegion.setPublishBlogs(region.isPublishBlogs());
-			originalRegion.setSendEmails(region.isSendEmails());
-			originalRegion.setSendTelegramMessages(region.isSendTelegramMessages());
-			originalRegion.setSendPushNotifications(region.isSendPushNotifications());
-			originalRegion.setExternalInstance(region.isExternalInstance());
-			originalRegion.setServerInstance(region.getServerInstance());
-			entityManager.persist(originalRegion);
-
+			entityManager.merge(region);
 			return region;
 		});
 	}
@@ -151,7 +139,7 @@ public class RegionController {
 
 	public List<Region> getPublishBulletinRegions() {
 		try {
-			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBulletins()).collect(Collectors.toList());
+			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternal() && region.isPublishBulletins()).collect(Collectors.toList());
 			return result;
 		} catch (AlbinaException ae) {
 			logger.warn("Active region ids could not be loaded!", ae);
@@ -161,37 +149,17 @@ public class RegionController {
 
 	public List<Region> getPublishBlogRegions() {
 		try {
-			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBlogs()).collect(Collectors.toList());
+			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternal() && region.isPublishBlogs()).collect(Collectors.toList());
 		} catch (AlbinaException ae) {
 			logger.warn("Active regions could not be loaded!", ae);
 			return new ArrayList<Region>();
 		}
 	}
 
-    public boolean isPublishBulletins(String regionId) {
-		return this.getRegion(regionId).isPublishBulletins();
-	}
-
-    public boolean isPublishBlogs(String regionId) {
-		return this.getRegion(regionId).isPublishBlogs();
-	}
-
-    public boolean isSendEmails(String regionId) {
-		return this.getRegion(regionId).isSendEmails();
-	}
-
-    public boolean isSendTelegramMessages(String regionId) {
-		return this.getRegion(regionId).isSendTelegramMessages();
-	}
-
-    public boolean isSendPushNotifications(String regionId) {
-		return this.getRegion(regionId).isSendPushNotifications();
-	}
-
 	@SuppressWarnings("unchecked")
 	public List<ServerInstance> getExternalServerInstances() {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return entityManager.createQuery(HibernateUtil.queryGetServerInstances).getResultList();
+			return entityManager.createQuery(HibernateUtil.queryGetExternalServerInstances).getResultList();
 		});
 	}
 

@@ -113,9 +113,6 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "SEND_PUSH_NOTIFICATIONS")
 	private boolean sendPushNotifications;
 
-	@Column(name = "EXTERNAL_INSTANCE")
-	private boolean externalInstance;
-
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -245,8 +242,6 @@ public class Region implements AvalancheInformationObject {
 			this.sendTelegramMessages = json.getBoolean("sendTelegramMessages");
 		if (json.has("sendPushNotifications") && !json.isNull("sendPushNotifications"))
 			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
-		if (json.has("externalInstance") && !json.isNull("externalInstance"))
-			this.externalInstance = json.getBoolean("external");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
 			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"));
 		if (json.has("pdfColor") && !json.isNull("pdfColor"))
@@ -409,14 +404,6 @@ public class Region implements AvalancheInformationObject {
 		this.sendPushNotifications = sendPushNotifications;
 	}
 
-	public boolean isExternalInstance() {
-		return externalInstance;
-	}
-
-	public void setExternalInstance(boolean externalInstance) {
-		this.externalInstance = externalInstance;
-	}
-
 	public ServerInstance getServerInstance() {
 		return serverInstance;
 	}
@@ -560,7 +547,6 @@ public class Region implements AvalancheInformationObject {
 		json.put("sendEmails", isSendEmails());
 		json.put("sendTelegramMessages", isSendTelegramMessages());
 		json.put("sendPushNotifications", isSendPushNotifications());
-		json.put("externalInstance", isExternalInstance());
 		json.put("serverInstance", getServerInstance().toJSON());
 		json.put("pdfColor", getPdfColor());
 		json.put("pdfMapYAmPm", getPdfMapYAmPm());

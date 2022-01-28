@@ -38,6 +38,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -187,28 +188,30 @@ public class EmailUtil {
 		try {
 			// Create data model
 			Map<String, Object> root = new HashMap<>();
-
 			Map<String, Object> image = new HashMap<>();
+
+			final String serverImagesUrl =  ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl();
+
 			switch (lang) {
 			case de:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lawinen_report.png");
+				image.put("logo", serverImagesUrl + "logo/color/lawinen_report.png");
 				break;
 			case it:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/valanghe_report.png");
+				image.put("logo", serverImagesUrl + "logo/color/valanghe_report.png");
 				break;
 			case en:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
+				image.put("logo", serverImagesUrl + "logo/color/avalanche_report.png");
 				break;
 			default:
-				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/avalanche_report.png");
+				image.put("logo", serverImagesUrl + "logo/color/avalanche_report.png");
 				break;
 			}
 			image.put("dangerLevel5Style", getDangerLevel5Style());
-			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
+			image.put("ci", serverImagesUrl + "logo/color/colorbar.gif");
 			Map<String, Object> socialMediaImages = new HashMap<>();
-			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
-			socialMediaImages.put("instagram", GlobalVariables.getServerImagesUrl() + "social_media/instagram.png");
-			socialMediaImages.put("youtube", GlobalVariables.getServerImagesUrl() + "social_media/youtube.png");
+			socialMediaImages.put("facebook", serverImagesUrl + "social_media/facebook.png");
+			socialMediaImages.put("instagram", serverImagesUrl + "social_media/instagram.png");
+			socialMediaImages.put("youtube", serverImagesUrl + "social_media/youtube.png");
 			image.put("socialmedia", socialMediaImages);
 			Map<String, Object> mapImage = new HashMap<>();
 
@@ -234,7 +237,7 @@ public class EmailUtil {
 							LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
 									+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.fd, false));
-				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
+				mapImage.put("overviewPM", serverImagesUrl + "/empty.png");
 				mapImage.put("widthPM", "");
 			}
 
@@ -404,17 +407,17 @@ public class EmailUtil {
 				}
 				if (avalancheBulletin.getTendency() == Tendency.decreasing) {
 					tendency.put("symbol",
-							GlobalVariables.getServerImagesUrl() + "tendency/tendency_decreasing_blue.png");
+							serverImagesUrl + "tendency/tendency_decreasing_blue.png");
 					tendency.put("date", AlbinaUtil.getTendencyDate(bulletins, lang));
 				} else if (avalancheBulletin.getTendency() == Tendency.steady) {
-					tendency.put("symbol", GlobalVariables.getServerImagesUrl() + "tendency/tendency_steady_blue.png");
+					tendency.put("symbol", serverImagesUrl + "tendency/tendency_steady_blue.png");
 					tendency.put("date", AlbinaUtil.getTendencyDate(bulletins, lang));
 				} else if (avalancheBulletin.getTendency() == Tendency.increasing) {
 					tendency.put("symbol",
-							GlobalVariables.getServerImagesUrl() + "tendency/tendency_increasing_blue.png");
+							serverImagesUrl + "tendency/tendency_increasing_blue.png");
 					tendency.put("date", AlbinaUtil.getTendencyDate(bulletins, lang));
 				} else {
-					tendency.put("symbol", GlobalVariables.getServerImagesUrl() + "tendency/empty.png");
+					tendency.put("symbol", serverImagesUrl + "tendency/empty.png");
 					tendency.put("date", "");
 				}
 				bulletin.put("tendency", tendency);
@@ -471,6 +474,8 @@ public class EmailUtil {
 		else
 			daytimeBulletin = avalancheBulletin.getForenoon();
 
+		final String serverImagesUrl =  ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl();
+
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
 		if ((daytimeBulletin.getDangerRatingBelow() == null
@@ -479,9 +484,9 @@ public class EmailUtil {
 				&& (daytimeBulletin.getDangerRatingAbove() == null
 						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.missing
 						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.no_rating)) {
-			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_0_0.png");
+			dangerRating.put("symbol", serverImagesUrl + "warning_pictos/color/level_0_0.png");
 		} else {
-			dangerRating.put("symbol", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
+			dangerRating.put("symbol", serverImagesUrl + "warning_pictos/color/level_"
 					+ AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		}
 		// dangerRating.put("symbol", "cid:warning_picto/" +
@@ -518,30 +523,32 @@ public class EmailUtil {
 	private Map<String, Object> createAvalancheSituation(eu.albina.model.AvalancheSituation avalancheSituation,
 			LanguageCode lang) {
 		Map<String, Object> avalancheSituation2 = new HashMap<>();
+		final String serverImagesUrl =  ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl();
+
 		if (avalancheSituation != null && avalancheSituation.getAvalancheSituation() != null) {
 			avalancheSituation2.put("empty", false);
 			if (avalancheSituation.getAvalancheSituation() != null) {
-				avalancheSituation2.put("symbol", GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/"
+				avalancheSituation2.put("symbol", serverImagesUrl + "avalanche_situations/color/"
 						+ avalancheSituation.getAvalancheSituation().toStringId() + ".png");
 				avalancheSituation2.put("text", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 				avalancheSituation2.put("link",
 						LinkUtil.getAvalancheSituationLink(lang, avalancheSituation.getAvalancheSituation()));
 			} else {
 				avalancheSituation2.put("symbol",
-						GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
+						serverImagesUrl + "avalanche_situations/color/empty.png");
 				avalancheSituation2.put("text", "");
 				avalancheSituation2.put("link", "");
 			}
 
 			String path = Aspect.getSymbolPath(avalancheSituation.getAspects(), false);
-			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+			avalancheSituation2.put("aspects", serverImagesUrl + path);
 
 			Map<String, Object> elevation = new HashMap<>();
 			if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
 				if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 					// elevation high and low set
 					elevation.put("symbol",
-							GlobalVariables.getServerImagesUrl() + "elevation/color/levels_middle_two.png");
+							serverImagesUrl + "elevation/color/levels_middle_two.png");
 					// elevation.put("symbol", "cid:elevation/middle");
 					if (avalancheSituation.getTreelineLow())
 						elevation.put("limitAbove", lang.getBundleString("elevation.treeline.capitalized"));
@@ -553,7 +560,7 @@ public class EmailUtil {
 						elevation.put("limitBelow", avalancheSituation.getElevationHigh() + "m");
 				} else {
 					// elevation high set
-					elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_below.png");
+					elevation.put("symbol", serverImagesUrl + "elevation/color/levels_below.png");
 					// elevation.put("symbol", "cid:elevation/below");
 					elevation.put("limitAbove", "");
 					if (avalancheSituation.getTreelineHigh())
@@ -563,7 +570,7 @@ public class EmailUtil {
 				}
 			} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 				// elevation low set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_above.png");
+				elevation.put("symbol", serverImagesUrl + "elevation/color/levels_above.png");
 				// elevation.put("symbol", "cid:elevation/above");
 				if (avalancheSituation.getTreelineLow())
 					elevation.put("limitAbove", lang.getBundleString("elevation.treeline.capitalized"));
@@ -572,7 +579,7 @@ public class EmailUtil {
 				elevation.put("limitBelow", "");
 			} else {
 				// no elevation set
-				elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/levels_all.png");
+				elevation.put("symbol", serverImagesUrl + "elevation/color/levels_all.png");
 				// elevation.put("symbol", "cid:elevation/all");
 				elevation.put("limitAbove", "");
 				elevation.put("limitBelow", "");
@@ -581,15 +588,15 @@ public class EmailUtil {
 		} else {
 			avalancheSituation2.put("empty", true);
 			avalancheSituation2.put("symbol",
-					GlobalVariables.getServerImagesUrl() + "avalanche_situations/color/empty.png");
+					serverImagesUrl + "avalanche_situations/color/empty.png");
 			avalancheSituation2.put("text", "");
 			avalancheSituation2.put("link", "");
 
 			String path = Aspect.getSymbolPath(null, false);
-			avalancheSituation2.put("aspects", GlobalVariables.getServerImagesUrl() + path);
+			avalancheSituation2.put("aspects", serverImagesUrl + path);
 
 			Map<String, Object> elevation = new HashMap<>();
-			elevation.put("symbol", GlobalVariables.getServerImagesUrl() + "elevation/color/empty.png");
+			elevation.put("symbol", serverImagesUrl + "elevation/color/empty.png");
 			elevation.put("limitAbove", "");
 			elevation.put("limitBelow", "");
 			avalancheSituation2.put("elevation", elevation);
@@ -599,7 +606,7 @@ public class EmailUtil {
 
 	private String getDangerRatingColorStyle(DangerRating dangerRating) {
 		if (dangerRating.equals(DangerRating.very_high)) {
-			return "background=\"" + GlobalVariables.getServerImagesUrl() + "bg_checkered.png"
+			return "background=\"" + ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl() + "bg_checkered.png"
 					+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
 		} else
 			return "style=\"background-color: " + dangerRating.getColor()
@@ -617,7 +624,7 @@ public class EmailUtil {
 	}
 
 	private String getDangerLevel5Style() {
-		return "background=\"" + GlobalVariables.getServerImagesUrl() + "bg_checkered.png"
+		return "background=\"" + ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl() + "bg_checkered.png"
 				+ "\" height=\"10\" width=\"75\" bgcolor=\"#FF0000\"";
 	}
 

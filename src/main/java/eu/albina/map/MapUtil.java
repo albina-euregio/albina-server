@@ -29,7 +29,6 @@ import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.GlobalVariables;
 import org.mapyrus.Argument;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.MapyrusException;
@@ -37,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.RegionController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.Region;
@@ -71,7 +71,7 @@ public interface MapUtil {
 	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Region region, boolean preview) throws Exception {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
-				GlobalVariables.getMapProductionUrl());
+				ServerInstanceController.getInstance().getLocalServerInstance().getMapProductionUrl());
 		try {
 			createMapyrusMaps(bulletins, region);
 		} catch (Exception ex) {
@@ -105,7 +105,7 @@ public interface MapUtil {
 	static Path getOutputDirectory(List<AvalancheBulletin> bulletins) {
 		final String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		final String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		return Paths.get(GlobalVariables.getMapsPath(), validityDateString, publicationTime);
+		return Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(), validityDateString, publicationTime);
 	}
 
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region) {

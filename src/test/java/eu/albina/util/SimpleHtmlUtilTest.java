@@ -22,12 +22,14 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.io.Resources;
 
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -40,12 +42,18 @@ public class SimpleHtmlUtilTest {
 
 	@Before
 	public void setUp() throws Exception {
-		GlobalVariables.htmlDirectory = "/foo/bar/baz/simple/";
-		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files/";
+		HibernateUtil.getInstance().setUp();
+		ServerInstanceController.getInstance().getLocalServerInstance().setHtmlDirectory("/foo/bar/baz/simple/");
+		ServerInstanceController.getInstance().getLocalServerInstance().setMapsPath("/foo/bar/baz/albina_files/");
 		regionEuregio = new Region();
 		regionEuregio.setId("EUREGIO");
 		regionEuregio = new Region();
 		regionEuregio.setId("ES-CT-L");
+	}
+
+	@After
+	public void shutDown() throws Exception {
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test
@@ -59,9 +67,9 @@ public class SimpleHtmlUtilTest {
 
 	@Test
 	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
-		final String serverImagesUrl = GlobalVariables.serverImagesUrl;
+		final String serverImagesUrl = ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl();
 		try {
-			GlobalVariables.serverImagesUrl = "https://static.lauegi.report/images/";
+			ServerInstanceController.getInstance().getLocalServerInstance().setServerImagesUrl("https://static.lauegi.report/images/");
 			GlobalVariables.serverMapsUrl = "https://static.lauegi.report/albina_files";
 			GlobalVariables.serverWebsiteUrl = "https://www.lauegi.report/";
 			URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
@@ -70,7 +78,7 @@ public class SimpleHtmlUtilTest {
 			String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
 			Assert.assertEquals(expected.trim(), htmlString.trim());
 		} finally {
-			GlobalVariables.serverImagesUrl = serverImagesUrl;
+			ServerInstanceController.getInstance().getLocalServerInstance().setServerImagesUrl(serverImagesUrl);
 			GlobalVariables.serverMapsUrl = "";
 			GlobalVariables.serverWebsiteUrl = "";
 		}

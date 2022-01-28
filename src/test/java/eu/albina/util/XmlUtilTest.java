@@ -11,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -24,6 +25,7 @@ import eu.albina.caaml.CaamlValidator;
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -34,10 +36,16 @@ public class XmlUtilTest {
 
 	@Before
 	public void setUp() throws Exception {
-		GlobalVariables.htmlDirectory = "/foo/bar/baz/simple/";
-		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files/";
+		HibernateUtil.getInstance().setUp();
+		ServerInstanceController.getInstance().getLocalServerInstance().setHtmlDirectory("/foo/bar/baz/simple/");
+		ServerInstanceController.getInstance().getLocalServerInstance().setMapsPath("/foo/bar/baz/albina_files/");
 		regionEuregio = new Region();
 		regionEuregio.setId("EUREGIO");
+	}
+
+	@After
+	public void shutDown() throws Exception {
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	private String createCaaml(CaamlVersion version) throws Exception {

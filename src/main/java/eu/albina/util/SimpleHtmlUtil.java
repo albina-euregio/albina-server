@@ -40,6 +40,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
@@ -138,7 +139,7 @@ public class SimpleHtmlUtil {
 
 				filename = region.getId() + "_" + lang.toString() + ".html";
 
-				String dirPath = GlobalVariables.getHtmlDirectory() + "/" + validityDateString;
+				String dirPath = ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory() + "/" + validityDateString;
 				new File(dirPath).mkdirs();
 
 				// using PosixFilePermission to set file permissions 755
@@ -244,8 +245,8 @@ public class SimpleHtmlUtil {
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
 					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
-					bulletin.put("mapPMjpg", GlobalVariables.getServerImagesUrl() + "empty.png");
-					bulletin.put("mapPMwebp", GlobalVariables.getServerImagesUrl() + "empty.webp");
+					bulletin.put("mapPMjpg", ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl() + "empty.png");
+					bulletin.put("mapPMwebp", ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl() + "empty.webp");
 					bulletin.put("widthPM", "width=\"0\"");
 					bulletin.put("heightPMSmall", "style=\"height: 0; margin: 0\"");
 					bulletin.put("fontSize", "style=\"font-size: 0\"");
@@ -374,7 +375,7 @@ public class SimpleHtmlUtil {
 			text.put("avalancheProblem", "");
 		result.put("text", text);
 
-		dangerLevel.put("warningPicto", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
+		dangerLevel.put("warningPicto", ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl() + "warning_pictos/color/level_"
 				+ AlbinaUtil.getWarningLevelId(daytimeDescription) + ".png");
 		dangerLevel.put("elevation",
 				getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang));
@@ -414,13 +415,13 @@ public class SimpleHtmlUtil {
 		Map<String, Object> result = new HashMap<>();
 
 		result.put("exist", true);
-		result.put("avalancheProblemIcon", GlobalVariables.getServerImagesUrl()
+		result.put("avalancheProblemIcon", ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl()
 				+ avalancheSituation.getAvalancheSituation().getSymbolPath(false));
 		result.put("avalancheProblemText", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
-		result.put("elevationIcon", GlobalVariables.getServerImagesUrl() + getElevationIcon(avalancheSituation));
+		result.put("elevationIcon", ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl() + getElevationIcon(avalancheSituation));
 		result.put("elevationLow", getElevationLowText(avalancheSituation, lang));
 		result.put("elevationHigh", getElevationHighText(avalancheSituation, lang));
-		result.put("aspectsIcon", GlobalVariables.getServerImagesUrl()
+		result.put("aspectsIcon", ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl()
 				+ Aspect.getSymbolPath(avalancheSituation.getAspects(), false));
 
 		return result;

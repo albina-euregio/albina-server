@@ -40,6 +40,7 @@ import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.map.DaytimeDependency;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
@@ -237,7 +238,7 @@ public class StaticWidgetUtil {
 			euregioLogo = resizeHeight(euregioLogo, 110);
 			ig2.drawImage(euregioLogo, 330, 35, null);
 
-			String filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString
+			String filename = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString
 					+ "/" + AlbinaUtil.getStaticWidgetFilename(validityDateString, region, lang) + ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
 

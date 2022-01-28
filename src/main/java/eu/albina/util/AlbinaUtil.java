@@ -45,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.map.DaytimeDependency;
 import eu.albina.model.AvalancheBulletin;
@@ -184,7 +185,7 @@ public class AlbinaUtil {
 	}
 
 	public static String getThumbnailFileName(Region region, String validityDateString, String publicationTimeString, DaytimeDependency daytimeDependency) {
-		return GlobalVariables.getMapsPath() + "/"
+		return ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath() + "/"
 				+ validityDateString + "/" + publicationTimeString + "/" + daytimeDependency.toString() + "_" + region.getId() + "_thumbnail.jpg";
 	}
 
@@ -316,7 +317,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateMaps.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -330,7 +331,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateFiles.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -344,7 +345,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updatePdfs.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -358,7 +359,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestPdfs.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -372,7 +373,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateJson.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					validityDateString, publicationTimeString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -386,7 +387,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateXmls.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -400,7 +401,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestJson.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					validityDateString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -414,7 +415,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestXmls.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -428,7 +429,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateStaticWidgets.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -442,7 +443,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestStaticWidgets.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -456,7 +457,7 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestMaps.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -470,8 +471,8 @@ public class AlbinaUtil {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestFiles.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
-					date, GlobalVariables.getHtmlDirectory()).inheritIO();
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Latest files updated using {}", pb.command());
@@ -485,7 +486,7 @@ public class AlbinaUtil {
 			final File file = new File(classLoader.getResource("scripts/updateLatestHtmls.sh").getFile());
 			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()),
-					GlobalVariables.getHtmlDirectory(), date).inheritIO();
+					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("HTMLs for {} updated in latest directory using {}", date, pb.command());

@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.io.Resources;
+
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.map.MapUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,8 +119,8 @@ public class PdfUtil {
 			pdfPath = GlobalVariables.getTmpPdfDirectory();
 			mapsPath = GlobalVariables.getTmpMapsPath();
 		} else {
-			pdfPath = GlobalVariables.getPdfDirectory();
-			mapsPath = GlobalVariables.getMapsPath();
+			pdfPath = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory();
+			mapsPath = ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath();
 		}
 		String filename = getFilename(lang, region, grayscale, validityDateString, publicationTimeString, pdfPath);
 

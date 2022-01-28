@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.albina.ImageTestUtils;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
@@ -47,11 +48,6 @@ public class MapUtilTest {
 	public void setUp() throws Exception {
 		HibernateUtil.getInstance().setUp();
 
-		GlobalVariables.loadConfigProperties();
-		GlobalVariables.mapsPath = folder.toString();
-		GlobalVariables.mapProductionUrl = "../avalanche-warning-maps/";
-		GlobalVariables.pdfDirectory = GlobalVariables.mapsPath;
-
 		regionEuregio = new Region("EUREGIO");
 		regionTirol = new Region("AT-07");
 		regionSouthTyrol = new Region("IT-32-BZ");
@@ -80,7 +76,7 @@ public class MapUtilTest {
 	}
 
 	private void assumeMapsPath() {
-		Assume.assumeTrue(Files.isDirectory(Paths.get(GlobalVariables.getMapProductionUrl())));
+		Assume.assumeTrue(Files.isDirectory(Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMapProductionUrl())));
 	}
 
 	@Test
@@ -93,7 +89,7 @@ public class MapUtilTest {
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
 			BufferedImage actual = ImageIO.read(new File(
-				GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
+				ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
 			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 		}
 		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.en, regionEuregio, false, false,
@@ -109,7 +105,7 @@ public class MapUtilTest {
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		BufferedImage actual = ImageIO.read(new File(
-			GlobalVariables.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
+			ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, false, false,
 			"2021-01-24", "2021-01-23_16-00-00", false);

@@ -38,7 +38,6 @@ import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
 import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
@@ -89,7 +88,7 @@ public class PublicationController {
 	 *            The bulletins that were published.
 	 */
 	public void publishAutomatically(List<AvalancheBulletin> bulletins) {
-		if (GlobalVariables.isPublishAt5PM())
+		if (ServerInstanceController.getInstance().getLocalServerInstance().isPublishAt5PM())
 			publish(bulletins);
 	}
 
@@ -180,7 +179,7 @@ public class PublicationController {
 	 *            The regions that were updated.
 	 */
 	public void updateAutomatically(List<AvalancheBulletin> bulletins, List<Region> regions) {
-		if (GlobalVariables.isPublishAt8AM())
+		if (ServerInstanceController.getInstance().getLocalServerInstance().isPublishAt8AM())
 			update(bulletins, regions);
 	}
 

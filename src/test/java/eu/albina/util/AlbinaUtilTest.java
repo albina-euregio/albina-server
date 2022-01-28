@@ -38,6 +38,8 @@ import java.util.List;
 import javax.xml.transform.TransformerException;
 
 import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.ServerInstanceController;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -79,7 +81,7 @@ public class AlbinaUtilTest {
 
 	@Before
 	public void setUp() throws IOException {
-		// HibernateUtil.getInstance().setUp();
+		HibernateUtil.getInstance().setUp();
 
 		regionTirol = new Region();
 		regionTirol.setId("AT-07");
@@ -103,7 +105,7 @@ public class AlbinaUtilTest {
 
 	@After
 	public void shutDown() {
-		// HibernateUtil.getInstance().shutDown();
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Ignore
@@ -180,8 +182,8 @@ public class AlbinaUtilTest {
 
 	@Test
 	public void testDates() throws Exception {
-		GlobalVariables.pdfDirectory = "/foo/bar/baz/albina_files";
-		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files";
+		ServerInstanceController.getInstance().getLocalServerInstance().setPdfDirectory("/foo/bar/baz/albina_files");
+		ServerInstanceController.getInstance().getLocalServerInstance().setMapsPath("/foo/bar/baz/albina_files");
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));

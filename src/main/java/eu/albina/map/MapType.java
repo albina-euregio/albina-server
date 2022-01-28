@@ -3,6 +3,7 @@ package eu.albina.map;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.RegionController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.util.GlobalVariables;
 
@@ -37,19 +38,19 @@ enum MapType {
 	public static Collection<MapType> forGlobalVariablesPublishBulletins() {
 		final EnumSet<MapType> mapTypes = EnumSet.noneOf(MapType.class);
 
-		if (RegionController.getInstance().isPublishBulletins(GlobalVariables.codeTyrol)) {
+		if (RegionController.getInstance().getRegion(GlobalVariables.codeTyrol).isPublishBulletins()) {
 			mapTypes.add(euregio);
 			mapTypes.add(tyrol);
 		}
-		if (RegionController.getInstance().isPublishBulletins(GlobalVariables.codeSouthTyrol)) {
+		if (RegionController.getInstance().getRegion(GlobalVariables.codeSouthTyrol).isPublishBulletins()) {
 			mapTypes.add(euregio);
 			mapTypes.add(southtyrol);
 		}
-		if (RegionController.getInstance().isPublishBulletins(GlobalVariables.codeTrentino)) {
+		if (RegionController.getInstance().getRegion(GlobalVariables.codeTrentino).isPublishBulletins()) {
 			mapTypes.add(euregio);
 			mapTypes.add(trentino);
 		}
-		if (RegionController.getInstance().isPublishBulletins(GlobalVariables.codeAran)) {
+		if (RegionController.getInstance().getRegion(GlobalVariables.codeAran).isPublishBulletins()) {
 			mapTypes.add(aran);
 		}
 		return mapTypes;
@@ -57,9 +58,9 @@ enum MapType {
 
 	String geodata() {
 		if (this == MapType.aran) {
-			return GlobalVariables.getMapProductionUrl() + "geodata.Aran/";
+			return ServerInstanceController.getInstance().getLocalServerInstance().getMapProductionUrl() + "geodata.Aran/";
 		} else {
-			return GlobalVariables.getMapProductionUrl() + "geodata.Euregio/";
+			return ServerInstanceController.getInstance().getLocalServerInstance().getMapProductionUrl() + "geodata.Euregio/";
 		}
 	}
 

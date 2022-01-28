@@ -1,6 +1,8 @@
 package eu.albina.util;
 
 import com.google.common.base.Strings;
+
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.map.DaytimeDependency;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
@@ -28,7 +30,7 @@ public interface LinkUtil {
 	static String getSimpleHtmlUrl(LanguageCode lang) {
 		String url = GlobalVariables.serverSimpleHtmlUrl;
 		if (Strings.isNullOrEmpty(url)) {
-			String htmlDirectory = Paths.get(GlobalVariables.getHtmlDirectory()).getFileName().toString();
+			String htmlDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).getFileName().toString();
 			url = String.format("%s/%s", getWebsite(lang), htmlDirectory);
 		}
 		return url;
@@ -37,7 +39,7 @@ public interface LinkUtil {
 	static String getMapsUrl(LanguageCode lang) {
 		String url = GlobalVariables.serverMapsUrl;
 		if (Strings.isNullOrEmpty(url)) {
-			String mapsDirectory = Paths.get(GlobalVariables.getMapsPath()).getFileName().toString();
+			String mapsDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath()).getFileName().toString();
 			url = String.format("%s/%s", getWebsite(lang), mapsDirectory);
 		}
 		return url;
@@ -46,7 +48,7 @@ public interface LinkUtil {
 	static String getPdfUrl(LanguageCode lang) {
 		String url = GlobalVariables.serverPdfUrl;
 		if (Strings.isNullOrEmpty(url)) {
-			String pdfDirectory = Paths.get(GlobalVariables.getPdfDirectory()).getFileName().toString();
+			String pdfDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory()).getFileName().toString();
 			url = String.format("%s/%s", getWebsite(lang), pdfDirectory);
 		}
 		return url;

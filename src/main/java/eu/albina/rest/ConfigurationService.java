@@ -26,17 +26,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.openjson.JSONObject;
 
+import eu.albina.controller.ServerInstanceController;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 
 @Path("/configuration")
 @Api(value = "/configuration")
 public class ConfigurationService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
 
 	@Context
 	UriInfo uri;
@@ -45,12 +51,13 @@ public class ConfigurationService {
 	@Secured({ Role.SUPERADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response setConfigurationParameter(String configuration) {
+	public Response setConfigurationParameter(String serverInstance) {
 		try {
-			JSONObject configurationJson = new JSONObject(configuration);
-			GlobalVariables.setConfigurationParameters(configurationJson);
+			JSONObject serverInstanceJson = new JSONObject(serverInstance);
+			ServerInstanceController.getInstance().updateServerInstance(new ServerInstance(serverInstanceJson));
 			return Response.ok().build();
-		} catch (ConfigurationException e) {
+		} catch (AlbinaException e) {
+			logger.warn("Error updating local server configuration", e);
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 	}
@@ -60,6 +67,6 @@ public class ConfigurationService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getConfigurationParameters() {
-		return Response.ok(GlobalVariables.getConfigProperties().toString(), MediaType.APPLICATION_JSON).build();
+		return Response.ok(ServerInstanceController.getInstance().getLocalServerInstance().toJSON(), MediaType.APPLICATION_JSON).build();
 	}
 }

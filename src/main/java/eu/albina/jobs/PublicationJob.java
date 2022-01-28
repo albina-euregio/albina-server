@@ -31,13 +31,13 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.GlobalVariables;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
@@ -63,7 +63,7 @@ public class PublicationJob implements org.quartz.Job {
 		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions();
 		if (!regions.isEmpty()) {
 			try {
-				User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
+				User user = UserController.getInstance().getUser(ServerInstanceController.getInstance().getLocalServerInstance().getUserName());
 
 				Instant startDate = AlbinaUtil.getInstantStartOfDay().plus(1, ChronoUnit.DAYS);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);

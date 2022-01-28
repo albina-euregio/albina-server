@@ -47,6 +47,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.albina.caaml.CaamlVersion;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -57,8 +58,8 @@ public class XmlUtil {
 
 	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
 			String publicationTimeString, CaamlVersion version) throws TransformerException, IOException {
-		String dirPathParent = GlobalVariables.getPdfDirectory() + "/" + validityDateString;
-		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
+		String dirPathParent = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory() + "/" + validityDateString;
+		String dirPath = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();
 
 		// using PosixFilePermission to set file permissions 777

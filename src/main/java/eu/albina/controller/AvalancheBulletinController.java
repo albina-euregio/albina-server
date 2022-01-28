@@ -50,7 +50,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.XmlUtil;
 
@@ -596,7 +595,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : results) {
 
 				// set author
-				if (!Objects.equals(user.getEmail(), GlobalVariables.avalancheReportUsername)) {
+				if (!Objects.equals(user.getEmail(), ServerInstanceController.getInstance().getLocalServerInstance().getUserName())) {
 					if (!bulletin.getAdditionalAuthors().contains(user.getName()))
 						bulletin.addAdditionalAuthor(user.getName());
 					bulletin.setUser(user);

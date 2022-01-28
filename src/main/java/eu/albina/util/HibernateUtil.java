@@ -54,7 +54,8 @@ public class HibernateUtil {
 	public static String queryGetLatestDate = "from AvalancheReport as r where r.status = 3 or r.status = 0 order by r.date desc";
 
 	public static String queryGetRegions = "from Region as r";
-	public static String queryGetServerInstances = "from ServerInstance as s";
+	public static String queryGetLocalServerInstance = "from ServerInstance as i where i.external = false";
+	public static String queryGetExternalServerInstances = "from ServerInstance as i where i.external = true";
 	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :regionId and c.lang = :lang";
 	public static String queryGetRapidMailConfiguration = "from RapidMailConfiguration as c where c.region = :regionId";
 	public static String queryGetGoogleBloggerConfiguration = "from GoogleBloggerConfiguration as c where c.region = :regionId and c.lang = :lang";
