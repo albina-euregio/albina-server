@@ -72,7 +72,7 @@ public class AlbinaUtilTest {
 
 	private Region regionTirol;
 
-	private final String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
+	private final String imgBaseUrl = "D:/norbert/vs_workspace/albina-server/src/test/resources/images/";
 	private final List<String> names = new ArrayList<String>();
 	private final List<String> passwords = new ArrayList<String>();
 	private final List<String> recipients = new ArrayList<String>();
@@ -125,10 +125,12 @@ public class AlbinaUtilTest {
 		System.out.println(string);
 	}
 
-	@Ignore
 	@Test
 	public void encodeImageAndPassword() {
-		for (int i = 4; i < 6; i++) {
+		List<String> names = new ArrayList<String>();
+		List<String> passwords = new ArrayList<String>();
+
+		for (int i = 0; i < names.size(); i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
 			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
