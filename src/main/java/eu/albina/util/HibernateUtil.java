@@ -59,6 +59,7 @@ public class HibernateUtil {
 	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :regionId and c.lang = :lang";
 	public static String queryGetRapidMailConfiguration = "from RapidMailConfiguration as c where c.region = :regionId";
 	public static String queryGetGoogleBloggerConfiguration = "from GoogleBloggerConfiguration as c where c.region = :regionId and c.lang = :lang";
+	public static String queryGetPushConfiguration = "from PushConfiguration as c";
 
 	public static HibernateUtil getInstance() {
 		if (instance == null) {

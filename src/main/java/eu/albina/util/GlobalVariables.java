@@ -36,11 +36,6 @@ public class GlobalVariables {
 
 	public static String version;
 
-	/*---- Defined in configuration file -----*/
-	static String vapidPublicKey;
-	static String vapidPrivateKey;
-	/*---- Defined in configuration file -----*/
-
 	static String serverMapsUrl = "";
 	static String serverPdfUrl = "";
 	static String serverSimpleHtmlUrl = "";
@@ -88,14 +83,6 @@ public class GlobalVariables {
 	private static final String emailEncoding = "UTF-8";
 
 	public static String notAvailableString = "N/A";
-
-	public static String getVapidPublicKey() {
-		return vapidPublicKey;
-	}
-
-	public static String getVapidPrivateKey() {
-		return vapidPrivateKey;
-	}
 
 	public static String getTmpMapsPath() {
 		return tmpDirectory;
@@ -181,10 +168,6 @@ public class GlobalVariables {
 				serverPdfUrl = config.getString("serverPdfUrl");
 			if (config.containsKey("serverWebsiteUrl"))
 				serverWebsiteUrl = config.getString("serverWebsiteUrl");
-			if (config.containsKey("vapidPublicKey"))
-				vapidPublicKey = config.getString("vapidPublicKey");
-			if (config.containsKey("vapidPrivateKey"))
-				vapidPrivateKey = config.getString("vapidPrivateKey");
 			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration file could not be loaded!", e);

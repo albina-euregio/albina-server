@@ -90,7 +90,7 @@ public class ServerInstanceController {
 
 	public ServerInstance getLocalServerInstance() {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return (ServerInstance) entityManager.createQuery(HibernateUtil.queryGetLocalServerInstance).getResultList().get(0);
+			return (ServerInstance) entityManager.createQuery(HibernateUtil.queryGetLocalServerInstance).getSingleResult();
 		});
 	}
 

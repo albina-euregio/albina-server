@@ -18,7 +18,6 @@ package eu.albina.util;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ch.rasc.webpush.CryptoService;
 import ch.rasc.webpush.PushController;
@@ -30,6 +29,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClients;
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +39,7 @@ import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.PushConfiguration;
 
 public class PushNotificationUtil implements SocialMediaUtil {
 
@@ -62,14 +63,14 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
 		payload.put("url", bulletinUrl);
 
-		List<Region> regions = Arrays.asList(region);
-		List<String> publishRegions = regions.stream().filter(reg -> reg.isSendPushNotifications()).map(Region::getId).collect(Collectors.toList());
-
-		List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, publishRegions);
-
-		logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, region, payload);
-		for (PushSubscription subscription : subscriptions) {
-			sendPushMessage(subscription, payload);
+		if (region.isSendPushNotifications()) {
+			List<String> regions = Arrays.asList(region.getId());
+			List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, regions);
+	
+			logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, region, payload);
+			for (PushSubscription subscription : subscriptions) {
+				sendPushMessage(subscription, payload);
+			}
 		}
 	}
 
@@ -80,10 +81,21 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		sendPushMessage(subscription, payload);
 	}
 
+
+	public static PushConfiguration getConfiguration() {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			PushConfiguration result = (PushConfiguration) entityManager.createQuery(HibernateUtil.queryGetPushConfiguration).getSingleResult();
+			if (result != null)
+				return result;
+			else
+				throw new HibernateException("No push configuration found");
+		});
+	}
+
 	public void sendPushMessage(PushSubscription subscription, JSONObject payload) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
-			final ServerKeys serverKeys = new ServerKeys(GlobalVariables.getVapidPublicKey(), GlobalVariables.getVapidPrivateKey());
+			final ServerKeys serverKeys = new ServerKeys(getConfiguration().getVapidPublicKey(), getConfiguration().getVapidPrivateKey());
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
 			final byte[] encrypted = new CryptoService().encrypt(payload.toString(), subscriptionKeys, 0);
