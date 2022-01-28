@@ -187,6 +187,31 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "SIMPLE_HTML_TEMPLATE_NAME")
 	private String simpleHtmlTemplateName;
 
+
+	// EUREGIO geodata.Euregio/
+	// ES-CT-L geodata.Aran/
+	// AT-07 geodata.Euregio/
+	// IT-32-BZ geodata.Euregio/
+	// IT-32-TN geodata.Euregio/
+	@Column(name = "GEO_DATA_DIRECTORY")
+	private String geoDataDirectory;
+
+	// EUREGIO images/logo/color/euregio_map.png
+	// ES-CT-L images/logo/color/lauegi_map.png
+	// AT-07 images/logo/color/euregio_map.png
+	// IT-32-BZ images/logo/color/euregio_map.png
+	// IT-32-TN images/logo/color/euregio_map.png
+	@Column(name = "LOGO_COLOR_PATH")
+	private String logoColorPath;
+
+	// EUREGIO images/logo/grey/euregio_map.png
+	// ES-CT-L images/logo/grey/lauegi_map.png
+	// AT-07 images/logo/grey/euregio_map.png
+	// IT-32-BZ images/logo/grey/euregio_map.png
+	// IT-32-TN images/logo/grey/euregio_map.png
+	@Column(name = "LOGO_BW_PATH")
+	private String logoBwPath;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -266,6 +291,12 @@ public class Region implements AvalancheInformationObject {
 			this.mapYmin = json.getInt("mapYmin");
 		if (json.has("simpleHtmlTemplateName") && !json.isNull("simpleHtmlTemplateName"))
 			this.simpleHtmlTemplateName = json.getString("simpleHtmlTemplateName");
+		if (json.has("geoDataDirectory") && !json.isNull("geoDataDirectory"))
+			this.geoDataDirectory = json.getString("geoDataDirectory");
+		if (json.has("logoColorPath") && !json.isNull("logoColorPath"))
+			this.logoColorPath = json.getString("logoColorPath");
+		if (json.has("logoBwPath") && !json.isNull("logoBwPath"))
+			this.logoBwPath = json.getString("logoBwPath");
 	}
 
 	public String getId() {
@@ -500,6 +531,30 @@ public class Region implements AvalancheInformationObject {
 		this.simpleHtmlTemplateName = simpleHtmlTemplateName;
 	}
 
+	public String getGeoDataDirectory() {
+		return geoDataDirectory;
+	}
+
+	public void setGeoDataDirectory(String geoDataDirectory) {
+		this.geoDataDirectory = geoDataDirectory;
+	}
+
+	public String getLogoColorPath() {
+		return logoColorPath;
+	}
+
+	public void setLogoColorPath(String logoColorPath) {
+		this.logoColorPath = logoColorPath;
+	}
+
+	public String getLogoBwPath() {
+		return logoBwPath;
+	}
+
+	public void setLogoBwPath(String logoBwPath) {
+		this.logoBwPath = logoBwPath;
+	}
+
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
@@ -559,6 +614,9 @@ public class Region implements AvalancheInformationObject {
 		json.put("mapYmax", getMapXmax());
 		json.put("mapYmin", getMapXmin());
 		json.put("simpleHtmlTemplateName", getSimpleHtmlTemplateName());
+		json.put("geoDataDirectory", getGeoDataDirectory());
+		json.put("logoColorPath", getLogoColorPath());
+		json.put("logoBwPath", getLogoBwPath());
 
 		return json;
 	}

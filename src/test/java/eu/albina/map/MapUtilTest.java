@@ -62,17 +62,17 @@ public class MapUtilTest {
 
 	@Test
 	public void testOverviewMapFilename() {
-		assertEquals("fd_EUREGIO_map.jpg", MapUtil.getOverviewMapFilename(null, false, false, false));
+		assertEquals("fd_EUREGIO_map.jpg", MapUtil.getOverviewMapFilename(null, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map.jpg",
-				MapUtil.getOverviewMapFilename(regionTirol, false, false, false));
+				MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionTirol, false, false, true));
-		assertEquals("am_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTirol, false, true, false));
-		assertEquals("pm_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTirol, true, true, false));
+				MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.fd, true));
+		assertEquals("am_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.am, false));
+		assertEquals("pm_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.pm, false));
 		assertEquals("fd_IT-32-BZ_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionSouthTyrol, false, false, true));
+				MapUtil.getOverviewMapFilename(regionSouthTyrol, DaytimeDependency.fd, true));
 		assertEquals("fd_IT-32-TN_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionTrentino, false, false, true));
+				MapUtil.getOverviewMapFilename(regionTrentino, DaytimeDependency.fd, true));
 	}
 
 	private void assumeMapsPath() {

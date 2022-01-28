@@ -92,10 +92,10 @@ public interface LinkUtil {
 		return "PDF " + regionName;
 	}
 
-	static String getSocialMediaAttachmentUrl(LanguageCode lang, List<AvalancheBulletin> bulletins) {
+	static String getSocialMediaAttachmentUrl(Region region, LanguageCode lang, List<AvalancheBulletin> bulletins) {
 		String validityDate = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 		return String.format("%s/%s/%s/%s",
-			getMapsUrl(lang), validityDate, publicationTime, MapUtil.getOverviewMapFilename("", DaytimeDependency.fd, false));
+			getMapsUrl(lang), validityDate, publicationTime, MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
 	}
 }

@@ -26,6 +26,7 @@ import java.util.Set;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.ServerInstanceController;
+import eu.albina.map.DaytimeDependency;
 import eu.albina.map.MapUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1029,7 +1030,7 @@ public class PdfUtil {
 			ImageData overviewMapAMImageData = ImageDataFactory.create(mapsPath
 					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
 					+ publicationTimeString + System.getProperty("file.separator")
-					+ MapUtil.getOverviewMapFilename(region, false, true, grayscale));
+					+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, grayscale));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
 			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
@@ -1042,7 +1043,7 @@ public class PdfUtil {
 			ImageData overviewMapPMImageData = ImageDataFactory.create(mapsPath
 					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
 					+ publicationTimeString + System.getProperty("file.separator")
-					+ MapUtil.getOverviewMapFilename(region, true, true, grayscale));
+					+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, grayscale));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
 			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
@@ -1055,7 +1056,7 @@ public class PdfUtil {
 			ImageData overviewMapImageData = ImageDataFactory.create(mapsPath
 					+ System.getProperty("file.separator") + validityDateString + System.getProperty("file.separator")
 					+ publicationTimeString + System.getProperty("file.separator")
-					+ MapUtil.getOverviewMapFilename(region, false, daytimeDependency, grayscale));
+					+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, grayscale));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			mapY = region.getPdfMapYFd();

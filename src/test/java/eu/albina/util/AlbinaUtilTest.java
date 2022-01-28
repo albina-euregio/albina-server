@@ -75,7 +75,9 @@ public class AlbinaUtilTest {
 	private Region regionTirol;
 
 	private final String imgBaseUrl = "D:/norbert/vs_workspace/albina-server/src/test/resources/images/";
+	@SuppressWarnings("unused")
 	private final List<String> names = new ArrayList<String>();
+	@SuppressWarnings("unused")
 	private final List<String> passwords = new ArrayList<String>();
 	private final List<String> recipients = new ArrayList<String>();
 

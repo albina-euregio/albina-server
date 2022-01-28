@@ -220,23 +220,23 @@ public class EmailUtil {
 				mapImage.put("overview",
 						LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 								+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-								+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.am, false));
+								+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
 				mapImage.put("overviewPM",
 						LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 								+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-								+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.pm, false));
+								+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false));
 				mapImage.put("widthPM", "width=\"600\"");
 			} else {
 				if (daytimeDependency)
 					mapImage.put("overview",
 							LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-									+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.am, false));
+									+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
 				else
 					mapImage.put("overview",
 							LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-									+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.fd, false));
+									+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
 				mapImage.put("overviewPM", serverImagesUrl + "/empty.png");
 				mapImage.put("widthPM", "");
 			}

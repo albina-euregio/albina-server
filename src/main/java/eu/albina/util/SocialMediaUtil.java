@@ -33,7 +33,7 @@ interface SocialMediaUtil {
 
 	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode lang, boolean test) {
 		String message = getSocialMediaText(bulletins, update, lang);
-		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(lang, bulletins);
+		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(region, lang, bulletins);
 		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
 		sendBulletinNewsletter(message, lang, region, attachmentUrl, bulletinUrl, test);
 	}

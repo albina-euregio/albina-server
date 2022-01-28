@@ -21,7 +21,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hibernate.HibernateException;
@@ -33,7 +32,6 @@ import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
 import eu.albina.model.ServerInstance;
 import eu.albina.rest.websocket.RegionEndpoint;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -127,15 +125,6 @@ public class RegionController {
 			return region;
 		});
     }
-
-	public boolean affectsRegion(String regionId, Set<String> regions) {
-		if (regions == null) {
-			return false;
-		}
-		return regions.stream().anyMatch(entry -> regionId.equals(GlobalVariables.codeEuregio)
-			? entry.startsWith(GlobalVariables.codeTyrol) || entry.startsWith(GlobalVariables.codeSouthTyrol) || entry.startsWith(GlobalVariables.codeTrentino)
-			: entry.startsWith(regionId));
-	}
 
 	public List<Region> getPublishBulletinRegions() {
 		try {
