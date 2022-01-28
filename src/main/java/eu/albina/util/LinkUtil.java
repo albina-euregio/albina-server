@@ -28,30 +28,18 @@ public interface LinkUtil {
 	}
 
 	static String getSimpleHtmlUrl(LanguageCode lang) {
-		String url = GlobalVariables.serverSimpleHtmlUrl;
-		if (Strings.isNullOrEmpty(url)) {
-			String htmlDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).getFileName().toString();
-			url = String.format("%s/%s", getWebsite(lang), htmlDirectory);
-		}
-		return url;
+		String htmlDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).getFileName().toString();
+		return String.format("%s/%s", getWebsite(lang), htmlDirectory);
 	}
 
 	static String getMapsUrl(LanguageCode lang) {
-		String url = GlobalVariables.serverMapsUrl;
-		if (Strings.isNullOrEmpty(url)) {
-			String mapsDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath()).getFileName().toString();
-			url = String.format("%s/%s", getWebsite(lang), mapsDirectory);
-		}
-		return url;
+		String mapsDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath()).getFileName().toString();
+		return String.format("%s/%s", getWebsite(lang), mapsDirectory);
 	}
 
 	static String getPdfUrl(LanguageCode lang) {
-		String url = GlobalVariables.serverPdfUrl;
-		if (Strings.isNullOrEmpty(url)) {
-			String pdfDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory()).getFileName().toString();
-			url = String.format("%s/%s", getWebsite(lang), pdfDirectory);
-		}
-		return url;
+		String pdfDirectory = Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory()).getFileName().toString();
+		return String.format("%s/%s", getWebsite(lang), pdfDirectory);
 	}
 
 	static String getAvalancheReportFullBlogUrl(LanguageCode lang) {

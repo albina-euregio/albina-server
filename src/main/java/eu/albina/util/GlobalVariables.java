@@ -36,9 +36,6 @@ public class GlobalVariables {
 
 	public static String version;
 
-	static String serverMapsUrl = "";
-	static String serverPdfUrl = "";
-	static String serverSimpleHtmlUrl = "";
 	static String serverWebsiteUrl = "";
 
 	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
@@ -58,15 +55,6 @@ public class GlobalVariables {
 	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
 	public static String csvDeliminator = ";";
 	public static String csvLineBreak = "\n";
-
-	public static int[] getRGB(final String hex) {
-		final int[] ret = new int[3];
-		for (int i = 0; i < 3; i++)
-		{
-			ret[i] = Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
-		}
-		return ret;
-	}
 
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 
@@ -122,6 +110,15 @@ public class GlobalVariables {
 		setConfigProperty("bulletinCaamlSchemaFileString", bulletinCaamlSchemaFileString);
 	}
 
+	public static int[] getRGB(final String hex) {
+		final int[] ret = new int[3];
+		for (int i = 0; i < 3; i++)
+		{
+			ret[i] = Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
+		}
+		return ret;
+	}
+
 	public static String getEuregioLogoPath(boolean grayscale) {
 		if (grayscale)
 			return "logo/grey/euregio.png";
@@ -158,14 +155,6 @@ public class GlobalVariables {
 			config = configs.properties(propertiesFilePath);
 			if (config.containsKey("gitVersion"))
 				version = config.getString("gitVersion");
-			if (config.containsKey("serverMapsUrl"))
-				serverMapsUrl = config.getString("serverMapsUrl");
-			if (config.containsKey("serverMapsUrl"))
-				serverMapsUrl = config.getString("serverMapsUrl");
-			if (config.containsKey("serverSimpleHtmlUrl"))
-				serverSimpleHtmlUrl = config.getString("serverSimpleHtmlUrl");
-			if (config.containsKey("serverPdfUrl"))
-				serverPdfUrl = config.getString("serverPdfUrl");
 			if (config.containsKey("serverWebsiteUrl"))
 				serverWebsiteUrl = config.getString("serverWebsiteUrl");
 			logger.info("Configuration file loaded!");
