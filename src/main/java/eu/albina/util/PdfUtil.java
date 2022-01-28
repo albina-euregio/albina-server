@@ -74,11 +74,6 @@ public class PdfUtil {
 
 	private static PdfUtil instance = null;
 
-	// TODO get rid of it, just take it from DB
-	public static final Color blueColor = new DeviceRgb(0, 172, 251);
-	// TODO get rid of it, just take it from DB
-	public static final Color aranColor = new DeviceRgb(0xa2, 0x0d, 0x2d);
-
 	public static final Color blackColor = Color.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
 	public static final Color whiteColor = Color.WHITE;
