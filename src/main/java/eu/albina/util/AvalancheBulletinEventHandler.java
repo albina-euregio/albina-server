@@ -52,6 +52,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEventHandler.class);
 
 	private final List<AvalancheBulletin> bulletins;
+	private final Region region;
 	private final LanguageCode lang;
 	private final boolean grayscale;
 	private final boolean preview;
@@ -59,6 +60,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 	public AvalancheBulletinEventHandler(LanguageCode lang, Region region, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
 		this.lang = lang;
+		this.region = region;
 		this.bulletins = bulletins;
 		this.grayscale = grayscale;
 		this.preview = preview;
@@ -75,8 +77,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Rectangle pageSize = page.getPageSize();
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
-			// TODO use color from region object
-			Color blue = grayscale ? blueColorBw : isAran ? aranColor : blueColor;
+			Color blue = grayscale ? blueColorBw : PdfUtil.getInstance().getColor(region.getPdfColor());
 
 			PdfFont openSansRegularFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Regular.ttf");
 			PdfFont openSansBoldFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Bold.ttf");
