@@ -37,8 +37,11 @@ import javax.persistence.Table;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import eu.albina.controller.RegionController;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
@@ -197,13 +200,24 @@ public class Region implements AvalancheInformationObject {
 		this.id = id;
 	}
 
-	// TODO handle superRegions and subRegions
 	public Region(JSONObject json) {
 		this();
 		if (json.has("id") && !json.isNull("id"))
 			this.id = json.getString("id");
 		if (json.has("microRegions") && !json.isNull("microRegions"))
 			this.microRegions = json.getInt("microRegions");
+		if (json.has("subRegions")) {
+			JSONArray subRegions = json.getJSONArray("subRegions");
+			for (Object entry : subRegions) {
+				this.subRegions.add(RegionController.getInstance().getRegion((String) entry));
+			}
+		}
+		if (json.has("superRegions")) {
+			JSONArray superRegions = json.getJSONArray("superRegions");
+			for (Object entry : superRegions) {
+				this.superRegions.add(RegionController.getInstance().getRegion((String) entry));
+			}
+		}
 		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
 			this.publishBulletins = json.getBoolean("publishBulletins");
 		if (json.has("publishBlogs") && !json.isNull("publishBlogs"))
@@ -508,6 +522,20 @@ public class Region implements AvalancheInformationObject {
 
 		json.put("id", getId());
 		json.put("microRegions", getMicroRegions());
+		if (subRegions != null && subRegions.size() > 0) {
+			JSONArray jsonSubRegions = new JSONArray();
+			for (Region subRegion : subRegions) {
+				jsonSubRegions.put(subRegion.getId());
+			}
+			json.put("subRegions", jsonSubRegions);
+		}
+		if (superRegions != null && superRegions.size() > 0) {
+			JSONArray jsonSuperRegions = new JSONArray();
+			for (Region superRegion : superRegions) {
+				jsonSuperRegions.put(superRegion.getId());
+			}
+			json.put("superRegions", jsonSuperRegions);
+		}
 		json.put("publishBulletins", isPublishBulletins());
 		json.put("publishBlogs", isPublishBlogs());
 		json.put("createCaamlV5", isCreateCaamlV5());
