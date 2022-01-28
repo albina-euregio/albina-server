@@ -40,7 +40,9 @@ import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.map.DaytimeDependency;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -83,13 +85,13 @@ public class StaticWidgetUtil {
 	 * @param bulletins
 	 *            The bulletins to create the PDF of.
 	 */
-	public void createStaticWidgets(List<AvalancheBulletin> bulletins, String validityDateString,
+	public void createStaticWidgets(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
 			String publicationTimeString) {
 		for (LanguageCode lang : LanguageCode.ENABLED)
-			createStaticWidget(bulletins, lang, validityDateString, publicationTimeString);
+			createStaticWidget(bulletins, lang, region, validityDateString, publicationTimeString);
 	}
 
-	public void createStaticWidget(List<AvalancheBulletin> bulletins, LanguageCode lang, String validityDateString,
+	public void createStaticWidget(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, String validityDateString,
 			String publicationTimeString) {
 		try {
 			int width = 600;
@@ -125,11 +127,9 @@ public class StaticWidgetUtil {
 
 			BufferedImage overviewThumbnail;
 			if (AlbinaUtil.hasDaytimeDependency(bulletins))
-				overviewThumbnail = resizeWidth(loadImageFromFile(GlobalVariables.getMapsPath() + "/"
-						+ validityDateString + "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 600);
+				overviewThumbnail = resizeWidth(loadImageFromFile(AlbinaUtil.getThumbnailFileName(region, validityDateString, publicationTimeString, DaytimeDependency.fd)), 600);
 			else
-				overviewThumbnail = resizeHeight(loadImageFromFile(GlobalVariables.getMapsPath() + "/"
-						+ validityDateString + "/" + publicationTimeString + "/fd_albina_thumbnail.jpg"), 400);
+				overviewThumbnail = resizeHeight(loadImageFromFile(AlbinaUtil.getThumbnailFileName(region, validityDateString, publicationTimeString, DaytimeDependency.fd)), 400);
 
 			if (highestDangerRating != DangerRating.very_high) {
 				ig2.setPaint(getDangerRatingColor(highestDangerRating));
@@ -231,12 +231,14 @@ public class StaticWidgetUtil {
 			else
 				ig2.drawImage(overviewThumbnail, 100, 170, null);
 
+
+			// TODO use correct logo for region
 			BufferedImage euregioLogo = loadImageFromPath("images/logo/color/euregio.png");
 			euregioLogo = resizeHeight(euregioLogo, 110);
 			ig2.drawImage(euregioLogo, 330, 35, null);
 
 			String filename = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString
-					+ "/" + AlbinaUtil.getStaticWidgetFilename(validityDateString, lang) + ".png";
+					+ "/" + AlbinaUtil.getStaticWidgetFilename(validityDateString, region, lang) + ".png";
 			ImageIO.write(bi, "PNG", new File(filename));
 			// ImageIO.write(bi, "PNG", new File("./yourImageName.PNG"));
 			// ImageIO.write(bi, "JPEG", new File("c:\\yourImageName.JPG"));
@@ -245,7 +247,7 @@ public class StaticWidgetUtil {
 
 			AlbinaUtil.setFilePermissions(filename);
 		} catch (IOException ie) {
-			logger.error("Static widget could not be created", ie);
+			logger.error("Static widget for " + region.getId() + " could not be created", ie);
 		}
 	}
 

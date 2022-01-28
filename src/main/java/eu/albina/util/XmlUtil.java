@@ -26,6 +26,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,13 +48,14 @@ import org.w3c.dom.Element;
 
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class XmlUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
 
-	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, String validityDateString,
+	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
 			String publicationTimeString, CaamlVersion version) throws TransformerException, IOException {
 		String dirPathParent = GlobalVariables.getPdfDirectory() + "/" + validityDateString;
 		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
@@ -82,27 +84,27 @@ public class XmlUtil {
 		}
 
 		for (LanguageCode lang : LanguageCode.ENABLED) {
-			Document doc = createCaaml(bulletins, lang, version);
+			Document doc = createCaaml(bulletins, Arrays.asList(region), lang, version);
 			String caamlString = XmlUtil.convertDocToString(doc);
 			String fileName;
 			if (version == CaamlVersion.V5)
-				fileName = dirPath + "/" + validityDateString + "_" + lang.toString() + ".xml";
+				fileName = dirPath + "/" + validityDateString + "_" + region.getId() + "_" + lang.toString() + ".xml";
 			else
-				fileName = dirPath + "/" + validityDateString + "_" + lang.toString() + "_CAAMLv6.xml";
+				fileName = dirPath + "/" + validityDateString + "_" + region.getId() + "_" + lang.toString() + "_CAAMLv6.xml";
 			Files.write(Paths.get(fileName), caamlString.getBytes(StandardCharsets.UTF_8));
 			AlbinaUtil.setFilePermissions(fileName);
 		}
 	}
 
-	public static Document createCaaml(List<AvalancheBulletin> bulletins, LanguageCode lang, CaamlVersion version) {
+	public static Document createCaaml(List<AvalancheBulletin> bulletins, List<Region> regions, LanguageCode lang, CaamlVersion version) {
 		if (version == CaamlVersion.V5) {
-			return XmlUtil.createCaamlv5(bulletins, lang);
+			return XmlUtil.createCaamlv5(bulletins, regions, lang);
 		} else {
-			return XmlUtil.createCaamlv6(bulletins, lang);
+			return XmlUtil.createCaamlv6(bulletins, regions, lang);
 		}
 	}
 
-	public static Document createCaamlv5(List<AvalancheBulletin> bulletins, LanguageCode language) {
+	public static Document createCaamlv5(List<AvalancheBulletin> bulletins, List<Region> regions, LanguageCode language) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
@@ -112,18 +114,8 @@ public class XmlUtil {
 			Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
 
 			// create meta data
-			ZonedDateTime publicationDate = null;
 			if (bulletins != null && !bulletins.isEmpty()) {
-				for (AvalancheBulletin bulletin : bulletins) {
-					if (bulletin.getPublicationDate() != null) {
-						if (publicationDate == null)
-							publicationDate = bulletin.getPublicationDate();
-						else {
-							if (bulletin.getPublicationDate().isAfter(publicationDate))
-								publicationDate = bulletin.getPublicationDate();
-						}
-					}
-				}
+				ZonedDateTime publicationDate = AlbinaUtil.getPublicationDate(bulletins);
 
 				// metaData
 				Element metaDataProperty = createMetaDataProperty(doc, publicationDate);
@@ -133,7 +125,7 @@ public class XmlUtil {
 				Element observations = doc.createElement("observations");
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv5(doc, language);
+					List<Element> caaml = bulletin.toCAAMLv5(doc, language, regions);
 					if (caaml != null)
 						for (Element element : caaml) {
 							if (element != null)
@@ -157,7 +149,7 @@ public class XmlUtil {
 		}
 	}
 
-	public static Document createCaamlv6(List<AvalancheBulletin> bulletins, LanguageCode language) {
+	public static Document createCaamlv6(List<AvalancheBulletin> bulletins, List<Region> regions, LanguageCode language) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
@@ -179,7 +171,7 @@ public class XmlUtil {
 				String reportPublicationTime = AlbinaUtil.getPublicationTime(bulletins);
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv6(doc, language, reportPublicationTime);
+					List<Element> caaml = bulletin.toCAAMLv6(doc, language, regions, reportPublicationTime);
 					if (caaml != null)
 						for (Element element : caaml) {
 							if (element != null)
@@ -211,6 +203,7 @@ public class XmlUtil {
 		}
 	}
 
+	// TODO use generic operation name
 	public static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime) {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");

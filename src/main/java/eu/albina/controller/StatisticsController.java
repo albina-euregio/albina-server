@@ -38,6 +38,7 @@ import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.MatrixInformation;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
@@ -95,7 +96,7 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, String region,
+	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, Region region,
 			boolean extended, boolean duplicateBulletinForenoon) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			// get latest reports
@@ -133,7 +134,7 @@ public class StatisticsController {
 			boolean duplicateBulletinForenoon) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (String region : GlobalVariables.getPublishRegions()) {
+			for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
 				// get latest reports
 				Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
 						endDate, region);

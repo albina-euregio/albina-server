@@ -28,12 +28,14 @@ import org.junit.Test;
 
 import com.google.common.io.Resources;
 
+import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.TelegramChannelUtil;
 
+// TODO test the tests
 @Ignore
 public class TelegramChannelControllerTest {
 
@@ -65,7 +67,7 @@ public class TelegramChannelControllerTest {
 		String attachmentUrl = "https://avalanche.report/albina_files_dev/2020-01-26/fd_albina_map.jpg";
 		String message;
 
-		for (String region : GlobalVariables.getPublishRegions()) {
+		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
 			for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 				message = region + " - " + lang;
 				telegramController.sendPhoto(region, lang, message, attachmentUrl, true);
@@ -76,8 +78,9 @@ public class TelegramChannelControllerTest {
 	@Ignore
 	@Test
 	public void sendBulletin() throws URISyntaxException, IOException {
-		List<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTrentino);
+		List<Region> regions = new ArrayList<Region>();
+		Region regionTrentino = new Region();
+		regionTrentino.setId("IT-32-TN");
 		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, true, true);
 	}
 }

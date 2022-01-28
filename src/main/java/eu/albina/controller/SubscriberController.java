@@ -30,6 +30,7 @@ import org.hibernate.HibernateException;
 
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
@@ -234,9 +235,11 @@ public class SubscriberController {
 			CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, Exception {
 		if (subscriber.getLanguage() == null)
 			throw new AlbinaException("No language defined!");
-		for (String region : subscriber.getRegions()) {
+		for (String regionId : subscriber.getRegions()) {
 			PostRecipientsRequest recipient = new PostRecipientsRequest();
 			recipient.setEmail(subscriber.getEmail());
+
+			Region region = RegionController.getInstance().getRegion(regionId);
 
 			RapidMailController.getInstance().createRecipient(region, recipient, null, subscriber.getLanguage());
 		}

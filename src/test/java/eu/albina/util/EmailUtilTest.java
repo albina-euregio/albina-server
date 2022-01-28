@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 import static org.junit.Assert.assertEquals;
@@ -41,13 +43,26 @@ import static org.junit.Assert.assertTrue;
 public class EmailUtilTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(EmailUtilTest.class);
+	private Region regionTirol;
+	private Region regionSouthTyrol;
+	private Region regionTrentino;
+
+	@Before
+	public void setUp() throws IOException {
+		regionTirol = new Region();
+		regionTirol.setId("AT-07");
+		regionSouthTyrol = new Region();
+		regionSouthTyrol.setId("IT-32-BZ");
+		regionTrentino = new Region();
+		regionTrentino.setId("IT-32-TN");
+	}
 
 	@Test
 	public void createBulletinEmailHtml() throws IOException, URISyntaxException {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-				"AT-07", false, false);
+				regionTirol, false, false);
 		assertEquals("162 kB", 162, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 		assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag  17.01.2019</h2>"));
 		assertTrue(html.contains("Veröffentlicht am <b>16.01.2019 um 17:00</b>"));
@@ -62,7 +77,7 @@ public class EmailUtilTest {
 		final URL resource = Resources.getResource("2021-12-01.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-			"AT-07", false, false);
+			regionTirol, false, false);
 		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
@@ -73,10 +88,10 @@ public class EmailUtilTest {
 		final URL resource = Resources.getResource("2021-12-02.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		logger.info("#bulletins: {}", bulletins.size());
-		ArrayList<String> regions = new ArrayList<String>();
-		regions.add("AT-07");
-		regions.add("IT-32-BZ");
-		regions.add("IT-32-TN");
+		ArrayList<Region> regions = new ArrayList<Region>();
+		regions.add(regionTirol);
+		regions.add(regionSouthTyrol);
+		regions.add(regionTrentino);
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
 		HibernateUtil.getInstance().shutDown();
 	}
@@ -96,10 +111,10 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final boolean update = false;
 		final LanguageCode lang = LanguageCode.en;
-		ArrayList<String> regions = new ArrayList<String>();
-		regions.add("AT-07");
-		regions.add("IT-32-BZ");
-		regions.add("IT-32-TN");
+		ArrayList<Region> regions = new ArrayList<Region>();
+		regions.add(regionTirol);
+		regions.add(regionSouthTyrol);
+		regions.add(regionTrentino);
 
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		String subject;
@@ -108,7 +123,7 @@ public class EmailUtilTest {
 		else
 			subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
 		subject = System.getProperty("java.version") + " " + subject;
-		for (String region : regions) {
+		for (Region region : regions) {
 			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				if (avalancheBulletin.affectsRegionOnlyPublished(region))

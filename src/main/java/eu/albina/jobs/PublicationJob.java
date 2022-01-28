@@ -30,9 +30,11 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.RegionController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
@@ -58,7 +60,7 @@ public class PublicationJob implements org.quartz.Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		logger.info("Publication job triggered!");
 
-		List<String> regions = GlobalVariables.getPublishRegions();
+		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions();
 		if (!regions.isEmpty()) {
 			try {
 				User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
@@ -92,7 +94,7 @@ public class PublicationJob implements org.quartz.Job {
 				}
 
 				List<String> avalancheReportIds = new ArrayList<String>();
-				for (String region : regions) {
+				for (Region region : regions) {
 					String avalancheReportId = AvalancheReportController.getInstance()
 							.publishReport(publishedBulletins.values(), startDate, region, user, publicationDate);
 					avalancheReportIds.add(avalancheReportId);

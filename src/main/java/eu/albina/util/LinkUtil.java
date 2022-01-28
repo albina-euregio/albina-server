@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import eu.albina.map.DaytimeDependency;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -60,9 +61,9 @@ public interface LinkUtil {
 		return String.format("%s/bulletin/%s", getWebsite(lang), date);
 	}
 
-	static String getPdfLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
+	static String getPdfLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region) {
 		String date = AlbinaUtil.getValidityDateString(bulletins);
-		return String.format("%s/%s/%s_%s_%s.pdf", getPdfUrl(lang), date, date, region, lang);
+		return String.format("%s/%s/%s_%s_%s.pdf", getPdfUrl(lang), date, date, region.getId(), lang);
 	}
 
 	static String getDangerPatternLink(LanguageCode lang, DangerPattern dangerPattern) {

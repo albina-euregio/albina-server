@@ -53,6 +53,7 @@ import com.google.common.io.Resources;
 import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -68,6 +69,8 @@ public class AlbinaUtilTest {
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;
 
+	private Region testRegion;
+
 	private final String imgBaseUrl = "D:/norbert/workspaces/albina-euregio/albina-server/src/test/resources/images/";
 	private final List<String> names = new ArrayList<String>();
 	private final List<String> passwords = new ArrayList<String>();
@@ -77,69 +80,8 @@ public class AlbinaUtilTest {
 	public void setUp() throws IOException {
 		// HibernateUtil.getInstance().setUp();
 
-		names.add("Sergio Benigni");
-		names.add("Paolo Cestari");
-		names.add("Marco Gadotti");
-		names.add("Walter Beozzo");
-		names.add("Gianluca Tognoni");
-		names.add("Andrea Piazza");
-		names.add("Günther Geier");
-		names.add("Fabio Gheser");
-		names.add("Lukas Rastner");
-		names.add("Sarah Graf");
-		names.add("Rudi Mair");
-		names.add("Patrick Nairz");
-		names.add("Christoph Mitterer");
-		names.add("Norbert Lanzanasto");
-		names.add("Jürg Schweizer");
-		names.add("Matthias Gerber");
-		names.add("Thomas Stucki");
-		names.add("Kurt Winkler");
-		names.add("Ulrich Niederer");
-		names.add("Marc Ruesch");
-		names.add("Simon Legner");
-		names.add("Bernhard Niedermoser");
-		names.add("Michael Butschek");
-		names.add("Claudia Riedl");
-		names.add("Astrid Maschits");
-		names.add("Harald Timons");
-		names.add("Jordi Gavaldà Bordes");
-		names.add("Ivan Moner Seira");
-		names.add("Montse Bacardit");
-		names.add("David Broto");
-		names.add("AINEVA");
-
-		passwords.add("Sergio");
-		passwords.add("Paolo");
-		passwords.add("Marco");
-		passwords.add("Walter");
-		passwords.add("Gianluca");
-		passwords.add("Andrea");
-		passwords.add("Günther");
-		passwords.add("Fabio");
-		passwords.add("Lukas");
-		passwords.add("Sarah");
-		passwords.add("Rudi");
-		passwords.add("Patrick");
-		passwords.add("Christoph");
-		passwords.add("Norbert");
-		passwords.add("Jürg");
-		passwords.add("Matthias");
-		passwords.add("Thomas");
-		passwords.add("Kurt");
-		passwords.add("Ulrich");
-		passwords.add("Marc");
-		passwords.add("Simon");
-		passwords.add("Bernhard");
-		passwords.add("Michael");
-		passwords.add("Claudia");
-		passwords.add("Astrid");
-		passwords.add("Harald");
-		passwords.add("Jordi");
-		passwords.add("Ivan");
-		passwords.add("Montse");
-		passwords.add("David");
-		passwords.add("aineva");
+		testRegion = new Region();
+		testRegion.setId("AT-07");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -213,7 +155,7 @@ public class AlbinaUtilTest {
 	@Ignore
 	@Test
 	public void createStaticWidget() throws IOException, URISyntaxException {
-		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en,
+		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en, testRegion,
 				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 	}
 
@@ -233,7 +175,7 @@ public class AlbinaUtilTest {
 	@Ignore
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
-		JsonUtil.createJsonFile(bulletins, "2019-12-30", "2019-12-30_17-15-30");
+		JsonUtil.createJsonFile(bulletins, testRegion, "2019-12-30", "2019-12-30_17-15-30");
 	}
 
 	@Test
@@ -259,7 +201,7 @@ public class AlbinaUtilTest {
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
 			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de));
 		assertEquals("https://lawinen.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
-			LinkUtil.getPdfLink(bulletins, LanguageCode.de, "AT-07"));
+			LinkUtil.getPdfLink(bulletins, LanguageCode.de, testRegion));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),

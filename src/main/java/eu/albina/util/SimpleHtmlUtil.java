@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 import freemarker.core.ParseException;
@@ -116,23 +117,18 @@ public class SimpleHtmlUtil {
 		return instance;
 	}
 
-	public boolean createRegionSimpleHtml(List<AvalancheBulletin> bulletins, String region) {
+	public boolean createRegionSimpleHtml(List<AvalancheBulletin> bulletins, Region region) {
 		boolean result = true;
-		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			if (avalancheBulletin.affectsRegionOnlyPublished(region))
-				regionBulletins.add(avalancheBulletin);
-		}
 
-		if (!regionBulletins.isEmpty())
+		if (!bulletins.isEmpty())
 			for (LanguageCode lang : LanguageCode.ENABLED) {
-				if (!createSimpleHtml(regionBulletins, lang, region))
+				if (!createSimpleHtml(bulletins, lang, region))
 					result = false;
 			}
 		return result;
 	}
 
-	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
+	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region) {
 		try {
 			if (bulletins != null && !bulletins.isEmpty()) {
 				String simpleHtmlString = createSimpleHtmlString(bulletins, lang, region);
@@ -140,10 +136,7 @@ public class SimpleHtmlUtil {
 				String filename;
 				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 
-				if (region.equals(GlobalVariables.codeEuregio))
-					filename = lang.toString() + ".html";
-				else
-					filename = region + "_" + lang.toString() + ".html";
+				filename = region.getId() + "_" + lang.toString() + ".html";
 
 				String dirPath = GlobalVariables.getHtmlDirectory() + "/" + validityDateString;
 				new File(dirPath).mkdirs();
@@ -181,7 +174,7 @@ public class SimpleHtmlUtil {
 		return false;
 	}
 
-	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
+	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
 		// Create data model
@@ -210,29 +203,20 @@ public class SimpleHtmlUtil {
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", lang.getBundleString("avalanche-report.url") + "/bulletin/"
 				+ AlbinaUtil.getValidityDateString(bulletins));
-		String regionString;
-		String underscore;
-		if (region.equalsIgnoreCase(GlobalVariables.codeEuregio)) {
-			regionString = "";
-			underscore = "";
-		} else {
-			regionString = region;
-			underscore = "_";
-		}
-		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(-1)));
-		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(1)));
+		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region.getId(), Period.ofDays(-1)));
+		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region.getId(), Period.ofDays(1)));
 		link.put("linkDe", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "de.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_de.html");
 		link.put("linkIt", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "it.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_it.html");
 		link.put("linkEn", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "en.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_en.html");
 		link.put("linkEs", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "es.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_es.html");
 		link.put("linkCa", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ca.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_ca.html");
 		link.put("linkAr", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ar.html");
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_ar.html");
 
 		root.put("link", link);
 
@@ -329,7 +313,7 @@ public class SimpleHtmlUtil {
 		root.put("bulletins", arrayList);
 
 		// Get template
-		boolean isAran = GlobalVariables.codeAran.equals(region);
+		boolean isAran = GlobalVariables.codeAran.equals(region.getId());
 		Template temp = cfg.getTemplate(isAran ? "simple-bulletin.aran.html" : "simple-bulletin.min.html");
 
 		// Merge template and model

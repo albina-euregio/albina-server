@@ -43,6 +43,7 @@ import eu.albina.caaml.CaamlVersion;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
+import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
@@ -161,7 +162,7 @@ public class AvalancheBulletinController {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> bulletins, Instant startDate,
-			Instant endDate, String region, Instant publicationDate) throws AlbinaException {
+			Instant endDate, Region region, Instant publicationDate) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
 		if (checkBulletinsForDuplicateRegion(bulletins, region))
@@ -186,12 +187,12 @@ public class AvalancheBulletinController {
 				if (results.containsKey(bulletin.getId())) {
 					// Bulletin already exists
 					AvalancheBulletin b = results.get(bulletin.getId());
-					if (results.get(bulletin.getId()).getOwnerRegion().startsWith(region)) {
+					if (results.get(bulletin.getId()).getOwnerRegion().startsWith(region.getId())) {
 						// own bulletin - save the bulletin
 						Set<String> savedRegions = b.getSavedRegions();
 						b.copy(bulletin);
 						for (String r : savedRegions) {
-							if (!r.startsWith(region)) {
+							if (!r.startsWith(region.getId())) {
 								if (!b.getSavedRegions().contains(r))
 									b.addSavedRegion(r);
 							}
@@ -206,7 +207,7 @@ public class AvalancheBulletinController {
 
 						tmpRegions = new HashSet<String>();
 						for (String r : b.getPublishedRegions()) {
-							if (!r.startsWith(region)) {
+							if (!r.startsWith(region.getId())) {
 								if (bulletin.getSavedRegions().contains(r))
 									tmpRegions.add(r);
 							}
@@ -219,7 +220,7 @@ public class AvalancheBulletinController {
 						// foreign bulletin
 						Set<String> tmpRegions = new HashSet<String>();
 						for (String r : b.getSavedRegions()) {
-							if (r.startsWith(region)) {
+							if (r.startsWith(region.getId())) {
 								if (!bulletin.getSavedRegions().contains(r))
 									tmpRegions.add(r);
 							}
@@ -228,14 +229,14 @@ public class AvalancheBulletinController {
 							b.getSavedRegions().remove(r);
 
 						for (String r : bulletin.getSavedRegions()) {
-							if (r.startsWith(region)) {
+							if (r.startsWith(region.getId())) {
 								if (!b.getSavedRegions().contains(r))
 									b.addSavedRegion(r);
 							}
 						}
 						tmpRegions = new HashSet<String>();
 						for (String r : b.getSuggestedRegions()) {
-							if (r.startsWith(region)) {
+							if (r.startsWith(region.getId())) {
 								if (!bulletin.getSuggestedRegions().contains(r))
 									tmpRegions.add(r);
 							}
@@ -245,7 +246,7 @@ public class AvalancheBulletinController {
 
 						tmpRegions = new HashSet<String>();
 						for (String r : b.getPublishedRegions()) {
-							if (r.startsWith(region))
+							if (r.startsWith(region.getId()))
 								tmpRegions.add(r);
 						}
 						for (String r : tmpRegions)
@@ -254,7 +255,7 @@ public class AvalancheBulletinController {
 					entityManager.merge(b);
 					resultBulletins.put(b.getId(), b);
 				} else {
-					if (bulletin.getOwnerRegion().startsWith(region)) {
+					if (bulletin.getOwnerRegion().startsWith(region.getId())) {
 						// own bulletin
 						// Bulletin has to be created
 						bulletin.setId(null);
@@ -271,7 +272,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin avalancheBulletin : results.values()) {
 				// bulletin has to be removed
 				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId())
-						&& avalancheBulletin.getOwnerRegion().startsWith(region)) {
+						&& avalancheBulletin.getOwnerRegion().startsWith(region.getId())) {
 					entityManager.remove(avalancheBulletin);
 					if (resultBulletins.containsKey(avalancheBulletin.getId()))
 						resultBulletins.remove(avalancheBulletin.getId());
@@ -308,12 +309,12 @@ public class AvalancheBulletinController {
 	 * @throws ParserConfigurationException
 	 *             if the XML document can not be initialized
 	 */
-	public String getPublishedBulletinsCaaml(Instant date, List<String> regions, LanguageCode language,
+	public String getPublishedBulletinsCaaml(Instant date, List<Region> regions, LanguageCode language,
 			CaamlVersion version) throws TransformerException, AlbinaException, ParserConfigurationException {
 		ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				regions);
 
-		Document caamlDoc = XmlUtil.createCaaml(result, language, version);
+		Document caamlDoc = XmlUtil.createCaaml(result, regions, language, version);
 		return XmlUtil.convertDocToString(caamlDoc);
 	}
 
@@ -339,7 +340,7 @@ public class AvalancheBulletinController {
 	 * @throws ParserConfigurationException
 	 *             if the XML document can not be initialized
 	 */
-	public String getAinevaBulletinsCaaml(Instant startDate, Instant endDate, List<String> regions,
+	public String getAinevaBulletinsCaaml(Instant startDate, Instant endDate, List<Region> regions,
 			LanguageCode language) throws TransformerException, ParserConfigurationException {
 		List<AvalancheBulletin> bulletins = getBulletins(startDate, endDate, regions);
 
@@ -354,19 +355,19 @@ public class AvalancheBulletinController {
 			Element observations = doc.createElement("observations");
 			for (AvalancheBulletin bulletin : bulletins) {
 				Set<String> tmpRegions = new HashSet<String>();
-				for (String desiredRegion : regions) {
+				for (Region desiredRegion : regions) {
 					for (String region : bulletin.getSavedRegions()) {
-						if (region.startsWith(desiredRegion))
+						if (region.startsWith(desiredRegion.getId()))
 							tmpRegions.add(region);
 					}
 					for (String region : bulletin.getPublishedRegions()) {
-						if (region.startsWith(desiredRegion))
+						if (region.startsWith(desiredRegion.getId()))
 							tmpRegions.add(region);
 					}
 				}
 				if (!tmpRegions.isEmpty()) {
 					bulletin.setPublishedRegions(tmpRegions);
-					for (Element element : bulletin.toCAAMLv5(doc, language)) {
+					for (Element element : bulletin.toCAAMLv5(doc, language, regions)) {
 						observations.appendChild(element);
 					}
 				}
@@ -396,7 +397,7 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 *             if the published bulletins can not be loaded from DB
 	 */
-	public JSONArray getPublishedBulletinsJson(Instant date, List<String> regions) throws AlbinaException {
+	public JSONArray getPublishedBulletinsJson(Instant date, List<Region> regions) throws AlbinaException {
 		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				regions);
 
@@ -424,7 +425,7 @@ public class AvalancheBulletinController {
 	 *             if the published bulletins for this time period and in this
 	 *             region could not be loaded
 	 */
-	public DangerRating getHighestDangerRating(Instant date, List<String> regions) throws AlbinaException {
+	public DangerRating getHighestDangerRating(Instant date, List<Region> regions) throws AlbinaException {
 		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				regions);
 
@@ -452,7 +453,7 @@ public class AvalancheBulletinController {
 	 * @return the most recent bulletins for the given time period and regions
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<String> regions) {
+	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<Region> regions) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
@@ -486,7 +487,7 @@ public class AvalancheBulletinController {
 	 * @return a list of all affected bulletins
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> submitBulletins(Instant startDate, Instant endDate, String region, User user) {
+	public List<AvalancheBulletin> submitBulletins(Instant startDate, Instant endDate, Region region, User user) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
@@ -509,7 +510,7 @@ public class AvalancheBulletinController {
 				// delete suggestions within the region
 				result = new HashSet<String>();
 				for (String entry : bulletin.getSuggestedRegions())
-					if (entry.startsWith(region))
+					if (entry.startsWith(region.getId()))
 						result.add(entry);
 				for (String entry : result)
 					bulletin.getSuggestedRegions().remove(entry);
@@ -541,11 +542,11 @@ public class AvalancheBulletinController {
 	 *            the user who publishes the bulletins
 	 * @return a map of all affected bulletin ids and bulletins
 	 */
-	public Map<String, AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, List<String> regions,
+	public Map<String, AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, List<Region> regions,
 			Instant publicationDate, User user) throws AlbinaException {
 		Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
 
-		for (String region : regions) {
+		for (Region region : regions) {
 			BulletinStatus internalStatus = AvalancheReportController.getInstance().getInternalStatusForDay(startDate,
 					region);
 
@@ -578,7 +579,7 @@ public class AvalancheBulletinController {
 	 * @return a list of all affected bulletins
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, String region,
+	public List<AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, Region region,
 			Instant publicationDate, User user) {
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
@@ -604,7 +605,7 @@ public class AvalancheBulletinController {
 				// publish all saved regions
 				result = new HashSet<String>();
 				for (String entry : bulletin.getSavedRegions())
-					if (entry.startsWith(region))
+					if (entry.startsWith(region.getId()))
 						result.add(entry);
 				for (String entry : result) {
 					bulletin.getSavedRegions().remove(entry);
@@ -632,17 +633,17 @@ public class AvalancheBulletinController {
 	 *            the region to check the micro regions for
 	 * @return true if one micro region was defined twice
 	 */
-	private boolean checkBulletinsForDuplicateRegion(List<AvalancheBulletin> bulletins, String region) {
+	private boolean checkBulletinsForDuplicateRegion(List<AvalancheBulletin> bulletins, Region region) {
 		boolean duplicateRegion = false;
 		Set<String> definedRegions = new HashSet<String>();
 		for (AvalancheBulletin bulletin : bulletins) {
 
 			for (String entry : bulletin.getSavedRegions())
-				if (entry.startsWith(region))
+				if (entry.startsWith(region.getId()))
 					if (!definedRegions.add(entry.toLowerCase()))
 						duplicateRegion = true;
 			for (String entry : bulletin.getPublishedRegions())
-				if (entry.startsWith(region))
+				if (entry.startsWith(region.getId()))
 					if (!definedRegions.add(entry.toLowerCase()))
 						duplicateRegion = true;
 		}
@@ -660,10 +661,10 @@ public class AvalancheBulletinController {
 	 * @return a set of micro regions that are contained by {@code regions} and part
 	 *         of {@code region}
 	 */
-	private Set<String> getOwnRegions(Set<String> regions, String region) {
+	private Set<String> getOwnRegions(Set<String> regions, Region region) {
 		Set<String> result = new HashSet<String>();
 		for (String entry : regions)
-			if (entry.startsWith(region))
+			if (entry.startsWith(region.getId()))
 				result.add(entry);
 		return result;
 	}
@@ -682,7 +683,7 @@ public class AvalancheBulletinController {
 	 * @return a JSON array containing all warnings (empty if no warning was found)
 	 */
 	@SuppressWarnings("unchecked")
-	public JSONArray checkBulletins(Instant startDate, Instant endDate, String region) {
+	public JSONArray checkBulletins(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			JSONArray json = new JSONArray();
 			boolean missingAvActivityHighlights = false;
@@ -712,7 +713,7 @@ public class AvalancheBulletinController {
 
 				if (!pendingSuggestions)
 					for (String entry : bulletin.getSuggestedRegions())
-						if (entry.startsWith(region))
+						if (entry.startsWith(region.getId()))
 							pendingSuggestions = true;
 
 				if (bulletin.affectsRegionWithoutSuggestions(region)) {
@@ -783,7 +784,7 @@ public class AvalancheBulletinController {
 				}
 			}
 
-			if (definedRegions.size() < RegionController.getInstance().getRegion(region).getMicroRegions())
+			if (definedRegions.size() < region.getMicroRegions())
 				json.put("missingRegion");
 			if (missingAvActivityHighlights)
 				json.put("missingAvActivityHighlights");

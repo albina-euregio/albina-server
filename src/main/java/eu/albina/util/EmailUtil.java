@@ -38,10 +38,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -104,13 +104,13 @@ public class EmailUtil {
 		return cfg;
 	}
 
-	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
+	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, boolean test) {
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 			sendBulletinEmails(bulletins, regions, update, test, lang);
 		}
 	}
 
-	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test,
+	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, boolean test,
 			LanguageCode lang) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		String subject;
@@ -118,8 +118,8 @@ public class EmailUtil {
 			subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
 		else
 			subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
-		for (String region : regions) {
-			if (RegionController.getInstance().isSendEmails(region)) {
+		for (Region region : regions) {
+			if (region.isSendEmails()) {
 				ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 				for (AvalancheBulletin avalancheBulletin : bulletins) {
 					if (avalancheBulletin.affectsRegionOnlyPublished(region))
@@ -156,17 +156,17 @@ public class EmailUtil {
 		}
 	}
 
-	public void sendBulletinEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
-		logger.info("Sending bulletin email in {} for {} ({} bytes)...", lang, region, emailHtml.getBytes(StandardCharsets.UTF_8).length);
+	public void sendBulletinEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
+		logger.info("Sending bulletin email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
 		sendEmail(lang, region, emailHtml, subject, test);
 	}
 
-	public void sendBlogPostEmailRapidmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
-		logger.info("Sending blog post email in {} for {} ({} bytes)...", lang, region, emailHtml.getBytes(StandardCharsets.UTF_8).length);
+	public void sendBlogPostEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
+		logger.info("Sending blog post email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
 		sendEmail(lang, region, emailHtml, subject, test);
 	}
 
-	private void sendEmail(LanguageCode lang, String region, String emailHtml, String subject, boolean test) {
+	private void sendEmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
 		try {
 			PostMailingsRequestPostFile file = new PostMailingsRequestPostFile()
 				.description("mail-content.zip")
@@ -180,11 +180,11 @@ public class EmailUtil {
 				.file(file);
 			RapidMailController.getInstance().sendMessage(region, lang, request, test);
 		} catch (Exception e) {
-			logger.error("Emails could not be sent in " + lang + " for " + region, e);
+			logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
 		}
 	}
 
-	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region,
+	public String createBulletinEmailHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region,
 			boolean update, boolean daytimeDependency) {
 		try {
 			// Create data model
@@ -219,23 +219,23 @@ public class EmailUtil {
 				mapImage.put("overview",
 						LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 								+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-								+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
+								+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.am, false));
 				mapImage.put("overviewPM",
 						LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 								+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-								+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false));
+								+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.pm, false));
 				mapImage.put("widthPM", "width=\"600\"");
 			} else {
 				if (daytimeDependency)
 					mapImage.put("overview",
 							LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-									+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
+									+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.am, false));
 				else
 					mapImage.put("overview",
 							LinkUtil.getMapsUrl(lang) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
 									+ AlbinaUtil.getPublicationTime(bulletins) + "/"
-									+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
+									+ MapUtil.getOverviewMapFilename(region.getId(), DaytimeDependency.fd, false));
 				mapImage.put("overviewPM", GlobalVariables.getServerImagesUrl() + "/empty.png");
 				mapImage.put("widthPM", "");
 			}

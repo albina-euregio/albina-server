@@ -29,21 +29,30 @@ import org.junit.Test;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import freemarker.template.TemplateException;
 
 public class SimpleHtmlUtilTest {
+
+	private Region regionEuregio;
+	private Region regionAran;
+
 	@Before
 	public void setUp() throws Exception {
 		GlobalVariables.htmlDirectory = "/foo/bar/baz/simple/";
 		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files/";
+		regionEuregio = new Region();
+		regionEuregio.setId("EUREGIO");
+		regionEuregio = new Region();
+		regionEuregio.setId("ES-CT-L");
 	}
 
 	@Test
 	public void createSimpleHtmlString() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("2019-01-17.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.de, "").replaceAll("\\s*<", "\n<");
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.de, regionEuregio).replaceAll("\\s*<", "\n<");
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
 		Assert.assertEquals(expected.trim(), htmlString.trim());
 	}
@@ -57,7 +66,7 @@ public class SimpleHtmlUtilTest {
 			GlobalVariables.serverWebsiteUrl = "https://www.lauegi.report/";
 			URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-			String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, "ES-CT-L");
+			String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, regionAran);
 			String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
 			Assert.assertEquals(expected.trim(), htmlString.trim());
 		} finally {

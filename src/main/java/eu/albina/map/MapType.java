@@ -9,6 +9,7 @@ import eu.albina.util.GlobalVariables;
 import java.util.*;
 
 enum MapType {
+	// TODO already exists in region object
 	euregio(GlobalVariables.codeEuregio, 1464000, 1104000, 6047000, 5687000),
 	aran(GlobalVariables.codeAran, 120500, 66200, 5266900, 5215700),
 	tyrol(GlobalVariables.codeTyrol, 1452000, 1116000, 6053000, 5829000),

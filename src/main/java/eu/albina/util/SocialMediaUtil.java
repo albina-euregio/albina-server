@@ -20,17 +20,18 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 interface SocialMediaUtil {
 
-	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
+	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, boolean test) {
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 			sendBulletinNewsletters(bulletins, regions, update, lang, test);
 		}
 	}
 
-	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode lang, boolean test) {
+	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, LanguageCode lang, boolean test) {
 		String message = getSocialMediaText(bulletins, update, lang);
 		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(lang, bulletins);
 		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
@@ -49,5 +50,5 @@ interface SocialMediaUtil {
 		}
 	}
 
-	void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl, boolean test);
+	void sendBulletinNewsletter(String message, LanguageCode lang, List<Region> regions, String attachmentUrl, String bulletinUrl, boolean test);
 }

@@ -28,10 +28,17 @@ import org.junit.rules.TemporaryFolder;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 
 import javax.imageio.ImageIO;
 
 public class MapUtilTest {
+
+	private Region regionEuregio;
+	private Region regionTirol;
+	private Region regionSouthTyrol;
+	private Region regionTrentino;
+	private Region regionAran;
 
 	@Rule
 	public TemporaryFolder folder = TemporaryFolder.builder().assureDeletion().build();
@@ -44,6 +51,12 @@ public class MapUtilTest {
 		GlobalVariables.mapsPath = folder.toString();
 		GlobalVariables.mapProductionUrl = "../avalanche-warning-maps/";
 		GlobalVariables.pdfDirectory = GlobalVariables.mapsPath;
+
+		regionEuregio = new Region("EUREGIO");
+		regionTirol = new Region("AT-07");
+		regionSouthTyrol = new Region("IT-32-BZ");
+		regionTrentino = new Region("IT-32-TN");
+		regionAran = new Region("ES-CT-L");
 	}
 
 	@After
@@ -53,17 +66,17 @@ public class MapUtilTest {
 
 	@Test
 	public void testOverviewMapFilename() {
-		assertEquals("fd_albina_map.jpg", MapUtil.getOverviewMapFilename(null, false, false, false));
-		assertEquals("fd_tyrol_map.jpg",
-				MapUtil.getOverviewMapFilename(GlobalVariables.codeTyrol, false, false, false));
-		assertEquals("fd_tyrol_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(GlobalVariables.codeTyrol, false, false, true));
-		assertEquals("am_tyrol_map.jpg", MapUtil.getOverviewMapFilename(GlobalVariables.codeTyrol, false, true, false));
-		assertEquals("pm_tyrol_map.jpg", MapUtil.getOverviewMapFilename(GlobalVariables.codeTyrol, true, true, false));
-		assertEquals("fd_southtyrol_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(GlobalVariables.codeSouthTyrol, false, false, true));
-		assertEquals("fd_trentino_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(GlobalVariables.codeTrentino, false, false, true));
+		assertEquals("fd_EUREGIO_map.jpg", MapUtil.getOverviewMapFilename(null, false, false, false));
+		assertEquals("fd_AT-07_map.jpg",
+				MapUtil.getOverviewMapFilename(regionTirol, false, false, false));
+		assertEquals("fd_AT-07_map_bw.jpg",
+				MapUtil.getOverviewMapFilename(regionTirol, false, false, true));
+		assertEquals("am_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTirol, false, true, false));
+		assertEquals("pm_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTirol, true, true, false));
+		assertEquals("fd_IT-32-BZ_map_bw.jpg",
+				MapUtil.getOverviewMapFilename(regionSouthTyrol, false, false, true));
+		assertEquals("fd_IT-32-TN_map_bw.jpg",
+				MapUtil.getOverviewMapFilename(regionTrentino, false, false, true));
 	}
 
 	private void assumeMapsPath() {
@@ -75,15 +88,15 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
 
-		for (String name : Arrays.asList("fd_albina_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
+		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
 			BufferedImage actual = ImageIO.read(new File(
 				GlobalVariables.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
 			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
 		}
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.en, GlobalVariables.codeEuregio, false, false,
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.en, regionEuregio, false, false,
 			"2019-01-17", "2019-01-16_16-00-00", false);
 	}
 
@@ -92,13 +105,13 @@ public class MapUtilTest {
 		assumeMapsPath();
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionAran);
 
-		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_aran_thumbnail.png"));
+		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		BufferedImage actual = ImageIO.read(new File(
-			GlobalVariables.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_aran_thumbnail.png"));
+			GlobalVariables.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, GlobalVariables.codeAran, false, false,
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, false, false,
 			"2021-01-24", "2021-01-23_16-00-00", false);
 	}
 
@@ -108,8 +121,8 @@ public class MapUtilTest {
 		assumeMapsPath();
 		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, GlobalVariables.codeAran, false, false,
+		MapUtil.createMapyrusMaps(bulletins, regionAran);
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, false, false,
 			"2021-12-10", "2021-12-09_16-06-27", false);
 	}
 
@@ -118,7 +131,7 @@ public class MapUtilTest {
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		BufferedImage actual = ImageIO.read(new File(
@@ -132,7 +145,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
 	}
 
 	@Test
@@ -141,7 +154,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
 	}
 
 	@Test
@@ -150,7 +163,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
 	}
 
 	@Test

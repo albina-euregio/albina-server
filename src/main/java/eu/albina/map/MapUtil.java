@@ -36,22 +36,24 @@ import org.mapyrus.MapyrusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerRating;
 
 public interface MapUtil {
 
 	Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
-	static String getOverviewMapFilename(String region, boolean isAfternoon, boolean hasDaytimeDependency,
+	static String getOverviewMapFilename(Region region, boolean isAfternoon, boolean hasDaytimeDependency,
 			boolean grayscale) {
 		final DaytimeDependency daytimeDependency = DaytimeDependency.of(isAfternoon, hasDaytimeDependency);
-		return getOverviewMapFilename(region, daytimeDependency, grayscale);
+		return getOverviewMapFilename(region.getId(), daytimeDependency, grayscale);
 	}
 
-	static String getOverviewMapFilename(String region, DaytimeDependency daytimeDependency, boolean grayscale) {
-		return MapType.forRegion(region).orElse(MapType.euregio).filename(MapLevel.standard, daytimeDependency, null, grayscale, MapImageFormat.jpg);
+	static String getOverviewMapFilename(String regionId, DaytimeDependency daytimeDependency, boolean grayscale) {
+		return MapType.forRegion(regionId).orElse(MapType.euregio).filename(MapLevel.standard, daytimeDependency, null, grayscale, MapImageFormat.jpg);
 	}
 
 	/**
@@ -66,12 +68,12 @@ public interface MapUtil {
 	 * @throws Exception
 	 *             an error occurred during map production
 	 */
-	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, boolean preview) throws Exception {
+	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Region region, boolean preview) throws Exception {
 		final long start = System.currentTimeMillis();
 		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
 				GlobalVariables.getMapProductionUrl());
 		try {
-			createMapyrusMaps(bulletins);
+			createMapyrusMaps(bulletins, region);
 		} catch (Exception ex) {
 			logger.error("Failed to create mapyrus maps", ex);
 			throw ex;
@@ -106,12 +108,12 @@ public interface MapUtil {
 		return Paths.get(GlobalVariables.getMapsPath(), validityDateString, publicationTime);
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins) {
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region) {
 		final Path outputDirectory = getOutputDirectory(bulletins);
-		createMapyrusMaps(bulletins, false, outputDirectory);
+		createMapyrusMaps(bulletins, region, false, outputDirectory);
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, boolean preview, Path outputDirectory) {
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, boolean preview, Path outputDirectory) {
 		try {
 			logger.info("Creating directory {}", outputDirectory);
 			Files.createDirectories(outputDirectory);
@@ -134,7 +136,7 @@ public interface MapUtil {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					final MapType map = AvalancheBulletin.affectsRegion(MapType.aran.region, bulletin.regions(preview))
+					final MapType map = RegionController.getInstance().affectsRegion(MapType.aran.region, bulletin.regions(preview))
 						? MapType.aran : MapType.euregio;
 					createMapyrusMaps(map, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
 					createMapyrusMaps(map, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);

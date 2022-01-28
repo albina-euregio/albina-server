@@ -47,6 +47,7 @@ public class Subscriber {
 	@Column(name = "CONFIRMED")
 	private boolean confirmed;
 
+	// TODO use region table
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "subscriber_regions", joinColumns = @JoinColumn(name = "SUBSCRIBER_ID"))
 	@Column(name = "REGION_ID")

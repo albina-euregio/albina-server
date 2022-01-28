@@ -62,7 +62,7 @@ public class BlogController extends CommonProcessor {
 		executor = Executor.newInstance(sslHttpClient());
 		try {
 			Instant date = Instant.now();
-			for (String region : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBlogs()).map(Region::getId).collect(Collectors.toList())) {
+			for (Region region : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBlogs()).collect(Collectors.toList())) {
 				for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 					try {
 						GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
@@ -93,12 +93,12 @@ public class BlogController extends CommonProcessor {
 		return instance;
 	}
 
-	protected GoogleBloggerConfiguration getConfiguration(String regionId, LanguageCode languageCode) {
+	protected GoogleBloggerConfiguration getConfiguration(Region region, LanguageCode languageCode) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			GoogleBloggerConfiguration result = null;
-			if (!Strings.isNullOrEmpty(regionId) && languageCode != null) {
+			if (region != null && !Strings.isNullOrEmpty(region.getId()) && languageCode != null) {
 				result = (GoogleBloggerConfiguration) entityManager.createQuery(HibernateUtil.queryGetGoogleBloggerConfiguration)
-				.setParameter("regionId", regionId)
+				.setParameter("regionId", region.getId())
 				.setParameter("lang", languageCode).getSingleResult();
 			} else {
 				throw new HibernateException("No region or language defined!");
@@ -106,7 +106,7 @@ public class BlogController extends CommonProcessor {
 			if (result != null)
 				return result;
 			else
-				throw new HibernateException("No telegram configuration found for " + regionId + " [" + languageCode + "]");
+				throw new HibernateException("No telegram configuration found for " + region.getId() + " [" + languageCode + "]");
 		});
 	}
 
@@ -115,8 +115,8 @@ public class BlogController extends CommonProcessor {
 		return HttpClients.custom().build();
 	}
 
-	protected List<Blogger.Item> getBlogPosts(String regionId, LanguageCode lang) throws IOException {
-		GoogleBloggerConfiguration config = this.getConfiguration(regionId, lang);
+	protected List<Blogger.Item> getBlogPosts(Region region, LanguageCode lang) throws IOException {
+		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
@@ -139,7 +139,7 @@ public class BlogController extends CommonProcessor {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
 				List<Blogger.Item> blogPosts = new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
-				logger.info("Found {} new blog posts for region={} lang={} url={}", blogPosts.size(), regionId, lang, uri);
+				logger.info("Found {} new blog posts for region={} lang={} url={}", blogPosts.size(), region.getId(), lang, uri);
 				return blogPosts;
 			} else {
 				throw new IOException("Failed to fetch blog posts: " + response);
@@ -149,7 +149,7 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	protected Blogger.Item getLatestBlogPost(String region, LanguageCode lang) throws IOException {
+	protected Blogger.Item getLatestBlogPost(Region region, LanguageCode lang) throws IOException {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
@@ -170,7 +170,7 @@ public class BlogController extends CommonProcessor {
 				HttpEntity entity = response.getEntity();
 				String entityString = EntityUtils.toString(entity, "UTF-8");
 				List<Blogger.Item> blogPosts = new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
-				logger.info("Fetched latest blog post for region={} lang={} url={}", blogPosts.size(), region, lang, uri);
+				logger.info("Fetched latest blog post for region={} lang={} url={}", blogPosts.size(), region.getId(), lang, uri);
 				if (blogPosts.size() > 0)
 					return blogPosts.get(0);
 				else
@@ -183,7 +183,7 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	protected String getBlogPost(String blogPostId, String region, LanguageCode lang) throws IOException {
+	protected String getBlogPost(String blogPostId, Region region, LanguageCode lang) throws IOException {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
@@ -202,8 +202,8 @@ public class BlogController extends CommonProcessor {
 		return null;
 	}
 
-	public void sendNewBlogPosts(String region, LanguageCode lang) {
-		if (RegionController.getInstance().isPublishBlogs(region)) {
+	public void sendNewBlogPosts(Region region, LanguageCode lang) {
+		if (region.isPublishBlogs()) {
 			GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
 			if (config.getBlogId() != null) {
@@ -223,8 +223,8 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	public void sendLatestBlogPost(String region, LanguageCode lang, boolean test) {
-		if (RegionController.getInstance().isPublishBlogs(region)) {
+	public void sendLatestBlogPost(Region region, LanguageCode lang, boolean test) {
+		if (region.isPublishBlogs()) {
 			GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
 			if (config.getBlogId() != null) {
@@ -234,15 +234,15 @@ public class BlogController extends CommonProcessor {
 					sendNewBlogPostToTelegramChannel(blogPost, region, lang, test);
 					sendNewBlogPostToPushNotification(region, lang, blogPost, test);
 				} catch (IOException e) {
-					logger.warn("Latest blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+					logger.warn("Latest blog post could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
 				}
 			}
 		} else {
-			logger.info("Sending blog posts disabled for " + region + " [" + lang + "]");
+			logger.info("Sending blog posts disabled for " + region.getId() + " [" + lang + "]");
 		}
 	}
 
-	public void sendLatestBlogPostEmail(String region, LanguageCode lang, boolean test) {
+	public void sendLatestBlogPostEmail(Region region, LanguageCode lang, boolean test) {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
 		if (config.getBlogId() != null) {
@@ -250,12 +250,12 @@ public class BlogController extends CommonProcessor {
 				Blogger.Item blogPost = getLatestBlogPost(region, lang);
 				sendNewBlogPostToRapidmail(blogPost, region, lang, test);
 			} catch (IOException e) {
-				logger.warn("Latest blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+				logger.warn("Latest blog post could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
 			}
 		}
 	}
 
-	public void sendLatestBlogPostTelegram(String region, LanguageCode lang, boolean test) {
+	public void sendLatestBlogPostTelegram(Region region, LanguageCode lang, boolean test) {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
 		if (config.getBlogId() != null) {
@@ -263,12 +263,12 @@ public class BlogController extends CommonProcessor {
 				Blogger.Item blogPost = getLatestBlogPost(region, lang);
 				sendNewBlogPostToTelegramChannel(blogPost, region, lang, test);
 			} catch (IOException e) {
-				logger.warn("Latest blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+				logger.warn("Latest blog post could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
 			}
 		}
 	}
 
-	public void sendLatestBlogPostPush(String region, LanguageCode lang, boolean test) {
+	public void sendLatestBlogPostPush(Region region, LanguageCode lang, boolean test) {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
 		if (config.getBlogId() != null) {
@@ -276,12 +276,12 @@ public class BlogController extends CommonProcessor {
 				Blogger.Item blogPost = getLatestBlogPost(region, lang);
 				sendNewBlogPostToPushNotification(region, lang, blogPost, test);
 			} catch (IOException e) {
-				logger.warn("Latest blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+				logger.warn("Latest blog post could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
 			}
 		}
 	}
 
-	void sendNewBlogPostToTelegramChannel(Blogger.Item item, String region, LanguageCode lang, boolean test) {
+	void sendNewBlogPostToTelegramChannel(Blogger.Item item, Region region, LanguageCode lang, boolean test) {
 		logger.info("Sending new blog post to telegram channel ...");
 
 		String message = getBlogMessage(item, region, lang);
@@ -300,7 +300,7 @@ public class BlogController extends CommonProcessor {
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(Blogger.Item item, String region, LanguageCode lang, boolean test) {
+	private void sendNewBlogPostToRapidmail(Blogger.Item item, Region region, LanguageCode lang, boolean test) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
 		String subject = item.title;
@@ -311,13 +311,13 @@ public class BlogController extends CommonProcessor {
 			if (htmlString != null && !htmlString.isEmpty())
 				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject, test);
 		} catch (IOException e) {
-			logger.warn("Blog post could not be retrieved: " + region + ", " + lang.toString(), e);
+			logger.warn("Blog post could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
 		} catch (URISyntaxException e) {
-			logger.warn("Blog post email could not be sent: " + region + ", " + lang.toString(), e);
+			logger.warn("Blog post email could not be sent: " + region.getId() + ", " + lang.toString(), e);
 		}
 	}
 
-	private void sendNewBlogPostToPushNotification(String region, LanguageCode lang, Blogger.Item object, boolean test) {
+	private void sendNewBlogPostToPushNotification(Region region, LanguageCode lang, Blogger.Item object, boolean test) {
 		String message = getBlogMessage(object, region, lang);
 		String attachmentUrl = getAttachmentUrl(object);
 		String blogUrl = getBlogUrl(object, region, lang);
@@ -325,11 +325,11 @@ public class BlogController extends CommonProcessor {
 		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl, test);
 	}
 
-	private String getBlogMessage(Blogger.Item item, String region, LanguageCode lang) {
+	private String getBlogMessage(Blogger.Item item, Region region, LanguageCode lang) {
 		return item.title + ": " + getBlogUrl(item, region, lang);
 	}
 
-	private String getBlogUrl(Blogger.Item item, String region, LanguageCode lang) {
+	private String getBlogUrl(Blogger.Item item, Region region, LanguageCode lang) {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 		return LinkUtil.getAvalancheReportFullBlogUrl(lang) + config.getBlogUrl() + "/" + item.id;
 	}

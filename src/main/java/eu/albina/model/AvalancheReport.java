@@ -56,7 +56,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	private User user;
 
 	@Column(name = "REGION")
-	private String region;
+	private Region region;
 
 	@Column(name = "DATE")
 	private ZonedDateTime date;
@@ -119,7 +119,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		}
 
 		if (json.has("region"))
-			this.region = json.getString("region");
+			this.region = new Region(json.getJSONObject("region"));
 
 		if (json.has("date"))
 			this.date = ZonedDateTime.parse(json.getString("date"));
@@ -159,11 +159,11 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.user = user;
 	}
 
-	public String getRegion() {
+	public Region getRegion() {
 		return region;
 	}
 
-	public void setRegion(String region) {
+	public void setRegion(Region region) {
 		this.region = region;
 	}
 
@@ -273,8 +273,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (user != null && !Strings.isNullOrEmpty(user.getName()))
 			json.put("user", user.getName());
 
-		if (!Strings.isNullOrEmpty(region))
-			json.put("region", region);
+		if (region != null && !Strings.isNullOrEmpty(region.getId()))
+			json.put("region", region.getId());
 
 		if (date != null)
 			json.put("date", DateTimeFormatter.ISO_INSTANT.format(date));

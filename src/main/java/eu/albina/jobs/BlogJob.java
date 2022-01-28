@@ -21,9 +21,10 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogController;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.GlobalVariables;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
@@ -43,11 +44,10 @@ public class BlogJob implements org.quartz.Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		for (String region : GlobalVariables.getPublishBlogRegions()) {
+		for (Region region : RegionController.getInstance().getPublishBlogRegions()) {
 			logger.info("Blog job triggered for {}!", region);
 			for (LanguageCode lang : LanguageCode.ENABLED)
 				BlogController.getInstance().sendNewBlogPosts(region, lang);
 		}
-
 	}
 }

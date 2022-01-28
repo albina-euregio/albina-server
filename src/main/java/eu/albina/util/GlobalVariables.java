@@ -18,9 +18,6 @@ package eu.albina.util;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -33,9 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.controller.RegionController;
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class GlobalVariables {
@@ -46,9 +40,6 @@ public class GlobalVariables {
 
 	/*---- Defined in configuration file -----*/
 	private static boolean createMaps = false;
-	private static boolean createPdf = false;
-	private static boolean createStaticWidget = false;
-	private static boolean createSimpleHtml = false;
 	static String vapidPublicKey;
 	static String vapidPrivateKey;
 	private static boolean publishAt5PM = false;
@@ -84,21 +75,13 @@ public class GlobalVariables {
 	public static String csvDeliminator = ";";
 	public static String csvLineBreak = "\n";
 
-	public static List<String> getPublishRegions() {
-		return getPublishRegions(false);
-	}
-
-	public static List<String> getPublishRegions(boolean includeEuregio) {
-		try {
-			List<String> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBulletins()).map(Region::getId).collect(Collectors.toList());
-			if (includeEuregio) {
-				result.add(GlobalVariables.codeEuregio);
-			}
-			return result;
-		} catch (AlbinaException ae) {
-			logger.warn("Active regions could not be loaded!", ae);
-			return new ArrayList<String>();
+	public static int[] getRGB(final String hex) {
+		final int[] ret = new int[3];
+		for (int i = 0; i < 3; i++)
+		{
+			ret[i] = Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
 		}
+		return ret;
 	}
 
 	public static String avalancheReportUsername = "info@avalanche.report";
@@ -127,24 +110,6 @@ public class GlobalVariables {
 		setConfigProperty("createMaps", createMaps);
 	}
 
-	public static boolean isCreatePdf() {
-		return createPdf;
-	}
-
-	public static void setCreatePdf(boolean createPdf) throws ConfigurationException {
-		GlobalVariables.createPdf = createPdf;
-		setConfigProperty("createPdf", createPdf);
-	}
-
-	public static boolean isCreateStaticWidget() {
-		return createStaticWidget;
-	}
-
-	public static void setCreateStaticWidget(boolean createStaticWidget) throws ConfigurationException {
-		GlobalVariables.createStaticWidget = createStaticWidget;
-		setConfigProperty("createStaticWidget", createStaticWidget);
-	}
-
 	public static String getVapidPublicKey() {
 		return vapidPublicKey;
 	}
@@ -169,24 +134,6 @@ public class GlobalVariables {
 	public static void setPublishAt8AM(boolean publishAt8AM) throws ConfigurationException {
 		GlobalVariables.publishAt8AM = publishAt8AM;
 		setConfigProperty("publishAt8AM", publishAt8AM);
-	}
-
-	public static boolean isCreateSimpleHtml() {
-		return createSimpleHtml;
-	}
-
-	public static void setCreateSimpleHtml(boolean createSimpleHtml) throws ConfigurationException {
-		GlobalVariables.createSimpleHtml = createSimpleHtml;
-		setConfigProperty("createSimpleHtml", createSimpleHtml);
-	}
-
-	public static List<String> getPublishBlogRegions() {
-		try {
-			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBlogs()).map(Region::getId).collect(Collectors.toList());
-		} catch (AlbinaException ae) {
-			logger.warn("Active regions could not be loaded!", ae);
-			return new ArrayList<String>();
-		}
 	}
 
 	public static String getPdfDirectory() {
@@ -339,12 +286,6 @@ public class GlobalVariables {
 				mapProductionUrl = config.getString("mapProductionUrl");
 			if (config.containsKey("createMaps"))
 				createMaps = config.getBoolean("createMaps");
-			if (config.containsKey("createPdf"))
-				createPdf = config.getBoolean("createPdf");
-			if (config.containsKey("createSimpleHtml"))
-				createSimpleHtml = config.getBoolean("createSimpleHtml");
-			if (config.containsKey("createStaticWidget"))
-				createStaticWidget = config.getBoolean("createStaticWidget");
 			if (config.containsKey("publishAt5PM"))
 				publishAt5PM = config.getBoolean("publishAt5PM");
 			if (config.containsKey("publishAt8AM"))
@@ -373,9 +314,6 @@ public class GlobalVariables {
 		if (mapProductionUrl != null)
 			json.put("mapProductionUrl", mapProductionUrl);
 		json.put("createMaps", createMaps);
-		json.put("createPdf", createPdf);
-		json.put("createSimpleHtml", createSimpleHtml);
-		json.put("createStaticWidget", createStaticWidget);
 		json.put("publishAt5PM", publishAt5PM);
 		json.put("publishAt8AM", publishAt8AM);
 
@@ -411,12 +349,6 @@ public class GlobalVariables {
 			setMapProductionUrl(configuration.getString("mapProductionUrl"));
 		if (configuration.has("createMaps"))
 			setCreateMaps(configuration.getBoolean("createMaps"));
-		if (configuration.has("createPdf"))
-			setCreatePdf(configuration.getBoolean("createPdf"));
-		if (configuration.has("createSimpleHtml"))
-			setCreateSimpleHtml(configuration.getBoolean("createSimpleHtml"));
-		if (configuration.has("createStaticWidget"))
-			setCreateStaticWidget(configuration.getBoolean("createStaticWidget"));
 		if (configuration.has("publishAt5PM"))
 			setPublishAt5PM(configuration.getBoolean("publishAt5PM"));
 		if (configuration.has("publishAt8AM"))

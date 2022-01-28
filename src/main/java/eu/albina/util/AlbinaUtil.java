@@ -46,9 +46,11 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.map.DaytimeDependency;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
@@ -174,11 +176,16 @@ public class AlbinaUtil {
 		return getDate(bulletins).getYear();
 	}
 
-	public static String getStaticWidgetFilename(String validityDateString, LanguageCode lang) {
+	public static String getStaticWidgetFilename(String validityDateString, Region region, LanguageCode lang) {
 		if (validityDateString != null)
-			return validityDateString + "_" + lang.toString();
+			return validityDateString + "_" + region.getId() + "_" + lang.toString();
 		else
-			return "_" + lang.toString();
+			return "_" + region.getId() + "_" + lang.toString();
+	}
+
+	public static String getThumbnailFileName(Region region, String validityDateString, String publicationTimeString, DaytimeDependency daytimeDependency) {
+		return GlobalVariables.getMapsPath() + "/"
+				+ validityDateString + "/" + publicationTimeString + "/" + daytimeDependency.toString() + "_" + region.getId() + "_thumbnail.jpg";
 	}
 
 	public static String getValidityDateString(List<AvalancheBulletin> bulletins) {
@@ -235,7 +242,7 @@ public class AlbinaUtil {
 		return (secondOfDay == 61200) ? false : true;
 	}
 
-	private static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
+	public static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			ZonedDateTime bulletinDate = avalancheBulletin.getPublicationDate();

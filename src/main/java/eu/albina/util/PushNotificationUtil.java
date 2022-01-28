@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONObject;
 
 import eu.albina.controller.PushSubscriptionController;
-import eu.albina.controller.RegionController;
 import eu.albina.model.PushSubscription;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class PushNotificationUtil implements SocialMediaUtil {
@@ -53,7 +53,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl, boolean test) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, List<Region> regions, String attachmentUrl, String bulletinUrl, boolean test) {
 		final JSONObject payload = new JSONObject();
 		payload.put("title", lang.getBundleString("avalanche-report.name"));
 		payload.put("body", message);
@@ -61,7 +61,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
 		payload.put("url", bulletinUrl);
 
-		List<String> publishRegions = regions.stream().filter(region -> RegionController.getInstance().isSendPushNotifications(region)).collect(Collectors.toList());
+		List<String> publishRegions = regions.stream().filter(region -> region.isSendPushNotifications()).map(Region::getId).collect(Collectors.toList());
 
 		List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, publishRegions);
 

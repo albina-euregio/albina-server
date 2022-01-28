@@ -67,7 +67,7 @@ public class UpdateJob implements org.quartz.Job {
 			Instant startDate = AlbinaUtil.getInstantStartOfDay();
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			List<String> changedRegions = RegionController.getInstance().getActiveRegions().stream()
+			List<Region> changedRegions = RegionController.getInstance().getActiveRegions().stream()
 				.filter(region -> {
 					try {
 						return AlbinaUtil.hasBulletinChanged(startDate, region.getId());
@@ -75,7 +75,7 @@ public class UpdateJob implements org.quartz.Job {
 						logger.error("Failed hasBulletinChanged", e);
 						return false;
 					}
-				}).map(Region::getId).collect(Collectors.toList());
+				}).collect(Collectors.toList());
 
 			Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 

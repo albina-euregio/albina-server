@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -31,34 +30,27 @@ import javax.xml.transform.TransformerException;
 import com.github.openjson.JSONArray;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 
 public class JsonUtil {
 
 	// private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
-	public static void createJsonFile(List<AvalancheBulletin> bulletins, String validityDateString,
+	public static void createJsonFile(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
 			String publicationTimeString) throws TransformerException, IOException {
 		String dirPath = GlobalVariables.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
 
-		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			// TODO is it necessary to use codeEuregio?
-			if (avalancheBulletin.affectsRegionOnlyPublished(GlobalVariables.codeEuregio))
-				regionBulletins.add(avalancheBulletin);
-		}
-
-		if (!regionBulletins.isEmpty()) {
-			JSONArray jsonArray = JsonUtil.createJSONString(regionBulletins, "", true);
+		if (!bulletins.isEmpty()) {
+			JSONArray jsonArray = JsonUtil.createJSONString(bulletins, region, true);
 			String jsonString = jsonArray.toString();
 
-			// TODO define generic filename
-			String fileName = dirPath + "/avalanche_report.json";
+			String fileName = dirPath + "/" + region.getId() + ".json";
 			Files.write(Paths.get(fileName), jsonString.getBytes(StandardCharsets.UTF_8));
 			AlbinaUtil.setFilePermissions(fileName);
 		}
 	}
 
-	public static JSONArray createJSONString(Collection<AvalancheBulletin> bulletins, String region, boolean small) {
+	public static JSONArray createJSONString(Collection<AvalancheBulletin> bulletins, Region region, boolean small) {
 		JSONArray jsonResult = new JSONArray();
 		if (bulletins != null) {
 			AvalancheBulletin b;
@@ -71,7 +63,7 @@ public class JsonUtil {
 				Set<String> newPublishedRegions = new HashSet<String>();
 				if (b.getPublishedRegions() != null) {
 					for (String publishedRegion : b.getPublishedRegions()) {
-						if (publishedRegion.startsWith(region))
+						if (publishedRegion.startsWith(region.getId()))
 							newPublishedRegions.add(publishedRegion);
 					}
 					b.setPublishedRegions(newPublishedRegions);
@@ -81,7 +73,7 @@ public class JsonUtil {
 				Set<String> newSavedRegions = new HashSet<String>();
 				if (b.getSavedRegions() != null) {
 					for (String savedRegion : b.getSavedRegions()) {
-						if (savedRegion.startsWith(region))
+						if (savedRegion.startsWith(region.getId()))
 							newSavedRegions.add(savedRegion);
 					}
 					b.setSavedRegions(newSavedRegions);
@@ -91,7 +83,7 @@ public class JsonUtil {
 				Set<String> newSuggestedRegions = new HashSet<String>();
 				if (b.getSuggestedRegions() != null) {
 					for (String suggestedRegion : b.getSuggestedRegions()) {
-						if (suggestedRegion.startsWith(region))
+						if (suggestedRegion.startsWith(region.getId()))
 							newSuggestedRegions.add(suggestedRegion);
 					}
 					b.setSuggestedRegions(newSuggestedRegions);

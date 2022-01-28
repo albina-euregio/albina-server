@@ -26,6 +26,7 @@ import java.util.Base64;
 import java.util.Collections;
 
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.rapidmail.mailings.PostMailingsRequest;
@@ -76,19 +77,19 @@ public class RapidMailController extends CommonProcessor {
 		executor = Executor.newInstance(sslHttpClient());
 	}
 
-	private RapidMailConfiguration getConfiguration(String regionId) {
+	private RapidMailConfiguration getConfiguration(Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			RapidMailConfiguration result = null;
-			if (!Strings.isNullOrEmpty(regionId)) {
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				result = (RapidMailConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
-				.setParameter("regionId", regionId).getSingleResult();
+				.setParameter("regionId", region.getId()).getSingleResult();
 			} else {
 				throw new HibernateException("No region defined!");
 			}
 			if (result != null)
 				return result;
 			else
-				throw new HibernateException("No rapid mail configuration found for " + regionId);
+				throw new HibernateException("No rapid mail configuration found for " + region.getId());
 		});
 	}
 
@@ -101,7 +102,7 @@ public class RapidMailController extends CommonProcessor {
 		return "Basic " + Base64.getEncoder().encodeToString((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
 	}
 
-	public RapidMailRecipientListResponse getRecipientsList(String region) throws IOException, HibernateException {
+	public RapidMailRecipientListResponse getRecipientsList(Region region) throws IOException, HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/get_recipientlists
@@ -113,7 +114,7 @@ public class RapidMailController extends CommonProcessor {
 		return objectMapper.readValue(getResponseContent(response), RapidMailRecipientListResponse.class);
 	}
 
-	public HttpResponse createRecipient(String region, PostRecipientsRequest recipient,
+	public HttpResponse createRecipient(Region region, PostRecipientsRequest recipient,
 			String sendActivationmail, LanguageCode language) throws AlbinaException, IOException, HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
@@ -135,7 +136,7 @@ public class RapidMailController extends CommonProcessor {
 				.returnResponse();
 	}
 
-	public HttpResponse deleteRecipient(String region, Integer recipientId) throws IOException, HibernateException {
+	public HttpResponse deleteRecipient(Region region, Integer recipientId) throws IOException, HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/delete_recipientlists__recipientlist_id_
@@ -145,7 +146,7 @@ public class RapidMailController extends CommonProcessor {
 				.socketTimeout(RAPIDMAIL_SOCKET_TIMEOUT)).returnResponse();
 	}
 
-	public HttpResponse sendMessage(String region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
+	public HttpResponse sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
 			throws AlbinaException, IOException, HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
@@ -176,12 +177,12 @@ public class RapidMailController extends CommonProcessor {
 		return response;
 	}
 
- 	private String getRecipientName(String region, LanguageCode language) throws HibernateException {
+ 	private String getRecipientName(Region region, LanguageCode language) throws HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 		return config.getRegion().getId() + "_" + language.name().toUpperCase();
 	}
 
-	public int getRecipientId(String region, String recipientName) throws AlbinaException, HibernateException, IOException {
+	public int getRecipientId(Region region, String recipientName) throws AlbinaException, HibernateException, IOException {
 		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(region);
 		return recipientListResponse.getEmbedded().getRecipientlists().stream()
 			.filter(x -> StringUtils.equalsIgnoreCase(x.getName(), recipientName))

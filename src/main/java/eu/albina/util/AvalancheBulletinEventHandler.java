@@ -37,6 +37,7 @@ import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Image;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 import static eu.albina.util.PdfUtil.aranColor;
@@ -56,12 +57,13 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 	private final boolean preview;
 	private final boolean isAran;
 
-	public AvalancheBulletinEventHandler(LanguageCode lang, String region, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
+	public AvalancheBulletinEventHandler(LanguageCode lang, Region region, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
 		this.lang = lang;
 		this.bulletins = bulletins;
 		this.grayscale = grayscale;
 		this.preview = preview;
-		this.isAran = GlobalVariables.codeAran.equals(region);
+		// TODO remove
+		this.isAran = GlobalVariables.codeAran.equals(region.getId());
 	}
 
 	@Override
@@ -73,6 +75,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Rectangle pageSize = page.getPageSize();
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
+			// TODO use color from region object
 			Color blue = grayscale ? blueColorBw : isAran ? aranColor : blueColor;
 
 			PdfFont openSansRegularFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Regular.ttf");

@@ -21,14 +21,19 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
 import eu.albina.model.ServerInstance;
 import eu.albina.rest.websocket.RegionEndpoint;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -39,8 +44,7 @@ import eu.albina.util.HibernateUtil;
  */
 public class RegionController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(RegionController.class);
+	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
 	private final List<RegionLock> regionLocks;
@@ -135,6 +139,34 @@ public class RegionController {
 			return region;
 		});
     }
+
+	public boolean affectsRegion(String regionId, Set<String> regions) {
+		if (regions == null) {
+			return false;
+		}
+		return regions.stream().anyMatch(entry -> regionId.equals(GlobalVariables.codeEuregio)
+			? entry.startsWith(GlobalVariables.codeTyrol) || entry.startsWith(GlobalVariables.codeSouthTyrol) || entry.startsWith(GlobalVariables.codeTrentino)
+			: entry.startsWith(regionId));
+	}
+
+	public List<Region> getPublishBulletinRegions() {
+		try {
+			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBulletins()).collect(Collectors.toList());
+			return result;
+		} catch (AlbinaException ae) {
+			logger.warn("Active region ids could not be loaded!", ae);
+			return new ArrayList<Region>();
+		}
+	}
+
+	public List<Region> getPublishBlogRegions() {
+		try {
+			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.isExternalInstance() && region.isPublishBlogs()).collect(Collectors.toList());
+		} catch (AlbinaException ae) {
+			logger.warn("Active regions could not be loaded!", ae);
+			return new ArrayList<Region>();
+		}
+	}
 
     public boolean isPublishBulletins(String regionId) {
 		return this.getRegion(regionId).isPublishBulletins();

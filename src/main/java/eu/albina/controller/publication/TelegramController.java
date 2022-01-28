@@ -32,6 +32,7 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HibernateUtil;
@@ -53,12 +54,12 @@ public class TelegramController extends CommonProcessor {
 	public TelegramController() {
 	}
 
-	private TelegramConfiguration getConfiguration(String regionId, LanguageCode languageCode) {
+	private TelegramConfiguration getConfiguration(Region region, LanguageCode languageCode) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			TelegramConfiguration result = null;
-			if (!Strings.isNullOrEmpty(regionId)) {
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				result = (TelegramConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
-				.setParameter("regionId", regionId)
+				.setParameter("regionId", region.getId())
 				.setParameter("lang", languageCode).getSingleResult();
 			} else {
 				throw new HibernateException("No region defined!");
@@ -66,11 +67,11 @@ public class TelegramController extends CommonProcessor {
 			if (result != null)
 				return result;
 			else
-				throw new HibernateException("No telegram configuration found for " + regionId + " [" + languageCode + "]");
+				throw new HibernateException("No telegram configuration found for " + region + " [" + languageCode + "]");
 		});
 	}
 
-	public HttpResponse sendPhoto(String region, LanguageCode lang, String message, String attachmentUrl, boolean test)
+	public HttpResponse sendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl, boolean test)
 			throws IOException, URISyntaxException, HibernateException {
 		TelegramConfiguration config = this.getConfiguration(region, lang);
 
@@ -100,7 +101,7 @@ public class TelegramController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse sendMessage(String region, LanguageCode lang, String message, boolean test) throws IOException, URISyntaxException, HibernateException {
+	public HttpResponse sendMessage(Region region, LanguageCode lang, String message, boolean test) throws IOException, URISyntaxException, HibernateException {
 		TelegramConfiguration config = this.getConfiguration(region, lang);
 
 		String chatId = test ? "aws_test" : config.getChatId();
@@ -125,7 +126,7 @@ public class TelegramController extends CommonProcessor {
 		return response;
 	}
 
-	public HttpResponse sendFile(String region, LanguageCode lang, String message, String attachmentUrl, boolean test) throws IOException, HibernateException {
+	public HttpResponse sendFile(Region region, LanguageCode lang, String message, String attachmentUrl, boolean test) throws IOException, HibernateException {
 		TelegramConfiguration config = this.getConfiguration(region, lang);
 		String urlString = "https://api.telegram.org/bot%s/sendDocument?chat_id=%s&caption=%s&document=%s";
 
