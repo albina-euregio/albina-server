@@ -40,8 +40,6 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
-import static eu.albina.util.PdfUtil.aranColor;
-import static eu.albina.util.PdfUtil.blueColor;
 import static eu.albina.util.PdfUtil.blueColorBw;
 import static eu.albina.util.PdfUtil.greyDarkColor;
 import static eu.albina.util.PdfUtil.redColor;
