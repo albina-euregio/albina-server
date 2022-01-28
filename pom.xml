@@ -34,29 +34,6 @@
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
 				<albina.conf.git.version>SNAPSHOT</albina.conf.git.version>
-				<albina.conf.create-caaml>false</albina.conf.create-caaml>
-				<albina.conf.create-maps>false</albina.conf.create-maps>
-				<albina.conf.create-pdf>false</albina.conf.create-pdf>
-				<albina.conf.create-static-widget>false</albina.conf.create-static-widget>
-				<albina.conf.create-simple-html>false</albina.conf.create-simple-html>
-				<albina.conf.publish-to-telegram-channel>false</albina.conf.publish-to-telegram-channel>
-				<albina.conf.send-emails>false</albina.conf.send-emails>
-				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.maps-path>D:\mnt\albina_files_local</albina.conf.maps-path>
-				<albina.conf.map-production-url>../avalanche-warning-maps/</albina.conf.map-production-url>
-				<albina.conf.pdf-directory>D:\mnt\albina_files_local</albina.conf.pdf-directory>
-				<albina.conf.html-directory>/mnt/simple_local</albina.conf.html-directory>
-				<albina.conf.publish-at-5-pm>false</albina.conf.publish-at-5-pm>
-				<albina.conf.publish-at-8-am>false</albina.conf.publish-at-8-am>
-				<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
-				<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
-				<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-				<albina.conf.publish-bulletins-aran>true</albina.conf.publish-bulletins-aran>
-				<albina.conf.publish-blogs-tyrol>false</albina.conf.publish-blogs-tyrol>
-				<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
-				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
-				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
-				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix>LOCAL </albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
 				<albina.log.level.c3p0>ERROR</albina.log.level.c3p0>
@@ -76,29 +53,6 @@
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina_dev/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina_dev/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
-				<albina.conf.create-caaml>true</albina.conf.create-caaml>
-				<albina.conf.create-maps>true</albina.conf.create-maps>
-				<albina.conf.create-pdf>true</albina.conf.create-pdf>
-				<albina.conf.create-static-widget>true</albina.conf.create-static-widget>
-				<albina.conf.create-simple-html>true</albina.conf.create-simple-html>
-				<albina.conf.publish-to-telegram-channel>false</albina.conf.publish-to-telegram-channel>
-				<albina.conf.send-emails>false</albina.conf.send-emails>
-				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.maps-path>/var/www/avalanche.report/albina_files_dev</albina.conf.maps-path>
-				<albina.conf.map-production-url>/opt/avalanche-warning-maps_dev/</albina.conf.map-production-url>
-				<albina.conf.pdf-directory>/var/www/avalanche.report/albina_files_dev</albina.conf.pdf-directory>
-				<albina.conf.html-directory>/var/www/avalanche.report/simple_dev</albina.conf.html-directory>
-				<albina.conf.publish-at-5-pm>false</albina.conf.publish-at-5-pm>
-				<albina.conf.publish-at-8-am>false</albina.conf.publish-at-8-am>
-				<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
-				<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
-				<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-				<albina.conf.publish-bulletins-aran>true</albina.conf.publish-bulletins-aran>
-				<albina.conf.publish-blogs-tyrol>false</albina.conf.publish-blogs-tyrol>
-				<albina.conf.publish-blogs-south-tyrol>false</albina.conf.publish-blogs-south-tyrol>
-				<albina.conf.publish-blogs-trentino>false</albina.conf.publish-blogs-trentino>
-				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
-				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix>DEV </albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
 				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
@@ -118,29 +72,6 @@
 				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
 				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
-				<albina.conf.create-caaml>true</albina.conf.create-caaml>
-				<albina.conf.create-maps>true</albina.conf.create-maps>
-				<albina.conf.create-pdf>true</albina.conf.create-pdf>
-				<albina.conf.create-static-widget>true</albina.conf.create-static-widget>
-				<albina.conf.create-simple-html>true</albina.conf.create-simple-html>
-				<albina.conf.publish-to-telegram-channel>true</albina.conf.publish-to-telegram-channel>
-				<albina.conf.send-emails>true</albina.conf.send-emails>
-				<albina.conf.server-images-url>https://admin.avalanche.report/images/</albina.conf.server-images-url>
-				<albina.conf.maps-path>/var/www/avalanche.report/albina_files</albina.conf.maps-path>
-				<albina.conf.map-production-url>/opt/avalanche-warning-maps/</albina.conf.map-production-url>
-				<albina.conf.pdf-directory>/var/www/avalanche.report/albina_files</albina.conf.pdf-directory>
-				<albina.conf.html-directory>/var/www/avalanche.report/simple</albina.conf.html-directory>
-				<albina.conf.publish-at-5-pm>true</albina.conf.publish-at-5-pm>
-				<albina.conf.publish-at-8-am>true</albina.conf.publish-at-8-am>
-				<albina.conf.publish-bulletins-tyrol>true</albina.conf.publish-bulletins-tyrol>
-				<albina.conf.publish-bulletins-south-tyrol>true</albina.conf.publish-bulletins-south-tyrol>
-				<albina.conf.publish-bulletins-trentino>true</albina.conf.publish-bulletins-trentino>
-				<albina.conf.publish-bulletins-aran>true</albina.conf.publish-bulletins-aran>
-				<albina.conf.publish-blogs-tyrol>true</albina.conf.publish-blogs-tyrol>
-				<albina.conf.publish-blogs-south-tyrol>true</albina.conf.publish-blogs-south-tyrol>
-				<albina.conf.publish-blogs-trentino>true</albina.conf.publish-blogs-trentino>
-				<albina.conf.vapid-public-key>BIcUWrlcmeIOMajxtb2CPESjCXypy4AEuEFbGb73PcwWMQFEMXcQhcsTuyDfcAdr0uLBXBDMbJeKGm5XNLQu2WM</albina.conf.vapid-public-key>
-				<albina.conf.vapid-private-key>${env.VAPID_PRIVATE_KEY}</albina.conf.vapid-private-key>
 				<albina.log.prefix></albina.log.prefix>
 				<albina.log.level>INFO</albina.log.level>
 				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
