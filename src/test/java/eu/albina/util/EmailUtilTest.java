@@ -88,11 +88,9 @@ public class EmailUtilTest {
 		final URL resource = Resources.getResource("2021-12-02.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		logger.info("#bulletins: {}", bulletins.size());
-		ArrayList<Region> regions = new ArrayList<Region>();
-		regions.add(regionTirol);
-		regions.add(regionSouthTyrol);
-		regions.add(regionTrentino);
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionTirol, false, true);
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionSouthTyrol, false, true);
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionTrentino, false, true);
 		HibernateUtil.getInstance().shutDown();
 	}
 

@@ -92,6 +92,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "CREATE_JSON")
 	private boolean createJson;
 
+	@Column(name = "CREATE_MAPS")
+	private boolean createMaps;
+
 	@Column(name = "CREATE_PDF")
 	private boolean createPdf;
 
@@ -228,6 +231,8 @@ public class Region implements AvalancheInformationObject {
 			this.createCaamlV6 = json.getBoolean("createCaamlV6");
 		if (json.has("createJson") && !json.isNull("createJson"))
 			this.createJson = json.getBoolean("createJson");
+		if (json.has("createMaps") && !json.isNull("createMaps"))
+			this.createMaps = json.getBoolean("createMaps");
 		if (json.has("createPdf") && !json.isNull("createPdf"))
 			this.createPdf = json.getBoolean("createPdf");
 		if (json.has("createStaticWidget") && !json.isNull("createStaticWidget"))
@@ -346,6 +351,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void setCreateJson(boolean createJson) {
 		this.createJson = createJson;
+	}
+
+	public boolean isCreateMaps() {
+		return createMaps;
+	}
+
+	public void setCreateMaps(boolean createMaps) {
+		this.createMaps = createMaps;
 	}
 
 	public boolean isCreatePdf() {
@@ -540,6 +553,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("createCaamlV5", isCreateCaamlV5());
 		json.put("createCaamlV6", isCreateCaamlV6());
 		json.put("createJson", isCreateJson());
+		json.put("createMaps", isCreateMaps());
 		json.put("createPdf", isCreatePdf());
 		json.put("createStaticWidget", isCreateStaticWidget());
 		json.put("createSimpleHtml", isCreateSimpleHtml());

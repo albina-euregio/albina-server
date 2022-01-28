@@ -115,7 +115,7 @@ public class PublicationController {
 
 			try {
 				// create maps
-				if (GlobalVariables.isCreateMaps()) {
+				if (region.isCreateMaps()) {
 					createMaps(bulletins, region, validityDateString, publicationTimeString);
 
 					Map<String, Thread> threads = new HashMap<String, Thread>();
@@ -149,6 +149,12 @@ public class PublicationController {
 							logger.error(key + " thread interrupted", e);
 						}
 					}
+
+					if (region.isCreateMaps()) {
+						new Thread(() -> sendEmails(bulletins, region, false, false)).start();
+						new Thread(() -> triggerTelegramChannel(bulletins, region,	false, null, false)).start();
+						new Thread(() -> triggerPushNotifications(bulletins, region, false, null, false)).start();
+					}
 				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
@@ -160,12 +166,6 @@ public class PublicationController {
 			AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
-
-			if (GlobalVariables.isCreateMaps()) {
-				new Thread(() -> sendEmails(bulletins, RegionController.getInstance().getPublishBulletinRegions(), false, false)).start();
-				new Thread(() -> triggerTelegramChannel(bulletins, RegionController.getInstance().getPublishBulletinRegions(),	false, null, false)).start();
-				new Thread(() -> triggerPushNotifications(bulletins, RegionController.getInstance().getPublishBulletinRegions(), false, null, false)).start();
-			}
 		}
 	}
 
@@ -224,7 +224,7 @@ public class PublicationController {
 
 			try {
 				// create maps
-				if (GlobalVariables.isCreateMaps()) {
+				if (region.isCreateMaps()) {
 					
 					createMaps(regionBulletins, region, validityDateString, publicationTimeString);
 
@@ -258,6 +258,12 @@ public class PublicationController {
 						} catch (InterruptedException e) {
 							logger.error(key + " thread interrupted", e);
 						}
+
+						if (region.isCreateMaps()) {
+							new Thread(() -> sendEmails(bulletins, region, true, false)).start();
+							new Thread(() -> triggerTelegramChannel(bulletins, region, true, null, false)).start();
+							new Thread(() -> triggerPushNotifications(bulletins, region, true, null, false)).start();
+						}
 					}
 				}
 			} catch (InterruptedException e) {
@@ -270,12 +276,6 @@ public class PublicationController {
 			AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 				AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
-
-			if (GlobalVariables.isCreateMaps()) {
-				new Thread(() -> sendEmails(bulletins, regions, true, false)).start();
-				new Thread(() -> triggerTelegramChannel(bulletins, regions, true, null, false)).start();
-				new Thread(() -> triggerPushNotifications(bulletins, regions, true, null, false)).start();
-			}
 		}
 	}
 
@@ -309,7 +309,7 @@ public class PublicationController {
 
 			try {
 				// create maps
-				if (GlobalVariables.isCreateMaps()) {
+				if (region.isCreateMaps()) {
 					
 					createMaps(regionBulletins, region, validityDateString, publicationTimeString);
 
@@ -597,17 +597,17 @@ public class PublicationController {
 	 * @param bulletins
 	 *            the bulletins contained in the emails
 	 */
-	public Thread sendEmails(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, boolean test) {
+	public Thread sendEmails(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test) {
 		return new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					logger.info("Email production started");
-					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, test);
+					logger.info("Email production for " + region.getId() + " started");
+					EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test);
 				} catch (IOException | URISyntaxException e) {
-					logger.error("Error preparing emails", e);
+					logger.error("Error preparing emails " + region, e);
 				} finally {
-					logger.info("Email production finished");
+					logger.info("Email production " + region.getId() + " finished");
 				}
 			}
 		});
@@ -619,42 +619,42 @@ public class PublicationController {
 	 * @param bulletins
 	 *            the bulletins contained in the emails
 	 */
-	public void sendEmails(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, boolean test, LanguageCode language) {
+	public void sendEmails(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test, LanguageCode language) {
 		try {
-			logger.info("Email production started");
-			EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, test, language);
+			logger.info("Email production for " + region.getId() + " started");
+			EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test, language);
 		} catch (IOException | URISyntaxException e) {
-			logger.error("Error preparing emails", e);
+			logger.error("Error preparing emails for " + region.getId(), e);
 		} finally {
-			logger.info("Email production finished");
+			logger.info("Email production for " + region.getId() + " finished");
 		}
 	}
 
-	public void triggerTelegramChannel(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, LanguageCode language, boolean test) {
+	public void triggerTelegramChannel(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test) {
 		try {
-			logger.info("Telegram channel triggered");
+			logger.info("Telegram channel for " + region.getId() + " triggered");
 			if (language == null)
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update, test);
+				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, test);
 			else
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update, language, test);
+				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, language, test);
 		} catch (IOException | URISyntaxException e) {
 			logger.error("Error preparing telegram channel", e);
 		} finally {
-			logger.info("Telegram channel finished");
+			logger.info("Telegram channel for " + region.getId() + " finished");
 		}
 	}
 
-	public void triggerPushNotifications(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, LanguageCode language, boolean test) {
+	public void triggerPushNotifications(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test) {
 		try {
-			logger.info("Push notifications triggered");
+			logger.info("Push notifications for " + region.getId() + " triggered");
 			if (language == null)
-				new PushNotificationUtil().sendBulletinNewsletters(bulletins, regions, update, test);
+				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, test);
 			else
-				new PushNotificationUtil().sendBulletinNewsletters(bulletins, regions, update, language, test);
+				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, language, test);
 		} catch (Exception e) {
-			logger.error("Error sending push notifications", e);
+			logger.error("Error sending push notifications for " + region.getId(), e);
 		} finally {
-			logger.info("Push notifications finished");
+			logger.info("Push notifications for " + region.getId() + " finished");
 		}
 	}
 }

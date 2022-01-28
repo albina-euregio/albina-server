@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, List<Region> regions, String attachmentUrl, String bulletinUrl, boolean test) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl, boolean test) {
 		final JSONObject payload = new JSONObject();
 		payload.put("title", lang.getBundleString("avalanche-report.name"));
 		payload.put("body", message);
@@ -61,11 +62,12 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
 		payload.put("url", bulletinUrl);
 
-		List<String> publishRegions = regions.stream().filter(region -> region.isSendPushNotifications()).map(Region::getId).collect(Collectors.toList());
+		List<Region> regions = Arrays.asList(region);
+		List<String> publishRegions = regions.stream().filter(reg -> reg.isSendPushNotifications()).map(Region::getId).collect(Collectors.toList());
 
 		List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, publishRegions);
 
-		logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, regions, payload);
+		logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, region, payload);
 		for (PushSubscription subscription : subscriptions) {
 			sendPushMessage(subscription, payload);
 		}

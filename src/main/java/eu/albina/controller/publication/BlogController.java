@@ -322,7 +322,7 @@ public class BlogController extends CommonProcessor {
 		String attachmentUrl = getAttachmentUrl(object);
 		String blogUrl = getBlogUrl(object, region, lang);
 		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
-		pushNotificationUtil.sendBulletinNewsletter(message, lang, Collections.singletonList(region), attachmentUrl, blogUrl, test);
+		pushNotificationUtil.sendBulletinNewsletter(message, lang, region, attachmentUrl, blogUrl, test);
 	}
 
 	private String getBlogMessage(Blogger.Item item, Region region, LanguageCode lang) {

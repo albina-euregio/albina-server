@@ -104,31 +104,29 @@ public class EmailUtil {
 		return cfg;
 	}
 
-	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, boolean test) {
+	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test) {
 		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
-			sendBulletinEmails(bulletins, regions, update, test, lang);
+			sendBulletinEmails(bulletins, region, update, test, lang);
 		}
 	}
 
-	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<Region> regions, boolean update, boolean test,
+	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test,
 			LanguageCode lang) {
-		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
-		String subject;
-		if (update)
-			subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
-		else
-			subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
-		for (Region region : regions) {
-			if (region.isSendEmails()) {
-				ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : bulletins) {
-					if (avalancheBulletin.affectsRegionOnlyPublished(region))
-						regionBulletins.add(avalancheBulletin);
-				}
-				if (regionBulletins != null && !regionBulletins.isEmpty()) {
-					String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
-					sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
-				}
+		if (region.isSendEmails()) {
+			boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
+			String subject;
+			if (update)
+				subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
+			else
+				subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
+			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
+			for (AvalancheBulletin avalancheBulletin : bulletins) {
+				if (avalancheBulletin.affectsRegionOnlyPublished(region))
+					regionBulletins.add(avalancheBulletin);
+			}
+			if (regionBulletins != null && !regionBulletins.isEmpty()) {
+				String emailHtml = createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
+				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, test);
 			}
 		}
 	}

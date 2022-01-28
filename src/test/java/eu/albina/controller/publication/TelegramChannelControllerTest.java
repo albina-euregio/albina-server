@@ -78,9 +78,7 @@ public class TelegramChannelControllerTest {
 	@Ignore
 	@Test
 	public void sendBulletin() throws URISyntaxException, IOException {
-		List<Region> regions = new ArrayList<Region>();
-		Region regionTrentino = new Region();
-		regionTrentino.setId("IT-32-TN");
-		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, true, true);
+		Region regionTrentino = new Region("IT-32-TN");
+		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regionTrentino, true, true);
 	}
 }

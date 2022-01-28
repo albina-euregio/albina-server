@@ -1026,17 +1026,15 @@ public class AvalancheBulletinService {
 
 			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 
-			List<Region> regions = new ArrayList<Region>();
-			regions.add(RegionController.getInstance().getRegion(regionId));
-
+			Region region = RegionController.getInstance().getRegion(regionId);
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
 
 			if (language == null)
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, false);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, false);
 			else
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, false, language);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, false, language);
 
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
@@ -1063,9 +1061,7 @@ public class AvalancheBulletinService {
 
 			logger.debug("POST send TEST emails for {} in {} [{}]", regionId, language, date);
 
-			List<Region> regions = new ArrayList<Region>();
-			regions.add(RegionController.getInstance().getRegion(regionId));
-
+			Region region = RegionController.getInstance().getRegion(regionId);
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
@@ -1074,9 +1070,9 @@ public class AvalancheBulletinService {
 			logger.debug("#bulletins: {}", bulletins.size());
 
 			if (language == null)
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, true);
 			else
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, false, true, language);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, true, language);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1102,15 +1098,14 @@ public class AvalancheBulletinService {
 
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 
-			List<Region> regions = new ArrayList<Region>();
-			regions.add(RegionController.getInstance().getRegion(regionId));
+			Region region = RegionController.getInstance().getRegion(regionId);
 
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
 
 			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(bulletins,
-					regions, false, language, false)).start();
+					region, false, language, false)).start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1133,15 +1128,14 @@ public class AvalancheBulletinService {
 
 			logger.debug("POST trigger TEST telegram channel for {} in {} [{}]", regionId, language, date);
 
-			List<Region> regions = new ArrayList<Region>();
-			regions.add(RegionController.getInstance().getRegion(regionId));
+			Region region = RegionController.getInstance().getRegion(regionId);
 
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
 
 			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(bulletins,
-					regions, false, language, true)).start();
+					region, false, language, true)).start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1164,8 +1158,7 @@ public class AvalancheBulletinService {
 
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 
-			List<Region> regions = new ArrayList<Region>();
-			regions.add(RegionController.getInstance().getRegion(regionId));
+			Region region = RegionController.getInstance().getRegion(regionId);
 
 			Instant startDate = null;
 
@@ -1178,7 +1171,7 @@ public class AvalancheBulletinService {
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
 
 			PublicationController.getInstance().triggerPushNotifications(bulletins,
-					regions, false, language, false);
+					region, false, language, false);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1201,8 +1194,7 @@ public class AvalancheBulletinService {
 
 			logger.debug("POST trigger TEST push notifications for {} in {} [{}]", regionId, language, date);
 
-			List<Region> regions = new ArrayList<Region>();
-			regions.add(RegionController.getInstance().getRegion(regionId));
+			Region region = RegionController.getInstance().getRegion(regionId);
 
 			Instant startDate = null;
 
@@ -1215,7 +1207,7 @@ public class AvalancheBulletinService {
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
 
 			PublicationController.getInstance().triggerPushNotifications(bulletins,
-					regions, false, language, true);
+					region, false, language, true);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {

@@ -39,7 +39,6 @@ public class GlobalVariables {
 	public static String version;
 
 	/*---- Defined in configuration file -----*/
-	private static boolean createMaps = false;
 	static String vapidPublicKey;
 	static String vapidPrivateKey;
 	private static boolean publishAt5PM = false;
@@ -100,15 +99,6 @@ public class GlobalVariables {
 	private static final String emailEncoding = "UTF-8";
 
 	public static String notAvailableString = "N/A";
-
-	public static boolean isCreateMaps() {
-		return createMaps;
-	}
-
-	public static void setCreateMaps(boolean createMaps) throws ConfigurationException {
-		GlobalVariables.createMaps = createMaps;
-		setConfigProperty("createMaps", createMaps);
-	}
 
 	public static String getVapidPublicKey() {
 		return vapidPublicKey;
@@ -284,8 +274,6 @@ public class GlobalVariables {
 				mapsPath = config.getString("mapsPath");
 			if (config.containsKey("mapProductionUrl"))
 				mapProductionUrl = config.getString("mapProductionUrl");
-			if (config.containsKey("createMaps"))
-				createMaps = config.getBoolean("createMaps");
 			if (config.containsKey("publishAt5PM"))
 				publishAt5PM = config.getBoolean("publishAt5PM");
 			if (config.containsKey("publishAt8AM"))
@@ -313,7 +301,6 @@ public class GlobalVariables {
 			json.put("mapsPath", mapsPath);
 		if (mapProductionUrl != null)
 			json.put("mapProductionUrl", mapProductionUrl);
-		json.put("createMaps", createMaps);
 		json.put("publishAt5PM", publishAt5PM);
 		json.put("publishAt8AM", publishAt8AM);
 
@@ -347,8 +334,6 @@ public class GlobalVariables {
 			setMapsPath(configuration.getString("mapsPath"));
 		if (configuration.has("mapProductionUrl"))
 			setMapProductionUrl(configuration.getString("mapProductionUrl"));
-		if (configuration.has("createMaps"))
-			setCreateMaps(configuration.getBoolean("createMaps"));
 		if (configuration.has("publishAt5PM"))
 			setPublishAt5PM(configuration.getBoolean("publishAt5PM"));
 		if (configuration.has("publishAt8AM"))
