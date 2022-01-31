@@ -1,6 +1,6 @@
 package eu.albina.rest.filter;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import com.google.common.hash.Hashing;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -10,6 +10,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -40,7 +41,7 @@ public class ETagFilter implements ContainerRequestFilter, ContainerResponseFilt
 			return;
 		}
 		final String entity = String.valueOf(responseContext.getEntity());
-		final String eTag = DigestUtils.sha1Hex(entity);
+		final String eTag = Hashing.sha256().hashString(entity, StandardCharsets.UTF_8).toString();
 		if (Objects.equals(requestContext.getProperty(HttpHeaders.IF_NONE_MATCH), eTag)) {
 			responseContext.setEntity(null);
 			responseContext.setStatusInfo(Response.Status.NOT_MODIFIED);

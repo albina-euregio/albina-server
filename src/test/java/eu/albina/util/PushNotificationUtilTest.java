@@ -3,22 +3,21 @@ package eu.albina.util;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 import java.net.URI;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class PushNotificationUtilTest {
@@ -42,25 +41,20 @@ public class PushNotificationUtilTest {
 		subscription.setP256dh("BEoQn2VR93GQ9gBxOo4pvdmgOyO1eiSDjUy7blwez1Vu_99PDswkEtV6m7cuwB60A8WlYq6lGKTZLet7PbnAEow");
 		subscription.setRegion("AT-07");
 
-		StatusLine statusLine = mock(StatusLine.class);
-		when(statusLine.getStatusCode()).thenReturn(201);
-		HttpResponse httpResponse = mock(HttpResponse.class);
-		when(httpResponse.getStatusLine()).thenReturn(statusLine);
-		HttpClient httpClient = mock(HttpClient.class);
-		when(httpClient.execute(any())).thenReturn(httpResponse);
+		Response response = mock(Response.class);
+		when(response.getStatusInfo()).thenReturn(Response.Status.fromStatusCode(201));
+		Invocation.Builder builder = mock(Invocation.Builder.class);
+		when(builder.post(any())).thenReturn(response);
+		WebTarget webTarget = mock(WebTarget.class);
+		when(webTarget.request()).thenReturn(builder);
+		Client client = mock(Client.class);
+		when(client.target(eq(URI.create(subscription.getEndpoint())))).thenReturn(webTarget);
 
-		new PushNotificationUtil(httpClient).sendWelcomePushMessage(subscription);
+		new PushNotificationUtil(client).sendWelcomePushMessage(subscription);
 
-		ArgumentCaptor<HttpUriRequest> argument = ArgumentCaptor.forClass(HttpUriRequest.class);
-		verify(httpClient).execute(argument.capture());
-		verifyNoMoreInteractions(httpClient);
-
-		HttpUriRequest httpPost = argument.getValue();
-
-		Assert.assertEquals("POST", httpPost.getMethod());
-		Assert.assertEquals(URI.create(subscription.getEndpoint()), httpPost.getURI());
-		Assert.assertEquals("aes128gcm", httpPost.getFirstHeader("Content-Encoding").getValue());
-		Assert.assertEquals("180", httpPost.getFirstHeader("TTL").getValue());
-		Assert.assertTrue(httpPost.getFirstHeader("Authorization").getValue().startsWith("vapid t=e"));
+		verify(builder).header(eq("Content-Type"), eq("application/octet-stream"));
+		verify(builder).header(eq("TTL"), eq("180"));
+		verify(builder).header(eq("Content-Encoding"), eq("aes128gcm"));
+		verify(builder).header(eq("Authorization"), startsWith("vapid t=ey"));
 	}
 }

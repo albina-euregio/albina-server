@@ -26,15 +26,9 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Strings;
 
+import com.google.common.collect.MoreCollectors;
+import eu.albina.util.HttpClientUtil;
 import eu.albina.util.LinkUtil;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,18 +42,17 @@ import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.PushNotificationUtil;
 
-public class BlogController extends CommonProcessor {
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
+
+public class BlogController {
 	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
-
-	private static final int BLOGGER_SOCKET_TIMEOUT = 10000;
-	private static final int BLOGGER_CONNECTION_TIMEOUT = 10000;
-
 	private static BlogController instance = null;
+
 	protected final HashMap<String, Instant> lastFetch = new HashMap<>();
-	private final Executor executor;
+	private final Client client = HttpClientUtil.newClientBuilder().build();
 
 	private BlogController() {
-		executor = Executor.newInstance(sslHttpClient());
 		try {
 			Instant date = Instant.now();
 			for (Region region : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternal() && region.isPublishBlogs()).collect(Collectors.toList())) {
@@ -110,43 +103,24 @@ public class BlogController extends CommonProcessor {
 		});
 	}
 
-	public CloseableHttpClient sslHttpClient() {
-		// Trust own CA and all self-signed certs
-		return HttpClients.custom().build();
-	}
-
 	protected List<Blogger.Item> getBlogPosts(Region region, LanguageCode lang) throws IOException {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
-
+		
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
 		}
-		try {
-			String uri = new URIBuilder(config.getBlogApiUrl() + config.getBlogId() + "/posts")
-				.addParameter("key", config.getApiKey())
-				.addParameter("startDate", lastFetch.get(config.getBlogId()).toString())
-				.addParameter("fetchBodies", Boolean.TRUE.toString())
-				.addParameter("fetchImages", Boolean.TRUE.toString())
-				.toString();
-            logger.debug("URI: {}", uri);
-			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
-					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-			logger.debug("Start date for {}: {}", config.getBlogId(), lastFetch.get(config.getBlogId()).toString());
-			lastFetch.put(config.getBlogId(), Instant.now());
-			HttpResponse response = executor.execute(request).returnResponse();
-			logger.debug("New start date for {}: {}", config.getBlogId(), lastFetch.get(config.getBlogId()).toString());
-			if (response.getStatusLine().getStatusCode() == 200) {
-				HttpEntity entity = response.getEntity();
-				String entityString = EntityUtils.toString(entity, "UTF-8");
-				List<Blogger.Item> blogPosts = new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
-				logger.info("Found {} new blog posts for region={} lang={} url={}", blogPosts.size(), region.getId(), lang, uri);
-				return blogPosts;
-			} else {
-				throw new IOException("Failed to fetch blog posts: " + response);
-			}
-		} catch (URISyntaxException ex) {
-			throw new IllegalStateException(ex);
-		}
+
+		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
+			.queryParam("key", config.getApiKey())
+			.queryParam("startDate", lastFetch.get(config.getBlogId()).toString())
+			.queryParam("fetchBodies", Boolean.TRUE.toString())
+			.queryParam("fetchImages", Boolean.TRUE.toString());
+		logger.debug("Start date for {}: {}", config.getBlogId(), lastFetch.get(config.getBlogId()).toString());
+		lastFetch.put(config.getBlogId(), Instant.now());
+		Blogger.Root root = request.request().get(Blogger.Root.class);
+		List<Blogger.Item> blogPosts = root.items;
+		logger.info("Found {} new blog posts for region={} lang={} url={}", blogPosts.size(), region.getId(), lang, request.getUri());
+		return blogPosts;
 	}
 
 	protected Blogger.Item getLatestBlogPost(Region region, LanguageCode lang) throws IOException {
@@ -155,32 +129,17 @@ public class BlogController extends CommonProcessor {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
-		try {
-			String uri = new URIBuilder(config.getBlogApiUrl() + config.getBlogId() + "/posts")
-				.addParameter("key", config.getApiKey())
-				.addParameter("fetchBodies", Boolean.TRUE.toString())
-				.addParameter("fetchImages", Boolean.TRUE.toString())
-				.addParameter("maxResults", "1")
-				.toString();
-            logger.debug("URI: {}", uri);
-			Request request = Request.Get(uri).connectTimeout(BLOGGER_CONNECTION_TIMEOUT)
-					.socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-			HttpResponse response = executor.execute(request).returnResponse();
-			if (response.getStatusLine().getStatusCode() == 200) {
-				HttpEntity entity = response.getEntity();
-				String entityString = EntityUtils.toString(entity, "UTF-8");
-				List<Blogger.Item> blogPosts = new CommonProcessor().fromJson(entityString, Blogger.Root.class).items;
-				logger.info("Fetched latest blog post for region={} lang={} url={}", blogPosts.size(), region.getId(), lang, uri);
-				if (blogPosts.size() > 0)
-					return blogPosts.get(0);
-				else
-					throw new IOException("No blog post found");
-			} else {
-				throw new IOException("Failed to fetch latest blog post: " + response);
-			}
-		} catch (URISyntaxException ex) {
-			throw new IllegalStateException(ex);
-		}
+
+		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
+			.queryParam("key", config.getApiKey())
+			.queryParam("fetchBodies", Boolean.TRUE.toString())
+			.queryParam("fetchImages", Boolean.TRUE.toString())
+			.queryParam("maxResults", Integer.toString(1));
+		lastFetch.put(config.getBlogId(), Instant.now());
+		Blogger.Root root = request.request().get(Blogger.Root.class);
+		List<Blogger.Item> blogPosts = root.items;
+		logger.info("Fetched latest blog post for region={} lang={} url={}", region, lang, request.getUri());
+		return blogPosts.stream().collect(MoreCollectors.onlyElement());
 	}
 
 	protected String getBlogPost(String blogPostId, Region region, LanguageCode lang) throws IOException {
@@ -189,17 +148,12 @@ public class BlogController extends CommonProcessor {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
-		Request request = Request
-				.Get(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId + "?key="
-						+ config.getApiKey())
-				.connectTimeout(BLOGGER_CONNECTION_TIMEOUT).socketTimeout(BLOGGER_SOCKET_TIMEOUT);
-		HttpResponse response = executor.execute(request).returnResponse();
-		if (response.getStatusLine().getStatusCode() == 200) {
-			HttpEntity entity = response.getEntity();
-			String entityString = EntityUtils.toString(entity, "UTF-8");
-			return new CommonProcessor().fromJson(entityString, Blogger.Item.class).content;
-		}
-		return null;
+		
+		return client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId)
+			.queryParam("key", config.getApiKey())
+			.request()
+			.get(Blogger.Item.class)
+			.content;
 	}
 
 	public void sendNewBlogPosts(Region region, LanguageCode lang) {
@@ -215,11 +169,11 @@ public class BlogController extends CommonProcessor {
 						sendNewBlogPostToPushNotification(region, lang, object, false);
 					}
 				} catch (IOException e) {
-					logger.warn("Blog posts could not be retrieved: " + region + ", " + lang.toString(), e);
+					logger.warn("Blog posts could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
 				}
 			}
 		} else {
-			logger.info("Sending blog posts disabled for " + region + " [" + lang + "]");
+			logger.info("Sending blog posts disabled for " + region.getId() + " [" + lang + "]");
 		}
 	}
 

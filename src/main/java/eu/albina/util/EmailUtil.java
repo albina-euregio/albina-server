@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,6 @@ import java.util.zip.ZipOutputStream;
 
 import eu.albina.map.DaytimeDependency;
 import eu.albina.map.MapUtil;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,7 +151,7 @@ public class EmailUtil {
 			}
 			out.close();
 			byte[] zipData = baos.toByteArray();
-			return Base64.encodeBase64String(zipData);
+			return Base64.getEncoder().encodeToString(zipData);
 		}
 	}
 

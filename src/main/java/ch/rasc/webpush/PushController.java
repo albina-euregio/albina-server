@@ -4,13 +4,8 @@ import java.net.URI;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import ch.rasc.webpush.dto.Subscription;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.entity.ByteArrayEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,21 +34,10 @@ public class PushController {
 			.sign(this.jwtAlgorithm);
 	}
 
-	private String getAuthorization(URI endpointURI) {
+	public String getAuthorization(URI endpointURI) {
 		String origin = endpointURI.getScheme() + "://" + endpointURI.getHost();
 		final String token = getToken(origin);
 		return "vapid t=" + token + ", k=" + this.serverKeys.getPublicKeyBase64();
-	}
-
-	public HttpUriRequest prepareRequest(Subscription subscription, byte[] encryptedPayload) {
-		URI endpointURI = URI.create(subscription.getEndpoint());
-		return RequestBuilder.post(endpointURI)
-			.setEntity(new ByteArrayEntity(encryptedPayload))
-			.addHeader("Content-Type", "application/octet-stream")
-			.addHeader("Content-Encoding", "aes128gcm")
-			.addHeader("TTL", "180")
-			.addHeader("Authorization", getAuthorization(endpointURI))
-			.build();
 	}
 
 }

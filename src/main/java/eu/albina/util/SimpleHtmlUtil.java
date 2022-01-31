@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.Period;
@@ -36,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -161,8 +161,8 @@ public class SimpleHtmlUtil {
 					logger.warn("File permissions could not be set!");
 				}
 
-				File newHtmlFile = new File(dirPath + "/" + filename);
-				FileUtils.writeStringToFile(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
+				Path newHtmlFile = Paths.get(dirPath + "/" + filename);
+				Files.write(newHtmlFile, simpleHtmlString.getBytes(StandardCharsets.UTF_8));
 				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
 
 				return true;

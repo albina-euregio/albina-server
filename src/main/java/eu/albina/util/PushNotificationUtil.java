@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.util.Arrays;
+import java.net.URI;
 import java.util.List;
 
 import ch.rasc.webpush.CryptoService;
@@ -25,10 +26,6 @@ import ch.rasc.webpush.ServerKeys;
 import ch.rasc.webpush.dto.Subscription;
 import ch.rasc.webpush.dto.SubscriptionKeys;
 import eu.albina.exception.AlbinaException;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.HttpClients;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,17 +38,23 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.PushConfiguration;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 public class PushNotificationUtil implements SocialMediaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
-	private final HttpClient httpClient;
+	private final Client client;
 
 	public PushNotificationUtil() {
-		this(HttpClients.createDefault());
+		this(HttpClientUtil.newClientBuilder().build());
 	}
 
-	protected PushNotificationUtil(HttpClient httpClient) {
-		this.httpClient = httpClient;
+	protected PushNotificationUtil(Client client) {
+		this.client = client;
 	}
 
 	@Override
@@ -99,12 +102,16 @@ public class PushNotificationUtil implements SocialMediaUtil {
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
 			final byte[] encrypted = new CryptoService().encrypt(payload.toString(), subscriptionKeys, 0);
-			HttpUriRequest httpPost = new PushController(serverKeys).prepareRequest(subscription1, encrypted);
-			logger.debug("Sending POST request: {}", httpPost);
-			HttpResponse response = httpClient.execute(httpPost);
-			logger.debug("Received response on POST: {}", response);
-			if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
-				throw new AlbinaException(response.getStatusLine().toString());
+			final URI endpointURI = URI.create(subscription1.getEndpoint());
+			final Invocation.Builder builder = client.target(endpointURI).request();
+			builder.header("Content-Type", "application/octet-stream");
+			builder.header("Content-Encoding", "aes128gcm");
+			builder.header("TTL", "180");
+			builder.header("Authorization", new PushController(serverKeys).getAuthorization(endpointURI));
+			final Response response = builder.post(Entity.entity(encrypted, MediaType.APPLICATION_OCTET_STREAM));
+			logger.debug("Received response on POST: {}", response.getStatusInfo());
+			if (response.getStatusInfo().getStatusCode() != 200 && response.getStatusInfo().getStatusCode() != 201) {
+				throw new AlbinaException(response.getStatusInfo().toString());
 			}
 			logger.debug("Successfully sent push notification to {}", subscription.getEndpoint());
 		} catch (Exception e) {
