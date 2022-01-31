@@ -82,7 +82,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			PdfFont openSansLightFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Light.ttf");
 
 			// Add headline
-			String headline = isAran ? "Centre de Lauegi Val d'Aran" : lang.getBundleString("avalanche-report.name");
+			String headline = lang.getBundleString("avalanche-report.name", region);
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 					.setColor(greyDarkColor, true).showText(headline).endText();
 			String date = AlbinaUtil.getDate(bulletins, lang);
@@ -114,7 +114,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
 					.showText(copyright).endText();
 
-			String urlString = isAran ? "WWW.LAUEGI.REPORT" : lang.getBundleString("avalanche-report.url.capitalized");
+			String urlString = lang.getBundleString("avalanche-report.url.capitalized", region);
 			Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
 			pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)

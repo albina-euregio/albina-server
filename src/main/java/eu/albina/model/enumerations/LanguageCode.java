@@ -20,9 +20,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import eu.albina.model.Region;
 import eu.albina.util.XMLResourceBundleControl;
 
 /**
@@ -56,6 +58,14 @@ public enum LanguageCode {
 
 	public String getBundleString(String key) {
 		return getBundle("i18n.MessagesBundle").getString(key);
+	}
+
+	public String getBundleString(String key, Region region) {
+		try {
+			return getBundleString(key + "." + region.getId());
+		} catch (MissingResourceException e) {
+			return getBundleString(key);
+		}
 	}
 
 	public static LanguageCode fromString(String text) {
