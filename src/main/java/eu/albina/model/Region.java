@@ -162,6 +162,11 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "PDF_FOOTER_LOGO_BW_PATH")
 	private String pdfFooterLogoBwPath;
 
+	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/color/euregio.png
+	// ARAN: -
+	@Column(name = "STATIC_WIDGET_SECONDARY_LOGO_COLOR_PATH")
+	private String staticWidgetSecondaryLogoColorPath;
+
 	// EUREGIO 1464000
 	// ES-CT-L 120500
 	// AT-07 1452000
@@ -311,6 +316,8 @@ public class Region implements AvalancheInformationObject {
 			this.pdfFooterLogoColorPath = json.getString("pdfFooterLogoColorPath");
 		if (json.has("pdfFooterLogoBwPath") && !json.isNull("pdfFooterLogoBwPath"))
 			this.pdfFooterLogoBwPath = json.getString("pdfFooterLogoBwPath");
+		if (json.has("staticWidgetSecondaryLogoColorPath") && !json.isNull("staticWidgetSecondaryLogoColorPath"))
+			this.staticWidgetSecondaryLogoColorPath = json.getString("staticWidgetSecondaryLogoColorPath");
 		if (json.has("mapXmax") && !json.isNull("mapXmax"))
 			this.mapXmax = json.getInt("mapXmax");
 		if (json.has("mapXmin") && !json.isNull("mapXmin"))
@@ -549,6 +556,14 @@ public class Region implements AvalancheInformationObject {
 		this.pdfFooterLogoBwPath = pdfFooterLogoBwPath;
 	}
 
+	public String getStaticWidgetSecondaryLogoColorPath() {
+		return staticWidgetSecondaryLogoColorPath;
+	}
+
+	public void setStaticWidgetSecondaryLogoColorPath(String staticWidgetSecondaryLogoColorPath) {
+		this.staticWidgetSecondaryLogoColorPath = staticWidgetSecondaryLogoColorPath;
+	}
+
 	public int getMapXmax() {
 		return mapXmax;
 	}
@@ -686,6 +701,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("pdfFooterLogo", isPdfFooterLogo());
 		json.put("pdfFooterLogoColorPath", getPdfFooterLogoColorPath());
 		json.put("pdfFooterLogoBwPath", getPdfFooterLogoBwPath());
+		json.put("staticWidgetSecondaryLogoColorPath", getStaticWidgetSecondaryLogoColorPath());
 		json.put("mapXmax", getMapXmax());
 		json.put("mapXmin", getMapXmin());
 		json.put("mapYmax", getMapXmax());

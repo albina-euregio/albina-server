@@ -80,7 +80,7 @@ public class StaticWidgetUtil {
 	}
 
 	/**
-	 * Create static widgets containing overview information for the EUREGIO for
+	 * Create static widgets containing overview information for the {@code region} for
 	 * print media.
 	 *
 	 * @param bulletins
@@ -233,10 +233,9 @@ public class StaticWidgetUtil {
 				ig2.drawImage(overviewThumbnail, 100, 170, null);
 
 
-			// TODO use correct logo for region
-			BufferedImage euregioLogo = loadImageFromPath("images/logo/color/euregio.png");
-			euregioLogo = resizeHeight(euregioLogo, 110);
-			ig2.drawImage(euregioLogo, 330, 35, null);
+			BufferedImage secondaryLogo = loadImageFromPath(lang.getBundleString(region.getStaticWidgetSecondaryLogoColorPath()));
+			secondaryLogo = resizeHeight(secondaryLogo, 110);
+			ig2.drawImage(secondaryLogo, 330, 35, null);
 
 			String filename = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString
 					+ "/" + AlbinaUtil.getStaticWidgetFilename(validityDateString, region, lang) + ".png";

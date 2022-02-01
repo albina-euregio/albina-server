@@ -196,7 +196,7 @@ public class PublicationController {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
-		// update also super regions (e.g. euregio, aineva)
+		// update also super regions
 		List<Region> updateRegions = regions;
 		for (Region region : regions) {
 			for (Region superRegion : region.getSuperRegions()) {

@@ -53,9 +53,9 @@ public interface MapUtil {
 	}
 
 	/**
-	 * Create images of each map needed for the different products of
-	 * avalanche.report. This consists of an overview map over the whole EUREGIO,
-	 * maps for each province and detailed maps for each aggregated region.
+	 * Create images of each map needed for the different products. This 
+	 * consists of an overview map, maps for each region and detailed 
+	 * maps for each aggregated region.
 	 *
 	 * @param bulletins
 	 *            The bulletins to create the maps from.
