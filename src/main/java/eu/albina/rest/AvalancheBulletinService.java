@@ -47,6 +47,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import eu.albina.controller.ServerInstanceController;
+import eu.albina.model.ServerInstance;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,7 +193,7 @@ public class AvalancheBulletinService {
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 
 		List<Region> regions = new ArrayList<Region>();
-		
+
 		if (regionIds.isEmpty()) {
 			regions = RegionController.getInstance().getPublishBulletinRegions();
 		} else {
@@ -411,10 +413,11 @@ public class AvalancheBulletinService {
 				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 				String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
 				java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
+				ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
-				MapUtil.createMapyrusMaps(bulletins, region, true, outputDirectory);
+				MapUtil.createMapyrusMaps(bulletins, region, serverInstance, true, outputDirectory);
 
-				PdfUtil.getInstance().createPdf(bulletins, language, region, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
+				PdfUtil.getInstance().createPdf(bulletins, language, region, serverInstance, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 							publicationTimeString, true);
 
 				String filename = validityDateString + "_" + region + "_" + language.toString() + ".pdf";
@@ -804,7 +807,7 @@ public class AvalancheBulletinService {
 					logger.error(key + " thread interrupted", e);
 				}
 			}
-			
+
 			// copy files
 			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 				AlbinaUtil.runUpdateLatestHtmlsScript(AlbinaUtil.getValidityDateString(bulletins));
@@ -923,7 +926,7 @@ public class AvalancheBulletinService {
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
-			for (Region region: publishBulletinRegions) {	
+			for (Region region: publishBulletinRegions) {
 				PublicationController.getInstance().createCaamlV5(bulletins, region, validityDateString, publicationTimeString);
 				PublicationController.getInstance().createCaamlV6(bulletins, region, validityDateString, publicationTimeString);
 			}

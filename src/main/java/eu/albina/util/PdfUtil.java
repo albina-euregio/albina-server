@@ -28,6 +28,7 @@ import com.google.common.io.Resources;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.map.DaytimeDependency;
 import eu.albina.map.MapUtil;
+import eu.albina.model.ServerInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,7 +113,7 @@ public class PdfUtil {
 		return instance;
 	}
 
-	public void createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, boolean grayscale,
+	public void createPdf(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance, boolean grayscale,
 			boolean daytimeDependency, String validityDateString, String publicationTimeString, boolean preview) throws IOException {
 		String pdfPath;
 		String mapsPath;
@@ -120,8 +121,8 @@ public class PdfUtil {
 			pdfPath = GlobalVariables.getTmpPdfDirectory();
 			mapsPath = GlobalVariables.getTmpMapsPath();
 		} else {
-			pdfPath = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory();
-			mapsPath = ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath();
+			pdfPath = serverInstance.getPdfDirectory();
+			mapsPath = serverInstance.getMapsPath();
 		}
 		String filename = getFilename(lang, region, grayscale, validityDateString, publicationTimeString, pdfPath);
 
@@ -196,8 +197,8 @@ public class PdfUtil {
 
 		for (LanguageCode lang : LanguageCode.ENABLED) {
 			try {
-				createPdf(regionBulletins, lang, region, false, daytimeDependency, validityDateString, publicationTimeString, false);
-				createPdf(regionBulletins, lang, region, true, daytimeDependency, validityDateString, publicationTimeString, false);
+				createPdf(regionBulletins, lang, region, ServerInstanceController.getInstance().getLocalServerInstance(), false, daytimeDependency, validityDateString, publicationTimeString, false);
+				createPdf(regionBulletins, lang, region, ServerInstanceController.getInstance().getLocalServerInstance(), true, daytimeDependency, validityDateString, publicationTimeString, false);
 			} catch (IOException e) {
 				logger.error("PDF could not be created", e);
 			}

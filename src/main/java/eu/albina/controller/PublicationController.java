@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
 
+import eu.albina.model.ServerInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -224,7 +225,7 @@ public class PublicationController {
 			try {
 				// create maps
 				if (region.isCreateMaps()) {
-					
+
 					createMaps(regionBulletins, region, validityDateString, publicationTimeString);
 
 					Map<String, Thread> threads = new HashMap<String, Thread>();
@@ -309,7 +310,7 @@ public class PublicationController {
 			try {
 				// create maps
 				if (region.isCreateMaps()) {
-					
+
 					createMaps(regionBulletins, region, validityDateString, publicationTimeString);
 
 					Map<String, Thread> threads = new HashMap<String, Thread>();
@@ -503,7 +504,8 @@ public class PublicationController {
 			throws Exception {
 		try {
 			logger.info("Map production for " + region.getId() + " started");
-			MapUtil.createDangerRatingMaps(bulletins, region, false);
+			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			MapUtil.createMapyrusMaps(bulletins, region, serverInstance);
 			logger.info("Map production " + region.getId() + " finished");
 		} catch (Exception e) {
 			logger.error("Error producing maps for " + region.getId(), e);
