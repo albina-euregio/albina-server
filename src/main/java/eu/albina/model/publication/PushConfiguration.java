@@ -24,8 +24,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -39,10 +37,6 @@ public class PushConfiguration implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "PROVIDER_ID")
-	private PublicationProvider provider;
-
 	@Column(name = "VAPID_PUBLIC_KEY")
 	private String vapidPublicKey;
 
@@ -55,19 +49,6 @@ public class PushConfiguration implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public PublicationProvider getProvider() {
-		return provider;
-	}
-
-	public PushConfiguration provider(PublicationProvider provider) {
-		this.provider = provider;
-		return this;
-	}
-
-	public void setProvider(PublicationProvider provider) {
-		this.provider = provider;
 	}
 
 	public String getVapidPublicKey() {

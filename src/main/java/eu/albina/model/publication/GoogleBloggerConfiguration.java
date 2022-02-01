@@ -45,10 +45,6 @@ public class GoogleBloggerConfiguration implements Serializable {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "PROVIDER_ID")
-	private PublicationProvider provider;
-
-	@ManyToOne
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
@@ -74,19 +70,6 @@ public class GoogleBloggerConfiguration implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public PublicationProvider getProvider() {
-		return provider;
-	}
-
-	public GoogleBloggerConfiguration provider(PublicationProvider provider) {
-		this.provider = provider;
-		return this;
-	}
-
-	public void setProvider(PublicationProvider provider) {
-		this.provider = provider;
 	}
 
 	public Region getRegion() {
