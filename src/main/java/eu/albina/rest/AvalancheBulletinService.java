@@ -258,7 +258,6 @@ public class AvalancheBulletinService {
 
 		try {
 			Map<Instant, BulletinStatus> status;
-			// if no region is defined, get status for EUREGIO
 			if (regionId == null || regionId.isEmpty()) {
 				status = AvalancheReportController.getInstance().getStatus(startDate, endDate,
 						RegionController.getInstance().getPublishBulletinRegions());
