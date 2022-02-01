@@ -75,7 +75,7 @@ public class Region implements AvalancheInformationObject {
 	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
 	)
 	private List<Region> subRegions;
-	
+
 	@ManyToMany
 	@JoinTable(name="super_region_sub_region",
 	 joinColumns=@JoinColumn(name="SUB_REGION_ID"),
@@ -228,7 +228,7 @@ public class Region implements AvalancheInformationObject {
 	// IT-32-TN 1358000
 	@Column(name = "MAP_X_MAX")
 	private int mapXmax;
-	
+
 	// EUREGIO 1104000
 	// ES-CT-L 66200
 	// AT-07 1116000
@@ -315,6 +315,15 @@ public class Region implements AvalancheInformationObject {
 	public Region(String id) {
 		super();
 		this.id = id;
+	}
+
+	public Region(String id, String geoDataDirectory, int mapXmax, int mapXmin, int mapYmax, int mapYmin) {
+		this.id = id;
+		this.geoDataDirectory = geoDataDirectory;
+		this.mapXmax = mapXmax;
+		this.mapXmin = mapXmin;
+		this.mapYmax = mapYmax;
+		this.mapYmin = mapYmin;
 	}
 
 	public Region(JSONObject json) {
@@ -758,7 +767,7 @@ public class Region implements AvalancheInformationObject {
 	public boolean affects(String regionId) {
 		if (regionId.startsWith(this.getId()))
 			return true;
-		
+
 		return subRegions.stream().anyMatch(subRegion -> regionId.startsWith(subRegion.getId()));
 	}
 

@@ -12,7 +12,7 @@ print "######################################################"
 let raster = geodata_dir . rasterFile
 
 # Shapefile
-let country_1 = geodata_dir . countryShapeFile
+let country_1 = geodata_dir . countriesShapeFile
 let provinces_1 = geodata_dir . provincesShapeFile
 let reg_euregio_ha = geodata_dir . microRegionsShapeFile
 let rivers = geodata_dir . riversShapeFile

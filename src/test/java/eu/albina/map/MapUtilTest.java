@@ -12,14 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 import eu.albina.ImageTestUtils;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.enumerations.DaytimeDependency;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.HibernateUtil;
 import eu.albina.util.PdfUtil;
 
-import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -36,34 +34,27 @@ import javax.imageio.ImageIO;
 
 public class MapUtilTest {
 
-	private Region regionEuregio;
-	private Region regionTirol;
-	private Region regionSouthTyrol;
-	private Region regionTrentino;
-	private Region regionAran;
+	private final Region regionEuregio = new Region("EUREGIO", "geodata.Euregio", 1464000, 1104000, 6047000, 5687000);
+	private final Region regionTirol = new Region("AT-07", "geodata.Euregio", 1452000, 1116000, 6053000, 5829000);
+	private final Region regionSouthTyrol = new Region("IT-32-BZ", "geodata.Euregio", 1400000, 1145000, 5939000, 5769000);
+	private final Region regionTrentino = new Region("IT-32-TN", "geodata.Euregio", 1358000, 1133000, 5842000, 5692000);
+	private final Region regionAran = new Region("ES-CT-L", "geodata.Aran", 120500, 66200, 5266900, 5215700);
+	private final ServerInstance serverInstance = new ServerInstance();
 
 	@Rule
 	public TemporaryFolder folder = TemporaryFolder.builder().assureDeletion().build();
 
 	@Before
 	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
-
-		regionEuregio = new Region("EUREGIO");
-		regionTirol = new Region("AT-07");
-		regionSouthTyrol = new Region("IT-32-BZ");
-		regionTrentino = new Region("IT-32-TN");
-		regionAran = new Region("ES-CT-L");
-	}
-
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
+		serverInstance.setMapsPath(folder.toString());
+		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
+		serverInstance.setPdfDirectory(folder.toString());
 	}
 
 	@Test
 	public void testOverviewMapFilename() {
-		assertEquals("fd_EUREGIO_map.jpg", MapUtil.getOverviewMapFilename(null, DaytimeDependency.fd, false));
+		assertEquals("fd_EUREGIO_map.jpg",
+				MapUtil.getOverviewMapFilename(regionEuregio, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map.jpg",
 				MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map_bw.jpg",
@@ -77,7 +68,7 @@ public class MapUtilTest {
 	}
 
 	private void assumeMapsPath() {
-		Assume.assumeTrue(Files.isDirectory(Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMapProductionUrl())));
+		Assume.assumeTrue(Files.isDirectory(Paths.get(serverInstance.getMapProductionUrl())));
 	}
 
 	@Test
@@ -85,15 +76,16 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
 
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
 			BufferedImage actual = ImageIO.read(new File(
-				ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
-			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
+				serverInstance.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
+			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> {
+			});
 		}
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.en, regionEuregio, false, false,
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.en, regionEuregio, serverInstance, false, false,
 			"2019-01-17", "2019-01-16_16-00-00", false);
 	}
 
@@ -102,13 +94,14 @@ public class MapUtilTest {
 		assumeMapsPath();
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionAran);
+		MapUtil.createMapyrusMaps(bulletins, regionAran, serverInstance);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		BufferedImage actual = ImageIO.read(new File(
-			ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
-		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, false, false,
+			serverInstance.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
+		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> {
+		});
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, serverInstance, false, false,
 			"2021-01-24", "2021-01-23_16-00-00", false);
 	}
 
@@ -118,8 +111,8 @@ public class MapUtilTest {
 		assumeMapsPath();
 		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionAran);
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, false, false,
+		MapUtil.createMapyrusMaps(bulletins, regionAran, serverInstance);
+		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, serverInstance, false, false,
 			"2021-12-10", "2021-12-09_16-06-27", false);
 	}
 
@@ -128,12 +121,13 @@ public class MapUtilTest {
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		BufferedImage actual = ImageIO.read(new File(
 			GlobalVariables.getTmpMapsPath() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
-		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
+		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> {
+		});
 	}
 
 	@Test
@@ -142,7 +136,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
 	}
 
 	@Test
@@ -151,7 +145,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
 	}
 
 	@Test
@@ -160,7 +154,7 @@ public class MapUtilTest {
 		assumeMapsPath();
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
 	}
 
 	@Test

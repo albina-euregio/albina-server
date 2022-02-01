@@ -36,10 +36,10 @@ import org.mapyrus.MapyrusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.MapProductionConfiguration;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
@@ -51,31 +51,6 @@ public interface MapUtil {
 	static String getOverviewMapFilename(Region region, DaytimeDependency daytimeDependency,
 			boolean grayscale) {
 		return MapUtil.filename(region, MapLevel.standard, daytimeDependency, null, grayscale, MapImageFormat.jpg);
-	}
-
-	/**
-	 * Create images of each map needed for the different products. This 
-	 * consists of an overview map, maps for each region and detailed 
-	 * maps for each aggregated region.
-	 *
-	 * @param bulletins
-	 *            The bulletins to create the maps from.
-	 * @param regions
-	 *            The regions for the bulletin
-	 * @throws Exception
-	 *             an error occurred during map production
-	 */
-	static void createDangerRatingMaps(List<AvalancheBulletin> bulletins, Region region, boolean preview) throws Exception {
-		final long start = System.currentTimeMillis();
-		logger.info("Creating danger rating maps for {} using {}", AlbinaUtil.getValidityDateString(bulletins),
-				ServerInstanceController.getInstance().getLocalServerInstance().getMapProductionUrl());
-		try {
-			createMapyrusMaps(bulletins, region);
-		} catch (Exception ex) {
-			logger.error("Failed to create mapyrus maps", ex);
-			throw ex;
-		}
-		logger.info("Creating danger rating maps done in {} ms", System.currentTimeMillis() - start);
 	}
 
 	static SimpleBindings createMayrusBindings(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, boolean preview) {
@@ -99,22 +74,14 @@ public interface MapUtil {
 		return simpleBindings;
 	}
 
-	static Path getOutputDirectory(List<AvalancheBulletin> bulletins) {
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance) {
 		final String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		final String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		return Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(), validityDateString, publicationTime);
+		final Path outputDirectory = Paths.get(serverInstance.getMapsPath(), validityDateString, publicationTime);
+		createMapyrusMaps(bulletins, region, serverInstance, false, outputDirectory);
 	}
 
-	static String getGeodataUrl(Region region) {
-		return ServerInstanceController.getInstance().getLocalServerInstance().getMapProductionUrl() + region.getGeoDataDirectory();
-	}
-
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region) {
-		final Path outputDirectory = getOutputDirectory(bulletins);
-		createMapyrusMaps(bulletins, region, false, outputDirectory);
-	}
-
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, boolean preview, Path outputDirectory) {
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance, boolean preview, Path outputDirectory) {
 		try {
 			logger.info("Creating directory {}", outputDirectory);
 			Files.createDirectories(outputDirectory);
@@ -126,15 +93,15 @@ public interface MapUtil {
 			try {
 				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, preview);
 				for (MapLevel mapLevel : MapLevel.values()) {
-					createMapyrusMaps(region, mapLevel, daytimeDependency, null, false, bindings, outputDirectory, preview);
-					createMapyrusMaps(region, mapLevel, daytimeDependency, null, true, bindings, outputDirectory, preview);
+					createMapyrusMaps(region, serverInstance, mapLevel, daytimeDependency, null, false, bindings, outputDirectory, preview);
+					createMapyrusMaps(region, serverInstance, mapLevel, daytimeDependency, null, true, bindings, outputDirectory, preview);
 				}
 				for (final AvalancheBulletin bulletin : bulletins) {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					createMapyrusMaps(region, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
-					createMapyrusMaps(region, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
+					createMapyrusMaps(region, serverInstance, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
+					createMapyrusMaps(region, serverInstance, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
 				}
 			} catch (IOException | MapyrusException | InterruptedException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
@@ -142,7 +109,7 @@ public interface MapUtil {
 		}
 	}
 
-	static void createMapyrusMaps(Region region, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
+	static void createMapyrusMaps(Region region, ServerInstance serverInstance, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
 								  boolean grayscale, SimpleBindings dangerBindings, Path outputDirectory, boolean preview) throws IOException, MapyrusException, InterruptedException {
 
 		final Path outputFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
@@ -154,9 +121,8 @@ public interface MapUtil {
 		bindings.put("image_type", "pdf");
 		bindings.put("mapFile", outputFile);
 		bindings.put("pagesize_x", mapLevel.width);
-		bindings.put("pagesize_y", MapUtil.height(region, mapLevel));
-		bindings.put("geodata_dir", getGeodataUrl(region));
-
+		bindings.put("pagesize_y", mapLevel.width / aspectRatio(region));
+		bindings.put("geodata_dir", Paths.get(serverInstance.getMapProductionUrl()).resolve(region.getGeoDataDirectory()) + "/");
 		bindings.put("map_level", mapLevel.name());
 		MapProductionConfiguration config;
 		switch (mapLevel) {
@@ -172,7 +138,7 @@ public interface MapUtil {
 				break;
 		}
 		bindings.put("rasterFile", config.getRasterFilePath());
-		bindings.put("countryShapeFile", config.getCountryShapeFilePath());
+		bindings.put("countriesShapeFile", config.getCountriesShapeFilePath());
 		bindings.put("provincesShapeFile", config.getProvincesShapeFilePath());
 		bindings.put("microRegionsShapeFile", config.getMicroRegionsShapeFilePath());
 		bindings.put("riversShapeFile", config.getRiversShapeFilePath());
@@ -188,10 +154,8 @@ public interface MapUtil {
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
 		bindings.put("scalebar",  MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
-		bindings.put("logo_file", MapUtil.logo(region, mapLevel, grayscale));
+		bindings.put("logo_file", grayscale ? region.getMapLogoBwPath() : region.getMapLogoColorPath());
 		bindings.put("logo_position", region.getLogoPosition().toString());
-		// TODO broken
-		// split into multiple parameters
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
 
@@ -239,24 +203,6 @@ public interface MapUtil {
 		if (!preview) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
 		}
-	}
-
-	static String logo(Region region, MapLevel mapLevel, boolean grayscale) {
-		if (!MapLevel.standard.equals(mapLevel)) {
-			return "";
-		} else {
-			return grayscale
-				? region.getMapLogoBwPath()
-				: region.getMapLogoColorPath();
-		}
-	}
-
-	static double width(MapLevel mapLevel) {
-		return mapLevel.width;
-	}
-
-	static double height(Region region, MapLevel mapLevel) {
-		return mapLevel.width / aspectRatio(region);
 	}
 
 	static double aspectRatio(Region region) {
