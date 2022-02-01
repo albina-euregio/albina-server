@@ -152,7 +152,7 @@ public class UserController {
 
 	public JSONArray getRegionsJson() throws AlbinaException {
 		JSONArray jsonResult = new JSONArray();
-		for (String regionId : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternal()).map(Region::getId).collect(Collectors.toList()))
+		for (String regionId : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).map(Region::getId).collect(Collectors.toList()))
 			jsonResult.put(regionId);
 		return jsonResult;
 	}

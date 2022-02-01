@@ -129,7 +129,7 @@ public class RegionController {
 
 	public List<Region> getPublishBulletinRegions() {
 		try {
-			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternal() && region.isPublishBulletins()).collect(Collectors.toList());
+			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
 			return result;
 		} catch (AlbinaException ae) {
 			logger.warn("Active region ids could not be loaded!", ae);
@@ -139,7 +139,7 @@ public class RegionController {
 
 	public List<Region> getPublishBlogRegions() {
 		try {
-			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternal() && region.isPublishBlogs()).collect(Collectors.toList());
+			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBlogs()).collect(Collectors.toList());
 		} catch (AlbinaException ae) {
 			logger.warn("Active regions could not be loaded!", ae);
 			return new ArrayList<Region>();

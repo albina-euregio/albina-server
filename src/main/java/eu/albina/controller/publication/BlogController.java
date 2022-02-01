@@ -55,7 +55,7 @@ public class BlogController {
 	private BlogController() {
 		try {
 			Instant date = Instant.now();
-			for (Region region : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternal() && region.isPublishBlogs()).collect(Collectors.toList())) {
+			for (Region region : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBlogs()).collect(Collectors.toList())) {
 				for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
 					try {
 						GoogleBloggerConfiguration config = this.getConfiguration(region, lang);

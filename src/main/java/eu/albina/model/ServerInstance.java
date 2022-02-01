@@ -16,17 +16,18 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
@@ -38,12 +39,14 @@ import com.github.openjson.JSONObject;
  */
 @Entity
 @Table(name = "server_instances")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = ServerInstance.class)
-public class ServerInstance implements AvalancheInformationObject {
+public class ServerInstance implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID")
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(name = "NAME")
 	private String name;
@@ -51,43 +54,36 @@ public class ServerInstance implements AvalancheInformationObject {
 	@Column(name = "API_URL")
 	private String apiUrl;
 
-	// info@avalanche.report for local instance
 	@Column(name = "USER_NAME")
 	private String userName;
 
 	@Column(name = "PASSWORD")
 	private String password;
 
-	@Column(name = "EXTERNAL")
-	private boolean external;
+	@Column(name = "EXTERNAL_SERVER")
+	private boolean externalServer;
 
 	@OneToMany(mappedBy = "serverInstance")
 	private List<Region> regions;
  
-	// false
-	@Column(name = "PUBLISH_AT_5AM")
+	@Column(name = "PUBLISH_AT_5PM")
 	private boolean publishAt5PM;
 
-	// false
 	@Column(name = "PUBLISH_AT_8PM")
 	private boolean publishAt8AM;
 
-	// /mnt/albina_files_local
 	@Column(name = "PDF_DIRECTORY")
 	private String pdfDirectory;
 
-	// /mnt/simple_local
 	@Column(name = "HTML_DIRECTORY")
 	private String htmlDirectory;
 
-	// /mnt/albina_files_local
 	@Column(name = "MAPS_PATH")
 	private String mapsPath;
 
 	@Column(name = "MAP_PRODUCTION_URL")
 	private String mapProductionUrl;
 
-	// https://admin.avalanche.report/images/
 	@Column(name = "SERVER_IMAGES_URL")
 	private String serverImagesUrl;
 
@@ -100,7 +96,7 @@ public class ServerInstance implements AvalancheInformationObject {
 	public ServerInstance(JSONObject json) {
 		this();
 		if (json.has("id") && !json.isNull("id"))
-			this.id = json.getString("id");
+			this.id = json.getLong("id");
 		if (json.has("name") && !json.isNull("name"))
 			this.name = json.getString("name");
 		if (json.has("apiUrl") && !json.isNull("apiUrl"))
@@ -110,7 +106,7 @@ public class ServerInstance implements AvalancheInformationObject {
 		if (json.has("password") && !json.isNull("password"))
 			this.password = json.getString("password");
 		if (json.has("external") && !json.isNull("external"))
-			this.external = json.getBoolean("external");
+			this.externalServer = json.getBoolean("external");
 		if (json.has("regions")) {
 			JSONArray regions = json.getJSONArray("regions");
 			for (Object region : regions) {
@@ -133,11 +129,11 @@ public class ServerInstance implements AvalancheInformationObject {
 			this.serverImagesUrl = json.getString("serverImagesUrl");
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -173,12 +169,12 @@ public class ServerInstance implements AvalancheInformationObject {
 		this.password = password;
 	}
 
-	public boolean isExternal() {
-		return external;
+	public boolean isExternalServer() {
+		return externalServer;
 	}
 
-	public void setExternal(boolean external) {
-		this.external = external;
+	public void setExternalServer(boolean externalServer) {
+		this.externalServer = externalServer;
 	}
 
 	public List<Region> getRegions() {
@@ -259,7 +255,7 @@ public class ServerInstance implements AvalancheInformationObject {
 		json.put("apiUrl", getApiUrl());
 		json.put("userName", getUserName());
 		json.put("password", getPassword());
-		json.put("external", isExternal());
+		json.put("externalServer", isExternalServer());
 		if (regions != null && regions.size() > 0) {
 			JSONArray jsonRegions = new JSONArray();
 			for (Region region : regions) {
