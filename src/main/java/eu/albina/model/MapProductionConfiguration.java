@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2019 Norbert Lanzanasto
+ * Copyright (C) 2022 Norbert Lanzanasto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,59 +18,45 @@ package eu.albina.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 import com.github.openjson.JSONObject;
 
 @Embeddable
 public class MapProductionConfiguration implements AvalancheInformationObject {
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "RASTER_FILE_PATH")
 	private String rasterFilePath;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "COUNTRY_SHAPE_FILE_PATH")
-	private String countryShapeFilePath;
+	@Column(name = "COUNTRIES_SHAPE_FILE_PATH")
+	private String countriesShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "PROVINCES_SHAPE_FILE_PATH")
 	private String provincesShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "MICRO_REGIONS_SHAPE_FILE_PATH")
 	private String microRegionsShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "RIVERS_SHAPE_FILE_PATH")
 	private String riversShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "LAKES_SHAPE_FILE_PATH")
 	private String lakesShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "CITIES_SHAPE_FILE_PATH")
 	private String citiesShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "PEAKS_SHAPE_FILE_PATH")
 	private String peaksShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "NAMES_P_SHAPE_FILE_PATH")
 	private String namesPShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "NAMES_L_SHAPE_FILE_PATH")
 	private String namesLShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "REGION_SHAPE_FILE_PATH")
 	private String regionShapeFilePath;
 
-	@Enumerated(EnumType.STRING)
 	@Column(name = "PP_SHAPE_FILE_PATH")
 	private String ppShapeFilePath;
 
@@ -82,8 +68,8 @@ public class MapProductionConfiguration implements AvalancheInformationObject {
 
 		if (json.has("rasterFilePath"))
 			this.rasterFilePath = json.getString("rasterFilePath");
-		if (json.has("countryShapeFilePath"))
-			this.countryShapeFilePath = json.getString("countryShapeFilePath");
+		if (json.has("countriesShapeFilePath"))
+			this.countriesShapeFilePath = json.getString("countriesShapeFilePath");
 		if (json.has("provincesShapeFilePath"))
 			this.provincesShapeFilePath = json.getString("provincesShapeFilePath");
 		if (json.has("microRegionsShapeFilePath"))
@@ -114,12 +100,12 @@ public class MapProductionConfiguration implements AvalancheInformationObject {
 		this.rasterFilePath = rasterFilePath;
 	}
 
-	public String getCountryShapeFilePath() {
-		return countryShapeFilePath;
+	public String getCountriesShapeFilePath() {
+		return countriesShapeFilePath;
 	}
 
-	public void setCountryShapeFilePath(String countryShapeFilePath) {
-		this.countryShapeFilePath = countryShapeFilePath;
+	public void setCountriesShapeFilePath(String countriesShapeFilePath) {
+		this.countriesShapeFilePath = countriesShapeFilePath;
 	}
 
 	public String getProvincesShapeFilePath() {
@@ -206,7 +192,7 @@ public class MapProductionConfiguration implements AvalancheInformationObject {
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		json.put("rasterFilePath", this.rasterFilePath);
-		json.put("countryShapeFilePath", this.countryShapeFilePath);
+		json.put("countriesShapeFilePath", this.countriesShapeFilePath);
 		json.put("provincesShapeFilePath", this.provincesShapeFilePath);
 		json.put("microRegionsShapeFilePath", this.microRegionsShapeFilePath);
 		json.put("riversShapeFilePath", this.riversShapeFilePath);

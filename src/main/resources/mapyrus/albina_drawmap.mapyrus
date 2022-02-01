@@ -8,77 +8,21 @@ print "Gueltiges Kartendatum: " . date
 print "Bulletin-ID/Karte: " . bulletin_id
 print "######################################################"
 
-# Raster-Input
-if region eq "Euregio" then
-	if map_level eq "thumbnail" then
-		let raster = geodata_dir . "alpes_srtm250_n_gm_hs_light.png"
-    elif map_level eq "standard" then
-		let raster = geodata_dir . "alpes_srtm250_n_gm_hs_v1.png"
-    elif map_level eq "overlay" then
-		let raster = geodata_dir . "srtm90_albina_EPSG_3395_hs.png"
-	endif
-elif region eq "Aran" then
-	let raster = geodata_dir . "pyrenees_srtm250_n_gm_hs_v2.png"
-endif
+# Rasterfile
+let raster = geodata_dir . rasterFile
 
-# Shapefile-Input
-if map_level eq "thumbnail" then
-	let country_l = geodata_dir . "simple_geom_staat_l.shp"
-	let provinces_l = geodata_dir . "simple_geom_provinzen_l.shp"
-	if region eq "Euregio" then
-		let reg_euregio_ha = geodata_dir . "simple_geom_regionen_euregio_ha.shp"
-	elif region eq "Aran" then
-		let reg_euregio_ha = geodata_dir . "simple_geom_regionen_aran_ha.shp"
-	endif
-	let rivers = geodata_dir . "gewaesser_l_gen.shp"
-	let lakes = geodata_dir . "gewaesser_a_gen.shp"
-else
-	let country_l = geodata_dir . "staat_l.shp"
-	let provinces_l = geodata_dir . "provinzen_l.shp"
-	if region eq "Euregio" then
-		let reg_euregio_ha = geodata_dir . "regionen_euregio_ha.shp"
-	elif region eq "Aran" then
-		let reg_euregio_ha = geodata_dir . "regions-elevation.aran.shp"
-	endif
-	let rivers = geodata_dir . "gewaesser_l.shp"
-	let lakes = geodata_dir . "gewaesser_a.shp"
-endif
-
-if region eq "Euregio" then
-	let euregio = geodata_dir . "euregio_a.shp"
-	if map_level eq "thumbnail" then
-		let euregio = geodata_dir . "simple_geom_euregio_a.shp"
-	endif
-elif region eq "Aran" then
-	let euregio = geodata_dir . "aran_a.shp"
-	if map_level eq "thumbnail" then
-		let euregio = geodata_dir . "simple_geom_valdaran_a.shp"
-	endif
-endif
-
-if region eq "Euregio" then
-	let pp_region = geodata_dir . "pp_euregio.shp"
-	if map_level eq "thumbnail" then
-		let pp_region = geodata_dir . "simple_geom_pp_euregio.shp"
-	endif
-elif region eq "Aran" then
-	let pp_region = geodata_dir . "pp_aran.shp"
-endif
-
-if bulletin_id eq "tyrol" then
-	let pp_region = geodata_dir . "pp_tirol.shp"
-elif bulletin_id eq "southtyrol" then
-	let pp_region = geodata_dir . "pp_suedtirol.shp"
-elif bulletin_id eq "trentino" then
-	let pp_region = geodata_dir . "pp_trentino.shp"
-elif bulletin_id eq "aran" then
-	let pp_region = geodata_dir . "pp_aran.shp"
-endif
-
-let cities = geodata_dir . "albina_orte_p.shp"
-let peaks = geodata_dir . "albina_hoehenpunkte_p.shp"
-let names_p = geodata_dir . "albina_namengut_p.shp"
-let names_l = geodata_dir . "albina_namengut_l.shp"
+# Shapefile
+let country_1 = geodata_dir . countryShapeFile
+let provinces_1 = geodata_dir . provincesShapeFile
+let reg_euregio_ha = geodata_dir . microRegionsShapeFile
+let rivers = geodata_dir . riversShapeFile
+let lakes = geodata_dir . lakesShapeFile
+let cities = geodata_dir . citiesShapeFile
+let peaks = geodata_dir . peaksShapeFile
+let names_p = geodata_dir . namesPShapeFile
+let names_l = geodata_dir . namesLShapeFile
+let euregio = geodata_dir . regionShapeFile
+let pp_region = geodata_dir . ppShapeFile
 
 ###################################################################
 # --- Define NEWPAGE

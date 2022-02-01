@@ -13,6 +13,7 @@ import java.util.Map;
 
 import eu.albina.ImageTestUtils;
 import eu.albina.controller.ServerInstanceController;
+import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;

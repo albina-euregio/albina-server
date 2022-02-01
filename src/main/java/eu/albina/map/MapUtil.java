@@ -29,7 +29,6 @@ import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.GlobalVariables;
 
 import org.mapyrus.Argument;
 import org.mapyrus.FileOrURL;
@@ -40,8 +39,10 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.MapProductionConfiguration;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerRating;
+import eu.albina.model.enumerations.DaytimeDependency;
 
 public interface MapUtil {
 
@@ -155,15 +156,40 @@ public interface MapUtil {
 		bindings.put("pagesize_x", mapLevel.width);
 		bindings.put("pagesize_y", MapUtil.height(region, mapLevel));
 		bindings.put("geodata_dir", getGeodataUrl(region));
-		// TODO maybe we can use region.getId() here?
-		// split into multiple parameters
-		bindings.put("region", MapUtil.realm(region));
+
 		bindings.put("map_level", mapLevel.name());
+		MapProductionConfiguration config;
+		switch (mapLevel) {
+			case thumbnail:
+				config = region.getThumbnailMapConfig();
+				break;
+			case overlay:
+				config = region.getOverlayMapConfig();
+				break;
+			case standard:
+			default:
+				config = region.getStandardMapConfig();
+				break;
+		}
+		bindings.put("rasterFile", config.getRasterFilePath());
+		bindings.put("countryShapeFile", config.getCountryShapeFilePath());
+		bindings.put("provincesShapeFile", config.getProvincesShapeFilePath());
+		bindings.put("microRegionsShapeFile", config.getMicroRegionsShapeFilePath());
+		bindings.put("riversShapeFile", config.getRiversShapeFilePath());
+		bindings.put("lakesShapeFile", config.getLakesShapeFilePath());
+		bindings.put("citiesShapeFile", config.getCitiesShapeFilePath());
+		bindings.put("peaksShapeFile", config.getPeaksShapeFilePath());
+		bindings.put("namesPShapeFile", config.getNamesPShapeFilePath());
+		bindings.put("namesLShapeFile", config.getNamesLShapeFilePath());
+		bindings.put("regionShapeFile", config.getRegionShapeFilePath());
+		bindings.put("ppShapeFile", config.getPpShapeFilePath());
+
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
 		bindings.put("scalebar",  MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("logo_file", MapUtil.logo(region, mapLevel, grayscale));
+		bindings.put("logo_position", region.getLogoPosition().toString());
 		// TODO broken
 		// split into multiple parameters
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
@@ -258,13 +284,5 @@ public interface MapUtil {
 		sb.append(".");
 		sb.append(format);
 		return sb.toString();
-	}
-
-	static String realm(Region region) {
-		if (region.getId().equals(GlobalVariables.codeAran)) {
-			return "Aran";
-		} else {
-			return "Euregio";
-		}
 	}
 }

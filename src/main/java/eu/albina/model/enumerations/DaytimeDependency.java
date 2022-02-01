@@ -13,17 +13,17 @@ public enum DaytimeDependency {
 	 */
 	fd, am, pm;
 
-	static DaytimeDependency of(boolean isAfternoon, boolean hasDaytimeDependency) {
+	public static DaytimeDependency of(boolean isAfternoon, boolean hasDaytimeDependency) {
 		return !hasDaytimeDependency ? fd : isAfternoon ? pm : am;
 	}
 
-	static EnumSet<DaytimeDependency> of(List<AvalancheBulletin> bulletins) {
+	public static EnumSet<DaytimeDependency> of(List<AvalancheBulletin> bulletins) {
 		return AlbinaUtil.hasDaytimeDependency(bulletins)
 			? EnumSet.of(am, pm)
 			: EnumSet.of(fd);
 	}
 
-	AvalancheBulletinDaytimeDescription getBulletinDaytimeDescription(AvalancheBulletin bulletin) {
+	public AvalancheBulletinDaytimeDescription getBulletinDaytimeDescription(AvalancheBulletin bulletin) {
 		return bulletin.isHasDaytimeDependency() && pm.equals(this)
 				? bulletin.getAfternoon()
 				: bulletin.getForenoon();

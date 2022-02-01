@@ -901,11 +901,16 @@ begin place_logo
 
 	worlds px1, py1, px2, py2
 	clearpath
-	if region eq "Euregio" then
-	    move mx2 - (logo_size / 2) - 2, my1 + 19.0
-    elif region eq "Aran" then
-        move mx2 - (logo_size / 2) - 2, my2 - 8.0
-    endif
+
+	if logo_position eq "topleft" then
+		move mx1 + 2, my2 - (logo_size / 2) - 2
+	elif logo_position eq "topright" then
+		move mx2 - (logo_size / 2) - 2, my2 - (logo_size / 2) - 2
+	elif logo_position eq "bottomleft" then
+		move mx1 + 2, my1 + 2
+	elif logo_position eq "bottomright" then
+		move mx2 - (logo_size / 2) - 2, my1 + 2
+	endif
 	icon logo_file, logo_size
 
 end

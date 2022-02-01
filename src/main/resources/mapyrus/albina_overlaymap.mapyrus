@@ -2,15 +2,11 @@ print "========================================="
 print "Mapyrus.time.stamp = ", Mapyrus.time.stamp
 print "Mapyrus.version    = ", Mapyrus.version
 print "-----------------------------------------"
-print "Kartenerstelleung Overlay ALBINA"
+print "Kartenerstellung Overlay ALBINA"
 print "-----------------------------------------"
 
 # Shapefile-Input
-if region eq "Euregio" then
-	let reg_euregio_ha = geodata_dir . "regionen_euregio_ha.shp"
-elif region eq "Aran" then
-	let reg_euregio_ha = geodata_dir . "regions-elevation.aran.shp"
-endif
+let reg_euregio_ha = geodata_dir . microRegionsShapeFile
 
 ###################################################################
 # --- Define NEWPAGE
