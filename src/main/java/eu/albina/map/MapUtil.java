@@ -155,14 +155,17 @@ public interface MapUtil {
 		bindings.put("pagesize_x", mapLevel.width);
 		bindings.put("pagesize_y", MapUtil.height(region, mapLevel));
 		bindings.put("geodata_dir", getGeodataUrl(region));
+		// TODO maybe we can use region.getId() here?
+		// split into multiple parameters
 		bindings.put("region", MapUtil.realm(region));
 		bindings.put("map_level", mapLevel.name());
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
 		bindings.put("scalebar",  MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
-		// TODO use generic name for image file
-		bindings.put("euregio_image_file", MapUtil.logo(region, mapLevel, grayscale));
+		bindings.put("logo_file", MapUtil.logo(region, mapLevel, grayscale));
+		// TODO broken
+		// split into multiple parameters
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
 

@@ -151,8 +151,8 @@ if copyright eq "on" then
 endif
 
 # Logo bei Karten
-if euregio_image_file ne "" then
-	place_euregio_logo
+if logo_file ne "" then
+	place_logo
 endif
 
 # Rahmen

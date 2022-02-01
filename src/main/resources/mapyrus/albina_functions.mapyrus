@@ -894,18 +894,18 @@ begin draw_copyright copyright_txt, font, fontsize, fontcolor
 end
 
 ###############################################################
-# EUREGIO-Logo
+# Logo
 ###############################################################
 
-begin place_euregio_logo
+begin place_logo
 
 	worlds px1, py1, px2, py2
 	clearpath
 	if region eq "Euregio" then
-	    move mx2 - (euregio_image_size / 2) - 2, my1 + 19.0
+	    move mx2 - (logo_size / 2) - 2, my1 + 19.0
     elif region eq "Aran" then
-        move mx2 - (euregio_image_size / 2) - 2, my2 - 8.0
+        move mx2 - (logo_size / 2) - 2, my2 - 8.0
     endif
-	icon euregio_image_file, euregio_image_size
+	icon logo_file, logo_size
 
 end
