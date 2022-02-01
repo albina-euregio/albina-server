@@ -9,7 +9,7 @@ print "Bulletin-ID/Karte: " . bulletin_id
 print "######################################################"
 
 # Raster-Input
-if region eq "Euregio" then
+if region eq "EUREGIO" then
 	if map_level eq "thumbnail" then
 		let raster = geodata_dir . "alpes_srtm250_n_gm_hs_light.png"
     elif map_level eq "standard" then
@@ -17,7 +17,7 @@ if region eq "Euregio" then
     elif map_level eq "overlay" then
 		let raster = geodata_dir . "srtm90_albina_EPSG_3395_hs.png"
 	endif
-elif region eq "Aran" then
+elif region eq "ES-CT-L" then
 	let raster = geodata_dir . "pyrenees_srtm250_n_gm_hs_v2.png"
 endif
 
@@ -25,9 +25,9 @@ endif
 if map_level eq "thumbnail" then
 	let country_l = geodata_dir . "simple_geom_staat_l.shp"
 	let provinces_l = geodata_dir . "simple_geom_provinzen_l.shp"
-	if region eq "Euregio" then
+	if region eq "EUREGIO" then
 		let reg_euregio_ha = geodata_dir . "simple_geom_regionen_euregio_ha.shp"
-	elif region eq "Aran" then
+	elif region eq "ES-CT-L" then
 		let reg_euregio_ha = geodata_dir . "simple_geom_regionen_aran_ha.shp"
 	endif
 	let rivers = geodata_dir . "gewaesser_l_gen.shp"
@@ -35,33 +35,33 @@ if map_level eq "thumbnail" then
 else
 	let country_l = geodata_dir . "staat_l.shp"
 	let provinces_l = geodata_dir . "provinzen_l.shp"
-	if region eq "Euregio" then
+	if region eq "EUREGIO" then
 		let reg_euregio_ha = geodata_dir . "regionen_euregio_ha.shp"
-	elif region eq "Aran" then
+	elif region eq "ES-CT-L" then
 		let reg_euregio_ha = geodata_dir . "regions-elevation.aran.shp"
 	endif
 	let rivers = geodata_dir . "gewaesser_l.shp"
 	let lakes = geodata_dir . "gewaesser_a.shp"
 endif
 
-if region eq "Euregio" then
+if region eq "EUREGIO" then
 	let euregio = geodata_dir . "euregio_a.shp"
 	if map_level eq "thumbnail" then
 		let euregio = geodata_dir . "simple_geom_euregio_a.shp"
 	endif
-elif region eq "Aran" then
+elif region eq "ES-CT-L" then
 	let euregio = geodata_dir . "aran_a.shp"
 	if map_level eq "thumbnail" then
 		let euregio = geodata_dir . "simple_geom_valdaran_a.shp"
 	endif
 endif
 
-if region eq "Euregio" then
+if region eq "EUREGIO" then
 	let pp_region = geodata_dir . "pp_euregio.shp"
 	if map_level eq "thumbnail" then
 		let pp_region = geodata_dir . "simple_geom_pp_euregio.shp"
 	endif
-elif region eq "Aran" then
+elif region eq "ES-CT-L" then
 	let pp_region = geodata_dir . "pp_aran.shp"
 endif
 

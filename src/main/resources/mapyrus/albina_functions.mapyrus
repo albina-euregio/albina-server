@@ -901,9 +901,9 @@ begin place_euregio_logo
 
 	worlds px1, py1, px2, py2
 	clearpath
-	if region eq "Euregio" then
+	if region eq "EUREGIO" then
 	    move mx2 - (euregio_image_size / 2) - 2, my1 + 19.0
-    elif region eq "Aran" then
+    elif region eq "ES-CT-L" then
         move mx2 - (euregio_image_size / 2) - 2, my2 - 8.0
     endif
 	icon euregio_image_file, euregio_image_size

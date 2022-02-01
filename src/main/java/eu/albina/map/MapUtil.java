@@ -155,7 +155,7 @@ public interface MapUtil {
 		bindings.put("pagesize_x", mapLevel.width);
 		bindings.put("pagesize_y", MapUtil.height(region, mapLevel));
 		bindings.put("geodata_dir", getGeodataUrl(region));
-		bindings.put("region", MapUtil.realm(region));
+		bindings.put("region", region.getId());
 		bindings.put("map_level", mapLevel.name());
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
@@ -255,13 +255,5 @@ public interface MapUtil {
 		sb.append(".");
 		sb.append(format);
 		return sb.toString();
-	}
-
-	static String realm(Region region) {
-		if (region.getId().equals(GlobalVariables.codeAran)) {
-			return "Aran";
-		} else {
-			return "Euregio";
-		}
 	}
 }
