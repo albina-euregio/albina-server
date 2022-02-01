@@ -114,7 +114,7 @@ public class StatisticsController {
 
 	/**
 	 * Return a CSV string with all bulletin information from {@code startDate}
-	 * until {@code endDate} in {@code lang} for whole EUREGIO.
+	 * until {@code endDate} in {@code lang} for {@code regions}.
 	 *
 	 * @param startDate
 	 *            the start date of the desired time period
@@ -122,6 +122,8 @@ public class StatisticsController {
 	 *            the end date of the desired time period
 	 * @param lang
 	 *            the desired language
+	 * @param regions
+	 * 			  the desired regions
 	 * @param extended
 	 *            add textcat ids, matrix information and author if {@code true}
 	 * @param duplicateBulletinForenoon
@@ -130,11 +132,11 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, boolean extended,
+	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, List<Region> regions, boolean extended,
 			boolean duplicateBulletinForenoon) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
+			for (Region region : regions) {
 				// get latest reports
 				Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
 						endDate, region);
