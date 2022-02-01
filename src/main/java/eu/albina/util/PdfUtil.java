@@ -26,7 +26,6 @@ import java.util.Set;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.ServerInstanceController;
-import eu.albina.map.DaytimeDependency;
 import eu.albina.map.MapUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +68,7 @@ import eu.albina.model.AvalancheSituation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
+import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class PdfUtil {

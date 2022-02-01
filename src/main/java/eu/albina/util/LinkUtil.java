@@ -2,11 +2,11 @@ package eu.albina.util;
 
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
-import eu.albina.map.DaytimeDependency;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerPattern;
+import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 
 import java.nio.file.Paths;

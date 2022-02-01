@@ -1,4 +1,4 @@
-package eu.albina.map;
+package eu.albina.model.enumerations;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
