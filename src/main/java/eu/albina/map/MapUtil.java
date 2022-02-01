@@ -161,8 +161,6 @@ public interface MapUtil {
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
 		bindings.put("scalebar",  MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
-		// TODO use generic name for image file
-		bindings.put("euregio_image_file", MapUtil.logo(region, mapLevel, grayscale));
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
 
@@ -209,16 +207,6 @@ public interface MapUtil {
 
 		if (!preview) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
-		}
-	}
-
-	static String logo(Region region, MapLevel mapLevel, boolean grayscale) {
-		if (!MapLevel.standard.equals(mapLevel)) {
-			return "";
-		} else {
-			return grayscale
-				? region.getMapLogoBwPath()
-				: region.getMapLogoColorPath();
 		}
 	}
 

@@ -901,6 +901,11 @@ begin place_euregio_logo
 
 	worlds px1, py1, px2, py2
 	clearpath
+	if colormode eq "bw" then
+	    let euregio_image_file = geodata_dir . "logo_bw.png"
+    else
+	    let euregio_image_file = geodata_dir . "logo.png"
+    endif
 	if region eq "EUREGIO" then
 	    move mx2 - (euregio_image_size / 2) - 2, my1 + 19.0
     elif region eq "ES-CT-L" then

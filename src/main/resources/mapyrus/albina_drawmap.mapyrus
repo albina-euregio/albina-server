@@ -151,8 +151,10 @@ if copyright eq "on" then
 endif
 
 # Logo bei Karten
-if euregio_image_file ne "" then
-	place_euregio_logo
+if map_level eq "standard" then
+    if region eq "EUREGIO" or region eq "ES-CT-L" then
+        place_euregio_logo
+    endif
 endif
 
 # Rahmen

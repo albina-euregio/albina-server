@@ -211,22 +211,6 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "GEO_DATA_DIRECTORY")
 	private String geoDataDirectory;
 
-	// EUREGIO images/logo/color/euregio_map.png
-	// ES-CT-L images/logo/color/lauegi_map.png
-	// AT-07 images/logo/color/euregio_map.png
-	// IT-32-BZ images/logo/color/euregio_map.png
-	// IT-32-TN images/logo/color/euregio_map.png
-	@Column(name = "MAP_LOGO_COLOR_PATH")
-	private String mapLogoColorPath;
-
-	// EUREGIO images/logo/grey/euregio_map.png
-	// ES-CT-L images/logo/grey/lauegi_map.png
-	// AT-07 images/logo/grey/euregio_map.png
-	// IT-32-BZ images/logo/grey/euregio_map.png
-	// IT-32-TN images/logo/grey/euregio_map.png
-	@Column(name = "MAP_LOGO_BW_PATH")
-	private String mapLogoBwPath;
-
 	// ARAN: images/logo/color/colorbar.Aran.gif
 	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/color/colorbar.gif
 	@Column(name = "IMAGE_COLORBAR_COLOR_PATH")
@@ -323,10 +307,6 @@ public class Region implements AvalancheInformationObject {
 			this.simpleHtmlTemplateName = json.getString("simpleHtmlTemplateName");
 		if (json.has("geoDataDirectory") && !json.isNull("geoDataDirectory"))
 			this.geoDataDirectory = json.getString("geoDataDirectory");
-		if (json.has("mapLogoColorPath") && !json.isNull("mapLogoColorPath"))
-			this.mapLogoColorPath = json.getString("mapLogoColorPath");
-		if (json.has("mapLogoBwPath") && !json.isNull("mapLogoBwPath"))
-			this.mapLogoBwPath = json.getString("mapLogoBwPath");
 		if (json.has("imageColorbarColorPath") && !json.isNull("imageColorbarColorPath"))
 			this.imageColorbarColorPath = json.getString("imageColorbarColorPath");
 		if (json.has("imageColorbarBwPath") && !json.isNull("imageColorbarBwPath"))
@@ -597,22 +577,6 @@ public class Region implements AvalancheInformationObject {
 		this.geoDataDirectory = geoDataDirectory;
 	}
 
-	public String getMapLogoColorPath() {
-		return mapLogoColorPath;
-	}
-
-	public void setMapLogoColorPath(String mapLogoColorPath) {
-		this.mapLogoColorPath = mapLogoColorPath;
-	}
-
-	public String getMapLogoBwPath() {
-		return mapLogoBwPath;
-	}
-
-	public void setMapLogoBwPath(String mapLogoBwPath) {
-		this.mapLogoBwPath = mapLogoBwPath;
-	}
-
 	public String getImageColorbarColorPath() {
 		return imageColorbarColorPath;
 	}
@@ -692,8 +656,6 @@ public class Region implements AvalancheInformationObject {
 		json.put("mapYmin", getMapXmin());
 		json.put("simpleHtmlTemplateName", getSimpleHtmlTemplateName());
 		json.put("geoDataDirectory", getGeoDataDirectory());
-		json.put("mapLogoColorPath", getMapLogoColorPath());
-		json.put("mapLogoBwPath", getMapLogoBwPath());
 		json.put("imageColorbarColorPath", getImageColorbarColorPath());
 		json.put("imageColorbarBwPath", getImageColorbarBwPath());
 
