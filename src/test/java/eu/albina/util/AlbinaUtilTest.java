@@ -73,6 +73,7 @@ public class AlbinaUtilTest {
 	private List<AvalancheBulletin> bulletinsAmPm;
 
 	private Region regionTirol;
+	private Region regionEuregio;
 
 	private final String imgBaseUrl = "D:/norbert/vs_workspace/albina-server/src/test/resources/images/";
 	@SuppressWarnings("unused")
@@ -87,6 +88,8 @@ public class AlbinaUtilTest {
 
 		regionTirol = new Region();
 		regionTirol.setId("AT-07");
+		regionEuregio = new Region();
+		regionEuregio.setId("EUREGIO");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -199,11 +202,11 @@ public class AlbinaUtilTest {
 		assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
 		assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
 		assertEquals("Lawinen.report für Donnerstag  17.01.2019: https://lawinen.report/bulletin/2019-01-17",
-			SocialMediaUtil.getSocialMediaText(bulletins, false, LanguageCode.de));
+			SocialMediaUtil.getSocialMediaText(bulletins, regionEuregio, false, LanguageCode.de));
 		assertEquals("UPDATE zum Lawinen.report für Donnerstag  17.01.2019: https://lawinen.report/bulletin/2019-01-17",
-			SocialMediaUtil.getSocialMediaText(bulletins, true, LanguageCode.de));
+			SocialMediaUtil.getSocialMediaText(bulletins, regionEuregio, true, LanguageCode.de));
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
-			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de));
+			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de, regionEuregio));
 		assertEquals("https://lawinen.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
 			LinkUtil.getPdfLink(bulletins, LanguageCode.de, regionTirol));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),

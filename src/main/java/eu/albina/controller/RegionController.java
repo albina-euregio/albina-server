@@ -31,6 +31,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
 import eu.albina.model.ServerInstance;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.websocket.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
@@ -224,4 +225,12 @@ public class RegionController {
 		}
 		return result;
 	}
+
+    // TODO use region names from eaws-region repository
+    public String getRegionName(LanguageCode lang, String regionId) {
+    	if ("".equals(regionId)) {
+    		return "";
+    	}
+    	return lang.getBundle("i18n.Regions").getString(regionId);
+    }
 }

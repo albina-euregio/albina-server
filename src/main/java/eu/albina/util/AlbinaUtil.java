@@ -65,14 +65,6 @@ public class AlbinaUtil {
 
 	public static final String greyDarkColor = "#565F61";
 
-	// TODO use region names from eaws-region repository
-	public static String getRegionName(LanguageCode lang, String regionId) {
-		if ("".equals(regionId)) {
-			return "";
-		}
-		return lang.getBundle("i18n.Regions").getString(regionId);
-	}
-
 	public static ZoneId localZone() {
 		return ZoneId.of("Europe/Vienna");
 	}
@@ -214,13 +206,13 @@ public class AlbinaUtil {
 		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
 	}
 
-	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, Period offset) {
-		if (region != null && !region.isEmpty())
-			return LinkUtil.getSimpleHtmlUrl(lang) + "/"
-					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region + "_" + lang.toString()
+	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, Period offset) {
+		if (region != null && !region.getId().isEmpty())
+			return LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
+					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region.getId() + "_" + lang.toString()
 					+ ".html";
 		else
-			return LinkUtil.getSimpleHtmlUrl(lang) + "/"
+			return LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + lang.toString() + ".html";
 	}
 

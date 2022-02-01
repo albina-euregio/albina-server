@@ -19,6 +19,7 @@ package eu.albina.controller;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,15 +28,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import com.github.openjson.JSONArray;
 
@@ -287,13 +285,13 @@ public class AvalancheBulletinController {
 
 	/**
 	 * Returns a XML (CAAML) string of all bulletins with status {@code published}
-	 * for a given {@code date} and {@code regions} in a given {@code language}
+	 * for a given {@code date} and {@code region} in a given {@code language}
 	 * (ordered by danger rating).
 	 *
 	 * @param date
 	 *            the date the bulletins should be valid from
-	 * @param regions
-	 *            the regions of the bulletins
+	 * @param region
+	 *            the region of the bulletins
 	 * @param language
 	 *            the language in which the texts of the bulletins should be added
 	 *            to the XML (CAAML) string
@@ -308,75 +306,13 @@ public class AvalancheBulletinController {
 	 * @throws ParserConfigurationException
 	 *             if the XML document can not be initialized
 	 */
-	public String getPublishedBulletinsCaaml(Instant date, List<Region> regions, LanguageCode language,
+	public String getPublishedBulletinsCaaml(Instant date, Region region, LanguageCode language,
 			CaamlVersion version) throws TransformerException, AlbinaException, ParserConfigurationException {
 		ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
-				regions);
+				Arrays.asList(region));
 
-		Document caamlDoc = XmlUtil.createCaaml(result, regions, language, version);
+		Document caamlDoc = XmlUtil.createCaaml(result, region, language, version);
 		return XmlUtil.convertDocToString(caamlDoc);
-	}
-
-	/**
-	 * Returns a XML (CAAML) string of the most recent bulletins for a given time
-	 * period and {@code regions} in a given {@code language} (also if the bulletins
-	 * are not in status {@code published}). This method is only for internal use.
-	 * Currently TN and BZ need it for the AINEVA forecast.
-	 *
-	 * @param startDate
-	 *            the start date the bulletins should be valid from
-	 * @param endDate
-	 *            the end date the bulletins should be valid until
-	 * @param regions
-	 *            the regions of the bulletins
-	 * @param language
-	 *            the language in which the texts of the bulletins should be added
-	 *            to the XML (CAAML) string
-	 * @return the XML (CAAML) string of the most recent bulletins for the given
-	 *         time period and regions in the given language
-	 * @throws TransformerException
-	 *             if the transformation of the bulletins in XML fails
-	 * @throws ParserConfigurationException
-	 *             if the XML document can not be initialized
-	 */
-	public String getAinevaBulletinsCaaml(Instant startDate, Instant endDate, List<Region> regions,
-			LanguageCode language) throws TransformerException, ParserConfigurationException {
-		List<AvalancheBulletin> bulletins = getBulletins(startDate, endDate, regions);
-
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder;
-		docBuilder = docFactory.newDocumentBuilder();
-
-		Document doc = docBuilder.newDocument();
-		Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
-
-		if (bulletins != null && !bulletins.isEmpty()) {
-			Element observations = doc.createElement("observations");
-			for (AvalancheBulletin bulletin : bulletins) {
-				Set<String> tmpRegions = new HashSet<String>();
-				for (Region desiredRegion : regions) {
-					for (String region : bulletin.getSavedRegions()) {
-						if (region.startsWith(desiredRegion.getId()))
-							tmpRegions.add(region);
-					}
-					for (String region : bulletin.getPublishedRegions()) {
-						if (region.startsWith(desiredRegion.getId()))
-							tmpRegions.add(region);
-					}
-				}
-				if (!tmpRegions.isEmpty()) {
-					bulletin.setPublishedRegions(tmpRegions);
-					for (Element element : bulletin.toCAAMLv5(doc, language, regions)) {
-						observations.appendChild(element);
-					}
-				}
-			}
-			rootElement.appendChild(observations);
-		}
-
-		doc.appendChild(rootElement);
-
-		return XmlUtil.convertDocToString(doc);
 	}
 
 	/**

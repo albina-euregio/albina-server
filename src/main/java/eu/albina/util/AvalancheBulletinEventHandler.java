@@ -54,7 +54,6 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 	private final LanguageCode lang;
 	private final boolean grayscale;
 	private final boolean preview;
-	private final boolean isAran;
 
 	public AvalancheBulletinEventHandler(LanguageCode lang, Region region, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
 		this.lang = lang;
@@ -62,8 +61,6 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 		this.bulletins = bulletins;
 		this.grayscale = grayscale;
 		this.preview = preview;
-		// TODO remove
-		this.isAran = GlobalVariables.codeAran.equals(region.getId());
 	}
 
 	@Override
@@ -129,11 +126,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add CI
 			Image ciImg;
 			if (grayscale)
-				ciImg = PdfUtil.getInstance().getImage("images/logo/grey/colorbar.gif");
-			else if (isAran)
-				ciImg = PdfUtil.getInstance().getImage("images/logo/color/colorbar.Aran.gif");
+				ciImg = PdfUtil.getInstance().getImage(region.getImageColorbarBwPath());
 			else
-				ciImg = PdfUtil.getInstance().getImage("images/logo/color/colorbar.gif");
+				ciImg = PdfUtil.getInstance().getImage(region.getImageColorbarColorPath());
 			ciImg.scaleAbsolute(pageSize.getWidth(), 4);
 			ciImg.setFixedPosition(0, pageSize.getHeight() - 4);
 			canvas.add(ciImg);
@@ -141,21 +136,19 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add logo
 			Image logoImg;
 			if (grayscale)
-				logoImg = PdfUtil.getInstance().getImage("images/" + lang.getBundleString("avalanche-report.logo.path.bw"));
-			else if (isAran)
-				logoImg = PdfUtil.getInstance().getImage("images/logo/color/lauegi.png");
+				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("avalanche-report.logo.path.bw", region));
 			else
-				logoImg = PdfUtil.getInstance().getImage("images/" + lang.getBundleString("avalanche-report.logo.path"));
+				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("avalanche-report.logo.path", region));
 			logoImg.scaleToFit(130, 55);
 			logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
 			canvas.add(logoImg);
 
-			// Add EUREGIO logo
-			if (!isAran) {
-				Image euregioImg = PdfUtil.getInstance().getImage("images/" + GlobalVariables.getEuregioLogoPath(grayscale));
-				euregioImg.scaleToFit(120, 40);
-				euregioImg.setFixedPosition(15, 5);
-				canvas.add(euregioImg);
+			// Add secondary logo
+			if (!region.isPdfFooterLogo()) {
+				Image footerImg = PdfUtil.getInstance().getImage(grayscale ? region.getPdfFooterLogoBwPath() : region.getPdfFooterLogoColorPath());
+				footerImg.scaleToFit(120, 40);
+				footerImg.setFixedPosition(15, 5);
+				canvas.add(footerImg);
 			}
 
 			// Add page number

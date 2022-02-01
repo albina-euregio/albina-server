@@ -32,15 +32,15 @@ interface SocialMediaUtil {
 	}
 
 	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode lang, boolean test) {
-		String message = getSocialMediaText(bulletins, update, lang);
+		String message = getSocialMediaText(bulletins, region, update, lang);
 		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(region, lang, bulletins);
-		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
+		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, region);
 		sendBulletinNewsletter(message, lang, region, attachmentUrl, bulletinUrl, test);
 	}
 
-	static String getSocialMediaText(List<AvalancheBulletin> bulletins, boolean update, LanguageCode lang) {
+	static String getSocialMediaText(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode lang) {
 		String dateString = AlbinaUtil.getDate(bulletins, lang);
-		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
+		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, region);
 		if (update) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
 				lang.getBundleString("avalanche-report.name"), dateString, bulletinUrl);

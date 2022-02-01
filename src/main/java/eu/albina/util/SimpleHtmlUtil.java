@@ -40,6 +40,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -204,19 +205,19 @@ public class SimpleHtmlUtil {
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", lang.getBundleString("avalanche-report.url") + "/bulletin/"
 				+ AlbinaUtil.getValidityDateString(bulletins));
-		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region.getId(), Period.ofDays(-1)));
-		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region.getId(), Period.ofDays(1)));
-		link.put("linkDe", LinkUtil.getSimpleHtmlUrl(lang) + "/"
+		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1)));
+		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1)));
+		link.put("linkDe", LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_de.html");
-		link.put("linkIt", LinkUtil.getSimpleHtmlUrl(lang) + "/"
+		link.put("linkIt", LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_it.html");
-		link.put("linkEn", LinkUtil.getSimpleHtmlUrl(lang) + "/"
+		link.put("linkEn", LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_en.html");
-		link.put("linkEs", LinkUtil.getSimpleHtmlUrl(lang) + "/"
+		link.put("linkEs", LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_es.html");
-		link.put("linkCa", LinkUtil.getSimpleHtmlUrl(lang) + "/"
+		link.put("linkCa", LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_ca.html");
-		link.put("linkAr", LinkUtil.getSimpleHtmlUrl(lang) + "/"
+		link.put("linkAr", LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
 				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_ar.html");
 
 		root.put("link", link);
@@ -229,21 +230,21 @@ public class SimpleHtmlUtil {
 
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
-					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang, region) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
-					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang, region) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.webp");
 					bulletin.put("widthPM", "width=\"150\"");
 					bulletin.put("heightPMSmall", "height=\"50\"");
 					bulletin.put("fontSize", "");
 				} else {
-					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
 					bulletin.put("mapPMjpg", ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl() + "empty.png");
 					bulletin.put("mapPMwebp", ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl() + "empty.webp");
@@ -254,7 +255,7 @@ public class SimpleHtmlUtil {
 
 				StringBuilder sb = new StringBuilder();
 				for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
-					sb.append(AlbinaUtil.getRegionName(lang, publishedRegion));
+					sb.append(RegionController.getInstance().getRegionName(lang, publishedRegion));
 					sb.append(", ");
 				}
 				sb.delete(sb.length() - 2, sb.length());

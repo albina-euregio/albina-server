@@ -51,7 +51,7 @@ public class XmlUtilTest {
 	private String createCaaml(CaamlVersion version) throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		final Document doc = XmlUtil.createCaaml(bulletins, Arrays.asList(regionEuregio), LanguageCode.en, version);
+		final Document doc = XmlUtil.createCaaml(bulletins, regionEuregio, LanguageCode.en, version);
 		return XmlUtil.convertDocToString(doc);
 	}
 
@@ -104,7 +104,7 @@ public class XmlUtilTest {
 				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UTC")).toInstant(), RegionController.getInstance().getPublishBulletinRegions());
 		for (LanguageCode language : Arrays.asList(LanguageCode.de, LanguageCode.en, LanguageCode.it)) {
 			Path path = Paths.get("/tmp/albina_files" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
-			Document caamlDoc = XmlUtil.createCaaml(result, Arrays.asList(regionEuregio), language, CaamlVersion.V6);
+			Document caamlDoc = XmlUtil.createCaaml(result, regionEuregio, language, CaamlVersion.V6);
 			String caaml = XmlUtil.convertDocToString(caamlDoc);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.write(path, caaml.getBytes(StandardCharsets.UTF_8));

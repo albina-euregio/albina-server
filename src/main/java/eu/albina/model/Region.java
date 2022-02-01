@@ -147,6 +147,21 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "PDF_MAP_HEIGHT")
 	private int pdfMapHeight;
 
+	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: true
+	// ARAN: false
+	@Column(name = "PDF_FOOTER_LOGO")
+	private boolean pdfFooterLogo;
+
+	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/color/euregio.png
+	// ARAN: -
+	@Column(name = "PDF_FOOTER_LOGO_COLOR_PATH")
+	private String pdfFooterLogoColorPath;
+
+	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/grey/euregio.png
+	// ARAN: -
+	@Column(name = "PDF_FOOTER_LOGO_BW_PATH")
+	private String pdfFooterLogoBwPath;
+
 	// EUREGIO 1464000
 	// ES-CT-L 120500
 	// AT-07 1452000
@@ -201,16 +216,25 @@ public class Region implements AvalancheInformationObject {
 	// AT-07 images/logo/color/euregio_map.png
 	// IT-32-BZ images/logo/color/euregio_map.png
 	// IT-32-TN images/logo/color/euregio_map.png
-	@Column(name = "LOGO_COLOR_PATH")
-	private String logoColorPath;
+	@Column(name = "MAP_LOGO_COLOR_PATH")
+	private String mapLogoColorPath;
 
 	// EUREGIO images/logo/grey/euregio_map.png
 	// ES-CT-L images/logo/grey/lauegi_map.png
 	// AT-07 images/logo/grey/euregio_map.png
 	// IT-32-BZ images/logo/grey/euregio_map.png
 	// IT-32-TN images/logo/grey/euregio_map.png
-	@Column(name = "LOGO_BW_PATH")
-	private String logoBwPath;
+	@Column(name = "MAP_LOGO_BW_PATH")
+	private String mapLogoBwPath;
+
+	// ARAN: images/logo/color/colorbar.Aran.gif
+	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/color/colorbar.gif
+	@Column(name = "IMAGE_COLORBAR_COLOR_PATH")
+	private String imageColorbarColorPath;
+
+	// ARAN, EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/grey/colorbar.gif
+	@Column(name = "IMAGE_COLORBAR_BW_PATH")
+	private String imageColorbarBwPath;
 
 	/**
 	 * Default constructor. Initializes all collections of the region.
@@ -281,6 +305,12 @@ public class Region implements AvalancheInformationObject {
 			this.pdfMapWidthFd = json.getInt("pdfMapWidthFd");
 		if (json.has("pdfMapHeight") && !json.isNull("pdfMapHeight"))
 			this.pdfMapHeight = json.getInt("pdfMapHeight");
+		if (json.has("pdfFooterLogo") && !json.isNull("pdfFooterLogo"))
+			this.pdfFooterLogo = json.getBoolean("pdfFooterLogo");
+		if (json.has("pdfFooterLogoColorPath") && !json.isNull("pdfFooterLogoColorPath"))
+			this.pdfFooterLogoColorPath = json.getString("pdfFooterLogoColorPath");
+		if (json.has("pdfFooterLogoBwPath") && !json.isNull("pdfFooterLogoBwPath"))
+			this.pdfFooterLogoBwPath = json.getString("pdfFooterLogoBwPath");
 		if (json.has("mapXmax") && !json.isNull("mapXmax"))
 			this.mapXmax = json.getInt("mapXmax");
 		if (json.has("mapXmin") && !json.isNull("mapXmin"))
@@ -293,10 +323,14 @@ public class Region implements AvalancheInformationObject {
 			this.simpleHtmlTemplateName = json.getString("simpleHtmlTemplateName");
 		if (json.has("geoDataDirectory") && !json.isNull("geoDataDirectory"))
 			this.geoDataDirectory = json.getString("geoDataDirectory");
-		if (json.has("logoColorPath") && !json.isNull("logoColorPath"))
-			this.logoColorPath = json.getString("logoColorPath");
-		if (json.has("logoBwPath") && !json.isNull("logoBwPath"))
-			this.logoBwPath = json.getString("logoBwPath");
+		if (json.has("mapLogoColorPath") && !json.isNull("mapLogoColorPath"))
+			this.mapLogoColorPath = json.getString("mapLogoColorPath");
+		if (json.has("mapLogoBwPath") && !json.isNull("mapLogoBwPath"))
+			this.mapLogoBwPath = json.getString("mapLogoBwPath");
+		if (json.has("imageColorbarColorPath") && !json.isNull("imageColorbarColorPath"))
+			this.imageColorbarColorPath = json.getString("imageColorbarColorPath");
+		if (json.has("imageColorbarBwPath") && !json.isNull("imageColorbarBwPath"))
+			this.imageColorbarBwPath = json.getString("imageColorbarBwPath");
 	}
 
 	public String getId() {
@@ -491,6 +525,30 @@ public class Region implements AvalancheInformationObject {
 		this.pdfMapHeight = pdfMapHeight;
 	}
 
+	public boolean isPdfFooterLogo() {
+		return pdfFooterLogo;
+	}
+
+	public void setPdfFooterLogo(boolean pdfFooterLogo) {
+		this.pdfFooterLogo = pdfFooterLogo;
+	}
+
+	public String getPdfFooterLogoColorPath() {
+		return pdfFooterLogoColorPath;
+	}
+
+	public void setPdfFooterLogoColorPath(String pdfFooterLogoColorPath) {
+		this.pdfFooterLogoColorPath = pdfFooterLogoColorPath;
+	}
+
+	public String getPdfFooterLogoBwPath() {
+		return pdfFooterLogoBwPath;
+	}
+
+	public void setPdfFooterLogoBwPath(String pdfFooterLogoBwPath) {
+		this.pdfFooterLogoBwPath = pdfFooterLogoBwPath;
+	}
+
 	public int getMapXmax() {
 		return mapXmax;
 	}
@@ -539,20 +597,36 @@ public class Region implements AvalancheInformationObject {
 		this.geoDataDirectory = geoDataDirectory;
 	}
 
-	public String getLogoColorPath() {
-		return logoColorPath;
+	public String getMapLogoColorPath() {
+		return mapLogoColorPath;
 	}
 
-	public void setLogoColorPath(String logoColorPath) {
-		this.logoColorPath = logoColorPath;
+	public void setMapLogoColorPath(String mapLogoColorPath) {
+		this.mapLogoColorPath = mapLogoColorPath;
 	}
 
-	public String getLogoBwPath() {
-		return logoBwPath;
+	public String getMapLogoBwPath() {
+		return mapLogoBwPath;
 	}
 
-	public void setLogoBwPath(String logoBwPath) {
-		this.logoBwPath = logoBwPath;
+	public void setMapLogoBwPath(String mapLogoBwPath) {
+		this.mapLogoBwPath = mapLogoBwPath;
+	}
+
+	public String getImageColorbarColorPath() {
+		return imageColorbarColorPath;
+	}
+
+	public void setImageColorbarColorPath(String imageColorbarColorPath) {
+		this.imageColorbarColorPath = imageColorbarColorPath;
+	}
+
+	public String getImageColorbarBwPath() {
+		return imageColorbarBwPath;
+	}
+
+	public void setImageColorbarBwPath(String imageColorbarBwPath) {
+		this.imageColorbarBwPath = imageColorbarBwPath;
 	}
 
 	public Element toCAAML(Document doc) {
@@ -609,14 +683,19 @@ public class Region implements AvalancheInformationObject {
 		json.put("pdfMapWidthAmPm", getPdfMapWidthAmPm());
 		json.put("pdfMapWidthFd", getPdfMapWidthFd());
 		json.put("pdfMapHeight", getPdfMapHeight());
+		json.put("pdfFooterLogo", isPdfFooterLogo());
+		json.put("pdfFooterLogoColorPath", getPdfFooterLogoColorPath());
+		json.put("pdfFooterLogoBwPath", getPdfFooterLogoBwPath());
 		json.put("mapXmax", getMapXmax());
 		json.put("mapXmin", getMapXmin());
 		json.put("mapYmax", getMapXmax());
 		json.put("mapYmin", getMapXmin());
 		json.put("simpleHtmlTemplateName", getSimpleHtmlTemplateName());
 		json.put("geoDataDirectory", getGeoDataDirectory());
-		json.put("logoColorPath", getLogoColorPath());
-		json.put("logoBwPath", getLogoBwPath());
+		json.put("mapLogoColorPath", getMapLogoColorPath());
+		json.put("mapLogoBwPath", getMapLogoBwPath());
+		json.put("imageColorbarColorPath", getImageColorbarColorPath());
+		json.put("imageColorbarBwPath", getImageColorbarBwPath());
 
 		return json;
 	}

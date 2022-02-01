@@ -166,7 +166,7 @@ public class StaticWidgetUtil {
 			AttributedString asThirdLine;
 			AttributedString asFourthLine;
 
-			logo = loadImageFromPath(GlobalVariables.getAvalancheReportLogoPath(lang));
+			logo = loadImageFromPath(lang.getBundleString("avalanche-report.logo.path", region));
 	
 			firstLine = MessageFormat.format(staticWidgetBundle.getString("line.1"), date);
 			int dateIndex = firstLine.indexOf(date);

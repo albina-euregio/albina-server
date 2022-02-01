@@ -36,26 +36,14 @@ public class GlobalVariables {
 
 	public static String version;
 
-	static String serverWebsiteUrl = "";
-
 	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
-
-	@Deprecated
-	public final static String codeTrentino = "IT-32-TN";
-	@Deprecated
-	public final static String codeSouthTyrol = "IT-32-BZ";
-	@Deprecated
-	public final static String codeTyrol = "AT-07";
-	@Deprecated
-	public final static String codeEuregio = "EUREGIO";
-	@Deprecated
-	public final static String codeAran = "ES-CT-L";
-
 	public static String propertiesFilePath = "META-INF/config.properties";
+
+	// TODO use schema from caaml.org
 	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
+
 	public static String csvDeliminator = ";";
 	public static String csvLineBreak = "\n";
-
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 
 	public static final String tokenEncodingIssuer = "albina";
@@ -119,26 +107,6 @@ public class GlobalVariables {
 		return ret;
 	}
 
-	public static String getEuregioLogoPath(boolean grayscale) {
-		if (grayscale)
-			return "logo/grey/euregio.png";
-		else
-			return "logo/color/euregio.png";
-	}
-
-	public static String getAvalancheReportLogoPath(LanguageCode lang) {
-		switch (lang) {
-			case de:
-				return "images/logo/color/lawinen_report.png";
-			case it:
-				return "images/logo/color/valanghe_report.png";
-			case en:
-				return "images/logo/color/avalanche_report.png";
-			default:
-				return "images/logo/color/avalanche_report.png";
-		}
-	}
-
 	public static String getCopyrightText(LanguageCode lang) {
 		// return AlbinaUtil.getYear(bulletins) + lang.getBundleString("copyright");
 		return "";
@@ -155,8 +123,6 @@ public class GlobalVariables {
 			config = configs.properties(propertiesFilePath);
 			if (config.containsKey("gitVersion"))
 				version = config.getString("gitVersion");
-			if (config.containsKey("serverWebsiteUrl"))
-				serverWebsiteUrl = config.getString("serverWebsiteUrl");
 			logger.info("Configuration file loaded!");
 		} catch (ConfigurationException e) {
 			logger.error("Configuration file could not be loaded!", e);

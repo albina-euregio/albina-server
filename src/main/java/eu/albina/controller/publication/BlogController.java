@@ -285,7 +285,7 @@ public class BlogController {
 
 	private String getBlogUrl(Blogger.Item item, Region region, LanguageCode lang) {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
-		return LinkUtil.getAvalancheReportFullBlogUrl(lang) + config.getBlogUrl() + "/" + item.id;
+		return LinkUtil.getAvalancheReportFullBlogUrl(lang, region) + config.getBlogUrl() + "/" + item.id;
 	}
 
 	private String getAttachmentUrl(Blogger.Item item) {

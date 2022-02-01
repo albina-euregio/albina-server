@@ -69,7 +69,6 @@ public class SimpleHtmlUtilTest {
 	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
 		final String serverImagesUrl = ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl();
 		try {
-			GlobalVariables.serverWebsiteUrl = "https://www.lauegi.report/";
 			URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 			String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, regionAran);
@@ -77,7 +76,6 @@ public class SimpleHtmlUtilTest {
 			Assert.assertEquals(expected.trim(), htmlString.trim());
 		} finally {
 			ServerInstanceController.getInstance().getLocalServerInstance().setServerImagesUrl(serverImagesUrl);
-			GlobalVariables.serverWebsiteUrl = "";
 		}
 	}
 }

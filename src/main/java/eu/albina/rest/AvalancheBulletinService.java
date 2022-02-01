@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -127,21 +126,21 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getPublishedXMLBulletins(
 			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language,
+			@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language,
 			@QueryParam("version") CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 
-		List<Region> regions = new ArrayList<Region>();
-		if (regionIds.isEmpty()) {
-			regions = RegionController.getInstance().getPublishBulletinRegions();
-		} else {
-			regions = regionIds.stream().map(regionId -> RegionController.getInstance().getRegion(regionId)).collect(Collectors.toList());
+		if (regionId == null || regionId.isEmpty()) {
+			logger.warn("No region defined.");
+			return Response.noContent().build();
 		}
 
+		Region region = RegionController.getInstance().getRegion(regionId);
+
 		try {
-			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, regions,
+			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, region,
 					language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
 				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
@@ -155,42 +154,6 @@ public class AvalancheBulletinService {
 				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
 			} catch (Exception ex) {
 				return Response.status(400).type(MediaType.APPLICATION_XML).build();
-			}
-		} catch (TransformerException | ParserConfigurationException e) {
-			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_XML).build();
-		}
-	}
-
-	@GET
-	@Path("/aineva")
-	@Secured({ Role.ADMIN, Role.FORECASTER })
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_XML)
-	public Response getInternalXMLBulletins(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language) {
-		logger.debug("GET published XML bulletins");
-
-		Instant startDate = DateControllerUtil.parseDateOrToday(date);
-		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
-
-		if (regionIds.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
-		List<Region> regions = new ArrayList<Region>();
-		regionIds.stream().forEach(regionId -> regions.add(RegionController.getInstance().getRegion(regionId)));
-
-		try {
-			String caaml = AvalancheBulletinController.getInstance().getAinevaBulletinsCaaml(startDate, endDate,
-					regions, language);
-			if (caaml != null) {
-				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
-			} else {
-				logger.debug("No bulletins found.");
-				return Response.noContent().build();
 			}
 		} catch (TransformerException | ParserConfigurationException e) {
 			logger.warn("Error loading bulletins", e);
