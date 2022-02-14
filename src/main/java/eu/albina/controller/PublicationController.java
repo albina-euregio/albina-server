@@ -515,7 +515,7 @@ public class PublicationController {
 					logger.info("Simple HTML production started");
 					for (String region : GlobalVariables.getPublishRegions(true))
 						SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
-				} catch (IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					logger.error("Error creating simple HTML", e);
 				} finally {
 					logger.info("Simple HTML production finished");
@@ -547,7 +547,7 @@ public class PublicationController {
 					logger.info("Static widget production started");
 					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins, validityDateString,
 							publicationTimeString);
-				} catch (IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					logger.error("Error creating static widgets", e);
 				} finally {
 					logger.info("Static widget production finished");
@@ -569,7 +569,7 @@ public class PublicationController {
 				try {
 					logger.info("Email production started");
 					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, test);
-				} catch (IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					logger.error("Error preparing emails", e);
 				} finally {
 					logger.info("Email production finished");
@@ -591,7 +591,7 @@ public class PublicationController {
 				try {
 					logger.info("Email production started");
 					EmailUtil.getInstance().sendBulletinEmails(bulletins, regions, update, test, language);
-				} catch (IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					logger.error("Error preparing emails", e);
 				} finally {
 					logger.info("Email production finished");
@@ -610,7 +610,7 @@ public class PublicationController {
 						TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update, test);
 					else
 						TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, update, language, test);
-				} catch (IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					logger.error("Error preparing telegram channel", e);
 				} finally {
 					logger.info("Telegram channel finished");
