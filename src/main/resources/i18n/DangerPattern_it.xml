@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="dp1">st.1: la seconda nevicata</entry>
+  <entry key="dp1">st.1: strato debole persistente basale</entry>
   <entry key="dp2">st.2: valanga per scivolamento di neve</entry>
   <entry key="dp3">st.3: pioggia</entry>
   <entry key="dp4">st.4: freddo su caldo / caldo su freddo</entry>
