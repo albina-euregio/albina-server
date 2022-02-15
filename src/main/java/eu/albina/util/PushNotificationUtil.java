@@ -39,6 +39,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Variant;
 
 public class PushNotificationUtil implements SocialMediaUtil {
 
@@ -87,10 +88,9 @@ public class PushNotificationUtil implements SocialMediaUtil {
 			final URI endpointURI = URI.create(subscription1.getEndpoint());
 			final Invocation.Builder builder = client.target(endpointURI).request();
 			builder.header("Content-Type", "application/octet-stream");
-			builder.header("Content-Encoding", "aes128gcm");
 			builder.header("TTL", "180");
 			builder.header("Authorization", new PushController(serverKeys).getAuthorization(endpointURI));
-			final Response response = builder.post(Entity.entity(encrypted, MediaType.APPLICATION_OCTET_STREAM));
+			final Response response = builder.post(Entity.entity(encrypted, new Variant(MediaType.APPLICATION_OCTET_STREAM_TYPE, (String) null, "aes128gcm")));
 			logger.debug("Received response on POST: {}", response.getStatusInfo());
 			if (response.getStatusInfo().getStatusCode() != 200 && response.getStatusInfo().getStatusCode() != 201) {
 				throw new AlbinaException(response.getStatusInfo().toString());
