@@ -93,7 +93,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 			final Response response = builder.post(Entity.entity(encrypted, new Variant(MediaType.APPLICATION_OCTET_STREAM_TYPE, (String) null, "aes128gcm")));
 			logger.debug("Received response on POST: {}", response.getStatusInfo());
 			if (response.getStatusInfo().getStatusCode() != 200 && response.getStatusInfo().getStatusCode() != 201) {
-				throw new AlbinaException(response.getStatusInfo().toString());
+				throw new AlbinaException(response.getStatusInfo() + " " + response.readEntity(String.class));
 			}
 			logger.debug("Successfully sent push notification to {}", subscription.getEndpoint());
 		} catch (Exception e) {
