@@ -24,7 +24,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
