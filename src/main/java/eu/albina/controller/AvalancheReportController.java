@@ -969,10 +969,26 @@ public class AvalancheReportController {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setMediaFileFlag(Instant date, String region) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport report = this.getInternalReport(date, region);
-			report.setMediaFileUploaded(true);
+			AvalancheReport result = null;
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+
+			if (!Strings.isNullOrEmpty(region)) {
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+						.setParameter("region", region).getResultList();
+			}
+
+			// select most recent report
+			for (AvalancheReport avalancheReport : reports)
+				if (result == null)
+					result = avalancheReport;
+				else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
+					result = avalancheReport;
+
+			result.setMediaFileUploaded(true);
+			entityManager.persist(result);
 			entityManager.flush();
 			return null;
 		});
