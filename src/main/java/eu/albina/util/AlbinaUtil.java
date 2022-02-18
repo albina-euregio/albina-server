@@ -28,6 +28,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -51,6 +52,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.Region;
+import eu.albina.model.User;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
@@ -567,6 +569,11 @@ public class AlbinaUtil {
 			aspectString.add(aspect.toString(locale));
 		}
 		return aspectString.toString();
+    }
+
+    public static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {
+		String stringDate = OffsetDateTime.parse(date).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return stringDate + "_" + language.getBundleString("avalanche-report.filename") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
     }
 
 }

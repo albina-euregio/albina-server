@@ -91,6 +91,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "TELEGRAM_SENT")
 	private boolean telegramSent;
 
+	@Column(name = "MEDIA_FILE_UPLOADED")
+	private boolean mediaFileUploaded;
+
 	@Lob
 	@Column(name = "JSON_STRING")
 	private String jsonString;
@@ -146,6 +149,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			this.whatsappSent = json.getBoolean("whatsappSent");
 		if (json.has("telegramSent"))
 			this.telegramSent = json.getBoolean("telegramSent");
+		if (json.has("mediaFileUploaded"))
+			this.mediaFileUploaded = json.getBoolean("mediaFileUploaded");
 
 		if (json.has("jsonString"))
 			this.jsonString = json.getString("jsonString");
@@ -255,6 +260,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.telegramSent = telegram;
 	}
 
+	public boolean isMediaFileUploaded() {
+		return mediaFileUploaded;
+	}
+
+	public void setMediaFileUploaded(boolean mediaFile) {
+		this.mediaFileUploaded = mediaFile;
+	}
+
 	public String getJsonString() {
 		return jsonString;
 	}
@@ -293,6 +306,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		json.put("emailCreated", emailCreated);
 		json.put("whatsappSent", whatsappSent);
 		json.put("telegramSent", telegramSent);
+		json.put("mediaFileUploaded", mediaFileUploaded);
 
 		if (jsonString != null)
 			json.put("jsonString", jsonString);

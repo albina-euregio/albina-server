@@ -494,6 +494,7 @@ public class AvalancheReportController {
 				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 				avalancheReport.setRegion(region);
 				avalancheReport.setStatus(latestReport.getStatus());
+				avalancheReport.setMediaFileUploaded(latestReport.isMediaFileUploaded());
 
 				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region, false).toString());
 				entityManager.persist(avalancheReport);
@@ -571,6 +572,7 @@ public class AvalancheReportController {
 			if (report == null) {
 				avalancheReport.setStatus(BulletinStatus.missing);
 			} else {
+				avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
 				switch (report.getStatus()) {
 				case missing:
 					logger.warn("Bulletins have to be created first!");
@@ -643,6 +645,7 @@ public class AvalancheReportController {
 			if (report == null) {
 				avalancheReport.setStatus(BulletinStatus.missing);
 			} else {
+				avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
 				switch (report.getStatus()) {
 				case missing:
 					logger.warn("Bulletins have to be created first!");
@@ -961,6 +964,15 @@ public class AvalancheReportController {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setTelegramSent(true);
 			}
+			entityManager.flush();
+			return null;
+		});
+	}
+
+	public void setMediaFileFlag(Instant date, String region) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			AvalancheReport report = this.getInternalReport(date, region);
+			report.setMediaFileUploaded(true);
 			entityManager.flush();
 			return null;
 		});
