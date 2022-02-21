@@ -17,7 +17,6 @@
 package eu.albina.controller;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -551,7 +550,7 @@ public class PublicationController {
 				try {
 					logger.info("Simple HTML production for " + region.getId() + " started");
 					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
-				} catch (IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					logger.error("Error creating simple HTML for " + region.getId(), e);
 				} finally {
 					logger.info("Simple HTML production for " + region.getId() + " finished");
@@ -583,7 +582,7 @@ public class PublicationController {
 					logger.info("Static widget production for " + region.getId()  + " started");
 					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins, region, validityDateString,
 							publicationTimeString);
-				} catch (IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					logger.error("Error creating static widgets for " + region.getId(), e);
 				} finally {
 					logger.info("Static widget production " + region.getId()  + " finished");
@@ -605,7 +604,7 @@ public class PublicationController {
 				try {
 					logger.info("Email production for " + region.getId() + " started");
 					EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test);
-				} catch (IOException | URISyntaxException e) {
+				} catch (Exception e) {
 					logger.error("Error preparing emails " + region, e);
 				} finally {
 					logger.info("Email production " + region.getId() + " finished");
@@ -624,7 +623,7 @@ public class PublicationController {
 		try {
 			logger.info("Email production for " + region.getId() + " started");
 			EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test, language);
-		} catch (IOException | URISyntaxException e) {
+		} catch (Exception e) {
 			logger.error("Error preparing emails for " + region.getId(), e);
 		} finally {
 			logger.info("Email production for " + region.getId() + " finished");
@@ -638,7 +637,7 @@ public class PublicationController {
 				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, test);
 			else
 				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, language, test);
-		} catch (IOException | URISyntaxException e) {
+		} catch (Exception e) {
 			logger.error("Error preparing telegram channel", e);
 		} finally {
 			logger.info("Telegram channel for " + region.getId() + " finished");

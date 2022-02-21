@@ -5,9 +5,12 @@ import eu.albina.model.enumerations.LanguageCode;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
@@ -54,7 +57,16 @@ public class PushNotificationUtilTest {
 
 		verify(builder).header(eq("Content-Type"), eq("application/octet-stream"));
 		verify(builder).header(eq("TTL"), eq("180"));
-		verify(builder).header(eq("Content-Encoding"), eq("aes128gcm"));
 		verify(builder).header(eq("Authorization"), startsWith("vapid t=ey"));
+
+		ArgumentCaptor<Entity<?>> entityArgumentCaptor = getEntityArgumentCaptor();
+		verify(builder).post(entityArgumentCaptor.capture());
+		Assert.assertEquals("application/octet-stream", entityArgumentCaptor.getValue().getMediaType().toString());
+		Assert.assertEquals("aes128gcm", entityArgumentCaptor.getValue().getEncoding());
+	}
+
+	@SuppressWarnings("unchecked")
+	private ArgumentCaptor<Entity<?>> getEntityArgumentCaptor() {
+		return ArgumentCaptor.forClass(Entity.class);
 	}
 }

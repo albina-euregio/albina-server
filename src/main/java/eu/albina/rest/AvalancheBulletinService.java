@@ -1189,7 +1189,7 @@ public class AvalancheBulletinService {
 	public Response checkBulletins(@QueryParam("region") String regionId,
 			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST publish bulletins");
+		logger.debug("GET check bulletins");
 
 		try {
 			if (regionId == null)
