@@ -39,7 +39,7 @@ import com.github.openjson.JSONObject;
  */
 @Entity
 @Table(name = "server_instances")
-public class ServerInstance implements Serializable {
+public class ServerInstance implements AvalancheInformationObject, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
