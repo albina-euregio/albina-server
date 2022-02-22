@@ -65,7 +65,6 @@ public class PushNotificationUtilTest {
 		Assert.assertEquals("aes128gcm", entityArgumentCaptor.getValue().getEncoding());
 	}
 
-	@SuppressWarnings("unchecked")
 	private ArgumentCaptor<Entity<?>> getEntityArgumentCaptor() {
 		return ArgumentCaptor.forClass(Entity.class);
 	}

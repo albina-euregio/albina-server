@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
@@ -47,7 +48,6 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
@@ -80,7 +80,7 @@ public class MediaFileService {
 			}
 			
 			// TODO move mediaPath to server instance config
-			String fileLocation = GlobalVariables.mediaPath + "/" + region + "/";
+			String fileLocation = ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath() + "/" + region + "/";
 
 			// save mp3 file
 			String mp3FileName = AlbinaUtil.getMediaFileName(date, user, language, ".mp3");

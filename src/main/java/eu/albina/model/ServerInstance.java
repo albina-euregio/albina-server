@@ -81,6 +81,9 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 	@Column(name = "MAPS_PATH")
 	private String mapsPath;
 
+	@Column(name = "MEDIA_PATH")
+	private String mediaPath;
+
 	@Column(name = "MAP_PRODUCTION_URL")
 	private String mapProductionUrl;
 
@@ -123,6 +126,8 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 			this.htmlDirectory = json.getString("htmlDirectory");
 		if (json.has("mapsPath") && !json.isNull("mapsPath"))
 			this.mapsPath = json.getString("mapsPath");
+		if (json.has("mediaPath") && !json.isNull("mediaPath"))
+			this.mediaPath = json.getString("mediaPath");
 		if (json.has("mapProductionUrl") && !json.isNull("mapProductionUrl"))
 			this.mapProductionUrl = json.getString("mapProductionUrl");
 		if (json.has("serverImagesUrl") && !json.isNull("serverImagesUrl"))
@@ -230,6 +235,14 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 		this.mapsPath = mapsPath;
 	}
 
+	public String getMediaPath() {
+		return mediaPath;
+	}
+
+	public void setMediaPath(String mediaPath) {
+		this.mediaPath = mediaPath;
+	}
+
 	public String getMapProductionUrl() {
 		return mapProductionUrl;
 	}
@@ -268,6 +281,7 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 		json.put("pdfDirectory", getPdfDirectory());
 		json.put("htmlDirectory", getHtmlDirectory());
 		json.put("mapsPath", getMapsPath());
+		json.put("mediaPath", getMediaPath());
 		json.put("mapProductionUrl", getMapProductionUrl());
 		json.put("serverImagesUrl", getServerImagesUrl());
 		return json;
