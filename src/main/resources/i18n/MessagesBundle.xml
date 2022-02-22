@@ -84,6 +84,8 @@
 	<entry key="email.subject">Avalanche.report, </entry>
 	<entry key="email.subject.update">UPDATE on Avalanche.report, </entry>
 	<entry key="email.imprint">Imprint</entry>
+	<entry key="email.media.subject">Avalanche.report for {0} from {1}</entry>
+	<entry key="email.media.text">Best regards, {1}</entry>
 	<entry key="pdf.page-number">Page {0}</entry>
 	<entry key="cop.incomplete-translation">Wait for translation in progress ....</entry>
 	<entry key="published">Published </entry>

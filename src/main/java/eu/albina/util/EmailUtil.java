@@ -25,6 +25,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -132,6 +136,21 @@ public class EmailUtil {
 		}
 	}
 
+	public void sendMediaEmails(String text, Instant date, Region region, String username, boolean test, LanguageCode lang) {
+		StringBuilder sb = new StringBuilder();
+		ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
+		sb.append(lang.getBundleString("day." + localDate.getDayOfWeek()));
+		sb.append(", ");
+		sb.append(localDate.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
+
+		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), sb.toString(), username);
+		String emailHtml = text + "\n\n" + MessageFormat.format(lang.getBundleString("email.media.text"), date, username);
+
+		// TODO add links to mp3 and txt file
+
+		sendMediaEmailRapidmail(lang, region, emailHtml, subject, test);
+	}
+
 	private String createZipFile(String htmlContent, String textContent) throws IOException {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ZipOutputStream out = new ZipOutputStream(baos)) {
@@ -157,15 +176,20 @@ public class EmailUtil {
 
 	public void sendBulletinEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
 		logger.info("Sending bulletin email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		sendEmail(lang, region, emailHtml, subject, test);
+		sendEmail(lang, region, emailHtml, subject, test, false);
 	}
 
 	public void sendBlogPostEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
 		logger.info("Sending blog post email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		sendEmail(lang, region, emailHtml, subject, test);
+		sendEmail(lang, region, emailHtml, subject, test, false);
 	}
 
-	private void sendEmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
+	public void sendMediaEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
+		logger.info("Sending media email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
+		sendEmail(lang, region, emailHtml, subject, test, true);
+	}
+
+	private void sendEmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test, boolean media) {
 		try {
 			PostMailingsRequestPostFile file = new PostMailingsRequestPostFile()
 				.description("mail-content.zip")
@@ -177,7 +201,7 @@ public class EmailUtil {
 				.subject(subject)
 				.status("scheduled")
 				.file(file);
-			RapidMailController.getInstance().sendMessage(region, lang, request, test);
+			RapidMailController.getInstance().sendMessage(region, lang, request, test, media);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
 		}

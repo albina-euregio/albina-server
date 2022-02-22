@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.time.Instant;
 
 import javax.ws.rs.Consumes;
@@ -40,14 +41,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.EmailUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
@@ -64,26 +68,33 @@ public class MediaFileService {
 	@Secured({ Role.ADMIN, Role.FORECASTER})
 	@Consumes({ MediaType.MULTIPART_FORM_DATA })
 	public Response saveMediaFile(
-		@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date,
-		@QueryParam("region") String region,
+		@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String dateString,
+		@QueryParam("region") String regionId,
 		@QueryParam("lang") LanguageCode language,
 		@FormDataParam("text") String mediaText,
         @FormDataParam("file") InputStream uploadedInputStream,
 		@Context SecurityContext securityContext) {
 		try {
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
-			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-
-			if (region == null || !user.hasPermissionForRegion(region)) {
+			
+			if (regionId == null) {
 				logger.warn("Region for media file not defined!");
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity("Region for media file not defined!").build();
 			}
 			
-			// TODO move mediaPath to server instance config
+			Region region = RegionController.getInstance().getRegion(regionId);
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+
+			if (region == null || !user.hasPermissionForRegion(region.getId())) {
+				logger.warn("User is not authorized for this region!");
+				throw new AlbinaException("User is not authorized for this region!");
+			}
+
+			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
+
 			String fileLocation = ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath() + "/" + region + "/";
 
 			// save mp3 file
-			String mp3FileName = AlbinaUtil.getMediaFileName(date, user, language, ".mp3");
+			String mp3FileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".mp3");
 			File mp3File = new File(fileLocation + mp3FileName);
 			mp3File.getParentFile().mkdir();
 			FileOutputStream out = new FileOutputStream(mp3File);
@@ -97,7 +108,7 @@ public class MediaFileService {
 			logger.debug(mp3FileName + " successfully uploaded to: " + fileLocation);
 
 			// save text file
-			String txtFileName = AlbinaUtil.getMediaFileName(date, user, language, ".txt");
+			String txtFileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".txt");
 			File txtFile = new File(fileLocation + txtFileName);
 			txtFile.getParentFile().mkdir();
 			FileOutputStream outputStream = new FileOutputStream(txtFile);
@@ -106,7 +117,11 @@ public class MediaFileService {
 			outputStream.close();
 			logger.debug(txtFileName + " successfully uploaded to " + fileLocation);
 
-			AvalancheReportController.getInstance().setMediaFileFlag(startDate, region);
+			// send emails
+			EmailUtil.getInstance().sendMediaEmails(mediaText, date, region, user.getName(), false, language);
+
+			// set publication flag
+			AvalancheReportController.getInstance().setMediaFileFlag(date, region);
 
 			return Response.status(200).type(MediaType.APPLICATION_JSON).entity(new JSONObject().append("file", fileLocation)).build();
 		} catch (AlbinaException e) {
@@ -114,6 +129,10 @@ public class MediaFileService {
 		} catch (FileNotFoundException e) {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		} catch (IOException e) {
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		} catch (URISyntaxException e) {
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		} catch (Exception e) {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}

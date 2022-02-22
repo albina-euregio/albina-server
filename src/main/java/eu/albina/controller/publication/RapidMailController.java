@@ -104,7 +104,7 @@ public class RapidMailController {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
 		if (recipient.getRecipientlistId() == null) {
-			String recipientName = getRecipientName(region, language);
+			String recipientName = getRecipientName(region, language, false);
 			Integer recipientListId = getRecipientId(region, recipientName);
 			recipient.setRecipientlistId(recipientListId);
 		}
@@ -127,12 +127,12 @@ public class RapidMailController {
 			.delete();
 	}
 
-	public PostMailingsResponse sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
+	public PostMailingsResponse sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test, boolean media)
 			throws AlbinaException, IOException, HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
 		if (mailingsPost.getDestinations() == null) {
-			String recipientName = test ? "TEST" : getRecipientName(region, language);
+			String recipientName = test ? "TEST" : getRecipientName(region, language, media);
 			logger.info("Retrieving recipient for {} ...", recipientName);
 			int recipientListId = getRecipientId(region, recipientName);
 			logger.info("Retrieving recipient for {} -> {}", recipientName, recipientListId);
@@ -153,9 +153,12 @@ public class RapidMailController {
 		return entity;
 	}
 
- 	private String getRecipientName(Region region, LanguageCode language) throws HibernateException {
+ 	private String getRecipientName(Region region, LanguageCode language, boolean media) throws HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
-		return config.getRegion().getId() + "_" + language.name().toUpperCase();
+		if (media)
+			return config.getRegion().getId() + "_" + language.name().toUpperCase() + "_media";
+		else
+			return config.getRegion().getId() + "_" + language.name().toUpperCase();
 	}
 
 	public int getRecipientId(Region region, String recipientName) throws AlbinaException, HibernateException, IOException {

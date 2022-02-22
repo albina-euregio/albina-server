@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -49,12 +50,18 @@ public class EmailUtilTest {
 
 	@Before
 	public void setUp() throws IOException {
+		HibernateUtil.getInstance().setUp();
 		regionTirol = new Region();
 		regionTirol.setId("AT-07");
 		regionSouthTyrol = new Region();
 		regionSouthTyrol.setId("IT-32-BZ");
 		regionTrentino = new Region();
 		regionTrentino.setId("IT-32-TN");
+	}
+
+	@After
+	public void shutDown() {
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test
@@ -131,5 +138,10 @@ public class EmailUtilTest {
 			EmailUtil.getInstance().sendBulletinEmailRapidmail(lang, region, emailHtml, subject, true);
 		}
 		HibernateUtil.getInstance().shutDown();
+	}
+
+	@Test
+	public void sendMediaEmails() throws IOException, URISyntaxException {
+		EmailUtil.getInstance().sendMediaEmails("Media text", AlbinaUtil.getInstantStartOfDay(), regionTirol, "Norbert Lanzanasto", true, LanguageCode.de);
 	}
 }

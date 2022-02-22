@@ -970,14 +970,14 @@ public class AvalancheReportController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setMediaFileFlag(Instant date, String region) {
+	public void setMediaFileFlag(Instant date, Region region) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport result = null;
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
-			if (!Strings.isNullOrEmpty(region)) {
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
-						.setParameter("region", region).getResultList();
+						.setParameter("region", region.getId()).getResultList();
 			}
 
 			// select most recent report
