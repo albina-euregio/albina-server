@@ -16,13 +16,17 @@
  ******************************************************************************/
 package eu.albina.map;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import javax.imageio.ImageIO;
 import javax.script.SimpleBindings;
 
 import com.google.common.collect.Table;
@@ -115,8 +119,20 @@ public interface MapUtil {
 
 		final Path outputFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
 		String logoPath = "";
-		if (region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath()))
-			logoPath = grayscale ? Resources.getResource(region.getMapLogoBwPath()).toString() : Resources.getResource(region.getMapLogoColorPath()).toString();
+		double logoAspectRatio = 1;
+
+		if (grayscale && region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath())) {
+			URL logoUrl = Resources.getResource(region.getMapLogoBwPath());
+			logoPath = logoUrl.toString();
+			BufferedImage image = ImageIO.read(logoUrl);
+   			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
+		} else if (!grayscale && region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath())) {
+			URL logoUrl = Resources.getResource(region.getMapLogoColorPath());
+			logoPath = logoUrl.toString();
+			BufferedImage image = ImageIO.read(logoUrl);
+   			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
+		}		
+
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		bindings.put("xmax", region.getMapXmax());
 		bindings.put("xmin", region.getMapXmin());
@@ -160,6 +176,7 @@ public interface MapUtil {
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("logo_file", logoPath);
 		bindings.put("logo_position", region.getLogoPosition().toString());
+		bindings.put("logo_aspect_ratio", logoAspectRatio);
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
 

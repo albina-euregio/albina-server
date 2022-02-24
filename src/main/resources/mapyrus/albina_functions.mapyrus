@@ -885,6 +885,7 @@ begin draw_copyright copyright_txt, font, fontsize, fontcolor
 	worlds px1, py1, px2, py2
 	clearpath
 
+	move mx2 - (mx2 / 50), my1 + (mx2 / 50)
 	eval fontcolor
 	justify "right, bottom"
 	font font, fontsize
@@ -902,13 +903,13 @@ begin place_logo
 	clearpath
 
 	if logo_position eq "topleft" then
-		move mx1 + 2, my2 - (logo_size / 2) - 2
+		move mx1 + (logo_size / 2) + 2, my2 - (logo_size / logo_aspect_ratio / 2) - 2
 	elif logo_position eq "topright" then
-		move mx2 - (logo_size / 2) - 2, my2 - (logo_size / 2) - 2
+		move mx2 - (logo_size / 2) - 2, my2 - (logo_size / logo_aspect_ratio / 2) - 2
 	elif logo_position eq "bottomleft" then
-		move mx1 + 2, my1 + 2
+		move mx1 + (logo_size / 2) + 2, my1 + (logo_size / logo_aspect_ratio / 2) + 8
 	elif logo_position eq "bottomright" then
-		move mx2 - (logo_size / 2) - 2, my1 + 2
+		move mx2 - (logo_size / 2) - 2, my1 + (logo_size / logo_aspect_ratio / 2) + 8
 	endif
 	icon logo_file, logo_size
 
