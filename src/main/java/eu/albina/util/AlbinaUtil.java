@@ -155,7 +155,6 @@ public class AlbinaUtil {
 		if (date != null) {
 			date = date.withZoneSameInstant(localZone());
 			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
-			result.append(" ");
 			result.append(date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
 		} else {
 			// TODO what if no date is given (should not happen)
