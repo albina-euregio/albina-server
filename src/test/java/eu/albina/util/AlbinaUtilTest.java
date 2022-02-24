@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -163,13 +162,6 @@ public class AlbinaUtilTest {
 	@Test
 	public void testIsUpdate() {
 		Assert.assertTrue(AlbinaUtil.isUpdate(bulletins));
-	}
-
-	@Ignore
-	@Test
-	public void createStaticWidget() throws IOException, URISyntaxException {
-		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en, regionTirol,
-				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Ignore

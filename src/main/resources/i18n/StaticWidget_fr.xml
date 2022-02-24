@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-<properties>
-  <entry key="line.1">Pour {0} au maximum</entry>
-  <entry key="line.3">La bulletin d'avalanche complète et les endroits où </entry>
-  <entry key="line.4">la situation sera meilleure:</entry>
-</properties>

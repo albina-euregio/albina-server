@@ -104,9 +104,6 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "CREATE_PDF")
 	private boolean createPdf;
 
-	@Column(name = "CREATE_STATIC_WIDGET")
-	private boolean createStaticWidget;
-
 	@Column(name = "CREATE_SIMPLE_HTML")
 	private boolean createSimpleHtml;
 
@@ -197,9 +194,6 @@ public class Region implements AvalancheInformationObject {
 
 	@Column(name = "PDF_FOOTER_LOGO_BW_PATH")
 	private String pdfFooterLogoBwPath;
-
-	@Column(name = "STATIC_WIDGET_SECONDARY_LOGO_COLOR_PATH")
-	private String staticWidgetSecondaryLogoColorPath;
 
 	@Column(name = "MAP_X_MAX")
 	private int mapXmax;
@@ -293,8 +287,6 @@ public class Region implements AvalancheInformationObject {
 			this.createMaps = json.getBoolean("createMaps");
 		if (json.has("createPdf") && !json.isNull("createPdf"))
 			this.createPdf = json.getBoolean("createPdf");
-		if (json.has("createStaticWidget") && !json.isNull("createStaticWidget"))
-			this.createStaticWidget = json.getBoolean("createStaticWidget");
 		if (json.has("createSimpleHtml") && !json.isNull("createSimpleHtml"))
 			this.createSimpleHtml = json.getBoolean("createSimpleHtml");
 		if (json.has("sendEmails") && !json.isNull("sendEmails"))
@@ -329,8 +321,6 @@ public class Region implements AvalancheInformationObject {
 			this.pdfFooterLogoColorPath = json.getString("pdfFooterLogoColorPath");
 		if (json.has("pdfFooterLogoBwPath") && !json.isNull("pdfFooterLogoBwPath"))
 			this.pdfFooterLogoBwPath = json.getString("pdfFooterLogoBwPath");
-		if (json.has("staticWidgetSecondaryLogoColorPath") && !json.isNull("staticWidgetSecondaryLogoColorPath"))
-			this.staticWidgetSecondaryLogoColorPath = json.getString("staticWidgetSecondaryLogoColorPath");
 		if (json.has("mapXmax") && !json.isNull("mapXmax"))
 			this.mapXmax = json.getInt("mapXmax");
 		if (json.has("mapXmin") && !json.isNull("mapXmin"))
@@ -449,14 +439,6 @@ public class Region implements AvalancheInformationObject {
 
 	public void setCreatePdf(boolean createPdf) {
 		this.createPdf = createPdf;
-	}
-
-	public boolean isCreateStaticWidget() {
-		return createStaticWidget;
-	}
-
-	public void setCreateStaticWidget(boolean createStaticWidget) {
-		this.createStaticWidget = createStaticWidget;
 	}
 
 	public boolean isCreateSimpleHtml() {
@@ -595,14 +577,6 @@ public class Region implements AvalancheInformationObject {
 		this.pdfFooterLogoBwPath = pdfFooterLogoBwPath;
 	}
 
-	public String getStaticWidgetSecondaryLogoColorPath() {
-		return staticWidgetSecondaryLogoColorPath;
-	}
-
-	public void setStaticWidgetSecondaryLogoColorPath(String staticWidgetSecondaryLogoColorPath) {
-		this.staticWidgetSecondaryLogoColorPath = staticWidgetSecondaryLogoColorPath;
-	}
-
 	public int getMapXmax() {
 		return mapXmax;
 	}
@@ -733,7 +707,6 @@ public class Region implements AvalancheInformationObject {
 		json.put("createJson", isCreateJson());
 		json.put("createMaps", isCreateMaps());
 		json.put("createPdf", isCreatePdf());
-		json.put("createStaticWidget", isCreateStaticWidget());
 		json.put("createSimpleHtml", isCreateSimpleHtml());
 		json.put("sendEmails", isSendEmails());
 		json.put("sendTelegramMessages", isSendTelegramMessages());
@@ -751,7 +724,6 @@ public class Region implements AvalancheInformationObject {
 		json.put("pdfFooterLogo", isPdfFooterLogo());
 		json.put("pdfFooterLogoColorPath", getPdfFooterLogoColorPath());
 		json.put("pdfFooterLogoBwPath", getPdfFooterLogoBwPath());
-		json.put("staticWidgetSecondaryLogoColorPath", getStaticWidgetSecondaryLogoColorPath());
 		json.put("mapXmax", getMapXmax());
 		json.put("mapXmin", getMapXmin());
 		json.put("mapYmax", getMapXmax());

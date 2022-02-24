@@ -843,53 +843,6 @@ public class AvalancheBulletinService {
 
 	@POST
 	@Secured({ Role.ADMIN })
-	@Path("/publish/staticwidget")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createStaticWidget(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@Context SecurityContext securityContext) {
-		logger.debug("POST create static widget [{}]", date);
-
-		try {
-			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			List<Region> publishBulletinRegions = RegionController.getInstance().getPublishBulletinRegions();
-			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, publishBulletinRegions);
-
-			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
-
-			Map<String, Thread> threads = new HashMap<String, Thread>();
-			for (Region region : publishBulletinRegions) {
-				Thread createStaticWidgetsThread = PublicationController.getInstance().createStaticWidgets(bulletins, region,
-					validityDateString, publicationTimeString);
-				threads.put("staticWidget_" + region.getId(), createStaticWidgetsThread);
-				createStaticWidgetsThread.start();
-			}
-
-			for (String key : threads.keySet()) {
-				try {
-					threads.get(key).join();
-				} catch (InterruptedException e) {
-					logger.error(key + " thread interrupted", e);
-				}
-			}
-
-			// copy files
-			AlbinaUtil.runUpdateStaticWidgetsScript(validityDateString, publicationTimeString);
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-				AlbinaUtil.runUpdateLatestStaticWidgetsScript(validityDateString);
-
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
-		} catch (AlbinaException e) {
-			logger.warn("Error creating static widgets", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		}
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
 	@Path("/publish/map")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

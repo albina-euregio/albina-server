@@ -169,13 +169,6 @@ public class AlbinaUtil {
 		return getDate(bulletins).getYear();
 	}
 
-	public static String getStaticWidgetFilename(String validityDateString, Region region, LanguageCode lang) {
-		if (validityDateString != null)
-			return validityDateString + "_" + region.getId() + "_" + lang.toString();
-		else
-			return "_" + region.getId() + "_" + lang.toString();
-	}
-
 	public static String getThumbnailFileName(Region region, String validityDateString, String publicationTimeString, DaytimeDependency daytimeDependency) {
 		return ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath() + "/"
 				+ validityDateString + "/" + publicationTimeString + "/" + daytimeDependency.toString() + "_" + region.getId() + "_thumbnail.jpg";
@@ -414,35 +407,6 @@ public class AlbinaUtil {
 			logger.info("XMLs for {} update in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
 			logger.error("XMLs for " + date + " could not be updated in latest directory!", e);
-		}
-	}
-
-	public static void runUpdateStaticWidgetsScript(String date, String publicationTime) {
-		try {
-			final File file = new File(classLoader.getResource("scripts/updateStaticWidgets.sh").getFile());
-			// TODO just for testing
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("PNGs updated in date directory for {} using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("PNGs could not be updated in date directory for " + date + "!", e);
-		}
-	}
-
-	public static void runUpdateLatestStaticWidgetsScript(String date) {
-		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestStaticWidgets.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date).inheritIO();
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("PNGs for {} updated in latest directory using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("PNGs for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 

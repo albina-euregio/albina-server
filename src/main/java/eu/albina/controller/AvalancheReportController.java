@@ -876,25 +876,6 @@ public class AvalancheReportController {
 	}
 
 	/**
-	 * Set the static widget flag for all reports with {@code avalancheReportIds},
-	 * indicating that the static widgets (images for press) for this reports have
-	 * been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportStaticWidgetFlag(List<String> avalancheReportIds) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setStaticWidgetCreated(true);
-			}
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	/**
 	 * Set the map flag for all reports with {@code avalancheReportIds}, indicating
 	 * that the maps for this reports have been created.
 	 *

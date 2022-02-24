@@ -77,9 +77,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "HTML_CREATED")
 	private boolean htmlCreated;
 
-	@Column(name = "STATIC_WIDGET_CREATED")
-	private boolean staticWidgetCreated;
-
 	@Column(name = "MAP_CREATED")
 	private boolean mapCreated;
 
@@ -137,8 +134,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			this.pdfCreated = json.getBoolean("pdfCreated");
 		if (json.has("htmlCreated"))
 			this.htmlCreated = json.getBoolean("htmlCreated");
-		if (json.has("staticWidgetCreated"))
-			this.staticWidgetCreated = json.getBoolean("staticWidgetCreated");
 		if (json.has("emailCreated"))
 			this.emailCreated = json.getBoolean("emailCreated");
 		if (json.has("mapCreated"))
@@ -216,14 +211,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.htmlCreated = html;
 	}
 
-	public boolean isStaticWidgetCreated() {
-		return staticWidgetCreated;
-	}
-
-	public void setStaticWidgetCreated(boolean staticWidget) {
-		this.staticWidgetCreated = staticWidget;
-	}
-
 	public boolean isMapCreated() {
 		return mapCreated;
 	}
@@ -289,7 +276,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		json.put("caamlCreated", caamlCreated);
 		json.put("pdfCreated", pdfCreated);
 		json.put("htmlCreated", htmlCreated);
-		json.put("staticWidgetCreated", staticWidgetCreated);
 		json.put("mapCreated", mapCreated);
 		json.put("emailCreated", emailCreated);
 		json.put("whatsappSent", whatsappSent);

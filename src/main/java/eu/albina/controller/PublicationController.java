@@ -45,7 +45,6 @@ import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.PushNotificationUtil;
 import eu.albina.util.SimpleHtmlUtil;
-import eu.albina.util.StaticWidgetUtil;
 import eu.albina.util.TelegramChannelUtil;
 import eu.albina.util.XmlUtil;
 
@@ -135,14 +134,6 @@ public class PublicationController {
 							Thread createPdfThread = createPdf(regionBulletins, region, validityDateString, publicationTimeString);
 							threads.put("pdf_" + region.getId(), createPdfThread);
 							createPdfThread.start();
-						}
-
-						// create static widgets
-						if (region.isCreateStaticWidget()) {
-							Thread createStaticWidgetsThread = createStaticWidgets(regionBulletins, region, validityDateString,
-									publicationTimeString);
-							threads.put("staticWidget_" + region.getId(), createStaticWidgetsThread);
-							createStaticWidgetsThread.start();
 						}
 
 						for (String key : threads.keySet()) {
@@ -250,14 +241,6 @@ public class PublicationController {
 							createPdfThread.start();
 						}
 
-						// create static widgets
-						if (region.isCreateStaticWidget()) {
-							Thread createStaticWidgetsThread = createStaticWidgets(regionBulletins, region, validityDateString,
-									publicationTimeString);
-							threads.put("staticWidget_" + region.getId(), createStaticWidgetsThread);
-							createStaticWidgetsThread.start();
-						}
-
 						for (String key : threads.keySet()) {
 							try {
 								threads.get(key).join();
@@ -336,14 +319,6 @@ public class PublicationController {
 							Thread createPdfThread = createPdf(regionBulletins, region, validityDateString, publicationTimeString);
 							threads.put("pdf_" + region.getId(), createPdfThread);
 							createPdfThread.start();
-						}
-
-						// create static widgets
-						if (region.isCreateStaticWidget()) {
-							Thread createStaticWidgetsThread = createStaticWidgets(regionBulletins, region, validityDateString,
-									publicationTimeString);
-							threads.put("staticWidget_" + region.getId(), createStaticWidgetsThread);
-							createStaticWidgetsThread.start();
 						}
 
 						for (String key : threads.keySet()) {
@@ -565,38 +540,6 @@ public class PublicationController {
 					logger.error("Error creating simple HTML for " + region.getId(), e);
 				} finally {
 					logger.info("Simple HTML production for " + region.getId() + " finished");
-				}
-			}
-		});
-	}
-
-	/**
-	 * Trigger the creation of the static widgets.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the static widgets
-	 * @param publicationTimeString
-	 *            the time of publication
-	 * @param validityDateString
-	 *            the start of the validity of the report
-	 * @param publicationTimeString
-	 *            the time of publication
-	 * @param validityDateString
-	 *            the start of the validity of the report
-	 */
-	public Thread createStaticWidgets(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString) {
-		return new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					logger.info("Static widget production for " + region.getId()  + " started");
-					StaticWidgetUtil.getInstance().createStaticWidgets(bulletins, region, validityDateString,
-							publicationTimeString);
-				} catch (Exception e) {
-					logger.error("Error creating static widgets for " + region.getId(), e);
-				} finally {
-					logger.info("Static widget production " + region.getId()  + " finished");
 				}
 			}
 		});
