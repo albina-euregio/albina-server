@@ -567,23 +567,6 @@ public class PublicationController {
 		});
 	}
 
-	/**
-	 * Trigger the sending of the emails.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the emails
-	 */
-	public void sendEmails(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test, LanguageCode language) {
-		try {
-			logger.info("Email production for " + region.getId() + " started");
-			EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test, language);
-		} catch (Exception e) {
-			logger.error("Error preparing emails for " + region.getId(), e);
-		} finally {
-			logger.info("Email production for " + region.getId() + " finished");
-		}
-	}
-
 	public void triggerTelegramChannel(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test) {
 		try {
 			logger.info("Telegram channel for " + region.getId() + " triggered");
