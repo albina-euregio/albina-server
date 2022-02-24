@@ -203,7 +203,6 @@ public class XmlUtil {
 		}
 	}
 
-	// TODO use generic operation name
 	public static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime) {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
