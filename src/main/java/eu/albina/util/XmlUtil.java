@@ -216,7 +216,7 @@ public class XmlUtil {
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode("Avalanche.report"));
+		name.appendChild(doc.createTextNode(ServerInstanceController.getInstance().getLocalServerInstance().getName()));
 		operation.appendChild(name);
 		srcRef.appendChild(operation);
 		metaData.appendChild(srcRef);
