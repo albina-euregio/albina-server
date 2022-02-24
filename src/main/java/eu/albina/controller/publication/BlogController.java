@@ -90,16 +90,18 @@ public class BlogController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			GoogleBloggerConfiguration result = null;
 			if (region != null && !Strings.isNullOrEmpty(region.getId()) && languageCode != null) {
-				result = (GoogleBloggerConfiguration) entityManager.createQuery(HibernateUtil.queryGetGoogleBloggerConfiguration)
-				.setParameter("regionId", region.getId())
-				.setParameter("lang", languageCode).getSingleResult();
+				try {
+					result = (GoogleBloggerConfiguration) entityManager.createQuery(HibernateUtil.queryGetGoogleBloggerConfiguration)
+					.setParameter("region", region)
+					.setParameter("lang", languageCode).getSingleResult();
+				} catch (Exception e) {
+					logger.warn("No google blogger configuration found for " + region.getId() + "[" + languageCode + "]");
+					return null;
+				}
 			} else {
 				throw new HibernateException("No region or language defined!");
 			}
-			if (result != null)
-				return result;
-			else
-				throw new HibernateException("No telegram configuration found for " + region.getId() + " [" + languageCode + "]");
+			return result;
 		});
 	}
 
@@ -160,7 +162,7 @@ public class BlogController {
 		if (region.isPublishBlogs()) {
 			GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
-			if (config.getBlogId() != null) {
+			if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 				try {
 					List<Blogger.Item> blogPosts = getBlogPosts(region, lang);
 					for (Blogger.Item object : blogPosts) {
@@ -181,7 +183,7 @@ public class BlogController {
 		if (region.isPublishBlogs()) {
 			GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
-			if (config.getBlogId() != null) {
+			if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 				try {
 					Blogger.Item blogPost = getLatestBlogPost(region, lang);
 					sendNewBlogPostToRapidmail(blogPost, region, lang, test);
@@ -199,7 +201,7 @@ public class BlogController {
 	public void sendLatestBlogPostEmail(Region region, LanguageCode lang, boolean test) {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
-		if (config.getBlogId() != null) {
+		if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 			try {
 				Blogger.Item blogPost = getLatestBlogPost(region, lang);
 				sendNewBlogPostToRapidmail(blogPost, region, lang, test);
@@ -212,7 +214,7 @@ public class BlogController {
 	public void sendLatestBlogPostTelegram(Region region, LanguageCode lang, boolean test) {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
-		if (config.getBlogId() != null) {
+		if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 			try {
 				Blogger.Item blogPost = getLatestBlogPost(region, lang);
 				sendNewBlogPostToTelegramChannel(blogPost, region, lang, test);
@@ -225,7 +227,7 @@ public class BlogController {
 	public void sendLatestBlogPostPush(Region region, LanguageCode lang, boolean test) {
 		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
 
-		if (config.getBlogId() != null) {
+		if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 			try {
 				Blogger.Item blogPost = getLatestBlogPost(region, lang);
 				sendNewBlogPostToPushNotification(region, lang, blogPost, test);

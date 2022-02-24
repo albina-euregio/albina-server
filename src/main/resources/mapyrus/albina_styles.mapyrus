@@ -196,6 +196,9 @@ elif map_level eq "overlay" then
 	let scale_fontsize = 2.2
 endif
 
+# EUREGIO-Logo Size
+let logo_size = 52
+
 # Copyrightvariabel
 let copyright_txt = "(CC)BY avalanche.report"
 let c_font = font_semibold

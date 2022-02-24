@@ -147,6 +147,12 @@ public class AlbinaUtilTest {
 		}
 	}
 
+	@Test
+	public void encodePassword() {
+		String pwd = BCrypt.hashpw("Norbert", BCrypt.gensalt());
+		logger.warn("Password: " + pwd);
+	}
+
 	@Ignore
 	@Test
 	public void testIsLatest() {

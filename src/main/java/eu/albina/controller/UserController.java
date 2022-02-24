@@ -229,9 +229,10 @@ public class UserController {
 	@SuppressWarnings("unchecked")
 	public boolean isUserInRegionRole(String userEmail, String regionId, Role role) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Region region = entityManager.find(Region.class, regionId);
 			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks)
 				.setParameter("userEmail", userEmail)
-				.setParameter("regionId", regionId)
+				.setParameter("region", region)
 				.getResultList();
 			return links.stream().anyMatch(link -> link.getRole().equals(role));
 		});

@@ -19,9 +19,9 @@ package eu.albina.model;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -43,7 +43,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.albina.controller.RegionController;
-import eu.albina.map.Position;
+import eu.albina.model.enumerations.Position;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -69,19 +69,19 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "MICRO_REGIONS")
 	private int microRegions;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="super_region_sub_region",
 	 joinColumns=@JoinColumn(name="SUPER_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
 	)
-	private List<Region> subRegions;
+	private Set<Region> subRegions;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="super_region_sub_region",
 	 joinColumns=@JoinColumn(name="SUB_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUPER_REGION_ID")
 	)
-	private List<Region> superRegions;
+	private Set<Region> superRegions;
 
 	@Column(name = "PUBLISH_BULLETINS")
 	private boolean publishBulletins;
@@ -171,136 +171,67 @@ public class Region implements AvalancheInformationObject {
 		@AttributeOverride(name = "ppShapeFilePath", column = @Column(name = "OVERLAY_PP_SHAPE_FILE_PATH")) })
 	private MapProductionConfiguration overlayMapConfig;
 
-	// AT-07, IT-32-BZ, IT-32-TN, EUREGIO: RGB(0, 172, 251)
-	// ES-CT-L: RGB(0xa2, 0x0d, 0x2d)
 	@Column(name = "PDF_COLOR")
 	private String pdfColor;
 
-	// EUREGIO, ARAN: 130
-	// AT-07, IT-32-BZ, IT-32-TN: 130
 	@Column(name = "PDF_MAP_Y_AM_PM")
 	private int pdfMapYAmPm;
 
-	// EUREGIO, ARAN: 250
-	// AT-07, IT-32-BZ, IT-32-TN: 290
 	@Column(name = "PDF_MAP_Y_FD")
 	private int pdfMapYFd;
 
-	// EUREGIO, ARAN: 270
-	// AT-07, IT-32-BZ, IT-32-TN: 400
 	@Column(name = "PDF_MAP_WIDTH_AM_PM")
 	private int pdfMapWidthAmPm;
 
-	// EUREGIO, ARAN: 420
-	// AT-07, IT-32-BZ, IT-32-TN: 500
 	@Column(name = "PDF_MAP_WIDTH_FD")
 	private int pdfMapWidthFd;
 
-	// EUREGIO, ARAN: 270
-	// AT-07, IT-32-BZ, IT-32-TN: 400/3*2
 	@Column(name = "PDF_MAP_HEIGHT")
 	private int pdfMapHeight;
 
-	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: true
-	// ARAN: false
 	@Column(name = "PDF_FOOTER_LOGO")
 	private boolean pdfFooterLogo;
 
-	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/color/euregio.png
-	// ARAN: -
 	@Column(name = "PDF_FOOTER_LOGO_COLOR_PATH")
 	private String pdfFooterLogoColorPath;
 
-	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/grey/euregio.png
-	// ARAN: -
 	@Column(name = "PDF_FOOTER_LOGO_BW_PATH")
 	private String pdfFooterLogoBwPath;
 
-	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/color/euregio.png
-	// ARAN: -
 	@Column(name = "STATIC_WIDGET_SECONDARY_LOGO_COLOR_PATH")
 	private String staticWidgetSecondaryLogoColorPath;
 
-	// EUREGIO 1464000
-	// ES-CT-L 120500
-	// AT-07 1452000
-	// IT-32-BZ 1400000
-	// IT-32-TN 1358000
 	@Column(name = "MAP_X_MAX")
 	private int mapXmax;
 
-	// EUREGIO 1104000
-	// ES-CT-L 66200
-	// AT-07 1116000
-	// IT-32-BZ 1145000
-	// IT-32-TN 1133000
 	@Column(name = "MAP_X_MIN")
 	private int mapXmin;
 
-	// EUREGIO 6047000
-	// ES-CT-L 5266900
-	// AT-07 6053000
-	// IT-32-BZ 5939000
-	// IT-32-TN 5842000
 	@Column(name = "MAP_Y_MAX")
 	private int mapYmax;
 
-	// EUREGIO 5687000
-	// ES-CT-L 5215700
-	// AT-07 5829000
-	// IT-32-BZ 5769000
-	// IT-32-TN 5692000
 	@Column(name = "MAP_Y_MIN")
 	private int mapYmin;
 
-	// EUREGIO simple-bulletin.min.html
-	// ES-CT-L simple-bulletin.aran.html
-	// AT-07 simple-bulletin.min.html
-	// IT-32-BZ simple-bulletin.min.html
-	// IT-32-TN simple-bulletin.min.html
 	@Column(name = "SIMPLE_HTML_TEMPLATE_NAME")
 	private String simpleHtmlTemplateName;
 
-
-	// EUREGIO geodata.Euregio/
-	// ES-CT-L geodata.Aran/
-	// AT-07 geodata.Euregio/
-	// IT-32-BZ geodata.Euregio/
-	// IT-32-TN geodata.Euregio/
 	@Column(name = "GEO_DATA_DIRECTORY")
 	private String geoDataDirectory;
 
-	// EUREGIO images/logo/color/euregio_map.png
-	// ES-CT-L images/logo/color/lauegi_map.png
-	// AT-07 images/logo/color/euregio_map.png
-	// IT-32-BZ images/logo/color/euregio_map.png
-	// IT-32-TN images/logo/color/euregio_map.png
 	@Column(name = "MAP_LOGO_COLOR_PATH")
 	private String mapLogoColorPath;
 
-	// EUREGIO images/logo/grey/euregio_map.png
-	// ES-CT-L images/logo/grey/lauegi_map.png
-	// AT-07 images/logo/grey/euregio_map.png
-	// IT-32-BZ images/logo/grey/euregio_map.png
-	// IT-32-TN images/logo/grey/euregio_map.png
 	@Column(name = "MAP_LOGO_BW_PATH")
 	private String mapLogoBwPath;
 
-	// EUREGIO bottomright
-	// ES-CT-L topright
-	// AT-07 
-	// IT-32-BZ 
-	// IT-32-TN 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "MAP_LOGO_POSITION")
 	private Position mapLogoPosition;
 
-	// ARAN: images/logo/color/colorbar.Aran.gif
-	// EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/color/colorbar.gif
 	@Column(name = "IMAGE_COLORBAR_COLOR_PATH")
 	private String imageColorbarColorPath;
 
-	// ARAN, EUREGIO, AT-07, IT-32-BZ, IT-32-TN: images/logo/grey/colorbar.gif
 	@Column(name = "IMAGE_COLORBAR_BW_PATH")
 	private String imageColorbarBwPath;
 
@@ -308,8 +239,8 @@ public class Region implements AvalancheInformationObject {
 	 * Default constructor. Initializes all collections of the region.
 	 */
 	public Region() {
-		this.superRegions = new ArrayList<Region>();
-		this.subRegions = new ArrayList<Region>();
+		this.superRegions = new HashSet<Region>();
+		this.subRegions = new HashSet<Region>();
 	}
 
 	public Region(String id) {
@@ -335,13 +266,17 @@ public class Region implements AvalancheInformationObject {
 		if (json.has("subRegions")) {
 			JSONArray subRegions = json.getJSONArray("subRegions");
 			for (Object entry : subRegions) {
-				this.subRegions.add(RegionController.getInstance().getRegion((String) entry));
+				Region region = RegionController.getInstance().getRegion((String) entry);
+				if (region != null)
+					this.subRegions.add(region);
 			}
 		}
 		if (json.has("superRegions")) {
 			JSONArray superRegions = json.getJSONArray("superRegions");
 			for (Object entry : superRegions) {
-				this.superRegions.add(RegionController.getInstance().getRegion((String) entry));
+				Region region = RegionController.getInstance().getRegion((String) entry);
+				if (region != null)
+					this.superRegions.add(region);
 			}
 		}
 		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
@@ -436,11 +371,11 @@ public class Region implements AvalancheInformationObject {
 		this.microRegions = microRegions;
 	}
 
-	public List<Region> getSuperRegions() {
+	public Set<Region> getSuperRegions() {
 		return superRegions;
 	}
 
-	public void setSuperRegions(List<Region> superRegions) {
+	public void setSuperRegions(Set<Region> superRegions) {
 		this.superRegions = superRegions;
 	}
 
@@ -448,11 +383,11 @@ public class Region implements AvalancheInformationObject {
 		this.superRegions.add(superRegion);
 	}
 
-	public List<Region> getSubRegions() {
+	public Set<Region> getSubRegions() {
 		return subRegions;
 	}
 
-	public void setSubRegions(List<Region> subRegions) {
+	public void setSubRegions(Set<Region> subRegions) {
 		this.subRegions = subRegions;
 	}
 

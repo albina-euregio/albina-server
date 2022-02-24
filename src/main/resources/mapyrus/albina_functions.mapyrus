@@ -885,7 +885,6 @@ begin draw_copyright copyright_txt, font, fontsize, fontcolor
 	worlds px1, py1, px2, py2
 	clearpath
 
-	move mx2 - (mx2 / 50), my1 + (mx2 / 50)
 	eval fontcolor
 	justify "right, bottom"
 	font font, fontsize

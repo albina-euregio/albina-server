@@ -59,7 +59,6 @@ public class TelegramChannelControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
-	@Ignore
 	@Test
 	public void sendMessageTest() throws Exception {
 		TelegramController telegramController = TelegramController.getInstance();
@@ -75,7 +74,6 @@ public class TelegramChannelControllerTest {
 		}
 	}
 
-	@Ignore
 	@Test
 	public void sendBulletin() throws URISyntaxException, IOException {
 		Region regionTrentino = new Region("IT-32-TN");

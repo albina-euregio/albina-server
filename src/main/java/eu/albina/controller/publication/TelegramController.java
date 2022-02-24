@@ -55,7 +55,7 @@ public class TelegramController {
 			TelegramConfiguration result = null;
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				result = (TelegramConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
-				.setParameter("regionId", region.getId())
+				.setParameter("region", region)
 				.setParameter("lang", languageCode).getSingleResult();
 			} else {
 				throw new HibernateException("No region defined!");
@@ -75,7 +75,7 @@ public class TelegramController {
 			throw new IOException("Chat ID not found");
 		}
 
-		String chatId = test ? "aws_test" : config.getChatId();
+		String chatId = test ? "@aws_test" : config.getChatId();
 
 		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
 			.queryParam("chat_id", chatId)

@@ -30,6 +30,7 @@ import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
 import eu.albina.util.AlbinaUtil;
 
+import org.apache.logging.log4j.util.Strings;
 import org.mapyrus.Argument;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.MapyrusException;
@@ -113,6 +114,9 @@ public interface MapUtil {
 								  boolean grayscale, SimpleBindings dangerBindings, Path outputDirectory, boolean preview) throws IOException, MapyrusException, InterruptedException {
 
 		final Path outputFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
+		String logoPath = "";
+		if (region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath()))
+			logoPath = grayscale ? Resources.getResource(region.getMapLogoBwPath()).toString() : Resources.getResource(region.getMapLogoColorPath()).toString();
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		bindings.put("xmax", region.getMapXmax());
 		bindings.put("xmin", region.getMapXmin());
@@ -154,7 +158,7 @@ public interface MapUtil {
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
 		bindings.put("scalebar",  MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
-		bindings.put("logo_file", grayscale ? region.getMapLogoBwPath() : region.getMapLogoColorPath());
+		bindings.put("logo_file", logoPath);
 		bindings.put("logo_position", region.getLogoPosition().toString());
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);

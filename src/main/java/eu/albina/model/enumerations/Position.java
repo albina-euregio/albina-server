@@ -1,4 +1,4 @@
-package eu.albina.map;
+package eu.albina.model.enumerations;
 
 import java.util.Arrays;
 

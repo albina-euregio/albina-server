@@ -55,7 +55,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
-	@Column(name = "REGION")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
 	@Column(name = "DATE")

@@ -233,7 +233,7 @@ public class StaticWidgetUtil {
 				ig2.drawImage(overviewThumbnail, 100, 170, null);
 
 
-			BufferedImage secondaryLogo = loadImageFromPath(lang.getBundleString(region.getStaticWidgetSecondaryLogoColorPath()));
+			BufferedImage secondaryLogo = loadImageFromPath(region.getStaticWidgetSecondaryLogoColorPath());
 			secondaryLogo = resizeHeight(secondaryLogo, 110);
 			ig2.drawImage(secondaryLogo, 330, 35, null);
 

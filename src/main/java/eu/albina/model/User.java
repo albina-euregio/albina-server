@@ -30,6 +30,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -63,9 +65,11 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private List<Role> roles;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "user_region", joinColumns = @JoinColumn(name = "USER_EMAIL"))
-	@Column(name = "USER_REGION")
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="user_region",
+	 joinColumns=@JoinColumn(name="USER_EMAIL"),
+	 inverseJoinColumns=@JoinColumn(name="REGION_ID")
+	)
 	private Set<Region> regions;
 
 	/** Image of the user **/
@@ -207,7 +211,7 @@ public class User {
 		if (regions != null && regions.size() > 0) {
 			JSONArray jsonRegions = new JSONArray();
 			for (Region region : regions) {
-				jsonRegions.put(region.toJSON());
+				jsonRegions.put(region.getId());
 			}
 			json.put("regions", jsonRegions);
 		}

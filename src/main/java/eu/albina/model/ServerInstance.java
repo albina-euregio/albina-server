@@ -22,6 +22,7 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -63,7 +64,7 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 	@Column(name = "EXTERNAL_SERVER")
 	private boolean externalServer;
 
-	@OneToMany(mappedBy = "serverInstance")
+	@OneToMany(mappedBy = "serverInstance", fetch = FetchType.EAGER)
 	private List<Region> regions;
  
 	@Column(name = "PUBLISH_AT_5PM")

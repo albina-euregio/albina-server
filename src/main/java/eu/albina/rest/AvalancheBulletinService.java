@@ -109,7 +109,14 @@ public class AvalancheBulletinService {
 		}
 
 		List<Region> regions = new ArrayList<Region>();
-		regionIds.stream().forEach(regionId -> regions.add(RegionController.getInstance().getRegion(regionId)));
+		regionIds.stream().forEach(regionId -> {
+			try {
+				Region region = RegionController.getInstance().getRegion(regionId);
+				regions.add(region);
+			} catch (HibernateException e) {
+				logger.warn("No region with ID: " + regionId);
+			}
+		});
 
 		List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, endDate,
 				regions);
@@ -139,9 +146,8 @@ public class AvalancheBulletinService {
 			return Response.noContent().build();
 		}
 
-		Region region = RegionController.getInstance().getRegion(regionId);
-
 		try {
+			Region region = RegionController.getInstance().getRegion(regionId);
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, region,
 					language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
@@ -159,6 +165,9 @@ public class AvalancheBulletinService {
 			}
 		} catch (TransformerException | ParserConfigurationException e) {
 			logger.warn("Error loading bulletins", e);
+			return Response.status(400).type(MediaType.APPLICATION_XML).build();
+		} catch (HibernateException e) {
+			logger.warn("No region with ID: " + regionId);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		}
 	}
@@ -198,7 +207,12 @@ public class AvalancheBulletinService {
 			regions = RegionController.getInstance().getPublishBulletinRegions();
 		} else {
 			for (String regionId : regionIds) {
-				regions.add(RegionController.getInstance().getRegion(regionId));
+				try {
+					Region region = RegionController.getInstance().getRegion(regionId);
+					regions.add(region);
+				} catch (HibernateException e) {
+					logger.warn("No region with ID: " + regionId);
+				}
 			}
 		}
 
@@ -255,7 +269,7 @@ public class AvalancheBulletinService {
 			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(start);
-		Instant endDate = DateControllerUtil.parseDateOrNull(end);
+		Instant endDate = DateControllerUtil.parseDateOrToday(end);
 		ZoneId zoneId = DateControllerUtil.parseTimezoneOrLocal(timezone);
 
 		try {
@@ -290,14 +304,20 @@ public class AvalancheBulletinService {
 	@Path("/status/internal")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getInternalStatus(@QueryParam("region") String region,
+	public Response getInternalStatus(@QueryParam("region") String regionId,
 			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
 			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
-		Instant startDate = DateControllerUtil.parseDateOrToday(start);
-		Instant endDate = DateControllerUtil.parseDateOrNull(end);
-
+		if (regionId == null || regionId.isEmpty()) {
+			logger.warn("No region defined.");
+			return Response.noContent().build();
+		}
+		
 		try {
+			Region region = RegionController.getInstance().getRegion(regionId);
+			Instant startDate = DateControllerUtil.parseDateOrToday(start);
+			Instant endDate = DateControllerUtil.parseDateOrNull(end);
+
 			Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 					endDate, region);
 			JSONArray jsonResult = new JSONArray();
@@ -312,6 +332,9 @@ public class AvalancheBulletinService {
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		} catch (HibernateException e) {
+			logger.warn("Error loading status for " + regionId);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}

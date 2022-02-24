@@ -39,14 +39,12 @@ public class HibernateUtil {
 
 	public static String queryGetBulletins = "from AvalancheBulletin as b where b.validFrom = :startDate or b.validUntil = :endDate";
 	public static String queryGetReports = "from AvalancheReport as r where r.date between :startDate and :endDate";
-	public static String queryGetReportsForRegion = "from AvalancheReport as r where r.date between :startDate and :endDate and :region = r.region";
-	public static String queryGetReportsForRegionStartDate = "from AvalancheReport as r where r.date = :startDate and :region = r.region";
 	public static String queryGetReportsStartDate = "from AvalancheReport as r where r.date = :startDate";
 	public static String queryGetSubscribersForLanguage = "from Subscriber as s where :language = s.language";
 	public static String queryGetChatMessages = "from ChatMessage as cm";
 	public static String queryGetChatMessagesDate = "from ChatMessage as cm where cm.dateTime >= :date";
 	public static String queryGetUsers = "from User as u";
-	public static String queryGetUserRegionRoleLinks = "from UserRegionRoleLink as l where l.user = :userEmail and l.region = regionId";
+	public static String queryGetUserRegionRoleLinks = "from UserRegionRoleLink as l where l.user = :userEmail and l.region = :region";
 
 	public static String queryGetReportsForDayAndRegion = "from AvalancheReport as r where r.date = :date and r.region = :region";
 	public static String queryGetReportsForTimePeriodAndRegion = "from AvalancheReport as r where r.date between :startDate and :endDate and r.region = :region";
@@ -54,11 +52,11 @@ public class HibernateUtil {
 	public static String queryGetLatestDate = "from AvalancheReport as r where r.status = 3 or r.status = 0 order by r.date desc";
 
 	public static String queryGetRegions = "from Region as r";
-	public static String queryGetLocalServerInstance = "from ServerInstance as i where i.external = false";
-	public static String queryGetExternalServerInstances = "from ServerInstance as i where i.external = true";
-	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :regionId and c.lang = :lang";
-	public static String queryGetRapidMailConfiguration = "from RapidMailConfiguration as c where c.region = :regionId";
-	public static String queryGetGoogleBloggerConfiguration = "from GoogleBloggerConfiguration as c where c.region = :regionId and c.lang = :lang";
+	public static String queryGetLocalServerInstance = "from ServerInstance as i where i.externalServer = false";
+	public static String queryGetExternalServerInstances = "from ServerInstance as i where i.externalServer = true";
+	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :region and c.lang = :lang";
+	public static String queryGetRapidMailConfiguration = "from RapidMailConfiguration as c where c.region = :region";
+	public static String queryGetGoogleBloggerConfiguration = "from GoogleBloggerConfiguration as c where c.region = :region and c.lang = :lang";
 	public static String queryGetPushConfiguration = "from PushConfiguration as c";
 
 	public static HibernateUtil getInstance() {
