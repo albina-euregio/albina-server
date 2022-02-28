@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -61,8 +62,6 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
-import eu.albina.controller.RegionController;
-import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.Complexity;
@@ -215,7 +214,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	 * @param json
 	 *            JSONObject holding information about an avalanche bulletin.
 	 */
-	public AvalancheBulletin(JSONObject json) {
+	public AvalancheBulletin(JSONObject json, Function<String, User> userFunction) {
 		this();
 
 		if (json.has("id"))
@@ -225,7 +224,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			JSONObject author = json.getJSONObject("author");
 			if (author.has("email")) {
 				try {
-					this.user = UserController.getInstance().getUser(author.getString("email"));
+					this.user = userFunction.apply(author.getString("email"));
 				} catch (Exception e) {
 					LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
 				}
@@ -1240,9 +1239,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		for (String regionId : publishedRegions) {
 			if (region.affects(regionId)) {
 				Element regionElement = doc.createElement("region");
-				Element nameElement = doc.createElement("name");
-				nameElement.appendChild(doc.createTextNode(RegionController.getInstance().getRegionName(languageCode, regionId)));
-				regionElement.appendChild(nameElement);
+				// Element nameElement = doc.createElement("name");
+				// nameElement.appendChild(doc.createTextNode(RegionController.getInstance().getRegionName(languageCode, regionId)));
+				// regionElement.appendChild(nameElement);
 				regionElement.setAttribute("id", regionId);
 				rootElement.appendChild(regionElement);
 			}
@@ -1696,13 +1695,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public static AvalancheBulletin readBulletin(final URL resource) throws IOException {
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), User::new);
 	}
 
 	public static List<AvalancheBulletin> readBulletins(final URL resource) throws IOException {
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		final JSONArray array = new JSONArray(validBulletinStringFromResource);
-		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(AvalancheBulletin::new)
+		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(u -> new AvalancheBulletin(u, User::new))
 				.collect(Collectors.toList());
 	}
 

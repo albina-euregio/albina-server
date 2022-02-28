@@ -312,7 +312,7 @@ public class AvalancheBulletinService {
 			logger.warn("No region defined.");
 			return Response.noContent().build();
 		}
-		
+
 		try {
 			Region region = RegionController.getInstance().getRegion(regionId);
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
@@ -424,7 +424,7 @@ public class AvalancheBulletinService {
 				JSONArray jsonArray = new JSONArray(report.getJsonString());
 				for (Object object : jsonArray) {
 					if (object instanceof JSONObject) {
-						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
 						if (bulletin.affectsRegionWithoutSuggestions(region)) {
 							bulletins.add(bulletin);
 						}
@@ -511,7 +511,7 @@ public class AvalancheBulletinService {
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			for (int i = 0; i < bulletinsJson.length(); i++) {
 				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
-				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
+				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser);
 				bulletins.add(bulletin);
 			}
 
@@ -557,7 +557,7 @@ public class AvalancheBulletinService {
 			for (int i = 0; i < bulletinsJson.length(); i++) {
 				// TODO validate
 				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
-				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson);
+				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser);
 				if (bulletin.affectsRegion(region))
 					bulletins.add(bulletin);
 			}

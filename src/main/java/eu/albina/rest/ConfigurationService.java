@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import eu.albina.controller.RegionController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,7 @@ public class ConfigurationService {
 	public Response setConfigurationParameter(String serverInstance) {
 		try {
 			JSONObject serverInstanceJson = new JSONObject(serverInstance);
-			ServerInstanceController.getInstance().updateServerInstance(new ServerInstance(serverInstanceJson));
+			ServerInstanceController.getInstance().updateServerInstance(new ServerInstance(serverInstanceJson, RegionController.getInstance()::getRegion));
 			return Response.ok().build();
 		} catch (AlbinaException e) {
 			logger.warn("Error updating local server configuration", e);

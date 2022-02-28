@@ -86,7 +86,7 @@ public class RegionService {
 
 		try {
 			JSONObject regionJson = new JSONObject(regionString);
-			Region region = new Region(regionJson);
+			Region region = new Region(regionJson, RegionController.getInstance()::getRegion);
 
 			// check if region id already exists
 			if (RegionController.getInstance().regionExists(region.getId())) {
@@ -116,7 +116,7 @@ public class RegionService {
 	public Response createRegion(String regionString, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON region");
 		JSONObject regionJson = new JSONObject(regionString);
-		Region region = new Region(regionJson);
+		Region region = new Region(regionJson, RegionController.getInstance()::getRegion);
 
 		// check if id already exists
 		if (!RegionController.getInstance().regionExists(region.getId())) {

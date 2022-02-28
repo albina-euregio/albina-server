@@ -100,7 +100,7 @@ public class UserController {
 	 *            the username of the desired user
 	 * @return the {@code User} with the specified {@code username}
 	 */
-	public User getUser(String username) throws AlbinaException {
+	public User getUser(String username) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			User user = entityManager.find(User.class, username);
 			if (user == null) {
