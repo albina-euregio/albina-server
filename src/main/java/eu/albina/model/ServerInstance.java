@@ -17,20 +17,16 @@
 package eu.albina.model;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 /**
@@ -64,9 +60,6 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 
 	@Column(name = "EXTERNAL_SERVER")
 	private boolean externalServer;
-
-	@OneToMany(mappedBy = "serverInstance", fetch = FetchType.EAGER)
-	private List<Region> regions;
 
 	@Column(name = "PUBLISH_AT_5PM")
 	private boolean publishAt5PM;
@@ -109,12 +102,6 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 			this.password = json.getString("password");
 		if (json.has("external") && !json.isNull("external"))
 			this.externalServer = json.getBoolean("external");
-		if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("regions");
-			for (Object region : regions) {
-				this.regions.add(new Region((JSONObject) region, regionFunction));
-			}
-		}
 		if (json.has("publishAt5PM") && !json.isNull("publishAt5PM"))
 			this.publishAt5PM = json.getBoolean("publishAt5PM");
 		if (json.has("publishAt8AM") && !json.isNull("publishAt8AM"))
@@ -177,19 +164,6 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 
 	public void setExternalServer(boolean externalServer) {
 		this.externalServer = externalServer;
-	}
-
-	public List<Region> getRegions() {
-		return regions;
-	}
-
-	public void setRegions(List<Region> regions) {
-		this.regions = regions;
-	}
-
-	public void addRegion(Region region) {
-		if (!this.regions.contains(region))
-			this.regions.add(region);
 	}
 
 	public boolean isPublishAt5PM() {
@@ -258,13 +232,6 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 		json.put("userName", getUserName());
 		json.put("password", getPassword());
 		json.put("externalServer", isExternalServer());
-		if (regions != null && regions.size() > 0) {
-			JSONArray jsonRegions = new JSONArray();
-			for (Region region : regions) {
-				jsonRegions.put(region.getId());
-			}
-			json.put("regions", jsonRegions);
-		}
 		json.put("publishAt5PM", isPublishAt5PM());
 		json.put("publishAt8AM", isPublishAt8AM());
 		json.put("pdfDirectory", getPdfDirectory());
