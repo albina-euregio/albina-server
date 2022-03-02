@@ -100,7 +100,7 @@ public class UserController {
 	 *            the username of the desired user
 	 * @return the {@code User} with the specified {@code username}
 	 */
-	public User getUser(String username) throws AlbinaException {
+	public User getUser(String username) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			User user = entityManager.find(User.class, username);
 			if (user == null) {
@@ -229,9 +229,10 @@ public class UserController {
 	@SuppressWarnings("unchecked")
 	public boolean isUserInRegionRole(String userEmail, String regionId, Role role) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Region region = entityManager.find(Region.class, regionId);
 			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks)
 				.setParameter("userEmail", userEmail)
-				.setParameter("regionId", regionId)
+				.setParameter("region", region)
 				.getResultList();
 			return links.stream().anyMatch(link -> link.getRole().equals(role));
 		});

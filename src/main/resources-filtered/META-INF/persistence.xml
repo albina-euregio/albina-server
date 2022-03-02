@@ -12,10 +12,12 @@
 		<class>eu.albina.model.AvalancheSituation</class>
 		<class>eu.albina.model.AvalancheBulletinDaytimeDescription</class>
 		<class>eu.albina.model.AvalancheBulletin</class>
+		<class>eu.albina.model.AvalancheReport</class>
 		<class>eu.albina.model.ChatMessage</class>
 		<class>eu.albina.model.publication.TelegramConfiguration</class>
-		<class>eu.albina.model.publication.PublicationProvider</class>
 		<class>eu.albina.model.publication.RapidMailConfiguration</class>
+		<class>eu.albina.model.publication.GoogleBloggerConfiguration</class>
+		<class>eu.albina.model.publication.PushConfiguration</class>
 
 		<properties>
 

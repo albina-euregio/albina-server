@@ -88,7 +88,6 @@ public class EmailUtilTest {
 		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
-	@Ignore
 	@Test
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
 		HibernateUtil.getInstance().setUp();

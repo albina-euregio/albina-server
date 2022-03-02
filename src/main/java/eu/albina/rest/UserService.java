@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import eu.albina.controller.RegionController;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,7 +117,7 @@ public class UserService {
 	public Response createUser(String userString, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON user");
 		JSONObject userJson = new JSONObject(userString);
-		User user = new User(userJson);
+		User user = new User(userJson, RegionController.getInstance()::getRegion);
 
 		// check if email already exists
 		if (!UserController.getInstance().userExists(user.getEmail())) {
@@ -140,7 +141,7 @@ public class UserService {
 		logger.debug("PUT JSON user");
 		try {
 			JSONObject userJson = new JSONObject(userString);
-			User user = new User(userJson);
+			User user = new User(userJson, RegionController.getInstance()::getRegion);
 
 			// check if email already exists
 			if (UserController.getInstance().userExists(user.getEmail())) {

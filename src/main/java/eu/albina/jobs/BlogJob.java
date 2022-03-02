@@ -45,7 +45,7 @@ public class BlogJob implements org.quartz.Job {
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		for (Region region : RegionController.getInstance().getPublishBlogRegions()) {
-			logger.info("Blog job triggered for {}!", region);
+			logger.info("Blog job triggered for {}!", region.getId());
 			for (LanguageCode lang : LanguageCode.ENABLED)
 				BlogController.getInstance().sendNewBlogPosts(region, lang);
 		}

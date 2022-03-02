@@ -12,8 +12,8 @@ print "######################################################"
 let raster = geodata_dir . rasterFile
 
 # Shapefile
-let country_1 = geodata_dir . countriesShapeFile
-let provinces_1 = geodata_dir . provincesShapeFile
+let country_l = geodata_dir . countriesShapeFile
+let provinces_l = geodata_dir . provincesShapeFile
 let reg_euregio_ha = geodata_dir . microRegionsShapeFile
 let rivers = geodata_dir . riversShapeFile
 let lakes = geodata_dir . lakesShapeFile
@@ -95,7 +95,7 @@ if copyright eq "on" then
 endif
 
 # Logo bei Karten
-if logo_file ne "" then
+if map_level eq "standard" and logo_file ne "" then
 	place_logo
 endif
 

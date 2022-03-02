@@ -30,11 +30,9 @@ import javax.persistence.Table;
 
 import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -55,7 +53,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
-	@Column(name = "REGION")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
 	@Column(name = "DATE")
@@ -75,9 +74,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	@Column(name = "HTML_CREATED")
 	private boolean htmlCreated;
-
-	@Column(name = "STATIC_WIDGET_CREATED")
-	private boolean staticWidgetCreated;
 
 	@Column(name = "MAP_CREATED")
 	private boolean mapCreated;
@@ -102,58 +98,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	 * Standard constructor for an avalanche report.
 	 */
 	public AvalancheReport() {
-	}
-
-	/**
-	 * Custom constructor that creates an avalanche bulletin object from JSON input.
-	 *
-	 * @param json
-	 *            JSONObject holding information about an avalanche bulletin.
-	 */
-	public AvalancheReport(JSONObject json, String username) {
-		this();
-
-		if (username != null) {
-			try {
-				this.user = UserController.getInstance().getUser(username);
-			} catch (Exception e) {
-				LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
-			}
-		}
-
-		if (json.has("region"))
-			this.region = new Region(json.getJSONObject("region"));
-
-		if (json.has("date"))
-			this.date = ZonedDateTime.parse(json.getString("date"));
-
-		if (json.has("timestamp"))
-			this.timestamp = ZonedDateTime.parse(json.getString("timestamp"));
-
-		if (json.has("status"))
-			this.status = BulletinStatus.fromString(json.getString("status"));
-
-		if (json.has("caamlCreated"))
-			this.caamlCreated = json.getBoolean("caamlCreated");
-		if (json.has("pdfCreated"))
-			this.pdfCreated = json.getBoolean("pdfCreated");
-		if (json.has("htmlCreated"))
-			this.htmlCreated = json.getBoolean("htmlCreated");
-		if (json.has("staticWidgetCreated"))
-			this.staticWidgetCreated = json.getBoolean("staticWidgetCreated");
-		if (json.has("emailCreated"))
-			this.emailCreated = json.getBoolean("emailCreated");
-		if (json.has("mapCreated"))
-			this.mapCreated = json.getBoolean("mapCreated");
-		if (json.has("whatsappSent"))
-			this.whatsappSent = json.getBoolean("whatsappSent");
-		if (json.has("telegramSent"))
-			this.telegramSent = json.getBoolean("telegramSent");
-		if (json.has("mediaFileUploaded"))
-			this.mediaFileUploaded = json.getBoolean("mediaFileUploaded");
-
-		if (json.has("jsonString"))
-			this.jsonString = json.getString("jsonString");
 	}
 
 	public User getUser() {
@@ -218,14 +162,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setHtmlCreated(boolean html) {
 		this.htmlCreated = html;
-	}
-
-	public boolean isStaticWidgetCreated() {
-		return staticWidgetCreated;
-	}
-
-	public void setStaticWidgetCreated(boolean staticWidget) {
-		this.staticWidgetCreated = staticWidget;
 	}
 
 	public boolean isMapCreated() {
@@ -301,7 +237,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		json.put("caamlCreated", caamlCreated);
 		json.put("pdfCreated", pdfCreated);
 		json.put("htmlCreated", htmlCreated);
-		json.put("staticWidgetCreated", staticWidgetCreated);
 		json.put("mapCreated", mapCreated);
 		json.put("emailCreated", emailCreated);
 		json.put("whatsappSent", whatsappSent);

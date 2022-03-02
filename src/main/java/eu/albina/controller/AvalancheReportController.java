@@ -93,11 +93,11 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if no {@code region} was defined
 	 */
-	public Map<Instant, BulletinStatus> getInternalStatus(Instant startDate, Instant endDate, String region)
+	public Map<Instant, BulletinStatus> getInternalStatus(Instant startDate, Instant endDate, Region region)
 			throws AlbinaException {
 		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
 
-		if (region == null || region.isEmpty())
+		if (region == null)
 			throw new AlbinaException("No region defined!");
 
 		Collection<AvalancheReport> reports = getInternalReports(startDate, endDate, region);
@@ -244,7 +244,7 @@ public class AvalancheReportController {
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
 						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
-						.setParameter("region", region.getId()).getResultList();
+						.setParameter("region", region).getResultList();
 
 				for (AvalancheReport avalancheReport : reports) {
 					initializeAndUnproxy(avalancheReport);
@@ -275,7 +275,7 @@ public class AvalancheReportController {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
-						.setParameter("region", region.getId()).getResultList();
+						.setParameter("region", region).getResultList();
 
 				for (AvalancheReport avalancheReport : reports) {
 					initializeAndUnproxy(avalancheReport);
@@ -335,12 +335,12 @@ public class AvalancheReportController {
 	 * @return all most recent reports for a specific time period and {@code region}
 	 */
 	@SuppressWarnings("unchecked")
-	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, String region) {
+	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-	
-			if (!Strings.isNullOrEmpty(region)) {
+
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
 						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 						.setParameter("region", region).getResultList();
@@ -377,7 +377,7 @@ public class AvalancheReportController {
 
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
-						.setParameter("region", region.getId()).getResultList();
+						.setParameter("region", region).getResultList();
 			}
 
 			// select most recent report
@@ -794,7 +794,7 @@ public class AvalancheReportController {
 			JSONArray jsonArray = new JSONArray(report.getJsonString());
 			for (Object object : jsonArray)
 				if (object instanceof JSONObject) {
-					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
 					// only add bulletins with published regions
 					if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
 						results.add(bulletin);
@@ -872,25 +872,6 @@ public class AvalancheReportController {
 			for (String avalancheReportId : avalancheReportIds) {
 				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
 				avalancheReport.setHtmlCreated(true);
-			}
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	/**
-	 * Set the static widget flag for all reports with {@code avalancheReportIds},
-	 * indicating that the static widgets (images for press) for this reports have
-	 * been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportStaticWidgetFlag(List<String> avalancheReportIds) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setStaticWidgetCreated(true);
 			}
 			entityManager.flush();
 			return null;

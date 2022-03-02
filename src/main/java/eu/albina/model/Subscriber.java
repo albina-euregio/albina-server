@@ -31,8 +31,8 @@ import javax.persistence.Table;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+import com.google.common.base.Strings;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
@@ -68,24 +68,6 @@ public class Subscriber {
 		regions = new ArrayList<Region>();
 		pdfAttachment = false;
 		confirmed = false;
-	}
-
-	public Subscriber(JSONObject json) {
-		this();
-		if (json.has("email") && !json.isNull("email"))
-			this.email = json.getString("email");
-		if (json.has("confirmed") && !json.isNull("confirmed"))
-			this.confirmed = json.getBoolean("confirmed");
-		if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("regions");
-			for (Object entry : regions) {
-				this.regions.add(RegionController.getInstance().getRegion((String) entry));
-			}
-		}
-		if (json.has("language") && !json.isNull("language"))
-			this.language = LanguageCode.valueOf((json.getString("language").toLowerCase()));
-		if (json.has("pdfAttachment") && !json.isNull("pdfAttachment"))
-			this.pdfAttachment = json.getBoolean("pdfAttachment");
 	}
 
 	public String getEmail() {
@@ -152,7 +134,7 @@ public class Subscriber {
 	}
 
 	public boolean affectsRegion(Region region) {
-		if (getRegions() != null)
+		if (getRegions() != null && region != null && !Strings.isNullOrEmpty(region.getId()))
 			return getRegions().stream().anyMatch(entry -> entry.getId().startsWith(region.getId()));
 		return false;
 	}

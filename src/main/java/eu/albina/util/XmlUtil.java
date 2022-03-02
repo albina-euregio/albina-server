@@ -203,7 +203,6 @@ public class XmlUtil {
 		}
 	}
 
-	// TODO use generic operation name
 	public static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime) {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
@@ -216,7 +215,7 @@ public class XmlUtil {
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode("Avalanche.report"));
+		name.appendChild(doc.createTextNode(ServerInstanceController.getInstance().getLocalServerInstance().getName()));
 		operation.appendChild(name);
 		srcRef.appendChild(operation);
 		metaData.appendChild(srcRef);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020 Norbert Lanzanasto
+ * Copyright (C) 2019 Norbert Lanzanasto
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,36 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.controller.publication;
+package eu.albina.util;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
+import javax.xml.transform.TransformerException;
+
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.google.common.io.Resources;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.HibernateUtil;
-import eu.albina.util.TelegramChannelUtil;
 
-// TODO test the tests
-@Ignore
-public class TelegramChannelControllerTest {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class JsonUtilTest {
 
 	private List<AvalancheBulletin> bulletins;
 
+	private Region regionTirol;
+
 	@Before
-	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
+	public void setUp() throws IOException {
+		regionTirol = new Region();
+		regionTirol.setId("AT-07");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -54,29 +53,8 @@ public class TelegramChannelControllerTest {
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
 	}
 
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
-	}
-
 	@Test
-	public void sendMessageTest() throws Exception {
-		TelegramController telegramController = TelegramController.getInstance();
-
-		String attachmentUrl = "https://avalanche.report/albina_files_dev/2020-01-26/fd_albina_map.jpg";
-		String message;
-
-		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
-			for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
-				message = region + " - " + lang;
-				telegramController.sendPhoto(region, lang, message, attachmentUrl, true);
-			}
-		}
-	}
-
-	@Test
-	public void sendBulletin() throws URISyntaxException, IOException {
-		Region regionTrentino = new Region("IT-32-TN");
-		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regionTrentino, true, true);
+	public void createJsonTest() throws TransformerException, IOException {
+		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30");
 	}
 }

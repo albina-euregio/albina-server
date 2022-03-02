@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -125,11 +124,10 @@ public class AlbinaUtilTest {
 		SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 	}
 
-	@Ignore
 	@Test
 	public void retrieveTranslationTest() throws UnsupportedEncodingException {
 		String string = LanguageCode.ca.getBundleString("headline.tendency");
-		System.out.println(string);
+		Assert.assertEquals("Tendència", string);
 	}
 
 	@Test
@@ -147,23 +145,27 @@ public class AlbinaUtilTest {
 		}
 	}
 
-	@Ignore
+	@Test
+	public void encodePassword() {
+		String pwd = BCrypt.hashpw("Norbert", BCrypt.gensalt());
+		logger.warn("Password: " + pwd);
+	}
+
 	@Test
 	public void testIsLatest() {
 		ZonedDateTime dateTime = (ZonedDateTime.now()).minusDays(0);
-		System.out.println(AlbinaUtil.isLatest(dateTime));
+		Assert.assertTrue(AlbinaUtil.isLatest(dateTime));
+	}
+
+	@Test
+	public void testIsNotLatest() {
+		ZonedDateTime dateTime = (ZonedDateTime.now()).minusDays(1);
+		Assert.assertFalse(AlbinaUtil.isLatest(dateTime));
 	}
 
 	@Test
 	public void testIsUpdate() {
 		Assert.assertTrue(AlbinaUtil.isUpdate(bulletins));
-	}
-
-	@Ignore
-	@Test
-	public void createStaticWidget() throws IOException, URISyntaxException {
-		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en, regionTirol,
-				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Ignore
@@ -194,20 +196,20 @@ public class AlbinaUtilTest {
 		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
 		assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
 		assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
-		assertEquals("Donnerstag  17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
+		assertEquals("Donnerstag 17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
 		assertEquals("am Freitag, den 18.01.2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
 		assertEquals("16.01.2019", AlbinaUtil.getPreviousValidityDateString(bulletins, LanguageCode.de));
 		assertEquals("18.01.2019", AlbinaUtil.getNextValidityDateString(bulletins, LanguageCode.de));
 		assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
 		assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
 		assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
-		assertEquals("Lawinen.report für Donnerstag  17.01.2019: https://lawinen.report/bulletin/2019-01-17",
+		assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
 			SocialMediaUtil.getSocialMediaText(bulletins, regionEuregio, false, LanguageCode.de));
-		assertEquals("UPDATE zum Lawinen.report für Donnerstag  17.01.2019: https://lawinen.report/bulletin/2019-01-17",
+		assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
 			SocialMediaUtil.getSocialMediaText(bulletins, regionEuregio, true, LanguageCode.de));
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
 			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de, regionEuregio));
-		assertEquals("https://lawinen.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
+		assertEquals("https://lawinen.report/bulletins/2019-01-17/2019-01-17_AT-07_de.pdf",
 			LinkUtil.getPdfLink(bulletins, LanguageCode.de, regionTirol));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));

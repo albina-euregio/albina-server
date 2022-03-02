@@ -3,8 +3,6 @@
 # -------------------------------------------------------------
 ### Font
 
-# let otf_mapyrus = " otffiles=OpenSans.otf,OpenSans-Italic.otf,OpenSans-Semibold.otf,OpenSans-SemiboldItalic.otf,OpenSans-Bold.otf,OpenSans-BoldItalic.otf "
-
 let resolution = " resolution=1200 background=white "
 let extras = otf_mapyrus . resolution
 

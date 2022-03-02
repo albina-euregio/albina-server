@@ -903,13 +903,13 @@ begin place_logo
 	clearpath
 
 	if logo_position eq "topleft" then
-		move mx1 + 2, my2 - (logo_size / 2) - 2
+		move mx1 + (logo_size / 2) + 2, my2 - (logo_size / logo_aspect_ratio / 2) - 2
 	elif logo_position eq "topright" then
-		move mx2 - (logo_size / 2) - 2, my2 - (logo_size / 2) - 2
+		move mx2 - (logo_size / 2) - 2, my2 - (logo_size / logo_aspect_ratio / 2) - 2
 	elif logo_position eq "bottomleft" then
-		move mx1 + 2, my1 + 2
+		move mx1 + (logo_size / 2) + 2, my1 + (logo_size / logo_aspect_ratio / 2) + 6
 	elif logo_position eq "bottomright" then
-		move mx2 - (logo_size / 2) - 2, my1 + 2
+		move mx2 - (logo_size / 2) - 2, my1 + (logo_size / logo_aspect_ratio / 2) + 6
 	endif
 	icon logo_file, logo_size
 

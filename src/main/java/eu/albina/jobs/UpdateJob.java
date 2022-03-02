@@ -70,7 +70,7 @@ public class UpdateJob implements org.quartz.Job {
 			List<Region> changedRegions = RegionController.getInstance().getActiveRegions().stream()
 				.filter(region -> {
 					try {
-						return AlbinaUtil.hasBulletinChanged(startDate, region.getId());
+						return AlbinaUtil.hasBulletinChanged(startDate, region);
 					} catch (AlbinaException e) {
 						logger.error("Failed hasBulletinChanged", e);
 						return false;

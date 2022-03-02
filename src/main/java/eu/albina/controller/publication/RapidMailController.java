@@ -70,8 +70,8 @@ public class RapidMailController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			RapidMailConfiguration result = null;
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				result = (RapidMailConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
-				.setParameter("regionId", region.getId()).getSingleResult();
+				result = (RapidMailConfiguration) entityManager.createQuery(HibernateUtil.queryGetRapidMailConfiguration)
+				.setParameter("region", region).getSingleResult();
 			} else {
 				throw new HibernateException("No region defined!");
 			}
