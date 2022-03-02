@@ -506,37 +506,6 @@ public class AvalancheReportController {
 	}
 
 	/**
-	 * Change status of reports with a given validity time and region to
-	 * <code>published</code> (if the previous status was <code>submitted</code>) or
-	 * <code>republished</code> (if the previous status was
-	 * <code>resubmitted</code>) and set the json string of the bulletins. If there
-	 * was not report a new report with status <code>missing</code> is created.
-	 *
-	 * @param bulletins
-	 *            the bulletins which are affected by the publication
-	 * @param startDate
-	 *            the start date of the time period
-	 * @param regions
-	 *            the region that should be published
-	 * @param user
-	 *            the user who publishes the report
-	 * @param publicationDate
-	 *            the timestamp when the report was published
-	 * @return a list of the ids of the published reports
-	 * @throws AlbinaException
-	 *             if more than one report was found
-	 */
-	public List<String> publishReport(Collection<AvalancheBulletin> bulletins, Instant startDate, List<Region> regions,
-			User user, Instant publicationDate) throws AlbinaException {
-		List<String> avalancheReportIds = new ArrayList<String>();
-		for (Region region : regions) {
-			String avalancheReportId = publishReport(bulletins, startDate, region, user, publicationDate);
-			avalancheReportIds.add(avalancheReportId);
-		}
-		return avalancheReportIds;
-	}
-
-	/**
 	 * Change status of a report with a given validity time and region to
 	 * <code>published</code> (if the previous status was <code>submitted</code>) or
 	 * <code>republished</code> (if the previous status was
@@ -824,127 +793,82 @@ public class AvalancheReportController {
 		return entity;
 	}
 
-	/**
-	 * Set the email flag for all reports with {@code avalancheReportIds},
-	 * indicating that the emails for this reports have been sent.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportEmailFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportEmailFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setEmailCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setEmailCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the pdf flag for all reports with {@code avalancheReportIds}, indicating
-	 * that the pdfs for this reports have been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportPdfFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportPdfFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setPdfCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setPdfCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the html flag for all reports with {@code avalancheReportIds}, indicating
-	 * that the simple html version for this reports have been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportHtmlFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportHtmlFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setHtmlCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setHtmlCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the map flag for all reports with {@code avalancheReportIds}, indicating
-	 * that the maps for this reports have been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportMapFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportMapFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setMapCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setMapCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the caaml flag for all reports with {@code avalancheReportIds},
-	 * indicating that the caaml (XML) files for this reports have been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportCaamlFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportCaamlV5Flag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setCaamlCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setCaamlV5Created(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the whatsapp flag for all reports with {@code avalancheReportIds},
-	 * indicating that the messages via whatsapp for this reports have been sent.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportWhatsappFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportCaamlV6Flag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setWhatsappSent(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setCaamlV6Created(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the telegram flag for all reports with {@code avalancheReportIds},
-	 * indicating that the messages via telegram for this reports have been sent.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportTelegramFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportJsonFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setTelegramSent(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setJsonCreated(true);
+			entityManager.flush();
+			return null;
+		});
+	}
+
+	public void setAvalancheReportTelegramFlag(String avalancheReportId) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setTelegramSent(true);
+			entityManager.flush();
+			return null;
+		});
+	}
+
+	public void setAvalancheReportPushFlag(String avalancheReportId) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setPushSent(true);
 			entityManager.flush();
 			return null;
 		});

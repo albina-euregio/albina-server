@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheBulletinController;
-import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
@@ -90,11 +89,8 @@ public class UpdateJob implements org.quartz.Job {
 							result.add(avalancheBulletin);
 					}
 					if (result != null && !result.isEmpty())
-						PublicationController.getInstance().updateAutomatically(result, changedRegions);
+						PublicationController.getInstance().updateAutomatically(result, changedRegions, user, publicationDate, startDate);
 				}
-
-				AvalancheReportController.getInstance().publishReport(publishedBulletins.values(), startDate,
-						changedRegions, user, publicationDate);
 			} else {
 				logger.info("No bulletins to update.");
 			}

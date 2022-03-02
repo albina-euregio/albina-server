@@ -66,8 +66,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "STATUS")
 	private BulletinStatus status;
 
-	@Column(name = "CAAML_CREATED")
-	private boolean caamlCreated;
+	@Column(name = "CAAML_V5_CREATED")
+	private boolean caamlV5Created;
+
+	@Column(name = "CAAML_V6_CREATED")
+	private boolean caamlV6Created;
+
+	@Column(name = "JSON_CREATED")
+	private boolean jsonCreated;
 
 	@Column(name = "PDF_CREATED")
 	private boolean pdfCreated;
@@ -81,11 +87,11 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "EMAIL_CREATED")
 	private boolean emailCreated;
 
-	@Column(name = "WHATSAPP_SENT")
-	private boolean whatsappSent;
-
 	@Column(name = "TELEGRAM_SENT")
 	private boolean telegramSent;
+
+	@Column(name = "PUSH_SENT")
+	private boolean pushSent;
 
 	@Column(name = "MEDIA_FILE_UPLOADED")
 	private boolean mediaFileUploaded;
@@ -140,12 +146,28 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.status = status;
 	}
 
-	public boolean isCaamlCreated() {
-		return caamlCreated;
+	public boolean isCaamlV5Created() {
+		return caamlV5Created;
 	}
 
-	public void setCaamlCreated(boolean caaml) {
-		this.caamlCreated = caaml;
+	public void setCaamlV5Created(boolean caaml) {
+		this.caamlV5Created = caaml;
+	}
+
+	public boolean isCaamlV6Created() {
+		return caamlV6Created;
+	}
+
+	public void setCaamlV6Created(boolean caaml) {
+		this.caamlV6Created = caaml;
+	}
+
+	public boolean isJsonCreated() {
+		return jsonCreated;
+	}
+
+	public void setJsonCreated(boolean json) {
+		this.jsonCreated = json;
 	}
 
 	public boolean isPdfCreated() {
@@ -180,20 +202,20 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.emailCreated = email;
 	}
 
-	public boolean isWhatsappSent() {
-		return whatsappSent;
-	}
-
-	public void setWhatsappSent(boolean whatsapp) {
-		this.whatsappSent = whatsapp;
-	}
-
 	public boolean isTelegramSent() {
 		return telegramSent;
 	}
 
 	public void setTelegramSent(boolean telegram) {
 		this.telegramSent = telegram;
+	}
+
+	public boolean isPushSent() {
+		return pushSent;
+	}
+
+	public void setPushSent(boolean push) {
+		this.pushSent = push;
 	}
 
 	public boolean isMediaFileUploaded() {
@@ -234,13 +256,15 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (status != null)
 			json.put("status", status.toString());
 
-		json.put("caamlCreated", caamlCreated);
+		json.put("caamlV5Created", caamlV5Created);
+		json.put("caamlV6Created", caamlV6Created);
+		json.put("jsonCreated", jsonCreated);
 		json.put("pdfCreated", pdfCreated);
 		json.put("htmlCreated", htmlCreated);
 		json.put("mapCreated", mapCreated);
 		json.put("emailCreated", emailCreated);
-		json.put("whatsappSent", whatsappSent);
 		json.put("telegramSent", telegramSent);
+		json.put("pushSent", pushSent);
 		json.put("mediaFileUploaded", mediaFileUploaded);
 
 		if (jsonString != null)

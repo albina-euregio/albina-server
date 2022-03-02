@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheBulletinController;
-import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
@@ -87,17 +86,10 @@ public class PublicationJob implements org.quartz.Job {
 							result.add(avalancheBulletin);
 					}
 					if (result != null && !result.isEmpty()) {
-						PublicationController.getInstance().publishAutomatically(result);
+						PublicationController.getInstance().publishAutomatically(result, user, publicationDate, startDate);
 					} else {
 						logger.debug("No bulletins to publish!");
 					}
-				}
-
-				List<String> avalancheReportIds = new ArrayList<String>();
-				for (Region region : regions) {
-					String avalancheReportId = AvalancheReportController.getInstance()
-							.publishReport(publishedBulletins.values(), startDate, region, user, publicationDate);
-					avalancheReportIds.add(avalancheReportId);
 				}
 			} catch (AlbinaException e) {
 				logger.error("Error publishing bulletins", e);

@@ -723,14 +723,7 @@ public class AvalancheBulletinService {
 								result.add(avalancheBulletin);
 						}
 						if (result != null && !result.isEmpty())
-							PublicationController.getInstance().publish(result);
-					}
-
-					List<String> avalancheReportIds = new ArrayList<String>();
-					for (Region region : regions) {
-						String avalancheReportId = AvalancheReportController.getInstance()
-								.publishReport(publishedBulletins.values(), startDate, region, user, publicationDate);
-						avalancheReportIds.add(avalancheReportId);
+							PublicationController.getInstance().publish(result, user, publicationDate, startDate);
 					}
 				} catch (AlbinaException e) {
 					logger.error("Error publishing bulletins", e);
@@ -811,7 +804,8 @@ public class AvalancheBulletinService {
 
 			Map<String, Thread> threads = new HashMap<String, Thread>();
 			for (Region region : publishBulletinRegions) {
-				Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(bulletins, region);
+				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+				Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(avalancheReport.getId(), bulletins, region);
 				threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
 				createSimpleHtmlThread.start();
 			}
@@ -856,7 +850,8 @@ public class AvalancheBulletinService {
 
 			for (Region region: publishBulletinRegions) {
 				try {
-					PublicationController.getInstance().createMaps(bulletins, region, validityDateString, publicationTimeString);
+					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+					PublicationController.getInstance().createMaps(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString);
 				} catch (InterruptedException e) {
 					logger.error("Map production for " + region.getId() + " interrupted", e);
 				} catch (Exception e1) {
@@ -896,8 +891,9 @@ public class AvalancheBulletinService {
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
 			for (Region region: publishBulletinRegions) {
-				PublicationController.getInstance().createCaamlV5(bulletins, region, validityDateString, publicationTimeString);
-				PublicationController.getInstance().createCaamlV6(bulletins, region, validityDateString, publicationTimeString);
+				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+				PublicationController.getInstance().createCaamlV5(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString);
+				PublicationController.getInstance().createCaamlV6(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString);
 			}
 
 			// copy files
@@ -932,7 +928,8 @@ public class AvalancheBulletinService {
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
 			for (Region region: publishBulletinRegions) {
-				PublicationController.getInstance().createJson(bulletins, region, validityDateString, publicationTimeString);
+				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+				PublicationController.getInstance().createJson(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString);
 			}
 
 			// copy files
@@ -966,9 +963,10 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
 
-			if (language == null)
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, false);
-			else
+			if (language == null) {
+				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+				PublicationController.getInstance().sendEmails(avalancheReport.getId(), bulletins, region, false, false);
+			} else
 				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, false, language);
 
 
@@ -1038,8 +1036,9 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
+			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 
-			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(bulletins,
+			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(avalancheReport.getId(), bulletins,
 					region, false, language, false)).start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
@@ -1068,8 +1067,9 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
+			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 
-			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(bulletins,
+			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(avalancheReport.getId(), bulletins,
 					region, false, language, true)).start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
@@ -1104,8 +1104,9 @@ public class AvalancheBulletinService {
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
+			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 
-			PublicationController.getInstance().triggerPushNotifications(bulletins,
+			PublicationController.getInstance().triggerPushNotifications(avalancheReport.getId(), bulletins,
 					region, false, language, false);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
@@ -1140,8 +1141,9 @@ public class AvalancheBulletinService {
 
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
+			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 
-			PublicationController.getInstance().triggerPushNotifications(bulletins,
+			PublicationController.getInstance().triggerPushNotifications(avalancheReport.getId(), bulletins,
 					region, false, language, true);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
