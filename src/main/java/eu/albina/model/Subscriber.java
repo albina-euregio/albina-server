@@ -33,7 +33,6 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
@@ -69,26 +68,6 @@ public class Subscriber {
 		regions = new ArrayList<Region>();
 		pdfAttachment = false;
 		confirmed = false;
-	}
-
-	public Subscriber(JSONObject json) {
-		this();
-		if (json.has("email") && !json.isNull("email"))
-			this.email = json.getString("email");
-		if (json.has("confirmed") && !json.isNull("confirmed"))
-			this.confirmed = json.getBoolean("confirmed");
-		if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("regions");
-			for (Object entry : regions) {
-				Region region = RegionController.getInstance().getRegion((String) entry);
-				if (region != null)
-					this.regions.add(region);
-			}
-		}
-		if (json.has("language") && !json.isNull("language"))
-			this.language = LanguageCode.valueOf((json.getString("language").toLowerCase()));
-		if (json.has("pdfAttachment") && !json.isNull("pdfAttachment"))
-			this.pdfAttachment = json.getBoolean("pdfAttachment");
 	}
 
 	public String getEmail() {

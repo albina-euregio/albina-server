@@ -16,12 +16,10 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -42,14 +40,12 @@ import javax.persistence.Table;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.enumerations.Position;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
-import com.google.common.io.Resources;
 
 /**
  * This class holds all information about one region.
@@ -251,7 +247,7 @@ public class Region implements AvalancheInformationObject {
 		this.mapYmin = mapYmin;
 	}
 
-	public Region(JSONObject json) {
+	public Region(JSONObject json, Function<String, Region> regionFunction) {
 		this();
 		if (json.has("id") && !json.isNull("id"))
 			this.id = json.getString("id");
@@ -260,7 +256,7 @@ public class Region implements AvalancheInformationObject {
 		if (json.has("subRegions")) {
 			JSONArray subRegions = json.getJSONArray("subRegions");
 			for (Object entry : subRegions) {
-				Region region = RegionController.getInstance().getRegion((String) entry);
+				Region region = regionFunction.apply((String) entry);
 				if (region != null)
 					this.subRegions.add(region);
 			}
@@ -268,7 +264,7 @@ public class Region implements AvalancheInformationObject {
 		if (json.has("superRegions")) {
 			JSONArray superRegions = json.getJSONArray("superRegions");
 			for (Object entry : superRegions) {
-				Region region = RegionController.getInstance().getRegion((String) entry);
+				Region region = regionFunction.apply((String) entry);
 				if (region != null)
 					this.superRegions.add(region);
 			}
@@ -296,7 +292,7 @@ public class Region implements AvalancheInformationObject {
 		if (json.has("sendPushNotifications") && !json.isNull("sendPushNotifications"))
 			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
-			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"));
+			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"), regionFunction);
 		if (json.has("thumbnailMapConfig") && !json.isNull("thumbnailMapConfig"))
 			this.thumbnailMapConfig = new MapProductionConfiguration(json.getJSONObject("thumbnailMapConfig"));
 		if (json.has("standardMapConfig") && !json.isNull("standardMapConfig"))
@@ -752,11 +748,6 @@ public class Region implements AvalancheInformationObject {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
-	}
-
-	public static Region readRegion(final URL resource) throws IOException {
-		final String string = Resources.toString(resource, StandardCharsets.UTF_8);
-		return new Region(new JSONObject(string));
 	}
 
 }

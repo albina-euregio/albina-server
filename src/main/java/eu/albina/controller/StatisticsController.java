@@ -211,7 +211,7 @@ public class StatisticsController {
 				JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
 				for (Object object : jsonArray) {
 					if (object instanceof JSONObject) {
-						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
 						// only add bulletins with published regions
 						if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
 							bulletins.add(bulletin);

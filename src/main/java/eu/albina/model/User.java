@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -92,7 +93,11 @@ public class User {
 		roles = new ArrayList<Role>();
 	}
 
-	public User(JSONObject json) {
+	public User(String email) {
+		this.email = email;
+	}
+
+	public User(JSONObject json, Function<String, Region> regionFunction) {
 		this();
 		if (json.has("email") && !json.isNull("email"))
 			this.email = json.getString("email");
@@ -107,7 +112,7 @@ public class User {
 		if (json.has("regions")) {
 			JSONArray regions = json.getJSONArray("regions");
 			for (Object region : regions) {
-				this.regions.add(new Region((JSONObject) region));
+				this.regions.add(new Region((JSONObject) region, regionFunction));
 			}
 		}
 		if (json.has("roles")) {

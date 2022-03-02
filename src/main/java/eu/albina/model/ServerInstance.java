@@ -19,6 +19,7 @@ package eu.albina.model;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -66,7 +67,7 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 
 	@OneToMany(mappedBy = "serverInstance", fetch = FetchType.EAGER)
 	private List<Region> regions;
- 
+
 	@Column(name = "PUBLISH_AT_5PM")
 	private boolean publishAt5PM;
 
@@ -94,7 +95,7 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 	public ServerInstance() {
 	}
 
-	public ServerInstance(JSONObject json) {
+	public ServerInstance(JSONObject json, Function<String, Region> regionFunction) {
 		this();
 		if (json.has("id") && !json.isNull("id"))
 			this.id = json.getLong("id");
@@ -111,7 +112,7 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 		if (json.has("regions")) {
 			JSONArray regions = json.getJSONArray("regions");
 			for (Object region : regions) {
-				this.regions.add(new Region((JSONObject) region));
+				this.regions.add(new Region((JSONObject) region, regionFunction));
 			}
 		}
 		if (json.has("publishAt5PM") && !json.isNull("publishAt5PM"))

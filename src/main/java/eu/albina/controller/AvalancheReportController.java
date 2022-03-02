@@ -339,7 +339,7 @@ public class AvalancheReportController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-	
+
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
 						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
@@ -791,7 +791,7 @@ public class AvalancheReportController {
 			JSONArray jsonArray = new JSONArray(report.getJsonString());
 			for (Object object : jsonArray)
 				if (object instanceof JSONObject) {
-					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
 					// only add bulletins with published regions
 					if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
 						results.add(bulletin);
