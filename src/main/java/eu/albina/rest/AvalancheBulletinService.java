@@ -442,7 +442,7 @@ public class AvalancheBulletinService {
 				PdfUtil.getInstance().createPdf(bulletins, language, region, serverInstance, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 							publicationTimeString, true);
 
-				String filename = validityDateString + "_" + region + "_" + language.toString() + ".pdf";
+				String filename = validityDateString + "_" + region.getId() + "_" + language.toString() + ".pdf";
 
 				File file = new File(GlobalVariables.getTmpPdfDirectory() + System.getProperty("file.separator")
 				+ validityDateString + System.getProperty("file.separator") + publicationTimeString
@@ -771,19 +771,13 @@ public class AvalancheBulletinService {
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 
-			Map<String, Thread> threads = new HashMap<String, Thread>();
 			for (Region region : publishBulletinRegions) {
-				Thread createPdfThread = PublicationController.getInstance().createPdf(bulletins, region, validityDateString,
-						publicationTimeString);
-				threads.put("pdf" + region.getId(), createPdfThread);
-						createPdfThread.start();
-			}
-
-			for (String key : threads.keySet()) {
 				try {
-					threads.get(key).join();
-				} catch (InterruptedException e) {
-					logger.error(key + " thread interrupted", e);
+					logger.info("PDF production for " + region.getId() + " started");
+					PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
+							publicationTimeString);
+				} finally {
+					logger.info("PDF production " + region.getId() + " finished");
 				}
 			}
 

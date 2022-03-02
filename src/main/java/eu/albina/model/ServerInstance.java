@@ -261,7 +261,7 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 		if (regions != null && regions.size() > 0) {
 			JSONArray jsonRegions = new JSONArray();
 			for (Region region : regions) {
-				jsonRegions.put(region.toJSON());
+				jsonRegions.put(region.getId());
 			}
 			json.put("regions", jsonRegions);
 		}

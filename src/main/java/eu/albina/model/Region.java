@@ -16,6 +16,9 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -46,6 +49,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+import com.google.common.io.Resources;
 
 /**
  * This class holds all information about one region.
@@ -750,4 +754,8 @@ public class Region implements AvalancheInformationObject {
 		return Objects.hash(id);
 	}
 
+    public static Region readBulletin(URL resource) throws IOException {
+		final String validRegionStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
+		return new Region(new JSONObject(validRegionStringFromResource), Region::new);
+    }
 }
