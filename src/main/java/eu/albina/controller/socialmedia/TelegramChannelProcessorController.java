@@ -18,6 +18,11 @@ package eu.albina.controller.socialmedia;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.Duration;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
@@ -44,6 +49,25 @@ public class TelegramChannelProcessorController {
 	}
 
 	public TelegramChannelProcessorController() {
+	}
+
+	public Void trySendPhoto(TelegramConfig config, String message, String attachmentUrl, boolean test, int retry) throws Exception {
+		try {
+			sendPhoto(config, message, attachmentUrl, test);
+		} catch (Exception e) {
+			if (retry <= 0) {
+				throw e;
+			}
+			final int newRetry = retry - 1;
+			final int delay = 50_000 + new Random().nextInt(20_000); // after 50..70s
+			logger.warn("Error while sending bulletin newsletter to telegram channel! Retrying " + newRetry + " times in " + Duration.ofMillis(delay), e);
+			final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+			executorService.schedule(() -> {
+				executorService.shutdown();
+				return trySendPhoto(config, message, attachmentUrl, test, newRetry);
+			}, delay, TimeUnit.MILLISECONDS);
+		}
+		return null;
 	}
 
 	public Response sendPhoto(TelegramConfig config, String message, String attachmentUrl, boolean test)

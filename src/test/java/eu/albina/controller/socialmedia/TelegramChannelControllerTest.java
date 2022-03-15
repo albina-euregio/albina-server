@@ -83,4 +83,11 @@ public class TelegramChannelControllerTest {
 		regions.add(GlobalVariables.codeTrentino);
 		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regions, true, true);
 	}
+
+	@Ignore
+	@Test
+	public void testTrySendPhoto() throws Exception {
+		TelegramChannelProcessorController.getInstance().trySendPhoto(null, null, null, false, 3);
+		Thread.sleep(100_000);
+	}
 }

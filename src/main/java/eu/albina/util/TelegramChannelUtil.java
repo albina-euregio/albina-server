@@ -54,7 +54,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 					.findFirst()
 					.orElseThrow(() -> new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")"));
 				logger.info("Publishing report on telegram channel for {} in {}", config.getRegionConfiguration().getRegion().getId(), lang);
-				ctTc.sendPhoto(config, message, attachmentUrl, test);
+				ctTc.trySendPhoto(config, message, attachmentUrl, test, 3);
 			} catch (Exception e) {
 				logger.error("Error while sending bulletin newsletter to telegram channel in " + lang + " for region "
 						+ region, e);
