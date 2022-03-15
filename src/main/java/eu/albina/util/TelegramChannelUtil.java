@@ -16,8 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +35,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(TelegramChannelUtil.class);
 
-	public static TelegramChannelUtil getInstance() throws IOException, URISyntaxException {
+	public static TelegramChannelUtil getInstance() {
 		if (instance == null) {
 			instance = new TelegramChannelUtil();
 		}
