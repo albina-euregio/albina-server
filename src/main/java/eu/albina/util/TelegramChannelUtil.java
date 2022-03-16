@@ -16,8 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +35,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(TelegramChannelUtil.class);
 
-	public static TelegramChannelUtil getInstance() throws IOException, URISyntaxException {
+	public static TelegramChannelUtil getInstance() {
 		if (instance == null) {
 			instance = new TelegramChannelUtil();
 		}
@@ -51,15 +49,12 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 			try {
 				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
 				Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
-				TelegramConfig config = telegramConfigs.stream().filter(telegramConfig -> telegramConfig.getLanguageCode().equals(lang)).findFirst().orElse(null);
-
-				if (config != null) {
-                    logger.info("Publishing report on telegram channel for {} in {}", config.getRegionConfiguration().getRegion().getId(), lang);
-					ctTc.sendPhoto(config, message, attachmentUrl, test);
-				} else {
-					throw new AlbinaException(
-							"No configuration for telegram channel found (" + region + ", " + lang + ")");
-				}
+				TelegramConfig config = telegramConfigs.stream()
+					.filter(telegramConfig -> telegramConfig.getLanguageCode().equals(lang))
+					.findFirst()
+					.orElseThrow(() -> new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")"));
+				logger.info("Publishing report on telegram channel for {} in {}", config.getRegionConfiguration().getRegion().getId(), lang);
+				ctTc.trySendPhoto(config, message, attachmentUrl, test, 3);
 			} catch (Exception e) {
 				logger.error("Error while sending bulletin newsletter to telegram channel in " + lang + " for region "
 						+ region, e);
