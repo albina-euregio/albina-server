@@ -18,6 +18,11 @@ package eu.albina.controller.publication;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.Duration;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Strings;
 import org.hibernate.HibernateException;
@@ -66,6 +71,26 @@ public class TelegramController {
 				throw new HibernateException("No telegram configuration found for " + region + " [" + languageCode + "]");
 		});
 	}
+
+	public Void trySendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl, boolean test, int retry) throws Exception {
+		try {
+			sendPhoto(region, lang, message, attachmentUrl, test);
+		} catch (Exception e) {
+			if (retry <= 0) {
+				throw e;
+			}
+			final int newRetry = retry - 1;
+			final int delay = 50_000 + new Random().nextInt(20_000); // after 50..70s
+			logger.warn("Error while sending bulletin newsletter to telegram channel! Retrying " + newRetry + " times in " + Duration.ofMillis(delay), e);
+			final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+			executorService.schedule(() -> {
+				executorService.shutdown();
+				return trySendPhoto(region, lang, message, attachmentUrl, test, newRetry);
+			}, delay, TimeUnit.MILLISECONDS);
+		}
+		return null;
+	}
+
 
 	public Response sendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl, boolean test)
 			throws IOException, URISyntaxException, HibernateException {

@@ -29,6 +29,7 @@ import org.junit.Test;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.RegionController;
+import eu.albina.controller.socialmedia.TelegramChannelProcessorController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -78,5 +79,12 @@ public class TelegramChannelControllerTest {
 	public void sendBulletin() throws URISyntaxException, IOException {
 		Region regionTrentino = new Region("IT-32-TN");
 		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regionTrentino, true, true);
+	}
+
+	@Ignore
+	@Test
+	public void testTrySendPhoto() throws Exception {
+		TelegramController.getInstance().trySendPhoto(null, null, null, null, false, 3);
+		Thread.sleep(100_000);
 	}
 }

@@ -16,10 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +29,7 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(TelegramChannelUtil.class);
 
-	public static TelegramChannelUtil getInstance() throws IOException, URISyntaxException {
+	public static TelegramChannelUtil getInstance() {
 		if (instance == null) {
 			instance = new TelegramChannelUtil();
 		}
@@ -46,8 +42,8 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 		if (region.isSendTelegramMessages()) {
 			try {
 				logger.info("Publishing report on telegram channel for {} in {}", region.getId(), lang);
-				ctTc.sendPhoto(region, lang, message, attachmentUrl, test);
-			} catch (IOException | URISyntaxException | HibernateException e) {
+				ctTc.trySendPhoto(region, lang, message, attachmentUrl, test, 3);
+			} catch (Exception e) {
 				logger.error("Error while sending bulletin newsletter to telegram channel in " + lang + " for region "
 						+ region.getId(), e);
 			}
