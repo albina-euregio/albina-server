@@ -29,7 +29,6 @@ import org.junit.Test;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.RegionController;
-import eu.albina.controller.socialmedia.TelegramChannelProcessorController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
