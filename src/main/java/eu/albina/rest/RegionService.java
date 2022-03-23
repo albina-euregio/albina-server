@@ -134,6 +134,7 @@ public class RegionService {
 
 	@GET
 	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Path("/external")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getExternalServerInstances(@Context SecurityContext securityContext) {
