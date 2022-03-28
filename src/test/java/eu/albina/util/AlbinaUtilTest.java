@@ -234,10 +234,18 @@ public class AlbinaUtilTest {
 		assertEquals(Instant.parse("2022-03-26T23:00:00Z"), startDate); // ok
 		assertEquals(ZonedDateTime.parse("2022-03-27T00:00+01:00[Europe/Vienna]"), startDate.atZone(ZoneId.of("Europe/Vienna"))); // ok
 
-		// code from PublicationJob
+		// old code from PublicationJob
 		startDate = startDate.plus(1, ChronoUnit.DAYS);
 		assertEquals(Instant.parse("2022-03-27T23:00:00Z"), startDate); // not good!
 		assertEquals(ZonedDateTime.parse("2022-03-28T01:00+02:00[Europe/Vienna]"), startDate.atZone(ZoneId.of("Europe/Vienna"))); // not good!
 		assertEquals(ZonedDateTime.parse("2022-03-27T23:00Z[UTC]"), startDate.atZone(ZoneId.of("UTC")));
+
+		// code from PublicationJob
+		ZonedDateTime today = LocalDate.parse("2022-03-27").atStartOfDay(AlbinaUtil.localZone());
+		assertEquals(Instant.parse("2022-03-26T23:00:00Z"), today.toInstant()); // ok
+		startDate = today.plusDays(1).toInstant();
+		assertEquals(Instant.parse("2022-03-27T22:00:00Z"), startDate); // ok
+		Instant endDate = today.plusDays(2).toInstant();
+		assertEquals(Instant.parse("2022-03-28T22:00:00Z"), endDate); // ok
 	}
 }

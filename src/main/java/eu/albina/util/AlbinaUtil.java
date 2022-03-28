@@ -26,7 +26,6 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -143,10 +142,6 @@ public class AlbinaUtil {
 				&& status.get(startDate) != BulletinStatus.republished)
 			result = true;
 		return result;
-	}
-
-	public static Instant getInstantStartOfDay() {
-		return LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant();
 	}
 
 	public static Instant getInstantNowNoNanos() {

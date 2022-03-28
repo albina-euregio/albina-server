@@ -17,7 +17,8 @@
 package eu.albina.jobs;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +64,9 @@ public class PublicationJob implements org.quartz.Job {
 			try {
 				User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
 
-				Instant startDate = AlbinaUtil.getInstantStartOfDay().plus(1, ChronoUnit.DAYS);
-				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+				ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
+				Instant startDate = today.plusDays(1).toInstant();
+				Instant endDate = today.plusDays(2).toInstant();
 
                 logger.debug("Start date: {}", startDate.toString());
                 logger.debug("End date: {}", endDate.toString());
