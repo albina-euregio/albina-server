@@ -81,7 +81,7 @@ public class HibernateUtil {
 	}
 
 	public <T> T runTransaction(Function<EntityManager, T> function) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			transaction.begin();
