@@ -212,6 +212,13 @@ public class EmailUtil {
 			}
 			image.put("dangerLevel5Style", getDangerLevel5Style());
 			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
+
+			final boolean isAran = bulletins.stream().anyMatch(b -> b.affectsRegion(GlobalVariables.codeAran));
+			if (isAran) {
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lauegi.png");
+				image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.Aran.gif");
+			}
+
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
 			socialMediaImages.put("instagram", GlobalVariables.getServerImagesUrl() + "social_media/instagram.png");

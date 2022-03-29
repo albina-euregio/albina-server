@@ -20,11 +20,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -55,6 +58,26 @@ public class EmailUtilTest {
 		assertTrue(html.contains("Tendenz: Lawinengefahr nimmt ab</p><p style=\"text-align: left; margin-bottom: 0;\">am Freitag, den 18.01.2019"));
 		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/fd_tyrol_map.jpg"));
 		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/6385c958-018d-4c89-aa67-5eddc31ada5a.jpg"));
+	}
+
+	@Test
+	public void createBulletinEmailHtmlAran() throws Exception {
+		final String serverImagesUrl = GlobalVariables.serverImagesUrl;
+		try {
+			GlobalVariables.serverImagesUrl = "https://static.lauegi.report/images/";
+			GlobalVariables.serverMapsUrl = "https://static.lauegi.report/albina_files";
+			GlobalVariables.serverWebsiteUrl = "https://www.lauegi.report/";
+			URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
+			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+			String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.en,
+				GlobalVariables.codeAran, false, false);
+			String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.mail.html"), StandardCharsets.UTF_8);
+			Assert.assertEquals(expected.trim(), html.trim());
+		} finally {
+			GlobalVariables.serverImagesUrl = serverImagesUrl;
+			GlobalVariables.serverMapsUrl = "";
+			GlobalVariables.serverWebsiteUrl = "";
+		}
 	}
 
 	@Test
