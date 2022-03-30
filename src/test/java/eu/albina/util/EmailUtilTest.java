@@ -20,9 +20,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -113,6 +112,19 @@ public class EmailUtilTest {
 		logger.info("#bulletins: {}", bulletins.size());
 		EmailUtil.getInstance().sendBulletinEmails(bulletins, GlobalVariables.regionsEuregio, false, true);
 		HibernateUtil.getInstance().shutDown();
+	}
+
+	@Ignore
+	@Test
+	public void sendEmailAran() throws Exception {
+		try (AutoCloseable ignore = GlobalVariablesTest.withLauegiVariables()) {
+			HibernateUtil.getInstance().setUp();
+			final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
+			final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+			logger.info("#bulletins: {}", bulletins.size());
+			EmailUtil.getInstance().sendBulletinEmails(bulletins, Collections.singletonList(GlobalVariables.codeAran), false, false);
+			HibernateUtil.getInstance().shutDown();
+		}
 	}
 
 	@Test
