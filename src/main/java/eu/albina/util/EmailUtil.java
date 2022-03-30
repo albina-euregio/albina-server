@@ -177,9 +177,12 @@ public class EmailUtil {
 				.description("mail-content.zip")
 				.type("application/zip")
 				.content(createZipFile(emailHtml, null));
+			final boolean isAran = GlobalVariables.codeAran.equals(region);
+			final String fromEmail = isAran ? "lauegi@aran.org" : lang.getBundleString("avalanche-report.email");
+			final String fromName = isAran ? "Centre de Lauegi Val d'Aran" : lang.getBundleString("avalanche-report.name");
 			PostMailingsRequest request = new PostMailingsRequest()
-				.fromEmail(lang.getBundleString("avalanche-report.email"))
-				.fromName(lang.getBundleString("avalanche-report.name"))
+				.fromEmail(fromEmail)
+				.fromName(fromName)
 				.subject(subject)
 				.status("scheduled")
 				.file(file);
