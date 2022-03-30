@@ -183,7 +183,7 @@ public class EmailUtil {
 			PostMailingsRequest request = new PostMailingsRequest()
 				.fromEmail(fromEmail)
 				.fromName(fromName)
-				.subject(isAran ? subject.replace("\\w+\\.report", "Lauegi.report") : subject)
+				.subject(subject)
 				.status("scheduled")
 				.file(file);
 			rmc.sendMessage(rmConfig, lang, request, test);
