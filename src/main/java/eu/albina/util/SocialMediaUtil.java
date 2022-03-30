@@ -25,7 +25,7 @@ import eu.albina.model.enumerations.LanguageCode;
 interface SocialMediaUtil {
 
 	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
-		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+		for (LanguageCode lang : LanguageCode.getSocialMedia(regions)) {
 			sendBulletinNewsletters(bulletins, regions, update, lang, test);
 		}
 	}

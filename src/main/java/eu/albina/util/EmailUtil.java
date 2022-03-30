@@ -107,7 +107,7 @@ public class EmailUtil {
 	}
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
-		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+		for (LanguageCode lang : LanguageCode.getSocialMedia(regions)) {
 			sendBulletinEmails(bulletins, regions, update, test, lang);
 		}
 	}
@@ -183,7 +183,7 @@ public class EmailUtil {
 			PostMailingsRequest request = new PostMailingsRequest()
 				.fromEmail(fromEmail)
 				.fromName(fromName)
-				.subject(subject)
+				.subject(isAran ? subject.replace("\\w+\\.report", "Lauegi.report") : subject)
 				.status("scheduled")
 				.file(file);
 			rmc.sendMessage(rmConfig, lang, request, test);
