@@ -469,6 +469,9 @@ public class EmailUtil {
 			// Writer out = new OutputStreamWriter(System.out);
 			temp.process(root, out);
 
+			if (isAran) {
+				return out.toString().replaceAll("(?i)#1aabff", "#A32136");
+			}
 			return out.toString();
 		} catch (IOException | TemplateException e) {
 			logger.error("Bulletin email could not be created", e);
