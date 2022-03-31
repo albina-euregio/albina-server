@@ -50,7 +50,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
 				GlobalVariables.codeTyrol, false, false);
-		assertEquals("162 kB", 162, html.getBytes(StandardCharsets.UTF_8).length / 1024);
+		assertEquals("162 kB", 162., html.getBytes(StandardCharsets.UTF_8).length / 1024., 1.);
 		assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag  17.01.2019</h2>"));
 		assertTrue(html.contains("Veröffentlicht am <b>16.01.2019 um 17:00</b>"));
 		assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
