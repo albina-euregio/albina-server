@@ -21,7 +21,7 @@ public interface LinkUtil {
 		if (Strings.isNullOrEmpty(url)) {
 			url = lang.getBundleString("avalanche-report.url");
 		}
-		return url;
+		return url.replaceAll("/$", "");
 	}
 
 	static String getSimpleHtmlUrl(LanguageCode lang) {
