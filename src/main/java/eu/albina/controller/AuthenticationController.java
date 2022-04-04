@@ -18,8 +18,11 @@ package eu.albina.controller;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
+import eu.albina.util.AlbinaUtil;
 import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -104,25 +107,10 @@ public class AuthenticationController {
 	 *             if the sign process fails
 	 */
 	public String issueAccessToken(String username) throws IllegalArgumentException {
-		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
-		Date expirationTime = new Date(time);
-		Date issuedAt = new Date();
-		return JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
-				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
-	}
-
-	/**
-	 * Creates a refresh token for the given user.
-	 *
-	 * @param username
-	 *            the username the token should be generated for
-	 * @return the refresh token for the given user
-	 * @throws IllegalArgumentException
-	 *             if the sign process fails
-	 */
-	public String issueRefreshToken(String username) throws IllegalArgumentException {
-		long time = System.currentTimeMillis() + GlobalVariables.refreshTokenExpirationDuration;
-		Date expirationTime = new Date(time);
+		Date expirationTime = Date.from(LocalDate.now().atStartOfDay(AlbinaUtil.localZone())
+			.plusDays(1)
+			.withHour(3) // tomorrow at 03:00
+			.toInstant());
 		Date issuedAt = new Date();
 		return JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
 				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
@@ -143,23 +131,6 @@ public class AuthenticationController {
 		} catch (JWTVerificationException exception) {
 			throw new AlbinaException("Not authorized");
 		}
-	}
-
-	/**
-	 * Refresh the token for a given user.
-	 *
-	 * @param username
-	 *            the username
-	 * @return the refreshed access token for the given user
-	 * @throws IllegalArgumentException
-	 *             if the sign process fails
-	 */
-	public String refreshToken(String username) throws IllegalArgumentException {
-		long time = System.currentTimeMillis() + GlobalVariables.accessTokenExpirationDuration;
-		Date expirationTime = new Date(time);
-		Date issuedAt = new Date();
-		return JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
-				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
 	}
 
 	/**
