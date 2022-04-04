@@ -17,7 +17,8 @@
 package eu.albina.jobs;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ import eu.albina.util.AlbinaUtil;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
- * automatically update the Avalanche.report at 8AM.
+ * automatically update the bulletins at 8AM.
  *
  * @author Norbert Lanzanasto
  *
@@ -51,7 +52,7 @@ public class UpdateJob implements org.quartz.Job {
 	private static final Logger logger = LoggerFactory.getLogger(UpdateJob.class);
 
 	/**
-	 * Execute all necessary tasks to update the Avalanche.report at 8AM, depending
+	 * Execute all necessary tasks to update the bulletins at 8AM, depending
 	 * on the current settings.
 	 *
 	 * @param arg0
@@ -63,8 +64,9 @@ public class UpdateJob implements org.quartz.Job {
 		try {
 			User user = UserController.getInstance().getUser(ServerInstanceController.getInstance().getLocalServerInstance().getUserName());
 
-			Instant startDate = AlbinaUtil.getInstantStartOfDay();
-			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+			ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
+			Instant startDate = today.toInstant();
+			Instant endDate = today.plusDays(1).toInstant();
 
 			List<Region> changedRegions = RegionController.getInstance().getActiveRegions().stream()
 				.filter(region -> {

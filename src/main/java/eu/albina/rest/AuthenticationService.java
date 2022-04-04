@@ -58,12 +58,10 @@ public class AuthenticationService {
 		try {
 			AuthenticationController.getInstance().authenticate(username, password);
 			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
-			String refreshToken = AuthenticationController.getInstance().issueRefreshToken(username);
 
 			User user = UserController.getInstance().getUser(username);
 			JSONObject jsonResult = user.toJSON();
 			jsonResult.put("access_token", accessToken);
-			jsonResult.put("refresh_token", refreshToken);
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {

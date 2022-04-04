@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="avalanche-report.name">Avalanche.report</entry>
-  <entry key="avalanche-report.preview">Vista prèvia</entry>
-  <entry key="avalanche-report.url">https://avalanche.report</entry>
-  <entry key="avalanche-report.url.capitalized">WWW.AVALANCHE.REPORT</entry>
-  <entry key="avalanche-report.email">info@avalanche.report</entry>
-  <entry key="avalanche-report.logo.path.bw">logo/grey/avalanche_report.png</entry>
-  <entry key="avalanche-report.logo.path">logo/color/avalanche_report.png</entry>
-  <entry key="avalanche-report.standard.link.text">Cargar era visualizacion estandard</entry>
+  <entry key="website.name">Avalanche.report</entry>
+  <entry key="preview">Vista prèvia</entry>
+  <entry key="website.url">https://avalanche.report</entry>
+  <entry key="website.url.capitalized">WWW.AVALANCHE.REPORT</entry>
+  <entry key="email">info@avalanche.report</entry>
+  <entry key="logo.path.bw">logo/grey/avalanche_report.png</entry>
+  <entry key="logo.path">logo/color/avalanche_report.png</entry>
+  <entry key="standard.link.text">Cargar era visualizacion estandard</entry>
   <entry key="danger-rating.elevation">{0} per jos {1}, {2} per dessús {3}</entry>
   <entry key="day.MONDAY">Deluns</entry>
   <entry key="day.TUESDAY">Dimars</entry>

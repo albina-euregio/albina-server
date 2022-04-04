@@ -39,9 +39,6 @@ public enum LanguageCode {
 	// LANG
 	public static final Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(de, it, en, fr, es, ca, oc));
 
-	// LANG
-	public static final Set<LanguageCode> SOCIAL_MEDIA = Collections.unmodifiableSet(EnumSet.of(de, it, en));
-
 	private final Locale locale;
 
 	LanguageCode(Locale locale) {

@@ -174,8 +174,8 @@ elif map_level eq "overlay" then
 	let frame_width = 0.2
 endif
 
-let frame_stroke_color = "color '#999999'"										# Rahmenfarbe #1aabff
-let frame_line_style = "linestyle " . frame_width . ", 'round', 'miter'" 		# Rahmenbreite
+let frame_stroke_color = "color '#999999'"
+let frame_line_style = "linestyle " . frame_width . ", 'round', 'miter'"
 
 
 # Maßstabsvariablen

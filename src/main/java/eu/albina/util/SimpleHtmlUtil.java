@@ -183,9 +183,9 @@ public class SimpleHtmlUtil {
 		Map<String, Object> root = new HashMap<>();
 
 		Map<String, Object> text = new HashMap<>();
-		text.put("standardView", lang.getBundleString("avalanche-report.standard.link.text"));
-		text.put("tabtitle", lang.getBundleString("avalanche-report.name") + " " + AlbinaUtil.getDate(bulletins, lang));
-		text.put("title", lang.getBundleString("avalanche-report.name"));
+		text.put("standardView", lang.getBundleString("standard.link.text"));
+		text.put("tabtitle", lang.getBundleString("website.name") + " " + AlbinaUtil.getDate(bulletins, lang));
+		text.put("title", lang.getBundleString("website.name"));
 		text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
 		String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
 		text.put("publicationDate", publicationDate);
@@ -203,7 +203,7 @@ public class SimpleHtmlUtil {
 		root.put("text", text);
 
 		Map<String, Object> link = new HashMap<>();
-		link.put("website", lang.getBundleString("avalanche-report.url") + "/bulletin/"
+		link.put("website", lang.getBundleString("website.url") + "/bulletin/"
 				+ AlbinaUtil.getValidityDateString(bulletins));
 		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1)));
 		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1)));

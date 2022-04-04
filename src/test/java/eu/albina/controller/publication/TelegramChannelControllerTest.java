@@ -67,7 +67,7 @@ public class TelegramChannelControllerTest {
 		String message;
 
 		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
-			for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+			for (LanguageCode lang : LanguageCode.ENABLED) {
 				message = region + " - " + lang;
 				telegramController.sendPhoto(region, lang, message, attachmentUrl, true);
 			}

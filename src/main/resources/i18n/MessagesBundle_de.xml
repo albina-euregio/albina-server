@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="avalanche-report.name">Lawinen.report</entry>
-  <entry key="avalanche-report.preview"> - VORSCHAU</entry>
-  <entry key="avalanche-report.url">https://lawinen.report</entry>
-  <entry key="avalanche-report.url.capitalized">WWW.LAWINEN.REPORT</entry>
-  <entry key="avalanche-report.email">info@lawinen.report</entry>
-  <entry key="avalanche-report.logo.path.bw">logo/grey/lawinen_report.png</entry>
-  <entry key="avalanche-report.logo.path">logo/color/lawinen_report.png</entry>
-  <entry key="avalanche-report.standard.link.text">Standardansicht laden</entry>
+  <entry key="website.name">Lawinen.report</entry>
+  <entry key="preview"> - VORSCHAU</entry>
+  <entry key="website.url">https://lawinen.report</entry>
+  <entry key="website.url.capitalized">WWW.LAWINEN.REPORT</entry>
+  <entry key="email">info@lawinen.report</entry>
+  <entry key="logo.path.bw">logo/grey/lawinen_report.png</entry>
+  <entry key="logo.path">logo/color/lawinen_report.png</entry>
+  <entry key="standard.link.text">Standardansicht laden</entry>
   <entry key="danger-rating.elevation">{0} unter {1}, {2} über {3}</entry>
   <entry key="day.MONDAY">Montag</entry>
   <entry key="day.TUESDAY">Dienstag</entry>

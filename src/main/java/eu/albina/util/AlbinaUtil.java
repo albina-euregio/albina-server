@@ -26,7 +26,6 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.Period;
@@ -118,10 +117,6 @@ public class AlbinaUtil {
 				&& status.get(startDate) != BulletinStatus.republished)
 			result = true;
 		return result;
-	}
-
-	public static Instant getInstantStartOfDay() {
-		return LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant();
 	}
 
 	public static Instant getInstantNowNoNanos() {
@@ -537,7 +532,7 @@ public class AlbinaUtil {
 
     public static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {
 		String stringDate = OffsetDateTime.parse(date).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return stringDate + "_" + language.getBundleString("avalanche-report.filename") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
+        return stringDate + "_" + language.getBundleString("media-file.name") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
     }
 
 }

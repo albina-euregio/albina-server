@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="avalanche-report.name">Valanghe.report</entry>
-  <entry key="avalanche-report.preview">  - ANTEPRIMA</entry>
-  <entry key="avalanche-report.url">https://valanghe.report</entry>
-  <entry key="avalanche-report.url.capitalized">WWW.VALANGHE.REPORT</entry>
-  <entry key="avalanche-report.email">info@valanghe.report</entry>
-  <entry key="avalanche-report.logo.path.bw">logo/grey/valanghe_report.png</entry>
-  <entry key="avalanche-report.logo.path">logo/color/valanghe_report.png</entry>
-  <entry key="avalanche-report.standard.link.text">Vista standard del carico</entry>
+  <entry key="website.name">Valanghe.report</entry>
+  <entry key="preview">  - ANTEPRIMA</entry>
+  <entry key="website.url">https://valanghe.report</entry>
+  <entry key="website.url.capitalized">WWW.VALANGHE.REPORT</entry>
+  <entry key="email">info@valanghe.report</entry>
+  <entry key="logo.path.bw">logo/grey/valanghe_report.png</entry>
+  <entry key="logo.path">logo/color/valanghe_report.png</entry>
+  <entry key="standard.link.text">Vista standard del carico</entry>
   <entry key="danger-rating.elevation">{0} sotto i {1}, {2} sopra i {3}</entry>
   <entry key="day.MONDAY">Lunedì</entry>
   <entry key="day.TUESDAY">Martedì</entry>

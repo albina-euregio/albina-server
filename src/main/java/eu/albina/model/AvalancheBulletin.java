@@ -1189,7 +1189,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		}
-		String linkReferenceURI = languageCode.getBundleString("avalanche-report.url") + "/bulletin/" + getValidityDateString()
+		String linkReferenceURI = languageCode.getBundleString("website.url") + "/bulletin/" + getValidityDateString()
 				+ "?region=" + getId();
 		metaData.appendChild(XmlUtil.createExtFile(doc, "website",
 				languageCode.getBundleString("ext-file.region-link.description"), linkReferenceURI));
@@ -1227,10 +1227,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element source = doc.createElement("source");
 		Element operation = doc.createElement("operation");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode(languageCode.getBundleString("avalanche-report.name")));
+		name.appendChild(doc.createTextNode(languageCode.getBundleString("website.name")));
 		operation.appendChild(name);
 		Element website = doc.createElement("website");
-		website.appendChild(doc.createTextNode(languageCode.getBundleString("avalanche-report.url")));
+		website.appendChild(doc.createTextNode(languageCode.getBundleString("website.url")));
 		operation.appendChild(website);
 		source.appendChild(operation);
 		rootElement.appendChild(source);

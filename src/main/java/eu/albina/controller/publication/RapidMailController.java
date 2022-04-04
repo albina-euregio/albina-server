@@ -131,6 +131,10 @@ public class RapidMailController {
 			throws AlbinaException, IOException, HibernateException {
 		RapidMailConfiguration config = this.getConfiguration(region);
 
+		if (config == null || config.getUsername() == null || config.getUsername().isEmpty() || config.getPassword() == null || config.getPassword().isEmpty()) {
+			throw new AlbinaException("No rapid mail configuration for " + region.getId() + " in " + language);
+		}
+
 		if (mailingsPost.getDestinations() == null) {
 			String recipientName = test ? "TEST" : getRecipientName(region, language, media);
 			logger.info("Retrieving recipient for {} ...", recipientName);

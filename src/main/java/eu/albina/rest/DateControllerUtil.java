@@ -5,6 +5,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.util.AlbinaUtil;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -15,7 +16,7 @@ interface DateControllerUtil {
 		if (date != null) {
 			return ZonedDateTime.parse(date).toInstant();
 		} else {
-			return AlbinaUtil.getInstantStartOfDay();
+			return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).toInstant();
 		}
 	}
 

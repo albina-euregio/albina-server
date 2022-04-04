@@ -17,7 +17,8 @@
 package eu.albina.jobs;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ import eu.albina.util.AlbinaUtil;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
- * automatically publish the Avalanche.report at 5PM.
+ * automatically publish the bulletins at 5PM.
  *
  * @author Norbert Lanzanasto
  *
@@ -50,7 +51,7 @@ public class PublicationJob implements org.quartz.Job {
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
 
 	/**
-	 * Execute all necessary tasks to publish the Avalanche.report at 5PM, depending
+	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
 	 * on the current settings.
 	 *
 	 * @param arg0
@@ -64,8 +65,9 @@ public class PublicationJob implements org.quartz.Job {
 			try {
 				User user = UserController.getInstance().getUser(ServerInstanceController.getInstance().getLocalServerInstance().getUserName());
 
-				Instant startDate = AlbinaUtil.getInstantStartOfDay().plus(1, ChronoUnit.DAYS);
-				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+				ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
+				Instant startDate = today.plusDays(1).toInstant();
+				Instant endDate = today.plusDays(2).toInstant();
 
                 logger.debug("Start date: {}", startDate.toString());
                 logger.debug("End date: {}", endDate.toString());

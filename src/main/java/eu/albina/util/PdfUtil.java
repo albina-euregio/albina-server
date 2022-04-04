@@ -133,7 +133,7 @@ public class PdfUtil {
 			pdf.getCatalog().setLang(new PdfString(lang.toString()));
 			pdf.getCatalog().setViewerPreferences(new PdfViewerPreferences().setDisplayDocTitle(true));
 			PdfDocumentInfo info = pdf.getDocumentInfo();
-			info.setTitle(lang.getBundleString("avalanche-report.name"));
+			info.setTitle(lang.getBundleString("website.name"));
 
 			openSansRegularFont = createFont("fonts/open-sans/OpenSans-Regular.ttf");
 			openSansBoldFont = createFont("fonts/open-sans/OpenSans-Bold.ttf");
@@ -652,7 +652,7 @@ public class PdfUtil {
 	}
 
 	public Image getImage(String resourceName) {
-		URL resource = Resources.getResource(resourceName);
+		URL resource = Resources.getResource("images/" + resourceName);
 		ImageData imageData = ImageDataFactory.create(resource);
 		return new Image(imageData);
 	}

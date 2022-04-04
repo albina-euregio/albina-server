@@ -61,7 +61,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	@Override
 	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl, boolean test) {
 		final JSONObject payload = new JSONObject();
-		payload.put("title", lang.getBundleString("avalanche-report.name"));
+		payload.put("title", lang.getBundleString("website.name"));
 		payload.put("body", message);
 		payload.put("image", attachmentUrl);
 		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
@@ -80,7 +80,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 
 	public void sendWelcomePushMessage(PushSubscription subscription) {
 		final JSONObject payload = new JSONObject();
-		payload.put("title", subscription.getLanguage().getBundleString("avalanche-report.name"));
+		payload.put("title", subscription.getLanguage().getBundleString("website.name"));
 		payload.put("body", "Hello World!");
 		sendPushMessage(subscription, payload);
 	}

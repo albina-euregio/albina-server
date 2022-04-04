@@ -24,8 +24,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,15 +86,15 @@ public class HibernateUtil {
 	}
 
 	public <T> T runTransaction(Function<EntityManager, T> function) {
-		EntityManager entityManager = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		EntityTransaction transaction = entityManager.getTransaction();
 		try {
 			transaction.begin();
 			final T result = function.apply(entityManager);
 			transaction.commit();
 			return result;
-		} catch (HibernateException e) {
-			logger.warn("HibernateException: " + e.getMessage());
+		} catch (PersistenceException e) {
+			logger.warn("PersistenceException: " + e.getMessage());
 			transaction.rollback();
 			throw e;
 		} finally {

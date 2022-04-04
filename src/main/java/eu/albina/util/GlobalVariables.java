@@ -48,10 +48,6 @@ public class GlobalVariables {
 
 	public static final String tokenEncodingIssuer = "albina";
 
-	public static long accessTokenExpirationDuration = 1000 * 60 * 60 * 24;
-	public static long refreshTokenExpirationDuration = 1000 * 60 * 60 * 24 * 7;
-	public static long confirmationTokenExpirationDuration = 1000 * 60 * 60 * 24 * 3;
-
 	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = CaamlVersion.V5.schemaLocation();
@@ -66,26 +62,6 @@ public class GlobalVariables {
 
 	public static String getTmpPdfDirectory() {
 		return tmpDirectory;
-	}
-
-	public static long getAccessTokenExpirationDuration() {
-		return accessTokenExpirationDuration;
-	}
-
-	public static void setAccessTokenExpirationDuration(long accessTokenExpirationDuration)
-			throws ConfigurationException {
-		GlobalVariables.accessTokenExpirationDuration = accessTokenExpirationDuration;
-		setConfigProperty("accessTokenExpirationDuration", accessTokenExpirationDuration);
-	}
-
-	public static long getConfirmationTokenExpirationDuration() {
-		return confirmationTokenExpirationDuration;
-	}
-
-	public static void setConfirmationTokenExpirationDuration(long confirmationTokenExpirationDuration)
-			throws ConfigurationException {
-		GlobalVariables.confirmationTokenExpirationDuration = confirmationTokenExpirationDuration;
-		setConfigProperty("confirmationTokenExpirationDuration", confirmationTokenExpirationDuration);
 	}
 
 	public static String getBulletinCaamlSchemaFileString() {

@@ -26,7 +26,7 @@ import eu.albina.model.enumerations.LanguageCode;
 interface SocialMediaUtil {
 
 	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test) {
-		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+		for (LanguageCode lang : LanguageCode.ENABLED) {
 			sendBulletinNewsletters(bulletins, region, update, lang, test);
 		}
 	}
@@ -43,10 +43,10 @@ interface SocialMediaUtil {
 		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, region);
 		if (update) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
-				lang.getBundleString("avalanche-report.name"), dateString, bulletinUrl);
+				lang.getBundleString("website.name"), dateString, bulletinUrl);
 		} else {
 			return MessageFormat.format(lang.getBundleString("social-media.message"),
-				lang.getBundleString("avalanche-report.name"), dateString, bulletinUrl);
+				lang.getBundleString("website.name"), dateString, bulletinUrl);
 		}
 	}
 

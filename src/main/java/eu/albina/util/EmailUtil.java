@@ -110,7 +110,7 @@ public class EmailUtil {
 	}
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test) {
-		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+		for (LanguageCode lang : LanguageCode.ENABLED) {
 			sendBulletinEmails(bulletins, region, update, test, lang);
 		}
 	}
@@ -121,9 +121,9 @@ public class EmailUtil {
 			boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 			String subject;
 			if (update)
-				subject = lang.getBundleString("email.subject.update") + AlbinaUtil.getDate(bulletins, lang);
+				subject = MessageFormat.format(lang.getBundleString("email.subject.update", region), lang.getBundleString("website.name", region)) + AlbinaUtil.getDate(bulletins, lang);
 			else
-				subject = lang.getBundleString("email.subject") + AlbinaUtil.getDate(bulletins, lang);
+				subject = MessageFormat.format(lang.getBundleString("email.subject", region), lang.getBundleString("website.name", region)) + AlbinaUtil.getDate(bulletins, lang);
 			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
 			for (AvalancheBulletin avalancheBulletin : bulletins) {
 				if (avalancheBulletin.affectsRegionOnlyPublished(region))
@@ -143,7 +143,7 @@ public class EmailUtil {
 		sb.append(", ");
 		sb.append(localDate.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
 
-		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), sb.toString(), username);
+		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb.toString(), username);
 		String emailHtml = text + "\n\n" + MessageFormat.format(lang.getBundleString("email.media.text"), date, username);
 
 		// TODO add links to mp3 and txt file
@@ -195,9 +195,11 @@ public class EmailUtil {
 				.description("mail-content.zip")
 				.type("application/zip")
 				.content(createZipFile(emailHtml, null));
+			final String fromEmail = lang.getBundleString("email", region);
+			final String fromName = lang.getBundleString("website.name", region);
 			PostMailingsRequest request = new PostMailingsRequest()
-				.fromEmail(lang.getBundleString("avalanche-report.email"))
-				.fromName(lang.getBundleString("avalanche-report.name"))
+				.fromEmail(fromEmail)
+				.fromName(fromName)
 				.subject(subject)
 				.status("scheduled")
 				.file(file);
@@ -216,22 +218,11 @@ public class EmailUtil {
 
 			final String serverImagesUrl =  ServerInstanceController.getInstance().getLocalServerInstance().getServerImagesUrl();
 
-			switch (lang) {
-			case de:
-				image.put("logo", serverImagesUrl + "logo/color/lawinen_report.png");
-				break;
-			case it:
-				image.put("logo", serverImagesUrl + "logo/color/valanghe_report.png");
-				break;
-			case en:
-				image.put("logo", serverImagesUrl + "logo/color/avalanche_report.png");
-				break;
-			default:
-				image.put("logo", serverImagesUrl + "logo/color/avalanche_report.png");
-				break;
-			}
+			image.put("logo", serverImagesUrl + lang.getBundleString("logo.path", region));
 			image.put("dangerLevel5Style", getDangerLevel5Style());
-			image.put("ci", serverImagesUrl + "logo/color/colorbar.gif");
+			image.put("ci", serverImagesUrl + region.getImageColorbarColorPath());
+			image.put("color", region.getEmailColor());
+
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", serverImagesUrl + "social_media/facebook.png");
 			socialMediaImages.put("instagram", serverImagesUrl + "social_media/instagram.png");
@@ -468,9 +459,9 @@ public class EmailUtil {
 			links.put("pdf", LinkUtil.getPdfLink(bulletins, lang, region));
 			links.put("imprint", LinkUtil.getImprintLink(lang, region));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
-			socialMediaLinks.put("facebook", lang.getBundleString("avalanche-report.url") + "/#followDialog");
-			socialMediaLinks.put("instagram", lang.getBundleString("avalanche-report.url") + "/#followDialog");
-			socialMediaLinks.put("youtube", lang.getBundleString("avalanche-report.url") + "/#followDialog");
+			socialMediaLinks.put("facebook", lang.getBundleString("website.url") + "/#followDialog");
+			socialMediaLinks.put("instagram", lang.getBundleString("website.url") + "/#followDialog");
+			socialMediaLinks.put("youtube", lang.getBundleString("website.url") + "/#followDialog");
 			links.put("socialmedia", socialMediaLinks);
 			root.put("link", links);
 

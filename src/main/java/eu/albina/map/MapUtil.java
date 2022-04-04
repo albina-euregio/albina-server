@@ -121,12 +121,12 @@ public interface MapUtil {
 		double logoAspectRatio = 1;
 
 		if (grayscale && region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath())) {
-			URL logoUrl = Resources.getResource(region.getMapLogoBwPath());
+			URL logoUrl = Resources.getResource("images/" + region.getMapLogoBwPath());
 			logoPath = logoUrl.toString();
 			BufferedImage image = ImageIO.read(logoUrl);
    			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
 		} else if (!grayscale && region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath())) {
-			URL logoUrl = Resources.getResource(region.getMapLogoColorPath());
+			URL logoUrl = Resources.getResource("images/" + region.getMapLogoColorPath());
 			logoPath = logoUrl.toString();
 			BufferedImage image = ImageIO.read(logoUrl);
    			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();

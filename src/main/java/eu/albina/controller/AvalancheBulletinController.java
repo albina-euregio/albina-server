@@ -627,7 +627,6 @@ public class AvalancheBulletinController {
 			boolean missingSnowpackStructureComment = false;
 			boolean pendingSuggestions = false;
 			boolean missingDangerRating = false;
-			boolean incompleteTranslation = false;
 
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
@@ -677,45 +676,6 @@ public class AvalancheBulletinController {
 									&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
 						missingDangerRating = true;
 					}
-
-					if ((bulletin.getAvActivityHighlightsIn(LanguageCode.de) != null
-							&& bulletin.getAvActivityHighlightsIn(LanguageCode.de)
-									.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getAvActivityHighlightsIn(LanguageCode.it) != null
-									&& bulletin.getAvActivityHighlightsIn(LanguageCode.it)
-											.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getAvActivityHighlightsIn(LanguageCode.en) != null
-									&& bulletin.getAvActivityHighlightsIn(LanguageCode.en)
-											.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getAvActivityCommentIn(LanguageCode.de) != null
-									&& bulletin.getAvActivityCommentIn(LanguageCode.de)
-											.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getAvActivityCommentIn(LanguageCode.it) != null
-									&& bulletin.getAvActivityCommentIn(LanguageCode.it)
-											.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getAvActivityCommentIn(LanguageCode.en) != null
-									&& bulletin.getAvActivityCommentIn(LanguageCode.en)
-											.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.de) != null
-									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.de)
-											.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.it) != null
-									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.it)
-											.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getSnowpackStructureCommentIn(LanguageCode.en) != null
-									&& bulletin.getSnowpackStructureCommentIn(LanguageCode.en)
-											.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getTendencyCommentIn(LanguageCode.de) != null
-									&& bulletin.getTendencyCommentIn(LanguageCode.de)
-											.equals(LanguageCode.de.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getTendencyCommentIn(LanguageCode.it) != null
-									&& bulletin.getTendencyCommentIn(LanguageCode.it)
-											.equals(LanguageCode.it.getBundleString("cop.incomplete-translation")))
-							|| (bulletin.getTendencyCommentIn(LanguageCode.en) != null
-									&& bulletin.getTendencyCommentIn(LanguageCode.en)
-											.equals(LanguageCode.en.getBundleString("cop.incomplete-translation")))) {
-						incompleteTranslation = true;
-					}
 				}
 			}
 
@@ -733,8 +693,6 @@ public class AvalancheBulletinController {
 				json.put("pendingSuggestions");
 			if (missingDangerRating)
 				json.put("missingDangerRating");
-			if (incompleteTranslation)
-				json.put("incompleteTranslation");
 
 			return json;
 		});

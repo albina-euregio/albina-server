@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="avalanche-report.name">Avalanche.report</entry>
-  <entry key="avalanche-report.preview"> - PRÉVIEW</entry>
-  <entry key="avalanche-report.url">https://avalanche.report/fr</entry>
-  <entry key="avalanche-report.url.capitalized">WWW.AVALANCHE.REPORT/FR</entry>
-  <entry key="avalanche-report.email">info@avalanche.report</entry>
-  <entry key="avalanche-report.logo.path.bw">logo/grey/avalanche_report.png</entry>
-  <entry key="avalanche-report.logo.path">logo/color/avalanche_report.png</entry>
-  <entry key="avalanche-report.standard.link.text">Charger la vue standard</entry>
+  <entry key="website.name">Avalanche.report</entry>
+  <entry key="preview"> - PRÉVIEW</entry>
+  <entry key="website.url">https://avalanche.report/fr</entry>
+  <entry key="website.url.capitalized">WWW.AVALANCHE.REPORT/FR</entry>
+  <entry key="email">info@avalanche.report</entry>
+  <entry key="logo.path.bw">logo/grey/avalanche_report.png</entry>
+  <entry key="logo.path">logo/color/avalanche_report.png</entry>
+  <entry key="standard.link.text">Charger la vue standard</entry>
   <entry key="danger-rating.elevation">{0} au-dessous de {1}, {2} au-dessus de {3}</entry>
   <entry key="day.MONDAY">Lundi</entry>
   <entry key="day.TUESDAY">Mardi</entry>

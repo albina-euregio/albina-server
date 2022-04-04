@@ -12,7 +12,6 @@ import eu.albina.model.enumerations.LanguageCode;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.MissingResourceException;
 
 /**
  * Returns URLs (descriptions) for various bulletin elements
@@ -20,11 +19,8 @@ import java.util.MissingResourceException;
 public interface LinkUtil {
 
 	static String getWebsite(LanguageCode lang, Region region) {
-		try {
-			return lang.getBundleString("avalanche-report.url", region);
-		} catch (MissingResourceException e) {
-			return lang.getBundleString("avalanche-report.url");
-		}
+		String url = lang.getBundleString("website.url", region);
+		return url.replaceAll("/$", "");
 	}
 
 	static String getSimpleHtmlUrl(LanguageCode lang, Region region) {

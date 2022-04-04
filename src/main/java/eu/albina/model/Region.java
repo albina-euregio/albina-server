@@ -171,6 +171,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "PDF_COLOR")
 	private String pdfColor;
 
+	@Column(name = "EMAIL_COLOR")
+	private String emailColor;
+
 	@Column(name = "PDF_MAP_Y_AM_PM")
 	private int pdfMapYAmPm;
 
@@ -305,6 +308,8 @@ public class Region implements AvalancheInformationObject {
 			this.overlayMapConfig = new MapProductionConfiguration(json.getJSONObject("overlayMapConfig"));
 		if (json.has("pdfColor") && !json.isNull("pdfColor"))
 			this.pdfColor = json.getString("pdfColor");
+		if (json.has("emailColor") && !json.isNull("emailColor"))
+			this.emailColor = json.getString("emailColor");
 		if (json.has("pdfMapYAmPm") && !json.isNull("pdfMapYAmPm"))
 			this.pdfMapYAmPm = json.getInt("pdfMapYAmPm");
 		if (json.has("pdfMapYFd") && !json.isNull("pdfMapYFd"))
@@ -513,6 +518,14 @@ public class Region implements AvalancheInformationObject {
 		this.pdfColor = pdfColor;
 	}
 
+	public String getEmailColor() {
+		return emailColor;
+	}
+
+	public void setEmailColor(String emailColor) {
+		this.emailColor = emailColor;
+	}
+
 	public int getPdfMapYAmPm() {
 		return pdfMapYAmPm;
 	}
@@ -716,6 +729,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("standardMapConfig", getStandardMapConfig().toJSON());
 		json.put("overlayMapConfig", getOverlayMapConfig().toJSON());
 		json.put("pdfColor", getPdfColor());
+		json.put("emailColor", getEmailColor());
 		json.put("pdfMapYAmPm", getPdfMapYAmPm());
 		json.put("pdfMapYFd", getPdfMapYFd());
 		json.put("pdfMapWidthAmPm", getPdfMapWidthAmPm());

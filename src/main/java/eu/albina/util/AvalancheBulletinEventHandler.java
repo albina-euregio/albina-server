@@ -79,12 +79,12 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			PdfFont openSansLightFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Light.ttf");
 
 			// Add headline
-			String headline = lang.getBundleString("avalanche-report.name", region);
+			String headline = lang.getBundleString("website.name", region);
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 					.setColor(greyDarkColor, true).showText(headline).endText();
 			String date = AlbinaUtil.getDate(bulletins, lang);
 			if (preview) {
-				String preview = lang.getBundleString("avalanche-report.preview");
+				String preview = lang.getBundleString("preview");
 				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
 				.setColor(redColor, true).showText(date + preview).endText();
 			} else {
@@ -111,7 +111,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
 					.showText(copyright).endText();
 
-			String urlString = lang.getBundleString("avalanche-report.url.capitalized", region);
+			String urlString = lang.getBundleString("website.url.capitalized", region);
 			Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
 			pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)
@@ -136,9 +136,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add logo
 			Image logoImg;
 			if (grayscale)
-				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("avalanche-report.logo.path.bw", region));
+				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("logo.path.bw", region));
 			else
-				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("avalanche-report.logo.path", region));
+				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("logo.path", region));
 			logoImg.scaleToFit(130, 55);
 			logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
 			canvas.add(logoImg);

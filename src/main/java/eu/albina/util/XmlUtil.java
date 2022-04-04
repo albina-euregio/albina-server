@@ -233,7 +233,7 @@ public class XmlUtil {
 		String baseUri = LinkUtil.getMapsUrl(lang, region) + "/" + validityDateString + "/" + publicationTime + "/";
 
 		extFiles.add(createExtFile(doc, "link", lang.getBundleString("ext-file.website-link.description"),
-				lang.getBundleString("avalanche-report.url") + "/bulletin/" + validityDateString));
+				lang.getBundleString("website.url") + "/bulletin/" + validityDateString));
 		extFiles.add(createExtFile(doc, "simple_link", lang.getBundleString("ext-file.simple-link.description"),
 				LinkUtil.getSimpleHtmlUrl(lang, region) + "/" + validityDateString + "/" + lang.toString()
 						+ ".html"));
