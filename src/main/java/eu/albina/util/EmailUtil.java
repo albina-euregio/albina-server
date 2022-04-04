@@ -107,7 +107,7 @@ public class EmailUtil {
 	}
 
 	public void sendBulletinEmails(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
-		for (LanguageCode lang : LanguageCode.SOCIAL_MEDIA) {
+		for (LanguageCode lang : LanguageCode.getSocialMedia(regions)) {
 			sendBulletinEmails(bulletins, regions, update, test, lang);
 		}
 	}
@@ -177,10 +177,13 @@ public class EmailUtil {
 				.description("mail-content.zip")
 				.type("application/zip")
 				.content(createZipFile(emailHtml, null));
+			final boolean isAran = GlobalVariables.codeAran.equals(region);
+			final String fromEmail = isAran ? "lauegi@aran.org" : lang.getBundleString("avalanche-report.email");
+			final String fromName = isAran ? "Centre de Lauegi Val d'Aran" : lang.getBundleString("avalanche-report.name");
 			PostMailingsRequest request = new PostMailingsRequest()
-				.fromEmail(lang.getBundleString("avalanche-report.email"))
-				.fromName(lang.getBundleString("avalanche-report.name"))
-				.subject(subject)
+				.fromEmail(fromEmail)
+				.fromName(fromName)
+				.subject(isAran ? subject.replaceAll("\\w+\\.report", "Lauegi.report") : subject)
 				.status("scheduled")
 				.file(file);
 			rmc.sendMessage(rmConfig, lang, request, test);
@@ -212,6 +215,13 @@ public class EmailUtil {
 			}
 			image.put("dangerLevel5Style", getDangerLevel5Style());
 			image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.gif");
+
+			final boolean isAran = GlobalVariables.codeAran.equals(region);
+			if (isAran) {
+				image.put("logo", GlobalVariables.getServerImagesUrl() + "logo/color/lauegi.png");
+				image.put("ci", GlobalVariables.getServerImagesUrl() + "logo/color/colorbar.Aran.gif");
+			}
+
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", GlobalVariables.getServerImagesUrl() + "social_media/facebook.png");
 			socialMediaImages.put("instagram", GlobalVariables.getServerImagesUrl() + "social_media/instagram.png");
@@ -462,6 +472,9 @@ public class EmailUtil {
 			// Writer out = new OutputStreamWriter(System.out);
 			temp.process(root, out);
 
+			if (isAran) {
+				return out.toString().replaceAll("(?i)#1aabff", "#A32136");
+			}
 			return out.toString();
 		} catch (IOException | TemplateException e) {
 			logger.error("Bulletin email could not be created", e);

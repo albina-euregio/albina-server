@@ -45,8 +45,9 @@ public class RegionConfigurationController {
 	public RegionConfiguration getRegionConfiguration(String regionConfigurationId) throws AlbinaException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			TypedQuery<Long> query = entityManager.createQuery(
-					"SELECT c.id FROM RegionConfiguration c WHERE c.region.id='" + regionConfigurationId + "'",
+					"SELECT c.id FROM RegionConfiguration c WHERE c.region.id = :region",
 					Long.class);
+			query.setParameter("region", regionConfigurationId);
 			Long id = query.getSingleResult();
 			RegionConfiguration regionConfiguration = entityManager.find(RegionConfiguration.class, id);
 			if (regionConfiguration == null) {
