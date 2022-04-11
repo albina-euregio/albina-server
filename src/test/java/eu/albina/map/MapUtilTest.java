@@ -14,6 +14,7 @@ import java.util.Map;
 import eu.albina.ImageTestUtils;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.GlobalVariablesTest;
 import eu.albina.util.PdfUtil;
 import org.junit.Assume;
 import org.junit.Before;
@@ -80,16 +81,18 @@ public class MapUtilTest {
 	@Test
 	public void testMapyrusMapsAran() throws Exception {
 		assumeMapsPath();
-		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins);
+		try (AutoCloseable closeable = GlobalVariablesTest.withLauegiVariables()) {
+			URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
+			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+			MapUtil.createMapyrusMaps(bulletins);
 
-		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_aran_thumbnail.png"));
-		BufferedImage actual = ImageIO.read(new File(
-			GlobalVariables.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_aran_thumbnail.png"));
-		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, GlobalVariables.codeAran, false, false,
-			"2021-01-24", "2021-01-23_16-00-00", false);
+			BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_aran_thumbnail.png"));
+			BufferedImage actual = ImageIO.read(new File(
+				GlobalVariables.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_aran_thumbnail.png"));
+			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> { });
+			PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, GlobalVariables.codeAran, false, false,
+				"2021-01-24", "2021-01-23_16-00-00", false);
+		}
 	}
 
 	@Test

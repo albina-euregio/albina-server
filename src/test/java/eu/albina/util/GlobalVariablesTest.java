@@ -20,10 +20,13 @@ public class GlobalVariablesTest {
 
 	public static AutoCloseable withLauegiVariables() {
 		final String serverImagesUrl = GlobalVariables.serverImagesUrl;
+		final boolean publishBulletinsAran = GlobalVariables.publishBulletinsAran;
+		GlobalVariables.publishBulletinsAran = true;
 		GlobalVariables.serverImagesUrl = "https://static.lauegi.report/images/";
 		GlobalVariables.serverMapsUrl = "https://static.lauegi.report/albina_files";
 		GlobalVariables.serverWebsiteUrl = "https://www.lauegi.report/";
 		return () -> {
+			GlobalVariables.publishBulletinsAran = publishBulletinsAran;
 			GlobalVariables.serverImagesUrl = serverImagesUrl;
 			GlobalVariables.serverMapsUrl = "";
 			GlobalVariables.serverWebsiteUrl = "";

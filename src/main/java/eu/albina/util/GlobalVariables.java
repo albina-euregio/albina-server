@@ -57,7 +57,7 @@ public class GlobalVariables {
 	private static boolean publishBulletinsTyrol = true;
 	private static boolean publishBulletinsSouthTyrol = true;
 	private static boolean publishBulletinsTrentino = true;
-	private static boolean publishBulletinsAran = true;
+	static boolean publishBulletinsAran = true;
 	// REGION
 	private static boolean publishBlogsTyrol = false;
 	private static boolean publishBlogsSouthTyrol = false;
