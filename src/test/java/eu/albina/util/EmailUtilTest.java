@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Resources;
 
+import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -56,14 +57,10 @@ public class EmailUtilTest {
 	@Before
 	public void setUp() throws IOException {
 		HibernateUtil.getInstance().setUp();
-		regionTirol = new Region();
-		regionTirol.setId("AT-07");
-		regionSouthTyrol = new Region();
-		regionSouthTyrol.setId("IT-32-BZ");
-		regionTrentino = new Region();
-		regionTrentino.setId("IT-32-TN");
-		regionAran = new Region();
-		regionAran.setId("ES-CT-L");
+		regionTirol = RegionController.getInstance().getRegion("AT-07");
+		regionSouthTyrol = RegionController.getInstance().getRegion("IT-32-BZ");
+		regionTrentino = RegionController.getInstance().getRegion("IT-32-TN");
+		regionAran = RegionController.getInstance().getRegion("ES-CT-L");
 	}
 
 	@After
@@ -78,11 +75,11 @@ public class EmailUtilTest {
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
 				regionTirol, false, false);
 		assertEquals("162 kB", 162., html.getBytes(StandardCharsets.UTF_8).length / 1024., 1.);
-		assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag  17.01.2019</h2>"));
+		assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag 17.01.2019</h2>"));
 		assertTrue(html.contains("Veröffentlicht am <b>16.01.2019 um 17:00</b>"));
 		assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
 		assertTrue(html.contains("Tendenz: Lawinengefahr nimmt ab</p><p style=\"text-align: left; margin-bottom: 0;\">am Freitag, den 18.01.2019"));
-		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/fd_tyrol_map.jpg"));
+		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/fd_AT-07_map.jpg"));
 		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/6385c958-018d-4c89-aa67-5eddc31ada5a.jpg"));
 	}
 
@@ -169,6 +166,6 @@ public class EmailUtilTest {
 
 	@Test
 	public void sendMediaEmails() throws IOException, URISyntaxException {
-		EmailUtil.getInstance().sendMediaEmails("Media text", LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(), regionTirol, "Norbert Lanzanasto", true, LanguageCode.de);
+		EmailUtil.getInstance().sendMediaEmails("", LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(), regionTirol, "Norbert Lanzanasto", true, LanguageCode.de);
 	}
 }

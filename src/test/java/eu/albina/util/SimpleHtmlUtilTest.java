@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import com.google.common.io.Resources;
 
+import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
@@ -45,10 +46,8 @@ public class SimpleHtmlUtilTest {
 		HibernateUtil.getInstance().setUp();
 		ServerInstanceController.getInstance().getLocalServerInstance().setHtmlDirectory("/foo/bar/baz/simple/");
 		ServerInstanceController.getInstance().getLocalServerInstance().setMapsPath("/foo/bar/baz/albina_files/");
-		regionEuregio = new Region();
-		regionEuregio.setId("EUREGIO");
-		regionEuregio = new Region();
-		regionEuregio.setId("ES-CT-L");
+		regionEuregio = RegionController.getInstance().getRegion("EUREGIO");
+		regionAran = RegionController.getInstance().getRegion("ES-CT-L");
 	}
 
 	@After

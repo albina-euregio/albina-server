@@ -94,7 +94,7 @@
 	<entry key="email.subject.update">UPDATE on {0}, </entry>
 	<entry key="email.imprint">Imprint</entry>
 	<entry key="email.media.subject">{0} for {1} from {2}</entry>
-	<entry key="email.media.text">Best regards, {1}</entry>
+	<entry key="email.media.text">Best regards, {0}</entry>
 	<entry key="pdf.page-number">Page {0}</entry>
 	<entry key="published">Published </entry>
 	<entry key="updated">Updated </entry>

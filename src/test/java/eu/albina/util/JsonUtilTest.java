@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -41,6 +42,8 @@ public class JsonUtilTest {
 
 	@Before
 	public void setUp() throws IOException {
+		HibernateUtil.getInstance().setUp();
+
 		regionTirol = new Region();
 		regionTirol.setId("AT-07");
 
@@ -51,6 +54,11 @@ public class JsonUtilTest {
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")));
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json")));
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
+	}
+
+	@After
+	public void shutDown() {
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test

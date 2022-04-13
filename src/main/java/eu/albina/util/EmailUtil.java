@@ -144,7 +144,7 @@ public class EmailUtil {
 		sb.append(localDate.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
 
 		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb.toString(), username);
-		String emailHtml = text + "\n\n" + MessageFormat.format(lang.getBundleString("email.media.text"), date, username);
+		String emailHtml = text + "\n\n" + MessageFormat.format(lang.getBundleString("email.media.text"), username);
 
 		// TODO add links to mp3 and txt file
 
@@ -221,7 +221,7 @@ public class EmailUtil {
 			image.put("logo", serverImagesUrl + lang.getBundleString("logo.path", region));
 			image.put("dangerLevel5Style", getDangerLevel5Style());
 			image.put("ci", serverImagesUrl + region.getImageColorbarColorPath());
-			image.put("color", region.getEmailColor());
+			image.put("color", "#" + region.getEmailColor());
 
 			Map<String, Object> socialMediaImages = new HashMap<>();
 			socialMediaImages.put("facebook", serverImagesUrl + "social_media/facebook.png");
