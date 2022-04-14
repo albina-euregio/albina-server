@@ -982,7 +982,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		rootElement.setAttribute("xml:lang", languageCode.toString());
 
 		// metaData
-		Element metaDataProperty = XmlUtil.createMetaDataProperty(doc, publicationDate);
+		Element metaDataProperty = XmlUtil.createMetaDataProperty(doc, publicationDate, languageCode);
 		rootElement.appendChild(metaDataProperty);
 
 		// validTime
@@ -1151,7 +1151,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return rootElement;
 	}
 
-	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, Region region, boolean isAfternoon, String reportPublicationTime) {
+	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, Region region, boolean isAfternoon, String reportPublicationTime, ServerInstance serverInstance) {
 
 		AvalancheBulletinDaytimeDescription bulletinDaytimeDescription;
 
@@ -1178,13 +1178,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		rootElement.appendChild(metaData);
 		if (!isAfternoon) {
 			// TODO use specific file for region
-			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + getId() + ".jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
 			// TODO use specific file for region
-			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region) + "/" + getValidityDateString() + "/"
+			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + getId() + "_PM.jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
@@ -1551,13 +1551,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			return null;
 	}
 
-	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode, Region region, String reportPublicationTime) {
+	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode, Region region, String reportPublicationTime, ServerInstance serverInstance) {
 		if (publishedRegions != null && !publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLv6Bulletin(doc, languageCode, region, false, reportPublicationTime));
+			result.add(createCAAMLv6Bulletin(doc, languageCode, region, false, reportPublicationTime, serverInstance));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLv6Bulletin(doc, languageCode, region, true, reportPublicationTime));
+				result.add(createCAAMLv6Bulletin(doc, languageCode, region, true, reportPublicationTime, serverInstance));
 
 			return result;
 		} else

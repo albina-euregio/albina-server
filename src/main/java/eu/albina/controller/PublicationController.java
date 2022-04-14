@@ -96,6 +96,7 @@ public class PublicationController {
 	public void publish(List<AvalancheBulletin> bulletins, User user, Instant publicationDate, Instant startDate) {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		Collections.sort(bulletins);
 
@@ -109,13 +110,13 @@ public class PublicationController {
 
 				// create CAAML
 				if (region.isCreateCaamlV5())
-					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 				if (region.isCreateCaamlV6())
-					createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 				// create JSON
 				if (region.isCreateJson())
-					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 				try {
 					// create maps
@@ -149,8 +150,8 @@ public class PublicationController {
 
 						if (region.isCreateMaps()) {
 							new Thread(() -> sendEmails(avalancheReportId, bulletins, region, false, false)).start();
-							new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region,	false, null, false)).start();
-							new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, false, null, false)).start();
+							new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region,	false, null, false, localServerInstance)).start();
+							new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, false, null, false, localServerInstance)).start();
 						}
 					}
 				} catch (InterruptedException e) {
@@ -194,6 +195,7 @@ public class PublicationController {
 	public void update(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate) {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		// update also super regions
 		Set<Region> updateRegions = new HashSet<Region>(regions);
@@ -216,13 +218,13 @@ public class PublicationController {
 
 				// create CAAML
 				if (region.isCreateCaamlV5())
-					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 				if (region.isCreateCaamlV6())
-					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 				// create JSON
 				if (region.isCreateJson())
-					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 				try {
 					// create maps
@@ -255,8 +257,8 @@ public class PublicationController {
 
 							if (region.isCreateMaps()) {
 								new Thread(() -> sendEmails(avalancheReportId, bulletins, region, true, false)).start();
-								new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region, true, null, false)).start();
-								new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, true, null, false)).start();
+								new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
+								new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
 							}
 						}
 					}
@@ -285,6 +287,7 @@ public class PublicationController {
 	public void change(List<AvalancheBulletin> bulletins, User user, Instant startDate) {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		Collections.sort(bulletins);
 
@@ -298,13 +301,13 @@ public class PublicationController {
 				
 				// create CAAML
 				if (region.isCreateCaamlV5())
-					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 				if (region.isCreateCaamlV6())
-					createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 				// create JSON
 				if (region.isCreateJson())
-					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 				try {
 					// create maps
@@ -430,10 +433,10 @@ public class PublicationController {
 	 * @param publicationTimeString
 	 *            date and time of publication
 	 */
-	public boolean createJson(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString) {
+	public boolean createJson(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString, ServerInstance serverInstance) {
 		try {
 			logger.info("JSON production for " + region.getId() + " started");
-			JsonUtil.createJsonFile(bulletins, region, validityDateString, publicationTimeString);
+			JsonUtil.createJsonFile(bulletins, region, validityDateString, publicationTimeString, serverInstance);
 			AvalancheReportController.getInstance().setAvalancheReportJsonFlag(avalancheReportId);
 			logger.info("JSON production for " + region.getId() + " finished");
 			return true;
@@ -454,10 +457,10 @@ public class PublicationController {
 	 *            date and time of publication
 	 */
 	public boolean createCaamlV5(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString) {
+			String publicationTimeString, ServerInstance serverInstance) {
 		try {
 			logger.info("CAAMLv5 production for " + region.getId() + " started");
-			XmlUtil.createCaamlFiles(bulletins, region, validityDateString, publicationTimeString, CaamlVersion.V5);
+			XmlUtil.createCaamlFiles(bulletins, region, validityDateString, publicationTimeString, CaamlVersion.V5, serverInstance);
 			AvalancheReportController.getInstance().setAvalancheReportCaamlV5Flag(avalancheReportId);
 			logger.info("CAAMLv5 production for " + region.getId() + " finished");
 			return true;
@@ -478,10 +481,10 @@ public class PublicationController {
 	 *            date and time of publication
 	 */
 	public boolean createCaamlV6(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString) {
+			String publicationTimeString, ServerInstance serverInstance) {
 		try {
 			logger.info("CAAMLv6 production for " + region.getId() + " started");
-			XmlUtil.createCaamlFiles(bulletins, region, validityDateString, publicationTimeString, CaamlVersion.V6);
+			XmlUtil.createCaamlFiles(bulletins, region, validityDateString, publicationTimeString, CaamlVersion.V6, serverInstance);
 			AvalancheReportController.getInstance().setAvalancheReportCaamlV6Flag(avalancheReportId);
 			logger.info("CAAMLv6 production for " + region.getId() + " finished");
 			return true;
@@ -555,7 +558,7 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("Simple HTML production for " + region.getId() + " started");
-					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region);
+					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region, ServerInstanceController.getInstance().getLocalServerInstance());
 					AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReportId);
 				} catch (Exception e) {
 					logger.error("Error creating simple HTML for " + region.getId(), e);
@@ -578,7 +581,8 @@ public class PublicationController {
 			public void run() {
 				try {
 					logger.info("Email production for " + region.getId() + " started");
-					EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test);
+					ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+					EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test, localServerInstance);
 					if (!test)
 						AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportId);
 				} catch (Exception e) {
@@ -590,13 +594,13 @@ public class PublicationController {
 		});
 	}
 
-	public void triggerTelegramChannel(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test) {
+	public void triggerTelegramChannel(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test, ServerInstance serverInstance) {
 		try {
 			logger.info("Telegram channel for " + region.getId() + " triggered");
 			if (language == null)
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, test);
+				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, test, serverInstance);
 			else
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, language, test);
+				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, language, test, serverInstance);
 			if (!test)
 				AvalancheReportController.getInstance().setAvalancheReportTelegramFlag(avalancheReportId);
 		} catch (Exception e) {
@@ -606,13 +610,13 @@ public class PublicationController {
 		}
 	}
 
-	public void triggerPushNotifications(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test) {
+	public void triggerPushNotifications(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test, ServerInstance serverInstance) {
 		try {
 			logger.info("Push notifications for " + region.getId() + " triggered");
 			if (language == null)
-				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, test);
+				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, test, serverInstance);
 			else
-				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, language, test);
+				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, language, test, serverInstance);
 			if (!test)
 				AvalancheReportController.getInstance().setAvalancheReportPushFlag(avalancheReportId);
 		} catch (Exception e) {

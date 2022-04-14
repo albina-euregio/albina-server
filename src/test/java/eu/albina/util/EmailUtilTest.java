@@ -28,7 +28,6 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -38,9 +37,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Resources;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
 import static org.junit.Assert.assertEquals;
@@ -49,6 +48,10 @@ import static org.junit.Assert.assertTrue;
 public class EmailUtilTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(EmailUtilTest.class);
+
+	private ServerInstance serverInstanceEuregio;
+	private ServerInstance serverInstanceAran;
+
 	private Region regionTirol;
 	private Region regionSouthTyrol;
 	private Region regionTrentino;
@@ -56,16 +59,28 @@ public class EmailUtilTest {
 
 	@Before
 	public void setUp() throws IOException {
-		HibernateUtil.getInstance().setUp();
-		regionTirol = RegionController.getInstance().getRegion("AT-07");
-		regionSouthTyrol = RegionController.getInstance().getRegion("IT-32-BZ");
-		regionTrentino = RegionController.getInstance().getRegion("IT-32-TN");
-		regionAran = RegionController.getInstance().getRegion("ES-CT-L");
-	}
+		serverInstanceEuregio = new ServerInstance();
+		serverInstanceEuregio.setServerImagesUrl("/mnt/images/");
+		serverInstanceEuregio.setMapsPath("/mnt/albina_files_local/");
+		serverInstanceEuregio.setPdfDirectory("/mnt/albina_files_local/");
+		serverInstanceAran = new ServerInstance();
+		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
+		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
+		serverInstanceAran.setPdfDirectory("/mnt/albina_files_local/");
 
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
+		regionTirol = new Region();
+		regionTirol.setId("AT-07");
+		regionTirol.setEmailColor("1AABFF");
+		regionSouthTyrol = new Region();
+		regionSouthTyrol.setId("IT-32-BZ");
+		regionSouthTyrol.setEmailColor("1AABFF");
+		regionTrentino = new Region();
+		regionTrentino.setId("IT-32-TN");
+		regionTrentino.setEmailColor("1AABFF");
+		regionAran = new Region();
+		regionAran.setId("ES-CT-L");
+		regionAran.setEmailColor("A32136");
+		regionAran.setImageColorbarColorPath("logo/color/colorbar.Aran.gif");
 	}
 
 	@Test
@@ -73,8 +88,8 @@ public class EmailUtilTest {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-				regionTirol, false, false);
-		assertEquals("162 kB", 162., html.getBytes(StandardCharsets.UTF_8).length / 1024., 1.);
+				regionTirol, false, false, serverInstanceEuregio);
+		assertEquals("156 kB", 155.8759765625, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1.);
 		assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag 17.01.2019</h2>"));
 		assertTrue(html.contains("Veröffentlicht am <b>16.01.2019 um 17:00</b>"));
 		assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
@@ -88,7 +103,7 @@ public class EmailUtilTest {
 		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-				regionAran, false, false);
+				regionAran, false, false, serverInstanceAran);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.mail.html"), StandardCharsets.UTF_8);
 		Assert.assertEquals(expected.trim(), html.trim());
 		}
@@ -98,44 +113,38 @@ public class EmailUtilTest {
 		final URL resource = Resources.getResource("2021-12-01.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
-			regionTirol, false, false);
-		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
+			regionTirol, false, false, serverInstanceAran);
+		assertEquals("59 kB", 59, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
 	@Test
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
-		HibernateUtil.getInstance().setUp();
 		final URL resource = Resources.getResource("2021-12-02.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		logger.info("#bulletins: {}", bulletins.size());
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionTirol, false, true);
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionSouthTyrol, false, true);
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionTrentino, false, true);
-		HibernateUtil.getInstance().shutDown();
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionTirol, false, true, serverInstanceAran);
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionSouthTyrol, false, true, serverInstanceAran);
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionTrentino, false, true, serverInstanceAran);
 	}
 
 	@Ignore
 	@Test
 	public void sendEmailAran() throws Exception {
-		HibernateUtil.getInstance().setUp();
 		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		logger.info("#bulletins: {}", bulletins.size());
-		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionAran, false, false);
-		HibernateUtil.getInstance().shutDown();
+		EmailUtil.getInstance().sendBulletinEmails(bulletins, regionAran, false, false, serverInstanceAran);
 	}
 
 	@Test
 	public void langTest() {
-		assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
+		assertEquals("All elevations", LanguageCode.de.getBundleString("elevation.all"));
 		assertEquals("Tutte le elevazioni", LanguageCode.it.getBundleString("elevation.all"));
 		assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
 	}
 
-	@Ignore
 	@Test
 	public void sendLangEmail() throws MessagingException, IOException, URISyntaxException {
-		HibernateUtil.getInstance().setUp();
 		final URL resource = Resources.getResource("2021-12-02.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final boolean update = false;
@@ -158,10 +167,9 @@ public class EmailUtilTest {
 				if (avalancheBulletin.affectsRegionOnlyPublished(region))
 					regionBulletins.add(avalancheBulletin);
 			}
-			String emailHtml = EmailUtil.getInstance().createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency);
+			String emailHtml = EmailUtil.getInstance().createBulletinEmailHtml(regionBulletins, lang, region, update, daytimeDependency, serverInstanceAran);
 			EmailUtil.getInstance().sendBulletinEmailRapidmail(lang, region, emailHtml, subject, true);
 		}
-		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test

@@ -39,9 +39,7 @@ import java.util.List;
 import javax.xml.transform.TransformerException;
 
 import eu.albina.controller.AvalancheBulletinController;
-import eu.albina.controller.ServerInstanceController;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -58,6 +56,7 @@ import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -69,6 +68,8 @@ import static org.junit.Assert.assertTrue;
 public class AlbinaUtilTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtilTest.class);
+
+	private ServerInstance serverInstanceEuregio;
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;
@@ -85,7 +86,7 @@ public class AlbinaUtilTest {
 
 	@Before
 	public void setUp() throws IOException {
-		HibernateUtil.getInstance().setUp();
+		serverInstanceEuregio = new ServerInstance();
 
 		regionTirol = new Region();
 		regionTirol.setId("AT-07");
@@ -107,11 +108,6 @@ public class AlbinaUtilTest {
 		recipients.add("norbert.lanzanasto@tirol.gv.at");
 		// recipients.add("mitterer.chris@gmail.com");
 		// recipients.add("chris.mitterer@tirol.gv.at");
-	}
-
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Ignore
@@ -186,13 +182,13 @@ public class AlbinaUtilTest {
 	@Ignore
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
-		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30");
+		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30", serverInstanceEuregio);
 	}
 
 	@Test
 	public void testDates() throws Exception {
-		ServerInstanceController.getInstance().getLocalServerInstance().setPdfDirectory("/foo/bar/baz/albina_files");
-		ServerInstanceController.getInstance().getLocalServerInstance().setMapsPath("/foo/bar/baz/albina_files");
+		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/albina_files");
+		serverInstanceEuregio.setMapsPath("/foo/bar/baz/albina_files");
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
@@ -212,7 +208,7 @@ public class AlbinaUtilTest {
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
 			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de, regionEuregio));
 		assertEquals("https://lawinen.report/bulletins/2019-01-17/2019-01-17_AT-07_de.pdf",
-			LinkUtil.getPdfLink(bulletins, LanguageCode.de, regionTirol));
+			LinkUtil.getPdfLink(bulletins, LanguageCode.de, regionTirol, serverInstanceEuregio));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),

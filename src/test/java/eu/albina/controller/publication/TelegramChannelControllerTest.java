@@ -21,7 +21,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -31,8 +30,8 @@ import com.google.common.io.Resources;
 import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.HibernateUtil;
 import eu.albina.util.TelegramChannelUtil;
 
 // TODO test the tests
@@ -40,10 +39,11 @@ import eu.albina.util.TelegramChannelUtil;
 public class TelegramChannelControllerTest {
 
 	private List<AvalancheBulletin> bulletins;
+	private ServerInstance serverInstance;
 
 	@Before
 	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
+		serverInstance = new ServerInstance();
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -52,11 +52,6 @@ public class TelegramChannelControllerTest {
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")));
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json")));
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
-	}
-
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test
@@ -77,7 +72,7 @@ public class TelegramChannelControllerTest {
 	@Test
 	public void sendBulletin() throws URISyntaxException, IOException {
 		Region regionTrentino = new Region("IT-32-TN");
-		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regionTrentino, true, true);
+		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regionTrentino, true, true, serverInstance);
 	}
 
 	@Ignore

@@ -51,6 +51,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -195,13 +196,13 @@ public class AlbinaUtil {
 		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
 	}
 
-	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, Period offset) {
+	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, Period offset, ServerInstance serverInstance) {
 		if (region != null && !region.getId().isEmpty())
-			return LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
+			return LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region.getId() + "_" + lang.toString()
 					+ ".html";
 		else
-			return LinkUtil.getSimpleHtmlUrl(lang, region) + "/"
+			return LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + lang.toString() + ".html";
 	}
 

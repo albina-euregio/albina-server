@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -32,17 +31,21 @@ import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JsonUtilTest {
 
 	private List<AvalancheBulletin> bulletins;
-
+	private ServerInstance serverInstanceEuregio;
 	private Region regionTirol;
 
 	@Before
 	public void setUp() throws IOException {
-		HibernateUtil.getInstance().setUp();
+		serverInstanceEuregio = new ServerInstance();
+		serverInstanceEuregio.setHtmlDirectory("/mnt/simple_local/");
+		serverInstanceEuregio.setMapsPath("/mnt/albina_files_local/");
+		serverInstanceEuregio.setPdfDirectory("/mnt/albina_files_local/");
 
 		regionTirol = new Region();
 		regionTirol.setId("AT-07");
@@ -56,13 +59,8 @@ public class JsonUtilTest {
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
 	}
 
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
-	}
-
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
-		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30");
+		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30", serverInstanceEuregio);
 	}
 }

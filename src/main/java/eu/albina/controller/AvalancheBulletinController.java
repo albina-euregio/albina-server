@@ -42,6 +42,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
@@ -307,11 +308,11 @@ public class AvalancheBulletinController {
 	 *             if the XML document can not be initialized
 	 */
 	public String getPublishedBulletinsCaaml(Instant date, Region region, LanguageCode language,
-			CaamlVersion version) throws TransformerException, AlbinaException, ParserConfigurationException {
+			CaamlVersion version, ServerInstance serverInstance) throws TransformerException, AlbinaException, ParserConfigurationException {
 		ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
 				Arrays.asList(region));
 
-		Document caamlDoc = XmlUtil.createCaaml(result, region, language, version);
+		Document caamlDoc = XmlUtil.createCaaml(result, region, language, version, serverInstance);
 		return XmlUtil.convertDocToString(caamlDoc);
 	}
 

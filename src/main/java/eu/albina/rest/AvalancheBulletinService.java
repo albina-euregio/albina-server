@@ -149,7 +149,7 @@ public class AvalancheBulletinService {
 		try {
 			Region region = RegionController.getInstance().getRegion(regionId);
 			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, region,
-					language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
+					language, MoreObjects.firstNonNull(version, CaamlVersion.V5), ServerInstanceController.getInstance().getLocalServerInstance());
 			if (caaml != null) {
 				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 			} else {
@@ -889,11 +889,12 @@ public class AvalancheBulletinService {
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			for (Region region: publishBulletinRegions) {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-				PublicationController.getInstance().createCaamlV5(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString);
-				PublicationController.getInstance().createCaamlV6(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString);
+				PublicationController.getInstance().createCaamlV5(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				PublicationController.getInstance().createCaamlV6(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 			}
 
 			// copy files
@@ -929,7 +930,7 @@ public class AvalancheBulletinService {
 
 			for (Region region: publishBulletinRegions) {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-				PublicationController.getInstance().createJson(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString);
+				PublicationController.getInstance().createJson(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, ServerInstanceController.getInstance().getLocalServerInstance());
 			}
 
 			// copy files
@@ -967,8 +968,7 @@ public class AvalancheBulletinService {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 				PublicationController.getInstance().sendEmails(avalancheReport.getId(), bulletins, region, false, false);
 			} else
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, false, language);
-
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, false, language, ServerInstanceController.getInstance().getLocalServerInstance());
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -998,14 +998,15 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
+			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			logger.debug("startDate: {}", startDate.toString());
 			logger.debug("#bulletins: {}", bulletins.size());
 
 			if (language == null)
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, true);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, true, localServerInstance);
 			else
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, true, language);
+				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, true, language, localServerInstance);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1039,7 +1040,7 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 
 			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(avalancheReport.getId(), bulletins,
-					region, false, language, false)).start();
+					region, false, language, false, ServerInstanceController.getInstance().getLocalServerInstance())).start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1070,7 +1071,7 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 
 			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(avalancheReport.getId(), bulletins,
-					region, false, language, true)).start();
+					region, false, language, true, ServerInstanceController.getInstance().getLocalServerInstance())).start();
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1107,7 +1108,7 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 
 			PublicationController.getInstance().triggerPushNotifications(avalancheReport.getId(), bulletins,
-					region, false, language, false);
+					region, false, language, false, ServerInstanceController.getInstance().getLocalServerInstance());
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1144,7 +1145,7 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 
 			PublicationController.getInstance().triggerPushNotifications(avalancheReport.getId(), bulletins,
-					region, false, language, true);
+					region, false, language, true, ServerInstanceController.getInstance().getLocalServerInstance());
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {

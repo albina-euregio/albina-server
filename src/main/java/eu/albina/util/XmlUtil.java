@@ -46,9 +46,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class XmlUtil {
@@ -56,9 +56,9 @@ public class XmlUtil {
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
 
 	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString, CaamlVersion version) throws TransformerException, IOException {
-		String dirPathParent = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory() + "/" + validityDateString;
-		String dirPath = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
+			String publicationTimeString, CaamlVersion version, ServerInstance serverInstance) throws TransformerException, IOException {
+		String dirPathParent = serverInstance.getPdfDirectory() + "/" + validityDateString;
+		String dirPath = serverInstance.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
 		new File(dirPath).mkdirs();
 
 		// using PosixFilePermission to set file permissions 777
@@ -84,7 +84,7 @@ public class XmlUtil {
 		}
 
 		for (LanguageCode lang : LanguageCode.ENABLED) {
-			Document doc = createCaaml(bulletins, region, lang, version);
+			Document doc = createCaaml(bulletins, region, lang, version, serverInstance);
 			String caamlString = XmlUtil.convertDocToString(doc);
 			String fileName;
 			if (version == CaamlVersion.V5)
@@ -96,11 +96,11 @@ public class XmlUtil {
 		}
 	}
 
-	public static Document createCaaml(List<AvalancheBulletin> bulletins, Region region, LanguageCode lang, CaamlVersion version) {
+	public static Document createCaaml(List<AvalancheBulletin> bulletins, Region region, LanguageCode lang, CaamlVersion version, ServerInstance serverInstance) {
 		if (version == CaamlVersion.V5) {
 			return XmlUtil.createCaamlv5(bulletins, region, lang);
 		} else {
-			return XmlUtil.createCaamlv6(bulletins, region, lang);
+			return XmlUtil.createCaamlv6(bulletins, region, lang, serverInstance);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class XmlUtil {
 				ZonedDateTime publicationDate = AlbinaUtil.getPublicationDate(bulletins);
 
 				// metaData
-				Element metaDataProperty = createMetaDataProperty(doc, publicationDate);
+				Element metaDataProperty = createMetaDataProperty(doc, publicationDate, language);
 				rootElement.appendChild(metaDataProperty);
 
 				// observations
@@ -149,7 +149,7 @@ public class XmlUtil {
 		}
 	}
 
-	public static Document createCaamlv6(List<AvalancheBulletin> bulletins, Region region, LanguageCode language) {
+	public static Document createCaamlv6(List<AvalancheBulletin> bulletins, Region region, LanguageCode language, ServerInstance serverInstance) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
@@ -163,7 +163,7 @@ public class XmlUtil {
 
 				// metaData
 				Element metaData = doc.createElement("metaData");
-				for (Element extFile : createObsCollectionExtFiles(doc, bulletins, language, region)) {
+				for (Element extFile : createObsCollectionExtFiles(doc, bulletins, language, region, serverInstance)) {
 					metaData.appendChild(extFile);
 				}
 				rootElement.appendChild(metaData);
@@ -171,7 +171,7 @@ public class XmlUtil {
 				String reportPublicationTime = AlbinaUtil.getPublicationTime(bulletins);
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv6(doc, language, region, reportPublicationTime);
+					List<Element> caaml = bulletin.toCAAMLv6(doc, language, region, reportPublicationTime, serverInstance);
 					if (caaml != null)
 						for (Element element : caaml) {
 							if (element != null)
@@ -203,7 +203,7 @@ public class XmlUtil {
 		}
 	}
 
-	public static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime) {
+	public static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime, LanguageCode language) {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
@@ -215,7 +215,7 @@ public class XmlUtil {
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode(ServerInstanceController.getInstance().getLocalServerInstance().getName()));
+		name.appendChild(doc.createTextNode(language.getBundleString("website.name")));
 		operation.appendChild(name);
 		srcRef.appendChild(operation);
 		metaData.appendChild(srcRef);
@@ -224,18 +224,18 @@ public class XmlUtil {
 		return metaDataProperty;
 	}
 
-	private static List<Element> createObsCollectionExtFiles(Document doc, List<AvalancheBulletin> bulletins, LanguageCode lang, Region region) {
+	private static List<Element> createObsCollectionExtFiles(Document doc, List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance) {
 		List<Element> extFiles = new ArrayList<Element>();
 
 		boolean hasDaytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		String baseUri = LinkUtil.getMapsUrl(lang, region) + "/" + validityDateString + "/" + publicationTime + "/";
+		String baseUri = LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + validityDateString + "/" + publicationTime + "/";
 
 		extFiles.add(createExtFile(doc, "link", lang.getBundleString("ext-file.website-link.description"),
 				lang.getBundleString("website.url") + "/bulletin/" + validityDateString));
 		extFiles.add(createExtFile(doc, "simple_link", lang.getBundleString("ext-file.simple-link.description"),
-				LinkUtil.getSimpleHtmlUrl(lang, region) + "/" + validityDateString + "/" + lang.toString()
+				LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/" + validityDateString + "/" + lang.toString()
 						+ ".html"));
 		extFiles.add(createExtFile(doc, "fd_albina_map.jpg",
 				LinkUtil.getExtFileMapDescription(lang, "fd", ""), baseUri + "fd_albina_map.jpg"));

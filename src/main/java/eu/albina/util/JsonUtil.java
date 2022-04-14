@@ -29,17 +29,17 @@ import javax.xml.transform.TransformerException;
 
 import com.github.openjson.JSONArray;
 
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 
 public class JsonUtil {
 
 	// private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
 	public static void createJsonFile(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString) throws TransformerException, IOException {
-		String dirPath = ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
+			String publicationTimeString, ServerInstance serverInstance) throws TransformerException, IOException {
+		String dirPath = serverInstance.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
 
 		if (!bulletins.isEmpty()) {
 			JSONArray jsonArray = JsonUtil.createJSONString(bulletins, region, true);
