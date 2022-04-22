@@ -32,6 +32,9 @@ import eu.albina.model.enumerations.LanguageCode;
 public class XmlUtilTest {
 
 	private Region regionEuregio;
+	private Region regionTyrol;
+	private Region regionSouthTyrol;
+	private Region regionTrentino;
 	private ServerInstance serverInstanceEuregio;
 
 	@Before
@@ -41,6 +44,15 @@ public class XmlUtilTest {
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/albina_files/");
 		regionEuregio = new Region();
 		regionEuregio.setId("EUREGIO");
+		regionTyrol = new Region();
+		regionTyrol.setId("AT-07");
+		regionSouthTyrol = new Region();
+		regionSouthTyrol.setId("IT-32-BZ");
+		regionTrentino = new Region();
+		regionTrentino.setId("IT-32-TN");
+		regionEuregio.addSubRegion(regionTyrol);
+		regionEuregio.addSubRegion(regionSouthTyrol);
+		regionEuregio.addSubRegion(regionTrentino);
 	}
 
 	private String createCaaml(CaamlVersion version) throws Exception {
