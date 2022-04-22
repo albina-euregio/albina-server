@@ -17,21 +17,6 @@
       <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/fd_albina_map.jpg</fileReferenceURI>
     </extFile>
     <extFile>
-      <type>fd_tyrol_map.jpg</type>
-      <description>Danger rating map Tirol (whole day)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/fd_tyrol_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
-      <type>fd_southtyrol_map.jpg</type>
-      <description>Danger rating map Southtyrol (whole day)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/fd_southtyrol_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
-      <type>fd_trentino_map.jpg</type>
-      <description>Danger rating map Trentino (whole day)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/fd_trentino_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
       <type>pdf</type>
       <description>PDF </description>
       <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/2019-01-16_en.pdf</fileReferenceURI>
