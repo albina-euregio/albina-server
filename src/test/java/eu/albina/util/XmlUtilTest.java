@@ -18,6 +18,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXParseException;
 
 import com.google.common.io.Resources;
 
@@ -75,7 +76,7 @@ public class XmlUtilTest {
 		final String xml = createCaaml(CaamlVersion.V6);
 		try {
 			CaamlValidator.validateCaamlBulletin(xml, CaamlVersion.V6);
-		} catch (FileNotFoundException e) {
+		} catch (SAXParseException e) {
 			// TODO CAAMLv6 schema file currently not in place
 		}
 	}
