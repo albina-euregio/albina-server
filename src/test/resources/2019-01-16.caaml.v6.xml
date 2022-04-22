@@ -3,17 +3,17 @@
   <metaData>
     <extFile>
       <type>link</type>
-      <description>Link to website</description>
-      <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16</fileReferenceURI>
+      <description>Link zur Webseite</description>
+      <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16</fileReferenceURI>
     </extFile>
     <extFile>
       <type>simple_link</type>
-      <description>Link to the simplified website</description>
+      <description>Link zur vereinfachten Webseite</description>
       <fileReferenceURI>https://static.avalanche.report/simple/2019-01-16/en.html</fileReferenceURI>
     </extFile>
     <extFile>
       <type>fd_albina_map.jpg</type>
-      <description>Danger rating map  (whole day)</description>
+      <description>Gefahrenstufenkarte  (ganzer Tag)</description>
       <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/fd_albina_map.jpg</fileReferenceURI>
     </extFile>
     <extFile>
@@ -22,68 +22,23 @@
       <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/2019-01-16_en.pdf</fileReferenceURI>
     </extFile>
     <extFile>
-      <type>tyrol_pdf</type>
-      <description>PDF Tirol</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/2019-01-16_AT-07_en.pdf</fileReferenceURI>
-    </extFile>
-    <extFile>
-      <type>southtyrol_pdf</type>
-      <description>PDF Southtyrol</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/2019-01-16_IT-32-BZ_en.pdf</fileReferenceURI>
-    </extFile>
-    <extFile>
-      <type>trentino_pdf</type>
-      <description>PDF Trentino</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/2019-01-16_IT-32-TN_en.pdf</fileReferenceURI>
-    </extFile>
-    <extFile>
       <type>am_albina_map.jpg</type>
-      <description>Danger rating map (AM)</description>
+      <description>Gefahrenstufenkarte  (Vormittag)</description>
       <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/am_albina_map.jpg</fileReferenceURI>
     </extFile>
     <extFile>
-      <type>am_tyrol_map.jpg</type>
-      <description>Danger rating map Tirol (AM)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/am_tyrol_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
-      <type>am_southtyrol_map.jpg</type>
-      <description>Danger rating map Southtyrol (AM)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/am_southtyrol_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
-      <type>am_trentino_map.jpg</type>
-      <description>Danger rating map Trentino (AM)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/am_trentino_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
       <type>pm_albina_map.jpg</type>
-      <description>Danger rating map  (PM)</description>
+      <description>Gefahrenstufenkarte  (Nachmittag)</description>
       <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/pm_albina_map.jpg</fileReferenceURI>
     </extFile>
     <extFile>
-      <type>pm_tyrol_map.jpg</type>
-      <description>Danger rating map Tirol (PM)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/pm_tyrol_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
-      <type>pm_southtyrol_map.jpg</type>
-      <description>Danger rating map Southtyrol (PM)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/pm_southtyrol_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
-      <type>pm_trentino_map.jpg</type>
-      <description>Danger rating map Trentino (PM)</description>
-      <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/pm_trentino_map.jpg</fileReferenceURI>
-    </extFile>
-    <extFile>
       <type>am_overlay.png</type>
-      <description>Danger rating overlay (AM)</description>
+      <description>Gefahrenstufen Overlay (Vormittag)</description>
       <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/am_overlay.png</fileReferenceURI>
     </extFile>
     <extFile>
       <type>pm_overlay.png</type>
-      <description>Danger rating overlay (PM)</description>
+      <description>Gefahrenstufen Overlay (Nachmittag)</description>
       <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/pm_overlay.png</fileReferenceURI>
     </extFile>
   </metaData>
@@ -91,13 +46,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/a19bd3dc-85df-448f-be5e-f88f0c14ed4f.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=a19bd3dc-85df-448f-be5e-f88f0c14ed4f</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=a19bd3dc-85df-448f-be5e-f88f0c14ed4f</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -107,34 +62,18 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-07">
-      <name>Texel Mountains</name>
-    </region>
-    <region id="IT-32-BZ-11">
-      <name>Durreck Range</name>
-    </region>
-    <region id="IT-32-BZ-12">
-      <name>Western Rieserferner Mountains</name>
-    </region>
-    <region id="IT-32-BZ-01">
-      <name>Val Müstair Alps</name>
-    </region>
-    <region id="IT-32-BZ-02">
-      <name>Langtaufers</name>
-    </region>
-    <region id="IT-32-BZ-03">
-      <name>Schnals Ridge</name>
-    </region>
-    <region id="IT-32-BZ-04">
-      <name>Southern Stubai Alps</name>
-    </region>
-    <region id="IT-32-BZ-05">
-      <name>Southern Zillertal Alps and High Tauern</name>
-    </region>
+    <region id="IT-32-BZ-07"/>
+    <region id="IT-32-BZ-11"/>
+    <region id="IT-32-BZ-12"/>
+    <region id="IT-32-BZ-01"/>
+    <region id="IT-32-BZ-02"/>
+    <region id="IT-32-BZ-03"/>
+    <region id="IT-32-BZ-04"/>
+    <region id="IT-32-BZ-05"/>
     <dangerRating>
       <mainValue>considerable</mainValue>
       <elevation uom="m">
@@ -207,13 +146,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/a19bd3dc-85df-448f-be5e-f88f0c14ed4f_PM.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=a19bd3dc-85df-448f-be5e-f88f0c14ed4f</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=a19bd3dc-85df-448f-be5e-f88f0c14ed4f</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -223,34 +162,18 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-07">
-      <name>Texel Mountains</name>
-    </region>
-    <region id="IT-32-BZ-11">
-      <name>Durreck Range</name>
-    </region>
-    <region id="IT-32-BZ-12">
-      <name>Western Rieserferner Mountains</name>
-    </region>
-    <region id="IT-32-BZ-01">
-      <name>Val Müstair Alps</name>
-    </region>
-    <region id="IT-32-BZ-02">
-      <name>Langtaufers</name>
-    </region>
-    <region id="IT-32-BZ-03">
-      <name>Schnals Ridge</name>
-    </region>
-    <region id="IT-32-BZ-04">
-      <name>Southern Stubai Alps</name>
-    </region>
-    <region id="IT-32-BZ-05">
-      <name>Southern Zillertal Alps and High Tauern</name>
-    </region>
+    <region id="IT-32-BZ-07"/>
+    <region id="IT-32-BZ-11"/>
+    <region id="IT-32-BZ-12"/>
+    <region id="IT-32-BZ-01"/>
+    <region id="IT-32-BZ-02"/>
+    <region id="IT-32-BZ-03"/>
+    <region id="IT-32-BZ-04"/>
+    <region id="IT-32-BZ-05"/>
     <dangerRating>
       <mainValue>high</mainValue>
       <elevation uom="m">
@@ -293,13 +216,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/a2dda2a6-f451-4fac-ac81-4acd051f47a6.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=a2dda2a6-f451-4fac-ac81-4acd051f47a6</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=a2dda2a6-f451-4fac-ac81-4acd051f47a6</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -309,19 +232,13 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-18">
-      <name>Gröden Dolomites</name>
-    </region>
-    <region id="IT-32-BZ-19">
-      <name>Prags Dolomites</name>
-    </region>
-    <region id="IT-32-BZ-20">
-      <name>Sexten Dolomites</name>
-    </region>
+    <region id="IT-32-BZ-18"/>
+    <region id="IT-32-BZ-19"/>
+    <region id="IT-32-BZ-20"/>
     <dangerRating>
       <mainValue>moderate</mainValue>
       <elevation uom="m">
@@ -364,13 +281,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/c0fba3a0-9ca2-4dd9-a198-9a59a3f8b77a.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=c0fba3a0-9ca2-4dd9-a198-9a59a3f8b77a</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=c0fba3a0-9ca2-4dd9-a198-9a59a3f8b77a</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -380,22 +297,14 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-TN-02">
-      <name>Southern Adamello</name>
-    </region>
-    <region id="IT-32-TN-01">
-      <name>Adamello - Presanella</name>
-    </region>
-    <region id="IT-32-TN-04">
-      <name>Northern Brenta - Peller</name>
-    </region>
-    <region id="IT-32-TN-05">
-      <name>Southern Brenta</name>
-    </region>
+    <region id="IT-32-TN-02"/>
+    <region id="IT-32-TN-01"/>
+    <region id="IT-32-TN-04"/>
+    <region id="IT-32-TN-05"/>
     <dangerRating>
       <mainValue>moderate</mainValue>
       <elevation uom="m">
@@ -453,13 +362,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/hbc68380-6475-4726-95ce-d946e3a2cf79.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=hbc68380-6475-4726-95ce-d946e3a2cf79</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=hbc68380-6475-4726-95ce-d946e3a2cf79</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -469,85 +378,35 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="AT-07-10">
-      <name>Western Verwall Mountains</name>
-    </region>
-    <region id="AT-07-11">
-      <name>Eastern Verwall Mountains</name>
-    </region>
-    <region id="AT-07-12">
-      <name>Silvretta</name>
-    </region>
-    <region id="AT-07-13">
-      <name>Samnaun Mountains</name>
-    </region>
-    <region id="AT-07-14">
-      <name>Northern Oetz and Stubai Alps</name>
-    </region>
-    <region id="AT-07-15">
-      <name>Western Tuxer Alps</name>
-    </region>
-    <region id="AT-07-16">
-      <name>Eastern Tuxer Alps</name>
-    </region>
-    <region id="AT-07-17">
-      <name>Western Kitzbühel Alps</name>
-    </region>
-    <region id="AT-07-18">
-      <name>Eastern Kitzbühel Alps</name>
-    </region>
-    <region id="AT-07-19">
-      <name>Glockturm Range</name>
-    </region>
-    <region id="AT-07-20">
-      <name>Weißkugel Range</name>
-    </region>
-    <region id="AT-07-21">
-      <name>Gurgler Range</name>
-    </region>
-    <region id="AT-07-22">
-      <name>Central Stubai Alps</name>
-    </region>
-    <region id="AT-07-23">
-      <name>Northern Zillertal Alps</name>
-    </region>
-    <region id="AT-07-01">
-      <name>Allgäu Alps</name>
-    </region>
-    <region id="AT-07-24">
-      <name>Venediger Range</name>
-    </region>
-    <region id="AT-07-02">
-      <name>Eastern Lechtal Alps - Ammergau Alps</name>
-    </region>
-    <region id="AT-07-03">
-      <name>Mieming Mountains</name>
-    </region>
-    <region id="AT-07-04">
-      <name>Karwendel Mountains</name>
-    </region>
-    <region id="AT-07-26">
-      <name>Glockner Range</name>
-    </region>
-    <region id="AT-07-05">
-      <name>Brandenberg Alps</name>
-    </region>
-    <region id="AT-07-06">
-      <name>Wilder Kaiser Mountains - Waidring Alps</name>
-    </region>
-    <region id="AT-07-07">
-      <name>Western Lechtal Alps</name>
-    </region>
-    <region id="AT-07-08">
-      <name>Central Lechtal Alps</name>
-    </region>
-    <region id="AT-07-09">
-      <name>Grieskogel Mountains</name>
-    </region>
+    <region id="AT-07-10"/>
+    <region id="AT-07-11"/>
+    <region id="AT-07-12"/>
+    <region id="AT-07-13"/>
+    <region id="AT-07-14"/>
+    <region id="AT-07-15"/>
+    <region id="AT-07-16"/>
+    <region id="AT-07-17"/>
+    <region id="AT-07-18"/>
+    <region id="AT-07-19"/>
+    <region id="AT-07-20"/>
+    <region id="AT-07-21"/>
+    <region id="AT-07-22"/>
+    <region id="AT-07-23"/>
+    <region id="AT-07-01"/>
+    <region id="AT-07-24"/>
+    <region id="AT-07-02"/>
+    <region id="AT-07-03"/>
+    <region id="AT-07-04"/>
+    <region id="AT-07-26"/>
+    <region id="AT-07-05"/>
+    <region id="AT-07-06"/>
+    <region id="AT-07-07"/>
+    <region id="AT-07-08"/>
+    <region id="AT-07-09"/>
     <dangerRating>
       <mainValue>high</mainValue>
       <elevation uom="m">
@@ -614,13 +473,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/cfcbf4e6-73cd-4d0a-98d4-0c06a519bf30.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=cfcbf4e6-73cd-4d0a-98d4-0c06a519bf30</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=cfcbf4e6-73cd-4d0a-98d4-0c06a519bf30</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -630,13 +489,11 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="AT-07-29">
-      <name>Lienzer Dolomites</name>
-    </region>
+    <region id="AT-07-29"/>
     <dangerRating>
       <mainValue>moderate</mainValue>
       <elevation uom="m">
@@ -680,13 +537,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/j1c0717f-2aaa-444f-b06e-9d6ffddd417a.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=j1c0717f-2aaa-444f-b06e-9d6ffddd417a</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=j1c0717f-2aaa-444f-b06e-9d6ffddd417a</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -696,19 +553,13 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-08">
-      <name>Sarntal Alps</name>
-    </region>
-    <region id="IT-32-BZ-14">
-      <name>Ortler Range</name>
-    </region>
-    <region id="IT-32-BZ-15">
-      <name>Ulten Valley</name>
-    </region>
+    <region id="IT-32-BZ-08"/>
+    <region id="IT-32-BZ-14"/>
+    <region id="IT-32-BZ-15"/>
     <dangerRating>
       <mainValue>considerable</mainValue>
       <elevation uom="m">
@@ -753,13 +604,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/m50f79b9-39bb-4b44-b795-536319013cad.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=m50f79b9-39bb-4b44-b795-536319013cad</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=m50f79b9-39bb-4b44-b795-536319013cad</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -769,28 +620,16 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-TN-13">
-      <name>Primiero - Pale di S. Martino</name>
-    </region>
-    <region id="IT-32-TN-16">
-      <name>Fassa Valley</name>
-    </region>
-    <region id="IT-32-TN-19">
-      <name>Sole, Pejo and Rabbi</name>
-    </region>
-    <region id="IT-32-TN-07">
-      <name>Northern Lagorai</name>
-    </region>
-    <region id="IT-32-TN-09">
-      <name>Latemar</name>
-    </region>
-    <region id="IT-32-TN-20">
-      <name>Maddalene</name>
-    </region>
+    <region id="IT-32-TN-13"/>
+    <region id="IT-32-TN-16"/>
+    <region id="IT-32-TN-19"/>
+    <region id="IT-32-TN-07"/>
+    <region id="IT-32-TN-09"/>
+    <region id="IT-32-TN-20"/>
     <dangerRating>
       <mainValue>moderate</mainValue>
       <elevation uom="m">
@@ -848,13 +687,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/c06be44f-9ec4-4e78-b534-2e3f87f7aa3d.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=c06be44f-9ec4-4e78-b534-2e3f87f7aa3d</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=c06be44f-9ec4-4e78-b534-2e3f87f7aa3d</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -864,43 +703,21 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-TN-12">
-      <name>Prealps</name>
-    </region>
-    <region id="IT-32-TN-15">
-      <name>Cembra Valley</name>
-    </region>
-    <region id="IT-32-TN-03">
-      <name>Bondone and Stivo</name>
-    </region>
-    <region id="IT-32-TN-14">
-      <name>Vallarsa</name>
-    </region>
-    <region id="IT-32-TN-17">
-      <name>Western Nonsberg Alps</name>
-    </region>
-    <region id="IT-32-TN-06">
-      <name>Folgaria - Laverone</name>
-    </region>
-    <region id="IT-32-TN-08">
-      <name>Southern Lagorai</name>
-    </region>
-    <region id="IT-32-TN-18">
-      <name>Ledro Valley</name>
-    </region>
-    <region id="IT-32-TN-11">
-      <name>Paganella</name>
-    </region>
-    <region id="IT-32-TN-10">
-      <name>Marzola - Valsugana</name>
-    </region>
-    <region id="IT-32-TN-21">
-      <name>Pine' - Mocheni Valley</name>
-    </region>
+    <region id="IT-32-TN-12"/>
+    <region id="IT-32-TN-15"/>
+    <region id="IT-32-TN-03"/>
+    <region id="IT-32-TN-14"/>
+    <region id="IT-32-TN-17"/>
+    <region id="IT-32-TN-06"/>
+    <region id="IT-32-TN-08"/>
+    <region id="IT-32-TN-18"/>
+    <region id="IT-32-TN-11"/>
+    <region id="IT-32-TN-10"/>
+    <region id="IT-32-TN-21"/>
     <dangerRating>
       <mainValue>low</mainValue>
     </dangerRating>
@@ -933,13 +750,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/a7bbc5cb-db37-4577-a328-95e639ff969d.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=a7bbc5cb-db37-4577-a328-95e639ff969d</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=a7bbc5cb-db37-4577-a328-95e639ff969d</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -949,22 +766,14 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-09">
-      <name>Western Pfunderer Mountains</name>
-    </region>
-    <region id="IT-32-BZ-10">
-      <name>Eastern Pfunderer Mountains</name>
-    </region>
-    <region id="IT-32-BZ-13">
-      <name>Western Deferegger Alps</name>
-    </region>
-    <region id="IT-32-BZ-06">
-      <name>Saldurn-Mastaun Ridge</name>
-    </region>
+    <region id="IT-32-BZ-09"/>
+    <region id="IT-32-BZ-10"/>
+    <region id="IT-32-BZ-13"/>
+    <region id="IT-32-BZ-06"/>
     <dangerRating>
       <mainValue>considerable</mainValue>
       <elevation uom="m">
@@ -1025,13 +834,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/f6c0b17f-136f-4c03-a0b7-4e4af39a3ade.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=f6c0b17f-136f-4c03-a0b7-4e4af39a3ade</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=f6c0b17f-136f-4c03-a0b7-4e4af39a3ade</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -1041,19 +850,13 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="AT-07-27">
-      <name>Eastern Deferegger Alps</name>
-    </region>
-    <region id="AT-07-28">
-      <name>Schober Mountains</name>
-    </region>
-    <region id="AT-07-25">
-      <name>Eastern Rieserferner Mountains</name>
-    </region>
+    <region id="AT-07-27"/>
+    <region id="AT-07-28"/>
+    <region id="AT-07-25"/>
     <dangerRating>
       <mainValue>considerable</mainValue>
       <elevation uom="m">
@@ -1120,13 +923,13 @@
     <metaData>
       <extFile>
         <type>dangerRatingMap</type>
-        <description>Simplified danger rating map of the region</description>
+        <description>Vereinfachte Gefahrenstufenkarte der Region</description>
         <fileReferenceURI>https://static.avalanche.report/albina_files/2019-01-16/2019-01-15_16-00-00/vfd074b7-c2dd-4da8-8d7d-038471d4b5a9.jpg</fileReferenceURI>
       </extFile>
       <extFile>
         <type>website</type>
-        <description>Link to region on the website</description>
-        <fileReferenceURI>https://avalanche.report/bulletin/2019-01-16?region=vfd074b7-c2dd-4da8-8d7d-038471d4b5a9</fileReferenceURI>
+        <description>Link zur Region auf der Webseite</description>
+        <fileReferenceURI>https://lawinen.report/bulletin/2019-01-16?region=vfd074b7-c2dd-4da8-8d7d-038471d4b5a9</fileReferenceURI>
       </extFile>
     </metaData>
     <publicationTime>2019-01-15T16:00:00Z</publicationTime>
@@ -1136,16 +939,12 @@
     </validTime>
     <source>
       <operation>
-        <name>Avalanche.report</name>
-        <website>https://avalanche.report</website>
+        <name>Lawinen.report</name>
+        <website>https://lawinen.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-16">
-      <name>Eastern Nonsberger Alps</name>
-    </region>
-    <region id="IT-32-BZ-17">
-      <name>Northern Dolomites of Fiemme</name>
-    </region>
+    <region id="IT-32-BZ-16"/>
+    <region id="IT-32-BZ-17"/>
     <dangerRating>
       <mainValue>low</mainValue>
     </dangerRating>
