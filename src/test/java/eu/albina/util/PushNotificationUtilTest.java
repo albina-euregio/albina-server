@@ -5,6 +5,7 @@ import eu.albina.model.enumerations.LanguageCode;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -35,6 +36,7 @@ public class PushNotificationUtilTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
+	@Ignore
 	@Test
 	public void test() throws Exception {
 		PushSubscription subscription = new PushSubscription();
