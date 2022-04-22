@@ -117,6 +117,7 @@ public class EmailUtilTest {
 		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
+	@Ignore
 	@Test
 	public void sendEmail() throws MessagingException, IOException, URISyntaxException {
 		final URL resource = Resources.getResource("2021-12-02.json");
@@ -143,6 +144,7 @@ public class EmailUtilTest {
 		assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
 	}
 
+	@Ignore
 	@Test
 	public void sendLangEmail() throws MessagingException, IOException, URISyntaxException {
 		final URL resource = Resources.getResource("2021-12-02.json");
@@ -172,6 +174,7 @@ public class EmailUtilTest {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void sendMediaEmails() throws IOException, URISyntaxException {
 		EmailUtil.getInstance().sendMediaEmails("", LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(), regionTirol, "Norbert Lanzanasto", true, LanguageCode.de);
