@@ -24,6 +24,7 @@ import javax.xml.transform.TransformerException;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -59,6 +60,7 @@ public class JsonUtilTest {
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
 	}
 
+	@Ignore
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
 		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30", serverInstanceEuregio);
