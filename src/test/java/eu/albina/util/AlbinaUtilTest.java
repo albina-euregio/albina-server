@@ -207,7 +207,7 @@ public class AlbinaUtilTest {
 			SocialMediaUtil.getSocialMediaText(bulletins, regionEuregio, true, LanguageCode.de));
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
 			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de, regionEuregio));
-		assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_AT-07_de.pdf",
+		assertEquals("https://static.avalanche.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
 			LinkUtil.getPdfLink(bulletins, LanguageCode.de, regionTirol, serverInstanceEuregio));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
