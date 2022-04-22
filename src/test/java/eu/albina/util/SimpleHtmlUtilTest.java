@@ -47,7 +47,7 @@ public class SimpleHtmlUtilTest {
 		serverInstanceEuregio.setName("ALBINA-TEST");
 		serverInstanceEuregio.setHtmlDirectory("/mnt/simple_local/");
 		serverInstanceEuregio.setMapsPath("/mnt/albina_files_local/");
-		serverInstanceEuregio.setServerImagesUrl("/mnt/images/");
+		serverInstanceEuregio.setServerImagesUrl("https://static.avalanche.report/images/");
 		serverInstanceEuregio.setHtmlDirectory("/mnt/simple_local");
 		serverInstanceAran = new ServerInstance();
 		serverInstanceAran.setName("ALBINA-TEST");

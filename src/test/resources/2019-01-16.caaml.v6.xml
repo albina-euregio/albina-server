@@ -382,57 +382,31 @@
         <website>https://avalanche.report</website>
       </operation>
     </source>
-    <region id="AT-07-10">
-    <region id="AT-07-11">
-    <region id="AT-07-12">
-    <region id="AT-07-13">
-    <region id="AT-07-14">
-    <region id="AT-07-15">
-    <region id="AT-07-16">
-    <region id="AT-07-17">
-    <region id="AT-07-18">
-    <region id="AT-07-19">
-    <region id="AT-07-20">
-    <region id="AT-07-21">
-    <region id="AT-07-22">
-      <name>Central Stubai Alps</name>
-    </region>
-    <region id="AT-07-23">
-      <name>Northern Zillertal Alps</name>
-    </region>
-    <region id="AT-07-01">
-      <name>Allgäu Alps</name>
-    </region>
-    <region id="AT-07-24">
-      <name>Venediger Range</name>
-    </region>
-    <region id="AT-07-02">
-      <name>Eastern Lechtal Alps - Ammergau Alps</name>
-    </region>
-    <region id="AT-07-03">
-      <name>Mieming Mountains</name>
-    </region>
-    <region id="AT-07-04">
-      <name>Karwendel Mountains</name>
-    </region>
-    <region id="AT-07-26">
-      <name>Glockner Range</name>
-    </region>
-    <region id="AT-07-05">
-      <name>Brandenberg Alps</name>
-    </region>
-    <region id="AT-07-06">
-      <name>Wilder Kaiser Mountains - Waidring Alps</name>
-    </region>
-    <region id="AT-07-07">
-      <name>Western Lechtal Alps</name>
-    </region>
-    <region id="AT-07-08">
-      <name>Central Lechtal Alps</name>
-    </region>
-    <region id="AT-07-09">
-      <name>Grieskogel Mountains</name>
-    </region>
+    <region id="AT-07-10"/>
+    <region id="AT-07-11"/>
+    <region id="AT-07-12"/>
+    <region id="AT-07-13"/>
+    <region id="AT-07-14"/>
+    <region id="AT-07-15"/>
+    <region id="AT-07-16"/>
+    <region id="AT-07-17"/>
+    <region id="AT-07-18"/>
+    <region id="AT-07-19"/>
+    <region id="AT-07-20"/>
+    <region id="AT-07-21"/>
+    <region id="AT-07-22"/>
+    <region id="AT-07-23"/>
+    <region id="AT-07-01"/>
+    <region id="AT-07-24"/>
+    <region id="AT-07-02"/>
+    <region id="AT-07-03"/>
+    <region id="AT-07-04"/>
+    <region id="AT-07-26"/>
+    <region id="AT-07-05"/>
+    <region id="AT-07-06"/>
+    <region id="AT-07-07"/>
+    <region id="AT-07-08"/>
+    <region id="AT-07-09"/>
     <dangerRating>
       <mainValue>high</mainValue>
       <elevation uom="m">
@@ -519,9 +493,7 @@
         <website>https://avalanche.report</website>
       </operation>
     </source>
-    <region id="AT-07-29">
-      <name>Lienzer Dolomites</name>
-    </region>
+    <region id="AT-07-29"/>
     <dangerRating>
       <mainValue>moderate</mainValue>
       <elevation uom="m">
@@ -585,15 +557,9 @@
         <website>https://avalanche.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-08">
-      <name>Sarntal Alps</name>
-    </region>
-    <region id="IT-32-BZ-14">
-      <name>Ortler Range</name>
-    </region>
-    <region id="IT-32-BZ-15">
-      <name>Ulten Valley</name>
-    </region>
+    <region id="IT-32-BZ-08"/>
+    <region id="IT-32-BZ-14"/>
+    <region id="IT-32-BZ-15"/>
     <dangerRating>
       <mainValue>considerable</mainValue>
       <elevation uom="m">
@@ -658,24 +624,12 @@
         <website>https://avalanche.report</website>
       </operation>
     </source>
-    <region id="IT-32-TN-13">
-      <name>Primiero - Pale di S. Martino</name>
-    </region>
-    <region id="IT-32-TN-16">
-      <name>Fassa Valley</name>
-    </region>
-    <region id="IT-32-TN-19">
-      <name>Sole, Pejo and Rabbi</name>
-    </region>
-    <region id="IT-32-TN-07">
-      <name>Northern Lagorai</name>
-    </region>
-    <region id="IT-32-TN-09">
-      <name>Latemar</name>
-    </region>
-    <region id="IT-32-TN-20">
-      <name>Maddalene</name>
-    </region>
+    <region id="IT-32-TN-13"/>
+    <region id="IT-32-TN-16"/>
+    <region id="IT-32-TN-19"/>
+    <region id="IT-32-TN-07"/>
+    <region id="IT-32-TN-09"/>
+    <region id="IT-32-TN-20"/>
     <dangerRating>
       <mainValue>moderate</mainValue>
       <elevation uom="m">
@@ -753,39 +707,17 @@
         <website>https://avalanche.report</website>
       </operation>
     </source>
-    <region id="IT-32-TN-12">
-      <name>Prealps</name>
-    </region>
-    <region id="IT-32-TN-15">
-      <name>Cembra Valley</name>
-    </region>
-    <region id="IT-32-TN-03">
-      <name>Bondone and Stivo</name>
-    </region>
-    <region id="IT-32-TN-14">
-      <name>Vallarsa</name>
-    </region>
-    <region id="IT-32-TN-17">
-      <name>Western Nonsberg Alps</name>
-    </region>
-    <region id="IT-32-TN-06">
-      <name>Folgaria - Laverone</name>
-    </region>
-    <region id="IT-32-TN-08">
-      <name>Southern Lagorai</name>
-    </region>
-    <region id="IT-32-TN-18">
-      <name>Ledro Valley</name>
-    </region>
-    <region id="IT-32-TN-11">
-      <name>Paganella</name>
-    </region>
-    <region id="IT-32-TN-10">
-      <name>Marzola - Valsugana</name>
-    </region>
-    <region id="IT-32-TN-21">
-      <name>Pine' - Mocheni Valley</name>
-    </region>
+    <region id="IT-32-TN-12"/>
+    <region id="IT-32-TN-15"/>
+    <region id="IT-32-TN-03"/>
+    <region id="IT-32-TN-14"/>
+    <region id="IT-32-TN-17"/>
+    <region id="IT-32-TN-06"/>
+    <region id="IT-32-TN-08"/>
+    <region id="IT-32-TN-18"/>
+    <region id="IT-32-TN-11"/>
+    <region id="IT-32-TN-10"/>
+    <region id="IT-32-TN-21"/>
     <dangerRating>
       <mainValue>low</mainValue>
     </dangerRating>
@@ -838,18 +770,10 @@
         <website>https://avalanche.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-09">
-      <name>Western Pfunderer Mountains</name>
-    </region>
-    <region id="IT-32-BZ-10">
-      <name>Eastern Pfunderer Mountains</name>
-    </region>
-    <region id="IT-32-BZ-13">
-      <name>Western Deferegger Alps</name>
-    </region>
-    <region id="IT-32-BZ-06">
-      <name>Saldurn-Mastaun Ridge</name>
-    </region>
+    <region id="IT-32-BZ-09"/>
+    <region id="IT-32-BZ-10"/>
+    <region id="IT-32-BZ-13"/>
+    <region id="IT-32-BZ-06"/>
     <dangerRating>
       <mainValue>considerable</mainValue>
       <elevation uom="m">
@@ -930,15 +854,9 @@
         <website>https://avalanche.report</website>
       </operation>
     </source>
-    <region id="AT-07-27">
-      <name>Eastern Deferegger Alps</name>
-    </region>
-    <region id="AT-07-28">
-      <name>Schober Mountains</name>
-    </region>
-    <region id="AT-07-25">
-      <name>Eastern Rieserferner Mountains</name>
-    </region>
+    <region id="AT-07-27"/>
+    <region id="AT-07-28"/>
+    <region id="AT-07-25"/>
     <dangerRating>
       <mainValue>considerable</mainValue>
       <elevation uom="m">
@@ -1025,12 +943,8 @@
         <website>https://avalanche.report</website>
       </operation>
     </source>
-    <region id="IT-32-BZ-16">
-      <name>Eastern Nonsberger Alps</name>
-    </region>
-    <region id="IT-32-BZ-17">
-      <name>Northern Dolomites of Fiemme</name>
-    </region>
+    <region id="IT-32-BZ-16"/>
+    <region id="IT-32-BZ-17"/>
     <dangerRating>
       <mainValue>low</mainValue>
     </dangerRating>
