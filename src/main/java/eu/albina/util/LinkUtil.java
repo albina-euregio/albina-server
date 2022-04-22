@@ -18,33 +18,38 @@ import java.util.List;
  */
 public interface LinkUtil {
 
-	static String getWebsite(LanguageCode lang, Region region) {
+	static String getWebsiteUrl(LanguageCode lang, Region region) {
 		String url = lang.getBundleString("website.url", region);
+		return url.replaceAll("/$", "");
+	}
+
+	static String getStaticContentUrl(LanguageCode lang, Region region) {
+		String url = lang.getBundleString("website.static.url", region);
 		return url.replaceAll("/$", "");
 	}
 
 	static String getSimpleHtmlUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
 		String htmlDirectory = Paths.get(serverInstance.getHtmlDirectory()).getFileName().toString();
-		return String.format("%s/%s", getWebsite(lang, region), htmlDirectory);
+		return String.format("%s/%s", getStaticContentUrl(lang, region), htmlDirectory);
 	}
 
 	static String getMapsUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
 		String mapsDirectory = Paths.get(serverInstance.getMapsPath()).getFileName().toString();
-		return String.format("%s/%s", getWebsite(lang, region), mapsDirectory);
+		return String.format("%s/%s", getStaticContentUrl(lang, region), mapsDirectory);
 	}
 
 	static String getPdfUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
 		String pdfDirectory = Paths.get(serverInstance.getPdfDirectory()).getFileName().toString();
-		return String.format("%s/%s", getWebsite(lang, region), pdfDirectory);
+		return String.format("%s/%s", getStaticContentUrl(lang, region), pdfDirectory);
 	}
 
 	static String getAvalancheReportFullBlogUrl(LanguageCode lang, Region region) {
-		return String.format("%s/blog/", getWebsite(lang, region));
+		return String.format("%s/blog/", getWebsiteUrl(lang, region));
 	}
 
 	static String getBulletinUrl(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region) {
 		String date = AlbinaUtil.getValidityDateString(bulletins);
-		return String.format("%s/bulletin/%s", getWebsite(lang, region), date);
+		return String.format("%s/bulletin/%s", getWebsiteUrl(lang, region), date);
 	}
 
 	static String getPdfLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance) {
@@ -54,17 +59,17 @@ public interface LinkUtil {
 
 	static String getDangerPatternLink(LanguageCode lang, Region region, DangerPattern dangerPattern) {
 		return String.format("%s/education/danger-patterns#%s",
-			getWebsite(lang, region), DangerPattern.getCAAMLv6String(dangerPattern));
+			getWebsiteUrl(lang, region), DangerPattern.getCAAMLv6String(dangerPattern));
 	}
 
 	static String getAvalancheSituationLink(LanguageCode lang, Region region,
 											eu.albina.model.enumerations.AvalancheSituation avalancheSituation) {
 		return String.format("%s/education/avalanche-problems#%s",
-			getWebsite(lang, region), avalancheSituation.toCaamlv6String());
+			getWebsiteUrl(lang, region), avalancheSituation.toCaamlv6String());
 	}
 
 	static String getImprintLink(LanguageCode lang, Region region) {
-		return String.format("%s/more/imprint", getWebsite(lang, region));
+		return String.format("%s/more/imprint", getWebsiteUrl(lang, region));
 	}
 
 	static String getExtFileMapDescription(LanguageCode lang, String type, String region) {

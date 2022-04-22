@@ -23,6 +23,11 @@
 	<entry key="website.url.capitalized.IT-32-BZ">WWW.AVALANCHE.REPORT</entry>
 	<entry key="website.url.capitalized.IT-32-TN">WWW.AVALANCHE.REPORT</entry>
 	<entry key="website.url.capitalized.ES-CT-L">WWW.LAUEGI.REPORT</entry>
+	<entry key="website.static.url">https://static.avalanche.report</entry>
+	<entry key="website.static.url.AT-07">https://static.avalanche.report</entry>
+	<entry key="website.static.url.IT-32-BZ">https://static.avalanche.report</entry>
+	<entry key="website.static.url.IT-32-TN">https://static.avalanche.report</entry>
+	<entry key="website.static.url.ES-CT-L">https://static.lauegi.report/</entry>
 	<entry key="email">info@avalanche.report</entry>
 	<entry key="email.AT-07">info@avalanche.report</entry>
 	<entry key="email.IT-32-BZ">info@avalanche.report</entry>
