@@ -9,7 +9,7 @@
     <extFile>
       <type>simple_link</type>
       <description>Link to the simplified website</description>
-      <fileReferenceURI>https://avalanche.report/simple/2019-01-16/en.html</fileReferenceURI>
+      <fileReferenceURI>https://static.avalanche.report/simple/2019-01-16/en.html</fileReferenceURI>
     </extFile>
     <extFile>
       <type>fd_albina_map.jpg</type>
