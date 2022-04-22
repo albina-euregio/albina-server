@@ -175,8 +175,9 @@ public class BlogController {
 		}
 	}
 
-	public void sendLatestBlogPost(GoogleBloggerConfiguration config, boolean test) {
-		if (config.getRegion().isPublishBlogs()) {
+	public void sendLatestBlogPost(Region region, LanguageCode lang, boolean test) {
+		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		if (region.isPublishBlogs()) {
 			if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 				try {
 					Blogger.Item blogPost = getLatestBlogPost(config);
@@ -192,8 +193,9 @@ public class BlogController {
 		}
 	}
 
-	public void sendLatestBlogPostEmail(GoogleBloggerConfiguration config, boolean test) {
-		if (config.getRegion().isPublishBlogs()) {
+	public void sendLatestBlogPostEmail(Region region, LanguageCode lang, boolean test) {
+		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		if (region.isPublishBlogs()) {
 			if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 				try {
 					Blogger.Item blogPost = getLatestBlogPost(config);
@@ -205,8 +207,9 @@ public class BlogController {
 		}
 	}
 
-	public void sendLatestBlogPostTelegram(GoogleBloggerConfiguration config, boolean test) {
-		if (config.getRegion().isPublishBlogs()) {
+	public void sendLatestBlogPostTelegram(Region region, LanguageCode lang, boolean test) {
+		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		if (region.isPublishBlogs()) {
 			if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 				try {
 					Blogger.Item blogPost = getLatestBlogPost(config);
@@ -218,8 +221,9 @@ public class BlogController {
 		}
 	}
 
-	public void sendLatestBlogPostPush(GoogleBloggerConfiguration config, boolean test) {
-		if (config.getRegion().isPublishBlogs()) {
+	public void sendLatestBlogPostPush(Region region, LanguageCode lang, boolean test) {
+		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		if (region.isPublishBlogs()) {
 			if (config != null && config.getBlogId() != null && config.getApiKey() != null && config.getBlogApiUrl() != null) {
 				try {
 					Blogger.Item blogPost = getLatestBlogPost(config);
