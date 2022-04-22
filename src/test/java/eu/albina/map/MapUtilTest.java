@@ -11,16 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 import eu.albina.ImageTestUtils;
-import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
-import eu.albina.util.HibernateUtil;
 import eu.albina.util.PdfUtil;
 
-import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -41,7 +37,7 @@ public class MapUtilTest {
 	private Region regionTirol;
 	private Region regionSouthTyrol;
 	private Region regionTrentino;
-	private Region regionAran = new Region("ES-CT-L", "geodata.Aran", 120500, 66200, 5266900, 5215700);
+	private Region regionAran;
 	private ServerInstance serverInstance;
 
 	@Rule
@@ -49,18 +45,16 @@ public class MapUtilTest {
 
 	@Before
 	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
+		serverInstance = new ServerInstance();
+		serverInstance.setMapsPath("/mnt/albina_files_local/");
+		serverInstance.setMapProductionUrl("D:\\norbert\\vs_workspace\\avalanche-warning-maps");
 
-		regionEuregio = RegionController.getInstance().getRegion("EUREGIO");
-		regionTirol = RegionController.getInstance().getRegion("AT-07");
-		regionSouthTyrol = RegionController.getInstance().getRegion("IT-32-BZ");
-		regionTrentino = RegionController.getInstance().getRegion("IT-32-TN");
-		serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-	}
+		regionEuregio = Region.readRegion(Resources.getResource("region_EUREGIO.json"));
+		regionTirol = Region.readRegion(Resources.getResource("region_AT-07.json"));
+		regionSouthTyrol = Region.readRegion(Resources.getResource("region_IT-32-BZ.json"));
+		regionTrentino = Region.readRegion(Resources.getResource("region_IT-32-TN.json"));
 
-	@After
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
+		regionAran = Region.readRegion(Resources.getResource("region_ES-CT-L.json"));
 	}
 
 	@Test

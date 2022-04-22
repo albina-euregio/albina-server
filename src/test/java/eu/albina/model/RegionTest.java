@@ -13,7 +13,7 @@ public class RegionTest {
 	@Test
 	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("region_AT-07.json"), StandardCharsets.UTF_8);
-		Region region = Region.readBulletin(Resources.getResource("region_AT-07.json"));
+		Region region = Region.readRegion(Resources.getResource("region_AT-07.json"));
 		Assert.assertEquals(
 			new JSONObject(expected).toString(4),
 			region.toJSON().toString(4)

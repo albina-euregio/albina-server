@@ -102,7 +102,7 @@ public class EmailUtilTest {
 	public void createBulletinEmailHtmlAran() throws Exception {
 		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
+		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.en,
 				regionAran, false, false, serverInstanceAran);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.mail.html"), StandardCharsets.UTF_8);
 		Assert.assertEquals(expected.trim(), html.trim());
@@ -114,7 +114,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
 			regionTirol, false, false, serverInstanceAran);
-		assertEquals("59 kB", 59, html.getBytes(StandardCharsets.UTF_8).length / 1024);
+		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
 	@Test

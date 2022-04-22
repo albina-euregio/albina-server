@@ -122,7 +122,7 @@ public class PublicationController {
 					// create maps
 					if (region.isCreateMaps()) {
 					
-						createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString);
+						createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 					
 						Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -135,7 +135,7 @@ public class PublicationController {
 
 						// create pdfs
 						if (region.isCreatePdf()) {
-							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 							threads.put("pdf_" + region.getId(), createPdfThread);
 							createPdfThread.start();
 						}
@@ -230,7 +230,7 @@ public class PublicationController {
 					// create maps
 					if (region.isCreateMaps()) {
 
-						createMaps(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+						createMaps(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 						Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -243,7 +243,7 @@ public class PublicationController {
 
 						// create pdf
 						if (region.isCreatePdf()) {
-							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 							threads.put("pdf_" + region.getId(), createPdfThread);
 							createPdfThread.start();
 						}
@@ -313,7 +313,7 @@ public class PublicationController {
 					// create maps
 					if (region.isCreateMaps()) {
 
-						createMaps(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+						createMaps(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 						Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -326,7 +326,7 @@ public class PublicationController {
 
 						// create pdfs
 						if (region.isCreatePdf()) {
-							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString);
+							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 							threads.put("pdf_" + region.getId(), createPdfThread);
 							createPdfThread.start();
 						}
@@ -504,11 +504,10 @@ public class PublicationController {
 	 * @param validityDateString
 	 *            the start of the validity of the report
 	 */
-	public boolean createMaps(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString)
+	public boolean createMaps(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString, ServerInstance serverInstance)
 			throws Exception {
 		try {
 			logger.info("Map production for " + region.getId() + " started");
-			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			MapUtil.createMapyrusMaps(bulletins, region, serverInstance);
 			AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportId);
 			logger.info("Map production " + region.getId() + " finished");
@@ -530,14 +529,14 @@ public class PublicationController {
 	 *            the start of the validity of the report
 	 */
 	public Thread createPdf(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString) {
+			String publicationTimeString, ServerInstance serverInstance) {
 		return new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					logger.info("PDF production for " + region.getId() + " started");
 					PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
-							publicationTimeString);
+							publicationTimeString, serverInstance);
 					AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportId);
 				} finally {
 					logger.info("PDF production " + region.getId() + " finished");

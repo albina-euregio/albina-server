@@ -342,8 +342,8 @@ public class Region implements AvalancheInformationObject {
 			this.mapLogoColorPath = json.getString("mapLogoColorPath");
 		if (json.has("mapLogoBwPath") && !json.isNull("mapLogoBwPath"))
 			this.mapLogoBwPath = json.getString("mapLogoBwPath");
-		if (json.has("logoPosition"))
-			this.mapLogoPosition = Position.fromString(json.getString("logoPosition"));
+		if (json.has("mapLogoPosition"))
+			this.mapLogoPosition = Position.fromString(json.getString("mapLogoPosition"));
 		if (json.has("imageColorbarColorPath") && !json.isNull("imageColorbarColorPath"))
 			this.imageColorbarColorPath = json.getString("imageColorbarColorPath");
 		if (json.has("imageColorbarBwPath") && !json.isNull("imageColorbarBwPath"))
@@ -746,7 +746,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("geoDataDirectory", getGeoDataDirectory());
 		json.put("mapLogoColorPath", getMapLogoColorPath());
 		json.put("mapLogoBwPath", getMapLogoBwPath());
-		json.put("logoPosition", this.mapLogoPosition.toString());
+		json.put("mapLogoPosition", getLogoPosition().toString());
 		json.put("imageColorbarColorPath", getImageColorbarColorPath());
 		json.put("imageColorbarBwPath", getImageColorbarBwPath());
 
@@ -768,7 +768,7 @@ public class Region implements AvalancheInformationObject {
 		return Objects.hash(id);
 	}
 
-    public static Region readBulletin(URL resource) throws IOException {
+    public static Region readRegion(URL resource) throws IOException {
 		final String validRegionStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		return new Region(new JSONObject(validRegionStringFromResource), Region::new);
     }

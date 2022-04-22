@@ -25,7 +25,6 @@ import java.util.Set;
 
 import com.google.common.io.Resources;
 
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.map.MapUtil;
 import eu.albina.model.ServerInstance;
 import org.slf4j.Logger;
@@ -183,7 +182,7 @@ public class PdfUtil {
 	 * @param validityDateString
 	 *            the start of the validity of the report
 	 */
-	public void createRegionPdfs(List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString) {
+	public void createRegionPdfs(List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString, ServerInstance serverInstance) {
 		boolean daytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
 
 		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
@@ -197,8 +196,8 @@ public class PdfUtil {
 
 		for (LanguageCode lang : LanguageCode.ENABLED) {
 			try {
-				createPdf(regionBulletins, lang, region, ServerInstanceController.getInstance().getLocalServerInstance(), false, daytimeDependency, validityDateString, publicationTimeString, false);
-				createPdf(regionBulletins, lang, region, ServerInstanceController.getInstance().getLocalServerInstance(), true, daytimeDependency, validityDateString, publicationTimeString, false);
+				createPdf(regionBulletins, lang, region, serverInstance, false, daytimeDependency, validityDateString, publicationTimeString, false);
+				createPdf(regionBulletins, lang, region, serverInstance, true, daytimeDependency, validityDateString, publicationTimeString, false);
 			} catch (IOException e) {
 				logger.error("PDF could not be created", e);
 			}

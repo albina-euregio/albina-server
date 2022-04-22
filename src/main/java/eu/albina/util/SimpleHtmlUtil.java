@@ -41,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
@@ -141,7 +140,7 @@ public class SimpleHtmlUtil {
 
 				filename = region.getId() + "_" + lang.toString() + ".html";
 
-				String dirPath = ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory() + "/" + validityDateString;
+				String dirPath = serverInstance.getHtmlDirectory() + "/" + validityDateString;
 				new File(dirPath).mkdirs();
 
 				// using PosixFilePermission to set file permissions 755

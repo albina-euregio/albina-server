@@ -47,6 +47,7 @@ public class SimpleHtmlUtilTest {
 		serverInstance.setHtmlDirectory("/mnt/simple_local/");
 		serverInstance.setMapsPath("/mnt/albina_files_local/");
 		serverInstance.setServerImagesUrl("/mnt/images/");
+		serverInstance.setHtmlDirectory("/mnt/simple_local");
 		regionEuregio = new Region();
 		regionEuregio.setId("EUREGIO");
 		regionEuregio.setSimpleHtmlTemplateName("simple-bulletin.min.html");

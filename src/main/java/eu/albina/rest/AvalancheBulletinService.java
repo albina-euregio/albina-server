@@ -763,12 +763,13 @@ public class AvalancheBulletinService {
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			for (Region region : publishBulletinRegions) {
 				try {
 					logger.info("PDF production for " + region.getId() + " started");
 					PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
-							publicationTimeString);
+							publicationTimeString, localServerInstance);
 				} finally {
 					logger.info("PDF production " + region.getId() + " finished");
 				}
@@ -847,11 +848,12 @@ public class AvalancheBulletinService {
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			for (Region region: publishBulletinRegions) {
 				try {
 					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-					PublicationController.getInstance().createMaps(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString);
+					PublicationController.getInstance().createMaps(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 				} catch (InterruptedException e) {
 					logger.error("Map production for " + region.getId() + " interrupted", e);
 				} catch (Exception e1) {

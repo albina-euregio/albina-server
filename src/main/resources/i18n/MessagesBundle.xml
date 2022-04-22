@@ -14,6 +14,10 @@
 	<entry key="warning-service.name.ES-CT-L">Centre de Lauegi Val d'Aran</entry>
 	<entry key="media-file.name">avalanchereport</entry>
 	<entry key="website.url">https://avalanche.report</entry>
+	<entry key="website.url.AT-07">https://avalanche.report</entry>
+	<entry key="website.url.IT-32-BZ">https://avalanche.report</entry>
+	<entry key="website.url.IT-32-TN">https://avalanche.report</entry>
+	<entry key="website.url.ES-CT-L">https://lauegi.report/</entry>
 	<entry key="website.url.capitalized">WWW.AVALANCHE.REPORT</entry>
 	<entry key="website.url.capitalized.AT-07">WWW.AVALANCHE.REPORT</entry>
 	<entry key="website.url.capitalized.IT-32-BZ">WWW.AVALANCHE.REPORT</entry>
