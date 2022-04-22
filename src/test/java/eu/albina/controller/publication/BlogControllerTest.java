@@ -52,21 +52,25 @@ public class BlogControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
+	@Ignore
 	@Test
 	public void testBlogPosts() throws Exception {
 		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
 		BlogController.getInstance().lastFetch.put(config.getBlogId(), Instant.ofEpochMilli(0L));
-		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(regionTyrol, LanguageCode.de);
+		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(config);
 		assertTrue("size=" + blogPosts.size(), blogPosts.size() > 5);
 		assertTrue("one blog has image", blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()));
 	}
 
+	@Ignore
 	@Test
 	public void testLatestBlogPost() throws Exception {
-		Blogger.Item blogPost = BlogController.getInstance().getLatestBlogPost(regionTyrol, LanguageCode.de);
+		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
+		Blogger.Item blogPost = BlogController.getInstance().getLatestBlogPost(config);
 		assertTrue("blog has >100 chars", blogPost.content.length() > 100);
 	}
 
+	@Ignore
 	@Test
 	public void testBlogPost() throws Exception {
 		String blogPost = BlogController.getInstance().getBlogPost("1227558273754407795", regionTyrol, LanguageCode.de);
@@ -81,6 +85,7 @@ public class BlogControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
+	@Ignore
 	@Test
 	public void testTicket150() throws Exception {
 		String blogPost = BlogController.getInstance().getBlogPost("4564885875858452565", regionSouthTyrol, LanguageCode.de);
