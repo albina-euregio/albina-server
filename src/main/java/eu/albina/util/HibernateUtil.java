@@ -60,13 +60,17 @@ public class HibernateUtil {
 	public static String queryGetPushConfiguration = "from PushConfiguration as c";
 
 	public static HibernateUtil getInstance() {
+		if (System.getenv("CI_JOB_NAME") != null) {
+			// https://docs.gitlab.com/ee/ci/variables/#list-all-environment-variables
+			throw new IllegalStateException("No Hibernate for continuous integration!");
+		}
 		if (instance == null) {
 			instance = new HibernateUtil();
 		}
 		return instance;
 	}
 
-	public HibernateUtil() {
+	private HibernateUtil() {
 	}
 
 	public void setUp() {
