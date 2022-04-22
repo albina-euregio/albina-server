@@ -5,7 +5,7 @@
       <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
       <srcRef>
         <Operation>
-          <name>Avalanche.report</name>
+          <name>Lawinen.report</name>
         </Operation>
       </srcRef>
     </MetaData>
@@ -17,7 +17,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -33,6 +33,14 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-BZ-07"/>
+      <locRef xlink:href="IT-32-BZ-11"/>
+      <locRef xlink:href="IT-32-BZ-12"/>
+      <locRef xlink:href="IT-32-BZ-01"/>
+      <locRef xlink:href="IT-32-BZ-02"/>
+      <locRef xlink:href="IT-32-BZ-03"/>
+      <locRef xlink:href="IT-32-BZ-04"/>
+      <locRef xlink:href="IT-32-BZ-05"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -85,14 +93,6 @@
           <tendencyComment> Gradual decrease in avalanche danger.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-BZ-07"/>
-      <locRef xlink:href="IT-32-BZ-11"/>
-      <locRef xlink:href="IT-32-BZ-12"/>
-      <locRef xlink:href="IT-32-BZ-01"/>
-      <locRef xlink:href="IT-32-BZ-02"/>
-      <locRef xlink:href="IT-32-BZ-03"/>
-      <locRef xlink:href="IT-32-BZ-04"/>
-      <locRef xlink:href="IT-32-BZ-05"/>
     </Bulletin>
     <Bulletin gml:id="a19bd3dc-85df-448f-be5e-f88f0c14ed4f_PM" xml:lang="en">
       <metaDataProperty>
@@ -100,7 +100,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -116,6 +116,14 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-BZ-07"/>
+      <locRef xlink:href="IT-32-BZ-11"/>
+      <locRef xlink:href="IT-32-BZ-12"/>
+      <locRef xlink:href="IT-32-BZ-01"/>
+      <locRef xlink:href="IT-32-BZ-02"/>
+      <locRef xlink:href="IT-32-BZ-03"/>
+      <locRef xlink:href="IT-32-BZ-04"/>
+      <locRef xlink:href="IT-32-BZ-05"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -155,14 +163,6 @@
           <tendencyComment> Gradual decrease in avalanche danger.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-BZ-07"/>
-      <locRef xlink:href="IT-32-BZ-11"/>
-      <locRef xlink:href="IT-32-BZ-12"/>
-      <locRef xlink:href="IT-32-BZ-01"/>
-      <locRef xlink:href="IT-32-BZ-02"/>
-      <locRef xlink:href="IT-32-BZ-03"/>
-      <locRef xlink:href="IT-32-BZ-04"/>
-      <locRef xlink:href="IT-32-BZ-05"/>
     </Bulletin>
     <Bulletin gml:id="a2dda2a6-f451-4fac-ac81-4acd051f47a6" xml:lang="en">
       <metaDataProperty>
@@ -170,7 +170,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -186,6 +186,9 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-BZ-18"/>
+      <locRef xlink:href="IT-32-BZ-19"/>
+      <locRef xlink:href="IT-32-BZ-20"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -225,9 +228,6 @@
           <tendencyComment> Moderate, level 2.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-BZ-18"/>
-      <locRef xlink:href="IT-32-BZ-19"/>
-      <locRef xlink:href="IT-32-BZ-20"/>
     </Bulletin>
     <Bulletin gml:id="c0fba3a0-9ca2-4dd9-a198-9a59a3f8b77a" xml:lang="en">
       <metaDataProperty>
@@ -235,7 +235,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -251,6 +251,10 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-TN-02"/>
+      <locRef xlink:href="IT-32-TN-01"/>
+      <locRef xlink:href="IT-32-TN-04"/>
+      <locRef xlink:href="IT-32-TN-05"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -301,10 +305,6 @@
           <tendencyComment> The avalanche danger will persist.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-TN-02"/>
-      <locRef xlink:href="IT-32-TN-01"/>
-      <locRef xlink:href="IT-32-TN-04"/>
-      <locRef xlink:href="IT-32-TN-05"/>
     </Bulletin>
     <Bulletin gml:id="hbc68380-6475-4726-95ce-d946e3a2cf79" xml:lang="en">
       <metaDataProperty>
@@ -312,7 +312,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -328,6 +328,31 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="AT-07-10"/>
+      <locRef xlink:href="AT-07-11"/>
+      <locRef xlink:href="AT-07-12"/>
+      <locRef xlink:href="AT-07-13"/>
+      <locRef xlink:href="AT-07-14"/>
+      <locRef xlink:href="AT-07-15"/>
+      <locRef xlink:href="AT-07-16"/>
+      <locRef xlink:href="AT-07-17"/>
+      <locRef xlink:href="AT-07-18"/>
+      <locRef xlink:href="AT-07-19"/>
+      <locRef xlink:href="AT-07-20"/>
+      <locRef xlink:href="AT-07-21"/>
+      <locRef xlink:href="AT-07-22"/>
+      <locRef xlink:href="AT-07-23"/>
+      <locRef xlink:href="AT-07-01"/>
+      <locRef xlink:href="AT-07-24"/>
+      <locRef xlink:href="AT-07-02"/>
+      <locRef xlink:href="AT-07-03"/>
+      <locRef xlink:href="AT-07-04"/>
+      <locRef xlink:href="AT-07-26"/>
+      <locRef xlink:href="AT-07-05"/>
+      <locRef xlink:href="AT-07-06"/>
+      <locRef xlink:href="AT-07-07"/>
+      <locRef xlink:href="AT-07-08"/>
+      <locRef xlink:href="AT-07-09"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -389,31 +414,6 @@
           <tendencyComment> Further decrease in avalanche danger.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="AT-07-10"/>
-      <locRef xlink:href="AT-07-11"/>
-      <locRef xlink:href="AT-07-12"/>
-      <locRef xlink:href="AT-07-13"/>
-      <locRef xlink:href="AT-07-14"/>
-      <locRef xlink:href="AT-07-15"/>
-      <locRef xlink:href="AT-07-16"/>
-      <locRef xlink:href="AT-07-17"/>
-      <locRef xlink:href="AT-07-18"/>
-      <locRef xlink:href="AT-07-19"/>
-      <locRef xlink:href="AT-07-20"/>
-      <locRef xlink:href="AT-07-21"/>
-      <locRef xlink:href="AT-07-22"/>
-      <locRef xlink:href="AT-07-23"/>
-      <locRef xlink:href="AT-07-01"/>
-      <locRef xlink:href="AT-07-24"/>
-      <locRef xlink:href="AT-07-02"/>
-      <locRef xlink:href="AT-07-03"/>
-      <locRef xlink:href="AT-07-04"/>
-      <locRef xlink:href="AT-07-26"/>
-      <locRef xlink:href="AT-07-05"/>
-      <locRef xlink:href="AT-07-06"/>
-      <locRef xlink:href="AT-07-07"/>
-      <locRef xlink:href="AT-07-08"/>
-      <locRef xlink:href="AT-07-09"/>
     </Bulletin>
     <Bulletin gml:id="cfcbf4e6-73cd-4d0a-98d4-0c06a519bf30" xml:lang="en">
       <metaDataProperty>
@@ -421,7 +421,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -437,6 +437,7 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="AT-07-29"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -479,7 +480,6 @@
           <tendencyComment> Slight decrease in avalanche danger.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="AT-07-29"/>
     </Bulletin>
     <Bulletin gml:id="j1c0717f-2aaa-444f-b06e-9d6ffddd417a" xml:lang="en">
       <metaDataProperty>
@@ -487,7 +487,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -503,6 +503,9 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-BZ-08"/>
+      <locRef xlink:href="IT-32-BZ-14"/>
+      <locRef xlink:href="IT-32-BZ-15"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -544,9 +547,6 @@
           <tendencyComment> Fresh wind slabs represent the main danger.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-BZ-08"/>
-      <locRef xlink:href="IT-32-BZ-14"/>
-      <locRef xlink:href="IT-32-BZ-15"/>
     </Bulletin>
     <Bulletin gml:id="m50f79b9-39bb-4b44-b795-536319013cad" xml:lang="en">
       <metaDataProperty>
@@ -554,7 +554,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -570,6 +570,12 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-TN-13"/>
+      <locRef xlink:href="IT-32-TN-16"/>
+      <locRef xlink:href="IT-32-TN-19"/>
+      <locRef xlink:href="IT-32-TN-07"/>
+      <locRef xlink:href="IT-32-TN-09"/>
+      <locRef xlink:href="IT-32-TN-20"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -620,12 +626,6 @@
           <tendencyComment> Moderate, level 2.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-TN-13"/>
-      <locRef xlink:href="IT-32-TN-16"/>
-      <locRef xlink:href="IT-32-TN-19"/>
-      <locRef xlink:href="IT-32-TN-07"/>
-      <locRef xlink:href="IT-32-TN-09"/>
-      <locRef xlink:href="IT-32-TN-20"/>
     </Bulletin>
     <Bulletin gml:id="c06be44f-9ec4-4e78-b534-2e3f87f7aa3d" xml:lang="en">
       <metaDataProperty>
@@ -633,7 +633,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -649,6 +649,17 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-TN-12"/>
+      <locRef xlink:href="IT-32-TN-15"/>
+      <locRef xlink:href="IT-32-TN-03"/>
+      <locRef xlink:href="IT-32-TN-14"/>
+      <locRef xlink:href="IT-32-TN-17"/>
+      <locRef xlink:href="IT-32-TN-06"/>
+      <locRef xlink:href="IT-32-TN-08"/>
+      <locRef xlink:href="IT-32-TN-18"/>
+      <locRef xlink:href="IT-32-TN-11"/>
+      <locRef xlink:href="IT-32-TN-10"/>
+      <locRef xlink:href="IT-32-TN-21"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -682,17 +693,6 @@
           <tendencyComment> Low, level 1.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-TN-12"/>
-      <locRef xlink:href="IT-32-TN-15"/>
-      <locRef xlink:href="IT-32-TN-03"/>
-      <locRef xlink:href="IT-32-TN-14"/>
-      <locRef xlink:href="IT-32-TN-17"/>
-      <locRef xlink:href="IT-32-TN-06"/>
-      <locRef xlink:href="IT-32-TN-08"/>
-      <locRef xlink:href="IT-32-TN-18"/>
-      <locRef xlink:href="IT-32-TN-11"/>
-      <locRef xlink:href="IT-32-TN-10"/>
-      <locRef xlink:href="IT-32-TN-21"/>
     </Bulletin>
     <Bulletin gml:id="a7bbc5cb-db37-4577-a328-95e639ff969d" xml:lang="en">
       <metaDataProperty>
@@ -700,7 +700,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -716,6 +716,10 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-BZ-09"/>
+      <locRef xlink:href="IT-32-BZ-10"/>
+      <locRef xlink:href="IT-32-BZ-13"/>
+      <locRef xlink:href="IT-32-BZ-06"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -769,10 +773,6 @@
           <tendencyComment> Fresh wind slabs represent the main danger.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-BZ-09"/>
-      <locRef xlink:href="IT-32-BZ-10"/>
-      <locRef xlink:href="IT-32-BZ-13"/>
-      <locRef xlink:href="IT-32-BZ-06"/>
     </Bulletin>
     <Bulletin gml:id="f6c0b17f-136f-4c03-a0b7-4e4af39a3ade" xml:lang="en">
       <metaDataProperty>
@@ -780,7 +780,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -796,6 +796,9 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="AT-07-27"/>
+      <locRef xlink:href="AT-07-28"/>
+      <locRef xlink:href="AT-07-25"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -857,9 +860,6 @@
           <tendencyComment> Further decrease in avalanche danger.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="AT-07-27"/>
-      <locRef xlink:href="AT-07-28"/>
-      <locRef xlink:href="AT-07-25"/>
     </Bulletin>
     <Bulletin gml:id="vfd074b7-c2dd-4da8-8d7d-038471d4b5a9" xml:lang="en">
       <metaDataProperty>
@@ -867,7 +867,7 @@
           <dateTimeReport>2019-01-15T16:00:00Z</dateTimeReport>
           <srcRef>
             <Operation>
-              <name>Avalanche.report</name>
+              <name>Lawinen.report</name>
             </Operation>
           </srcRef>
         </MetaData>
@@ -883,6 +883,8 @@
           <name>Avalanche.report</name>
         </Operation>
       </srcRef>
+      <locRef xlink:href="IT-32-BZ-16"/>
+      <locRef xlink:href="IT-32-BZ-17"/>
       <bulletinResultsOf>
         <BulletinMeasurements>
           <dangerRatings>
@@ -916,8 +918,6 @@
           <tendencyComment> Low, level 1.</tendencyComment>
         </BulletinMeasurements>
       </bulletinResultsOf>
-      <locRef xlink:href="IT-32-BZ-16"/>
-      <locRef xlink:href="IT-32-BZ-17"/>
     </Bulletin>
   </observations>
 </ObsCollection>
