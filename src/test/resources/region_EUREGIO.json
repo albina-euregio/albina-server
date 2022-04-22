@@ -71,6 +71,7 @@
         "ppShapeFilePath": "pp_euregio.shp"
     },
     "pdfColor": "00ACFB",
+    "emailColor" : "1AABFF",
     "pdfMapYAmPm": 130,
     "pdfMapYFd": 250,
     "pdfMapWidthAmPm": 270,
@@ -89,6 +90,5 @@
     "mapLogoBwPath": "images/logo/grey/euregio.png",
     "mapLogoPosition": "bottomright",
     "imageColorbarColorPath": "images/logo/color/colorbar.gif",
-    "imageColorbarBwPath": "images/logo/grey/colorbar.gif",
-    "emailColor" : "1AABFF"
+    "imageColorbarBwPath": "images/logo/grey/colorbar.gif"
 }

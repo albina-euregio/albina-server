@@ -71,6 +71,7 @@
         "ppShapeFilePath" : "pp_aran.shp"
     },
     "pdfColor" : "A20D2D",
+    "emailColor" : "A32136",
     "pdfMapYAmPm" : 130,
     "pdfMapYFd" : 250,
     "pdfMapWidthAmPm" : 270,
@@ -89,6 +90,5 @@
     "mapLogoBwPath" : "images\/logo\/grey\/lauegi.png",
     "mapLogoPosition" : "topright",
     "imageColorbarColorPath" : "images\/logo\/color\/colorbar.Aran.gif",
-    "imageColorbarBwPath" : "images\/logo\/grey\/colorbar.gif",
-    "emailColor" : "A32136"
+    "imageColorbarBwPath" : "images\/logo\/grey\/colorbar.gif"
 }
