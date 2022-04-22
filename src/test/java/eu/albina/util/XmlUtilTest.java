@@ -1,6 +1,5 @@
 package eu.albina.util;
 
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
