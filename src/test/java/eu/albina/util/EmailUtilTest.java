@@ -138,7 +138,7 @@ public class EmailUtilTest {
 
 	@Test
 	public void langTest() {
-		assertEquals("All elevations", LanguageCode.de.getBundleString("elevation.all"));
+		assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
 		assertEquals("Tutte le elevazioni", LanguageCode.it.getBundleString("elevation.all"));
 		assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
 	}
