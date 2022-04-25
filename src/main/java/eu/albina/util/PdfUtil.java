@@ -515,9 +515,9 @@ public class PdfUtil {
 
 		Image regionImg;
 		if (grayscale)
-			regionImg = getImage("images/warning_pictos/grey/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
+			regionImg = getImage("warning_pictos/grey/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		else
-			regionImg = getImage("images/warning_pictos/color/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
+			regionImg = getImage("warning_pictos/color/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		if (regionImg != null) {
 			regionImg.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getDangerRatingText(daytimeBulletin, lang));
 			regionImg.scaleToFit(70, 30);
@@ -673,7 +673,7 @@ public class PdfUtil {
 				avalancheSituationTable.setMarginTop(5);
 				avalancheSituationTable.setWidth(60);
 				avalancheSituationTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
-				img = getImage("images/" + avalancheSituation.getAvalancheSituation().getSymbolPath(grayscale));
+				img = getImage(avalancheSituation.getAvalancheSituation().getSymbolPath(grayscale));
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
 					img.scaleToFit(60, 35);
@@ -701,7 +701,7 @@ public class PdfUtil {
 
 			if (avalancheSituation.getAspects() != null && avalancheSituation.getAspects().size() > 0) {
 				Set<Aspect> aspects = avalancheSituation.getAspects();
-				img = getImage("images/" + Aspect.getSymbolPath(aspects, grayscale));
+				img = getImage(Aspect.getSymbolPath(aspects, grayscale));
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(avalancheSituation.getAspects(), lang.getLocale()));
 					img.scaleToFit(30, 30);
@@ -725,9 +725,9 @@ public class PdfUtil {
 				if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 					// elevation high and low set
 					if (grayscale)
-						img = getImage("images/elevation/grey/levels_middle_two.png");
+						img = getImage("elevation/grey/levels_middle_two.png");
 					else
-						img = getImage("images/elevation/color/levels_middle_two.png");
+						img = getImage("elevation/color/levels_middle_two.png");
 					if (img != null) {
 						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 						img.scaleToFit(70, 25);
@@ -791,9 +791,9 @@ public class PdfUtil {
 				} else {
 					// elevation high set
 					if (grayscale)
-						img = getImage("images/elevation/grey/levels_below.png");
+						img = getImage("elevation/grey/levels_below.png");
 					else
-						img = getImage("images/elevation/color/levels_below.png");
+						img = getImage("elevation/color/levels_below.png");
 					if (img != null) {
 						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 						img.scaleToFit(70, 25);
@@ -834,9 +834,9 @@ public class PdfUtil {
 			} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
 				// elevation low set
 				if (grayscale)
-					img = getImage("images/elevation/grey/levels_above.png");
+					img = getImage("elevation/grey/levels_above.png");
 				else
-					img = getImage("images/elevation/color/levels_above.png");
+					img = getImage("elevation/color/levels_above.png");
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 					img.scaleToFit(70, 25);
@@ -877,9 +877,9 @@ public class PdfUtil {
 			} else {
 				// no elevation set
 				if (grayscale)
-					img = getImage("images/elevation/grey/levels_all.png");
+					img = getImage("elevation/grey/levels_all.png");
 				else
-					img = getImage("images/elevation/color/levels_all.png");
+					img = getImage("elevation/color/levels_all.png");
 				if (img != null) {
 					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
 					img.scaleToFit(70, 25);
