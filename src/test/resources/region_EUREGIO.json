@@ -73,8 +73,8 @@
     "mapYmin": 1104000,
     "simpleHtmlTemplateName": "simple-bulletin.min.html",
     "geoDataDirectory": "geodata.Euregio/",
-    "mapLogoColorPath": "logo/color/euregio.png",
-    "mapLogoBwPath": "logo/grey/euregio.png",
+    "mapLogoColorPath": "images\/logo/color/euregio.png",
+    "mapLogoBwPath": "images\/logo/grey/euregio.png",
     "mapLogoPosition": "bottomright",
     "imageColorbarColorPath": "logo/color/colorbar.gif",
     "imageColorbarBwPath": "logo/grey/colorbar.gif"

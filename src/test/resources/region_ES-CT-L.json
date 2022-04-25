@@ -73,8 +73,8 @@
     "mapYmin" : 5215700,
     "simpleHtmlTemplateName" : "simple-bulletin.aran.html",
     "geoDataDirectory" : "geodata.Aran\/",
-    "mapLogoColorPath" : "logo\/color\/lauegi.png",
-    "mapLogoBwPath" : "logo\/grey\/lauegi.png",
+    "mapLogoColorPath" : "images\/logo\/color\/lauegi.png",
+    "mapLogoBwPath" : "images\/logo\/grey\/lauegi.png",
     "mapLogoPosition" : "topright",
     "imageColorbarColorPath" : "logo\/color\/colorbar.Aran.gif",
     "imageColorbarBwPath" : "logo\/grey\/colorbar.gif"
