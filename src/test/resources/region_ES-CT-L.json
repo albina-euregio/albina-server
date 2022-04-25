@@ -14,19 +14,6 @@
     "sendTelegramMessages" : false,
     "sendPushNotifications" : false,
     "serverInstance": {
-        "id": 2,
-        "name": "Avalanche.report",
-        "apiUrl": "https://api.avalanche.report/albina/api/",
-        "userName": "info@avalanche.report",
-        "password": "",
-        "externalServer": false,
-        "publishAt5PM": false,
-        "publishAt8AM": false,
-        "pdfDirectory": "D:\\var\\www\\avalanche.report\\bulletins_local",
-        "htmlDirectory": "D:\\var\\www\\avalanche.report\\simple_local",
-        "mapsPath": "D:\\var\\www\\avalanche.report\\bulletins_local",
-        "mapProductionUrl": "D:\\norbert\\vs_workspace\\avalanche-warning-maps",
-        "serverImagesUrl": "https://admin.avalanche.report/images/"
     },
     "overlayMapConfig": {
         "rasterFilePath" : "pyrenees_srtm250_n_gm_hs_v2.png",
@@ -86,9 +73,9 @@
     "mapYmin" : 5215700,
     "simpleHtmlTemplateName" : "simple-bulletin.aran.html",
     "geoDataDirectory" : "geodata.Aran\/",
-    "mapLogoColorPath" : "images\/logo\/color\/lauegi.png",
-    "mapLogoBwPath" : "images\/logo\/grey\/lauegi.png",
+    "mapLogoColorPath" : "logo\/color\/lauegi.png",
+    "mapLogoBwPath" : "logo\/grey\/lauegi.png",
     "mapLogoPosition" : "topright",
-    "imageColorbarColorPath" : "images\/logo\/color\/colorbar.Aran.gif",
-    "imageColorbarBwPath" : "images\/logo\/grey\/colorbar.gif"
+    "imageColorbarColorPath" : "logo\/color\/colorbar.Aran.gif",
+    "imageColorbarBwPath" : "logo\/grey\/colorbar.gif"
 }
