@@ -38,8 +38,8 @@
         "lakesShapeFilePath" : "gewaesser_a.shp",
         "citiesShapeFilePath" : "albina_orte_p.shp",
         "peaksShapeFilePath" : "albina_hoehenpunkte_p.shp",
-        "namesPShapeFilePath" : "albina_namengut_p.shp",
-        "namesLShapeFilePath" : "albina_namengut_l.shp",
+        "namesPShapeFilePath" : "labels_point.shp",
+        "namesLShapeFilePath" : "labels_line.shp",
         "regionShapeFilePath" : "aran_a.shp",
         "ppShapeFilePath" : "pp_aran.shp"
     },
@@ -52,8 +52,8 @@
         "lakesShapeFilePath" : "gewaesser_a_gen.shp",
         "citiesShapeFilePath" : "albina_orte_p.shp",
         "peaksShapeFilePath" : "albina_hoehenpunkte_p.shp",
-        "namesPShapeFilePath" : "albina_namengut_p.shp",
-        "namesLShapeFilePath" : "albina_namengut_l.shp",
+        "namesPShapeFilePath" : "labels_point.shp",
+        "namesLShapeFilePath" : "labels_line.shp",
         "regionShapeFilePath" : "simple_geom_valdaran_a.shp",
         "ppShapeFilePath" : "pp_aran.shp"
     },
