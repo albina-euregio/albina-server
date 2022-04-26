@@ -144,7 +144,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			canvas.add(logoImg);
 
 			// Add secondary logo
-			if (!region.isPdfFooterLogo()) {
+			if (region.isPdfFooterLogo()) {
 				Image footerImg = PdfUtil.getInstance().getImage(grayscale ? region.getPdfFooterLogoBwPath() : region.getPdfFooterLogoColorPath());
 				footerImg.scaleToFit(120, 40);
 				footerImg.setFixedPosition(15, 5);
