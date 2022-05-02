@@ -145,9 +145,9 @@ public interface MapUtil {
 		bindings.put("map_level", mapLevel.name());
 
 		bindings.put("raster", MapUtil.mapProductionResource(geodataPath, "raster.png"));
-		bindings.put("cities_p", MapUtil.mapProductionResource(geodataPath, "cities_p.png"));
-		bindings.put("labels_p", MapUtil.mapProductionResource(geodataPath, "labels_p.png"));
-		bindings.put("labels_l", MapUtil.mapProductionResource(geodataPath, "labels_l.png"));
+		bindings.put("cities_p", MapUtil.mapProductionResource(geodataPath, "cities_p.shp"));
+		bindings.put("labels_p", MapUtil.mapProductionResource(geodataPath, "labels_p.shp"));
+		bindings.put("labels_l", MapUtil.mapProductionResource(geodataPath, "labels_l.shp"));
 		bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout.shp"));
 		switch (mapLevel) {
 			case thumbnail:
