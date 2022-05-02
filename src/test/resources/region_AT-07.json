@@ -13,7 +13,6 @@
     "sendEmails": false,
     "sendTelegramMessages": false,
     "sendPushNotifications": false,
-    "serverInstance": {},
     "pdfColor": "00ACFB",
     "emailColor" : "1AABFF",
     "pdfMapYAmPm": 130,
