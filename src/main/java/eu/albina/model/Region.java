@@ -643,7 +643,9 @@ public class Region implements AvalancheInformationObject {
 		json.put("sendEmails", isSendEmails());
 		json.put("sendTelegramMessages", isSendTelegramMessages());
 		json.put("sendPushNotifications", isSendPushNotifications());
-		json.put("serverInstance", getServerInstance().toJSON());
+		if (getServerInstance() != null) {
+			json.put("serverInstance", getServerInstance().toJSON());
+		}
 		json.put("pdfColor", getPdfColor());
 		json.put("emailColor", getEmailColor());
 		json.put("pdfMapYAmPm", getPdfMapYAmPm());
