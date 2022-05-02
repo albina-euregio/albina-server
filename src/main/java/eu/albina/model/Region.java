@@ -24,11 +24,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -119,54 +116,6 @@ public class Region implements AvalancheInformationObject {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
-
-	@Embedded
-	@AttributeOverrides({
-		@AttributeOverride(name = "rasterFilePath", column = @Column(name = "THUMBNAIL_RASTER_FILE_PATH")),
-		@AttributeOverride(name = "countriesShapeFilePath", column = @Column(name = "THUMBNAIL_COUNTRIES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "provincesShapeFilePath", column = @Column(name = "THUMBNAIL_PROVINCES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "microRegionsShapeFilePath", column = @Column(name = "THUMBNAIL_MICRO_REGIONS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "riversShapeFilePath", column = @Column(name = "THUMBNAIL_RIVERS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "lakesShapeFilePath", column = @Column(name = "THUMBNAIL_LAKES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "citiesShapeFilePath", column = @Column(name = "THUMBNAIL_CITIES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "peaksShapeFilePath", column = @Column(name = "THUMBNAIL_PEAKS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "namesPShapeFilePath", column = @Column(name = "THUMBNAIL_NAMES_P_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "namesLShapeFilePath", column = @Column(name = "THUMBNAIL_NAMES_L_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "regionShapeFilePath", column = @Column(name = "THUMBNAIL_REGION_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "ppShapeFilePath", column = @Column(name = "THUMBNAIL_PP_SHAPE_FILE_PATH")) })
-	private MapProductionConfiguration thumbnailMapConfig;
-
-	@Embedded
-	@AttributeOverrides({
-		@AttributeOverride(name = "rasterFilePath", column = @Column(name = "STANDARD_RASTER_FILE_PATH")),
-		@AttributeOverride(name = "countriesShapeFilePath", column = @Column(name = "STANDARD_COUNTRIES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "provincesShapeFilePath", column = @Column(name = "STANDARD_PROVINCES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "microRegionsShapeFilePath", column = @Column(name = "STANDARD_MICRO_REGIONS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "riversShapeFilePath", column = @Column(name = "STANDARD_RIVERS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "lakesShapeFilePath", column = @Column(name = "STANDARD_LAKES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "citiesShapeFilePath", column = @Column(name = "STANDARD_CITIES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "peaksShapeFilePath", column = @Column(name = "STANDARD_PEAKS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "namesPShapeFilePath", column = @Column(name = "STANDARD_NAMES_P_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "namesLShapeFilePath", column = @Column(name = "STANDARD_NAMES_L_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "regionShapeFilePath", column = @Column(name = "STANDARD_REGION_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "ppShapeFilePath", column = @Column(name = "STANDARD_PP_SHAPE_FILE_PATH")) })
-	private MapProductionConfiguration standardMapConfig;
-
-	@Embedded
-	@AttributeOverrides({
-		@AttributeOverride(name = "rasterFilePath", column = @Column(name = "OVERLAY_RASTER_FILE_PATH")),
-		@AttributeOverride(name = "countriesShapeFilePath", column = @Column(name = "OVERLAY_COUNTRIES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "provincesShapeFilePath", column = @Column(name = "OVERLAY_PROVINCES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "microRegionsShapeFilePath", column = @Column(name = "OVERLAY_MICRO_REGIONS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "riversShapeFilePath", column = @Column(name = "OVERLAY_RIVERS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "lakesShapeFilePath", column = @Column(name = "OVERLAY_LAKES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "citiesShapeFilePath", column = @Column(name = "OVERLAY_CITIES_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "peaksShapeFilePath", column = @Column(name = "OVERLAY_PEAKS_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "namesPShapeFilePath", column = @Column(name = "OVERLAY_NAMES_P_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "namesLShapeFilePath", column = @Column(name = "OVERLAY_NAMES_L_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "regionShapeFilePath", column = @Column(name = "OVERLAY_REGION_SHAPE_FILE_PATH")),
-		@AttributeOverride(name = "ppShapeFilePath", column = @Column(name = "OVERLAY_PP_SHAPE_FILE_PATH")) })
-	private MapProductionConfiguration overlayMapConfig;
 
 	@Column(name = "PDF_COLOR")
 	private String pdfColor;
@@ -300,12 +249,6 @@ public class Region implements AvalancheInformationObject {
 			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
 			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"), regionFunction);
-		if (json.has("thumbnailMapConfig") && !json.isNull("thumbnailMapConfig"))
-			this.thumbnailMapConfig = new MapProductionConfiguration(json.getJSONObject("thumbnailMapConfig"));
-		if (json.has("standardMapConfig") && !json.isNull("standardMapConfig"))
-			this.standardMapConfig = new MapProductionConfiguration(json.getJSONObject("standardMapConfig"));
-		if (json.has("overlayMapConfig") && !json.isNull("overlayMapConfig"))
-			this.overlayMapConfig = new MapProductionConfiguration(json.getJSONObject("overlayMapConfig"));
 		if (json.has("pdfColor") && !json.isNull("pdfColor"))
 			this.pdfColor = json.getString("pdfColor");
 		if (json.has("emailColor") && !json.isNull("emailColor"))
@@ -484,30 +427,6 @@ public class Region implements AvalancheInformationObject {
 
 	public void setServerInstance(ServerInstance serverInstance) {
 		this.serverInstance = serverInstance;
-	}
-
-	public MapProductionConfiguration getThumbnailMapConfig() {
-		return thumbnailMapConfig;
-	}
-
-	public void setThumbnailMapConfig(MapProductionConfiguration thumbnailMapConfig) {
-		this.thumbnailMapConfig = thumbnailMapConfig;
-	}
-
-	public MapProductionConfiguration getStandardMapConfig() {
-		return standardMapConfig;
-	}
-
-	public void setStandardMapConfig(MapProductionConfiguration standardMapConfig) {
-		this.standardMapConfig = standardMapConfig;
-	}
-
-	public MapProductionConfiguration getOverlayMapConfig() {
-		return overlayMapConfig;
-	}
-
-	public void setOverlayMapConfig(MapProductionConfiguration overlayMapConfig) {
-		this.overlayMapConfig = overlayMapConfig;
 	}
 
 	public String getPdfColor() {
@@ -725,9 +644,6 @@ public class Region implements AvalancheInformationObject {
 		json.put("sendTelegramMessages", isSendTelegramMessages());
 		json.put("sendPushNotifications", isSendPushNotifications());
 		json.put("serverInstance", getServerInstance().toJSON());
-		json.put("thumbnailMapConfig", getThumbnailMapConfig().toJSON());
-		json.put("standardMapConfig", getStandardMapConfig().toJSON());
-		json.put("overlayMapConfig", getOverlayMapConfig().toJSON());
 		json.put("pdfColor", getPdfColor());
 		json.put("emailColor", getEmailColor());
 		json.put("pdfMapYAmPm", getPdfMapYAmPm());

@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.MapProductionConfiguration;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerRating;
@@ -133,6 +132,8 @@ public interface MapUtil {
 		}		
 
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
+		final Path geodataPath = Paths.get(serverInstance.getMapProductionUrl()).resolve(region.getGeoDataDirectory());
+
 		bindings.put("xmax", region.getMapXmax());
 		bindings.put("xmin", region.getMapXmin());
 		bindings.put("ymax", region.getMapYmax());
@@ -141,33 +142,34 @@ public interface MapUtil {
 		bindings.put("mapFile", outputFile);
 		bindings.put("pagesize_x", mapLevel.width);
 		bindings.put("pagesize_y", mapLevel.width / aspectRatio(region));
-		bindings.put("geodata_dir", Paths.get(serverInstance.getMapProductionUrl()).resolve(region.getGeoDataDirectory()) + "/");
 		bindings.put("map_level", mapLevel.name());
-		MapProductionConfiguration config;
+
+		bindings.put("raster", MapUtil.mapProductionResource(geodataPath, "raster.png"));
+		bindings.put("cities_p", MapUtil.mapProductionResource(geodataPath, "cities_p.png"));
+		bindings.put("labels_p", MapUtil.mapProductionResource(geodataPath, "labels_p.png"));
+		bindings.put("labels_l", MapUtil.mapProductionResource(geodataPath, "labels_l.png"));
+		bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout.shp"));
 		switch (mapLevel) {
 			case thumbnail:
-				config = region.getThumbnailMapConfig();
+				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l_simplified.shp"));
+				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l_simplified.shp"));
+				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a_simplified.shp"));
+				bindings.put("rivers_l", MapUtil.mapProductionResource(geodataPath, "rivers_l_simplified.shp"));
+				bindings.put("lakes_a", MapUtil.mapProductionResource(geodataPath, "lakes_a_simplified.shp"));
+				bindings.put("region_a", MapUtil.mapProductionResource(geodataPath, "region_a_simplified.shp"));
 				break;
 			case overlay:
-				config = region.getOverlayMapConfig();
-				break;
 			case standard:
 			default:
-				config = region.getStandardMapConfig();
+				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l.shp"));
+				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l.shp"));
+				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a.shp"));
+				bindings.put("rivers_l", MapUtil.mapProductionResource(geodataPath, "rivers_l.shp"));
+				bindings.put("lakes_a", MapUtil.mapProductionResource(geodataPath, "lakes_a.shp"));
+				bindings.put("regionShapeFile", MapUtil.mapProductionResource(geodataPath, "region.shp"));
+				bindings.put("region_a", MapUtil.mapProductionResource(geodataPath, "region_a.shp"));
 				break;
 		}
-		bindings.put("rasterFile", config.getRasterFilePath());
-		bindings.put("countriesShapeFile", config.getCountriesShapeFilePath());
-		bindings.put("provincesShapeFile", config.getProvincesShapeFilePath());
-		bindings.put("microRegionsShapeFile", config.getMicroRegionsShapeFilePath());
-		bindings.put("riversShapeFile", config.getRiversShapeFilePath());
-		bindings.put("lakesShapeFile", config.getLakesShapeFilePath());
-		bindings.put("citiesShapeFile", config.getCitiesShapeFilePath());
-		bindings.put("peaksShapeFile", config.getPeaksShapeFilePath());
-		bindings.put("namesPShapeFile", config.getNamesPShapeFilePath());
-		bindings.put("namesLShapeFile", config.getNamesLShapeFilePath());
-		bindings.put("regionShapeFile", config.getRegionShapeFilePath());
-		bindings.put("ppShapeFile", config.getPpShapeFilePath());
 
 		bindings.put("colormode", grayscale ? "bw" : "col");
 		bindings.put("dynamic_region", bulletin != null ? "one" : "all");
@@ -222,6 +224,15 @@ public interface MapUtil {
 
 		if (!preview) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
+		}
+	}
+
+	static Path mapProductionResource(Path geodataPath, String filename) {
+		Path path = geodataPath.resolve(filename);
+		if (Files.exists(path)) {
+			return path;
+		} else {
+			return geodataPath.subpath(0, geodataPath.getNameCount() - 1).resolve(filename);
 		}
 	}
 

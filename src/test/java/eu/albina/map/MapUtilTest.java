@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -164,6 +166,13 @@ public class MapUtilTest {
 		assertEquals(expected, bindings.get("danger_l").toString());
 		expected = "{\"AT-07-01-h\": 0, \"AT-07-02-h\": 0, \"AT-07-03-h\": 0, \"AT-07-04-h\": 0, \"AT-07-05-h\": 0, \"AT-07-06-h\": 0, \"AT-07-07-h\": 0, \"AT-07-08-h\": 0, \"AT-07-09-h\": 2200, \"AT-07-10-h\": 0, \"AT-07-11-h\": 0, \"AT-07-12-h\": 0, \"AT-07-13-h\": 0, \"AT-07-14-h\": 2200, \"AT-07-15-h\": 2200, \"AT-07-16-h\": 2200, \"AT-07-17-h\": 0, \"AT-07-18-h\": 0, \"AT-07-19-h\": 2200, \"AT-07-20-h\": 2200, \"AT-07-21-h\": 2200, \"AT-07-22-h\": 2200, \"AT-07-23-h\": 2200, \"AT-07-24-h\": 0, \"AT-07-25-h\": 1600, \"AT-07-26-h\": 0, \"AT-07-27-h\": 1600, \"AT-07-28-h\": 1600, \"AT-07-29-h\": 2000, \"IT-32-BZ-01-h\": 0, \"IT-32-BZ-02-h\": 0, \"IT-32-BZ-03-h\": 0, \"IT-32-BZ-04-h\": 0, \"IT-32-BZ-05-h\": 0, \"IT-32-BZ-06-h\": 0, \"IT-32-BZ-07-h\": 0, \"IT-32-BZ-08-h\": 2000, \"IT-32-BZ-09-h\": 0, \"IT-32-BZ-10-h\": 0, \"IT-32-BZ-11-h\": 0, \"IT-32-BZ-12-h\": 0, \"IT-32-BZ-13-h\": 0, \"IT-32-BZ-14-h\": 0, \"IT-32-BZ-15-h\": 2000, \"IT-32-BZ-16-h\": 0, \"IT-32-BZ-17-h\": 0, \"IT-32-BZ-18-h\": 2000, \"IT-32-BZ-19-h\": 2000, \"IT-32-BZ-20-h\": 2000, \"IT-32-TN-01-h\": 2500, \"IT-32-TN-02-h\": 2500, \"IT-32-TN-03-h\": 0, \"IT-32-TN-04-h\": 2500, \"IT-32-TN-05-h\": 2500, \"IT-32-TN-06-h\": 0, \"IT-32-TN-07-h\": 2500, \"IT-32-TN-08-h\": 0, \"IT-32-TN-09-h\": 2500, \"IT-32-TN-10-h\": 0, \"IT-32-TN-11-h\": 0, \"IT-32-TN-12-h\": 0, \"IT-32-TN-13-h\": 2500, \"IT-32-TN-14-h\": 0, \"IT-32-TN-15-h\": 0, \"IT-32-TN-16-h\": 2500, \"IT-32-TN-17-h\": 0, \"IT-32-TN-18-h\": 0, \"IT-32-TN-19-h\": 2500, \"IT-32-TN-20-h\": 2500, \"IT-32-TN-21-h\": 0}";
 		assertEquals(expected, bindings.get("elevation_h").toString());
+	}
 
+	@Test
+	public void testMapProductionRessource() {
+		Path geoDataPath = Paths.get("geodata.Euregio/AT-07/");
+		String filename = "test.png";
+		String result = MapUtil.mapProductionResource(geoDataPath, filename).toString();
+		assertEquals("geodata.Euregio" + System.getProperty("file.separator") + filename, result);
 	}
 }

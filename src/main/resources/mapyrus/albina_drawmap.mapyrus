@@ -2,27 +2,12 @@ print "========================================="
 print "Mapyrus.time.stamp = ", Mapyrus.time.stamp
 print "Mapyrus.version    = ", Mapyrus.version
 print "-----------------------------------------"
-print "Kartenerstelleung ALBINA"
+print "Map Production"
 print "-----------------------------------------"
-print "Gueltiges Kartendatum: " . date
-print "Bulletin-ID/Karte: " . bulletin_id
+print "Valid date: " . date
+print "Bulletin-ID/Map: " . bulletin_id
 print "######################################################"
 
-# Rasterfile
-let raster = geodata_dir . rasterFile
-
-# Shapefile
-let country_l = geodata_dir . countriesShapeFile
-let provinces_l = geodata_dir . provincesShapeFile
-let reg_euregio_ha = geodata_dir . microRegionsShapeFile
-let rivers = geodata_dir . riversShapeFile
-let lakes = geodata_dir . lakesShapeFile
-let cities = geodata_dir . citiesShapeFile
-let peaks = geodata_dir . peaksShapeFile
-let names_p = geodata_dir . namesPShapeFile
-let names_l = geodata_dir . namesLShapeFile
-let euregio = geodata_dir . regionShapeFile
-let pp_region = geodata_dir . ppShapeFile
 
 ###################################################################
 # --- Define NEWPAGE
@@ -50,56 +35,55 @@ if (map_level eq "standard" or map_level eq "overlay") and colormode ne "bw" the
 	image_feature raster
 endif
 
-# Euregio bei Bulletin Karten
+# Micro Regions
 if dynamic_region eq "one" then
-	polygon_feature_euregio euregio
+	polygon_feature_micro_regions region_a
 endif
 
-# Regionen Lawinengefahrenstufen
-polygon_feature_danger_levels reg_euregio_ha
+# Warning Regions
+polygon_feature_danger_levels micro_regions_elevation_a
 
-# Flüsse & Seen
-line_feature_rivers rivers, level
-polygon_feature_lakes lakes, level
+# Rivers & Lakes
+line_feature_rivers rivers_l, level
+polygon_feature_lakes lakes_a, level
 
-# Provinz- und Staatsgrenzen (außerhalb)
-line_feature_country country_l, level, 0
+# Province and Country borders (outside)
+line_feature_country countries_l, level, 0
 
-# Städte
-point_feature_city_marker cities, level
+# Cities
+point_feature_city_marker cities_p, level
 
-# Linienlabels
+# Line labels
 if map_level eq "standard" and dynamic_region eq "all" then
-	line_feature_labels names_l, level
+	line_feature_labels labels_l, level
 endif
 
-# Punktlabels
-point_feature_labels names_p, level
+# Point labels
+point_feature_labels labels_p, level
 
-# Absoftung
-polygon_feature_pp pp_region, level
+# Passe Partout
+polygon_feature_pp passe_partout, level
 
-# Provinz- und Staatsgrenzen (innerhalb)
+# Province and Country borders (inside)
 line_feature_provinces provinces_l, level, 1
-line_feature_country country_l, level, 1
+line_feature_country countries_l, level, 1
 
-
-# Maßstabsleiste
+# Scale bar
 if scalebar eq "on" then
 	draw_scalebar scale_km_value, scale_bar_color, scale_bar_style, scale_font, scale_fontsize
 endif
 
-# Copyrightinformation
+# Copyright information
 if copyright eq "on" then
 	draw_copyright copyright_txt, c_font, c_fontsize, c_fontcolor
 endif
 
-# Logo bei Karten
+# Logo
 if map_level eq "standard" and logo_file ne "" then
 	place_logo
 endif
 
-# Rahmen
+# Frame
 draw_frame frame_stroke_color, frame_line_style
 
 

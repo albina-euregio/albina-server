@@ -284,7 +284,7 @@ end
 # --- Einfärbung Euregio bei Bulletin Karten ---
 # -------------------------------------------------------------
 
-begin polygon_feature_euregio file
+begin polygon_feature_micro_regions file
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
