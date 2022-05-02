@@ -189,7 +189,7 @@ public interface MapUtil {
 			Resources.getResource("fonts/open-sans/OpenSans-Semibold.otf").getFile(),
 			Resources.getResource("fonts/open-sans/OpenSans-SemiboldItalic.otf").getFile());
 
-		logger.info("Creating map {} using {} with bindings {}", outputFile, dangerBindings, bindings);
+		logger.debug("Creating map {} using {} with bindings {}", outputFile, dangerBindings, bindings);
 		final MapyrusInterpreter mapyrus = new MapyrusInterpreter(bindings);
 		mapyrus.interpret(new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"));
 		mapyrus.interpret(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
@@ -218,7 +218,7 @@ public interface MapUtil {
 			final String amFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, DaytimeDependency.am, null, grayscale, MapImageFormat.jpg)).toString();
 			final String pmFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, DaytimeDependency.pm, null, grayscale, MapImageFormat.jpg)).toString();
 			final String fdFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, DaytimeDependency.fd, null, grayscale, MapImageFormat.jpg)).toString();
-			logger.info("Combining {} and {} to {}", amFile, pmFile, fdFile);
+			logger.debug("Combining {} and {} to {}", amFile, pmFile, fdFile);
 			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
 
