@@ -21,7 +21,7 @@ enum MapImageFormat {
 			Path pngFile = checkAndReplaceExtension(pdfFile, "pdf", "png");
 			logger.info("Converting {} to {}", pdfFile, pngFile);
 			int dpi = 300;
-			new ProcessBuilder("gswin32",
+			new ProcessBuilder("gs",
 				"-sDEVICE=png16m",
 				"-dTextAlphaBits=4",
 				"-dGraphicsAlphaBits=4",
@@ -37,7 +37,7 @@ enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			checkAndReplaceExtension(pngFile, "png", "png");
 			logger.info("Creating transparency for {}", pngFile);
-			new ProcessBuilder("cmd.exe", "/C", "convert",
+			new ProcessBuilder("convert",
 				"-transparent",
 				"white",
 				pngFile.toString(),
@@ -50,7 +50,7 @@ enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			Path jpgFile = checkAndReplaceExtension(pngFile, "png", "jpg");
 			logger.info("Converting {} to {}", pngFile, jpgFile);
-			new ProcessBuilder("cmd.exe", "/C", "convert",
+			new ProcessBuilder("convert",
 				pngFile.toString(),
 				jpgFile.toString()
 			).inheritIO().start().waitFor();
@@ -61,7 +61,7 @@ enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			Path webpFile = checkAndReplaceExtension(pngFile, "png", "webp");
 			logger.info("Converting {} to {}", pngFile, webpFile);
-			new ProcessBuilder("cmd.exe", "/C", "cwebp",
+			new ProcessBuilder("cwebp",
 				pngFile.toString(),
 				"-o",
 				webpFile.toString())
