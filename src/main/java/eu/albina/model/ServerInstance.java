@@ -238,7 +238,6 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
-
 		json.put("id", getId());
 		json.put("name", getName());
 		json.put("apiUrl", getApiUrl());

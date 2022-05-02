@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import io.swagger.annotations.Api;
@@ -58,7 +57,6 @@ public class RegionService {
 
 	@GET
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
-	@Path("/configuration")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getRegion(@QueryParam("region") String regionId, @Context SecurityContext securityContext) {
@@ -130,20 +128,6 @@ public class RegionService {
 			json.append("message", "Error creating region - Region already exists");
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
 		}
-	}
-
-	@GET
-	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
-	@Path("/external")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getExternalServerInstances(@Context SecurityContext securityContext) {
-		logger.debug("GET JSON external server instances");
-
-		JSONArray json = new JSONArray();
-		for (ServerInstance instance : RegionController.getInstance().getExternalServerInstances())
-			json.put(instance.toJSON());
-		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET

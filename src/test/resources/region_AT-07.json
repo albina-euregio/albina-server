@@ -14,19 +14,6 @@
     "sendTelegramMessages": false,
     "sendPushNotifications": false,
     "serverInstance": {
-        "id": 1,
-        "name": "Avalanche.report",
-        "apiUrl": "https://api.avalanche.report/albina/api/",
-        "userName": "info@avalanche.report",
-        "password": "",
-        "externalServer": false,
-        "publishAt5PM": false,
-        "publishAt8AM": false,
-        "pdfDirectory": "D:\\var\\www\\avalanche.report\\bulletins_local",
-        "htmlDirectory": "D:\\var\\www\\avalanche.report\\simple_local",
-        "mapsPath": "D:\\var\\www\\avalanche.report\\bulletins_local",
-        "mapProductionUrl": "D:\\norbert\\vs_workspace\\avalanche-warning-maps",
-        "serverImagesUrl": "https://admin.avalanche.report/images/"
     },
     "thumbnailMapConfig": {
         "rasterFilePath": "alpes_srtm250_n_gm_hs_light.png",

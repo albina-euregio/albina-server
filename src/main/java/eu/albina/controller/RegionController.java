@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.websocket.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
@@ -154,13 +153,6 @@ public class RegionController {
 			logger.warn("Active regions could not be loaded!", ae);
 			return new ArrayList<Region>();
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ServerInstance> getExternalServerInstances() {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return entityManager.createQuery(HibernateUtil.queryGetExternalServerInstances).getResultList();
-		});
 	}
 
 	/**

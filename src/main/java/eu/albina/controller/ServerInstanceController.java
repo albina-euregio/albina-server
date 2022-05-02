@@ -100,4 +100,11 @@ public class ServerInstanceController {
 			return entityManager.createQuery(HibernateUtil.queryGetExternalServerInstances).getResultList();
 		});
 	}
+
+	public boolean serverInstanceExists(Long id) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			ServerInstance serverInstance = entityManager.find(ServerInstance.class, id);
+			return serverInstance != null;
+		});
+	}
 }
