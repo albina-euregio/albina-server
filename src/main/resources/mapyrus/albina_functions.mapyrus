@@ -147,7 +147,7 @@ begin LABEL_LINE color, font, size, outlinecolor, outlinewidth, inn_o, x_off, y_
 end
 
 # -------------------------------------------------------------
-# --- Schummerung ---
+# --- Shading ---
 # -------------------------------------------------------------
 
 begin image_feature file
@@ -158,7 +158,7 @@ begin image_feature file
         geoimage file
 	endif
 
-	print "Schummerung gezeichnet"
+	print "Shading drawn"
 
 end
 
@@ -182,12 +182,12 @@ begin polygon_feature_pp file, level
             fill
 		done
 
-	print "Passepartout gezeichnet"
+	print "Passe partout drawn"
 
 end
 
 
-# Schattenbegrenzung für Schwarz-Weiß
+# Shadow limitation for black and white
 begin polygon_feature_shadow_bw file, level, linewidth
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
@@ -204,13 +204,13 @@ begin polygon_feature_shadow_bw file, level, linewidth
             stroke
 		done
 
-	print "Schatten gezeichnet"
+	print "Shadows drawn"
 
 end
 
 
 # -------------------------------------------------------------
-# --- Seen & Flüsse---
+# --- Lakes & Rivers ---
 # -------------------------------------------------------------
 
 begin line_feature_rivers file, level
@@ -239,7 +239,7 @@ begin line_feature_rivers file, level
 			endif
 		done
 
-	print "Fluesse gezeichnet"
+	print "Rivers drawn"
 
 end
 
@@ -276,12 +276,12 @@ begin polygon_feature_lakes file, level
 			endif
 		done
 
-	print "Seen gezeichnet"
+	print "Lakes drawn"
 
 end
 
 # -------------------------------------------------------------
-# --- Einfärbung Euregio bei Bulletin Karten ---
+# --- Coloring of bulletin maps ---
 # -------------------------------------------------------------
 
 begin polygon_feature_micro_regions file
@@ -308,11 +308,11 @@ begin polygon_feature_micro_regions file
 					endif
 		done
 
-	print "Euregio gezeichnet"
+	print "Coloring drawn"
 end
 
 # -------------------------------------------------------------
-# --- Gefahrenstufen ---
+# --- Danger Levels ---
 # -------------------------------------------------------------
 
 begin polygon_feature_danger_levels file
@@ -338,9 +338,6 @@ begin polygon_feature_danger_levels file
 					endif
 				endif
 			done
-
-	print "---------------------------------"
-	print "--- Gefahrenstufeneinfaerbung ---"
 
 	dataset "shapefile", file, ""
 	while Mapyrus.fetch.more
@@ -478,14 +475,13 @@ begin polygon_feature_danger_levels file
 				endif
 			done
 
-	print "---------------------------------"
-	print "Gefahrenstufen gezeichnet"
+	print "Danger levels drawn"
 
 end
 
 
 # -------------------------------------------------------------
-# --- Regionsgrenzen ---
+# --- Region Borders ---
 # -------------------------------------------------------------
 
 begin line_feature_regions file, level
@@ -512,13 +508,13 @@ begin line_feature_regions file, level
 				endif
 			done
 
-	print "Regionsgrenzen gezeichnet"
+	print "Region borders drawn"
 
 end
 
 
 # -------------------------------------------------------------
-# --- Staatsgrenzen ---
+# --- Country Borders ---
 # -------------------------------------------------------------
 
 begin line_feature_country file, level, in_out
@@ -547,12 +543,12 @@ begin line_feature_country file, level, in_out
 				endif
 			done
 
-	print "Staatsgrenzen gezeichnet"
+	print "Country borders drawn"
 
 end
 
 # -------------------------------------------------------------
-# --- Provinzgrenzen ---
+# --- Province Borders ---
 # -------------------------------------------------------------
 
 begin line_feature_provinces file, level, in_out
@@ -588,7 +584,7 @@ begin line_feature_provinces file, level, in_out
 				endif
 			done
 
-	print "Provinzgrenzen gezeichnet"
+	print "Prvince borders drawn"
 
 end
 
@@ -653,7 +649,7 @@ begin HALFFILL c1, c2, c3, c4, scalefactor
 end
 
 # -------------------------------------------------------------
-# --- procedure draw gefahrenkarte warnstufe 5
+# --- procedure draw danger level 5
 # -------------------------------------------------------------
 begin CHESSBORD_LWD5 fillcolor
   clip "inside"
@@ -674,7 +670,7 @@ begin CHESSBORD_LWD5_SMALL fillcolor
 end
 
 # -------------------------------------------------------------
-# --- Städte mit Marker und Labels ---
+# --- Cities with markers and labels ---
 # -------------------------------------------------------------
 
 begin SQUAREMARKER scalefactor, fillcolor, strokecolor, linewidth
@@ -738,7 +734,7 @@ begin point_feature_city_marker file, level					#, in_out
 			#endif
 		done
 
-	print "Staedte gezeichnet"
+	print "Cities drawn"
 
 end
 
@@ -770,7 +766,7 @@ begin point_feature_labels file, level
 			endif
 		done
 
-	print "Namengut (P) gezeichnet"
+	print "Point labels drawn"
 
 end
 
@@ -794,13 +790,13 @@ begin line_feature_labels file, level
 			endif
 		done
 
-	print "Namengut (L) gezeichnet"
+	print "Line labels drawn"
 
 end
 
 
 ###############################################################
-# Symbol Berg
+# Mountain Symbol
 ###############################################################
 
 begin MOUNTAIN scalefactor, fillcolor, linecolor, line
@@ -832,14 +828,13 @@ begin point_feature_peaks file, level
 			endif
 		done
 
-	print "Berggipfel gezeichnet"
+	print "Peaks drawn"
 
 end
 
 ###############################################################
-# Rahmen
+# Frame
 ###############################################################
-
 
 begin draw_frame stroke_color, line_style
 
@@ -854,7 +849,7 @@ end
 
 
 ###############################################################
-# Maßstabsleiste
+# Scale bar
 ###############################################################
 
 begin draw_scalebar km_value, bar_color, bar_style, font, fontsize
@@ -874,7 +869,9 @@ begin draw_scalebar km_value, bar_color, bar_style, font, fontsize
 	justify "center, bottom"
 	font font, fontsize
 	label km_value . " km"
+
 end
+
 
 ###############################################################
 # Copyright
@@ -892,6 +889,7 @@ begin draw_copyright copyright_txt, font, fontsize, fontcolor
 	label copyright_txt
 
 end
+
 
 ###############################################################
 # Logo
