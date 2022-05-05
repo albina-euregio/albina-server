@@ -112,7 +112,7 @@ public class User {
 		if (json.has("regions")) {
 			JSONArray regions = json.getJSONArray("regions");
 			for (Object region : regions) {
-				this.regions.add(new Region((JSONObject) region, regionFunction));
+				this.regions.add(regionFunction.apply((String) region));
 			}
 		}
 		if (json.has("roles")) {
