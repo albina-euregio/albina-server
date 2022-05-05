@@ -18,6 +18,7 @@ package eu.albina.rest;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -56,6 +57,32 @@ public class RegionService {
 	UriInfo uri;
 
 	@GET
+	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getRegions(@Context SecurityContext securityContext) {
+		logger.debug("GET JSON regions");
+
+		// TODO check if user has ADMIN rights for this region
+
+		try {
+			List<Region> regions = RegionController.getInstance().getRegions();
+			if (regions != null) {
+				JSONArray jsonResult = new JSONArray();
+				for (Region region : regions)
+					jsonResult.put(region.toJSON());
+				return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+			} else {
+				return Response.ok("", MediaType.APPLICATION_JSON).build();
+			}
+		} catch (HibernateException he) {
+			logger.warn("Error loading regions", he);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
+		}
+	}
+
+	@GET
+	@Path("/region")
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -108,7 +135,7 @@ public class RegionService {
 	}
 
 	@POST
-	@Secured({ Role.SUPERADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRegion(String regionString, @Context SecurityContext securityContext) {

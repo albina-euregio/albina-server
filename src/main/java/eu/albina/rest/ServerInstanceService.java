@@ -56,7 +56,7 @@ public class ServerInstanceService {
 	UriInfo uri;
 
 	@PUT
-	@Secured({ Role.SUPERADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateServerConfiguration(String serverInstance) {
@@ -71,7 +71,7 @@ public class ServerInstanceService {
 	}
 
 	@POST
-	@Secured({ Role.SUPERADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createServerConfiguration(String serverString, @Context SecurityContext securityContext) {
@@ -80,8 +80,7 @@ public class ServerInstanceService {
 		ServerInstance serverInstance = new ServerInstance(serverJson, RegionController.getInstance()::getRegion);
 
 		// check if id already exists
-		// check if regions are not handled by other server
-		if (!ServerInstanceController.getInstance().serverInstanceExists(serverInstance.getId())) {
+		if (serverInstance.getId() == null || !ServerInstanceController.getInstance().serverInstanceExists(serverInstance.getId())) {
 			ServerInstanceController.getInstance().createServerInstance(serverInstance);
 			JSONObject jsonObject = new JSONObject();
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
@@ -95,7 +94,7 @@ public class ServerInstanceService {
 	}
 
 	@GET
-	@Secured({ Role.SUPERADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getLocalServerConfiguration() {
@@ -112,7 +111,7 @@ public class ServerInstanceService {
 	}
 
 	@GET
-	@Secured({ Role.SUPERADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@Path("/external")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
