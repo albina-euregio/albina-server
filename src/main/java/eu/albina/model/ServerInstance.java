@@ -103,8 +103,8 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 			this.userName = json.getString("userName");
 		if (json.has("password") && !json.isNull("password"))
 			this.password = json.getString("password");
-		if (json.has("external") && !json.isNull("external"))
-			this.externalServer = json.getBoolean("external");
+		if (json.has("externalServer") && !json.isNull("externalServer"))
+			this.externalServer = json.getBoolean("externalServer");
 		if (json.has("publishAt5PM") && !json.isNull("publishAt5PM"))
 			this.publishAt5PM = json.getBoolean("publishAt5PM");
 		if (json.has("publishAt8AM") && !json.isNull("publishAt8AM"))
