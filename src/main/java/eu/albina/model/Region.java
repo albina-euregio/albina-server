@@ -658,8 +658,8 @@ public class Region implements AvalancheInformationObject {
 		json.put("pdfFooterLogoBwPath", getPdfFooterLogoBwPath());
 		json.put("mapXmax", getMapXmax());
 		json.put("mapXmin", getMapXmin());
-		json.put("mapYmax", getMapXmax());
-		json.put("mapYmin", getMapXmin());
+		json.put("mapYmax", getMapYmax());
+		json.put("mapYmin", getMapYmin());
 		json.put("simpleHtmlTemplateName", getSimpleHtmlTemplateName());
 		json.put("geoDataDirectory", getGeoDataDirectory());
 		json.put("mapLogoColorPath", getMapLogoColorPath());
