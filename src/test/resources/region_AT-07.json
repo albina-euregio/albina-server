@@ -13,6 +13,7 @@
     "sendEmails": false,
     "sendTelegramMessages": false,
     "sendPushNotifications": false,
+    "enableMediaFile": true,
     "pdfColor": "00ACFB",
     "emailColor" : "1AABFF",
     "pdfMapYAmPm": 130,
@@ -32,6 +33,8 @@
     "mapLogoColorPath": "",
     "mapLogoBwPath": "",
     "mapLogoPosition": "bottomright",
+    "mapCenterLat": 47.1,
+    "mapCenterLng": 11.44,
     "imageColorbarColorPath": "images/logo/color/colorbar.gif",
     "imageColorbarBwPath": "images/logo/grey/colorbar.gif"
 }
