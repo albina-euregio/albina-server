@@ -46,6 +46,7 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
@@ -118,7 +119,8 @@ public class MediaFileService {
 			logger.debug(txtFileName + " successfully uploaded to " + fileLocation);
 
 			// send emails
-			EmailUtil.getInstance().sendMediaEmails(mediaText, date, region, user.getName(), false, language);
+			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			EmailUtil.getInstance().sendMediaEmails(mediaText, mp3FileName, txtFileName, date, region, user.getName(), false, language, localServerInstance);
 
 			// set publication flag
 			AvalancheReportController.getInstance().setMediaFileFlag(date, region);

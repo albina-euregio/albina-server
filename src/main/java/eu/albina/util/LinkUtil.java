@@ -33,6 +33,11 @@ public interface LinkUtil {
 		return String.format("%s/%s", getStaticContentUrl(lang, region), htmlDirectory);
 	}
 
+	static String getMediaFileUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
+		String mediaFileDirectory = Paths.get(serverInstance.getMediaPath()).getFileName().toString();
+		return String.format("%s/%s", getStaticContentUrl(lang, region), mediaFileDirectory);
+	}
+
 	static String getMapsUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
 		String mapsDirectory = Paths.get(serverInstance.getMapsPath()).getFileName().toString();
 		return String.format("%s/%s", getStaticContentUrl(lang, region), mapsDirectory);
@@ -98,5 +103,9 @@ public interface LinkUtil {
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 		return String.format("%s/%s/%s/%s",
 			getMapsUrl(lang, region, serverInstance), validityDate, publicationTime, MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
+	}
+
+	static String createHtmlLink(String text, String url) {
+		return "<a href=\"" + url + "\">" + text + "</a>";
 	}
 }

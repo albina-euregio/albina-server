@@ -136,17 +136,17 @@ public class EmailUtil {
 		}
 	}
 
-	public void sendMediaEmails(String text, Instant date, Region region, String username, boolean test, LanguageCode lang) {
+	public void sendMediaEmails(String text, String mp3FileName, String txtFileName, Instant date, Region region, String username, boolean test, LanguageCode lang, ServerInstance serverInstance) {
 		StringBuilder sb = new StringBuilder();
 		ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
 		sb.append(lang.getBundleString("day." + localDate.getDayOfWeek()));
 		sb.append(", ");
 		sb.append(localDate.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
+		
+		String mp3FileUrl = LinkUtil.getMediaFileUrl(lang, region, serverInstance) + "/" + mp3FileName;
 
 		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb.toString(), username);
-		String emailHtml = text + "\n\n" + MessageFormat.format(lang.getBundleString("email.media.text"), username);
-
-		// TODO add links to mp3 and txt file
+		String emailHtml = text.replace("\n", "<br>") + "<br><br>" + LinkUtil.createHtmlLink(lang.getBundleString("email.media.link.mp3"), mp3FileUrl) + "<br><br>" + MessageFormat.format(lang.getBundleString("email.media.text"), username);
 
 		sendMediaEmailRapidmail(lang, region, emailHtml, subject, test);
 	}
