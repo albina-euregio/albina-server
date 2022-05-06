@@ -179,10 +179,10 @@ public class Region implements AvalancheInformationObject {
 	private Position mapLogoPosition;
 
 	@Column(name = "MAP_CENTER_LAT")
-	private float mapCenterLat;
+	private double mapCenterLat;
 
 	@Column(name = "MAP_CENTER_LNG")
-	private float mapCenterLng;
+	private double mapCenterLng;
 
 	@Column(name = "IMAGE_COLORBAR_COLOR_PATH")
 	private String imageColorbarColorPath;
@@ -299,9 +299,9 @@ public class Region implements AvalancheInformationObject {
 		if (json.has("mapLogoPosition"))
 			this.mapLogoPosition = Position.fromString(json.getString("mapLogoPosition"));
 		if (json.has("mapCenterLat"))
-			this.mapCenterLat = json.getLong("mapCenterLat");
+			this.mapCenterLat = json.getDouble("mapCenterLat");
 		if (json.has("mapCenterLng"))
-			this.mapCenterLng = json.getLong("mapCenterLng");
+			this.mapCenterLng = json.getDouble("mapCenterLng");
 		if (json.has("imageColorbarColorPath") && !json.isNull("imageColorbarColorPath"))
 			this.imageColorbarColorPath = json.getString("imageColorbarColorPath");
 		if (json.has("imageColorbarBwPath") && !json.isNull("imageColorbarBwPath"))
@@ -604,19 +604,19 @@ public class Region implements AvalancheInformationObject {
 		this.mapLogoPosition = logoPosition;
 	}
 
-	public float getMapCenterLat() {
+	public double getMapCenterLat() {
 		return mapCenterLat;
 	}
 
-	public void setMapCenterLat(float CenterLat) {
+	public void setMapCenterLat(double CenterLat) {
 		this.mapCenterLat = CenterLat;
 	}
 
-	public float getMapCenterLng() {
+	public double getMapCenterLng() {
 		return mapCenterLng;
 	}
 
-	public void setMapCenterLng(float CenterLng) {
+	public void setMapCenterLng(double CenterLng) {
 		this.mapCenterLng = CenterLng;
 	}
 
