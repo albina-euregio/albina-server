@@ -177,6 +177,6 @@ public class EmailUtilTest {
 	@Ignore
 	@Test
 	public void sendMediaEmails() throws IOException, URISyntaxException {
-		EmailUtil.getInstance().sendMediaEmails("", LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(), regionTirol, "Norbert Lanzanasto", true, LanguageCode.de);
+		EmailUtil.getInstance().sendMediaEmails("Test", "test.mp3", "test.txt", LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(), regionTirol, "Norbert Lanzanasto", true, LanguageCode.de, serverInstanceEuregio);
 	}
 }
