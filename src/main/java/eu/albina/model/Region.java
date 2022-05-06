@@ -80,6 +80,13 @@ public class Region implements AvalancheInformationObject {
 	)
 	private Set<Region> superRegions;
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="neighbor_regions",
+	 joinColumns=@JoinColumn(name="REGION_ID"),
+	 inverseJoinColumns=@JoinColumn(name="NEIGHBOR_REGION_ID")
+	)
+	private Set<Region> neighborRegions;
+
 	@Column(name = "PUBLISH_BULLETINS")
 	private boolean publishBulletins;
 
@@ -196,6 +203,7 @@ public class Region implements AvalancheInformationObject {
 	public Region() {
 		this.superRegions = new HashSet<Region>();
 		this.subRegions = new HashSet<Region>();
+		this.neighborRegions = new HashSet<Region>();
 	}
 
 	public Region(String id) {
@@ -232,6 +240,14 @@ public class Region implements AvalancheInformationObject {
 				Region region = regionFunction.apply((String) entry);
 				if (region != null)
 					this.superRegions.add(region);
+			}
+		}
+		if (json.has("neighborRegions")) {
+			JSONArray neighborRegions = json.getJSONArray("neighborRegions");
+			for (Object entry : neighborRegions) {
+				Region region = regionFunction.apply((String) entry);
+				if (region != null)
+					this.neighborRegions.add(region);
 			}
 		}
 		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
@@ -324,6 +340,18 @@ public class Region implements AvalancheInformationObject {
 		this.microRegions = microRegions;
 	}
 
+	public Set<Region> getSubRegions() {
+		return subRegions;
+	}
+	
+	public void setSubRegions(Set<Region> subRegions) {
+		this.subRegions = subRegions;
+	}
+	
+	public void addSubRegion(Region subRegion) {
+		this.subRegions.add(subRegion);
+	}
+	
 	public Set<Region> getSuperRegions() {
 		return superRegions;
 	}
@@ -336,16 +364,16 @@ public class Region implements AvalancheInformationObject {
 		this.superRegions.add(superRegion);
 	}
 
-	public Set<Region> getSubRegions() {
-		return subRegions;
+	public Set<Region> getNeighborRegions() {
+		return neighborRegions;
 	}
 
-	public void setSubRegions(Set<Region> subRegions) {
-		this.subRegions = subRegions;
+	public void setNeighborRegions(Set<Region> neighborRegions) {
+		this.neighborRegions = neighborRegions;
 	}
 
-	public void addSubRegion(Region subRegion) {
-		this.subRegions.add(subRegion);
+	public void addNeighborRegion(Region neighborRegion) {
+		this.neighborRegions.add(neighborRegion);
 	}
 
 	public boolean isPublishBulletins() {
@@ -670,6 +698,13 @@ public class Region implements AvalancheInformationObject {
 				jsonSuperRegions.put(superRegion.getId());
 			}
 			json.put("superRegions", jsonSuperRegions);
+		}
+		if (neighborRegions != null && neighborRegions.size() > 0) {
+			JSONArray jsonNeighborRegions = new JSONArray();
+			for (Region neighborRegion : neighborRegions) {
+				jsonNeighborRegions.put(neighborRegion.getId());
+			}
+			json.put("neighborRegions", jsonNeighborRegions);
 		}
 		json.put("publishBulletins", isPublishBulletins());
 		json.put("publishBlogs", isPublishBlogs());
