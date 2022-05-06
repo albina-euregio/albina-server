@@ -216,7 +216,7 @@ public class User {
 		if (regions != null && regions.size() > 0) {
 			JSONArray jsonRegions = new JSONArray();
 			for (Region region : regions) {
-				jsonRegions.put(region.getId());
+				jsonRegions.put(region.toJSON());
 			}
 			json.put("regions", jsonRegions);
 		}
