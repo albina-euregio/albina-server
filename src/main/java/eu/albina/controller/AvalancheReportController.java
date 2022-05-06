@@ -882,7 +882,7 @@ public class AvalancheReportController {
 
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
-						.setParameter("region", region.getId()).getResultList();
+						.setParameter("region", region).getResultList();
 			}
 
 			// select most recent report
