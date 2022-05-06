@@ -113,6 +113,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "SEND_PUSH_NOTIFICATIONS")
 	private boolean sendPushNotifications;
 
+	@Column(name = "ENABLE_MEDIA_FILE")
+	private boolean enableMediaFile;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -247,6 +250,8 @@ public class Region implements AvalancheInformationObject {
 			this.sendTelegramMessages = json.getBoolean("sendTelegramMessages");
 		if (json.has("sendPushNotifications") && !json.isNull("sendPushNotifications"))
 			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
+		if (json.has("enableMediaFile") && !json.isNull("enableMediaFile"))
+			this.enableMediaFile = json.getBoolean("enableMediaFile");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
 			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"), regionFunction);
 		if (json.has("pdfColor") && !json.isNull("pdfColor"))
@@ -419,6 +424,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void setSendPushNotifications(boolean sendPushNotifications) {
 		this.sendPushNotifications = sendPushNotifications;
+	}
+
+	public boolean isEnableMediaFile() {
+		return enableMediaFile;
+	}
+
+	public void setEnableMediaFile(boolean enableMediaFile) {
+		this.enableMediaFile = enableMediaFile;
 	}
 
 	public ServerInstance getServerInstance() {
@@ -643,6 +656,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("sendEmails", isSendEmails());
 		json.put("sendTelegramMessages", isSendTelegramMessages());
 		json.put("sendPushNotifications", isSendPushNotifications());
+		json.put("enableMediaFile", isEnableMediaFile());
 		if (getServerInstance() != null) {
 			json.put("serverInstance", getServerInstance().toJSON());
 		}
