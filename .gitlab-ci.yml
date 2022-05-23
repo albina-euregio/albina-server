@@ -27,7 +27,7 @@ deploy to development:
     script:
         - export TOMCAT_PATH=/albina_dev
         - export GIT_VERSION=$(git describe --tags)
-        - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:deploy
+        - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:deploy -Dmaven.test.skip=true
     environment:
         name: development
     only:
@@ -39,7 +39,7 @@ deploy to production:
     script:
         - export TOMCAT_PATH=/albina
         - export GIT_VERSION=$(git describe --tags)
-        - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod tomcat7:deploy
+        - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod tomcat7:deploy -Dmaven.test.skip=true
     environment:
         name: production
     only:
