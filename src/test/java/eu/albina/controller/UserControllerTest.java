@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.github.openjson.JSONArray;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
+import eu.albina.util.HibernateUtil;
 
 public class UserControllerTest {
 
@@ -35,7 +37,12 @@ public class UserControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		// HibernateUtil.getInstance().setUp();
+		HibernateUtil.getInstance().setUp();
+	}
+
+	@After
+	public void shutDown() {
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test
@@ -55,12 +62,14 @@ public class UserControllerTest {
 	}
 
 	@Test
+	@Ignore
 	public void getRegionsTest() throws AlbinaException {
 		JSONArray regionsJson = UserController.getInstance().getRegionsJson();
 		logger.info(regionsJson.toString());
 	}
-
+	
 	@Test
+	@Ignore
 	public void getRolesTest() throws AlbinaException {
 		JSONArray rolesJson = UserController.getInstance().getRolesJson();
 		logger.info(rolesJson.toString());

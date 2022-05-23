@@ -30,11 +30,9 @@ import javax.persistence.Table;
 
 import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -55,8 +53,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
-	@Column(name = "REGION")
-	private String region;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "REGION_ID")
+	private Region region;
 
 	@Column(name = "DATE")
 	private ZonedDateTime date;
@@ -67,8 +66,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "STATUS")
 	private BulletinStatus status;
 
-	@Column(name = "CAAML_CREATED")
-	private boolean caamlCreated;
+	@Column(name = "CAAML_V5_CREATED")
+	private boolean caamlV5Created;
+
+	@Column(name = "CAAML_V6_CREATED")
+	private boolean caamlV6Created;
+
+	@Column(name = "JSON_CREATED")
+	private boolean jsonCreated;
 
 	@Column(name = "PDF_CREATED")
 	private boolean pdfCreated;
@@ -76,20 +81,20 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "HTML_CREATED")
 	private boolean htmlCreated;
 
-	@Column(name = "STATIC_WIDGET_CREATED")
-	private boolean staticWidgetCreated;
-
 	@Column(name = "MAP_CREATED")
 	private boolean mapCreated;
 
 	@Column(name = "EMAIL_CREATED")
 	private boolean emailCreated;
 
-	@Column(name = "WHATSAPP_SENT")
-	private boolean whatsappSent;
-
 	@Column(name = "TELEGRAM_SENT")
 	private boolean telegramSent;
+
+	@Column(name = "PUSH_SENT")
+	private boolean pushSent;
+
+	@Column(name = "MEDIA_FILE_UPLOADED")
+	private boolean mediaFileUploaded;
 
 	@Lob
 	@Column(name = "JSON_STRING")
@@ -101,56 +106,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	public AvalancheReport() {
 	}
 
-	/**
-	 * Custom constructor that creates an avalanche bulletin object from JSON input.
-	 *
-	 * @param json
-	 *            JSONObject holding information about an avalanche bulletin.
-	 */
-	public AvalancheReport(JSONObject json, String username) {
-		this();
-
-		if (username != null) {
-			try {
-				this.user = UserController.getInstance().getUser(username);
-			} catch (Exception e) {
-				LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
-			}
-		}
-
-		if (json.has("region"))
-			this.region = json.getString("region");
-
-		if (json.has("date"))
-			this.date = ZonedDateTime.parse(json.getString("date"));
-
-		if (json.has("timestamp"))
-			this.timestamp = ZonedDateTime.parse(json.getString("timestamp"));
-
-		if (json.has("status"))
-			this.status = BulletinStatus.fromString(json.getString("status"));
-
-		if (json.has("caamlCreated"))
-			this.caamlCreated = json.getBoolean("caamlCreated");
-		if (json.has("pdfCreated"))
-			this.pdfCreated = json.getBoolean("pdfCreated");
-		if (json.has("htmlCreated"))
-			this.htmlCreated = json.getBoolean("htmlCreated");
-		if (json.has("staticWidgetCreated"))
-			this.staticWidgetCreated = json.getBoolean("staticWidgetCreated");
-		if (json.has("emailCreated"))
-			this.emailCreated = json.getBoolean("emailCreated");
-		if (json.has("mapCreated"))
-			this.mapCreated = json.getBoolean("mapCreated");
-		if (json.has("whatsappSent"))
-			this.whatsappSent = json.getBoolean("whatsappSent");
-		if (json.has("telegramSent"))
-			this.telegramSent = json.getBoolean("telegramSent");
-
-		if (json.has("jsonString"))
-			this.jsonString = json.getString("jsonString");
-	}
-
 	public User getUser() {
 		return user;
 	}
@@ -159,11 +114,11 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.user = user;
 	}
 
-	public String getRegion() {
+	public Region getRegion() {
 		return region;
 	}
 
-	public void setRegion(String region) {
+	public void setRegion(Region region) {
 		this.region = region;
 	}
 
@@ -191,12 +146,28 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.status = status;
 	}
 
-	public boolean isCaamlCreated() {
-		return caamlCreated;
+	public boolean isCaamlV5Created() {
+		return caamlV5Created;
 	}
 
-	public void setCaamlCreated(boolean caaml) {
-		this.caamlCreated = caaml;
+	public void setCaamlV5Created(boolean caaml) {
+		this.caamlV5Created = caaml;
+	}
+
+	public boolean isCaamlV6Created() {
+		return caamlV6Created;
+	}
+
+	public void setCaamlV6Created(boolean caaml) {
+		this.caamlV6Created = caaml;
+	}
+
+	public boolean isJsonCreated() {
+		return jsonCreated;
+	}
+
+	public void setJsonCreated(boolean json) {
+		this.jsonCreated = json;
 	}
 
 	public boolean isPdfCreated() {
@@ -215,14 +186,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.htmlCreated = html;
 	}
 
-	public boolean isStaticWidgetCreated() {
-		return staticWidgetCreated;
-	}
-
-	public void setStaticWidgetCreated(boolean staticWidget) {
-		this.staticWidgetCreated = staticWidget;
-	}
-
 	public boolean isMapCreated() {
 		return mapCreated;
 	}
@@ -239,20 +202,28 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.emailCreated = email;
 	}
 
-	public boolean isWhatsappSent() {
-		return whatsappSent;
-	}
-
-	public void setWhatsappSent(boolean whatsapp) {
-		this.whatsappSent = whatsapp;
-	}
-
 	public boolean isTelegramSent() {
 		return telegramSent;
 	}
 
 	public void setTelegramSent(boolean telegram) {
 		this.telegramSent = telegram;
+	}
+
+	public boolean isPushSent() {
+		return pushSent;
+	}
+
+	public void setPushSent(boolean push) {
+		this.pushSent = push;
+	}
+
+	public boolean isMediaFileUploaded() {
+		return mediaFileUploaded;
+	}
+
+	public void setMediaFileUploaded(boolean mediaFile) {
+		this.mediaFileUploaded = mediaFile;
 	}
 
 	public String getJsonString() {
@@ -273,8 +244,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (user != null && !Strings.isNullOrEmpty(user.getName()))
 			json.put("user", user.getName());
 
-		if (!Strings.isNullOrEmpty(region))
-			json.put("region", region);
+		if (region != null && !Strings.isNullOrEmpty(region.getId()))
+			json.put("region", region.getId());
 
 		if (date != null)
 			json.put("date", DateTimeFormatter.ISO_INSTANT.format(date));
@@ -285,14 +256,16 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		if (status != null)
 			json.put("status", status.toString());
 
-		json.put("caamlCreated", caamlCreated);
+		json.put("caamlV5Created", caamlV5Created);
+		json.put("caamlV6Created", caamlV6Created);
+		json.put("jsonCreated", jsonCreated);
 		json.put("pdfCreated", pdfCreated);
 		json.put("htmlCreated", htmlCreated);
-		json.put("staticWidgetCreated", staticWidgetCreated);
 		json.put("mapCreated", mapCreated);
 		json.put("emailCreated", emailCreated);
-		json.put("whatsappSent", whatsappSent);
 		json.put("telegramSent", telegramSent);
+		json.put("pushSent", pushSent);
+		json.put("mediaFileUploaded", mediaFileUploaded);
 
 		if (jsonString != null)
 			json.put("jsonString", jsonString);

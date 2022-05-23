@@ -1,0 +1,114 @@
+[
+	{
+		"tendencyCommentTextcat": "86[6412,7750,7100,14258,3990,9413]",
+		"regions": [
+			"AT-07-10",
+			"AT-07-11",
+			"AT-07-01",
+			"AT-07-12",
+			"AT-07-24",
+			"AT-07-13",
+			"AT-07-02",
+			"AT-07-03",
+			"AT-07-04",
+			"AT-07-26",
+			"AT-07-05",
+			"AT-07-17",
+			"AT-07-06",
+			"AT-07-18",
+			"AT-07-07",
+			"AT-07-08"
+		],
+		"tendency": "decreasing",
+		"forenoon": {
+			"hasElevationDependency": false,
+			"avalancheSituation2": {
+				"aspects": ["s", "sw", "w", "nw", "ne", "se", "n", "e"],
+				"elevationHigh": 2400,
+				"avalancheSituation": "gliding_snow"
+			},
+			"avalancheSituation1": {
+				"elevationLow": 2200,
+				"aspects": ["nw", "ne", "n", "e"],
+				"avalancheSituation": "wind_drifted_snow"
+			},
+			"id": "6384b47b-d4a7-42e2-adb7-f7ecab22d626",
+			"dangerRatingAbove": "considerable"
+		},
+		"snowpackStructureHighlights": [
+			{"languageCode": "de"},
+			{"languageCode": "it"},
+			{"languageCode": "en"},
+			{"languageCode": "fr"}
+		],
+		"avActivityHighlightsTextcat": "16[1438,7752[10213,5929],9413].119[11874,6674,6210[6984]]",
+		"hasDaytimeDependency": false,
+		"avActivityCommentTextcat": "15[6226,4164,5890,871,7225[10213,5930[3794],10179,3907],9413].102[6658,7010,7595,7404,9731[14871],10547,9413].62[503,9182,1406,10109].73[14893,7130,2168,3645,6537,11879,6914,606].30[680[12003,14871],3875,10400[3796],11555,14841,10447,11892].102[6657,6998,7595,7404,9728,10547,9413].36[5914].36[5915].46[7050,9834,9413]",
+		"avActivityComment": [
+			{
+				"text": " The no longer entirely fresh wind slabs can be released by a single winter sport participant above approximately 2200 m. This applies in particular in gullies and bowls, and behind abrupt changes in the terrain on steep shady slopes. Mostly avalanches are medium-sized. Natural avalanches must be expected now only rarely. On steep grassy slopes a large number of medium-sized and, in isolated cases, large gliding avalanches are possible below approximately 2400 m. This applies in all aspects. Caution is to be exercised in areas with glide cracks. Gliding avalanches can be released at any time of day or night. Backcountry touring calls for caution and restraint.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Die nicht mehr ganz frischen Triebschneeansammlungen können oberhalb von rund 2200 m von einzelnen Wintersportlern ausgelöst werden. Dies vor allem in Rinnen, Mulden und hinter Geländekanten an steilen Schattenhängen. Lawinen sind meist mittelgross. Es muss kaum noch mit spontanen Lawinen gerechnet werden. An steilen Grashängen sind unterhalb von rund 2400 m viele mittlere und vereinzelt grosse Gleitschneelawinen möglich. Dies an allen Expositionen. Vorsicht in Hängen mit Gleitschneerissen. Gleitschneelawinen können zu jeder Tages- und Nachtzeit abgehen. Touren erfordern Vorsicht und Zurückhaltung.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Les accumulations de neige soufflée plus entièrement fraîches peuvent être déclenchées par un seul amateur de sports d'hiver au-dessus d'environ 2200 m. Ceci surtout dans les combes, couloirs et derrière les ruptures de terrain sur les pentes raides à l'ombre. Des avalanches sont généralement de taille moyenne. Il faut compter avec des avalanches spontanées de plus en plus rares. Des avalanches de glissement nombreuses de moyenne et rarement grande taille sont possibles sur les pentes raides herbeuses en dessous d'environ 2400 m. Ceci à toutes les expositions. Prudence en présence de fissures de glissement. Les avalanches de glissement peuvent se déclencher à tout moment du jour et de la nuit. Les randonnées demandent prudence et retenue.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Gli accumuli di neve ventata non più proprio freschi possono subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali al di sopra dei 2200 m circa. Ciò soprattutto nelle conche, nei canaloni e dietro ai cambi di pendenza sui pendii ombreggiati ripidi. Le valanghe sono per lo più di dimensioni medie. Non si prevedono praticamente più valanghe spontanee. Sui pendii erbosi ripidi, sono possibili molte valanghe per scivolamento di neve di medie e, a livello isolato, di grandi dimensioni al di sotto dei 2400 m circa. Ciò a tutte le esposizioni. Attenzione in caso di rotture da scivolamento. Distacchi di valanghe per scivolamento di neve possono verificarsi a qualsiasi ora del giorno e della notte. Le escursioni richiedono attenzione e prudenza.",
+				"languageCode": "it"
+			}
+		],
+		"tendencyComment": [
+			{"text": " Further decrease in avalanche danger.", "languageCode": "en"},
+			{"text": " Weiterer Rückgang der Lawinengefahr.", "languageCode": "de"},
+			{"text": " Ulteriore calo del pericolo di valanghe.", "languageCode": "it"},
+			{"text": " Diminution étendue du danger d'avalanches.", "languageCode": "fr"}
+		],
+		"dangerPattern2": "dp2",
+		"dangerPattern1": "dp6",
+		"avActivityHighlights": [
+			{
+				"text": " Die schon etwas älteren Triebschneeansammlungen müssen vorsichtig beurteilt werden. Gleitschneelawinen sind weiterhin zu erwarten.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Gli accumuli di neve ventata meno recenti devono essere valutati con attenzione. Ancora sono previste valanghe per scivolamento di neve.",
+				"languageCode": "it"
+			},
+			{
+				"text": " The somewhat older wind slabs must be evaluated with care and prudence. Gliding avalanches are still to be expected.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Les accumulations déjà plus anciennes de neige soufflée doivent être évaluées avec précaution. Il faut toujours s'attendre à des avalanches de glissement.",
+				"languageCode": "fr"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"text": " Schwachschichten im oberen Teil der Schneedecke sind die Hauptgefahr. Die schon etwas älteren Triebschneeansammlungen sind besonders an steilen Schattenhängen oberhalb von rund 2200 m teils noch störanfällig. Im unteren Teil der Schneedecke sind keine ausgeprägten Schwachschichten vorhanden. Die Schneedecke ist in tiefen und mittleren Lagen feucht.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Gli strati deboli presenti nella parte superficiale del manto nevoso rappresentano la principale fonte di pericolo. Gli accumuli di neve ventata meno recenti sono in parte ancora instabili soprattutto sui pendii ripidi ombreggiati al di sopra dei 2200 m circa. Nella parte basale del manto nevoso non si trovano strati fragili degni di rilievo. Il manto nevoso è umido alle quote di bassa e media montagna.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Des couches fragiles en partie supérieure du manteau neigeux constituent le danger principal. Les accumulations de neige soufflée déjà relativement anciennes sont partiellement encore fragiles particulièrement sur les pentes raides à l'ombre au-dessus d'environ 2200 m. Dans la partie inférieure du manteau neigeux aucune couche fragile marquée n'est présente. À basse et moyenne altitude le manteau neigeux est humide.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Weak layers in the upper part of the snowpack represent the main danger. The somewhat older wind slabs are in some cases still prone to triggering especially on steep shady slopes above approximately 2200 m. No distinct weak layers exist in the bottom section of the snowpack. The snowpack will be moist at low and intermediate altitudes.",
+				"languageCode": "en"
+			}
+		],
+		"id": "6385c958-018d-4c89-aa67-5eddc31ada5a",
+		"validity": {"from": "2019-01-16T23:00:00Z", "until": "2019-01-17T23:00:00Z"},
+		"snowpackStructureCommentTextcat": "27[3856,6863].15[6226,4167,5890,871,7233[10218[9257,7498],5930[3794],2966],9413].22[5936,3739,5928,6439,1546,6420].11[10387,3976,6039[3765],9544]",
+		"publicationDate": "2019-01-16T16:00:00Z"
+	}
+]

@@ -54,22 +54,22 @@ public enum Tendency {
 		if (grayscale) {
 			switch (this) {
 				case increasing:
-					return "images/tendency/tendency_increasing_black.png";
+					return "tendency/tendency_increasing_black.png";
 				case steady:
-					return "images/tendency/tendency_steady_black.png";
+					return "tendency/tendency_steady_black.png";
 				case decreasing:
-					return "images/tendency/tendency_decreasing_black.png";
+					return "tendency/tendency_decreasing_black.png";
 				default:
 					return null;
 			}
 		} else {
 			switch (this) {
 				case increasing:
-					return "images/tendency/tendency_increasing_blue.png";
+					return "tendency/tendency_increasing_blue.png";
 				case steady:
-					return "images/tendency/tendency_steady_blue.png";
+					return "tendency/tendency_steady_blue.png";
 				case decreasing:
-					return "images/tendency/tendency_decreasing_blue.png";
+					return "tendency/tendency_decreasing_blue.png";
 				default:
 					return null;
 			}

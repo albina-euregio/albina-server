@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 albina-euregio
+ * Copyright (C) 2021 albina
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import javax.persistence.Table;
 import com.google.common.base.MoreObjects;
 
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.GlobalVariables;
 
 @Entity
 @Table(name = "push_subscriptions")
@@ -154,7 +153,7 @@ public class PushSubscription {
 		subscription.setId(24L);
 		subscription.setLanguage(language);
 		subscription.setP256dh("BH9E3G1nCGH1RP3WrW7c0j93OUeY4yswq_Tbw0KOpMViVPgkgzT-S-PSc1SCOooO72PjiYCQE50cXCSueDELzmE");
-		subscription.setRegion(GlobalVariables.codeTyrol);
+		subscription.setRegion("AT-07");
 		subscription.setSubscribeDate(Instant.now());
 		subscriptions.add(subscription);
 		return subscriptions;

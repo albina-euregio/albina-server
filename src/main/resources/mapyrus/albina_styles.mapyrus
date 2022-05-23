@@ -1,6 +1,6 @@
 
 # -------------------------------------------------------------
-# Zoomstufe & Zoomfaktor
+# Zoom level & zoom factor
 # -------------------------------------------------------------
 let level = level
 let pf = 1
@@ -14,70 +14,67 @@ elif map_level eq "overlay" then
 endif
 
 # -------------------------------------------------------------
-# --- Schummerung
+# --- Shading
 # -------------------------------------------------------------
-let draw_raster = "true"												# Schummerung true/false
+let draw_raster = "true"												# Shading true/false
 
 # -------------------------------------------------------------
-# --- Lawinengefahrenstufen Regionen
+# --- Danger level regions
 # -------------------------------------------------------------
 
-# Farben der Gefahrenstufen (Icon Style)
+# Danger level colors (Icon Style)
 /*
-let danger_color[0] = "color '#FFFFFF'"									# weiß
-let danger_color[1] = "color '#CAD65A'"									# grün
-let danger_color[2] = "color '#FFFF00'"									# gelb
+let danger_color[0] = "color '#FFFFFF'"									# white
+let danger_color[1] = "color '#CAD65A'"									# green
+let danger_color[2] = "color '#FFFF00'"									# yellow
 let danger_color[3] = "color '#F39A1B'"									# orange
-let danger_color[4] = "color '#E52D22'"									# rot
-let danger_color[5] = "color '#666666'"									# dunkelgrau
+let danger_color[4] = "color '#E52D22'"									# red
+let danger_color[5] = "color '#666666'"									# dark grey
 */
 
-# Farben der Gefahrenstufen (Transporter Style)
-#/*
-let danger_color[0] = "color '#FFFFFF'"									# weiß
-let danger_color[1] = "color '#CCFF66'"									# grün
-let danger_color[2] = "color '#FFFF00'"									# gelb
+# Danger level colors (Transporter Style)
+let danger_color[0] = "color '#FFFFFF'"									# white
+let danger_color[1] = "color '#CCFF66'"									# green
+let danger_color[2] = "color '#FFFF00'"									# yellow
 let danger_color[3] = "color '#FF9900'"									# orange
-let danger_color[4] = "color '#FF0000'"									# rot
-let danger_color[5] = "color '#666666'"									# dunkelgrau
+let danger_color[4] = "color '#FF0000'"									# red
+let danger_color[5] = "color '#666666'"									# dark grey
 if map_level eq "thumbnail" or bulletin_id eq "overlay" then
 	let danger_color[5] = "color '#660000'"
 endif
 
-#*/
-
-# Farben der Gefahrenstufen (knalliger Style)
+# Danger level colors (knalliger Style)
 /*
-let danger_color[0] = "color '#FFFFFF'"									# weiß
-let danger_color[1] = "color '#00FF00'"									# grün
-let danger_color[2] = "color '#FFFF00'"									# gelb
+let danger_color[0] = "color '#FFFFFF'"									# white
+let danger_color[1] = "color '#00FF00'"									# green
+let danger_color[2] = "color '#FFFF00'"									# yellow
 let danger_color[3] = "color '#FF9900'"									# orange
-let danger_color[4] = "color '#FF0000'"									# rot
-let danger_color[5] = "color '#666666'"									# dunkelgrau
+let danger_color[4] = "color '#FF0000'"									# red
+let danger_color[5] = "color '#666666'"									# dark grey
 */
 
-# Farben der Gefahrenstufen (LWD-Tirol Style)
+# Danger level colors (LWD-Tirol Style)
 /*
-let danger_color[0] = "color '#FFFFFF'"									# weiß
-let danger_color[1] = "color '#00FF00'"									# grün
-let danger_color[2] = "color '#FFFF00'"									# gelb
+let danger_color[0] = "color '#FFFFFF'"									# white
+let danger_color[1] = "color '#00FF00'"									# green
+let danger_color[2] = "color '#FFFF00'"									# yellow
 let danger_color[3] = "color '#FF9900'"									# orange
-let danger_color[4] = "color '#FF0000'"									# rot
+let danger_color[4] = "color '#FF0000'"									# red
 let danger_color[5] = "color '#000000'"									# schwarz
 */
 
-let dynamic_region_color = "color '#cda5ce'"	# nicht verwendet
-let rest_color = "color '#DDDDDD'"				# Farbe nicht betroffener Regionen bei Bulletin maps
+let dynamic_region_color = "color '#cda5ce'"							# not used
+let rest_color = "color '#DDDDDD'"										# Color of regions not rated
 let rest_stroke = "linestyle " . 0.1
 
-# Farben der Gefahrenstufen (Schwarz-Weiß Darstellung)
+# Danger level colors (black & white)
 if colormode eq "bw" then
-	let danger_color[0] = "color '#FFFFFF'"									# weiß
-	let danger_color[1] = "color '#EFEFEF'"									# grün
-	let danger_color[2] = "color '#D8D8D8'"									# gelb
-	let danger_color[3] = "color '#B0B0B0'"									# orange
-	let danger_color[4] = "color '#888888'"									# rot
-	let danger_color[5] = "color '#666666'"									# dunkelgrau
+	let danger_color[0] = "color '#FFFFFF'"								# white
+	let danger_color[1] = "color '#EFEFEF'"								# green
+	let danger_color[2] = "color '#D8D8D8'"								# yellow
+	let danger_color[3] = "color '#B0B0B0'"								# orange
+	let danger_color[4] = "color '#888888'"								# red
+	let danger_color[5] = "color '#666666'"								# dark grey
 	if map_level eq "thumbnail" or bulletin_id eq "overlay" then
 		let danger_color[5] = "color '#454545'"
 	endif
@@ -85,20 +82,20 @@ if colormode eq "bw" then
 endif
 
 
-# Regionslinie
+# Region lines
 let reg_line_color = "color '#FFFFFF'"
 let reg_line = "linestyle " . 0.3  * zf . ", 'round', 'round'"
 let reg_line_1 = "linestyle " . 0.075  * zf . ", 'round', 'round'"
 let reg_line_2 = "linestyle " . 0.1  * zf . ", 'round', 'round'"
 let reg_line_3 = "linestyle " . 0.15  * zf . ", 'round', 'round'"
 
-# Staatsgrenze
+# Country borders
 let country_line_color = "color '#777777'"
 let country_line_1 = "linestyle " . 0.2  * zf . ", 'round', 'round'"
 let country_line_2 = "linestyle " . 0.3  * zf . ", 'round', 'round'"
 let country_line_3 = "linestyle " . 0.4  * zf . ", 'round', 'round'"
 
-# Provinzgrenze
+# Province borders
 let prov_line_color = "color '#777777'"
 let prov_line_1 = "linestyle " . 0.1  * zf . ", 'round', 'round'"
 let prov_line_2 = "linestyle " . 0.15  * zf . ", 'round', 'round'"
@@ -108,21 +105,21 @@ let autonom_line_1 = "linestyle " . 0.05  * zf . ", 'round', 'round'"
 let autonom_line_2 = "linestyle " . 0.075  * zf . ", 'round', 'round'"
 let autonom_line_3 = "linestyle " . 0.2  * zf . ", 'round', 'round'"
 
-# Absoftbereich
+# Absoft area
 let pp_color = "color '#FFFFFF', 0.5"
 
-# Flüsse
+# Rivers
 let river_line_color = "color '#19ABFF'"			#488cca
 let river_line_1 = "linestyle " . 0.125  * zf . ", 'round', 'round'"
 let river_line_2 = "linestyle " . 0.15  * zf . ", 'round', 'round'"
 let river_line_3 = "linestyle " . 0.2  * zf . ", 'round', 'round'"
 
-# Seen
+# Lakes
 let lake_color = "color '#99DAFF'"		#d8f0fc
 let lake_line_color = river_line_color
 let lake_line = "linestyle " . 0.1  * zf . ", 'round', 'round'"
 
-# Städtemarke
+# City markers
 let marker_scale = 0.5 * zf
 let marker_color = "color '#FFFFFF'"
 let marker_line_color = "color '#222222'"
@@ -131,7 +128,7 @@ if map_level eq "thumbnail" then
 endif
 let marker_line = "linestyle " . 0.25  * zf . ", 'round', 'round'"
 
-# Städtenamen
+# City labels
 let city_label_color = "color '#222222'"
 let cap_city_font_size = 2.2 * zf
 let city_font_size = 1.9 * zf
@@ -145,17 +142,17 @@ else
 	let label_halo_width5 = "outlinewidth=" . 0.325 * zf
 endif
 
-# Gipfelmarker
+# Peak markers
 let peak_scale = 0.5 * zf
 let peak_color = "color '#FFFFFF'"
 let peak_line_color = "color '#222222'"
 let peak_line = "linestyle " . 0.25  * zf . ", 'round', 'round'"
 
-# Gipfelnamen
+# Peak names
 let peak_label_color = "color '#222222'"
 let peak_font_size = 1.6 * zf
 
-# Weitere Labelvariablen
+# Additional label variables
 let country_label_color = "color '#777777'"
 let country_font_size = 1.9 * zf
 let prov_label_color = "color '#222222'"
@@ -165,7 +162,7 @@ let range_font_size = 2.5 * zf
 let label_halo_color = "color '#333333'"
 let no_label_halo = "outlinewidth=" . 0.0 * zf
 
-# Rahmenbreite
+# Frame width
 if map_level eq "thumbnail" then
 	let frame_width = 0.1
 elif map_level eq "standard" then
@@ -174,17 +171,16 @@ elif map_level eq "overlay" then
 	let frame_width = 0.2
 endif
 
-let frame_stroke_color = "color '#999999'"										# Rahmenfarbe #1aabff
-let frame_line_style = "linestyle " . frame_width . ", 'round', 'miter'" 		# Rahmenbreite
+let frame_stroke_color = "color '#999999'"
+let frame_line_style = "linestyle " . frame_width . ", 'round', 'miter'"
 
-
-# Maßstabsvariablen
+# Scale bar variables
 let scale_km_value = 20
 let scale_bar_color = "color '#222222'"
 let scale_bar_style = "linestyle " . frame_width . ", 'butt', 'round'"
 let scale_font = font_semibold
 
-# Fontsize Maßstab und Copyright
+# Font size, scale and copyright
 if map_level eq "thumbnail" then
 	let c_fontsize = 0.8
 	let scale_fontsize = 0.8
@@ -196,10 +192,10 @@ elif map_level eq "overlay" then
 	let scale_fontsize = 2.2
 endif
 
-# EUREGIO-Logo Size
-let euregio_image_size = 52
+# Logo Size
+let logo_size = 52
 
-# Copyrightvariabel
+# Copyright variables
 let copyright_txt = "(CC)BY avalanche.report"
 let c_font = font_semibold
 let c_fontcolor = "color '#444444'"

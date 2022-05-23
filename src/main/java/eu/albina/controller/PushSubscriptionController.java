@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 albina-euregio
+ * Copyright (C) 2021 albina
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,14 +39,14 @@ public interface PushSubscriptionController {
 		});
 	}
 
-	static List<PushSubscription> get(LanguageCode lang, Collection<String> regions) throws HibernateException {
+	static List<PushSubscription> get(LanguageCode lang, Collection<String> regionIds) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<PushSubscription> select = criteriaBuilder.createQuery(PushSubscription.class);
 			Root<PushSubscription> root = select.from(PushSubscription.class);
 			select.where(
 				criteriaBuilder.equal(root.get("language"), lang),
-				root.get("region").in(regions));
+				root.get("region").in(regionIds));
 			return entityManager.createQuery(select).getResultList();
 		});
 	}

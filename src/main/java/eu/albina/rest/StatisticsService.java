@@ -36,6 +36,7 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.RegionController;
 import eu.albina.controller.StatisticsController;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
@@ -74,7 +75,7 @@ public class StatisticsService {
 		else
 			return Response.notAcceptable(null).build();
 
-		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, extended,
+		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, RegionController.getInstance().getPublishBulletinRegions(), extended,
 				duplicate);
 
 		StringBuilder sbFilename = new StringBuilder();

@@ -19,7 +19,6 @@ package eu.albina.controller;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import eu.albina.util.AlbinaUtil;

@@ -30,8 +30,10 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.socialmedia.BlogController;
+import eu.albina.controller.RegionController;
+import eu.albina.controller.publication.BlogController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
@@ -51,16 +53,20 @@ public class BlogService {
 	@Path("/publish/latest")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPost(@QueryParam("region") String region,
+	public Response sendLatestBlogPost(@QueryParam("region") String regionId,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (region == null)
+			if (regionId == null)
 				throw new AlbinaException("No region defined!");
 			if (language == null)
 				throw new AlbinaException("No language defined!");
 
-			logger.debug("POST send latest blog post for {} in {}", region, language);
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (region == null)
+				throw new AlbinaException("No region with id " + regionId + " found!");
+
+			logger.debug("POST send latest blog post for {} in {}", region.getId(), language);
 
 			BlogController.getInstance().sendLatestBlogPost(region, language, false);
 
@@ -79,14 +85,18 @@ public class BlogService {
 	@Path("/publish/latest/test")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostTest(@QueryParam("region") String region,
+	public Response sendLatestBlogPostTest(@QueryParam("region") String regionId,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (region == null)
+			if (regionId == null)
 				throw new AlbinaException("No region defined!");
 			if (language == null)
 				throw new AlbinaException("No language defined!");
+
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (region == null)
+				throw new AlbinaException("No region with id " + regionId + " found!");
 
 			logger.debug("POST send latest blog post TEST for {} in {}", region, language);
 
@@ -107,14 +117,18 @@ public class BlogService {
 	@Path("/publish/latest/email")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostEmail(@QueryParam("region") String region,
+	public Response sendLatestBlogPostEmail(@QueryParam("region") String regionId,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (region == null)
+			if (regionId == null)
 				throw new AlbinaException("No region defined!");
 			if (language == null)
 				throw new AlbinaException("No language defined!");
+
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (region == null)
+				throw new AlbinaException("No region with id " + regionId + " found!");
 
 			logger.debug("POST send latest blog post for {} in {} via email", region, language);
 
@@ -135,14 +149,18 @@ public class BlogService {
 	@Path("/publish/latest/email/test")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostEmailTest(@QueryParam("region") String region,
+	public Response sendLatestBlogPostEmailTest(@QueryParam("region") String regionId,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (region == null)
+			if (regionId == null)
 				throw new AlbinaException("No region defined!");
 			if (language == null)
 				throw new AlbinaException("No language defined!");
+
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (region == null)
+				throw new AlbinaException("No region with id " + regionId + " found!");
 
 			logger.debug("POST send latest blog post TEST for {} in {} via email", region, language);
 
@@ -163,14 +181,18 @@ public class BlogService {
 	@Path("/publish/latest/telegram")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostTelegram(@QueryParam("region") String region,
+	public Response sendLatestBlogPostTelegram(@QueryParam("region") String regionId,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (region == null)
+			if (regionId == null)
 				throw new AlbinaException("No region defined!");
 			if (language == null)
 				throw new AlbinaException("No language defined!");
+
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (region == null)
+				throw new AlbinaException("No region with id " + regionId + " found!");
 
 			logger.debug("POST send latest blog post for {} in {} via telegram", region, language);
 
@@ -191,14 +213,18 @@ public class BlogService {
 	@Path("/publish/latest/telegram/test")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostTelegramTest(@QueryParam("region") String region,
+	public Response sendLatestBlogPostTelegramTest(@QueryParam("region") String regionId,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (region == null)
+			if (regionId == null)
 				throw new AlbinaException("No region defined!");
 			if (language == null)
 				throw new AlbinaException("No language defined!");
+
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (region == null)
+				throw new AlbinaException("No region with id " + regionId + " found!");
 
 			logger.debug("POST send latest blog post TEST for {} in {} via telegram", region, language);
 
@@ -219,14 +245,18 @@ public class BlogService {
 	@Path("/publish/latest/push")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostPush(@QueryParam("region") String region,
+	public Response sendLatestBlogPostPush(@QueryParam("region") String regionId,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (region == null)
+			if (regionId == null)
 				throw new AlbinaException("No region defined!");
 			if (language == null)
 				throw new AlbinaException("No language defined!");
+
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (region == null)
+				throw new AlbinaException("No region with id " + regionId + " found!");
 
 			logger.debug("POST send latest blog post for {} in {} via push", region, language);
 
@@ -247,14 +277,18 @@ public class BlogService {
 	@Path("/publish/latest/push/test")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostPushTest(@QueryParam("region") String region,
+	public Response sendLatestBlogPostPushTest(@QueryParam("region") String regionId,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (region == null)
+			if (regionId == null)
 				throw new AlbinaException("No region defined!");
 			if (language == null)
 				throw new AlbinaException("No language defined!");
+
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (region == null)
+				throw new AlbinaException("No region with id " + regionId + " found!");
 
 			logger.debug("POST send latest blog post TEST for {} in {} via push", region, language);
 

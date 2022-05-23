@@ -25,12 +25,6 @@ source_lang = en
 type = PROPERTIESXML
 file_filter = src/main/resources/i18n/DangerRating_<lang>.xml
 
-[albina-server.static-widget-xml]
-source_file = src/main/resources/i18n/StaticWidget.xml
-source_lang = en
-type = PROPERTIESXML
-file_filter = src/main/resources/i18n/StaticWidget_<lang>.xml
-
 [albina-server.tendency-xml]
 source_file = src/main/resources/i18n/Tendency.xml
 source_lang = en

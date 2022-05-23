@@ -38,6 +38,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.BulletinUpdate;
+import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
@@ -92,11 +93,11 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if no {@code region} was defined
 	 */
-	public Map<Instant, BulletinStatus> getInternalStatus(Instant startDate, Instant endDate, String region)
+	public Map<Instant, BulletinStatus> getInternalStatus(Instant startDate, Instant endDate, Region region)
 			throws AlbinaException {
 		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
 
-		if (region == null || region.isEmpty())
+		if (region == null)
 			throw new AlbinaException("No region defined!");
 
 		Collection<AvalancheReport> reports = getInternalReports(startDate, endDate, region);
@@ -120,7 +121,7 @@ public class AvalancheReportController {
 	 * @return the actual status of the bulletins of this day or null if no report
 	 *         was found
 	 */
-	public BulletinStatus getInternalStatusForDay(Instant date, String region) {
+	public BulletinStatus getInternalStatusForDay(Instant date, Region region) {
 		AvalancheReport report = getInternalReport(date, region);
 		if (report != null)
 			return report.getStatus();
@@ -145,11 +146,11 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if no region was defined
 	 */
-	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, String region)
+	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, Region region)
 			throws AlbinaException {
 		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
 
-		if (region == null || region.isEmpty())
+		if (region == null)
 			throw new AlbinaException("No region defined!");
 
 		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
@@ -176,14 +177,14 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if no region was defined
 	 */
-	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, List<String> regions)
+	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, List<Region> regions)
 			throws AlbinaException {
 		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
 
 		if (regions == null || regions.isEmpty())
 			throw new AlbinaException("No region defined!");
 
-		for (String region : regions) {
+		for (Region region : regions) {
 			Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
 			for (AvalancheReport avalancheReport : reports) {
 				if (result.containsKey(avalancheReport.getDate().toInstant())) {
@@ -212,7 +213,7 @@ public class AvalancheReportController {
 	 *         bulletins of this day if it is {@code republished} or
 	 *         {@code published}
 	 */
-	public Map<Instant, AvalancheReport> getPublicationStatus(Instant startDate, Instant endDate, String region) {
+	public Map<Instant, AvalancheReport> getPublicationStatus(Instant startDate, Instant endDate, Region region) {
 		Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
 
 		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
@@ -237,10 +238,10 @@ public class AvalancheReportController {
 	 * @return all public reports for a specific time period and {@code region}
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<AvalancheReport> getPublicReports(Instant startDate, Instant endDate, String region) {
+	public Collection<AvalancheReport> getPublicReports(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-			if (!Strings.isNullOrEmpty(region)) {
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
 						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 						.setParameter("region", region).getResultList();
@@ -269,10 +270,10 @@ public class AvalancheReportController {
 	 *         null if not report was found
 	 */
 	@SuppressWarnings("unchecked")
-	private AvalancheReport getPublicReport(Instant date, String region) {
+	private AvalancheReport getPublicReport(Instant date, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-			if (!Strings.isNullOrEmpty(region)) {
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 						.setParameter("region", region).getResultList();
 
@@ -334,12 +335,12 @@ public class AvalancheReportController {
 	 * @return all most recent reports for a specific time period and {@code region}
 	 */
 	@SuppressWarnings("unchecked")
-	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, String region) {
+	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
-	
-			if (!Strings.isNullOrEmpty(region)) {
+
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
 						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 						.setParameter("region", region).getResultList();
@@ -369,12 +370,12 @@ public class AvalancheReportController {
 	 *         or null if no report was found
 	 */
 	@SuppressWarnings("unchecked")
-	public AvalancheReport getInternalReport(Instant date, String region) {
+	public AvalancheReport getInternalReport(Instant date, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport result = null;
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
-			if (!Strings.isNullOrEmpty(region)) {
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 						.setParameter("region", region).getResultList();
 			}
@@ -410,7 +411,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if more than one report was found for the given day
 	 */
-	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, String region, User user)
+	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user)
 			throws AlbinaException {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			BulletinUpdate bulletinUpdate = null;
@@ -456,7 +457,7 @@ public class AvalancheReportController {
 					.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region, false).toString());
 
 			entityManager.persist(avalancheReport);
-			bulletinUpdate = new BulletinUpdate(region, date, avalancheReport.getStatus());
+			bulletinUpdate = new BulletinUpdate(region.getId(), date, avalancheReport.getStatus());
 
 			if (bulletinUpdate != null) {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
@@ -483,7 +484,7 @@ public class AvalancheReportController {
 	 * @throws HibernateException
 	 *             if the report can not be loaded from the DB
 	 */
-	public String changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, String region, User user) {
+	public String changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, Region region, User user) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport latestReport = getInternalReport(startDate, region);
 			if (latestReport != null) {
@@ -493,6 +494,7 @@ public class AvalancheReportController {
 				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 				avalancheReport.setRegion(region);
 				avalancheReport.setStatus(latestReport.getStatus());
+				avalancheReport.setMediaFileUploaded(latestReport.isMediaFileUploaded());
 
 				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region, false).toString());
 				entityManager.persist(avalancheReport);
@@ -501,37 +503,6 @@ public class AvalancheReportController {
 				throw new HibernateException("Report error!");
 			}
 		});
-	}
-
-	/**
-	 * Change status of reports with a given validity time and region to
-	 * <code>published</code> (if the previous status was <code>submitted</code>) or
-	 * <code>republished</code> (if the previous status was
-	 * <code>resubmitted</code>) and set the json string of the bulletins. If there
-	 * was not report a new report with status <code>missing</code> is created.
-	 *
-	 * @param bulletins
-	 *            the bulletins which are affected by the publication
-	 * @param startDate
-	 *            the start date of the time period
-	 * @param regions
-	 *            the region that should be published
-	 * @param user
-	 *            the user who publishes the report
-	 * @param publicationDate
-	 *            the timestamp when the report was published
-	 * @return a list of the ids of the published reports
-	 * @throws AlbinaException
-	 *             if more than one report was found
-	 */
-	public List<String> publishReport(Collection<AvalancheBulletin> bulletins, Instant startDate, List<String> regions,
-			User user, Instant publicationDate) throws AlbinaException {
-		List<String> avalancheReportIds = new ArrayList<String>();
-		for (String region : regions) {
-			String avalancheReportId = publishReport(bulletins, startDate, region, user, publicationDate);
-			avalancheReportIds.add(avalancheReportId);
-		}
-		return avalancheReportIds;
 	}
 
 	/**
@@ -555,7 +526,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if more than one report was found
 	 */
-	public String publishReport(Collection<AvalancheBulletin> bulletins, Instant startDate, String region, User user,
+	public String publishReport(Collection<AvalancheBulletin> bulletins, Instant startDate, Region region, User user,
 			Instant publicationDate) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport report = getInternalReport(startDate, region);
@@ -570,6 +541,7 @@ public class AvalancheReportController {
 			if (report == null) {
 				avalancheReport.setStatus(BulletinStatus.missing);
 			} else {
+				avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
 				switch (report.getStatus()) {
 				case missing:
 					logger.warn("Bulletins have to be created first!");
@@ -603,7 +575,7 @@ public class AvalancheReportController {
 			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
 
 			entityManager.persist(avalancheReport);
-			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
+			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
 
 			if (bulletinUpdate != null) {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
@@ -629,7 +601,7 @@ public class AvalancheReportController {
 	 * @param user
 	 *            the user who submits the report
 	 */
-	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, String region, User user) {
+	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, User user) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport report = getInternalReport(startDate, region);
 			BulletinUpdate bulletinUpdate = null;
@@ -642,6 +614,7 @@ public class AvalancheReportController {
 			if (report == null) {
 				avalancheReport.setStatus(BulletinStatus.missing);
 			} else {
+				avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
 				switch (report.getStatus()) {
 				case missing:
 					logger.warn("Bulletins have to be created first!");
@@ -673,7 +646,7 @@ public class AvalancheReportController {
 			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
 
 			entityManager.persist(avalancheReport);
-			bulletinUpdate = new BulletinUpdate(region, startDate, avalancheReport.getStatus());
+			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
 
 			if (bulletinUpdate != null) {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
@@ -695,13 +668,13 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if the report could not be loaded from the DB
 	 */
-	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, List<String> regions)
+	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, List<Region> regions)
 			throws AlbinaException {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
 		Map<String, AvalancheBulletin> tmpMap = new HashMap<String, AvalancheBulletin>();
 
-		for (String region : regions) {
+		for (Region region : regions) {
 			// get bulletins for this region
 			List<AvalancheBulletin> publishedBulletinsForRegion = getPublishedBulletinsForRegion(date, region);
 			for (AvalancheBulletin bulletin : publishedBulletinsForRegion) {
@@ -756,10 +729,10 @@ public class AvalancheReportController {
 	 * @return id of reports for a specific time period and regions with status
 	 *         {@code published} or {@code republished}
 	 */
-	public List<String> getPublishedReportIds(Instant date, List<String> regions) {
+	public List<String> getPublishedReportIds(Instant date, List<Region> regions) {
 		List<String> ids = new ArrayList<String>();
 
-		for (String region : regions) {
+		for (Region region : regions) {
 			AvalancheReport report = getPublicReport(date, region);
 			if (report.getStatus() == BulletinStatus.published || report.getStatus() == BulletinStatus.republished)
 				ids.add(report.getId());
@@ -779,7 +752,7 @@ public class AvalancheReportController {
 	 *            the region of interest
 	 * @return all published bulletins for a specific time period and region
 	 */
-	private List<AvalancheBulletin> getPublishedBulletinsForRegion(Instant date, String region) {
+	private List<AvalancheBulletin> getPublishedBulletinsForRegion(Instant date, Region region) {
 		// get report for date and region
 		AvalancheReport report = getPublicReport(date, region);
 
@@ -790,7 +763,7 @@ public class AvalancheReportController {
 			JSONArray jsonArray = new JSONArray(report.getJsonString());
 			for (Object object : jsonArray)
 				if (object instanceof JSONObject) {
-					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
 					// only add bulletins with published regions
 					if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
 						results.add(bulletin);
@@ -820,146 +793,107 @@ public class AvalancheReportController {
 		return entity;
 	}
 
-	/**
-	 * Set the email flag for all reports with {@code avalancheReportIds},
-	 * indicating that the emails for this reports have been sent.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportEmailFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportEmailFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setEmailCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setEmailCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the pdf flag for all reports with {@code avalancheReportIds}, indicating
-	 * that the pdfs for this reports have been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportPdfFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportPdfFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setPdfCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setPdfCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the html flag for all reports with {@code avalancheReportIds}, indicating
-	 * that the simple html version for this reports have been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportHtmlFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportHtmlFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setHtmlCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setHtmlCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the static widget flag for all reports with {@code avalancheReportIds},
-	 * indicating that the static widgets (images for press) for this reports have
-	 * been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportStaticWidgetFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportMapFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setStaticWidgetCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setMapCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the map flag for all reports with {@code avalancheReportIds}, indicating
-	 * that the maps for this reports have been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportMapFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportCaamlV5Flag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setMapCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setCaamlV5Created(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the caaml flag for all reports with {@code avalancheReportIds},
-	 * indicating that the caaml (XML) files for this reports have been created.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportCaamlFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportCaamlV6Flag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setCaamlCreated(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setCaamlV6Created(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the whatsapp flag for all reports with {@code avalancheReportIds},
-	 * indicating that the messages via whatsapp for this reports have been sent.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportWhatsappFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportJsonFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setWhatsappSent(true);
-			}
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setJsonCreated(true);
 			entityManager.flush();
 			return null;
 		});
 	}
 
-	/**
-	 * Set the telegram flag for all reports with {@code avalancheReportIds},
-	 * indicating that the messages via telegram for this reports have been sent.
-	 *
-	 * @param avalancheReportIds
-	 *            the ids of the reports for whom the flag should be set
-	 */
-	public void setAvalancheReportTelegramFlag(List<String> avalancheReportIds) {
+	public void setAvalancheReportTelegramFlag(String avalancheReportId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			for (String avalancheReportId : avalancheReportIds) {
-				AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-				avalancheReport.setTelegramSent(true);
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setTelegramSent(true);
+			entityManager.flush();
+			return null;
+		});
+	}
+
+	public void setAvalancheReportPushFlag(String avalancheReportId) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
+			avalancheReport.setPushSent(true);
+			entityManager.flush();
+			return null;
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setMediaFileFlag(Instant date, Region region) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			AvalancheReport result = null;
+			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+
+			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+						.setParameter("region", region).getResultList();
 			}
+
+			// select most recent report
+			for (AvalancheReport avalancheReport : reports)
+				if (result == null)
+					result = avalancheReport;
+				else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
+					result = avalancheReport;
+
+			result.setMediaFileUploaded(true);
+			entityManager.persist(result);
 			entityManager.flush();
 			return null;
 		});

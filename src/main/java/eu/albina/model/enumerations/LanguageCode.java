@@ -17,14 +17,14 @@
 package eu.albina.model.enumerations;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import eu.albina.util.GlobalVariables;
+import eu.albina.model.Region;
 import eu.albina.util.XMLResourceBundleControl;
 
 /**
@@ -38,10 +38,6 @@ public enum LanguageCode {
 
 	// LANG
 	public static final Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(de, it, en, fr, es, ca, oc));
-
-	// LANG
-	private static final Set<LanguageCode> SOCIAL_MEDIA = Collections.unmodifiableSet(EnumSet.of(de, it, en));
-	private static final Set<LanguageCode> SOCIAL_MEDIA_ARAN = Collections.unmodifiableSet(EnumSet.of(en, es, ca, oc));
 
 	private final Locale locale;
 
@@ -61,15 +57,18 @@ public enum LanguageCode {
 		return getBundle("i18n.MessagesBundle").getString(key);
 	}
 
+	public String getBundleString(String key, Region region) {
+		try {
+			return getBundleString(key + "." + region.getId());
+		} catch (MissingResourceException e) {
+			return getBundleString(key);
+		}
+	}
+
 	public static LanguageCode fromString(String text) {
 		if (text != null) {
 			return Arrays.stream(LanguageCode.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
-	}
-
-	public static Set<LanguageCode> getSocialMedia(Collection<String> regions) {
-		final boolean isAran = Collections.singletonList(GlobalVariables.codeAran).equals(regions);
-		return isAran ? LanguageCode.SOCIAL_MEDIA_ARAN : LanguageCode.SOCIAL_MEDIA;
 	}
 }

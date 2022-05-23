@@ -19,39 +19,34 @@ package eu.albina.model;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Polygon;
-import org.n52.jackson.datatype.jts.GeometryDeserializer;
-import org.n52.jackson.datatype.jts.GeometrySerializer;
-import org.n52.jackson.datatype.jts.JtsModule;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import eu.albina.model.enumerations.Position;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
-
-import eu.albina.util.GlobalVariables;
 
 /**
  * This class holds all information about one region.
@@ -68,59 +63,265 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ID")
 	private String id;
 
-	@Version
-	@Column(name = "VERSION")
-	private Integer version;
+	@Column(name = "MICRO_REGIONS")
+	private int microRegions;
 
-	@Column(name = "NAME_DE")
-	private String nameDe;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="super_region_sub_region",
+	 joinColumns=@JoinColumn(name="SUPER_REGION_ID"),
+	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
+	)
+	private Set<Region> subRegions;
 
-	@Column(name = "NAME_IT")
-	private String nameIt;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="super_region_sub_region",
+	 joinColumns=@JoinColumn(name="SUB_REGION_ID"),
+	 inverseJoinColumns=@JoinColumn(name="SUPER_REGION_ID")
+	)
+	private Set<Region> superRegions;
 
-	@Column(name = "NAME_EN")
-	private String nameEn;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="neighbor_regions",
+	 joinColumns=@JoinColumn(name="REGION_ID"),
+	 inverseJoinColumns=@JoinColumn(name="NEIGHBOR_REGION_ID")
+	)
+	private Set<Region> neighborRegions;
 
-	@JsonSerialize(using = GeometrySerializer.class)
-	@JsonDeserialize(contentUsing = GeometryDeserializer.class)
-	@Column(name = "POLYGON")
-	private Polygon polygon;
+	@Column(name = "PUBLISH_BULLETINS")
+	private boolean publishBulletins;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "PARENTREGION_ID")
-	private Region parentRegion;
+	@Column(name = "PUBLISH_BLOGS")
+	private boolean publishBlogs;
 
-	@OneToMany(mappedBy = "parentRegion", fetch = FetchType.EAGER)
-	private Set<Region> subregions;
+	@Column(name = "CREATE_CAAML_V5")
+	private boolean createCaamlV5;
 
-	@ManyToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "AGGREGATEDREGION_ID")
-	private Region aggregatedRegion;
+	@Column(name = "CREATE_CAAML_V6")
+	private boolean createCaamlV6;
+
+	@Column(name = "CREATE_JSON")
+	private boolean createJson;
+
+	@Column(name = "CREATE_MAPS")
+	private boolean createMaps;
+
+	@Column(name = "CREATE_PDF")
+	private boolean createPdf;
+
+	@Column(name = "CREATE_SIMPLE_HTML")
+	private boolean createSimpleHtml;
+
+	@Column(name = "SEND_EMAILS")
+	private boolean sendEmails;
+
+	@Column(name = "SEND_TELEGRAM_MESSAGES")
+	private boolean sendTelegramMessages;
+
+	@Column(name = "SEND_PUSH_NOTIFICATIONS")
+	private boolean sendPushNotifications;
+
+	@Column(name = "ENABLE_MEDIA_FILE")
+	private boolean enableMediaFile;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "SERVER_INSTANCE_ID")
+	private ServerInstance serverInstance;
+
+	@Column(name = "PDF_COLOR")
+	private String pdfColor;
+
+	@Column(name = "EMAIL_COLOR")
+	private String emailColor;
+
+	@Column(name = "PDF_MAP_Y_AM_PM")
+	private int pdfMapYAmPm;
+
+	@Column(name = "PDF_MAP_Y_FD")
+	private int pdfMapYFd;
+
+	@Column(name = "PDF_MAP_WIDTH_AM_PM")
+	private int pdfMapWidthAmPm;
+
+	@Column(name = "PDF_MAP_WIDTH_FD")
+	private int pdfMapWidthFd;
+
+	@Column(name = "PDF_MAP_HEIGHT")
+	private int pdfMapHeight;
+
+	@Column(name = "PDF_FOOTER_LOGO")
+	private boolean pdfFooterLogo;
+
+	@Column(name = "PDF_FOOTER_LOGO_COLOR_PATH")
+	private String pdfFooterLogoColorPath;
+
+	@Column(name = "PDF_FOOTER_LOGO_BW_PATH")
+	private String pdfFooterLogoBwPath;
+
+	@Column(name = "MAP_X_MAX")
+	private int mapXmax;
+
+	@Column(name = "MAP_X_MIN")
+	private int mapXmin;
+
+	@Column(name = "MAP_Y_MAX")
+	private int mapYmax;
+
+	@Column(name = "MAP_Y_MIN")
+	private int mapYmin;
+
+	@Column(name = "SIMPLE_HTML_TEMPLATE_NAME")
+	private String simpleHtmlTemplateName;
+
+	@Column(name = "GEO_DATA_DIRECTORY")
+	private String geoDataDirectory;
+
+	@Column(name = "MAP_LOGO_COLOR_PATH")
+	private String mapLogoColorPath;
+
+	@Column(name = "MAP_LOGO_BW_PATH")
+	private String mapLogoBwPath;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "MAP_LOGO_POSITION")
+	private Position mapLogoPosition;
+
+	@Column(name = "MAP_CENTER_LAT")
+	private double mapCenterLat;
+
+	@Column(name = "MAP_CENTER_LNG")
+	private double mapCenterLng;
+
+	@Column(name = "IMAGE_COLORBAR_COLOR_PATH")
+	private String imageColorbarColorPath;
+
+	@Column(name = "IMAGE_COLORBAR_BW_PATH")
+	private String imageColorbarBwPath;
 
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
 	public Region() {
-		subregions = new LinkedHashSet<>();
+		this.superRegions = new HashSet<Region>();
+		this.subRegions = new HashSet<Region>();
+		this.neighborRegions = new HashSet<Region>();
 	}
 
-	public Region(JSONObject object) {
-		this();
-		if (!"Feature".equals(object.getString("type"))) {
-			throw new IllegalArgumentException("Expecting type=Feature");
-		}
-		final JSONObject properties = object.getJSONObject("properties");
-		nameDe = properties.getString("nameDe");
-		nameIt = properties.getString("nameIt");
-		nameEn = properties.getString("nameEn");
-		id = properties.getString("id");
+	public Region(String id) {
+		super();
+		this.id = id;
+	}
 
-		try {
-			polygon = new ObjectMapper().registerModule(new JtsModule())
-					.readValue(object.getJSONObject("geometry").toString(), Polygon.class);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
+	public Region(String id, String geoDataDirectory, int mapXmax, int mapXmin, int mapYmax, int mapYmin) {
+		this.id = id;
+		this.geoDataDirectory = geoDataDirectory;
+		this.mapXmax = mapXmax;
+		this.mapXmin = mapXmin;
+		this.mapYmax = mapYmax;
+		this.mapYmin = mapYmin;
+	}
+
+	public Region(JSONObject json, Function<String, Region> regionFunction) {
+		this();
+		if (json.has("id") && !json.isNull("id"))
+			this.id = json.getString("id");
+		if (json.has("microRegions") && !json.isNull("microRegions"))
+			this.microRegions = json.getInt("microRegions");
+		if (json.has("subRegions")) {
+			JSONArray subRegions = json.getJSONArray("subRegions");
+			for (Object entry : subRegions) {
+				Region region = regionFunction.apply((String) entry);
+				if (region != null)
+					this.subRegions.add(region);
+			}
 		}
+		if (json.has("superRegions")) {
+			JSONArray superRegions = json.getJSONArray("superRegions");
+			for (Object entry : superRegions) {
+				Region region = regionFunction.apply((String) entry);
+				if (region != null)
+					this.superRegions.add(region);
+			}
+		}
+		if (json.has("neighborRegions")) {
+			JSONArray neighborRegions = json.getJSONArray("neighborRegions");
+			for (Object entry : neighborRegions) {
+				Region region = regionFunction.apply((String) entry);
+				if (region != null)
+					this.neighborRegions.add(region);
+			}
+		}
+		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
+			this.publishBulletins = json.getBoolean("publishBulletins");
+		if (json.has("publishBlogs") && !json.isNull("publishBlogs"))
+			this.publishBlogs = json.getBoolean("publishBlogs");
+		if (json.has("createCaamlV5") && !json.isNull("createCaamlV5"))
+			this.createCaamlV5 = json.getBoolean("createCaamlV5");
+		if (json.has("createCaamlV6") && !json.isNull("createCaamlV6"))
+			this.createCaamlV6 = json.getBoolean("createCaamlV6");
+		if (json.has("createJson") && !json.isNull("createJson"))
+			this.createJson = json.getBoolean("createJson");
+		if (json.has("createMaps") && !json.isNull("createMaps"))
+			this.createMaps = json.getBoolean("createMaps");
+		if (json.has("createPdf") && !json.isNull("createPdf"))
+			this.createPdf = json.getBoolean("createPdf");
+		if (json.has("createSimpleHtml") && !json.isNull("createSimpleHtml"))
+			this.createSimpleHtml = json.getBoolean("createSimpleHtml");
+		if (json.has("sendEmails") && !json.isNull("sendEmails"))
+			this.sendEmails = json.getBoolean("sendEmails");
+		if (json.has("sendTelegramMessages") && !json.isNull("sendTelegramMessages"))
+			this.sendTelegramMessages = json.getBoolean("sendTelegramMessages");
+		if (json.has("sendPushNotifications") && !json.isNull("sendPushNotifications"))
+			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
+		if (json.has("enableMediaFile") && !json.isNull("enableMediaFile"))
+			this.enableMediaFile = json.getBoolean("enableMediaFile");
+		if (json.has("serverInstance") && !json.isNull("serverInstance"))
+			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"), regionFunction);
+		if (json.has("pdfColor") && !json.isNull("pdfColor"))
+			this.pdfColor = json.getString("pdfColor");
+		if (json.has("emailColor") && !json.isNull("emailColor"))
+			this.emailColor = json.getString("emailColor");
+		if (json.has("pdfMapYAmPm") && !json.isNull("pdfMapYAmPm"))
+			this.pdfMapYAmPm = json.getInt("pdfMapYAmPm");
+		if (json.has("pdfMapYFd") && !json.isNull("pdfMapYFd"))
+			this.pdfMapYFd = json.getInt("pdfMapYFd");
+		if (json.has("pdfMapWidthAmPm") && !json.isNull("pdfMapWidthAmPm"))
+			this.pdfMapWidthAmPm = json.getInt("pdfMapWidthAmPm");
+		if (json.has("pdfMapWidthFd") && !json.isNull("pdfMapWidthFd"))
+			this.pdfMapWidthFd = json.getInt("pdfMapWidthFd");
+		if (json.has("pdfMapHeight") && !json.isNull("pdfMapHeight"))
+			this.pdfMapHeight = json.getInt("pdfMapHeight");
+		if (json.has("pdfFooterLogo") && !json.isNull("pdfFooterLogo"))
+			this.pdfFooterLogo = json.getBoolean("pdfFooterLogo");
+		if (json.has("pdfFooterLogoColorPath") && !json.isNull("pdfFooterLogoColorPath"))
+			this.pdfFooterLogoColorPath = json.getString("pdfFooterLogoColorPath");
+		if (json.has("pdfFooterLogoBwPath") && !json.isNull("pdfFooterLogoBwPath"))
+			this.pdfFooterLogoBwPath = json.getString("pdfFooterLogoBwPath");
+		if (json.has("mapXmax") && !json.isNull("mapXmax"))
+			this.mapXmax = json.getInt("mapXmax");
+		if (json.has("mapXmin") && !json.isNull("mapXmin"))
+			this.mapXmin = json.getInt("mapXmin");
+		if (json.has("mapYmax") && !json.isNull("mapYmax"))
+			this.mapYmax = json.getInt("mapYmax");
+		if (json.has("mapYmin") && !json.isNull("mapYmin"))
+			this.mapYmin = json.getInt("mapYmin");
+		if (json.has("simpleHtmlTemplateName") && !json.isNull("simpleHtmlTemplateName"))
+			this.simpleHtmlTemplateName = json.getString("simpleHtmlTemplateName");
+		if (json.has("geoDataDirectory") && !json.isNull("geoDataDirectory"))
+			this.geoDataDirectory = json.getString("geoDataDirectory");
+		if (json.has("mapLogoColorPath") && !json.isNull("mapLogoColorPath"))
+			this.mapLogoColorPath = json.getString("mapLogoColorPath");
+		if (json.has("mapLogoBwPath") && !json.isNull("mapLogoBwPath"))
+			this.mapLogoBwPath = json.getString("mapLogoBwPath");
+		if (json.has("mapLogoPosition"))
+			this.mapLogoPosition = Position.fromString(json.getString("mapLogoPosition"));
+		if (json.has("mapCenterLat"))
+			this.mapCenterLat = json.getDouble("mapCenterLat");
+		if (json.has("mapCenterLng"))
+			this.mapCenterLng = json.getDouble("mapCenterLng");
+		if (json.has("imageColorbarColorPath") && !json.isNull("imageColorbarColorPath"))
+			this.imageColorbarColorPath = json.getString("imageColorbarColorPath");
+		if (json.has("imageColorbarBwPath") && !json.isNull("imageColorbarBwPath"))
+			this.imageColorbarBwPath = json.getString("imageColorbarBwPath");
 	}
 
 	public String getId() {
@@ -131,140 +332,420 @@ public class Region implements AvalancheInformationObject {
 		this.id = id;
 	}
 
-	public Integer getVersion() {
-		return version;
+	public int getMicroRegions() {
+		return microRegions;
 	}
 
-	public void setVersion(Integer version) {
-		this.version = version;
+	public void setMicroRegions(int microRegions) {
+		this.microRegions = microRegions;
 	}
 
-	public String getNameDe() {
-		return nameDe;
+	public Set<Region> getSubRegions() {
+		return subRegions;
+	}
+	
+	public void setSubRegions(Set<Region> subRegions) {
+		this.subRegions = subRegions;
+	}
+	
+	public void addSubRegion(Region subRegion) {
+		this.subRegions.add(subRegion);
+	}
+	
+	public Set<Region> getSuperRegions() {
+		return superRegions;
 	}
 
-	public void setNameDe(String name) {
-		this.nameDe = name;
+	public void setSuperRegions(Set<Region> superRegions) {
+		this.superRegions = superRegions;
 	}
 
-	public String getNameIt() {
-		return nameIt;
+	public void addSuperRegion(Region superRegion) {
+		this.superRegions.add(superRegion);
 	}
 
-	public void setNameIt(String name) {
-		this.nameIt = name;
+	public Set<Region> getNeighborRegions() {
+		return neighborRegions;
 	}
 
-	public String getNameEn() {
-		return nameEn;
+	public void setNeighborRegions(Set<Region> neighborRegions) {
+		this.neighborRegions = neighborRegions;
 	}
 
-	public void setNameEn(String name) {
-		this.nameEn = name;
+	public void addNeighborRegion(Region neighborRegion) {
+		this.neighborRegions.add(neighborRegion);
 	}
 
-	public Polygon getPolygon() {
-		return polygon;
+	public boolean isPublishBulletins() {
+		return publishBulletins;
 	}
 
-	public void setPolygon(Polygon polygon) {
-		this.polygon = polygon;
+	public void setPublishBulletins(boolean publishBulletins) {
+		this.publishBulletins = publishBulletins;
 	}
 
-	public Region getParentRegion() {
-		return parentRegion;
+	public boolean isPublishBlogs() {
+		return publishBlogs;
 	}
 
-	public void setParentRegion(Region parentRegion) {
-		this.parentRegion = parentRegion;
+	public void setPublishBlogs(boolean publishBlogs) {
+		this.publishBlogs = publishBlogs;
 	}
 
-	public Region getAggregatedRegion() {
-		return aggregatedRegion;
+	public boolean isCreateCaamlV5() {
+		return createCaamlV5;
 	}
 
-	public void setAggregatedRegion(Region aggregatedRegion) {
-		this.aggregatedRegion = aggregatedRegion;
+	public void setCreateCaamlV5(boolean createCaamlV5) {
+		this.createCaamlV5 = createCaamlV5;
 	}
 
-	public Set<Region> getSubregions() {
-		return subregions;
+	public boolean isCreateCaamlV6() {
+		return createCaamlV6;
 	}
 
-	public void setSubregions(Set<Region> subregions) {
-		this.subregions = subregions;
+	public void setCreateCaamlV6(boolean createCaamlV6) {
+		this.createCaamlV6 = createCaamlV6;
+	}
+
+	public boolean isCreateJson() {
+		return createJson;
+	}
+
+	public void setCreateJson(boolean createJson) {
+		this.createJson = createJson;
+	}
+
+	public boolean isCreateMaps() {
+		return createMaps;
+	}
+
+	public void setCreateMaps(boolean createMaps) {
+		this.createMaps = createMaps;
+	}
+
+	public boolean isCreatePdf() {
+		return createPdf;
+	}
+
+	public void setCreatePdf(boolean createPdf) {
+		this.createPdf = createPdf;
+	}
+
+	public boolean isCreateSimpleHtml() {
+		return createSimpleHtml;
+	}
+
+	public void setCreateSimpleHtml(boolean createSimpleHtml) {
+		this.createSimpleHtml = createSimpleHtml;
+	}
+
+	public boolean isSendEmails() {
+		return sendEmails;
+	}
+
+	public void setSendEmails(boolean sendEmails) {
+		this.sendEmails = sendEmails;
+	}
+
+	public boolean isSendTelegramMessages() {
+		return sendTelegramMessages;
+	}
+
+	public void setSendTelegramMessages(boolean sendTelegramMessages) {
+		this.sendTelegramMessages = sendTelegramMessages;
+	}
+
+	public boolean isSendPushNotifications() {
+		return sendPushNotifications;
+	}
+
+	public void setSendPushNotifications(boolean sendPushNotifications) {
+		this.sendPushNotifications = sendPushNotifications;
+	}
+
+	public boolean isEnableMediaFile() {
+		return enableMediaFile;
+	}
+
+	public void setEnableMediaFile(boolean enableMediaFile) {
+		this.enableMediaFile = enableMediaFile;
+	}
+
+	public ServerInstance getServerInstance() {
+		return serverInstance;
+	}
+
+	public void setServerInstance(ServerInstance serverInstance) {
+		this.serverInstance = serverInstance;
+	}
+
+	public String getPdfColor() {
+		return pdfColor;
+	}
+
+	public void setPdfColor(String pdfColor) {
+		this.pdfColor = pdfColor;
+	}
+
+	public String getEmailColor() {
+		return emailColor;
+	}
+
+	public void setEmailColor(String emailColor) {
+		this.emailColor = emailColor;
+	}
+
+	public int getPdfMapYAmPm() {
+		return pdfMapYAmPm;
+	}
+
+	public void setPdfMapYAmPm(int pdfMapYAmPm) {
+		this.pdfMapYAmPm = pdfMapYAmPm;
+	}
+
+	public int getPdfMapYFd() {
+		return pdfMapYFd;
+	}
+
+	public void setPdfMapYFd(int pdfMapYFd) {
+		this.pdfMapYFd = pdfMapYFd;
+	}
+
+	public int getPdfMapWidthAmPm() {
+		return pdfMapWidthAmPm;
+	}
+
+	public void setPdfMapWidthAmPm(int pdfMapWidthAmPm) {
+		this.pdfMapWidthAmPm = pdfMapWidthAmPm;
+	}
+
+	public int getPdfMapWidthFd() {
+		return pdfMapWidthFd;
+	}
+
+	public void setPdfMapWidthFd(int pdfMapWidthFd) {
+		this.pdfMapWidthFd = pdfMapWidthFd;
+	}
+
+	public int getPdfMapHeight() {
+		return pdfMapHeight;
+	}
+
+	public void setPdfMapHeight(int pdfMapHeight) {
+		this.pdfMapHeight = pdfMapHeight;
+	}
+
+	public boolean isPdfFooterLogo() {
+		return pdfFooterLogo;
+	}
+
+	public void setPdfFooterLogo(boolean pdfFooterLogo) {
+		this.pdfFooterLogo = pdfFooterLogo;
+	}
+
+	public String getPdfFooterLogoColorPath() {
+		return pdfFooterLogoColorPath;
+	}
+
+	public void setPdfFooterLogoColorPath(String pdfFooterLogoColorPath) {
+		this.pdfFooterLogoColorPath = pdfFooterLogoColorPath;
+	}
+
+	public String getPdfFooterLogoBwPath() {
+		return pdfFooterLogoBwPath;
+	}
+
+	public void setPdfFooterLogoBwPath(String pdfFooterLogoBwPath) {
+		this.pdfFooterLogoBwPath = pdfFooterLogoBwPath;
+	}
+
+	public int getMapXmax() {
+		return mapXmax;
+	}
+
+	public void setMapXmax(int mapXmax) {
+		this.mapXmax = mapXmax;
+	}
+
+	public int getMapXmin() {
+		return mapXmin;
+	}
+
+	public void setMapXmin(int mapXmin) {
+		this.mapXmin = mapXmin;
+	}
+
+	public int getMapYmax() {
+		return mapYmax;
+	}
+
+	public void setMapYmax(int mapYmax) {
+		this.mapYmax = mapYmax;
+	}
+
+	public int getMapYmin() {
+		return mapYmin;
+	}
+
+	public void setMapYmin(int mapYmin) {
+		this.mapYmin = mapYmin;
+	}
+
+	public String getSimpleHtmlTemplateName() {
+		return simpleHtmlTemplateName;
+	}
+
+	public void setSimpleHtmlTemplateName(String simpleHtmlTemplateName) {
+		this.simpleHtmlTemplateName = simpleHtmlTemplateName;
+	}
+
+	public String getGeoDataDirectory() {
+		return geoDataDirectory;
+	}
+
+	public void setGeoDataDirectory(String geoDataDirectory) {
+		this.geoDataDirectory = geoDataDirectory;
+	}
+
+	public String getMapLogoColorPath() {
+		return mapLogoColorPath;
+	}
+
+	public void setMapLogoColorPath(String mapLogoColorPath) {
+		this.mapLogoColorPath = mapLogoColorPath;
+	}
+
+	public String getMapLogoBwPath() {
+		return mapLogoBwPath;
+	}
+
+	public void setMapLogoBwPath(String mapLogoBwPath) {
+		this.mapLogoBwPath = mapLogoBwPath;
+	}
+
+	public Position getLogoPosition() {
+		return mapLogoPosition;
+	}
+
+	public void setLogoPosition(Position logoPosition) {
+		this.mapLogoPosition = logoPosition;
+	}
+
+	public double getMapCenterLat() {
+		return mapCenterLat;
+	}
+
+	public void setMapCenterLat(double CenterLat) {
+		this.mapCenterLat = CenterLat;
+	}
+
+	public double getMapCenterLng() {
+		return mapCenterLng;
+	}
+
+	public void setMapCenterLng(double CenterLng) {
+		this.mapCenterLng = CenterLng;
+	}
+
+	public String getImageColorbarColorPath() {
+		return imageColorbarColorPath;
+	}
+
+	public void setImageColorbarColorPath(String imageColorbarColorPath) {
+		this.imageColorbarColorPath = imageColorbarColorPath;
+	}
+
+	public String getImageColorbarBwPath() {
+		return imageColorbarBwPath;
+	}
+
+	public void setImageColorbarBwPath(String imageColorbarBwPath) {
+		this.imageColorbarBwPath = imageColorbarBwPath;
 	}
 
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
-		Element regionNameDe = doc.createElement("nameDe");
-		regionNameDe.appendChild(doc.createTextNode(nameDe));
-		Element regionNameIt = doc.createElement("nameIt");
-		regionNameIt.appendChild(doc.createTextNode(nameIt));
-		Element regionNameEn = doc.createElement("nameEn");
-		regionNameEn.appendChild(doc.createTextNode(nameEn));
-		region.appendChild(regionNameDe);
 		Element regionSubType = doc.createElement("regionSubType");
 		region.appendChild(regionSubType);
-		Element outline = doc.createElement("outline");
-		Element polygon = doc.createElement("gml:Polygon");
-		polygon.setAttribute("gml:id", getId());
-		polygon.setAttribute("srsDimension", "2");
-		polygon.setAttribute("srsName", GlobalVariables.referenceSystemUrn);
-		Element exterior = doc.createElement("gml:exterior");
-		Element linearRing = doc.createElement("gml:LinearRing");
-		Element posList = doc.createElement("gml:posList");
-
-		if (this.polygon != null && this.polygon.getCoordinates() != null) {
-			StringBuilder sb = new StringBuilder();
-			for (Coordinate coordinate : this.polygon.getCoordinates())
-				sb.append(coordinate.x + " " + coordinate.y + " ");
-			posList.appendChild(doc.createTextNode(sb.toString()));
-		}
-
-		linearRing.appendChild(posList);
-		exterior.appendChild(linearRing);
-		polygon.appendChild(exterior);
-		outline.appendChild(polygon);
-		region.appendChild(outline);
 		return region;
+	}
+
+	public boolean affects(String regionId) {
+		if (regionId.startsWith(this.getId()))
+			return true;
+
+		return subRegions.stream().anyMatch(subRegion -> regionId.startsWith(subRegion.getId()));
 	}
 
 	@Override
 	public JSONObject toJSON() {
-		JSONObject feature = new JSONObject();
+		JSONObject json = new JSONObject();
 
-		feature.put("type", "Feature");
-		JSONObject featureProperties = new JSONObject();
-		featureProperties.put("nameDe", nameDe);
-		featureProperties.put("nameIt", nameIt);
-		featureProperties.put("nameEn", nameEn);
-		featureProperties.put("id", getId());
-		if (getParentRegion() != null)
-			featureProperties.put("parentRegion", getParentRegion().getId());
-		if (getAggregatedRegion() != null)
-			featureProperties.put("aggregatedRegion", getAggregatedRegion().getId());
-		feature.put("properties", featureProperties);
-
-		JSONObject geometry = new JSONObject();
-		geometry.put("type", "Polygon");
-		JSONArray coordinates = new JSONArray();
-		JSONArray innerCoordinates = new JSONArray();
-
-		if (polygon != null && polygon.getCoordinates() != null) {
-			for (Coordinate coordinate : polygon.getCoordinates()) {
-				JSONArray entry = new JSONArray();
-				entry.put(coordinate.x);
-				entry.put(coordinate.y);
-				innerCoordinates.put(entry);
+		json.put("id", getId());
+		json.put("microRegions", getMicroRegions());
+		if (subRegions != null && subRegions.size() > 0) {
+			JSONArray jsonSubRegions = new JSONArray();
+			for (Region subRegion : subRegions) {
+				jsonSubRegions.put(subRegion.getId());
 			}
+			json.put("subRegions", jsonSubRegions);
 		}
+		if (superRegions != null && superRegions.size() > 0) {
+			JSONArray jsonSuperRegions = new JSONArray();
+			for (Region superRegion : superRegions) {
+				jsonSuperRegions.put(superRegion.getId());
+			}
+			json.put("superRegions", jsonSuperRegions);
+		}
+		if (neighborRegions != null && neighborRegions.size() > 0) {
+			JSONArray jsonNeighborRegions = new JSONArray();
+			for (Region neighborRegion : neighborRegions) {
+				jsonNeighborRegions.put(neighborRegion.getId());
+			}
+			json.put("neighborRegions", jsonNeighborRegions);
+		}
+		json.put("publishBulletins", isPublishBulletins());
+		json.put("publishBlogs", isPublishBlogs());
+		json.put("createCaamlV5", isCreateCaamlV5());
+		json.put("createCaamlV6", isCreateCaamlV6());
+		json.put("createJson", isCreateJson());
+		json.put("createMaps", isCreateMaps());
+		json.put("createPdf", isCreatePdf());
+		json.put("createSimpleHtml", isCreateSimpleHtml());
+		json.put("sendEmails", isSendEmails());
+		json.put("sendTelegramMessages", isSendTelegramMessages());
+		json.put("sendPushNotifications", isSendPushNotifications());
+		json.put("enableMediaFile", isEnableMediaFile());
+		if (getServerInstance() != null) {
+			json.put("serverInstance", getServerInstance().toJSON());
+		}
+		json.put("pdfColor", getPdfColor());
+		json.put("emailColor", getEmailColor());
+		json.put("pdfMapYAmPm", getPdfMapYAmPm());
+		json.put("pdfMapYFd", getPdfMapYFd());
+		json.put("pdfMapWidthAmPm", getPdfMapWidthAmPm());
+		json.put("pdfMapWidthFd", getPdfMapWidthFd());
+		json.put("pdfMapHeight", getPdfMapHeight());
+		json.put("pdfFooterLogo", isPdfFooterLogo());
+		json.put("pdfFooterLogoColorPath", getPdfFooterLogoColorPath());
+		json.put("pdfFooterLogoBwPath", getPdfFooterLogoBwPath());
+		json.put("mapXmax", getMapXmax());
+		json.put("mapXmin", getMapXmin());
+		json.put("mapYmax", getMapYmax());
+		json.put("mapYmin", getMapYmin());
+		json.put("simpleHtmlTemplateName", getSimpleHtmlTemplateName());
+		json.put("geoDataDirectory", getGeoDataDirectory());
+		json.put("mapLogoColorPath", getMapLogoColorPath());
+		json.put("mapLogoBwPath", getMapLogoBwPath());
+		json.put("mapLogoPosition", getLogoPosition().toString());
+		json.put("mapCenterLat", getMapCenterLat());
+		json.put("mapCenterLng", getMapCenterLng());
+		json.put("imageColorbarColorPath", getImageColorbarColorPath());
+		json.put("imageColorbarBwPath", getImageColorbarBwPath());
 
-		coordinates.put(innerCoordinates);
-		geometry.put("coordinates", coordinates);
-		feature.put("geometry", geometry);
-		return feature;
+		return json;
 	}
 
 	@Override
@@ -274,19 +755,16 @@ public class Region implements AvalancheInformationObject {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Region region = (Region) o;
-		return Objects.equals(id, region.id) && Objects.equals(version, region.version)
-				&& Objects.equals(nameDe, region.nameDe) && Objects.equals(nameIt, region.nameIt)
-				&& Objects.equals(nameEn, region.nameEn) && Objects.equals(polygon, region.polygon);
+		return Objects.equals(id, region.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, version, nameDe, nameIt, nameEn, polygon);
+		return Objects.hash(id);
 	}
 
-	public static Region readRegion(final URL resource) throws IOException {
-		final String string = Resources.toString(resource, StandardCharsets.UTF_8);
-		return new Region(new JSONObject(string));
-	}
-
+    public static Region readRegion(URL resource) throws IOException {
+		final String validRegionStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
+		return new Region(new JSONObject(validRegionStringFromResource), Region::new);
+    }
 }

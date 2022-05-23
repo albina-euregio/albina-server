@@ -38,6 +38,7 @@ import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.AvalancheSituation;
 import eu.albina.model.MatrixInformation;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
@@ -95,7 +96,7 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, String region,
+	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, Region region,
 			boolean extended, boolean duplicateBulletinForenoon) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			// get latest reports
@@ -113,7 +114,7 @@ public class StatisticsController {
 
 	/**
 	 * Return a CSV string with all bulletin information from {@code startDate}
-	 * until {@code endDate} in {@code lang} for whole EUREGIO.
+	 * until {@code endDate} in {@code lang} for {@code regions}.
 	 *
 	 * @param startDate
 	 *            the start date of the desired time period
@@ -121,6 +122,8 @@ public class StatisticsController {
 	 *            the end date of the desired time period
 	 * @param lang
 	 *            the desired language
+	 * @param regions
+	 * 			  the desired regions
 	 * @param extended
 	 *            add textcat ids, matrix information and author if {@code true}
 	 * @param duplicateBulletinForenoon
@@ -129,11 +132,11 @@ public class StatisticsController {
 	 * @return a CSV string with all bulletin information from {@code startDate}
 	 *         until {@code endDate} in {@code lang}
 	 */
-	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, boolean extended,
+	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, List<Region> regions, boolean extended,
 			boolean duplicateBulletinForenoon) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (String region : GlobalVariables.getPublishRegions()) {
+			for (Region region : regions) {
 				// get latest reports
 				Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
 						endDate, region);
@@ -208,7 +211,7 @@ public class StatisticsController {
 				JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
 				for (Object object : jsonArray) {
 					if (object instanceof JSONObject) {
-						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object);
+						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
 						// only add bulletins with published regions
 						if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
 							bulletins.add(bulletin);

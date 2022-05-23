@@ -27,9 +27,10 @@ import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.model.User;
+import eu.albina.model.UserRegionRoleLink;
 import eu.albina.model.enumerations.Role;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -99,7 +100,7 @@ public class UserController {
 	 *            the username of the desired user
 	 * @return the {@code User} with the specified {@code username}
 	 */
-	public User getUser(String username) throws AlbinaException {
+	public User getUser(String username) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			User user = entityManager.find(User.class, username);
 			if (user == null) {
@@ -151,8 +152,8 @@ public class UserController {
 
 	public JSONArray getRegionsJson() throws AlbinaException {
 		JSONArray jsonResult = new JSONArray();
-		for (String region : GlobalVariables.awsRegions)
-			jsonResult.put(region);
+		for (String regionId : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).map(Region::getId).collect(Collectors.toList()))
+			jsonResult.put(regionId);
 		return jsonResult;
 	}
 
@@ -222,6 +223,18 @@ public class UserController {
 			User user = entityManager.find(User.class, id);
 			entityManager.remove(user);
 			return null;
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean isUserInRegionRole(String userEmail, String regionId, Role role) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Region region = entityManager.find(Region.class, regionId);
+			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks)
+				.setParameter("userEmail", userEmail)
+				.setParameter("region", region)
+				.getResultList();
+			return links.stream().anyMatch(link -> link.getRole().equals(role));
 		});
 	}
 }

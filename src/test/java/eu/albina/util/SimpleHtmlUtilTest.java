@@ -29,42 +29,56 @@ import org.junit.Test;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import freemarker.template.TemplateException;
 
 public class SimpleHtmlUtilTest {
+
+	private ServerInstance serverInstanceEuregio;
+	private ServerInstance serverInstanceAran;
+	private Region regionEuregio;
+	private Region regionAran;
+
 	@Before
 	public void setUp() throws Exception {
-		GlobalVariables.htmlDirectory = "/foo/bar/baz/simple/";
-		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files/";
+		serverInstanceEuregio = new ServerInstance();
+		serverInstanceEuregio.setName("ALBINA-TEST");
+		serverInstanceEuregio.setHtmlDirectory("/mnt/simple_local/");
+		serverInstanceEuregio.setMapsPath("/mnt/albina_files_local/");
+		serverInstanceEuregio.setServerImagesUrl("https://static.avalanche.report/images/");
+		serverInstanceEuregio.setHtmlDirectory("/mnt/simple_local");
+		serverInstanceAran = new ServerInstance();
+		serverInstanceAran.setName("ALBINA-TEST");
+		serverInstanceAran.setHtmlDirectory("/mnt/simple_local/");
+		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
+		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
+		serverInstanceAran.setHtmlDirectory("/mnt/simple_local");
+		regionEuregio = new Region();
+		regionEuregio.setId("EUREGIO");
+		regionEuregio.setSimpleHtmlTemplateName("simple-bulletin.min.html");
+		regionAran = new Region();
+		regionAran.setId("ES-CT-L");
+		regionAran.setSimpleHtmlTemplateName("simple-bulletin.aran.html");
 	}
 
 	@Test
 	public void createSimpleHtmlString() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("2019-01-17.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.de, "").replaceAll("\\s*<", "\n<");
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.de, regionEuregio, serverInstanceEuregio).replaceAll("\\s*<", "\n<");
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
 		Assert.assertEquals(expected.trim(), htmlString.trim());
 	}
 
 	@Test
 	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
-		final String serverImagesUrl = GlobalVariables.serverImagesUrl;
-		try {
-			GlobalVariables.serverImagesUrl = "https://static.lauegi.report/images/";
-			GlobalVariables.serverMapsUrl = "https://static.lauegi.report/albina_files";
-			GlobalVariables.serverWebsiteUrl = "https://www.lauegi.report/";
-			URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
-			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-			String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, GlobalVariables.codeAran);
-			String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
-			Assert.assertEquals(expected.trim(), htmlString.trim());
-		} finally {
-			GlobalVariables.serverImagesUrl = serverImagesUrl;
-			GlobalVariables.serverMapsUrl = "";
-			GlobalVariables.serverWebsiteUrl = "";
-		}
+		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, regionAran, serverInstanceAran);
+		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
+		Assert.assertEquals(expected.trim(), htmlString.trim());
 	}
 }
 

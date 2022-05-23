@@ -16,20 +16,21 @@
  ******************************************************************************/
 package eu.albina.controller;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
-import eu.albina.model.Regions;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.websocket.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
@@ -41,8 +42,7 @@ import eu.albina.util.HibernateUtil;
  */
 public class RegionController {
 
-	// private static Logger logger =
-	// LoggerFactory.getLogger(RegionController.class);
+	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
 	private final List<RegionLock> regionLocks;
@@ -69,61 +69,90 @@ public class RegionController {
 	}
 
 	/**
-	 * Retrieve a region from the database by ID.
+	 * Return {@code true} if the region with {@code id} exists.
 	 *
-	 * @param regionId
-	 *            the ID of the desired region
-	 * @return the region with the given ID.
-	 * @throws AlbinaException
-	 *             if the {@code Region} object could not be initialized
+	 * @param id
+	 *            the id of the desired region
+	 * @return {@code true} if the region with {@code id} exists
 	 */
-	public Region getRegion(String regionId) throws AlbinaException {
+	public boolean regionExists(String id) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Region region = entityManager.find(Region.class, id);
+			return region != null;
+		});
+	}
+
+	/**
+	 * Save a {@code region} to the database.
+	 *
+	 * @param region
+	 *            the region to be saved
+	 * @return the id of the saved region
+	 */
+	public Serializable createRegion(Region region) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			entityManager.persist(region);
+			return region.getId();
+		});
+	}
+
+	public Region updateRegion(Region region) throws AlbinaException {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			entityManager.merge(region);
+			return region;
+		});
+	}
+
+	public List<String> getAvailableRegions(String regionId) throws AlbinaException {
+		// TODO implement
+		// return all regions with name starting with regionID or all region IDs from eaws-regions outline
+		return new ArrayList<String>();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Region> getActiveRegions() throws AlbinaException {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			return entityManager.createQuery(HibernateUtil.queryGetRegions).getResultList();
+		});
+	}
+
+    public Region getRegion(String regionId) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Region region = entityManager.find(Region.class, regionId);
 			if (region == null) {
 				throw new HibernateException("No region with ID: " + regionId);
 			}
-			Hibernate.initialize(region.getSubregions());
 			return region;
 		});
+    }
+
+	public List<Region> getPublishBulletinRegions() {
+		try {
+			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
+			return result;
+		} catch (AlbinaException ae) {
+			logger.warn("Active region ids could not be loaded!", ae);
+			return new ArrayList<Region>();
+		}
 	}
 
-	/**
-	 * Return all top-level regions (no parent region is available).
-	 *
-	 * @return all top-level regions
-	 * @throws AlbinaException
-	 *             if the {@code Region} objects could not be initialized
-	 */
-	@Nonnull
-	public Regions getRegions() throws AlbinaException {
-		return getRegions(null);
+	public List<Region> getRegions() {
+		try {
+			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).collect(Collectors.toList());
+			return result;
+		} catch (AlbinaException ae) {
+			logger.warn("Active region ids could not be loaded!", ae);
+			return new ArrayList<Region>();
+		}
 	}
 
-	/**
-	 * Return all sub-regions that have {@code regionId} as parent.
-	 *
-	 * @param regionId
-	 *            the id of the parent region of all desired regions
-	 * @return all sub-regions that have {@code regionId} as parent
-	 * @throws AlbinaException
-	 *             if the {@code Region} objects could not be initialized
-	 */
-	@SuppressWarnings("unchecked")
-	@Nonnull
-	public Regions getRegions(String regionId) throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<Region> regions = null;
-			if (regionId == null || regionId.isEmpty())
-				regions = entityManager.createQuery(HibernateUtil.queryGetTopLevelRegions).getResultList();
-			else
-				regions = entityManager.createQuery(HibernateUtil.queryGetSubregions).setParameter("regionId", regionId)
-						.getResultList();
-			for (Region region : regions) {
-				Hibernate.initialize(region.getSubregions());
-			}
-			return new Regions(regions);
-		});
+	public List<Region> getPublishBlogRegions() {
+		try {
+			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBlogs()).collect(Collectors.toList());
+		} catch (AlbinaException ae) {
+			logger.warn("Active regions could not be loaded!", ae);
+			return new ArrayList<Region>();
+		}
 	}
 
 	/**
@@ -198,4 +227,12 @@ public class RegionController {
 		}
 		return result;
 	}
+
+    // TODO use region names from eaws-region repository
+    public String getRegionName(LanguageCode lang, String regionId) {
+    	if ("".equals(regionId)) {
+    		return "";
+    	}
+    	return lang.getBundle("i18n.Regions").getString(regionId);
+    }
 }

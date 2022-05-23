@@ -2,83 +2,12 @@ print "========================================="
 print "Mapyrus.time.stamp = ", Mapyrus.time.stamp
 print "Mapyrus.version    = ", Mapyrus.version
 print "-----------------------------------------"
-print "Kartenerstelleung ALBINA"
+print "Map Production"
 print "-----------------------------------------"
-print "Gueltiges Kartendatum: " . date
-print "Bulletin-ID/Karte: " . bulletin_id
+print "Valid date: " . date
+print "Bulletin-ID/Map: " . bulletin_id
 print "######################################################"
 
-# Raster-Input
-if region eq "Euregio" then
-	if map_level eq "thumbnail" then
-		let raster = geodata_dir . "alpes_srtm250_n_gm_hs_light.png"
-    elif map_level eq "standard" then
-		let raster = geodata_dir . "alpes_srtm250_n_gm_hs_v1.png"
-    elif map_level eq "overlay" then
-		let raster = geodata_dir . "srtm90_albina_EPSG_3395_hs.png"
-	endif
-elif region eq "Aran" then
-	let raster = geodata_dir . "pyrenees_srtm250_n_gm_hs_v2.png"
-endif
-
-# Shapefile-Input
-if map_level eq "thumbnail" then
-	let country_l = geodata_dir . "simple_geom_staat_l.shp"
-	let provinces_l = geodata_dir . "simple_geom_provinzen_l.shp"
-	if region eq "Euregio" then
-		let reg_euregio_ha = geodata_dir . "simple_geom_regionen_euregio_ha.shp"
-	elif region eq "Aran" then
-		let reg_euregio_ha = geodata_dir . "simple_geom_regionen_aran_ha.shp"
-	endif
-	let rivers = geodata_dir . "gewaesser_l_gen.shp"
-	let lakes = geodata_dir . "gewaesser_a_gen.shp"
-else
-	let country_l = geodata_dir . "staat_l.shp"
-	let provinces_l = geodata_dir . "provinzen_l.shp"
-	if region eq "Euregio" then
-		let reg_euregio_ha = geodata_dir . "regionen_euregio_ha.shp"
-	elif region eq "Aran" then
-		let reg_euregio_ha = geodata_dir . "regions-elevation.aran.shp"
-	endif
-	let rivers = geodata_dir . "gewaesser_l.shp"
-	let lakes = geodata_dir . "gewaesser_a.shp"
-endif
-
-if region eq "Euregio" then
-	let euregio = geodata_dir . "euregio_a.shp"
-	if map_level eq "thumbnail" then
-		let euregio = geodata_dir . "simple_geom_euregio_a.shp"
-	endif
-elif region eq "Aran" then
-	let euregio = geodata_dir . "aran_a.shp"
-	if map_level eq "thumbnail" then
-		let euregio = geodata_dir . "simple_geom_valdaran_a.shp"
-	endif
-endif
-
-if region eq "Euregio" then
-	let pp_region = geodata_dir . "pp_euregio.shp"
-	if map_level eq "thumbnail" then
-		let pp_region = geodata_dir . "simple_geom_pp_euregio.shp"
-	endif
-elif region eq "Aran" then
-	let pp_region = geodata_dir . "pp_aran.shp"
-endif
-
-if bulletin_id eq "tyrol" then
-	let pp_region = geodata_dir . "pp_tirol.shp"
-elif bulletin_id eq "southtyrol" then
-	let pp_region = geodata_dir . "pp_suedtirol.shp"
-elif bulletin_id eq "trentino" then
-	let pp_region = geodata_dir . "pp_trentino.shp"
-elif bulletin_id eq "aran" then
-	let pp_region = geodata_dir . "pp_aran.shp"
-endif
-
-let cities = geodata_dir . "albina_orte_p.shp"
-let peaks = geodata_dir . "albina_hoehenpunkte_p.shp"
-let names_p = geodata_dir . "albina_namengut_p.shp"
-let names_l = geodata_dir . "albina_namengut_l.shp"
 
 ###################################################################
 # --- Define NEWPAGE
@@ -91,7 +20,7 @@ let py1 = 0
 let px2 = pagesize_x
 let py2 = pagesize_y
 
-# Aufhängungspunkte für Karte
+# Hanging points for map
 let mx1 = px1
 let my1 = py1
 let mx2 = px2
@@ -99,63 +28,62 @@ let my2 = py2
 
 
 ###################################################################
-# EBENEN
+# LAYERS
 ###################################################################
 # Raster
 if (map_level eq "standard" or map_level eq "overlay") and colormode ne "bw" then
 	image_feature raster
 endif
 
-# Euregio bei Bulletin Karten
+# Micro Regions
 if dynamic_region eq "one" then
-	polygon_feature_euregio euregio
+	polygon_feature_micro_regions region_a
 endif
 
-# Regionen Lawinengefahrenstufen
-polygon_feature_danger_levels reg_euregio_ha
+# Warning Regions
+polygon_feature_danger_levels micro_regions_elevation_a
 
-# Flüsse & Seen
-line_feature_rivers rivers, level
-polygon_feature_lakes lakes, level
+# Rivers & Lakes
+line_feature_rivers rivers_l, level
+polygon_feature_lakes lakes_a, level
 
-# Provinz- und Staatsgrenzen (außerhalb)
-line_feature_country country_l, level, 0
+# Province and Country borders (outside)
+line_feature_country countries_l, level, 0
 
-# Städte
-point_feature_city_marker cities, level
+# Cities
+point_feature_city_marker cities_p, level
 
-# Linienlabels
+# Line labels
 if map_level eq "standard" and dynamic_region eq "all" then
-	line_feature_labels names_l, level
+	line_feature_labels labels_l, level
 endif
 
-# Punktlabels
-point_feature_labels names_p, level
+# Point labels
+point_feature_labels labels_p, level
 
-# Absoftung
-polygon_feature_pp pp_region, level
+# Passe Partout
+polygon_feature_pp passe_partout, level
 
-# Provinz- und Staatsgrenzen (innerhalb)
+# Province and Country borders (inside)
 line_feature_provinces provinces_l, level, 1
-line_feature_country country_l, level, 1
+line_feature_country countries_l, level, 1
 
-
-# Maßstabsleiste
+# Scale bar
 if scalebar eq "on" then
 	draw_scalebar scale_km_value, scale_bar_color, scale_bar_style, scale_font, scale_fontsize
 endif
 
-# Copyrightinformation
+# Copyright information
 if copyright eq "on" then
 	draw_copyright copyright_txt, c_font, c_fontsize, c_fontcolor
 endif
 
-# Logo bei Karten
-if euregio_image_file ne "" then
-	place_euregio_logo
+# Logo
+if map_level eq "standard" and logo_file ne "" then
+	place_logo
 endif
 
-# Rahmen
+# Frame
 draw_frame frame_stroke_color, frame_line_style
 
 

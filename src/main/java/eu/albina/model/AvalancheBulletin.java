@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -61,7 +62,6 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
-import eu.albina.controller.UserController;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.Complexity;
@@ -70,8 +70,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
-import eu.albina.util.AlbinaUtil;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.XmlUtil;
 
 /**
@@ -216,7 +214,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	 * @param json
 	 *            JSONObject holding information about an avalanche bulletin.
 	 */
-	public AvalancheBulletin(JSONObject json) {
+	public AvalancheBulletin(JSONObject json, Function<String, User> userFunction) {
 		this();
 
 		if (json.has("id"))
@@ -226,7 +224,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			JSONObject author = json.getJSONObject("author");
 			if (author.has("email")) {
 				try {
-					this.user = UserController.getInstance().getUser(author.getString("email"));
+					this.user = userFunction.apply(author.getString("email"));
 				} catch (Exception e) {
 					LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
 				}
@@ -737,28 +735,19 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.hasDaytimeDependency = hasDaytimeDependency;
 	}
 
-	public static boolean affectsRegion(String region, Set<String> regions) {
-		if (regions == null) {
-			return false;
-		}
-		return regions.stream().anyMatch(entry -> region.equals(GlobalVariables.codeEuregio)
-			? entry.startsWith(GlobalVariables.codeTyrol) || entry.startsWith(GlobalVariables.codeSouthTyrol) || entry.startsWith(GlobalVariables.codeTrentino)
-			: entry.startsWith(region));
+	public boolean affectsRegion(Region region) {
+		return getSuggestedRegions().stream().anyMatch(suggestedRegion -> region.affects(suggestedRegion))
+			|| getSavedRegions().stream().anyMatch(savedRegion -> region.affects(savedRegion))
+			|| getPublishedRegions().stream().anyMatch(publishedRegion -> region.affects(publishedRegion));
 	}
 
-	public boolean affectsRegion(String region) {
-		return affectsRegion(region, getSuggestedRegions())
-			|| affectsRegion(region, getSavedRegions())
-			|| affectsRegion(region, getPublishedRegions());
+	public boolean affectsRegionWithoutSuggestions(Region region) {
+		return getSavedRegions().stream().anyMatch(savedRegion -> region.affects(savedRegion))
+			|| getPublishedRegions().stream().anyMatch(publishedRegion -> region.affects(publishedRegion));
 	}
 
-	public boolean affectsRegionWithoutSuggestions(String region) {
-		return affectsRegion(region, getSavedRegions())
-			|| affectsRegion(region, getPublishedRegions());
-	}
-
-	public boolean affectsRegionOnlyPublished(String region) {
-		return affectsRegion(region, getPublishedRegions());
+	public boolean affectsRegionOnlyPublished(Region region) {
+		return getPublishedRegions().stream().anyMatch(publishedRegion -> region.affects(publishedRegion));
 	}
 
 	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
@@ -971,7 +960,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return json;
 	}
 
-	private Element createCAAMLv5Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon) {
+	private Element createCAAMLv5Bulletin(Document doc, LanguageCode languageCode, Region region,  boolean isAfternoon) {
 		AvalancheBulletinDaytimeDescription bulletinDaytimeDescription;
 
 		if (isAfternoon)
@@ -993,7 +982,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		rootElement.setAttribute("xml:lang", languageCode.toString());
 
 		// metaData
-		Element metaDataProperty = XmlUtil.createMetaDataProperty(doc, publicationDate);
+		Element metaDataProperty = XmlUtil.createMetaDataProperty(doc, publicationDate, languageCode);
 		rootElement.appendChild(metaDataProperty);
 
 		// validTime
@@ -1031,10 +1020,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		rootElement.appendChild(srcRef);
 
 		// locRef
-		for (String region : publishedRegions) {
-			Element locRef = doc.createElement("locRef");
-			locRef.setAttribute("xlink:href", region);
-			rootElement.appendChild(locRef);
+		for (String publishedRegion : publishedRegions) {
+			if (region.affects(publishedRegion)) {
+				Element locRef = doc.createElement("locRef");
+				locRef.setAttribute("xlink:href", publishedRegion);
+				rootElement.appendChild(locRef);
+			}
 		}
 
 		// bulletinResultsOf
@@ -1160,7 +1151,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return rootElement;
 	}
 
-	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, boolean isAfternoon, String reportPublicationTime) {
+	private Element createCAAMLv6Bulletin(Document doc, LanguageCode languageCode, Region region, boolean isAfternoon, String reportPublicationTime, ServerInstance serverInstance) {
 
 		AvalancheBulletinDaytimeDescription bulletinDaytimeDescription;
 
@@ -1186,17 +1177,19 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element metaData = doc.createElement("metaData");
 		rootElement.appendChild(metaData);
 		if (!isAfternoon) {
-			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+			// TODO use specific file for region
+			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + getId() + ".jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
-			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode) + "/" + getValidityDateString() + "/"
+			// TODO use specific file for region
+			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + getId() + "_PM.jpg";
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		}
-		String linkReferenceURI = languageCode.getBundleString("avalanche-report.url") + "/bulletin/" + getValidityDateString()
+		String linkReferenceURI = languageCode.getBundleString("website.url") + "/bulletin/" + getValidityDateString()
 				+ "?region=" + getId();
 		metaData.appendChild(XmlUtil.createExtFile(doc, "website",
 				languageCode.getBundleString("ext-file.region-link.description"), linkReferenceURI));
@@ -1234,22 +1227,24 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element source = doc.createElement("source");
 		Element operation = doc.createElement("operation");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode(languageCode.getBundleString("avalanche-report.name")));
+		name.appendChild(doc.createTextNode(languageCode.getBundleString("website.name")));
 		operation.appendChild(name);
 		Element website = doc.createElement("website");
-		website.appendChild(doc.createTextNode(languageCode.getBundleString("avalanche-report.url")));
+		website.appendChild(doc.createTextNode(languageCode.getBundleString("website.url")));
 		operation.appendChild(website);
 		source.appendChild(operation);
 		rootElement.appendChild(source);
 
 		// region
-		for (String region : publishedRegions) {
-			Element regionElement = doc.createElement("region");
-			Element nameElement = doc.createElement("name");
-			nameElement.appendChild(doc.createTextNode(AlbinaUtil.getRegionName(languageCode, region)));
-			regionElement.appendChild(nameElement);
-			regionElement.setAttribute("id", region);
-			rootElement.appendChild(regionElement);
+		for (String regionId : publishedRegions) {
+			if (region.affects(regionId)) {
+				Element regionElement = doc.createElement("region");
+				// Element nameElement = doc.createElement("name");
+				// nameElement.appendChild(doc.createTextNode(RegionController.getInstance().getRegionName(languageCode, regionId)));
+				// regionElement.appendChild(nameElement);
+				regionElement.setAttribute("id", regionId);
+				rootElement.appendChild(regionElement);
+			}
 		}
 
 		// complexity
@@ -1543,26 +1538,26 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return avalancheProblem;
 	}
 
-	public List<Element> toCAAMLv5(Document doc, LanguageCode languageCode) {
+	public List<Element> toCAAMLv5(Document doc, LanguageCode languageCode, Region region) {
 		if (publishedRegions != null && !publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLv5Bulletin(doc, languageCode, false));
+			result.add(createCAAMLv5Bulletin(doc, languageCode, region, false));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLv5Bulletin(doc, languageCode, true));
+				result.add(createCAAMLv5Bulletin(doc, languageCode, region, true));
 
 			return result;
 		} else
 			return null;
 	}
 
-	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode, String reportPublicationTime) {
+	public List<Element> toCAAMLv6(Document doc, LanguageCode languageCode, Region region, String reportPublicationTime, ServerInstance serverInstance) {
 		if (publishedRegions != null && !publishedRegions.isEmpty()) {
 			List<Element> result = new ArrayList<Element>();
-			result.add(createCAAMLv6Bulletin(doc, languageCode, false, reportPublicationTime));
+			result.add(createCAAMLv6Bulletin(doc, languageCode, region, false, reportPublicationTime, serverInstance));
 
 			if (hasDaytimeDependency)
-				result.add(createCAAMLv6Bulletin(doc, languageCode, true, reportPublicationTime));
+				result.add(createCAAMLv6Bulletin(doc, languageCode, region, true, reportPublicationTime, serverInstance));
 
 			return result;
 		} else
@@ -1700,13 +1695,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public static AvalancheBulletin readBulletin(final URL resource) throws IOException {
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource));
+		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), User::new);
 	}
 
 	public static List<AvalancheBulletin> readBulletins(final URL resource) throws IOException {
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		final JSONArray array = new JSONArray(validBulletinStringFromResource);
-		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(AvalancheBulletin::new)
+		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(u -> new AvalancheBulletin(u, User::new))
 				.collect(Collectors.toList());
 	}
 

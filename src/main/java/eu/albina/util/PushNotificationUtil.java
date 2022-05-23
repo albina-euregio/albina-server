@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 albina-euregio
+ * Copyright (C) 2021 albina
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import java.util.Arrays;
 import java.net.URI;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import ch.rasc.webpush.ServerKeys;
 import ch.rasc.webpush.dto.Subscription;
 import ch.rasc.webpush.dto.SubscriptionKeys;
 import eu.albina.exception.AlbinaException;
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +34,9 @@ import com.github.openjson.JSONObject;
 
 import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.PushConfiguration;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
@@ -55,33 +59,47 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl, boolean test) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl, boolean test) {
 		final JSONObject payload = new JSONObject();
-		payload.put("title", lang.getBundleString("avalanche-report.name"));
+		payload.put("title", lang.getBundleString("website.name"));
 		payload.put("body", message);
 		payload.put("image", attachmentUrl);
 		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
 		payload.put("url", bulletinUrl);
 
-		List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, regions);
-
-		logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, regions, payload);
-		for (PushSubscription subscription : subscriptions) {
-			sendPushMessage(subscription, payload);
+		if (region.isSendPushNotifications()) {
+			List<String> regions = Arrays.asList(region.getId());
+			List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, regions);
+	
+			logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, region, payload);
+			for (PushSubscription subscription : subscriptions) {
+				sendPushMessage(subscription, payload);
+			}
 		}
 	}
 
 	public void sendWelcomePushMessage(PushSubscription subscription) {
 		final JSONObject payload = new JSONObject();
-		payload.put("title", subscription.getLanguage().getBundleString("avalanche-report.name"));
+		payload.put("title", subscription.getLanguage().getBundleString("website.name"));
 		payload.put("body", "Hello World!");
 		sendPushMessage(subscription, payload);
+	}
+
+
+	public static PushConfiguration getConfiguration() {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			PushConfiguration result = (PushConfiguration) entityManager.createQuery(HibernateUtil.queryGetPushConfiguration).getSingleResult();
+			if (result != null)
+				return result;
+			else
+				throw new HibernateException("No push configuration found");
+		});
 	}
 
 	public void sendPushMessage(PushSubscription subscription, JSONObject payload) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
-			final ServerKeys serverKeys = new ServerKeys(GlobalVariables.getVapidPublicKey(), GlobalVariables.getVapidPrivateKey());
+			final ServerKeys serverKeys = new ServerKeys(getConfiguration().getVapidPublicKey(), getConfiguration().getVapidPrivateKey());
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
 			final byte[] encrypted = new CryptoService().encrypt(payload.toString(), subscriptionKeys, 0);

@@ -16,18 +16,12 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.util.List;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.socialmedia.RegionConfigurationController;
-import eu.albina.controller.socialmedia.TelegramChannelProcessorController;
-import eu.albina.exception.AlbinaException;
+import eu.albina.controller.publication.TelegramController;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.socialmedia.RegionConfiguration;
-import eu.albina.model.socialmedia.TelegramConfig;
 
 public class TelegramChannelUtil implements SocialMediaUtil {
 
@@ -43,21 +37,15 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl, boolean test) {
-		TelegramChannelProcessorController ctTc = TelegramChannelProcessorController.getInstance();
-		for (String region : regions) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl, boolean test) {
+		TelegramController ctTc = TelegramController.getInstance();
+		if (region.isSendTelegramMessages()) {
 			try {
-				RegionConfiguration rc = RegionConfigurationController.getInstance().getRegionConfiguration(region);
-				Set<TelegramConfig> telegramConfigs = rc.getTelegramConfigs();
-				TelegramConfig config = telegramConfigs.stream()
-					.filter(telegramConfig -> telegramConfig.getLanguageCode().equals(lang))
-					.findFirst()
-					.orElseThrow(() -> new AlbinaException("No configuration for telegram channel found (" + region + ", " + lang + ")"));
-				logger.info("Publishing report on telegram channel for {} in {}", config.getRegionConfiguration().getRegion().getId(), lang);
-				ctTc.trySendPhoto(config, message, attachmentUrl, test, 3);
+				logger.info("Publishing report on telegram channel for {} in {}", region.getId(), lang);
+				ctTc.trySendPhoto(region, lang, message, attachmentUrl, test, 3);
 			} catch (Exception e) {
 				logger.error("Error while sending bulletin newsletter to telegram channel in " + lang + " for region "
-						+ region, e);
+						+ region.getId(), e);
 			}
 		}
 	}

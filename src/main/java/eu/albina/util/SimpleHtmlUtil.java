@@ -40,9 +40,12 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
+import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 import freemarker.core.ParseException;
@@ -116,36 +119,28 @@ public class SimpleHtmlUtil {
 		return instance;
 	}
 
-	public boolean createRegionSimpleHtml(List<AvalancheBulletin> bulletins, String region) {
+	public boolean createRegionSimpleHtml(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance) {
 		boolean result = true;
-		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			if (avalancheBulletin.affectsRegionOnlyPublished(region))
-				regionBulletins.add(avalancheBulletin);
-		}
 
-		if (!regionBulletins.isEmpty())
+		if (!bulletins.isEmpty())
 			for (LanguageCode lang : LanguageCode.ENABLED) {
-				if (!createSimpleHtml(regionBulletins, lang, region))
+				if (!createSimpleHtml(bulletins, lang, region, serverInstance))
 					result = false;
 			}
 		return result;
 	}
 
-	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, String region) {
+	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance) {
 		try {
 			if (bulletins != null && !bulletins.isEmpty()) {
-				String simpleHtmlString = createSimpleHtmlString(bulletins, lang, region);
+				String simpleHtmlString = createSimpleHtmlString(bulletins, lang, region, serverInstance);
 
 				String filename;
 				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 
-				if (region.equals(GlobalVariables.codeEuregio))
-					filename = lang.toString() + ".html";
-				else
-					filename = region + "_" + lang.toString() + ".html";
+				filename = region.getId() + "_" + lang.toString() + ".html";
 
-				String dirPath = GlobalVariables.getHtmlDirectory() + "/" + validityDateString;
+				String dirPath = serverInstance.getHtmlDirectory() + "/" + validityDateString;
 				new File(dirPath).mkdirs();
 
 				// using PosixFilePermission to set file permissions 755
@@ -181,16 +176,16 @@ public class SimpleHtmlUtil {
 		return false;
 	}
 
-	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, String region)
+	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
 		// Create data model
 		Map<String, Object> root = new HashMap<>();
 
 		Map<String, Object> text = new HashMap<>();
-		text.put("standardView", lang.getBundleString("avalanche-report.standard.link.text"));
-		text.put("tabtitle", lang.getBundleString("avalanche-report.name") + " " + AlbinaUtil.getDate(bulletins, lang));
-		text.put("title", lang.getBundleString("avalanche-report.name"));
+		text.put("standardView", lang.getBundleString("standard.link.text"));
+		text.put("tabtitle", lang.getBundleString("website.name") + " " + AlbinaUtil.getDate(bulletins, lang));
+		text.put("title", lang.getBundleString("website.name"));
 		text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
 		String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
 		text.put("publicationDate", publicationDate);
@@ -208,31 +203,22 @@ public class SimpleHtmlUtil {
 		root.put("text", text);
 
 		Map<String, Object> link = new HashMap<>();
-		link.put("website", lang.getBundleString("avalanche-report.url") + "/bulletin/"
+		link.put("website", lang.getBundleString("website.url") + "/bulletin/"
 				+ AlbinaUtil.getValidityDateString(bulletins));
-		String regionString;
-		String underscore;
-		if (region.equalsIgnoreCase(GlobalVariables.codeEuregio)) {
-			regionString = "";
-			underscore = "";
-		} else {
-			regionString = region;
-			underscore = "_";
-		}
-		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(-1)));
-		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, regionString, Period.ofDays(1)));
-		link.put("linkDe", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "de.html");
-		link.put("linkIt", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "it.html");
-		link.put("linkEn", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "en.html");
-		link.put("linkEs", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "es.html");
-		link.put("linkCa", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ca.html");
-		link.put("linkAr", LinkUtil.getSimpleHtmlUrl(lang) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + regionString + underscore + "ar.html");
+		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1), serverInstance));
+		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1), serverInstance));
+		link.put("linkDe", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_de.html");
+		link.put("linkIt", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_it.html");
+		link.put("linkEn", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_en.html");
+		link.put("linkEs", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_es.html");
+		link.put("linkCa", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_ca.html");
+		link.put("linkAr", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_ar.html");
 
 		root.put("link", link);
 
@@ -244,24 +230,24 @@ public class SimpleHtmlUtil {
 
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
-					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
-					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.webp");
 					bulletin.put("widthPM", "width=\"150\"");
 					bulletin.put("heightPMSmall", "height=\"50\"");
 					bulletin.put("fontSize", "");
 				} else {
-					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
-					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang) + "/"
+					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
-					bulletin.put("mapPMjpg", GlobalVariables.getServerImagesUrl() + "empty.png");
-					bulletin.put("mapPMwebp", GlobalVariables.getServerImagesUrl() + "empty.webp");
+					bulletin.put("mapPMjpg", serverInstance.getServerImagesUrl() + "empty.png");
+					bulletin.put("mapPMwebp", serverInstance.getServerImagesUrl() + "empty.webp");
 					bulletin.put("widthPM", "width=\"0\"");
 					bulletin.put("heightPMSmall", "style=\"height: 0; margin: 0\"");
 					bulletin.put("fontSize", "style=\"font-size: 0\"");
@@ -269,15 +255,15 @@ public class SimpleHtmlUtil {
 
 				StringBuilder sb = new StringBuilder();
 				for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
-					sb.append(AlbinaUtil.getRegionName(lang, publishedRegion));
+					sb.append(RegionController.getInstance().getRegionName(lang, publishedRegion));
 					sb.append(", ");
 				}
 				sb.delete(sb.length() - 2, sb.length());
 				bulletin.put("regions", sb.toString());
 
-				bulletin.put("forenoon", getDaytime(avalancheBulletin.getForenoon(), lang));
+				bulletin.put("forenoon", getDaytime(avalancheBulletin.getForenoon(), lang, serverInstance));
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("afternoon", getDaytime(avalancheBulletin.getAfternoon(), lang));
+					bulletin.put("afternoon", getDaytime(avalancheBulletin.getAfternoon(), lang, serverInstance));
 					bulletin.put("am",
 							"<b>" + lang.getBundleString("daytime.am.capitalized").toUpperCase() + "</b><br>");
 					bulletin.put("pm",
@@ -329,8 +315,7 @@ public class SimpleHtmlUtil {
 		root.put("bulletins", arrayList);
 
 		// Get template
-		boolean isAran = GlobalVariables.codeAran.equals(region);
-		Template temp = cfg.getTemplate(isAran ? "simple-bulletin.aran.html" : "simple-bulletin.min.html");
+		Template temp = cfg.getTemplate(region.getSimpleHtmlTemplateName());
 
 		// Merge template and model
 		Writer out = new StringWriter();
@@ -369,7 +354,7 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	private Map<String, Object> getDaytime(AvalancheBulletinDaytimeDescription daytimeDescription, LanguageCode lang) {
+	private Map<String, Object> getDaytime(AvalancheBulletinDaytimeDescription daytimeDescription, LanguageCode lang, ServerInstance serverInstance) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> dangerLevel = new HashMap<>();
 		Map<String, Object> text = new HashMap<>();
@@ -391,7 +376,7 @@ public class SimpleHtmlUtil {
 			text.put("avalancheProblem", "");
 		result.put("text", text);
 
-		dangerLevel.put("warningPicto", GlobalVariables.getServerImagesUrl() + "warning_pictos/color/level_"
+		dangerLevel.put("warningPicto", serverInstance.getServerImagesUrl() + "warning_pictos/color/level_"
 				+ AlbinaUtil.getWarningLevelId(daytimeDescription) + ".png");
 		dangerLevel.put("elevation",
 				getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang));
@@ -400,44 +385,44 @@ public class SimpleHtmlUtil {
 
 		if (daytimeDescription.getAvalancheSituation1() != null
 				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null) {
-			result.put("avalancheProblem1", getAvalancheSituation(daytimeDescription.getAvalancheSituation1(), lang));
+			result.put("avalancheProblem1", getAvalancheSituation(daytimeDescription.getAvalancheSituation1(), lang, serverInstance));
 		} else
 			result.put("avalancheProblem1", getEmptyAvalancheSituation());
 		if (daytimeDescription.getAvalancheSituation2() != null
 				&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null) {
-			result.put("avalancheProblem2", getAvalancheSituation(daytimeDescription.getAvalancheSituation2(), lang));
+			result.put("avalancheProblem2", getAvalancheSituation(daytimeDescription.getAvalancheSituation2(), lang, serverInstance));
 		} else
 			result.put("avalancheProblem2", getEmptyAvalancheSituation());
 		if (daytimeDescription.getAvalancheSituation3() != null
 				&& daytimeDescription.getAvalancheSituation3().getAvalancheSituation() != null) {
-			result.put("avalancheProblem3", getAvalancheSituation(daytimeDescription.getAvalancheSituation3(), lang));
+			result.put("avalancheProblem3", getAvalancheSituation(daytimeDescription.getAvalancheSituation3(), lang, serverInstance));
 		} else
 			result.put("avalancheProblem3", getEmptyAvalancheSituation());
 		if (daytimeDescription.getAvalancheSituation4() != null
 				&& daytimeDescription.getAvalancheSituation4().getAvalancheSituation() != null) {
-			result.put("avalancheProblem4", getAvalancheSituation(daytimeDescription.getAvalancheSituation4(), lang));
+			result.put("avalancheProblem4", getAvalancheSituation(daytimeDescription.getAvalancheSituation4(), lang, serverInstance));
 		} else
 			result.put("avalancheProblem4", getEmptyAvalancheSituation());
 		if (daytimeDescription.getAvalancheSituation5() != null
 				&& daytimeDescription.getAvalancheSituation5().getAvalancheSituation() != null) {
-			result.put("avalancheProblem5", getAvalancheSituation(daytimeDescription.getAvalancheSituation5(), lang));
+			result.put("avalancheProblem5", getAvalancheSituation(daytimeDescription.getAvalancheSituation5(), lang, serverInstance));
 		} else
 			result.put("avalancheProblem5", getEmptyAvalancheSituation());
 
 		return result;
 	}
 
-	private Map<String, Object> getAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang) {
+	private Map<String, Object> getAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, ServerInstance serverInstance) {
 		Map<String, Object> result = new HashMap<>();
 
 		result.put("exist", true);
-		result.put("avalancheProblemIcon", GlobalVariables.getServerImagesUrl()
+		result.put("avalancheProblemIcon", serverInstance.getServerImagesUrl()
 				+ avalancheSituation.getAvalancheSituation().getSymbolPath(false));
 		result.put("avalancheProblemText", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
-		result.put("elevationIcon", GlobalVariables.getServerImagesUrl() + getElevationIcon(avalancheSituation));
+		result.put("elevationIcon", serverInstance.getServerImagesUrl() + getElevationIcon(avalancheSituation));
 		result.put("elevationLow", getElevationLowText(avalancheSituation, lang));
 		result.put("elevationHigh", getElevationHighText(avalancheSituation, lang));
-		result.put("aspectsIcon", GlobalVariables.getServerImagesUrl()
+		result.put("aspectsIcon", serverInstance.getServerImagesUrl()
 				+ Aspect.getSymbolPath(avalancheSituation.getAspects(), false));
 
 		return result;

@@ -4,16 +4,10 @@ import java.net.URI;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import ch.rasc.webpush.dto.Subscription;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * Web push and signed JWTs

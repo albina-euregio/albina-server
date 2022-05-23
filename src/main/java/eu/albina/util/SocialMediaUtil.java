@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 albina-euregio
+ * Copyright (C) 2021 albina
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,34 +20,36 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
 interface SocialMediaUtil {
 
-	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, boolean test) {
-		for (LanguageCode lang : LanguageCode.getSocialMedia(regions)) {
-			sendBulletinNewsletters(bulletins, regions, update, lang, test);
+	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test, ServerInstance serverInstance) {
+		for (LanguageCode lang : LanguageCode.ENABLED) {
+			sendBulletinNewsletters(bulletins, region, update, lang, test, serverInstance);
 		}
 	}
 
-	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, List<String> regions, boolean update, LanguageCode lang, boolean test) {
-		String message = getSocialMediaText(bulletins, update, lang);
-		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(lang, bulletins);
-		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
-		sendBulletinNewsletter(message, lang, regions, attachmentUrl, bulletinUrl, test);
+	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode lang, boolean test, ServerInstance serverInstance) {
+		String message = getSocialMediaText(bulletins, region, update, lang);
+		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(region, lang, bulletins, serverInstance);
+		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, region);
+		sendBulletinNewsletter(message, lang, region, attachmentUrl, bulletinUrl, test);
 	}
 
-	static String getSocialMediaText(List<AvalancheBulletin> bulletins, boolean update, LanguageCode lang) {
+	static String getSocialMediaText(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode lang) {
 		String dateString = AlbinaUtil.getDate(bulletins, lang);
-		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang);
+		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, region);
 		if (update) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
-				lang.getBundleString("avalanche-report.name"), dateString, bulletinUrl);
+				lang.getBundleString("website.name"), dateString, bulletinUrl);
 		} else {
 			return MessageFormat.format(lang.getBundleString("social-media.message"),
-				lang.getBundleString("avalanche-report.name"), dateString, bulletinUrl);
+				lang.getBundleString("website.name"), dateString, bulletinUrl);
 		}
 	}
 
-	void sendBulletinNewsletter(String message, LanguageCode lang, List<String> regions, String attachmentUrl, String bulletinUrl, boolean test);
+	void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl, boolean test);
 }

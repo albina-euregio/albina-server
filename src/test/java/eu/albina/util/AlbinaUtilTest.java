@@ -19,7 +19,6 @@ package eu.albina.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -33,13 +32,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
 import eu.albina.controller.AvalancheBulletinController;
-import org.junit.After;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -55,6 +55,8 @@ import com.google.common.io.Resources;
 import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -67,15 +69,29 @@ public class AlbinaUtilTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtilTest.class);
 
+	private ServerInstance serverInstanceEuregio;
+
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;
 
+	private Region regionTirol;
+	private Region regionEuregio;
+
 	private final String imgBaseUrl = "D:/norbert/vs_workspace/albina-server/src/test/resources/images/";
+	@SuppressWarnings("unused")
+	private final List<String> names = new ArrayList<String>();
+	@SuppressWarnings("unused")
+	private final List<String> passwords = new ArrayList<String>();
 	private final List<String> recipients = new ArrayList<String>();
 
 	@Before
 	public void setUp() throws IOException {
-		// HibernateUtil.getInstance().setUp();
+		serverInstanceEuregio = new ServerInstance();
+
+		regionTirol = new Region();
+		regionTirol.setId("AT-07");
+		regionEuregio = new Region();
+		regionEuregio.setId("EUREGIO");
 
 		// Load valid avalanche bulletin JSON from resources
 		bulletins = new ArrayList<AvalancheBulletin>();
@@ -94,31 +110,22 @@ public class AlbinaUtilTest {
 		// recipients.add("chris.mitterer@tirol.gv.at");
 	}
 
-	@After
-	public void shutDown() {
-		// HibernateUtil.getInstance().shutDown();
-	}
-
 	@Ignore
 	@Test
 	public void addSubscriber() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, AlbinaException, IOException, Exception {
-		ArrayList<String> regions = new ArrayList<String>();
-		regions.add(GlobalVariables.codeTyrol);
-
 		Subscriber subscriber = new Subscriber();
 		subscriber.setEmail("n.lanzanasto@gmail.com");
 		subscriber.setLanguage(LanguageCode.it);
-		subscriber.setRegions(regions);
+		subscriber.setRegions(Arrays.asList(regionTirol));
 
 		SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
 	}
 
-	@Ignore
 	@Test
 	public void retrieveTranslationTest() throws UnsupportedEncodingException {
 		String string = LanguageCode.ca.getBundleString("headline.tendency");
-		System.out.println(string);
+		Assert.assertEquals("Tendència", string);
 	}
 
 	@Test
@@ -136,23 +143,28 @@ public class AlbinaUtilTest {
 		}
 	}
 
+	@Test
+	public void encodePassword() {
+		String pwd = BCrypt.hashpw("Norbert", BCrypt.gensalt());
+		logger.warn("Password: " + pwd);
+	}
+
 	@Ignore
 	@Test
 	public void testIsLatest() {
 		ZonedDateTime dateTime = (ZonedDateTime.now()).minusDays(0);
-		System.out.println(AlbinaUtil.isLatest(dateTime));
+		Assert.assertTrue(AlbinaUtil.isLatest(dateTime));
+	}
+
+	@Test
+	public void testIsNotLatest() {
+		ZonedDateTime dateTime = (ZonedDateTime.now()).minusDays(1);
+		Assert.assertFalse(AlbinaUtil.isLatest(dateTime));
 	}
 
 	@Test
 	public void testIsUpdate() {
 		Assert.assertTrue(AlbinaUtil.isUpdate(bulletins));
-	}
-
-	@Ignore
-	@Test
-	public void createStaticWidget() throws IOException, URISyntaxException {
-		StaticWidgetUtil.getInstance().createStaticWidget(bulletins, LanguageCode.en,
-				AlbinaUtil.getValidityDateString(bulletins), AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Ignore
@@ -171,33 +183,33 @@ public class AlbinaUtilTest {
 	@Ignore
 	@Test
 	public void createJsonTest() throws TransformerException, IOException {
-		JsonUtil.createJsonFile(bulletins, "2019-12-30", "2019-12-30_17-15-30");
+		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30", serverInstanceEuregio);
 	}
 
 	@Test
 	public void testDates() throws Exception {
-		GlobalVariables.pdfDirectory = "/foo/bar/baz/albina_files";
-		GlobalVariables.mapsPath = "/foo/bar/baz/albina_files";
+		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/albina_files");
+		serverInstanceEuregio.setMapsPath("/foo/bar/baz/albina_files");
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
 		assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
 		assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
-		assertEquals("Donnerstag  17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
+		assertEquals("Donnerstag 17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
 		assertEquals("am Freitag, den 18.01.2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
 		assertEquals("16.01.2019", AlbinaUtil.getPreviousValidityDateString(bulletins, LanguageCode.de));
 		assertEquals("18.01.2019", AlbinaUtil.getNextValidityDateString(bulletins, LanguageCode.de));
 		assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
 		assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
 		assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
-		assertEquals("Lawinen.report für Donnerstag  17.01.2019: https://lawinen.report/bulletin/2019-01-17",
-			SocialMediaUtil.getSocialMediaText(bulletins, false, LanguageCode.de));
-		assertEquals("UPDATE zum Lawinen.report für Donnerstag  17.01.2019: https://lawinen.report/bulletin/2019-01-17",
-			SocialMediaUtil.getSocialMediaText(bulletins, true, LanguageCode.de));
+		assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
+			SocialMediaUtil.getSocialMediaText(bulletins, regionEuregio, false, LanguageCode.de));
+		assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
+			SocialMediaUtil.getSocialMediaText(bulletins, regionEuregio, true, LanguageCode.de));
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
-			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de));
-		assertEquals("https://lawinen.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
-			LinkUtil.getPdfLink(bulletins, LanguageCode.de, GlobalVariables.codeTyrol));
+			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de, regionEuregio));
+		assertEquals("https://static.avalanche.report/albina_files/2019-01-17/2019-01-17_AT-07_de.pdf",
+			LinkUtil.getPdfLink(bulletins, LanguageCode.de, regionTirol, serverInstanceEuregio));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),

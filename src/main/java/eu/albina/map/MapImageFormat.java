@@ -19,7 +19,7 @@ enum MapImageFormat {
 		@Override
 		Path convertFrom(Path pdfFile) throws IOException, InterruptedException {
 			Path pngFile = checkAndReplaceExtension(pdfFile, "pdf", "png");
-			logger.info("Converting {} to {}", pdfFile, pngFile);
+			logger.debug("Converting {} to {}", pdfFile, pngFile);
 			int dpi = 300;
 			new ProcessBuilder("gs",
 				"-sDEVICE=png16m",
@@ -36,7 +36,7 @@ enum MapImageFormat {
 		@Override
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			checkAndReplaceExtension(pngFile, "png", "png");
-			logger.info("Creating transparency for {}", pngFile);
+			logger.debug("Creating transparency for {}", pngFile);
 			new ProcessBuilder("convert",
 				"-transparent",
 				"white",
@@ -49,7 +49,7 @@ enum MapImageFormat {
 		@Override
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			Path jpgFile = checkAndReplaceExtension(pngFile, "png", "jpg");
-			logger.info("Converting {} to {}", pngFile, jpgFile);
+			logger.debug("Converting {} to {}", pngFile, jpgFile);
 			new ProcessBuilder("convert",
 				pngFile.toString(),
 				jpgFile.toString()
@@ -60,7 +60,7 @@ enum MapImageFormat {
 		@Override
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			Path webpFile = checkAndReplaceExtension(pngFile, "png", "webp");
-			logger.info("Converting {} to {}", pngFile, webpFile);
+			logger.debug("Converting {} to {}", pngFile, webpFile);
 			new ProcessBuilder("cwebp",
 				pngFile.toString(),
 				"-o",

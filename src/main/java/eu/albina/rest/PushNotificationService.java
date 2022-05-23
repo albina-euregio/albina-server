@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 albina-euregio
+ * Copyright (C) 2021 albina
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import eu.albina.util.GlobalVariables;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,7 @@ public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 
 	static class VapidKey {
-		public String vapidPublicKey = GlobalVariables.getVapidPublicKey();
+		public String vapidPublicKey = PushNotificationUtil.getConfiguration().getVapidPublicKey();
 	}
 
 	@GET

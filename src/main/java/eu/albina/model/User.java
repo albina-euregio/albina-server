@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -30,6 +31,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -63,10 +66,12 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private List<Role> roles;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "user_region", joinColumns = @JoinColumn(name = "USER_EMAIL"))
-	@Column(name = "USER_REGION")
-	private Set<String> regions;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name="user_region",
+	 joinColumns=@JoinColumn(name="USER_EMAIL"),
+	 inverseJoinColumns=@JoinColumn(name="REGION_ID")
+	)
+	private Set<Region> regions;
 
 	/** Image of the user **/
 	@Column(name = "IMAGE", columnDefinition = "LONGBLOB")
@@ -84,11 +89,15 @@ public class User {
 	 * Standard constructor for a user.
 	 */
 	public User() {
-		regions = new HashSet<String>();
+		regions = new HashSet<Region>();
 		roles = new ArrayList<Role>();
 	}
 
-	public User(JSONObject json) {
+	public User(String email) {
+		this.email = email;
+	}
+
+	public User(JSONObject json, Function<String, Region> regionFunction) {
 		this();
 		if (json.has("email") && !json.isNull("email"))
 			this.email = json.getString("email");
@@ -103,7 +112,7 @@ public class User {
 		if (json.has("regions")) {
 			JSONArray regions = json.getJSONArray("regions");
 			for (Object region : regions) {
-				this.regions.add((String) region);
+				this.regions.add(regionFunction.apply((String) region));
 			}
 		}
 		if (json.has("roles")) {
@@ -159,15 +168,15 @@ public class User {
 			this.roles.add(role);
 	}
 
-	public Set<String> getRegions() {
+	public Set<Region> getRegions() {
 		return regions;
 	}
 
-	public void setRegions(Set<String> regions) {
+	public void setRegions(Set<Region> regions) {
 		this.regions = regions;
 	}
 
-	public void addRegion(String region) {
+	public void addRegion(Region region) {
 		if (!this.regions.contains(region))
 			this.regions.add(region);
 	}
@@ -206,8 +215,8 @@ public class User {
 
 		if (regions != null && regions.size() > 0) {
 			JSONArray jsonRegions = new JSONArray();
-			for (String region : regions) {
-				jsonRegions.put(region.toString());
+			for (Region region : regions) {
+				jsonRegions.put(region.toJSON());
 			}
 			json.put("regions", jsonRegions);
 		}
@@ -241,7 +250,7 @@ public class User {
 		return operation;
 	}
 
-	public boolean hasPermissionForRegion(String region) {
-		return getRegions().contains(region);
+	public boolean hasPermissionForRegion(String regionId) {
+		return getRegions().stream().anyMatch(region -> region.getId().equals(regionId));
 	}
 }

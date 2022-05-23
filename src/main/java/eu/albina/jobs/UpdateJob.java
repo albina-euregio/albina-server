@@ -30,18 +30,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheBulletinController;
-import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.RegionController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.GlobalVariables;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
- * automatically update the Avalanche.report at 8AM.
+ * automatically update the bulletins at 8AM.
  *
  * @author Norbert Lanzanasto
  *
@@ -51,7 +52,7 @@ public class UpdateJob implements org.quartz.Job {
 	private static final Logger logger = LoggerFactory.getLogger(UpdateJob.class);
 
 	/**
-	 * Execute all necessary tasks to update the Avalanche.report at 8AM, depending
+	 * Execute all necessary tasks to update the bulletins at 8AM, depending
 	 * on the current settings.
 	 *
 	 * @param arg0
@@ -61,13 +62,13 @@ public class UpdateJob implements org.quartz.Job {
 		logger.info("Update job triggered!");
 
 		try {
-			User user = UserController.getInstance().getUser(GlobalVariables.avalancheReportUsername);
+			User user = UserController.getInstance().getUser(ServerInstanceController.getInstance().getLocalServerInstance().getUserName());
 
 			ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
 			Instant startDate = today.toInstant();
 			Instant endDate = today.plusDays(1).toInstant();
 
-			List<String> changedRegions = GlobalVariables.getPublishRegions().stream()
+			List<Region> changedRegions = RegionController.getInstance().getActiveRegions().stream()
 				.filter(region -> {
 					try {
 						return AlbinaUtil.hasBulletinChanged(startDate, region);
@@ -90,11 +91,8 @@ public class UpdateJob implements org.quartz.Job {
 							result.add(avalancheBulletin);
 					}
 					if (result != null && !result.isEmpty())
-						PublicationController.getInstance().updateAutomatically(result, changedRegions);
+						PublicationController.getInstance().updateAutomatically(result, changedRegions, user, publicationDate, startDate);
 				}
-
-				AvalancheReportController.getInstance().publishReport(publishedBulletins.values(), startDate,
-						changedRegions, user, publicationDate);
 			} else {
 				logger.info("No bulletins to update.");
 			}

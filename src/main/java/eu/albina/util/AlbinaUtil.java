@@ -27,6 +27,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -44,14 +45,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheSituation;
+import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
+import eu.albina.model.User;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
+import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class AlbinaUtil {
@@ -59,37 +65,7 @@ public class AlbinaUtil {
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
 	private static final ClassLoader classLoader = AlbinaUtil.class.getClassLoader();
 
-	// REGION
-	public static final int regionCountTyrol = 29;
-	public static final int regionCountSouthTyrol = 20;
-	public static final int regionCountTrentino = 21;
-	public static final int regionCountAran = 3;
-
 	public static final String greyDarkColor = "#565F61";
-
-	// REGION
-	public static int getRegionCount(String region) {
-		switch (region) {
-		case GlobalVariables.codeTyrol:
-			return regionCountTyrol;
-		case GlobalVariables.codeSouthTyrol:
-			return regionCountSouthTyrol;
-		case GlobalVariables.codeTrentino:
-			return regionCountTrentino;
-		case GlobalVariables.codeAran:
-			return regionCountAran;
-
-		default:
-			return -1;
-		}
-	}
-
-	public static String getRegionName(LanguageCode lang, String regionId) {
-		if ("".equals(regionId)) {
-			return "";
-		}
-		return lang.getBundle("i18n.Regions").getString(regionId);
-	}
 
 	public static ZoneId localZone() {
 		return ZoneId.of("Europe/Vienna");
@@ -134,7 +110,7 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static boolean hasBulletinChanged(Instant startDate, String region) throws AlbinaException {
+	public static boolean hasBulletinChanged(Instant startDate, Region region) throws AlbinaException {
 		boolean result = false;
 		Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 				startDate, region);
@@ -177,7 +153,6 @@ public class AlbinaUtil {
 		if (date != null) {
 			date = date.withZoneSameInstant(localZone());
 			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
-			result.append(" ");
 			result.append(date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
 		} else {
 			// TODO what if no date is given (should not happen)
@@ -191,11 +166,9 @@ public class AlbinaUtil {
 		return getDate(bulletins).getYear();
 	}
 
-	public static String getStaticWidgetFilename(String validityDateString, LanguageCode lang) {
-		if (validityDateString != null)
-			return validityDateString + "_" + lang.toString();
-		else
-			return "_" + lang.toString();
+	public static String getThumbnailFileName(Region region, String validityDateString, String publicationTimeString, DaytimeDependency daytimeDependency) {
+		return ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath() + "/"
+				+ validityDateString + "/" + publicationTimeString + "/" + daytimeDependency.toString() + "_" + region.getId() + "_thumbnail.jpg";
 	}
 
 	public static String getValidityDateString(List<AvalancheBulletin> bulletins) {
@@ -223,13 +196,13 @@ public class AlbinaUtil {
 		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
 	}
 
-	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, String region, Period offset) {
-		if (region != null && !region.isEmpty())
-			return LinkUtil.getSimpleHtmlUrl(lang) + "/"
-					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region + "_" + lang.toString()
+	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, Period offset, ServerInstance serverInstance) {
+		if (region != null && !region.getId().isEmpty())
+			return LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region.getId() + "_" + lang.toString()
 					+ ".html";
 		else
-			return LinkUtil.getSimpleHtmlUrl(lang) + "/"
+			return LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
 					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + lang.toString() + ".html";
 	}
 
@@ -252,7 +225,7 @@ public class AlbinaUtil {
 		return (secondOfDay == 61200) ? false : true;
 	}
 
-	private static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
+	public static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime date = null;
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			ZonedDateTime bulletinDate = avalancheBulletin.getPublicationDate();
@@ -325,8 +298,8 @@ public class AlbinaUtil {
 	public static void runUpdateMapsScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateMaps.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -339,8 +312,8 @@ public class AlbinaUtil {
 	public static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateFiles.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -353,8 +326,8 @@ public class AlbinaUtil {
 	public static void runUpdatePdfsScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updatePdfs.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -367,8 +340,8 @@ public class AlbinaUtil {
 	public static void runUpdateLatestPdfsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestPdfs.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -381,8 +354,8 @@ public class AlbinaUtil {
 	public static void runUpdateJsonScript(String validityDateString, String publicationTimeString) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateJson.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					validityDateString, publicationTimeString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -395,8 +368,8 @@ public class AlbinaUtil {
 	public static void runUpdateXmlsScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateXmls.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -409,8 +382,8 @@ public class AlbinaUtil {
 	public static void runUpdateLatestJsonScript(String validityDateString) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestJson.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					validityDateString).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -423,8 +396,8 @@ public class AlbinaUtil {
 	public static void runUpdateLatestXmlsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestXmls.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -434,39 +407,11 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static void runUpdateStaticWidgetsScript(String date, String publicationTime) {
-		try {
-			final File file = new File(classLoader.getResource("scripts/updateStaticWidgets.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
-					date, publicationTime).inheritIO();
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("PNGs updated in date directory for {} using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("PNGs could not be updated in date directory for " + date + "!", e);
-		}
-	}
-
-	public static void runUpdateLatestStaticWidgetsScript(String date) {
-		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestStaticWidgets.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
-					date).inheritIO();
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("PNGs for {} updated in latest directory using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("PNGs for " + date + " could not be updated in latest directory!", e);
-		}
-	}
-
 	public static void runUpdateLatestMapsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestMaps.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getMapsPath(),
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
@@ -479,9 +424,9 @@ public class AlbinaUtil {
 	public static void runUpdateLatestFilesScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestFiles.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), GlobalVariables.getPdfDirectory(),
-					date, GlobalVariables.getHtmlDirectory()).inheritIO();
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Latest files updated using {}", pb.command());
@@ -493,9 +438,9 @@ public class AlbinaUtil {
 	public static void runUpdateLatestHtmlsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestHtmls.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()),
-					GlobalVariables.getHtmlDirectory(), date).inheritIO();
+					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("HTMLs for {} updated in latest directory using {}", date, pb.command());
@@ -584,6 +529,11 @@ public class AlbinaUtil {
 			aspectString.add(aspect.toString(locale));
 		}
 		return aspectString.toString();
+    }
+
+    public static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {
+		String stringDate = OffsetDateTime.parse(date).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return stringDate + "_" + language.getBundleString("media-file.name") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
     }
 
 }
