@@ -192,7 +192,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	/** Map containing all text parts available for a bulletin */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "AVALANCHE_BULLETIN_TEXTS", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
+	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@MapKeyEnumerated(EnumType.STRING)
 	@MapKeyColumn(name = "TEXT_TYPE")
 	private Map<TextPart, Texts> textPartsMap;

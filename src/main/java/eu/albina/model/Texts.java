@@ -36,7 +36,7 @@ import eu.albina.model.enumerations.LanguageCode;
 public class Texts extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "TEXT_PARTS", joinColumns = @JoinColumn(name = "TEXTS_ID"))
+	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
 	private Set<Text> texts;
 
 	public Texts() {
