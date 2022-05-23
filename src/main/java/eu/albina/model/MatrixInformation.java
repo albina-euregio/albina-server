@@ -48,7 +48,7 @@ public class MatrixInformation implements AvalancheInformationObject {
 	private ArtificialAvalancheReleaseProbability artificialAvalancheReleaseProbability;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ARTIFICIAL_HARZARD_SITE_DISTRIBUTION")
+	@Column(name = "ARTIFICIAL_HAZARD_SITE_DISTRIBUTION")
 	private HazardSiteDistribution artificialHazardSiteDistribution;
 
 	@Enumerated(EnumType.STRING)
