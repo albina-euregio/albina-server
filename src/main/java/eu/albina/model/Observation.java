@@ -31,6 +31,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -79,6 +80,7 @@ public class Observation {
 	@Column(name = "REGION_ID")
 	private String region;
 
+	@Lob
 	@Column(name = "CONTENT")
 	private String content;
 
