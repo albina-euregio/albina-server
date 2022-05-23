@@ -527,70 +527,70 @@ public class EmailUtil {
 			bulletin.put("map", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + avalancheBulletin.getValidityDateString() + "/"
 					+ publicationTime + "/" + avalancheBulletin.getId() + ".jpg");
 
-		// avalanche situations
-		bulletin.put("avalancheSituation1", createAvalancheSituation(daytimeBulletin.getAvalancheSituation1(), lang, region, serverInstance));
-		bulletin.put("avalancheSituation2", createAvalancheSituation(daytimeBulletin.getAvalancheSituation2(), lang, region, serverInstance));
-		bulletin.put("avalancheSituation3", createAvalancheSituation(daytimeBulletin.getAvalancheSituation3(), lang, region, serverInstance));
-		bulletin.put("avalancheSituation4", createAvalancheSituation(daytimeBulletin.getAvalancheSituation4(), lang, region, serverInstance));
-		bulletin.put("avalancheSituation5", createAvalancheSituation(daytimeBulletin.getAvalancheSituation5(), lang, region, serverInstance));
+		// avalanche problems
+		bulletin.put("avalancheProblem1", createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, region, serverInstance));
+		bulletin.put("avalancheProblem2", createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), lang, region, serverInstance));
+		bulletin.put("avalancheProblem3", createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), lang, region, serverInstance));
+		bulletin.put("avalancheProblem4", createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), lang, region, serverInstance));
+		bulletin.put("avalancheProblem5", createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), lang, region, serverInstance));
 	}
 
-	private Map<String, Object> createAvalancheSituation(eu.albina.model.AvalancheSituation avalancheSituation,
+	private Map<String, Object> createAvalancheProblem(eu.albina.model.AvalancheProblem avalancheProblem,
 			LanguageCode lang, Region region, ServerInstance serverInstance) {
-		Map<String, Object> avalancheSituation2 = new HashMap<>();
+		Map<String, Object> avalancheProblemMap = new HashMap<>();
 		final String serverImagesUrl =  serverInstance.getServerImagesUrl();
 
-		if (avalancheSituation != null && avalancheSituation.getAvalancheSituation() != null) {
-			avalancheSituation2.put("empty", false);
-			if (avalancheSituation.getAvalancheSituation() != null) {
-				avalancheSituation2.put("symbol", serverImagesUrl + "avalanche_situations/color/"
-						+ avalancheSituation.getAvalancheSituation().toStringId() + ".png");
-				avalancheSituation2.put("text", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
-				avalancheSituation2.put("link",
-						LinkUtil.getAvalancheSituationLink(lang, region, avalancheSituation.getAvalancheSituation()));
+		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
+			avalancheProblemMap.put("empty", false);
+			if (avalancheProblem.getAvalancheProblem() != null) {
+				avalancheProblemMap.put("symbol", serverImagesUrl + "avalanche_problems/color/"
+						+ avalancheProblem.getAvalancheProblem().toStringId() + ".png");
+				avalancheProblemMap.put("text", avalancheProblem.getAvalancheProblem().toString(lang.getLocale()));
+				avalancheProblemMap.put("link",
+						LinkUtil.getAvalancheProblemLink(lang, region, avalancheProblem.getAvalancheProblem()));
 			} else {
-				avalancheSituation2.put("symbol",
-						serverImagesUrl + "avalanche_situations/color/empty.png");
-				avalancheSituation2.put("text", "");
-				avalancheSituation2.put("link", "");
+				avalancheProblemMap.put("symbol",
+						serverImagesUrl + "avalanche_problems/color/empty.png");
+				avalancheProblemMap.put("text", "");
+				avalancheProblemMap.put("link", "");
 			}
 
-			String path = Aspect.getSymbolPath(avalancheSituation.getAspects(), false);
-			avalancheSituation2.put("aspects", serverImagesUrl + path);
+			String path = Aspect.getSymbolPath(avalancheProblem.getAspects(), false);
+			avalancheProblemMap.put("aspects", serverImagesUrl + path);
 
 			Map<String, Object> elevation = new HashMap<>();
-			if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
-				if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
+				if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 					// elevation high and low set
 					elevation.put("symbol",
 							serverImagesUrl + "elevation/color/levels_middle_two.png");
 					// elevation.put("symbol", "cid:elevation/middle");
-					if (avalancheSituation.getTreelineLow())
+					if (avalancheProblem.getTreelineLow())
 						elevation.put("limitAbove", lang.getBundleString("elevation.treeline.capitalized"));
-					else if (avalancheSituation.getElevationLow() > 0)
-						elevation.put("limitAbove", avalancheSituation.getElevationLow() + "m");
-					if (avalancheSituation.getTreelineHigh())
+					else if (avalancheProblem.getElevationLow() > 0)
+						elevation.put("limitAbove", avalancheProblem.getElevationLow() + "m");
+					if (avalancheProblem.getTreelineHigh())
 						elevation.put("limitBelow", lang.getBundleString("elevation.treeline.capitalized"));
-					else if (avalancheSituation.getElevationHigh() > 0)
-						elevation.put("limitBelow", avalancheSituation.getElevationHigh() + "m");
+					else if (avalancheProblem.getElevationHigh() > 0)
+						elevation.put("limitBelow", avalancheProblem.getElevationHigh() + "m");
 				} else {
 					// elevation high set
 					elevation.put("symbol", serverImagesUrl + "elevation/color/levels_below.png");
 					// elevation.put("symbol", "cid:elevation/below");
 					elevation.put("limitAbove", "");
-					if (avalancheSituation.getTreelineHigh())
+					if (avalancheProblem.getTreelineHigh())
 						elevation.put("limitBelow", lang.getBundleString("elevation.treeline.capitalized"));
-					else if (avalancheSituation.getElevationHigh() > 0)
-						elevation.put("limitBelow", avalancheSituation.getElevationHigh() + "m");
+					else if (avalancheProblem.getElevationHigh() > 0)
+						elevation.put("limitBelow", avalancheProblem.getElevationHigh() + "m");
 				}
-			} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation low set
 				elevation.put("symbol", serverImagesUrl + "elevation/color/levels_above.png");
 				// elevation.put("symbol", "cid:elevation/above");
-				if (avalancheSituation.getTreelineLow())
+				if (avalancheProblem.getTreelineLow())
 					elevation.put("limitAbove", lang.getBundleString("elevation.treeline.capitalized"));
-				else if (avalancheSituation.getElevationLow() > 0)
-					elevation.put("limitAbove", avalancheSituation.getElevationLow() + "m");
+				else if (avalancheProblem.getElevationLow() > 0)
+					elevation.put("limitAbove", avalancheProblem.getElevationLow() + "m");
 				elevation.put("limitBelow", "");
 			} else {
 				// no elevation set
@@ -599,24 +599,24 @@ public class EmailUtil {
 				elevation.put("limitAbove", "");
 				elevation.put("limitBelow", "");
 			}
-			avalancheSituation2.put("elevation", elevation);
+			avalancheProblemMap.put("elevation", elevation);
 		} else {
-			avalancheSituation2.put("empty", true);
-			avalancheSituation2.put("symbol",
-					serverImagesUrl + "avalanche_situations/color/empty.png");
-			avalancheSituation2.put("text", "");
-			avalancheSituation2.put("link", "");
+			avalancheProblemMap.put("empty", true);
+			avalancheProblemMap.put("symbol",
+					serverImagesUrl + "avalanche_problems/color/empty.png");
+			avalancheProblemMap.put("text", "");
+			avalancheProblemMap.put("link", "");
 
 			String path = Aspect.getSymbolPath(null, false);
-			avalancheSituation2.put("aspects", serverImagesUrl + path);
+			avalancheProblemMap.put("aspects", serverImagesUrl + path);
 
 			Map<String, Object> elevation = new HashMap<>();
 			elevation.put("symbol", serverImagesUrl + "elevation/color/empty.png");
 			elevation.put("limitAbove", "");
 			elevation.put("limitBelow", "");
-			avalancheSituation2.put("elevation", elevation);
+			avalancheProblemMap.put("elevation", elevation);
 		}
-		return avalancheSituation2;
+		return avalancheProblemMap;
 	}
 
 	private String getDangerRatingColorStyle(DangerRating dangerRating, ServerInstance serverInstance) {

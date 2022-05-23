@@ -26,7 +26,7 @@
 	"dangerPattern2": "dp2",
 	"dangerPattern1": "dp8",
 	"forenoon": {
-		"avalancheSituation2": {
+		"avalancheProblem2": {
 			"aspects": [
 				"SE",
 				"S",
@@ -34,9 +34,9 @@
 				"SW",
 				"E"
 			],
-			"avalancheSituation": "persistent_weak_layers"
+			"avalancheProblem": "persistent_weak_layers"
 		},
-		"avalancheSituation1": {
+		"avalancheProblem1": {
 			"aspects": [
 				"SE",
 				"S",
@@ -44,7 +44,7 @@
 				"NE",
 				"E"
 			],
-			"avalancheSituation": "wind_drifted_snow"
+			"avalancheProblem": "wind_drifted_snow"
 		},
 		"id": "b5ae6b14-5368-41b9-bbd2-88a6ab213fa1",
 		"dangerRatingAbove": "moderate"

@@ -190,8 +190,8 @@
 			"elevation": 2000,
 			"dangerRatingAbove": "considerable",
 			"dangerRatingBelow": "moderate",
-			"avalancheSituation1": {
-				"avalancheSituation": "wind_drifted_snow",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_drifted_snow",
 				"aspects": [
 					"NW",
 					"SW",
@@ -213,8 +213,8 @@
 					"naturalHazardSiteDistribution": "some"
 				}
 			},
-			"avalancheSituation2": {
-				"avalancheSituation": "persistent_weak_layers",
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
 				"aspects": [
 					"NW",
 					"SW",
@@ -233,8 +233,8 @@
 					"artificialHazardSiteDistribution": "many"
 				}
 			},
-			"avalancheSituation3": {
-				"avalancheSituation": "new_snow",
+			"avalancheProblem3": {
+				"avalancheProblem": "new_snow",
 				"aspects": [
 					"NW",
 					"SW",

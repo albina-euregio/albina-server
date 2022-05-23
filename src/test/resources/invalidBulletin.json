@@ -13,7 +13,7 @@
 		},
 		{
 			"languageCode" : "en",
-			"text" : "Avalanche situation highlight in english."
+			"text" : "Avalanche activity highlight in english."
 		}
 	],
 	"avActivityComment" : [
@@ -23,7 +23,7 @@
 		},
 		{
 			"languageCode" : "en",
-			"text" : "Avalanche situation in english."
+			"text" : "Avalanche activity in english."
 		}
 	],
 	"synopsisComment" : [
@@ -84,13 +84,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -107,13 +107,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -130,13 +130,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -153,13 +153,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -176,13 +176,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -199,13 +199,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -222,13 +222,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -245,13 +245,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -268,13 +268,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -291,13 +291,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -314,13 +314,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -337,13 +337,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -370,13 +370,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -393,13 +393,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -416,13 +416,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -439,13 +439,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -462,13 +462,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -485,13 +485,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -508,13 +508,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -531,13 +531,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -554,13 +554,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -577,13 +577,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -600,13 +600,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],
@@ -623,13 +623,13 @@
 						{
 							"elevationLimit" : 2000,
 							"dangerZone" : "above",
-							"avalancheSituation" : "new_snow",
+							"avalancheProblem" : "new_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						},
 						{
 							"elevationLimit" : 2500,
 							"dangerZone" : "above",
-							"avalancheSituation" : "wind_drifted_snow",
+							"avalancheProblem" : "wind_drifted_snow",
 							"aspects" : [ "NW", "N", "NE" ]
 						}
 					],

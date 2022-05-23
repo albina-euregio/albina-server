@@ -27,8 +27,8 @@
 		"tendency": "steady",
 		"forenoon": {
 			"dangerRatingBelow": "moderate",
-			"avalancheSituation2": {},
-			"avalancheSituation1": {
+			"avalancheProblem2": {},
+			"avalancheProblem1": {
 				"treelineLow": true,
 				"aspects": [
 					"n",
@@ -40,7 +40,7 @@
 					"se",
 					"ne"
 				],
-				"avalancheSituation": "new_snow"
+				"avalancheProblem": "new_snow"
 			},
 			"id": "4ddf7260-80e7-4a7c-a7b1-d3cdcbf27489",
 			"dangerRatingAbove": "moderate"
@@ -201,8 +201,8 @@
 		"tendency": "steady",
 		"forenoon": {
 			"dangerRatingBelow": "low",
-			"avalancheSituation2": {},
-			"avalancheSituation1": {
+			"avalancheProblem2": {},
+			"avalancheProblem1": {
 				"treelineLow": true,
 				"aspects": [
 					"n",
@@ -214,7 +214,7 @@
 					"se",
 					"ne"
 				],
-				"avalancheSituation": "wind_drifted_snow"
+				"avalancheProblem": "wind_drifted_snow"
 			},
 			"id": "bccf82c0-223a-4ceb-b110-a08a66cd0a5e",
 			"dangerRatingAbove": "moderate"

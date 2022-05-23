@@ -49,7 +49,7 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.AvalancheSituation;
+import eu.albina.model.AvalancheProblem;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
@@ -473,48 +473,48 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static String getElevationString(AvalancheSituation avalancheSituation, LanguageCode lang) {
-		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
-			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+	public static String getElevationString(AvalancheProblem avalancheProblem, LanguageCode lang) {
+		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
+			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
 				String low = "";
 				String high = "";
-				if (avalancheSituation.getTreelineLow()) {
+				if (avalancheProblem.getTreelineLow()) {
 					// elevation low treeline
 					low = lang.getBundleString("elevation.treeline");
-				} else if (avalancheSituation.getElevationLow() > 0) {
+				} else if (avalancheProblem.getElevationLow() > 0) {
 					// elevation low number
-					low = avalancheSituation.getElevationLow() + lang.getBundleString("unit.meter");
+					low = avalancheProblem.getElevationLow() + lang.getBundleString("unit.meter");
 				}
-				if (avalancheSituation.getTreelineHigh()) {
+				if (avalancheProblem.getTreelineHigh()) {
 					// elevation high treeline
 					high = lang.getBundleString("elevation.treeline");
-				} else if (avalancheSituation.getElevationHigh() > 0) {
+				} else if (avalancheProblem.getElevationHigh() > 0) {
 					// elevation high number
-					high = avalancheSituation.getElevationHigh() + lang.getBundleString("unit.meter");
+					high = avalancheProblem.getElevationHigh() + lang.getBundleString("unit.meter");
 				}
 				return MessageFormat.format(lang.getBundleString("elevation.band"), low, high);
 			} else {
 				// elevation high set
 				String high = "";
-				if (avalancheSituation.getTreelineHigh()) {
+				if (avalancheProblem.getTreelineHigh()) {
 					// elevation high treeline
 					high = lang.getBundleString("elevation.treeline");
-				} else if (avalancheSituation.getElevationHigh() > 0) {
+				} else if (avalancheProblem.getElevationHigh() > 0) {
 					// elevation high number
-					high = avalancheSituation.getElevationHigh() + lang.getBundleString("unit.meter");
+					high = avalancheProblem.getElevationHigh() + lang.getBundleString("unit.meter");
 				}
 				return MessageFormat.format(lang.getBundleString("elevation.below"), high);
 			}
-		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
 			String low = "";
-			if (avalancheSituation.getTreelineLow()) {
+			if (avalancheProblem.getTreelineLow()) {
 				// elevation low treeline
 				low = lang.getBundleString("elevation.treeline");
-			} else if (avalancheSituation.getElevationLow() > 0) {
+			} else if (avalancheProblem.getElevationLow() > 0) {
 				// elevation low number
-				low = avalancheSituation.getElevationLow() + lang.getBundleString("unit.meter");
+				low = avalancheProblem.getElevationLow() + lang.getBundleString("unit.meter");
 			}
 			return MessageFormat.format(lang.getBundleString("elevation.above"), low);
 		} else {

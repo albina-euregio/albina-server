@@ -36,7 +36,7 @@ import com.github.openjson.JSONObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.AvalancheSituation;
+import eu.albina.model.AvalancheProblem;
 import eu.albina.model.MatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
@@ -563,11 +563,11 @@ public class StatisticsController {
 			}
 			sb.append(GlobalVariables.csvDeliminator);
 
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation1(), extended, lang);
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation2(), extended, lang);
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation3(), extended, lang);
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation4(), extended, lang);
-			addCsvAvalancheSituation(sb, daytimeDescription.getAvalancheSituation5(), extended, lang);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem1(), extended, lang);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem2(), extended, lang);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem3(), extended, lang);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem4(), extended, lang);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem5(), extended, lang);
 
 			if (avalancheBulletin.getTendency() != null)
 				sb.append(avalancheBulletin.getTendency().toString());
@@ -699,73 +699,73 @@ public class StatisticsController {
 
 	/**
 	 * Add a CSV string to a {@code StringBuilder} instance representing the
-	 * {@code avalancheSituation}.
+	 * {@code avalancheProblem}.
 	 *  @param sb
 	 *            the string builder instance the new string should be added to
-	 * @param avalancheSituation
-	 *            the {@code AvalancheSituation} that should be added to the
+	 * @param avalancheProblem
+	 *            the {@code AvalancheProblem} that should be added to the
 	 *            {@code StringBuilder} instance
 	 * @param lang
 	 */
-	private void addCsvAvalancheSituation(StringBuilder sb, AvalancheSituation avalancheSituation, boolean extended, LanguageCode lang) {
-		if (avalancheSituation != null && avalancheSituation.getAvalancheSituation() != null) {
-			sb.append(avalancheSituation.getAvalancheSituation().toStringId());
+	private void addCsvAvalancheProblem(StringBuilder sb, AvalancheProblem avalancheProblem, boolean extended, LanguageCode lang) {
+		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
+			sb.append(avalancheProblem.getAvalancheProblem().toStringId());
 			sb.append(GlobalVariables.csvDeliminator);
-			if (avalancheSituation.getTreelineLow())
+			if (avalancheProblem.getTreelineLow())
 				sb.append(lang.getBundleString("elevation.treeline"));
 			else {
-				if (avalancheSituation.getElevationLow() <= 0)
+				if (avalancheProblem.getElevationLow() <= 0)
 					sb.append(GlobalVariables.notAvailableString);
 				else
-					sb.append(avalancheSituation.getElevationLow());
+					sb.append(avalancheProblem.getElevationLow());
 			}
 			sb.append(GlobalVariables.csvDeliminator);
-			if (avalancheSituation.getTreelineHigh())
+			if (avalancheProblem.getTreelineHigh())
 				sb.append(lang.getBundleString("elevation.treeline"));
 			else {
-				if (avalancheSituation.getElevationHigh() <= 0)
+				if (avalancheProblem.getElevationHigh() <= 0)
 					sb.append(GlobalVariables.notAvailableString);
 				else
-					sb.append(avalancheSituation.getElevationHigh());
+					sb.append(avalancheProblem.getElevationHigh());
 			}
 			sb.append(GlobalVariables.csvDeliminator);
-			if (avalancheSituation.getAspects() != null && !avalancheSituation.getAspects().isEmpty()) {
-				if (avalancheSituation.getAspects().contains(Aspect.N))
+			if (avalancheProblem.getAspects() != null && !avalancheProblem.getAspects().isEmpty()) {
+				if (avalancheProblem.getAspects().contains(Aspect.N))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation.getAspects().contains(Aspect.NE))
+				if (avalancheProblem.getAspects().contains(Aspect.NE))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation.getAspects().contains(Aspect.E))
+				if (avalancheProblem.getAspects().contains(Aspect.E))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation.getAspects().contains(Aspect.SE))
+				if (avalancheProblem.getAspects().contains(Aspect.SE))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation.getAspects().contains(Aspect.S))
+				if (avalancheProblem.getAspects().contains(Aspect.S))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation.getAspects().contains(Aspect.SW))
+				if (avalancheProblem.getAspects().contains(Aspect.SW))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation.getAspects().contains(Aspect.W))
+				if (avalancheProblem.getAspects().contains(Aspect.W))
 					sb.append("1");
 				else
 					sb.append("0");
 				sb.append(GlobalVariables.csvDeliminator);
-				if (avalancheSituation.getAspects().contains(Aspect.NW))
+				if (avalancheProblem.getAspects().contains(Aspect.NW))
 					sb.append("1");
 				else
 					sb.append("0");
@@ -777,7 +777,7 @@ public class StatisticsController {
 				}
 			}
 			if (extended) {
-				addMatrixInformation(sb, avalancheSituation.getMatrixInformation());
+				addMatrixInformation(sb, avalancheProblem.getMatrixInformation());
 				sb.append(GlobalVariables.csvDeliminator);
 			}
 		} else {

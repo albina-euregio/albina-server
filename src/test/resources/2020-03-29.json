@@ -26,8 +26,8 @@
 		],
 		"tendency": "increasing",
 		"forenoon": {
-			"avalancheSituation2": {},
-			"avalancheSituation1": {
+			"avalancheProblem2": {},
+			"avalancheProblem1": {
 				"treelineLow": true
 			},
 			"id": "eb5a3e23-3e74-4d8c-a843-ef17f7984fa8",
@@ -161,8 +161,8 @@
 		],
 		"tendency": "increasing",
 		"forenoon": {
-			"avalancheSituation2": {},
-			"avalancheSituation1": {
+			"avalancheProblem2": {},
+			"avalancheProblem1": {
 				"treelineLow": true
 			},
 			"id": "0c2a50f5-c460-4138-b3a9-0554a07eca7f",
@@ -297,10 +297,10 @@
 		],
 		"tendency": "increasing",
 		"forenoon": {
-			"avalancheSituation2": {
+			"avalancheProblem2": {
 				"elevationLow": 2400
 			},
-			"avalancheSituation1": {
+			"avalancheProblem1": {
 				"elevationLow": 2400
 			},
 			"id": "1aa3813e-3935-4e06-b3a5-c6f9d2c6e54c",

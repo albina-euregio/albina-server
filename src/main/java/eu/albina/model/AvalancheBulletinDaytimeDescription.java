@@ -119,24 +119,24 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	private Complexity complexity;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "AVALANCHE_SITUATION_1_ID")
-	private AvalancheSituation avalancheSituation1;
+	@JoinColumn(name = "AVALANCHE_PROBLEM_1_ID")
+	private AvalancheProblem avalancheProblem1;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "AVALANCHE_SITUATION_2_ID")
-	private AvalancheSituation avalancheSituation2;
+	@JoinColumn(name = "AVALANCHE_PROBLEM_2_ID")
+	private AvalancheProblem avalancheProblem2;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "AVALANCHE_SITUATION_3_ID")
-	private AvalancheSituation avalancheSituation3;
+	@JoinColumn(name = "AVALANCHE_PROBLEM_3_ID")
+	private AvalancheProblem avalancheProblem3;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "AVALANCHE_SITUATION_4_ID")
-	private AvalancheSituation avalancheSituation4;
+	@JoinColumn(name = "AVALANCHE_PROBLEM_4_ID")
+	private AvalancheProblem avalancheProblem4;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "AVALANCHE_SITUATION_5_ID")
-	private AvalancheSituation avalancheSituation5;
+	@JoinColumn(name = "AVALANCHE_PROBLEM_5_ID")
+	private AvalancheProblem avalancheProblem5;
 
 	public AvalancheBulletinDaytimeDescription() {
 		this.terrainFeatureAbove = new HashSet<Text>();
@@ -174,21 +174,21 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 				terrainFeatureBelow.add(new Text((JSONObject) entry));
 		if (json.has("complexity"))
 			this.complexity = Complexity.valueOf(json.getString("complexity").toLowerCase());
-		if (json.has("avalancheSituation1"))
-			this.avalancheSituation1 = new eu.albina.model.AvalancheSituation(
-					json.getJSONObject("avalancheSituation1"));
-		if (json.has("avalancheSituation2"))
-			this.avalancheSituation2 = new eu.albina.model.AvalancheSituation(
-					json.getJSONObject("avalancheSituation2"));
-		if (json.has("avalancheSituation3"))
-			this.avalancheSituation3 = new eu.albina.model.AvalancheSituation(
-					json.getJSONObject("avalancheSituation3"));
-		if (json.has("avalancheSituation4"))
-			this.avalancheSituation4 = new eu.albina.model.AvalancheSituation(
-					json.getJSONObject("avalancheSituation4"));
-		if (json.has("avalancheSituation5"))
-			this.avalancheSituation5 = new eu.albina.model.AvalancheSituation(
-					json.getJSONObject("avalancheSituation5"));
+		if (json.has("avalancheProblem1"))
+			this.avalancheProblem1 = new eu.albina.model.AvalancheProblem(
+					json.getJSONObject("avalancheProblem1"));
+		if (json.has("avalancheProblem2"))
+			this.avalancheProblem2 = new eu.albina.model.AvalancheProblem(
+					json.getJSONObject("avalancheProblem2"));
+		if (json.has("avalancheProblem3"))
+			this.avalancheProblem3 = new eu.albina.model.AvalancheProblem(
+					json.getJSONObject("avalancheProblem3"));
+		if (json.has("avalancheProblem4"))
+			this.avalancheProblem4 = new eu.albina.model.AvalancheProblem(
+					json.getJSONObject("avalancheProblem4"));
+		if (json.has("avalancheProblem5"))
+			this.avalancheProblem5 = new eu.albina.model.AvalancheProblem(
+					json.getJSONObject("avalancheProblem5"));
 	}
 
 	public boolean isHasElevationDependency() {
@@ -303,49 +303,49 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.complexity = complexity;
 	}
 
-	public AvalancheSituation getAvalancheSituation1() {
-		return avalancheSituation1;
+	public AvalancheProblem getAvalancheProblem1() {
+		return avalancheProblem1;
 	}
 
-	public void setAvalancheSituation1(AvalancheSituation avalancheSituation1) {
-		this.avalancheSituation1 = avalancheSituation1;
+	public void setAvalancheProblem1(AvalancheProblem avalancheProblem1) {
+		this.avalancheProblem1 = avalancheProblem1;
 	}
 
-	public AvalancheSituation getAvalancheSituation2() {
-		return avalancheSituation2;
+	public AvalancheProblem getAvalancheProblem2() {
+		return avalancheProblem2;
 	}
 
-	public void setAvalancheSituation2(AvalancheSituation avalancheSituation2) {
-		this.avalancheSituation2 = avalancheSituation2;
+	public void setAvalancheProblem2(AvalancheProblem avalancheProblem2) {
+		this.avalancheProblem2 = avalancheProblem2;
 	}
 
-	public AvalancheSituation getAvalancheSituation3() {
-		return avalancheSituation3;
+	public AvalancheProblem getAvalancheProblem3() {
+		return avalancheProblem3;
 	}
 
-	public void setAvalancheSituation3(AvalancheSituation avalancheSituation3) {
-		this.avalancheSituation3 = avalancheSituation3;
+	public void setAvalancheProblem3(AvalancheProblem avalancheProblem3) {
+		this.avalancheProblem3 = avalancheProblem3;
 	}
 
-	public AvalancheSituation getAvalancheSituation4() {
-		return avalancheSituation4;
+	public AvalancheProblem getAvalancheProblem4() {
+		return avalancheProblem4;
 	}
 
-	public void setAvalancheSituation4(AvalancheSituation avalancheSituation4) {
-		this.avalancheSituation4 = avalancheSituation4;
+	public void setAvalancheProblem4(AvalancheProblem avalancheProblem4) {
+		this.avalancheProblem4 = avalancheProblem4;
 	}
 
-	public AvalancheSituation getAvalancheSituation5() {
-		return avalancheSituation5;
+	public AvalancheProblem getAvalancheProblem5() {
+		return avalancheProblem5;
 	}
 
-	public void setAvalancheSituation5(AvalancheSituation avalancheSituation5) {
-		this.avalancheSituation5 = avalancheSituation5;
+	public void setAvalancheProblem5(AvalancheProblem avalancheProblem5) {
+		this.avalancheProblem5 = avalancheProblem5;
 	}
 
-	public List<AvalancheSituation> getAvalancheSituations() {
-		return Arrays.asList(avalancheSituation1, avalancheSituation2, avalancheSituation3, avalancheSituation4,
-				avalancheSituation5);
+	public List<AvalancheProblem> getAvalancheProblems() {
+		return Arrays.asList(avalancheProblem1, avalancheProblem2, avalancheProblem3, avalancheProblem4,
+				avalancheProblem5);
 	}
 
 	public DangerRating dangerRating(boolean above) {
@@ -397,16 +397,16 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 		if (complexity != null)
 			json.put("complexity", this.complexity.toString());
-		if (avalancheSituation1 != null)
-			json.put("avalancheSituation1", avalancheSituation1.toJSON());
-		if (avalancheSituation2 != null)
-			json.put("avalancheSituation2", avalancheSituation2.toJSON());
-		if (avalancheSituation3 != null)
-			json.put("avalancheSituation3", avalancheSituation3.toJSON());
-		if (avalancheSituation4 != null)
-			json.put("avalancheSituation4", avalancheSituation4.toJSON());
-		if (avalancheSituation5 != null)
-			json.put("avalancheSituation5", avalancheSituation5.toJSON());
+		if (avalancheProblem1 != null)
+			json.put("avalancheProblem1", avalancheProblem1.toJSON());
+		if (avalancheProblem2 != null)
+			json.put("avalancheProblem2", avalancheProblem2.toJSON());
+		if (avalancheProblem3 != null)
+			json.put("avalancheProblem3", avalancheProblem3.toJSON());
+		if (avalancheProblem4 != null)
+			json.put("avalancheProblem4", avalancheProblem4.toJSON());
+		if (avalancheProblem5 != null)
+			json.put("avalancheProblem5", avalancheProblem5.toJSON());
 		return json;
 	}
 
@@ -446,16 +446,16 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 		if (complexity != null)
 			json.put("complexity", this.complexity.toString());
-		if (avalancheSituation1 != null)
-			json.put("avalancheSituation1", avalancheSituation1.toJSON());
-		if (avalancheSituation2 != null)
-			json.put("avalancheSituation2", avalancheSituation2.toJSON());
-		if (avalancheSituation3 != null)
-			json.put("avalancheSituation3", avalancheSituation3.toJSON());
-		if (avalancheSituation4 != null)
-			json.put("avalancheSituation4", avalancheSituation4.toJSON());
-		if (avalancheSituation5 != null)
-			json.put("avalancheSituation5", avalancheSituation5.toJSON());
+		if (avalancheProblem1 != null)
+			json.put("avalancheProblem1", avalancheProblem1.toJSON());
+		if (avalancheProblem2 != null)
+			json.put("avalancheProblem2", avalancheProblem2.toJSON());
+		if (avalancheProblem3 != null)
+			json.put("avalancheProblem3", avalancheProblem3.toJSON());
+		if (avalancheProblem4 != null)
+			json.put("avalancheProblem4", avalancheProblem4.toJSON());
+		if (avalancheProblem5 != null)
+			json.put("avalancheProblem5", avalancheProblem5.toJSON());
 		return json;
 	}
 
@@ -489,15 +489,15 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			return false;
 		if (!Objects.equals(this.complexity, other.complexity))
 			return false;
-		if (!Objects.equals(this.avalancheSituation1, other.avalancheSituation1))
+		if (!Objects.equals(this.avalancheProblem1, other.avalancheProblem1))
 			return false;
-		if (!Objects.equals(this.avalancheSituation2, other.avalancheSituation2))
+		if (!Objects.equals(this.avalancheProblem2, other.avalancheProblem2))
 			return false;
-		if (!Objects.equals(this.avalancheSituation3, other.avalancheSituation3))
+		if (!Objects.equals(this.avalancheProblem3, other.avalancheProblem3))
 			return false;
-		if (!Objects.equals(this.avalancheSituation4, other.avalancheSituation4))
+		if (!Objects.equals(this.avalancheProblem4, other.avalancheProblem4))
 			return false;
-		if (!Objects.equals(this.avalancheSituation5, other.avalancheSituation5))
+		if (!Objects.equals(this.avalancheProblem5, other.avalancheProblem5))
 			return false;
 
 		return true;

@@ -9,7 +9,7 @@
 		<class>eu.albina.model.Region</class>
 		<class>eu.albina.model.ServerInstance</class>
 		<class>eu.albina.model.MatrixInformation</class>
-		<class>eu.albina.model.AvalancheSituation</class>
+		<class>eu.albina.model.AvalancheProblem</class>
 		<class>eu.albina.model.AvalancheBulletinDaytimeDescription</class>
 		<class>eu.albina.model.AvalancheBulletin</class>
 		<class>eu.albina.model.AvalancheReport</class>

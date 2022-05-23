@@ -114,8 +114,8 @@
 				"matrixInformationAbove" : { "$ref" : "#/definitions/matrixInformation" },
 				"dangerRatingBelow" : { "$ref" : "#/definitions/dangerRating" },
 				"matrixInformationBelow" : { "$ref" : "#/definitions/matrixInformation" },
-				"avalancheSituation1" : { "$ref" : "#/definitions/avalancheSituationObject" },
-				"avalancheSituation2" : { "$ref" : "#/definitions/avalancheSituationObject" }
+				"avalancheProblem1" : { "$ref" : "#/definitions/avalancheProblemObject" },
+				"avalancheProblem2" : { "$ref" : "#/definitions/avalancheProblemObject" }
 			},
 			"additionalProperties" : false
 		},
@@ -166,14 +166,14 @@
 			"type" : "string",
 			"enum" : [ "easy", "challenging", "complex" ]
 		},
-		"avalancheSituationObject" : {
-			"id" : "#avalancheSituation",
+		"avalancheProblemObject" : {
+			"id" : "#avalancheProblem",
 			"$schema" : "http://json-schema.org/draft-04/schema#",
-			"title" : "Avalanche Situation",
-			"description" : "The five avalanche situations.",
+			"title" : "Avalanche Problems",
+			"description" : "The five avalanche problems.",
 			"type" : "object",
 			"properties" : {
-				"avalancheSituation" : { "$ref" : "#/definitions/avalancheSituation" },
+				"avalancheProblem" : { "$ref" : "#/definitions/avalancheProblem" },
 				"aspects" : {
 					"type" : "array",
 					"uniqueItems": true,
@@ -185,11 +185,11 @@
 				"dangerRatingDirection" : { "$ref" : "#/definitions/direction"}
 			}
 		},
-		"avalancheSituation" : {
-			"id" : "#avalancheSituation",
+		"avalancheProblem" : {
+			"id" : "#avalancheProblem",
 			"$schema" : "http://json-schema.org/draft-04/schema#",
-			"title" : "Avalanche Situation",
-			"description" : "The five avalanche situations.",
+			"title" : "Avalanche Problem",
+			"description" : "The five avalanche problems.",
 			"type" : "string",
 			"enum" : [ "new_snow", "wind_drifted_snow", "persistent_weak_layers", "wet_snow", "gliding_snow", "favourable_situation" ]
 		},

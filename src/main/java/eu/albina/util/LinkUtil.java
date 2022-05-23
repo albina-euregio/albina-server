@@ -67,10 +67,10 @@ public interface LinkUtil {
 			getWebsiteUrl(lang, region), DangerPattern.getCAAMLv6String(dangerPattern));
 	}
 
-	static String getAvalancheSituationLink(LanguageCode lang, Region region,
-											eu.albina.model.enumerations.AvalancheSituation avalancheSituation) {
+	static String getAvalancheProblemLink(LanguageCode lang, Region region,
+											eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
 		return String.format("%s/education/avalanche-problems#%s",
-			getWebsiteUrl(lang, region), avalancheSituation.toCaamlv6String());
+			getWebsiteUrl(lang, region), avalancheProblem.toCaamlv6String());
 	}
 
 	static String getImprintLink(LanguageCode lang, Region region) {

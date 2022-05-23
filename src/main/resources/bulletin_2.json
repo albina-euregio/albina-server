@@ -6,7 +6,7 @@
 		},
 		{
 			"languageCode" : "en",
-			"text" : "Avalanche situation highlight in english."
+			"text" : "Avalanche activity highlight in english."
 		}
 	],
 	"avActivityComment" : [
@@ -16,7 +16,7 @@
 		},
 		{
 			"languageCode" : "en",
-			"text" : "Avalanche situation in english."
+			"text" : "Avalanche activity in english."
 		}
 	],
 	"synopsisComment" : [
@@ -60,13 +60,13 @@
 
 	"above" : {
 		"dangerRating" : "considerable",
-		"avalancheSituation" : "new_snow",
+		"avalancheProblem" : "new_snow",
 		"aspects" : [ "NW", "N", "NE"]
 	},
 
 	"below" : {
 		"dangerRating" : "moderate",
-		"avalancheSituation" : "wind_drifted_snow",
+		"avalancheProblem" : "wind_drifted_snow",
 		"aspects" : [ "NW", "N", "NE" ]
 	}
 }

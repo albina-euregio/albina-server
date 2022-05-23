@@ -70,7 +70,7 @@
 			},
 			"additionalProperties" : false
 		},
-		"avalancheSituation" : {
+		"avalancheProblem" : {
 			"type" : "object",
 			"properties" : {
 				"dangerRating" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#dangerRating" },

@@ -121,13 +121,13 @@ public class AvalancheBulletinController {
 		Hibernate.initialize(bulletin.getTravelAdvisoryComment());
 		Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
 		if (bulletin.getForenoon() != null) {
-			bulletin.getForenoon().getAvalancheSituations().forEach(s -> {
+			bulletin.getForenoon().getAvalancheProblems().forEach(s -> {
 				if (s != null)
 					Hibernate.initialize(s.getAspects());
 			});
 		}
 		if (bulletin.getAfternoon() != null) {
-			bulletin.getAfternoon().getAvalancheSituations().forEach(s -> {
+			bulletin.getAfternoon().getAvalancheProblems().forEach(s -> {
 				if (s != null)
 					Hibernate.initialize(s.getAspects());
 			});

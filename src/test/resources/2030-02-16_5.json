@@ -20,15 +20,15 @@
 		"hasElevationDependency": true,
 		"treeline": true,
 		"dangerRatingBelow": "moderate",
-		"avalancheSituation2": {
+		"avalancheProblem2": {
 			"aspects": [
 				"nw",
 				"ne",
 				"n"
 			],
-			"avalancheSituation": "persistent_weak_layers"
+			"avalancheProblem": "persistent_weak_layers"
 		},
-		"avalancheSituation1": {
+		"avalancheProblem1": {
 			"treelineLow": true,
 			"aspects": [
 				"nw",
@@ -40,7 +40,7 @@
 				"sw",
 				"w"
 			],
-			"avalancheSituation": "wind_drifted_snow"
+			"avalancheProblem": "wind_drifted_snow"
 		},
 		"id": "9a351c23-4111-4092-bde0-2c086363792f",
 		"dangerRatingAbove": "considerable"

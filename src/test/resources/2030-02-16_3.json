@@ -24,7 +24,7 @@
 		"hasElevationDependency": true,
 		"treeline": true,
 		"dangerRatingBelow": "low",
-		"avalancheSituation1": {
+		"avalancheProblem1": {
 			"treelineLow": true,
 			"aspects": [
 				"nw",
@@ -33,18 +33,18 @@
 				"n",
 				"w"
 			],
-			"avalancheSituation": "wind_drifted_snow"
+			"avalancheProblem": "wind_drifted_snow"
 		},
-		"avalancheSituation2": {
+		"avalancheProblem2": {
 			"treelineLow": true,
 			"aspects": [
 				"nw",
 				"ne",
 				"n"
 			],
-			"avalancheSituation": "persistent_weak_layers"
+			"avalancheProblem": "persistent_weak_layers"
 		},
-		"avalancheSituation3": {
+		"avalancheProblem3": {
 			"treelineHigh": true,
 			"aspects": [
 				"nw",
@@ -56,7 +56,7 @@
 				"se",
 				"sw"
 			],
-			"avalancheSituation": "wet_snow"
+			"avalancheProblem": "wet_snow"
 		},
 		"id": "eff4f0a3-aa80-4244-bfd0-0392857b65ac",
 		"dangerRatingAbove": "moderate"

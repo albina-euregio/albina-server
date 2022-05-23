@@ -22,15 +22,15 @@
 		"tendency": "decreasing",
 		"forenoon": {
 			"hasElevationDependency": false,
-			"avalancheSituation2": {
+			"avalancheProblem2": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "n", "e"],
 				"elevationHigh": 2400,
-				"avalancheSituation": "gliding_snow"
+				"avalancheProblem": "gliding_snow"
 			},
-			"avalancheSituation1": {
+			"avalancheProblem1": {
 				"elevationLow": 2200,
 				"aspects": ["nw", "ne", "n", "e"],
-				"avalancheSituation": "wind_drifted_snow"
+				"avalancheProblem": "wind_drifted_snow"
 			},
 			"id": "6384b47b-d4a7-42e2-adb7-f7ecab22d626",
 			"dangerRatingAbove": "considerable"

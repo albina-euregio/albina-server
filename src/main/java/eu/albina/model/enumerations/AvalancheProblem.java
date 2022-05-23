@@ -23,20 +23,18 @@ import java.util.ResourceBundle;
 
 import eu.albina.util.XMLResourceBundleControl;
 
-public enum AvalancheSituation {
+public enum AvalancheProblem {
 	new_snow, wind_drifted_snow, persistent_weak_layers, wet_snow, gliding_snow, favourable_situation;
 
 	public String toString(Locale locale) {
 
-		return ResourceBundle.getBundle("i18n.AvalancheSituation", locale, new XMLResourceBundleControl())
+		return ResourceBundle.getBundle("i18n.AvalancheProblem", locale, new XMLResourceBundleControl())
 				.getString(name());
 	}
 
-	public static AvalancheSituation fromString(String text) {
+	public static AvalancheProblem fromString(String text) {
 		if (text != null) {
-			if (text.equalsIgnoreCase("weak_persistent_layer"))
-				return persistent_weak_layers;
-			return Arrays.stream(AvalancheSituation.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
+			return Arrays.stream(AvalancheProblem.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}
@@ -61,9 +59,9 @@ public enum AvalancheSituation {
 		}
 	}
 
-	public static String toCaamlv5String(eu.albina.model.AvalancheSituation avalancheSituation) {
-		return Optional.ofNullable(avalancheSituation).map(eu.albina.model.AvalancheSituation::getAvalancheSituation)
-			.map(AvalancheSituation::toCaamlv5String).orElse("false");
+	public static String toCaamlv5String(eu.albina.model.AvalancheProblem avalancheProblem) {
+		return Optional.ofNullable(avalancheProblem).map(eu.albina.model.AvalancheProblem::getAvalancheProblem)
+			.map(AvalancheProblem::toCaamlv5String).orElse("false");
 	}
 
 	public String toCaamlv6String() {
@@ -107,9 +105,9 @@ public enum AvalancheSituation {
 
 	public String getSymbolPath(boolean grayscale) {
 		if (grayscale)
-			return "avalanche_situations/grey/" + toStringId() + ".png";
+			return "avalanche_problems/grey/" + toStringId() + ".png";
 		else
-			return "avalanche_situations/color/" + toStringId() + ".png";
+			return "avalanche_problems/color/" + toStringId() + ".png";
 	}
 
 }

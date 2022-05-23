@@ -7,11 +7,11 @@ source_lang = en
 type = PROPERTIESXML
 file_filter = src/main/resources/i18n/MessagesBundle_<lang>.xml
 
-[albina-server.avalanche-situation-xml]
-source_file = src/main/resources/i18n/AvalancheSituation.xml
+[albina-server.avalanche-problem-xml]
+source_file = src/main/resources/i18n/AvalancheProblem.xml
 source_lang = en
 type = PROPERTIESXML
-file_filter = src/main/resources/i18n/AvalancheSituation_<lang>.xml
+file_filter = src/main/resources/i18n/AvalancheProblem_<lang>.xml
 
 [albina-server.danger-pattern-xml]
 source_file = src/main/resources/i18n/DangerPattern.xml

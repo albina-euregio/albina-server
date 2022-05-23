@@ -64,7 +64,7 @@ import com.itextpdf.layout.renderer.DocumentRenderer;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.AvalancheSituation;
+import eu.albina.model.AvalancheProblem;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
@@ -601,7 +601,7 @@ public class PdfUtil {
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
 
-		cell = new Cell(1, 1).add(createAvalancheSituations(daytimeBulletin, lang, pdf, document, writer, isAfternoon,
+		cell = new Cell(1, 1).add(createAvalancheProblems(daytimeBulletin, lang, pdf, document, writer, isAfternoon,
 				avalancheBulletin.isHasDaytimeDependency(), grayscale));
 		cell.setTextAlignment(TextAlignment.LEFT);
 		cell.setBorder(Border.NO_BORDER);
@@ -610,40 +610,40 @@ public class PdfUtil {
 		return table;
 	}
 
-	private Table createAvalancheSituations(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang,
+	private Table createAvalancheProblems(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang,
 			PdfDocument pdf, Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime,
 			boolean grayscale) throws MalformedURLException {
 		float[] columnWidths = { 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
 
-		if (daytimeBulletin.getAvalancheSituation1() != null
-				&& daytimeBulletin.getAvalancheSituation1().getAvalancheSituation() != null) {
+		if (daytimeBulletin.getAvalancheProblem1() != null
+				&& daytimeBulletin.getAvalancheProblem1().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheSituation(daytimeBulletin.getAvalancheSituation1(), lang, table, document, writer,
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, table, document, writer,
 					isAfternoon, hasDaytime, grayscale);
 		}
-		if (daytimeBulletin.getAvalancheSituation2() != null
-				&& daytimeBulletin.getAvalancheSituation2().getAvalancheSituation() != null) {
+		if (daytimeBulletin.getAvalancheProblem2() != null
+				&& daytimeBulletin.getAvalancheProblem2().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheSituation(daytimeBulletin.getAvalancheSituation2(), lang, table, document, writer,
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), lang, table, document, writer,
 					isAfternoon, hasDaytime, grayscale);
 		}
-		if (daytimeBulletin.getAvalancheSituation3() != null
-				&& daytimeBulletin.getAvalancheSituation3().getAvalancheSituation() != null) {
+		if (daytimeBulletin.getAvalancheProblem3() != null
+				&& daytimeBulletin.getAvalancheProblem3().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheSituation(daytimeBulletin.getAvalancheSituation3(), lang, table, document, writer,
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), lang, table, document, writer,
 					isAfternoon, hasDaytime, grayscale);
 		}
-		if (daytimeBulletin.getAvalancheSituation4() != null
-				&& daytimeBulletin.getAvalancheSituation4().getAvalancheSituation() != null) {
+		if (daytimeBulletin.getAvalancheProblem4() != null
+				&& daytimeBulletin.getAvalancheProblem4().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheSituation(daytimeBulletin.getAvalancheSituation4(), lang, table, document, writer,
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), lang, table, document, writer,
 					isAfternoon, hasDaytime, grayscale);
 		}
-		if (daytimeBulletin.getAvalancheSituation5() != null
-				&& daytimeBulletin.getAvalancheSituation5().getAvalancheSituation() != null) {
+		if (daytimeBulletin.getAvalancheProblem5() != null
+				&& daytimeBulletin.getAvalancheProblem5().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheSituation(daytimeBulletin.getAvalancheSituation5(), lang, table, document, writer,
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), lang, table, document, writer,
 					isAfternoon, hasDaytime, grayscale);
 		}
 
@@ -656,54 +656,54 @@ public class PdfUtil {
 		return new Image(imageData);
 	}
 
-	private void createAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, Table table,
+	private void createAvalancheProblem(AvalancheProblem avalancheProblem, LanguageCode lang, Table table,
 			Document document, PdfWriter writer, boolean isAfternoon, boolean hasDaytime,
 			boolean grayscale) throws MalformedURLException {
-		float[] avalancheSituationColumnWidths = { 1 };
-		Table avalancheSituationTable;
+		float[] avalancheProblemColumnWidths = { 1 };
+		Table avalancheProblemTable;
 		Paragraph paragraph;
 		Image img;
 		Cell cell;
 		int padding = 0;
 
-		if (avalancheSituation != null) {
-			if (avalancheSituation.getAvalancheSituation() != null) {
-				avalancheSituationTable = new Table(avalancheSituationColumnWidths).setBorder(Border.NO_BORDER);
-				avalancheSituationTable.setMarginLeft(0);
-				avalancheSituationTable.setMarginTop(5);
-				avalancheSituationTable.setWidth(60);
-				avalancheSituationTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
-				img = getImage(avalancheSituation.getAvalancheSituation().getSymbolPath(grayscale));
+		if (avalancheProblem != null) {
+			if (avalancheProblem.getAvalancheProblem() != null) {
+				avalancheProblemTable = new Table(avalancheProblemColumnWidths).setBorder(Border.NO_BORDER);
+				avalancheProblemTable.setMarginLeft(0);
+				avalancheProblemTable.setMarginTop(5);
+				avalancheProblemTable.setWidth(60);
+				avalancheProblemTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
+				img = getImage(avalancheProblem.getAvalancheProblem().getSymbolPath(grayscale));
 				if (img != null) {
-					img.getAccessibilityProperties().setAlternateDescription(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
+					img.getAccessibilityProperties().setAlternateDescription(avalancheProblem.getAvalancheProblem().toString(lang.getLocale()));
 					img.scaleToFit(60, 35);
 					cell = new Cell(1, 1).add(img);
 					cell.setBorder(Border.NO_BORDER);
 					cell.setWidth(60);
-					avalancheSituationTable.addCell(cell);
+					avalancheProblemTable.addCell(cell);
 				}
-				paragraph = new Paragraph(avalancheSituation.getAvalancheSituation().toString(lang.getLocale()))
+				paragraph = new Paragraph(avalancheProblem.getAvalancheProblem().toString(lang.getLocale()))
 						.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor)
 						.setMultipliedLeading(1.0f);
 				cell = new Cell(1, 1).add(paragraph);
 				cell.setBorder(Border.NO_BORDER);
-				avalancheSituationTable.addCell(cell);
+				avalancheProblemTable.addCell(cell);
 
 				cell = new Cell(1, 1);
 				cell.setBorder(Border.NO_BORDER);
 				cell.setPadding(padding);
-				cell.add(avalancheSituationTable);
+				cell.add(avalancheProblemTable);
 				table.addCell(cell);
 			} else {
 				cell = new Cell().setBorder(null);
 				table.addCell(cell);
 			}
 
-			if (avalancheSituation.getAspects() != null && avalancheSituation.getAspects().size() > 0) {
-				Set<Aspect> aspects = avalancheSituation.getAspects();
+			if (avalancheProblem.getAspects() != null && avalancheProblem.getAspects().size() > 0) {
+				Set<Aspect> aspects = avalancheProblem.getAspects();
 				img = getImage(Aspect.getSymbolPath(aspects, grayscale));
 				if (img != null) {
-					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(avalancheSituation.getAspects(), lang.getLocale()));
+					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(avalancheProblem.getAspects(), lang.getLocale()));
 					img.scaleToFit(30, 30);
 					cell = new Cell(1, 1).add(img);
 					cell.setBorder(Border.NO_BORDER);
@@ -721,15 +721,15 @@ public class PdfUtil {
 			float[] elevationColumnWidths = { 1 };
 			Table elevationTable = new Table(elevationColumnWidths);
 
-			if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
-				if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
+				if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 					// elevation high and low set
 					if (grayscale)
 						img = getImage("elevation/grey/levels_middle_two.png");
 					else
 						img = getImage("elevation/color/levels_middle_two.png");
 					if (img != null) {
-						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
+						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
 						img.scaleToFit(70, 25);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -742,7 +742,7 @@ public class PdfUtil {
 						cell = new Cell().setBorder(null);
 						table.addCell(cell);
 					}
-					if (avalancheSituation.getTreelineHigh()) {
+					if (avalancheProblem.getTreelineHigh()) {
 						Paragraph paragraph2 = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
@@ -753,8 +753,8 @@ public class PdfUtil {
 						cell.setPadding(padding);
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
-					} else if (avalancheSituation.getElevationHigh() > 0) {
-						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationHigh() + "m")
+					} else if (avalancheProblem.getElevationHigh() > 0) {
+						Paragraph paragraph2 = new Paragraph(avalancheProblem.getElevationHigh() + "m")
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, 2, 0, 0);
 						cell = new Cell(1, 1);
@@ -765,7 +765,7 @@ public class PdfUtil {
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
 					}
-					if (avalancheSituation.getTreelineLow()) {
+					if (avalancheProblem.getTreelineLow()) {
 						Paragraph paragraph2 = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
@@ -776,8 +776,8 @@ public class PdfUtil {
 						cell.setPadding(padding);
 						cell.add(paragraph2);
 						elevationTable.addCell(cell);
-					} else if (avalancheSituation.getElevationLow() > 0) {
-						Paragraph paragraph2 = new Paragraph(avalancheSituation.getElevationLow() + "m")
+					} else if (avalancheProblem.getElevationLow() > 0) {
+						Paragraph paragraph2 = new Paragraph(avalancheProblem.getElevationLow() + "m")
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph2.setRelativePosition(-6, -3, 0, 0);
 						cell = new Cell(1, 1);
@@ -795,7 +795,7 @@ public class PdfUtil {
 					else
 						img = getImage("elevation/color/levels_below.png");
 					if (img != null) {
-						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
+						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
 						img.scaleToFit(70, 25);
 						cell = new Cell(1, 1);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -809,7 +809,7 @@ public class PdfUtil {
 						table.addCell(cell);
 					}
 
-					if (avalancheSituation.getTreelineHigh()) {
+					if (avalancheProblem.getTreelineHigh()) {
 						paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
 								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 						paragraph.setRelativePosition(-6, -4, 0, 0);
@@ -819,8 +819,8 @@ public class PdfUtil {
 						cell.setBorder(Border.NO_BORDER);
 						cell.add(paragraph);
 						elevationTable.addCell(cell);
-					} else if (avalancheSituation.getElevationHigh() > 0) {
-						paragraph = new Paragraph(avalancheSituation.getElevationHigh() + "m").setFont(openSansBoldFont)
+					} else if (avalancheProblem.getElevationHigh() > 0) {
+						paragraph = new Paragraph(avalancheProblem.getElevationHigh() + "m").setFont(openSansBoldFont)
 								.setFontSize(8).setFontColor(blackColor);
 						paragraph.setRelativePosition(-6, -4, 0, 0);
 						cell = new Cell(1, 1);
@@ -831,14 +831,14 @@ public class PdfUtil {
 						elevationTable.addCell(cell);
 					}
 				}
-			} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+			} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation low set
 				if (grayscale)
 					img = getImage("elevation/grey/levels_above.png");
 				else
 					img = getImage("elevation/color/levels_above.png");
 				if (img != null) {
-					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
+					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
 					img.scaleToFit(70, 25);
 					img.setMarginLeft(5);
 					cell = new Cell(1, 1);
@@ -853,7 +853,7 @@ public class PdfUtil {
 					table.addCell(cell);
 				}
 
-				if (avalancheSituation.getTreelineLow()) {
+				if (avalancheProblem.getTreelineLow()) {
 					paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
 							.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph.setRelativePosition(-6, 4, 0, 0);
@@ -863,8 +863,8 @@ public class PdfUtil {
 					cell.setBorder(Border.NO_BORDER);
 					cell.add(paragraph);
 					elevationTable.addCell(cell);
-				} else if (avalancheSituation.getElevationLow() > 0) {
-					paragraph = new Paragraph(avalancheSituation.getElevationLow() + "m").setFont(openSansBoldFont)
+				} else if (avalancheProblem.getElevationLow() > 0) {
+					paragraph = new Paragraph(avalancheProblem.getElevationLow() + "m").setFont(openSansBoldFont)
 							.setFontSize(8).setFontColor(blackColor);
 					paragraph.setRelativePosition(-6, 4, 0, 0);
 					cell = new Cell(1, 1);
@@ -881,7 +881,7 @@ public class PdfUtil {
 				else
 					img = getImage("elevation/color/levels_all.png");
 				if (img != null) {
-					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheSituation, lang));
+					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
 					img.scaleToFit(70, 25);
 					img.setMarginLeft(5);
 					cell = new Cell(1, 1);

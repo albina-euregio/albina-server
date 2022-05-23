@@ -50,18 +50,18 @@ import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
 @Table(name = "avalanche_problems")
-public class AvalancheSituation extends AbstractPersistentObject implements AvalancheInformationObject {
+public class AvalancheProblem extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@OneToOne
 	@PrimaryKeyJoinColumn
 	private AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_SITUATION")
-	private eu.albina.model.enumerations.AvalancheSituation avalancheSituation;
+	@Column(name = "AVALANCHE_PROBLEM")
+	private eu.albina.model.enumerations.AvalancheProblem avalancheProblem;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "avalanche_problem_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_SITUATION_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "avalanche_problem_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_PROBLEM_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
 	@Fetch(FetchMode.JOIN)
 	private Set<Aspect> aspects;
@@ -103,20 +103,17 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	@Column(name = "TERRAIN_FEATURE")
 	private Set<Text> terrainFeature;
 
-	public AvalancheSituation() {
+	public AvalancheProblem() {
 		this.aspects = new LinkedHashSet<Aspect>();
 		this.terrainFeature = new LinkedHashSet<Text>();
 	}
 
-	public AvalancheSituation(JSONObject json) {
+	public AvalancheProblem(JSONObject json) {
 		this();
 
-		if (json.has("avalancheSituation")) {
-			if (json.getString("avalancheSituation").equals("weak_persistent_layer"))
-				this.avalancheSituation = eu.albina.model.enumerations.AvalancheSituation.persistent_weak_layers;
-			else
-				this.avalancheSituation = eu.albina.model.enumerations.AvalancheSituation
-						.valueOf(json.getString("avalancheSituation").toLowerCase());
+		if (json.has("avalancheProblem")) {
+			this.avalancheProblem = eu.albina.model.enumerations.AvalancheProblem
+					.valueOf(json.getString("avalancheProblem").toLowerCase());
 		}
 		if (json.has("aspects")) {
 			JSONArray aspects = json.getJSONArray("aspects");
@@ -143,18 +140,18 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 				terrainFeature.add(new Text((JSONObject) entry));
 	}
 
-	public eu.albina.model.enumerations.AvalancheSituation getAvalancheSituation() {
-		return avalancheSituation;
+	public eu.albina.model.enumerations.AvalancheProblem getAvalancheProblem() {
+		return avalancheProblem;
 	}
 
-	public void setAvalancheSituation(eu.albina.model.enumerations.AvalancheSituation avalancheSituation) {
-		if (avalancheSituation == eu.albina.model.enumerations.AvalancheSituation.favourable_situation) {
+	public void setAvalancheProblem(eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
+		if (avalancheProblem == eu.albina.model.enumerations.AvalancheProblem.favourable_situation) {
 			this.treelineHigh = false;
 			this.treelineLow = false;
 			this.elevationHigh = -1;
 			this.elevationLow = -1;
 		}
-		this.avalancheSituation = avalancheSituation;
+		this.avalancheProblem = avalancheProblem;
 	}
 
 	public Set<Aspect> getAspects() {
@@ -240,8 +237,8 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
-		if (avalancheSituation != null)
-			json.put("avalancheSituation", this.avalancheSituation.toString());
+		if (avalancheProblem != null)
+			json.put("avalancheProblem", this.avalancheProblem.toString());
 		if (aspects != null && aspects.size() > 0) {
 			JSONArray aspects = new JSONArray();
 			for (Aspect aspect : this.aspects) {
@@ -281,12 +278,12 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 		if (obj == null) {
 			return false;
 		}
-		if (!AvalancheSituation.class.isAssignableFrom(obj.getClass())) {
+		if (!AvalancheProblem.class.isAssignableFrom(obj.getClass())) {
 			return false;
 		}
-		final AvalancheSituation other = (AvalancheSituation) obj;
+		final AvalancheProblem other = (AvalancheProblem) obj;
 
-		if (this.avalancheSituation != other.avalancheSituation)
+		if (this.avalancheProblem != other.avalancheProblem)
 			return false;
 		if (!this.aspects.containsAll(other.getAspects()) || !other.getAspects().containsAll(this.aspects))
 			return false;

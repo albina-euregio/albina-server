@@ -21,7 +21,7 @@
 		"hasElevationDependency": true,
 		"elevation": 2000,
 		"dangerRatingBelow": "considerable",
-		"avalancheSituation2": {
+		"avalancheProblem2": {
 			"elevationLow": 2000,
 			"aspects": [
 				"nw",
@@ -33,9 +33,9 @@
 				"sw",
 				"w"
 			],
-			"avalancheSituation": "wind_drifted_snow"
+			"avalancheProblem": "wind_drifted_snow"
 		},
-		"avalancheSituation1": {
+		"avalancheProblem1": {
 			"elevationLow": 2000,
 			"aspects": [
 				"nw",
@@ -47,7 +47,7 @@
 				"sw",
 				"w"
 			],
-			"avalancheSituation": "new_snow"
+			"avalancheProblem": "new_snow"
 		},
 		"id": "e68d97a6-17b3-43c0-99ec-45d8dcc477df",
 		"dangerRatingAbove": "high"

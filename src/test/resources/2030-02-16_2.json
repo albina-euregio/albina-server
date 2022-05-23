@@ -13,9 +13,9 @@
 	"tendency": "steady",
 	"forenoon": {
 		"hasElevationDependency": false,
-		"avalancheSituation2": {},
-		"avalancheSituation1": {
-			"avalancheSituation": "favourable_situation"
+		"avalancheProblem2": {},
+		"avalancheProblem1": {
+			"avalancheProblem": "favourable_situation"
 		},
 		"id": "2a174a7a-19a0-4028-b1c8-742f029454f3",
 		"dangerRatingAbove": "low"

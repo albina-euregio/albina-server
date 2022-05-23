@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.AvalancheSituation;
+import eu.albina.model.AvalancheProblem;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Aspect;
@@ -334,15 +334,15 @@ public class SimpleHtmlUtil {
 		dangerLevel.put("elevation", "");
 		dangerLevel.put("warningPicto", "");
 		result.put("dangerLevel", dangerLevel);
-		result.put("avalancheProblem1", getEmptyAvalancheSituation());
-		result.put("avalancheProblem2", getEmptyAvalancheSituation());
-		result.put("avalancheProblem3", getEmptyAvalancheSituation());
-		result.put("avalancheProblem4", getEmptyAvalancheSituation());
-		result.put("avalancheProblem5", getEmptyAvalancheSituation());
+		result.put("avalancheProblem1", getEmptyAvalancheProblem());
+		result.put("avalancheProblem2", getEmptyAvalancheProblem());
+		result.put("avalancheProblem3", getEmptyAvalancheProblem());
+		result.put("avalancheProblem4", getEmptyAvalancheProblem());
+		result.put("avalancheProblem5", getEmptyAvalancheProblem());
 		return result;
 	}
 
-	private Map<String, Object> getEmptyAvalancheSituation() {
+	private Map<String, Object> getEmptyAvalancheProblem() {
 		Map<String, Object> result = new HashMap<>();
 		result.put("exist", false);
 		result.put("avalancheProblemIcon", "");
@@ -361,16 +361,16 @@ public class SimpleHtmlUtil {
 
 		text.put("dangerLevel", "<b>" + lang.getBundleString("headline.danger-rating") + "</b><br>");
 
-		if ((daytimeDescription.getAvalancheSituation1() != null
-				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null)
-				|| (daytimeDescription.getAvalancheSituation2() != null
-						&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null)
-				|| (daytimeDescription.getAvalancheSituation3() != null
-						&& daytimeDescription.getAvalancheSituation3().getAvalancheSituation() != null)
-				|| (daytimeDescription.getAvalancheSituation4() != null
-						&& daytimeDescription.getAvalancheSituation4().getAvalancheSituation() != null)
-				|| (daytimeDescription.getAvalancheSituation5() != null
-						&& daytimeDescription.getAvalancheSituation5().getAvalancheSituation() != null))
+		if ((daytimeDescription.getAvalancheProblem1() != null
+				&& daytimeDescription.getAvalancheProblem1().getAvalancheProblem() != null)
+				|| (daytimeDescription.getAvalancheProblem2() != null
+						&& daytimeDescription.getAvalancheProblem2().getAvalancheProblem() != null)
+				|| (daytimeDescription.getAvalancheProblem3() != null
+						&& daytimeDescription.getAvalancheProblem3().getAvalancheProblem() != null)
+				|| (daytimeDescription.getAvalancheProblem4() != null
+						&& daytimeDescription.getAvalancheProblem4().getAvalancheProblem() != null)
+				|| (daytimeDescription.getAvalancheProblem5() != null
+						&& daytimeDescription.getAvalancheProblem5().getAvalancheProblem() != null))
 			text.put("avalancheProblem", "<b>" + lang.getBundleString("headline.avalanche-problem") + "</b><br>");
 		else
 			text.put("avalancheProblem", "");
@@ -383,61 +383,61 @@ public class SimpleHtmlUtil {
 
 		result.put("dangerLevel", dangerLevel);
 
-		if (daytimeDescription.getAvalancheSituation1() != null
-				&& daytimeDescription.getAvalancheSituation1().getAvalancheSituation() != null) {
-			result.put("avalancheProblem1", getAvalancheSituation(daytimeDescription.getAvalancheSituation1(), lang, serverInstance));
+		if (daytimeDescription.getAvalancheProblem1() != null
+				&& daytimeDescription.getAvalancheProblem1().getAvalancheProblem() != null) {
+			result.put("avalancheProblem1", getAvalancheProblem(daytimeDescription.getAvalancheProblem1(), lang, serverInstance));
 		} else
-			result.put("avalancheProblem1", getEmptyAvalancheSituation());
-		if (daytimeDescription.getAvalancheSituation2() != null
-				&& daytimeDescription.getAvalancheSituation2().getAvalancheSituation() != null) {
-			result.put("avalancheProblem2", getAvalancheSituation(daytimeDescription.getAvalancheSituation2(), lang, serverInstance));
+			result.put("avalancheProblem1", getEmptyAvalancheProblem());
+		if (daytimeDescription.getAvalancheProblem2() != null
+				&& daytimeDescription.getAvalancheProblem2().getAvalancheProblem() != null) {
+			result.put("avalancheProblem2", getAvalancheProblem(daytimeDescription.getAvalancheProblem2(), lang, serverInstance));
 		} else
-			result.put("avalancheProblem2", getEmptyAvalancheSituation());
-		if (daytimeDescription.getAvalancheSituation3() != null
-				&& daytimeDescription.getAvalancheSituation3().getAvalancheSituation() != null) {
-			result.put("avalancheProblem3", getAvalancheSituation(daytimeDescription.getAvalancheSituation3(), lang, serverInstance));
+			result.put("avalancheProblem2", getEmptyAvalancheProblem());
+		if (daytimeDescription.getAvalancheProblem3() != null
+				&& daytimeDescription.getAvalancheProblem3().getAvalancheProblem() != null) {
+			result.put("avalancheProblem3", getAvalancheProblem(daytimeDescription.getAvalancheProblem3(), lang, serverInstance));
 		} else
-			result.put("avalancheProblem3", getEmptyAvalancheSituation());
-		if (daytimeDescription.getAvalancheSituation4() != null
-				&& daytimeDescription.getAvalancheSituation4().getAvalancheSituation() != null) {
-			result.put("avalancheProblem4", getAvalancheSituation(daytimeDescription.getAvalancheSituation4(), lang, serverInstance));
+			result.put("avalancheProblem3", getEmptyAvalancheProblem());
+		if (daytimeDescription.getAvalancheProblem4() != null
+				&& daytimeDescription.getAvalancheProblem4().getAvalancheProblem() != null) {
+			result.put("avalancheProblem4", getAvalancheProblem(daytimeDescription.getAvalancheProblem4(), lang, serverInstance));
 		} else
-			result.put("avalancheProblem4", getEmptyAvalancheSituation());
-		if (daytimeDescription.getAvalancheSituation5() != null
-				&& daytimeDescription.getAvalancheSituation5().getAvalancheSituation() != null) {
-			result.put("avalancheProblem5", getAvalancheSituation(daytimeDescription.getAvalancheSituation5(), lang, serverInstance));
+			result.put("avalancheProblem4", getEmptyAvalancheProblem());
+		if (daytimeDescription.getAvalancheProblem5() != null
+				&& daytimeDescription.getAvalancheProblem5().getAvalancheProblem() != null) {
+			result.put("avalancheProblem5", getAvalancheProblem(daytimeDescription.getAvalancheProblem5(), lang, serverInstance));
 		} else
-			result.put("avalancheProblem5", getEmptyAvalancheSituation());
+			result.put("avalancheProblem5", getEmptyAvalancheProblem());
 
 		return result;
 	}
 
-	private Map<String, Object> getAvalancheSituation(AvalancheSituation avalancheSituation, LanguageCode lang, ServerInstance serverInstance) {
+	private Map<String, Object> getAvalancheProblem(AvalancheProblem avalancheProblem, LanguageCode lang, ServerInstance serverInstance) {
 		Map<String, Object> result = new HashMap<>();
 
 		result.put("exist", true);
 		result.put("avalancheProblemIcon", serverInstance.getServerImagesUrl()
-				+ avalancheSituation.getAvalancheSituation().getSymbolPath(false));
-		result.put("avalancheProblemText", avalancheSituation.getAvalancheSituation().toString(lang.getLocale()));
-		result.put("elevationIcon", serverInstance.getServerImagesUrl() + getElevationIcon(avalancheSituation));
-		result.put("elevationLow", getElevationLowText(avalancheSituation, lang));
-		result.put("elevationHigh", getElevationHighText(avalancheSituation, lang));
+				+ avalancheProblem.getAvalancheProblem().getSymbolPath(false));
+		result.put("avalancheProblemText", avalancheProblem.getAvalancheProblem().toString(lang.getLocale()));
+		result.put("elevationIcon", serverInstance.getServerImagesUrl() + getElevationIcon(avalancheProblem));
+		result.put("elevationLow", getElevationLowText(avalancheProblem, lang));
+		result.put("elevationHigh", getElevationHighText(avalancheProblem, lang));
 		result.put("aspectsIcon", serverInstance.getServerImagesUrl()
-				+ Aspect.getSymbolPath(avalancheSituation.getAspects(), false));
+				+ Aspect.getSymbolPath(avalancheProblem.getAspects(), false));
 
 		return result;
 	}
 
-	private String getElevationIcon(AvalancheSituation avalancheSituation) {
-		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
-			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+	private String getElevationIcon(AvalancheProblem avalancheProblem) {
+		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
+			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
 				return "elevation/color/levels_middle_two.png";
 			} else {
 				// elevation high set
 				return "elevation/color/levels_below.png";
 			}
-		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
 			return "elevation/color/levels_above.png";
 		} else {
@@ -446,49 +446,49 @@ public class SimpleHtmlUtil {
 		}
 	}
 
-	private String getElevationLowText(AvalancheSituation avalancheSituation, LanguageCode lang) {
-		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
-			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+	private String getElevationLowText(AvalancheProblem avalancheProblem, LanguageCode lang) {
+		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
+			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
-				if (avalancheSituation.getTreelineLow()) {
+				if (avalancheProblem.getTreelineLow()) {
 					return lang.getBundleString("elevation.treeline.capitalized");
 				} else {
-					return avalancheSituation.getElevationLow() + "m";
+					return avalancheProblem.getElevationLow() + "m";
 				}
 			} else {
 				// elevation high set
 				return "";
 			}
-		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
-			if (avalancheSituation.getTreelineLow()) {
+			if (avalancheProblem.getTreelineLow()) {
 				return lang.getBundleString("elevation.treeline.capitalized");
 			} else {
-				return avalancheSituation.getElevationLow() + "m";
+				return avalancheProblem.getElevationLow() + "m";
 			}
 		} else {
 			return "";
 		}
 	}
 
-	private String getElevationHighText(AvalancheSituation avalancheSituation, LanguageCode lang) {
-		if (avalancheSituation.getTreelineHigh() || avalancheSituation.getElevationHigh() > 0) {
-			if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+	private String getElevationHighText(AvalancheProblem avalancheProblem, LanguageCode lang) {
+		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
+			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
-				if (avalancheSituation.getTreelineHigh()) {
+				if (avalancheProblem.getTreelineHigh()) {
 					return lang.getBundleString("elevation.treeline.capitalized");
 				} else {
-					return avalancheSituation.getElevationHigh() + "m";
+					return avalancheProblem.getElevationHigh() + "m";
 				}
 			} else {
 				// elevation high set
-				if (avalancheSituation.getTreelineHigh()) {
+				if (avalancheProblem.getTreelineHigh()) {
 					return lang.getBundleString("elevation.treeline.capitalized");
 				} else {
-					return avalancheSituation.getElevationHigh() + "m";
+					return avalancheProblem.getElevationHigh() + "m";
 				}
 			}
-		} else if (avalancheSituation.getTreelineLow() || avalancheSituation.getElevationLow() > 0) {
+		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
 			return "";
 		} else {
