@@ -35,7 +35,7 @@ public interface LinkUtil {
 
 	static String getMediaFileUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
 		String mediaFileDirectory = Paths.get(serverInstance.getMediaPath()).getFileName().toString();
-		return String.format("%s/%s", getStaticContentUrl(lang, region), mediaFileDirectory);
+		return String.format("%s/%s/%s", getStaticContentUrl(lang, region), region.getId(), mediaFileDirectory);
 	}
 
 	static String getMapsUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
