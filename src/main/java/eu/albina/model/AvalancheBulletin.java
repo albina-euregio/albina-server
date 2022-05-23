@@ -92,7 +92,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private String ownerRegion;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "avalanche_bulletin_additional_user", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
+	@CollectionTable(name = "avalanche_bulletin_additional_users", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "ADDITIONAL_USER_NAME")
 	private Set<String> additionalAuthors;
 

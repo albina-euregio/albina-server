@@ -26,7 +26,7 @@ import javax.persistence.Table;
 import com.github.openjson.JSONObject;
 
 @Entity
-@Table(name = "chat_message")
+@Table(name = "chat_messages")
 public class ChatMessage extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@Column(name = "TEXT")

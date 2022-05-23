@@ -36,7 +36,7 @@ import com.google.common.base.Strings;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
-@Table(name = "subscriber")
+@Table(name = "subscribers")
 public class Subscriber {
 
 	/** Email address of the subscriber */

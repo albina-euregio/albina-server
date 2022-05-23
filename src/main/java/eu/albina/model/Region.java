@@ -67,21 +67,21 @@ public class Region implements AvalancheInformationObject {
 	private int microRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name="super_region_sub_region",
+	@JoinTable(name="region_hierarchy",
 	 joinColumns=@JoinColumn(name="SUPER_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
 	)
 	private Set<Region> subRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name="super_region_sub_region",
+	@JoinTable(name="region_hierarchy",
 	 joinColumns=@JoinColumn(name="SUB_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUPER_REGION_ID")
 	)
 	private Set<Region> superRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name="neighbor_regions",
+	@JoinTable(name="region_neighbors",
 	 joinColumns=@JoinColumn(name="REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="NEIGHBOR_REGION_ID")
 	)

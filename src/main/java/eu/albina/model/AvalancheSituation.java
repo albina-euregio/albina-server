@@ -49,7 +49,7 @@ import eu.albina.model.enumerations.Direction;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
-@Table(name = "avalanche_situation")
+@Table(name = "avalanche_problems")
 public class AvalancheSituation extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@OneToOne
@@ -61,7 +61,7 @@ public class AvalancheSituation extends AbstractPersistentObject implements Aval
 	private eu.albina.model.enumerations.AvalancheSituation avalancheSituation;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "avalanche_situation_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_SITUATION_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "avalanche_problem_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_SITUATION_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
 	@Fetch(FetchMode.JOIN)
 	private Set<Aspect> aspects;
