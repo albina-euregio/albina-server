@@ -72,6 +72,7 @@ public class MediaFileService {
 		@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String dateString,
 		@QueryParam("region") String regionId,
 		@QueryParam("lang") LanguageCode language,
+		@QueryParam("important") boolean important,
 		@FormDataParam("text") String mediaText,
         @FormDataParam("file") InputStream uploadedInputStream,
 		@Context SecurityContext securityContext) {
@@ -120,7 +121,7 @@ public class MediaFileService {
 
 			// send emails
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-			EmailUtil.getInstance().sendMediaEmails(mediaText, mp3FileName, txtFileName, date, region, user.getName(), false, language, localServerInstance);
+			EmailUtil.getInstance().sendMediaEmails(mediaText, mp3FileName, txtFileName, date, region, user.getName(), false, language, localServerInstance, important);
 
 			// set publication flag
 			AvalancheReportController.getInstance().setMediaFileFlag(date, region);

@@ -136,7 +136,7 @@ public class EmailUtil {
 		}
 	}
 
-	public void sendMediaEmails(String text, String mp3FileName, String txtFileName, Instant date, Region region, String username, boolean test, LanguageCode lang, ServerInstance serverInstance) {
+	public void sendMediaEmails(String text, String mp3FileName, String txtFileName, Instant date, Region region, String username, boolean test, LanguageCode lang, ServerInstance serverInstance, boolean important) {
 		StringBuilder sb = new StringBuilder();
 		ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
 		sb.append(lang.getBundleString("day." + localDate.getDayOfWeek()));
@@ -148,7 +148,7 @@ public class EmailUtil {
 		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb.toString(), username);
 		String emailHtml = text.replace("\n", "<br>") + "<br><br>" + LinkUtil.createHtmlLink(lang.getBundleString("email.media.link.mp3"), mp3FileUrl) + "<br><br>" + MessageFormat.format(lang.getBundleString("email.media.text"), username);
 
-		sendMediaEmailRapidmail(lang, region, emailHtml, subject, test);
+		sendMediaEmailRapidmail(lang, region, emailHtml, subject, test, important);
 	}
 
 	private String createZipFile(String htmlContent, String textContent) throws IOException {
@@ -176,20 +176,20 @@ public class EmailUtil {
 
 	public void sendBulletinEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
 		logger.info("Sending bulletin email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		sendEmail(lang, region, emailHtml, subject, test, false);
+		sendEmail(lang, region, emailHtml, subject, test, false, false);
 	}
 
 	public void sendBlogPostEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
 		logger.info("Sending blog post email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		sendEmail(lang, region, emailHtml, subject, test, false);
+		sendEmail(lang, region, emailHtml, subject, test, false, false);
 	}
 
-	public void sendMediaEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
+	public void sendMediaEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test, boolean important) {
 		logger.info("Sending media email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		sendEmail(lang, region, emailHtml, subject, test, true);
+		sendEmail(lang, region, emailHtml, subject, test, true, important);
 	}
 
-	private void sendEmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test, boolean media) {
+	private void sendEmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test, boolean media, boolean important) {
 		try {
 			PostMailingsRequestPostFile file = new PostMailingsRequestPostFile()
 				.description("mail-content.zip")
@@ -203,7 +203,9 @@ public class EmailUtil {
 				.subject(subject)
 				.status("scheduled")
 				.file(file);
-			RapidMailController.getInstance().sendMessage(region, lang, request, test, media);
+			RapidMailController.getInstance().sendMessage(region, lang, request, test, media, false);
+			if (media && important)
+				RapidMailController.getInstance().sendMessage(region, lang, request, test, media, important);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
 		}
