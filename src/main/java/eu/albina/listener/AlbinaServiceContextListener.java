@@ -87,6 +87,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent arg0) {
 		HibernateUtil.getInstance().shutDown();
 		SchedulerUtil.getInstance().shutDown();
+		AbandonedConnectionCleanupThread.checkedShutdown();
 		logger.debug("ServletContextListener destroyed");
 	}
 }
