@@ -1275,8 +1275,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				lowerBound.appendChild(doc.createTextNode(String.valueOf(bulletinDaytimeDescription.getElevation())));
 			elevationAbove.appendChild(lowerBound);
 			dangerRatingAbove.appendChild(elevationAbove);
-			if (bulletinDaytimeDescription.getMatrixInformationAbove() != null)
-				bulletinDaytimeDescription.getMatrixInformationAbove().toCAAMLv6(doc, dangerRatingAbove);
 			rootElement.appendChild(dangerRatingAbove);
 
 			Element dangerRatingBelow = doc.createElement("dangerRating");
@@ -1295,8 +1293,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				upperBound.appendChild(doc.createTextNode(String.valueOf(bulletinDaytimeDescription.getElevation())));
 			elevationBelow.appendChild(upperBound);
 			dangerRatingBelow.appendChild(elevationBelow);
-			if (bulletinDaytimeDescription.getMatrixInformationBelow() != null)
-				bulletinDaytimeDescription.getMatrixInformationBelow().toCAAMLv6(doc, dangerRatingBelow);
 			rootElement.appendChild(dangerRatingBelow);
 		} else {
 			// NOTE if no elevation dependency is set, the elevation description is above
@@ -1307,8 +1303,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 						DangerRating.getCAAMLv6String(bulletinDaytimeDescription.getDangerRatingAbove())));
 				dangerRating.appendChild(mainValue);
 			}
-			if (bulletinDaytimeDescription.getMatrixInformationAbove() != null)
-				bulletinDaytimeDescription.getMatrixInformationAbove().toCAAMLv6(doc, dangerRating);
 			rootElement.appendChild(dangerRating);
 		}
 
@@ -1586,11 +1580,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				forenoon.setTreeline(bulletin.getForenoon().getTreeline());
 				forenoon.setElevation(bulletin.getForenoon().getElevation());
 				forenoon.setDangerRatingAbove(bulletin.getForenoon().getDangerRatingAbove());
-				forenoon.setMatrixInformationAbove(bulletin.getForenoon().getMatrixInformationAbove());
 				forenoon.setTerrainFeatureAboveTextcat(bulletin.getForenoon().getTerrainFeatureAboveTextcat());
 				forenoon.setTerrainFeatureAbove(bulletin.getForenoon().getTerrainFeatureAbove());
 				forenoon.setDangerRatingBelow(bulletin.getForenoon().getDangerRatingBelow());
-				forenoon.setMatrixInformationBelow(bulletin.getForenoon().getMatrixInformationBelow());
 				forenoon.setTerrainFeatureBelowTextcat(bulletin.getForenoon().getTerrainFeatureBelowTextcat());
 				forenoon.setTerrainFeatureBelow(bulletin.getForenoon().getTerrainFeatureBelow());
 				forenoon.setComplexity(bulletin.getForenoon().getComplexity());
@@ -1610,11 +1602,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				afternoon.setTreeline(bulletin.getAfternoon().getTreeline());
 				afternoon.setElevation(bulletin.getAfternoon().getElevation());
 				afternoon.setDangerRatingAbove(bulletin.getAfternoon().getDangerRatingAbove());
-				afternoon.setMatrixInformationAbove(bulletin.getAfternoon().getMatrixInformationAbove());
 				afternoon.setTerrainFeatureAboveTextcat(bulletin.getAfternoon().getTerrainFeatureAboveTextcat());
 				afternoon.setTerrainFeatureAbove(bulletin.getAfternoon().getTerrainFeatureAbove());
 				afternoon.setDangerRatingBelow(bulletin.getAfternoon().getDangerRatingBelow());
-				afternoon.setMatrixInformationBelow(bulletin.getAfternoon().getMatrixInformationBelow());
 				afternoon.setTerrainFeatureBelowTextcat(bulletin.getAfternoon().getTerrainFeatureBelowTextcat());
 				afternoon.setTerrainFeatureBelow(bulletin.getAfternoon().getTerrainFeatureBelow());
 				afternoon.setComplexity(bulletin.getAfternoon().getComplexity());

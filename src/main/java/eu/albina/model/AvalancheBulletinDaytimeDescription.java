@@ -22,12 +22,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -68,18 +65,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@Column(name = "TREELINE")
 	private boolean treeline;
 
-	/** Information about the selected field in the EAWS matrix */
-	@Embedded
-	@AttributeOverrides({
-			@AttributeOverride(name = "artificialDangerRating", column = @Column(name = "ARTIFICIAL_DANGER_RATING_ABOVE")),
-			@AttributeOverride(name = "artificialAvalancheSize", column = @Column(name = "ARTIFICIAL_AVALANCHE_SIZE_ABOVE")),
-			@AttributeOverride(name = "artificialAvalancheReleaseProbability", column = @Column(name = "ARTIFICIAL_AVALANCHE_RELEASE_PROBABILITY_ABOVE")),
-			@AttributeOverride(name = "artificialHazardSiteDistribution", column = @Column(name = "ARTIFICIAL_HAZARD_SITE_DISTRIBUTION_ABOVE")),
-			@AttributeOverride(name = "naturalDangerRating", column = @Column(name = "NATURAL_DANGER_RATING_ABOVE")),
-			@AttributeOverride(name = "naturalAvalancheReleaseProbability", column = @Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY_ABOVE")),
-			@AttributeOverride(name = "naturalHazardSiteDistribution", column = @Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION_ABOVE")) })
-	private MatrixInformation matrixInformationAbove;
-
 	@Lob
 	@Column(name = "TERRAIN_FEATURE_ABOVE_TEXTCAT")
 	private String terrainFeatureAboveTextcat;
@@ -92,18 +77,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_RATING_BELOW")
 	private DangerRating dangerRatingBelow;
-
-	/** Information about the selected field in the EAWS matrix */
-	@Embedded
-	@AttributeOverrides({
-			@AttributeOverride(name = "artificialDangerRating", column = @Column(name = "ARTIFICIAL_DANGER_RATING_BELOW")),
-			@AttributeOverride(name = "artificialAvalancheSize", column = @Column(name = "ARTIFICIAL_AVALANCHE_SIZE_BELOW")),
-			@AttributeOverride(name = "artificialAvalancheReleaseProbability", column = @Column(name = "ARTIFICIAL_AVALANCHE_RELEASE_PROBABILITY_BELOW")),
-			@AttributeOverride(name = "artificialHazardSiteDistribution", column = @Column(name = "ARTIFICIAL_HAZARD_SITE_DISTRIBUTION_BELOW")),
-			@AttributeOverride(name = "naturalDangerRating", column = @Column(name = "NATURAL_DANGER_RATING_BELOW")),
-			@AttributeOverride(name = "naturalAvalancheReleaseProbability", column = @Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY_BELOW")),
-			@AttributeOverride(name = "naturalHazardSiteDistribution", column = @Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION_BELOW")) })
-	private MatrixInformation matrixInformationBelow;
 
 	@Lob
 	@Column(name = "TERRAIN_FEATURE_BELOW_TEXTCAT")
@@ -156,8 +129,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			this.treeline = json.getBoolean("treeline");
 		if (json.has("dangerRatingAbove"))
 			this.dangerRatingAbove = DangerRating.valueOf(json.getString("dangerRatingAbove").toLowerCase());
-		if (json.has("matrixInformationAbove"))
-			this.matrixInformationAbove = new MatrixInformation(json.getJSONObject("matrixInformationAbove"));
 		if (json.has("terrainFeatureAboveTextcat"))
 			this.terrainFeatureAboveTextcat = json.getString("terrainFeatureAboveTextcat");
 		if (json.has("terrainFeatureAbove"))
@@ -165,8 +136,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 				terrainFeatureAbove.add(new Text((JSONObject) entry));
 		if (json.has("dangerRatingBelow"))
 			this.dangerRatingBelow = DangerRating.valueOf(json.getString("dangerRatingBelow").toLowerCase());
-		if (json.has("matrixInformationBelow"))
-			this.matrixInformationBelow = new MatrixInformation(json.getJSONObject("matrixInformationBelow"));
 		if (json.has("terrainFeatureBelowTextcat"))
 			this.terrainFeatureBelowTextcat = json.getString("terrainFeatureBelowTextcat");
 		if (json.has("terrainFeatureBelow"))
@@ -223,14 +192,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.dangerRatingAbove = dangerRatingAbove;
 	}
 
-	public MatrixInformation getMatrixInformationAbove() {
-		return matrixInformationAbove;
-	}
-
-	public void setMatrixInformationAbove(MatrixInformation matrixInformationAbove) {
-		this.matrixInformationAbove = matrixInformationAbove;
-	}
-
 	public String getTerrainFeatureAboveTextcat() {
 		return terrainFeatureAboveTextcat;
 	}
@@ -261,14 +222,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 	public void setDangerRatingBelow(DangerRating dangerRatingBelow) {
 		this.dangerRatingBelow = dangerRatingBelow;
-	}
-
-	public MatrixInformation getMatrixInformationBelow() {
-		return matrixInformationBelow;
-	}
-
-	public void setMatrixInformationBelow(MatrixInformation matrixInformationBelow) {
-		this.matrixInformationBelow = matrixInformationBelow;
 	}
 
 	public String getTerrainFeatureBelowTextcat() {
@@ -371,8 +324,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 		if (dangerRatingAbove != null)
 			json.put("dangerRatingAbove", this.dangerRatingAbove.toString());
-		if (matrixInformationAbove != null)
-			json.put("matrixInformationAbove", matrixInformationAbove.toJSON());
 		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureAboveTextcat))
 			json.put("terrainFeatureAboveTextcat", terrainFeatureAboveTextcat);
 		if (terrainFeatureAbove != null && !terrainFeatureAbove.isEmpty()) {
@@ -384,8 +335,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 		if (dangerRatingBelow != null)
 			json.put("dangerRatingBelow", this.dangerRatingBelow.toString());
-		if (matrixInformationBelow != null)
-			json.put("matrixInformationBelow", matrixInformationBelow.toJSON());
 		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureBelowTextcat))
 			json.put("terrainFeatureBelowTextcat", terrainFeatureBelowTextcat);
 		if (terrainFeatureBelow != null && !terrainFeatureBelow.isEmpty()) {
@@ -477,13 +426,9 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			return false;
 		if (!Objects.equals(this.dangerRatingAbove, other.dangerRatingAbove))
 			return false;
-		if (!Objects.equals(this.matrixInformationAbove, other.matrixInformationAbove))
-			return false;
 		if (!Objects.equals(this.terrainFeatureAboveTextcat, other.terrainFeatureAboveTextcat))
 			return false;
 		if (!Objects.equals(this.dangerRatingBelow, other.dangerRatingBelow))
-			return false;
-		if (!Objects.equals(this.matrixInformationBelow, other.matrixInformationBelow))
 			return false;
 		if (!Objects.equals(this.terrainFeatureBelowTextcat, other.terrainFeatureBelowTextcat))
 			return false;
