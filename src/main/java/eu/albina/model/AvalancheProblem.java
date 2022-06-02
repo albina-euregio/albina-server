@@ -94,6 +94,15 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 			@AttributeOverride(name = "naturalHazardSiteDistribution", column = @Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION")) })
 	private MatrixInformation matrixInformation;
 
+	/** Information about the selected field in the EAWS matrix */
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "dangerRating", column = @Column(name = "DANGER_RATING")),
+			@AttributeOverride(name = "avalancheSize", column = @Column(name = "AVALANCHE_SIZE")),
+			@AttributeOverride(name = "snowpackStability", column = @Column(name = "SNOWPACK_STABILITY")),
+			@AttributeOverride(name = "frequency", column = @Column(name = "FREQUENCY")) })
+	private EawsMatrixInformation eawsMatrixInformation;
+
 	@Lob
 	@Column(name = "TERRAIN_FEATURE_TEXTCAT")
 	private String terrainFeatureTextcat;
@@ -133,6 +142,8 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 			this.dangerRatingDirection = Direction.valueOf(json.getString("dangerRatingDirection").toLowerCase());
 		if (json.has("matrixInformation"))
 			this.matrixInformation = new MatrixInformation(json.getJSONObject("matrixInformation"));
+		if (json.has("eawsMatrixInformation"))
+			this.eawsMatrixInformation = new EawsMatrixInformation(json.getJSONObject("eawsMatrixInformation"));
 		if (json.has("terrainFeatureTextcat"))
 			this.terrainFeatureTextcat = json.getString("terrainFeatureTextcat");
 		if (json.has("terrainFeature"))
@@ -210,6 +221,14 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 		this.matrixInformation = matrixInformation;
 	}
 
+	public EawsMatrixInformation getEawsMatrixInformation() {
+		return eawsMatrixInformation;
+	}
+
+	public void setEawsMatrixInformation(EawsMatrixInformation eawsMatrixInformation) {
+		this.eawsMatrixInformation = eawsMatrixInformation;
+	}
+
 	public String getTerrainFeatureTextcat() {
 		return terrainFeatureTextcat;
 	}
@@ -259,6 +278,8 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 			json.put("dangerRatingDirection", this.dangerRatingDirection.toString());
 		if (matrixInformation != null)
 			json.put("matrixInformation", matrixInformation.toJSON());
+		if (eawsMatrixInformation != null)
+			json.put("eawsMatrixInformation", eawsMatrixInformation.toJSON());
 
 		if (!Strings.isNullOrEmpty(terrainFeatureTextcat))
 			json.put("terrainFeatureTextcat", terrainFeatureTextcat);
@@ -294,6 +315,8 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 		if (!Objects.equals(this.dangerRatingDirection, other.dangerRatingDirection))
 			return false;
 		if (!Objects.equals(this.matrixInformation, other.matrixInformation))
+			return false;
+		if (!Objects.equals(this.eawsMatrixInformation, other.eawsMatrixInformation))
 			return false;
 		if (!Objects.equals(this.terrainFeatureTextcat, other.terrainFeatureTextcat))
 			return false;

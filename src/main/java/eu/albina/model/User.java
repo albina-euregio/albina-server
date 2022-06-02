@@ -224,6 +224,33 @@ public class User {
 		return json;
 	}
 
+	public JSONObject toMediumJSON() {
+		JSONObject json = new JSONObject();
+
+		json.put("email", getEmail());
+		json.put("name", getName());
+		json.put("image", getImage());
+		json.put("organization", getOrganization());
+
+		if (roles != null && roles.size() > 0) {
+			JSONArray jsonRoles = new JSONArray();
+			for (Role role : roles) {
+				jsonRoles.put(role.toString());
+			}
+			json.put("roles", jsonRoles);
+		}
+
+		if (regions != null && regions.size() > 0) {
+			JSONArray jsonRegions = new JSONArray();
+			for (Region region : regions) {
+				jsonRegions.put(region.getId());
+			}
+			json.put("regions", jsonRegions);
+		}
+
+		return json;
+	}
+
 	public JSONObject toSmallJSON() {
 		JSONObject json = new JSONObject();
 

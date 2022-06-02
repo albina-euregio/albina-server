@@ -129,7 +129,7 @@ public class UserController {
 		if (users != null) {
 			JSONArray jsonResult = new JSONArray();
 			for (User user : users)
-				jsonResult.put(user.toJSON());
+				jsonResult.put(user.toMediumJSON());
 
 			return jsonResult;
 		} else
