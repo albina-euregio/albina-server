@@ -1,6 +1,6 @@
-rm $1/$2/avalanche_report.json
+rm $1/$2/*.json
 
-cp $1/$2/$3/avalanche_report.json $1/$2/
+cp $1/$2/$3/*.json $1/$2/
 
-chmod 755 $1/$2/avalanche_report.json
+chmod -R 755 $1/$2/
 

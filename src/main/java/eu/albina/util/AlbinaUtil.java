@@ -298,7 +298,7 @@ public class AlbinaUtil {
 	public static void runUpdateMapsScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateMaps.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
@@ -312,7 +312,7 @@ public class AlbinaUtil {
 	public static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateFiles.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
@@ -326,7 +326,7 @@ public class AlbinaUtil {
 	public static void runUpdatePdfsScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updatePdfs.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
@@ -340,7 +340,7 @@ public class AlbinaUtil {
 	public static void runUpdateLatestPdfsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestPdfs.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			Process p = pb.start();
@@ -354,7 +354,7 @@ public class AlbinaUtil {
 	public static void runUpdateJsonScript(String validityDateString, String publicationTimeString) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateJson.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					validityDateString, publicationTimeString).inheritIO();
 			Process p = pb.start();
@@ -368,7 +368,7 @@ public class AlbinaUtil {
 	public static void runUpdateXmlsScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateXmls.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			Process p = pb.start();
@@ -382,7 +382,7 @@ public class AlbinaUtil {
 	public static void runUpdateLatestJsonScript(String validityDateString) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestJson.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					validityDateString).inheritIO();
 			Process p = pb.start();
@@ -396,7 +396,7 @@ public class AlbinaUtil {
 	public static void runUpdateLatestXmlsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestXmls.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			Process p = pb.start();
@@ -410,7 +410,7 @@ public class AlbinaUtil {
 	public static void runUpdateLatestMapsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestMaps.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date).inheritIO();
 			Process p = pb.start();
@@ -424,7 +424,7 @@ public class AlbinaUtil {
 	public static void runUpdateLatestFilesScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestFiles.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			Process p = pb.start();
@@ -438,7 +438,7 @@ public class AlbinaUtil {
 	public static void runUpdateLatestHtmlsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestHtmls.sh").getFile());
-			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/C",
+			ProcessBuilder pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()),
 					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
 			Process p = pb.start();

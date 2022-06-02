@@ -22,6 +22,11 @@
   <entry key="website.url.capitalized.IT-32-BZ">WWW.LAWINEN.REPORT</entry>
   <entry key="website.url.capitalized.IT-32-TN">WWW.LAWINEN.REPORT</entry>
   <entry key="website.url.capitalized.ES-CT-L">WWW.LAUEGI.REPORT</entry>
+  <entry key="website.static.url">https://static.avalanche.report</entry>
+  <entry key="website.static.url.AT-07">https://static.avalanche.report</entry>
+  <entry key="website.static.url.IT-32-BZ">https://static.avalanche.report</entry>
+  <entry key="website.static.url.IT-32-TN">https://static.avalanche.report</entry>
+  <entry key="website.static.url.ES-CT-L">https://static.lauegi.report/</entry>
   <entry key="email">info@lawinen.report</entry>
   <entry key="email.AT-07">info@lawinen.report</entry>
   <entry key="email.IT-32-BZ">info@lawinen.report</entry>
@@ -97,7 +102,9 @@
   <entry key="email.subject.update">UPDATE zum {0}, </entry>
   <entry key="email.imprint">Impressum</entry>
   <entry key="email.media.subject">{0} für {1} von {2}</entry>
+  <entry key="email.media.important.subject">WICHTIG {0} für {1} von {2}</entry>
   <entry key="email.media.text">Schöne Grüße, {0}</entry>
+  <entry key="email.media.link.mp3">MP3 Datei</entry>
   <entry key="pdf.page-number">Seite {0}</entry>
   <entry key="published">Veröffentlicht am </entry>
   <entry key="updated">Aktualisiert am </entry>

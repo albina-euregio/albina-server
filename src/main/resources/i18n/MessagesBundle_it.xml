@@ -22,6 +22,11 @@
   <entry key="website.url.capitalized.IT-32-BZ">WWW.VALANGHE.REPORT</entry>
   <entry key="website.url.capitalized.IT-32-TN">WWW.VALANGHE.REPORT</entry>
   <entry key="website.url.capitalized.ES-CT-L">WWW.LAUEGI.REPORT</entry>
+  <entry key="website.static.url">https://static.avalanche.report</entry>
+  <entry key="website.static.url.AT-07">https://static.avalanche.report</entry>
+  <entry key="website.static.url.IT-32-BZ">https://static.avalanche.report</entry>
+  <entry key="website.static.url.IT-32-TN">https://static.avalanche.report</entry>
+  <entry key="website.static.url.ES-CT-L">https://static.lauegi.report/</entry>
   <entry key="email">info@valanghe.report</entry>
   <entry key="email.AT-07">info@valanghe.report</entry>
   <entry key="email.IT-32-BZ">info@valanghe.report</entry>
@@ -94,10 +99,12 @@
   <entry key="email.follow-us">Seguici</entry>
   <entry key="email.unsubscribe">Annullare l'iscrizione</entry>
   <entry key="email.subject">{0}, </entry>
-  <entry key="email.subject.update">UPDATE on {0}, </entry>
+  <entry key="email.subject.update">AGGIORNAMENTO sulla {0}, </entry>
   <entry key="email.imprint">Impressum</entry>
   <entry key="email.media.subject">{0} for {1} from {2}</entry>
+  <entry key="email.media.important.subject">IMPORTANT {0} for {1} from {2}</entry>
   <entry key="email.media.text">Best regards, {0}</entry>
+  <entry key="email.media.link.mp3">MP3 File</entry>
   <entry key="pdf.page-number">Pagina {0}</entry>
   <entry key="published">Pubblicato il </entry>
   <entry key="updated">Aggiornamento sulla </entry>

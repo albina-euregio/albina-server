@@ -148,7 +148,11 @@ public class EmailUtil {
 		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb.toString(), username);
 		String emailHtml = text.replace("\n", "<br>") + "<br><br>" + LinkUtil.createHtmlLink(lang.getBundleString("email.media.link.mp3"), mp3FileUrl) + "<br><br>" + MessageFormat.format(lang.getBundleString("email.media.text"), username);
 
-		sendMediaEmailRapidmail(lang, region, emailHtml, subject, test, important);
+		sendMediaEmailRapidmail(lang, region, emailHtml, subject, test, false);
+		if (important) {
+			subject = MessageFormat.format(lang.getBundleString("email.media.important.subject"), lang.getBundleString("website.name"), sb.toString(), username);
+			sendMediaEmailRapidmail(lang, region, emailHtml, subject, test, true);
+		}
 	}
 
 	private String createZipFile(String htmlContent, String textContent) throws IOException {
@@ -204,8 +208,6 @@ public class EmailUtil {
 				.status("scheduled")
 				.file(file);
 			RapidMailController.getInstance().sendMessage(region, lang, request, test, media, false);
-			if (media && important)
-				RapidMailController.getInstance().sendMessage(region, lang, request, test, media, important);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
 		}
