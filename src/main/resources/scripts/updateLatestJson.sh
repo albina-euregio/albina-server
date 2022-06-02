@@ -1,6 +1,6 @@
-rm $1/latest/avalanche_report.json
+rm $1/latest/*.json
 
-cp $1/$2/avalanche_report.json $1/latest/
+cp $1/$2/*.json $1/latest/
 
-chmod 755 $1/latest/avalanche_report.json
+chmod -R 755 $1/latest/*
 
