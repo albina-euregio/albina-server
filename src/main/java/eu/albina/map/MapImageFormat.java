@@ -2,6 +2,8 @@ package eu.albina.map;
 
 import com.google.common.base.Preconditions;
 import com.google.common.io.MoreFiles;
+
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,15 +23,27 @@ enum MapImageFormat {
 			Path pngFile = checkAndReplaceExtension(pdfFile, "pdf", "png");
 			logger.debug("Converting {} to {}", pdfFile, pngFile);
 			int dpi = 300;
-			new ProcessBuilder("gs",
-				"-sDEVICE=png16m",
-				"-dTextAlphaBits=4",
-				"-dGraphicsAlphaBits=4",
-				"-r" + dpi,
-				"-o",
-				pngFile.toString(),
-				pdfFile.toString()
-			).inheritIO().start().waitFor();
+			if (SystemUtils.IS_OS_WINDOWS) {
+				new ProcessBuilder("gswin32",
+					"-sDEVICE=png16m",
+					"-dTextAlphaBits=4",
+					"-dGraphicsAlphaBits=4",
+					"-r" + dpi,
+					"-o",
+					pngFile.toString(),
+					pdfFile.toString()
+				).inheritIO().start().waitFor();
+			} else {
+				new ProcessBuilder("gs",
+					"-sDEVICE=png16m",
+					"-dTextAlphaBits=4",
+					"-dGraphicsAlphaBits=4",
+					"-r" + dpi,
+					"-o",
+					pngFile.toString(),
+					pdfFile.toString()
+				).inheritIO().start().waitFor();
+			}
 			return pngFile;
 		}
 	}, pngTransparent {
@@ -37,12 +51,21 @@ enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			checkAndReplaceExtension(pngFile, "png", "png");
 			logger.debug("Creating transparency for {}", pngFile);
-			new ProcessBuilder("convert",
-				"-transparent",
-				"white",
-				pngFile.toString(),
-				pngFile.toString()
-			).inheritIO().start().waitFor();
+			if (SystemUtils.IS_OS_WINDOWS) {
+				new ProcessBuilder("cmd.exe", "/C", "convert",
+					"-transparent",
+					"white",
+					pngFile.toString(),
+					pngFile.toString()
+				).inheritIO().start().waitFor();
+			} else {
+				new ProcessBuilder("convert",
+					"-transparent",
+					"white",
+					pngFile.toString(),
+					pngFile.toString()
+				).inheritIO().start().waitFor();
+			}
 			return pngFile;
 		}
 	}, jpg {
@@ -50,10 +73,17 @@ enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			Path jpgFile = checkAndReplaceExtension(pngFile, "png", "jpg");
 			logger.debug("Converting {} to {}", pngFile, jpgFile);
-			new ProcessBuilder("convert",
-				pngFile.toString(),
-				jpgFile.toString()
-			).inheritIO().start().waitFor();
+			if (SystemUtils.IS_OS_WINDOWS) {
+				new ProcessBuilder("cmd.exe", "/C", "convert",
+					pngFile.toString(),
+					jpgFile.toString()
+				).inheritIO().start().waitFor();
+			} else {
+				new ProcessBuilder("convert",
+					pngFile.toString(),
+					jpgFile.toString()
+				).inheritIO().start().waitFor();
+			}
 			return jpgFile;
 		}
 	}, webp {
@@ -61,11 +91,19 @@ enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			Path webpFile = checkAndReplaceExtension(pngFile, "png", "webp");
 			logger.debug("Converting {} to {}", pngFile, webpFile);
-			new ProcessBuilder("cwebp",
-				pngFile.toString(),
-				"-o",
-				webpFile.toString())
-				.inheritIO().start().waitFor();
+			if (SystemUtils.IS_OS_WINDOWS) {
+				new ProcessBuilder("cmd.exe", "/C", "cwebp",
+					pngFile.toString(),
+					"-o",
+					webpFile.toString())
+					.inheritIO().start().waitFor();
+			} else {
+				new ProcessBuilder("cwebp",
+					pngFile.toString(),
+					"-o",
+					webpFile.toString())
+					.inheritIO().start().waitFor();
+			}
 			return webpFile;
 		}
 	};
