@@ -212,7 +212,12 @@ public class PublicationController {
 
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
-			String avalancheReportId = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+			String avalancheReportId;
+			if (region.getSubRegions().isEmpty()) {
+				avalancheReportId = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+			} else {
+				avalancheReportId = null;
+			}
 
 			if (!regionBulletins.isEmpty()) {
 
@@ -428,7 +433,8 @@ public class PublicationController {
 		try {
 			logger.info("JSON production for " + region.getId() + " started");
 			JsonUtil.createJsonFile(bulletins, region, validityDateString, publicationTimeString, serverInstance);
-			AvalancheReportController.getInstance().setAvalancheReportJsonFlag(avalancheReportId);
+			if (avalancheReportId != null)
+				AvalancheReportController.getInstance().setAvalancheReportJsonFlag(avalancheReportId);
 			logger.info("JSON production for " + region.getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
@@ -452,7 +458,8 @@ public class PublicationController {
 		try {
 			logger.info("CAAMLv5 production for " + region.getId() + " started");
 			XmlUtil.createCaamlFiles(bulletins, region, validityDateString, publicationTimeString, CaamlVersion.V5, serverInstance);
-			AvalancheReportController.getInstance().setAvalancheReportCaamlV5Flag(avalancheReportId);
+			if (avalancheReportId != null)
+				AvalancheReportController.getInstance().setAvalancheReportCaamlV5Flag(avalancheReportId);
 			logger.info("CAAMLv5 production for " + region.getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
@@ -476,7 +483,8 @@ public class PublicationController {
 		try {
 			logger.info("CAAMLv6 production for " + region.getId() + " started");
 			XmlUtil.createCaamlFiles(bulletins, region, validityDateString, publicationTimeString, CaamlVersion.V6, serverInstance);
-			AvalancheReportController.getInstance().setAvalancheReportCaamlV6Flag(avalancheReportId);
+			if (avalancheReportId != null)
+				AvalancheReportController.getInstance().setAvalancheReportCaamlV6Flag(avalancheReportId);
 			logger.info("CAAMLv6 production for " + region.getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
@@ -500,7 +508,8 @@ public class PublicationController {
 		try {
 			logger.info("Map production for " + region.getId() + " started");
 			MapUtil.createMapyrusMaps(bulletins, region, serverInstance);
-			AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportId);
+			if (avalancheReportId != null)
+				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportId);
 			logger.info("Map production " + region.getId() + " finished");
 			return true;
 		} catch (Exception e) {
@@ -528,7 +537,8 @@ public class PublicationController {
 					logger.info("PDF production for " + region.getId() + " started");
 					PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
 							publicationTimeString, serverInstance);
-					AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportId);
+					if (avalancheReportId != null)
+						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportId);
 				} finally {
 					logger.info("PDF production " + region.getId() + " finished");
 				}
@@ -549,7 +559,8 @@ public class PublicationController {
 				try {
 					logger.info("Simple HTML production for " + region.getId() + " started");
 					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region, ServerInstanceController.getInstance().getLocalServerInstance());
-					AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReportId);
+					if (avalancheReportId != null)
+						AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReportId);
 				} catch (Exception e) {
 					logger.error("Error creating simple HTML for " + region.getId(), e);
 				} finally {
@@ -573,7 +584,7 @@ public class PublicationController {
 					logger.info("Email production for " + region.getId() + " started");
 					ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 					EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test, localServerInstance);
-					if (!test)
+					if (!test && avalancheReportId != null)
 						AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportId);
 				} catch (Exception e) {
 					logger.error("Error preparing emails " + region, e);
@@ -591,7 +602,7 @@ public class PublicationController {
 				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, test, serverInstance);
 			else
 				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, language, test, serverInstance);
-			if (!test)
+			if (!test && avalancheReportId != null)
 				AvalancheReportController.getInstance().setAvalancheReportTelegramFlag(avalancheReportId);
 		} catch (Exception e) {
 			logger.error("Error preparing telegram channel", e);
@@ -607,7 +618,7 @@ public class PublicationController {
 				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, test, serverInstance);
 			else
 				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, language, test, serverInstance);
-			if (!test)
+			if (!test && avalancheReportId != null)
 				AvalancheReportController.getInstance().setAvalancheReportPushFlag(avalancheReportId);
 		} catch (Exception e) {
 			logger.error("Error sending push notifications for " + region.getId(), e);
