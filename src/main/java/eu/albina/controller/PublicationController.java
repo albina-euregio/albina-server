@@ -382,10 +382,6 @@ public class PublicationController {
 				if (result != null && !result.isEmpty())
 					PublicationController.getInstance().update(result, regions, user, publicationDate, startDate);
 
-				List<String> avalancheReportIds = new ArrayList<String>();
-				String avalancheReportId = AvalancheReportController.getInstance().publishReport(publishedBulletins,
-						startDate, region, user, publicationDate);
-				avalancheReportIds.add(avalancheReportId);
 			}
 		}).start();
 	}
@@ -414,11 +410,6 @@ public class PublicationController {
 				}
 				if (result != null && !result.isEmpty())
 					PublicationController.getInstance().change(result, user, startDate);
-
-				List<String> avalancheReportIds = new ArrayList<String>();
-				String avalancheReportId = AvalancheReportController.getInstance().changeReport(publishedBulletins,
-						startDate, region, user);
-				avalancheReportIds.add(avalancheReportId);
 			}
 		}).start();
 	}
