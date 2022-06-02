@@ -254,12 +254,12 @@ public class PublicationController {
 							} catch (InterruptedException e) {
 								logger.error(key + " thread interrupted", e);
 							}
+						}
 
-							if (region.isCreateMaps()) {
-								new Thread(() -> sendEmails(avalancheReportId, bulletins, region, true, false)).start();
-								new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
-								new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
-							}
+						if (region.isCreateMaps()) {
+							new Thread(() -> sendEmails(avalancheReportId, bulletins, region, true, false)).start();
+							new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
+							new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
 						}
 					}
 				} catch (InterruptedException e) {
