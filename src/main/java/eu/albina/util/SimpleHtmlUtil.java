@@ -231,21 +231,21 @@ public class SimpleHtmlUtil {
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
 					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
+							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + ".jpg");
 					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
+							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + ".webp");
 					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.jpg");
+							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + "_PM.jpg");
 					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + "_PM.webp");
+							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + "_PM.webp");
 					bulletin.put("widthPM", "width=\"150\"");
 					bulletin.put("heightPMSmall", "height=\"50\"");
 					bulletin.put("fontSize", "");
 				} else {
 					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".jpg");
+							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + ".jpg");
 					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + avalancheBulletin.getId() + ".webp");
+							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + ".webp");
 					bulletin.put("mapPMjpg", serverInstance.getServerImagesUrl() + "empty.png");
 					bulletin.put("mapPMwebp", serverInstance.getServerImagesUrl() + "empty.webp");
 					bulletin.put("widthPM", "width=\"0\"");

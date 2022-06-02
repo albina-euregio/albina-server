@@ -251,6 +251,8 @@ public interface MapUtil {
 			sb.append("_");
 			sb.append(MapUtil.filename(region, mapLevel));
 		} else {
+			sb.append(region.getId());
+			sb.append("_");
 			sb.append(bulletin.getId());
 			sb.append(DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "");
 		}

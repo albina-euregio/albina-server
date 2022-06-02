@@ -255,12 +255,12 @@ public class PdfUtil {
 				regionAMImageDate = ImageDataFactory.create(mapsPath
 						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
 						+ System.getProperty("file.separator") + publicationTimeString
-						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_bw.jpg");
+						+ System.getProperty("file.separator") + region.getId() + "_" + avalancheBulletin.getId() + "_bw.jpg");
 			else
 				regionAMImageDate = ImageDataFactory.create(mapsPath
 						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
 						+ System.getProperty("file.separator") + publicationTimeString
-						+ System.getProperty("file.separator") + avalancheBulletin.getId() + ".jpg");
+						+ System.getProperty("file.separator") + region.getId() + "_" + avalancheBulletin.getId() + ".jpg");
 			Image regionAMImg = new Image(regionAMImageDate);
 			regionAMImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionAMImg.scaleToFit(regionMapSize, regionMapSize);
@@ -296,12 +296,12 @@ public class PdfUtil {
 				regionPMImageDate = ImageDataFactory.create(mapsPath
 						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
 						+ System.getProperty("file.separator") + publicationTimeString
-						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_PM_bw.jpg");
+						+ System.getProperty("file.separator") + region.getId() + "_" + avalancheBulletin.getId() + "_PM_bw.jpg");
 			else
 				regionPMImageDate = ImageDataFactory.create(mapsPath
 						+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
 						+ System.getProperty("file.separator") + publicationTimeString
-						+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_PM.jpg");
+						+ System.getProperty("file.separator") + region.getId() + "_" + avalancheBulletin.getId() + "_PM.jpg");
 			Image regionPMImg = new Image(regionPMImageDate);
 			regionPMImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionPMImg.scaleToFit(regionMapSize, regionMapSize);
@@ -324,12 +324,12 @@ public class PdfUtil {
 				regionImageDate = ImageDataFactory
 						.create(mapsPath + System.getProperty("file.separator")
 								+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-								+ System.getProperty("file.separator") + avalancheBulletin.getId() + "_bw.jpg");
+								+ System.getProperty("file.separator") + region.getId() + "_" + avalancheBulletin.getId() + "_bw.jpg");
 			else
 				regionImageDate = ImageDataFactory
 						.create(mapsPath + System.getProperty("file.separator")
 								+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-								+ System.getProperty("file.separator") + avalancheBulletin.getId() + ".jpg");
+								+ System.getProperty("file.separator") + region.getId() + "_" + avalancheBulletin.getId() + ".jpg");
 			Image regionImg = new Image(regionImageDate);
 			regionImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionImg.scaleToFit(regionMapSize, regionMapSize);
