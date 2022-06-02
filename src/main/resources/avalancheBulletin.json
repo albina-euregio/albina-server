@@ -111,11 +111,12 @@
 				"elevation" : { "type" : "integer" },
 				"treeline" : { "type" : "boolean" },
 				"dangerRatingAbove" : { "$ref" : "#/definitions/dangerRating" },
-				"matrixInformationAbove" : { "$ref" : "#/definitions/matrixInformation" },
 				"dangerRatingBelow" : { "$ref" : "#/definitions/dangerRating" },
-				"matrixInformationBelow" : { "$ref" : "#/definitions/matrixInformation" },
 				"avalancheProblem1" : { "$ref" : "#/definitions/avalancheProblemObject" },
-				"avalancheProblem2" : { "$ref" : "#/definitions/avalancheProblemObject" }
+				"avalancheProblem2" : { "$ref" : "#/definitions/avalancheProblemObject" },
+				"avalancheProblem3" : { "$ref" : "#/definitions/avalancheProblemObject" },
+				"avalancheProblem4" : { "$ref" : "#/definitions/avalancheProblemObject" },
+				"avalancheProblem5" : { "$ref" : "#/definitions/avalancheProblemObject" }
 			},
 			"additionalProperties" : false
 		},
