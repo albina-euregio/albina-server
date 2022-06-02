@@ -220,7 +220,7 @@ public class PublicationController {
 				if (region.isCreateCaamlV5())
 					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 				if (region.isCreateCaamlV6())
-					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+					createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 				// create JSON
 				if (region.isCreateJson())
