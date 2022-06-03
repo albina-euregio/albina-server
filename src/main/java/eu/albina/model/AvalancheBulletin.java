@@ -1502,7 +1502,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			dangerRating.appendChild(textPart);
 		}
 
-		// danger rating
+		// obsolete matrix
 		if (avalancheProblem.getMatrixInformation() != null) {
 			DangerRating rating = null;
 			if (avalancheProblem.getMatrixInformation().getArtificialDangerRating() != null) {
@@ -1525,6 +1525,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			}
 
 			avalancheProblem.getMatrixInformation().toCAAMLv6(doc, dangerRating);
+		}
+
+		// new matrix
+		if (avalancheProblem.getEawsMatrixInformation() != null) {
+			avalancheProblem.getEawsMatrixInformation().toCAAMLv6(doc, dangerRating);
 		}
 
 		avProblem.appendChild(dangerRating);

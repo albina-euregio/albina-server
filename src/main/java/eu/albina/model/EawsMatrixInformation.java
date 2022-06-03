@@ -114,11 +114,14 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 	}
 
 	public void toCAAMLv6(Document doc, Element rootElement) {
+		/*
+		// does not exist in CAAMLv6 specification
 		if (dangerRating != null) {
 			Element dangerRatingElement = doc.createElement("dangerRating");
 			dangerRatingElement.appendChild(doc.createTextNode(DangerRating.getCAAMLv6String(dangerRating)));
 			rootElement.appendChild(dangerRatingElement);
 		}
+		*/
 		if (avalancheSize != null) {
 			Element avalancheSizeElement = doc.createElement("avalancheSize");
 			avalancheSizeElement.appendChild(doc.createTextNode(avalancheSize.toCaamlString()));
