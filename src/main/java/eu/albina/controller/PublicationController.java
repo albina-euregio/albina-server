@@ -235,7 +235,7 @@ public class PublicationController {
 					// create maps
 					if (region.isCreateMaps()) {
 
-						createMaps(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+						createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 						Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -318,7 +318,7 @@ public class PublicationController {
 					// create maps
 					if (region.isCreateMaps()) {
 
-						createMaps(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+						createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
 						Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -507,7 +507,7 @@ public class PublicationController {
 			throws Exception {
 		try {
 			logger.info("Map production for " + region.getId() + " started");
-			MapUtil.createMapyrusMaps(bulletins, region, serverInstance);
+			MapUtil.createMapyrusMaps(bulletins, region, validityDateString, publicationTimeString, serverInstance);
 			if (avalancheReportId != null)
 				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportId);
 			logger.info("Map production " + region.getId() + " finished");

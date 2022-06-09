@@ -558,8 +558,7 @@ public class AvalancheBulletinService {
 				// TODO validate
 				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
 				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser);
-				if (bulletin.affectsRegion(region))
-					bulletins.add(bulletin);
+				bulletins.add(bulletin);
 			}
 
 			Instant publicationTime = AlbinaUtil.getInstantNowNoNanos();

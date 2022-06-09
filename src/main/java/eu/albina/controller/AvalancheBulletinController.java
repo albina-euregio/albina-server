@@ -573,7 +573,6 @@ public class AvalancheBulletinController {
 		boolean duplicateRegion = false;
 		Set<String> definedRegions = new HashSet<String>();
 		for (AvalancheBulletin bulletin : bulletins) {
-
 			for (String entry : bulletin.getSavedRegions())
 				if (entry.startsWith(region.getId()))
 					if (!definedRegions.add(entry.toLowerCase()))

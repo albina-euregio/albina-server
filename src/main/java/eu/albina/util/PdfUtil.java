@@ -904,6 +904,8 @@ public class PdfUtil {
 			cell.add(elevationTable);
 			cell.setPadding(padding);
 			table.addCell(cell);
+
+			// TODO add matrix information
 		}
 	}
 

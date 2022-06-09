@@ -31,7 +31,6 @@ import javax.script.SimpleBindings;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
-import eu.albina.util.AlbinaUtil;
 
 import org.apache.logging.log4j.util.Strings;
 import org.mapyrus.Argument;
@@ -77,10 +76,8 @@ public interface MapUtil {
 		return simpleBindings;
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance) {
-		final String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		final String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
-		final Path outputDirectory = Paths.get(serverInstance.getMapsPath(), validityDateString, publicationTime);
+	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString, ServerInstance serverInstance) {
+		final Path outputDirectory = Paths.get(serverInstance.getMapsPath(), validityDateString, publicationTimeString);
 		createMapyrusMaps(bulletins, region, serverInstance, false, outputDirectory);
 	}
 
@@ -101,6 +98,9 @@ public interface MapUtil {
 				}
 				for (final AvalancheBulletin bulletin : bulletins) {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
+						continue;
+					}
+					if (!bulletin.affectsRegionOnlyPublished(region)) {
 						continue;
 					}
 					createMapyrusMaps(region, serverInstance, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
@@ -129,7 +129,7 @@ public interface MapUtil {
 			logoPath = logoUrl.toString();
 			BufferedImage image = ImageIO.read(logoUrl);
    			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
-		}		
+		}
 
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		final Path geodataPath = Paths.get(serverInstance.getMapProductionUrl()).resolve(region.getGeoDataDirectory());
