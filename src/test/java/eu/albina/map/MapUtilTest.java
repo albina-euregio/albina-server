@@ -14,6 +14,7 @@ import eu.albina.ImageTestUtils;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.PdfUtil;
 
@@ -77,7 +78,9 @@ public class MapUtilTest {
 	public void testMapyrusMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17_1.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, validityDateString, publicationTimeString, serverInstance);
 
 /*		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
@@ -94,7 +97,9 @@ public class MapUtilTest {
 	public void testMapyrusMapsAran() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionAran, serverInstance);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionAran, validityDateString, publicationTimeString, serverInstance);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		BufferedImage actual = ImageIO.read(new File(
@@ -110,7 +115,9 @@ public class MapUtilTest {
 	public void testMapyrusMapsAranVeryHigh() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionAran, serverInstance);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionAran, validityDateString, publicationTimeString, serverInstance);
 		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, serverInstance, false, false,
 			"2021-12-10", "2021-12-09_16-06-27", false);
 	}
@@ -120,7 +127,9 @@ public class MapUtilTest {
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, validityDateString, publicationTimeString, serverInstance);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		BufferedImage actual = ImageIO.read(new File(
@@ -134,7 +143,9 @@ public class MapUtilTest {
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, validityDateString, publicationTimeString, serverInstance);
 	}
 
 	@Test
@@ -142,7 +153,9 @@ public class MapUtilTest {
 	public void testMapyrusMapsDaylightSavingTime1() throws Exception {
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, validityDateString, publicationTimeString, serverInstance);
 	}
 
 	@Test
@@ -150,7 +163,9 @@ public class MapUtilTest {
 	public void testMapyrusMapsDaylightSavingTime2() throws Exception {
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(bulletins, regionEuregio, serverInstance);
+		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		MapUtil.createMapyrusMaps(bulletins, regionEuregio, validityDateString, publicationTimeString, serverInstance);
 	}
 
 	@Test
