@@ -2,7 +2,6 @@
     "id" : "ES-CT-L",
     "microRegions": 3,
     "superRegions": [],
-    "showMatrix": true,
     "publishBulletins" : true,
     "publishBlogs" : false,
     "createCaamlV5" : true,
