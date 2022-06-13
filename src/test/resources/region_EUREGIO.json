@@ -2,6 +2,7 @@
     "id": "EUREGIO",
     "microRegions": 0,
     "subRegions": ["IT-32-BZ", "IT-32-TN", "AT-07"],
+    "showMatrix": true,
     "publishBulletins": false,
     "publishBlogs": false,
     "createCaamlV5": true,
