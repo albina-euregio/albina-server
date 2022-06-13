@@ -123,6 +123,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_MEDIA_FILE")
 	private boolean enableMediaFile;
 
+	@Column(name = "SHOW_MATRIX")
+	private boolean showMatrix;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -274,6 +277,8 @@ public class Region implements AvalancheInformationObject {
 			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
 		if (json.has("enableMediaFile") && !json.isNull("enableMediaFile"))
 			this.enableMediaFile = json.getBoolean("enableMediaFile");
+		if (json.has("showMatrix") && !json.isNull("showMatrix"))
+			this.showMatrix = json.getBoolean("showMatrix");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
 			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"), regionFunction);
 		if (json.has("pdfColor") && !json.isNull("pdfColor"))
@@ -470,6 +475,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void setEnableMediaFile(boolean enableMediaFile) {
 		this.enableMediaFile = enableMediaFile;
+	}
+
+	public boolean isShowMatrix() {
+		return showMatrix;
+	}
+
+	public void setShowMatrix(boolean showMatrix) {
+		this.showMatrix = showMatrix;
 	}
 
 	public ServerInstance getServerInstance() {
@@ -718,6 +731,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("sendTelegramMessages", isSendTelegramMessages());
 		json.put("sendPushNotifications", isSendPushNotifications());
 		json.put("enableMediaFile", isEnableMediaFile());
+		json.put("showMatrix", isShowMatrix());
 		if (getServerInstance() != null) {
 			json.put("serverInstance", getServerInstance().toJSON());
 		}
