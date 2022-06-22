@@ -114,7 +114,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(bulletins, LanguageCode.de,
 			regionTirol, false, false, serverInstanceAran);
-		assertEquals("61 kB", 61, html.getBytes(StandardCharsets.UTF_8).length / 1024);
+		assertEquals("60 kB", 60, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
 	@Ignore
