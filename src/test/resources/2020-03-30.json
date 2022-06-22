@@ -214,7 +214,7 @@
 					"se",
 					"ne"
 				],
-				"avalancheProblem": "wind_drifted_snow"
+				"avalancheProblem": "wind_slab"
 			},
 			"id": "bccf82c0-223a-4ceb-b110-a08a66cd0a5e",
 			"dangerRatingAbove": "moderate"

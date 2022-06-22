@@ -207,7 +207,7 @@
 				}
 			},
 			"avalancheProblem2": {
-				"avalancheProblem": "wind_drifted_snow",
+				"avalancheProblem": "wind_slab",
 				"aspects": ["S", "W", "NW", "NE", "N", "SE", "E", "SW"],
 				"treelineLow": true,
 				"matrixInformation": {
@@ -371,7 +371,7 @@
 			"dangerRatingAbove": "moderate",
 			"dangerRatingBelow": "moderate",
 			"avalancheProblem1": {
-				"avalancheProblem": "wind_drifted_snow",
+				"avalancheProblem": "wind_slab",
 				"aspects": ["S", "W", "NW", "NE", "N", "SE", "E", "SW"],
 				"treelineLow": true,
 				"matrixInformation": {
@@ -577,7 +577,7 @@
 				}
 			},
 			"avalancheProblem2": {
-				"avalancheProblem": "wind_drifted_snow",
+				"avalancheProblem": "wind_slab",
 				"aspects": ["S", "W", "NW", "NE", "N", "SE", "E", "SW"],
 				"treelineLow": true,
 				"matrixInformation": {
@@ -772,7 +772,7 @@
 			"dangerRatingAbove": "moderate",
 			"dangerRatingBelow": "low",
 			"avalancheProblem1": {
-				"avalancheProblem": "wind_drifted_snow",
+				"avalancheProblem": "wind_slab",
 				"aspects": ["S", "W", "NW", "NE", "N", "SE", "E", "SW"],
 				"treelineLow": true,
 				"matrixInformation": {

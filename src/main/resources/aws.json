@@ -94,7 +94,7 @@
 		"title" : "Avalanche Problem",
 		"description" : "The five avalanche problems.",
 		"type" : "string",
-		"enum" : [ "new_snow", "wind_drifted_snow", "old_snow", "wet_snow", "gliding_snow" ]
+		"enum" : [ "new_snow", "wind_slab", "old_snow", "wet_snow", "gliding_snow" ]
 	},
 
 	"dangerPattern" : {

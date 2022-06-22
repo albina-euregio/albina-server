@@ -70,7 +70,7 @@
 				"sw",
 				"w"
 			],
-			"avalancheProblem": "wind_drifted_snow"
+			"avalancheProblem": "wind_slab"
 		},
 		"id": "9a351c23-4111-4092-bde0-2c086363792f",
 		"dangerRatingAbove": "considerable"

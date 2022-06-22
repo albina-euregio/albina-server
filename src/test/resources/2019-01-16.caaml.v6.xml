@@ -109,7 +109,7 @@
       </dangerRating>
     </avalancheProblem>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>S</aspect>
         <aspect>SW</aspect>
@@ -252,7 +252,7 @@
       </elevation>
     </dangerRating>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>S</aspect>
         <aspect>NW</aspect>
@@ -318,7 +318,7 @@
       </elevation>
     </dangerRating>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>S</aspect>
         <aspect>SW</aspect>
@@ -426,7 +426,7 @@
       <type>dp2</type>
     </dangerPattern>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>S</aspect>
         <aspect>SW</aspect>
@@ -510,7 +510,7 @@
       <type>dp6</type>
     </dangerPattern>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>NE</aspect>
         <aspect>SE</aspect>
@@ -573,7 +573,7 @@
       </elevation>
     </dangerRating>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>S</aspect>
         <aspect>SW</aspect>
@@ -643,7 +643,7 @@
       </elevation>
     </dangerRating>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>S</aspect>
         <aspect>SW</aspect>
@@ -722,7 +722,7 @@
       <mainValue>low</mainValue>
     </dangerRating>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>W</aspect>
         <aspect>NW</aspect>
@@ -787,7 +787,7 @@
       </elevation>
     </dangerRating>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>S</aspect>
         <aspect>SW</aspect>
@@ -876,7 +876,7 @@
       <type>dp4</type>
     </dangerPattern>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>S</aspect>
         <aspect>SW</aspect>
@@ -949,7 +949,7 @@
       <mainValue>low</mainValue>
     </dangerRating>
     <avalancheProblem>
-      <type>wind_drifted_snow</type>
+      <type>wind_slab</type>
       <dangerRating>
         <aspect>W</aspect>
         <aspect>NW</aspect>

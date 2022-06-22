@@ -30,7 +30,7 @@
 			"avalancheProblem1": {
 				"elevationLow": 2200,
 				"aspects": ["nw", "ne", "n", "e"],
-				"avalancheProblem": "wind_drifted_snow"
+				"avalancheProblem": "wind_slab"
 			},
 			"id": "6384b47b-d4a7-42e2-adb7-f7ecab22d626",
 			"dangerRatingAbove": "considerable"

@@ -9,7 +9,7 @@
 				"NW",
 				"SW"
 			],
-			"avalancheProblem": "wind_drifted_snow"
+			"avalancheProblem": "wind_slab"
 		},
 		"avalancheProblem1": {
 			"treelineHigh" : true,
@@ -67,7 +67,7 @@
 				"E"
 			],
 			"elevationHigh": 2500,
-			"avalancheProblem": "wind_drifted_snow"
+			"avalancheProblem": "wind_slab"
 		},
 		"avalancheProblem1": {
 			"elevationLow": 1000,

@@ -56,7 +56,7 @@
 
 	"below" : {
 		"dangerRating" : "low",
-		"avalancheProblem" : "wind_drifted_snow",
+		"avalancheProblem" : "wind_slab",
 		"aspects" : [ "NW", "N", "NE" ]
 	}
 }

@@ -33,7 +33,7 @@
 				"n",
 				"w"
 			],
-			"avalancheProblem": "wind_drifted_snow"
+			"avalancheProblem": "wind_slab"
 		},
 		"avalancheProblem2": {
 			"treelineLow": true,

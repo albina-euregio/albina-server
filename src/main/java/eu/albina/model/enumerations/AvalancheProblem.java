@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 import eu.albina.util.XMLResourceBundleControl;
 
 public enum AvalancheProblem {
-	new_snow, wind_drifted_snow, persistent_weak_layers, wet_snow, gliding_snow, favourable_situation;
+	new_snow, wind_slab, persistent_weak_layers, wet_snow, gliding_snow, favourable_situation;
 
 	public String toString(Locale locale) {
 
@@ -43,7 +43,7 @@ public enum AvalancheProblem {
 		switch (this) {
 		case new_snow:
 			return "new snow";
-		case wind_drifted_snow:
+		case wind_slab:
 			return "drifting snow";
 		case persistent_weak_layers:
 			return "old snow";
@@ -68,8 +68,8 @@ public enum AvalancheProblem {
 		switch (this) {
 		case new_snow:
 			return "new_snow";
-		case wind_drifted_snow:
-			return "wind_drifted_snow";
+		case wind_slab:
+			return "wind_slab";
 		case persistent_weak_layers:
 			return "persistent_weak_layers";
 		case wet_snow:
@@ -88,8 +88,8 @@ public enum AvalancheProblem {
 		switch (this) {
 		case new_snow:
 			return "new_snow";
-		case wind_drifted_snow:
-			return "wind_drifted_snow";
+		case wind_slab:
+			return "wind_slab";
 		case persistent_weak_layers:
 			return "persistent_weak_layers";
 		case wet_snow:

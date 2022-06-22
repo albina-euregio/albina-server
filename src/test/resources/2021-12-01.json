@@ -260,7 +260,7 @@
 				}
 			},
 			"avalancheProblem2": {
-				"avalancheProblem": "wind_drifted_snow",
+				"avalancheProblem": "wind_slab",
 				"aspects": [
 					"W",
 					"S",
@@ -477,7 +477,7 @@
 			"dangerRatingAbove": "moderate",
 			"dangerRatingBelow": "moderate",
 			"avalancheProblem1": {
-				"avalancheProblem": "wind_drifted_snow",
+				"avalancheProblem": "wind_slab",
 				"aspects": [
 					"W",
 					"S",
@@ -717,7 +717,7 @@
 			"dangerRatingAbove": "considerable",
 			"dangerRatingBelow": "low",
 			"avalancheProblem1": {
-				"avalancheProblem": "wind_drifted_snow",
+				"avalancheProblem": "wind_slab",
 				"aspects": [
 					"W",
 					"S",

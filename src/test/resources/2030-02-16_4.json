@@ -33,7 +33,7 @@
 				"sw",
 				"w"
 			],
-			"avalancheProblem": "wind_drifted_snow"
+			"avalancheProblem": "wind_slab"
 		},
 		"avalancheProblem1": {
 			"elevationLow": 2000,

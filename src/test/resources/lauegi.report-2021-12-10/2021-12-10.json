@@ -259,7 +259,7 @@
 			"dangerRatingAbove": "high",
 			"dangerRatingBelow": "considerable",
 			"avalancheProblem1": {
-				"avalancheProblem": "wind_drifted_snow",
+				"avalancheProblem": "wind_slab",
 				"aspects": [
 					"NE",
 					"S",

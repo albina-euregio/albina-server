@@ -44,7 +44,7 @@
 				"NE",
 				"E"
 			],
-			"avalancheProblem": "wind_drifted_snow"
+			"avalancheProblem": "wind_slab"
 		},
 		"id": "b5ae6b14-5368-41b9-bbd2-88a6ab213fa1",
 		"dangerRatingAbove": "moderate"
