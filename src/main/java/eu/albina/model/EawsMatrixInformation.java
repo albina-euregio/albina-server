@@ -28,6 +28,7 @@ import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.AvalancheSize;
 import eu.albina.model.enumerations.DangerRating;
+import eu.albina.model.enumerations.DangerRatingModificator;
 import eu.albina.model.enumerations.Frequency;
 import eu.albina.model.enumerations.SnowpackStability;
 
@@ -37,6 +38,10 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_RATING")
 	private DangerRating dangerRating;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "DANGER_RATING_MODIFICATOR")
+	private DangerRatingModificator dangerRatingModificator;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "AVALANCHE_SIZE")
@@ -58,6 +63,8 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 
 		if (json.has("dangerRating"))
 			this.dangerRating = DangerRating.fromString(json.getString("dangerRating"));
+		if (json.has("dangerRatingModificator"))
+			this.dangerRatingModificator = DangerRatingModificator.fromString(json.getString("dangerRatingModificator"));
 		if (json.has("avalancheSize"))
 			this.avalancheSize = AvalancheSize.fromString(json.getString("avalancheSize"));
 		if (json.has("snowpackStability"))
@@ -72,6 +79,14 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 
 	public void setDangerRating(DangerRating dangerRating) {
 		this.dangerRating = dangerRating;
+	}
+
+	public DangerRatingModificator getDangerRatingModificator() {
+		return dangerRatingModificator;
+	}
+
+	public void setDangerRatingModificator(DangerRatingModificator dangerRatingModificator) {
+		this.dangerRatingModificator = dangerRatingModificator;
 	}
 
 	public AvalancheSize getAvalancheSize() {
@@ -103,6 +118,8 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 		JSONObject json = new JSONObject();
 		if (dangerRating != null)
 			json.put("dangerRating", this.dangerRating.toString());
+		if (dangerRatingModificator != null)
+			json.put("dangerRatingModificator", this.dangerRatingModificator.toString());
 		if (avalancheSize != null)
 			json.put("avalancheSize", this.avalancheSize.toString());
 		if (snowpackStability != null)
@@ -152,6 +169,8 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 		final EawsMatrixInformation other = (EawsMatrixInformation) obj;
 
 		if (this.dangerRating != other.dangerRating)
+			return false;
+		if (this.dangerRatingModificator != other.dangerRatingModificator)
 			return false;
 		if (this.avalancheSize != other.avalancheSize)
 			return false;
