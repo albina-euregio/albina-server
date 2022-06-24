@@ -55,6 +55,15 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 	@Column(name = "FREQUENCY")
 	private Frequency frequency;
 
+	@Column(name = "AVALANCHE_SIZE_VALUE")
+	private int avalancheSizeValue;
+
+	@Column(name = "SNOWPACK_STABILITY_VALUE")
+	private int snowpackStabilityValue;
+
+	@Column(name = "FREQUENCY_VALUE")
+	private int frequencyValue;
+
 	public EawsMatrixInformation() {
 	}
 
@@ -71,6 +80,12 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 			this.snowpackStability = SnowpackStability.fromString(json.getString("snowpackStability"));
 		if (json.has("frequency"))
 			this.frequency = Frequency.fromString(json.getString("frequency"));
+		if (json.has("avalancheSizeValue"))
+			this.avalancheSizeValue = json.getInt("avalancheSizeValue");
+		if (json.has("snowpackStabilityValue"))
+			this.snowpackStabilityValue = json.getInt("snowpackStabilityValue");
+		if (json.has("frequencyValue"))
+			this.frequencyValue = json.getInt("frequencyValue");
 	}
 
 	public DangerRating getDangerRating() {
@@ -113,6 +128,30 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 		this.frequency = frequency;
 	}
 
+	public int getAvalancheSizeValue() {
+		return avalancheSizeValue;
+	}
+
+	public void setAvalancheSizeValue(int avalancheSizeValue) {
+		this.avalancheSizeValue = avalancheSizeValue;
+	}
+
+	public int getSnowpackStabilityValue() {
+		return snowpackStabilityValue;
+	}
+
+	public void setSnowpackStabilityValue(int snowpackStabilityValue) {
+		this.snowpackStabilityValue = snowpackStabilityValue;
+	}
+
+	public int getFrequencyValue() {
+		return frequencyValue;
+	}
+
+	public void setFrequencyValue(int frequencyValue) {
+		this.frequencyValue = frequencyValue;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -126,6 +165,9 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 			json.put("snowpackStability", this.snowpackStability.toString());
 		if (frequency != null)
 			json.put("frequency", this.frequency.toString());
+		json.put("avalancheSizeValue", this.avalancheSizeValue);
+		json.put("snowpackStabilityValue", this.snowpackStabilityValue);
+		json.put("frequencyValue", this.frequencyValue);
 
 		return json;
 	}
@@ -177,6 +219,12 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 		if (this.snowpackStability != other.snowpackStability)
 			return false;
 		if (this.frequency != other.frequency)
+			return false;
+		if (this.avalancheSizeValue != other.avalancheSizeValue)
+			return false;
+		if (this.snowpackStabilityValue != other.snowpackStabilityValue)
+			return false;
+		if (this.frequencyValue != other.frequencyValue)
 			return false;
 
 		return true;
