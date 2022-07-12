@@ -7,6 +7,7 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -76,13 +77,13 @@ public class MapUtilTest {
 
 	@Test
 	public void testMapyrusMaps() throws Exception {
-		final URL resource = Resources.getResource("2019-01-17_1.json");
+		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 		MapUtil.createMapyrusMaps(bulletins, regionEuregio, validityDateString, publicationTimeString, serverInstance);
 
-/*		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
+		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "EUREGIO_f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
 			BufferedImage actual = ImageIO.read(new File(
 				serverInstance.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
@@ -90,7 +91,7 @@ public class MapUtilTest {
 			});
 		}
 		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.en, regionEuregio, serverInstance, false, false,
-			"2019-01-17", "2019-01-16_16-00-00", false);*/
+			"2019-01-17", "2019-01-16_16-00-00", false);
 	}
 
 	@Test
