@@ -123,6 +123,12 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_MEDIA_FILE")
 	private boolean enableMediaFile;
 
+	@Column(name = "ENABLE_AVALANCHE_PROBLEM_CORNICES")
+	private boolean enableAvalancheProblemCornices;
+
+	@Column(name = "ENABLE_AVALANCHE_PROBLEM_NO_DISTINCT_AVALANCHE_PROBLEM")
+	private boolean enableAvalancheProblemNoDistinctAvalancheProblem;
+
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
 
@@ -277,6 +283,10 @@ public class Region implements AvalancheInformationObject {
 			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
 		if (json.has("enableMediaFile") && !json.isNull("enableMediaFile"))
 			this.enableMediaFile = json.getBoolean("enableMediaFile");
+		if (json.has("enableAvalancheProblemCornices") && !json.isNull("enableAvalancheProblemCornices"))
+			this.enableAvalancheProblemCornices = json.getBoolean("enableAvalancheProblemCornices");
+		if (json.has("enableAvalancheProblemNoDistinctAvalancheProblem") && !json.isNull("enableAvalancheProblemNoDistinctAvalancheProblem"))
+			this.enableAvalancheProblemNoDistinctAvalancheProblem = json.getBoolean("enableAvalancheProblemNoDistinctAvalancheProblem");
 		if (json.has("showMatrix") && !json.isNull("showMatrix"))
 			this.showMatrix = json.getBoolean("showMatrix");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
@@ -475,6 +485,22 @@ public class Region implements AvalancheInformationObject {
 
 	public void setEnableMediaFile(boolean enableMediaFile) {
 		this.enableMediaFile = enableMediaFile;
+	}
+
+	public boolean isEnableAvalancheProblemCornices() {
+		return enableAvalancheProblemCornices;
+	}
+
+	public void setEnableAvalancheProblemCornices(boolean enableAvalancheProblemCornices) {
+		this.enableAvalancheProblemCornices = enableAvalancheProblemCornices;
+	}
+
+	public boolean isEnableAvalancheProblemNoDistinctAvalancheProblem() {
+		return enableAvalancheProblemNoDistinctAvalancheProblem;
+	}
+
+	public void setEnableAvalancheProblemNoDistinctAvalancheProblem(boolean enableAvalancheProblemNoDistinctAvalancheProblem) {
+		this.enableAvalancheProblemNoDistinctAvalancheProblem = enableAvalancheProblemNoDistinctAvalancheProblem;
 	}
 
 	public boolean isShowMatrix() {
@@ -731,6 +757,8 @@ public class Region implements AvalancheInformationObject {
 		json.put("sendTelegramMessages", isSendTelegramMessages());
 		json.put("sendPushNotifications", isSendPushNotifications());
 		json.put("enableMediaFile", isEnableMediaFile());
+		json.put("enableAvalancheProblemCornices", isEnableAvalancheProblemCornices());
+		json.put("enableAvalancheProblemNoDistinctAvalancheProblem", isEnableAvalancheProblemNoDistinctAvalancheProblem());
 		json.put("showMatrix", isShowMatrix());
 		if (getServerInstance() != null) {
 			json.put("serverInstance", getServerInstance().toJSON());
