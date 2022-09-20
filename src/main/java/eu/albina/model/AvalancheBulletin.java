@@ -736,18 +736,18 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public boolean affectsRegion(Region region) {
-		return getSuggestedRegions().stream().anyMatch(suggestedRegion -> region.affects(suggestedRegion))
-			|| getSavedRegions().stream().anyMatch(savedRegion -> region.affects(savedRegion))
-			|| getPublishedRegions().stream().anyMatch(publishedRegion -> region.affects(publishedRegion));
+		return getSuggestedRegions().stream().anyMatch(region::affects)
+			|| getSavedRegions().stream().anyMatch(region::affects)
+			|| getPublishedRegions().stream().anyMatch(region::affects);
 	}
 
 	public boolean affectsRegionWithoutSuggestions(Region region) {
-		return getSavedRegions().stream().anyMatch(savedRegion -> region.affects(savedRegion))
-			|| getPublishedRegions().stream().anyMatch(publishedRegion -> region.affects(publishedRegion));
+		return getSavedRegions().stream().anyMatch(region::affects)
+			|| getPublishedRegions().stream().anyMatch(region::affects);
 	}
 
 	public boolean affectsRegionOnlyPublished(Region region) {
-		return getPublishedRegions().stream().anyMatch(publishedRegion -> region.affects(publishedRegion));
+		return getPublishedRegions().stream().anyMatch(region::affects);
 	}
 
 	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
