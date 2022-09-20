@@ -100,7 +100,10 @@ public interface MapUtil {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					if (!bulletin.affectsRegionOnlyPublished(region)) {
+					if (!preview && !bulletin.affectsRegionOnlyPublished(region)) {
+						continue;
+					}
+					if (preview && !bulletin.affectsRegionWithoutSuggestions(region)) {
 						continue;
 					}
 					createMapyrusMaps(region, serverInstance, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
