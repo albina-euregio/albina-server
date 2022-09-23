@@ -12,13 +12,21 @@ services:
       MYSQL_DATABASE: albina
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - albina-network
 
   albina-server:
     build: .
     ports:
       - "8080:8080"
+    networks:
+      - albina-network
     depends_on:
       - albina-db
 
 volumes:
   mysql-data:
+
+networks:
+  albina-network:
+    driver: bridge
