@@ -46,7 +46,7 @@
 		<profile>
 			<id>env-docker</id>
 			<properties>
-				<hibernate.connection.url>jdbc:mysql://albina-db:3306/ais_tmp?allowPublicKeyRetrieval=true&amp;amp;useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
+				<hibernate.connection.url>jdbc:mysql://albina-db:3306/albina?allowPublicKeyRetrieval=true&amp;amp;useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
