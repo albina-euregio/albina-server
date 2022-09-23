@@ -12,5 +12,6 @@ RUN mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -
 FROM tomcat:8-jre11-temurin
 COPY --from=build /app/target/albina.war /usr/local/tomcat/webapps/
 COPY --from=build-albina-admin-gui /app/dist /usr/local/tomcat/webapps/ROOT
+ADD https://gitlab.com/albina-euregio/avalanche-warning-maps.git#master /opt/avalanche-warning-maps
 
 EXPOSE 8080
