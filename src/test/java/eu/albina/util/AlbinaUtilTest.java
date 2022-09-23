@@ -147,8 +147,9 @@ public class AlbinaUtilTest {
 
 	@Test
 	public void encodePassword() {
-		String pwd = BCrypt.hashpw("Norbert", BCrypt.gensalt());
+		String pwd = BCrypt.hashpw("zee3tohDuu7Zi", BCrypt.gensalt());
 		logger.warn("Password: " + pwd);
+		Assert.assertTrue(BCrypt.checkpw("zee3tohDuu7Zi", "$2a$10$/SiPco5fFqCvIPkure0ffuBjMIRN2LPgQCvhwKMfM8HEFLch/xzzy"));
 	}
 
 	@Ignore
