@@ -23,7 +23,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 import javax.script.SimpleBindings;
@@ -58,14 +60,17 @@ public interface MapUtil {
 	static SimpleBindings createMayrusBindings(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, boolean preview) {
 		Table<String, String, Argument> bindings = TreeBasedTable.create();
 		for (AvalancheBulletin bulletin : bulletins) {
-			for (String region : bulletin.regions(preview)) {
+			Stream<String> regions = bulletin.getValidityDate().isBefore(ZonedDateTime.parse("2022-10-01T00:00:00Z"))
+				? bulletin.regions(preview).stream().flatMap(MapUtil::mapRegions)
+				: bulletin.regions(preview).stream();
+			regions.forEach(region -> {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
 				bindings.put("bulletin_ids", region + "-h", new Argument(Argument.STRING, bulletin.getId()));
 				bindings.put("bulletin_ids", region + "-l", new Argument(Argument.STRING, bulletin.getId()));
 				bindings.put("danger_h", region + "-h", new Argument(DangerRating.getInt(description.dangerRating(true))));
 				bindings.put("danger_l", region + "-l", new Argument(DangerRating.getInt(description.dangerRating(false))));
 				bindings.put("elevation_h", region + "-h", new Argument(description.getElevation()));
-			}
+			});
 		}
 		SimpleBindings simpleBindings = new SimpleBindings();
 		bindings.rowMap().forEach((key, stringObjectMap) -> {
@@ -74,6 +79,23 @@ public interface MapUtil {
 			simpleBindings.put(key, argument);
 		});
 		return simpleBindings;
+	}
+
+	static Stream<String> mapRegions(String region) {
+		switch (region) {
+			case "AT-07-02": return Stream.of("AT-07-02-01", "AT-07-02-02");
+			case "AT-07-04": return Stream.of("AT-07-04-01", "AT-07-04-02");
+			case "AT-07-14": return Stream.of("AT-07-14-01", "AT-07-14-02", "AT-07-14-03", "AT-07-14-04", "AT-07-14-05");
+			case "AT-07-17": return Stream.of("AT-07-17-01", "AT-07-17-02");
+			case "IT-32-BZ-01": return Stream.of("IT-32-BZ-01-01", "IT-32-BZ-01-02");
+			case "IT-32-BZ-02": return Stream.of("IT-32-BZ-02-01", "IT-32-BZ-02-02");
+			case "IT-32-BZ-04": return Stream.of("IT-32-BZ-04-01", "IT-32-BZ-04-02");
+			case "IT-32-BZ-05": return Stream.of("IT-32-BZ-05-01", "IT-32-BZ-05-02", "IT-32-BZ-05-03");
+			case "IT-32-BZ-07": return Stream.of("IT-32-BZ-07-01", "IT-32-BZ-07-02");
+			case "IT-32-BZ-08": return Stream.of("IT-32-BZ-08-01", "IT-32-BZ-08-02", "IT-32-BZ-08-03");
+			case "IT-32-BZ-18": return Stream.of("IT-32-BZ-18-01", "IT-32-BZ-18-02");
+			default: return Stream.of(region);
+		}
 	}
 
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString, ServerInstance serverInstance) {
