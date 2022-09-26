@@ -1,6 +1,6 @@
 FROM alpine:latest AS build-albina-admin-gui
 WORKDIR /app
-ADD https://gitlab.com/albina-euregio/albina-admin-gui/-/jobs/artifacts/master/download?job=build:production albina-admin-gui.zip
+ADD https://gitlab.com/albina-euregio/albina-admin-gui/-/jobs/artifacts/environment-relative/download?job=build:production albina-admin-gui.zip
 RUN apk add unzip && unzip albina-admin-gui && find
 
 FROM maven:3-eclipse-temurin-17 AS build
