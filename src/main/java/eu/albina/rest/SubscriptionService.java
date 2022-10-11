@@ -16,7 +16,10 @@
  ******************************************************************************/
 package eu.albina.rest;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -27,6 +30,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import eu.albina.controller.RegionController;
+import eu.albina.model.Region;
+import eu.albina.model.enumerations.LanguageCode;
 import org.hibernate.HibernateException;
 import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
@@ -50,12 +56,26 @@ public class SubscriptionService {
 	@Context
 	UriInfo uri;
 
+	static class SubscriberJson {
+		public String email;
+
+		public String regions;
+
+		public LanguageCode language;
+	}
+
 	@POST
 	@Path("/subscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addSubscriber(Subscriber subscriber) {
+	public Response addSubscriber(SubscriberJson json) {
 		logger.debug("POST JSON subscribe");
+		final Region region = RegionController.getInstance().getRegion(json.regions);
+		final List<Region> regions = Collections.singletonList(region);
+		final Subscriber subscriber = new Subscriber();
+		subscriber.setEmail(json.email);
+		subscriber.setRegions(regions);
+		subscriber.setLanguage(json.language);
 
 		try {
 			SubscriberController.getInstance().createSubscriber(subscriber);
