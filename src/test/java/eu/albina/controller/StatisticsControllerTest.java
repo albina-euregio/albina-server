@@ -21,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-import eu.albina.util.GlobalVariables;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +48,7 @@ public class StatisticsControllerTest {
 	@Test
 	public void getCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.csv"),
-				StandardCharsets.UTF_8).replaceAll("\r?\n", GlobalVariables.csvLineBreak);
+				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
 		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, false, false);
 		Assert.assertEquals(expected, csvString);
 	}
@@ -57,7 +56,7 @@ public class StatisticsControllerTest {
 	@Test
 	public void getExtendedCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.extended.csv"),
-				StandardCharsets.UTF_8).replaceAll("\r?\n", GlobalVariables.csvLineBreak);
+				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
 		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, true, false);
 		Assert.assertEquals(expected, csvString);
 	}

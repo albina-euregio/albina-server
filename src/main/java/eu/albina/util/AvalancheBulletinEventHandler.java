@@ -107,7 +107,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Canvas canvas = new Canvas(pdfCanvas, pdfDoc, page.getPageSize());
 
 			// Add copyright
-			String copyright = GlobalVariables.getCopyrightText(lang);
+			String copyright = "";
 			pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
 					.showText(copyright).endText();
 

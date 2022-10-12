@@ -34,7 +34,6 @@ import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
 
-import org.apache.logging.log4j.util.Strings;
 import org.mapyrus.Argument;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.MapyrusException;
@@ -144,12 +143,12 @@ public interface MapUtil {
 		String logoPath = "";
 		double logoAspectRatio = 1;
 
-		if (grayscale && region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath())) {
+		if (grayscale && region.getMapLogoBwPath() != null && !region.getMapLogoBwPath().isEmpty()) {
 			URL logoUrl = Resources.getResource(region.getMapLogoBwPath());
 			logoPath = logoUrl.toString();
 			BufferedImage image = ImageIO.read(logoUrl);
    			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
-		} else if (!grayscale && region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath())) {
+		} else if (!grayscale && region.getMapLogoBwPath() != null && !region.getMapLogoBwPath().isEmpty()) {
 			URL logoUrl = Resources.getResource(region.getMapLogoColorPath());
 			logoPath = logoUrl.toString();
 			BufferedImage image = ImageIO.read(logoUrl);
@@ -201,7 +200,7 @@ public interface MapUtil {
 		bindings.put("scalebar",  MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("logo_file", logoPath);
-		bindings.put("logo_position", region.getLogoPosition().toString());
+		bindings.put("logo_position", region.getMapLogoPosition().toString());
 		bindings.put("logo_aspect_ratio", logoAspectRatio);
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
