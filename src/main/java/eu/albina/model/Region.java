@@ -663,12 +663,12 @@ public class Region implements AvalancheInformationObject {
 		this.mapLogoBwPath = mapLogoBwPath;
 	}
 
-	public Position getLogoPosition() {
+	public Position getMapLogoPosition() {
 		return mapLogoPosition;
 	}
 
-	public void setLogoPosition(Position logoPosition) {
-		this.mapLogoPosition = logoPosition;
+	public void setMapLogoPosition(Position mapLogoPosition) {
+		this.mapLogoPosition = mapLogoPosition;
 	}
 
 	public double getMapCenterLat() {
@@ -783,7 +783,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("geoDataDirectory", getGeoDataDirectory());
 		json.put("mapLogoColorPath", getMapLogoColorPath());
 		json.put("mapLogoBwPath", getMapLogoBwPath());
-		json.put("mapLogoPosition", getLogoPosition().toString());
+		json.put("mapLogoPosition", getMapLogoPosition().toString());
 		json.put("mapCenterLat", getMapCenterLat());
 		json.put("mapCenterLng", getMapCenterLng());
 		json.put("imageColorbarColorPath", getImageColorbarColorPath());

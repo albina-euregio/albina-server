@@ -200,7 +200,7 @@ public interface MapUtil {
 		bindings.put("scalebar",  MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("copyright", MapLevel.overlay.equals(mapLevel) ? "off" : "on");
 		bindings.put("logo_file", logoPath);
-		bindings.put("logo_position", region.getLogoPosition().toString());
+		bindings.put("logo_position", region.getMapLogoPosition().toString());
 		bindings.put("logo_aspect_ratio", logoAspectRatio);
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
