@@ -44,6 +44,14 @@ import eu.albina.model.enumerations.Position;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
@@ -59,6 +67,20 @@ import com.google.common.io.Resources;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Region.class)
 public class Region implements AvalancheInformationObject {
 
+	static class RegionSerializer extends JsonSerializer<Region> {
+		@Override
+		public void serialize(Region value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+			gen.writeString(value.getId());
+		}
+	}
+
+	static class RegionDeserializer extends JsonDeserializer<Region> {
+		@Override
+		public Region deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+			return new Region(p.getValueAsString());
+		}
+	}
+
 	@Id
 	@Column(name = "ID")
 	private String id;
@@ -71,6 +93,8 @@ public class Region implements AvalancheInformationObject {
 	 joinColumns=@JoinColumn(name="SUPER_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
 	)
+	@JsonSerialize(contentUsing = RegionSerializer.class)
+	@JsonDeserialize(contentUsing = RegionDeserializer.class)
 	private Set<Region> subRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -78,6 +102,8 @@ public class Region implements AvalancheInformationObject {
 	 joinColumns=@JoinColumn(name="SUB_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUPER_REGION_ID")
 	)
+	@JsonSerialize(contentUsing = RegionSerializer.class)
+	@JsonDeserialize(contentUsing = RegionDeserializer.class)
 	private Set<Region> superRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -85,6 +111,8 @@ public class Region implements AvalancheInformationObject {
 	 joinColumns=@JoinColumn(name="REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="NEIGHBOR_REGION_ID")
 	)
+	@JsonSerialize(contentUsing = RegionSerializer.class)
+	@JsonDeserialize(contentUsing = RegionDeserializer.class)
 	private Set<Region> neighborRegions;
 
 	@Column(name = "PUBLISH_BULLETINS")
@@ -730,6 +758,8 @@ public class Region implements AvalancheInformationObject {
 				jsonSubRegions.put(subRegion.getId());
 			}
 			json.put("subRegions", jsonSubRegions);
+		} else {
+			json.put("subRegions", new JSONArray());
 		}
 		if (superRegions != null && superRegions.size() > 0) {
 			JSONArray jsonSuperRegions = new JSONArray();
@@ -737,6 +767,8 @@ public class Region implements AvalancheInformationObject {
 				jsonSuperRegions.put(superRegion.getId());
 			}
 			json.put("superRegions", jsonSuperRegions);
+		} else {
+			json.put("superRegions", new JSONArray());
 		}
 		if (neighborRegions != null && neighborRegions.size() > 0) {
 			JSONArray jsonNeighborRegions = new JSONArray();

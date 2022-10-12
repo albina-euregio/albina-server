@@ -1,6 +1,7 @@
 {
     "id": "AT-07",
     "microRegions": 29,
+	"subRegions": [],
     "superRegions": ["EUREGIO"],
 	"neighborRegions": [],
     "publishBulletins": true,
