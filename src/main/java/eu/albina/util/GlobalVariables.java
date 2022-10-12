@@ -20,15 +20,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import eu.albina.caaml.CaamlVersion;
-import eu.albina.model.enumerations.LanguageCode;
 
 public class GlobalVariables {
 
@@ -44,28 +39,12 @@ public class GlobalVariables {
 
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 
-	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
-	// public static String referenceSystemUrn = "EPSG:32632";
-	public static String bulletinCaamlSchemaFileString = CaamlVersion.V5.schemaLocation();
-
-	private static final String emailEncoding = "UTF-8";
-
 	public static String getTmpMapsPath() {
 		return tmpDirectory;
 	}
 
 	public static String getTmpPdfDirectory() {
 		return tmpDirectory;
-	}
-
-	public static String getBulletinCaamlSchemaFileString() {
-		return bulletinCaamlSchemaFileString;
-	}
-
-	public static void setBulletinCaamlSchemaFileString(String bulletinCaamlSchemaFileString)
-			throws ConfigurationException {
-		GlobalVariables.bulletinCaamlSchemaFileString = bulletinCaamlSchemaFileString;
-		setConfigProperty("bulletinCaamlSchemaFileString", bulletinCaamlSchemaFileString);
 	}
 
 	public static int[] getRGB(final String hex) {
@@ -75,15 +54,6 @@ public class GlobalVariables {
 			ret[i] = Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
 		}
 		return ret;
-	}
-
-	public static String getCopyrightText(LanguageCode lang) {
-		// return AlbinaUtil.getYear(bulletins) + lang.getBundleString("copyright");
-		return "";
-	}
-
-	public static String getEmailEncoding() {
-		return emailEncoding;
 	}
 
 	public static void loadConfigProperties() {
@@ -99,19 +69,4 @@ public class GlobalVariables {
 		}
 	}
 
-	private static void setConfigProperty(String key, Object value) throws ConfigurationException {
-		Configurations configs = new Configurations();
-		FileBasedConfigurationBuilder<PropertiesConfiguration> propertiesBuilder = configs
-				.propertiesBuilder(propertiesFilePath);
-		PropertiesConfiguration configuration;
-		try {
-			configuration = propertiesBuilder.getConfiguration();
-			configuration.setProperty(key, value);
-			propertiesBuilder.save();
-			logger.info("[Configuration saved] {}: {}", key, value);
-		} catch (ConfigurationException e) {
-			logger.error("Configuration could not be saved!", e);
-			throw e;
-		}
-	}
 }
