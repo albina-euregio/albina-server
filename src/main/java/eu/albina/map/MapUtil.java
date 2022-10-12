@@ -34,7 +34,6 @@ import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
 
-import org.apache.logging.log4j.util.Strings;
 import org.mapyrus.Argument;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.MapyrusException;
@@ -144,12 +143,12 @@ public interface MapUtil {
 		String logoPath = "";
 		double logoAspectRatio = 1;
 
-		if (grayscale && region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath())) {
+		if (grayscale && region.getMapLogoBwPath() != null && !region.getMapLogoBwPath().isEmpty()) {
 			URL logoUrl = Resources.getResource(region.getMapLogoBwPath());
 			logoPath = logoUrl.toString();
 			BufferedImage image = ImageIO.read(logoUrl);
    			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
-		} else if (!grayscale && region.getMapLogoBwPath() != null && Strings.isNotEmpty(region.getMapLogoBwPath())) {
+		} else if (!grayscale && region.getMapLogoBwPath() != null && !region.getMapLogoBwPath().isEmpty()) {
 			URL logoUrl = Resources.getResource(region.getMapLogoColorPath());
 			logoPath = logoUrl.toString();
 			BufferedImage image = ImageIO.read(logoUrl);
