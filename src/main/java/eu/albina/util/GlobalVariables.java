@@ -43,15 +43,6 @@ public class GlobalVariables {
 		return tmpDirectory;
 	}
 
-	public static int[] getRGB(final String hex) {
-		final int[] ret = new int[3];
-		for (int i = 0; i < 3; i++)
-		{
-			ret[i] = Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
-		}
-		return ret;
-	}
-
 	public static void loadConfigProperties() {
 		Configurations configs = new Configurations();
 		Configuration config;

@@ -205,7 +205,10 @@ public class PdfUtil {
 	}
 
 	protected Color getColor(String hex) {
-		int[] rgb = GlobalVariables.getRGB(hex);
+		final int[] rgb = new int[3];
+		for (int i = 0; i < 3; i++) {
+			rgb[i] = Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
+		}
 		return new DeviceRgb(rgb[0], rgb[1], rgb[2]);
 	}
 
