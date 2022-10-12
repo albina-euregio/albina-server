@@ -16,11 +16,12 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
-import org.apache.commons.configuration2.ex.ConfigurationException;
+import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.InputStream;
+import java.util.Properties;
 
 public class GlobalVariables {
 
@@ -44,14 +45,12 @@ public class GlobalVariables {
 	}
 
 	public static void loadConfigProperties() {
-		Configurations configs = new Configurations();
-		Configuration config;
-		try {
-			config = configs.properties(propertiesFilePath);
-			if (config.containsKey("gitVersion"))
-				version = config.getString("gitVersion");
+		try (InputStream inputStream = Resources.getResource(propertiesFilePath).openStream()) {
+			Properties properties = new Properties();
+			properties.load(inputStream);
+			version = properties.getProperty("gitVersion");
 			logger.info("Configuration file loaded!");
-		} catch (ConfigurationException e) {
+		} catch (Exception e) {
 			logger.error("Configuration file could not be loaded!", e);
 		}
 	}
