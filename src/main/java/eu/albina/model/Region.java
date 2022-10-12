@@ -358,15 +358,15 @@ public class Region implements AvalancheInformationObject {
 	public Set<Region> getSubRegions() {
 		return subRegions;
 	}
-	
+
 	public void setSubRegions(Set<Region> subRegions) {
 		this.subRegions = subRegions;
 	}
-	
+
 	public void addSubRegion(Region subRegion) {
 		this.subRegions.add(subRegion);
 	}
-	
+
 	public Set<Region> getSuperRegions() {
 		return superRegions;
 	}
@@ -744,6 +744,8 @@ public class Region implements AvalancheInformationObject {
 				jsonNeighborRegions.put(neighborRegion.getId());
 			}
 			json.put("neighborRegions", jsonNeighborRegions);
+		} else {
+			json.put("neighborRegions", new JSONArray());
 		}
 		json.put("publishBulletins", isPublishBulletins());
 		json.put("publishBlogs", isPublishBlogs());
