@@ -42,8 +42,6 @@ public class GlobalVariables {
 	// TODO use schema from caaml.org
 	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
 
-	public static String csvDeliminator = ";";
-	public static String csvLineBreak = "\n";
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 
 	public static final String tokenEncodingIssuer = "albina";
@@ -53,8 +51,6 @@ public class GlobalVariables {
 	public static String bulletinCaamlSchemaFileString = CaamlVersion.V5.schemaLocation();
 
 	private static final String emailEncoding = "UTF-8";
-
-	public static String notAvailableString = "N/A";
 
 	public static String getTmpMapsPath() {
 		return tmpDirectory;

@@ -41,7 +41,6 @@ import eu.albina.model.MatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -51,6 +50,12 @@ import eu.albina.util.HibernateUtil;
  *
  */
 public class StatisticsController {
+
+	static String csvDeliminator = ";";
+
+	static String csvLineBreak = "\n";
+
+	static String notAvailableString = "N/A";
 
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsController.class);
 
@@ -254,245 +259,245 @@ public class StatisticsController {
 
 		// add header
 		sb.append("BulletinId");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("Date");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("Daytime");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("Region");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("Subregion");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("DangerRatingBelow");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("DangerRatingAbove");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("DangerRatingElevation");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1ElevationAbove");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1ElevationBelow");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectN");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectNE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectSE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectS");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectSW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectNW");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem1ArtificialDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem1ArtificialAvalancheSize");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem1ArtificialAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem1ArtificialHazardSiteDistribution");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem1NaturalDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem1NaturalAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem1NaturalHazardSiteDistribution");
 		}
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2ElevationAbove");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2ElevationBelow");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectN");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectNE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectSE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectS");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectSW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectNW");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem2ArtificialDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem2ArtificialAvalancheSize");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem2ArtificialAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem2ArtificialHazardSiteDistribution");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem2NaturalDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem2NaturalAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem2NaturalHazardSiteDistribution");
 		}
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3ElevationAbove");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3ElevationBelow");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectN");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectNE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectSE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectS");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectSW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectNW");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem3ArtificialDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem3ArtificialAvalancheSize");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem3ArtificialAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem3ArtificialHazardSiteDistribution");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem3NaturalDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem3NaturalAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem3NaturalHazardSiteDistribution");
 		}
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4ElevationAbove");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4ElevationBelow");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectN");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectNE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectSE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectS");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectSW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectNW");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem4ArtificialDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem4ArtificialAvalancheSize");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem4ArtificialAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem4ArtificialHazardSiteDistribution");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem4NaturalDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem4NaturalAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem4NaturalHazardSiteDistribution");
 		}
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5ElevationAbove");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5ElevationBelow");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectN");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectNE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectSE");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectS");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectSW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectW");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectNW");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem5ArtificialDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem5ArtificialAvalancheSize");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem5ArtificialAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem5ArtificialHazardSiteDistribution");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem5NaturalDangerRating");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem5NaturalAvalancheReleaseProbability");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvalancheProblem5NaturalHazardSiteDistribution");
 		}
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("Tendency");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("DangerPattern1");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("DangerPattern2");
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvActivityHighlight");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvActivityHighlightIdsDe");
 		}
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("AvActivityComment");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("AvActivityCommentIdsDe");
 		}
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("SnowpackStructureComment");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("SnowpackStructureCommentIdsDe");
 		}
-		sb.append(GlobalVariables.csvDeliminator);
+		sb.append(csvDeliminator);
 		sb.append("TendencyComment");
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("TendencyCommentIdsDe");
 		}
 		if (extended) {
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append("Author");
 		}
-		sb.append(GlobalVariables.csvLineBreak);
+		sb.append(csvLineBreak);
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			addCsvLines(sb, avalancheBulletin, false, lang, extended, false);
 			if (avalancheBulletin.isHasDaytimeDependency()) {
@@ -531,37 +536,37 @@ public class StatisticsController {
 			daytimeDescription = avalancheBulletin.getAfternoon();
 		for (String region : avalancheBulletin.getPublishedRegions()) {
 			sb.append(avalancheBulletin.getId());
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append(avalancheBulletin.getValidityDateString());
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (isAfternoon || duplicateBulletinForenoon)
 				sb.append("PM");
 			else
 				sb.append("AM");
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			int i = region.lastIndexOf("-");
 			String[] r = { region.substring(0, i), region.substring(i + 1) };
 			sb.append(r[0]);
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append(r[1]);
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (!daytimeDescription.isHasElevationDependency()) {
 				sb.append(daytimeDescription.getDangerRatingAbove().toString());
 			} else {
 				sb.append(daytimeDescription.getDangerRatingBelow().toString());
 			}
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			sb.append(daytimeDescription.getDangerRatingAbove().toString());
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (!daytimeDescription.isHasElevationDependency())
-				sb.append(GlobalVariables.notAvailableString);
+				sb.append(notAvailableString);
 			else {
 				if (daytimeDescription.getTreeline())
 					sb.append(lang.getBundleString("elevation.treeline"));
 				else
 					sb.append(daytimeDescription.getElevation());
 			}
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 
 			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem1(), extended, lang);
 			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem2(), extended, lang);
@@ -572,75 +577,75 @@ public class StatisticsController {
 			if (avalancheBulletin.getTendency() != null)
 				sb.append(avalancheBulletin.getTendency().toString());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 
 			if (avalancheBulletin.getDangerPattern1() != null)
 				sb.append(avalancheBulletin.getDangerPattern1().toString());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 			if (avalancheBulletin.getDangerPattern2() != null)
 				sb.append(avalancheBulletin.getDangerPattern2().toString());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 
 			if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
 				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getAvActivityHighlightsIn(lang)));
 			else
-				sb.append(GlobalVariables.notAvailableString);
+				sb.append(notAvailableString);
 			if (extended) {
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheBulletin.getAvActivityHighlightsTextcat() != null)
 					sb.append(avalancheBulletin.getAvActivityHighlightsTextcat());
 				else
-					sb.append(GlobalVariables.notAvailableString);
+					sb.append(notAvailableString);
 			}
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (avalancheBulletin.getAvActivityCommentIn(lang) != null)
 				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getAvActivityCommentIn(lang)));
 			else
-				sb.append(GlobalVariables.notAvailableString);
+				sb.append(notAvailableString);
 			if (extended) {
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheBulletin.getAvActivityCommentTextcat() != null)
 					sb.append(avalancheBulletin.getAvActivityCommentTextcat());
 				else
-					sb.append(GlobalVariables.notAvailableString);
+					sb.append(notAvailableString);
 			}
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
 				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getSnowpackStructureCommentIn(lang)));
 			else
-				sb.append(GlobalVariables.notAvailableString);
+				sb.append(notAvailableString);
 			if (extended) {
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheBulletin.getSnowpackStructureCommentTextcat() != null)
 					sb.append(avalancheBulletin.getSnowpackStructureCommentTextcat());
 				else
-					sb.append(GlobalVariables.notAvailableString);
+					sb.append(notAvailableString);
 			}
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (avalancheBulletin.getTendencyCommentIn(lang) != null)
 				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getTendencyCommentIn(lang)));
 			else
-				sb.append(GlobalVariables.notAvailableString);
+				sb.append(notAvailableString);
 			if (extended) {
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheBulletin.getTendencyCommentTextcat() != null)
 					sb.append(avalancheBulletin.getTendencyCommentTextcat());
 				else
-					sb.append(GlobalVariables.notAvailableString);
+					sb.append(notAvailableString);
 			}
 			if (extended) {
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheBulletin.getUser() != null && avalancheBulletin.getUser().getName() != null)
 					sb.append(avalancheBulletin.getUser().getName());
 				else
-					sb.append(GlobalVariables.notAvailableString);
+					sb.append(notAvailableString);
 			}
-			sb.append(GlobalVariables.csvLineBreak);
+			sb.append(csvLineBreak);
 		}
 	}
 
@@ -649,51 +654,51 @@ public class StatisticsController {
 			if (matrixInformation.getArtificialDangerRating() != null)
 				sb.append(matrixInformation.getArtificialDangerRating());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 			if (matrixInformation.getArtificialAvalancheSize() != null)
 				sb.append(matrixInformation.getArtificialAvalancheSize());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 			if (matrixInformation.getArtificialAvalancheReleaseProbability() != null)
 				sb.append(matrixInformation.getArtificialAvalancheReleaseProbability());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 			if (matrixInformation.getArtificialHazardSiteDistribution() != null)
 				sb.append(matrixInformation.getArtificialHazardSiteDistribution());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 			if (matrixInformation.getNaturalDangerRating() != null)
 				sb.append(matrixInformation.getNaturalDangerRating());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 			if (matrixInformation.getNaturalAvalancheReleaseProbability() != null)
 				sb.append(matrixInformation.getNaturalAvalancheReleaseProbability());
 			else
-				sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 			if (matrixInformation.getNaturalHazardSiteDistribution() != null)
 				sb.append(matrixInformation.getNaturalHazardSiteDistribution());
 			else
-				sb.append(GlobalVariables.notAvailableString);
+				sb.append(notAvailableString);
 		} else {
-			sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(GlobalVariables.notAvailableString);
-			sb.append(GlobalVariables.csvDeliminator);
-			sb.append(GlobalVariables.notAvailableString);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
 		}
 	}
 
@@ -710,85 +715,85 @@ public class StatisticsController {
 	private void addCsvAvalancheProblem(StringBuilder sb, AvalancheProblem avalancheProblem, boolean extended, LanguageCode lang) {
 		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
 			sb.append(avalancheProblem.getAvalancheProblem().toStringId());
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (avalancheProblem.getTreelineLow())
 				sb.append(lang.getBundleString("elevation.treeline"));
 			else {
 				if (avalancheProblem.getElevationLow() <= 0)
-					sb.append(GlobalVariables.notAvailableString);
+					sb.append(notAvailableString);
 				else
 					sb.append(avalancheProblem.getElevationLow());
 			}
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (avalancheProblem.getTreelineHigh())
 				sb.append(lang.getBundleString("elevation.treeline"));
 			else {
 				if (avalancheProblem.getElevationHigh() <= 0)
-					sb.append(GlobalVariables.notAvailableString);
+					sb.append(notAvailableString);
 				else
 					sb.append(avalancheProblem.getElevationHigh());
 			}
-			sb.append(GlobalVariables.csvDeliminator);
+			sb.append(csvDeliminator);
 			if (avalancheProblem.getAspects() != null && !avalancheProblem.getAspects().isEmpty()) {
 				if (avalancheProblem.getAspects().contains(Aspect.N))
 					sb.append("1");
 				else
 					sb.append("0");
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheProblem.getAspects().contains(Aspect.NE))
 					sb.append("1");
 				else
 					sb.append("0");
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheProblem.getAspects().contains(Aspect.E))
 					sb.append("1");
 				else
 					sb.append("0");
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheProblem.getAspects().contains(Aspect.SE))
 					sb.append("1");
 				else
 					sb.append("0");
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheProblem.getAspects().contains(Aspect.S))
 					sb.append("1");
 				else
 					sb.append("0");
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheProblem.getAspects().contains(Aspect.SW))
 					sb.append("1");
 				else
 					sb.append("0");
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheProblem.getAspects().contains(Aspect.W))
 					sb.append("1");
 				else
 					sb.append("0");
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 				if (avalancheProblem.getAspects().contains(Aspect.NW))
 					sb.append("1");
 				else
 					sb.append("0");
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 			} else {
 				for (int i = 0; i < 8; i++) {
-					sb.append(GlobalVariables.notAvailableString);
-					sb.append(GlobalVariables.csvDeliminator);
+					sb.append(notAvailableString);
+					sb.append(csvDeliminator);
 				}
 			}
 			if (extended) {
 				addMatrixInformation(sb, avalancheProblem.getMatrixInformation());
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(csvDeliminator);
 			}
 		} else {
 			for (int i = 0; i < 11; i++) {
-				sb.append(GlobalVariables.notAvailableString);
-				sb.append(GlobalVariables.csvDeliminator);
+				sb.append(notAvailableString);
+				sb.append(csvDeliminator);
 			}
 			if (extended) {
 				for (int i = 0; i < 7; i++) {
-					sb.append(GlobalVariables.notAvailableString);
-					sb.append(GlobalVariables.csvDeliminator);
+					sb.append(notAvailableString);
+					sb.append(csvDeliminator);
 				}
 			}
 		}
