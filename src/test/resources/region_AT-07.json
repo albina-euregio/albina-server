@@ -2,6 +2,7 @@
     "id": "AT-07",
     "microRegions": 29,
     "superRegions": ["EUREGIO"],
+	"neighborRegions": [],
     "publishBulletins": true,
     "publishBlogs": false,
     "createCaamlV5": true,
