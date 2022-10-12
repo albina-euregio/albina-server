@@ -44,8 +44,6 @@ public class GlobalVariables {
 
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 
-	public static final String tokenEncodingIssuer = "albina";
-
 	public static String referenceSystemUrn = "urn:ogc:def:crs:OGC:1.3:CRS84";
 	// public static String referenceSystemUrn = "EPSG:32632";
 	public static String bulletinCaamlSchemaFileString = CaamlVersion.V5.schemaLocation();

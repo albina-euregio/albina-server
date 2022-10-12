@@ -34,7 +34,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -44,7 +43,9 @@ import eu.albina.util.HibernateUtil;
  *
  */
 public class AuthenticationController {
-	// private static final Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
+	public static final String JWT_SECRET_ENV = "ALBINA_JWT_SECRET";
+	public static final String JWT_ISSUER = "albina";
+
 	private static AuthenticationController instance = null;
 
 	private final Algorithm algorithm;
@@ -55,12 +56,12 @@ public class AuthenticationController {
 	 */
 	private AuthenticationController() {
 		try {
-			String tokenEncodingSecret = System.getenv("ALBINA_JWT_SECRET");
+			String tokenEncodingSecret = System.getenv(JWT_SECRET_ENV);
 			if (tokenEncodingSecret == null || tokenEncodingSecret.length() < 32) {
 				tokenEncodingSecret = new BigInteger(512, new SecureRandom()).toString(36);
 			}
 			algorithm = Algorithm.HMAC256(tokenEncodingSecret);
-			verifier = JWT.require(algorithm).withIssuer(GlobalVariables.tokenEncodingIssuer).build();
+			verifier = JWT.require(algorithm).withIssuer(JWT_ISSUER).build();
 		} catch (IllegalArgumentException e) {
 			throw new IllegalStateException("Failed to initialize controller", e);
 		}
@@ -111,7 +112,7 @@ public class AuthenticationController {
 			.withHour(3) // tomorrow at 03:00
 			.toInstant());
 		Date issuedAt = new Date();
-		return JWT.create().withIssuer(GlobalVariables.tokenEncodingIssuer).withSubject(username)
+		return JWT.create().withIssuer(JWT_ISSUER).withSubject(username)
 				.withIssuedAt(issuedAt).withExpiresAt(expirationTime).sign(algorithm);
 	}
 
