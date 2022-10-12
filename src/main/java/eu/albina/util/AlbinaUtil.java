@@ -68,6 +68,8 @@ public class AlbinaUtil {
 
 	public static final String greyDarkColor = "#565F61";
 
+	public static final DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
+
 	public static ZoneId localZone() {
 		return ZoneId.of("Europe/Vienna");
 	}
@@ -252,7 +254,7 @@ public class AlbinaUtil {
 	public static String getPublicationTime(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime utcTime = getPublicationDate(bulletins);
 		if (utcTime != null)
-			return utcTime.format(GlobalVariables.formatterPublicationTime);
+			return utcTime.format(formatterPublicationTime);
 		else
 			return "";
 	}

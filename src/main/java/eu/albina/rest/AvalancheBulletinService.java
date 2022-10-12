@@ -433,7 +433,7 @@ public class AvalancheBulletinService {
 				Collections.sort(bulletins);
 
 				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-				String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(GlobalVariables.formatterPublicationTime);
+				String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(AlbinaUtil.formatterPublicationTime);
 				java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
 				ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 

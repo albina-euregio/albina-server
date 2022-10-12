@@ -16,9 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -31,7 +28,6 @@ public class GlobalVariables {
 
 	public static String version;
 
-	public static DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
 	public static String propertiesFilePath = "META-INF/config.properties";
 
 	// TODO use schema from caaml.org
