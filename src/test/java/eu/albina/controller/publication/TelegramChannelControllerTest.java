@@ -58,7 +58,7 @@ public class TelegramChannelControllerTest {
 	public void sendMessageTest() throws Exception {
 		TelegramController telegramController = TelegramController.getInstance();
 
-		String attachmentUrl = "https://avalanche.report/albina_files_dev/2020-01-26/fd_albina_map.jpg";
+		String attachmentUrl = "https://static.avalanche.report/bulletins/2020-01-26/fd_albina_map.jpg";
 		String message;
 
 		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {

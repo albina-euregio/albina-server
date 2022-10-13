@@ -42,7 +42,7 @@ public class XmlUtilTest {
 	public void setUp() throws Exception {
 		serverInstanceEuregio = new ServerInstance();
 		serverInstanceEuregio.setHtmlDirectory("/foo/bar/baz/simple/");
-		serverInstanceEuregio.setMapsPath("/foo/bar/baz/albina_files/");
+		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins/");
 		regionEuregio = new Region();
 		regionEuregio.setId("EUREGIO");
 		regionTyrol = new Region();
@@ -114,7 +114,7 @@ public class XmlUtilTest {
 		List<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(
 				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UTC")).toInstant(), RegionController.getInstance().getPublishBulletinRegions());
 		for (LanguageCode language : Arrays.asList(LanguageCode.de, LanguageCode.en, LanguageCode.it)) {
-			Path path = Paths.get("/tmp/albina_files" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
+			Path path = Paths.get("/tmp/bulletins" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
 			Document caamlDoc = XmlUtil.createCaaml(result, regionEuregio, language, CaamlVersion.V6, serverInstanceEuregio);
 			String caaml = XmlUtil.convertDocToString(caamlDoc);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);

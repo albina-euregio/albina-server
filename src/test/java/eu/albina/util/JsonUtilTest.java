@@ -45,8 +45,8 @@ public class JsonUtilTest {
 	public void setUp() throws IOException {
 		serverInstanceEuregio = new ServerInstance();
 		serverInstanceEuregio.setHtmlDirectory("/mnt/simple_local/");
-		serverInstanceEuregio.setMapsPath("/mnt/albina_files_local/");
-		serverInstanceEuregio.setPdfDirectory("/mnt/albina_files_local/");
+		serverInstanceEuregio.setMapsPath("/mnt/bulletins/");
+		serverInstanceEuregio.setPdfDirectory("/mnt/bulletins/");
 
 		regionTirol = new Region();
 		regionTirol.setId("AT-07");
