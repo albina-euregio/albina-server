@@ -102,7 +102,7 @@
   <entry key="email.subject.update">ACTUALITZAR en {0}, </entry>
   <entry key="email.imprint">Imprimeix</entry>
   <entry key="email.media.subject">{0} per {1} de {2}</entry>
-  <entry key="email.media.important.subject">IMPORTANT {0} for {1} from {2}</entry>
+  <entry key="email.media.important.subject">IMPORTANT {0} per a {1} de {2}</entry>
   <entry key="email.media.text">Salutacions, {0}</entry>
   <entry key="email.media.link.mp3">Fitxer MP3</entry>
   <entry key="pdf.page-number">Pàgina {0}</entry>

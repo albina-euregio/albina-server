@@ -2,9 +2,11 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="new_snow">Nhèu recenta</entry>
-  <entry key="wind_slab">Nhèu ventada</entry>
+  <entry key="wind_slab">Plaques de vent</entry>
   <entry key="persistent_weak_layers">Coches fèbles persistentes</entry>
   <entry key="wet_snow">Nhèu umida</entry>
   <entry key="gliding_snow">Esguitlament de nhèu</entry>
   <entry key="favourable_situation">Situacion favorabla</entry>
+  <entry key="cornices">Cornises</entry>
+  <entry key="no_distinct_problem">Cap problèma de lauegi</entry>
 </properties>

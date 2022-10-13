@@ -2,9 +2,11 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="new_snow">Nieve reciente</entry>
-  <entry key="wind_slab">Nieve venteada</entry>
+  <entry key="wind_slab">Placas de viento</entry>
   <entry key="persistent_weak_layers">Capas débiles persistentes</entry>
   <entry key="wet_snow">Nieve húmeda</entry>
   <entry key="gliding_snow">Deslizamientos </entry>
   <entry key="favourable_situation">Situación favorable</entry>
+  <entry key="cornices">Cornisas</entry>
+  <entry key="no_distinct_problem">Ningún problema de aludes diferenciado</entry>
 </properties>

@@ -2,9 +2,11 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="new_snow">Neu recent</entry>
-  <entry key="wind_slab">Neu ventada</entry>
+  <entry key="wind_slab">Plaques de vent</entry>
   <entry key="persistent_weak_layers">Capa feble persistent</entry>
   <entry key="wet_snow">Neu humida</entry>
   <entry key="gliding_snow">Lliscaments</entry>
   <entry key="favourable_situation">Situació favorable</entry>
+  <entry key="cornices">Cornises</entry>
+  <entry key="no_distinct_problem">Cap problema d'allaus distingible</entry>
 </properties>

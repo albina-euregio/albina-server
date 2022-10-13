@@ -7,4 +7,6 @@
   <entry key="wet_snow">Avalanches mouillées (Neige humide)</entry>
   <entry key="gliding_snow">Avalanches de glissement (Avalanches de fond)</entry>
   <entry key="favourable_situation">Situation favorable</entry>
+  <entry key="cornices">Cornices</entry>
+  <entry key="no_distinct_problem">No distinct problem</entry>
 </properties>
