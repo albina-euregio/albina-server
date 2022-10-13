@@ -14,7 +14,7 @@
     <extFile>
       <type>fd_albina_map.jpg</type>
       <description>Danger rating map  (whole day)</description>
-      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/fd_albina_map.jpg</fileReferenceURI>
+      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/fd_EUREGIO_map.jpg</fileReferenceURI>
     </extFile>
     <extFile>
       <type>pdf</type>
@@ -24,22 +24,22 @@
     <extFile>
       <type>am_albina_map.jpg</type>
       <description>Danger rating map  (AM)</description>
-      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/am_albina_map.jpg</fileReferenceURI>
+      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/am_EUREGIO_map.jpg</fileReferenceURI>
     </extFile>
     <extFile>
       <type>pm_albina_map.jpg</type>
       <description>Danger rating map  (PM)</description>
-      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/pm_albina_map.jpg</fileReferenceURI>
+      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/pm_EUREGIO_map.jpg</fileReferenceURI>
     </extFile>
     <extFile>
       <type>am_overlay.png</type>
       <description>Danger rating overlay (AM)</description>
-      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/am_overlay.png</fileReferenceURI>
+      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/am_EUREGIO_overlay.png</fileReferenceURI>
     </extFile>
     <extFile>
       <type>pm_overlay.png</type>
       <description>Danger rating overlay (PM)</description>
-      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/pm_overlay.png</fileReferenceURI>
+      <fileReferenceURI>https://static.avalanche.report/bulletins/2019-01-16/2019-01-15_16-00-00/pm_EUREGIO_overlay.png</fileReferenceURI>
     </extFile>
   </metaData>
   <bulletin id="a19bd3dc-85df-448f-be5e-f88f0c14ed4f" lang="en">

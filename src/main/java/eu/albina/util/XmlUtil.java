@@ -40,6 +40,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import eu.albina.map.MapImageFormat;
+import eu.albina.map.MapLevel;
+import eu.albina.map.MapUtil;
+import eu.albina.model.enumerations.DaytimeDependency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -238,22 +242,28 @@ public class XmlUtil {
 				LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/" + validityDateString + "/" + lang.toString()
 						+ ".html"));
 		extFiles.add(createExtFile(doc, "fd_albina_map.jpg",
-				LinkUtil.getExtFileMapDescription(lang, "fd", ""), baseUri + "fd_albina_map.jpg"));
+				LinkUtil.getExtFileMapDescription(lang, "fd", ""), baseUri +
+				MapUtil.filename(region, MapLevel.standard, DaytimeDependency.fd, false, MapImageFormat.jpg)));
 		extFiles.add(createExtFile(doc, "pdf", LinkUtil.getExtFilePdfDescription(lang, ""),
 				baseUri + validityDateString + "_" + lang.toString() + ".pdf"));
 
 		if (!hasDaytimeDependency) {
 			extFiles.add(createExtFile(doc, "fd_overlay.png",
-					LinkUtil.getExtFileOverlayDescription(lang, "fd"), baseUri + "fd_overlay.png"));
+					LinkUtil.getExtFileOverlayDescription(lang, "fd"), baseUri +
+					MapUtil.filename(region, MapLevel.overlay, DaytimeDependency.fd, false, MapImageFormat.png)));
 		} else {
 			extFiles.add(createExtFile(doc, "am_albina_map.jpg",
-					LinkUtil.getExtFileMapDescription(lang, "am", ""), baseUri + "am_albina_map.jpg"));
+					LinkUtil.getExtFileMapDescription(lang, "am", ""), baseUri +
+					MapUtil.filename(region, MapLevel.standard, DaytimeDependency.am, false, MapImageFormat.jpg)));
 			extFiles.add(createExtFile(doc, "pm_albina_map.jpg",
-					LinkUtil.getExtFileMapDescription(lang, "pm", ""), baseUri + "pm_albina_map.jpg"));
+					LinkUtil.getExtFileMapDescription(lang, "pm", ""), baseUri +
+					MapUtil.filename(region, MapLevel.standard, DaytimeDependency.pm, false, MapImageFormat.jpg)));
 			extFiles.add(createExtFile(doc, "am_overlay.png",
-					LinkUtil.getExtFileOverlayDescription(lang, "am"), baseUri + "am_overlay.png"));
+					LinkUtil.getExtFileOverlayDescription(lang, "am"), baseUri +
+					MapUtil.filename(region, MapLevel.overlay, DaytimeDependency.am, false, MapImageFormat.png)));
 			extFiles.add(createExtFile(doc, "pm_overlay.png",
-					LinkUtil.getExtFileOverlayDescription(lang, "pm"), baseUri + "pm_overlay.png"));
+					LinkUtil.getExtFileOverlayDescription(lang, "pm"), baseUri +
+					MapUtil.filename(region, MapLevel.overlay, DaytimeDependency.pm, false, MapImageFormat.png)));
 		}
 
 		return extFiles;
