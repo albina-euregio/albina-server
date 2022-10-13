@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,7 +143,7 @@ public class EmailUtil {
 		sb.append(lang.getBundleString("day." + localDate.getDayOfWeek()));
 		sb.append(", ");
 		sb.append(localDate.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
-		
+
 		String mp3FileUrl = LinkUtil.getMediaFileUrl(lang, region, serverInstance) + "/" + mp3FileName;
 
 		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb.toString(), username);
@@ -526,10 +527,10 @@ public class EmailUtil {
 		// maps
 		if (isAfternoon)
 			bulletin.put("map", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + avalancheBulletin.getValidityDateString() + "/"
-					+ publicationTime + "/" + avalancheBulletin.getId() + "_PM.jpg");
+					+ publicationTime + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.pm, false, MapImageFormat.jpg));
 		else
 			bulletin.put("map", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + avalancheBulletin.getValidityDateString() + "/"
-					+ publicationTime + "/" + avalancheBulletin.getId() + ".jpg");
+					+ publicationTime + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.am, false, MapImageFormat.jpg));
 
 		// avalanche problems
 		bulletin.put("avalancheProblem1", createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, region, serverInstance));
