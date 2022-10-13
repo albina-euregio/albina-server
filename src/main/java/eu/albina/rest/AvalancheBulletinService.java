@@ -436,8 +436,11 @@ public class AvalancheBulletinService {
 				String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(AlbinaUtil.formatterPublicationTime);
 				java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
 				ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+				serverInstance.setMapsPath(outputDirectory.toString());
+				AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
+				avalancheReport.setPreview(true);
 
-				MapUtil.createMapyrusMaps(bulletins, region, serverInstance, true, outputDirectory);
+				MapUtil.createMapyrusMaps(avalancheReport);
 
 				PdfUtil.getInstance().createPdf(bulletins, language, region, serverInstance, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
 							publicationTimeString, true);

@@ -99,42 +99,32 @@ public interface MapUtil {
 	}
 
 	static void createMapyrusMaps(AvalancheReport avalancheReport) {
-		createMapyrusMaps(
-			avalancheReport.getBulletins(),
-			avalancheReport.getRegion(),
-			avalancheReport.getServerInstance(),
-			avalancheReport.isPreview(),
-			avalancheReport.getMapsPath()
-		);
-	}
-
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance, boolean preview, Path outputDirectory) {
 		try {
-			logger.info("Creating directory {}", outputDirectory);
-			Files.createDirectories(outputDirectory);
+			logger.info("Creating directory {}", avalancheReport.getMapsPath());
+			Files.createDirectories(avalancheReport.getMapsPath());
 		} catch (IOException ex) {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
 
-		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(bulletins)) {
+		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(avalancheReport.getBulletins())) {
 			try {
-				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, preview);
+				final SimpleBindings bindings = createMayrusBindings(avalancheReport.getBulletins(), daytimeDependency, avalancheReport.isPreview());
 				for (MapLevel mapLevel : MapLevel.values()) {
-					createMapyrusMaps(region, serverInstance, mapLevel, daytimeDependency, null, false, bindings, outputDirectory, preview);
-					createMapyrusMaps(region, serverInstance, mapLevel, daytimeDependency, null, true, bindings, outputDirectory, preview);
+					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, false, bindings);
+					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, true, bindings);
 				}
-				for (final AvalancheBulletin bulletin : bulletins) {
+				for (final AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					if (!preview && !bulletin.affectsRegionOnlyPublished(region)) {
+					if (!avalancheReport.isPreview() && !bulletin.affectsRegionOnlyPublished(avalancheReport.getRegion())) {
 						continue;
 					}
-					if (preview && !bulletin.affectsRegionWithoutSuggestions(region)) {
+					if (avalancheReport.isPreview() && !bulletin.affectsRegionWithoutSuggestions(avalancheReport.getRegion())) {
 						continue;
 					}
-					createMapyrusMaps(region, serverInstance, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings, outputDirectory, preview);
-					createMapyrusMaps(region, serverInstance, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings, outputDirectory, preview);
+					createMapyrusMaps(avalancheReport, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings);
+					createMapyrusMaps(avalancheReport, MapLevel.thumbnail, daytimeDependency, bulletin, true, bindings);
 				}
 			} catch (IOException | MapyrusException | InterruptedException ex) {
 				throw new AlbinaMapException("Failed to create mapyrus maps", ex);
@@ -142,9 +132,12 @@ public interface MapUtil {
 		}
 	}
 
-	static void createMapyrusMaps(Region region, ServerInstance serverInstance, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
-								  boolean grayscale, SimpleBindings dangerBindings, Path outputDirectory, boolean preview) throws IOException, MapyrusException, InterruptedException {
-
+	static void createMapyrusMaps(AvalancheReport avalancheReport, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
+								  boolean grayscale, SimpleBindings dangerBindings) throws IOException, MapyrusException, InterruptedException {
+		final Region region = avalancheReport.getRegion();
+		final ServerInstance serverInstance = avalancheReport.getServerInstance();
+		final boolean preview = avalancheReport.isPreview();
+		final Path outputDirectory = avalancheReport.getMapsPath();
 		final Path outputFile = outputDirectory.resolve(bulletin == null
 			? filename(region, mapLevel, daytimeDependency, grayscale, MapImageFormat.pdf)
 			: filename(region, bulletin, daytimeDependency, grayscale, MapImageFormat.pdf));
