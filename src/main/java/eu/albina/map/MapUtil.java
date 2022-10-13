@@ -53,7 +53,7 @@ public interface MapUtil {
 
 	static String getOverviewMapFilename(Region region, DaytimeDependency daytimeDependency,
 			boolean grayscale) {
-		return MapUtil.filename(region, MapLevel.standard, daytimeDependency, null, grayscale, MapImageFormat.jpg);
+		return filename(region, MapLevel.standard, daytimeDependency, grayscale, MapImageFormat.jpg);
 	}
 
 	static SimpleBindings createMayrusBindings(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, boolean preview) {
@@ -139,7 +139,9 @@ public interface MapUtil {
 	static void createMapyrusMaps(Region region, ServerInstance serverInstance, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
 								  boolean grayscale, SimpleBindings dangerBindings, Path outputDirectory, boolean preview) throws IOException, MapyrusException, InterruptedException {
 
-		final Path outputFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, daytimeDependency, bulletin, grayscale, MapImageFormat.pdf));
+		final Path outputFile = outputDirectory.resolve(bulletin == null
+			? filename(region, mapLevel, daytimeDependency, grayscale, MapImageFormat.pdf)
+			: filename(region, bulletin, daytimeDependency, grayscale, MapImageFormat.pdf));
 		String logoPath = "";
 		double logoAspectRatio = 1;
 
@@ -239,9 +241,9 @@ public interface MapUtil {
 		MapImageFormat.jpg.convertFrom(outputFilePng);
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletin == null) {
 			// create combined am/pm maps
-			final String amFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, DaytimeDependency.am, null, grayscale, MapImageFormat.jpg)).toString();
-			final String pmFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, DaytimeDependency.pm, null, grayscale, MapImageFormat.jpg)).toString();
-			final String fdFile = outputDirectory.resolve(MapUtil.filename(region, mapLevel, DaytimeDependency.fd, null, grayscale, MapImageFormat.jpg)).toString();
+			final String amFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.am, grayscale, MapImageFormat.jpg)).toString();
+			final String pmFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.pm, grayscale, MapImageFormat.jpg)).toString();
+			final String fdFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.fd, grayscale, MapImageFormat.jpg)).toString();
 			logger.debug("Combining {} and {} to {}", amFile, pmFile, fdFile);
 			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
@@ -264,26 +266,24 @@ public interface MapUtil {
 		return ((double) region.getMapXmax() - (double) region.getMapXmin()) / ((double) region.getMapYmax() - (double) region.getMapYmin());
 	}
 
-	static String filename(Region region, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin, boolean grayscale, MapImageFormat format) {
-		StringBuilder sb = new StringBuilder();
-		if (bulletin == null) {
-			sb.append(daytimeDependency.name());
-			sb.append("_");
-			sb.append(region.getId());
-			sb.append("_");
-			sb.append(mapLevel.toString());
-		} else {
-			sb.append(region.getId());
-			sb.append("_");
-			sb.append(bulletin.getId());
-			sb.append(DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "");
-		}
+	static String filename(Region region, MapLevel mapLevel, DaytimeDependency daytimeDependency, boolean grayscale, MapImageFormat format) {
+		return daytimeDependency.name() +
+			"_" +
+			region.getId() +
+			"_" +
+			mapLevel.toString() +
+			(grayscale ? "_bw" : "") +
+			"." +
+			format;
+	}
 
-		if (grayscale)
-			sb.append("_bw");
-
-		sb.append(".");
-		sb.append(format);
-		return sb.toString();
+	static String filename(Region region, AvalancheBulletin bulletin, DaytimeDependency daytimeDependency, boolean grayscale, MapImageFormat format) {
+		return region.getId() +
+			"_" +
+			bulletin.getId() +
+			(DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "") +
+			(grayscale ? "_bw" : "") +
+			"." +
+			format;
 	}
 }

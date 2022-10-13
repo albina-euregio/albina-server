@@ -83,7 +83,7 @@ public class MapUtilTest {
 		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTirol, regionTrentino)) {
 			for (MapLevel mapLevel : MapLevel.values()) {
 				for (DaytimeDependency daytimeDependency : DaytimeDependency.values()) {
-					filenames.add(MapUtil.filename(region, mapLevel, daytimeDependency, null, false, MapImageFormat.png));
+					filenames.add(MapUtil.filename(region, mapLevel, daytimeDependency, false, MapImageFormat.png));
 				}
 			}
 		}
@@ -94,7 +94,7 @@ public class MapUtilTest {
 				continue;
 			}
 			for (DaytimeDependency daytimeDependency : DaytimeDependency.values()) {
-				filenames.add(MapUtil.filename(region, null, daytimeDependency, bulletin, false, MapImageFormat.png));
+				filenames.add(MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.png));
 			}
 		}
 		assertEquals(Arrays.asList(
