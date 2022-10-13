@@ -18,6 +18,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -127,7 +128,7 @@ public class PublicationController {
 				// create maps
 				if (region.isCreateMaps()) {
 
-					createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+					createMaps(avalancheReport);
 
 					Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -216,14 +217,21 @@ public class PublicationController {
 
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
+			AvalancheReport avalancheReport;
 			String avalancheReportId;
 			if (region.getSubRegions().isEmpty()) {
-				AvalancheReport avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
-				avalancheReport.setServerInstance(localServerInstance);
+				avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
 				avalancheReportId = avalancheReport.getId();
 			} else {
+				avalancheReport = new AvalancheReport();
+				avalancheReport.setBulletins(regionBulletins);
+				avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
+				avalancheReport.setUser(user);
+				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
+				avalancheReport.setRegion(region);
 				avalancheReportId = null;
 			}
+			avalancheReport.setServerInstance(localServerInstance);
 
 			if (regionBulletins.isEmpty()) {
 				continue;
@@ -243,7 +251,7 @@ public class PublicationController {
 				// create maps
 				if (region.isCreateMaps()) {
 
-					createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+					createMaps(avalancheReport);
 
 					Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -329,7 +337,7 @@ public class PublicationController {
 				// create maps
 				if (region.isCreateMaps()) {
 
-					createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+					createMaps(avalancheReport);
 
 					Map<String, Thread> threads = new HashMap<String, Thread>();
 
@@ -505,25 +513,19 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the maps.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the maps
-	 * @param publicationTimeString
-	 *            the time of publication
-	 * @param validityDateString
-	 *            the start of the validity of the report
 	 */
-	public boolean createMaps(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString, ServerInstance serverInstance)
+	public boolean createMaps(AvalancheReport avalancheReport)
 			throws Exception {
+		final String regionId = avalancheReport.getRegion().getId();
 		try {
-			logger.info("Map production for " + region.getId() + " started");
-			MapUtil.createMapyrusMaps(bulletins, region, validityDateString, publicationTimeString, serverInstance);
-			if (avalancheReportId != null)
-				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReportId);
-			logger.info("Map production " + region.getId() + " finished");
+			logger.info("Map production for " + regionId + " started");
+			MapUtil.createMapyrusMaps(avalancheReport);
+			if (avalancheReport.getId() != null)
+				AvalancheReportController.getInstance().setAvalancheReportMapFlag(avalancheReport.getId());
+			logger.info("Map production " + regionId + " finished");
 			return true;
 		} catch (Exception e) {
-			logger.error("Error producing maps for " + region.getId(), e);
+			logger.error("Error producing maps for " + regionId, e);
 			return false;
 		}
 	}

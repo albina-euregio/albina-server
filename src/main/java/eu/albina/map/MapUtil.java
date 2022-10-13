@@ -34,6 +34,7 @@ import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
 
+import eu.albina.model.AvalancheReport;
 import org.mapyrus.Argument;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.MapyrusException;
@@ -97,9 +98,14 @@ public interface MapUtil {
 		}
 	}
 
-	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString, ServerInstance serverInstance) {
-		final Path outputDirectory = Paths.get(serverInstance.getMapsPath(), validityDateString, publicationTimeString);
-		createMapyrusMaps(bulletins, region, serverInstance, false, outputDirectory);
+	static void createMapyrusMaps(AvalancheReport avalancheReport) {
+		createMapyrusMaps(
+			avalancheReport.getBulletins(),
+			avalancheReport.getRegion(),
+			avalancheReport.getServerInstance(),
+			avalancheReport.isPreview(),
+			avalancheReport.getMapsPath()
+		);
 	}
 
 	static void createMapyrusMaps(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance, boolean preview, Path outputDirectory) {

@@ -852,7 +852,7 @@ public class AvalancheBulletinService {
 			for (Region region: publishBulletinRegions) {
 				try {
 					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-					PublicationController.getInstance().createMaps(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+					PublicationController.getInstance().createMaps(avalancheReport);
 				} catch (InterruptedException e) {
 					logger.error("Map production for " + region.getId() + " interrupted", e);
 				} catch (Exception e1) {
