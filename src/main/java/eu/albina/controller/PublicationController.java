@@ -109,59 +109,60 @@ public class PublicationController {
 			avalancheReport.setServerInstance(localServerInstance);
 			String avalancheReportId = avalancheReport.getId();
 
-			if (!regionBulletins.isEmpty()) {
+			if (regionBulletins.isEmpty()) {
+				continue;
+			}
 
-				// create CAAML
-				if (region.isCreateCaamlV5())
-					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
-				if (region.isCreateCaamlV6())
-					createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			// create CAAML
+			if (region.isCreateCaamlV5())
+				createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			if (region.isCreateCaamlV6())
+				createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-				// create JSON
-				if (region.isCreateJson())
-					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			// create JSON
+			if (region.isCreateJson())
+				createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-				try {
-					// create maps
-					if (region.isCreateMaps()) {
+			try {
+				// create maps
+				if (region.isCreateMaps()) {
 
-						createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+					createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-						Map<String, Thread> threads = new HashMap<String, Thread>();
+					Map<String, Thread> threads = new HashMap<String, Thread>();
 
-						// create HTML
-						if (region.isCreateSimpleHtml()) {
-							Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
-							threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
-							createSimpleHtmlThread.start();
-						}
+					// create HTML
+					if (region.isCreateSimpleHtml()) {
+						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
+						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
+						createSimpleHtmlThread.start();
+					}
 
-						// create pdfs
-						if (region.isCreatePdf()) {
-							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
-							threads.put("pdf_" + region.getId(), createPdfThread);
-							createPdfThread.start();
-						}
+					// create pdfs
+					if (region.isCreatePdf()) {
+						Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+						threads.put("pdf_" + region.getId(), createPdfThread);
+						createPdfThread.start();
+					}
 
-						for (String key : threads.keySet()) {
-							try {
-								threads.get(key).join();
-							} catch (InterruptedException e) {
-								logger.error(key + " thread interrupted", e);
-							}
-						}
-
-						if (region.isCreateMaps()) {
-							new Thread(() -> sendEmails(avalancheReportId, bulletins, region, false, false)).start();
-							new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region,	false, null, false, localServerInstance)).start();
-							new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, false, null, false, localServerInstance)).start();
+					for (String key : threads.keySet()) {
+						try {
+							threads.get(key).join();
+						} catch (InterruptedException e) {
+							logger.error(key + " thread interrupted", e);
 						}
 					}
-				} catch (InterruptedException e) {
-					logger.error("Map production interrupted", e);
-				} catch (Exception e1) {
-					logger.error("Error during map production", e1);
+
+					if (region.isCreateMaps()) {
+						new Thread(() -> sendEmails(avalancheReportId, bulletins, region, false, false)).start();
+						new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region,	false, null, false, localServerInstance)).start();
+						new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, false, null, false, localServerInstance)).start();
+					}
 				}
+			} catch (InterruptedException e) {
+				logger.error("Map production interrupted", e);
+			} catch (Exception e1) {
+				logger.error("Error during map production", e1);
 			}
 		}
 
@@ -224,59 +225,60 @@ public class PublicationController {
 				avalancheReportId = null;
 			}
 
-			if (!regionBulletins.isEmpty()) {
+			if (regionBulletins.isEmpty()) {
+				continue;
+			}
 
-				// create CAAML
-				if (region.isCreateCaamlV5())
-					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
-				if (region.isCreateCaamlV6())
-					createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			// create CAAML
+			if (region.isCreateCaamlV5())
+				createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			if (region.isCreateCaamlV6())
+				createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-				// create JSON
-				if (region.isCreateJson())
-					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			// create JSON
+			if (region.isCreateJson())
+				createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-				try {
-					// create maps
-					if (region.isCreateMaps()) {
+			try {
+				// create maps
+				if (region.isCreateMaps()) {
 
-						createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+					createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-						Map<String, Thread> threads = new HashMap<String, Thread>();
+					Map<String, Thread> threads = new HashMap<String, Thread>();
 
-						// create HTML
-						if (region.isCreateSimpleHtml()) {
-							Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
-							threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
-							createSimpleHtmlThread.start();
-						}
+					// create HTML
+					if (region.isCreateSimpleHtml()) {
+						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
+						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
+						createSimpleHtmlThread.start();
+					}
 
-						// create pdf
-						if (region.isCreatePdf()) {
-							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
-							threads.put("pdf_" + region.getId(), createPdfThread);
-							createPdfThread.start();
-						}
+					// create pdf
+					if (region.isCreatePdf()) {
+						Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+						threads.put("pdf_" + region.getId(), createPdfThread);
+						createPdfThread.start();
+					}
 
-						for (String key : threads.keySet()) {
-							try {
-								threads.get(key).join();
-							} catch (InterruptedException e) {
-								logger.error(key + " thread interrupted", e);
-							}
-						}
-
-						if (region.isCreateMaps()) {
-							new Thread(() -> sendEmails(avalancheReportId, bulletins, region, true, false)).start();
-							new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
-							new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
+					for (String key : threads.keySet()) {
+						try {
+							threads.get(key).join();
+						} catch (InterruptedException e) {
+							logger.error(key + " thread interrupted", e);
 						}
 					}
-				} catch (InterruptedException e) {
-					logger.error("Map production interrupted", e);
-				} catch (Exception e1) {
-					logger.error("Error during map production", e1);
+
+					if (region.isCreateMaps()) {
+						new Thread(() -> sendEmails(avalancheReportId, bulletins, region, true, false)).start();
+						new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
+						new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
+					}
 				}
+			} catch (InterruptedException e) {
+				logger.error("Map production interrupted", e);
+			} catch (Exception e1) {
+				logger.error("Error during map production", e1);
 			}
 		}
 
@@ -309,53 +311,54 @@ public class PublicationController {
 			avalancheReport.setServerInstance(localServerInstance);
 			String avalancheReportId = avalancheReport.getId();
 
-			if (!regionBulletins.isEmpty()) {
+			if (regionBulletins.isEmpty()) {
+				continue;
+			}
 
-				// create CAAML
-				if (region.isCreateCaamlV5())
-					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
-				if (region.isCreateCaamlV6())
-					createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			// create CAAML
+			if (region.isCreateCaamlV5())
+				createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			if (region.isCreateCaamlV6())
+				createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-				// create JSON
-				if (region.isCreateJson())
-					createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+			// create JSON
+			if (region.isCreateJson())
+				createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-				try {
-					// create maps
-					if (region.isCreateMaps()) {
+			try {
+				// create maps
+				if (region.isCreateMaps()) {
 
-						createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+					createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 
-						Map<String, Thread> threads = new HashMap<String, Thread>();
+					Map<String, Thread> threads = new HashMap<String, Thread>();
 
-						// create HTML
-						if (region.isCreateSimpleHtml()) {
-							Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
-							threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
-							createSimpleHtmlThread.start();
-						}
+					// create HTML
+					if (region.isCreateSimpleHtml()) {
+						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
+						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
+						createSimpleHtmlThread.start();
+					}
 
-						// create pdfs
-						if (region.isCreatePdf()) {
-							Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
-							threads.put("pdf_" + region.getId(), createPdfThread);
-							createPdfThread.start();
-						}
+					// create pdfs
+					if (region.isCreatePdf()) {
+						Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+						threads.put("pdf_" + region.getId(), createPdfThread);
+						createPdfThread.start();
+					}
 
-						for (String key : threads.keySet()) {
-							try {
-								threads.get(key).join();
-							} catch (InterruptedException e) {
-								logger.error(key + " thread interrupted", e);
-							}
+					for (String key : threads.keySet()) {
+						try {
+							threads.get(key).join();
+						} catch (InterruptedException e) {
+							logger.error(key + " thread interrupted", e);
 						}
 					}
-				} catch (InterruptedException e) {
-					logger.error("Map production interrupted", e);
-				} catch (Exception e) {
-					logger.error("Error during map production", e);
 				}
+			} catch (InterruptedException e) {
+				logger.error("Map production interrupted", e);
+			} catch (Exception e) {
+				logger.error("Error during map production", e);
 			}
 		}
 
