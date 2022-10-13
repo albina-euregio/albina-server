@@ -264,16 +264,14 @@ public interface MapUtil {
 		return ((double) region.getMapXmax() - (double) region.getMapXmin()) / ((double) region.getMapYmax() - (double) region.getMapYmin());
 	}
 
-	static String filename(Region region, MapLevel mapLevel) {
-		return region.getId() + "_" + mapLevel.toString();
-	}
-
 	static String filename(Region region, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin, boolean grayscale, MapImageFormat format) {
 		StringBuilder sb = new StringBuilder();
 		if (bulletin == null) {
 			sb.append(daytimeDependency.name());
 			sb.append("_");
-			sb.append(MapUtil.filename(region, mapLevel));
+			sb.append(region.getId());
+			sb.append("_");
+			sb.append(mapLevel.toString());
 		} else {
 			sb.append(region.getId());
 			sb.append("_");

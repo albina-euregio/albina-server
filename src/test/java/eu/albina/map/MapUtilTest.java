@@ -1,12 +1,14 @@
 package eu.albina.map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +75,81 @@ public class MapUtilTest {
 				MapUtil.getOverviewMapFilename(regionSouthTyrol, DaytimeDependency.fd, true));
 		assertEquals("fd_IT-32-TN_map_bw.jpg",
 				MapUtil.getOverviewMapFilename(regionTrentino, DaytimeDependency.fd, true));
+	}
+
+	@Test
+	public void testFilename() throws Exception {
+		List<String> filenames = new ArrayList<>();
+		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTirol, regionTrentino)) {
+			for (MapLevel mapLevel : MapLevel.values()) {
+				for (DaytimeDependency daytimeDependency : DaytimeDependency.values()) {
+					filenames.add(MapUtil.filename(region, mapLevel, daytimeDependency, null, false, MapImageFormat.png));
+				}
+			}
+		}
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final AvalancheBulletin bulletin = AvalancheBulletin.readBulletins(resource).get(0);
+		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTirol, regionTrentino)) {
+			if (!bulletin.affectsRegion(region)) {
+				continue;
+			}
+			for (DaytimeDependency daytimeDependency : DaytimeDependency.values()) {
+				filenames.add(MapUtil.filename(region, null, daytimeDependency, bulletin, false, MapImageFormat.png));
+			}
+		}
+		assertEquals(Arrays.asList(
+			"fd_ES-CT-L_thumbnail.png",
+			"am_ES-CT-L_thumbnail.png",
+			"pm_ES-CT-L_thumbnail.png",
+			"fd_ES-CT-L_map.png",
+			"am_ES-CT-L_map.png",
+			"pm_ES-CT-L_map.png",
+			"fd_ES-CT-L_overlay.png",
+			"am_ES-CT-L_overlay.png",
+			"pm_ES-CT-L_overlay.png",
+			"fd_EUREGIO_thumbnail.png",
+			"am_EUREGIO_thumbnail.png",
+			"pm_EUREGIO_thumbnail.png",
+			"fd_EUREGIO_map.png",
+			"am_EUREGIO_map.png",
+			"pm_EUREGIO_map.png",
+			"fd_EUREGIO_overlay.png",
+			"am_EUREGIO_overlay.png",
+			"pm_EUREGIO_overlay.png",
+			"fd_IT-32-BZ_thumbnail.png",
+			"am_IT-32-BZ_thumbnail.png",
+			"pm_IT-32-BZ_thumbnail.png",
+			"fd_IT-32-BZ_map.png",
+			"am_IT-32-BZ_map.png",
+			"pm_IT-32-BZ_map.png",
+			"fd_IT-32-BZ_overlay.png",
+			"am_IT-32-BZ_overlay.png",
+			"pm_IT-32-BZ_overlay.png",
+			"fd_AT-07_thumbnail.png",
+			"am_AT-07_thumbnail.png",
+			"pm_AT-07_thumbnail.png",
+			"fd_AT-07_map.png",
+			"am_AT-07_map.png",
+			"pm_AT-07_map.png",
+			"fd_AT-07_overlay.png",
+			"am_AT-07_overlay.png",
+			"pm_AT-07_overlay.png",
+			"fd_IT-32-TN_thumbnail.png",
+			"am_IT-32-TN_thumbnail.png",
+			"pm_IT-32-TN_thumbnail.png",
+			"fd_IT-32-TN_map.png",
+			"am_IT-32-TN_map.png",
+			"pm_IT-32-TN_map.png",
+			"fd_IT-32-TN_overlay.png",
+			"am_IT-32-TN_overlay.png",
+			"pm_IT-32-TN_overlay.png",
+			"EUREGIO_6385c958-018d-4c89-aa67-5eddc31ada5a.png",
+			"EUREGIO_6385c958-018d-4c89-aa67-5eddc31ada5a.png",
+			"EUREGIO_6385c958-018d-4c89-aa67-5eddc31ada5a_PM.png",
+			"AT-07_6385c958-018d-4c89-aa67-5eddc31ada5a.png",
+			"AT-07_6385c958-018d-4c89-aa67-5eddc31ada5a.png",
+			"AT-07_6385c958-018d-4c89-aa67-5eddc31ada5a_PM.png"
+		), filenames);
 	}
 
 	@Test
