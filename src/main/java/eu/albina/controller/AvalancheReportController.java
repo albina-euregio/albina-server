@@ -472,19 +472,14 @@ public class AvalancheReportController {
 	 * publication process. The timestamp, user and revoision as well as the JSON
 	 * string of all bulletins is updated in the report.
 	 *
-	 * @param publishedBulletins
-	 *            the bulletins affected by this change
-	 * @param startDate
-	 *            the start date of the report
-	 * @param region
-	 *            the region of the report
-	 * @param user
-	 *            the user who changes the report
+	 * @param publishedBulletins the bulletins affected by this change
+	 * @param startDate          the start date of the report
+	 * @param region             the region of the report
+	 * @param user               the user who changes the report
 	 * @return the id of the report
-	 * @throws HibernateException
-	 *             if the report can not be loaded from the DB
+	 * @throws HibernateException if the report can not be loaded from the DB
 	 */
-	public String changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, Region region, User user) {
+	public AvalancheReport changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, Region region, User user) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport latestReport = getInternalReport(startDate, region);
 			if (latestReport != null) {
@@ -495,10 +490,10 @@ public class AvalancheReportController {
 				avalancheReport.setRegion(region);
 				avalancheReport.setStatus(latestReport.getStatus());
 				avalancheReport.setMediaFileUploaded(latestReport.isMediaFileUploaded());
-
 				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region, false).toString());
+				avalancheReport.setBulletins(publishedBulletins);
 				entityManager.persist(avalancheReport);
-				return avalancheReport.getId();
+				return avalancheReport;
 			} else {
 				throw new HibernateException("Report error!");
 			}
@@ -512,22 +507,16 @@ public class AvalancheReportController {
 	 * <code>resubmitted</code>) and set the json string of the bulletins. If there
 	 * was not report a new report with status <code>missing</code> is created.
 	 *
-	 * @param bulletins
-	 *            the bulletins which are affected by the publication
-	 * @param startDate
-	 *            the start date of the time period
-	 * @param region
-	 *            the region that should be published
-	 * @param user
-	 *            the user who publishes the report
-	 * @param publicationDate
-	 *            the timestamp when the report was published
+	 * @param bulletins       the bulletins which are affected by the publication
+	 * @param startDate       the start date of the time period
+	 * @param region          the region that should be published
+	 * @param user            the user who publishes the report
+	 * @param publicationDate the timestamp when the report was published
 	 * @return a list of the ids of the published reports
-	 * @throws AlbinaException
-	 *             if more than one report was found
+	 * @throws AlbinaException if more than one report was found
 	 */
-	public String publishReport(Collection<AvalancheBulletin> bulletins, Instant startDate, Region region, User user,
-			Instant publicationDate) {
+	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, User user,
+										 Instant publicationDate) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport report = getInternalReport(startDate, region);
 
@@ -571,17 +560,14 @@ public class AvalancheReportController {
 				}
 			}
 
-			// set json string after status is published/republished
 			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
+			avalancheReport.setBulletins(bulletins);
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
+			AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 
-			if (bulletinUpdate != null) {
-				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
-			}
-
-			return avalancheReport.getId();
+			return avalancheReport;
 		});
 	}
 

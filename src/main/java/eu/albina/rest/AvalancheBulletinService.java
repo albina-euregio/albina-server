@@ -894,6 +894,8 @@ public class AvalancheBulletinService {
 
 			for (Region region: publishBulletinRegions) {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+				avalancheReport.setBulletins(bulletins);
+				avalancheReport.setServerInstance(localServerInstance);
 				PublicationController.getInstance().createCaamlV5(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 				PublicationController.getInstance().createCaamlV6(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, localServerInstance);
 			}

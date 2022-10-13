@@ -18,6 +18,7 @@ package eu.albina.model;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,9 +28,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
+import eu.albina.util.AlbinaUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -100,10 +103,28 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "JSON_STRING")
 	private String jsonString;
 
+	@Transient
+	private List<AvalancheBulletin> bulletins;
+
+	@Transient
+	private String validityDateString;
+
+	@Transient
+	private String publicationTimeString;
+
+	@Transient
+	private ServerInstance serverInstance;
+
 	/**
 	 * Standard constructor for an avalanche report.
 	 */
 	public AvalancheReport() {
+	}
+
+	public void setBulletins(List<AvalancheBulletin> bulletins) {
+		this.bulletins = bulletins;
+		this.validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+		this.publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 	}
 
 	public User getUser() {
@@ -232,6 +253,26 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setJsonString(String jsonString) {
 		this.jsonString = jsonString;
+	}
+
+	public List<AvalancheBulletin> getBulletins() {
+		return bulletins;
+	}
+
+	public String getValidityDateString() {
+		return validityDateString;
+	}
+
+	public String getPublicationTimeString() {
+		return publicationTimeString;
+	}
+
+	public ServerInstance getServerInstance() {
+		return serverInstance;
+	}
+
+	public void setServerInstance(ServerInstance serverInstance) {
+		this.serverInstance = serverInstance;
 	}
 
 	@Override

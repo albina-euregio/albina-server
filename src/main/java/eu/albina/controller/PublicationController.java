@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
 
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +105,9 @@ public class PublicationController {
 
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
-			String avalancheReportId = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+			AvalancheReport avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+			avalancheReport.setServerInstance(localServerInstance);
+			String avalancheReportId = avalancheReport.getId();
 
 			if (!regionBulletins.isEmpty()) {
 
@@ -121,9 +124,9 @@ public class PublicationController {
 				try {
 					// create maps
 					if (region.isCreateMaps()) {
-					
+
 						createMaps(avalancheReportId, bulletins, region, validityDateString, publicationTimeString, localServerInstance);
-					
+
 						Map<String, Thread> threads = new HashMap<String, Thread>();
 
 						// create HTML
@@ -214,7 +217,9 @@ public class PublicationController {
 
 			String avalancheReportId;
 			if (region.getSubRegions().isEmpty()) {
-				avalancheReportId = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+				AvalancheReport avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+				avalancheReport.setServerInstance(localServerInstance);
+				avalancheReportId = avalancheReport.getId();
 			} else {
 				avalancheReportId = null;
 			}
@@ -274,7 +279,7 @@ public class PublicationController {
 				}
 			}
 		}
-		
+
 		// copy files
 		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
@@ -300,10 +305,12 @@ public class PublicationController {
 
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
-			String avalancheReportId = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
+			AvalancheReport avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
+			avalancheReport.setServerInstance(localServerInstance);
+			String avalancheReportId = avalancheReport.getId();
 
 			if (!regionBulletins.isEmpty()) {
-				
+
 				// create CAAML
 				if (region.isCreateCaamlV5())
 					createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
