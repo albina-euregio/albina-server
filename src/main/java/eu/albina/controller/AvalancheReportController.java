@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import com.google.common.base.Strings;
 import org.hibernate.Hibernate;
@@ -780,13 +780,13 @@ public class AvalancheReportController {
 		return entity;
 	}
 
-	public void setAvalancheReportFlag(String avalancheReportId, Consumer<AvalancheReport> flagSetter) {
+	public void setAvalancheReportFlag(String avalancheReportId, BiConsumer<AvalancheReport, Boolean> flagSetter) {
 		if (avalancheReportId == null) {
 			return;
 		}
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			flagSetter.accept(avalancheReport);
+			flagSetter.accept(avalancheReport, true);
 			entityManager.flush();
 			return null;
 		});
