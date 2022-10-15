@@ -156,7 +156,7 @@ public class PublicationController {
 					}
 
 					if (region.isCreateMaps()) {
-						new Thread(() -> sendEmails(avalancheReportId, bulletins, region, false, false)).start();
+						new Thread(() -> sendEmails(avalancheReport)).start();
 						new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
 						new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
 					}
@@ -279,7 +279,7 @@ public class PublicationController {
 					}
 
 					if (region.isCreateMaps()) {
-						new Thread(() -> sendEmails(avalancheReportId, bulletins, region, true, false)).start();
+						new Thread(() -> sendEmails(avalancheReport)).start();
 						new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
 						new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
 					}
@@ -553,24 +553,20 @@ public class PublicationController {
 
 	/**
 	 * Trigger the sending of the emails.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the emails
 	 */
-	public Thread sendEmails(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test) {
+	public Thread sendEmails(AvalancheReport avalancheReport) {
 		return new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					logger.info("Email production for " + region.getId() + " started");
-					ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-					EmailUtil.getInstance().sendBulletinEmails(bulletins, region, update, test, localServerInstance);
-					if (!test && avalancheReportId != null)
-						AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReportId);
+					logger.info("Email production for " + avalancheReport.getRegion().getId() + " started");
+					EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
+					if (avalancheReport.getStatus() != BulletinStatus.test && avalancheReport.getId() != null)
+						AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReport.getId());
 				} catch (Exception e) {
-					logger.error("Error preparing emails " + region, e);
+					logger.error("Error preparing emails " + avalancheReport.getRegion().getId(), e);
 				} finally {
-					logger.info("Email production " + region.getId() + " finished");
+					logger.info("Email production " + avalancheReport.getRegion().getId() + " finished");
 				}
 			}
 		});

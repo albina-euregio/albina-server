@@ -971,11 +971,13 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
 
+			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+			avalancheReport.setBulletins(bulletins);
+			avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 			if (language == null) {
-				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-				PublicationController.getInstance().sendEmails(avalancheReport.getId(), bulletins, region, false, false);
+				PublicationController.getInstance().sendEmails(avalancheReport);
 			} else
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, false, language, ServerInstanceController.getInstance().getLocalServerInstance());
+				EmailUtil.getInstance().sendBulletinEmails(avalancheReport, language);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1005,15 +1007,18 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
-			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+			avalancheReport.setBulletins(bulletins);
+			avalancheReport.setStatus(BulletinStatus.test);
+			avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 
 			logger.debug("startDate: {}", startDate.toString());
 			logger.debug("#bulletins: {}", bulletins.size());
 
 			if (language == null)
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, true, localServerInstance);
+				EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
 			else
-				EmailUtil.getInstance().sendBulletinEmails(bulletins, region, false, true, language, localServerInstance);
+				EmailUtil.getInstance().sendBulletinEmails(avalancheReport, language);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -1078,6 +1083,7 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 			avalancheReport.setBulletins(bulletins);
 			avalancheReport.setStatus(BulletinStatus.test);
+			avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 
 			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(avalancheReport, language)).start();
 
