@@ -117,9 +117,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Transient
 	private ServerInstance serverInstance;
 
-	@Transient
-	private boolean preview = false;
-
 	/**
 	 * Standard constructor for an avalanche report.
 	 */
@@ -286,14 +283,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setServerInstance(ServerInstance serverInstance) {
 		this.serverInstance = serverInstance;
-	}
-
-	public boolean isPreview() {
-		return preview;
-	}
-
-	public void setPreview(boolean preview) {
-		this.preview = preview;
 	}
 
 	public Path getMapsPath() {

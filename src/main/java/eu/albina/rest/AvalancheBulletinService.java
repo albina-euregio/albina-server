@@ -438,7 +438,7 @@ public class AvalancheBulletinService {
 				ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 				serverInstance.setMapsPath(outputDirectory.toString());
 				AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
-				avalancheReport.setPreview(true);
+				avalancheReport.setStatus(BulletinStatus.draft); // preview
 
 				MapUtil.createMapyrusMaps(avalancheReport);
 
