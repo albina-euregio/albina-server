@@ -20,29 +20,31 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 
 interface SocialMediaUtil {
 
-	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, Region region, boolean update, boolean test, ServerInstance serverInstance) {
+	default void sendBulletinNewsletters(AvalancheReport avalancheReport) {
 		for (LanguageCode lang : LanguageCode.ENABLED) {
-			sendBulletinNewsletters(bulletins, region, update, lang, test, serverInstance);
+			sendBulletinNewsletters(avalancheReport, lang);
 		}
 	}
 
-	default void sendBulletinNewsletters(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode lang, boolean test, ServerInstance serverInstance) {
-		String message = getSocialMediaText(bulletins, region, update, lang);
-		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(region, lang, bulletins, serverInstance);
-		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, region);
-		sendBulletinNewsletter(message, lang, region, attachmentUrl, bulletinUrl, test);
+	default void sendBulletinNewsletters(AvalancheReport avalancheReport, LanguageCode lang) {
+		String message = getSocialMediaText(avalancheReport, lang);
+		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(avalancheReport.getRegion(), lang, avalancheReport.getBulletins(), avalancheReport.getServerInstance());
+		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport.getBulletins(), lang, avalancheReport.getRegion());
+		sendBulletinNewsletter(message, lang, avalancheReport.getRegion(), attachmentUrl, bulletinUrl, avalancheReport.getStatus() == BulletinStatus.test);
 	}
 
-	static String getSocialMediaText(List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode lang) {
+	static String getSocialMediaText(AvalancheReport avalancheReport, LanguageCode lang) {
+		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 		String dateString = AlbinaUtil.getDate(bulletins, lang);
-		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, region);
-		if (update) {
+		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, avalancheReport.getRegion());
+		if (avalancheReport.getStatus() == BulletinStatus.updated) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
 				lang.getBundleString("website.name"), dateString, bulletinUrl);
 		} else {

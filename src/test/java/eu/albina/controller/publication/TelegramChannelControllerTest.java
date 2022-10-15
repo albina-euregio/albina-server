@@ -21,6 +21,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.enumerations.BulletinStatus;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -72,7 +74,9 @@ public class TelegramChannelControllerTest {
 	@Test
 	public void sendBulletin() throws URISyntaxException, IOException {
 		Region regionTrentino = new Region("IT-32-TN");
-		TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, regionTrentino, true, true, serverInstance);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTrentino, serverInstance);
+		avalancheReport.setStatus(BulletinStatus.test);
+		TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport);
 	}
 
 	@Ignore

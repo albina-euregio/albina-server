@@ -32,6 +32,7 @@ import javax.xml.transform.TransformerException;
 
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
+import eu.albina.model.enumerations.BulletinStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,8 +157,8 @@ public class PublicationController {
 
 					if (region.isCreateMaps()) {
 						new Thread(() -> sendEmails(avalancheReportId, bulletins, region, false, false)).start();
-						new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region,	false, null, false, localServerInstance)).start();
-						new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, false, null, false, localServerInstance)).start();
+						new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
+						new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
 					}
 				}
 			} catch (InterruptedException e) {
@@ -279,8 +280,8 @@ public class PublicationController {
 
 					if (region.isCreateMaps()) {
 						new Thread(() -> sendEmails(avalancheReportId, bulletins, region, true, false)).start();
-						new Thread(() -> triggerTelegramChannel(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
-						new Thread(() -> triggerPushNotifications(avalancheReportId, bulletins, region, true, null, false, localServerInstance)).start();
+						new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
+						new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
 					}
 				}
 			} catch (InterruptedException e) {
@@ -582,35 +583,35 @@ public class PublicationController {
 		});
 	}
 
-	public void triggerTelegramChannel(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test, ServerInstance serverInstance) {
+	public void triggerTelegramChannel(AvalancheReport avalancheReport, LanguageCode language) {
 		try {
-			logger.info("Telegram channel for " + region.getId() + " triggered");
+			logger.info("Telegram channel for " + avalancheReport.getRegion().getId() + " triggered");
 			if (language == null)
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, test, serverInstance);
+				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport);
 			else
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(bulletins, region, update, language, test, serverInstance);
-			if (!test && avalancheReportId != null)
-				AvalancheReportController.getInstance().setAvalancheReportTelegramFlag(avalancheReportId);
+				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport, language);
+			if (avalancheReport.getStatus() != BulletinStatus.test && avalancheReport.getId() != null)
+				AvalancheReportController.getInstance().setAvalancheReportTelegramFlag(avalancheReport.getId());
 		} catch (Exception e) {
 			logger.error("Error preparing telegram channel", e);
 		} finally {
-			logger.info("Telegram channel for " + region.getId() + " finished");
+			logger.info("Telegram channel for " + avalancheReport.getRegion().getId() + " finished");
 		}
 	}
 
-	public void triggerPushNotifications(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, boolean update, LanguageCode language, boolean test, ServerInstance serverInstance) {
+	public void triggerPushNotifications(AvalancheReport avalancheReport, LanguageCode language) {
 		try {
-			logger.info("Push notifications for " + region.getId() + " triggered");
+			logger.info("Push notifications for " + avalancheReport.getRegion().getId() + " triggered");
 			if (language == null)
-				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, test, serverInstance);
+				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport);
 			else
-				new PushNotificationUtil().sendBulletinNewsletters(bulletins, region, update, language, test, serverInstance);
-			if (!test && avalancheReportId != null)
-				AvalancheReportController.getInstance().setAvalancheReportPushFlag(avalancheReportId);
+				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport, language);
+			if (avalancheReport.getStatus() != BulletinStatus.test && avalancheReport.getId() != null)
+				AvalancheReportController.getInstance().setAvalancheReportPushFlag(avalancheReport.getId());
 		} catch (Exception e) {
-			logger.error("Error sending push notifications for " + region.getId(), e);
+			logger.error("Error sending push notifications for " + avalancheReport.getRegion().getId(), e);
 		} finally {
-			logger.info("Push notifications for " + region.getId() + " finished");
+			logger.info("Push notifications for " + avalancheReport.getRegion().getId() + " finished");
 		}
 	}
 }
