@@ -551,22 +551,17 @@ public class PublicationController {
 	/**
 	 * Trigger the sending of the emails.
 	 */
-	public Thread sendEmails(AvalancheReport avalancheReport) {
-		return new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					logger.info("Email production for " + avalancheReport.getRegion().getId() + " started");
-					EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
-					if (avalancheReport.getStatus() != BulletinStatus.test && avalancheReport.getId() != null)
-						AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReport.getId());
-				} catch (Exception e) {
-					logger.error("Error preparing emails " + avalancheReport.getRegion().getId(), e);
-				} finally {
-					logger.info("Email production " + avalancheReport.getRegion().getId() + " finished");
-				}
-			}
-		});
+	public void sendEmails(AvalancheReport avalancheReport) {
+		try {
+			logger.info("Email production for " + avalancheReport.getRegion().getId() + " started");
+			EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
+			if (avalancheReport.getStatus() != BulletinStatus.test && avalancheReport.getId() != null)
+				AvalancheReportController.getInstance().setAvalancheReportEmailFlag(avalancheReport.getId());
+		} catch (Exception e) {
+			logger.error("Error preparing emails " + avalancheReport.getRegion().getId(), e);
+		} finally {
+			logger.info("Email production " + avalancheReport.getRegion().getId() + " finished");
+		}
 	}
 
 	public void triggerTelegramChannel(AvalancheReport avalancheReport, LanguageCode language) {
