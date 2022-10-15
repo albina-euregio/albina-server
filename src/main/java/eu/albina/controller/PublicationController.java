@@ -516,13 +516,6 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the pdfs.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the pdfs
-	 * @param publicationTimeString
-	 *            the time of publication
-	 * @param validityDateString
-	 *            the start of the validity of the report
 	 */
 	public Thread createPdf(AvalancheReport avalancheReport) {
 		return new Thread(new Runnable() {
