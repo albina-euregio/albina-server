@@ -182,12 +182,6 @@ public class AlbinaUtilTest {
 		}
 	}
 
-	@Ignore
-	@Test
-	public void createJsonTest() throws TransformerException, IOException {
-		JsonUtil.createJsonFile(bulletins, regionTirol, "2019-12-30", "2019-12-30_17-15-30", serverInstanceEuregio);
-	}
-
 	@Test
 	public void testDates() throws Exception {
 		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/bulletins");

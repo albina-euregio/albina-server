@@ -123,7 +123,7 @@ public class PublicationController {
 
 			// create JSON
 			if (region.isCreateJson())
-				createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createJson(avalancheReport);
 
 			try {
 				// create maps
@@ -246,7 +246,7 @@ public class PublicationController {
 
 			// create JSON
 			if (region.isCreateJson())
-				createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createJson(avalancheReport);
 
 			try {
 				// create maps
@@ -332,7 +332,7 @@ public class PublicationController {
 
 			// create JSON
 			if (region.isCreateJson())
-				createJson(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createJson(avalancheReport);
 
 			try {
 				// create maps
@@ -440,24 +440,17 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the JSON file.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the JSON file
-	 * @param validityDateString
-	 *            point in time when the validity of the bulletin starts
-	 * @param publicationTimeString
-	 *            date and time of publication
 	 */
-	public boolean createJson(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString, String publicationTimeString, ServerInstance serverInstance) {
+	public boolean createJson(AvalancheReport avalancheReport) {
 		try {
-			logger.info("JSON production for " + region.getId() + " started");
-			JsonUtil.createJsonFile(bulletins, region, validityDateString, publicationTimeString, serverInstance);
-			if (avalancheReportId != null)
-				AvalancheReportController.getInstance().setAvalancheReportJsonFlag(avalancheReportId);
-			logger.info("JSON production for " + region.getId() + " finished");
+			logger.info("JSON production for " + avalancheReport.getRegion().getId() + " started");
+			JsonUtil.createJsonFile(avalancheReport);
+			if (avalancheReport.getId() != null)
+				AvalancheReportController.getInstance().setAvalancheReportJsonFlag(avalancheReport.getId());
+			logger.info("JSON production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
-			logger.error("Error producing JSON for " + region.getId(), e);
+			logger.error("Error producing JSON for " + avalancheReport.getRegion().getId(), e);
 			return false;
 		}
 	}

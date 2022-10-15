@@ -936,7 +936,8 @@ public class AvalancheBulletinService {
 
 			for (Region region: publishBulletinRegions) {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-				PublicationController.getInstance().createJson(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, ServerInstanceController.getInstance().getLocalServerInstance());
+				avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
+				PublicationController.getInstance().createJson(avalancheReport);
 			}
 
 			// copy files
