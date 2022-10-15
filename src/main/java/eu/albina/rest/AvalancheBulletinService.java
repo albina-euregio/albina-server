@@ -431,27 +431,19 @@ public class AvalancheBulletinService {
 				}
 				Collections.sort(bulletins);
 
-				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-				String publicationTimeString = AlbinaUtil.getZonedDateTimeNowNoNanos().format(AlbinaUtil.formatterPublicationTime);
-				java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
 				ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-				serverInstance.setMapsPath(outputDirectory.toString());
-				serverInstance.setPdfDirectory(outputDirectory.toString());
+				serverInstance.setMapsPath(GlobalVariables.getTmpPdfDirectory());
+				serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
 				AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 				avalancheReport.setStatus(BulletinStatus.draft); // preview
 
 				MapUtil.createMapyrusMaps(avalancheReport);
 
-				new PdfUtil(avalancheReport, language, false).createPdf();
-
-				String filename = validityDateString + "_" + region.getId() + "_" + language.toString() + ".pdf";
-
-				File file = new File(GlobalVariables.getTmpPdfDirectory() + System.getProperty("file.separator")
-				+ validityDateString + System.getProperty("file.separator") + publicationTimeString
-				+ System.getProperty("file.separator") + filename);
+				final java.nio.file.Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
+				File file = pdf.toFile();
 
 				return Response.ok(file).header(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=\"" + filename + "\"").header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
+					"attachment; filename=\"" + pdf.getFileName() + "\"").header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
 			} else {
 				return Response.noContent().build();
 			}

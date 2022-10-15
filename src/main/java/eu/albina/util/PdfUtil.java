@@ -112,7 +112,7 @@ public class PdfUtil {
 		this.grayscale = grayscale;
 	}
 
-	public void createPdf() throws IOException {
+	public Path createPdf() throws IOException {
 		Path pdfDirectory = avalancheReport.getPdfDirectory();
 		Files.createDirectories(pdfDirectory);
 		Path path = pdfDirectory.resolve(avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_"
@@ -142,6 +142,7 @@ public class PdfUtil {
 			}
 
 			AlbinaUtil.setFilePermissions(path.toString());
+			return path;
 		} catch (com.itextpdf.io.IOException e) {
 			throw new IOException(e);
 		}
