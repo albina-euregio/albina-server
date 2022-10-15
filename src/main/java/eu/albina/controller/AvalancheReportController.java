@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import com.google.common.base.Strings;
 import org.hibernate.Hibernate;
@@ -779,82 +780,13 @@ public class AvalancheReportController {
 		return entity;
 	}
 
-	public void setAvalancheReportEmailFlag(String avalancheReportId) {
+	public void setAvalancheReportFlag(String avalancheReportId, Consumer<AvalancheReport> flagSetter) {
+		if (avalancheReportId == null) {
+			return;
+		}
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setEmailCreated(true);
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	public void setAvalancheReportPdfFlag(String avalancheReportId) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setPdfCreated(true);
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	public void setAvalancheReportHtmlFlag(String avalancheReportId) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setHtmlCreated(true);
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	public void setAvalancheReportMapFlag(String avalancheReportId) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setMapCreated(true);
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	public void setAvalancheReportCaamlV5Flag(String avalancheReportId) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setCaamlV5Created(true);
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	public void setAvalancheReportCaamlV6Flag(String avalancheReportId) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setCaamlV6Created(true);
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	public void setAvalancheReportJsonFlag(String avalancheReportId) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setJsonCreated(true);
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	public void setAvalancheReportTelegramFlag(String avalancheReportId) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setTelegramSent(true);
-			entityManager.flush();
-			return null;
-		});
-	}
-
-	public void setAvalancheReportPushFlag(String avalancheReportId) {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport avalancheReport = entityManager.find(AvalancheReport.class, avalancheReportId);
-			avalancheReport.setPushSent(true);
+			flagSetter.accept(avalancheReport);
 			entityManager.flush();
 			return null;
 		});
