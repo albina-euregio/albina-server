@@ -44,11 +44,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.ServerInstance;
+import eu.albina.util.XmlUtil;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,8 +147,11 @@ public class AvalancheBulletinService {
 
 		try {
 			Region region = RegionController.getInstance().getRegion(regionId);
-			String caaml = AvalancheBulletinController.getInstance().getPublishedBulletinsCaaml(startDate, region,
-					language, MoreObjects.firstNonNull(version, CaamlVersion.V5), ServerInstanceController.getInstance().getLocalServerInstance());
+			AvalancheBulletinController.getInstance();
+			ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
+				Collections.singletonList(region));
+			AvalancheReport avalancheReport = AvalancheReport.of(result, region, ServerInstanceController.getInstance().getLocalServerInstance());
+			String caaml = XmlUtil.createCaaml(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
 				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 			} else {
@@ -163,11 +165,8 @@ public class AvalancheBulletinService {
 			} catch (Exception ex) {
 				return Response.status(400).type(MediaType.APPLICATION_XML).build();
 			}
-		} catch (TransformerException | ParserConfigurationException e) {
+		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_XML).build();
-		} catch (HibernateException e) {
-			logger.warn("No region with ID: " + regionId);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		}
 	}
@@ -900,8 +899,8 @@ public class AvalancheBulletinService {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 				avalancheReport.setBulletins(bulletins);
 				avalancheReport.setServerInstance(localServerInstance);
-				PublicationController.getInstance().createCaamlV5(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, localServerInstance);
-				PublicationController.getInstance().createCaamlV6(avalancheReport.getId(), bulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				PublicationController.getInstance().createCaamlV5(avalancheReport);
+				PublicationController.getInstance().createCaamlV6(avalancheReport);
 			}
 
 			// copy files

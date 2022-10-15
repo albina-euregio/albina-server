@@ -116,9 +116,9 @@ public class PublicationController {
 
 			// create CAAML
 			if (region.isCreateCaamlV5())
-				createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createCaamlV5(avalancheReport);
 			if (region.isCreateCaamlV6())
-				createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createCaamlV6(avalancheReport);
 
 			// create JSON
 			if (region.isCreateJson())
@@ -239,9 +239,9 @@ public class PublicationController {
 
 			// create CAAML
 			if (region.isCreateCaamlV5())
-				createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createCaamlV5(avalancheReport);
 			if (region.isCreateCaamlV6())
-				createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createCaamlV6(avalancheReport);
 
 			// create JSON
 			if (region.isCreateJson())
@@ -325,9 +325,9 @@ public class PublicationController {
 
 			// create CAAML
 			if (region.isCreateCaamlV5())
-				createCaamlV5(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createCaamlV5(avalancheReport);
 			if (region.isCreateCaamlV6())
-				createCaamlV6(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+				createCaamlV6(avalancheReport);
 
 			// create JSON
 			if (region.isCreateJson())
@@ -463,50 +463,34 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the CAAMLv5 (XML) files.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the CAAML file
-	 * @param validityDateString
-	 *            point in time when the validity of the bulletin starts
-	 * @param publicationTimeString
-	 *            date and time of publication
 	 */
-	public boolean createCaamlV5(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString, ServerInstance serverInstance) {
+	public boolean createCaamlV5(AvalancheReport avalancheReport) {
 		try {
-			logger.info("CAAMLv5 production for " + region.getId() + " started");
-			XmlUtil.createCaamlFiles(bulletins, region, validityDateString, publicationTimeString, CaamlVersion.V5, serverInstance);
-			if (avalancheReportId != null)
-				AvalancheReportController.getInstance().setAvalancheReportCaamlV5Flag(avalancheReportId);
-			logger.info("CAAMLv5 production for " + region.getId() + " finished");
+			logger.info("CAAMLv5 production for " + avalancheReport.getRegion().getId() + " started");
+			XmlUtil.createCaamlFiles(avalancheReport, CaamlVersion.V5);
+			if (avalancheReport.getId() != null)
+				AvalancheReportController.getInstance().setAvalancheReportCaamlV5Flag(avalancheReport.getId());
+			logger.info("CAAMLv5 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
-			logger.error("Error producing CAAMLv5 for " + region.getId(), e);
+			logger.error("Error producing CAAMLv5 for " + avalancheReport.getRegion().getId(), e);
 			return false;
 		}
 	}
 
 	/**
 	 * Trigger the creation of the CAAMLv6 (XML) files.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the CAAML file
-	 * @param validityDateString
-	 *            point in time when the validity of the bulletin starts
-	 * @param publicationTimeString
-	 *            date and time of publication
 	 */
-	public boolean createCaamlV6(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString, ServerInstance serverInstance) {
+	public boolean createCaamlV6(AvalancheReport avalancheReport) {
 		try {
-			logger.info("CAAMLv6 production for " + region.getId() + " started");
-			XmlUtil.createCaamlFiles(bulletins, region, validityDateString, publicationTimeString, CaamlVersion.V6, serverInstance);
-			if (avalancheReportId != null)
-				AvalancheReportController.getInstance().setAvalancheReportCaamlV6Flag(avalancheReportId);
-			logger.info("CAAMLv6 production for " + region.getId() + " finished");
+			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " started");
+			XmlUtil.createCaamlFiles(avalancheReport, CaamlVersion.V6);
+			if (avalancheReport.getId() != null)
+				AvalancheReportController.getInstance().setAvalancheReportCaamlV6Flag(avalancheReport.getId());
+			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
-			logger.error("Error producing CAAMLv6 for " + region.getId(), e);
+			logger.error("Error producing CAAMLv6 for " + avalancheReport.getRegion().getId(), e);
 			return false;
 		}
 	}
