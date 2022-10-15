@@ -1,7 +1,6 @@
 package eu.albina.map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -157,7 +156,8 @@ public class MapUtilTest {
 	public void testMapyrusMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(AvalancheReport.of(bulletins, regionEuregio, serverInstance));
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
+		MapUtil.createMapyrusMaps(avalancheReport);
 
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "EUREGIO_f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
@@ -166,23 +166,22 @@ public class MapUtilTest {
 			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> {
 			});
 		}
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.en, regionEuregio, serverInstance, false, false,
-			"2019-01-17", "2019-01-16_16-00-00", false);
+		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
 	}
 
 	@Test
 	public void testMapyrusMapsAran() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(AvalancheReport.of(bulletins, regionAran, serverInstance));
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
+		MapUtil.createMapyrusMaps(avalancheReport);
 
 		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		BufferedImage actual = ImageIO.read(new File(
 			serverInstance.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> {
 		});
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, serverInstance, false, false,
-			"2021-01-24", "2021-01-23_16-00-00", false);
+		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
 	}
 
 	@Test
@@ -190,9 +189,9 @@ public class MapUtilTest {
 	public void testMapyrusMapsAranVeryHigh() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(AvalancheReport.of(bulletins, regionAran, serverInstance));
-		PdfUtil.getInstance().createPdf(bulletins, LanguageCode.ca, regionAran, serverInstance, false, false,
-			"2021-12-10", "2021-12-09_16-06-27", false);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
+		MapUtil.createMapyrusMaps(avalancheReport);
+		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
 	}
 
 	@Test

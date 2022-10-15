@@ -437,13 +437,13 @@ public class AvalancheBulletinService {
 				java.nio.file.Path outputDirectory = Paths.get(GlobalVariables.getTmpMapsPath(), validityDateString, publicationTimeString);
 				ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 				serverInstance.setMapsPath(outputDirectory.toString());
+				serverInstance.setPdfDirectory(outputDirectory.toString());
 				AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 				avalancheReport.setStatus(BulletinStatus.draft); // preview
 
 				MapUtil.createMapyrusMaps(avalancheReport);
 
-				PdfUtil.getInstance().createPdf(bulletins, language, region, serverInstance, false, AlbinaUtil.hasDaytimeDependency(bulletins), validityDateString,
-							publicationTimeString, true);
+				new PdfUtil(avalancheReport, language, false).createPdf();
 
 				String filename = validityDateString + "_" + region.getId() + "_" + language.toString() + ".pdf";
 
@@ -770,8 +770,8 @@ public class AvalancheBulletinService {
 			for (Region region : publishBulletinRegions) {
 				try {
 					logger.info("PDF production for " + region.getId() + " started");
-					PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
-							publicationTimeString, localServerInstance);
+					AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, localServerInstance);
+					PdfUtil.createRegionPdfs(avalancheReport);
 				} finally {
 					logger.info("PDF production " + region.getId() + " finished");
 				}
@@ -855,6 +855,7 @@ public class AvalancheBulletinService {
 			for (Region region: publishBulletinRegions) {
 				try {
 					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+					avalancheReport.setServerInstance(localServerInstance);
 					PublicationController.getInstance().createMaps(avalancheReport);
 				} catch (InterruptedException e) {
 					logger.error("Map production for " + region.getId() + " interrupted", e);

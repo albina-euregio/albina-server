@@ -141,7 +141,7 @@ public class PublicationController {
 
 					// create pdfs
 					if (region.isCreatePdf()) {
-						Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+						Thread createPdfThread = createPdf(avalancheReport);
 						threads.put("pdf_" + region.getId(), createPdfThread);
 						createPdfThread.start();
 					}
@@ -264,7 +264,7 @@ public class PublicationController {
 
 					// create pdf
 					if (region.isCreatePdf()) {
-						Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+						Thread createPdfThread = createPdf(avalancheReport);
 						threads.put("pdf_" + region.getId(), createPdfThread);
 						createPdfThread.start();
 					}
@@ -350,7 +350,7 @@ public class PublicationController {
 
 					// create pdfs
 					if (region.isCreatePdf()) {
-						Thread createPdfThread = createPdf(avalancheReportId, regionBulletins, region, validityDateString, publicationTimeString, localServerInstance);
+						Thread createPdfThread = createPdf(avalancheReport);
 						threads.put("pdf_" + region.getId(), createPdfThread);
 						createPdfThread.start();
 					}
@@ -540,19 +540,17 @@ public class PublicationController {
 	 * @param validityDateString
 	 *            the start of the validity of the report
 	 */
-	public Thread createPdf(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString, ServerInstance serverInstance) {
+	public Thread createPdf(AvalancheReport avalancheReport) {
 		return new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					logger.info("PDF production for " + region.getId() + " started");
-					PdfUtil.getInstance().createRegionPdfs(bulletins, region, validityDateString,
-							publicationTimeString, serverInstance);
-					if (avalancheReportId != null)
-						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReportId);
+					logger.info("PDF production for " + avalancheReport.getRegion().getId() + " started");
+					PdfUtil.createRegionPdfs(avalancheReport);
+					if (avalancheReport.getId() != null)
+						AvalancheReportController.getInstance().setAvalancheReportPdfFlag(avalancheReport.getId());
 				} finally {
-					logger.info("PDF production " + region.getId() + " finished");
+					logger.info("PDF production " + avalancheReport.getRegion().getId() + " finished");
 				}
 			}
 		});

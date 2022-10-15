@@ -18,8 +18,9 @@ package eu.albina.util;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.List;
 
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.enumerations.BulletinStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,6 @@ import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Image;
 
-import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -49,18 +49,14 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEventHandler.class);
 
-	private final List<AvalancheBulletin> bulletins;
-	private final Region region;
+	private final AvalancheReport avalancheReport;
 	private final LanguageCode lang;
 	private final boolean grayscale;
-	private final boolean preview;
 
-	public AvalancheBulletinEventHandler(LanguageCode lang, Region region, List<AvalancheBulletin> bulletins, boolean grayscale, boolean preview) {
+	public AvalancheBulletinEventHandler(AvalancheReport avalancheReport, LanguageCode lang, boolean grayscale) {
+		this.avalancheReport = avalancheReport;
 		this.lang = lang;
-		this.region = region;
-		this.bulletins = bulletins;
 		this.grayscale = grayscale;
-		this.preview = preview;
 	}
 
 	@Override
@@ -72,7 +68,8 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			Rectangle pageSize = page.getPageSize();
 			PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
-			Color blue = grayscale ? blueColorBw : PdfUtil.getInstance().getColor(region.getPdfColor());
+			Region region = avalancheReport.getRegion();
+			Color blue = grayscale ? blueColorBw : PdfUtil.getColor(region.getPdfColor());
 
 			PdfFont openSansRegularFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Regular.ttf");
 			PdfFont openSansBoldFont = PdfUtil.createFont("fonts/open-sans/OpenSans-Bold.ttf");
@@ -82,8 +79,8 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			String headline = lang.getBundleString("website.name", region);
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 					.setColor(greyDarkColor, true).showText(headline).endText();
-			String date = AlbinaUtil.getDate(bulletins, lang);
-			if (preview) {
+			String date = AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
+			if (avalancheReport.getStatus() == BulletinStatus.draft) {
 				String preview = lang.getBundleString("preview");
 				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
 				.setColor(redColor, true).showText(date + preview).endText();
@@ -92,9 +89,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 				.setColor(blue, true).showText(date).endText();
 			}
 
-			String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
+			String publicationDate = AlbinaUtil.getPublicationDate(avalancheReport.getBulletins(), lang);
 			if (!publicationDate.isEmpty()) {
-				if (AlbinaUtil.isUpdate(bulletins))
+				if (AlbinaUtil.isUpdate(avalancheReport.getBulletins()))
 					pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
 							.setColor(greyDarkColor, true).showText(lang.getBundleString("updated") + publicationDate)
 							.endText();
@@ -126,9 +123,9 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add CI
 			Image ciImg;
 			if (grayscale)
-				ciImg = PdfUtil.getInstance().getImage(region.getImageColorbarBwPath());
+				ciImg = PdfUtil.getImage(region.getImageColorbarBwPath());
 			else
-				ciImg = PdfUtil.getInstance().getImage(region.getImageColorbarColorPath());
+				ciImg = PdfUtil.getImage(region.getImageColorbarColorPath());
 			ciImg.scaleAbsolute(pageSize.getWidth(), 4);
 			ciImg.setFixedPosition(0, pageSize.getHeight() - 4);
 			canvas.add(ciImg);
@@ -136,16 +133,16 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			// Add logo
 			Image logoImg;
 			if (grayscale)
-				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("logo.path.bw", region));
+				logoImg = PdfUtil.getImage(lang.getBundleString("logo.path.bw", region));
 			else
-				logoImg = PdfUtil.getInstance().getImage(lang.getBundleString("logo.path", region));
+				logoImg = PdfUtil.getImage(lang.getBundleString("logo.path", region));
 			logoImg.scaleToFit(130, 55);
 			logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
 			canvas.add(logoImg);
 
 			// Add secondary logo
 			if (region.isPdfFooterLogo()) {
-				Image footerImg = PdfUtil.getInstance().getImage(grayscale ? region.getPdfFooterLogoBwPath() : region.getPdfFooterLogoColorPath());
+				Image footerImg = PdfUtil.getImage(grayscale ? region.getPdfFooterLogoBwPath() : region.getPdfFooterLogoColorPath());
 				footerImg.scaleToFit(120, 40);
 				footerImg.setFixedPosition(15, 5);
 				canvas.add(footerImg);

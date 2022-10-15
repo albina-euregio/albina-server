@@ -289,6 +289,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		return Paths.get(serverInstance.getMapsPath(), validityDateString, publicationTimeString);
 	}
 
+	public Path getPdfDirectory() {
+		return Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString);
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -330,5 +334,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public Element toCAAML(Document doc, LanguageCode languageCode) {
 		return null;
+	}
+
+	public boolean hasDaytimeDependency() {
+		return AlbinaUtil.hasDaytimeDependency(getBulletins());
 	}
 }
