@@ -22,6 +22,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import eu.albina.model.AvalancheReport;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,7 +68,8 @@ public class SimpleHtmlUtilTest {
 	public void createSimpleHtmlString() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("2019-01-17.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.de, regionEuregio, serverInstanceEuregio).replaceAll("\\s*<", "\n<");
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
 		Assert.assertEquals(expected.trim(), htmlString.trim());
 	}
@@ -76,7 +78,8 @@ public class SimpleHtmlUtilTest {
 	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(bulletins, LanguageCode.ca, regionAran, serverInstanceAran);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.ca);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
 		Assert.assertEquals(expected.trim(), htmlString.trim());
 	}

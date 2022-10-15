@@ -135,7 +135,7 @@ public class PublicationController {
 
 					// create HTML
 					if (region.isCreateSimpleHtml()) {
-						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
+						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReport);
 						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
 						createSimpleHtmlThread.start();
 					}
@@ -258,7 +258,7 @@ public class PublicationController {
 
 					// create HTML
 					if (region.isCreateSimpleHtml()) {
-						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
+						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReport);
 						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
 						createSimpleHtmlThread.start();
 					}
@@ -344,7 +344,7 @@ public class PublicationController {
 
 					// create HTML
 					if (region.isCreateSimpleHtml()) {
-						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReportId, regionBulletins, region);
+						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReport);
 						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
 						createSimpleHtmlThread.start();
 					}
@@ -529,23 +529,20 @@ public class PublicationController {
 
 	/**
 	 * Trigger the creation of the simple html files.
-	 *
-	 * @param bulletins
-	 *            the bulletins contained in the html files
 	 */
-	public Thread createSimpleHtml(String avalancheReportId, List<AvalancheBulletin> bulletins, Region region) {
+	public Thread createSimpleHtml(AvalancheReport avalancheReport) {
 		return new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					logger.info("Simple HTML production for " + region.getId() + " started");
-					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(bulletins, region, ServerInstanceController.getInstance().getLocalServerInstance());
-					if (avalancheReportId != null)
-						AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReportId);
+					logger.info("Simple HTML production for " + avalancheReport.getRegion().getId() + " started");
+					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(avalancheReport);
+					if (avalancheReport.getId() != null)
+						AvalancheReportController.getInstance().setAvalancheReportHtmlFlag(avalancheReport.getId());
 				} catch (Exception e) {
-					logger.error("Error creating simple HTML for " + region.getId(), e);
+					logger.error("Error creating simple HTML for " + avalancheReport.getRegion().getId(), e);
 				} finally {
-					logger.info("Simple HTML production for " + region.getId() + " finished");
+					logger.info("Simple HTML production for " + avalancheReport.getRegion().getId() + " finished");
 				}
 			}
 		});

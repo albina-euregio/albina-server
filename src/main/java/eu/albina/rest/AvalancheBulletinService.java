@@ -807,7 +807,8 @@ public class AvalancheBulletinService {
 			Map<String, Thread> threads = new HashMap<String, Thread>();
 			for (Region region : publishBulletinRegions) {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-				Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(avalancheReport.getId(), bulletins, region);
+				avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
+				Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(avalancheReport);
 				threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
 				createSimpleHtmlThread.start();
 			}
