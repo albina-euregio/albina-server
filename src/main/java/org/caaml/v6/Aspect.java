@@ -1,5 +1,7 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * An aspect can be defined as a set of aspects. The aspects are the expositions as in a
  * eight part (45°) segments. The allowed aspects are the four main cardinal directions and
@@ -8,6 +10,7 @@ package org.caaml.v6;
 public enum Aspect {
     E, N, NE, NW, N_A, S, SE, SW, W;
 
+	@JsonValue
 	@Override
 	public String toString() {
         switch (this) {

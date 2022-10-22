@@ -1,8 +1,11 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum TendencyType {
     DECREASING, INCREASING, STEADY;
 
+	@JsonValue
 	@Override
 	public String toString() {
         switch (this) {

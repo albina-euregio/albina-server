@@ -1563,7 +1563,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		bulletin.setHighlights(getHighlightsIn(lang));
 		bulletin.setLang(lang.name());
 		bulletin.setMetaData(null);
-		bulletin.setPublicationTime(publicationDate);
+		bulletin.setPublicationTime(publicationDate.toInstant());
 		bulletin.setRegions(getPublishedRegions().stream()
 			.map(id -> new org.caaml.v6.Region(RegionController.getInstance().getRegionName(lang, id), id))
 			.collect(Collectors.toList()));
@@ -1571,7 +1571,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		bulletin.setSource(null);
 		bulletin.setTendency(new AvalancheSituationTendency(getTendencyCommentIn(lang), TendencyType.forValue(tendency.name())));
 		bulletin.setTravelAdvisory(new org.caaml.v6.Texts(getTravelAdvisoryHighlightsIn(lang), getTravelAdvisoryCommentIn(lang)));
-		bulletin.setValidTime(new ValidTime(validFrom, validUntil));
+		bulletin.setValidTime(new ValidTime(validFrom.toInstant(), validUntil.toInstant()));
 		bulletin.setWxSynopsis(new org.caaml.v6.Texts(getSynopsisHighlightsIn(lang), getSynopsisCommentIn(lang)));
 		return bulletin;
 	}

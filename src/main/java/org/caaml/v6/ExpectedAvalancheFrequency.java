@@ -1,5 +1,7 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Expected frequency of lowest snowpack stability, according to the EAWS definition. Three
  * stage scale (few, some, many).
@@ -7,6 +9,7 @@ package org.caaml.v6;
 public enum ExpectedAvalancheFrequency {
     FEW, MANY, SOME;
 
+	@JsonValue
 	@Override
 	public String toString() {
         switch (this) {

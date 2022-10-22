@@ -1,11 +1,14 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Danger rating value, according to EAWS danger scale definition.
  */
 public enum DangerRatingValue {
     CONSIDERABLE, HIGH, LOW, MODERATE, NO_RATING, NO_SNOW, VERY_HIGH;
 
+	@JsonValue
 	@Override
 	public String toString() {
         switch (this) {

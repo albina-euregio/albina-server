@@ -10,30 +10,30 @@
       "elevation" : {
         "lowerBound" : "1600"
       },
-      "mainValue" : "CONSIDERABLE",
-      "validTimePeriod" : "EARLIER"
+      "mainValue" : "considerable",
+      "validTimePeriod" : "earlier"
     }, {
       "elevation" : {
         "lowerBound" : "1600"
       },
-      "mainValue" : "CONSIDERABLE",
-      "validTimePeriod" : "EARLIER"
+      "mainValue" : "considerable",
+      "validTimePeriod" : "earlier"
     }, {
       "elevation" : {
         "upperBound" : "1600"
       },
-      "mainValue" : "CONSIDERABLE",
-      "validTimePeriod" : "LATER"
+      "mainValue" : "considerable",
+      "validTimePeriod" : "later"
     }, {
       "elevation" : {
         "lowerBound" : "1600"
       },
-      "mainValue" : "HIGH",
-      "validTimePeriod" : "LATER"
+      "mainValue" : "high",
+      "validTimePeriod" : "later"
     } ],
     "highlights" : " Many starting zones have released the snow but not entirely.",
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-07",
       "regionID" : "Texel Mountains"
@@ -64,12 +64,12 @@
     },
     "tendency" : {
       "highlights" : " Gradual decrease in avalanche danger.",
-      "tendencyType" : "DECREASING"
+      "tendencyType" : "decreasing"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -83,17 +83,17 @@
       "elevation" : {
         "upperBound" : "2000"
       },
-      "mainValue" : "LOW",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "low",
+      "validTimePeriod" : "all_day"
     }, {
       "elevation" : {
         "lowerBound" : "2000"
       },
-      "mainValue" : "MODERATE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "moderate",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-18",
       "regionID" : "Gröden Dolomites"
@@ -109,12 +109,12 @@
     },
     "tendency" : {
       "highlights" : " Moderate, level 2.",
-      "tendencyType" : "STEADY"
+      "tendencyType" : "steady"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -128,17 +128,17 @@
       "elevation" : {
         "upperBound" : "2300"
       },
-      "mainValue" : "LOW",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "low",
+      "validTimePeriod" : "all_day"
     }, {
       "elevation" : {
         "lowerBound" : "2300"
       },
-      "mainValue" : "MODERATE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "moderate",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-TN-02",
       "regionID" : "Southern Adamello"
@@ -157,12 +157,12 @@
     },
     "tendency" : {
       "highlights" : " The avalanche danger will persist.",
-      "tendencyType" : "STEADY"
+      "tendencyType" : "steady"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -182,17 +182,17 @@
       "elevation" : {
         "upperBound" : "1800"
       },
-      "mainValue" : "CONSIDERABLE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "considerable",
+      "validTimePeriod" : "all_day"
     }, {
       "elevation" : {
         "lowerBound" : "1800"
       },
-      "mainValue" : "HIGH",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "high",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "AT-07-10",
       "regionID" : "Western Verwall Mountains"
@@ -274,12 +274,12 @@
     },
     "tendency" : {
       "highlights" : " Further decrease in avalanche danger.",
-      "tendencyType" : "DECREASING"
+      "tendencyType" : "decreasing"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -296,17 +296,17 @@
       "elevation" : {
         "upperBound" : "2000"
       },
-      "mainValue" : "LOW",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "low",
+      "validTimePeriod" : "all_day"
     }, {
       "elevation" : {
         "lowerBound" : "2000"
       },
-      "mainValue" : "MODERATE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "moderate",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "AT-07-29",
       "regionID" : "Lienzer Dolomites"
@@ -316,12 +316,12 @@
     },
     "tendency" : {
       "highlights" : " Slight decrease in avalanche danger.",
-      "tendencyType" : "DECREASING"
+      "tendencyType" : "decreasing"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -335,17 +335,17 @@
       "elevation" : {
         "upperBound" : "treeline"
       },
-      "mainValue" : "LOW",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "low",
+      "validTimePeriod" : "all_day"
     }, {
       "elevation" : {
         "lowerBound" : "treeline"
       },
-      "mainValue" : "CONSIDERABLE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "considerable",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-08",
       "regionID" : "Sarntal Alps"
@@ -361,12 +361,12 @@
     },
     "tendency" : {
       "highlights" : " Fresh wind slabs represent the main danger.",
-      "tendencyType" : "DECREASING"
+      "tendencyType" : "decreasing"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -380,17 +380,17 @@
       "elevation" : {
         "upperBound" : "2200"
       },
-      "mainValue" : "LOW",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "low",
+      "validTimePeriod" : "all_day"
     }, {
       "elevation" : {
         "lowerBound" : "2200"
       },
-      "mainValue" : "MODERATE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "moderate",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-TN-13",
       "regionID" : "Primiero - Pale di S. Martino"
@@ -415,12 +415,12 @@
     },
     "tendency" : {
       "highlights" : " Moderate, level 2.",
-      "tendencyType" : "STEADY"
+      "tendencyType" : "steady"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -431,11 +431,11 @@
     "bulletinID" : "c06be44f-9ec4-4e78-b534-2e3f87f7aa3d",
     "customData" : [ ],
     "dangerRatings" : [ {
-      "mainValue" : "LOW",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "low",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-TN-12",
       "regionID" : "Prealps"
@@ -475,12 +475,12 @@
     },
     "tendency" : {
       "highlights" : " Low, level 1.",
-      "tendencyType" : "STEADY"
+      "tendencyType" : "steady"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -494,17 +494,17 @@
       "elevation" : {
         "upperBound" : "1800"
       },
-      "mainValue" : "MODERATE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "moderate",
+      "validTimePeriod" : "all_day"
     }, {
       "elevation" : {
         "lowerBound" : "1800"
       },
-      "mainValue" : "CONSIDERABLE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "considerable",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-09",
       "regionID" : "Western Pfunderer Mountains"
@@ -523,12 +523,12 @@
     },
     "tendency" : {
       "highlights" : " Fresh wind slabs represent the main danger.",
-      "tendencyType" : "STEADY"
+      "tendencyType" : "steady"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -548,17 +548,17 @@
       "elevation" : {
         "upperBound" : "treeline"
       },
-      "mainValue" : "MODERATE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "moderate",
+      "validTimePeriod" : "all_day"
     }, {
       "elevation" : {
         "lowerBound" : "treeline"
       },
-      "mainValue" : "CONSIDERABLE",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "considerable",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "AT-07-27",
       "regionID" : "Eastern Deferegger Alps"
@@ -574,12 +574,12 @@
     },
     "tendency" : {
       "highlights" : " Further decrease in avalanche danger.",
-      "tendencyType" : "DECREASING"
+      "tendencyType" : "decreasing"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   }, {
@@ -590,11 +590,11 @@
     "bulletinID" : "vfd074b7-c2dd-4da8-8d7d-038471d4b5a9",
     "customData" : [ ],
     "dangerRatings" : [ {
-      "mainValue" : "LOW",
-      "validTimePeriod" : "ALL_DAY"
+      "mainValue" : "low",
+      "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2019-01-15T16:00Z",
+    "publicationTime" : "2019-01-15T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-16",
       "regionID" : "Eastern Nonsberger Alps"
@@ -607,12 +607,12 @@
     },
     "tendency" : {
       "highlights" : " Low, level 1.",
-      "tendencyType" : "STEADY"
+      "tendencyType" : "steady"
     },
     "travelAdvisory" : { },
     "validTime" : {
-      "endTime" : "2019-01-16T23:00Z",
-      "startTime" : "2019-01-15T23:00Z"
+      "endTime" : "2019-01-16T23:00:00Z",
+      "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
   } ]

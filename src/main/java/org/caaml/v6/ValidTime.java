@@ -3,7 +3,7 @@ package org.caaml.v6;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 /**
  * Valid time defines two ISO 8601 timestamps in UTC or with time zone information.
@@ -13,21 +13,21 @@ import java.time.ZonedDateTime;
  */
 public class ValidTime {
 	@JsonSerialize(using = ToStringSerializer.class)
-    private ZonedDateTime endTime;
+    private Instant endTime;
 	@JsonSerialize(using = ToStringSerializer.class)
-    private ZonedDateTime startTime;
+    private Instant startTime;
 
 	public ValidTime() {
 	}
 
-	public ValidTime(ZonedDateTime startTime, ZonedDateTime endTime) {
+	public ValidTime(Instant startTime, Instant endTime) {
 		this.endTime = endTime;
 		this.startTime = startTime;
 	}
 
-	public ZonedDateTime getEndTime() { return endTime; }
-    public void setEndTime(ZonedDateTime value) { this.endTime = value; }
+	public Instant getEndTime() { return endTime; }
+    public void setEndTime(Instant value) { this.endTime = value; }
 
-    public ZonedDateTime getStartTime() { return startTime; }
-    public void setStartTime(ZonedDateTime value) { this.startTime = value; }
+    public Instant getStartTime() { return startTime; }
+    public void setStartTime(Instant value) { this.startTime = value; }
 }

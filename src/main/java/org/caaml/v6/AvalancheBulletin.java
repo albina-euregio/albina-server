@@ -3,7 +3,7 @@ package org.caaml.v6;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ public class AvalancheBulletin {
     private String lang;
     private MetaData metaData;
 	@JsonSerialize(using = ToStringSerializer.class)
-    private ZonedDateTime publicationTime;
+    private Instant publicationTime;
     private List<Region> regions;
     private Texts snowpackStructure;
     private AvalancheBulletinSource source;
@@ -74,8 +74,8 @@ public class AvalancheBulletin {
      * Time and date when the bulletin was issued by the AWS to the Public. ISO 8601 timestamp
      * in UTC or with time zone information.
      */
-    public ZonedDateTime getPublicationTime() { return publicationTime; }
-    public void setPublicationTime(ZonedDateTime value) { this.publicationTime = value; }
+    public Instant getPublicationTime() { return publicationTime; }
+    public void setPublicationTime(Instant value) { this.publicationTime = value; }
 
     /**
      * Collection of region elements for which this bulletin is valid.

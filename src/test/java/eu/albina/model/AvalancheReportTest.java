@@ -1,12 +1,14 @@
 package eu.albina.model;
 
 import com.google.common.io.Resources;
+import eu.albina.json.JsonValidator;
 import eu.albina.model.enumerations.LanguageCode;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -25,6 +27,7 @@ public class AvalancheReportTest {
 		final String caaml = buildCAAML("2019-01-16.json");
 		final String expected = Resources.toString(Resources.getResource("2019-01-16.caaml.v6.json"), StandardCharsets.UTF_8);
 		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
 	}
 
 	@Test
@@ -32,5 +35,6 @@ public class AvalancheReportTest {
 		final String caaml = buildCAAML("2019-01-17.json");
 		final String expected = Resources.toString(Resources.getResource("2019-01-17.caaml.v6.json"), StandardCharsets.UTF_8);
 		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
 	}
 }

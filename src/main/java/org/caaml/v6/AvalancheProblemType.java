@@ -1,11 +1,14 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Expected avalanche problem, according to the EAWS avalanche problem definition.
  */
 public enum AvalancheProblemType {
     CORNICES, FAVOURABLE_SITUATION, GLIDING_SNOW, NEW_SNOW, NO_DISTINCT_AVALANCHE_PROBLEM, PERSISTENT_WEAK_LAYERS, WET_SNOW, WIND_SLAB;
 
+	@JsonValue
 	@Override
 	public String toString() {
         switch (this) {
