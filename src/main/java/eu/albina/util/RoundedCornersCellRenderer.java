@@ -16,11 +16,12 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import com.itextpdf.kernel.color.Color;
-import com.itextpdf.kernel.color.DeviceRgb;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.renderer.CellRenderer;
 import com.itextpdf.layout.renderer.DrawContext;
 import com.itextpdf.layout.renderer.IRenderer;
@@ -36,8 +37,7 @@ public class RoundedCornersCellRenderer extends CellRenderer {
 	@Override
 	public void drawBorder(DrawContext drawContext) {
 		Rectangle occupiedAreaBBox = getOccupiedAreaBBox();
-		float[] margins = getMargins();
-		Rectangle rectangle = applyMargins(occupiedAreaBBox, margins, false);
+		Rectangle rectangle = applyMargins(occupiedAreaBBox, getMargins(), false);
 		PdfCanvas canvas = drawContext.getCanvas();
 		canvas.roundRectangle(rectangle.getX() - 5, rectangle.getY() + 2, rectangle.getWidth() + 10,
 				rectangle.getHeight() - 4, 8).setColor(greyDarkColor, false).setLineWidth(0.5f).stroke();
@@ -50,7 +50,7 @@ public class RoundedCornersCellRenderer extends CellRenderer {
 	}
 
 	@Override
-	protected Rectangle applyMargins(Rectangle rect, float[] margins, boolean reverse) {
-		return rect.<Rectangle>applyMargins(margins[0], margins[1], margins[2], margins[3], reverse);
+	protected Rectangle applyMargins(Rectangle rect, UnitValue[] margins, boolean reverse) {
+		return rect.applyMargins(margins[0].getValue(), margins[1].getValue(), margins[2].getValue(), margins[3].getValue(), reverse);
 	}
 }

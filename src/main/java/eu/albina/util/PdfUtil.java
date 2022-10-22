@@ -28,6 +28,8 @@ import java.util.Set;
 import com.google.common.io.Resources;
 
 import eu.albina.map.MapImageFormat;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.layout.properties.UnitValue;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -37,8 +39,8 @@ import org.slf4j.LoggerFactory;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.color.Color;
-import com.itextpdf.kernel.color.DeviceRgb;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -53,17 +55,17 @@ import com.itextpdf.kernel.pdf.WriterProperties;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.border.Border;
-import com.itextpdf.layout.border.SolidBorder;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
-import com.itextpdf.layout.property.HorizontalAlignment;
-import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.layout.property.VerticalAlignment;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
 import com.itextpdf.layout.renderer.DocumentRenderer;
 
 import eu.albina.model.AvalancheBulletin;
@@ -78,11 +80,11 @@ public class PdfUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PdfUtil.class);
 
-	public static final Color blackColor = Color.BLACK;
+	public static final Color blackColor = ColorConstants.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
-	public static final Color whiteColor = Color.WHITE;
+	public static final Color whiteColor = ColorConstants.WHITE;
 	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
-	public static final Color redColor = Color.RED;
+	public static final Color redColor = ColorConstants.RED;
 
 	public static final Color dangerLevel1Color = new DeviceRgb(197, 255, 118);
 	public static final Color dangerLevel2Color = new DeviceRgb(255, 255, 70);
@@ -143,14 +145,12 @@ public class PdfUtil {
 
 			AlbinaUtil.setFilePermissions(path.toString());
 			return path;
-		} catch (com.itextpdf.io.IOException e) {
-			throw new IOException(e);
 		}
 	}
 
 	public static PdfFont createFont(String resource) throws IOException {
 		final byte[] ttf = Resources.toByteArray(Resources.getResource(resource));
-		return PdfFontFactory.createFont(ttf, PdfEncodings.WINANSI, true);
+		return PdfFontFactory.createFont(ttf, PdfEncodings.WINANSI);
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class PdfUtil {
 
 		float[] columnWidths = { 1 };
 		Table table = new Table(columnWidths).setBorder(null);
-		table.setWidthPercent(100);
+		table.setWidth(UnitValue.createPercentValue(100));
 		Cell cell;
 
 		Paragraph dangerRatingHeadline = new Paragraph(
@@ -953,7 +953,7 @@ public class PdfUtil {
 		PdfPage page = pdf.addNewPage();
 		Rectangle pageSize = page.getPageSize();
 		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdf);
-		Canvas canvas = new Canvas(pdfCanvas, pdf, page.getPageSize());
+		Canvas canvas = new Canvas(pdfCanvas, page.getPageSize());
 
 		int mapY;
 		int mapWidth;

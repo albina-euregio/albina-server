@@ -16,9 +16,9 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import com.itextpdf.layout.border.Border;
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.property.VerticalAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
 import com.itextpdf.layout.renderer.IRenderer;
 
 public class RoundedCornersCell extends Cell {
