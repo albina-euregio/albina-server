@@ -143,12 +143,7 @@ public class AuthenticationController {
 	 * @return <code>true</code> if the user is in the given role
 	 */
 	public boolean isUserInRole(String role, String username) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			User user = entityManager.find(User.class, username);
-			if (user == null) {
-				throw new HibernateException("No user with username: " + username);
-			}
-			return user.getRoles().stream().anyMatch(userRole -> userRole.equals(Role.fromString(role)));
-		});
+		User user = UserController.getInstance().getUser(username);
+		return user.getRoles().stream().anyMatch(userRole -> userRole.equals(Role.fromString(role)));
 	}
 }
