@@ -280,4 +280,8 @@ public class User {
 	public boolean hasPermissionForRegion(String regionId) {
 		return getRegions().stream().anyMatch(region -> region.getId().equals(regionId));
 	}
+
+	public boolean hasRole(Role role) {
+		return getRoles().stream().anyMatch(userRole -> userRole.equals(role));
+	}
 }

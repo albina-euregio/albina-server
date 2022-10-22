@@ -218,6 +218,22 @@ public class UserController {
 		});
 	}
 
+	/**
+	 * Checks if the credentials belong to a registered user.
+	 *
+	 * @param username
+	 *            the username
+	 * @param password
+	 *            the password
+	 * @throws AlbinaException
+	 *             if the credentials are not valid
+	 */
+	public void authenticate(String username, String password) throws Exception {
+		User user = getUser(username);
+		if (!BCrypt.checkpw(password, user.getPassword()))
+			throw new AlbinaException("Password not correct!");
+	}
+
 	public static void delete(String id) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			User user = entityManager.find(User.class, id);

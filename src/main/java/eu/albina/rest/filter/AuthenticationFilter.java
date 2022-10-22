@@ -29,6 +29,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
+import eu.albina.controller.UserController;
+import eu.albina.model.User;
+import eu.albina.model.enumerations.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,7 +87,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 				@Override
 				public boolean isUserInRole(String role) {
-					return AuthenticationController.getInstance().isUserInRole(role, decodedToken.getSubject());
+					User user = UserController.getInstance().getUser(decodedToken.getSubject());
+					return user.hasRole(Role.fromString(role));
 				}
 
 				@Override
