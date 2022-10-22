@@ -57,8 +57,8 @@ public class StatisticsService {
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Produces("text/csv")
 	public Response getBulletinCsv(
-			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("startDate") String startDate,
-			@ApiParam(value = "End date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("endDate") String endDate,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate,
 			@QueryParam("lang") LanguageCode language, @QueryParam("extended") boolean extended,
 			@QueryParam("duplicate") boolean duplicate) {
 		logger.debug("GET CSV bulletins");

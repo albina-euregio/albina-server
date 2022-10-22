@@ -1087,7 +1087,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response triggerPushNotifications(@QueryParam("region") String regionId,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
 			if (regionId == null)
@@ -1124,7 +1124,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response triggerTestPushNotifications(@QueryParam("region") String regionId,
-			@ApiParam(value = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
 			if (regionId == null)
