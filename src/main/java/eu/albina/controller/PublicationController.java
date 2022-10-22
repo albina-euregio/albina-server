@@ -49,7 +49,6 @@ import eu.albina.util.PdfUtil;
 import eu.albina.util.PushNotificationUtil;
 import eu.albina.util.SimpleHtmlUtil;
 import eu.albina.util.TelegramChannelUtil;
-import eu.albina.util.XmlUtil;
 
 /**
  * Controller for avalanche reports.
@@ -460,7 +459,7 @@ public class PublicationController {
 	public boolean createCaamlV5(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv5 production for " + avalancheReport.getRegion().getId() + " started");
-			XmlUtil.createCaamlFiles(avalancheReport, CaamlVersion.V5);
+			avalancheReport.toCAAML(CaamlVersion.V5);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setCaamlV5Created);
 			logger.info("CAAMLv5 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
@@ -476,7 +475,7 @@ public class PublicationController {
 	public boolean createCaamlV6(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " started");
-			XmlUtil.createCaamlFiles(avalancheReport, CaamlVersion.V6);
+			avalancheReport.toCAAML(CaamlVersion.V6);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
