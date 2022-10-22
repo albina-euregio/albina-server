@@ -45,6 +45,7 @@ public class AvalancheBulletinUpdateEndpoint {
 	@OnOpen
 	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
+		this.session.setMaxIdleTimeout(0); // never timeout due to inactivity
 		updateEndpoints.add(this);
         logger.info("Client connected: {}", username);
 	}

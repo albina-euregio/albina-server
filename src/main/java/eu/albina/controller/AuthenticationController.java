@@ -22,8 +22,6 @@ import java.time.LocalDate;
 import java.util.Date;
 
 import eu.albina.util.AlbinaUtil;
-import org.hibernate.HibernateException;
-import org.mindrot.jbcrypt.BCrypt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -32,9 +30,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.User;
-import eu.albina.model.enumerations.Role;
-import eu.albina.util.HibernateUtil;
 
 /**
  * Controller handling the authentication and authorization.
@@ -82,22 +77,6 @@ public class AuthenticationController {
 	}
 
 	/**
-	 * Checks if the credentials belong to a registered user.
-	 *
-	 * @param username
-	 *            the username
-	 * @param password
-	 *            the password
-	 * @throws AlbinaException
-	 *             if the credentials are not valid
-	 */
-	public void authenticate(String username, String password) throws Exception {
-		User user = UserController.getInstance().getUser(username);
-		if (!BCrypt.checkpw(password, user.getPassword()))
-			throw new AlbinaException("Password not correct!");
-	}
-
-	/**
 	 * Creates an access token for the given user.
 	 *
 	 * @param username
@@ -133,22 +112,4 @@ public class AuthenticationController {
 		}
 	}
 
-	/**
-	 * Checks if a user in a given role.
-	 *
-	 * @param role
-	 *            the role to be checked if the user is in
-	 * @param username
-	 *            the user to be checked
-	 * @return <code>true</code> if the user is in the given role
-	 */
-	public boolean isUserInRole(String role, String username) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			User user = entityManager.find(User.class, username);
-			if (user == null) {
-				throw new HibernateException("No user with username: " + username);
-			}
-			return user.getRoles().stream().anyMatch(userRole -> userRole.equals(Role.fromString(role)));
-		});
-	}
 }

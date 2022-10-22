@@ -50,6 +50,7 @@ public class ChatEndpoint {
 	@OnOpen
 	public void onOpen(Session session, @PathParam("username") String username) {
 		this.session = session;
+		this.session.setMaxIdleTimeout(0); // never timeout due to inactivity
 		chatEndpoints.add(this);
 		users.put(session.getId(), username);
 

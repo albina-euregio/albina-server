@@ -69,7 +69,7 @@ public class MediaFileService {
 	@Secured({ Role.ADMIN, Role.FORECASTER})
 	@Consumes({ MediaType.MULTIPART_FORM_DATA })
 	public Response saveMediaFile(
-		@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String dateString,
+		@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
 		@QueryParam("region") String regionId,
 		@QueryParam("lang") LanguageCode language,
 		@QueryParam("important") boolean important,
@@ -77,12 +77,12 @@ public class MediaFileService {
         @FormDataParam("file") InputStream uploadedInputStream,
 		@Context SecurityContext securityContext) {
 		try {
-			
+
 			if (regionId == null) {
 				logger.warn("Region for media file not defined!");
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity("Region for media file not defined!").build();
 			}
-			
+
 			Region region = RegionController.getInstance().getRegion(regionId);
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 

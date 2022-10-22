@@ -56,7 +56,7 @@ public class AuthenticationService {
 		String password = credentials.getPassword();
 
 		try {
-			AuthenticationController.getInstance().authenticate(username, password);
+			UserController.getInstance().authenticate(username, password);
 			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
 
 			User user = UserController.getInstance().getUser(username);
