@@ -1,7 +1,7 @@
 package org.caaml.v6;
 
 /**
- * Region element describes a (micro) region. The regionID follows the EAWS schema. It is
+ * Region element describes a (micro) region. The regionId follows the EAWS schema. It is
  * recommended to have the region shape's files with the same IDs in
  * gitlab.com/eaws/eaws-regions. Additionally, the region name can be added.
  */
@@ -9,14 +9,15 @@ public class Region {
     private Object customData;
     private MetaData metaData;
     private String name;
-    private String regionID;
+    // FIXME regionID (consistency with bulletinID)
+    private String regionId;
 
 	public Region() {
 	}
 
-	public Region(String regionID, String name) {
+	public Region(String regionId, String name) {
 		this.name = name;
-		this.regionID = regionID;
+		this.regionId = regionId;
 	}
 
 	public Object getCustomData() { return customData; }
@@ -28,6 +29,6 @@ public class Region {
     public String getName() { return name; }
     public void setName(String value) { this.name = value; }
 
-    public String getRegionID() { return regionID; }
-    public void setRegionID(String value) { this.regionID = value; }
+    public String getRegionId() { return regionId; }
+    public void setRegionId(String value) { this.regionId = value; }
 }
