@@ -7,15 +7,6 @@
     "bulletinID" : "a19bd3dc-85df-448f-be5e-f88f0c14ed4f",
     "customData" : [ ],
     "dangerRatings" : [ {
-      "elevation" : {
-        "lowerBound" : "1600"
-      },
-      "mainValue" : "considerable",
-      "validTimePeriod" : "earlier"
-    }, {
-      "elevation" : {
-        "lowerBound" : "1600"
-      },
       "mainValue" : "considerable",
       "validTimePeriod" : "earlier"
     }, {

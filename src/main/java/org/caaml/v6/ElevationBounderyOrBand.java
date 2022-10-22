@@ -1,5 +1,7 @@
 package org.caaml.v6;
 
+import java.util.Objects;
+
 /**
  * Elevation describes either an elevation range below a certain bound (only upperBound is
  * set to a value) or above a certain bound (only lowerBound is set to a value). If both
@@ -25,4 +27,17 @@ public class ElevationBounderyOrBand {
 
     public String getUpperBound() { return upperBound; }
     public void setUpperBound(String value) { this.upperBound = value; }
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ElevationBounderyOrBand that = (ElevationBounderyOrBand) o;
+		return Objects.equals(lowerBound, that.lowerBound) && Objects.equals(upperBound, that.upperBound);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(lowerBound, upperBound);
+	}
 }

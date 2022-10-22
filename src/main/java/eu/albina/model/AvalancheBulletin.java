@@ -1583,7 +1583,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	private org.caaml.v6.DangerRating getDangerRating(AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
 		org.caaml.v6.DangerRating result = new org.caaml.v6.DangerRating();
-		if (!daytime.isHasElevationDependency()) {
+		if (!daytime.isHasElevationDependency() || Objects.equals(daytime.getDangerRatingBelow(), daytime.getDangerRatingAbove())) {
 			result.setMainValue(DangerRatingValue.forValue(daytime.getDangerRatingAbove().name()));
 			result.setElevation(null);
 		} else if (rating == daytime.getDangerRatingAbove()) {
