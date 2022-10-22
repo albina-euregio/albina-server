@@ -465,10 +465,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public String getTextPartIn(TextPart textPart, LanguageCode lang) {
 		Texts texts = textPartsMap.get(textPart);
-		if (texts != null)
-			return texts.getText(lang);
-		else
+		if (texts == null) {
 			return null;
+		}
+		String text = texts.getText(lang);
+		if (text == null) {
+			return null;
+		}
+		return text.trim();
 	}
 
 	public String getHighlightsIn(LanguageCode lang) {
