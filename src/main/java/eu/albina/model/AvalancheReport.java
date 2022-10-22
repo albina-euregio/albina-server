@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,11 +35,15 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.transform.TransformerException;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.XmlUtil;
+import org.caaml.v6.AvalancheBulletins;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -338,6 +343,17 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void toCAAML(CaamlVersion version) throws TransformerException, IOException {
 		XmlUtil.createCaamlFiles(this, version);
+	}
+
+	public org.caaml.v6.AvalancheBulletins toCAAMLv6_2022(LanguageCode lang) {
+		return new AvalancheBulletins(bulletins.stream().map(b -> b.toCAAMLv6_2022(lang)).collect(Collectors.toList()));
+	}
+
+	public String toCAAMLv6String_2022(LanguageCode lang) throws JsonProcessingException {
+		return new ObjectMapper()
+			.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+			.writerWithDefaultPrettyPrinter()
+			.writeValueAsString(toCAAMLv6_2022(lang));
 	}
 
 	public boolean hasDaytimeDependency() {
