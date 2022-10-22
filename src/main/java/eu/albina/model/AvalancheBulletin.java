@@ -58,6 +58,7 @@ import eu.albina.map.MapUtil;
 import eu.albina.model.enumerations.DaytimeDependency;
 import com.google.common.collect.ImmutableMap;
 import eu.albina.controller.RegionController;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.LinkUtil;
 import com.google.common.base.Strings;
 import org.caaml.v6.AvalancheSituationTendency;
@@ -1556,7 +1557,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		bulletin.setBulletinID(id);
 		bulletin.setCustomData(Stream.of(dangerPattern1, dangerPattern2)
 			.filter(Objects::nonNull)
-			.map(dp -> ImmutableMap.of("custom_type", "dangerPattern", "content", dp.name().toUpperCase()))
+			.map(dp -> ImmutableMap.of("custom_type", "dangerPattern", "content", dp.name().toUpperCase(), "name", AlbinaUtil.getDangerPatternText(dp, lang)))
 			.collect(Collectors.toList()));
 		bulletin.setDangerRatings(Stream.of(forenoon, afternoon)
 			.filter(Objects::nonNull)

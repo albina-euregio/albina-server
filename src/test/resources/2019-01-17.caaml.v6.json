@@ -7,10 +7,12 @@
     "bulletinID" : "6385c958-018d-4c89-aa67-5eddc31ada5a",
     "customData" : [ {
       "custom_type" : "dangerPattern",
-      "content" : "DP6"
+      "content" : "DP6",
+      "name" : "dp.6: cold, loose snow and wind"
     }, {
       "custom_type" : "dangerPattern",
-      "content" : "DP2"
+      "content" : "DP2",
+      "name" : "dp.2: gliding snow"
     } ],
     "dangerRatings" : [ {
       "mainValue" : "considerable",
@@ -88,10 +90,12 @@
     "bulletinID" : "cd6faf0f-5188-4904-91cc-524c3a446b0c",
     "customData" : [ {
       "custom_type" : "dangerPattern",
-      "content" : "DP6"
+      "content" : "DP6",
+      "name" : "dp.6: cold, loose snow and wind"
     }, {
       "custom_type" : "dangerPattern",
-      "content" : "DP4"
+      "content" : "DP4",
+      "name" : "dp.4: cold following warm / warm following cold"
     } ],
     "dangerRatings" : [ {
       "elevation" : {
@@ -139,10 +143,12 @@
     "bulletinID" : "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd",
     "customData" : [ {
       "custom_type" : "dangerPattern",
-      "content" : "DP6"
+      "content" : "DP6",
+      "name" : "dp.6: cold, loose snow and wind"
     }, {
       "custom_type" : "dangerPattern",
-      "content" : "DP2"
+      "content" : "DP2",
+      "name" : "dp.2: gliding snow"
     } ],
     "dangerRatings" : [ {
       "elevation" : {
@@ -478,7 +484,8 @@
     "bulletinID" : "5bf03ed5-7cac-493b-aad4-f2bc4cb4ba34",
     "customData" : [ {
       "custom_type" : "dangerPattern",
-      "content" : "DP6"
+      "content" : "DP6",
+      "name" : "dp.6: cold, loose snow and wind"
     } ],
     "dangerRatings" : [ {
       "elevation" : {
