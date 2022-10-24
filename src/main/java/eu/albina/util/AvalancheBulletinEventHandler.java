@@ -80,7 +80,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 			pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 					.setColor(greyDarkColor, true).showText(headline).endText();
 			String date = AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
-			if (avalancheReport.getStatus() == BulletinStatus.draft) {
+			if (avalancheReport.getStatus().isDraftOrUpdated()) {
 				String preview = lang.getBundleString("preview");
 				pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
 				.setColor(redColor, true).showText(date + preview).endText();

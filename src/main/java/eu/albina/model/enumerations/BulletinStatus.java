@@ -21,6 +21,10 @@ import java.util.Arrays;
 public enum BulletinStatus {
 	republished, resubmitted, updated, published, submitted, draft, missing, test;
 
+	public boolean isDraftOrUpdated() {
+		return this == draft || this == updated;
+	}
+
 	public static BulletinStatus fromString(String text) {
 		if (text != null) {
 			return Arrays.stream(BulletinStatus.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);

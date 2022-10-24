@@ -109,7 +109,7 @@ public interface MapUtil {
 
 		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(avalancheReport.getBulletins())) {
 			try {
-				final SimpleBindings bindings = createMayrusBindings(avalancheReport.getBulletins(), daytimeDependency, avalancheReport.getStatus() == BulletinStatus.draft);
+				final SimpleBindings bindings = createMayrusBindings(avalancheReport.getBulletins(), daytimeDependency, avalancheReport.getStatus().isDraftOrUpdated());
 				for (MapLevel mapLevel : MapLevel.values()) {
 					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, false, bindings);
 					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, true, bindings);
@@ -118,10 +118,10 @@ public interface MapUtil {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					if (!(avalancheReport.getStatus() == BulletinStatus.draft) && !bulletin.affectsRegionOnlyPublished(avalancheReport.getRegion())) {
+					if (!(avalancheReport.getStatus().isDraftOrUpdated()) && !bulletin.affectsRegionOnlyPublished(avalancheReport.getRegion())) {
 						continue;
 					}
-					if (avalancheReport.getStatus() == BulletinStatus.draft && !bulletin.affectsRegionWithoutSuggestions(avalancheReport.getRegion())) {
+					if (avalancheReport.getStatus().isDraftOrUpdated() && !bulletin.affectsRegionWithoutSuggestions(avalancheReport.getRegion())) {
 						continue;
 					}
 					createMapyrusMaps(avalancheReport, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings);
@@ -137,7 +137,6 @@ public interface MapUtil {
 								  boolean grayscale, SimpleBindings dangerBindings) throws IOException, MapyrusException, InterruptedException {
 		final Region region = avalancheReport.getRegion();
 		final ServerInstance serverInstance = avalancheReport.getServerInstance();
-		final boolean preview = avalancheReport.getStatus() == BulletinStatus.draft;
 		final Path outputDirectory = avalancheReport.getMapsPath();
 		final Path outputFile = outputDirectory.resolve(bulletin == null
 			? filename(region, mapLevel, daytimeDependency, grayscale, MapImageFormat.pdf)
@@ -248,7 +247,7 @@ public interface MapUtil {
 			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
 
-		if (!preview) {
+		if (!avalancheReport.getStatus().isDraftOrUpdated()) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
 		}
 	}
