@@ -109,7 +109,7 @@ public interface MapUtil {
 
 		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(avalancheReport.getBulletins())) {
 			try {
-				final SimpleBindings bindings = createMayrusBindings(avalancheReport.getBulletins(), daytimeDependency, avalancheReport.getStatus().isDraftOrUpdated());
+				final SimpleBindings bindings = createMayrusBindings(avalancheReport.getBulletins(), daytimeDependency, BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus()));
 				for (MapLevel mapLevel : MapLevel.values()) {
 					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, false, bindings);
 					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, true, bindings);
@@ -118,10 +118,10 @@ public interface MapUtil {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}
-					if (!(avalancheReport.getStatus().isDraftOrUpdated()) && !bulletin.affectsRegionOnlyPublished(avalancheReport.getRegion())) {
+					if (!(BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) && !bulletin.affectsRegionOnlyPublished(avalancheReport.getRegion())) {
 						continue;
 					}
-					if (avalancheReport.getStatus().isDraftOrUpdated() && !bulletin.affectsRegionWithoutSuggestions(avalancheReport.getRegion())) {
+					if (BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus()) && !bulletin.affectsRegionWithoutSuggestions(avalancheReport.getRegion())) {
 						continue;
 					}
 					createMapyrusMaps(avalancheReport, MapLevel.thumbnail, daytimeDependency, bulletin, false, bindings);
@@ -247,7 +247,7 @@ public interface MapUtil {
 			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
 		}
 
-		if (!avalancheReport.getStatus().isDraftOrUpdated()) {
+		if (!BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
 		}
 	}
