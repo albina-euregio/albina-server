@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -524,10 +525,10 @@ public class EmailUtil {
 		// maps
 		if (isAfternoon)
 			bulletin.put("map", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + avalancheBulletin.getValidityDateString() + "/"
-					+ publicationTime + "/" + avalancheBulletin.getId() + "_PM.jpg");
+					+ publicationTime + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.pm, false, MapImageFormat.jpg));
 		else
 			bulletin.put("map", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + avalancheBulletin.getValidityDateString() + "/"
-					+ publicationTime + "/" + avalancheBulletin.getId() + ".jpg");
+					+ publicationTime + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.am, false, MapImageFormat.jpg));
 
 		// avalanche problems
 		bulletin.put("avalancheProblem1", createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, region, serverInstance));

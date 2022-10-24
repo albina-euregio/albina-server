@@ -92,7 +92,7 @@ public class EmailUtilTest {
 		assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
 		assertTrue(html.contains("Tendenz: Lawinengefahr nimmt ab</p><p style=\"text-align: left; margin-bottom: 0;\">am Freitag, den 18.01.2019"));
 		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/fd_AT-07_map.jpg"));
-		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/6385c958-018d-4c89-aa67-5eddc31ada5a.jpg"));
+		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/AT-07_6385c958-018d-4c89-aa67-5eddc31ada5a.jpg"));
 	}
 
 	@Test

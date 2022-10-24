@@ -12,7 +12,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jersey.version>2.33</jersey.version>
+		<jersey.version>2.35</jersey.version>
 		<jackson.version>2.11.3</jackson.version>
 		<log4j.version>2.19.0</log4j.version>
 		<slf4j.version>1.7.36</slf4j.version>
@@ -183,7 +183,7 @@
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-jersey2-jaxrs</artifactId>
-			<version>1.6.2</version>
+			<version>1.6.8</version>
 		</dependency>
 
 		<!-- JSON -->
@@ -256,7 +256,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.23</version>
+			<version>8.0.30</version>
 		</dependency>
 
 		<!-- testing -->
@@ -306,7 +306,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
-			<version>1.9</version>
+			<version>1.10.0</version>
 		</dependency>
 
 		<!--  json  -->
@@ -328,13 +328,13 @@
 		<dependency>
 			<groupId>io.sentry</groupId>
 			<artifactId>sentry</artifactId>
-			<version>5.5.2</version>
+			<version>6.5.0</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.sentry</groupId>
 			<artifactId>sentry-log4j2</artifactId>
-			<version>5.5.2</version>
+			<version>6.5.0</version>
 			<scope>runtime</scope>
 		</dependency>
 

@@ -38,6 +38,9 @@ import java.util.Map;
 import java.util.Set;
 
 import eu.albina.model.AvalancheReport;
+import eu.albina.map.MapImageFormat;
+import eu.albina.map.MapUtil;
+import eu.albina.model.enumerations.DaytimeDependency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -232,21 +235,21 @@ public class SimpleHtmlUtil {
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
 					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + ".jpg");
+							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.am, false, MapImageFormat.jpg));
 					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + ".webp");
+							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.am, false, MapImageFormat.webp));
 					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + "_PM.jpg");
+							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.pm, false, MapImageFormat.jpg));
 					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + "_PM.webp");
+							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.pm, false, MapImageFormat.webp));
 					bulletin.put("widthPM", "width=\"150\"");
 					bulletin.put("heightPMSmall", "height=\"50\"");
 					bulletin.put("fontSize", "");
 				} else {
 					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + ".jpg");
+							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.fd, false, MapImageFormat.jpg));
 					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
-							+ avalancheBulletin.getValidityDateString() + "/" + region.getId() + "_" + avalancheBulletin.getId() + ".webp");
+							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.fd, false, MapImageFormat.webp));
 					bulletin.put("mapPMjpg", serverInstance.getServerImagesUrl() + "empty.png");
 					bulletin.put("mapPMwebp", serverInstance.getServerImagesUrl() + "empty.webp");
 					bulletin.put("widthPM", "width=\"0\"");

@@ -169,11 +169,6 @@ public class AlbinaUtil {
 		return getDate(bulletins).getYear();
 	}
 
-	public static String getThumbnailFileName(Region region, String validityDateString, String publicationTimeString, DaytimeDependency daytimeDependency) {
-		return ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath() + "/"
-				+ validityDateString + "/" + publicationTimeString + "/" + daytimeDependency.toString() + "_" + region.getId() + "_thumbnail.jpg";
-	}
-
 	public static String getValidityDateString(List<AvalancheBulletin> bulletins) {
 		return getValidityDateString(bulletins, Period.ZERO);
 	}
