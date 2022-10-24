@@ -16,11 +16,11 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.ZonedDateTime;
@@ -40,6 +40,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import eu.albina.model.AvalancheReport;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapLevel;
 import eu.albina.map.MapUtil;
@@ -59,11 +60,9 @@ public class XmlUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
 
-	public static void createCaamlFiles(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString, CaamlVersion version, ServerInstance serverInstance) throws TransformerException, IOException {
-		String dirPathParent = serverInstance.getPdfDirectory() + "/" + validityDateString;
-		String dirPath = serverInstance.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
-		new File(dirPath).mkdirs();
+	public static void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws TransformerException, IOException {
+		Path dirPath = avalancheReport.getPdfDirectory();
+		Files.createDirectories(dirPath);
 
 		// using PosixFilePermission to set file permissions 777
 		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
@@ -81,34 +80,33 @@ public class XmlUtil {
 		perms.add(PosixFilePermission.OTHERS_EXECUTE);
 
 		try {
-			Files.setPosixFilePermissions(Paths.get(dirPathParent), perms);
-			Files.setPosixFilePermissions(Paths.get(dirPath), perms);
+			Files.setPosixFilePermissions(dirPath.getParent(), perms);
+			Files.setPosixFilePermissions(dirPath, perms);
 		} catch (IOException | UnsupportedOperationException e) {
 			logger.warn("File permissions could not be set!");
 		}
 
 		for (LanguageCode lang : LanguageCode.ENABLED) {
-			Document doc = createCaaml(bulletins, region, lang, version, serverInstance);
-			String caamlString = XmlUtil.convertDocToString(doc);
-			String fileName;
+			String caamlString = createCaaml(avalancheReport, lang, version);
+			String fileName = dirPath + "/" + avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString();
 			if (version == CaamlVersion.V5)
-				fileName = dirPath + "/" + validityDateString + "_" + region.getId() + "_" + lang.toString() + ".xml";
+				fileName += ".xml";
 			else
-				fileName = dirPath + "/" + validityDateString + "_" + region.getId() + "_" + lang.toString() + "_CAAMLv6.xml";
+				fileName += "_CAAMLv6.xml";
 			Files.write(Paths.get(fileName), caamlString.getBytes(StandardCharsets.UTF_8));
 			AlbinaUtil.setFilePermissions(fileName);
 		}
 	}
 
-	public static Document createCaaml(List<AvalancheBulletin> bulletins, Region region, LanguageCode lang, CaamlVersion version, ServerInstance serverInstance) {
+	public static String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
 		if (version == CaamlVersion.V5) {
-			return XmlUtil.createCaamlv5(bulletins, region, lang);
+			return XmlUtil.createCaamlv5(avalancheReport, lang);
 		} else {
-			return XmlUtil.createCaamlv6(bulletins, region, lang, serverInstance);
+			return XmlUtil.createCaamlv6(avalancheReport, lang);
 		}
 	}
 
-	public static Document createCaamlv5(List<AvalancheBulletin> bulletins, Region region, LanguageCode language) {
+	public static String createCaamlv5(AvalancheReport avalancheReport, LanguageCode language) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
@@ -118,6 +116,7 @@ public class XmlUtil {
 			Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
 
 			// create meta data
+			List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 			if (bulletins != null && !bulletins.isEmpty()) {
 				ZonedDateTime publicationDate = AlbinaUtil.getPublicationDate(bulletins);
 
@@ -129,7 +128,7 @@ public class XmlUtil {
 				Element observations = doc.createElement("observations");
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv5(doc, language, region);
+					List<Element> caaml = bulletin.toCAAMLv5(doc, language, avalancheReport.getRegion());
 					if (caaml != null)
 						for (Element element : caaml) {
 							if (element != null)
@@ -146,14 +145,14 @@ public class XmlUtil {
 
 			doc.appendChild(rootElement);
 
-			return doc;
-		} catch (ParserConfigurationException e1) {
+			return convertDocToString(doc);
+		} catch (ParserConfigurationException | TransformerException e1) {
 			logger.error("Error producing CAAML", e1);
 			return null;
 		}
 	}
 
-	public static Document createCaamlv6(List<AvalancheBulletin> bulletins, Region region, LanguageCode language, ServerInstance serverInstance) {
+	public static String createCaamlv6(AvalancheReport avalancheReport, LanguageCode language) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
@@ -163,11 +162,12 @@ public class XmlUtil {
 			Element rootElement = CaamlVersion.V6.setNamespaceAttributes(doc.createElement("bulletins"));
 
 			// create meta data
+			List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 			if (bulletins != null && !bulletins.isEmpty()) {
 
 				// metaData
 				Element metaData = doc.createElement("metaData");
-				for (Element extFile : createObsCollectionExtFiles(doc, bulletins, language, region, serverInstance)) {
+				for (Element extFile : createObsCollectionExtFiles(doc, bulletins, language, avalancheReport.getRegion(), avalancheReport.getServerInstance())) {
 					metaData.appendChild(extFile);
 				}
 				rootElement.appendChild(metaData);
@@ -175,7 +175,7 @@ public class XmlUtil {
 				String reportPublicationTime = AlbinaUtil.getPublicationTime(bulletins);
 
 				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv6(doc, language, region, reportPublicationTime, serverInstance);
+					List<Element> caaml = bulletin.toCAAMLv6(doc, language, avalancheReport.getRegion(), reportPublicationTime, avalancheReport.getServerInstance());
 					if (caaml != null)
 						for (Element element : caaml) {
 							if (element != null)
@@ -186,8 +186,8 @@ public class XmlUtil {
 
 			doc.appendChild(rootElement);
 
-			return doc;
-		} catch (ParserConfigurationException e1) {
+			return convertDocToString(doc);
+		} catch (ParserConfigurationException | TransformerException e1) {
 			logger.error("Error producing CAAMLv6", e1);
 			return null;
 		}

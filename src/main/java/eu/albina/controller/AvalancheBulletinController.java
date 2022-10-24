@@ -19,7 +19,6 @@ package eu.albina.controller;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,29 +27,21 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.w3c.dom.Document;
 
 import com.github.openjson.JSONArray;
 
-import eu.albina.caaml.CaamlVersion;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.XmlUtil;
 
 /**
  * Controller for avalanche bulletins.
@@ -282,38 +273,6 @@ public class AvalancheBulletinController {
 
 			return resultBulletins;
 		});
-	}
-
-	/**
-	 * Returns a XML (CAAML) string of all bulletins with status {@code published}
-	 * for a given {@code date} and {@code region} in a given {@code language}
-	 * (ordered by danger rating).
-	 *
-	 * @param date
-	 *            the date the bulletins should be valid from
-	 * @param region
-	 *            the region of the bulletins
-	 * @param language
-	 *            the language in which the texts of the bulletins should be added
-	 *            to the XML (CAAML) string
-	 * @param version
-	 *            the CAAML version to generate
-	 * @return the XML (CAAML) string of all published bulletins for the given time
-	 *         period and regions in the given language
-	 * @throws TransformerException
-	 *             if the transformation of the bulletins in XML fails
-	 * @throws AlbinaException
-	 *             if the published bulletins can not be loaded from DB
-	 * @throws ParserConfigurationException
-	 *             if the XML document can not be initialized
-	 */
-	public String getPublishedBulletinsCaaml(Instant date, Region region, LanguageCode language,
-			CaamlVersion version, ServerInstance serverInstance) throws TransformerException, AlbinaException, ParserConfigurationException {
-		ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
-				Arrays.asList(region));
-
-		Document caamlDoc = XmlUtil.createCaaml(result, region, language, version, serverInstance);
-		return XmlUtil.convertDocToString(caamlDoc);
 	}
 
 	/**

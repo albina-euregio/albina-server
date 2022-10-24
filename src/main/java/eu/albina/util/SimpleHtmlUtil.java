@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import eu.albina.model.AvalancheReport;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import eu.albina.model.enumerations.DaytimeDependency;
@@ -122,28 +123,25 @@ public class SimpleHtmlUtil {
 		return instance;
 	}
 
-	public boolean createRegionSimpleHtml(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance) {
+	public boolean createRegionSimpleHtml(AvalancheReport avalancheReport) {
 		boolean result = true;
 
-		if (!bulletins.isEmpty())
+		if (!avalancheReport.getBulletins().isEmpty())
 			for (LanguageCode lang : LanguageCode.ENABLED) {
-				if (!createSimpleHtml(bulletins, lang, region, serverInstance))
+				if (!createSimpleHtml(avalancheReport, lang))
 					result = false;
 			}
 		return result;
 	}
 
-	public boolean createSimpleHtml(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance) {
+	public boolean createSimpleHtml(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
-			if (bulletins != null && !bulletins.isEmpty()) {
-				String simpleHtmlString = createSimpleHtmlString(bulletins, lang, region, serverInstance);
+			if (avalancheReport.getBulletins() != null && !avalancheReport.getBulletins().isEmpty()) {
+				String simpleHtmlString = createSimpleHtmlString(avalancheReport, lang);
 
-				String filename;
-				String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
+				String filename = avalancheReport.getRegion().getId() + "_" + lang.toString() + ".html";
 
-				filename = region.getId() + "_" + lang.toString() + ".html";
-
-				String dirPath = serverInstance.getHtmlDirectory() + "/" + validityDateString;
+				String dirPath = avalancheReport.getServerInstance().getHtmlDirectory() + "/" + avalancheReport.getValidityDateString();
 				new File(dirPath).mkdirs();
 
 				// using PosixFilePermission to set file permissions 755
@@ -179,10 +177,13 @@ public class SimpleHtmlUtil {
 		return false;
 	}
 
-	public String createSimpleHtmlString(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance)
+	public String createSimpleHtmlString(AvalancheReport avalancheReport, LanguageCode lang)
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
 		// Create data model
+		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
+		Region region = avalancheReport.getRegion();
+		ServerInstance serverInstance = avalancheReport.getServerInstance();
 		Map<String, Object> root = new HashMap<>();
 
 		Map<String, Object> text = new HashMap<>();

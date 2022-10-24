@@ -19,10 +19,10 @@ package eu.albina.util;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.xml.transform.TransformerException;
@@ -30,24 +30,24 @@ import javax.xml.transform.TransformerException;
 import com.github.openjson.JSONArray;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 
 public class JsonUtil {
 
 	// private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
-	public static void createJsonFile(List<AvalancheBulletin> bulletins, Region region, String validityDateString,
-			String publicationTimeString, ServerInstance serverInstance) throws TransformerException, IOException {
-		String dirPath = serverInstance.getPdfDirectory() + "/" + validityDateString + "/" + publicationTimeString;
+	public static void createJsonFile(AvalancheReport avalancheReport) throws TransformerException, IOException {
+		Path pdfDirectory = avalancheReport.getPdfDirectory();
+		Files.createDirectories(pdfDirectory);
+		Path path = pdfDirectory.resolve(avalancheReport.getRegion().getId() + ".json");
 
-		if (!bulletins.isEmpty()) {
-			JSONArray jsonArray = JsonUtil.createJSONString(bulletins, region, true);
+		if (!avalancheReport.getBulletins().isEmpty()) {
+			JSONArray jsonArray = JsonUtil.createJSONString(avalancheReport.getBulletins(), avalancheReport.getRegion(), true);
 			String jsonString = jsonArray.toString();
 
-			String fileName = dirPath + "/" + region.getId() + ".json";
-			Files.write(Paths.get(fileName), jsonString.getBytes(StandardCharsets.UTF_8));
-			AlbinaUtil.setFilePermissions(fileName);
+			Files.write(path, jsonString.getBytes(StandardCharsets.UTF_8));
+			AlbinaUtil.setFilePermissions(path.toString());
 		}
 	}
 

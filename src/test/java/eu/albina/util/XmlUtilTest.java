@@ -11,12 +11,12 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.albina.model.AvalancheReport;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXParseException;
 
 import com.google.common.io.Resources;
@@ -59,8 +59,8 @@ public class XmlUtilTest {
 	private String createCaaml(CaamlVersion version) throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		final Document doc = XmlUtil.createCaaml(bulletins, regionEuregio, LanguageCode.en, version, serverInstanceEuregio);
-		return XmlUtil.convertDocToString(doc);
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		return XmlUtil.createCaaml(avalancheReport, LanguageCode.en, version);
 	}
 
 	@Ignore("<Operation> needs gml:id")
@@ -113,10 +113,10 @@ public class XmlUtilTest {
 	private void createOldCaamlFiles(LocalDate date) throws Exception {
 		List<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(
 				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UTC")).toInstant(), RegionController.getInstance().getPublishBulletinRegions());
+		AvalancheReport avalancheReport = AvalancheReport.of(result, regionEuregio, serverInstanceEuregio);
 		for (LanguageCode language : Arrays.asList(LanguageCode.de, LanguageCode.en, LanguageCode.it)) {
 			Path path = Paths.get("/tmp/bulletins" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
-			Document caamlDoc = XmlUtil.createCaaml(result, regionEuregio, language, CaamlVersion.V6, serverInstanceEuregio);
-			String caaml = XmlUtil.convertDocToString(caamlDoc);
+			String caaml = XmlUtil.createCaaml(avalancheReport, language, CaamlVersion.V6);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.write(path, caaml.getBytes(StandardCharsets.UTF_8));
 		}

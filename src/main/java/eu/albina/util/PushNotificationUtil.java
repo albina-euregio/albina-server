@@ -70,10 +70,10 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		if (region.isSendPushNotifications()) {
 			List<String> regions = Arrays.asList(region.getId());
 			List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, regions);
-	
+
 			logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, region, payload);
 			for (PushSubscription subscription : subscriptions) {
-				sendPushMessage(subscription, payload);
+				sendPushMessage(subscription, payload, null);
 			}
 		}
 	}
@@ -82,7 +82,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		final JSONObject payload = new JSONObject();
 		payload.put("title", subscription.getLanguage().getBundleString("website.name"));
 		payload.put("body", "Hello World!");
-		sendPushMessage(subscription, payload);
+		sendPushMessage(subscription, payload, null);
 	}
 
 
@@ -96,10 +96,13 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		});
 	}
 
-	public void sendPushMessage(PushSubscription subscription, JSONObject payload) {
+
+	public void sendPushMessage(PushSubscription subscription, JSONObject payload, ServerKeys serverKeys) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
-			final ServerKeys serverKeys = new ServerKeys(getConfiguration().getVapidPublicKey(), getConfiguration().getVapidPrivateKey());
+			if (serverKeys == null) {
+				serverKeys = new ServerKeys(getConfiguration().getVapidPublicKey(), getConfiguration().getVapidPrivateKey());
+			}
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
 			final byte[] encrypted = new CryptoService().encrypt(payload.toString(), subscriptionKeys, 0);
@@ -132,5 +135,4 @@ public class PushNotificationUtil implements SocialMediaUtil {
 			}
 		}
 	}
-
 }

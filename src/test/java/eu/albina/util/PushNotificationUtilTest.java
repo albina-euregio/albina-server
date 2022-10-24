@@ -1,11 +1,10 @@
 package eu.albina.util;
 
+import ch.rasc.webpush.ServerKeys;
+import com.github.openjson.JSONObject;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -26,19 +25,11 @@ import static org.mockito.Mockito.when;
 
 public class PushNotificationUtilTest {
 
-	@Before
-	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
-	}
-
-	@After
-	public void shutDown() throws Exception {
-		HibernateUtil.getInstance().shutDown();
-	}
-
-	@Ignore
 	@Test
 	public void test() throws Exception {
+		ServerKeys serverKeys = new ServerKeys("BEgjVJRSctSvDIJ_7Hvo7ZjAXeSOO2fFGkiofbXh41O4FWqh6aIgVDI8Wp9fU2HRv-7qglih19Ba2GRXHUh5jTo",
+			"uAICF2Y8mCGJpSfVLm6L1SOlxb59jAT819-g3Xj5uL0");
+
 		PushSubscription subscription = new PushSubscription();
 		subscription.setAuth("wnAO8hfJGyGtdK3uUmVI8g");
 		subscription.setEndpoint("https://updates.push.services.mozilla.com/wpush/v2/gAAAAABgHwSx9txJscXfY5Dz82G5Xs7b6U0zROFXDPDhSM9D4KCTEmGxJTLfZ7arYnRlS3BexTWFeLA8pfzDEHjd8tX9UBmLuUaR3Xnim3Q-2Xa3UddaHRbh4NT2mKFMGBDmIZ4208OgpVECiuoI8UANC9B3IOf2CpduP58fUz1VE857gyNeHsw");
@@ -55,7 +46,10 @@ public class PushNotificationUtilTest {
 		Client client = mock(Client.class);
 		when(client.target(eq(URI.create(subscription.getEndpoint())))).thenReturn(webTarget);
 
-		new PushNotificationUtil(client).sendWelcomePushMessage(subscription);
+		final JSONObject payload = new JSONObject();
+		payload.put("title", subscription.getLanguage().getBundleString("website.name"));
+		payload.put("body", "Hello World!");
+		new PushNotificationUtil(client).sendPushMessage(subscription, payload, serverKeys);
 
 		verify(builder).header(eq("Content-Type"), eq("application/octet-stream"));
 		verify(builder).header(eq("TTL"), eq("180"));
