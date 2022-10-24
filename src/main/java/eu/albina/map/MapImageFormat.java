@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 
-enum MapImageFormat {
+public enum MapImageFormat {
 
 	pdf {
 		@Override

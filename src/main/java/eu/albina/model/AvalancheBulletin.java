@@ -52,6 +52,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import eu.albina.map.MapImageFormat;
+import eu.albina.map.MapUtil;
+import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.util.LinkUtil;
 import com.google.common.base.Strings;
 import org.slf4j.LoggerFactory;
@@ -1177,15 +1180,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Element metaData = doc.createElement("metaData");
 		rootElement.appendChild(metaData);
 		if (!isAfternoon) {
-			// TODO use specific file for region
 			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + getValidityDateString() + "/"
-					+ reportPublicationTime + "/" + getId() + ".jpg";
+					+ reportPublicationTime + "/" + MapUtil.filename(region, this, DaytimeDependency.am, false, MapImageFormat.jpg);
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
-			// TODO use specific file for region
 			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + getValidityDateString() + "/"
-					+ reportPublicationTime + "/" + getId() + "_PM.jpg";
+					+ reportPublicationTime + "/" + MapUtil.filename(region, this, DaytimeDependency.pm, false, MapImageFormat.jpg);
 			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		}
