@@ -9,15 +9,14 @@ import java.util.Objects;
  * a numeric value, not more detailed than 100m resolution. Additionally to the numeric
  * values also 'treeline' is allowed.
  */
-public class ElevationBounderyOrBand {
-	// FIXME type Boundery -> Boundary
+public class ElevationBoundaryOrBand {
     private String lowerBound;
     private String upperBound;
 
-	public ElevationBounderyOrBand() {
+	public ElevationBoundaryOrBand() {
 	}
 
-	public ElevationBounderyOrBand(String lowerBound, String upperBound) {
+	public ElevationBoundaryOrBand(String lowerBound, String upperBound) {
 		this.lowerBound = lowerBound;
 		this.upperBound = upperBound;
 	}
@@ -32,7 +31,7 @@ public class ElevationBounderyOrBand {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		ElevationBounderyOrBand that = (ElevationBounderyOrBand) o;
+		ElevationBoundaryOrBand that = (ElevationBoundaryOrBand) o;
 		return Objects.equals(lowerBound, that.lowerBound) && Objects.equals(upperBound, that.upperBound);
 	}
 

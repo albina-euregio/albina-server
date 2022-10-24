@@ -63,7 +63,7 @@ import eu.albina.util.LinkUtil;
 import com.google.common.base.Strings;
 import org.caaml.v6.AvalancheSituationTendency;
 import org.caaml.v6.DangerRatingValue;
-import org.caaml.v6.ElevationBounderyOrBand;
+import org.caaml.v6.ElevationBoundaryOrBand;
 import org.caaml.v6.TendencyType;
 import org.caaml.v6.ValidTime;
 import org.caaml.v6.ValidTimePeriod;
@@ -1589,11 +1589,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		} else if (rating == daytime.getDangerRatingAbove()) {
 			result.setMainValue(DangerRatingValue.forValue(rating.name()));
 			String bound = daytime.getTreeline() ? "treeline" : Integer.toString(daytime.getElevation());
-			result.setElevation(new ElevationBounderyOrBand(bound, null));
+			result.setElevation(new ElevationBoundaryOrBand(bound, null));
 		} else if (rating == daytime.getDangerRatingBelow()) {
 			result.setMainValue(DangerRatingValue.forValue(rating.name()));
 			String bound = daytime.getTreeline() ? "treeline" : Integer.toString(daytime.getElevation());
-			result.setElevation(new ElevationBounderyOrBand(null, bound));
+			result.setElevation(new ElevationBoundaryOrBand(null, bound));
 		}
 		if (!hasDaytimeDependency) {
 			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);

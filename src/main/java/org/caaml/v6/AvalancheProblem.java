@@ -11,7 +11,7 @@ public class AvalancheProblem {
     private List<Aspect> aspects;
     private Double avalancheSize;
     private Object customData;
-    private ElevationBounderyOrBand elevation;
+    private ElevationBoundaryOrBand elevation;
     private ExpectedAvalancheFrequency frequency;
     private MetaData metaData;
     private AvalancheProblemType problemType;
@@ -28,8 +28,8 @@ public class AvalancheProblem {
     public Object getCustomData() { return customData; }
     public void setCustomData(Object value) { this.customData = value; }
 
-    public ElevationBounderyOrBand getElevation() { return elevation; }
-    public void setElevation(ElevationBounderyOrBand value) { this.elevation = value; }
+    public ElevationBoundaryOrBand getElevation() { return elevation; }
+    public void setElevation(ElevationBoundaryOrBand value) { this.elevation = value; }
 
     public ExpectedAvalancheFrequency getFrequency() { return frequency; }
     public void setFrequency(ExpectedAvalancheFrequency value) { this.frequency = value; }

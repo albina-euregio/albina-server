@@ -308,7 +308,7 @@
             }
         },
         "elevation" : {
-            "title": "Elevation Boundery or Band",
+            "title": "Elevation Boundary or Band",
             "description": "Elevation describes either an elevation range below a certain bound (only upperBound is set to a value) or above a certain bound (only lowerBound is set to a value). If both values are set to a value, an elevation band is defined by this property. The value uses a numeric value, not more detailed than 100m resolution. Additionally to the numeric values also 'treeline' is allowed.",
             "type" : "object",
             "properties" : {

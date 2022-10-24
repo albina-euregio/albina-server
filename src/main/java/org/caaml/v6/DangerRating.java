@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public class DangerRating {
     private Object customData;
-    private ElevationBounderyOrBand elevation;
+    private ElevationBoundaryOrBand elevation;
     private DangerRatingValue mainValue;
     private MetaData metaData;
     private ValidTimePeriod validTimePeriod;
@@ -17,8 +17,8 @@ public class DangerRating {
     public Object getCustomData() { return customData; }
     public void setCustomData(Object value) { this.customData = value; }
 
-    public ElevationBounderyOrBand getElevation() { return elevation; }
-    public void setElevation(ElevationBounderyOrBand value) { this.elevation = value; }
+    public ElevationBoundaryOrBand getElevation() { return elevation; }
+    public void setElevation(ElevationBoundaryOrBand value) { this.elevation = value; }
 
     public DangerRatingValue getMainValue() { return mainValue; }
     public void setMainValue(DangerRatingValue value) { this.mainValue = value; }
