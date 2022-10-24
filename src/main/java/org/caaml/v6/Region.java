@@ -9,15 +9,14 @@ public class Region {
     private Object customData;
     private MetaData metaData;
     private String name;
-    // FIXME regionID (consistency with bulletinID)
-    private String regionId;
+    private String regionID;
 
 	public Region() {
 	}
 
-	public Region(String regionId, String name) {
+	public Region(String regionID, String name) {
 		this.name = name;
-		this.regionId = regionId;
+		this.regionID = regionID;
 	}
 
 	public Object getCustomData() { return customData; }
@@ -29,6 +28,6 @@ public class Region {
     public String getName() { return name; }
     public void setName(String value) { this.name = value; }
 
-    public String getRegionId() { return regionId; }
-    public void setRegionId(String value) { this.regionId = value; }
+    public String getRegionID() { return regionID; }
+    public void setRegionID(String value) { this.regionID = value; }
 }

@@ -22,52 +22,52 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "AT-07-10",
-      "regionId" : "Western Verwall Mountains"
+      "regionID" : "Western Verwall Mountains"
     }, {
       "name" : "AT-07-11",
-      "regionId" : "Eastern Verwall Mountains"
+      "regionID" : "Eastern Verwall Mountains"
     }, {
       "name" : "AT-07-01",
-      "regionId" : "Allgäu Alps"
+      "regionID" : "Allgäu Alps"
     }, {
       "name" : "AT-07-12",
-      "regionId" : "Silvretta"
+      "regionID" : "Silvretta"
     }, {
       "name" : "AT-07-24",
-      "regionId" : "Venediger Range"
+      "regionID" : "Venediger Range"
     }, {
       "name" : "AT-07-13",
-      "regionId" : "Samnaun Mountains"
+      "regionID" : "Samnaun Mountains"
     }, {
       "name" : "AT-07-02",
-      "regionId" : "Eastern Lechtal Alps - Ammergau Alps"
+      "regionID" : "Eastern Lechtal Alps - Ammergau Alps"
     }, {
       "name" : "AT-07-03",
-      "regionId" : "Mieming Mountains"
+      "regionID" : "Mieming Mountains"
     }, {
       "name" : "AT-07-04",
-      "regionId" : "Karwendel Mountains"
+      "regionID" : "Karwendel Mountains"
     }, {
       "name" : "AT-07-26",
-      "regionId" : "Glockner Range"
+      "regionID" : "Glockner Range"
     }, {
       "name" : "AT-07-05",
-      "regionId" : "Brandenberg Alps"
+      "regionID" : "Brandenberg Alps"
     }, {
       "name" : "AT-07-17",
-      "regionId" : "Western Kitzbühel Alps"
+      "regionID" : "Western Kitzbühel Alps"
     }, {
       "name" : "AT-07-06",
-      "regionId" : "Wilder Kaiser Mountains - Waidring Alps"
+      "regionID" : "Wilder Kaiser Mountains - Waidring Alps"
     }, {
       "name" : "AT-07-18",
-      "regionId" : "Eastern Kitzbühel Alps"
+      "regionID" : "Eastern Kitzbühel Alps"
     }, {
       "name" : "AT-07-07",
-      "regionId" : "Western Lechtal Alps"
+      "regionID" : "Western Lechtal Alps"
     }, {
       "name" : "AT-07-08",
-      "regionId" : "Central Lechtal Alps"
+      "regionID" : "Central Lechtal Alps"
     } ],
     "snowpackStructure" : {
       "comment" : "Weak layers in the upper part of the snowpack represent the main danger. The somewhat older wind slabs are in some cases still prone to triggering especially on steep shady slopes above approximately 2200 m. No distinct weak layers exist in the bottom section of the snowpack. The snowpack will be moist at low and intermediate altitudes."
@@ -114,13 +114,13 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "AT-07-27",
-      "regionId" : "Eastern Deferegger Alps"
+      "regionID" : "Eastern Deferegger Alps"
     }, {
       "name" : "AT-07-28",
-      "regionId" : "Schober Mountains"
+      "regionID" : "Schober Mountains"
     }, {
       "name" : "AT-07-25",
-      "regionId" : "Eastern Rieserferner Mountains"
+      "regionID" : "Eastern Rieserferner Mountains"
     } ],
     "snowpackStructure" : {
       "comment" : "The snowpack will be quite prone to triggering, especially in areas close to the tree line as well as above the tree line. Faceted weak layers exist in the bottom section of the snowpack. The somewhat older wind slabs have settled a little."
@@ -167,31 +167,31 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "AT-07-15",
-      "regionId" : "Western Tuxer Alps"
+      "regionID" : "Western Tuxer Alps"
     }, {
       "name" : "AT-07-16",
-      "regionId" : "Eastern Tuxer Alps"
+      "regionID" : "Eastern Tuxer Alps"
     }, {
       "name" : "AT-07-19",
-      "regionId" : "Glockturm Range"
+      "regionID" : "Glockturm Range"
     }, {
       "name" : "AT-07-09",
-      "regionId" : "Grieskogel Mountains"
+      "regionID" : "Grieskogel Mountains"
     }, {
       "name" : "AT-07-20",
-      "regionId" : "Weißkugel Range"
+      "regionID" : "Weißkugel Range"
     }, {
       "name" : "AT-07-21",
-      "regionId" : "Gurgler Range"
+      "regionID" : "Gurgler Range"
     }, {
       "name" : "AT-07-22",
-      "regionId" : "Central Stubai Alps"
+      "regionID" : "Central Stubai Alps"
     }, {
       "name" : "AT-07-23",
-      "regionId" : "Northern Zillertal Alps"
+      "regionID" : "Northern Zillertal Alps"
     }, {
       "name" : "AT-07-14",
-      "regionId" : "Northern Oetz and Stubai Alps"
+      "regionID" : "Northern Oetz and Stubai Alps"
     } ],
     "snowpackStructure" : {
       "comment" : "Weak layers in the upper part of the snowpack represent the main danger. The somewhat older wind slabs are in some cases still prone to triggering especially on steep shady slopes above approximately 2200 m. No distinct weak layers exist in the bottom section of the snowpack. The snowpack will be moist at low and intermediate altitudes."
@@ -230,34 +230,34 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-TN-02",
-      "regionId" : "Southern Adamello"
+      "regionID" : "Southern Adamello"
     }, {
       "name" : "IT-32-TN-13",
-      "regionId" : "Primiero - Pale di S. Martino"
+      "regionID" : "Primiero - Pale di S. Martino"
     }, {
       "name" : "IT-32-TN-01",
-      "regionId" : "Adamello - Presanella"
+      "regionID" : "Adamello - Presanella"
     }, {
       "name" : "IT-32-TN-04",
-      "regionId" : "Northern Brenta - Peller"
+      "regionID" : "Northern Brenta - Peller"
     }, {
       "name" : "IT-32-TN-05",
-      "regionId" : "Southern Brenta"
+      "regionID" : "Southern Brenta"
     }, {
       "name" : "IT-32-TN-16",
-      "regionId" : "Fassa Valley"
+      "regionID" : "Fassa Valley"
     }, {
       "name" : "IT-32-TN-19",
-      "regionId" : "Sole, Pejo and Rabbi"
+      "regionID" : "Sole, Pejo and Rabbi"
     }, {
       "name" : "IT-32-TN-07",
-      "regionId" : "Northern Lagorai"
+      "regionID" : "Northern Lagorai"
     }, {
       "name" : "IT-32-TN-09",
-      "regionId" : "Latemar"
+      "regionID" : "Latemar"
     }, {
       "name" : "IT-32-TN-20",
-      "regionId" : "Maddalene"
+      "regionID" : "Maddalene"
     } ],
     "snowpackStructure" : {
       "comment" : "The fresh snow and wind slabs of the last few days are lying on the quite favourable surface of an old snowpack in particular on east to south to southwest facing aspects. Faceted weak layers exist in the snowpack especially on steep, rather lightly snow-covered shady slopes. Below approximately 2000 m thus far only a little snow is lying."
@@ -296,7 +296,7 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-14",
-      "regionId" : "Ortler Range"
+      "regionID" : "Ortler Range"
     } ],
     "snowpackStructure" : {
       "comment" : "In some cases fresh snow and wind slabs are lying on soft layers. Isolated avalanche prone weak layers exist in the old snowpack. The snowpack will be generally prone to triggering."
@@ -326,37 +326,37 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-TN-12",
-      "regionId" : "Prealps"
+      "regionID" : "Prealps"
     }, {
       "name" : "IT-32-TN-15",
-      "regionId" : "Cembra Valley"
+      "regionID" : "Cembra Valley"
     }, {
       "name" : "IT-32-TN-03",
-      "regionId" : "Bondone and Stivo"
+      "regionID" : "Bondone and Stivo"
     }, {
       "name" : "IT-32-TN-14",
-      "regionId" : "Vallarsa"
+      "regionID" : "Vallarsa"
     }, {
       "name" : "IT-32-TN-17",
-      "regionId" : "Western Nonsberg Alps"
+      "regionID" : "Western Nonsberg Alps"
     }, {
       "name" : "IT-32-TN-06",
-      "regionId" : "Folgaria - Laverone"
+      "regionID" : "Folgaria - Laverone"
     }, {
       "name" : "IT-32-TN-08",
-      "regionId" : "Southern Lagorai"
+      "regionID" : "Southern Lagorai"
     }, {
       "name" : "IT-32-TN-18",
-      "regionId" : "Ledro Valley"
+      "regionID" : "Ledro Valley"
     }, {
       "name" : "IT-32-TN-11",
-      "regionId" : "Paganella"
+      "regionID" : "Paganella"
     }, {
       "name" : "IT-32-TN-10",
-      "regionId" : "Marzola - Valsugana"
+      "regionID" : "Marzola - Valsugana"
     }, {
       "name" : "IT-32-TN-21",
-      "regionId" : "Pine' - Mocheni Valley"
+      "regionID" : "Pine' - Mocheni Valley"
     } ],
     "snowpackStructure" : {
       "comment" : "The snowpack remains generally well bonded. In all regions from a snow sport perspective, in most cases insufficient snow is lying."
@@ -386,10 +386,10 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-16",
-      "regionId" : "Eastern Nonsberger Alps"
+      "regionID" : "Eastern Nonsberger Alps"
     }, {
       "name" : "IT-32-BZ-17",
-      "regionId" : "Northern Dolomites of Fiemme"
+      "regionID" : "Northern Dolomites of Fiemme"
     } ],
     "snowpackStructure" : {
       "comment" : "The snowpack will be subject to considerable local variations. In some places wind slabs are lying on a weakly bonded old snowpack. Only a little snow is lying."
@@ -428,40 +428,40 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-07",
-      "regionId" : "Texel Mountains"
+      "regionID" : "Texel Mountains"
     }, {
       "name" : "IT-32-BZ-09",
-      "regionId" : "Western Pfunderer Mountains"
+      "regionID" : "Western Pfunderer Mountains"
     }, {
       "name" : "IT-32-BZ-10",
-      "regionId" : "Eastern Pfunderer Mountains"
+      "regionID" : "Eastern Pfunderer Mountains"
     }, {
       "name" : "IT-32-BZ-11",
-      "regionId" : "Durreck Range"
+      "regionID" : "Durreck Range"
     }, {
       "name" : "IT-32-BZ-12",
-      "regionId" : "Western Rieserferner Mountains"
+      "regionID" : "Western Rieserferner Mountains"
     }, {
       "name" : "IT-32-BZ-01",
-      "regionId" : "Val Müstair Alps"
+      "regionID" : "Val Müstair Alps"
     }, {
       "name" : "IT-32-BZ-13",
-      "regionId" : "Western Deferegger Alps"
+      "regionID" : "Western Deferegger Alps"
     }, {
       "name" : "IT-32-BZ-02",
-      "regionId" : "Langtaufers"
+      "regionID" : "Langtaufers"
     }, {
       "name" : "IT-32-BZ-03",
-      "regionId" : "Schnals Ridge"
+      "regionID" : "Schnals Ridge"
     }, {
       "name" : "IT-32-BZ-04",
-      "regionId" : "Southern Stubai Alps"
+      "regionID" : "Southern Stubai Alps"
     }, {
       "name" : "IT-32-BZ-05",
-      "regionId" : "Southern Zillertal Alps and High Tauern"
+      "regionID" : "Southern Zillertal Alps and High Tauern"
     }, {
       "name" : "IT-32-BZ-06",
-      "regionId" : "Saldurn-Mastaun Ridge"
+      "regionID" : "Saldurn-Mastaun Ridge"
     } ],
     "snowpackStructure" : {
       "comment" : "The somewhat older wind slabs are lying on soft layers in all aspects. Avalanche prone weak layers exist in the centre of the old snowpack in all aspects. In some cases the wind slabs have bonded still only poorly with each other and the old snowpack. In some cases avalanches can penetrate even deep layers and reach large size in isolated cases."
@@ -504,7 +504,7 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "AT-07-29",
-      "regionId" : "Lienzer Dolomites"
+      "regionID" : "Lienzer Dolomites"
     } ],
     "snowpackStructure" : {
       "comment" : "Thus far only a little snow is lying. The snowpack will be subject to considerable local variations. In some cases the wind slabs have bonded still only poorly with the old snowpack."
@@ -543,19 +543,19 @@
     "publicationTime" : "2019-01-16T16:00:00Z",
     "regions" : [ {
       "name" : "IT-32-BZ-18",
-      "regionId" : "Gröden Dolomites"
+      "regionID" : "Gröden Dolomites"
     }, {
       "name" : "IT-32-BZ-19",
-      "regionId" : "Prags Dolomites"
+      "regionID" : "Prags Dolomites"
     }, {
       "name" : "IT-32-BZ-08",
-      "regionId" : "Sarntal Alps"
+      "regionID" : "Sarntal Alps"
     }, {
       "name" : "IT-32-BZ-20",
-      "regionId" : "Sexten Dolomites"
+      "regionID" : "Sexten Dolomites"
     }, {
       "name" : "IT-32-BZ-15",
-      "regionId" : "Ulten Valley"
+      "regionID" : "Ulten Valley"
     } ],
     "snowpackStructure" : {
       "comment" : "In some cases the wind slabs have bonded poorly with the old snowpack. They are barely recognisable because of the poor visibility. The snowpack will be subject to considerable local variations."

@@ -291,7 +291,7 @@
             "description": "Region element describes a (micro) region. The regionID follows the EAWS schema. It is recommended to have the region shape's files with the same IDs in gitlab.com/eaws/eaws-regions. Additionally, the region name can be added.",
             "type" : "object",
             "properties": {
-                "regionId" : { "type" : "string" },
+                "regionID" : { "type" : "string" },
                 "name" : { "type" : "string" },
                 "metaData" : { "$ref" : "#/definitions/metaData" },
                 "customData" : { "$ref" : "#/definitions/customData" }
