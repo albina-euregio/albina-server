@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class AvalancheProblem {
     private List<Aspect> aspects;
-    private Double avalancheSize;
+    private Integer avalancheSize;
     private Object customData;
     private ElevationBoundaryOrBand elevation;
     private ExpectedAvalancheFrequency frequency;
@@ -22,8 +22,8 @@ public class AvalancheProblem {
     public List<Aspect> getAspects() { return aspects; }
     public void setAspects(List<Aspect> value) { this.aspects = value; }
 
-    public Double getAvalancheSize() { return avalancheSize; }
-    public void setAvalancheSize(Double value) { this.avalancheSize = value; }
+    public Integer getAvalancheSize() { return avalancheSize; }
+    public void setAvalancheSize(Integer value) { this.avalancheSize = value; }
 
     public Object getCustomData() { return customData; }
     public void setCustomData(Object value) { this.customData = value; }

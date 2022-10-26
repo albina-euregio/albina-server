@@ -61,9 +61,12 @@ import eu.albina.controller.RegionController;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.LinkUtil;
 import com.google.common.base.Strings;
+import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.AvalancheSituationTendency;
 import org.caaml.v6.DangerRatingValue;
 import org.caaml.v6.ElevationBoundaryOrBand;
+import org.caaml.v6.ExpectedAvalancheFrequency;
+import org.caaml.v6.ExpectedSnowpackStability;
 import org.caaml.v6.TendencyType;
 import org.caaml.v6.ValidTime;
 import org.caaml.v6.ValidTimePeriod;
@@ -1553,7 +1556,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	public org.caaml.v6.AvalancheBulletin toCAAMLv6_2022(LanguageCode lang) {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
 		bulletin.setAvalancheActivity(new org.caaml.v6.Texts(getAvActivityHighlightsIn(lang), getAvActivityCommentIn(lang)));
-		bulletin.setAvalancheProblems(null);
+		bulletin.setAvalancheProblems(Stream.concat(
+				forenoon.getAvalancheProblems().stream(),
+				afternoon == null ? Stream.empty() : afternoon.getAvalancheProblems().stream()
+			)
+			.map(p -> getAvalancheProblem(p, lang))
+			.filter(Objects::nonNull).collect(Collectors.toList()));
 		bulletin.setBulletinID(id);
 		bulletin.setCustomData(Stream.of(dangerPattern1, dangerPattern2)
 			.filter(Objects::nonNull)
@@ -1579,6 +1587,33 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		bulletin.setValidTime(new ValidTime(validFrom.toInstant(), validUntil.toInstant()));
 		bulletin.setWxSynopsis(new org.caaml.v6.Texts(getSynopsisHighlightsIn(lang), getSynopsisCommentIn(lang)));
 		return bulletin;
+	}
+
+	private org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, LanguageCode lang) {
+		if (p == null || p.getAvalancheProblem() == null) {
+			return null;
+		}
+		final org.caaml.v6.AvalancheProblem result = new org.caaml.v6.AvalancheProblem();
+		result.setAspects(p.getAspects().stream().map(a -> org.caaml.v6.Aspect.forValue(a.name())).collect(Collectors.toList()));
+		result.setProblemType(AvalancheProblemType.forValue(p.getAvalancheProblem().toString()));
+		final String lowerBound = p.getElevationLow() > 0 ? Integer.toString(p.getElevationLow()) : p.getTreelineLow() ? "treeline" : null;
+		final String upperBound = p.getElevationHigh() > 0 ? Integer.toString(p.getElevationHigh()) : p.getTreelineHigh() ? "treeline" : null;
+		result.setElevation(new ElevationBoundaryOrBand(lowerBound, upperBound));
+		result.setTerrainFeature(p.getTerrainFeature(lang));
+		if (!hasDaytimeDependency) {
+			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);
+		} else if (forenoon.getAvalancheProblems().contains(p)) {
+			result.setValidTimePeriod(ValidTimePeriod.EARLIER);
+		} else if (afternoon != null && afternoon.getAvalancheProblems().contains(p)) {
+			result.setValidTimePeriod(ValidTimePeriod.LATER);
+		}
+		final EawsMatrixInformation matrixInformation = p.getEawsMatrixInformation();
+		if (matrixInformation != null) {
+			result.setAvalancheSize(matrixInformation.getAvalancheSizeValue());
+			result.setFrequency(ExpectedAvalancheFrequency.forValue(matrixInformation.getFrequency().toString()));
+			result.setSnowpackStability(ExpectedSnowpackStability.forValue(matrixInformation.getSnowpackStability().toString()));
+		}
+		return result;
 	}
 
 	private org.caaml.v6.DangerRating getDangerRating(AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
