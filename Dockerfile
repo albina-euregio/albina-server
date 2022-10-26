@@ -15,6 +15,7 @@ ADD pom.xml pom.xml
 RUN mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true --activate-profiles env-docker package -Dmaven.test.skip=true
 
 FROM tomcat:8-jre11-temurin
+RUN apt-get update -y && apt-get install -y ghostscript imagemagick webp
 COPY --from=build /app/target/albina.war /usr/local/tomcat/webapps/
 COPY --from=build-albina-admin-gui /app/dist /usr/local/tomcat/webapps/ROOT
 COPY --from=build-avalanche-warning-maps /app/avalanche-warning-maps-master /opt/avalanche-warning-maps
