@@ -1,7 +1,12 @@
 FROM alpine:latest AS build-albina-admin-gui
 WORKDIR /app
-ADD https://gitlab.com/albina-euregio/albina-admin-gui/-/jobs/artifacts/environment-relative/download?job=build:production albina-admin-gui.zip
+ENV API_BASE_URL="/albina/api/"
+ENV WS_BASE_URL="wss://socket.avalanche.report/albina/"
+ENV TEXTCAT_URL="/textcat-ng/"
+ENV HEADER_BG_COLOR="#ffffff"
+ADD https://gitlab.com/albina-euregio/albina-admin-gui/-/jobs/artifacts/master/download?job=build albina-admin-gui.zip
 RUN apk add unzip && unzip albina-admin-gui && find
+RUN apk add gettext && envsubst < dist/assets/env.template.js > dist/assets/env.js
 
 FROM alpine:latest AS build-textcat-ng
 WORKDIR /app
