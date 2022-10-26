@@ -26,7 +26,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -65,20 +65,7 @@ public class XmlUtil {
 		Files.createDirectories(dirPath);
 
 		// using PosixFilePermission to set file permissions 777
-		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
-		// add owners permission
-		perms.add(PosixFilePermission.OWNER_READ);
-		perms.add(PosixFilePermission.OWNER_WRITE);
-		perms.add(PosixFilePermission.OWNER_EXECUTE);
-		// add group permissions
-		perms.add(PosixFilePermission.GROUP_READ);
-		perms.add(PosixFilePermission.GROUP_WRITE);
-		perms.add(PosixFilePermission.GROUP_EXECUTE);
-		// add others permissions
-		perms.add(PosixFilePermission.OTHERS_READ);
-		perms.add(PosixFilePermission.OTHERS_WRITE);
-		perms.add(PosixFilePermission.OTHERS_EXECUTE);
-
+		Set<PosixFilePermission> perms = EnumSet.allOf(PosixFilePermission.class);
 		try {
 			Files.setPosixFilePermissions(dirPath.getParent(), perms);
 			Files.setPosixFilePermissions(dirPath, perms);
