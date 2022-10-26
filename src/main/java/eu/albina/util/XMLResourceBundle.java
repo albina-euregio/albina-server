@@ -4,16 +4,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.InvalidPropertiesFormatException;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 class XMLResourceBundle extends ResourceBundle {
-	private final Properties props;
+	private final Properties props = new Properties();
 
-	XMLResourceBundle(InputStream stream) throws IOException {
-		props = new Properties();
-		props.loadFromXML(stream);
+	void loadFromXML(InputStream in) throws IOException {
+		props.loadFromXML(in);
+	}
+
+	Object put(Object key, Object value) {
+		return props.put(key, value);
 	}
 
 	@Override

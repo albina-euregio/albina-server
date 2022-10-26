@@ -228,11 +228,10 @@ public class RegionController {
 		return result;
 	}
 
-    // TODO use region names from eaws-region repository
     public String getRegionName(LanguageCode lang, String regionId) {
     	if ("".equals(regionId)) {
     		return "";
     	}
-    	return lang.getBundle("i18n.Regions").getString(regionId);
+    	return lang.getBundle("micro-regions_names").getString(regionId);
     }
 }
