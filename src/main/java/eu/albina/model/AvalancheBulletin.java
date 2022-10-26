@@ -1565,7 +1565,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		bulletin.setBulletinID(id);
 		bulletin.setCustomData(Stream.of(dangerPattern1, dangerPattern2)
 			.filter(Objects::nonNull)
-			.map(dp -> ImmutableMap.of("custom_type", "dangerPattern", "content", dp.name().toUpperCase(), "name", AlbinaUtil.getDangerPatternText(dp, lang)))
+			.map(dp -> ImmutableMap.of(
+				"type", "dangerPattern",
+				"id", dp.name().toUpperCase(),
+				"name", AlbinaUtil.getDangerPatternText(dp, lang)))
 			.collect(Collectors.toList()));
 		bulletin.setDangerRatings(Stream.of(forenoon, afternoon)
 			.filter(Objects::nonNull)
