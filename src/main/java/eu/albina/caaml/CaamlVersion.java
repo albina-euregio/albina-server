@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
  */
 public enum CaamlVersion {
 
-	V5, V6;
+	V5, V6, V6_2022;
 
 	public int version() {
 		return this == V5 ? 5 : 6;

@@ -78,6 +78,8 @@ public class XmlUtil {
 			String fileName = dirPath + "/" + avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString();
 			if (version == CaamlVersion.V5)
 				fileName += ".xml";
+			else if (version == CaamlVersion.V6_2022)
+				fileName += "_CAAMLv6_2022.json";
 			else
 				fileName += "_CAAMLv6.xml";
 			Files.write(Paths.get(fileName), caamlString.getBytes(StandardCharsets.UTF_8));
@@ -88,6 +90,8 @@ public class XmlUtil {
 	public static String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
 		if (version == CaamlVersion.V5) {
 			return XmlUtil.createCaamlv5(avalancheReport, lang);
+		} else if (version == CaamlVersion.V6_2022) {
+			return avalancheReport.toCAAMLv6String_2022(lang);
 		} else {
 			return XmlUtil.createCaamlv6(avalancheReport, lang);
 		}

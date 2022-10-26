@@ -349,11 +349,15 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		return new AvalancheBulletins(bulletins.stream().map(b -> b.toCAAMLv6_2022(lang)).collect(Collectors.toList()));
 	}
 
-	public String toCAAMLv6String_2022(LanguageCode lang) throws JsonProcessingException {
-		return new ObjectMapper()
-			.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-			.writerWithDefaultPrettyPrinter()
-			.writeValueAsString(toCAAMLv6_2022(lang));
+	public String toCAAMLv6String_2022(LanguageCode lang) {
+		try {
+			return new ObjectMapper()
+				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+				.writerWithDefaultPrettyPrinter()
+				.writeValueAsString(toCAAMLv6_2022(lang));
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public boolean hasDaytimeDependency() {

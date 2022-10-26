@@ -476,6 +476,7 @@ public class PublicationController {
 		try {
 			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " started");
 			avalancheReport.toCAAML(CaamlVersion.V6);
+			avalancheReport.toCAAML(CaamlVersion.V6_2022);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
