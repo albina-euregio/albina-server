@@ -3,6 +3,18 @@ WORKDIR /app
 ADD https://gitlab.com/albina-euregio/albina-admin-gui/-/jobs/artifacts/environment-relative/download?job=build:production albina-admin-gui.zip
 RUN apk add unzip && unzip albina-admin-gui && find
 
+FROM alpine:latest AS build-textcat-ng
+WORKDIR /app
+ADD https://gitlab.com/albina-euregio/textcat-ng/-/jobs/artifacts/master/download?job=build textcat-ng.zip
+ADD https://admin.avalanche.report/textcat-ng-dev/assets/satzkatalog.CA.txt dist/assets/satzkatalog.CA.txt
+ADD https://admin.avalanche.report/textcat-ng-dev/assets/satzkatalog.DE.txt dist/assets/satzkatalog.DE.txt
+ADD https://admin.avalanche.report/textcat-ng-dev/assets/satzkatalog.EN.txt dist/assets/satzkatalog.EN.txt
+ADD https://admin.avalanche.report/textcat-ng-dev/assets/satzkatalog.ES.txt dist/assets/satzkatalog.ES.txt
+ADD https://admin.avalanche.report/textcat-ng-dev/assets/satzkatalog.FR.txt dist/assets/satzkatalog.FR.txt
+ADD https://admin.avalanche.report/textcat-ng-dev/assets/satzkatalog.IT.txt dist/assets/satzkatalog.IT.txt
+ADD https://admin.avalanche.report/textcat-ng-dev/assets/satzkatalog.OC.txt dist/assets/satzkatalog.OC.txt
+RUN apk add unzip && unzip textcat-ng && find
+
 FROM alpine:latest AS build-avalanche-warning-maps
 WORKDIR /app
 ADD https://gitlab.com/albina-euregio/avalanche-warning-maps/-/archive/master/avalanche-warning-maps-master.zip avalanche-warning-maps.zip
@@ -18,6 +30,7 @@ FROM tomcat:8-jre11-temurin
 RUN apt-get update -y && apt-get install -y ghostscript imagemagick webp
 COPY --from=build /app/target/albina.war /usr/local/tomcat/webapps/
 COPY --from=build-albina-admin-gui /app/dist /usr/local/tomcat/webapps/ROOT
+COPY --from=build-textcat-ng /app/dist /usr/local/tomcat/webapps/textcat-ng
 COPY --from=build-avalanche-warning-maps /app/avalanche-warning-maps-master /opt/avalanche-warning-maps
 
 EXPOSE 8080
