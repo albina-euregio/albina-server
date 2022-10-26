@@ -492,7 +492,6 @@ public class AvalancheReportController {
 				avalancheReport.setStatus(latestReport.getStatus());
 				avalancheReport.setMediaFileUploaded(latestReport.isMediaFileUploaded());
 				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region, false).toString());
-				avalancheReport.setBulletins(publishedBulletins);
 				entityManager.persist(avalancheReport);
 				return avalancheReport;
 			} else {
@@ -562,7 +561,6 @@ public class AvalancheReportController {
 			}
 
 			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
-			avalancheReport.setBulletins(bulletins);
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());

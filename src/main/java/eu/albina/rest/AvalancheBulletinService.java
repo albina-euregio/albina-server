@@ -799,6 +799,7 @@ public class AvalancheBulletinService {
 			Map<String, Thread> threads = new HashMap<String, Thread>();
 			for (Region region : publishBulletinRegions) {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+				avalancheReport.setBulletins(bulletins);
 				avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 				Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(avalancheReport);
 				threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
@@ -847,6 +848,7 @@ public class AvalancheBulletinService {
 			for (Region region: publishBulletinRegions) {
 				try {
 					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+					avalancheReport.setBulletins(bulletins);
 					avalancheReport.setServerInstance(localServerInstance);
 					PublicationController.getInstance().createMaps(avalancheReport);
 				} catch (InterruptedException e) {
@@ -929,6 +931,7 @@ public class AvalancheBulletinService {
 
 			for (Region region: publishBulletinRegions) {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+				avalancheReport.setBulletins(bulletins);
 				avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 				PublicationController.getInstance().createJson(avalancheReport);
 			}

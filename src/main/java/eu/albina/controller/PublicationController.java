@@ -107,6 +107,7 @@ public class PublicationController {
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+			avalancheReport.setBulletins(bulletins);
 			avalancheReport.setServerInstance(localServerInstance);
 			String avalancheReportId = avalancheReport.getId();
 
@@ -221,6 +222,7 @@ public class PublicationController {
 			String avalancheReportId;
 			if (region.getSubRegions().isEmpty()) {
 				avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+				avalancheReport.setBulletins(bulletins);
 				avalancheReportId = avalancheReport.getId();
 			} else {
 				avalancheReport = new AvalancheReport();
@@ -316,6 +318,7 @@ public class PublicationController {
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
+			avalancheReport.setBulletins(bulletins);
 			avalancheReport.setServerInstance(localServerInstance);
 			String avalancheReportId = avalancheReport.getId();
 
