@@ -19,7 +19,6 @@ package eu.albina.jobs;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -84,12 +83,10 @@ public class UpdateJob implements org.quartz.Job {
 				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
 						.publishBulletins(startDate, endDate, changedRegions, publicationDate, user);
 				if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
-					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-					for (AvalancheBulletin avalancheBulletin : publishedBulletins.values()) {
-						if (avalancheBulletin.getPublishedRegions() != null
-								&& !avalancheBulletin.getPublishedRegions().isEmpty())
-							result.add(avalancheBulletin);
-					}
+					List<AvalancheBulletin> result = publishedBulletins.values().stream()
+						.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
+							&& !avalancheBulletin.getPublishedRegions().isEmpty())
+						.collect(Collectors.toList());
 					if (result != null && !result.isEmpty())
 						PublicationController.getInstance().updateAutomatically(result, changedRegions, user, publicationDate, startDate);
 				}

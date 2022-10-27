@@ -20,10 +20,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
 
@@ -61,32 +60,26 @@ public class JsonUtil {
 				b.setId(bulletin.getId());
 
 				// delete all published regions which are foreign
-				Set<String> newPublishedRegions = new HashSet<String>();
 				if (b.getPublishedRegions() != null) {
-					for (String publishedRegion : b.getPublishedRegions()) {
-						if (publishedRegion.startsWith(region.getId()))
-							newPublishedRegions.add(publishedRegion);
-					}
+					Set<String> newPublishedRegions = b.getPublishedRegions().stream()
+						.filter(publishedRegion -> publishedRegion.startsWith(region.getId()))
+						.collect(Collectors.toSet());
 					b.setPublishedRegions(newPublishedRegions);
 				}
 
 				// delete all saved regions which are foreign
-				Set<String> newSavedRegions = new HashSet<String>();
 				if (b.getSavedRegions() != null) {
-					for (String savedRegion : b.getSavedRegions()) {
-						if (savedRegion.startsWith(region.getId()))
-							newSavedRegions.add(savedRegion);
-					}
+					Set<String> newSavedRegions = b.getSavedRegions().stream()
+						.filter(savedRegion -> savedRegion.startsWith(region.getId()))
+						.collect(Collectors.toSet());
 					b.setSavedRegions(newSavedRegions);
 				}
 
 				// delete all suggested regions which are foreign
-				Set<String> newSuggestedRegions = new HashSet<String>();
 				if (b.getSuggestedRegions() != null) {
-					for (String suggestedRegion : b.getSuggestedRegions()) {
-						if (suggestedRegion.startsWith(region.getId()))
-							newSuggestedRegions.add(suggestedRegion);
-					}
+					Set<String> newSuggestedRegions = b.getSuggestedRegions().stream()
+						.filter(suggestedRegion -> suggestedRegion.startsWith(region.getId()))
+						.collect(Collectors.toSet());
 					b.setSuggestedRegions(newSuggestedRegions);
 				}
 

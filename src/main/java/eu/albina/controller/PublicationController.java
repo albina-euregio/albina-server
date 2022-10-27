@@ -19,7 +19,6 @@ package eu.albina.controller;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -399,12 +398,10 @@ public class PublicationController {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : allBulletins) {
-					if (avalancheBulletin.getPublishedRegions() != null
-							&& !avalancheBulletin.getPublishedRegions().isEmpty())
-						result.add(avalancheBulletin);
-				}
+				List<AvalancheBulletin> result = allBulletins.stream()
+					.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
+						&& !avalancheBulletin.getPublishedRegions().isEmpty())
+					.collect(Collectors.toList());
 				if (result != null && !result.isEmpty())
 					PublicationController.getInstance().update(result, regions, user, publicationDate, startDate);
 
@@ -428,12 +425,10 @@ public class PublicationController {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin avalancheBulletin : allBulletins) {
-					if (avalancheBulletin.getPublishedRegions() != null
-							&& !avalancheBulletin.getPublishedRegions().isEmpty())
-						result.add(avalancheBulletin);
-				}
+				List<AvalancheBulletin> result = allBulletins.stream()
+					.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
+						&& !avalancheBulletin.getPublishedRegions().isEmpty())
+					.collect(Collectors.toList());
 				if (result != null && !result.isEmpty())
 					PublicationController.getInstance().change(result, user, startDate);
 			}

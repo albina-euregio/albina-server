@@ -17,7 +17,6 @@
 package eu.albina.rest;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -30,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -502,12 +503,10 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			JSONArray bulletinsJson = new JSONArray(bulletinsString);
-			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (int i = 0; i < bulletinsJson.length(); i++) {
-				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
-				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser);
-				bulletins.add(bulletin);
-			}
+			List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
+				.mapToObj(bulletinsJson::getJSONObject)
+				.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
+				.collect(Collectors.toList());
 
 			Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
 					.saveBulletins(bulletins, startDate, endDate, region, null);
@@ -547,13 +546,11 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			JSONArray bulletinsJson = new JSONArray(bulletinsString);
-			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (int i = 0; i < bulletinsJson.length(); i++) {
-				// TODO validate
-				JSONObject bulletinJson = bulletinsJson.getJSONObject(i);
-				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser);
-				bulletins.add(bulletin);
-			}
+			List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
+				.mapToObj(bulletinsJson::getJSONObject)
+				.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
+				.collect(Collectors.toList());
+			// TODO validate
 
 			Instant publicationTime = AlbinaUtil.getInstantNowNoNanos();
 			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
@@ -563,10 +560,9 @@ public class AvalancheBulletinService {
 					endDate, region, publicationTime, user);
 
 			// select bulletins within the region
-			List<AvalancheBulletin> publishedBulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin bulletin : allBulletins)
-				if (bulletin.affectsRegionWithoutSuggestions(region))
-					publishedBulletins.add(bulletin);
+			List<AvalancheBulletin> publishedBulletins = allBulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
+				.collect(Collectors.toList());
 
 			PublicationController.getInstance().startChangeThread(allBulletins, publishedBulletins, startDate, region,
 					user);
@@ -654,10 +650,9 @@ public class AvalancheBulletinService {
 						.publishBulletins(startDate, endDate, region, publicationDate, user);
 
 				// select bulletins within the region
-				List<AvalancheBulletin> publishedBulletins = new ArrayList<AvalancheBulletin>();
-				for (AvalancheBulletin bulletin : allBulletins)
-					if (bulletin.affectsRegionWithoutSuggestions(region))
-						publishedBulletins.add(bulletin);
+				List<AvalancheBulletin> publishedBulletins = allBulletins.stream()
+					.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
+					.collect(Collectors.toList());
 
 				List<Region> regions = new ArrayList<Region>();
 				regions.add(region);
@@ -709,12 +704,10 @@ public class AvalancheBulletinService {
 							.publishBulletins(startDate, endDate, regions, publicationDate, user);
 
 					if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
-						List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-						for (AvalancheBulletin avalancheBulletin : publishedBulletins.values()) {
-							if (avalancheBulletin.getPublishedRegions() != null
-									&& !avalancheBulletin.getPublishedRegions().isEmpty())
-								result.add(avalancheBulletin);
-						}
+						List<AvalancheBulletin> result = publishedBulletins.values().stream()
+							.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
+								&& !avalancheBulletin.getPublishedRegions().isEmpty())
+							.collect(Collectors.toList());
 						if (result != null && !result.isEmpty())
 							PublicationController.getInstance().publish(result, user, publicationDate, startDate);
 					}

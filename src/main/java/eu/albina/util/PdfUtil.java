@@ -21,9 +21,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.google.common.io.Resources;
 
@@ -158,12 +160,9 @@ public class PdfUtil {
 	 * detailed information about each aggregated region touching the province.
 	 */
 	public static void createRegionPdfs(AvalancheReport avalancheReport) {
-
-		ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-		for (AvalancheBulletin avalancheBulletin : avalancheReport.getBulletins()) {
-			if (avalancheBulletin.affectsRegionOnlyPublished(avalancheReport.getRegion()))
-				regionBulletins.add(avalancheBulletin);
-		}
+		List<AvalancheBulletin> regionBulletins = avalancheReport.getBulletins().stream()
+			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(avalancheReport.getRegion()))
+			.collect(Collectors.toList());
 		if (regionBulletins.isEmpty()) {
 			return;
 		}
@@ -179,10 +178,7 @@ public class PdfUtil {
 	}
 
 	protected static Color getColor(String hex) {
-		final int[] rgb = new int[3];
-		for (int i = 0; i < 3; i++) {
-			rgb[i] = Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
-		}
+		final int[] rgb = IntStream.range(0, 3).map(i -> Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16)).toArray();
 		return new DeviceRgb(rgb[0], rgb[1], rgb[2]);
 	}
 

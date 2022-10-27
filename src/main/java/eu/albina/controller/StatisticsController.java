@@ -24,6 +24,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.apache.commons.text.StringEscapeUtils;
 
 import org.slf4j.Logger;
@@ -140,14 +142,12 @@ public class StatisticsController {
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, List<Region> regions, boolean extended,
 			boolean duplicateBulletinForenoon) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			for (Region region : regions) {
-				// get latest reports
-				Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
-						endDate, region);
-				// get bulletins from report json
-				bulletins.addAll(getPublishedBulletinsFromReports(reports, lang));
-			}
+			List<AvalancheBulletin> bulletins = regions.stream()
+				.map(region -> AvalancheReportController.getInstance().getPublicReports(startDate,
+					endDate, region)).flatMap(reports -> getPublishedBulletinsFromReports(reports, lang).stream())
+				.collect(Collectors.toList());
+			// get latest reports
+			// get bulletins from report json
 
 			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
