@@ -348,12 +348,14 @@ public class AvalancheReportController {
 			}
 
 			// select most recent report
-			for (AvalancheReport avalancheReport : reports)
+			for (AvalancheReport avalancheReport : reports) {
+				avalancheReport.setRegion(region);
 				if (result.containsKey(avalancheReport.getDate().toInstant())) {
 					if (result.get(avalancheReport.getDate().toInstant()).getTimestamp().isBefore(avalancheReport.getTimestamp()))
 						result.put(avalancheReport.getDate().toInstant(), avalancheReport);
 				} else
 					result.put(avalancheReport.getDate().toInstant(), avalancheReport);
+			}
 
 			return result.values();
 		});
@@ -382,11 +384,13 @@ public class AvalancheReportController {
 			}
 
 			// select most recent report
-			for (AvalancheReport avalancheReport : reports)
+			for (AvalancheReport avalancheReport : reports) {
+				avalancheReport.setRegion(region);
 				if (result == null)
 					result = avalancheReport;
 				else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
 					result = avalancheReport;
+			}
 
 			return result;
 		});
