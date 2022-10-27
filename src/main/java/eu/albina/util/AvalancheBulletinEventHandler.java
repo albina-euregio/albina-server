@@ -24,7 +24,7 @@ import eu.albina.model.enumerations.BulletinStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.events.Event;
 import com.itextpdf.kernel.events.IEventHandler;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
@@ -101,7 +101,7 @@ public class AvalancheBulletinEventHandler implements IEventHandler {
 							.endText();
 			}
 
-			Canvas canvas = new Canvas(pdfCanvas, pdfDoc, page.getPageSize());
+			Canvas canvas = new Canvas(pdfCanvas, page.getPageSize());
 
 			// Add copyright
 			String copyright = "";
