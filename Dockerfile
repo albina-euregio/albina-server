@@ -25,11 +25,10 @@ WORKDIR /app
 ADD https://gitlab.com/albina-euregio/avalanche-warning-maps/-/archive/master/avalanche-warning-maps-master.zip avalanche-warning-maps.zip
 RUN apk add unzip && unzip avalanche-warning-maps.zip && find
 
-FROM maven:3-eclipse-temurin-17 AS build
+FROM alpine:latest AS build
 WORKDIR /app
-ADD src src
-ADD pom.xml pom.xml
-RUN mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true --activate-profiles env-prod package -Dmaven.test.skip=true
+ADD https://gitlab.com/albina-euregio/albina-server/-/jobs/artifacts/docker/download?job=production+build albina-server.zip
+RUN apk add unzip && unzip albina-server.zip && unzip target/albina.war -d /app/target/albina
 ADD docker-log4j2.xml target/albina/WEB-INF/classes/log4j2.xml
 
 FROM tomcat:8-jre11-temurin
