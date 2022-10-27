@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" xmlns="http://logging.apache.org/log4j/2.0/config">
+	<Appenders>
+		<Console name="STDOUT">
+			<PatternLayout pattern="%date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="STDOUT"/>
+		</Root>
+	</Loggers>
+</Configuration>

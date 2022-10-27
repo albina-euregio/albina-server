@@ -29,11 +29,12 @@ FROM maven:3-eclipse-temurin-17 AS build
 WORKDIR /app
 ADD src src
 ADD pom.xml pom.xml
-RUN mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true --activate-profiles env-docker package -Dmaven.test.skip=true
+RUN mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true --activate-profiles env-prod package -Dmaven.test.skip=true
+ADD docker-log4j2.xml target/albina/WEB-INF/classes/log4j2.xml
 
 FROM tomcat:8-jre11-temurin
 RUN apt-get update -y && apt-get install -y ghostscript imagemagick webp
-COPY --from=build /app/target/albina.war /usr/local/tomcat/webapps/
+COPY --from=build /app/target/albina /usr/local/tomcat/webapps/albina
 COPY --from=build-albina-admin-gui /app/dist /usr/local/tomcat/webapps/ROOT
 COPY --from=build-textcat-ng /app/dist /usr/local/tomcat/webapps/textcat-ng
 COPY --from=build-avalanche-warning-maps /app/avalanche-warning-maps-master /opt/avalanche-warning-maps
