@@ -17,6 +17,8 @@ production build:
         - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
     artifacts:
         when: always
+        paths:
+            - target/albina.war
         reports:
             junit:
                 - target/surefire-reports/TEST-*.xml
