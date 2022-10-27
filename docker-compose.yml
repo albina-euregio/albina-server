@@ -17,6 +17,8 @@ services:
 
   albina-server:
     build: .
+    environment:
+      ALBINA_DB_CONNECTION_URL: "jdbc:mysql://albina-db:3306/albina?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
     ports:
       - "8080:8080"
     networks:
