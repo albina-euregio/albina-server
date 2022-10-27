@@ -1,2 +1,0 @@
-FROM mysql
-COPY ./src/main/resources/sql/albina_create.sql ./src/main/resources/sql/albina_init_docker.sql /docker-entrypoint-initdb.d/

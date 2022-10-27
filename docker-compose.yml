@@ -2,15 +2,15 @@ version: "3.9"
 services:
 
   albina-db:
-    build:
-      context: .
-      dockerfile: Dockerfile.mysql
+    image: mysql:latest
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: yes
       MYSQL_USER: ais
       MYSQL_PASSWORD: "MD>5:X*n%)1V"
       MYSQL_DATABASE: albina
     volumes:
+      - ./src/main/resources/sql/albina_create.sql:/docker-entrypoint-initdb.d/albina_create.sql:Z
+      - ./src/main/resources/sql/albina_init_docker.sql:/docker-entrypoint-initdb.d/albina_init_docker.sql:Z
       - mysql-data:/var/lib/mysql
     networks:
       - albina-network
