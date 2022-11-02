@@ -136,7 +136,6 @@ public interface MapUtil {
 	static void createMapyrusMaps(AvalancheReport avalancheReport, MapLevel mapLevel, DaytimeDependency daytimeDependency, AvalancheBulletin bulletin,
 								  boolean grayscale, SimpleBindings dangerBindings) throws IOException, MapyrusException, InterruptedException {
 		final Region region = avalancheReport.getRegion();
-		final ServerInstance serverInstance = avalancheReport.getServerInstance();
 		final Path outputDirectory = avalancheReport.getMapsPath();
 		final Path outputFile = outputDirectory.resolve(bulletin == null
 			? filename(region, mapLevel, daytimeDependency, grayscale, MapImageFormat.pdf)
@@ -157,7 +156,7 @@ public interface MapUtil {
 		}
 
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
-		final Path geodataPath = Paths.get(serverInstance.getMapProductionUrl()).resolve(region.getGeoDataDirectory());
+		final Path geodataPath = Paths.get(avalancheReport.getServerInstance().getMapProductionUrl()).resolve(region.getGeoDataDirectory());
 
 		bindings.put("xmax", region.getMapXmax());
 		bindings.put("xmin", region.getMapXmin());
@@ -257,7 +256,7 @@ public interface MapUtil {
 		if (Files.exists(path)) {
 			return path;
 		} else {
-			return geodataPath.subpath(0, geodataPath.getNameCount() - 1).resolve(filename);
+			return geodataPath.getParent().resolve(filename);
 		}
 	}
 

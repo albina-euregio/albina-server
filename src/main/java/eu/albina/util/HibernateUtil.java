@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -74,7 +76,10 @@ public class HibernateUtil {
 	}
 
 	public void setUp() {
-		entityManagerFactory = Persistence.createEntityManagerFactory("eu.albina");
+		final String connectionUrl = System.getenv("ALBINA_DB_CONNECTION_URL");
+		final Map<String, String> properties = connectionUrl == null ?
+			Collections.emptyMap() : Collections.singletonMap("hibernate.connection.url", connectionUrl);
+		entityManagerFactory = Persistence.createEntityManagerFactory("eu.albina", properties);
 		logger.info("Entity manager factory created!");
 	}
 
