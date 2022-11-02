@@ -47,12 +47,3 @@ deploy to production:
     only:
         - tags
     when: manual
-
-docker-build:
-    image: docker:latest
-    stage: build
-    services:
-        - docker:dind
-    script:
-        - docker info
-        - docker build --pull --tag albina-server .

@@ -44,25 +44,6 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>env-docker</id>
-			<properties>
-				<hibernate.connection.url>jdbc:mysql://albina-db:3306/albina?allowPublicKeyRetrieval=true&amp;amp;useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
-				<hibernate.connection.username>ais</hibernate.connection.username>
-				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
-				<hibernate.show-sql>false</hibernate.show-sql>
-				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
-				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
-				<albina.conf.git.version>SNAPSHOT</albina.conf.git.version>
-				<albina.log.prefix/>
-				<albina.log.level>DEBUG</albina.log.level>
-				<albina.log.level.c3p0>ERROR</albina.log.level.c3p0>
-				<albina.log.level.sql>INFO</albina.log.level.sql>
-				<albina.log.filepath>/usr/local/tomcat/</albina.log.filepath>
-				<albina.log.filename>albina.log</albina.log.filename>
-				<albina.log.dest>stdout</albina.log.dest>
-			</properties>
-		</profile>
-		<profile>
 			<id>env-dev</id>
 			<properties>
 				<hibernate.connection.url>jdbc:mysql://localhost:3306/albina_dev?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
