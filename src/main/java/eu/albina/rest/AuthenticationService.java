@@ -40,7 +40,7 @@ import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/authentication")
-@Tag(name = "/authentication")
+@Tag(name = "authentication")
 public class AuthenticationService {
 
 	// private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);

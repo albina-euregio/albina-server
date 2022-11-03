@@ -48,7 +48,7 @@ import eu.albina.model.Subscriber;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/email")
-@Tag(name = "/email")
+@Tag(name = "email")
 public class SubscriptionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);

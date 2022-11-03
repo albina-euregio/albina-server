@@ -45,7 +45,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/chat")
-@Tag(name = "/chat")
+@Tag(name = "chat")
 public class ChatService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ChatService.class);

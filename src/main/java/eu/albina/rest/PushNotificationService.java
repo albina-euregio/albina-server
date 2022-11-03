@@ -33,7 +33,7 @@ import eu.albina.model.PushSubscription;
 import eu.albina.util.PushNotificationUtil;
 
 @Path("/push")
-@Tag(name = "/push")
+@Tag(name = "push")
 public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 

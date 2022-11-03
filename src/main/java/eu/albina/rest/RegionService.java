@@ -48,7 +48,7 @@ import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/regions")
-@Tag(name = "/regions")
+@Tag(name = "regions")
 public class RegionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegionService.class);

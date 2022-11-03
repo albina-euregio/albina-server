@@ -45,7 +45,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/statistics")
-@Tag(name = "/statistics")
+@Tag(name = "statistics")
 public class StatisticsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);

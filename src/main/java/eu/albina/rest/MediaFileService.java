@@ -57,7 +57,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/media")
-@Tag(name = "/media")
+@Tag(name = "media")
 public class MediaFileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MediaFileService.class);

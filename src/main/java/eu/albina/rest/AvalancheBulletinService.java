@@ -89,7 +89,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/bulletins")
-@Tag(name = "/bulletins")
+@Tag(name = "bulletins")
 @OpenAPIDefinition(info = @Info(
 	title = "albina-server",
 	version = "0.0",

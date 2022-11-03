@@ -48,7 +48,7 @@ import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/user")
-@Tag(name = "/user")
+@Tag(name = "user")
 public class UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);

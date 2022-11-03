@@ -46,7 +46,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Path("/observations")
-@Tag(name = "/observations")
+@Tag(name = "observations")
 public class ObservationService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ObservationService.class);
