@@ -109,6 +109,7 @@ public class AvalancheBulletinService {
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "bulletins", content = @Content(schema = @Schema(implementation = AvalancheBulletin[].class)))
 	public Response getJSONBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds) {
