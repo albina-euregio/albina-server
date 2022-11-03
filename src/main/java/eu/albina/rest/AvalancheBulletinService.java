@@ -18,15 +18,11 @@ package eu.albina.rest;
 
 import java.io.File;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -264,147 +260,6 @@ public class AvalancheBulletinService {
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading highest danger rating", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		}
-	}
-
-	@GET
-	@Path("/status")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getStatus(@QueryParam("region") String regionId,
-			@QueryParam("timezone") String timezone,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
-
-		Instant startDate = DateControllerUtil.parseDateOrToday(start);
-		Instant endDate = DateControllerUtil.parseDateOrToday(end);
-		ZoneId zoneId = DateControllerUtil.parseTimezoneOrLocal(timezone);
-
-		try {
-			Map<Instant, BulletinStatus> status;
-			if (regionId == null || regionId.isEmpty()) {
-				status = AvalancheReportController.getInstance().getStatus(startDate, endDate,
-						RegionController.getInstance().getPublishBulletinRegions());
-			} else {
-				status = AvalancheReportController.getInstance().getStatus(startDate, endDate, RegionController.getInstance().getRegion(regionId));
-			}
-
-			JSONArray jsonResult = new JSONArray();
-
-			for (Entry<Instant, BulletinStatus> entry : status.entrySet()) {
-				JSONObject json = new JSONObject();
-				final ZonedDateTime dateTime = entry.getKey().atZone(zoneId);
-				final String iso8601 = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(dateTime);
-				json.put("date", iso8601);
-				json.put("status", entry.getValue().toString());
-				jsonResult.put(json);
-			}
-
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading status", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		}
-	}
-
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/status/internal")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getInternalStatus(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
-
-		try {
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-			Instant startDate = DateControllerUtil.parseDateOrToday(start);
-			Instant endDate = DateControllerUtil.parseDateOrNull(end);
-
-			Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
-					endDate, region);
-			JSONArray jsonResult = new JSONArray();
-
-			for (Entry<Instant, BulletinStatus> entry : status.entrySet()) {
-				JSONObject json = new JSONObject();
-				json.put("date", DateTimeFormatter.ISO_INSTANT.format(entry.getKey()));
-				json.put("status", entry.getValue().toString());
-				jsonResult.put(json);
-			}
-
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading status", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		} catch (HibernateException e) {
-			logger.warn("Error loading status for " + regionId);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		}
-	}
-
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/status/publications")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPublicationsStatus(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
-
-		Instant startDate = DateControllerUtil.parseDateOrToday(start);
-		Instant endDate = DateControllerUtil.parseDateOrNull(end);
-
-		if (regionId == null || regionId.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
-		Map<Instant, AvalancheReport> status = AvalancheReportController.getInstance().getPublicationStatus(startDate,
-				endDate, RegionController.getInstance().getRegion(regionId));
-		JSONArray jsonResult = new JSONArray();
-
-		for (Entry<Instant, AvalancheReport> entry : status.entrySet()) {
-			JSONObject json = new JSONObject();
-			json.put("date", DateTimeFormatter.ISO_INSTANT.format(entry.getKey()));
-			json.put("report", entry.getValue().toJSON());
-			jsonResult.put(json);
-		}
-
-		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-	}
-
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/status/publication")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPublicationStatus(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date) {
-
-		Instant startDate = DateControllerUtil.parseDateOrToday(date);
-		Instant endDate = startDate;
-
-		try {
-			Map<Instant, AvalancheReport> status = AvalancheReportController.getInstance()
-					.getPublicationStatus(startDate, endDate, RegionController.getInstance().getRegionOrThrowAlbinaException(regionId));
-
-			if (status.size() > 1)
-				logger.warn("More than one report found!");
-			else if (status.isEmpty())
-				throw new AlbinaException("No publication found!");
-
-			Map.Entry<Instant, AvalancheReport> entry = status.entrySet().iterator().next();
-			JSONObject json = new JSONObject();
-			json.put("date", DateTimeFormatter.ISO_INSTANT.format(entry.getKey()));
-			json.put("report", entry.getValue().toJSON());
-
-			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}
