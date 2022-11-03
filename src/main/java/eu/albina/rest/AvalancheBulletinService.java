@@ -499,7 +499,9 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			String bulletinsString, @QueryParam("region") String regionId, @Context SecurityContext securityContext) {
+			@Parameter(schema = @Schema(implementation = AvalancheBulletin[].class)) String bulletinsString,
+			@QueryParam("region") String regionId,
+			@Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins");
 
 		if (regionId == null || regionId.isEmpty()) {
@@ -541,8 +543,10 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeBulletins(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			String bulletinsString, @QueryParam("region") String regionId, @Context SecurityContext securityContext) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+		@Parameter(schema = @Schema(implementation = AvalancheBulletin[].class)) String bulletinsString,
+		@QueryParam("region") String regionId,
+		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins change");
 
 		if (regionId == null || regionId.isEmpty()) {
