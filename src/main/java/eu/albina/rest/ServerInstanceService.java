@@ -32,6 +32,12 @@ import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
 
+import eu.albina.model.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +65,9 @@ public class ServerInstanceService {
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateServerConfiguration(String serverInstance) {
+	@Operation(summary = "Update server configuration")
+	public Response updateServerConfiguration(
+		@Parameter(schema = @Schema(implementation = ServerInstance.class)) String serverInstance) {
 		try {
 			JSONObject serverInstanceJson = new JSONObject(serverInstance);
 			ServerInstanceController.getInstance().updateServerInstance(new ServerInstance(serverInstanceJson, RegionController.getInstance()::getRegion));
@@ -74,7 +82,10 @@ public class ServerInstanceService {
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createServerConfiguration(String serverString, @Context SecurityContext securityContext) {
+	@Operation(summary = "Create server configuration")
+	public Response createServerConfiguration(
+		@Parameter(schema = @Schema(implementation = ServerInstance.class)) String serverString,
+		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON server");
 		JSONObject serverJson = new JSONObject(serverString);
 		ServerInstance serverInstance = new ServerInstance(serverJson, RegionController.getInstance()::getRegion);
@@ -97,6 +108,8 @@ public class ServerInstanceService {
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get local server configuration")
+	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
 	public Response getLocalServerConfiguration() {
 		logger.debug("GET JSON server");
 		try {
@@ -115,6 +128,8 @@ public class ServerInstanceService {
 	@Path("/external")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get external server configurations")
+	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance[].class)))
 	public Response getExternalServerConfigurations() {
 		logger.debug("GET JSON external servers");
 		try {
