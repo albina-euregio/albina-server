@@ -45,10 +45,10 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/regions")
-@Api(value = "/regions")
+@Tag(name = "/regions")
 public class RegionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegionService.class);

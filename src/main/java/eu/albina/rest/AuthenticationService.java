@@ -37,10 +37,10 @@ import eu.albina.model.Credentials;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/authentication")
-@Api(value = "/authentication")
+@Tag(name = "/authentication")
 public class AuthenticationService {
 
 	// private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);

@@ -53,11 +53,11 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/media")
-@Api(value = "/media")
+@Tag(name = "/media")
 public class MediaFileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MediaFileService.class);
@@ -69,7 +69,7 @@ public class MediaFileService {
 	@Secured({ Role.ADMIN, Role.FORECASTER})
 	@Consumes({ MediaType.MULTIPART_FORM_DATA })
 	public Response saveMediaFile(
-		@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
 		@QueryParam("region") String regionId,
 		@QueryParam("lang") LanguageCode language,
 		@QueryParam("important") boolean important,

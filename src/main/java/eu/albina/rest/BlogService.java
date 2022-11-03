@@ -37,10 +37,10 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/blogs")
-@Api(value = "/blogs")
+@Tag(name = "/blogs")
 public class BlogService {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlogService.class);

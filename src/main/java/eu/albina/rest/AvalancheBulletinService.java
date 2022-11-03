@@ -78,11 +78,11 @@ import eu.albina.util.EmailUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/bulletins")
-@Api(value = "/bulletins")
+@Tag(name = "/bulletins")
 public class AvalancheBulletinService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
@@ -96,7 +96,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getJSONBulletins(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds) {
 		logger.debug("GET JSON bulletins");
 
@@ -134,7 +134,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getPublishedXMLBulletins(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language,
 			@QueryParam("version") CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
@@ -195,7 +195,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublishedJSONBulletins(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published JSON bulletins");
 
@@ -232,7 +232,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getHighestDangerRating(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds) {
 		logger.debug("GET highest danger rating");
 
@@ -265,8 +265,8 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getStatus(@QueryParam("region") String regionId,
 			@QueryParam("timezone") String timezone,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(start);
 		Instant endDate = DateControllerUtil.parseDateOrToday(end);
@@ -305,8 +305,8 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getInternalStatus(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
 		if (regionId == null || regionId.isEmpty()) {
 			logger.warn("No region defined.");
@@ -345,8 +345,8 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublicationsStatus(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(start);
 		Instant endDate = DateControllerUtil.parseDateOrNull(end);
@@ -376,7 +376,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPublicationStatus(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		Instant endDate = startDate;
@@ -411,7 +411,7 @@ public class AvalancheBulletinService {
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
     @Path("/preview")
     @Produces("application/pdf")
-    public Response getPreviewPdf(@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
+    public Response getPreviewPdf(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
 
 		logger.debug("GET PDF preview [{}, {}]", date, regionId);
 
@@ -485,7 +485,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletins(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			String bulletinsString, @QueryParam("region") String regionId, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins");
 
@@ -528,7 +528,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeBulletins(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			String bulletinsString, @QueryParam("region") String regionId, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins change");
 
@@ -580,7 +580,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response submitBulletins(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST submit bulletins");
 
@@ -627,7 +627,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response publishBulletins(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST publish bulletins");
 
@@ -683,7 +683,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response publishAllBulletins(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST publish all bulletins");
 
@@ -731,7 +731,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPdf(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create PDF [{}]", date);
 
@@ -779,7 +779,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createHtml(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create HTML [{}]", date);
 
@@ -824,7 +824,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createMap(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create map [{}]", date);
 
@@ -869,7 +869,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createCaaml(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create caaml [{}]", date);
 
@@ -909,7 +909,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createJson(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST create json [{}]", date);
 
@@ -947,7 +947,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response sendEmail(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
 			if (regionId == null)
@@ -984,7 +984,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response sendTestEmail(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
 			if (regionId == null)
@@ -1025,7 +1025,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response triggerTelegramChannel(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
 			if (regionId == null)
@@ -1056,7 +1056,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response triggerTestTelegramChannel(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
 			if (regionId == null)
@@ -1089,7 +1089,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response triggerPushNotifications(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
 			if (regionId == null)
@@ -1126,7 +1126,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response triggerTestPushNotifications(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
 			if (regionId == null)
@@ -1164,7 +1164,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response checkBulletins(@QueryParam("region") String regionId,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
 		logger.debug("GET check bulletins");
 

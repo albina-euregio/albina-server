@@ -41,11 +41,11 @@ import eu.albina.controller.ChatController;
 import eu.albina.model.ChatMessage;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/chat")
-@Api(value = "/chat")
+@Tag(name = "/chat")
 public class ChatService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ChatService.class);
@@ -58,7 +58,7 @@ public class ChatService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getJsonChatMessages(
-			@ApiParam(value = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
+			@Parameter(description = "Start date in the format yyyy-MM-dd'T'HH:mm:ssZZ") @QueryParam("date") String date) {
 		logger.debug("GET JSON chat messages");
 
 		Instant dateTime = null;

@@ -44,10 +44,10 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/server")
-@Api(value = "/server")
+@Tag(name = "/server")
 public class ServerInstanceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerInstanceService.class);

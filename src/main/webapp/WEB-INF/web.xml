@@ -32,8 +32,7 @@
 			<param-name>jersey.config.server.provider.packages</param-name>
 			<param-value>
 				eu.albina.rest
-				io.swagger.jaxrs.json,
-				io.swagger.jaxrs.listing
+				io.swagger.v3.jaxrs2.integration.resources
 			</param-value>
 		</init-param>
 		<init-param>
@@ -55,18 +54,4 @@
 		<servlet-name>albina</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>Jersey2Config</servlet-name>
-		<servlet-class>io.swagger.jaxrs.config.DefaultJaxrsConfig</servlet-class>
-		<init-param>
-			<param-name>api.version</param-name>
-			<param-value>0.1</param-value>
-		</init-param>
-		<init-param>
-			<param-name>swagger.api.basepath</param-name>
-			<param-value>https://api.avalanche.report/albina/api</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
 </web-app>

@@ -45,10 +45,10 @@ import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/email")
-@Api(value = "/email")
+@Tag(name = "/email")
 public class SubscriptionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);

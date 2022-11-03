@@ -41,11 +41,11 @@ import eu.albina.controller.StatisticsController;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/statistics")
-@Api(value = "/statistics")
+@Tag(name = "/statistics")
 public class StatisticsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);
@@ -57,8 +57,8 @@ public class StatisticsService {
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Produces("text/csv")
 	public Response getBulletinCsv(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate,
 			@QueryParam("lang") LanguageCode language, @QueryParam("extended") boolean extended,
 			@QueryParam("duplicate") boolean duplicate) {
 		logger.debug("GET CSV bulletins");

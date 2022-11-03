@@ -20,8 +20,8 @@ import eu.albina.controller.ObservationController;
 import eu.albina.model.Observation;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Path("/observations")
-@Api(value = "/observations")
+@Tag(name = "/observations")
 public class ObservationService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ObservationService.class);
@@ -54,8 +54,8 @@ public class ObservationService {
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	public List<Observation> getObservations(
-		@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-		@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
 		LocalDateTime startDate = OffsetDateTime.parse(start).toLocalDateTime();
 		LocalDateTime endDate = OffsetDateTime.parse(end).toLocalDateTime();
@@ -99,8 +99,8 @@ public class ObservationService {
 	@Path("/export")
 	@Produces("text/csv")
 	public Response getBulletinCsv(
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
-			@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate
 			) {
 		logger.debug("GET CSV observations");
 

@@ -45,10 +45,10 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/user")
-@Api(value = "/user")
+@Tag(name = "/user")
 public class UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
