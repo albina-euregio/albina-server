@@ -35,10 +35,18 @@ import eu.albina.controller.UserController;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/authentication")
 @Tag(name = "authentication")
+@SecurityScheme(
+	name = "authentication",
+	description="Obtained from POST /authentication",
+	type = SecuritySchemeType.HTTP,
+	scheme = "bearer",
+	bearerFormat = "JWT")
 public class AuthenticationService {
 
 	static class Credentials {
