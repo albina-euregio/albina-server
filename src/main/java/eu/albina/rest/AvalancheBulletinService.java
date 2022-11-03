@@ -49,6 +49,10 @@ import javax.ws.rs.core.UriInfo;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +87,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/bulletins")
 @Tag(name = "/bulletins")
+@OpenAPIDefinition(info = @Info(
+	title = "albina-server",
+	version = "0.0",
+	description = "Server component to compose and publish multilingual avalanche bulletins",
+	license = @License(name = "GNU General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"),
+	contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")
+))
 public class AvalancheBulletinService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
