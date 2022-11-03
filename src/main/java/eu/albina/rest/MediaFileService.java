@@ -36,12 +36,12 @@ import javax.ws.rs.core.UriInfo;
 
 import com.github.openjson.JSONObject;
 
+import eu.albina.controller.RegionController;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
@@ -78,12 +78,7 @@ public class MediaFileService {
 		@Context SecurityContext securityContext) {
 		try {
 
-			if (regionId == null) {
-				logger.warn("Region for media file not defined!");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity("Region for media file not defined!").build();
-			}
-
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region == null || !user.hasPermissionForRegion(region.getId())) {

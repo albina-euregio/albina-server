@@ -126,6 +126,21 @@ public class RegionController {
 		});
     }
 
+	public Region getRegionOrThrowAlbinaException(String regionId) throws AlbinaException {
+		if (regionId == null) {
+			throw new AlbinaException("No region defined!");
+		}
+		try {
+			Region region = getRegion(regionId);
+			if (region == null) {
+				throw new AlbinaException("No region with id " + regionId + " found!");
+			}
+			return region;
+		} catch (HibernateException e) {
+			throw new AlbinaException("No region with id " + regionId + " found!");
+		}
+	}
+
 	public List<Region> getPublishBulletinRegions() {
 		try {
 			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());

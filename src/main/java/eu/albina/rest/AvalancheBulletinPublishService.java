@@ -85,17 +85,12 @@ public class AvalancheBulletinPublishService {
 			@Context SecurityContext securityContext) {
 		logger.debug("POST publish bulletins");
 
-		if (regionId == null || regionId.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
@@ -405,12 +400,9 @@ public class AvalancheBulletinPublishService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (regionId == null)
-				throw new AlbinaException("No region defined!");
-
 			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
@@ -443,12 +435,9 @@ public class AvalancheBulletinPublishService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (regionId == null)
-				throw new AlbinaException("No region defined!");
-
 			logger.debug("POST send TEST emails for {} in {} [{}]", regionId, language, date);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
@@ -485,12 +474,9 @@ public class AvalancheBulletinPublishService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (regionId == null)
-				throw new AlbinaException("No region defined!");
-
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
@@ -517,12 +503,9 @@ public class AvalancheBulletinPublishService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (regionId == null)
-				throw new AlbinaException("No region defined!");
-
 			logger.debug("POST trigger TEST telegram channel for {} in {} [{}]", regionId, language, date);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
@@ -551,12 +534,9 @@ public class AvalancheBulletinPublishService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (regionId == null)
-				throw new AlbinaException("No region defined!");
-
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			Instant startDate = null;
 
@@ -589,12 +569,9 @@ public class AvalancheBulletinPublishService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (regionId == null)
-				throw new AlbinaException("No region defined!");
-
 			logger.debug("POST trigger TEST push notifications for {} in {} [{}]", regionId, language, date);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			Instant startDate = null;
 

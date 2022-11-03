@@ -153,13 +153,8 @@ public class AvalancheBulletinService {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 
-		if (regionId == null || regionId.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
 		try {
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			AvalancheBulletinController.getInstance();
 			ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
 				Collections.singletonList(region));
@@ -320,13 +315,8 @@ public class AvalancheBulletinService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
-		if (regionId == null || regionId.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
 		try {
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
@@ -393,14 +383,9 @@ public class AvalancheBulletinService {
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		Instant endDate = startDate;
 
-		if (regionId == null || regionId.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
 		try {
 			Map<Instant, AvalancheReport> status = AvalancheReportController.getInstance()
-					.getPublicationStatus(startDate, endDate, RegionController.getInstance().getRegion(regionId));
+					.getPublicationStatus(startDate, endDate, RegionController.getInstance().getRegionOrThrowAlbinaException(regionId));
 
 			if (status.size() > 1)
 				logger.warn("More than one report found!");
@@ -429,7 +414,7 @@ public class AvalancheBulletinService {
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			AvalancheReport report = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
 			if (report != null	&& report.getJsonString() != null) {
@@ -504,16 +489,11 @@ public class AvalancheBulletinService {
 			@Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins");
 
-		if (regionId == null || regionId.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
@@ -549,16 +529,11 @@ public class AvalancheBulletinService {
 		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins change");
 
-		if (regionId == null || regionId.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
@@ -601,16 +576,11 @@ public class AvalancheBulletinService {
 			@Context SecurityContext securityContext) {
 		logger.debug("POST submit bulletins");
 
-		if (regionId == null || regionId.isEmpty()) {
-			logger.warn("No region defined.");
-			return Response.noContent().build();
-		}
-
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
@@ -645,7 +615,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
