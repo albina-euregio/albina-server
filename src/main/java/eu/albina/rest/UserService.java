@@ -33,6 +33,11 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +65,8 @@ public class UserService {
 	@Secured({ Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get all users")
+	@ApiResponse(description = "users", content = @Content(schema = @Schema(implementation = User[].class)))
 	public Response getUsers(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON users");
 		try {
@@ -78,6 +85,8 @@ public class UserService {
 	@Path("/roles")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get roles of logged-in user")
+	@ApiResponse(description = "roles", content = @Content(schema = @Schema(implementation = String[].class)))
 	public Response getRoles(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON roles");
 		try {
@@ -96,6 +105,8 @@ public class UserService {
 	@Path("/regions")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get regions of logged-in user")
+	@ApiResponse(description = "regions", content = @Content(schema = @Schema(implementation = String[].class)))
 	public Response getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
 		try {
@@ -114,7 +125,10 @@ public class UserService {
 	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createUser(String userString, @Context SecurityContext securityContext) {
+	@Operation(summary = "Create user")
+	public Response createUser(
+		@Parameter(schema = @Schema(implementation = User.class)) String userString,
+		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON user");
 		JSONObject userJson = new JSONObject(userString);
 		User user = new User(userJson, RegionController.getInstance()::getRegion);
@@ -137,7 +151,10 @@ public class UserService {
 	@Secured({ Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response udpateUser(String userString, @Context SecurityContext securityContext) {
+	@Operation(summary = "Update user")
+	public Response updateUser(
+		@Parameter(schema = @Schema(implementation = User.class)) String userString,
+		@Context SecurityContext securityContext) {
 		logger.debug("PUT JSON user");
 		try {
 			JSONObject userJson = new JSONObject(userString);
@@ -161,21 +178,24 @@ public class UserService {
 		}
 	}
 
+	static class ChangePassword {
+		public String oldPassword;
+		public String newPassword;
+	}
+
 	@PUT
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Path("/change")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response changePassword(String data, @Context SecurityContext securityContext) {
+	@Operation(summary = "Change password")
+	public Response changePassword(ChangePassword data, @Context SecurityContext securityContext) {
 		logger.debug("POST JSON user");
 		try {
-			JSONObject dataJson = new JSONObject(data);
-
 			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
-			UserController.getInstance().changePassword(username, dataJson.get("oldPassword").toString(),
-					dataJson.get("newPassword").toString());
+			UserController.getInstance().changePassword(username, data.oldPassword, data.newPassword);
 
 			JSONObject jsonObject = new JSONObject();
 			return Response.ok().type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
@@ -185,21 +205,23 @@ public class UserService {
 		}
 	}
 
+	static class CheckPassword {
+		public String password;
+	}
+
 	@PUT
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
 	@Path("/check")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response checkPassword(String data, @Context SecurityContext securityContext) {
+	@Operation(summary = "Check password")
+	public Response checkPassword(CheckPassword data, @Context SecurityContext securityContext) {
 		logger.debug("GET JSON check password");
 		try {
-			JSONObject dataJson = new JSONObject(data);
-
 			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
-			if (dataJson.has("password")
-					&& UserController.getInstance().checkPassword(username, dataJson.getString("password")))
+			if (UserController.getInstance().checkPassword(username, data.password))
 				return Response.ok(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 						.build();
 			else
@@ -215,7 +237,8 @@ public class UserService {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void deleteObservation(@PathParam("id") String id) {
+	@Operation(summary = "Delete user")
+	public void deleteUser(@PathParam("id") String id) {
 		logger.info("DELETE JSON user {}", id);
 		UserController.delete(id);
 	}
