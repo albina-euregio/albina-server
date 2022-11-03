@@ -54,6 +54,7 @@ import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +104,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -308,6 +310,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/status/internal")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -343,6 +346,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/status/publications")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -374,6 +378,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/status/publication")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -406,6 +411,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
     @Path("/preview")
     @Produces("application/pdf")
     public Response getPreviewPdf(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
@@ -456,6 +462,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/{bulletinId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -480,6 +487,7 @@ public class AvalancheBulletinService {
 
 	@POST
 	@Secured({ Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletins(
@@ -519,6 +527,7 @@ public class AvalancheBulletinService {
 
 	@POST
 	@Secured({ Role.FORECASTER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/change")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -568,6 +577,7 @@ public class AvalancheBulletinService {
 
 	@POST
 	@Secured({ Role.FORECASTER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/submit")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -600,6 +610,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Secured({ Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/check")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

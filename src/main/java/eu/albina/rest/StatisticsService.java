@@ -33,6 +33,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +56,7 @@ public class StatisticsService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces("text/csv")
 	public Response getBulletinCsv(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,

@@ -33,6 +33,8 @@ import javax.ws.rs.core.UriInfo;
 
 import com.github.openjson.JSONArray;
 
+import eu.albina.rest.AuthenticationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +57,7 @@ public class ChatService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getJsonChatMessages(
@@ -81,6 +84,7 @@ public class ChatService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/users")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

@@ -36,18 +36,21 @@ import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/authentication")
 @Tag(name = "authentication")
 @SecurityScheme(
-	name = "authentication",
+	name = AuthenticationService.SECURITY_SCHEME,
 	description="Obtained from POST /authentication",
 	type = SecuritySchemeType.HTTP,
 	scheme = "bearer",
 	bearerFormat = "JWT")
 public class AuthenticationService {
+
+	public static final String SECURITY_SCHEME = "authentication";
 
 	static class Credentials {
 		public String username;
@@ -77,6 +80,7 @@ public class AuthenticationService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response refreshToken(@Context SecurityContext securityContext) {

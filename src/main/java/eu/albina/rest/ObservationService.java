@@ -20,6 +20,7 @@ import eu.albina.controller.ObservationController;
 import eu.albina.model.Observation;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
@@ -53,6 +54,7 @@ public class ObservationService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	public List<Observation> getObservations(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
@@ -64,6 +66,7 @@ public class ObservationService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/{id}")
 	public Observation getObservation(@PathParam("id") long id) {
 		return ObservationController.get(id);
@@ -71,6 +74,7 @@ public class ObservationService {
 
 	@POST
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	public Observation postObservation(Observation observation) {
 		observation.setId(null);
 		logger.info("Creating observation {}", observation);
@@ -79,6 +83,7 @@ public class ObservationService {
 
 	@PUT
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/{id}")
 	public Observation putObservation(@PathParam("id") long id, Observation observation) {
 		observation.setId(id);
@@ -88,6 +93,7 @@ public class ObservationService {
 
 	@DELETE
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/{id}")
 	public void deleteObservation(@PathParam("id") long id) {
 		logger.info("Deleting observation {}", id);
@@ -96,6 +102,7 @@ public class ObservationService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/export")
 	@Produces("text/csv")
 	public Response getBulletinCsv(
