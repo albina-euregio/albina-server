@@ -36,6 +36,12 @@ import javax.ws.rs.core.UriInfo;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
+import eu.albina.model.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +66,8 @@ public class RegionService {
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get all regions")
+	@ApiResponse(description = "regions", content = @Content(schema = @Schema(implementation = Region[].class)))
 	public Response getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
 
@@ -86,6 +94,8 @@ public class RegionService {
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get region for ID")
+	@ApiResponse(description = "region", content = @Content(schema = @Schema(implementation = Region.class)))
 	public Response getRegion(@QueryParam("region") String regionId, @Context SecurityContext securityContext) {
 		logger.debug("GET JSON region");
 
@@ -104,7 +114,10 @@ public class RegionService {
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response udpateRegion(String regionString, @Context SecurityContext securityContext) {
+	@Operation(summary = "Update region")
+	public Response updateRegion(
+		@Parameter(schema = @Schema(implementation = Region.class)) String regionString,
+		@Context SecurityContext securityContext) {
 		logger.debug("PUT JSON region");
 
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
@@ -138,7 +151,10 @@ public class RegionService {
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createRegion(String regionString, @Context SecurityContext securityContext) {
+	@Operation(summary = "Create region")
+	public Response createRegion(
+		@Parameter(schema = @Schema(implementation = Region.class)) String regionString,
+		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON region");
 		JSONObject regionJson = new JSONObject(regionString);
 		Region region = new Region(regionJson, RegionController.getInstance()::getRegion);
