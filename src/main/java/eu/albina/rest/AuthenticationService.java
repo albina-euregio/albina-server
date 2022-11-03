@@ -27,13 +27,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
 
 import com.github.openjson.JSONObject;
 
 import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
-import eu.albina.model.Credentials;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
@@ -43,17 +41,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "authentication")
 public class AuthenticationService {
 
-	// private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-
-	@Context
-	UriInfo uri;
+	static class Credentials {
+		public String username;
+		public String password;
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(Credentials credentials) {
-		String username = credentials.getUsername().toLowerCase();
-		String password = credentials.getPassword();
+		String username = credentials.username.toLowerCase();
+		String password = credentials.password;
 
 		try {
 			UserController.getInstance().authenticate(username, password);
