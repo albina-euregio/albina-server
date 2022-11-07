@@ -40,8 +40,7 @@
 			<property name="hibernate.c3p0.idle_test_period" value="3000"/>
 
 			<!-- SQL dialect -->
-			<property name="hibernate.dialect" value="org.hibernate.spatial.dialect.mysql.MySQL56SpatialDialect"/>
-			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB53Dialect"/> -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL55Dialect"/>
 
 			<!-- Disable the second-level cache -->
 			<property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>
