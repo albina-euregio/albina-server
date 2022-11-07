@@ -31,9 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-public class CaamlValidator {
+public interface CaamlValidator {
 
-	private static final Logger logger = LoggerFactory.getLogger(CaamlValidator.class);
+	Logger logger = LoggerFactory.getLogger(CaamlValidator.class);
 
 	/**
 	 * Validates a CAAML string against the CAAML Bulletin schema.
@@ -49,22 +49,22 @@ public class CaamlValidator {
 	 * @throws SAXException
 	 *             If the caamlString is not valid.
 	 */
-	public static boolean validateCaamlBulletin(String caamlString, CaamlVersion version)
+	static boolean validateCaamlBulletin(String caamlString, CaamlVersion version)
 			throws SAXException, IOException {
 		return validate(caamlString, new StreamSource(version.schemaLocation()));
 	}
 
-	public static boolean validateCaamlBulletinLocalV5(String caamlString) throws SAXException, IOException {
+	static boolean validateCaamlBulletinLocalV5(String caamlString) throws SAXException, IOException {
 		return validate(caamlString, new StreamSource(
 				new File("D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\5.0\\CAAMLv5_BulletinEAWS.xsd")));
 	}
 
-	public static boolean validateCaamlBulletinLocalV6(String caamlString) throws SAXException, IOException {
+	static boolean validateCaamlBulletinLocalV6(String caamlString) throws SAXException, IOException {
 		return validate(caamlString, new StreamSource(
 				new File("D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\6.0\\CAAMLv6_BulletinEAWS.xsd")));
 	}
 
-	private static boolean validate(String caamlString, Source schemaFile) throws SAXException, IOException {
+	static boolean validate(String caamlString, Source schemaFile) throws SAXException, IOException {
 		StringReader stringReader = new StringReader(caamlString);
 		Source xmlFile = new StreamSource(stringReader);
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

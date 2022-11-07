@@ -48,7 +48,7 @@ import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.ServerInstance;
-import eu.albina.util.XmlUtil;
+import eu.albina.caaml.Caaml;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +152,7 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
 				Collections.singletonList(region));
 			AvalancheReport avalancheReport = AvalancheReport.of(result, region, ServerInstanceController.getInstance().getLocalServerInstance());
-			String caaml = XmlUtil.createCaaml(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
+			String caaml = Caaml.createCaaml(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
 				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
 			} else {

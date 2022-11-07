@@ -1,5 +1,6 @@
-package eu.albina.util;
+package eu.albina.caaml;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -9,9 +10,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import eu.albina.caaml.Caaml;
+import eu.albina.json.JsonValidator;
 import eu.albina.model.AvalancheReport;
+import eu.albina.util.HibernateUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -30,7 +35,9 @@ import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
-public class XmlUtilTest {
+import static org.junit.Assert.assertEquals;
+
+public class CaamlTest {
 
 	private Region regionEuregio;
 	private Region regionTyrol;
@@ -60,7 +67,7 @@ public class XmlUtilTest {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
-		return XmlUtil.createCaaml(avalancheReport, LanguageCode.en, version);
+		return Caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 	}
 
 	@Ignore("<Operation> needs gml:id")
@@ -116,9 +123,32 @@ public class XmlUtilTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(result, regionEuregio, serverInstanceEuregio);
 		for (LanguageCode language : Arrays.asList(LanguageCode.de, LanguageCode.en, LanguageCode.it)) {
 			Path path = Paths.get("/tmp/bulletins" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
-			String caaml = XmlUtil.createCaaml(avalancheReport, language, CaamlVersion.V6);
+			String caaml = Caaml.createCaaml(avalancheReport, language, CaamlVersion.V6);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.write(path, caaml.getBytes(StandardCharsets.UTF_8));
 		}
+	}
+
+	private static String buildCAAML(String resourceName) throws IOException {
+		final URL resource = Resources.getResource(resourceName);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
+		return Caaml6_2022.toCAAMLv6String_2022(avalancheReport, LanguageCode.en);
+	}
+
+	@Test
+	public void toCAAMLv6_2022a() throws Exception {
+		final String caaml = buildCAAML("2019-01-16.json");
+		final String expected = Resources.toString(Resources.getResource("2019-01-16.caaml.v6.json"), StandardCharsets.UTF_8);
+		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+	}
+
+	@Test
+	public void toCAAMLv6_2022b() throws Exception {
+		final String caaml = buildCAAML("2019-01-17.json");
+		final String expected = Resources.toString(Resources.getResource("2019-01-17.caaml.v6.json"), StandardCharsets.UTF_8);
+		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
 	}
 }
