@@ -34,6 +34,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -126,11 +127,9 @@ public class EmailUtil {
 				subject = MessageFormat.format(lang.getBundleString("email.subject.update", region), lang.getBundleString("website.name", region)) + AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
 			} else
 				subject = MessageFormat.format(lang.getBundleString("email.subject", region), lang.getBundleString("website.name", region)) + AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
-			ArrayList<AvalancheBulletin> regionBulletins = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin avalancheBulletin : avalancheReport.getBulletins()) {
-				if (avalancheBulletin.affectsRegionOnlyPublished(region))
-					regionBulletins.add(avalancheBulletin);
-			}
+			List<AvalancheBulletin> regionBulletins = avalancheReport.getBulletins().stream()
+				.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(region))
+				.collect(Collectors.toList());
 			if (regionBulletins != null && !regionBulletins.isEmpty()) {
 				String emailHtml = createBulletinEmailHtml(avalancheReport, lang);
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, avalancheReport.getStatus() == BulletinStatus.test);

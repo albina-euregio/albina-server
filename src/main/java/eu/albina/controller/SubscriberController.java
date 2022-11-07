@@ -22,8 +22,8 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -165,14 +165,9 @@ public class SubscriberController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage)
 					.setParameter("language", lang).getResultList();
-			List<Subscriber> results = new ArrayList<Subscriber>();
-			for (Subscriber subscriber : subscribers) {
-				for (String regionId : regionIds)
-					if (subscriber.affectsRegion(RegionController.getInstance().getRegion(regionId))) {
-						results.add(subscriber);
-						break;
-					}
-			}
+			List<Subscriber> results = subscribers.stream()
+				.filter(subscriber -> regionIds.stream().anyMatch(regionId -> subscriber.affectsRegion(RegionController.getInstance().getRegion(regionId))))
+				.collect(Collectors.toList());
 
 			for (Subscriber subscriber : results)
 				initializeSubscriber(subscriber);
@@ -194,13 +189,9 @@ public class SubscriberController {
 	 *         and the specified {@code regions}
 	 */
 	public List<String> getSubscriberEmails(LanguageCode lang, List<String> regions) {
-		List<String> result = new ArrayList<String>();
 		List<Subscriber> subscribers = getSubscribers(lang, regions);
 
-		for (Subscriber subscriber : subscribers)
-			result.add(subscriber.getEmail());
-
-		return result;
+		return subscribers.stream().map(Subscriber::getEmail).collect(Collectors.toList());
 	}
 
 	/**

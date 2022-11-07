@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -352,12 +353,10 @@ public class AvalancheBulletinController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin bulletin : bulletins) {
-				if (regions.stream().anyMatch(bulletin::affectsRegionWithoutSuggestions)) {
-					results.add(bulletin);
-				}
-			}
+			List<AvalancheBulletin> results = bulletins.stream()
+				.filter(bulletin -> regions.stream()
+					.anyMatch(bulletin::affectsRegionWithoutSuggestions))
+				.collect(Collectors.toList());
 
 			for (AvalancheBulletin bulletin : results)
 				initializeBulletin(bulletin);
@@ -387,12 +386,11 @@ public class AvalancheBulletinController {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			List<AvalancheBulletin> results = bulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegion(region))
+				.collect(Collectors.toList());
 
 			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegion(region))
-					results.add(bulletin);
 
 			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
@@ -478,16 +476,14 @@ public class AvalancheBulletinController {
 			Instant publicationDate, User user) {
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
 			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegionWithoutSuggestions(region))
-					results.add(bulletin);
+			List<AvalancheBulletin> results = bulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
+				.collect(Collectors.toList());
 
-			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
 
 				// set author
@@ -498,10 +494,9 @@ public class AvalancheBulletinController {
 				}
 
 				// publish all saved regions
-				result = new HashSet<String>();
-				for (String entry : bulletin.getSavedRegions())
-					if (entry.startsWith(region.getId()))
-						result.add(entry);
+				Set<String> result = bulletin.getSavedRegions().stream()
+					.filter(entry -> entry.startsWith(region.getId()))
+					.collect(Collectors.toSet());
 				for (String entry : result) {
 					bulletin.getSavedRegions().remove(entry);
 					bulletin.getPublishedRegions().add(entry);
@@ -556,11 +551,9 @@ public class AvalancheBulletinController {
 	 *         of {@code region}
 	 */
 	private Set<String> getOwnRegions(Set<String> regions, Region region) {
-		Set<String> result = new HashSet<String>();
-		for (String entry : regions)
-			if (entry.startsWith(region.getId()))
-				result.add(entry);
-		return result;
+		return regions.stream()
+			.filter(entry -> entry.startsWith(region.getId()))
+			.collect(Collectors.toSet());
 	}
 
 	/**
@@ -590,11 +583,10 @@ public class AvalancheBulletinController {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			List<AvalancheBulletin> results = bulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegion(region))
+				.collect(Collectors.toList());
 			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegion(region))
-					results.add(bulletin);
 
 			if (checkBulletinsForDuplicateRegion(bulletins, region))
 				json.put("duplicateRegion");
@@ -716,11 +708,9 @@ public class AvalancheBulletinController {
 	 *            the session id
 	 */
 	public void unlockBulletins(String sessionId) {
-		List<BulletinLock> hits = new ArrayList<BulletinLock>();
-		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (Objects.equals(bulletinLock.getSessionId(), sessionId))
-				hits.add(bulletinLock);
-		}
+		List<BulletinLock> hits = bulletinLocks.stream()
+			.filter(bulletinLock -> Objects.equals(bulletinLock.getSessionId(), sessionId))
+			.collect(Collectors.toList());
 		for (BulletinLock bulletinLock : hits) {
 			bulletinLocks.remove(bulletinLock);
 			bulletinLock.setLock(false);

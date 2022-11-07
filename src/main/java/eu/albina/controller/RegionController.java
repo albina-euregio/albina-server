@@ -200,11 +200,9 @@ public class RegionController {
 	 *            the session id
 	 */
 	public void unlockRegions(String sessionId) {
-		List<RegionLock> hits = new ArrayList<RegionLock>();
-		for (RegionLock regionLock : regionLocks) {
-			if (Objects.equals(regionLock.getSessionId(), sessionId))
-				hits.add(regionLock);
-		}
+		List<RegionLock> hits = regionLocks.stream()
+			.filter(regionLock -> Objects.equals(regionLock.getSessionId(), sessionId))
+			.collect(Collectors.toList());
 		for (RegionLock regionLock : hits) {
 			regionLocks.remove(regionLock);
 			regionLock.setLock(false);
@@ -220,12 +218,10 @@ public class RegionController {
 	 * @return all dates that are locked for {@code region}
 	 */
 	public List<Instant> getLockedRegions(String region) {
-		List<Instant> result = new ArrayList<Instant>();
-		for (RegionLock regionLock : regionLocks) {
-			if (regionLock.getRegion().equals(region))
-				result.add(regionLock.getDate().toInstant());
-		}
-		return result;
+		return regionLocks.stream()
+			.filter(regionLock -> regionLock.getRegion().equals(region))
+			.map(regionLock -> regionLock.getDate().toInstant())
+			.collect(Collectors.toList());
 	}
 
     public String getRegionName(LanguageCode lang, String regionId) {
