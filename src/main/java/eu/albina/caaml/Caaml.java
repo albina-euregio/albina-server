@@ -41,6 +41,13 @@ import org.slf4j.LoggerFactory;
 import eu.albina.model.enumerations.LanguageCode;
 import org.w3c.dom.Document;
 
+/**
+ * CAAML (Canadian Avalanche Association Markup Language) is a standard for the electronic representation
+ * of information pertinent to avalanche safety operations.
+ *
+ * @see <a href="http://caaml.org/">caaml.org</a>
+ * @see <a href="https://gitlab.com/albina-euregio/albina-caaml">gitlab.com/albina-euregio/albina-caaml</a>
+ */
 public interface Caaml {
 
 	Logger logger = LoggerFactory.getLogger(Caaml.class);
