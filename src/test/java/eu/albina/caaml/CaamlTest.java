@@ -1,5 +1,6 @@
 package eu.albina.caaml;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -9,9 +10,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import eu.albina.caaml.Caaml;
+import eu.albina.json.JsonValidator;
 import eu.albina.model.AvalancheReport;
 import eu.albina.util.HibernateUtil;
 import org.junit.Assert;
@@ -31,6 +34,8 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
+
+import static org.junit.Assert.assertEquals;
 
 public class CaamlTest {
 
@@ -122,5 +127,28 @@ public class CaamlTest {
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.write(path, caaml.getBytes(StandardCharsets.UTF_8));
 		}
+	}
+
+	private static String buildCAAML(String resourceName) throws IOException {
+		final URL resource = Resources.getResource(resourceName);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
+		return Caaml6_2022.toCAAMLv6String_2022(avalancheReport, LanguageCode.en);
+	}
+
+	@Test
+	public void toCAAMLv6_2022a() throws Exception {
+		final String caaml = buildCAAML("2019-01-16.json");
+		final String expected = Resources.toString(Resources.getResource("2019-01-16.caaml.v6.json"), StandardCharsets.UTF_8);
+		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+	}
+
+	@Test
+	public void toCAAMLv6_2022b() throws Exception {
+		final String caaml = buildCAAML("2019-01-17.json");
+		final String expected = Resources.toString(Resources.getResource("2019-01-17.caaml.v6.json"), StandardCharsets.UTF_8);
+		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
 	}
 }

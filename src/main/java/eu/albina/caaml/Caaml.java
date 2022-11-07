@@ -76,7 +76,7 @@ public class Caaml {
 		if (version == CaamlVersion.V5) {
 			return Caaml5.createCaamlv5(avalancheReport, lang);
 		} else if (version == CaamlVersion.V6_2022) {
-			return avalancheReport.toCAAMLv6String_2022(lang);
+			return Caaml6_2022.toCAAMLv6String_2022(avalancheReport, lang);
 		} else {
 			return Caaml6.createCaamlv6(avalancheReport, lang);
 		}
