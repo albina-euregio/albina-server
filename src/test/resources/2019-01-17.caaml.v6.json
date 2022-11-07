@@ -150,7 +150,7 @@
       "regionID" : "Schober Mountains"
     }, {
       "name" : "AT-07-25",
-      "regionID" : "Eastern Rieserferner Mountains"
+      "regionID" : "Lasörling Range"
     } ],
     "snowpackStructure" : {
       "comment" : "The snowpack will be quite prone to triggering, especially in areas close to the tree line as well as above the tree line. Faceted weak layers exist in the bottom section of the snowpack. The somewhat older wind slabs have settled a little."
@@ -537,7 +537,7 @@
       "regionID" : "Durreck Range"
     }, {
       "name" : "IT-32-BZ-12",
-      "regionID" : "Western Rieserferner Mountains"
+      "regionID" : "Rieserferner Mountains"
     }, {
       "name" : "IT-32-BZ-01",
       "regionID" : "Val Müstair Alps"

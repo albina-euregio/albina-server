@@ -52,7 +52,7 @@
       "regionID" : "Durreck Range"
     }, {
       "name" : "IT-32-BZ-12",
-      "regionID" : "Western Rieserferner Mountains"
+      "regionID" : "Rieserferner Mountains"
     }, {
       "name" : "IT-32-BZ-01",
       "regionID" : "Val Müstair Alps"
@@ -689,7 +689,7 @@
       "regionID" : "Schober Mountains"
     }, {
       "name" : "AT-07-25",
-      "regionID" : "Eastern Rieserferner Mountains"
+      "regionID" : "Lasörling Range"
     } ],
     "snowpackStructure" : {
       "comment" : "During the night the wind will be moderate to strong over a wide area. The wind will transport the fresh snow. In many cases various wind slab layers are lying on soft layers. Faceted weak layers exist in the old snowpack."
