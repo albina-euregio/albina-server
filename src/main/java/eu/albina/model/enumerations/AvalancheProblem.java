@@ -18,7 +18,6 @@ package eu.albina.model.enumerations;
 
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import eu.albina.util.XMLResourceBundleControl;
@@ -37,35 +36,6 @@ public enum AvalancheProblem {
 			return Arrays.stream(AvalancheProblem.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
-	}
-
-	public String toCaamlv5String() {
-		switch (this) {
-		case new_snow:
-			return "new snow";
-		case wind_slab:
-			return "drifting snow";
-		case persistent_weak_layers:
-			return "old snow";
-		case wet_snow:
-			return "wet snow";
-		case gliding_snow:
-			return "gliding snow";
-		case favourable_situation:
-			return "favourable situation";
-		case cornices:
-			return "cornices";
-		case no_distinct_problem:
-			return "no distinct problem";
-
-		default:
-			return null;
-		}
-	}
-
-	public static String toCaamlv5String(eu.albina.model.AvalancheProblem avalancheProblem) {
-		return Optional.ofNullable(avalancheProblem).map(eu.albina.model.AvalancheProblem::getAvalancheProblem)
-			.map(AvalancheProblem::toCaamlv5String).orElse("false");
 	}
 
 	public String toCaamlv6String() {

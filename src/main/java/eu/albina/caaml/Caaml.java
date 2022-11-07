@@ -90,57 +90,11 @@ public class Caaml {
 
 	public static String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
 		if (version == CaamlVersion.V5) {
-			return Caaml.createCaamlv5(avalancheReport, lang);
+			return Caaml5.createCaamlv5(avalancheReport, lang);
 		} else if (version == CaamlVersion.V6_2022) {
 			return avalancheReport.toCAAMLv6String_2022(lang);
 		} else {
 			return Caaml.createCaamlv6(avalancheReport, lang);
-		}
-	}
-
-	public static String createCaamlv5(AvalancheReport avalancheReport, LanguageCode language) {
-		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder;
-			docBuilder = docFactory.newDocumentBuilder();
-
-			Document doc = docBuilder.newDocument();
-			Element rootElement = CaamlVersion.V5.setNamespaceAttributes(doc.createElement("ObsCollection"));
-
-			// create meta data
-			List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
-			if (bulletins != null && !bulletins.isEmpty()) {
-				ZonedDateTime publicationDate = AlbinaUtil.getPublicationDate(bulletins);
-
-				// metaData
-				Element metaDataProperty = createMetaDataProperty(doc, publicationDate, language);
-				rootElement.appendChild(metaDataProperty);
-
-				// observations
-				Element observations = doc.createElement("observations");
-
-				for (AvalancheBulletin bulletin : bulletins) {
-					List<Element> caaml = bulletin.toCAAMLv5(doc, language, avalancheReport.getRegion());
-					if (caaml != null)
-						for (Element element : caaml) {
-							if (element != null)
-								observations.appendChild(element);
-						}
-				}
-				rootElement.appendChild(observations);
-
-				// attributes
-				if (language == null)
-					language = LanguageCode.en;
-				rootElement.setAttribute("xml:lang", language.toString());
-			}
-
-			doc.appendChild(rootElement);
-
-			return convertDocToString(doc);
-		} catch (ParserConfigurationException | TransformerException e1) {
-			logger.error("Error producing CAAML", e1);
-			return null;
 		}
 	}
 
