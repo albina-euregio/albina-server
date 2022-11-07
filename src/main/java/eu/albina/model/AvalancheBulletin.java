@@ -86,7 +86,7 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
-import eu.albina.util.XmlUtil;
+import eu.albina.caaml.Caaml;
 
 /**
  * This class holds all information about one avalanche bulletin.
@@ -976,7 +976,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		rootElement.setAttribute("xml:lang", languageCode.toString());
 
 		// metaData
-		Element metaDataProperty = XmlUtil.createMetaDataProperty(doc, publicationDate, languageCode);
+		Element metaDataProperty = Caaml.createMetaDataProperty(doc, publicationDate, languageCode);
 		rootElement.appendChild(metaDataProperty);
 
 		// validTime
@@ -1031,7 +1031,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (bulletinDaytimeDescription.isHasElevationDependency()) {
 			Element dangerRatingAbove = doc.createElement("DangerRating");
 			Element validElevationAbove = doc.createElement("validElevation");
-			validElevationAbove.setAttribute("xlink:href", XmlUtil.createValidElevationAttribute(
+			validElevationAbove.setAttribute("xlink:href", Caaml.createValidElevationAttribute(
 					bulletinDaytimeDescription.getElevation(), true, bulletinDaytimeDescription.getTreeline()));
 			dangerRatingAbove.appendChild(validElevationAbove);
 
@@ -1044,7 +1044,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			dangerRatings.appendChild(dangerRatingAbove);
 			Element dangerRatingBelow = doc.createElement("DangerRating");
 			Element validElevationBelow = doc.createElement("validElevation");
-			validElevationBelow.setAttribute("xlink:href", XmlUtil.createValidElevationAttribute(
+			validElevationBelow.setAttribute("xlink:href", Caaml.createValidElevationAttribute(
 					bulletinDaytimeDescription.getElevation(), false, bulletinDaytimeDescription.getTreeline()));
 			dangerRatingBelow.appendChild(validElevationBelow);
 
@@ -1172,17 +1172,17 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (!isAfternoon) {
 			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + MapUtil.filename(region, this, DaytimeDependency.am, false, MapImageFormat.jpg);
-			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
+			metaData.appendChild(Caaml.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		} else {
 			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + MapUtil.filename(region, this, DaytimeDependency.pm, false, MapImageFormat.jpg);
-			metaData.appendChild(XmlUtil.createExtFile(doc, "dangerRatingMap",
+			metaData.appendChild(Caaml.createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
 		}
 		String linkReferenceURI = languageCode.getBundleString("website.url") + "/bulletin/" + getValidityDateString()
 				+ "?region=" + getId();
-		metaData.appendChild(XmlUtil.createExtFile(doc, "website",
+		metaData.appendChild(Caaml.createExtFile(doc, "website",
 				languageCode.getBundleString("ext-file.region-link.description"), linkReferenceURI));
 
 		// publication time
@@ -1400,9 +1400,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				Element validElevation = doc.createElement("validElevation");
 				String elevationString;
 				if (avalancheProblem.getTreelineHigh())
-					elevationString = XmlUtil.createValidElevationAttribute(0, false, true);
+					elevationString = Caaml.createValidElevationAttribute(0, false, true);
 				else
-					elevationString = XmlUtil.createValidElevationAttribute(avalancheProblem.getElevationHigh(),
+					elevationString = Caaml.createValidElevationAttribute(avalancheProblem.getElevationHigh(),
 							false, false);
 				validElevation.setAttribute("xlink:href", elevationString);
 				avProblem.appendChild(validElevation);
@@ -1412,9 +1412,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			Element validElevation = doc.createElement("validElevation");
 			String elevationString;
 			if (avalancheProblem.getTreelineLow())
-				elevationString = XmlUtil.createValidElevationAttribute(0, true, true);
+				elevationString = Caaml.createValidElevationAttribute(0, true, true);
 			else
-				elevationString = XmlUtil.createValidElevationAttribute(avalancheProblem.getElevationLow(), true,
+				elevationString = Caaml.createValidElevationAttribute(avalancheProblem.getElevationLow(), true,
 						false);
 			validElevation.setAttribute("xlink:href", elevationString);
 			avProblem.appendChild(validElevation);

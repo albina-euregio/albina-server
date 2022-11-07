@@ -42,10 +42,8 @@ import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.XmlUtil;
+import eu.albina.caaml.Caaml;
 import org.caaml.v6.AvalancheBulletins;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
@@ -342,7 +340,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	}
 
 	public void toCAAML(CaamlVersion version) throws TransformerException, IOException {
-		XmlUtil.createCaamlFiles(this, version);
+		Caaml.createCaamlFiles(this, version);
 	}
 
 	public org.caaml.v6.AvalancheBulletins toCAAMLv6_2022(LanguageCode lang) {

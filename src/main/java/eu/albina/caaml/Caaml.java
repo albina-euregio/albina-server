@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.util;
+package eu.albina.caaml;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -45,20 +45,21 @@ import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapLevel;
 import eu.albina.map.MapUtil;
 import eu.albina.model.enumerations.DaytimeDependency;
+import eu.albina.util.AlbinaUtil;
+import eu.albina.util.LinkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
-public class XmlUtil {
+public class Caaml {
 
-	private static final Logger logger = LoggerFactory.getLogger(XmlUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(Caaml.class);
 
 	public static void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws TransformerException, IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
@@ -89,11 +90,11 @@ public class XmlUtil {
 
 	public static String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
 		if (version == CaamlVersion.V5) {
-			return XmlUtil.createCaamlv5(avalancheReport, lang);
+			return Caaml.createCaamlv5(avalancheReport, lang);
 		} else if (version == CaamlVersion.V6_2022) {
 			return avalancheReport.toCAAMLv6String_2022(lang);
 		} else {
-			return XmlUtil.createCaamlv6(avalancheReport, lang);
+			return Caaml.createCaamlv6(avalancheReport, lang);
 		}
 	}
 
