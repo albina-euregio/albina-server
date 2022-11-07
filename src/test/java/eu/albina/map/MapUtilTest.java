@@ -152,7 +152,6 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore("https://gitlab.com/albina-euregio/avalanche-warning-maps/-/issues/30")
 	public void testMapyrusMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
