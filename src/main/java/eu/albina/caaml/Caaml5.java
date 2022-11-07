@@ -42,7 +42,7 @@ interface Caaml5 {
 				ZonedDateTime publicationDate = AlbinaUtil.getPublicationDate(bulletins);
 
 				// metaData
-				Element metaDataProperty = Caaml.createMetaDataProperty(doc, publicationDate, language);
+				Element metaDataProperty = createMetaDataProperty(doc, publicationDate, language);
 				rootElement.appendChild(metaDataProperty);
 
 				// observations
@@ -95,7 +95,7 @@ interface Caaml5 {
 		rootElement.setAttribute("xml:lang", languageCode.toString());
 
 		// metaData
-		Element metaDataProperty = Caaml.createMetaDataProperty(doc, bulletin.getPublicationDate(), languageCode);
+		Element metaDataProperty = createMetaDataProperty(doc, bulletin.getPublicationDate(), languageCode);
 		rootElement.appendChild(metaDataProperty);
 
 		// validTime
@@ -150,7 +150,7 @@ interface Caaml5 {
 		if (bulletinDaytimeDescription.isHasElevationDependency()) {
 			Element dangerRatingAbove = doc.createElement("DangerRating");
 			Element validElevationAbove = doc.createElement("validElevation");
-			validElevationAbove.setAttribute("xlink:href", Caaml.createValidElevationAttribute(
+			validElevationAbove.setAttribute("xlink:href", createValidElevationAttribute(
 					bulletinDaytimeDescription.getElevation(), true, bulletinDaytimeDescription.getTreeline()));
 			dangerRatingAbove.appendChild(validElevationAbove);
 
@@ -163,7 +163,7 @@ interface Caaml5 {
 			dangerRatings.appendChild(dangerRatingAbove);
 			Element dangerRatingBelow = doc.createElement("DangerRating");
 			Element validElevationBelow = doc.createElement("validElevation");
-			validElevationBelow.setAttribute("xlink:href", Caaml.createValidElevationAttribute(
+			validElevationBelow.setAttribute("xlink:href", createValidElevationAttribute(
 					bulletinDaytimeDescription.getElevation(), false, bulletinDaytimeDescription.getTreeline()));
 			dangerRatingBelow.appendChild(validElevationBelow);
 
@@ -314,9 +314,9 @@ interface Caaml5 {
 				Element validElevation = doc.createElement("validElevation");
 				String elevationString;
 				if (avalancheProblem.getTreelineHigh())
-					elevationString = Caaml.createValidElevationAttribute(0, false, true);
+					elevationString = createValidElevationAttribute(0, false, true);
 				else
-					elevationString = Caaml.createValidElevationAttribute(avalancheProblem.getElevationHigh(),
+					elevationString = createValidElevationAttribute(avalancheProblem.getElevationHigh(),
 							false, false);
 				validElevation.setAttribute("xlink:href", elevationString);
 				avProblem.appendChild(validElevation);
@@ -326,9 +326,9 @@ interface Caaml5 {
 			Element validElevation = doc.createElement("validElevation");
 			String elevationString;
 			if (avalancheProblem.getTreelineLow())
-				elevationString = Caaml.createValidElevationAttribute(0, true, true);
+				elevationString = createValidElevationAttribute(0, true, true);
 			else
-				elevationString = Caaml.createValidElevationAttribute(avalancheProblem.getElevationLow(), true,
+				elevationString = createValidElevationAttribute(avalancheProblem.getElevationLow(), true,
 						false);
 			validElevation.setAttribute("xlink:href", elevationString);
 			avProblem.appendChild(validElevation);
@@ -389,5 +389,40 @@ interface Caaml5 {
 		default:
 			return null;
 		}
+	}
+
+	static String createValidElevationAttribute(int elevation, boolean above, boolean treeline) {
+		if (treeline) {
+			if (above)
+				return "ElevationRange_TreelineHi";
+			else
+				return "ElevationRange_TreelineLw";
+		} else {
+			if (above)
+				return "ElevationRange_" + elevation + "Hi";
+			else
+				return "ElevationRange_" + elevation + "Lw";
+		}
+	}
+
+	static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime, LanguageCode language) {
+		Element metaDataProperty = doc.createElement("metaDataProperty");
+		Element metaData = doc.createElement("MetaData");
+		Element dateTimeReport = doc.createElement("dateTimeReport");
+		if (dateTime != null) {
+			dateTimeReport.appendChild(doc
+					.createTextNode(DateTimeFormatter.ISO_INSTANT.format(dateTime)));
+			metaData.appendChild(dateTimeReport);
+		}
+		Element srcRef = doc.createElement("srcRef");
+		Element operation = doc.createElement("Operation");
+		Element name = doc.createElement("name");
+		name.appendChild(doc.createTextNode(language.getBundleString("website.name")));
+		operation.appendChild(name);
+		srcRef.appendChild(operation);
+		metaData.appendChild(srcRef);
+
+		metaDataProperty.appendChild(metaData);
+		return metaDataProperty;
 	}
 }
