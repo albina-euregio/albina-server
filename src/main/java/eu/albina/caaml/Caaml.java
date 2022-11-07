@@ -41,11 +41,11 @@ import org.slf4j.LoggerFactory;
 import eu.albina.model.enumerations.LanguageCode;
 import org.w3c.dom.Document;
 
-public class Caaml {
+public interface Caaml {
 
-	private static final Logger logger = LoggerFactory.getLogger(Caaml.class);
+	Logger logger = LoggerFactory.getLogger(Caaml.class);
 
-	public static void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws TransformerException, IOException {
+	static void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws TransformerException, IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
 		Files.createDirectories(dirPath);
 
@@ -72,7 +72,7 @@ public class Caaml {
 		}
 	}
 
-	public static String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
+	static String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
 		if (version == CaamlVersion.V5) {
 			return Caaml5.createCaamlv5(avalancheReport, lang);
 		} else if (version == CaamlVersion.V6_2022) {
@@ -82,7 +82,7 @@ public class Caaml {
 		}
 	}
 
-	public static String convertDocToString(Document doc) throws TransformerException {
+	static String convertDocToString(Document doc) throws TransformerException {
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
