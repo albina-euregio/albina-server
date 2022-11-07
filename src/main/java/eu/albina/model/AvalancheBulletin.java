@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -55,8 +56,20 @@ import javax.persistence.Table;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import eu.albina.model.enumerations.DaytimeDependency;
+import com.google.common.collect.ImmutableMap;
+import eu.albina.controller.RegionController;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.LinkUtil;
 import com.google.common.base.Strings;
+import org.caaml.v6.AvalancheProblemType;
+import org.caaml.v6.AvalancheSituationTendency;
+import org.caaml.v6.DangerRatingValue;
+import org.caaml.v6.ElevationBoundaryOrBand;
+import org.caaml.v6.ExpectedAvalancheFrequency;
+import org.caaml.v6.ExpectedSnowpackStability;
+import org.caaml.v6.TendencyType;
+import org.caaml.v6.ValidTime;
+import org.caaml.v6.ValidTimePeriod;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -454,12 +467,20 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return textPartsMap.get(TextPart.highlights);
 	}
 
-	public String getHighlightsIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.highlights);
-		if (texts != null)
-			return texts.getText(lang);
-		else
+	public String getTextPartIn(TextPart textPart, LanguageCode lang) {
+		Texts texts = textPartsMap.get(textPart);
+		if (texts == null) {
 			return null;
+		}
+		String text = texts.getText(lang);
+		if (text == null) {
+			return null;
+		}
+		return text.trim();
+	}
+
+	public String getHighlightsIn(LanguageCode lang) {
+		return getTextPartIn(TextPart.highlights, lang);
 	}
 
 	public void setHighlights(Texts highlights) {
@@ -471,11 +492,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getAvActivityHighlightsIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.avActivityHighlights);
-		if (texts != null)
-			return texts.getText(lang);
-		else
-			return null;
+		return getTextPartIn(TextPart.avActivityHighlights, lang);
 	}
 
 	public void setAvActivityHighlights(Texts avActivityHighlights) {
@@ -487,11 +504,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getAvActivityCommentIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.avActivityComment);
-		if (texts != null)
-			return texts.getText(lang);
-		else
-			return null;
+		return getTextPartIn(TextPart.avActivityComment, lang);
 	}
 
 	public void setAvActivityComment(Texts avActivityComment) {
@@ -503,11 +516,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getSynopsisHighlightsIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.synopsisHighlights);
-		if (texts != null)
-			return texts.getText(lang);
-		else
-			return null;
+		return getTextPartIn(TextPart.synopsisHighlights, lang);
 	}
 
 	public void setSynopsisHighlights(Texts synopsisHighlights) {
@@ -519,11 +528,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getSynopsisCommentIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.synopsisComment);
-		if (texts != null)
-			return texts.getText(lang);
-		else
-			return null;
+		return getTextPartIn(TextPart.synopsisComment, lang);
 	}
 
 	public void setSynopsisComment(Texts synopsisComment) {
@@ -535,11 +540,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getSnowpackStructureHighlightsIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.snowpackStructureHighlights);
-		if (texts != null)
-			return texts.getText(lang);
-		else
-			return null;
+		return getTextPartIn(TextPart.snowpackStructureHighlights, lang);
 	}
 
 	public void setSnowpackStructureHighlights(Texts snowpackStructureHighlights) {
@@ -551,11 +552,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getSnowpackStructureCommentIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.snowpackStructureComment);
-		if (texts != null)
-			return texts.getText(lang);
-		else
-			return null;
+		return getTextPartIn(TextPart.snowpackStructureComment, lang);
 	}
 
 	public void setSnowpackStructureComment(Texts snowpackStructureComment) {
@@ -567,8 +564,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getTravelAdvisoryHighlightsIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.travelAdvisoryHighlights);
-		return texts.getText(lang);
+		return getTextPartIn(TextPart.travelAdvisoryHighlights, lang);
 	}
 
 	public void setTravelAdvisoryHighlights(Texts travelAdvisoryHighlights) {
@@ -580,8 +576,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getTravelAdvisoryCommentIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.travelAdvisoryComment);
-		return texts.getText(lang);
+		return getTextPartIn(TextPart.travelAdvisoryComment, lang);
 	}
 
 	public void setTravelAdvisoryComment(Texts travelAdvisoryComment) {
@@ -593,11 +588,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getTendencyCommentIn(LanguageCode lang) {
-		Texts texts = textPartsMap.get(TextPart.tendencyComment);
-		if (texts != null)
-			return texts.getText(lang);
-		else
-			return null;
+		return getTextPartIn(TextPart.tendencyComment, lang);
 	}
 
 	public void setTendencyComment(Texts tendencyComment) {
@@ -1139,11 +1130,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 
 		for (TextPart part : TextPart.values()) {
-			if (textPartsMap.get(part) != null && textPartsMap.get(part).getTexts() != null
-					&& (!textPartsMap.get(part).getTexts().isEmpty())
-					&& (textPartsMap.get(part).getText(languageCode) != null)) {
+			final String text = getTextPartIn(part, languageCode);
+			if (text != null && !text.isEmpty()) {
 				Element textPart = doc.createElement(part.toCaamlv5String());
-				textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode)));
+				textPart.appendChild(doc.createTextNode(text));
 				bulletinMeasurements.appendChild(textPart);
 			}
 		}
@@ -1360,11 +1350,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 
 		for (TextPart part : TextPart.values()) {
-			if (textPartsMap.get(part) != null && textPartsMap.get(part).getTexts() != null
-					&& (!textPartsMap.get(part).getTexts().isEmpty())
-					&& (textPartsMap.get(part).getText(languageCode) != null)) {
+			final String text = getTextPartIn(part, languageCode);
+			if (text != null && !text.isEmpty()) {
 				Element textPart = doc.createElement(part.toCaamlv6String());
-				textPart.appendChild(doc.createTextNode(textPartsMap.get(part).getText(languageCode).trim()));
+				textPart.appendChild(doc.createTextNode(text));
 				rootElement.appendChild(textPart);
 			}
 		}
@@ -1562,6 +1551,98 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			return result;
 		} else
 			return null;
+	}
+
+	public org.caaml.v6.AvalancheBulletin toCAAMLv6_2022(LanguageCode lang) {
+		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
+		bulletin.setAvalancheActivity(new org.caaml.v6.Texts(getAvActivityHighlightsIn(lang), getAvActivityCommentIn(lang)));
+		bulletin.setAvalancheProblems(Stream.concat(
+				forenoon.getAvalancheProblems().stream(),
+				afternoon == null ? Stream.empty() : afternoon.getAvalancheProblems().stream()
+			)
+			.map(p -> getAvalancheProblem(p, lang))
+			.filter(Objects::nonNull).collect(Collectors.toList()));
+		bulletin.setBulletinID(id);
+		bulletin.setCustomData(Stream.of(dangerPattern1, dangerPattern2)
+			.filter(Objects::nonNull)
+			.map(dp -> ImmutableMap.of(
+				"type", "dangerPattern",
+				"id", dp.name().toUpperCase(),
+				"name", AlbinaUtil.getDangerPatternText(dp, lang)))
+			.collect(Collectors.toList()));
+		bulletin.setDangerRatings(Stream.of(forenoon, afternoon)
+			.filter(Objects::nonNull)
+			.flatMap(daytime -> Stream.of(
+				getDangerRating(daytime, daytime.getDangerRatingBelow()),
+				getDangerRating(daytime, daytime.getDangerRatingAbove())))
+			.distinct().collect(Collectors.toList()));
+		bulletin.setHighlights(getHighlightsIn(lang));
+		bulletin.setLang(lang.name());
+		bulletin.setMetaData(null);
+		bulletin.setPublicationTime(publicationDate.toInstant());
+		bulletin.setRegions(getPublishedRegions().stream()
+			.map(id -> new org.caaml.v6.Region(RegionController.getInstance().getRegionName(lang, id), id))
+			.collect(Collectors.toList()));
+		bulletin.setSnowpackStructure(new org.caaml.v6.Texts(getSnowpackStructureHighlightsIn(lang), getSnowpackStructureCommentIn(lang)));
+		bulletin.setSource(null);
+		bulletin.setTendency(new AvalancheSituationTendency(getTendencyCommentIn(lang), TendencyType.forValue(tendency.name())));
+		bulletin.setTravelAdvisory(new org.caaml.v6.Texts(getTravelAdvisoryHighlightsIn(lang), getTravelAdvisoryCommentIn(lang)));
+		bulletin.setValidTime(new ValidTime(validFrom.toInstant(), validUntil.toInstant()));
+		bulletin.setWxSynopsis(new org.caaml.v6.Texts(getSynopsisHighlightsIn(lang), getSynopsisCommentIn(lang)));
+		return bulletin;
+	}
+
+	private org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, LanguageCode lang) {
+		if (p == null || p.getAvalancheProblem() == null) {
+			return null;
+		}
+		final org.caaml.v6.AvalancheProblem result = new org.caaml.v6.AvalancheProblem();
+		result.setAspects(p.getAspects().stream().map(a -> org.caaml.v6.Aspect.forValue(a.name())).collect(Collectors.toList()));
+		result.setProblemType(AvalancheProblemType.forValue(p.getAvalancheProblem().toString()));
+		final String lowerBound = p.getElevationLow() > 0 ? Integer.toString(p.getElevationLow()) : p.getTreelineLow() ? "treeline" : null;
+		final String upperBound = p.getElevationHigh() > 0 ? Integer.toString(p.getElevationHigh()) : p.getTreelineHigh() ? "treeline" : null;
+		result.setElevation(new ElevationBoundaryOrBand(lowerBound, upperBound));
+		result.setTerrainFeature(p.getTerrainFeature(lang));
+		if (!hasDaytimeDependency) {
+			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);
+		} else if (forenoon.getAvalancheProblems().contains(p)) {
+			result.setValidTimePeriod(ValidTimePeriod.EARLIER);
+		} else if (afternoon != null && afternoon.getAvalancheProblems().contains(p)) {
+			result.setValidTimePeriod(ValidTimePeriod.LATER);
+		}
+		final EawsMatrixInformation matrixInformation = p.getEawsMatrixInformation();
+		if (matrixInformation != null) {
+			result.setAvalancheSize(matrixInformation.getAvalancheSizeValue());
+			result.setFrequency(ExpectedAvalancheFrequency.forValue(matrixInformation.getFrequency().toString()));
+			result.setSnowpackStability(ExpectedSnowpackStability.forValue(matrixInformation.getSnowpackStability().toString()));
+		}
+		return result;
+	}
+
+	private org.caaml.v6.DangerRating getDangerRating(AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
+		org.caaml.v6.DangerRating result = new org.caaml.v6.DangerRating();
+		if (!daytime.isHasElevationDependency() || Objects.equals(daytime.getDangerRatingBelow(), daytime.getDangerRatingAbove())) {
+			result.setMainValue(DangerRatingValue.forValue(daytime.getDangerRatingAbove().name()));
+			result.setElevation(null);
+		} else if (rating == daytime.getDangerRatingAbove()) {
+			result.setMainValue(DangerRatingValue.forValue(rating.name()));
+			String bound = daytime.getTreeline() ? "treeline" : Integer.toString(daytime.getElevation());
+			result.setElevation(new ElevationBoundaryOrBand(bound, null));
+		} else if (rating == daytime.getDangerRatingBelow()) {
+			result.setMainValue(DangerRatingValue.forValue(rating.name()));
+			String bound = daytime.getTreeline() ? "treeline" : Integer.toString(daytime.getElevation());
+			result.setElevation(new ElevationBoundaryOrBand(null, bound));
+		}
+		if (!hasDaytimeDependency) {
+			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);
+		} else if (daytime == forenoon) {
+			result.setValidTimePeriod(ValidTimePeriod.EARLIER);
+		} else if (daytime == afternoon) {
+			result.setValidTimePeriod(ValidTimePeriod.LATER);
+		} else {
+			result.setValidTimePeriod(null);
+		}
+		return result;
 	}
 
 	public void copy(AvalancheBulletin bulletin) {
