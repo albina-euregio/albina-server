@@ -19,7 +19,6 @@ package eu.albina.rest;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -56,7 +55,7 @@ public class SubscriptionService {
 	@Context
 	UriInfo uri;
 
-	static class SubscriberJson {
+	static class EmailSubscription {
 		public String email;
 
 		public String regions;
@@ -68,7 +67,7 @@ public class SubscriptionService {
 	@Path("/subscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addSubscriber(SubscriberJson json) {
+	public Response addSubscriber(EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
 		final Region region = RegionController.getInstance().getRegion(json.regions);
 		final List<Region> regions = Collections.singletonList(region);
