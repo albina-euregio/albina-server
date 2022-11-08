@@ -37,6 +37,7 @@ import javax.ws.rs.core.UriInfo;
 import com.github.openjson.JSONObject;
 
 import eu.albina.controller.RegionController;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -70,6 +71,7 @@ public class MediaFileService {
 	@Secured({ Role.ADMIN, Role.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Consumes({ MediaType.MULTIPART_FORM_DATA })
+	@Operation(summary = "Save media file")
 	public Response saveMediaFile(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
 		@QueryParam("region") String regionId,
