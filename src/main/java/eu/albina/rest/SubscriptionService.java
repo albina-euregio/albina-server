@@ -32,6 +32,7 @@ import javax.ws.rs.core.UriInfo;
 import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import io.swagger.v3.oas.annotations.Operation;
 import org.hibernate.HibernateException;
 import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
@@ -67,6 +68,7 @@ public class SubscriptionService {
 	@Path("/subscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Subscribe email notification")
 	public Response addSubscriber(EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
 		final Region region = RegionController.getInstance().getRegion(json.regions);
