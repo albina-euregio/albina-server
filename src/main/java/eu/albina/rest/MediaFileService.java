@@ -22,11 +22,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.time.Instant;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -36,7 +39,9 @@ import javax.ws.rs.core.UriInfo;
 
 import com.github.openjson.JSONObject;
 
+import com.google.common.base.MoreObjects;
 import eu.albina.controller.RegionController;
+import eu.albina.util.RssUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -138,4 +143,21 @@ public class MediaFileService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
+
+	@GET
+	@Path("/rss")
+	@Produces(MediaType.APPLICATION_XML)
+	@Operation(summary = "Get media files as RSS feed")
+	public Response getRssFeed(
+		@QueryParam("region") String regionId,
+		@QueryParam("lang") LanguageCode language
+	) throws Exception {
+		final Region region = new Region(MoreObjects.firstNonNull(regionId, "AT-07"));
+		final String rss = RssUtil.getRss(
+			MoreObjects.firstNonNull(language, LanguageCode.de),
+			region,
+			Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath()).resolve(region.getId()));
+		return Response.ok(rss, MediaType.APPLICATION_XML).build();
+	}
+
 }
