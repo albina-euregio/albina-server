@@ -32,6 +32,9 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -44,7 +47,8 @@ public interface RssUtil {
 		DocumentBuilder docBuilder;
 		docBuilder = docFactory.newDocumentBuilder();
 		Document document = docBuilder.newDocument();
-		Node rss = document.appendChild(document.createElement("rss"));
+		Element rss = (Element) document.appendChild(document.createElement("rss"));
+		rss.setAttribute("version", "2.0");
 		Node channel = rss.appendChild(document.createElement("channel"));
 		channel.appendChild(document.createElement("title")).setTextContent("albina media files");
 		channel.appendChild(document.createElement("description")).setTextContent("albina media files");
@@ -57,9 +61,11 @@ public interface RssUtil {
 				Node item = channel.appendChild(document.createElement("item"));
 				item.appendChild(document.createElement("title")).setTextContent(path.getFileName().toString());
 				item.appendChild(document.createElement("description")).setTextContent(path.getFileName().toString());
-				String pubDate = Files.getLastModifiedTime(path).toInstant().toString();
-				item.appendChild(document.createElement("pubDate")).setTextContent(pubDate); // FIXME "Tue, 14 Mar 2017 12:00:00 GMT"
-				item.appendChild(document.createElement("guid")).setTextContent(UUID.nameUUIDFromBytes((path.getFileName() + pubDate).getBytes(StandardCharsets.UTF_8)).toString());
+				Instant pubDate = Files.getLastModifiedTime(path).toInstant();
+				item.appendChild(document.createElement("pubDate")).setTextContent(DateTimeFormatter.RFC_1123_DATE_TIME.format(pubDate.atZone(AlbinaUtil.localZone())));
+				Element guid = (Element) item.appendChild(document.createElement("guid"));
+				guid.setAttribute("isPermaLink", Boolean.FALSE.toString());
+				guid.setTextContent(UUID.nameUUIDFromBytes((path.getFileName() + pubDate.toString()).getBytes(StandardCharsets.UTF_8)).toString());
 				Element enclosure = (Element) item.appendChild(document.createElement("enclosure"));
 				enclosure.setAttribute("url", LinkUtil.getStaticContentUrl(language, region) + "/" + directory.getFileName() + "/" + path.getFileName());
 				enclosure.setAttribute("type", "audio/mpeg");
