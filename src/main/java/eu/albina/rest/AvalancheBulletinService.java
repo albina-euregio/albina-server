@@ -164,7 +164,8 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReport.of(result, region, ServerInstanceController.getInstance().getLocalServerInstance());
 			String caaml = Caaml.createCaaml(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
-				return Response.ok(caaml, MediaType.APPLICATION_XML).build();
+				final String type = version != CaamlVersion.V6_2022 ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
+				return Response.ok(caaml, type).build();
 			} else {
 				logger.debug("No bulletins with status published.");
 				return Response.noContent().build();
