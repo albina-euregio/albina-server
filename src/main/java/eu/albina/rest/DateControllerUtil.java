@@ -8,13 +8,21 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 interface DateControllerUtil {
 	String DATE_FORMAT_DESCRIPTION = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ";
 
+	static Instant parseDate(String date) {
+		Objects.requireNonNull(date, "date");
+		return date.length() == "2006-01-02".length()
+			? LocalDate.parse(date).atStartOfDay(AlbinaUtil.localZone()).toInstant()
+			: ZonedDateTime.parse(date).toInstant();
+	}
+
 	static Instant parseDateOrToday(String date) {
 		if (date != null) {
-			return ZonedDateTime.parse(date).toInstant();
+			return parseDate(date);
 		} else {
 			return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).toInstant();
 		}
@@ -22,7 +30,7 @@ interface DateControllerUtil {
 
 	static Instant parseDateOrThrow(String date) throws AlbinaException {
 		if (date != null) {
-			return ZonedDateTime.parse(date).toInstant();
+			return parseDate(date);
 		} else {
 			throw new AlbinaException("No date!");
 		}
@@ -30,7 +38,7 @@ interface DateControllerUtil {
 
 	static Instant parseDateOrNull(String date) {
 		if (date != null) {
-			return ZonedDateTime.parse(date).toInstant();
+			return parseDate(date);
 		} else {
 			return null;
 		}
