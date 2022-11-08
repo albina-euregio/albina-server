@@ -21,12 +21,17 @@ import com.github.openjson.JSONObject;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hibernate.HibernateException;
@@ -53,9 +58,16 @@ public class AvalancheBulletinStatusService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinStatusService.class);
 
+	static class Status {
+		public String date;
+		public BulletinStatus status;
+		public String report;
+	}
+
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
 	public Response getStatus(@QueryParam("region") String regionId,
 			@QueryParam("timezone") String timezone,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
@@ -98,6 +110,7 @@ public class AvalancheBulletinStatusService {
 	@Path("/internal")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
 	public Response getInternalStatus(@QueryParam("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
@@ -134,6 +147,7 @@ public class AvalancheBulletinStatusService {
 	@Path("/publications")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
 	public Response getPublicationsStatus(@QueryParam("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
@@ -166,6 +180,7 @@ public class AvalancheBulletinStatusService {
 	@Path("/publication")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "status", content = @Content(schema = @Schema(implementation = Status.class)))
 	public Response getPublicationStatus(@QueryParam("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date) {
 
