@@ -232,12 +232,11 @@ public class AvalancheReportController {
 	 *            the region of interest
 	 * @return all public reports for a specific time period and {@code region}
 	 */
-	@SuppressWarnings("unchecked")
 	public Collection<AvalancheReport> getPublicReports(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion, AvalancheReport.class)
 						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 						.setParameter("region", region).getResultList();
 
@@ -264,12 +263,12 @@ public class AvalancheReportController {
 	 * @return the public report for specific {@code date} and {@code region} or
 	 *         null if not report was found
 	 */
-	@SuppressWarnings("unchecked")
 	private AvalancheReport getPublicReport(Instant date, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion, AvalancheReport.class)
+						.setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 						.setParameter("region", region).getResultList();
 
 				for (AvalancheReport avalancheReport : reports) {
@@ -329,14 +328,13 @@ public class AvalancheReportController {
 	 *            the region of interest
 	 * @return all most recent reports for a specific time period and {@code region}
 	 */
-	@SuppressWarnings("unchecked")
 	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion)
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion, AvalancheReport.class)
 						.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
 						.setParameter("region", region).getResultList();
 			}
@@ -366,14 +364,14 @@ public class AvalancheReportController {
 	 * @return the most recent report for specific {@code date} and {@code region}
 	 *         or null if no report was found
 	 */
-	@SuppressWarnings("unchecked")
 	public AvalancheReport getInternalReport(Instant date, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport result = null;
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion, AvalancheReport.class)
+						.setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 						.setParameter("region", region).getResultList();
 			}
 
@@ -784,14 +782,14 @@ public class AvalancheReportController {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
 	public void setMediaFileFlag(Instant date, Region region) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport result = null;
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion, AvalancheReport.class)
+						.setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 						.setParameter("region", region).getResultList();
 			}
 

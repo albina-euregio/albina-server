@@ -109,10 +109,9 @@ public class RegionController {
 		return new ArrayList<String>();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Region> getActiveRegions() throws AlbinaException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return entityManager.createQuery(HibernateUtil.queryGetRegions).getResultList();
+			return entityManager.createQuery(HibernateUtil.queryGetRegions, Region.class).getResultList();
 		});
 	}
 

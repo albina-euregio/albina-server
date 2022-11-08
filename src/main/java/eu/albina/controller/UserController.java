@@ -115,13 +115,9 @@ public class UserController {
 	 *
 	 * @return list of all {@code User}
 	 */
-	@SuppressWarnings("unchecked")
 	public List<User> getUsers() throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<User> users = null;
-			users = entityManager.createQuery(HibernateUtil.queryGetUsers).getResultList();
-			return users;
-		});
+		return HibernateUtil.getInstance().runTransaction(entityManager ->
+			entityManager.createQuery(HibernateUtil.queryGetUsers, User.class).getResultList());
 	}
 
 	public JSONArray getUsersJson() throws AlbinaException {
@@ -242,11 +238,10 @@ public class UserController {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean isUserInRegionRole(String userEmail, String regionId, Role role) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Region region = entityManager.find(Region.class, regionId);
-			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks)
+			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks, UserRegionRoleLink.class)
 				.setParameter("userEmail", userEmail)
 				.setParameter("region", region)
 				.getResultList();

@@ -160,10 +160,9 @@ public class SubscriberController {
 	 * @return all subscribers for the language {@code lang} and the specified
 	 *         {@code regions}
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Subscriber> getSubscribers(LanguageCode lang, List<String> regionIds) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage)
+			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage, Subscriber.class)
 					.setParameter("language", lang).getResultList();
 			List<Subscriber> results = subscribers.stream()
 				.filter(subscriber -> regionIds.stream().anyMatch(regionId -> subscriber.affectsRegion(RegionController.getInstance().getRegion(regionId))))
