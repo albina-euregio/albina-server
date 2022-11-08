@@ -109,10 +109,9 @@ public class RegionController {
 		return new ArrayList<String>();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Region> getActiveRegions() throws AlbinaException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return entityManager.createQuery(HibernateUtil.queryGetRegions).getResultList();
+			return entityManager.createQuery(HibernateUtil.queryGetRegions, Region.class).getResultList();
 		});
 	}
 
@@ -125,6 +124,21 @@ public class RegionController {
 			return region;
 		});
     }
+
+	public Region getRegionOrThrowAlbinaException(String regionId) throws AlbinaException {
+		if (regionId == null) {
+			throw new AlbinaException("No region defined!");
+		}
+		try {
+			Region region = getRegion(regionId);
+			if (region == null) {
+				throw new AlbinaException("No region with id " + regionId + " found!");
+			}
+			return region;
+		} catch (HibernateException e) {
+			throw new AlbinaException("No region with id " + regionId + " found!");
+		}
+	}
 
 	public List<Region> getPublishBulletinRegions() {
 		try {

@@ -19,7 +19,8 @@ package eu.albina.rest;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.HttpClientUtil;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 @Path("/observations/lwdkip")
-@Api(value = "/observations/lwdkip")
+@Hidden
 public class ObservationLwdKipService {
 
 	private static final String ARCGIS_API = "https://gis.tirol.gv.at/arcgis/";
@@ -72,6 +73,7 @@ public class ObservationLwdKipService {
 
 	@GET
 	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/{layer}")
 	public Response get(@PathParam("layer") String layer, @Context UriInfo uriInfo) throws Exception {

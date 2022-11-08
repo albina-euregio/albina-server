@@ -24,7 +24,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ import eu.albina.model.PushSubscription;
 import eu.albina.util.PushNotificationUtil;
 
 @Path("/push")
-@Api(value = "/push")
+@Tag(name = "push")
 public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 
@@ -44,6 +45,7 @@ public class PushNotificationService {
 	@GET
 	@Path("/key")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get VAPID public key")
 	public VapidKey key() {
 		return new VapidKey();
 	}
@@ -52,6 +54,7 @@ public class PushNotificationService {
 	@Path("/subscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Subscribe push notification")
 	public Response subscribe(PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
 		PushSubscriptionController.create(subscription);
@@ -63,6 +66,7 @@ public class PushNotificationService {
 	@Path("/unsubscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Unsubscribe push notification")
 	public Response unsubscribe(PushSubscription subscription) {
 		logger.info("Unsubscribing {}", subscription);
 		PushSubscriptionController.delete(subscription);

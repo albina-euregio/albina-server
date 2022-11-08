@@ -150,7 +150,6 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 *             if a micro region is defined twice in the bulletins
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> bulletins, Instant startDate,
 			Instant endDate, Region region, Instant publicationDate) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
@@ -159,7 +158,7 @@ public class AvalancheBulletinController {
 			throw new AlbinaException("duplicateRegion");
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> originalBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> originalBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 			Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
 
@@ -348,10 +347,9 @@ public class AvalancheBulletinController {
 	 *            the regions of the bulletins
 	 * @return the most recent bulletins for the given time period and regions
 	 */
-	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<Region> regions) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 			List<AvalancheBulletin> results = bulletins.stream()
 				.filter(bulletin -> regions.stream()
@@ -380,10 +378,9 @@ public class AvalancheBulletinController {
 	 *            the user who submits the bulletins
 	 * @return a list of all affected bulletins
 	 */
-	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> submitBulletins(Instant startDate, Instant endDate, Region region, User user) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
 			List<AvalancheBulletin> results = bulletins.stream()
@@ -471,12 +468,11 @@ public class AvalancheBulletinController {
 	 *            the user who publishes the bulletins
 	 * @return a list of all affected bulletins
 	 */
-	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, Region region,
 			Instant publicationDate, User user) {
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
 			// select bulletins within the region
@@ -569,7 +565,6 @@ public class AvalancheBulletinController {
 	 *            the region of interest
 	 * @return a JSON array containing all warnings (empty if no warning was found)
 	 */
-	@SuppressWarnings("unchecked")
 	public JSONArray checkBulletins(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			JSONArray json = new JSONArray();
@@ -580,7 +575,7 @@ public class AvalancheBulletinController {
 			boolean pendingSuggestions = false;
 			boolean missingDangerRating = false;
 
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
 			List<AvalancheBulletin> results = bulletins.stream()

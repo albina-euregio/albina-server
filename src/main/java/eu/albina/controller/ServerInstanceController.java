@@ -89,16 +89,13 @@ public class ServerInstanceController {
     }
 
 	public ServerInstance getLocalServerInstance() {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return (ServerInstance) entityManager.createQuery(HibernateUtil.queryGetLocalServerInstance).getSingleResult();
-		});
+		return HibernateUtil.getInstance().runTransaction(entityManager ->
+			entityManager.createQuery(HibernateUtil.queryGetLocalServerInstance, ServerInstance.class).getSingleResult());
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<ServerInstance> getExternalServerInstances() {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return entityManager.createQuery(HibernateUtil.queryGetExternalServerInstances).getResultList();
-		});
+		return HibernateUtil.getInstance().runTransaction(entityManager ->
+			entityManager.createQuery(HibernateUtil.queryGetExternalServerInstances, ServerInstance.class).getResultList());
 	}
 
 	public boolean serverInstanceExists(Long id) {
