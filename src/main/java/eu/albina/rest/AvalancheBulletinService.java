@@ -44,6 +44,7 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -107,6 +108,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
+	@Operation(summary = "Get bulletins for date")
 	public Response getJSONBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds) {
@@ -145,6 +147,7 @@ public class AvalancheBulletinService {
 	@GET
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
+	@Operation(summary = "Get published bulletins for date as CAAML")
 	public Response getPublishedXMLBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language,
@@ -179,19 +182,23 @@ public class AvalancheBulletinService {
 		}
 	}
 
+	static class LatestBulletin {
+		public Instant date;
+	}
+
 	@GET
 	@Path("/latest")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "latest", content = @Content(schema = @Schema(implementation = LatestBulletin.class)))
+	@Operation(summary = "Get latest bulletin date")
 	public Response getLatest() {
 		logger.debug("GET latest date");
 		try {
-			Instant date = AvalancheReportController.getInstance().getLatestDate();
+			LatestBulletin json = new LatestBulletin();
+			json.date = AvalancheReportController.getInstance().getLatestDate();
 
-			JSONObject json = new JSONObject();
-			json.put("date", date.toString());
-
-			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+			return Response.ok(json, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading latest date", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
@@ -201,6 +208,8 @@ public class AvalancheBulletinService {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
+	@Operation(summary = "Get published bulletins for date")
 	public Response getPublishedJSONBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language) {
@@ -234,10 +243,16 @@ public class AvalancheBulletinService {
 		}
 	}
 
+	static class Highest {
+		public DangerRating dangerRating;
+	}
+
 	@GET
 	@Path("/highest")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "latest", content = @Content(schema = @Schema(implementation = Highest.class)))
+	@Operation(summary = "Get highest danger rating")
 	public Response getHighestDangerRating(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds) {
@@ -257,9 +272,9 @@ public class AvalancheBulletinService {
 			DangerRating highestDangerRating = AvalancheBulletinController.getInstance()
 					.getHighestDangerRating(startDate, regions);
 
-			JSONObject jsonResult = new JSONObject();
-			jsonResult.put("dangerRating", highestDangerRating);
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+			Highest jsonResult = new Highest();
+			jsonResult.dangerRating = highestDangerRating;
+			return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading highest danger rating", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -271,6 +286,7 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
     @Path("/preview")
     @Produces("application/pdf")
+	@Operation(summary = "Get bulletin preview as PDF")
     public Response getPreviewPdf(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
 
 		logger.debug("GET PDF preview [{}, {}]", date, regionId);
@@ -324,6 +340,7 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "bulletin", content = @Content(schema = @Schema(implementation = AvalancheBulletin.class)))
+	@Operation(summary = "Get bulletin by ID")
 	public Response getJSONBulletin(@PathParam("bulletinId") String bulletinId) {
 		logger.debug("GET JSON bulletin: {}", bulletinId);
 
@@ -347,6 +364,7 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Create bulletins")
 	public Response createJSONBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinsString,
@@ -388,6 +406,7 @@ public class AvalancheBulletinService {
 	@Path("/change")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Change bulletins")
 	public Response changeBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
@@ -438,6 +457,7 @@ public class AvalancheBulletinService {
 	@Path("/submit")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Submit bulletins")
 	public Response submitBulletins(@QueryParam("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
@@ -471,6 +491,7 @@ public class AvalancheBulletinService {
 	@Path("/check")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Check bulletins")
 	public Response checkBulletins(@QueryParam("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@Context SecurityContext securityContext) {
