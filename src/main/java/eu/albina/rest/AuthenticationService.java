@@ -35,7 +35,11 @@ import eu.albina.controller.UserController;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -57,9 +61,19 @@ public class AuthenticationService {
 		public String password;
 	}
 
+	static class Token {
+		public String access_token;
+	}
+
+	static class UserAndToken extends User {
+		public String access_token;
+	}
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Authenticate user")
+	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = UserAndToken.class)))
 	public Response login(Credentials credentials) {
 		String username = credentials.username.toLowerCase();
 		String password = credentials.password;
@@ -83,6 +97,8 @@ public class AuthenticationService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Refresh token")
+	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Token.class)))
 	public Response refreshToken(@Context SecurityContext securityContext) {
 		try {
 			Principal principal = securityContext.getUserPrincipal();
