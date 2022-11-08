@@ -36,9 +36,9 @@ import javax.ws.rs.core.UriInfo;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-import eu.albina.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -69,7 +69,7 @@ public class RegionService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all regions")
-	@ApiResponse(description = "regions", content = @Content(schema = @Schema(implementation = Region[].class)))
+	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Region.class))))
 	public Response getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
 

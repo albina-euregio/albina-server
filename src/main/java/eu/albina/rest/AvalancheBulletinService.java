@@ -47,6 +47,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -104,7 +105,7 @@ public class AvalancheBulletinService {
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiResponse(description = "bulletins", content = @Content(schema = @Schema(implementation = AvalancheBulletin[].class)))
+	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	public Response getJSONBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds) {
@@ -347,7 +348,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createJSONBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@Parameter(schema = @Schema(implementation = AvalancheBulletin[].class)) String bulletinsString,
+			@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinsString,
 			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins");
@@ -388,7 +389,7 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@Parameter(schema = @Schema(implementation = AvalancheBulletin[].class)) String bulletinsString,
+		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
 		@QueryParam("region") String regionId,
 		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON bulletins change");

@@ -32,9 +32,9 @@ import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
 
-import eu.albina.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -134,7 +134,7 @@ public class ServerInstanceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get external server configurations")
-	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance[].class)))
+	@ApiResponse(description = "configuration", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ServerInstance.class))))
 	public Response getExternalServerConfigurations() {
 		logger.debug("GET JSON external servers");
 		try {

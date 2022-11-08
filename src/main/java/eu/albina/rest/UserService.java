@@ -35,6 +35,7 @@ import javax.ws.rs.core.UriInfo;
 import eu.albina.controller.RegionController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -68,7 +69,7 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all users")
-	@ApiResponse(description = "users", content = @Content(schema = @Schema(implementation = User[].class)))
+	@ApiResponse(description = "users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))))
 	public Response getUsers(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON users");
 		try {
@@ -89,7 +90,7 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get roles of logged-in user")
-	@ApiResponse(description = "roles", content = @Content(schema = @Schema(implementation = String[].class)))
+	@ApiResponse(description = "roles", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class))))
 	public Response getRoles(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON roles");
 		try {
@@ -110,7 +111,7 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get regions of logged-in user")
-	@ApiResponse(description = "regions", content = @Content(schema = @Schema(implementation = String[].class)))
+	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class))))
 	public Response getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
 		try {
