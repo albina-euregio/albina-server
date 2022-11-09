@@ -56,7 +56,7 @@ public interface RssUtil {
 		channel.appendChild(document.createElement("link")).setTextContent(LinkUtil.getWebsiteUrl(language, region));
 		channel.appendChild(document.createElementNS("http://www.itunes.com/dtds/podcast-1.0.dtd", "author")).setTextContent("avalanche.report");
 
-		list(directory).sorted(Comparator.comparing(p -> p.getFileName().toString(), Comparator.reverseOrder())).forEach(path -> {
+		list(directory).sorted(Comparator.comparing(p -> p.getFileName().toString(), Comparator.reverseOrder())).limit(10).forEach(path -> {
 			try {
 				Node item = channel.appendChild(document.createElement("item"));
 				item.appendChild(document.createElement("title")).setTextContent(path.getFileName().toString());
