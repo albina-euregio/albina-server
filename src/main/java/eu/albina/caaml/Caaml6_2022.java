@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
-import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
@@ -72,7 +71,7 @@ interface Caaml6_2022 {
 		bulletin.setMetaData(null);
 		bulletin.setPublicationTime(avalancheBulletin.getPublicationDate().toInstant());
 		bulletin.setRegions(avalancheBulletin.getPublishedRegions().stream()
-			.map(id -> new org.caaml.v6.Region(RegionController.getInstance().getRegionName(lang, id), id))
+			.map(id -> new org.caaml.v6.Region(lang.getRegionName(id), id))
 			.collect(Collectors.toList()));
 		bulletin.setSnowpackStructure(new org.caaml.v6.Texts(avalancheBulletin.getSnowpackStructureHighlightsIn(lang), avalancheBulletin.getSnowpackStructureCommentIn(lang)));
 		bulletin.setSource(null);

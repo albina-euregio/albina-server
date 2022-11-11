@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
-import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.websocket.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
@@ -238,10 +237,4 @@ public class RegionController {
 			.collect(Collectors.toList());
 	}
 
-    public String getRegionName(LanguageCode lang, String regionId) {
-    	if ("".equals(regionId)) {
-    		return "";
-    	}
-    	return lang.getBundle("micro-regions_names").getString(regionId);
-    }
 }

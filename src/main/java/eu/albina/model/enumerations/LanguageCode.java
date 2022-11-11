@@ -71,4 +71,11 @@ public enum LanguageCode {
 		}
 		return null;
 	}
+
+	public String getRegionName(String regionId) {
+		if ("".equals(regionId)) {
+			return "";
+		}
+		return getBundle("micro-regions_names").getString(regionId);
+	}
 }

@@ -1,6 +1,5 @@
 package eu.albina.util;
 
-import eu.albina.controller.RegionController;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
@@ -78,7 +77,7 @@ public interface LinkUtil {
 	}
 
 	static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
-		String regionName = RegionController.getInstance().getRegionName(lang, region);
+		String regionName = lang.getRegionName(region);
 		String timeString = AlbinaUtil.getDaytimeString(lang, type);
 		return MessageFormat.format(lang.getBundleString("ext-file.map.description"), regionName, timeString);
 	}
@@ -94,7 +93,7 @@ public interface LinkUtil {
 	}
 
 	static String getExtFilePdfDescription(LanguageCode lang, String region) {
-		String regionName = RegionController.getInstance().getRegionName(lang, region);
+		String regionName = lang.getRegionName(region);
 		return "PDF " + regionName;
 	}
 
