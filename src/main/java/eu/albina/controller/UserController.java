@@ -146,13 +146,6 @@ public class UserController {
 			throw new AlbinaException("Roles could not be loaded!");
 	}
 
-	public JSONArray getRegionsJson() throws AlbinaException {
-		JSONArray jsonResult = new JSONArray();
-		for (String regionId : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).map(Region::getId).collect(Collectors.toList()))
-			jsonResult.put(regionId);
-		return jsonResult;
-	}
-
 	/**
 	 * Save a {@code user} to the database.
 	 *

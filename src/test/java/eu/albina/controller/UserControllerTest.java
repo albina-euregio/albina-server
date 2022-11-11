@@ -64,10 +64,10 @@ public class UserControllerTest {
 	@Test
 	@Ignore
 	public void getRegionsTest() throws AlbinaException {
-		JSONArray regionsJson = UserController.getInstance().getRegionsJson();
+		JSONArray regionsJson = RegionController.getInstance().getRegionsJson();
 		logger.info(regionsJson.toString());
 	}
-	
+
 	@Test
 	@Ignore
 	public void getRolesTest() throws AlbinaException {

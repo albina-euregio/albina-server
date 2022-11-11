@@ -115,7 +115,7 @@ public class UserService {
 	public Response getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
 		try {
-			JSONArray jsonArray = UserController.getInstance().getRegionsJson();
+			JSONArray jsonArray = RegionController.getInstance().getRegionsJson();
 			return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading regions", e);

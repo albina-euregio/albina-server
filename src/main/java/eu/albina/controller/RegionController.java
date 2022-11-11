@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.github.openjson.JSONArray;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -235,6 +236,11 @@ public class RegionController {
 			.filter(regionLock -> regionLock.getRegion().equals(region))
 			.map(regionLock -> regionLock.getDate().toInstant())
 			.collect(Collectors.toList());
+	}
+
+	public JSONArray getRegionsJson() throws AlbinaException {
+		List<String> regions = getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).map(Region::getId).collect(Collectors.toList());
+		return new JSONArray(regions);
 	}
 
 }
