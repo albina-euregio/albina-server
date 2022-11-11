@@ -59,7 +59,6 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class AlbinaUtil {
@@ -252,10 +251,6 @@ public class AlbinaUtil {
 			return utcTime.format(formatterPublicationTime);
 		else
 			return "";
-	}
-
-	public static boolean hasDaytimeDependency(List<AvalancheBulletin> bulletins) {
-		return bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 	}
 
 	public static void setFilePermissions(String fileName) throws IOException {

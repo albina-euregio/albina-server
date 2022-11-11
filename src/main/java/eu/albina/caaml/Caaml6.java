@@ -79,7 +79,7 @@ interface Caaml6 {
 	static List<Element> createObsCollectionExtFiles(Document doc, List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance) {
 		List<Element> extFiles = new ArrayList<Element>();
 
-		boolean hasDaytimeDependency = AlbinaUtil.hasDaytimeDependency(bulletins);
+		boolean hasDaytimeDependency = bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
 		String baseUri = LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + validityDateString + "/" + publicationTime + "/";

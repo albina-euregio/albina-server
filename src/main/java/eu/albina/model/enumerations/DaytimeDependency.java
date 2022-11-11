@@ -2,7 +2,6 @@ package eu.albina.model.enumerations;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.util.AlbinaUtil;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -18,7 +17,7 @@ public enum DaytimeDependency {
 	}
 
 	public static EnumSet<DaytimeDependency> of(List<AvalancheBulletin> bulletins) {
-		return AlbinaUtil.hasDaytimeDependency(bulletins)
+		return bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency)
 			? EnumSet.of(am, pm)
 			: EnumSet.of(fd);
 	}

@@ -338,6 +338,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	}
 
 	public boolean hasDaytimeDependency() {
-		return AlbinaUtil.hasDaytimeDependency(getBulletins());
+		return getBulletins().stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 	}
 }
