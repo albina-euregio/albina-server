@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
 
+import eu.albina.caaml.Caaml;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -457,7 +458,7 @@ public class PublicationController {
 	public boolean createCaamlV5(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv5 production for " + avalancheReport.getRegion().getId() + " started");
-			avalancheReport.toCAAML(CaamlVersion.V5);
+			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setCaamlV5Created);
 			logger.info("CAAMLv5 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
@@ -473,8 +474,8 @@ public class PublicationController {
 	public boolean createCaamlV6(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " started");
-			avalancheReport.toCAAML(CaamlVersion.V6);
-			avalancheReport.toCAAML(CaamlVersion.V6_2022);
+			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
+			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_2022);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;

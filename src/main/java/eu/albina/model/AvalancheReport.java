@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZonedDateTime;
@@ -32,13 +31,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.xml.transform.TransformerException;
 
 import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
-import eu.albina.caaml.CaamlVersion;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.caaml.Caaml;
 
 import eu.albina.model.enumerations.BulletinStatus;
 
@@ -331,10 +327,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			json.put("jsonString", jsonString);
 
 		return json;
-	}
-
-	public void toCAAML(CaamlVersion version) throws TransformerException, IOException {
-		Caaml.createCaamlFiles(this, version);
 	}
 
 	public boolean hasDaytimeDependency() {
