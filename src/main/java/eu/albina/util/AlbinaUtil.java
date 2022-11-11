@@ -27,6 +27,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -219,8 +220,7 @@ public class AlbinaUtil {
 	public static boolean isUpdate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime publicationDate = getPublicationDate(bulletins);
 		LocalDateTime localDateTime = publicationDate.withZoneSameInstant(localZone()).toLocalDateTime();
-		int secondOfDay = localDateTime.toLocalTime().toSecondOfDay();
-		return (secondOfDay == 61200) ? false : true;
+		return !LocalTime.of(17, 0).equals(localDateTime.toLocalTime());
 	}
 
 	public static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
