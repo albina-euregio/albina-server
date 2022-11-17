@@ -18,15 +18,18 @@ package eu.albina.util;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.io.Resources;
 
 import eu.albina.map.MapImageFormat;
@@ -586,10 +589,12 @@ public class PdfUtil {
 		return table;
 	}
 
+	private static final LoadingCache<String, ImageData> resourceImageCache = CacheBuilder.newBuilder()
+		.expireAfterAccess(Duration.ofMinutes(10))
+		.build(CacheLoader.from(resourceName -> ImageDataFactory.create(Resources.getResource("images/" + resourceName))));
+
 	public static Image getImage(String resourceName) {
-		URL resource = Resources.getResource("images/" + resourceName);
-		ImageData imageData = ImageDataFactory.create(resource);
-		return new Image(imageData);
+		return new Image(resourceImageCache.getUnchecked(resourceName));
 	}
 
 	private void createAvalancheProblem(AvalancheProblem avalancheProblem, LanguageCode lang, Table table, boolean grayscale) {
