@@ -14,17 +14,18 @@ import eu.albina.util.PdfUtil;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Stream;
 
 public class MapUtilRebuildTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(MapUtilRebuildTest.class);
 	private Region regionEuregio;
 	private ServerInstance serverInstance;
 
@@ -49,17 +50,28 @@ public class MapUtilRebuildTest {
 	@Ignore
 	@Test
 	public void rebuildMaps() throws Exception {
-		for (LocalDate date = LocalDate.parse("2022-01-20"); date.isBefore(LocalDate.parse("2022-05-10")); date = date.plusDays(1)) {
-			rebuildMap(date);
+		final ExecutorService hibernate = Executors.newSingleThreadExecutor();
+		final ExecutorService render = Executors.newSingleThreadExecutor();
+		CompletableFuture.allOf(
+			Stream.iterate(LocalDate.parse("2022-01-20"), date -> date.plusDays(1))
+				.limit(365)
+				.filter(date -> date.isBefore(LocalDate.parse("2022-01-30")))
+				.map(date -> CompletableFuture.supplyAsync(() -> fetch(date), hibernate).thenAcceptAsync(this::render, render))
+				.toArray(CompletableFuture[]::new)
+		).get();
+	}
+
+	private AvalancheReport fetch(LocalDate date) {
+		try {
+			Instant instant = ZonedDateTime.of(date.atTime(0, 0, 0), AlbinaUtil.localZone()).toInstant();
+			List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(instant, RegionController.getInstance().getPublishBulletinRegions());
+			return AvalancheReport.of(bulletins, regionEuregio, serverInstance);
+		} catch (AlbinaException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
-	private void rebuildMap(LocalDate date) throws AlbinaException {
-		logger.info("{}", date);
-		Instant instant = ZonedDateTime.of(date.atTime(0, 0, 0), AlbinaUtil.localZone()).toInstant();
-		List<AvalancheBulletin> result = AvalancheReportController.getInstance()
-			.getPublishedBulletins(instant, RegionController.getInstance().getPublishBulletinRegions());
-		AvalancheReport avalancheReport = AvalancheReport.of(result, regionEuregio, serverInstance);
+	private void render(AvalancheReport avalancheReport) {
 		MapUtil.createMapyrusMaps(avalancheReport);
 		PdfUtil.createRegionPdfs(avalancheReport);
 	}
