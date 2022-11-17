@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.zip.Deflater;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -132,7 +133,7 @@ public class PdfUtil {
 		Path path = pdfDirectory.resolve(avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_"
 			+ lang.toString() + (grayscale ? "_bw" : "") + ".pdf");
 
-		try (PdfWriter writer = new PdfWriter(path.toString(), new WriterProperties().addXmpMetadata());
+		try (PdfWriter writer = new PdfWriter(path.toString(), new WriterProperties().addXmpMetadata().setCompressionLevel(Deflater.BEST_SPEED));
 			 PdfDocument pdf = new PdfDocument(writer);
 			 Document document = new Document(pdf)) {
 			pdf.setTagged();
