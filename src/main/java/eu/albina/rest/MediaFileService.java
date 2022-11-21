@@ -93,7 +93,7 @@ public class MediaFileService {
 
 			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
 
-			String fileLocation = ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath() + "/" + region.getId() + "/";
+			String fileLocation = ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath() + "/" + region.getId() + "/" + language + "/";
 
 			// save mp3 file
 			String mp3FileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".mp3");
