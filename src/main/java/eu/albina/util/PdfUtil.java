@@ -124,10 +124,8 @@ public class PdfUtil {
 			return null;
 		}
 
-		Path pdfDirectory = avalancheReport.getPdfDirectory();
-		Files.createDirectories(pdfDirectory);
-		Path path = pdfDirectory.resolve(avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_"
-			+ lang.toString() + (grayscale ? "_bw" : "") + ".pdf");
+		Path path = getPath();
+		Files.createDirectories(path.getParent());
 		logger.info("Creating PDF {}", path);
 
 		try (PdfWriter writer = new PdfWriter(path.toString(), new WriterProperties().addXmpMetadata());
@@ -156,6 +154,15 @@ public class PdfUtil {
 			AlbinaUtil.setFilePermissions(path.toString());
 			return path;
 		}
+	}
+
+	private Path getPath() {
+		final String filename = String.format("%s_%s_%s%s.pdf",
+			avalancheReport.getValidityDateString(),
+			avalancheReport.getRegion().getId(),
+			lang.toString(),
+			grayscale ? "_bw" : "");
+		return avalancheReport.getPdfDirectory().resolve(filename);
 	}
 
 	public static PdfFont createFont(String resource) throws IOException {
