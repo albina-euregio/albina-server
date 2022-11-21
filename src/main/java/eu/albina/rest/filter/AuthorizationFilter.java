@@ -96,7 +96,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 				return;
 
 		final String message = String.format("User %s has no permission for %s!",
-			currentSecurityContext.getUserPrincipal(), allowedRoles);
+			currentSecurityContext.getUserPrincipal().getName(), resourceInfo.getResourceMethod());
 		throw new AlbinaException(message);
 	}
 }
