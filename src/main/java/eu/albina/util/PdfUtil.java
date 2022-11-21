@@ -1113,17 +1113,19 @@ public class PdfUtil {
 	}
 
 	private ImageData getMapImage(DaytimeDependency daytimeDependency, AvalancheBulletin avalancheBulletin) throws MalformedURLException {
-		return ImageDataFactory.create(avalancheReport.getServerInstance().getMapsPath()
-			+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
-			+ System.getProperty("file.separator") + avalancheReport.getPublicationTimeString()
-			+ System.getProperty("file.separator") + MapUtil.filename(avalancheReport.getRegion(), avalancheBulletin, daytimeDependency, grayscale, MapImageFormat.jpg));
+		return ImageDataFactory.create(String.format("%s/%s/%s/%s",
+			avalancheReport.getServerInstance().getMapsPath(),
+			avalancheReport.getValidityDateString(),
+			avalancheReport.getPublicationTimeString(),
+			MapUtil.filename(avalancheReport.getRegion(), avalancheBulletin, daytimeDependency, grayscale, MapImageFormat.jpg)));
 	}
 
 	private ImageData getMapImage(DaytimeDependency daytimeDependency) throws MalformedURLException {
-		return ImageDataFactory.create(avalancheReport.getServerInstance().getMapsPath()
-			+ System.getProperty("file.separator") + avalancheReport.getValidityDateString()
-			+ System.getProperty("file.separator") + avalancheReport.getPublicationTimeString()
-			+ System.getProperty("file.separator") + MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), daytimeDependency, grayscale));
+		return ImageDataFactory.create(String.format("%s/%s/%s/%s",
+			avalancheReport.getServerInstance().getMapsPath(),
+			avalancheReport.getValidityDateString(),
+			avalancheReport.getPublicationTimeString(),
+			MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), daytimeDependency, grayscale)));
 	}
 
 	private String replaceLinebreaks(String text) {
