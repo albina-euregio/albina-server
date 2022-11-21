@@ -27,8 +27,8 @@
     "pdfMapWidthFd": 500,
     "pdfMapHeight": 267,
     "pdfFooterLogo": true,
-    "pdfFooterLogoColorPath": "images/logo/color/euregio.png",
-    "pdfFooterLogoBwPath": "images/logo/grey/euregio.png",
+    "pdfFooterLogoColorPath": "logo/color/euregio.png",
+    "pdfFooterLogoBwPath": "logo/grey/euregio.png",
     "mapXmax": 1452000,
     "mapXmin": 1116000,
     "mapYmax": 1452000,
@@ -40,6 +40,6 @@
     "mapLogoPosition": "bottomright",
     "mapCenterLat": 47.1,
     "mapCenterLng": 11.44,
-    "imageColorbarColorPath": "images/logo/color/colorbar.gif",
-    "imageColorbarBwPath": "images/logo/grey/colorbar.gif"
+    "imageColorbarColorPath": "logo/color/colorbar.gif",
+    "imageColorbarBwPath": "logo/grey/colorbar.gif"
 }
