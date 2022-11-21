@@ -18,8 +18,8 @@ package eu.albina.rest.filter;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Priority;
@@ -97,6 +97,8 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 			if (currentSecurityContext.isUserInRole(role.toString()))
 				return;
 
-		throw new AlbinaException("User has no role permission!");
+		final String message = String.format("User %s has no permission for %s!",
+			currentSecurityContext.getUserPrincipal(), allowedRoles);
+		throw new AlbinaException(message);
 	}
 }
