@@ -129,6 +129,7 @@ public class PdfUtil {
 		Files.createDirectories(pdfDirectory);
 		Path path = pdfDirectory.resolve(avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_"
 			+ lang.toString() + (grayscale ? "_bw" : "") + ".pdf");
+		logger.info("Creating PDF {}", path);
 
 		try (PdfWriter writer = new PdfWriter(path.toString(), new WriterProperties().addXmpMetadata().setCompressionLevel(Deflater.BEST_SPEED));
 			 PdfDocument pdf = new PdfDocument(writer);
@@ -170,6 +171,7 @@ public class PdfUtil {
 	public static void createRegionPdfs(AvalancheReport avalancheReport) {
 		for (LanguageCode lang : LanguageCode.ENABLED) {
 			try {
+				logger.info("Creating PDF for region {}, language {}", avalancheReport.getRegion().getId(), lang);
 				new PdfUtil(avalancheReport, lang, false).createPdf();
 				new PdfUtil(avalancheReport, lang, true).createPdf();
 			} catch (IOException e) {

@@ -9,6 +9,8 @@ import eu.albina.util.PdfUtil;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MapUtilRebuildTest {
+	private static final Logger logger = LoggerFactory.getLogger(MapUtilRebuildTest.class);
 
 	private List<Region> regions;
 	private ServerInstance serverInstance;
@@ -59,6 +62,7 @@ public class MapUtilRebuildTest {
 	private AvalancheReport fetch(LocalDate date, Region region) {
 		try {
 			URL url = new URL("https://static.avalanche.report/bulletins/" + date + "/avalanche_report.json");
+			logger.info("Fetching bulletins from {}", url);
 			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(url);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setServerInstance(serverInstance);
