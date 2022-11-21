@@ -1,11 +1,13 @@
-package eu.albina.map;
+package eu.albina.util;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
-import eu.albina.util.PdfUtil;
+import eu.albina.model.enumerations.DaytimeDependency;
+import eu.albina.model.enumerations.LanguageCode;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,15 +16,17 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MapUtilRebuildTest {
-	private static final Logger logger = LoggerFactory.getLogger(MapUtilRebuildTest.class);
+public class PdfUtilRebuildTest {
+	private static final Logger logger = LoggerFactory.getLogger(PdfUtilRebuildTest.class);
 
 	private List<Region> regions;
 	private ServerInstance serverInstance;
@@ -30,7 +34,7 @@ public class MapUtilRebuildTest {
 	@Before
 	public void setUp() throws Exception {
 		serverInstance = new ServerInstance();
-		serverInstance.setMapsPath("/tmp/bulletins/");
+		serverInstance.setMapsPath("https://static.avalanche.report/bulletins");
 		serverInstance.setPdfDirectory("/tmp/bulletins/");
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
 
@@ -55,8 +59,7 @@ public class MapUtilRebuildTest {
 
 	private void rebuildMaps(LocalDate date) {
 		List<AvalancheReport> reports = regions.stream().map(region -> fetch(date, region)).collect(Collectors.toList());
-		reports.forEach(MapUtil::createMapyrusMaps);
-		reports.forEach(PdfUtil::createRegionPdfs);
+		reports.forEach(PdfUtilRebuildTest::createRegionPdfs);
 	}
 
 	private AvalancheReport fetch(LocalDate date, Region region) {
@@ -69,6 +72,47 @@ public class MapUtilRebuildTest {
 			return avalancheReport;
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
+		}
+	}
+
+	private static void createRegionPdfs(AvalancheReport avalancheReport) {
+		for (LanguageCode lang : LanguageCode.ENABLED) {
+			try {
+				logger.info("Creating PDF for region {}, language {}", avalancheReport.getRegion().getId(), lang);
+				new RebuildPdfUtil(avalancheReport, lang, false).createPdf();
+				new RebuildPdfUtil(avalancheReport, lang, true).createPdf();
+			} catch (IOException e) {
+				logger.error("PDF could not be created", e);
+			}
+		}
+	}
+
+	static class RebuildPdfUtil extends PdfUtil{
+		RebuildPdfUtil(AvalancheReport avalancheReport, LanguageCode lang, boolean grayscale) {
+			super(avalancheReport, lang, grayscale);
+		}
+
+		@Override
+		protected Path getPath() {
+			final Path path = super.getPath();
+			final String filename = path.getFileName().toString().replace("_EUREGIO", "");
+			return path.resolveSibling(filename);
+		}
+
+		@Override
+		protected String getMapImage(DaytimeDependency daytimeDependency, AvalancheBulletin avalancheBulletin) throws MalformedURLException {
+			return super.getMapImage(daytimeDependency, avalancheBulletin).replace(avalancheReport.getRegion().getId() + "_", "");
+		}
+
+		@Override
+		protected String getMapImage(DaytimeDependency daytimeDependency) throws MalformedURLException {
+			Region region = avalancheReport.getRegion();
+			return super.getMapImage(daytimeDependency).replace(region.getId(), ImmutableMap.of(
+				"EUREGIO", "albina",
+				"AT-07", "tyrol",
+				"IT-32-BZ", "southtyrol",
+				"IT-32-TN", "trentino"
+			).getOrDefault(region.getId(), region.getId()));
 		}
 	}
 
