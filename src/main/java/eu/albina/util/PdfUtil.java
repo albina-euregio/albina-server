@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.zip.Deflater;
 
 import com.google.common.io.Resources;
 
@@ -131,7 +130,7 @@ public class PdfUtil {
 			+ lang.toString() + (grayscale ? "_bw" : "") + ".pdf");
 		logger.info("Creating PDF {}", path);
 
-		try (PdfWriter writer = new PdfWriter(path.toString(), new WriterProperties().addXmpMetadata().setCompressionLevel(Deflater.BEST_SPEED));
+		try (PdfWriter writer = new PdfWriter(path.toString(), new WriterProperties().addXmpMetadata());
 			 PdfDocument pdf = new PdfDocument(writer);
 			 Document document = new Document(pdf)) {
 			pdf.setTagged();
