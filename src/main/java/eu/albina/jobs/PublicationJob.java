@@ -19,9 +19,9 @@ package eu.albina.jobs;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -81,12 +81,10 @@ public class PublicationJob implements org.quartz.Job {
 						.publishBulletins(startDate, endDate, regions, publicationDate, user);
 
 				if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
-					List<AvalancheBulletin> result = new ArrayList<AvalancheBulletin>();
-					for (AvalancheBulletin avalancheBulletin : publishedBulletins.values()) {
-						if (avalancheBulletin.getPublishedRegions() != null
-								&& !avalancheBulletin.getPublishedRegions().isEmpty())
-							result.add(avalancheBulletin);
-					}
+					List<AvalancheBulletin> result = publishedBulletins.values().stream()
+						.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
+							&& !avalancheBulletin.getPublishedRegions().isEmpty())
+						.collect(Collectors.toList());
 					if (result != null && !result.isEmpty()) {
 						PublicationController.getInstance().publishAutomatically(result, user, publicationDate, startDate);
 					} else {

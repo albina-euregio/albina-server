@@ -14,6 +14,7 @@ public interface ImageTestUtils {
 	/**
 	 * Compares the reference image file with the actual images given as {@link BufferedImage}.
 	 *
+	 * @param message                 message for assertions
 	 * @param reference               the reference image
 	 * @param image                   the actual image
 	 * @param thresholdPixels         maximum number of differing pixels
@@ -21,6 +22,7 @@ public interface ImageTestUtils {
 	 * @param diffImageConsumer       a consumer for a rendered image highlighting the differing pixels, may be null
 	 */
 	static void assertImageEquals(
+		String message,
 		BufferedImage reference, BufferedImage image,
 		int thresholdPixels, int thresholdTotalColorDiff, Consumer<BufferedImage> diffImageConsumer) {
 
@@ -93,10 +95,10 @@ public interface ImageTestUtils {
 		}
 
 		if (differencePoints.size() > thresholdPixels) {
-			fail(String.format("Images differ at %d points, threshold is %d: %s",
+			fail(String.format("Images %s differ at %d points, threshold is %d: %s", message,
 				differencePoints.size(), thresholdPixels, differences));
 		} else {
-			fail(String.format("Images differ too much in color, value is %d, permitted threshold is %d: %s",
+			fail(String.format("Images %s differ too much in color, value is %d, permitted threshold is %d: %s", message,
 				colorDiffSum, thresholdTotalColorDiff, differences));
 		}
 	}

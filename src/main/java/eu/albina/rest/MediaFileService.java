@@ -36,12 +36,14 @@ import javax.ws.rs.core.UriInfo;
 
 import com.github.openjson.JSONObject;
 
+import eu.albina.controller.RegionController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
@@ -53,11 +55,11 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @Path("/media")
-@Api(value = "/media")
+@Tag(name = "media")
 public class MediaFileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MediaFileService.class);
@@ -67,9 +69,11 @@ public class MediaFileService {
 
 	@POST
 	@Secured({ Role.ADMIN, Role.FORECASTER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Consumes({ MediaType.MULTIPART_FORM_DATA })
+	@Operation(summary = "Save media file")
 	public Response saveMediaFile(
-		@ApiParam(value = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
 		@QueryParam("region") String regionId,
 		@QueryParam("lang") LanguageCode language,
 		@QueryParam("important") boolean important,
@@ -78,12 +82,7 @@ public class MediaFileService {
 		@Context SecurityContext securityContext) {
 		try {
 
-			if (regionId == null) {
-				logger.warn("Region for media file not defined!");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity("Region for media file not defined!").build();
-			}
-
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region == null || !user.hasPermissionForRegion(region.getId())) {

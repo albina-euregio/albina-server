@@ -27,33 +27,56 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
 
 import com.github.openjson.JSONObject;
 
 import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
-import eu.albina.model.Credentials;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/authentication")
-@Api(value = "/authentication")
+@Tag(name = "authentication")
+@SecurityScheme(
+	name = AuthenticationService.SECURITY_SCHEME,
+	description="Obtained from POST /authentication",
+	type = SecuritySchemeType.HTTP,
+	scheme = "bearer",
+	bearerFormat = "JWT")
 public class AuthenticationService {
 
-	// private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+	public static final String SECURITY_SCHEME = "authentication";
 
-	@Context
-	UriInfo uri;
+	static class Credentials {
+		public String username;
+		public String password;
+	}
+
+	static class Token {
+		public String access_token;
+	}
+
+	static class UserAndToken extends User {
+		public String access_token;
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Authenticate user")
+	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = UserAndToken.class)))
 	public Response login(Credentials credentials) {
-		String username = credentials.getUsername().toLowerCase();
-		String password = credentials.getPassword();
+		String username = credentials.username.toLowerCase();
+		String password = credentials.password;
 
 		try {
 			UserController.getInstance().authenticate(username, password);
@@ -71,8 +94,11 @@ public class AuthenticationService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Refresh token")
+	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Token.class)))
 	public Response refreshToken(@Context SecurityContext securityContext) {
 		try {
 			Principal principal = securityContext.getUserPrincipal();

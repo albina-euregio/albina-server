@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.github.openjson.JSONArray;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
-import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.websocket.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
@@ -109,10 +109,9 @@ public class RegionController {
 		return new ArrayList<String>();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Region> getActiveRegions() throws AlbinaException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return entityManager.createQuery(HibernateUtil.queryGetRegions).getResultList();
+			return entityManager.createQuery(HibernateUtil.queryGetRegions, Region.class).getResultList();
 		});
 	}
 
@@ -125,6 +124,21 @@ public class RegionController {
 			return region;
 		});
     }
+
+	public Region getRegionOrThrowAlbinaException(String regionId) throws AlbinaException {
+		if (regionId == null) {
+			throw new AlbinaException("No region defined!");
+		}
+		try {
+			Region region = getRegion(regionId);
+			if (region == null) {
+				throw new AlbinaException("No region with id " + regionId + " found!");
+			}
+			return region;
+		} catch (HibernateException e) {
+			throw new AlbinaException("No region with id " + regionId + " found!");
+		}
+	}
 
 	public List<Region> getPublishBulletinRegions() {
 		try {
@@ -200,11 +214,9 @@ public class RegionController {
 	 *            the session id
 	 */
 	public void unlockRegions(String sessionId) {
-		List<RegionLock> hits = new ArrayList<RegionLock>();
-		for (RegionLock regionLock : regionLocks) {
-			if (Objects.equals(regionLock.getSessionId(), sessionId))
-				hits.add(regionLock);
-		}
+		List<RegionLock> hits = regionLocks.stream()
+			.filter(regionLock -> Objects.equals(regionLock.getSessionId(), sessionId))
+			.collect(Collectors.toList());
 		for (RegionLock regionLock : hits) {
 			regionLocks.remove(regionLock);
 			regionLock.setLock(false);
@@ -220,18 +232,15 @@ public class RegionController {
 	 * @return all dates that are locked for {@code region}
 	 */
 	public List<Instant> getLockedRegions(String region) {
-		List<Instant> result = new ArrayList<Instant>();
-		for (RegionLock regionLock : regionLocks) {
-			if (regionLock.getRegion().equals(region))
-				result.add(regionLock.getDate().toInstant());
-		}
-		return result;
+		return regionLocks.stream()
+			.filter(regionLock -> regionLock.getRegion().equals(region))
+			.map(regionLock -> regionLock.getDate().toInstant())
+			.collect(Collectors.toList());
 	}
 
-    public String getRegionName(LanguageCode lang, String regionId) {
-    	if ("".equals(regionId)) {
-    		return "";
-    	}
-    	return lang.getBundle("micro-regions_names").getString(regionId);
-    }
+	public JSONArray getRegionsJson() throws AlbinaException {
+		List<String> regions = getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).map(Region::getId).collect(Collectors.toList());
+		return new JSONArray(regions);
+	}
+
 }

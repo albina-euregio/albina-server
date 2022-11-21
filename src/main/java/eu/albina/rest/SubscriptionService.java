@@ -19,7 +19,6 @@ package eu.albina.rest;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -33,6 +32,7 @@ import javax.ws.rs.core.UriInfo;
 import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import io.swagger.v3.oas.annotations.Operation;
 import org.hibernate.HibernateException;
 import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
@@ -45,10 +45,10 @@ import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.SubscriberController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/email")
-@Api(value = "/email")
+@Tag(name = "email")
 public class SubscriptionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
@@ -56,7 +56,7 @@ public class SubscriptionService {
 	@Context
 	UriInfo uri;
 
-	static class SubscriberJson {
+	static class EmailSubscription {
 		public String email;
 
 		public String regions;
@@ -68,7 +68,8 @@ public class SubscriptionService {
 	@Path("/subscribe")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addSubscriber(SubscriberJson json) {
+	@Operation(summary = "Subscribe email notification")
+	public Response addSubscriber(EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
 		final Region region = RegionController.getInstance().getRegion(json.regions);
 		final List<Region> regions = Collections.singletonList(region);

@@ -27,6 +27,7 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -58,7 +59,6 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class AlbinaUtil {
@@ -219,8 +219,7 @@ public class AlbinaUtil {
 	public static boolean isUpdate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime publicationDate = getPublicationDate(bulletins);
 		LocalDateTime localDateTime = publicationDate.withZoneSameInstant(localZone()).toLocalDateTime();
-		int secondOfDay = localDateTime.toLocalTime().toSecondOfDay();
-		return (secondOfDay == 61200) ? false : true;
+		return !LocalTime.of(17, 0).equals(localDateTime.toLocalTime());
 	}
 
 	public static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
@@ -252,10 +251,6 @@ public class AlbinaUtil {
 			return utcTime.format(formatterPublicationTime);
 		else
 			return "";
-	}
-
-	public static boolean hasDaytimeDependency(List<AvalancheBulletin> bulletins) {
-		return bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 	}
 
 	public static void setFilePermissions(String fileName) throws IOException {

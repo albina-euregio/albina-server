@@ -77,15 +77,15 @@ public class ChatController {
 	 *            chat messages newer than this date will be returned
 	 * @return all chat messages starting from a specific {@code date}
 	 */
-	@SuppressWarnings("unchecked")
 	public List<ChatMessage> getChatMessages(Instant date) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<ChatMessage> chatMessages = null;
 			if (date != null)
-				chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessagesDate).setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+				chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessagesDate, ChatMessage.class)
+						.setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
 						.getResultList();
 			else
-				chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessages).getResultList();
+				chatMessages = entityManager.createQuery(HibernateUtil.queryGetChatMessages, ChatMessage.class).getResultList();
 
 			return chatMessages;
 		});

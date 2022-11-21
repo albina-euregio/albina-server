@@ -44,7 +44,6 @@ import eu.albina.model.enumerations.DaytimeDependency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
@@ -259,7 +258,7 @@ public class SimpleHtmlUtil {
 
 				StringBuilder sb = new StringBuilder();
 				for (String publishedRegion : avalancheBulletin.getPublishedRegions()) {
-					sb.append(RegionController.getInstance().getRegionName(lang, publishedRegion));
+					sb.append(lang.getRegionName(publishedRegion));
 					sb.append(", ");
 				}
 				sb.delete(sb.length() - 2, sb.length());

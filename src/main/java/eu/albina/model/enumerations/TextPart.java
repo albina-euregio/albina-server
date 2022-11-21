@@ -28,34 +28,6 @@ public enum TextPart {
 		return null;
 	}
 
-	public String toCaamlv5String() {
-		switch (this) {
-		case avActivityHighlights:
-			return "avActivityHighlights";
-		case avActivityComment:
-			return "avActivityComment";
-		case synopsisHighlights:
-			return "wxSynopsisHighlights";
-		case synopsisComment:
-			return "wxSynopsisComment";
-		case snowpackStructureHighlights:
-			return "snowpackStructureHighlights";
-		case snowpackStructureComment:
-			return "snowpackStructureComment";
-		case travelAdvisoryHighlights:
-			return "travelAdvisoryHighlights";
-		case travelAdvisoryComment:
-			return "travelAdvisoryComment";
-		case tendencyComment:
-			return "tendencyComment";
-		case highlights:
-			return "highlights";
-
-		default:
-			return null;
-		}
-	}
-
 	public String toCaamlv6String() {
 		switch (this) {
 		case avActivityHighlights:

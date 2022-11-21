@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -149,7 +150,6 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 *             if a micro region is defined twice in the bulletins
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> bulletins, Instant startDate,
 			Instant endDate, Region region, Instant publicationDate) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
@@ -158,7 +158,7 @@ public class AvalancheBulletinController {
 			throw new AlbinaException("duplicateRegion");
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> originalBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> originalBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 			Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
 
@@ -347,17 +347,14 @@ public class AvalancheBulletinController {
 	 *            the regions of the bulletins
 	 * @return the most recent bulletins for the given time period and regions
 	 */
-	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<Region> regions) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-			for (AvalancheBulletin bulletin : bulletins) {
-				if (regions.stream().anyMatch(bulletin::affectsRegionWithoutSuggestions)) {
-					results.add(bulletin);
-				}
-			}
+			List<AvalancheBulletin> results = bulletins.stream()
+				.filter(bulletin -> regions.stream()
+					.anyMatch(bulletin::affectsRegionWithoutSuggestions))
+				.collect(Collectors.toList());
 
 			for (AvalancheBulletin bulletin : results)
 				initializeBulletin(bulletin);
@@ -381,18 +378,16 @@ public class AvalancheBulletinController {
 	 *            the user who submits the bulletins
 	 * @return a list of all affected bulletins
 	 */
-	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> submitBulletins(Instant startDate, Instant endDate, Region region, User user) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			List<AvalancheBulletin> results = bulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegion(region))
+				.collect(Collectors.toList());
 
 			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegion(region))
-					results.add(bulletin);
 
 			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
@@ -473,21 +468,18 @@ public class AvalancheBulletinController {
 	 *            the user who publishes the bulletins
 	 * @return a list of all affected bulletins
 	 */
-	@SuppressWarnings("unchecked")
 	public List<AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, Region region,
 			Instant publicationDate, User user) {
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
 			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegionWithoutSuggestions(region))
-					results.add(bulletin);
+			List<AvalancheBulletin> results = bulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
+				.collect(Collectors.toList());
 
-			Set<String> result = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
 
 				// set author
@@ -498,10 +490,9 @@ public class AvalancheBulletinController {
 				}
 
 				// publish all saved regions
-				result = new HashSet<String>();
-				for (String entry : bulletin.getSavedRegions())
-					if (entry.startsWith(region.getId()))
-						result.add(entry);
+				Set<String> result = bulletin.getSavedRegions().stream()
+					.filter(entry -> entry.startsWith(region.getId()))
+					.collect(Collectors.toSet());
 				for (String entry : result) {
 					bulletin.getSavedRegions().remove(entry);
 					bulletin.getPublishedRegions().add(entry);
@@ -556,11 +547,9 @@ public class AvalancheBulletinController {
 	 *         of {@code region}
 	 */
 	private Set<String> getOwnRegions(Set<String> regions, Region region) {
-		Set<String> result = new HashSet<String>();
-		for (String entry : regions)
-			if (entry.startsWith(region.getId()))
-				result.add(entry);
-		return result;
+		return regions.stream()
+			.filter(entry -> entry.startsWith(region.getId()))
+			.collect(Collectors.toSet());
 	}
 
 	/**
@@ -576,7 +565,6 @@ public class AvalancheBulletinController {
 	 *            the region of interest
 	 * @return a JSON array containing all warnings (empty if no warning was found)
 	 */
-	@SuppressWarnings("unchecked")
 	public JSONArray checkBulletins(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			JSONArray json = new JSONArray();
@@ -587,14 +575,13 @@ public class AvalancheBulletinController {
 			boolean pendingSuggestions = false;
 			boolean missingDangerRating = false;
 
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins)
+			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
-			List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
+			List<AvalancheBulletin> results = bulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegion(region))
+				.collect(Collectors.toList());
 			// select bulletins within the region
-			for (AvalancheBulletin bulletin : bulletins)
-				if (bulletin.affectsRegion(region))
-					results.add(bulletin);
 
 			if (checkBulletinsForDuplicateRegion(bulletins, region))
 				json.put("duplicateRegion");
@@ -716,11 +703,9 @@ public class AvalancheBulletinController {
 	 *            the session id
 	 */
 	public void unlockBulletins(String sessionId) {
-		List<BulletinLock> hits = new ArrayList<BulletinLock>();
-		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (Objects.equals(bulletinLock.getSessionId(), sessionId))
-				hits.add(bulletinLock);
-		}
+		List<BulletinLock> hits = bulletinLocks.stream()
+			.filter(bulletinLock -> Objects.equals(bulletinLock.getSessionId(), sessionId))
+			.collect(Collectors.toList());
 		for (BulletinLock bulletinLock : hits) {
 			bulletinLocks.remove(bulletinLock);
 			bulletinLock.setLock(false);

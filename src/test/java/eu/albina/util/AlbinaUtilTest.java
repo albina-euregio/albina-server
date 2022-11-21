@@ -166,8 +166,10 @@ public class AlbinaUtilTest {
 	}
 
 	@Test
-	public void testIsUpdate() {
+	public void testIsUpdate() throws Exception {
 		Assert.assertTrue(AlbinaUtil.isUpdate(bulletins));
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(Resources.getResource("2019-01-17.json"));
+		Assert.assertFalse(AlbinaUtil.isUpdate(bulletins));
 	}
 
 	@Ignore

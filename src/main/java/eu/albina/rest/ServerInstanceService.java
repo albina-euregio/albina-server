@@ -32,6 +32,13 @@ import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,10 +51,10 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/server")
-@Api(value = "/server")
+@Tag(name = "server")
 public class ServerInstanceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerInstanceService.class);
@@ -57,9 +64,12 @@ public class ServerInstanceService {
 
 	@PUT
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateServerConfiguration(String serverInstance) {
+	@Operation(summary = "Update server configuration")
+	public Response updateServerConfiguration(
+		@Parameter(schema = @Schema(implementation = ServerInstance.class)) String serverInstance) {
 		try {
 			JSONObject serverInstanceJson = new JSONObject(serverInstance);
 			ServerInstanceController.getInstance().updateServerInstance(new ServerInstance(serverInstanceJson, RegionController.getInstance()::getRegion));
@@ -72,9 +82,13 @@ public class ServerInstanceService {
 
 	@POST
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createServerConfiguration(String serverString, @Context SecurityContext securityContext) {
+	@Operation(summary = "Create server configuration")
+	public Response createServerConfiguration(
+		@Parameter(schema = @Schema(implementation = ServerInstance.class)) String serverString,
+		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON server");
 		JSONObject serverJson = new JSONObject(serverString);
 		ServerInstance serverInstance = new ServerInstance(serverJson, RegionController.getInstance()::getRegion);
@@ -95,8 +109,11 @@ public class ServerInstanceService {
 
 	@GET
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get local server configuration")
+	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
 	public Response getLocalServerConfiguration() {
 		logger.debug("GET JSON server");
 		try {
@@ -112,9 +129,12 @@ public class ServerInstanceService {
 
 	@GET
 	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/external")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get external server configurations")
+	@ApiResponse(description = "configuration", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ServerInstance.class))))
 	public Response getExternalServerConfigurations() {
 		logger.debug("GET JSON external servers");
 		try {

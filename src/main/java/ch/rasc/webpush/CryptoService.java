@@ -91,10 +91,7 @@ public class CryptoService {
 
 	byte[] concat(byte[]... arrays) {
 		// Determine the length of the result array
-		int totalLength = 0;
-		for (byte[] array : arrays) {
-			totalLength += array.length;
-		}
+		int totalLength = Arrays.stream(arrays).mapToInt(array -> array.length).sum();
 
 		// create the result array
 		byte[] result = new byte[totalLength];

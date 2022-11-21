@@ -8,23 +8,23 @@ import org.w3c.dom.Element;
  */
 public enum CaamlVersion {
 
-	V5, V6;
+	V5, V6, V6_2022;
 
-	public int version() {
+	int version() {
 		return this == V5 ? 5 : 6;
 	}
 
-	public String namespace() {
+	String namespace() {
 		return this == V5 ? "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS"
 				: "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS";
 	}
 
-	public String schemaLocation() {
+	String schemaLocation() {
 		return this == V5 ? "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd"
 				: "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS/CAAMLv6_BulletinEAWS.xsd";
 	}
 
-	public Element setNamespaceAttributes(Element rootElement) {
+	Element setNamespaceAttributes(Element rootElement) {
 		rootElement.setAttribute("xmlns", namespace());
 		rootElement.setAttribute("xmlns:gml", "http://www.opengis.net/gml");
 		rootElement.setAttribute("xmlns:xml", "http://www.w3.org/XML/1998/namespace");

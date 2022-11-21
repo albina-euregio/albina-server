@@ -36,6 +36,13 @@ import javax.ws.rs.core.UriInfo;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +52,10 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/regions")
-@Api(value = "/regions")
+@Tag(name = "regions")
 public class RegionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegionService.class);
@@ -58,8 +65,11 @@ public class RegionService {
 
 	@GET
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get all regions")
+	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Region.class))))
 	public Response getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
 
@@ -84,8 +94,11 @@ public class RegionService {
 	@GET
 	@Path("/region")
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get region for ID")
+	@ApiResponse(description = "region", content = @Content(schema = @Schema(implementation = Region.class)))
 	public Response getRegion(@QueryParam("region") String regionId, @Context SecurityContext securityContext) {
 		logger.debug("GET JSON region");
 
@@ -102,9 +115,13 @@ public class RegionService {
 
 	@PUT
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response udpateRegion(String regionString, @Context SecurityContext securityContext) {
+	@Operation(summary = "Update region")
+	public Response updateRegion(
+		@Parameter(schema = @Schema(implementation = Region.class)) String regionString,
+		@Context SecurityContext securityContext) {
 		logger.debug("PUT JSON region");
 
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
@@ -136,9 +153,13 @@ public class RegionService {
 
 	@POST
 	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createRegion(String regionString, @Context SecurityContext securityContext) {
+	@Operation(summary = "Create region")
+	public Response createRegion(
+		@Parameter(schema = @Schema(implementation = Region.class)) String regionString,
+		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON region");
 		JSONObject regionJson = new JSONObject(regionString);
 		Region region = new Region(regionJson, RegionController.getInstance()::getRegion);
@@ -159,6 +180,7 @@ public class RegionService {
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/locked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

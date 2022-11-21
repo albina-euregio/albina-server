@@ -152,7 +152,6 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore("https://gitlab.com/albina-euregio/avalanche-warning-maps/-/issues/30")
 	public void testMapyrusMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -163,7 +162,7 @@ public class MapUtilTest {
 			BufferedImage expected = ImageIO.read(Resources.getResource(name));
 			BufferedImage actual = ImageIO.read(new File(
 				serverInstance.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
-			ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> {
+			ImageTestUtils.assertImageEquals(name, expected, actual, 0, 0, ignore -> {
 			});
 		}
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
@@ -179,7 +178,7 @@ public class MapUtilTest {
 		BufferedImage expected = ImageIO.read(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		BufferedImage actual = ImageIO.read(new File(
 			serverInstance.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
-		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> {
+		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
 		});
 		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
 	}
@@ -204,7 +203,7 @@ public class MapUtilTest {
 		BufferedImage expected = ImageIO.read(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		BufferedImage actual = ImageIO.read(new File(
 			GlobalVariables.getTmpMapsPath() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
-		ImageTestUtils.assertImageEquals(expected, actual, 0, 0, ignore -> {
+		ImageTestUtils.assertImageEquals("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png", expected, actual, 0, 0, ignore -> {
 		});
 	}
 

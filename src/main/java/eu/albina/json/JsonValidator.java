@@ -37,6 +37,16 @@ import com.networknt.schema.ValidationMessage;
  */
 public class JsonValidator {
 
+	public static Set<ValidationMessage> validateCAAMLv6(String caaml) {
+		try {
+			JsonSchemaFactory jsonSchemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
+			JsonSchema jsonSchema1 = jsonSchemaFactory.getSchema(Resources.getResource("CAAMLv6_BulletinEAWS.json").openStream());
+			return jsonSchema1.validate(new ObjectMapper().readTree(caaml));
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
+		}
+	}
+
 	/**
 	 * Validates a JSON string against the avalanche bulletin JSON schema.
 	 *

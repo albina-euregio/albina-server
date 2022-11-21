@@ -115,13 +115,9 @@ public class UserController {
 	 *
 	 * @return list of all {@code User}
 	 */
-	@SuppressWarnings("unchecked")
 	public List<User> getUsers() throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<User> users = null;
-			users = entityManager.createQuery(HibernateUtil.queryGetUsers).getResultList();
-			return users;
-		});
+		return HibernateUtil.getInstance().runTransaction(entityManager ->
+			entityManager.createQuery(HibernateUtil.queryGetUsers, User.class).getResultList());
 	}
 
 	public JSONArray getUsersJson() throws AlbinaException {
@@ -148,13 +144,6 @@ public class UserController {
 			return jsonResult;
 		} else
 			throw new AlbinaException("Roles could not be loaded!");
-	}
-
-	public JSONArray getRegionsJson() throws AlbinaException {
-		JSONArray jsonResult = new JSONArray();
-		for (String regionId : RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).map(Region::getId).collect(Collectors.toList()))
-			jsonResult.put(regionId);
-		return jsonResult;
 	}
 
 	/**
@@ -242,11 +231,10 @@ public class UserController {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean isUserInRegionRole(String userEmail, String regionId, Role role) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Region region = entityManager.find(Region.class, regionId);
-			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks)
+			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks, UserRegionRoleLink.class)
 				.setParameter("userEmail", userEmail)
 				.setParameter("region", region)
 				.getResultList();
