@@ -78,16 +78,14 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 	// Extract the roles from the annotated element
 	private List<Role> extractRoles(AnnotatedElement annotatedElement) {
 		if (annotatedElement == null) {
-			return new ArrayList<Role>();
-		} else {
-			Secured secured = annotatedElement.getAnnotation(Secured.class);
-			if (secured == null) {
-				return new ArrayList<Role>();
-			} else {
-				Role[] allowedRoles = secured.value();
-				return Arrays.asList(allowedRoles);
-			}
+			return Collections.emptyList();
 		}
+		Secured secured = annotatedElement.getAnnotation(Secured.class);
+		if (secured == null) {
+			return Collections.emptyList();
+		}
+		Role[] allowedRoles = secured.value();
+		return Arrays.asList(allowedRoles);
 	}
 
 	private void checkPermissions(List<Role> allowedRoles, ContainerRequestContext requestContext) throws Exception {
