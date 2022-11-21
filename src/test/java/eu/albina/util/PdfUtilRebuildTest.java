@@ -53,7 +53,7 @@ public class PdfUtilRebuildTest {
 	public void rebuildMaps() {
 		Stream.iterate(LocalDate.parse("2022-01-20"), date -> date.plusDays(1))
 			.limit(365)
-			.filter(date -> date.isBefore(LocalDate.parse("2022-01-21")))
+			.filter(date -> date.isBefore(LocalDate.parse("2022-05-02")))
 			.forEach(this::rebuildMaps);
 	}
 
