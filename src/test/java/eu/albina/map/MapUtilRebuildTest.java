@@ -9,7 +9,6 @@ import eu.albina.util.PdfUtil;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -17,9 +16,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MapUtilRebuildTest {
@@ -46,34 +43,29 @@ public class MapUtilRebuildTest {
 
 	@Ignore
 	@Test
-	public void rebuildMaps() throws Exception {
-		final ExecutorService fetch = Executors.newSingleThreadExecutor();
-		final ExecutorService render = Executors.newSingleThreadExecutor();
-		CompletableFuture.allOf(
-			Stream.iterate(LocalDate.parse("2022-01-20"), date -> date.plusDays(1))
-				.limit(365)
-				.filter(date -> date.isBefore(LocalDate.parse("2022-01-21")))
-				.flatMap(date -> regions.stream().map(region ->
-					CompletableFuture.supplyAsync(() -> fetch(date, region), fetch).thenAcceptAsync(this::render, render))
-				)
-				.toArray(CompletableFuture[]::new)
-		).get();
+	public void rebuildMaps() {
+		Stream.iterate(LocalDate.parse("2022-01-20"), date -> date.plusDays(1))
+			.limit(365)
+			.filter(date -> date.isBefore(LocalDate.parse("2022-01-21")))
+			.forEach(this::rebuildMaps);
+	}
+
+	private void rebuildMaps(LocalDate date) {
+		List<AvalancheReport> reports = regions.stream().map(region -> fetch(date, region)).collect(Collectors.toList());
+		reports.forEach(MapUtil::createMapyrusMaps);
+		reports.forEach(PdfUtil::createRegionPdfs);
 	}
 
 	private AvalancheReport fetch(LocalDate date, Region region) {
 		try {
 			URL url = new URL("https://static.avalanche.report/bulletins/" + date + "/avalanche_report.json");
 			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(url);
-			return AvalancheReport.of(bulletins, region, serverInstance);
+			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
+			avalancheReport.setServerInstance(serverInstance);
+			return avalancheReport;
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
 	}
 
-	private void render(AvalancheReport avalancheReport) {
-		LoggerFactory.getLogger(getClass()).info("Rendering {}", avalancheReport.getPublicationTimeString());
-		avalancheReport.setServerInstance(serverInstance);
-		MapUtil.createMapyrusMaps(avalancheReport);
-		PdfUtil.createRegionPdfs(avalancheReport);
-	}
 }
