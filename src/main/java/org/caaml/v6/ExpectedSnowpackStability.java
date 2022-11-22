@@ -1,5 +1,7 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Snowpack stability, according to the EAWS definition. Four stage scale (very poor, poor,
  * fair, good).
@@ -7,6 +9,7 @@ package org.caaml.v6;
 public enum ExpectedSnowpackStability {
     FAIR, GOOD, POOR, VERY_POOR;
 
+	@JsonValue
 	@Override
     public String toString() {
         switch (this) {

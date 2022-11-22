@@ -103,7 +103,9 @@ interface Caaml6_2022 {
 		}
 		final EawsMatrixInformation matrixInformation = p.getEawsMatrixInformation();
 		if (matrixInformation != null) {
-			result.setAvalancheSize(matrixInformation.getAvalancheSizeValue());
+			if (matrixInformation.getAvalancheSize() != null) {
+				result.setAvalancheSize(matrixInformation.getAvalancheSize().toInteger());
+			}
 			result.setFrequency(ExpectedAvalancheFrequency.forValue(matrixInformation.getFrequency().toString()));
 			result.setSnowpackStability(ExpectedSnowpackStability.forValue(matrixInformation.getSnowpackStability().toString()));
 		}

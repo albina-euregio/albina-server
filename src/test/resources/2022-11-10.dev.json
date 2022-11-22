@@ -1,0 +1,1152 @@
+[
+	{
+		"id": "06888f8d-9e6e-4b0b-9523-9aed9e52d9e7",
+		"avActivityHighlightsTextcat": "[{\"curlyName\":\"Triebschnee02\",\"line\":0,\"args\":{\"Die_Eigenschaft_TSA\":{\"curlyName\":\"Die_Eigenschaft_TSA\",\"line\":2},\"Eigenschaft_Triebschnee\":{\"curlyName\":\"Eigenschaft_Triebschnee\",\"line\":0}}}]",
+		"avActivityCommentTextcat": "[{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":11,\"args\":{\"Anzahl\":{\"curlyName\":\"Anzahl\",\"line\":1}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":0}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":15,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":9,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":2,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":3},\"Expo\":{\"curlyName\":\"Expo\",\"line\":6},\"über_Nord\":{\"curlyName\":\"über_Nord\",\"line\":0},\"Expo°2\":{\"curlyName\":\"Expo°2\",\"line\":4}}},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Grösse01\",\"line\":0,\"args\":{\"Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":43,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":1}}},\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":0},\"warum_Höhe_Einzugsgebiet_wann\":{\"curlyName\":\"warum_Höhe_Einzugsgebiet_wann\",\"line\":5},\"wieviele4\":{\"curlyName\":\"wieviele4\",\"line\":1},\"Grösse_der_Lawinen\":{\"curlyName\":\"Grösse_der_Lawinen\",\"line\":7},\"Lawinenart\":{\"curlyName\":\"Lawinenart\",\"line\":8},\"möglich\":{\"curlyName\":\"möglich\",\"line\":1}}},{\"curlyName\":\"Triebschnee15\",\"line\":0,\"args\":{\"warum\":{\"curlyName\":\"warum\",\"line\":0,\"args\":{\"zunehmendem\":{\"curlyName\":\"zunehmendem\",\"line\":10},\"Wind_Richtung\":{\"curlyName\":\"Wind_Richtung\",\"line\":0},\"Neuschnee_und\":{\"curlyName\":\"Neuschnee_und\",\"line\":1}}},\"entstehen\":{\"curlyName\":\"entstehen\",\"line\":0},\"wann_optional\":{\"curlyName\":\"wann_optional\",\"line\":1,\"args\":{\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":6}}},\"wo_optional\":{\"curlyName\":\"wo_optional\",\"line\":2},\"Triebschnee_Beschreibung2\":{\"curlyName\":\"Triebschnee_Beschreibung2\",\"line\":5}}},{\"curlyName\":\"Verhältnisse01\",\"line\":0,\"args\":{\"Verhältnisse01§Verhältnisse\":{\"curlyName\":\"Verhältnisse01§Verhältnisse\",\"line\":3},\"Verhältnisse01§sind\":{\"curlyName\":\"Verhältnisse01§sind\",\"line\":0},\"gefährlich_Verhältnisse\":{\"curlyName\":\"gefährlich_Verhältnisse\",\"line\":1}}},{\"curlyName\":\"Gefährdung03\",\"line\":0,\"args\":{\"Sicherheitsmassnahmen\":{\"curlyName\":\"Sicherheitsmassnahmen\",\"line\":4},\"Gefährdung03§prüfen.\":{\"curlyName\":\"Gefährdung03§prüfen.\",\"line\":4}}}]",
+		"snowpackStructureCommentTextcat": "[{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Schneedecke07\",\"line\":0,\"args\":{\"Beweis\":{\"curlyName\":\"Beweis\",\"line\":2},\"Beweis_optional\":{\"curlyName\":\"Beweis_optional\",\"line\":6},\"bestätigen_bestätigten\":{\"curlyName\":\"bestätigen_bestätigten\",\"line\":1},\"dies_Situation\":{\"curlyName\":\"dies_Situation\",\"line\":4,\"args\":{\"wo_optional2\":{\"curlyName\":\"wo_optional2\",\"line\":0},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":0}}}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":3,\"args\":{\"Schichtung_wie3\":{\"curlyName\":\"Schichtung_wie3\",\"line\":17}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Altschnee06\",\"line\":0,\"args\":{\"Schwachschichten\":{\"curlyName\":\"Schwachschichten\",\"line\":9},\"Altschnee06§erfordern_Vorsicht.\":{\"curlyName\":\"Altschnee06§erfordern_Vorsicht.\",\"line\":3}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":31,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":0},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":7}}}}}}},{\"curlyName\":\"Doppelpunkt01\",\"line\":0,\"args\":{\"Hangart_Höhe3\":{\"curlyName\":\"Hangart_Höhe3\",\"line\":31,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"Höhenlage\":{\"curlyName\":\"Höhenlage\",\"line\":9}}},\"Doppelpunkt01§Komma\":{\"curlyName\":\"Doppelpunkt01§Komma\",\"line\":0},\"Hangart_Höhe4\":{\"curlyName\":\"Hangart_Höhe4\",\"line\":0}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":4,\"args\":{\"Schichtung_wie1\":{\"curlyName\":\"Schichtung_wie1\",\"line\":13}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Schneedecke02\",\"line\":0,\"args\":{\"Schneedecke02§Der_Neuschnee_liegt\":{\"curlyName\":\"Schneedecke02§Der_Neuschnee_liegt\",\"line\":0},\"Schneedecke02§oft2\":{\"curlyName\":\"Schneedecke02§oft2\",\"line\":1},\"Schneedecke02§Untergrund.\":{\"curlyName\":\"Schneedecke02§Untergrund.\",\"line\":5}}},{\"curlyName\":\"Altschnee05\",\"line\":0,\"args\":{\"Altschnee05§zudem_können\":{\"curlyName\":\"Altschnee05§zudem_können\",\"line\":0,\"args\":{\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":4},\"trockene\":{\"curlyName\":\"trockene\",\"line\":0}}},\"Belastung_Hangart\":{\"curlyName\":\"Belastung_Hangart\",\"line\":2},\"Altschnee05§im_Altschnee\":{\"curlyName\":\"Altschnee05§im_Altschnee\",\"line\":3}}}]",
+		"tendencyCommentTextcat": "[{\"curlyName\":\"Änderung06\",\"line\":0,\"args\":{\"Änderung06§Wie_starker\":{\"curlyName\":\"Änderung06§Wie_starker\",\"line\":8},\"Änderung06§Anstieg\":{\"curlyName\":\"Änderung06§Anstieg\",\"line\":1},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":1},\"warum_Ort_wann\":{\"curlyName\":\"warum_Ort_wann\",\"line\":2}}}]",
+		"highlights": [
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "ca"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "it",
+				"text": "I nuovi accumuli di neve ventata rappresentano la principale fonte di pericolo."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les noves acumulacions de neu ventada representen la principal font de perill."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es naues acumulacions de nhèu ventada representen era hònt principau de perilh."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh wind slabs represent the main danger."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las nuevas acumulaciones de nieve venteada representan la principal fuente de peligro."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations récentes de neige soufflée constituent le danger principal."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die frischen Triebschneeansammlungen bilden die Hauptgefahr."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "oc",
+				"text": "Era nhèu recenta des darrèri dus dies represente era hònt principau de perilh. Aguesta nhèu se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Era nhèu recenta se pòt desencadenar ath pas d’un unic montanhaire sustot en orientacions oèst enquiath sud peth nòrd per dessús deth limit deth bòsc. En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Damb era intensificacion des nheuades, sustot enes sectors mès afectadi pes precipitacions son probables nombrosi lauegi de placa de mida mejana e, locaument, grana. Damb era nhèu recenta e eth vent damb bohades plan fòrtes , en cors dera jornada , en totes es orientacions se formaràn a viatges de mida grana. Es condicions dehòra des pistes son perilhoses. Pòden èster de besonh es mesures de seguretat temporaus"
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+			},
+			{
+				"languageCode": "ca",
+				"text": "La neu recent dels darrers dos dies representa la principal font de perill. Aquesta neu pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. La neu recent pot ser desencadenada al pas d’un sol muntanyenc sobretot en orientacions oest a fins al sud pel nord per sobre del límit del bosc. En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. Amb la intensificació de les nevades, sobretot als sectors més afectats per les precipitacions són d'esperar nombroses allaus de placa de mida mitjana i, locament, gran. En el transcurs de la jornada , amb la neu recent i el vent amb ratxes molt fortes , es formaran plaques de vent de vegades de mida gran en totes les orientacions. Les condicions fora de les pistes són perilloses. Poden necessitar-se les mesures de seguretat temporals."
+			},
+			{
+				"languageCode": "es",
+				"text": "La nieve reciente de los últimos dos días representa la principal fuente de peligro. Esta nieve puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. La nieve reciente puede ser desencadenada al paso de un solo montañero sobre todo en orientaciones oeste a sur por el norte por encima del límite del bosque. En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. Con la intensificación de las nevadas, sobre todo en los sectores más afectados por las precipitaciones son probables numerosas avalanchas de placa de tamaño mediano y, locamente, grande. En el transcurso de la jornada , con la nieve reciente y el viento con rachas muy fuertes , se formarán placas de viento a veces de tamaño grande en todas las orientaciones. Las condiciones fuera de las pistas son peligrosas. Pueden necesitarse las medidas de seguridad temporales."
+			},
+			{
+				"languageCode": "it",
+				"text": "La neve fresca degli ultimi due giorni rappresenta la principale fonte di pericolo. Essa può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. La neve fresca può subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali soprattutto sui pendii esposti da ovest a nord sino a sud al di sopra del limite del bosco. In molte regioni sino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. Con l'intensificarsi delle nevicate, soprattutto nelle regioni più colpite dalle precipitazioni sono previste numerose valanghe di neve a lastroni di medie e, a livello isolato, di grandi dimensioni. Con neve fresca e vento in parte tempestoso nel corso della giornata a tutte le esposizioni si formeranno accumuli di neve ventata in parte di grandi dimensioni. Le condizioni al di fuori delle piste sono pericolose. Misure temporanee di sicurezza potrebbero rendersi necessarie."
+			},
+			{
+				"languageCode": "fr",
+				"text": "La neige fraîche des deux derniers jours constitue le danger principal. Elle peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. La neige fraîche peut être déclenchée par un seul amateur de sports d'hiver particulièrement sur les pentes exposées à l'ouest à sud en passant par le nord au-dessus de la limite de la forêt. Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. Avec l'intensification des chutes de neige de très nombreuses avalanches de plaque de neige de moyenne et rarement grande taille sont à attendre surtout dans les régions concernées par les précipitations principales. Des accumulations de neige soufflée en partie grandes se forment avec la neige fraîche et le vent partiellement tempétueux en cours de journée à toutes les expositions. Les conditions en dehors des pistes sont dangereuses. Des mesures de sécurité temporaires peuvent devenir nécessaires."
+			},
+			{
+				"languageCode": "de",
+				"text": "Der Neuschnee der letzten zwei Tage bildet die Hauptgefahr. Er kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Der Neuschnee kann besonders an den Expositionen West über Nord bis Süd oberhalb der Waldgrenze von einzelnen Wintersportlern ausgelöst werden. Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Vor allem in den Hauptniederschlagsgebieten sind mit der Intensivierung der Schneefälle zahlreiche mittlere und vereinzelt grosse Schneebrettlawinen zu erwarten. Mit Neuschnee und teils stürmischem Wind entstehen im Tagesverlauf an allen Expositionen teils grosse Triebschneeansammlungen. Die Verhältnisse abseits der Pisten sind gefährlich. Temporäre Sicherheitsmassnahmen können nötig werden."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "oc"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "it",
+				"text": "In molte regioni fino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. La neve fresca può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. I profili stratigrafici e i test di stabilità hanno confermato il pronunciato pericolo. Lo strato di neve fresca è soffice. Gli strati deboli molto pronunciati presenti nella parte superficiale del manto nevoso sono individuabili solo con difficoltà. La neve fresca si depositerà su brina superficiale in prossimità del limite del bosco. Al di sopra del limite del bosco: La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati ed è debole. In molti punti la neve fresca poggia su un debole manto di neve vecchia. Le valanghe possono subire un distacco molto facilmente negli strati più profondi del manto nevoso."
+			},
+			{
+				"languageCode": "en",
+				"text": "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+			},
+			{
+				"languageCode": "es",
+				"text": "En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. La nieve reciente puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. Los perfiles estratigráficos y los tests de estabilidad han confirmado el peligro pronunciado. La capa de nieve reciente es blanda. Las capas débiles muy pronunciadas presentes en la parte superficial del manto de nieve son difíciles de reconocer La nieve reciente se depositará encima de escarcha de superficie cerca del límite del bosque. Por encima del límite del bosque: La parte basal del manto se ha facetado y es débil. En muchos lugares la nieve reciente descansa encima de un manto débil de nieve antigua. Los aludes pueden desencadenarse muy fácilmente en las capas más profundas del manto de nieve."
+			},
+			{
+				"languageCode": "ca",
+				"text": "En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. La neu recent pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. Els perfils estratigràfics i els tests d'estabilitat han confirmat el perill pronunciat. La capa de neu recent és tova. (-) les capes febles molt pronunciades presents a la part superficial del mantell de neu són difícils de reconèixer La neu recent es dipositarà a sobre de gebre de superfície prop del límit del bosc. Per sobre del límit del bosc: La part basal del mantell s'ha facetat i és feble. En molts indrets la neu recent descansa a sobre d'un mantell feble de neu vella. Les allaus poden desencadenar-se molt fàcilment a les capes més profundes del mantell de neu."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. La neige fraîche peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. Les profils de neige et les tests de stabilité ont confirmé un danger prononcé. La couche de neige fraîche est meuble. Des couches fragiles marquées en partie supérieure du manteau neigeux ne sont que difficilement identifiables. La neige fraîche se déposera sur du givre de surface dans la zone de la limite de la forêt. Au-dessus de la limite de la forêt: La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux et est fragile. La neige fraîche repose en général sur un manteau neigeux ancien fragile. Des avalanches peuvent être déclenchées très facilement dans les couches plus profondes du manteau neigeux."
+			},
+			{
+				"languageCode": "de",
+				"text": "Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Der Neuschnee kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Schneeprofile und Stabilitätstests bestätigten die ausgeprägte Gefahr. Die Neuschneeauflage ist weich. Ausgeprägte Schwachschichten im oberen Teil der Schneedecke sind nur schwer erkennbar. Der Neuschnee wird im Bereich der Waldgrenze auf Oberflächenreif abgelagert. Oberhalb der Waldgrenze: Der untere Teil der Schneedecke ist kantig aufgebaut und schwach. Der Neuschnee liegt verbreitet auf einer schwachen Altschneedecke. Lawinen können sehr leicht in tieferen Schichten ausgelöst werden."
+			},
+			{
+				"languageCode": "oc",
+				"text": "En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Era nhèu recenta se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Es perfius estratigrafics e es tèsti d'estabilitat an confirmat eth perilh mercat. Era cocha de nhèu recenta ei trenda. (-) es coches febles fòrça prononciades presentes ena part superficiau deth mantèth de nhèu son de mau reconéisher Era nhèu recenta se depositarà ath dessús de gibra de superfícia apròp deth limit deth bòsc. Per dessús deth limit deth bòsc: Era part basau deth mantèth s'a facetat e ei febla. En fòrça endrets era nhèu recenta arrepòse ath dessús d'un mantèth feble de nhèu vielha. Es lauegi pòden desencadenar-se plan facilament enes coches mès pregones deth mantèth de nhèu."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "de",
+				"text": "Kaum Rückgang der Lawinengefahr mit dem Schneefall."
+			},
+			{
+				"languageCode": "es",
+				"text": "Con la nevada, escaso descenso del peligro de aludes."
+			},
+			{
+				"languageCode": "it",
+				"text": "Con le nevicate, scarso calo del pericolo di valanghe."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Damb era nheuada, escàs afebliment deth perilh de lauegi."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Amb la nevada, escàs afebliment del perill d'allaus."
+			},
+			{
+				"languageCode": "en",
+				"text": "Hardly any decrease in avalanche danger as a consequence of the snowfall."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Diminution à peine marquée du danger d'avalanches avec la chute de neige."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp6",
+		"publicationDate": "2022-11-09T16:29:01Z",
+		"validity": {
+			"from": "2022-11-09T23:00:00Z",
+			"until": "2022-11-10T23:00:00Z"
+		},
+		"regions": [],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "5eb13982-f2da-4884-bd32-60df35aeef05",
+			"hasElevationDependency": true,
+			"elevation": 1800,
+			"dangerRatingAbove": "high",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "new_snow",
+				"aspects": [
+					"NE",
+					"E",
+					"S",
+					"NW",
+					"SE",
+					"N",
+					"SW",
+					"W"
+				],
+				"elevationLow": 1800,
+				"eawsMatrixInformation": {
+					"dangerRating": "high",
+					"avalancheSize": "large",
+					"snowpackStability": "poor",
+					"frequency": "many",
+					"avalancheSizeValue": 50,
+					"snowpackStabilityValue": 60,
+					"frequencyValue": 89
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"NE",
+					"NW",
+					"N"
+				],
+				"elevationLow": 2600,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "large",
+					"snowpackStability": "fair",
+					"frequency": "few",
+					"avalancheSizeValue": 51,
+					"snowpackStabilityValue": 37,
+					"frequencyValue": 38
+				}
+			}
+		}
+	},
+	{
+		"id": "f4c31d95-94d0-47de-b678-8499f3ea080d",
+		"avActivityHighlightsTextcat": "[{\"curlyName\":\"Triebschnee02\",\"line\":0,\"args\":{\"Die_Eigenschaft_TSA\":{\"curlyName\":\"Die_Eigenschaft_TSA\",\"line\":2},\"Eigenschaft_Triebschnee\":{\"curlyName\":\"Eigenschaft_Triebschnee\",\"line\":0}}}]",
+		"avActivityCommentTextcat": "[{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":11,\"args\":{\"Anzahl\":{\"curlyName\":\"Anzahl\",\"line\":1}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":0}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":15,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":9,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":2,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":3},\"Expo\":{\"curlyName\":\"Expo\",\"line\":6},\"über_Nord\":{\"curlyName\":\"über_Nord\",\"line\":0},\"Expo°2\":{\"curlyName\":\"Expo°2\",\"line\":4}}},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Grösse01\",\"line\":0,\"args\":{\"Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":43,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":1}}},\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":0},\"warum_Höhe_Einzugsgebiet_wann\":{\"curlyName\":\"warum_Höhe_Einzugsgebiet_wann\",\"line\":5},\"wieviele4\":{\"curlyName\":\"wieviele4\",\"line\":1},\"Grösse_der_Lawinen\":{\"curlyName\":\"Grösse_der_Lawinen\",\"line\":7},\"Lawinenart\":{\"curlyName\":\"Lawinenart\",\"line\":8},\"möglich\":{\"curlyName\":\"möglich\",\"line\":1}}},{\"curlyName\":\"Triebschnee15\",\"line\":0,\"args\":{\"warum\":{\"curlyName\":\"warum\",\"line\":0,\"args\":{\"zunehmendem\":{\"curlyName\":\"zunehmendem\",\"line\":10},\"Wind_Richtung\":{\"curlyName\":\"Wind_Richtung\",\"line\":0},\"Neuschnee_und\":{\"curlyName\":\"Neuschnee_und\",\"line\":1}}},\"entstehen\":{\"curlyName\":\"entstehen\",\"line\":0},\"wann_optional\":{\"curlyName\":\"wann_optional\",\"line\":1,\"args\":{\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":6}}},\"wo_optional\":{\"curlyName\":\"wo_optional\",\"line\":2},\"Triebschnee_Beschreibung2\":{\"curlyName\":\"Triebschnee_Beschreibung2\",\"line\":5}}},{\"curlyName\":\"Verhältnisse01\",\"line\":0,\"args\":{\"Verhältnisse01§Verhältnisse\":{\"curlyName\":\"Verhältnisse01§Verhältnisse\",\"line\":3},\"Verhältnisse01§sind\":{\"curlyName\":\"Verhältnisse01§sind\",\"line\":0},\"gefährlich_Verhältnisse\":{\"curlyName\":\"gefährlich_Verhältnisse\",\"line\":1}}},{\"curlyName\":\"Gefährdung03\",\"line\":0,\"args\":{\"Sicherheitsmassnahmen\":{\"curlyName\":\"Sicherheitsmassnahmen\",\"line\":4},\"Gefährdung03§prüfen.\":{\"curlyName\":\"Gefährdung03§prüfen.\",\"line\":4}}}]",
+		"snowpackStructureCommentTextcat": "[{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Schneedecke07\",\"line\":0,\"args\":{\"Beweis\":{\"curlyName\":\"Beweis\",\"line\":2},\"Beweis_optional\":{\"curlyName\":\"Beweis_optional\",\"line\":6},\"bestätigen_bestätigten\":{\"curlyName\":\"bestätigen_bestätigten\",\"line\":1},\"dies_Situation\":{\"curlyName\":\"dies_Situation\",\"line\":4,\"args\":{\"wo_optional2\":{\"curlyName\":\"wo_optional2\",\"line\":0},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":0}}}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":3,\"args\":{\"Schichtung_wie3\":{\"curlyName\":\"Schichtung_wie3\",\"line\":17}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Altschnee06\",\"line\":0,\"args\":{\"Schwachschichten\":{\"curlyName\":\"Schwachschichten\",\"line\":9},\"Altschnee06§erfordern_Vorsicht.\":{\"curlyName\":\"Altschnee06§erfordern_Vorsicht.\",\"line\":3}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":31,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":0},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":7}}}}}}},{\"curlyName\":\"Doppelpunkt01\",\"line\":0,\"args\":{\"Hangart_Höhe3\":{\"curlyName\":\"Hangart_Höhe3\",\"line\":31,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"Höhenlage\":{\"curlyName\":\"Höhenlage\",\"line\":9}}},\"Doppelpunkt01§Komma\":{\"curlyName\":\"Doppelpunkt01§Komma\",\"line\":0},\"Hangart_Höhe4\":{\"curlyName\":\"Hangart_Höhe4\",\"line\":0}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":4,\"args\":{\"Schichtung_wie1\":{\"curlyName\":\"Schichtung_wie1\",\"line\":13}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Schneedecke02\",\"line\":0,\"args\":{\"Schneedecke02§Der_Neuschnee_liegt\":{\"curlyName\":\"Schneedecke02§Der_Neuschnee_liegt\",\"line\":0},\"Schneedecke02§oft2\":{\"curlyName\":\"Schneedecke02§oft2\",\"line\":1},\"Schneedecke02§Untergrund.\":{\"curlyName\":\"Schneedecke02§Untergrund.\",\"line\":5}}},{\"curlyName\":\"Altschnee05\",\"line\":0,\"args\":{\"Altschnee05§zudem_können\":{\"curlyName\":\"Altschnee05§zudem_können\",\"line\":0,\"args\":{\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":4},\"trockene\":{\"curlyName\":\"trockene\",\"line\":0}}},\"Belastung_Hangart\":{\"curlyName\":\"Belastung_Hangart\",\"line\":2},\"Altschnee05§im_Altschnee\":{\"curlyName\":\"Altschnee05§im_Altschnee\",\"line\":3}}}]",
+		"tendencyCommentTextcat": "[{\"curlyName\":\"Änderung06\",\"line\":0,\"args\":{\"Änderung06§Wie_starker\":{\"curlyName\":\"Änderung06§Wie_starker\",\"line\":8},\"Änderung06§Anstieg\":{\"curlyName\":\"Änderung06§Anstieg\",\"line\":1},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":1},\"warum_Ort_wann\":{\"curlyName\":\"warum_Ort_wann\",\"line\":2}}}]",
+		"highlights": [
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "ca",
+				"text": "Les noves acumulacions de neu ventada representen la principal font de perill."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh wind slabs represent the main danger."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die frischen Triebschneeansammlungen bilden die Hauptgefahr."
+			},
+			{
+				"languageCode": "it",
+				"text": "I nuovi accumuli di neve ventata rappresentano la principale fonte di pericolo."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es naues acumulacions de nhèu ventada representen era hònt principau de perilh."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations récentes de neige soufflée constituent le danger principal."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las nuevas acumulaciones de nieve venteada representan la principal fuente de peligro."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "ca",
+				"text": "La neu recent dels darrers dos dies representa la principal font de perill. Aquesta neu pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. La neu recent pot ser desencadenada al pas d’un sol muntanyenc sobretot en orientacions oest a fins al sud pel nord per sobre del límit del bosc. En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. Amb la intensificació de les nevades, sobretot als sectors més afectats per les precipitacions són d'esperar nombroses allaus de placa de mida mitjana i, locament, gran. En el transcurs de la jornada , amb la neu recent i el vent amb ratxes molt fortes , es formaran plaques de vent de vegades de mida gran en totes les orientacions. Les condicions fora de les pistes són perilloses. Poden necessitar-se les mesures de seguretat temporals."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Era nhèu recenta des darrèri dus dies represente era hònt principau de perilh. Aguesta nhèu se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Era nhèu recenta se pòt desencadenar ath pas d’un unic montanhaire sustot en orientacions oèst enquiath sud peth nòrd per dessús deth limit deth bòsc. En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Damb era intensificacion des nheuades, sustot enes sectors mès afectadi pes precipitacions son probables nombrosi lauegi de placa de mida mejana e, locaument, grana. Damb era nhèu recenta e eth vent damb bohades plan fòrtes , en cors dera jornada , en totes es orientacions se formaràn a viatges de mida grana. Es condicions dehòra des pistes son perilhoses. Pòden èster de besonh es mesures de seguretat temporaus"
+			},
+			{
+				"languageCode": "es",
+				"text": "La nieve reciente de los últimos dos días representa la principal fuente de peligro. Esta nieve puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. La nieve reciente puede ser desencadenada al paso de un solo montañero sobre todo en orientaciones oeste a sur por el norte por encima del límite del bosque. En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. Con la intensificación de las nevadas, sobre todo en los sectores más afectados por las precipitaciones son probables numerosas avalanchas de placa de tamaño mediano y, locamente, grande. En el transcurso de la jornada , con la nieve reciente y el viento con rachas muy fuertes , se formarán placas de viento a veces de tamaño grande en todas las orientaciones. Las condiciones fuera de las pistas son peligrosas. Pueden necesitarse las medidas de seguridad temporales."
+			},
+			{
+				"languageCode": "fr",
+				"text": "La neige fraîche des deux derniers jours constitue le danger principal. Elle peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. La neige fraîche peut être déclenchée par un seul amateur de sports d'hiver particulièrement sur les pentes exposées à l'ouest à sud en passant par le nord au-dessus de la limite de la forêt. Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. Avec l'intensification des chutes de neige de très nombreuses avalanches de plaque de neige de moyenne et rarement grande taille sont à attendre surtout dans les régions concernées par les précipitations principales. Des accumulations de neige soufflée en partie grandes se forment avec la neige fraîche et le vent partiellement tempétueux en cours de journée à toutes les expositions. Les conditions en dehors des pistes sont dangereuses. Des mesures de sécurité temporaires peuvent devenir nécessaires."
+			},
+			{
+				"languageCode": "de",
+				"text": "Der Neuschnee der letzten zwei Tage bildet die Hauptgefahr. Er kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Der Neuschnee kann besonders an den Expositionen West über Nord bis Süd oberhalb der Waldgrenze von einzelnen Wintersportlern ausgelöst werden. Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Vor allem in den Hauptniederschlagsgebieten sind mit der Intensivierung der Schneefälle zahlreiche mittlere und vereinzelt grosse Schneebrettlawinen zu erwarten. Mit Neuschnee und teils stürmischem Wind entstehen im Tagesverlauf an allen Expositionen teils grosse Triebschneeansammlungen. Die Verhältnisse abseits der Pisten sind gefährlich. Temporäre Sicherheitsmassnahmen können nötig werden."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+			},
+			{
+				"languageCode": "it",
+				"text": "La neve fresca degli ultimi due giorni rappresenta la principale fonte di pericolo. Essa può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. La neve fresca può subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali soprattutto sui pendii esposti da ovest a nord sino a sud al di sopra del limite del bosco. In molte regioni sino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. Con l'intensificarsi delle nevicate, soprattutto nelle regioni più colpite dalle precipitazioni sono previste numerose valanghe di neve a lastroni di medie e, a livello isolato, di grandi dimensioni. Con neve fresca e vento in parte tempestoso nel corso della giornata a tutte le esposizioni si formeranno accumuli di neve ventata in parte di grandi dimensioni. Le condizioni al di fuori delle piste sono pericolose. Misure temporanee di sicurezza potrebbero rendersi necessarie."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "de",
+				"text": "Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Der Neuschnee kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Schneeprofile und Stabilitätstests bestätigten die ausgeprägte Gefahr. Die Neuschneeauflage ist weich. Ausgeprägte Schwachschichten im oberen Teil der Schneedecke sind nur schwer erkennbar. Der Neuschnee wird im Bereich der Waldgrenze auf Oberflächenreif abgelagert. Oberhalb der Waldgrenze: Der untere Teil der Schneedecke ist kantig aufgebaut und schwach. Der Neuschnee liegt verbreitet auf einer schwachen Altschneedecke. Lawinen können sehr leicht in tieferen Schichten ausgelöst werden."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. La neige fraîche peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. Les profils de neige et les tests de stabilité ont confirmé un danger prononcé. La couche de neige fraîche est meuble. Des couches fragiles marquées en partie supérieure du manteau neigeux ne sont que difficilement identifiables. La neige fraîche se déposera sur du givre de surface dans la zone de la limite de la forêt. Au-dessus de la limite de la forêt: La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux et est fragile. La neige fraîche repose en général sur un manteau neigeux ancien fragile. Des avalanches peuvent être déclenchées très facilement dans les couches plus profondes du manteau neigeux."
+			},
+			{
+				"languageCode": "es",
+				"text": "En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. La nieve reciente puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. Los perfiles estratigráficos y los tests de estabilidad han confirmado el peligro pronunciado. La capa de nieve reciente es blanda. Las capas débiles muy pronunciadas presentes en la parte superficial del manto de nieve son difíciles de reconocer La nieve reciente se depositará encima de escarcha de superficie cerca del límite del bosque. Por encima del límite del bosque: La parte basal del manto se ha facetado y es débil. En muchos lugares la nieve reciente descansa encima de un manto débil de nieve antigua. Los aludes pueden desencadenarse muy fácilmente en las capas más profundas del manto de nieve."
+			},
+			{
+				"languageCode": "ca",
+				"text": "En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. La neu recent pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. Els perfils estratigràfics i els tests d'estabilitat han confirmat el perill pronunciat. La capa de neu recent és tova. (-) les capes febles molt pronunciades presents a la part superficial del mantell de neu són difícils de reconèixer La neu recent es dipositarà a sobre de gebre de superfície prop del límit del bosc. Per sobre del límit del bosc: La part basal del mantell s'ha facetat i és feble. En molts indrets la neu recent descansa a sobre d'un mantell feble de neu vella. Les allaus poden desencadenar-se molt fàcilment a les capes més profundes del mantell de neu."
+			},
+			{
+				"languageCode": "oc",
+				"text": "En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Era nhèu recenta se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Es perfius estratigrafics e es tèsti d'estabilitat an confirmat eth perilh mercat. Era cocha de nhèu recenta ei trenda. (-) es coches febles fòrça prononciades presentes ena part superficiau deth mantèth de nhèu son de mau reconéisher Era nhèu recenta se depositarà ath dessús de gibra de superfícia apròp deth limit deth bòsc. Per dessús deth limit deth bòsc: Era part basau deth mantèth s'a facetat e ei febla. En fòrça endrets era nhèu recenta arrepòse ath dessús d'un mantèth feble de nhèu vielha. Es lauegi pòden desencadenar-se plan facilament enes coches mès pregones deth mantèth de nhèu."
+			},
+			{
+				"languageCode": "it",
+				"text": "In molte regioni fino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. La neve fresca può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. I profili stratigrafici e i test di stabilità hanno confermato il pronunciato pericolo. Lo strato di neve fresca è soffice. Gli strati deboli molto pronunciati presenti nella parte superficiale del manto nevoso sono individuabili solo con difficoltà. La neve fresca si depositerà su brina superficiale in prossimità del limite del bosco. Al di sopra del limite del bosco: La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati ed è debole. In molti punti la neve fresca poggia su un debole manto di neve vecchia. Le valanghe possono subire un distacco molto facilmente negli strati più profondi del manto nevoso."
+			},
+			{
+				"languageCode": "en",
+				"text": "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "de",
+				"text": "Kaum Rückgang der Lawinengefahr mit dem Schneefall."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Diminution à peine marquée du danger d'avalanches avec la chute de neige."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Amb la nevada, escàs afebliment del perill d'allaus."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Damb era nheuada, escàs afebliment deth perilh de lauegi."
+			},
+			{
+				"languageCode": "es",
+				"text": "Con la nevada, escaso descenso del peligro de aludes."
+			},
+			{
+				"languageCode": "en",
+				"text": "Hardly any decrease in avalanche danger as a consequence of the snowfall."
+			},
+			{
+				"languageCode": "it",
+				"text": "Con le nevicate, scarso calo del pericolo di valanghe."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp6",
+		"publicationDate": "2022-11-09T16:00:00Z",
+		"validity": {
+			"from": "2022-11-09T23:00:00Z",
+			"until": "2022-11-10T23:00:00Z"
+		},
+		"regions": [],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "0f164f30-4648-44cd-b0e7-596f3898c8b0",
+			"hasElevationDependency": true,
+			"elevation": 1800,
+			"dangerRatingAbove": "high",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "new_snow",
+				"aspects": [
+					"NE",
+					"E",
+					"S",
+					"NW",
+					"SE",
+					"N",
+					"SW",
+					"W"
+				],
+				"elevationLow": 1800,
+				"eawsMatrixInformation": {
+					"dangerRating": "high",
+					"avalancheSize": "large",
+					"snowpackStability": "poor",
+					"frequency": "many",
+					"avalancheSizeValue": 50,
+					"snowpackStabilityValue": 60,
+					"frequencyValue": 89
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"NE",
+					"NW",
+					"N"
+				],
+				"elevationLow": 2600,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "large",
+					"snowpackStability": "fair",
+					"frequency": "few",
+					"avalancheSizeValue": 51,
+					"snowpackStabilityValue": 37,
+					"frequencyValue": 38
+				}
+			}
+		}
+	},
+	{
+		"id": "5263ea68-d47a-45f2-85ae-4e1938c82044",
+		"avActivityHighlightsTextcat": "[{\"curlyName\":\"Triebschnee02\",\"line\":0,\"args\":{\"Die_Eigenschaft_TSA\":{\"curlyName\":\"Die_Eigenschaft_TSA\",\"line\":2},\"Eigenschaft_Triebschnee\":{\"curlyName\":\"Eigenschaft_Triebschnee\",\"line\":0}}}]",
+		"avActivityCommentTextcat": "[{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":11,\"args\":{\"Anzahl\":{\"curlyName\":\"Anzahl\",\"line\":1}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":0}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":15,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":9,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":2,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":3},\"Expo\":{\"curlyName\":\"Expo\",\"line\":6},\"über_Nord\":{\"curlyName\":\"über_Nord\",\"line\":0},\"Expo°2\":{\"curlyName\":\"Expo°2\",\"line\":4}}},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Grösse01\",\"line\":0,\"args\":{\"Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":43,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":1}}},\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":0},\"warum_Höhe_Einzugsgebiet_wann\":{\"curlyName\":\"warum_Höhe_Einzugsgebiet_wann\",\"line\":5},\"wieviele4\":{\"curlyName\":\"wieviele4\",\"line\":1},\"Grösse_der_Lawinen\":{\"curlyName\":\"Grösse_der_Lawinen\",\"line\":7},\"Lawinenart\":{\"curlyName\":\"Lawinenart\",\"line\":8},\"möglich\":{\"curlyName\":\"möglich\",\"line\":1}}},{\"curlyName\":\"Triebschnee15\",\"line\":0,\"args\":{\"warum\":{\"curlyName\":\"warum\",\"line\":0,\"args\":{\"zunehmendem\":{\"curlyName\":\"zunehmendem\",\"line\":10},\"Wind_Richtung\":{\"curlyName\":\"Wind_Richtung\",\"line\":0},\"Neuschnee_und\":{\"curlyName\":\"Neuschnee_und\",\"line\":1}}},\"entstehen\":{\"curlyName\":\"entstehen\",\"line\":0},\"wann_optional\":{\"curlyName\":\"wann_optional\",\"line\":1,\"args\":{\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":6}}},\"wo_optional\":{\"curlyName\":\"wo_optional\",\"line\":2},\"Triebschnee_Beschreibung2\":{\"curlyName\":\"Triebschnee_Beschreibung2\",\"line\":5}}},{\"curlyName\":\"Verhältnisse01\",\"line\":0,\"args\":{\"Verhältnisse01§Verhältnisse\":{\"curlyName\":\"Verhältnisse01§Verhältnisse\",\"line\":3},\"Verhältnisse01§sind\":{\"curlyName\":\"Verhältnisse01§sind\",\"line\":0},\"gefährlich_Verhältnisse\":{\"curlyName\":\"gefährlich_Verhältnisse\",\"line\":1}}},{\"curlyName\":\"Gefährdung03\",\"line\":0,\"args\":{\"Sicherheitsmassnahmen\":{\"curlyName\":\"Sicherheitsmassnahmen\",\"line\":4},\"Gefährdung03§prüfen.\":{\"curlyName\":\"Gefährdung03§prüfen.\",\"line\":4}}}]",
+		"snowpackStructureCommentTextcat": "[{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Schneedecke07\",\"line\":0,\"args\":{\"Beweis\":{\"curlyName\":\"Beweis\",\"line\":2},\"Beweis_optional\":{\"curlyName\":\"Beweis_optional\",\"line\":6},\"bestätigen_bestätigten\":{\"curlyName\":\"bestätigen_bestätigten\",\"line\":1},\"dies_Situation\":{\"curlyName\":\"dies_Situation\",\"line\":4,\"args\":{\"wo_optional2\":{\"curlyName\":\"wo_optional2\",\"line\":0},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":0}}}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":3,\"args\":{\"Schichtung_wie3\":{\"curlyName\":\"Schichtung_wie3\",\"line\":17}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Altschnee06\",\"line\":0,\"args\":{\"Schwachschichten\":{\"curlyName\":\"Schwachschichten\",\"line\":9},\"Altschnee06§erfordern_Vorsicht.\":{\"curlyName\":\"Altschnee06§erfordern_Vorsicht.\",\"line\":3}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":31,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":0},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":7}}}}}}},{\"curlyName\":\"Doppelpunkt01\",\"line\":0,\"args\":{\"Hangart_Höhe3\":{\"curlyName\":\"Hangart_Höhe3\",\"line\":31,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"Höhenlage\":{\"curlyName\":\"Höhenlage\",\"line\":9}}},\"Doppelpunkt01§Komma\":{\"curlyName\":\"Doppelpunkt01§Komma\",\"line\":0},\"Hangart_Höhe4\":{\"curlyName\":\"Hangart_Höhe4\",\"line\":0}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":4,\"args\":{\"Schichtung_wie1\":{\"curlyName\":\"Schichtung_wie1\",\"line\":13}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Schneedecke02\",\"line\":0,\"args\":{\"Schneedecke02§Der_Neuschnee_liegt\":{\"curlyName\":\"Schneedecke02§Der_Neuschnee_liegt\",\"line\":0},\"Schneedecke02§oft2\":{\"curlyName\":\"Schneedecke02§oft2\",\"line\":1},\"Schneedecke02§Untergrund.\":{\"curlyName\":\"Schneedecke02§Untergrund.\",\"line\":5}}},{\"curlyName\":\"Altschnee05\",\"line\":0,\"args\":{\"Altschnee05§zudem_können\":{\"curlyName\":\"Altschnee05§zudem_können\",\"line\":0,\"args\":{\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":4},\"trockene\":{\"curlyName\":\"trockene\",\"line\":0}}},\"Belastung_Hangart\":{\"curlyName\":\"Belastung_Hangart\",\"line\":2},\"Altschnee05§im_Altschnee\":{\"curlyName\":\"Altschnee05§im_Altschnee\",\"line\":3}}}]",
+		"tendencyCommentTextcat": "[{\"curlyName\":\"Änderung06\",\"line\":0,\"args\":{\"Änderung06§Wie_starker\":{\"curlyName\":\"Änderung06§Wie_starker\",\"line\":8},\"Änderung06§Anstieg\":{\"curlyName\":\"Änderung06§Anstieg\",\"line\":1},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":1},\"warum_Ort_wann\":{\"curlyName\":\"warum_Ort_wann\",\"line\":2}}}]",
+		"highlights": [
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "ca",
+				"text": "Les noves acumulacions de neu ventada representen la principal font de perill."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las nuevas acumulaciones de nieve venteada representan la principal fuente de peligro."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die frischen Triebschneeansammlungen bilden die Hauptgefahr."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es naues acumulacions de nhèu ventada representen era hònt principau de perilh."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh wind slabs represent the main danger."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations récentes de neige soufflée constituent le danger principal."
+			},
+			{
+				"languageCode": "it",
+				"text": "I nuovi accumuli di neve ventata rappresentano la principale fonte di pericolo."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "it",
+				"text": "La neve fresca degli ultimi due giorni rappresenta la principale fonte di pericolo. Essa può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. La neve fresca può subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali soprattutto sui pendii esposti da ovest a nord sino a sud al di sopra del limite del bosco. In molte regioni sino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. Con l'intensificarsi delle nevicate, soprattutto nelle regioni più colpite dalle precipitazioni sono previste numerose valanghe di neve a lastroni di medie e, a livello isolato, di grandi dimensioni. Con neve fresca e vento in parte tempestoso nel corso della giornata a tutte le esposizioni si formeranno accumuli di neve ventata in parte di grandi dimensioni. Le condizioni al di fuori delle piste sono pericolose. Misure temporanee di sicurezza potrebbero rendersi necessarie."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+			},
+			{
+				"languageCode": "de",
+				"text": "Der Neuschnee der letzten zwei Tage bildet die Hauptgefahr. Er kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Der Neuschnee kann besonders an den Expositionen West über Nord bis Süd oberhalb der Waldgrenze von einzelnen Wintersportlern ausgelöst werden. Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Vor allem in den Hauptniederschlagsgebieten sind mit der Intensivierung der Schneefälle zahlreiche mittlere und vereinzelt grosse Schneebrettlawinen zu erwarten. Mit Neuschnee und teils stürmischem Wind entstehen im Tagesverlauf an allen Expositionen teils grosse Triebschneeansammlungen. Die Verhältnisse abseits der Pisten sind gefährlich. Temporäre Sicherheitsmassnahmen können nötig werden."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Era nhèu recenta des darrèri dus dies represente era hònt principau de perilh. Aguesta nhèu se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Era nhèu recenta se pòt desencadenar ath pas d’un unic montanhaire sustot en orientacions oèst enquiath sud peth nòrd per dessús deth limit deth bòsc. En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Damb era intensificacion des nheuades, sustot enes sectors mès afectadi pes precipitacions son probables nombrosi lauegi de placa de mida mejana e, locaument, grana. Damb era nhèu recenta e eth vent damb bohades plan fòrtes , en cors dera jornada , en totes es orientacions se formaràn a viatges de mida grana. Es condicions dehòra des pistes son perilhoses. Pòden èster de besonh es mesures de seguretat temporaus"
+			},
+			{
+				"languageCode": "fr",
+				"text": "La neige fraîche des deux derniers jours constitue le danger principal. Elle peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. La neige fraîche peut être déclenchée par un seul amateur de sports d'hiver particulièrement sur les pentes exposées à l'ouest à sud en passant par le nord au-dessus de la limite de la forêt. Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. Avec l'intensification des chutes de neige de très nombreuses avalanches de plaque de neige de moyenne et rarement grande taille sont à attendre surtout dans les régions concernées par les précipitations principales. Des accumulations de neige soufflée en partie grandes se forment avec la neige fraîche et le vent partiellement tempétueux en cours de journée à toutes les expositions. Les conditions en dehors des pistes sont dangereuses. Des mesures de sécurité temporaires peuvent devenir nécessaires."
+			},
+			{
+				"languageCode": "ca",
+				"text": "La neu recent dels darrers dos dies representa la principal font de perill. Aquesta neu pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. La neu recent pot ser desencadenada al pas d’un sol muntanyenc sobretot en orientacions oest a fins al sud pel nord per sobre del límit del bosc. En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. Amb la intensificació de les nevades, sobretot als sectors més afectats per les precipitacions són d'esperar nombroses allaus de placa de mida mitjana i, locament, gran. En el transcurs de la jornada , amb la neu recent i el vent amb ratxes molt fortes , es formaran plaques de vent de vegades de mida gran en totes les orientacions. Les condicions fora de les pistes són perilloses. Poden necessitar-se les mesures de seguretat temporals."
+			},
+			{
+				"languageCode": "es",
+				"text": "La nieve reciente de los últimos dos días representa la principal fuente de peligro. Esta nieve puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. La nieve reciente puede ser desencadenada al paso de un solo montañero sobre todo en orientaciones oeste a sur por el norte por encima del límite del bosque. En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. Con la intensificación de las nevadas, sobre todo en los sectores más afectados por las precipitaciones son probables numerosas avalanchas de placa de tamaño mediano y, locamente, grande. En el transcurso de la jornada , con la nieve reciente y el viento con rachas muy fuertes , se formarán placas de viento a veces de tamaño grande en todas las orientaciones. Las condiciones fuera de las pistas son peligrosas. Pueden necesitarse las medidas de seguridad temporales."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "es"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "en",
+				"text": "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+			},
+			{
+				"languageCode": "ca",
+				"text": "En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. La neu recent pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. Els perfils estratigràfics i els tests d'estabilitat han confirmat el perill pronunciat. La capa de neu recent és tova. (-) les capes febles molt pronunciades presents a la part superficial del mantell de neu són difícils de reconèixer La neu recent es dipositarà a sobre de gebre de superfície prop del límit del bosc. Per sobre del límit del bosc: La part basal del mantell s'ha facetat i és feble. En molts indrets la neu recent descansa a sobre d'un mantell feble de neu vella. Les allaus poden desencadenar-se molt fàcilment a les capes més profundes del mantell de neu."
+			},
+			{
+				"languageCode": "de",
+				"text": "Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Der Neuschnee kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Schneeprofile und Stabilitätstests bestätigten die ausgeprägte Gefahr. Die Neuschneeauflage ist weich. Ausgeprägte Schwachschichten im oberen Teil der Schneedecke sind nur schwer erkennbar. Der Neuschnee wird im Bereich der Waldgrenze auf Oberflächenreif abgelagert. Oberhalb der Waldgrenze: Der untere Teil der Schneedecke ist kantig aufgebaut und schwach. Der Neuschnee liegt verbreitet auf einer schwachen Altschneedecke. Lawinen können sehr leicht in tieferen Schichten ausgelöst werden."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. La neige fraîche peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. Les profils de neige et les tests de stabilité ont confirmé un danger prononcé. La couche de neige fraîche est meuble. Des couches fragiles marquées en partie supérieure du manteau neigeux ne sont que difficilement identifiables. La neige fraîche se déposera sur du givre de surface dans la zone de la limite de la forêt. Au-dessus de la limite de la forêt: La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux et est fragile. La neige fraîche repose en général sur un manteau neigeux ancien fragile. Des avalanches peuvent être déclenchées très facilement dans les couches plus profondes du manteau neigeux."
+			},
+			{
+				"languageCode": "es",
+				"text": "En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. La nieve reciente puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. Los perfiles estratigráficos y los tests de estabilidad han confirmado el peligro pronunciado. La capa de nieve reciente es blanda. Las capas débiles muy pronunciadas presentes en la parte superficial del manto de nieve son difíciles de reconocer La nieve reciente se depositará encima de escarcha de superficie cerca del límite del bosque. Por encima del límite del bosque: La parte basal del manto se ha facetado y es débil. En muchos lugares la nieve reciente descansa encima de un manto débil de nieve antigua. Los aludes pueden desencadenarse muy fácilmente en las capas más profundas del manto de nieve."
+			},
+			{
+				"languageCode": "it",
+				"text": "In molte regioni fino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. La neve fresca può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. I profili stratigrafici e i test di stabilità hanno confermato il pronunciato pericolo. Lo strato di neve fresca è soffice. Gli strati deboli molto pronunciati presenti nella parte superficiale del manto nevoso sono individuabili solo con difficoltà. La neve fresca si depositerà su brina superficiale in prossimità del limite del bosco. Al di sopra del limite del bosco: La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati ed è debole. In molti punti la neve fresca poggia su un debole manto di neve vecchia. Le valanghe possono subire un distacco molto facilmente negli strati più profondi del manto nevoso."
+			},
+			{
+				"languageCode": "oc",
+				"text": "En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Era nhèu recenta se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Es perfius estratigrafics e es tèsti d'estabilitat an confirmat eth perilh mercat. Era cocha de nhèu recenta ei trenda. (-) es coches febles fòrça prononciades presentes ena part superficiau deth mantèth de nhèu son de mau reconéisher Era nhèu recenta se depositarà ath dessús de gibra de superfícia apròp deth limit deth bòsc. Per dessús deth limit deth bòsc: Era part basau deth mantèth s'a facetat e ei febla. En fòrça endrets era nhèu recenta arrepòse ath dessús d'un mantèth feble de nhèu vielha. Es lauegi pòden desencadenar-se plan facilament enes coches mès pregones deth mantèth de nhèu."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "de",
+				"text": "Kaum Rückgang der Lawinengefahr mit dem Schneefall."
+			},
+			{
+				"languageCode": "it",
+				"text": "Con le nevicate, scarso calo del pericolo di valanghe."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Amb la nevada, escàs afebliment del perill d'allaus."
+			},
+			{
+				"languageCode": "es",
+				"text": "Con la nevada, escaso descenso del peligro de aludes."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Damb era nheuada, escàs afebliment deth perilh de lauegi."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Diminution à peine marquée du danger d'avalanches avec la chute de neige."
+			},
+			{
+				"languageCode": "en",
+				"text": "Hardly any decrease in avalanche danger as a consequence of the snowfall."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp6",
+		"publicationDate": "2022-11-09T16:29:01Z",
+		"validity": {
+			"from": "2022-11-09T23:00:00Z",
+			"until": "2022-11-10T23:00:00Z"
+		},
+		"regions": [],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "a8dbcf8f-3ff1-4f9f-bc79-0e468c7c3272",
+			"hasElevationDependency": true,
+			"elevation": 1800,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "new_snow",
+				"aspects": [
+					"NE",
+					"E",
+					"S",
+					"NW",
+					"SE",
+					"N",
+					"SW",
+					"W"
+				],
+				"elevationLow": 1800,
+				"eawsMatrixInformation": {
+					"dangerRating": "considerable",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "many",
+					"avalancheSizeValue": 31,
+					"snowpackStabilityValue": 60,
+					"frequencyValue": 89
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"NE",
+					"NW",
+					"N"
+				],
+				"elevationLow": 2600,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "large",
+					"snowpackStability": "fair",
+					"frequency": "few",
+					"avalancheSizeValue": 51,
+					"snowpackStabilityValue": 37,
+					"frequencyValue": 38
+				}
+			}
+		}
+	},
+	{
+		"id": "da6f43e1-ca07-4975-9ef6-42a335b5901d",
+		"avActivityHighlightsTextcat": "[{\"curlyName\":\"Triebschnee02\",\"line\":0,\"args\":{\"Die_Eigenschaft_TSA\":{\"curlyName\":\"Die_Eigenschaft_TSA\",\"line\":2},\"Eigenschaft_Triebschnee\":{\"curlyName\":\"Eigenschaft_Triebschnee\",\"line\":0}}}]",
+		"avActivityCommentTextcat": "[{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":11,\"args\":{\"Anzahl\":{\"curlyName\":\"Anzahl\",\"line\":1}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":0}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":15,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":9,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":2,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":3},\"Expo\":{\"curlyName\":\"Expo\",\"line\":6},\"über_Nord\":{\"curlyName\":\"über_Nord\",\"line\":0},\"Expo°2\":{\"curlyName\":\"Expo°2\",\"line\":4}}},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Grösse01\",\"line\":0,\"args\":{\"Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":43,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":1}}},\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":0},\"warum_Höhe_Einzugsgebiet_wann\":{\"curlyName\":\"warum_Höhe_Einzugsgebiet_wann\",\"line\":5},\"wieviele4\":{\"curlyName\":\"wieviele4\",\"line\":1},\"Grösse_der_Lawinen\":{\"curlyName\":\"Grösse_der_Lawinen\",\"line\":7},\"Lawinenart\":{\"curlyName\":\"Lawinenart\",\"line\":8},\"möglich\":{\"curlyName\":\"möglich\",\"line\":1}}},{\"curlyName\":\"Triebschnee15\",\"line\":0,\"args\":{\"warum\":{\"curlyName\":\"warum\",\"line\":0,\"args\":{\"zunehmendem\":{\"curlyName\":\"zunehmendem\",\"line\":10},\"Wind_Richtung\":{\"curlyName\":\"Wind_Richtung\",\"line\":0},\"Neuschnee_und\":{\"curlyName\":\"Neuschnee_und\",\"line\":1}}},\"entstehen\":{\"curlyName\":\"entstehen\",\"line\":0},\"wann_optional\":{\"curlyName\":\"wann_optional\",\"line\":1,\"args\":{\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":6}}},\"wo_optional\":{\"curlyName\":\"wo_optional\",\"line\":2},\"Triebschnee_Beschreibung2\":{\"curlyName\":\"Triebschnee_Beschreibung2\",\"line\":5}}},{\"curlyName\":\"Verhältnisse01\",\"line\":0,\"args\":{\"Verhältnisse01§Verhältnisse\":{\"curlyName\":\"Verhältnisse01§Verhältnisse\",\"line\":3},\"Verhältnisse01§sind\":{\"curlyName\":\"Verhältnisse01§sind\",\"line\":0},\"gefährlich_Verhältnisse\":{\"curlyName\":\"gefährlich_Verhältnisse\",\"line\":1}}},{\"curlyName\":\"Gefährdung03\",\"line\":0,\"args\":{\"Sicherheitsmassnahmen\":{\"curlyName\":\"Sicherheitsmassnahmen\",\"line\":4},\"Gefährdung03§prüfen.\":{\"curlyName\":\"Gefährdung03§prüfen.\",\"line\":4}}}]",
+		"snowpackStructureCommentTextcat": "[{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Schneedecke07\",\"line\":0,\"args\":{\"Beweis\":{\"curlyName\":\"Beweis\",\"line\":2},\"Beweis_optional\":{\"curlyName\":\"Beweis_optional\",\"line\":6},\"bestätigen_bestätigten\":{\"curlyName\":\"bestätigen_bestätigten\",\"line\":1},\"dies_Situation\":{\"curlyName\":\"dies_Situation\",\"line\":4,\"args\":{\"wo_optional2\":{\"curlyName\":\"wo_optional2\",\"line\":0},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":0}}}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":3,\"args\":{\"Schichtung_wie3\":{\"curlyName\":\"Schichtung_wie3\",\"line\":17}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Altschnee06\",\"line\":0,\"args\":{\"Schwachschichten\":{\"curlyName\":\"Schwachschichten\",\"line\":9},\"Altschnee06§erfordern_Vorsicht.\":{\"curlyName\":\"Altschnee06§erfordern_Vorsicht.\",\"line\":3}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":31,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":0},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":7}}}}}}},{\"curlyName\":\"Doppelpunkt01\",\"line\":0,\"args\":{\"Hangart_Höhe3\":{\"curlyName\":\"Hangart_Höhe3\",\"line\":31,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"Höhenlage\":{\"curlyName\":\"Höhenlage\",\"line\":9}}},\"Doppelpunkt01§Komma\":{\"curlyName\":\"Doppelpunkt01§Komma\",\"line\":0},\"Hangart_Höhe4\":{\"curlyName\":\"Hangart_Höhe4\",\"line\":0}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":4,\"args\":{\"Schichtung_wie1\":{\"curlyName\":\"Schichtung_wie1\",\"line\":13}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Schneedecke02\",\"line\":0,\"args\":{\"Schneedecke02§Der_Neuschnee_liegt\":{\"curlyName\":\"Schneedecke02§Der_Neuschnee_liegt\",\"line\":0},\"Schneedecke02§oft2\":{\"curlyName\":\"Schneedecke02§oft2\",\"line\":1},\"Schneedecke02§Untergrund.\":{\"curlyName\":\"Schneedecke02§Untergrund.\",\"line\":5}}},{\"curlyName\":\"Altschnee05\",\"line\":0,\"args\":{\"Altschnee05§zudem_können\":{\"curlyName\":\"Altschnee05§zudem_können\",\"line\":0,\"args\":{\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":4},\"trockene\":{\"curlyName\":\"trockene\",\"line\":0}}},\"Belastung_Hangart\":{\"curlyName\":\"Belastung_Hangart\",\"line\":2},\"Altschnee05§im_Altschnee\":{\"curlyName\":\"Altschnee05§im_Altschnee\",\"line\":3}}}]",
+		"tendencyCommentTextcat": "[{\"curlyName\":\"Änderung06\",\"line\":0,\"args\":{\"Änderung06§Wie_starker\":{\"curlyName\":\"Änderung06§Wie_starker\",\"line\":8},\"Änderung06§Anstieg\":{\"curlyName\":\"Änderung06§Anstieg\",\"line\":1},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":1},\"warum_Ort_wann\":{\"curlyName\":\"warum_Ort_wann\",\"line\":2}}}]",
+		"highlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "ca",
+				"text": "Les noves acumulacions de neu ventada representen la principal font de perill."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es naues acumulacions de nhèu ventada representen era hònt principau de perilh."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las nuevas acumulaciones de nieve venteada representan la principal fuente de peligro."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh wind slabs represent the main danger."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die frischen Triebschneeansammlungen bilden die Hauptgefahr."
+			},
+			{
+				"languageCode": "it",
+				"text": "I nuovi accumuli di neve ventata rappresentano la principale fonte di pericolo."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations récentes de neige soufflée constituent le danger principal."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "fr",
+				"text": "La neige fraîche des deux derniers jours constitue le danger principal. Elle peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. La neige fraîche peut être déclenchée par un seul amateur de sports d'hiver particulièrement sur les pentes exposées à l'ouest à sud en passant par le nord au-dessus de la limite de la forêt. Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. Avec l'intensification des chutes de neige de très nombreuses avalanches de plaque de neige de moyenne et rarement grande taille sont à attendre surtout dans les régions concernées par les précipitations principales. Des accumulations de neige soufflée en partie grandes se forment avec la neige fraîche et le vent partiellement tempétueux en cours de journée à toutes les expositions. Les conditions en dehors des pistes sont dangereuses. Des mesures de sécurité temporaires peuvent devenir nécessaires."
+			},
+			{
+				"languageCode": "it",
+				"text": "La neve fresca degli ultimi due giorni rappresenta la principale fonte di pericolo. Essa può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. La neve fresca può subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali soprattutto sui pendii esposti da ovest a nord sino a sud al di sopra del limite del bosco. In molte regioni sino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. Con l'intensificarsi delle nevicate, soprattutto nelle regioni più colpite dalle precipitazioni sono previste numerose valanghe di neve a lastroni di medie e, a livello isolato, di grandi dimensioni. Con neve fresca e vento in parte tempestoso nel corso della giornata a tutte le esposizioni si formeranno accumuli di neve ventata in parte di grandi dimensioni. Le condizioni al di fuori delle piste sono pericolose. Misure temporanee di sicurezza potrebbero rendersi necessarie."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Era nhèu recenta des darrèri dus dies represente era hònt principau de perilh. Aguesta nhèu se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Era nhèu recenta se pòt desencadenar ath pas d’un unic montanhaire sustot en orientacions oèst enquiath sud peth nòrd per dessús deth limit deth bòsc. En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Damb era intensificacion des nheuades, sustot enes sectors mès afectadi pes precipitacions son probables nombrosi lauegi de placa de mida mejana e, locaument, grana. Damb era nhèu recenta e eth vent damb bohades plan fòrtes , en cors dera jornada , en totes es orientacions se formaràn a viatges de mida grana. Es condicions dehòra des pistes son perilhoses. Pòden èster de besonh es mesures de seguretat temporaus"
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+			},
+			{
+				"languageCode": "es",
+				"text": "La nieve reciente de los últimos dos días representa la principal fuente de peligro. Esta nieve puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. La nieve reciente puede ser desencadenada al paso de un solo montañero sobre todo en orientaciones oeste a sur por el norte por encima del límite del bosque. En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. Con la intensificación de las nevadas, sobre todo en los sectores más afectados por las precipitaciones son probables numerosas avalanchas de placa de tamaño mediano y, locamente, grande. En el transcurso de la jornada , con la nieve reciente y el viento con rachas muy fuertes , se formarán placas de viento a veces de tamaño grande en todas las orientaciones. Las condiciones fuera de las pistas son peligrosas. Pueden necesitarse las medidas de seguridad temporales."
+			},
+			{
+				"languageCode": "de",
+				"text": "Der Neuschnee der letzten zwei Tage bildet die Hauptgefahr. Er kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Der Neuschnee kann besonders an den Expositionen West über Nord bis Süd oberhalb der Waldgrenze von einzelnen Wintersportlern ausgelöst werden. Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Vor allem in den Hauptniederschlagsgebieten sind mit der Intensivierung der Schneefälle zahlreiche mittlere und vereinzelt grosse Schneebrettlawinen zu erwarten. Mit Neuschnee und teils stürmischem Wind entstehen im Tagesverlauf an allen Expositionen teils grosse Triebschneeansammlungen. Die Verhältnisse abseits der Pisten sind gefährlich. Temporäre Sicherheitsmassnahmen können nötig werden."
+			},
+			{
+				"languageCode": "ca",
+				"text": "La neu recent dels darrers dos dies representa la principal font de perill. Aquesta neu pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. La neu recent pot ser desencadenada al pas d’un sol muntanyenc sobretot en orientacions oest a fins al sud pel nord per sobre del límit del bosc. En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. Amb la intensificació de les nevades, sobretot als sectors més afectats per les precipitacions són d'esperar nombroses allaus de placa de mida mitjana i, locament, gran. En el transcurs de la jornada , amb la neu recent i el vent amb ratxes molt fortes , es formaran plaques de vent de vegades de mida gran en totes les orientacions. Les condicions fora de les pistes són perilloses. Poden necessitar-se les mesures de seguretat temporals."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "de",
+				"text": "Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Der Neuschnee kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Schneeprofile und Stabilitätstests bestätigten die ausgeprägte Gefahr. Die Neuschneeauflage ist weich. Ausgeprägte Schwachschichten im oberen Teil der Schneedecke sind nur schwer erkennbar. Der Neuschnee wird im Bereich der Waldgrenze auf Oberflächenreif abgelagert. Oberhalb der Waldgrenze: Der untere Teil der Schneedecke ist kantig aufgebaut und schwach. Der Neuschnee liegt verbreitet auf einer schwachen Altschneedecke. Lawinen können sehr leicht in tieferen Schichten ausgelöst werden."
+			},
+			{
+				"languageCode": "en",
+				"text": "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+			},
+			{
+				"languageCode": "ca",
+				"text": "En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. La neu recent pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. Els perfils estratigràfics i els tests d'estabilitat han confirmat el perill pronunciat. La capa de neu recent és tova. (-) les capes febles molt pronunciades presents a la part superficial del mantell de neu són difícils de reconèixer La neu recent es dipositarà a sobre de gebre de superfície prop del límit del bosc. Per sobre del límit del bosc: La part basal del mantell s'ha facetat i és feble. En molts indrets la neu recent descansa a sobre d'un mantell feble de neu vella. Les allaus poden desencadenar-se molt fàcilment a les capes més profundes del mantell de neu."
+			},
+			{
+				"languageCode": "es",
+				"text": "En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. La nieve reciente puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. Los perfiles estratigráficos y los tests de estabilidad han confirmado el peligro pronunciado. La capa de nieve reciente es blanda. Las capas débiles muy pronunciadas presentes en la parte superficial del manto de nieve son difíciles de reconocer La nieve reciente se depositará encima de escarcha de superficie cerca del límite del bosque. Por encima del límite del bosque: La parte basal del manto se ha facetado y es débil. En muchos lugares la nieve reciente descansa encima de un manto débil de nieve antigua. Los aludes pueden desencadenarse muy fácilmente en las capas más profundas del manto de nieve."
+			},
+			{
+				"languageCode": "oc",
+				"text": "En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Era nhèu recenta se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Es perfius estratigrafics e es tèsti d'estabilitat an confirmat eth perilh mercat. Era cocha de nhèu recenta ei trenda. (-) es coches febles fòrça prononciades presentes ena part superficiau deth mantèth de nhèu son de mau reconéisher Era nhèu recenta se depositarà ath dessús de gibra de superfícia apròp deth limit deth bòsc. Per dessús deth limit deth bòsc: Era part basau deth mantèth s'a facetat e ei febla. En fòrça endrets era nhèu recenta arrepòse ath dessús d'un mantèth feble de nhèu vielha. Es lauegi pòden desencadenar-se plan facilament enes coches mès pregones deth mantèth de nhèu."
+			},
+			{
+				"languageCode": "it",
+				"text": "In molte regioni fino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. La neve fresca può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. I profili stratigrafici e i test di stabilità hanno confermato il pronunciato pericolo. Lo strato di neve fresca è soffice. Gli strati deboli molto pronunciati presenti nella parte superficiale del manto nevoso sono individuabili solo con difficoltà. La neve fresca si depositerà su brina superficiale in prossimità del limite del bosco. Al di sopra del limite del bosco: La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati ed è debole. In molti punti la neve fresca poggia su un debole manto di neve vecchia. Le valanghe possono subire un distacco molto facilmente negli strati più profondi del manto nevoso."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. La neige fraîche peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. Les profils de neige et les tests de stabilité ont confirmé un danger prononcé. La couche de neige fraîche est meuble. Des couches fragiles marquées en partie supérieure du manteau neigeux ne sont que difficilement identifiables. La neige fraîche se déposera sur du givre de surface dans la zone de la limite de la forêt. Au-dessus de la limite de la forêt: La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux et est fragile. La neige fraîche repose en général sur un manteau neigeux ancien fragile. Des avalanches peuvent être déclenchées très facilement dans les couches plus profondes du manteau neigeux."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "de",
+				"text": "Kaum Rückgang der Lawinengefahr mit dem Schneefall."
+			},
+			{
+				"languageCode": "es",
+				"text": "Con la nevada, escaso descenso del peligro de aludes."
+			},
+			{
+				"languageCode": "it",
+				"text": "Con le nevicate, scarso calo del pericolo di valanghe."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Amb la nevada, escàs afebliment del perill d'allaus."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Damb era nheuada, escàs afebliment deth perilh de lauegi."
+			},
+			{
+				"languageCode": "en",
+				"text": "Hardly any decrease in avalanche danger as a consequence of the snowfall."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Diminution à peine marquée du danger d'avalanches avec la chute de neige."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp6",
+		"publicationDate": "2022-11-09T16:00:00Z",
+		"validity": {
+			"from": "2022-11-09T23:00:00Z",
+			"until": "2022-11-10T23:00:00Z"
+		},
+		"regions": [],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "ab81993c-5fe1-4a88-b1fe-2b05f8900f78",
+			"hasElevationDependency": true,
+			"elevation": 1800,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "new_snow",
+				"aspects": [
+					"NE",
+					"E",
+					"S",
+					"NW",
+					"SE",
+					"N",
+					"SW",
+					"W"
+				],
+				"elevationLow": 1800,
+				"eawsMatrixInformation": {
+					"dangerRating": "considerable",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "many",
+					"avalancheSizeValue": 31,
+					"snowpackStabilityValue": 60,
+					"frequencyValue": 89
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"NE",
+					"NW",
+					"N"
+				],
+				"elevationLow": 2600,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "large",
+					"snowpackStability": "fair",
+					"frequency": "few",
+					"avalancheSizeValue": 51,
+					"snowpackStabilityValue": 37,
+					"frequencyValue": 38
+				}
+			}
+		}
+	},
+	{
+		"id": "dba44dec-d2c5-43cd-8ee3-70d3fa58c2dc",
+		"avActivityHighlightsTextcat": "[{\"curlyName\":\"Triebschnee02\",\"line\":0,\"args\":{\"Die_Eigenschaft_TSA\":{\"curlyName\":\"Die_Eigenschaft_TSA\",\"line\":2},\"Eigenschaft_Triebschnee\":{\"curlyName\":\"Eigenschaft_Triebschnee\",\"line\":0}}}]",
+		"avActivityCommentTextcat": "[{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":11,\"args\":{\"Anzahl\":{\"curlyName\":\"Anzahl\",\"line\":1}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":0}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":15,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":9,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":2,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":3},\"Expo\":{\"curlyName\":\"Expo\",\"line\":6},\"über_Nord\":{\"curlyName\":\"über_Nord\",\"line\":0},\"Expo°2\":{\"curlyName\":\"Expo°2\",\"line\":4}}},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Grösse01\",\"line\":0,\"args\":{\"Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":43,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":1}}},\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\":{\"curlyName\":\"und_Hangart_Höhe_Gebiet_Einzugsgebiet\",\"line\":0},\"warum_Höhe_Einzugsgebiet_wann\":{\"curlyName\":\"warum_Höhe_Einzugsgebiet_wann\",\"line\":5},\"wieviele4\":{\"curlyName\":\"wieviele4\",\"line\":1},\"Grösse_der_Lawinen\":{\"curlyName\":\"Grösse_der_Lawinen\",\"line\":7},\"Lawinenart\":{\"curlyName\":\"Lawinenart\",\"line\":8},\"möglich\":{\"curlyName\":\"möglich\",\"line\":1}}},{\"curlyName\":\"Triebschnee15\",\"line\":0,\"args\":{\"warum\":{\"curlyName\":\"warum\",\"line\":0,\"args\":{\"zunehmendem\":{\"curlyName\":\"zunehmendem\",\"line\":10},\"Wind_Richtung\":{\"curlyName\":\"Wind_Richtung\",\"line\":0},\"Neuschnee_und\":{\"curlyName\":\"Neuschnee_und\",\"line\":1}}},\"entstehen\":{\"curlyName\":\"entstehen\",\"line\":0},\"wann_optional\":{\"curlyName\":\"wann_optional\",\"line\":1,\"args\":{\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":6}}},\"wo_optional\":{\"curlyName\":\"wo_optional\",\"line\":2},\"Triebschnee_Beschreibung2\":{\"curlyName\":\"Triebschnee_Beschreibung2\",\"line\":5}}},{\"curlyName\":\"Verhältnisse01\",\"line\":0,\"args\":{\"Verhältnisse01§Verhältnisse\":{\"curlyName\":\"Verhältnisse01§Verhältnisse\",\"line\":3},\"Verhältnisse01§sind\":{\"curlyName\":\"Verhältnisse01§sind\",\"line\":0},\"gefährlich_Verhältnisse\":{\"curlyName\":\"gefährlich_Verhältnisse\",\"line\":1}}},{\"curlyName\":\"Gefährdung03\",\"line\":0,\"args\":{\"Sicherheitsmassnahmen\":{\"curlyName\":\"Sicherheitsmassnahmen\",\"line\":4},\"Gefährdung03§prüfen.\":{\"curlyName\":\"Gefährdung03§prüfen.\",\"line\":4}}}]",
+		"snowpackStructureCommentTextcat": "[{\"curlyName\":\"Wetter04\",\"line\":0,\"args\":{\"Wetter04§Es_fielen\":{\"curlyName\":\"Wetter04§Es_fielen\",\"line\":5,\"args\":{\"Bis_wann\":{\"curlyName\":\"Bis_wann\",\"line\":4}}},\"Gebiet0\":{\"curlyName\":\"Gebiet0\",\"line\":5},\"oberhalb_von_Höhe_optional\":{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":14}}},\"Wetter04§wieviel_Schnee\":{\"curlyName\":\"Wetter04§wieviel_Schnee\",\"line\":0,\"args\":{\"verbreitet\":{\"curlyName\":\"verbreitet\",\"line\":0},\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":9}}},\"Wetter04§lokal_mehr.\":{\"curlyName\":\"Wetter04§lokal_mehr.\",\"line\":3,\"args\":{\"Zahl\":{\"curlyName\":\"Zahl\",\"line\":11}}}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":4,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":1},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":9}}}}}}},{\"curlyName\":\"Schneedecke07\",\"line\":0,\"args\":{\"Beweis\":{\"curlyName\":\"Beweis\",\"line\":2},\"Beweis_optional\":{\"curlyName\":\"Beweis_optional\",\"line\":6},\"bestätigen_bestätigten\":{\"curlyName\":\"bestätigen_bestätigten\",\"line\":1},\"dies_Situation\":{\"curlyName\":\"dies_Situation\",\"line\":4,\"args\":{\"wo_optional2\":{\"curlyName\":\"wo_optional2\",\"line\":0},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":0}}}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":3,\"args\":{\"Schichtung_wie3\":{\"curlyName\":\"Schichtung_wie3\",\"line\":17}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Altschnee06\",\"line\":0,\"args\":{\"Schwachschichten\":{\"curlyName\":\"Schwachschichten\",\"line\":9},\"Altschnee06§erfordern_Vorsicht.\":{\"curlyName\":\"Altschnee06§erfordern_Vorsicht.\",\"line\":3}}},{\"curlyName\":\"Neuschnee01\",\"line\":0,\"args\":{\"Neuschnee01§Der_Neuschnee\":{\"curlyName\":\"Neuschnee01§Der_Neuschnee\",\"line\":0,\"args\":{\"Er=der_Neuschnee\":{\"curlyName\":\"Er=der_Neuschnee\",\"line\":0}}},\"Eigenschaft_Neuschnee\":{\"curlyName\":\"Eigenschaft_Neuschnee\",\"line\":31,\"args\":{\"an_Expositionen\":{\"curlyName\":\"an_Expositionen\",\"line\":0},\"und_oberhalb_von_Höhe_optional\":{\"curlyName\":\"und_oberhalb_von_Höhe_optional\",\"line\":3,\"args\":{\"und\":{\"curlyName\":\"und\",\"line\":0},\"in_Höhenlage\":{\"curlyName\":\"in_Höhenlage\",\"line\":7}}}}}}},{\"curlyName\":\"Doppelpunkt01\",\"line\":0,\"args\":{\"Hangart_Höhe3\":{\"curlyName\":\"Hangart_Höhe3\",\"line\":31,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"Höhenlage\":{\"curlyName\":\"Höhenlage\",\"line\":9}}},\"Doppelpunkt01§Komma\":{\"curlyName\":\"Doppelpunkt01§Komma\",\"line\":0},\"Hangart_Höhe4\":{\"curlyName\":\"Hangart_Höhe4\",\"line\":0}}},{\"curlyName\":\"Schneedecke03\",\"line\":0,\"args\":{\"Schneedecke_Sie\":{\"curlyName\":\"Schneedecke_Sie\",\"line\":4,\"args\":{\"Schichtung_wie1\":{\"curlyName\":\"Schichtung_wie1\",\"line\":13}}},\"Oberfläche_wie\":{\"curlyName\":\"Oberfläche_wie\",\"line\":0}}},{\"curlyName\":\"Schneedecke02\",\"line\":0,\"args\":{\"Schneedecke02§Der_Neuschnee_liegt\":{\"curlyName\":\"Schneedecke02§Der_Neuschnee_liegt\",\"line\":0},\"Schneedecke02§oft2\":{\"curlyName\":\"Schneedecke02§oft2\",\"line\":1},\"Schneedecke02§Untergrund.\":{\"curlyName\":\"Schneedecke02§Untergrund.\",\"line\":5}}},{\"curlyName\":\"Altschnee05\",\"line\":0,\"args\":{\"Altschnee05§zudem_können\":{\"curlyName\":\"Altschnee05§zudem_können\",\"line\":0,\"args\":{\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":4},\"trockene\":{\"curlyName\":\"trockene\",\"line\":0}}},\"Belastung_Hangart\":{\"curlyName\":\"Belastung_Hangart\",\"line\":2},\"Altschnee05§im_Altschnee\":{\"curlyName\":\"Altschnee05§im_Altschnee\",\"line\":3}}}]",
+		"tendencyCommentTextcat": "[{\"curlyName\":\"Änderung06\",\"line\":0,\"args\":{\"Änderung06§Wie_starker\":{\"curlyName\":\"Änderung06§Wie_starker\",\"line\":8},\"Änderung06§Anstieg\":{\"curlyName\":\"Änderung06§Anstieg\",\"line\":1},\"Gefahr\":{\"curlyName\":\"Gefahr\",\"line\":1},\"warum_Ort_wann\":{\"curlyName\":\"warum_Ort_wann\",\"line\":2}}}]",
+		"highlights": [
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "de"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "ca",
+				"text": "Les noves acumulacions de neu ventada representen la principal font de perill."
+			},
+			{
+				"languageCode": "it",
+				"text": "I nuovi accumuli di neve ventata rappresentano la principale fonte di pericolo."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die frischen Triebschneeansammlungen bilden die Hauptgefahr."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es naues acumulacions de nhèu ventada representen era hònt principau de perilh."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh wind slabs represent the main danger."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las nuevas acumulaciones de nieve venteada representan la principal fuente de peligro."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations récentes de neige soufflée constituent le danger principal."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "oc",
+				"text": "Era nhèu recenta des darrèri dus dies represente era hònt principau de perilh. Aguesta nhèu se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Era nhèu recenta se pòt desencadenar ath pas d’un unic montanhaire sustot en orientacions oèst enquiath sud peth nòrd per dessús deth limit deth bòsc. En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Damb era intensificacion des nheuades, sustot enes sectors mès afectadi pes precipitacions son probables nombrosi lauegi de placa de mida mejana e, locaument, grana. Damb era nhèu recenta e eth vent damb bohades plan fòrtes , en cors dera jornada , en totes es orientacions se formaràn a viatges de mida grana. Es condicions dehòra des pistes son perilhoses. Pòden èster de besonh es mesures de seguretat temporaus"
+			},
+			{
+				"languageCode": "fr",
+				"text": "La neige fraîche des deux derniers jours constitue le danger principal. Elle peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. La neige fraîche peut être déclenchée par un seul amateur de sports d'hiver particulièrement sur les pentes exposées à l'ouest à sud en passant par le nord au-dessus de la limite de la forêt. Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. Avec l'intensification des chutes de neige de très nombreuses avalanches de plaque de neige de moyenne et rarement grande taille sont à attendre surtout dans les régions concernées par les précipitations principales. Des accumulations de neige soufflée en partie grandes se forment avec la neige fraîche et le vent partiellement tempétueux en cours de journée à toutes les expositions. Les conditions en dehors des pistes sont dangereuses. Des mesures de sécurité temporaires peuvent devenir nécessaires."
+			},
+			{
+				"languageCode": "it",
+				"text": "La neve fresca degli ultimi due giorni rappresenta la principale fonte di pericolo. Essa può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. La neve fresca può subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali soprattutto sui pendii esposti da ovest a nord sino a sud al di sopra del limite del bosco. In molte regioni sino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. Con l'intensificarsi delle nevicate, soprattutto nelle regioni più colpite dalle precipitazioni sono previste numerose valanghe di neve a lastroni di medie e, a livello isolato, di grandi dimensioni. Con neve fresca e vento in parte tempestoso nel corso della giornata a tutte le esposizioni si formeranno accumuli di neve ventata in parte di grandi dimensioni. Le condizioni al di fuori delle piste sono pericolose. Misure temporanee di sicurezza potrebbero rendersi necessarie."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+			},
+			{
+				"languageCode": "ca",
+				"text": "La neu recent dels darrers dos dies representa la principal font de perill. Aquesta neu pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. La neu recent pot ser desencadenada al pas d’un sol muntanyenc sobretot en orientacions oest a fins al sud pel nord per sobre del límit del bosc. En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. Amb la intensificació de les nevades, sobretot als sectors més afectats per les precipitacions són d'esperar nombroses allaus de placa de mida mitjana i, locament, gran. En el transcurs de la jornada , amb la neu recent i el vent amb ratxes molt fortes , es formaran plaques de vent de vegades de mida gran en totes les orientacions. Les condicions fora de les pistes són perilloses. Poden necessitar-se les mesures de seguretat temporals."
+			},
+			{
+				"languageCode": "es",
+				"text": "La nieve reciente de los últimos dos días representa la principal fuente de peligro. Esta nieve puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. La nieve reciente puede ser desencadenada al paso de un solo montañero sobre todo en orientaciones oeste a sur por el norte por encima del límite del bosque. En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. Con la intensificación de las nevadas, sobre todo en los sectores más afectados por las precipitaciones son probables numerosas avalanchas de placa de tamaño mediano y, locamente, grande. En el transcurso de la jornada , con la nieve reciente y el viento con rachas muy fuertes , se formarán placas de viento a veces de tamaño grande en todas las orientaciones. Las condiciones fuera de las pistas son peligrosas. Pueden necesitarse las medidas de seguridad temporales."
+			},
+			{
+				"languageCode": "de",
+				"text": "Der Neuschnee der letzten zwei Tage bildet die Hauptgefahr. Er kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Der Neuschnee kann besonders an den Expositionen West über Nord bis Süd oberhalb der Waldgrenze von einzelnen Wintersportlern ausgelöst werden. Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Vor allem in den Hauptniederschlagsgebieten sind mit der Intensivierung der Schneefälle zahlreiche mittlere und vereinzelt grosse Schneebrettlawinen zu erwarten. Mit Neuschnee und teils stürmischem Wind entstehen im Tagesverlauf an allen Expositionen teils grosse Triebschneeansammlungen. Die Verhältnisse abseits der Pisten sind gefährlich. Temporäre Sicherheitsmassnahmen können nötig werden."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "oc"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "en",
+				"text": "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+			},
+			{
+				"languageCode": "it",
+				"text": "In molte regioni fino al mattino cadranno 50 cm di neve al di sopra dei 1800 m circa, localmente sino a 70 cm. La neve fresca può facilmente subire un distacco provocato o spontaneo a tutte le esposizioni al di sopra del limite del bosco. I profili stratigrafici e i test di stabilità hanno confermato il pronunciato pericolo. Lo strato di neve fresca è soffice. Gli strati deboli molto pronunciati presenti nella parte superficiale del manto nevoso sono individuabili solo con difficoltà. La neve fresca si depositerà su brina superficiale in prossimità del limite del bosco. Al di sopra del limite del bosco: La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati ed è debole. In molti punti la neve fresca poggia su un debole manto di neve vecchia. Le valanghe possono subire un distacco molto facilmente negli strati più profondi del manto nevoso."
+			},
+			{
+				"languageCode": "oc",
+				"text": "En ua zòna grana enquiath matin queiràn 50 cm de nhèu per dessús des 1800 m aproximativament, locaument enquia 70 cm. Era nhèu recenta se pòt desencadenar damb facilitat de manèra naturau o accidentau en totes es orientacions per dessús deth limit deth bòsc. Es perfius estratigrafics e es tèsti d'estabilitat an confirmat eth perilh mercat. Era cocha de nhèu recenta ei trenda. (-) es coches febles fòrça prononciades presentes ena part superficiau deth mantèth de nhèu son de mau reconéisher Era nhèu recenta se depositarà ath dessús de gibra de superfícia apròp deth limit deth bòsc. Per dessús deth limit deth bòsc: Era part basau deth mantèth s'a facetat e ei febla. En fòrça endrets era nhèu recenta arrepòse ath dessús d'un mantèth feble de nhèu vielha. Es lauegi pòden desencadenar-se plan facilament enes coches mès pregones deth mantèth de nhèu."
+			},
+			{
+				"languageCode": "es",
+				"text": "En una zona amplia hasta la mañana se prevén 50 cm de nieve por encima de los 1800 m aproximadamente, localmente hasta 70 cm. La nieve reciente puede fácilmente desencadenarse de manera natural o accidental en todas las orientaciones por encima del límite del bosque. Los perfiles estratigráficos y los tests de estabilidad han confirmado el peligro pronunciado. La capa de nieve reciente es blanda. Las capas débiles muy pronunciadas presentes en la parte superficial del manto de nieve son difíciles de reconocer La nieve reciente se depositará encima de escarcha de superficie cerca del límite del bosque. Por encima del límite del bosque: La parte basal del manto se ha facetado y es débil. En muchos lugares la nieve reciente descansa encima de un manto débil de nieve antigua. Los aludes pueden desencadenarse muy fácilmente en las capas más profundas del manto de nieve."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Jusqu'au matin il tombera en général au-dessus d'environ 1800 m 50 cm de neige, localement jusqu'à 70 cm. La neige fraîche peut facilement être déclenchée, ou glisser spontanément à toutes les expositions au-dessus de la limite de la forêt. Les profils de neige et les tests de stabilité ont confirmé un danger prononcé. La couche de neige fraîche est meuble. Des couches fragiles marquées en partie supérieure du manteau neigeux ne sont que difficilement identifiables. La neige fraîche se déposera sur du givre de surface dans la zone de la limite de la forêt. Au-dessus de la limite de la forêt: La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux et est fragile. La neige fraîche repose en général sur un manteau neigeux ancien fragile. Des avalanches peuvent être déclenchées très facilement dans les couches plus profondes du manteau neigeux."
+			},
+			{
+				"languageCode": "ca",
+				"text": "En una zona àmplia fins al matí es preveuen 50 cm de neu per sobre dels 1800 m aproximadament, localment fins a 70 cm. La neu recent pot fàcilment desencadenar-se de manera natural o accidental en totes les orientacions per sobre del límit del bosc. Els perfils estratigràfics i els tests d'estabilitat han confirmat el perill pronunciat. La capa de neu recent és tova. (-) les capes febles molt pronunciades presents a la part superficial del mantell de neu són difícils de reconèixer La neu recent es dipositarà a sobre de gebre de superfície prop del límit del bosc. Per sobre del límit del bosc: La part basal del mantell s'ha facetat i és feble. En molts indrets la neu recent descansa a sobre d'un mantell feble de neu vella. Les allaus poden desencadenar-se molt fàcilment a les capes més profundes del mantell de neu."
+			},
+			{
+				"languageCode": "de",
+				"text": "Bis am Morgen fallen verbreitet oberhalb von rund 1800 m 50 cm Schnee, lokal bis zu 70 cm. Der Neuschnee kann an allen Expositionen oberhalb der Waldgrenze leicht ausgelöst werden oder spontan abgleiten. Schneeprofile und Stabilitätstests bestätigten die ausgeprägte Gefahr. Die Neuschneeauflage ist weich. Ausgeprägte Schwachschichten im oberen Teil der Schneedecke sind nur schwer erkennbar. Der Neuschnee wird im Bereich der Waldgrenze auf Oberflächenreif abgelagert. Oberhalb der Waldgrenze: Der untere Teil der Schneedecke ist kantig aufgebaut und schwach. Der Neuschnee liegt verbreitet auf einer schwachen Altschneedecke. Lawinen können sehr leicht in tieferen Schichten ausgelöst werden."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "fr",
+				"text": "Diminution à peine marquée du danger d'avalanches avec la chute de neige."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Damb era nheuada, escàs afebliment deth perilh de lauegi."
+			},
+			{
+				"languageCode": "en",
+				"text": "Hardly any decrease in avalanche danger as a consequence of the snowfall."
+			},
+			{
+				"languageCode": "it",
+				"text": "Con le nevicate, scarso calo del pericolo di valanghe."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Amb la nevada, escàs afebliment del perill d'allaus."
+			},
+			{
+				"languageCode": "es",
+				"text": "Con la nevada, escaso descenso del peligro de aludes."
+			},
+			{
+				"languageCode": "de",
+				"text": "Kaum Rückgang der Lawinengefahr mit dem Schneefall."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp6",
+		"publicationDate": "2022-11-09T16:29:01Z",
+		"validity": {
+			"from": "2022-11-09T23:00:00Z",
+			"until": "2022-11-10T23:00:00Z"
+		},
+		"regions": [],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "72153bfb-0afa-4902-bd13-0c01203b23c4",
+			"hasElevationDependency": true,
+			"elevation": 1800,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "new_snow",
+				"aspects": [
+					"NE",
+					"E",
+					"S",
+					"NW",
+					"SE",
+					"N",
+					"SW",
+					"W"
+				],
+				"elevationLow": 1800,
+				"eawsMatrixInformation": {
+					"dangerRating": "considerable",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "many",
+					"avalancheSizeValue": 31,
+					"snowpackStabilityValue": 60,
+					"frequencyValue": 89
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"NE",
+					"NW",
+					"N"
+				],
+				"elevationLow": 2600,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "large",
+					"snowpackStability": "fair",
+					"frequency": "few",
+					"avalancheSizeValue": 51,
+					"snowpackStabilityValue": 37,
+					"frequencyValue": 38
+				}
+			}
+		}
+	}
+]

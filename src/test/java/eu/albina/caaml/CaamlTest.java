@@ -131,6 +131,7 @@ public class CaamlTest {
 			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, version.filenameSuffix()));
 			String caaml = Caaml.createCaaml(avalancheReport, language, version);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
+			Files.createDirectories(path.getParent());
 			Files.write(path, caaml.getBytes(StandardCharsets.UTF_8));
 		}
 	}
@@ -154,6 +155,14 @@ public class CaamlTest {
 	public void toCAAMLv6_2022b() throws Exception {
 		final String caaml = buildCAAML("2019-01-17.json");
 		final String expected = Resources.toString(Resources.getResource("2019-01-17.caaml.v6.json"), StandardCharsets.UTF_8);
+		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+	}
+
+	@Test
+	public void toCAAMLv6_2022c() throws Exception {
+		final String caaml = buildCAAML("2022-11-10.dev.json");
+		final String expected = Resources.toString(Resources.getResource("2022-11-10.dev.caaml.v6.json"), StandardCharsets.UTF_8);
 		assertEquals(expected.trim(), caaml.trim());
 		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
 	}
