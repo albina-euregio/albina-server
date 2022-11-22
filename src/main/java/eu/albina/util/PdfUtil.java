@@ -106,7 +106,7 @@ public class PdfUtil {
 
 	private static PdfFont openSansRegularFont;
 	private static PdfFont openSansBoldFont;
-	private final AvalancheReport avalancheReport;
+	protected final AvalancheReport avalancheReport;
 	private final LanguageCode lang;
 	private final boolean grayscale;
 
@@ -124,10 +124,9 @@ public class PdfUtil {
 			return null;
 		}
 
-		Path pdfDirectory = avalancheReport.getPdfDirectory();
-		Files.createDirectories(pdfDirectory);
-		Path path = pdfDirectory.resolve(avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_"
-			+ lang.toString() + (grayscale ? "_bw" : "") + ".pdf");
+		Path path = getPath();
+		Files.createDirectories(path.getParent());
+		logger.info("Creating PDF {}", path);
 
 		try (PdfWriter writer = new PdfWriter(path.toString(), new WriterProperties().addXmpMetadata());
 			 PdfDocument pdf = new PdfDocument(writer);
@@ -157,6 +156,15 @@ public class PdfUtil {
 		}
 	}
 
+	protected Path getPath() {
+		final String filename = String.format("%s_%s_%s%s.pdf",
+			avalancheReport.getValidityDateString(),
+			avalancheReport.getRegion().getId(),
+			lang.toString(),
+			grayscale ? "_bw" : "");
+		return avalancheReport.getPdfDirectory().resolve(filename);
+	}
+
 	public static PdfFont createFont(String resource) throws IOException {
 		final byte[] ttf = Resources.toByteArray(Resources.getResource(resource));
 		return PdfFontFactory.createFont(ttf, PdfEncodings.WINANSI);
@@ -169,6 +177,7 @@ public class PdfUtil {
 	public static void createRegionPdfs(AvalancheReport avalancheReport) {
 		for (LanguageCode lang : LanguageCode.ENABLED) {
 			try {
+				logger.info("Creating PDF for region {}, language {}", avalancheReport.getRegion().getId(), lang);
 				new PdfUtil(avalancheReport, lang, false).createPdf();
 				new PdfUtil(avalancheReport, lang, true).createPdf();
 			} catch (IOException e) {
@@ -221,7 +230,7 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			secondTable.addCell(cell);
-			ImageData regionAMImageDate = getMapImage(DaytimeDependency.am, avalancheBulletin);
+			ImageData regionAMImageDate = ImageDataFactory.create(getMapImage(DaytimeDependency.am, avalancheBulletin));
 			Image regionAMImg = new Image(regionAMImageDate);
 			regionAMImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionAMImg.scaleToFit(regionMapSize, regionMapSize);
@@ -252,7 +261,7 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			secondTable.addCell(cell);
-			ImageData regionPMImageDate = getMapImage(DaytimeDependency.pm, avalancheBulletin);
+			ImageData regionPMImageDate = ImageDataFactory.create(getMapImage(DaytimeDependency.pm, avalancheBulletin));
 			Image regionPMImg = new Image(regionPMImageDate);
 			regionPMImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionPMImg.scaleToFit(regionMapSize, regionMapSize);
@@ -270,7 +279,7 @@ public class PdfUtil {
 		} else {
 			secondColumnWidths = new float[]{1, 1};
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
-			ImageData regionImageDate = getMapImage(DaytimeDependency.fd, avalancheBulletin);
+			ImageData regionImageDate = ImageDataFactory.create(getMapImage(DaytimeDependency.fd, avalancheBulletin));
 			Image regionImg = new Image(regionImageDate);
 			regionImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
 			regionImg.scaleToFit(regionMapSize, regionMapSize);
@@ -962,7 +971,7 @@ public class PdfUtil {
 			mapWidth = region.getPdfMapWidthAmPm();
 			mapHeight = region.getPdfMapHeight();
 
-			ImageData overviewMapAMImageData = getMapImage(DaytimeDependency.am);
+			ImageData overviewMapAMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.am));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
 			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
@@ -972,7 +981,7 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
 					.showText(lang.getBundleString("daytime.am.capitalized")).endText();
 
-			ImageData overviewMapPMImageData = getMapImage(DaytimeDependency.pm);
+			ImageData overviewMapPMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.pm));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
 			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
@@ -982,7 +991,7 @@ public class PdfUtil {
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(blackColor, true)
 					.showText(lang.getBundleString("daytime.pm.capitalized")).endText();
 		} else {
-			ImageData overviewMapImageData = getMapImage(DaytimeDependency.fd);
+			ImageData overviewMapImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.fd));
 			Image overviewMapImg = new Image(overviewMapImageData);
 			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			mapY = region.getPdfMapYFd();
@@ -1110,18 +1119,20 @@ public class PdfUtil {
 		pdfCanvas.release();
 	}
 
-	private ImageData getMapImage(DaytimeDependency daytimeDependency, AvalancheBulletin avalancheBulletin) throws MalformedURLException {
-		return ImageDataFactory.create(avalancheReport.getServerInstance().getMapsPath()
-			+ System.getProperty("file.separator") + avalancheBulletin.getValidityDateString()
-			+ System.getProperty("file.separator") + avalancheReport.getPublicationTimeString()
-			+ System.getProperty("file.separator") + MapUtil.filename(avalancheReport.getRegion(), avalancheBulletin, daytimeDependency, grayscale, MapImageFormat.jpg));
+	protected String getMapImage(DaytimeDependency daytimeDependency, AvalancheBulletin avalancheBulletin) throws MalformedURLException {
+		return String.format("%s/%s/%s/%s",
+			avalancheReport.getServerInstance().getMapsPath(),
+			avalancheReport.getValidityDateString(),
+			avalancheReport.getPublicationTimeString(),
+			MapUtil.filename(avalancheReport.getRegion(), avalancheBulletin, daytimeDependency, grayscale, MapImageFormat.jpg));
 	}
 
-	private ImageData getMapImage(DaytimeDependency daytimeDependency) throws MalformedURLException {
-		return ImageDataFactory.create(avalancheReport.getServerInstance().getMapsPath()
-			+ System.getProperty("file.separator") + avalancheReport.getValidityDateString()
-			+ System.getProperty("file.separator") + avalancheReport.getPublicationTimeString()
-			+ System.getProperty("file.separator") + MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), daytimeDependency, grayscale));
+	protected String getMapImage(DaytimeDependency daytimeDependency) throws MalformedURLException {
+		return String.format("%s/%s/%s/%s",
+			avalancheReport.getServerInstance().getMapsPath(),
+			avalancheReport.getValidityDateString(),
+			avalancheReport.getPublicationTimeString(),
+			MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), daytimeDependency, grayscale));
 	}
 
 	private String replaceLinebreaks(String text) {
