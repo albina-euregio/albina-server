@@ -35,6 +35,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.text.MessageFormat;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -92,15 +93,7 @@ public class AlbinaUtil {
 	}
 
 	public static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = null;
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			ZonedDateTime bulletinDate = avalancheBulletin.getValidUntil();
-			if (date == null)
-				date = bulletinDate;
-			else if (bulletinDate.isAfter(date))
-				date = bulletinDate;
-		}
-
+		ZonedDateTime date = bulletins.stream().map(AvalancheBulletin::getValidUntil).max(Comparator.naturalOrder()).orElse(null);
 		if (date != null) {
 			date = date.withZoneSameInstant(localZone());
 			StringBuilder result = new StringBuilder();
@@ -205,15 +198,7 @@ public class AlbinaUtil {
 	}
 
 	public static ZonedDateTime getDate(List<AvalancheBulletin> bulletins) {
-		ZonedDateTime date = null;
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			ZonedDateTime bulletinDate = avalancheBulletin.getValidFrom();
-			if (date == null)
-				date = bulletinDate;
-			else if (bulletinDate.isAfter(date))
-				date = bulletinDate;
-		}
-		return date;
+		return bulletins.stream().map(AvalancheBulletin::getValidFrom).max(Comparator.naturalOrder()).orElse(null);
 	}
 
 	public static boolean isUpdate(List<AvalancheBulletin> bulletins) {
@@ -223,17 +208,8 @@ public class AlbinaUtil {
 	}
 
 	public static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
-		ZonedDateTime date = null;
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			ZonedDateTime bulletinDate = avalancheBulletin.getPublicationDate();
-			if (bulletinDate != null) {
-				if (date == null)
-					date = bulletinDate;
-				else if (bulletinDate.isAfter(date))
-					date = bulletinDate;
-			}
-		}
-		return date;
+		return bulletins.stream().map(AvalancheBulletin::getPublicationDate).max(Comparator.naturalOrder()).orElse(null);
+
 	}
 
 	public static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
