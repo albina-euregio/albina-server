@@ -67,13 +67,7 @@ public interface Caaml {
 
 		for (LanguageCode lang : LanguageCode.ENABLED) {
 			String caamlString = createCaaml(avalancheReport, lang, version);
-			String fileName = dirPath + "/" + avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString();
-			if (version == CaamlVersion.V5)
-				fileName += ".xml";
-			else if (version == CaamlVersion.V6_2022)
-				fileName += "_CAAMLv6_2022.json";
-			else
-				fileName += "_CAAMLv6.xml";
+			String fileName = dirPath + "/" + avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString() + version.filenameSuffix();
 			Files.write(Paths.get(fileName), caamlString.getBytes(StandardCharsets.UTF_8));
 			AlbinaUtil.setFilePermissions(fileName);
 		}

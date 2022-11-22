@@ -10,6 +10,15 @@ public enum CaamlVersion {
 
 	V5, V6, V6_2022;
 
+	String filenameSuffix() {
+		if (this == V5)
+			return ".xml";
+		else if (this == V6_2022)
+			return "_CAAMLv6_2022.json";
+		else
+			return "_CAAMLv6.xml";
+	}
+
 	int version() {
 		return this == V5 ? 5 : 6;
 	}

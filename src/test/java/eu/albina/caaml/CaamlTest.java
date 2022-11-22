@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import eu.albina.caaml.Caaml;
 import eu.albina.json.JsonValidator;
 import eu.albina.model.AvalancheReport;
 import eu.albina.util.HibernateUtil;
@@ -26,10 +25,6 @@ import org.xml.sax.SAXParseException;
 
 import com.google.common.io.Resources;
 
-import eu.albina.caaml.CaamlValidator;
-import eu.albina.caaml.CaamlVersion;
-import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
@@ -109,21 +104,32 @@ public class CaamlTest {
 		HibernateUtil.getInstance().setUp();
 		for (LocalDate date = LocalDate.parse("2018-12-04"); date
 				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date);
+			createOldCaamlFiles(date, CaamlVersion.V6);
 		}
 		for (LocalDate date = LocalDate.parse("2019-11-16"); date
 				.isBefore(LocalDate.parse("2020-05-04")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date);
+			createOldCaamlFiles(date, CaamlVersion.V6);
 		}
 	}
 
-	private void createOldCaamlFiles(LocalDate date) throws Exception {
-		List<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(
-				ZonedDateTime.of(date.atTime(0, 0, 0), ZoneId.of("UTC")).toInstant(), RegionController.getInstance().getPublishBulletinRegions());
-		AvalancheReport avalancheReport = AvalancheReport.of(result, regionEuregio, serverInstanceEuregio);
-		for (LanguageCode language : Arrays.asList(LanguageCode.de, LanguageCode.en, LanguageCode.it)) {
-			Path path = Paths.get("/tmp/bulletins" + "/" + date + "/" + date + "_" + language + "_CAAMLv6.xml");
-			String caaml = Caaml.createCaaml(avalancheReport, language, CaamlVersion.V6);
+	@Ignore
+	@Test
+	public void createOldCaamlFiles2022() throws Exception {
+		for (LocalDate date = LocalDate.parse("2021-12-01");
+			 date.isBefore(LocalDate.parse("2022-05-02"));
+			 date = date.plusDays(1)) {
+			createOldCaamlFiles(date, CaamlVersion.V6_2022);
+		}
+	}
+
+	private void createOldCaamlFiles(LocalDate date, CaamlVersion version) throws Exception {
+		URL url = new URL(String.format("https://static.avalanche.report/bulletins/%s/avalanche_report.json", date));
+		LoggerFactory.getLogger(getClass()).info("Fetching bulletins from {}", url);
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(url);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		for (LanguageCode language : LanguageCode.ENABLED) {
+			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, version.filenameSuffix()));
+			String caaml = Caaml.createCaaml(avalancheReport, language, version);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.write(path, caaml.getBytes(StandardCharsets.UTF_8));
 		}
