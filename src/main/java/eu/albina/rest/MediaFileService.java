@@ -16,12 +16,12 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 
@@ -97,31 +97,26 @@ public class MediaFileService {
 
 			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
 
-			String fileLocation = ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath() + "/" + region.getId() + "/" + language + "/";
+			java.nio.file.Path fileLocation = getMediaPath(region, language);
+			Files.createDirectories(fileLocation);
 
 			// save mp3 file
 			String mp3FileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".mp3");
-			File mp3File = new File(fileLocation + mp3FileName);
-			mp3File.getParentFile().mkdir();
-			FileOutputStream out = new FileOutputStream(mp3File);
-			int read = 0;
-			byte[] bytes = new byte[1024];
-			while ((read = uploadedInputStream.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
+			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
+			try (OutputStream out = Files.newOutputStream(mp3File)) {
+				int read = 0;
+				byte[] bytes = new byte[1024];
+				while ((read = uploadedInputStream.read(bytes)) != -1) {
+					out.write(bytes, 0, read);
+				}
 			}
-			out.flush();
-			out.close();
-			logger.debug(mp3FileName + " successfully uploaded to: " + fileLocation);
+			logger.info(mp3FileName + " successfully uploaded to: " + mp3File);
 
 			// save text file
 			String txtFileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".txt");
-			File txtFile = new File(fileLocation + txtFileName);
-			txtFile.getParentFile().mkdir();
-			FileOutputStream outputStream = new FileOutputStream(txtFile);
-			byte[] strToBytes = mediaText.getBytes();
-			outputStream.write(strToBytes);
-			outputStream.close();
-			logger.debug(txtFileName + " successfully uploaded to " + fileLocation);
+			java.nio.file.Path txtFile = fileLocation.resolve(txtFileName);
+			Files.write(txtFile, mediaText.getBytes());
+			logger.info(txtFileName + " successfully uploaded to " + txtFile);
 
 			// send emails
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
