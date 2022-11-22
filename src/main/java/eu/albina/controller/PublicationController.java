@@ -107,9 +107,8 @@ public class PublicationController {
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
-			avalancheReport.setBulletins(bulletins);
+			avalancheReport.setBulletins(regionBulletins);
 			avalancheReport.setServerInstance(localServerInstance);
-			String avalancheReportId = avalancheReport.getId();
 
 			if (regionBulletins.isEmpty()) {
 				continue;
@@ -219,11 +218,9 @@ public class PublicationController {
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
 			AvalancheReport avalancheReport;
-			String avalancheReportId;
 			if (region.getSubRegions().isEmpty()) {
 				avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
-				avalancheReport.setBulletins(bulletins);
-				avalancheReportId = avalancheReport.getId();
+				avalancheReport.setBulletins(regionBulletins);
 			} else {
 				avalancheReport = new AvalancheReport();
 				avalancheReport.setBulletins(regionBulletins);
@@ -231,7 +228,6 @@ public class PublicationController {
 				avalancheReport.setUser(user);
 				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 				avalancheReport.setRegion(region);
-				avalancheReportId = null;
 			}
 			avalancheReport.setServerInstance(localServerInstance);
 
@@ -318,9 +314,8 @@ public class PublicationController {
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
-			avalancheReport.setBulletins(bulletins);
+			avalancheReport.setBulletins(regionBulletins);
 			avalancheReport.setServerInstance(localServerInstance);
-			String avalancheReportId = avalancheReport.getId();
 
 			if (regionBulletins.isEmpty()) {
 				continue;
