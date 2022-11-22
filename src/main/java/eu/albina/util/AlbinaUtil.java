@@ -75,10 +75,6 @@ public class AlbinaUtil {
 		return ZoneId.of("Europe/Vienna");
 	}
 
-	public static String getDaytimeString(LanguageCode lang, String type) {
-		return lang.getBundleString("daytime." + type);
-	}
-
 	public static String getDangerPatternText(DangerPattern dp, LanguageCode lang) {
 		return dp.toString(lang.getLocale());
 	}

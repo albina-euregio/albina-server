@@ -78,17 +78,17 @@ public interface LinkUtil {
 
 	static String getExtFileMapDescription(LanguageCode lang, String type, String region) {
 		String regionName = lang.getRegionName(region);
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		String timeString = lang.getBundleString("daytime." + type);
 		return MessageFormat.format(lang.getBundleString("ext-file.map.description"), regionName, timeString);
 	}
 
 	static String getExtFileOverlayDescription(LanguageCode lang, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		String timeString = lang.getBundleString("daytime." + type);
 		return MessageFormat.format(lang.getBundleString("ext-file.overlay.description"), timeString);
 	}
 
 	static String getExtFileRegionsDescription(LanguageCode lang, String type) {
-		String timeString = AlbinaUtil.getDaytimeString(lang, type);
+		String timeString = lang.getBundleString("daytime." + type);
 		return MessageFormat.format(lang.getBundleString("ext-file.regions.description"), timeString);
 	}
 
