@@ -139,7 +139,7 @@ public class EmailUtil {
 		ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
 		sb.append(lang.getBundleString("day." + localDate.getDayOfWeek()));
 		sb.append(", ");
-		sb.append(localDate.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
+		sb.append(localDate.format(lang.getFormatter()));
 
 		String mp3FileUrl = LinkUtil.getMediaFileUrl(lang, region, serverInstance) + "/" + mp3FileName;
 

@@ -145,7 +145,8 @@ public class AlbinaUtil {
 		if (date != null) {
 			date = date.withZoneSameInstant(localZone());
 			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
-			result.append(date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))));
+			result.append(" ");
+			result.append(date.format(lang.getFormatter()));
 		} else {
 			// TODO what if no date is given (should not happen)
 			result.append("-");
@@ -173,14 +174,14 @@ public class AlbinaUtil {
 		ZonedDateTime date = getDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		date = date.minusDays(1);
-		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
+		return date.format(lang.getFormatter());
 	}
 
 	public static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		ZonedDateTime date = getDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		date = date.plusDays(1);
-		return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format"))).trim();
+		return date.format(lang.getFormatter());
 	}
 
 	public static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, Period offset, ServerInstance serverInstance) {

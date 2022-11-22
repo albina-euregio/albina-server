@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -77,5 +78,9 @@ public enum LanguageCode {
 			return "";
 		}
 		return getBundle("micro-regions_names").getString(regionId);
+	}
+
+	public DateTimeFormatter getFormatter() {
+		return DateTimeFormatter.ofPattern(getBundleString("date-time-format").trim());
 	}
 }
