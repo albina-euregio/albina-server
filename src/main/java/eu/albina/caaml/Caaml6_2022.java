@@ -71,7 +71,7 @@ interface Caaml6_2022 {
 		bulletin.setMetaData(null);
 		bulletin.setPublicationTime(avalancheBulletin.getPublicationDate().toInstant());
 		bulletin.setRegions(avalancheBulletin.getPublishedRegions().stream()
-			.map(id -> new org.caaml.v6.Region(lang.getRegionName(id), id))
+			.map(id -> new org.caaml.v6.Region(id, lang.getRegionName(id)))
 			.collect(Collectors.toList()));
 		bulletin.setSnowpackStructure(new org.caaml.v6.Texts(avalancheBulletin.getSnowpackStructureHighlightsIn(lang), avalancheBulletin.getSnowpackStructureCommentIn(lang)));
 		bulletin.setSource(null);
