@@ -17,6 +17,7 @@
 package eu.albina.model;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -839,8 +840,12 @@ public class Region implements AvalancheInformationObject {
 		return Objects.hash(id);
 	}
 
-    public static Region readRegion(URL resource) throws IOException {
-		final String validRegionStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		return new Region(new JSONObject(validRegionStringFromResource), Region::new);
+    public static Region readRegion(URL resource) throws UncheckedIOException {
+		try {
+			final String validRegionStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
+			return new Region(new JSONObject(validRegionStringFromResource), Region::new);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
     }
 }

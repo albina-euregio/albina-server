@@ -1,5 +1,10 @@
 package eu.albina.map;
 
+import static eu.albina.RegionTestUtils.regionAran;
+import static eu.albina.RegionTestUtils.regionEuregio;
+import static eu.albina.RegionTestUtils.regionSouthTyrol;
+import static eu.albina.RegionTestUtils.regionTrentino;
+import static eu.albina.RegionTestUtils.regionTyrol;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.image.BufferedImage;
@@ -35,11 +40,6 @@ import javax.imageio.ImageIO;
 
 public class MapUtilTest {
 
-	private Region regionEuregio;
-	private Region regionTirol;
-	private Region regionSouthTyrol;
-	private Region regionTrentino;
-	private Region regionAran;
 	private ServerInstance serverInstance;
 
 	@Rule
@@ -51,13 +51,6 @@ public class MapUtilTest {
 		serverInstance.setMapsPath(folder.toString());
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
 		serverInstance.setPdfDirectory(folder.toString());
-
-		regionEuregio = Region.readRegion(Resources.getResource("region_EUREGIO.json"));
-		regionTirol = Region.readRegion(Resources.getResource("region_AT-07.json"));
-		regionSouthTyrol = Region.readRegion(Resources.getResource("region_IT-32-BZ.json"));
-		regionTrentino = Region.readRegion(Resources.getResource("region_IT-32-TN.json"));
-
-		regionAran = Region.readRegion(Resources.getResource("region_ES-CT-L.json"));
 	}
 
 	@Test
@@ -65,11 +58,11 @@ public class MapUtilTest {
 		assertEquals("fd_EUREGIO_map.jpg",
 				MapUtil.getOverviewMapFilename(regionEuregio, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map.jpg",
-				MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.fd, false));
+				MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.fd, true));
-		assertEquals("am_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.am, false));
-		assertEquals("pm_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTirol, DaytimeDependency.pm, false));
+				MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, true));
+		assertEquals("am_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.am, false));
+		assertEquals("pm_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.pm, false));
 		assertEquals("fd_IT-32-BZ_map_bw.jpg",
 				MapUtil.getOverviewMapFilename(regionSouthTyrol, DaytimeDependency.fd, true));
 		assertEquals("fd_IT-32-TN_map_bw.jpg",
@@ -79,7 +72,7 @@ public class MapUtilTest {
 	@Test
 	public void testFilename() throws Exception {
 		List<String> filenames = new ArrayList<>();
-		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTirol, regionTrentino)) {
+		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTyrol, regionTrentino)) {
 			for (MapLevel mapLevel : MapLevel.values()) {
 				for (DaytimeDependency daytimeDependency : DaytimeDependency.values()) {
 					filenames.add(MapUtil.filename(region, mapLevel, daytimeDependency, false, MapImageFormat.png));
@@ -88,7 +81,7 @@ public class MapUtilTest {
 		}
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final AvalancheBulletin bulletin = AvalancheBulletin.readBulletins(resource).get(0);
-		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTirol, regionTrentino)) {
+		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTyrol, regionTrentino)) {
 			if (!bulletin.affectsRegion(region)) {
 				continue;
 			}
@@ -165,6 +158,15 @@ public class MapUtilTest {
 			ImageTestUtils.assertImageEquals(name, expected, actual, 0, 0, ignore -> {
 			});
 		}
+		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
+	}
+
+	@Test
+	public void testMapyrusMapsTyrol() throws Exception {
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstance);
+		MapUtil.createMapyrusMaps(avalancheReport);
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
 	}
 

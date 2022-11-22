@@ -24,27 +24,22 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.GoogleBloggerConfiguration;
 import eu.albina.util.HibernateUtil;
 
+import static eu.albina.RegionTestUtils.regionSouthTyrol;
+import static eu.albina.RegionTestUtils.regionTyrol;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class BlogControllerTest {
 
-	private Region regionTyrol;
-	private Region regionSouthTyrol;
 
 	@Before
 	public void setUp() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		regionTyrol = new Region();
-		regionTyrol.setId("AT-07");
-		regionSouthTyrol = new Region();
-		regionSouthTyrol.setId("IT-32-BZ");
 	}
 
 	@After

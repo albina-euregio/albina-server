@@ -30,17 +30,18 @@ import org.junit.Test;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import freemarker.template.TemplateException;
+
+import static eu.albina.RegionTestUtils.regionAran;
+import static eu.albina.RegionTestUtils.regionEuregio;
+import static eu.albina.RegionTestUtils.regionTyrol;
 
 public class SimpleHtmlUtilTest {
 
 	private ServerInstance serverInstanceEuregio;
 	private ServerInstance serverInstanceAran;
-	private Region regionEuregio;
-	private Region regionAran;
 
 	@Before
 	public void setUp() throws Exception {
@@ -56,12 +57,6 @@ public class SimpleHtmlUtilTest {
 		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
 		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
 		serverInstanceAran.setHtmlDirectory("/mnt/simple_local");
-		regionEuregio = new Region();
-		regionEuregio.setId("EUREGIO");
-		regionEuregio.setSimpleHtmlTemplateName("simple-bulletin.min.html");
-		regionAran = new Region();
-		regionAran.setId("ES-CT-L");
-		regionAran.setSimpleHtmlTemplateName("simple-bulletin.aran.html");
 	}
 
 	@Test

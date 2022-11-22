@@ -7,9 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,18 +23,14 @@ import org.xml.sax.SAXParseException;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
+import static eu.albina.RegionTestUtils.regionEuregio;
 import static org.junit.Assert.assertEquals;
 
 public class CaamlTest {
 
-	private Region regionEuregio;
-	private Region regionTyrol;
-	private Region regionSouthTyrol;
-	private Region regionTrentino;
 	private ServerInstance serverInstanceEuregio;
 
 	@Before
@@ -45,17 +38,6 @@ public class CaamlTest {
 		serverInstanceEuregio = new ServerInstance();
 		serverInstanceEuregio.setHtmlDirectory("/foo/bar/baz/simple/");
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins/");
-		regionEuregio = new Region();
-		regionEuregio.setId("EUREGIO");
-		regionTyrol = new Region();
-		regionTyrol.setId("AT-07");
-		regionSouthTyrol = new Region();
-		regionSouthTyrol.setId("IT-32-BZ");
-		regionTrentino = new Region();
-		regionTrentino.setId("IT-32-TN");
-		regionEuregio.addSubRegion(regionTyrol);
-		regionEuregio.addSubRegion(regionSouthTyrol);
-		regionEuregio.addSubRegion(regionTrentino);
 	}
 
 	private String createCaaml(CaamlVersion version) throws Exception {
