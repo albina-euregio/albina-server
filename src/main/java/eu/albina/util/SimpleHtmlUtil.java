@@ -180,7 +180,7 @@ public class SimpleHtmlUtil {
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
 		// Create data model
-		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
+		List<AvalancheBulletin> bulletins = avalancheReport.getRegionBulletins();
 		Region region = avalancheReport.getRegion();
 		ServerInstance serverInstance = avalancheReport.getServerInstance();
 		Map<String, Object> root = new HashMap<>();

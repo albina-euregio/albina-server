@@ -70,6 +70,15 @@ public class SimpleHtmlUtilTest {
 	}
 
 	@Test
+	public void createSimpleHtmlStringTyrol() throws IOException, URISyntaxException, TemplateException {
+		URL resource = Resources.getResource("2019-01-17.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
+		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
+		Assert.assertFalse(htmlString.contains("853733e5-cb48-4cf1-91a2-ebde59dda31f")); // IT-32-TN
+	}
+
+	@Test
 	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
