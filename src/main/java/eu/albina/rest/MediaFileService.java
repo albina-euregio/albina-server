@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -39,7 +40,6 @@ import javax.ws.rs.core.UriInfo;
 
 import com.github.openjson.JSONObject;
 
-import com.google.common.base.MoreObjects;
 import eu.albina.controller.RegionController;
 import eu.albina.util.RssUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -149,15 +149,21 @@ public class MediaFileService {
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(summary = "Get media files as RSS feed")
 	public Response getRssFeed(
-		@QueryParam("region") String regionId,
-		@QueryParam("lang") LanguageCode language
+		@QueryParam("region") @DefaultValue("AT-07") String regionId,
+		@QueryParam("lang") @DefaultValue("de") LanguageCode language
 	) throws Exception {
-		final Region region = new Region(MoreObjects.firstNonNull(regionId, "AT-07"));
+		final Region region = new Region(regionId);
 		final String rss = RssUtil.getRss(
-			MoreObjects.firstNonNull(language, LanguageCode.de),
+			language,
 			region,
-			Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath()).resolve(region.getId()));
+			getMediaPath(region, language));
 		return Response.ok(rss, MediaType.APPLICATION_XML).build();
+	}
+
+	private static java.nio.file.Path getMediaPath(Region region, LanguageCode lang) {
+		return Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath())
+			.resolve(region.getId())
+			.resolve(lang.name());
 	}
 
 }
