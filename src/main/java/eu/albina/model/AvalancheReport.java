@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -264,6 +265,12 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public List<AvalancheBulletin> getBulletins() {
 		return bulletins;
+	}
+
+	public List<AvalancheBulletin> getRegionBulletins() {
+		return getBulletins().stream()
+			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(region))
+			.collect(Collectors.toList());
 	}
 
 	public String getValidityDateString() {

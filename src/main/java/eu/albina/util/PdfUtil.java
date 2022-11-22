@@ -117,9 +117,7 @@ public class PdfUtil {
 	}
 
 	public Path createPdf() throws IOException {
-		List<AvalancheBulletin> regionBulletins = avalancheReport.getBulletins().stream()
-			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(avalancheReport.getRegion()))
-			.collect(Collectors.toList());
+		List<AvalancheBulletin> regionBulletins = avalancheReport.getRegionBulletins();
 		if (regionBulletins.isEmpty()) {
 			return null;
 		}
