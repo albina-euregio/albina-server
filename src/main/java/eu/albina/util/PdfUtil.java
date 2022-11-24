@@ -154,7 +154,7 @@ public class PdfUtil {
 		}
 	}
 
-	protected Path getPath() {
+	public Path getPath() {
 		final String filename = String.format("%s_%s_%s%s.pdf",
 			avalancheReport.getValidityDateString(),
 			avalancheReport.getRegion().getId(),

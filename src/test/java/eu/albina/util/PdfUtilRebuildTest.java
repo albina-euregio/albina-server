@@ -93,7 +93,7 @@ public class PdfUtilRebuildTest {
 		}
 
 		@Override
-		protected Path getPath() {
+		public Path getPath() {
 			final Path path = super.getPath();
 			final String filename = path.getFileName().toString().replace("_EUREGIO", "");
 			return path.resolveSibling(filename);

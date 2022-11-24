@@ -53,6 +53,10 @@ public class MapUtilTest {
 		serverInstance.setPdfDirectory(folder.toString());
 	}
 
+	private Path getRelativePath(Path path) {
+		return Paths.get(folder.toString()).relativize(path);
+	}
+
 	@Test
 	public void testOverviewMapFilename() {
 		assertEquals("fd_EUREGIO_map.jpg",
@@ -158,6 +162,9 @@ public class MapUtilTest {
 			ImageTestUtils.assertImageEquals(name, expected, actual, 0, 0, ignore -> {
 			});
 		}
+
+		assertEquals("2019-01-17/2019-01-16_16-00-00/2019-01-17_EUREGIO_en.pdf",
+			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
 	}
 
@@ -167,6 +174,8 @@ public class MapUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
+		assertEquals("2019-01-17/2019-01-16_16-00-00/2019-01-17_AT-07_en.pdf",
+			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
 	}
 
@@ -182,6 +191,8 @@ public class MapUtilTest {
 			serverInstance.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
 		});
+		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",
+			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
 		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
 	}
 
