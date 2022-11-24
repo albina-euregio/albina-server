@@ -265,23 +265,20 @@ public interface MapUtil {
 	}
 
 	static String filename(Region region, MapLevel mapLevel, DaytimeDependency daytimeDependency, boolean grayscale, MapImageFormat format) {
-		return daytimeDependency.name() +
-			"_" +
-			region.getId() +
-			"_" +
-			mapLevel.toString() +
-			(grayscale ? "_bw" : "") +
-			"." +
-			format;
+		return String.format("%s_%s_%s%s.%s",
+			daytimeDependency.name(),
+			region.getId(),
+			mapLevel.toString(),
+			grayscale ? "_bw" : "",
+			format);
 	}
 
 	static String filename(Region region, AvalancheBulletin bulletin, DaytimeDependency daytimeDependency, boolean grayscale, MapImageFormat format) {
-		return region.getId() +
-			"_" +
-			bulletin.getId() +
-			(DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "") +
-			(grayscale ? "_bw" : "") +
-			"." +
-			format;
+		return String.format("%s_%s%s%s.%s",
+			region.getId(),
+			bulletin.getId(),
+			DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "",
+			grayscale ? "_bw" : "",
+			format);
 	}
 }
