@@ -1,18 +1,25 @@
 package eu.albina.caaml;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
 
+import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.RegionController;
 import eu.albina.json.JsonValidator;
 import eu.albina.model.AvalancheReport;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.JsonUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -86,29 +93,31 @@ public class CaamlTest {
 		HibernateUtil.getInstance().setUp();
 		for (LocalDate date = LocalDate.parse("2018-12-04"); date
 				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6);
+			createOldCaamlFiles(date, CaamlVersion.V6_2022);
 		}
 		for (LocalDate date = LocalDate.parse("2019-11-16"); date
 				.isBefore(LocalDate.parse("2020-05-04")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6);
+			createOldCaamlFiles(date, CaamlVersion.V6_2022);
 		}
 	}
 
 	@Ignore
 	@Test
 	public void createOldCaamlFiles2022() throws Exception {
-		for (LocalDate date = LocalDate.parse("2021-12-01");
+		for (LocalDate date = LocalDate.parse("2020-11-01");
 			 date.isBefore(LocalDate.parse("2022-05-02"));
 			 date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_2022);
+			try {
+				createOldCaamlFiles(date, CaamlVersion.V6_2022);
+			} catch (FileNotFoundException e) {
+				LoggerFactory.getLogger(getClass()).warn("Not found {}", e.getMessage());
+			}
 		}
 	}
 
 	private void createOldCaamlFiles(LocalDate date, CaamlVersion version) throws Exception {
-		URL url = new URL(String.format("https://static.avalanche.report/bulletins/%s/avalanche_report.json", date));
-		LoggerFactory.getLogger(getClass()).info("Fetching bulletins from {}", url);
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(url);
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		LoggerFactory.getLogger(getClass()).info("Loading {}", date);
+		AvalancheReport avalancheReport = date.isAfter(LocalDate.parse("2020-10-01")) ? loadFromURL(date): loadFromDatabase(date);
 		for (LanguageCode language : LanguageCode.ENABLED) {
 			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, version.filenameSuffix()));
 			String caaml = Caaml.createCaaml(avalancheReport, language, version);
@@ -116,6 +125,22 @@ public class CaamlTest {
 			Files.createDirectories(path.getParent());
 			Files.write(path, caaml.getBytes(StandardCharsets.UTF_8));
 		}
+	}
+
+	private AvalancheReport loadFromURL(LocalDate date) throws Exception {
+		URL url = new URL(String.format("https://static.avalanche.report/bulletins/%s/avalanche_report.json", date));
+		LoggerFactory.getLogger(getClass()).info("Fetching bulletins from {}", url);
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(url);
+		return AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+	}
+
+	private AvalancheReport loadFromDatabase(LocalDate date) throws Exception {
+		serverInstanceEuregio.setPdfDirectory("/tmp/bulletins/");
+		Instant instant = date.atStartOfDay(AlbinaUtil.localZone()).withZoneSameInstant(ZoneOffset.UTC).toInstant();
+		List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(instant, RegionController.getInstance().getPublishBulletinRegions());
+		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		JsonUtil.createJsonFile(report);
+		return report;
 	}
 
 	private static String buildCAAML(String resourceName) throws IOException {
