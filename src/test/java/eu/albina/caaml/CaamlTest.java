@@ -17,6 +17,7 @@ import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
 import eu.albina.json.JsonValidator;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.Region;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
@@ -140,7 +141,7 @@ public class CaamlTest {
 		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Path path = Paths.get(String.format("/tmp/bulletins/%s/avalanche_report.json", date));
 		Files.createDirectories(path.getParent());
-		Files.write(path, JsonUtil.createJSONString(bulletins, regionEuregio, true).toString().getBytes(StandardCharsets.UTF_8));
+		Files.write(path, JsonUtil.createJSONString(bulletins, new Region("" /* empty to avoid filtering */), true).toString().getBytes(StandardCharsets.UTF_8));
 		return report;
 	}
 
