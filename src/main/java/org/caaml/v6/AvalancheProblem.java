@@ -1,6 +1,7 @@
 package org.caaml.v6;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Defines an avalanche problem, its time, aspect, and elevation constraints. A textual
@@ -48,4 +49,18 @@ public class AvalancheProblem {
 
     public ValidTimePeriod getValidTimePeriod() { return validTimePeriod; }
     public void setValidTimePeriod(ValidTimePeriod value) { this.validTimePeriod = value; }
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AvalancheProblem that = (AvalancheProblem) o;
+		return Objects.equals(aspects, that.aspects) && Objects.equals(avalancheSize, that.avalancheSize) && Objects.equals(elevation, that.elevation) && frequency == that.frequency && problemType == that.problemType && snowpackStability == that.snowpackStability && Objects.equals(terrainFeature, that.terrainFeature) && validTimePeriod == that.validTimePeriod;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(aspects, avalancheSize, elevation, frequency, problemType, snowpackStability, terrainFeature, validTimePeriod);
+	}
+
 }

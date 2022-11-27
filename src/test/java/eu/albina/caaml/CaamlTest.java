@@ -174,4 +174,12 @@ public class CaamlTest {
 		assertEquals(expected.trim(), caaml.trim());
 		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
 	}
+
+	@Test
+	public void toCAAMLv6_2022d() throws Exception {
+		final String caaml = buildCAAML("2018-12-27.json");
+		final String expected = Resources.toString(Resources.getResource("2018-12-27.caaml.v6.json"), StandardCharsets.UTF_8);
+		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+	}
 }

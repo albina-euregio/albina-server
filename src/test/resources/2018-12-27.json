@@ -1,0 +1,867 @@
+[
+	{
+		"id": "bbd97cc3-7de3-468c-afaf-2dfe0ffc3d7a",
+		"avActivityHighlightsTextcat": "7[6434[12335],9413].101[844,11335[3794],2908,10552,13015,7870,2800,9413].102[6666,6994[14872],7595,7407,9737,10547,9413].5[10169,3896[3767]].86[6415,7749,7100,14263,4010,9413]",
+		"avActivityCommentTextcat": "15[6226,4146,5890,882[5863],7215,9413].101[844,11335[3794],2908,10552,13015,7870,2800,9413].57[7694[3931],4140,11702,12188,7105].101[846,11305,2908,10552,13018[3653],7870,2800,9413].26[12925[2772,14931],9901,11349,6199].102[6666,7012,7598[7041,10257,3799],7407,9729[14872],10547,9413].4[1402,859,10398,6374,9413].36[5914].102[6658,6996[14871],7597[7041,3796],7404,9728,10547,9413].28[8505,798,14263,5982,9653,887,2815,9413].46[7053,9826,9413]",
+		"snowpackStructureCommentTextcat": "14[10389,882[5861],11594[10213,5930[3794]],9413].22[5937,3739,5928,6439,1540,6420].101[845,11337[10257,3799],2908,10552,13015,7870,2800,9413].15[6226,4167,5890,871,7241[10214,5930[3794]],9413].34[6326,14857,727,14276].102[6657,6995[14871],7599[7042,3765],7404,9764,10547,9413]",
+		"tendencyCommentTextcat": "32[1373,7158,9413]",
+		"avActivityHighlights": [
+			{
+				"languageCode": "en",
+				"text": " Wind slabs require caution, especially above approximately 2200 m, in particular on very steep shady slopes and adjacent to ridgelines. Weakly bonded old snow at intermediate and high altitudes. Slight increase in danger of moist and wet avalanches as a consequence of warming during the day and solar radiation."
+			},
+			{
+				"languageCode": "it",
+				"text": " Attenzione alla neve ventata, soprattutto al di sopra dei 2200 m circa, principalmente sui pendii ombreggiati molto ripidi e nelle zone in prossimità delle creste. Debole manto di neve vecchia alle quote medie e alte. Con il rialzo termico e l'irradiazione solare diurni, leggero aumento del pericolo di valanghe umide e bagnate."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Attention à la neige soufflée, notamment au-dessus d'environ 2200 m, surtout sur les pentes très raides à l'ombre et à proximité des crêtes. Neige ancienne fragile à moyenne et haute altitude. Augmentation légère du danger d'avalanches humides et mouillées avec le réchauffement diurne et le rayonnement solaire."
+			},
+			{
+				"languageCode": "de",
+				"text": " Vorsicht vor Triebschnee, besonders oberhalb von rund 2200 m, v.a. an sehr steilen Schattenhängen und in Kammlagen. Schwacher Altschnee in mittleren und hohen Lagen. Leichter Anstieg der Gefahr von feuchten und nassen Lawinen mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "it",
+				"text": " Gli accumuli di neve ventata in parte di grandi dimensioni degli ultimi tre giorni rappresentano la principale fonte di pericolo, soprattutto al di sopra dei 2200 m circa. Un singolo appassionato di sport invernali può ancora provocare il distacco di valanghe, anche di dimensioni pericolosamente grandi, principalmente, lungo il confine con l'Italia. Inoltre, le valanghe asciutte possono subire un distacco nella neve vecchia in seguito al passaggio di un singolo appassionato di sport invernali, principalmente nelle zone scarsamente innevate tra i 2200 e i 2700 m circa e sui pendii molto ripidi. I punti pericolosi si trovano a tutte le esposizioni. Attenzione in caso di rotture da scivolamento. Ciò soprattutto sui pendii erbosi ripidi al di sotto dei 2400 m circa. Con il rialzo termico e l'irradiazione solare diurni, durante il pomeriggio il pericolo di valanghe umide e bagnate aumenterà leggermente. Le escursioni e le discese fuori pista richiedono esperienza nella valutazione del pericolo di valanghe."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Les accumulations de neige soufflée en partie grosses des trois derniers jours constituent le danger principal, notamment au-dessus d'environ 2200 m. Des amateurs de sports d'hiver seuls peuvent toujours déclencher des avalanches, certaines pouvant atteindre une taille dangereuse, surtout, le long de la frontière italienne. Des avalanches sèches peuvent aussi être déclenchées par un seul amateur de sports d'hiver dans la neige ancienne, surtout dans les endroits plutôt faiblement enneigés entre environ 2200 et 2700 m et sur les pentes très raides. Les endroits dangereux se trouvent à toutes les expositions. Prudence en présence de fissures de glissement. Ceci surtout sur les pentes raides herbeuses en dessous d'environ 2400 m. Avec le réchauffement diurne et le rayonnement solaire le danger d'avalanches humides et mouillées augmente un peu l'après-midi. Les randonnées et descentes hors-piste demandent une expérience dans l'évaluation du danger d'avalanche."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die teils grossen Triebschneeansammlungen der letzten drei Tage bilden die Hauptgefahr, besonders oberhalb von rund 2200 m. Einzelne Wintersportler können weiterhin Lawinen auslösen, auch gefährlich grosse, v.a., entlang der Grenze zu Italien. Zudem können trockene Lawinen von einzelnen Wintersportlern im Altschnee ausgelöst werden, v.a. an eher schneearmen Stellen zwischen etwa 2200 und 2700 m und an sehr steilen Hängen. Die Gefahrenstellen liegen an allen Expositionen. Vorsicht in Hängen mit Gleitschneerissen. Dies vor allem an steilen Grashängen unterhalb von rund 2400 m. Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung steigt die Gefahr von feuchten und nassen Lawinen am Nachmittag etwas an. Touren und Variantenabfahrten erfordern Erfahrung in der Beurteilung der Lawinengefahr."
+			},
+			{
+				"languageCode": "en",
+				"text": " The sometimes large wind slabs of the last three days represent the main danger, especially above approximately 2200 m. Single winter sport participants can release avalanches as before, including dangerously large ones, in particular, along the border with Italy. Dry avalanches can additionally be released in the old snowpack by a single winter sport participant, in particular in areas where the snow cover is rather shallow between approximately 2200 and 2700 m and on very steep slopes. The avalanche prone locations are to be found in all aspects. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. In the afternoon as a consequence of warming during the day and solar radiation there will be only a slight increase in the danger of moist and wet avalanches. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "fr"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "it",
+				"text": " La neve fresca e la neve ventata degli ultimi giorni poggiano su strati soffici al di sopra dei 2200 m circa. Nella parte centrale del manto nevoso si trovano strati fragili instabili, specialmente tra i 2200 e i 2700 m circa. Gli accumuli di neve ventata meno recenti si legheranno solo lentamente con la neve vecchia a tutte le esposizioni al di sopra dei 2200 m circa. La superficie del manto nevoso si ammorbidirà nel corso della giornata. Ciò sui pendii soleggiati ripidi soprattutto alle quote di bassa e media montagna in queste regioni."
+			},
+			{
+				"languageCode": "de",
+				"text": " Neu- und Triebschnee der letzten Tage liegen oberhalb von rund 2200 m auf weichen Schichten. Im mittleren Teil der Schneedecke sind störanfällige Schwachschichten vorhanden, vor allem zwischen etwa 2200 und 2700 m. Die schon etwas älteren Triebschneeansammlungen verbinden sich an allen Expositionen oberhalb von rund 2200 m nur langsam mit dem Altschnee. Die Schneeoberfläche weicht im Tagesverlauf auf. Dies an steilen Sonnenhängen vor allem in tiefen und mittleren Lagen in diesen Gebieten."
+			},
+			{
+				"languageCode": "fr",
+				"text": " La neige fraîche et la neige soufflée des derniers jours reposent sur des couches meubles au-dessus d'environ 2200 m. Au milieu du manteau neigeux des couches fragiles susceptibles d'être déclenchées sont présentes, surtout entre environ 2200 et 2700 m. Les accumulations de neige soufflée déjà relativement anciennes ne se lient que lentement avec la neige ancienne à toutes les expositions au-dessus d'environ 2200 m. La surface de la neige se ramollit en cours de journée. Ceci sur les pentes raides ensoleillées surtout à basse et moyenne altitude dans ces régions."
+			},
+			{
+				"languageCode": "en",
+				"text": " The fresh snow and wind slabs of the last few days are lying on soft layers above approximately 2200 m. Avalanche prone weak layers exist in the centre of the snowpack, in particular between approximately 2200 and 2700 m. The somewhat older wind slabs are bonding only slowly with the old snowpack in all aspects above approximately 2200 m. The surface of the snowpack will soften during the day. This applies on steep sunny slopes in particular at low and intermediate altitudes in these regions."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "it",
+				"text": " Il pericolo di valanghe rimarrà invariato."
+			},
+			{
+				"languageCode": "en",
+				"text": " The avalanche danger will persist."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die Lawinengefahr bleibt bestehen."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Le danger d'avalanches subsiste."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp6",
+		"dangerPattern2": "dp5",
+		"publicationDate": "2018-12-26T16:00:00Z",
+		"validity": {
+			"from": "2018-12-26T23:00:00Z",
+			"until": "2018-12-27T23:00:00Z"
+		},
+		"regions": [
+			"IT-32-BZ-11",
+			"AT-07-20",
+			"IT-32-BZ-01",
+			"AT-07-10",
+			"AT-07-21",
+			"IT-32-BZ-02",
+			"AT-07-22",
+			"AT-07-11",
+			"IT-32-BZ-03",
+			"AT-07-23",
+			"AT-07-12",
+			"IT-32-BZ-04",
+			"AT-07-24",
+			"AT-07-13",
+			"IT-32-BZ-05",
+			"AT-07-14",
+			"IT-32-BZ-06",
+			"AT-07-15",
+			"IT-32-BZ-07",
+			"AT-07-16",
+			"AT-07-19",
+			"AT-07-09"
+		],
+		"hasDaytimeDependency": true,
+		"forenoon": {
+			"id": "70caeebd-bdb2-428f-b3f3-87a4cd811991",
+			"hasElevationDependency": false,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2200
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"SE",
+					"E",
+					"S",
+					"NW",
+					"NE",
+					"W",
+					"SW",
+					"N"
+				],
+				"elevationHigh": 2700,
+				"elevationLow": 2200
+			}
+		},
+		"afternoon": {
+			"id": "2f458ae6-bc61-4380-b789-255f10559bd9",
+			"hasElevationDependency": false,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem1": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"SE",
+					"E",
+					"S",
+					"NW",
+					"NE",
+					"W",
+					"SW",
+					"N"
+				],
+				"elevationHigh": 2700,
+				"elevationLow": 2200
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "wet_snow",
+				"aspects": [
+					"SE",
+					"E",
+					"S",
+					"W",
+					"SW"
+				],
+				"elevationHigh": 2400
+			}
+		}
+	},
+	{
+		"id": "c343a071-3c30-4d36-9796-225cb4db1ffa",
+		"avActivityHighlightsTextcat": "7[6434[12335],9413].101[844,11335[3794],2908,10552,13015,7870,2800,9413].5[10163[7397],3899[537[12003,14870]]].101[838,11336[3796],2908,10552,13015,7870,2800,9413].32[1374[11106],7137,9413]",
+		"avActivityCommentTextcat": "15[6226,4146,5890,882[5863],7215,9413].56[1388,6552,9342,6191,6944].82[6336,5,10136,14927].36[5914].102[6658,6996[14871],7597[7041,3796],7404,9728,10547,9413].32[1374[11106],7137,9413].31[3724[3798],9211,14839,10416,725].46[7053,9826,9413]",
+		"snowpackStructureCommentTextcat": "94[2939[9242],2918,1466[1471],9413].14[10389,882[5861],11594[10213,5930[3794]],9413].22[5937,3739,5928,6439,1541,6420].101[845,11337[10257,3799],2908,10552,13015,7870,2800,9413].34[6326,14857,727,14276]",
+		"tendencyCommentTextcat": "32[1373,7158,9413]",
+		"avActivityHighlights": [
+			{
+				"languageCode": "it",
+				"text": " Attenzione alla neve ventata, soprattutto al di sopra dei 2200 m circa. Valanghe per scivolamento di neve e colate sui pendii erbosi. Ciò soprattutto al di sotto dei 2400 m circa. Il pericolo di valanghe umide e bagnate aumenterà leggermente nel corso della giornata."
+			},
+			{
+				"languageCode": "de",
+				"text": " Vorsicht vor Triebschnee, besonders oberhalb von rund 2200 m. Gleitschneelawinen und Rutsche an Grashängen. Dies vor allem unterhalb von rund 2400 m. Die Gefahr von feuchten und nassen Lawinen steigt im Tagesverlauf etwas an."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Attention à la neige soufflée, notamment au-dessus d'environ 2200 m. Des avalanches de glissement et coulées sur les pentes herbeuses. Ceci surtout en dessous d'environ 2400 m. Le danger d'avalanches humides et mouillées augmente un peu en cours de journée."
+			},
+			{
+				"languageCode": "en",
+				"text": " Wind slabs require caution, especially above approximately 2200 m. Gliding avalanches and snow slides on grassy slopes. This applies in particular below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "it",
+				"text": " Gli accumuli di neve ventata in parte di grandi dimensioni degli ultimi tre giorni rappresentano la principale fonte di pericolo. I nuovi accumuli di neve ventata possono distaccarsi soprattutto in seguito a un forte sovraccarico e, a livello isolato, raggiungere grandi dimensioni. Il numero e le dimensioni dei punti pericolosi aumenteranno con l'altitudine. Attenzione in caso di rotture da scivolamento. Ciò soprattutto sui pendii erbosi ripidi al di sotto dei 2400 m circa. Il pericolo di valanghe umide e bagnate aumenterà leggermente nel corso della giornata. Al di sotto dei 2600 m circa sono possibili valanghe umide di neve a debole coesione di piccole e medie dimensioni. Le escursioni e le discese fuori pista richiedono esperienza nella valutazione del pericolo di valanghe."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die teils grossen Triebschneeansammlungen der letzten drei Tage bilden die Hauptgefahr. Die frischen Triebschneeansammlungen können vor allem mit grosser Belastung ausgelöst werden und vereinzelt gross werden. Anzahl und Grösse der Gefahrenstellen nehmen mit der Höhe zu. Vorsicht in Hängen mit Gleitschneerissen. Dies vor allem an steilen Grashängen unterhalb von rund 2400 m. Die Gefahr von feuchten und nassen Lawinen steigt im Tagesverlauf etwas an. Unterhalb von rund 2600 m sind kleine und mittlere feuchte Lockerschneelawinen möglich. Touren und Variantenabfahrten erfordern Erfahrung in der Beurteilung der Lawinengefahr."
+			},
+			{
+				"languageCode": "en",
+				"text": " The sometimes large wind slabs of the last three days represent the main danger. The fresh wind slabs can be released, in particular by large loads and reach large size in isolated cases. The number and size of avalanche prone locations will increase with altitude. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day. Below approximately 2600 m small and medium-sized moist loose snow avalanches are possible. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Les accumulations de neige soufflée en partie grosses des trois derniers jours constituent le danger principal. Les accumulations de neige fraîche soufflée peuvent être déclenchées surtout avec une surcharge importante et atteindre une grande taille de manière isolée. Le nombre et la taille des endroits dangereux augmentent avec l'altitude. Prudence en présence de fissures de glissement. Ceci surtout sur les pentes raides herbeuses en dessous d'environ 2400 m. Le danger d'avalanches humides et mouillées augmente un peu en cours de journée. En dessous d'environ 2600 m des avalanches de neige meuble humide de petite et moyenne taille sont possibles. Les randonnées et descentes hors-piste demandent une expérience dans l'évaluation du danger d'avalanche."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "en",
+				"text": " By the evening the wind has been strong over a wide area. The fresh snow and wind slabs of the last few days are lying on soft layers above approximately 2200 m. Isolated avalanche prone weak layers exist in the centre of the snowpack, in particular between approximately 2200 and 2700 m. The surface of the snowpack will soften during the day."
+			},
+			{
+				"languageCode": "it",
+				"text": " In molte regioni, sino a sera il vento è stato forte. La neve fresca e la neve ventata degli ultimi giorni poggiano su strati soffici al di sopra dei 2200 m circa. Nella parte centrale del manto nevoso si trovano, a livello isolato, strati fragili instabili, specialmente tra i 2200 e i 2700 m circa. La superficie del manto nevoso si ammorbidirà nel corso della giornata."
+			},
+			{
+				"languageCode": "de",
+				"text": " Bis am Abend blies der Wind verbreitet stark. Neu- und Triebschnee der letzten Tage liegen oberhalb von rund 2200 m auf weichen Schichten. Im mittleren Teil der Schneedecke sind vereinzelt störanfällige Schwachschichten vorhanden, vor allem zwischen etwa 2200 und 2700 m. Die Schneeoberfläche weicht im Tagesverlauf auf."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Jusqu'au soir le vent a soufflé fortement en général. La neige fraîche et la neige soufflée des derniers jours reposent sur des couches meubles au-dessus d'environ 2200 m. Au milieu du manteau neigeux des couches fragiles isolées susceptibles d'être déclenchées sont présentes, surtout entre environ 2200 et 2700 m. La surface de la neige se ramollit en cours de journée."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "fr",
+				"text": " Le danger d'avalanches subsiste."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die Lawinengefahr bleibt bestehen."
+			},
+			{
+				"languageCode": "en",
+				"text": " The avalanche danger will persist."
+			},
+			{
+				"languageCode": "it",
+				"text": " Il pericolo di valanghe rimarrà invariato."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp6",
+		"dangerPattern2": "dp2",
+		"publicationDate": "2018-12-26T16:00:00Z",
+		"validity": {
+			"from": "2018-12-26T23:00:00Z",
+			"until": "2018-12-27T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-04",
+			"AT-07-07",
+			"AT-07-08",
+			"AT-07-01",
+			"AT-07-02",
+			"AT-07-03"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "75b3038f-49c6-419d-b79b-3c447ec48637",
+			"hasElevationDependency": false,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2200
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "gliding_snow",
+				"aspects": [
+					"SE",
+					"E",
+					"S",
+					"W",
+					"SW"
+				],
+				"elevationHigh": 2400
+			}
+		}
+	},
+	{
+		"id": "8604e1dc-ecab-4947-9989-9ea9d73b7f32",
+		"avActivityHighlightsTextcat": "7[6430[12343,1585],9413].101[838,11314,2908,10552,13015,7870,2800,9413].5[10169,3899[534[12006,14870,7593,3727,819]]].101[846,11337[10257,3799],2908,10552,13015,7870,2800,9413]",
+		"avActivityCommentTextcat": "15[6226,4141,5890,882[5861],7233[10213,5930[3794],2963],9413].16[1451[6776],7751,9413].82[6336,5,10136,14927].38[11947,9893,10086,12285[12004],11207].102[6664,6994[14872],7595,7407,9737,10547,9413].30[670,3875,10398,11556,14836,10416,11892]",
+		"snowpackStructureCommentTextcat": "12[6490,10089,8417,12938].101[846,11335[3794],2908,10552,13015,7870,2800,9413].17[1430,11942,10172[9187,7093],9605[9390],9413].16[1451[6776],7796,9413].22[5937,3739,5928,6440[12128,14870,7593,3727,819],1544,6420].101[844,11337[10257,3799],2908,10552,13015,7870,2800,9413].24[6871,3911,6838].34[6326,14857,727,14276]",
+		"tendencyCommentTextcat": "86[6414,7750,7100,14258,3990,9413]",
+		"avActivityHighlights": [
+			{
+				"languageCode": "de",
+				"text": " Frischer Triebschnee ist die Hauptgefahr. Dies vor allem in Kammlagen. Schwacher Altschnee besonders an West-, Nord- und Osthängen, v.a. zwischen etwa 2200 und 2700 m."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Neige récemment soufflée constituant le danger principal. Ceci surtout à proximité des crêtes. Neige ancienne fragile spécialement sur les pentes exposées à l'ouest, au nord et à l'est, surtout entre environ 2200 et 2700 m."
+			},
+			{
+				"languageCode": "it",
+				"text": " La neve ventata recente è la principale fonte di pericolo. Ciò soprattutto nelle zone in prossimità delle creste. Debole manto di neve vecchia principalmente sui pendii esposti a ovest, nord ed est, principalmente tra i 2200 e i 2700 m circa."
+			},
+			{
+				"languageCode": "en",
+				"text": " Fresh wind slabs represent the main danger. This applies in particular adjacent to ridgelines. Weakly bonded old snow especially on west, north and east facing slopes, in particular between approximately 2200 and 2700 m."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "it",
+				"text": " Gli accumuli di neve ventata degli ultimi giorni sono instabili al di sopra dei 2200 m circa. Questi ultimi rappresentano la principale fonte di pericolo. Il numero e le dimensioni dei punti pericolosi aumenteranno con l'altitudine. Sfavorevoli sono soprattutto i punti di passaggio da poca a molta neve, soprattutto sui pendii ombreggiati molto ripidi e nelle zone in prossimità delle creste. Con il rialzo termico e l'irradiazione solare diurni, sono ancora possibili valanghe umide di neve a debole coesione per lo più di piccole dimensioni."
+			},
+			{
+				"languageCode": "en",
+				"text": " The wind slabs of the last few days are prone to triggering above approximately 2200 m. These represent the main danger. The number and size of avalanche prone locations will increase with altitude. In particular transitions from a shallow to a deep snowpack are unfavourable, especially on very steep shady slopes and adjacent to ridgelines. As a consequence of warming during the day and solar radiation more mostly small moist loose snow avalanches are possible."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die Triebschneeansammlungen der letzten Tage sind oberhalb von rund 2200 m störanfällig. Diese bilden die Hauptgefahr. Anzahl und Grösse der Gefahrenstellen nehmen mit der Höhe zu. Ungünstig sind vor allem Übergänge von wenig zu viel Schnee, besonders an sehr steilen Schattenhängen und in Kammlagen. Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung sind weiterhin meist kleine feuchte Lockerschneelawinen möglich."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Les accumulations de neige soufflée des derniers jours sont fragiles au-dessus d'environ 2200 m. Celles-ci constituent le danger principal. Le nombre et la taille des endroits dangereux augmentent avec l'altitude. Ce sont surtout les transitions entre les endroits peu enneigés et les endroits très enneigés qui sont défavorables, notamment sur les pentes très raides à l'ombre et à proximité des crêtes. Des avalanches de neige meuble humide en général de petite taille sont toujours possibles avec le réchauffement diurne et le rayonnement solaire."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "it",
+				"text": " In alcuni punti la neve fresca e quella ventata poggiano su strati soffici, principalmente al di sopra dei 2200 m circa. I nuovi accumuli di neve ventata sono piuttosto piccoli e in parte instabili. Questi ultimi sono ben individuabili dall'escursionista esperto. Soprattutto sui pendii esposti a ovest, nord ed est, nella parte centrale del manto nevoso si trovano strati fragili a cristalli angolari, soprattutto tra i 2200 e i 2700 m circa. I rumori di \"whum\" e i fischi sono possibili segnali di pericolo. La superficie del manto nevoso si ammorbidirà nel corso della giornata."
+			},
+			{
+				"languageCode": "en",
+				"text": " In some places fresh snow and wind slabs are lying on soft layers, in particular above approximately 2200 m. The fresh wind slabs are rather small and in some cases prone to triggering. These are clearly recognisable to the trained eye. Faceted weak layers exist in the centre of the snowpack in particular on west, north and east facing slopes, especially between approximately 2200 and 2700 m. Whumpfing and hissing sounds can indicate the danger. The surface of the snowpack will soften during the day."
+			},
+			{
+				"languageCode": "fr",
+				"text": " La neige fraîche et soufflée reposent par endroits sur des couches molles, surtout au-dessus d'environ 2200 m. Les accumulations récentes de neige soufflée sont plutôt petites et en partie fragiles. Celles-ci sont facilement reconnaissables pour un oeil exercé. Au milieu du manteau neigeux des couches fragiles ayant subi une métamorphose constructive à grains anguleux sont présentes, surtout sur les pentes exposées à l'ouest, au nord et à l'est, notamment entre environ 2200 et 2700 m. Des bruits sourds et sifflants peuvent attirer l'attention sur le danger. La surface de la neige se ramollit en cours de journée."
+			},
+			{
+				"languageCode": "de",
+				"text": " Neu- und Triebschnee liegen stellenweise auf weichen Schichten, v.a. oberhalb von rund 2200 m. Die frischen Triebschneeansammlungen sind eher klein und teilweise störanfällig. Diese sind für Geübte gut erkennbar. Im mittleren Teil der Schneedecke sind vor allem an West-, Nord- und Osthängen kantig aufgebaute Schwachschichten vorhanden, besonders zwischen etwa 2200 und 2700 m. Wumm- und Zischgeräusche können auf die Gefahr hinweisen. Die Schneeoberfläche weicht im Tagesverlauf auf."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "en",
+				"text": " Gradual decrease in avalanche danger."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Diminution progressive du danger d'avalanches."
+			},
+			{
+				"languageCode": "it",
+				"text": " Progressivo calo del pericolo di valanghe."
+			},
+			{
+				"languageCode": "de",
+				"text": " Allmählicher Rückgang der Lawinengefahr."
+			}
+		],
+		"tendency": "decreasing",
+		"dangerPattern1": "dp6",
+		"dangerPattern2": "dp5",
+		"publicationDate": "2018-12-26T16:00:00Z",
+		"validity": {
+			"from": "2018-12-26T23:00:00Z",
+			"until": "2018-12-27T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-26",
+			"AT-07-27",
+			"AT-07-28",
+			"IT-32-BZ-12",
+			"IT-32-BZ-13",
+			"AT-07-25"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "6e3c99fa-faf1-4553-b3b3-c355e509c789",
+			"hasElevationDependency": false,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2200
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"E",
+					"NW",
+					"NE",
+					"W",
+					"N"
+				],
+				"elevationHigh": 2700,
+				"elevationLow": 2200
+			}
+		}
+	},
+	{
+		"id": "e9cc9692-76d4-4b7f-a709-13ad0dd5faf6",
+		"avActivityHighlightsTextcat": "16[1428,7751,9413]",
+		"avActivityCommentTextcat": "234[21221[25277,25465,27400,25464],23559,22656[27352,29550],30331,19197,20934,19196,24567].187[26640[27352],26524,15822,21228,21436].165[22438[27354],19861[21481],25329,29497,21442].163[29576,18588,16421,28372[25433]].175[19069[28251]]",
+		"snowpackStructureCommentTextcat": "11[10387,3976,6030,9546].12[6490,10090,8417,12935].24[6872,3911,6836]",
+		"tendencyCommentTextcat": "3[4174,9413]",
+		"avActivityHighlights": [
+			{
+				"languageCode": "fr",
+				"text": " Les accumulations de neige soufflée constituent le danger principal."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die Triebschneeansammlungen bilden die Hauptgefahr."
+			},
+			{
+				"languageCode": "it",
+				"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo."
+			},
+			{
+				"languageCode": "en",
+				"text": " The wind slabs represent the main danger."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "de",
+				"text": " Mit Neuschnee und starkem Wind aus nördlichen Richtungen entstanden vor allem in Kammlagen, Rinnen und Mulden Triebschneeansammlungen. Lawinen können vor allem an Triebschneehängen leicht ausgelöst werden und eine gefährliche Grösse erreichen. Besonders in den schneereichen Gebieten und im Hochgebirge sind die Gefahrenstellen häufiger und die Gefahr höher. Die Gefahrenstellen sind für Geübte gut zu erkennen. Nebst der Verschüttungsgefahr sollte auch die Mitreiss- und Absturzgefahr beachtet werden."
+			},
+			{
+				"languageCode": "en",
+				"text": " As a consequence of fresh snow and a strong wind from northerly directions, wind slabs formed in particular adjacent to ridgelines and in gullies and bowls. In particular on wind-loaded slopes avalanches can be released easily and reach a dangerous size. Especially in regions with a lot of snow and in high Alpine regions avalanche prone locations are more prevalent and the danger is greater. The avalanche prone locations are clearly recognisable to the trained eye. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Des accumulations de neige soufflée se sont formées avec la neige fraîche et le vent de secteur nord fort surtout à proximité des crêtes, dans les combes et couloirs. Des avalanches peuvent être facilement déclenchées surtout sur les versants où s'est accumulée la neige soufflée et atteindre une taille dangereuse. Spécialement dans les régions bien enneigées et en haute montagne les endroits dangereux sont plus fréquents et le danger plus élevé. Les endroits dangereux sont facilement identifiables pour un oeil exercé. A côté du danger d'ensevelissement, il faut aussi penser au danger d'être emporté et de chuter."
+			},
+			{
+				"languageCode": "it",
+				"text": " Con neve fresca e vento forte proveniente dai quadranti settentrionali soprattutto nelle zone in prossimità delle creste, nelle conche e nei canaloni si sono formati accumuli di neve ventata. Soprattutto sui pendii carichi di neve ventata le valanghe possono facilmente subire un distacco e raggiungere dimensioni pericolose. Principalmente nelle regioni con tanta neve e in alta montagna, i punti pericolosi sono più frequenti e il pericolo superiore. I punti pericolosi sono facilmente individuabili dall'escursionista esperto. Oltre al pericolo di seppellimento, occorre fare attenzione anche al pericolo di trascinamento e caduta."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "de"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "it",
+				"text": " Il manto nevoso è estremamente variabile a distanza di pochi metri. La neve fresca e quella ventata poggiano spesso su una superficie del manto di neve vecchia morbida. I rumori di \"whum\" e la formazione di fessure quando si calpesta la coltre di neve sono i tipici indizi di una debole struttura del manto nevoso."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die Schneedecke ist kleinräumig sehr unterschiedlich. Neu- und Triebschnee liegen oft auf einer weichen Altschneeoberfläche. Wummgeräusche und Risse beim Betreten der Schneedecke sind deutliche Zeichen eines schwachen Schneedeckenaufbaus."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Le manteau neigeux est très variable à petite échelle. La neige fraîche et soufflée reposent souvent sur la surface meuble de la neige ancienne. Des bruits sourds et des fissures lors du passage sur le manteau neigeux sont des signes nets d'une structure fragile du manteau neigeux."
+			},
+			{
+				"languageCode": "en",
+				"text": " The snowpack will be subject to considerable local variations. In many cases fresh snow and wind slabs are lying on the soft surface of an old snowpack. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack are a clear indication of a weakly bonded snowpack."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "de",
+				"text": " Mässig, Stufe 2."
+			},
+			{
+				"languageCode": "it",
+				"text": " Moderato, grado 2."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Limité, degré 2."
+			},
+			{
+				"languageCode": "en",
+				"text": " Moderate, level 2."
+			}
+		],
+		"tendency": "steady",
+		"publicationDate": "2018-12-26T16:00:00Z",
+		"validity": {
+			"from": "2018-12-26T23:00:00Z",
+			"until": "2018-12-27T23:00:00Z"
+		},
+		"regions": [
+			"IT-32-BZ-10",
+			"IT-32-BZ-14",
+			"IT-32-BZ-15",
+			"IT-32-TN-02",
+			"IT-32-TN-13",
+			"IT-32-BZ-08",
+			"IT-32-TN-01",
+			"IT-32-BZ-09",
+			"IT-32-TN-04",
+			"IT-32-TN-05",
+			"IT-32-TN-16",
+			"IT-32-TN-19",
+			"IT-32-TN-20"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "bd505197-d007-4ca2-8a46-d7a8fb24aa84",
+			"hasElevationDependency": false,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"SE",
+					"E",
+					"NW",
+					"NE",
+					"W",
+					"N"
+				],
+				"elevationLow": 2300
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2300
+			}
+		}
+	},
+	{
+		"id": "45fbe7ff-2c98-4371-8ad8-6f9cb52aa541",
+		"avActivityHighlightsTextcat": "7[6432[12339,6828],9413].101[845,11314,2908,10552,13015,7870,2800,9413]",
+		"avActivityCommentTextcat": "15[6226,4163,5890,871,7215,9413].102[6664,6994[14872],7595,7407,9737,10547,9413].101[845,11335[3794],2908,10552,13015,7870,2800,9413].82[6336,5,10136,14927].9[12028[3765],9204,4836,14258,9413]",
+		"snowpackStructureCommentTextcat": "15[6226,4163,5890,875,7215,9413].17[1450[10281],11942,10171,9605[9389],9413].12[6490,10089,8417,12938].101[846,11335[3792],2908,10552,13015,7870,2800,9413].16[1438,7774[10213,5929],9413].34[6326,14857,727,14276]",
+		"tendencyCommentTextcat": "32[1373,7158,9413]",
+		"avActivityHighlights": [
+			{
+				"languageCode": "en",
+				"text": " Fresh wind slabs require caution, in particular adjacent to ridgelines."
+			},
+			{
+				"languageCode": "it",
+				"text": " La neve ventata recente richiede attenzione, specialmente nelle zone in prossimità delle creste."
+			},
+			{
+				"languageCode": "de",
+				"text": " Frischen Triebschnee beachten, vor allem in Kammlagen."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Neige récemment soufflée à surveiller, surtout à proximité des crêtes."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "it",
+				"text": " Gli accumuli di neve ventata di più recente formazione rappresentano la principale fonte di pericolo, soprattutto sui pendii ombreggiati molto ripidi e nelle zone in prossimità delle creste, specialmente al di sopra dei 2200 m circa. Il numero e le dimensioni dei punti pericolosi aumenteranno con l'altitudine. Alle quote di bassa e media montagna in molti punti debole pericolo di valanghe."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die frischen Triebschneeansammlungen bilden die Hauptgefahr, besonders an sehr steilen Schattenhängen und in Kammlagen, vor allem oberhalb von rund 2200 m. Anzahl und Grösse der Gefahrenstellen nehmen mit der Höhe zu. In tiefen und mittleren Lagen verbreitet geringe Lawinengefahr."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Les accumulations de neige soufflée fraîches constituent le danger principal, notamment sur les pentes très raides à l'ombre et à proximité des crêtes, surtout au-dessus d'environ 2200 m. Le nombre et la taille des endroits dangereux augmentent avec l'altitude. À basse et moyenne altitude danger d'avalanches en général faible."
+			},
+			{
+				"languageCode": "en",
+				"text": " The fresh wind slabs represent the main danger, especially on very steep shady slopes and adjacent to ridgelines, in particular above approximately 2200 m. The number and size of avalanche prone locations will increase with altitude. At low and intermediate altitudes a low avalanche danger will be encountered over a wide area."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "de",
+				"text": " Die frischen Triebschneeansammlungen vom Dienstag bilden die Hauptgefahr. Sie sind teilweise störanfällig. Neu- und Triebschnee liegen stellenweise auf weichen Schichten, v.a. oberhalb von rund 2000 m. Die schon etwas älteren Triebschneeansammlungen haben sich recht gut mit dem Altschnee verbunden. Die Schneeoberfläche weicht im Tagesverlauf auf."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Les accumulations de neige soufflée fraîches de mardi constituent le danger principal. Elles sont en partie fragiles. La neige fraîche et soufflée reposent par endroits sur des couches molles, surtout au-dessus d'environ 2000 m. Les accumulations déjà plus anciennes de neige soufflée se sont assez bien liées avec la neige ancienne. La surface de la neige se ramollit en cours de journée."
+			},
+			{
+				"languageCode": "it",
+				"text": " Gli accumuli di neve ventata di più recente formazione di martedì rappresentano la principale fonte di pericolo. Essi sono in parte instabili. In alcuni punti la neve fresca e quella ventata poggiano su strati soffici, principalmente al di sopra dei 2000 m circa. Gli accumuli di neve ventata meno recenti si sono legati piuttosto bene con la neve vecchia. La superficie del manto nevoso si ammorbidirà nel corso della giornata."
+			},
+			{
+				"languageCode": "en",
+				"text": " The fresh wind slabs of Tuesday represent the main danger. They are in some cases prone to triggering. In some places fresh snow and wind slabs are lying on soft layers, in particular above approximately 2000 m. The somewhat older wind slabs have bonded quite well with the old snowpack. The surface of the snowpack will soften during the day."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "de",
+				"text": " Die Lawinengefahr bleibt bestehen."
+			},
+			{
+				"languageCode": "en",
+				"text": " The avalanche danger will persist."
+			},
+			{
+				"languageCode": "it",
+				"text": " Il pericolo di valanghe rimarrà invariato."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Le danger d'avalanches subsiste."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp6",
+		"publicationDate": "2018-12-26T16:00:00Z",
+		"validity": {
+			"from": "2018-12-26T23:00:00Z",
+			"until": "2018-12-27T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-05",
+			"AT-07-17",
+			"AT-07-06",
+			"AT-07-18"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "4708e930-84b9-4d9f-ad6f-d7821d364a9b",
+			"hasElevationDependency": false,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2200
+			},
+			"avalancheProblem2": {
+				"elevationHigh": 2000
+			}
+		}
+	},
+	{
+		"id": "2f57292b-a9e7-48c4-bc65-1d9641fe7d3e",
+		"avActivityHighlightsTextcat": "106[7834,2175,2[7591,816],13005,14256]",
+		"avActivityCommentTextcat": "16[1428,7751,9413].20[1428,2972,10065[12004,3981,3018],9413].39[14195,3612,1485,12996[10183]]",
+		"snowpackStructureCommentTextcat": "106[7834,2175,1,13010,14256].19[6003,9863]",
+		"tendencyCommentTextcat": "3[4173,9413]",
+		"avActivityHighlights": [
+			{
+				"languageCode": "it",
+				"text": " C'è solo poca neve sui pendii esposti a sud."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Il y a très peu de neige sur les pentes exposées au sud."
+			},
+			{
+				"languageCode": "en",
+				"text": " Hardly any snow is lying on south facing slopes."
+			},
+			{
+				"languageCode": "de",
+				"text": " Es liegt an Südhängen kaum Schnee."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "fr",
+				"text": " Les accumulations de neige soufflée constituent le danger principal. Les accumulations de neige soufflée se situent surtout à proximité des crêtes, dans les combes et couloirs ainsi qu'en haute montagne. Les endroits dangereux sont plutôt rares et facilement identifiables."
+			},
+			{
+				"languageCode": "de",
+				"text": " Die Triebschneeansammlungen bilden die Hauptgefahr. Die Triebschneeansammlungen liegen vor allem in Kammlagen, Rinnen und Mulden sowie im Hochgebirge. Die Gefahrenstellen sind eher selten und gut zu erkennen."
+			},
+			{
+				"languageCode": "en",
+				"text": " The wind slabs represent the main danger. The wind slabs are to be found in particular adjacent to ridgelines and in gullies and bowls as well as in the high Alpine regions. The avalanche prone locations are rather rare and are easy to recognise."
+			},
+			{
+				"languageCode": "it",
+				"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo. Gli accumuli di neve ventata si trovano soprattutto nelle zone in prossimità delle creste, nelle conche e nei canaloni così come in alta montagna. I punti pericolosi sono piuttosto rari e facili da individuare."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "en",
+				"text": " From a snow sport perspective, in most cases insufficient snow is lying. The sometimes strong wind has transported only a little snow."
+			},
+			{
+				"languageCode": "it",
+				"text": " È generalmente presente troppo poca neve per la pratica degli sport invernali. Il vento a tratti forte ha causato solo il trasporto di poca neve."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Il y a en général trop peu de neige pour les sports d'hiver. Le vent parfois fort n'a transporté que peu de neige."
+			},
+			{
+				"languageCode": "de",
+				"text": " Es liegt für Schneesport meist zu wenig Schnee. Der teilweise starke Wind hat nur wenig Schnee verfrachtet."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "de",
+				"text": " Gering, Stufe 1."
+			},
+			{
+				"languageCode": "it",
+				"text": " Debole, grado 1."
+			},
+			{
+				"languageCode": "en",
+				"text": " Low, level 1."
+			},
+			{
+				"languageCode": "fr",
+				"text": " Faible, degré 1."
+			}
+		],
+		"tendency": "steady",
+		"publicationDate": "2018-12-26T16:00:00Z",
+		"validity": {
+			"from": "2018-12-26T23:00:00Z",
+			"until": "2018-12-27T23:00:00Z"
+		},
+		"regions": [
+			"IT-32-BZ-20",
+			"IT-32-TN-09",
+			"IT-32-BZ-16",
+			"IT-32-BZ-17",
+			"IT-32-BZ-18",
+			"IT-32-BZ-19",
+			"IT-32-TN-12",
+			"IT-32-TN-15",
+			"AT-07-29",
+			"IT-32-TN-03",
+			"IT-32-TN-14",
+			"IT-32-TN-17",
+			"IT-32-TN-06",
+			"IT-32-TN-08",
+			"IT-32-TN-18",
+			"IT-32-TN-07",
+			"IT-32-TN-11",
+			"IT-32-TN-10",
+			"IT-32-TN-21"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "6c18bf9b-ef49-47ef-ab63-bf515c873a95",
+			"hasElevationDependency": false,
+			"dangerRatingAbove": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"E",
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2200
+			},
+			"avalancheProblem2": {}
+		}
+	}
+]

@@ -52,7 +52,7 @@ interface Caaml6_2022 {
 				avalancheBulletin.getAfternoon() == null ? Stream.empty() : avalancheBulletin.getAfternoon().getAvalancheProblems().stream()
 			)
 			.map(p -> getAvalancheProblem(avalancheBulletin, p, lang))
-			.filter(Objects::nonNull).collect(Collectors.toList()));
+			.filter(Objects::nonNull).distinct().collect(Collectors.toList()));
 		bulletin.setBulletinID(avalancheBulletin.getId());
 		bulletin.setCustomData(Stream.of(avalancheBulletin.getDangerPattern1(), avalancheBulletin.getDangerPattern2())
 			.filter(Objects::nonNull)
@@ -95,11 +95,15 @@ interface Caaml6_2022 {
 		final String upperBound = p.getElevationHigh() > 0 ? Integer.toString(p.getElevationHigh()) : p.getTreelineHigh() ? "treeline" : null;
 		result.setElevation(new ElevationBoundaryOrBand(lowerBound, upperBound));
 		result.setTerrainFeature(p.getTerrainFeature(lang));
+		final boolean isForenoon = avalancheBulletin.getForenoon().getAvalancheProblems().contains(p);
+		final boolean isAfternoon = avalancheBulletin.getAfternoon() != null && avalancheBulletin.getAfternoon().getAvalancheProblems().contains(p);
 		if (!avalancheBulletin.isHasDaytimeDependency()) {
 			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);
-		} else if (avalancheBulletin.getForenoon().getAvalancheProblems().contains(p)) {
+		} else if (isForenoon && isAfternoon) {
+			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);
+		} else if (isForenoon) {
 			result.setValidTimePeriod(ValidTimePeriod.EARLIER);
-		} else if (avalancheBulletin.getAfternoon() != null && avalancheBulletin.getAfternoon().getAvalancheProblems().contains(p)) {
+		} else if (isAfternoon) {
 			result.setValidTimePeriod(ValidTimePeriod.LATER);
 		}
 		final EawsMatrixInformation matrixInformation = p.getEawsMatrixInformation();
