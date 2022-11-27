@@ -23,6 +23,7 @@ import org.caaml.v6.TendencyType;
 import org.caaml.v6.ValidTime;
 import org.caaml.v6.ValidTimePeriod;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -69,7 +70,7 @@ interface Caaml6_2022 {
 		bulletin.setHighlights(avalancheBulletin.getHighlightsIn(lang));
 		bulletin.setLang(lang.name());
 		bulletin.setMetaData(null);
-		bulletin.setPublicationTime(avalancheBulletin.getPublicationDate().toInstant());
+		bulletin.setPublicationTime(avalancheBulletin.getPublicationDate().toInstant().truncatedTo(ChronoUnit.SECONDS));
 		bulletin.setRegions(avalancheBulletin.getPublishedRegions().stream()
 			.map(id -> new org.caaml.v6.Region(id, lang.getRegionName(id)))
 			.collect(Collectors.toList()));
