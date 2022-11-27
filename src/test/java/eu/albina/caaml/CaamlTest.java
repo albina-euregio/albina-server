@@ -135,11 +135,12 @@ public class CaamlTest {
 	}
 
 	private AvalancheReport loadFromDatabase(LocalDate date) throws Exception {
-		serverInstanceEuregio.setPdfDirectory("/tmp/bulletins/");
 		Instant instant = date.atStartOfDay(AlbinaUtil.localZone()).withZoneSameInstant(ZoneOffset.UTC).toInstant();
 		List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(instant, RegionController.getInstance().getPublishBulletinRegions());
 		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
-		JsonUtil.createJsonFile(report);
+		Path path = Paths.get(String.format("/tmp/bulletins/%s/avalanche_report.json", date));
+		Files.createDirectories(path.getParent());
+		Files.write(path, JsonUtil.createJSONString(bulletins, regionEuregio, true).toString().getBytes(StandardCharsets.UTF_8));
 		return report;
 	}
 
