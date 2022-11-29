@@ -27,6 +27,9 @@
     } ],
     "bulletinID" : "06888f8d-9e6e-4b0b-9523-9aed9e52d9e7",
     "customData" : [ {
+      "type" : "mainDate",
+      "mainDate" : "2022-11-10"
+    }, {
       "type" : "dangerPattern",
       "id" : "dp6",
       "name" : "dp.6: cold, loose snow and wind"
@@ -88,6 +91,9 @@
     } ],
     "bulletinID" : "f4c31d95-94d0-47de-b678-8499f3ea080d",
     "customData" : [ {
+      "type" : "mainDate",
+      "mainDate" : "2022-11-10"
+    }, {
       "type" : "dangerPattern",
       "id" : "dp6",
       "name" : "dp.6: cold, loose snow and wind"
@@ -149,6 +155,9 @@
     } ],
     "bulletinID" : "5263ea68-d47a-45f2-85ae-4e1938c82044",
     "customData" : [ {
+      "type" : "mainDate",
+      "mainDate" : "2022-11-10"
+    }, {
       "type" : "dangerPattern",
       "id" : "dp6",
       "name" : "dp.6: cold, loose snow and wind"
@@ -210,6 +219,9 @@
     } ],
     "bulletinID" : "da6f43e1-ca07-4975-9ef6-42a335b5901d",
     "customData" : [ {
+      "type" : "mainDate",
+      "mainDate" : "2022-11-10"
+    }, {
       "type" : "dangerPattern",
       "id" : "dp6",
       "name" : "dp.6: cold, loose snow and wind"
@@ -271,6 +283,9 @@
     } ],
     "bulletinID" : "dba44dec-d2c5-43cd-8ee3-70d3fa58c2dc",
     "customData" : [ {
+      "type" : "mainDate",
+      "mainDate" : "2022-11-10"
+    }, {
       "type" : "dangerPattern",
       "id" : "dp6",
       "name" : "dp.6: cold, loose snow and wind"
@@ -304,5 +319,9 @@
       "startTime" : "2022-11-09T23:00:00Z"
     },
     "wxSynopsis" : { }
+  } ],
+  "customData" : [ {
+    "type" : "mainDate",
+    "mainDate" : "2022-11-10"
   } ]
 }
