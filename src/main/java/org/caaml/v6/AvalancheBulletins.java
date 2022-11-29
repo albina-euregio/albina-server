@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class AvalancheBulletins {
     private List<AvalancheBulletin> bulletins;
-    private Object customData;
+    private CustomData[] customData;
     private MetaData metaData;
 
 	public AvalancheBulletins() {
@@ -20,8 +20,8 @@ public class AvalancheBulletins {
 	public List<AvalancheBulletin> getBulletins() { return bulletins; }
     public void setBulletins(List<AvalancheBulletin> value) { this.bulletins = value; }
 
-    public Object getCustomData() { return customData; }
-    public void setCustomData(Object value) { this.customData = value; }
+    public CustomData[] getCustomData() { return customData; }
+    public void setCustomData(CustomData[] value) { this.customData = value; }
 
     public MetaData getMetaData() { return metaData; }
     public void setMetaData(MetaData value) { this.metaData = value; }

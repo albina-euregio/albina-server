@@ -4,13 +4,13 @@ package org.caaml.v6;
  * Details on a person.
  */
 public class Person {
-    private Object customData;
+    private CustomData[] customData;
     private MetaData metaData;
     private String name;
     private String website;
 
-    public Object getCustomData() { return customData; }
-    public void setCustomData(Object value) { this.customData = value; }
+    public CustomData[] getCustomData() { return customData; }
+    public void setCustomData(CustomData[] value) { this.customData = value; }
 
     public MetaData getMetaData() { return metaData; }
     public void setMetaData(MetaData value) { this.metaData = value; }

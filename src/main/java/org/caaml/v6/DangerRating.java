@@ -8,14 +8,14 @@ import java.util.Objects;
  * dangerRating for all the other cases.
  */
 public class DangerRating {
-    private Object customData;
+    private CustomData[] customData;
     private ElevationBoundaryOrBand elevation;
     private DangerRatingValue mainValue;
     private MetaData metaData;
     private ValidTimePeriod validTimePeriod;
 
-    public Object getCustomData() { return customData; }
-    public void setCustomData(Object value) { this.customData = value; }
+    public CustomData[] getCustomData() { return customData; }
+    public void setCustomData(CustomData[] value) { this.customData = value; }
 
     public ElevationBoundaryOrBand getElevation() { return elevation; }
     public void setElevation(ElevationBoundaryOrBand value) { this.elevation = value; }
