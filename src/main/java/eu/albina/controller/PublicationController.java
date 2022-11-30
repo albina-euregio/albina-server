@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import javax.xml.transform.TransformerException;
 
 import eu.albina.caaml.Caaml;
+import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -96,6 +97,7 @@ public class PublicationController {
 	}
 
 	public void publish(List<AvalancheBulletin> bulletins, User user, Instant publicationDate, Instant startDate) {
+		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
@@ -105,6 +107,8 @@ public class PublicationController {
 		for (Region region : RegionController.getInstance().getRegions()) {
 
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+
+			logger.info("Publishing region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
 
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
 			avalancheReport.setBulletins(regionBulletins);
