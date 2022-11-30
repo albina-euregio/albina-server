@@ -131,8 +131,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setBulletins(List<AvalancheBulletin> bulletins) {
 		this.bulletins = bulletins;
-		this.validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		this.publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		this.validityDateString = bulletins.isEmpty() ? null : AlbinaUtil.getValidityDateString(bulletins);
+		this.publicationTimeString = bulletins.isEmpty() ? null : AlbinaUtil.getPublicationTime(bulletins);
 	}
 
 	public User getUser() {
