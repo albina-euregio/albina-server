@@ -723,6 +723,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	public static DangerRating getHighestDangerRating(List<AvalancheBulletin> bulletins) {
 		return bulletins.stream()
 			.map(AvalancheBulletin::getHighestDangerRating)
+			.filter(Objects::nonNull)
 			.max(Comparator.naturalOrder())
 			.orElse(DangerRating.missing);
 	}

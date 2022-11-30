@@ -29,6 +29,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ import eu.albina.model.enumerations.LanguageCode;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -260,5 +262,16 @@ public class AlbinaUtilTest {
 		assertEquals(Instant.parse("2022-03-27T22:00:00Z"), startDate); // ok
 		Instant endDate = today.plusDays(2).toInstant();
 		assertEquals(Instant.parse("2022-03-28T22:00:00Z"), endDate); // ok
+	}
+
+	@Test
+	public void getPublicationDate() {
+		assertNull(AlbinaUtil.getPublicationDate(Collections.emptyList()));
+		assertNull(AlbinaUtil.getPublicationDate(Collections.singletonList(new AvalancheBulletin())));
+		AvalancheBulletin bulletin = new AvalancheBulletin();
+		bulletin.setPublicationDate(ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
+		assertEquals(
+			bulletin.getPublicationDate(),
+			AlbinaUtil.getPublicationDate(Arrays.asList(new AvalancheBulletin(), bulletin, new AvalancheBulletin())));
 	}
 }

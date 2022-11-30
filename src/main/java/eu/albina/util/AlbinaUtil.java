@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -89,7 +90,11 @@ public class AlbinaUtil {
 	}
 
 	public static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = bulletins.stream().map(AvalancheBulletin::getValidUntil).max(Comparator.naturalOrder()).orElse(null);
+		ZonedDateTime date = bulletins.stream()
+			.map(AvalancheBulletin::getValidUntil)
+			.filter(Objects::nonNull)
+			.max(Comparator.naturalOrder())
+			.orElse(null);
 		if (date != null) {
 			date = date.withZoneSameInstant(localZone());
 			StringBuilder result = new StringBuilder();
@@ -195,7 +200,11 @@ public class AlbinaUtil {
 	}
 
 	public static ZonedDateTime getDate(List<AvalancheBulletin> bulletins) {
-		return bulletins.stream().map(AvalancheBulletin::getValidFrom).max(Comparator.naturalOrder()).orElse(null);
+		return bulletins.stream()
+			.map(AvalancheBulletin::getValidFrom)
+			.filter(Objects::nonNull)
+			.max(Comparator.naturalOrder())
+			.orElse(null);
 	}
 
 	public static boolean isUpdate(List<AvalancheBulletin> bulletins) {
@@ -205,7 +214,11 @@ public class AlbinaUtil {
 	}
 
 	public static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
-		return bulletins.stream().map(AvalancheBulletin::getPublicationDate).max(Comparator.naturalOrder()).orElse(null);
+		return bulletins.stream()
+			.map(AvalancheBulletin::getPublicationDate)
+			.filter(Objects::nonNull)
+			.max(Comparator.naturalOrder())
+			.orElse(null);
 
 	}
 
