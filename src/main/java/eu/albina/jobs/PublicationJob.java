@@ -63,7 +63,8 @@ public class PublicationJob implements org.quartz.Job {
 		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions();
 		if (!regions.isEmpty()) {
 			try {
-				User user = UserController.getInstance().getUser(ServerInstanceController.getInstance().getLocalServerInstance().getUserName());
+				String userName = ServerInstanceController.getInstance().getLocalServerInstance().getUserName();
+				User user = userName != null ? UserController.getInstance().getUser(userName) : null;
 
 				ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
 				Instant startDate = today.plusDays(1).toInstant();

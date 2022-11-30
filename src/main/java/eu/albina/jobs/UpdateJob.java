@@ -61,7 +61,8 @@ public class UpdateJob implements org.quartz.Job {
 		logger.info("Update job triggered!");
 
 		try {
-			User user = UserController.getInstance().getUser(ServerInstanceController.getInstance().getLocalServerInstance().getUserName());
+			String userName = ServerInstanceController.getInstance().getLocalServerInstance().getUserName();
+			User user = userName != null ? UserController.getInstance().getUser(userName) : null;
 
 			ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
 			Instant startDate = today.toInstant();
