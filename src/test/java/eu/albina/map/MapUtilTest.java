@@ -172,7 +172,7 @@ public class MapUtilTest {
 	public void testMapyrusMapsTyrol() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstance);
+		AvalancheReport avalancheReport = AvalancheReport.of(AvalancheReport.of(bulletins, regionTyrol, null).getRegionBulletins(), regionTyrol, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 		assertEquals("2019-01-17/2019-01-16_16-00-00/2019-01-17_AT-07_en.pdf",
 			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
