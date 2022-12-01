@@ -112,6 +112,7 @@ public class PublicationController {
 
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
 			avalancheReport.setBulletins(regionBulletins);
+			avalancheReport.setGlobalBulletins(bulletins);
 			avalancheReport.setServerInstance(localServerInstance);
 
 			if (regionBulletins.isEmpty()) {
@@ -225,9 +226,11 @@ public class PublicationController {
 			if (region.getSubRegions().isEmpty()) {
 				avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
 				avalancheReport.setBulletins(regionBulletins);
+				avalancheReport.setGlobalBulletins(bulletins);
 			} else {
 				avalancheReport = new AvalancheReport();
 				avalancheReport.setBulletins(regionBulletins);
+				avalancheReport.setGlobalBulletins(bulletins);
 				avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
 				avalancheReport.setUser(user);
 				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
@@ -319,6 +322,7 @@ public class PublicationController {
 
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
 			avalancheReport.setBulletins(regionBulletins);
+			avalancheReport.setGlobalBulletins(bulletins);
 			avalancheReport.setServerInstance(localServerInstance);
 
 			if (regionBulletins.isEmpty()) {

@@ -107,6 +107,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	private List<AvalancheBulletin> bulletins;
 
 	@Transient
+	private List<AvalancheBulletin> globalBulletins;
+
+	@Transient
 	private String validityDateString;
 
 	@Transient
@@ -127,6 +130,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		avalancheReport.setRegion(region);
 		avalancheReport.setBulletins(bulletins); // after region
 		return avalancheReport;
+	}
+
+	public void setGlobalBulletins(List<AvalancheBulletin> globalBulletins) {
+		this.globalBulletins = globalBulletins;
 	}
 
 	public void setBulletins(List<AvalancheBulletin> bulletins) {
@@ -261,6 +268,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setJsonString(String jsonString) {
 		this.jsonString = jsonString;
+	}
+
+	public List<AvalancheBulletin> getGlobalBulletins() {
+		return globalBulletins;
 	}
 
 	public List<AvalancheBulletin> getBulletins() {

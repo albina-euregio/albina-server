@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.script.SimpleBindings;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.io.Resources;
@@ -107,14 +108,19 @@ public interface MapUtil {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
 
-		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(avalancheReport.getBulletins())) {
+		final List<AvalancheBulletin> bulletins = MoreObjects.firstNonNull(
+			// maps need all bulletins to paint neighboring micro regions!
+			avalancheReport.getGlobalBulletins(),
+			avalancheReport.getBulletins());
+
+		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(bulletins)) {
 			try {
-				final SimpleBindings bindings = createMayrusBindings(avalancheReport.getBulletins(), daytimeDependency, BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus()));
+				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus()));
 				for (MapLevel mapLevel : MapLevel.values()) {
 					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, false, bindings);
 					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, true, bindings);
 				}
-				for (final AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
+				for (final AvalancheBulletin bulletin : bulletins) {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
 						continue;
 					}

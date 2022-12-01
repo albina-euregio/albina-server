@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import eu.albina.ImageTestUtils;
 import eu.albina.model.AvalancheReport;
@@ -172,7 +173,11 @@ public class MapUtilTest {
 	public void testMapyrusMapsTyrol() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		AvalancheReport avalancheReport = AvalancheReport.of(AvalancheReport.of(bulletins, regionTyrol, null).getRegionBulletins(), regionTyrol, serverInstance);
+		final List<AvalancheBulletin> bulletinsTyrol = bulletins.stream()
+			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(regionTyrol))
+			.collect(Collectors.toList());
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletinsTyrol, regionTyrol, serverInstance);
+		avalancheReport.setGlobalBulletins(bulletins);
 		MapUtil.createMapyrusMaps(avalancheReport);
 		assertEquals("2019-01-17/2019-01-16_16-00-00/2019-01-17_AT-07_en.pdf",
 			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
