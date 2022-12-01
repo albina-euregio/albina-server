@@ -117,11 +117,6 @@ public class PdfUtil {
 	}
 
 	public Path createPdf() throws IOException {
-		List<AvalancheBulletin> regionBulletins = avalancheReport.getRegionBulletins();
-		if (regionBulletins.isEmpty()) {
-			return null;
-		}
-
 		Path path = getPath();
 		Files.createDirectories(path.getParent());
 		logger.info("Creating PDF {}", path);
@@ -145,7 +140,7 @@ public class PdfUtil {
 
 			createPdfFrontPage(pdf);
 
-			for (AvalancheBulletin bulletin : regionBulletins) {
+			for (AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
 				createPdfBulletinPage(bulletin, document);
 			}
 
@@ -173,6 +168,10 @@ public class PdfUtil {
 	 * detailed information about each aggregated region touching the province.
 	 */
 	public static void createRegionPdfs(AvalancheReport avalancheReport) {
+		List<AvalancheBulletin> regionBulletins = avalancheReport.getRegionBulletins();
+		if (regionBulletins.isEmpty()) {
+			return;
+		}
 		for (LanguageCode lang : LanguageCode.ENABLED) {
 			try {
 				logger.info("Creating PDF for region {}, language {}", avalancheReport.getRegion().getId(), lang);
