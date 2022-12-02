@@ -251,6 +251,11 @@ public class PublicationController {
 				avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
 			}
 
+			// maybe another region was not published at all
+			if (avalancheReport == null) {
+				continue;
+			}
+
 			// create CAAML
 			if (region.isCreateCaamlV5())
 				createCaamlV5(avalancheReport);
