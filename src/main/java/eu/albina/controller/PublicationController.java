@@ -252,7 +252,7 @@ public class PublicationController {
 			}
 
 			// maybe another region was not published at all
-			if (avalancheReport == null) {
+			if (avalancheReport == null || !(avalancheReport.getStatus() == BulletinStatus.published || avalancheReport.getStatus() == BulletinStatus.republished)) {
 				continue;
 			}
 
