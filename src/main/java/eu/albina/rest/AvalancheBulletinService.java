@@ -20,6 +20,7 @@ import java.io.File;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -392,6 +393,11 @@ public class AvalancheBulletinService {
 
 			AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
 
+			// save report for super regions
+			for (Region superRegion : region.getSuperRegions()) {
+				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
+			}
+
 			JSONObject jsonObject = new JSONObject();
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 					.entity(jsonObject.toString()).build();
@@ -437,6 +443,10 @@ public class AvalancheBulletinService {
 			List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().publishBulletins(startDate,
 					endDate, region, publicationTime, user);
 
+			region.getSuperRegions().stream().forEach(r -> {
+				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, r, publicationTime, user);
+			});
+
 			// select bulletins within the region
 			List<AvalancheBulletin> publishedBulletins = allBulletins.stream()
 				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
@@ -473,9 +483,23 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (regionId != null && user.hasPermissionForRegion(regionId)) {
-				List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
+				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
 						endDate, region, user);
-				AvalancheReportController.getInstance().submitReport(bulletins, startDate, region, user);
+
+				List<AvalancheBulletin> regionBulletins = allBulletins.stream()
+					.filter(bulletin -> bulletin.affectsRegion(region))
+					.collect(Collectors.toList());
+		
+				AvalancheReportController.getInstance().submitReport(regionBulletins, startDate, region, user);
+
+				// submit report for super regions
+				for (Region superRegion : region.getSuperRegions()) {
+					List<AvalancheBulletin> superRegionBulletins = allBulletins.stream()
+						.filter(bulletin -> bulletin.affectsRegion(superRegion))
+						.collect(Collectors.toList());
+
+					AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
+				}
 
 				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 			} else

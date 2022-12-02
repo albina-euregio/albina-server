@@ -241,18 +241,22 @@ public class PublicationController {
 				avalancheReport.setBulletins(regionBulletins);
 				avalancheReport.setGlobalBulletins(bulletins);
 				avalancheReport.setServerInstance(localServerInstance);
-	
+				
 				if (regionBulletins.isEmpty()) {
 					continue;
 				}
-	
+				
 				reportMap.put(region, avalancheReport);
 			} else {
 				avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
+				if (avalancheReport != null) {
+					avalancheReport.setBulletins(bulletins);
+					avalancheReport.setServerInstance(localServerInstance);
+				}
 			}
 
 			// maybe another region was not published at all
-			if (avalancheReport == null || !(avalancheReport.getStatus() == BulletinStatus.published || avalancheReport.getStatus() == BulletinStatus.republished)) {
+			if (avalancheReport == null || (avalancheReport.getStatus() != BulletinStatus.published && avalancheReport.getStatus() != BulletinStatus.republished)) {
 				continue;
 			}
 

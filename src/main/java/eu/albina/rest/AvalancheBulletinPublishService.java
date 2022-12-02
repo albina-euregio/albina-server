@@ -100,6 +100,10 @@ public class AvalancheBulletinPublishService {
 				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance()
 						.publishBulletins(startDate, endDate, region, publicationDate, user);
 
+				region.getSuperRegions().stream().forEach(r -> {
+					AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, r, publicationDate, user);
+				});
+
 				// select bulletins within the region
 				List<AvalancheBulletin> publishedBulletins = allBulletins.stream()
 					.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))

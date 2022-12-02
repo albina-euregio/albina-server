@@ -376,7 +376,7 @@ public class AvalancheBulletinController {
 	 *            the region that should be submitted
 	 * @param user
 	 *            the user who submits the bulletins
-	 * @return a list of all affected bulletins
+	 * @return a list of all bulletins
 	 */
 	public List<AvalancheBulletin> submitBulletins(Instant startDate, Instant endDate, Region region, User user) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
@@ -411,7 +411,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin avalancheBulletin : bulletins)
 				initializeBulletin(avalancheBulletin);
 
-			return results;
+			return bulletins;
 		});
 	}
 
