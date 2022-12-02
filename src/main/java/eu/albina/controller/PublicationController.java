@@ -21,8 +21,10 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
@@ -204,10 +206,10 @@ public class PublicationController {
 	 *
 	 * @param bulletins
 	 *            The bulletins that were updated.
-	 * @param updatedRegions
+	 * @param regions
 	 *            The regions that were updated.
 	 */
-	public void update(List<AvalancheBulletin> bulletins, List<Region> updatedRegions, User user, Instant publicationDate, Instant startDate) {
+	public void update(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate) {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
@@ -216,34 +218,37 @@ public class PublicationController {
 
 		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
 
+		// add super regions to send notifications
+		Set<Region> updatedRegions = new HashSet<Region>(regions);
+		for (Region region : regions) {
+			for (Region superRegion : region.getSuperRegions()) {
+				if (!updatedRegions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+					updatedRegions.add(superRegion);
+			}
+		}
+
 		// update all regions to create complete maps
 		for (Region region : RegionController.getInstance().getRegions()) {
 
-			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
-
 			AvalancheReport avalancheReport;
-			if (region.getSubRegions().isEmpty()) {
+
+			// publish report and add report if region was updated (to send notifications later on)
+			if (updatedRegions.contains(region)) {
+
+				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+
 				avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
 				avalancheReport.setBulletins(regionBulletins);
 				avalancheReport.setGlobalBulletins(bulletins);
-			} else {
-				avalancheReport = new AvalancheReport();
-				avalancheReport.setBulletins(regionBulletins);
-				avalancheReport.setGlobalBulletins(bulletins);
-				avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
-				avalancheReport.setUser(user);
-				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
-				avalancheReport.setRegion(region);
-			}
-			avalancheReport.setServerInstance(localServerInstance);
-
-			if (regionBulletins.isEmpty()) {
-				continue;
-			}
-			
-			// add report if region was updated (to send notifications later on)
-			if (updatedRegions.contains(region)) {
+				avalancheReport.setServerInstance(localServerInstance);
+	
+				if (regionBulletins.isEmpty()) {
+					continue;
+				}
+	
 				reportMap.put(region, avalancheReport);
+			} else {
+				avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
 			}
 
 			// create CAAML

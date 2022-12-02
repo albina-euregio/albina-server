@@ -28,6 +28,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Strings;
+
 import eu.albina.model.AbstractPersistentObject;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -263,7 +264,7 @@ public class AvalancheReportController {
 	 * @return the public report for specific {@code date} and {@code region} or
 	 *         null if not report was found
 	 */
-	private AvalancheReport getPublicReport(Instant date, Region region) {
+	protected AvalancheReport getPublicReport(Instant date, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
