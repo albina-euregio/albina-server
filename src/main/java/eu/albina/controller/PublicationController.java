@@ -18,13 +18,10 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
@@ -104,6 +101,8 @@ public class PublicationController {
 
 		Collections.sort(bulletins);
 
+		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
+
 		for (Region region : RegionController.getInstance().getRegions()) {
 
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
@@ -118,6 +117,8 @@ public class PublicationController {
 			if (regionBulletins.isEmpty()) {
 				continue;
 			}
+
+			reportMap.put(region, avalancheReport);
 
 			// create CAAML
 			if (region.isCreateCaamlV5())
@@ -158,17 +159,20 @@ public class PublicationController {
 							logger.error(key + " thread interrupted", e);
 						}
 					}
-
-					if (region.isCreateMaps()) {
-						new Thread(() -> sendEmails(avalancheReport)).start();
-						new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
-						new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
-					}
 				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
 			} catch (Exception e1) {
 				logger.error("Error during map production", e1);
+			}
+		}
+
+		// send notifications after all maps were created
+		for (AvalancheReport avalancheReport : reportMap.values()) {
+			if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
+				new Thread(() -> sendEmails(avalancheReport)).start();
+				new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
+				new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
 			}
 		}
 
@@ -199,26 +203,20 @@ public class PublicationController {
 	 *
 	 * @param bulletins
 	 *            The bulletins that were updated.
-	 * @param regions
-	 *            The region that was updated.
+	 * @param updatedRegions
+	 *            The regions that were updated.
 	 */
-	public void update(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate) {
+	public void update(List<AvalancheBulletin> bulletins, List<Region> updatedRegions, User user, Instant publicationDate, Instant startDate) {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
-		// update also super regions
-		Set<Region> updateRegions = new HashSet<Region>(regions);
-		for (Region region : regions) {
-			for (Region superRegion : region.getSuperRegions()) {
-				if (!updateRegions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
-					updateRegions.add(superRegion);
-			}
-		}
-
 		Collections.sort(bulletins);
 
-		for (Region region : updateRegions) {
+		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
+
+		// update all regions to create complete maps
+		for (Region region : RegionController.getInstance().getRegions()) {
 
 			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 
@@ -240,6 +238,11 @@ public class PublicationController {
 
 			if (regionBulletins.isEmpty()) {
 				continue;
+			}
+			
+			// add report if region was updated (to send notifications later on)
+			if (updatedRegions.contains(region)) {
+				reportMap.put(region, avalancheReport);
 			}
 
 			// create CAAML
@@ -281,17 +284,20 @@ public class PublicationController {
 							logger.error(key + " thread interrupted", e);
 						}
 					}
-
-					if (region.isCreateMaps()) {
-						new Thread(() -> sendEmails(avalancheReport)).start();
-						new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
-						new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
-					}
 				}
 			} catch (InterruptedException e) {
 				logger.error("Map production interrupted", e);
 			} catch (Exception e1) {
 				logger.error("Error during map production", e1);
+			}
+		}
+
+		// send notifications only for updated regions after all maps were created
+		for (AvalancheReport avalancheReport : reportMap.values()) {
+			if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
+				new Thread(() -> sendEmails(avalancheReport)).start();
+				new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
+				new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
 			}
 		}
 
