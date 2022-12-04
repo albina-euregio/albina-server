@@ -28,15 +28,14 @@
       "validTimePeriod" : "later"
     } ],
     "bulletinID" : "bbd97cc3-7de3-468c-afaf-2dfe0ffc3d7a",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "DP5",
-      "name" : "dp.5: snowfall after a long period of cold"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2018-12-27"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6", "DP5" ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "considerable",
       "validTimePeriod" : "earlier"
@@ -147,15 +146,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "c343a071-3c30-4d36-9796-225cb4db1ffa",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "DP2",
-      "name" : "dp.2: gliding snow"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2018-12-27"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6", "DP2" ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "moderate",
       "validTimePeriod" : "all_day"
@@ -216,15 +214,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "8604e1dc-ecab-4947-9989-9ea9d73b7f32",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "DP5",
-      "name" : "dp.5: snowfall after a long period of cold"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2018-12-27"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6", "DP5" ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "considerable",
       "validTimePeriod" : "all_day"
@@ -284,7 +281,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "e9cc9692-76d4-4b7f-a709-13ad0dd5faf6",
-    "customData" : [ ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2018-12-27"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "moderate",
       "validTimePeriod" : "all_day"
@@ -358,11 +362,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "45fbe7ff-2c98-4371-8ad8-6f9cb52aa541",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2018-12-27"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6" ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "moderate",
       "validTimePeriod" : "all_day"
@@ -409,7 +416,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "2f57292b-a9e7-48c4-bc65-1d9641fe7d3e",
-    "customData" : [ ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2018-12-27"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "low",
       "validTimePeriod" : "all_day"

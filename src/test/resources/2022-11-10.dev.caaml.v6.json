@@ -26,11 +26,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "06888f8d-9e6e-4b0b-9523-9aed9e52d9e7",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2022-11-10"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6" ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "1800"
@@ -87,11 +90,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "f4c31d95-94d0-47de-b678-8499f3ea080d",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2022-11-10"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6" ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "1800"
@@ -148,11 +154,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "5263ea68-d47a-45f2-85ae-4e1938c82044",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2022-11-10"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6" ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "1800"
@@ -209,11 +218,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "da6f43e1-ca07-4975-9ef6-42a335b5901d",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2022-11-10"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6" ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "1800"
@@ -270,11 +282,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "dba44dec-d2c5-43cd-8ee3-70d3fa58c2dc",
-    "customData" : [ {
-      "type" : "dangerPattern",
-      "id" : "DP6",
-      "name" : "dp.6: cold, loose snow and wind"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2022-11-10"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6" ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "1800"

@@ -24,6 +24,7 @@ import org.caaml.v6.ValidTime;
 import org.caaml.v6.ValidTimePeriod;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,13 +55,15 @@ interface Caaml6_2022 {
 			.map(p -> getAvalancheProblem(avalancheBulletin, p, lang))
 			.filter(Objects::nonNull).distinct().collect(Collectors.toList()));
 		bulletin.setBulletinID(avalancheBulletin.getId());
-		bulletin.setCustomData(Stream.of(avalancheBulletin.getDangerPattern1(), avalancheBulletin.getDangerPattern2())
+		List<String> dangerPatterns = Stream.of(avalancheBulletin.getDangerPattern1(), avalancheBulletin.getDangerPattern2())
 			.filter(Objects::nonNull)
-			.map(dp -> ImmutableMap.of(
-				"type", "dangerPattern",
-				"id", dp.name().toUpperCase(),
-				"name", AlbinaUtil.getDangerPatternText(dp, lang)))
-			.collect(Collectors.toList()));
+			.map(dp -> dp.name().toUpperCase())
+			.collect(Collectors.toList());
+		bulletin.setCustomData(ImmutableMap.of(
+				"ALBINA", ImmutableMap.of("mainDate", avalancheBulletin.getValidityDate().toLocalDate().toString()),
+				"LWD_Tyrol", ImmutableMap.of("dangerPatterns", dangerPatterns)
+			)
+		);
 		bulletin.setDangerRatings(Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
 			.filter(Objects::nonNull)
 			.flatMap(daytime -> Stream.of(
