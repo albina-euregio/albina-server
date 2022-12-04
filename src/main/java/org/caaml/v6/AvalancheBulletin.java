@@ -13,7 +13,7 @@ public class AvalancheBulletin {
     private Texts avalancheActivity;
     private List<AvalancheProblem> avalancheProblems;
     private String bulletinID;
-    private CustomData[] customData;
+    private Object customData;
     private List<DangerRating> dangerRatings;
     private String highlights;
     private String lang;
@@ -46,8 +46,8 @@ public class AvalancheBulletin {
     public String getBulletinID() { return bulletinID; }
     public void setBulletinID(String value) { this.bulletinID = value; }
 
-    public CustomData[] getCustomData() { return customData; }
-    public void setCustomData(CustomData[] value) { this.customData = value; }
+    public Object getCustomData() { return customData; }
+    public void setCustomData(Object value) { this.customData = value; }
 
     /**
      * Collection of Danger Rating elements for this bulletin.

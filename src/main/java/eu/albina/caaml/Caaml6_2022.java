@@ -3,6 +3,7 @@ package eu.albina.caaml;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
@@ -14,7 +15,6 @@ import eu.albina.util.AlbinaUtil;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.AvalancheSituationTendency;
-import org.caaml.v6.CustomData;
 import org.caaml.v6.DangerRatingValue;
 import org.caaml.v6.ElevationBoundaryOrBand;
 import org.caaml.v6.ExpectedAvalancheFrequency;
@@ -22,7 +22,6 @@ import org.caaml.v6.ExpectedSnowpackStability;
 import org.caaml.v6.TendencyType;
 import org.caaml.v6.ValidTime;
 import org.caaml.v6.ValidTimePeriod;
-import org.caaml.v6.albina.DangerPattern;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -57,8 +56,11 @@ interface Caaml6_2022 {
 		bulletin.setBulletinID(avalancheBulletin.getId());
 		bulletin.setCustomData(Stream.of(avalancheBulletin.getDangerPattern1(), avalancheBulletin.getDangerPattern2())
 			.filter(Objects::nonNull)
-			.map(dp -> new DangerPattern(dp, AlbinaUtil.getDangerPatternText(dp, lang)))
-			.toArray(CustomData[]::new));
+			.map(dp -> ImmutableMap.of(
+				"type", "dangerPattern",
+				"id", dp.name().toUpperCase(),
+				"name", AlbinaUtil.getDangerPatternText(dp, lang)))
+			.collect(Collectors.toList()));
 		bulletin.setDangerRatings(Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
 			.filter(Objects::nonNull)
 			.flatMap(daytime -> Stream.of(

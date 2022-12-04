@@ -6,7 +6,7 @@ package org.caaml.v6;
  */
 public class AvalancheBulletinProvider {
     private Person contactPerson;
-    private CustomData[] customData;
+    private Object customData;
     private MetaData metaData;
     private String name;
     private String website;
@@ -14,8 +14,8 @@ public class AvalancheBulletinProvider {
     public Person getContactPerson() { return contactPerson; }
     public void setContactPerson(Person value) { this.contactPerson = value; }
 
-    public CustomData[] getCustomData() { return customData; }
-    public void setCustomData(CustomData[] value) { this.customData = value; }
+    public Object getCustomData() { return customData; }
+    public void setCustomData(Object value) { this.customData = value; }
 
     public MetaData getMetaData() { return metaData; }
     public void setMetaData(MetaData value) { this.metaData = value; }
