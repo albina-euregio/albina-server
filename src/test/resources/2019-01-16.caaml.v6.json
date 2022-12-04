@@ -24,10 +24,7 @@
       "validTimePeriod" : "later"
     } ],
     "bulletinID" : "a19bd3dc-85df-448f-be5e-f88f0c14ed4f",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    } ],
+    "customData" : [ ],
     "dangerRatings" : [ {
       "mainValue" : "considerable",
       "validTimePeriod" : "earlier"
@@ -99,10 +96,7 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "a2dda2a6-f451-4fac-ac81-4acd051f47a6",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    } ],
+    "customData" : [ ],
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "2000"
@@ -162,10 +156,7 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "c0fba3a0-9ca2-4dd9-a198-9a59a3f8b77a",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    } ],
+    "customData" : [ ],
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "2300"
@@ -229,9 +220,6 @@
     } ],
     "bulletinID" : "hbc68380-6475-4726-95ce-d946e3a2cf79",
     "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    }, {
       "type" : "dangerPattern",
       "id" : "dp6",
       "name" : "dp.6: cold, loose snow and wind"
@@ -359,9 +347,6 @@
     } ],
     "bulletinID" : "cfcbf4e6-73cd-4d0a-98d4-0c06a519bf30",
     "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    }, {
       "type" : "dangerPattern",
       "id" : "dp6",
       "name" : "dp.6: cold, loose snow and wind"
@@ -412,10 +397,7 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "j1c0717f-2aaa-444f-b06e-9d6ffddd417a",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    } ],
+    "customData" : [ ],
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "treeline"
@@ -475,10 +457,7 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "m50f79b9-39bb-4b44-b795-536319013cad",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    } ],
+    "customData" : [ ],
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "2200"
@@ -540,10 +519,7 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "c06be44f-9ec4-4e78-b534-2e3f87f7aa3d",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    } ],
+    "customData" : [ ],
     "dangerRatings" : [ {
       "mainValue" : "low",
       "validTimePeriod" : "all_day"
@@ -618,10 +594,7 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "a7bbc5cb-db37-4577-a328-95e639ff969d",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    } ],
+    "customData" : [ ],
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "1800"
@@ -685,9 +658,6 @@
     } ],
     "bulletinID" : "f6c0b17f-136f-4c03-a0b7-4e4af39a3ade",
     "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    }, {
       "type" : "dangerPattern",
       "id" : "dp6",
       "name" : "dp.6: cold, loose snow and wind"
@@ -748,10 +718,7 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "vfd074b7-c2dd-4da8-8d7d-038471d4b5a9",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-16"
-    } ],
+    "customData" : [ ],
     "dangerRatings" : [ {
       "mainValue" : "low",
       "validTimePeriod" : "all_day"
@@ -778,9 +745,5 @@
       "startTime" : "2019-01-15T23:00:00Z"
     },
     "wxSynopsis" : { }
-  } ],
-  "customData" : [ {
-    "type" : "mainDate",
-    "mainDate" : "2019-01-16"
   } ]
 }
