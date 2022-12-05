@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.google.common.io.Resources;
@@ -544,8 +543,7 @@ public class PdfUtil {
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
 
-		cell = new Cell(1, 1).add(createAvalancheProblems(daytimeBulletin, lang,
-			grayscale));
+		cell = new Cell(1, 1).add(createAvalancheProblems(daytimeBulletin));
 		cell.setTextAlignment(TextAlignment.LEFT);
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
@@ -553,7 +551,7 @@ public class PdfUtil {
 		return table;
 	}
 
-	private Table createAvalancheProblems(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang, boolean grayscale) {
+	private Table createAvalancheProblems(AvalancheBulletinDaytimeDescription daytimeBulletin) {
 
 		float[] columnWidths = { 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
@@ -561,32 +559,32 @@ public class PdfUtil {
 		if (daytimeBulletin.getAvalancheProblem1() != null
 				&& daytimeBulletin.getAvalancheProblem1().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), table
+			);
 		}
 		if (daytimeBulletin.getAvalancheProblem2() != null
 				&& daytimeBulletin.getAvalancheProblem2().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), table
+			);
 		}
 		if (daytimeBulletin.getAvalancheProblem3() != null
 				&& daytimeBulletin.getAvalancheProblem3().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), table
+			);
 		}
 		if (daytimeBulletin.getAvalancheProblem4() != null
 				&& daytimeBulletin.getAvalancheProblem4().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), table
+			);
 		}
 		if (daytimeBulletin.getAvalancheProblem5() != null
 				&& daytimeBulletin.getAvalancheProblem5().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), table
+			);
 		}
 
 		return table;
@@ -598,7 +596,7 @@ public class PdfUtil {
 		return new Image(imageData);
 	}
 
-	private void createAvalancheProblem(AvalancheProblem avalancheProblem, LanguageCode lang, Table table, boolean grayscale) {
+	private void createAvalancheProblem(AvalancheProblem avalancheProblem, Table table) {
 		float[] avalancheProblemColumnWidths = { 1 };
 		Table avalancheProblemTable;
 		Paragraph paragraph;
