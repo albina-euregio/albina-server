@@ -18,7 +18,6 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -330,23 +329,41 @@ public class PublicationController {
 	 * @param bulletins
 	 *            The bulletins that were changed.
 	 */
-	public void change(List<AvalancheBulletin> bulletins, User user, Instant startDate) {
+	public void change(List<AvalancheBulletin> bulletins, User user, Instant startDate, Region changedRegion) {
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		Collections.sort(bulletins);
 
+		// reproduce resources for all regions
 		for (Region region : RegionController.getInstance().getRegions()) {
 
-			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+			AvalancheReport avalancheReport;
 
-			AvalancheReport avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
-			avalancheReport.setBulletins(regionBulletins);
-			avalancheReport.setGlobalBulletins(bulletins);
-			avalancheReport.setServerInstance(localServerInstance);
+			// change report if region was changed
+			if (region.equals(changedRegion)) {
 
-			if (regionBulletins.isEmpty()) {
+				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+
+				avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
+				avalancheReport.setBulletins(regionBulletins);
+				avalancheReport.setGlobalBulletins(bulletins);
+				avalancheReport.setServerInstance(localServerInstance);
+				
+				if (regionBulletins.isEmpty()) {
+					continue;
+				}
+			} else {
+				avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
+				if (avalancheReport != null) {
+					avalancheReport.setBulletins(bulletins);
+					avalancheReport.setServerInstance(localServerInstance);
+				}
+			}
+
+			// maybe another region was not published at all
+			if (avalancheReport == null || (avalancheReport.getStatus() != BulletinStatus.published && avalancheReport.getStatus() != BulletinStatus.republished)) {
 				continue;
 			}
 
@@ -455,7 +472,7 @@ public class PublicationController {
 						&& !avalancheBulletin.getPublishedRegions().isEmpty())
 					.collect(Collectors.toList());
 				if (result != null && !result.isEmpty())
-					PublicationController.getInstance().change(result, user, startDate);
+					PublicationController.getInstance().change(result, user, startDate, region);
 			}
 		}).start();
 	}
