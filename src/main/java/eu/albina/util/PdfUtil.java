@@ -30,6 +30,7 @@ import com.google.common.io.Resources;
 
 import eu.albina.map.MapImageFormat;
 import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.WebColors;
 import com.itextpdf.layout.properties.UnitValue;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
@@ -183,8 +184,7 @@ public class PdfUtil {
 	}
 
 	protected static Color getColor(String hex) {
-		final int[] rgb = IntStream.range(0, 3).map(i -> Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16)).toArray();
-		return new DeviceRgb(rgb[0], rgb[1], rgb[2]);
+		return WebColors.getRGBColor(hex);
 	}
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, Document document) throws IOException {
