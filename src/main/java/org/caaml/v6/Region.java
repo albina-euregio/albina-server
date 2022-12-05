@@ -6,7 +6,7 @@ package org.caaml.v6;
  * gitlab.com/eaws/eaws-regions. Additionally, the region name can be added.
  */
 public class Region {
-    private CustomData[] customData;
+    private Object customData;
     private MetaData metaData;
     private String name;
     private String regionID;
@@ -19,8 +19,8 @@ public class Region {
 		this.regionID = regionID;
 	}
 
-	public CustomData[] getCustomData() { return customData; }
-    public void setCustomData(CustomData[] value) { this.customData = value; }
+	public Object getCustomData() { return customData; }
+    public void setCustomData(Object value) { this.customData = value; }
 
     public MetaData getMetaData() { return metaData; }
     public void setMetaData(MetaData value) { this.metaData = value; }

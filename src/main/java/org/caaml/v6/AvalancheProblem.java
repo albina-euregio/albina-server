@@ -11,7 +11,7 @@ import java.util.Objects;
 public class AvalancheProblem {
     private List<Aspect> aspects;
     private Integer avalancheSize;
-    private CustomData[] customData;
+    private Object customData;
     private ElevationBoundaryOrBand elevation;
     private ExpectedAvalancheFrequency frequency;
     private MetaData metaData;
@@ -26,8 +26,8 @@ public class AvalancheProblem {
     public Integer getAvalancheSize() { return avalancheSize; }
     public void setAvalancheSize(Integer value) { this.avalancheSize = value; }
 
-    public CustomData[] getCustomData() { return customData; }
-    public void setCustomData(CustomData[] value) { this.customData = value; }
+    public Object getCustomData() { return customData; }
+    public void setCustomData(Object value) { this.customData = value; }
 
     public ElevationBoundaryOrBand getElevation() { return elevation; }
     public void setElevation(ElevationBoundaryOrBand value) { this.elevation = value; }
