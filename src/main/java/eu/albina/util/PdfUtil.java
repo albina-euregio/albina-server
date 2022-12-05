@@ -34,6 +34,7 @@ import com.itextpdf.kernel.colors.WebColors;
 import com.itextpdf.layout.properties.UnitValue;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -553,7 +554,7 @@ public class PdfUtil {
 
 	private Table createAvalancheProblems(AvalancheBulletinDaytimeDescription daytimeBulletin) {
 
-		float[] columnWidths = { 1, 1, 1, 1 };
+		float[] columnWidths = { 1, 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
 
 		if (daytimeBulletin.getAvalancheProblem1() != null
@@ -597,8 +598,7 @@ public class PdfUtil {
 		table.addCell(getAvalancheProblemCell(avalancheProblem.getAvalancheProblem()));
 		table.addCell(getAspectsCell(avalancheProblem.getAspects()));
 		table.addCell(getElevationCell(avalancheProblem, table));
-
-		// TODO add matrix information
+		table.addCell(getMatrixInformationCell(avalancheProblem.getEawsMatrixInformation()));
 	}
 
 	private Cell getAvalancheProblemCell(eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
@@ -818,6 +818,35 @@ public class PdfUtil {
 		cell.setBorder(Border.NO_BORDER);
 		cell.add(elevationTable);
 		cell.setPadding(0);
+		return cell;
+	}
+
+	private Cell getMatrixInformationCell(EawsMatrixInformation matrixInformation) {
+		if (matrixInformation == null) {
+			return new Cell().setBorder(null);
+		}
+		Paragraph paragraph = new Paragraph().setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
+		if (matrixInformation.getSnowpackStability() != null) {
+			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability") + ": "));
+			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability." + matrixInformation.getSnowpackStability()) + "\n")
+				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
+		}
+		if (matrixInformation.getFrequency() != null) {
+			paragraph.add(new Text(lang.getBundleString("problem.frequency") + ": "));
+			paragraph.add(new Text(lang.getBundleString("problem.frequency." + matrixInformation.getFrequency()) + "\n")
+				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
+		}
+		if (matrixInformation.getAvalancheSize() != null) {
+			paragraph.add(new Text(lang.getBundleString("problem.avalanche-size") + ": "));
+			paragraph.add(new Text(lang.getBundleString("problem.avalanche-size." + matrixInformation.getAvalancheSize()) + "\n")
+				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
+		}
+		Cell cell = new Cell(1, 1);
+		cell.setTextAlignment(TextAlignment.LEFT);
+		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+		cell.setBorder(Border.NO_BORDER);
+		cell.setPadding(0);
+		cell.add(paragraph);
 		return cell;
 	}
 
