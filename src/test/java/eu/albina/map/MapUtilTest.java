@@ -212,6 +212,16 @@ public class MapUtilTest {
 	}
 
 	@Test
+	@Ignore
+	public void testMapyrusMapsAranMatrixInformation() throws Exception {
+		URL resource = Resources.getResource("lauegi.report-2022-12-06/ES-CT-L.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
+		MapUtil.createMapyrusMaps(avalancheReport);
+		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
+	}
+
+	@Test
 	@Ignore("fix path")
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");

@@ -24,16 +24,17 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.google.common.io.Resources;
 
 import eu.albina.map.MapImageFormat;
 import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.WebColors;
 import com.itextpdf.layout.properties.UnitValue;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,8 +185,7 @@ public class PdfUtil {
 	}
 
 	protected static Color getColor(String hex) {
-		final int[] rgb = IntStream.range(0, 3).map(i -> Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16)).toArray();
-		return new DeviceRgb(rgb[0], rgb[1], rgb[2]);
+		return WebColors.getRGBColor(hex);
 	}
 
 	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, Document document) throws IOException {
@@ -544,8 +544,7 @@ public class PdfUtil {
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
 
-		cell = new Cell(1, 1).add(createAvalancheProblems(daytimeBulletin, lang,
-			grayscale));
+		cell = new Cell(1, 1).add(createAvalancheProblems(daytimeBulletin));
 		cell.setTextAlignment(TextAlignment.LEFT);
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
@@ -553,300 +552,308 @@ public class PdfUtil {
 		return table;
 	}
 
-	private Table createAvalancheProblems(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang, boolean grayscale) {
+	private Table createAvalancheProblems(AvalancheBulletinDaytimeDescription daytimeBulletin) {
 
-		float[] columnWidths = { 1, 1, 1, 1 };
+		float[] columnWidths = { 1, 1, 1, 1, 1 };
 		Table table = new Table(columnWidths);
 
 		if (daytimeBulletin.getAvalancheProblem1() != null
 				&& daytimeBulletin.getAvalancheProblem1().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), table
+			);
 		}
 		if (daytimeBulletin.getAvalancheProblem2() != null
 				&& daytimeBulletin.getAvalancheProblem2().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), table
+			);
 		}
 		if (daytimeBulletin.getAvalancheProblem3() != null
 				&& daytimeBulletin.getAvalancheProblem3().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), table
+			);
 		}
 		if (daytimeBulletin.getAvalancheProblem4() != null
 				&& daytimeBulletin.getAvalancheProblem4().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), table
+			);
 		}
 		if (daytimeBulletin.getAvalancheProblem5() != null
 				&& daytimeBulletin.getAvalancheProblem5().getAvalancheProblem() != null) {
 			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), lang, table,
-				grayscale);
+			createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), table
+			);
 		}
 
 		return table;
+	}
+
+	private void createAvalancheProblem(AvalancheProblem avalancheProblem, Table table) {
+		if (avalancheProblem == null) {
+			return;
+		}
+		table.addCell(getAvalancheProblemCell(avalancheProblem.getAvalancheProblem()));
+		table.addCell(getAspectsCell(avalancheProblem.getAspects()));
+		table.addCell(getElevationCell(avalancheProblem, table));
+		table.addCell(getMatrixInformationCell(avalancheProblem.getEawsMatrixInformation()));
+	}
+
+	private Cell getAvalancheProblemCell(eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
+		if (avalancheProblem == null) {
+			return new Cell().setBorder(null);
+		}
+		float[] avalancheProblemColumnWidths = {1};
+		Table avalancheProblemTable = new Table(avalancheProblemColumnWidths).setBorder(Border.NO_BORDER);
+		avalancheProblemTable.setMarginLeft(0);
+		avalancheProblemTable.setMarginTop(5);
+		avalancheProblemTable.setWidth(60);
+		avalancheProblemTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
+		Image img = getImage(avalancheProblem.getSymbolPath(grayscale));
+		img.getAccessibilityProperties().setAlternateDescription(avalancheProblem.toString(lang.getLocale()));
+		img.scaleToFit(60, 35);
+
+		Cell cell = new Cell(1, 1).add(img);
+		cell.setBorder(Border.NO_BORDER);
+		cell.setWidth(60);
+		avalancheProblemTable.addCell(cell);
+		Paragraph paragraph = new Paragraph(avalancheProblem.toString(lang.getLocale()))
+			.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor)
+			.setMultipliedLeading(1.0f);
+
+		cell = new Cell(1, 1).add(paragraph);
+		cell.setBorder(Border.NO_BORDER);
+		avalancheProblemTable.addCell(cell);
+
+		cell = new Cell(1, 1);
+		cell.setBorder(Border.NO_BORDER);
+		cell.setPadding(0);
+		cell.add(avalancheProblemTable);
+		return cell;
+
+	}
+
+	private Cell getAspectsCell(Set<Aspect> aspects) {
+		if (aspects == null || aspects.size() <= 0) {
+			return new Cell().setBorder(null);
+		}
+		Image img = getImage(Aspect.getSymbolPath(aspects, grayscale));
+		img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(aspects, lang.getLocale()));
+		img.scaleToFit(30, 30);
+		Cell cell = new Cell(1, 1).add(img);
+		cell.setBorder(Border.NO_BORDER);
+		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+		return cell;
+	}
+
+	private Cell getElevationCell(AvalancheProblem avalancheProblem, Table table) {
+		int padding = 0;
+		Paragraph paragraph;
+		Cell cell;
+		Image img;
+
+		float[] elevationColumnWidths = { 1 };
+		Table elevationTable = new Table(elevationColumnWidths);
+
+		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
+			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
+				// elevation high and low set
+				if (grayscale)
+					img = getImage("elevation/grey/levels_middle_two.png");
+				else
+					img = getImage("elevation/color/levels_middle_two.png");
+				img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
+				img.scaleToFit(70, 25);
+				cell = new Cell(1, 1);
+				cell.setTextAlignment(TextAlignment.LEFT);
+				cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+				cell.setBorder(Border.NO_BORDER);
+				cell.setPadding(padding);
+				cell.add(img);
+				table.addCell(cell);
+				if (avalancheProblem.getTreelineHigh()) {
+					Paragraph paragraph2 = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
+					paragraph2.setRelativePosition(-6, 2, 0, 0);
+					cell = new Cell(1, 1);
+					cell.setTextAlignment(TextAlignment.LEFT);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					cell.setBorder(Border.NO_BORDER);
+					cell.setPadding(padding);
+					cell.add(paragraph2);
+					elevationTable.addCell(cell);
+				} else if (avalancheProblem.getElevationHigh() > 0) {
+					Paragraph paragraph2 = new Paragraph(avalancheProblem.getElevationHigh() + "m")
+						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
+					paragraph2.setRelativePosition(-6, 2, 0, 0);
+					cell = new Cell(1, 1);
+					cell.setTextAlignment(TextAlignment.LEFT);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					cell.setBorder(Border.NO_BORDER);
+					cell.setPadding(padding);
+					cell.add(paragraph2);
+					elevationTable.addCell(cell);
+				}
+				if (avalancheProblem.getTreelineLow()) {
+					Paragraph paragraph2 = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
+					paragraph2.setRelativePosition(-6, -3, 0, 0);
+					cell = new Cell(1, 1);
+					cell.setTextAlignment(TextAlignment.LEFT);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					cell.setBorder(Border.NO_BORDER);
+					cell.setPadding(padding);
+					cell.add(paragraph2);
+					elevationTable.addCell(cell);
+				} else if (avalancheProblem.getElevationLow() > 0) {
+					Paragraph paragraph2 = new Paragraph(avalancheProblem.getElevationLow() + "m")
+						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
+					paragraph2.setRelativePosition(-6, -3, 0, 0);
+					cell = new Cell(1, 1);
+					cell.setTextAlignment(TextAlignment.LEFT);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					cell.setBorder(Border.NO_BORDER);
+					cell.setPadding(padding);
+					cell.add(paragraph2);
+					elevationTable.addCell(cell);
+				}
+			} else {
+				// elevation high set
+				if (grayscale)
+					img = getImage("elevation/grey/levels_below.png");
+				else
+					img = getImage("elevation/color/levels_below.png");
+				img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
+				img.scaleToFit(70, 25);
+				cell = new Cell(1, 1);
+				cell.setTextAlignment(TextAlignment.LEFT);
+				cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+				cell.setBorder(Border.NO_BORDER);
+				cell.setPadding(padding);
+				cell.add(img);
+				table.addCell(cell);
+
+				if (avalancheProblem.getTreelineHigh()) {
+					paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
+					paragraph.setRelativePosition(-6, -4, 0, 0);
+					cell = new Cell(1, 1);
+					cell.setTextAlignment(TextAlignment.LEFT);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					cell.setBorder(Border.NO_BORDER);
+					cell.add(paragraph);
+					elevationTable.addCell(cell);
+				} else if (avalancheProblem.getElevationHigh() > 0) {
+					paragraph = new Paragraph(avalancheProblem.getElevationHigh() + "m").setFont(openSansBoldFont)
+						.setFontSize(8).setFontColor(blackColor);
+					paragraph.setRelativePosition(-6, -4, 0, 0);
+					cell = new Cell(1, 1);
+					cell.setTextAlignment(TextAlignment.LEFT);
+					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					cell.setBorder(Border.NO_BORDER);
+					cell.add(paragraph);
+					elevationTable.addCell(cell);
+				}
+			}
+		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
+			// elevation low set
+			if (grayscale)
+				img = getImage("elevation/grey/levels_above.png");
+			else
+				img = getImage("elevation/color/levels_above.png");
+			img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
+			img.scaleToFit(70, 25);
+			img.setMarginLeft(5);
+			cell = new Cell(1, 1);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(Border.NO_BORDER);
+			cell.setPadding(padding);
+			cell.add(img);
+			table.addCell(cell);
+
+			if (avalancheProblem.getTreelineLow()) {
+				paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+					.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
+				paragraph.setRelativePosition(-6, 4, 0, 0);
+				cell = new Cell(1, 1);
+				cell.setTextAlignment(TextAlignment.LEFT);
+				cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+				cell.setBorder(Border.NO_BORDER);
+				cell.add(paragraph);
+				elevationTable.addCell(cell);
+			} else if (avalancheProblem.getElevationLow() > 0) {
+				paragraph = new Paragraph(avalancheProblem.getElevationLow() + "m").setFont(openSansBoldFont)
+					.setFontSize(8).setFontColor(blackColor);
+				paragraph.setRelativePosition(-6, 4, 0, 0);
+				cell = new Cell(1, 1);
+				cell.setTextAlignment(TextAlignment.LEFT);
+				cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+				cell.setBorder(Border.NO_BORDER);
+				cell.add(paragraph);
+				elevationTable.addCell(cell);
+			}
+		} else {
+			// no elevation set
+			if (grayscale)
+				img = getImage("elevation/grey/levels_all.png");
+			else
+				img = getImage("elevation/color/levels_all.png");
+			img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
+			img.scaleToFit(70, 25);
+			img.setMarginLeft(5);
+			cell = new Cell(1, 1);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(Border.NO_BORDER);
+			cell.setPadding(padding);
+			cell.add(img);
+			table.addCell(cell);
+		}
+		cell = new Cell(1, 1);
+		cell.setTextAlignment(TextAlignment.LEFT);
+		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+		cell.setBorder(Border.NO_BORDER);
+		cell.add(elevationTable);
+		cell.setPadding(0);
+		return cell;
+	}
+
+	private Cell getMatrixInformationCell(EawsMatrixInformation matrixInformation) {
+		if (matrixInformation == null) {
+			return new Cell().setBorder(null);
+		}
+		Paragraph paragraph = new Paragraph().setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
+		if (matrixInformation.getSnowpackStability() != null) {
+			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability") + ": "));
+			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability." + matrixInformation.getSnowpackStability()) + "\n")
+				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
+		}
+		if (matrixInformation.getFrequency() != null) {
+			paragraph.add(new Text(lang.getBundleString("problem.frequency") + ": "));
+			paragraph.add(new Text(lang.getBundleString("problem.frequency." + matrixInformation.getFrequency()) + "\n")
+				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
+		}
+		if (matrixInformation.getAvalancheSize() != null) {
+			paragraph.add(new Text(lang.getBundleString("problem.avalanche-size") + ": "));
+			paragraph.add(new Text(lang.getBundleString("problem.avalanche-size." + matrixInformation.getAvalancheSize()) + "\n")
+				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
+		}
+		Cell cell = new Cell(1, 1);
+		cell.setTextAlignment(TextAlignment.LEFT);
+		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+		cell.setBorder(Border.NO_BORDER);
+		cell.setPadding(0);
+		cell.add(paragraph);
+		return cell;
 	}
 
 	public static Image getImage(String resourceName) {
 		URL resource = Resources.getResource("images/" + resourceName);
 		ImageData imageData = ImageDataFactory.create(resource);
 		return new Image(imageData);
-	}
-
-	private void createAvalancheProblem(AvalancheProblem avalancheProblem, LanguageCode lang, Table table, boolean grayscale) {
-		float[] avalancheProblemColumnWidths = { 1 };
-		Table avalancheProblemTable;
-		Paragraph paragraph;
-		Image img;
-		Cell cell;
-		int padding = 0;
-
-		if (avalancheProblem != null) {
-			if (avalancheProblem.getAvalancheProblem() != null) {
-				avalancheProblemTable = new Table(avalancheProblemColumnWidths).setBorder(Border.NO_BORDER);
-				avalancheProblemTable.setMarginLeft(0);
-				avalancheProblemTable.setMarginTop(5);
-				avalancheProblemTable.setWidth(60);
-				avalancheProblemTable.setHorizontalAlignment(HorizontalAlignment.CENTER);
-				img = getImage(avalancheProblem.getAvalancheProblem().getSymbolPath(grayscale));
-				if (img != null) {
-					img.getAccessibilityProperties().setAlternateDescription(avalancheProblem.getAvalancheProblem().toString(lang.getLocale()));
-					img.scaleToFit(60, 35);
-					cell = new Cell(1, 1).add(img);
-					cell.setBorder(Border.NO_BORDER);
-					cell.setWidth(60);
-					avalancheProblemTable.addCell(cell);
-				}
-				paragraph = new Paragraph(avalancheProblem.getAvalancheProblem().toString(lang.getLocale()))
-						.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor)
-						.setMultipliedLeading(1.0f);
-				cell = new Cell(1, 1).add(paragraph);
-				cell.setBorder(Border.NO_BORDER);
-				avalancheProblemTable.addCell(cell);
-
-				cell = new Cell(1, 1);
-				cell.setBorder(Border.NO_BORDER);
-				cell.setPadding(padding);
-				cell.add(avalancheProblemTable);
-				table.addCell(cell);
-			} else {
-				cell = new Cell().setBorder(null);
-				table.addCell(cell);
-			}
-
-			if (avalancheProblem.getAspects() != null && avalancheProblem.getAspects().size() > 0) {
-				Set<Aspect> aspects = avalancheProblem.getAspects();
-				img = getImage(Aspect.getSymbolPath(aspects, grayscale));
-				if (img != null) {
-					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(avalancheProblem.getAspects(), lang.getLocale()));
-					img.scaleToFit(30, 30);
-					cell = new Cell(1, 1).add(img);
-					cell.setBorder(Border.NO_BORDER);
-					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-					table.addCell(cell);
-				} else {
-					cell = new Cell().setBorder(null);
-					table.addCell(cell);
-				}
-			} else {
-				cell = new Cell().setBorder(null);
-				table.addCell(cell);
-			}
-
-			float[] elevationColumnWidths = { 1 };
-			Table elevationTable = new Table(elevationColumnWidths);
-
-			if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
-				if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-					// elevation high and low set
-					if (grayscale)
-						img = getImage("elevation/grey/levels_middle_two.png");
-					else
-						img = getImage("elevation/color/levels_middle_two.png");
-					if (img != null) {
-						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
-						img.scaleToFit(70, 25);
-						cell = new Cell(1, 1);
-						cell.setTextAlignment(TextAlignment.LEFT);
-						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-						cell.setBorder(Border.NO_BORDER);
-						cell.setPadding(padding);
-						cell.add(img);
-						table.addCell(cell);
-					} else {
-						cell = new Cell().setBorder(null);
-						table.addCell(cell);
-					}
-					if (avalancheProblem.getTreelineHigh()) {
-						Paragraph paragraph2 = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
-						paragraph2.setRelativePosition(-6, 2, 0, 0);
-						cell = new Cell(1, 1);
-						cell.setTextAlignment(TextAlignment.LEFT);
-						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-						cell.setBorder(Border.NO_BORDER);
-						cell.setPadding(padding);
-						cell.add(paragraph2);
-						elevationTable.addCell(cell);
-					} else if (avalancheProblem.getElevationHigh() > 0) {
-						Paragraph paragraph2 = new Paragraph(avalancheProblem.getElevationHigh() + "m")
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
-						paragraph2.setRelativePosition(-6, 2, 0, 0);
-						cell = new Cell(1, 1);
-						cell.setTextAlignment(TextAlignment.LEFT);
-						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-						cell.setBorder(Border.NO_BORDER);
-						cell.setPadding(padding);
-						cell.add(paragraph2);
-						elevationTable.addCell(cell);
-					}
-					if (avalancheProblem.getTreelineLow()) {
-						Paragraph paragraph2 = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
-						paragraph2.setRelativePosition(-6, -3, 0, 0);
-						cell = new Cell(1, 1);
-						cell.setTextAlignment(TextAlignment.LEFT);
-						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-						cell.setBorder(Border.NO_BORDER);
-						cell.setPadding(padding);
-						cell.add(paragraph2);
-						elevationTable.addCell(cell);
-					} else if (avalancheProblem.getElevationLow() > 0) {
-						Paragraph paragraph2 = new Paragraph(avalancheProblem.getElevationLow() + "m")
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
-						paragraph2.setRelativePosition(-6, -3, 0, 0);
-						cell = new Cell(1, 1);
-						cell.setTextAlignment(TextAlignment.LEFT);
-						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-						cell.setBorder(Border.NO_BORDER);
-						cell.setPadding(padding);
-						cell.add(paragraph2);
-						elevationTable.addCell(cell);
-					}
-				} else {
-					// elevation high set
-					if (grayscale)
-						img = getImage("elevation/grey/levels_below.png");
-					else
-						img = getImage("elevation/color/levels_below.png");
-					if (img != null) {
-						img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
-						img.scaleToFit(70, 25);
-						cell = new Cell(1, 1);
-						cell.setTextAlignment(TextAlignment.LEFT);
-						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-						cell.setBorder(Border.NO_BORDER);
-						cell.setPadding(padding);
-						cell.add(img);
-						table.addCell(cell);
-					} else {
-						cell = new Cell().setBorder(null);
-						table.addCell(cell);
-					}
-
-					if (avalancheProblem.getTreelineHigh()) {
-						paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
-								.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
-						paragraph.setRelativePosition(-6, -4, 0, 0);
-						cell = new Cell(1, 1);
-						cell.setTextAlignment(TextAlignment.LEFT);
-						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-						cell.setBorder(Border.NO_BORDER);
-						cell.add(paragraph);
-						elevationTable.addCell(cell);
-					} else if (avalancheProblem.getElevationHigh() > 0) {
-						paragraph = new Paragraph(avalancheProblem.getElevationHigh() + "m").setFont(openSansBoldFont)
-								.setFontSize(8).setFontColor(blackColor);
-						paragraph.setRelativePosition(-6, -4, 0, 0);
-						cell = new Cell(1, 1);
-						cell.setTextAlignment(TextAlignment.LEFT);
-						cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-						cell.setBorder(Border.NO_BORDER);
-						cell.add(paragraph);
-						elevationTable.addCell(cell);
-					}
-				}
-			} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-				// elevation low set
-				if (grayscale)
-					img = getImage("elevation/grey/levels_above.png");
-				else
-					img = getImage("elevation/color/levels_above.png");
-				if (img != null) {
-					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
-					img.scaleToFit(70, 25);
-					img.setMarginLeft(5);
-					cell = new Cell(1, 1);
-					cell.setTextAlignment(TextAlignment.LEFT);
-					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-					cell.setBorder(Border.NO_BORDER);
-					cell.setPadding(padding);
-					cell.add(img);
-					table.addCell(cell);
-				} else {
-					cell = new Cell().setBorder(null);
-					table.addCell(cell);
-				}
-
-				if (avalancheProblem.getTreelineLow()) {
-					paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
-							.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
-					paragraph.setRelativePosition(-6, 4, 0, 0);
-					cell = new Cell(1, 1);
-					cell.setTextAlignment(TextAlignment.LEFT);
-					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-					cell.setBorder(Border.NO_BORDER);
-					cell.add(paragraph);
-					elevationTable.addCell(cell);
-				} else if (avalancheProblem.getElevationLow() > 0) {
-					paragraph = new Paragraph(avalancheProblem.getElevationLow() + "m").setFont(openSansBoldFont)
-							.setFontSize(8).setFontColor(blackColor);
-					paragraph.setRelativePosition(-6, 4, 0, 0);
-					cell = new Cell(1, 1);
-					cell.setTextAlignment(TextAlignment.LEFT);
-					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-					cell.setBorder(Border.NO_BORDER);
-					cell.add(paragraph);
-					elevationTable.addCell(cell);
-				}
-			} else {
-				// no elevation set
-				if (grayscale)
-					img = getImage("elevation/grey/levels_all.png");
-				else
-					img = getImage("elevation/color/levels_all.png");
-				if (img != null) {
-					img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
-					img.scaleToFit(70, 25);
-					img.setMarginLeft(5);
-					cell = new Cell(1, 1);
-					cell.setTextAlignment(TextAlignment.LEFT);
-					cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-					cell.setBorder(Border.NO_BORDER);
-					cell.setPadding(padding);
-					cell.add(img);
-					table.addCell(cell);
-				} else {
-					cell = new Cell().setBorder(null);
-					table.addCell(cell);
-				}
-			}
-
-			cell = new Cell(1, 1);
-			cell.setTextAlignment(TextAlignment.LEFT);
-			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-			cell.setBorder(Border.NO_BORDER);
-			cell.add(elevationTable);
-			cell.setPadding(padding);
-			table.addCell(cell);
-
-			// TODO add matrix information
-		}
 	}
 
 	private Color getDangerRatingColor(DangerRating dangerRating, boolean grayscale) {
