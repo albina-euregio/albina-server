@@ -145,42 +145,34 @@ public class CaamlTest {
 		return report;
 	}
 
-	private static String buildCAAML(String resourceName) throws IOException {
-		final URL resource = Resources.getResource(resourceName);
+	private static void toCAAMLv6_2022(String bulletinResource, String expectedCaamlResource) throws IOException {
+		final URL resource = Resources.getResource(bulletinResource);
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
-		return Caaml6_2022.toCAAMLv6String_2022(avalancheReport, LanguageCode.en);
+		final String caaml = Caaml6_2022.toCAAMLv6String_2022(avalancheReport, LanguageCode.en);
+		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
+		final String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
+		assertEquals(expected.trim(), caaml.trim());
+		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
 	}
 
 	@Test
 	public void toCAAMLv6_2022a() throws Exception {
-		final String caaml = buildCAAML("2019-01-16.json");
-		final String expected = Resources.toString(Resources.getResource("2019-01-16.caaml.v6.json"), StandardCharsets.UTF_8);
-		assertEquals(expected.trim(), caaml.trim());
-		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+		toCAAMLv6_2022("2019-01-16.json", "2019-01-16.caaml.v6.json");
 	}
 
 	@Test
 	public void toCAAMLv6_2022b() throws Exception {
-		final String caaml = buildCAAML("2019-01-17.json");
-		final String expected = Resources.toString(Resources.getResource("2019-01-17.caaml.v6.json"), StandardCharsets.UTF_8);
-		assertEquals(expected.trim(), caaml.trim());
-		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+		toCAAMLv6_2022("2019-01-17.json", "2019-01-17.caaml.v6.json");
 	}
 
 	@Test
 	public void toCAAMLv6_2022c() throws Exception {
-		final String caaml = buildCAAML("2022-11-10.dev.json");
-		final String expected = Resources.toString(Resources.getResource("2022-11-10.dev.caaml.v6.json"), StandardCharsets.UTF_8);
-		assertEquals(expected.trim(), caaml.trim());
-		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+		toCAAMLv6_2022("2022-11-10.dev.json", "2022-11-10.dev.caaml.v6.json");
 	}
 
 	@Test
 	public void toCAAMLv6_2022d() throws Exception {
-		final String caaml = buildCAAML("2018-12-27.json");
-		final String expected = Resources.toString(Resources.getResource("2018-12-27.caaml.v6.json"), StandardCharsets.UTF_8);
-		assertEquals(expected.trim(), caaml.trim());
-		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+		toCAAMLv6_2022("2018-12-27.json", "2018-12-27.caaml.v6.json");
 	}
 }

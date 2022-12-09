@@ -20,18 +20,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "6385c958-018d-4c89-aa67-5eddc31ada5a",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "dp6",
-      "name" : "dp.6: cold, loose snow and wind"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "dp2",
-      "name" : "dp.2: gliding snow"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6", "DP2" ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "considerable",
       "validTimePeriod" : "all_day"
@@ -121,18 +117,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "cd6faf0f-5188-4904-91cc-524c3a446b0c",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "dp6",
-      "name" : "dp.6: cold, loose snow and wind"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "dp4",
-      "name" : "dp.4: cold following warm / warm following cold"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6", "DP4" ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "1600"
@@ -192,18 +184,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "dp6",
-      "name" : "dp.6: cold, loose snow and wind"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "dp2",
-      "name" : "dp.2: gliding snow"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6", "DP2" ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "2200"
@@ -281,10 +269,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "853733e5-cb48-4cf1-91a2-ebde59dda31f",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "2500"
@@ -358,10 +350,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "2683b4d4-a4d3-48e0-ac4b-1e8a04676925",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "treeline"
@@ -408,10 +404,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "24fce71f-ad60-47d6-b607-d7cefca5ba3f",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "low",
       "validTimePeriod" : "all_day"
@@ -479,10 +479,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "67e2d91b-2335-45f5-abad-1dc48b86c777",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ ]
+      }
+    },
     "dangerRatings" : [ {
       "mainValue" : "low",
       "validTimePeriod" : "all_day"
@@ -528,10 +532,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "0d9c6af5-53cc-4c80-8901-065a3f5b3195",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "treeline"
@@ -611,14 +619,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "5bf03ed5-7cac-493b-aad4-f2bc4cb4ba34",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    }, {
-      "type" : "dangerPattern",
-      "id" : "dp6",
-      "name" : "dp.6: cold, loose snow and wind"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6" ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "2000"
@@ -665,10 +673,14 @@
       "validTimePeriod" : "all_day"
     } ],
     "bulletinID" : "9d365268-1218-49b8-b05b-e4cc6de13402",
-    "customData" : [ {
-      "type" : "mainDate",
-      "mainDate" : "2019-01-17"
-    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2019-01-17"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ ]
+      }
+    },
     "dangerRatings" : [ {
       "elevation" : {
         "upperBound" : "2000"
@@ -713,9 +725,5 @@
       "startTime" : "2019-01-16T23:00:00Z"
     },
     "wxSynopsis" : { }
-  } ],
-  "customData" : [ {
-    "type" : "mainDate",
-    "mainDate" : "2019-01-17"
   } ]
 }

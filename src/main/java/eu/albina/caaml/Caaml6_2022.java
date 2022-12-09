@@ -3,6 +3,7 @@ package eu.albina.caaml;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
@@ -14,7 +15,6 @@ import eu.albina.util.AlbinaUtil;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.AvalancheSituationTendency;
-import org.caaml.v6.CustomData;
 import org.caaml.v6.DangerRatingValue;
 import org.caaml.v6.ElevationBoundaryOrBand;
 import org.caaml.v6.ExpectedAvalancheFrequency;
@@ -22,11 +22,9 @@ import org.caaml.v6.ExpectedSnowpackStability;
 import org.caaml.v6.TendencyType;
 import org.caaml.v6.ValidTime;
 import org.caaml.v6.ValidTimePeriod;
-import org.caaml.v6.albina.DangerPattern;
-import org.caaml.v6.albina.MainDate;
 
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,10 +42,7 @@ interface Caaml6_2022 {
 	}
 
 	static org.caaml.v6.AvalancheBulletins toCAAMLv6_2022(AvalancheReport avalancheReport, LanguageCode lang) {
-		final AvalancheBulletins bulletins = new AvalancheBulletins();
-		bulletins.setBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAMLv6_2022(b, lang)).collect(Collectors.toList()));
-		bulletins.setCustomData(new CustomData[]{new MainDate(LocalDate.parse(avalancheReport.getValidityDateString()))});
-		return bulletins;
+		return new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAMLv6_2022(b, lang)).collect(Collectors.toList()));
 	}
 
 	static org.caaml.v6.AvalancheBulletin toCAAMLv6_2022(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
@@ -60,7 +55,15 @@ interface Caaml6_2022 {
 			.map(p -> getAvalancheProblem(avalancheBulletin, p, lang))
 			.filter(Objects::nonNull).distinct().collect(Collectors.toList()));
 		bulletin.setBulletinID(avalancheBulletin.getId());
-		bulletin.setCustomData(getCustomData(avalancheBulletin, lang));
+		List<String> dangerPatterns = Stream.of(avalancheBulletin.getDangerPattern1(), avalancheBulletin.getDangerPattern2())
+			.filter(Objects::nonNull)
+			.map(dp -> dp.name().toUpperCase())
+			.collect(Collectors.toList());
+		bulletin.setCustomData(ImmutableMap.of(
+				"ALBINA", ImmutableMap.of("mainDate", avalancheBulletin.getValidityDate().toLocalDate().toString()),
+				"LWD_Tyrol", ImmutableMap.of("dangerPatterns", dangerPatterns)
+			)
+		);
 		bulletin.setDangerRatings(Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
 			.filter(Objects::nonNull)
 			.flatMap(daytime -> Stream.of(
@@ -82,15 +85,6 @@ interface Caaml6_2022 {
 		bulletin.setValidTime(new ValidTime(avalancheBulletin.getValidFrom().toInstant(), avalancheBulletin.getValidUntil().toInstant()));
 		bulletin.setWxSynopsis(new org.caaml.v6.Texts(avalancheBulletin.getSynopsisHighlightsIn(lang), avalancheBulletin.getSynopsisCommentIn(lang)));
 		return bulletin;
-	}
-
-	static CustomData[] getCustomData(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
-		return Stream.concat(
-			Stream.of(new MainDate(avalancheBulletin.getValidityDate().toLocalDate())),
-			Stream.of(avalancheBulletin.getDangerPattern1(), avalancheBulletin.getDangerPattern2())
-				.filter(Objects::nonNull)
-				.map(dp -> new DangerPattern(dp, AlbinaUtil.getDangerPatternText(dp, lang)))
-		).toArray(CustomData[]::new);
 	}
 
 	static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheBulletin avalancheBulletin, AvalancheProblem p, LanguageCode lang) {

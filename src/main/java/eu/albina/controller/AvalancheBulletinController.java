@@ -483,7 +483,7 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : results) {
 
 				// set author
-				if (!Objects.equals(user.getEmail(), ServerInstanceController.getInstance().getLocalServerInstance().getUserName())) {
+				if (user != null && !Objects.equals(user.getEmail(), ServerInstanceController.getInstance().getLocalServerInstance().getUserName())) {
 					if (!bulletin.getAdditionalAuthors().contains(user.getName()))
 						bulletin.addAdditionalAuthor(user.getName());
 					bulletin.setUser(user);

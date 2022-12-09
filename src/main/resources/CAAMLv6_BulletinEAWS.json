@@ -216,18 +216,9 @@
             },
             "additionalProperties": false
         },
-        "customData" : {
-            "title": "Custom Data",
-            "description": "Custom data can be used to add arbitrary additional information. There can be AWS specific custom data types defined. The required `type` identifies the custom data type.",
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "type": { "type": "string" }
-                },
-                "required": ["type"],
-                "additionalProperties": true
-            }
+		"customData" : {
+			"title": "Custom Data",
+			"description": "Custom data can be used to add arbitrary additional information. There can be AWS specific custom data types defined."
         },
         "texts" : {
             "title": "Texts",

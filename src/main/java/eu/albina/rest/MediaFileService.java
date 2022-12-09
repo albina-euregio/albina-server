@@ -16,17 +16,21 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -37,6 +41,7 @@ import javax.ws.rs.core.UriInfo;
 import com.github.openjson.JSONObject;
 
 import eu.albina.controller.RegionController;
+import eu.albina.util.RssUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -92,31 +97,26 @@ public class MediaFileService {
 
 			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
 
-			String fileLocation = ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath() + "/" + region.getId() + "/" + language + "/";
+			java.nio.file.Path fileLocation = getMediaPath(region, language);
+			Files.createDirectories(fileLocation);
 
 			// save mp3 file
 			String mp3FileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".mp3");
-			File mp3File = new File(fileLocation + mp3FileName);
-			mp3File.getParentFile().mkdir();
-			FileOutputStream out = new FileOutputStream(mp3File);
-			int read = 0;
-			byte[] bytes = new byte[1024];
-			while ((read = uploadedInputStream.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
+			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
+			try (OutputStream out = Files.newOutputStream(mp3File)) {
+				int read = 0;
+				byte[] bytes = new byte[1024];
+				while ((read = uploadedInputStream.read(bytes)) != -1) {
+					out.write(bytes, 0, read);
+				}
 			}
-			out.flush();
-			out.close();
-			logger.debug(mp3FileName + " successfully uploaded to: " + fileLocation);
+			logger.info(mp3FileName + " successfully uploaded to: " + mp3File);
 
 			// save text file
 			String txtFileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".txt");
-			File txtFile = new File(fileLocation + txtFileName);
-			txtFile.getParentFile().mkdir();
-			FileOutputStream outputStream = new FileOutputStream(txtFile);
-			byte[] strToBytes = mediaText.getBytes();
-			outputStream.write(strToBytes);
-			outputStream.close();
-			logger.debug(txtFileName + " successfully uploaded to " + fileLocation);
+			java.nio.file.Path txtFile = fileLocation.resolve(txtFileName);
+			Files.write(txtFile, mediaText.getBytes());
+			logger.info(txtFileName + " successfully uploaded to " + txtFile);
 
 			// send emails
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
@@ -138,4 +138,27 @@ public class MediaFileService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
+
+	@GET
+	@Path("/rss")
+	@Produces(MediaType.APPLICATION_XML)
+	@Operation(summary = "Get media files as RSS feed")
+	public Response getRssFeed(
+		@QueryParam("region") @DefaultValue("AT-07") String regionId,
+		@QueryParam("lang") @DefaultValue("de") LanguageCode language
+	) throws Exception {
+		final Region region = new Region(regionId);
+		final String rss = RssUtil.getRss(
+			language,
+			region,
+			getMediaPath(region, language));
+		return Response.ok(rss, MediaType.APPLICATION_XML).build();
+	}
+
+	private static java.nio.file.Path getMediaPath(Region region, LanguageCode lang) {
+		return Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath())
+			.resolve(region.getId())
+			.resolve(lang.name());
+	}
+
 }

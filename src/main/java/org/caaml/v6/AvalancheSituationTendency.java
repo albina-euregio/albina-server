@@ -9,7 +9,7 @@ package org.caaml.v6;
  */
 public class AvalancheSituationTendency {
     private String comment;
-    private CustomData[] customData;
+    private Object customData;
     private String highlights;
 	// FIXME highlights, comment -> Texts
     private MetaData metaData;
@@ -27,8 +27,8 @@ public class AvalancheSituationTendency {
 	public String getComment() { return comment; }
     public void setComment(String value) { this.comment = value; }
 
-    public CustomData[] getCustomData() { return customData; }
-    public void setCustomData(CustomData[] value) { this.customData = value; }
+    public Object getCustomData() { return customData; }
+    public void setCustomData(Object value) { this.customData = value; }
 
     public String getHighlights() { return highlights; }
     public void setHighlights(String value) { this.highlights = value; }
