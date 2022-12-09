@@ -302,11 +302,11 @@ public class AlbinaUtil {
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
+					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
+					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			}
 			Process p = pb.start();
 			p.waitFor();
@@ -358,87 +358,45 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static void runUpdateJsonScript(String validityDateString, String publicationTimeString) {
+	public static void runUpdateCaamlsScript(String date, String publicationTime, Region region) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateJson.sh").getFile());
+			final File file = new File(classLoader.getResource("scripts/updateCaamls.sh").getFile());
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					validityDateString, publicationTimeString).inheritIO();
+					date, publicationTime, region.getId()).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					validityDateString, publicationTimeString).inheritIO();
+					date, publicationTime, region.getId()).inheritIO();
 			}
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("JSON updated in date directory for {} using {}", validityDateString, pb.command());
+			logger.info("CAAMLs for region {} updated in date directory for {} using {}", region.getId(), date, pb.command());
 		} catch (Exception e) {
-			logger.error("JSON could not be updated in date directory for " + validityDateString + "!", e);
+			logger.error("CAAMLs for region " + region.getId() + " could not be updated in date directory for " + date + "!", e);
 		}
 	}
 
-	public static void runUpdateXmlsScript(String date, String publicationTime) {
+	public static void runUpdateLatestCaamlsScript(String date, Region region) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateXmls.sh").getFile());
+			final File file = new File(classLoader.getResource("scripts/updateLatestCaamls.sh").getFile());
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
+					date, region.getId()).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
+					date, region.getId()).inheritIO();
 			}
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("XMLs updated in date directory for {} using {}", date, pb.command());
+			logger.info("CAAMLs for region {} for {} update in latest directory using {}", region.getId(), date, pb.command());
 		} catch (Exception e) {
-			logger.error("XMLs could not be updated in date directory for " + date + "!", e);
-		}
-	}
-
-	public static void runUpdateLatestJsonScript(String validityDateString) {
-		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestJson.sh").getFile());
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					validityDateString).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					validityDateString).inheritIO();
-			}
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("JSON for {} updated in latest directory using {}", validityDateString, pb.command());
-		} catch (Exception e) {
-			logger.error("JSON for " + validityDateString + " could not be updated in latest directory!", e);
-		}
-	}
-
-	public static void runUpdateLatestXmlsScript(String date) {
-		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestXmls.sh").getFile());
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date).inheritIO();
-			}
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("XMLs for {} update in latest directory using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("XMLs for " + date + " could not be updated in latest directory!", e);
+			logger.error("CAAMLs for region " + region.getId() + " for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 

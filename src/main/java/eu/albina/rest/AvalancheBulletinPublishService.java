@@ -23,6 +23,7 @@ import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -344,57 +345,28 @@ public class AvalancheBulletinPublishService {
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			for (Region region: publishBulletinRegions) {
-				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-				avalancheReport.setBulletins(bulletins);
+
+				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+				logger.info("Creating CAAML for region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
+	
+				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
+				avalancheReport.setBulletins(regionBulletins);
+				avalancheReport.setGlobalBulletins(bulletins);
 				avalancheReport.setServerInstance(localServerInstance);
+	
+				if (regionBulletins.isEmpty()) {
+					continue;
+				}
+
 				PublicationController.getInstance().createCaamlV5(avalancheReport);
 				PublicationController.getInstance().createCaamlV6(avalancheReport);
-			}
-
-			// copy files
-			AlbinaUtil.runUpdateXmlsScript(validityDateString, publicationTimeString);
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-				AlbinaUtil.runUpdateLatestXmlsScript(validityDateString);
-
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
-		} catch (AlbinaException e) {
-			logger.warn("Error creating CAAML", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		}
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createJson(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@Context SecurityContext securityContext) {
-		logger.debug("POST create json [{}]", date);
-
-		try {
-			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			List<Region> publishBulletinRegions = RegionController.getInstance().getPublishBulletinRegions();
-			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
-					.getPublishedBulletins(startDate, publishBulletinRegions);
-
-			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
-
-			for (Region region: publishBulletinRegions) {
-				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-				avalancheReport.setBulletins(bulletins);
-				avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 				PublicationController.getInstance().createJson(avalancheReport);
+
+				// copy files only for this region
+				AlbinaUtil.runUpdateCaamlsScript(validityDateString, publicationTimeString, region);
+				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+					AlbinaUtil.runUpdateLatestCaamlsScript(validityDateString, region);
 			}
-
-			// copy files
-			AlbinaUtil.runUpdateJsonScript(validityDateString, publicationTimeString);
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-				AlbinaUtil.runUpdateLatestJsonScript(validityDateString);
-
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating CAAML", e);
