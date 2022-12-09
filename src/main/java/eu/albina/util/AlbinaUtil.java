@@ -302,11 +302,11 @@ public class AlbinaUtil {
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
+					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
+					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			}
 			Process p = pb.start();
 			p.waitFor();
