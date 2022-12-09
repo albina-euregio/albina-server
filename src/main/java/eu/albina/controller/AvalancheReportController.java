@@ -264,7 +264,7 @@ public class AvalancheReportController {
 	 * @return the public report for specific {@code date} and {@code region} or
 	 *         null if not report was found
 	 */
-	protected AvalancheReport getPublicReport(Instant date, Region region) {
+	public AvalancheReport getPublicReport(Instant date, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
