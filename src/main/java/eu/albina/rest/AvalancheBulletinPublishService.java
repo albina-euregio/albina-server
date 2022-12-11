@@ -470,6 +470,7 @@ public class AvalancheBulletinPublishService {
 					.getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
 			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 			avalancheReport.setBulletins(bulletins);
+			avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 
 			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(avalancheReport, language)).start();
 
