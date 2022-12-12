@@ -213,7 +213,7 @@ public class AvalancheBulletinPublishService {
 
 			// update all super regions
 			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
-			for (Region region : regions) {
+			for (Region region : publishBulletinRegions) {
 				for (Region superRegion : region.getSuperRegions()) {
 					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
 						regions.add(superRegion);
@@ -260,9 +260,19 @@ public class AvalancheBulletinPublishService {
 					.getPublishedBulletins(startDate, publishBulletinRegions);
 
 			Map<String, Thread> threads = new HashMap<String, Thread>();
+
+			// update all super regions
+			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
 			for (Region region : publishBulletinRegions) {
+				for (Region superRegion : region.getSuperRegions()) {
+					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+						regions.add(superRegion);
+				}
+			}
+			for (Region region : regions) {
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-				avalancheReport.setBulletins(bulletins);
+				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+				avalancheReport.setBulletins(regionBulletins);
 				avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 				Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(avalancheReport);
 				threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
@@ -309,10 +319,19 @@ public class AvalancheBulletinPublishService {
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
-			for (Region region: publishBulletinRegions) {
+			// update all super regions
+			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
+			for (Region region : publishBulletinRegions) {
+				for (Region superRegion : region.getSuperRegions()) {
+					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+						regions.add(superRegion);
+				}
+			}
+			for (Region region: regions) {
 				try {
 					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
-					avalancheReport.setBulletins(bulletins);
+					List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+					avalancheReport.setBulletins(regionBulletins);
 					avalancheReport.setGlobalBulletins(bulletins);
 					avalancheReport.setServerInstance(localServerInstance);
 					PublicationController.getInstance().createMaps(avalancheReport);
@@ -356,7 +375,15 @@ public class AvalancheBulletinPublishService {
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
-			for (Region region: publishBulletinRegions) {
+			// update all super regions
+			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
+			for (Region region : publishBulletinRegions) {
+				for (Region superRegion : region.getSuperRegions()) {
+					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+						regions.add(superRegion);
+				}
+			}
+			for (Region region: regions) {
 
 				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 				logger.info("Creating CAAML for region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
