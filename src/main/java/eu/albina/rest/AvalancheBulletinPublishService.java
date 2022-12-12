@@ -58,8 +58,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/bulletins/publish")
@@ -209,10 +211,19 @@ public class AvalancheBulletinPublishService {
 			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
-			for (Region region : publishBulletinRegions) {
+			// update all super regions
+			Set<Region> regions = new HashSet()<Region>(publishBulletinRegions);
+			for (Region region : regions) {
+				for (Region superRegion : region.getSuperRegions()) {
+					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+						regions.add(superRegion);
+				}
+			}
+			for (Region region : regions) {
 				try {
 					logger.info("PDF production for " + region.getId() + " started");
-					AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, localServerInstance);
+					List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+					AvalancheReport avalancheReport = AvalancheReport.of(regionBulletins, region, localServerInstance);
 					PdfUtil.createRegionPdfs(avalancheReport);
 				} finally {
 					logger.info("PDF production " + region.getId() + " finished");
