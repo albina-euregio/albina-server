@@ -165,7 +165,7 @@ public class AvalancheBulletinService {
 			ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
 				regions);
 			AvalancheReport avalancheReport = AvalancheReport.of(result, null, ServerInstanceController.getInstance().getLocalServerInstance());
-			String caaml = Caaml.createCaaml(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
+			String caaml = Caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
 				final String type = version != CaamlVersion.V6_2022 ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
 				return Response.ok(caaml, type).build();
