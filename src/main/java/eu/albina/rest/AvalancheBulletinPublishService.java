@@ -400,12 +400,13 @@ public class AvalancheBulletinPublishService {
 				PublicationController.getInstance().createCaamlV5(avalancheReport);
 				PublicationController.getInstance().createCaamlV6(avalancheReport);
 				PublicationController.getInstance().createJson(avalancheReport);
-
-				// copy files only for this region
-				AlbinaUtil.runUpdateCaamlsScript(validityDateString, publicationTimeString, region);
-				if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-					AlbinaUtil.runUpdateLatestCaamlsScript(validityDateString, region);
 			}
+
+			// copy files
+			AlbinaUtil.runUpdateCaamlsScript(validityDateString, publicationTimeString);
+			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+				AlbinaUtil.runUpdateLatestCaamlsScript(validityDateString);
+
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating CAAML", e);

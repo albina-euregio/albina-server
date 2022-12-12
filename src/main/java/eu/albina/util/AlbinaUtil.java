@@ -358,45 +358,45 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static void runUpdateCaamlsScript(String date, String publicationTime, Region region) {
+	public static void runUpdateCaamlsScript(String date, String publicationTime) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateCaamls.sh").getFile());
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime, region.getId()).inheritIO();
+					date, publicationTime).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime, region.getId()).inheritIO();
+					date, publicationTime).inheritIO();
 			}
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("CAAMLs for region {} updated in date directory for {} using {}", region.getId(), date, pb.command());
+			logger.info("CAAMLs updated in date directory for {} using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("CAAMLs for region " + region.getId() + " could not be updated in date directory for " + date + "!", e);
+			logger.error("CAAMLs could not be updated in date directory for " + date + "!", e);
 		}
 	}
 
-	public static void runUpdateLatestCaamlsScript(String date, Region region) {
+	public static void runUpdateLatestCaamlsScript(String date) {
 		try {
 			final File file = new File(classLoader.getResource("scripts/updateLatestCaamls.sh").getFile());
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, region.getId()).inheritIO();
+					date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
 					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, region.getId()).inheritIO();
+					date).inheritIO();
 			}
 			Process p = pb.start();
 			p.waitFor();
-			logger.info("CAAMLs for region {} for {} update in latest directory using {}", region.getId(), date, pb.command());
+			logger.info("CAAMLs for region {} for {} update in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
-			logger.error("CAAMLs for region " + region.getId() + " for " + date + " could not be updated in latest directory!", e);
+			logger.error("CAAMLs for " + date + " could not be updated in latest directory!", e);
 		}
 	}
 

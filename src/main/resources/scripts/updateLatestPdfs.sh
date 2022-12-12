@@ -1,77 +1,30 @@
-rm $1/latest/$2_*.pdf
+rm $1/latest/*
+cp $1/$2/*.* $1/latest/
 
-cp $1/$2/$3/$2_*.pdf $1/latest/
+rm $3/*.html
+cp $3/$2/*.html $3/
 
-mv $1/latest/$2_EUREGIO_de.pdf $1/latest/de.pdf
-mv $1/latest/$2_EUREGIO_it.pdf $1/latest/it.pdf
-mv $1/latest/$2_EUREGIO_en.pdf $1/latest/en.pdf
-mv $1/latest/$2_EUREGIO_fr.pdf $1/latest/fr.pdf
-mv $1/latest/$2_EUREGIO_es.pdf $1/latest/es.pdf
-mv $1/latest/$2_EUREGIO_ca.pdf $1/latest/ca.pdf
-mv $1/latest/$2_EUREGIO_oc.pdf $1/latest/oc.pdf
-mv $1/latest/$2_EUREGIO_de_bw.pdf $1/latest/de_bw.pdf
-mv $1/latest/$2_EUREGIO_it_bw.pdf $1/latest/it_bw.pdf
-mv $1/latest/$2_EUREGIO_en_bw.pdf $1/latest/en_bw.pdf
-mv $1/latest/$2_EUREGIO_fr_bw.pdf $1/latest/fr_bw.pdf
-mv $1/latest/$2_EUREGIO_es_bw.pdf $1/latest/es_bw.pdf
-mv $1/latest/$2_EUREGIO_ca_bw.pdf $1/latest/ca_bw.pdf
-mv $1/latest/$2_EUREGIO_oc_bw.pdf $1/latest/oc_bw.pdf
-mv $1/latest/$2_AT-07_de.pdf $1/latest/AT-07_de.pdf
-mv $1/latest/$2_AT-07_it.pdf $1/latest/AT-07_it.pdf
-mv $1/latest/$2_AT-07_en.pdf $1/latest/AT-07_en.pdf
-mv $1/latest/$2_AT-07_fr.pdf $1/latest/AT-07_fr.pdf
-mv $1/latest/$2_AT-07_es.pdf $1/latest/AT-07_es.pdf
-mv $1/latest/$2_AT-07_ca.pdf $1/latest/AT-07_ca.pdf
-mv $1/latest/$2_AT-07_oc.pdf $1/latest/AT-07_oc.pdf
-mv $1/latest/$2_AT-07_de_bw.pdf $1/latest/AT-07_de_bw.pdf
-mv $1/latest/$2_AT-07_it_bw.pdf $1/latest/AT-07_it_bw.pdf
-mv $1/latest/$2_AT-07_en_bw.pdf $1/latest/AT-07_en_bw.pdf
-mv $1/latest/$2_AT-07_fr_bw.pdf $1/latest/AT-07_fr_bw.pdf
-mv $1/latest/$2_AT-07_es_bw.pdf $1/latest/AT-07_es_bw.pdf
-mv $1/latest/$2_AT-07_ca_bw.pdf $1/latest/AT-07_ca_bw.pdf
-mv $1/latest/$2_AT-07_oc_bw.pdf $1/latest/AT-07_oc_bw.pdf
-mv $1/latest/$2_IT-32-BZ_de.pdf $1/latest/IT-32-BZ_de.pdf
-mv $1/latest/$2_IT-32-BZ_it.pdf $1/latest/IT-32-BZ_it.pdf
-mv $1/latest/$2_IT-32-BZ_en.pdf $1/latest/IT-32-BZ_en.pdf
-mv $1/latest/$2_IT-32-BZ_fr.pdf $1/latest/IT-32-BZ_fr.pdf
-mv $1/latest/$2_IT-32-BZ_es.pdf $1/latest/IT-32-BZ_es.pdf
-mv $1/latest/$2_IT-32-BZ_ca.pdf $1/latest/IT-32-BZ_ca.pdf
-mv $1/latest/$2_IT-32-BZ_oc.pdf $1/latest/IT-32-BZ_oc.pdf
-mv $1/latest/$2_IT-32-BZ_de_bw.pdf $1/latest/IT-32-BZ_de_bw.pdf
-mv $1/latest/$2_IT-32-BZ_it_bw.pdf $1/latest/IT-32-BZ_it_bw.pdf
-mv $1/latest/$2_IT-32-BZ_en_bw.pdf $1/latest/IT-32-BZ_en_bw.pdf
-mv $1/latest/$2_IT-32-BZ_fr_bw.pdf $1/latest/IT-32-BZ_fr_bw.pdf
-mv $1/latest/$2_IT-32-BZ_es_bw.pdf $1/latest/IT-32-BZ_es_bw.pdf
-mv $1/latest/$2_IT-32-BZ_ca_bw.pdf $1/latest/IT-32-BZ_ca_bw.pdf
-mv $1/latest/$2_IT-32-BZ_oc_bw.pdf $1/latest/IT-32-BZ_oc_bw.pdf
-mv $1/latest/$2_IT-32-TN_de.pdf $1/latest/IT-32-TN_de.pdf
-mv $1/latest/$2_IT-32-TN_it.pdf $1/latest/IT-32-TN_it.pdf
-mv $1/latest/$2_IT-32-TN_en.pdf $1/latest/IT-32-TN_en.pdf
-mv $1/latest/$2_IT-32-TN_fr.pdf $1/latest/IT-32-TN_fr.pdf
-mv $1/latest/$2_IT-32-TN_es.pdf $1/latest/IT-32-TN_es.pdf
-mv $1/latest/$2_IT-32-TN_ca.pdf $1/latest/IT-32-TN_ca.pdf
-mv $1/latest/$2_IT-32-TN_oc.pdf $1/latest/IT-32-TN_oc.pdf
-mv $1/latest/$2_IT-32-TN_de_bw.pdf $1/latest/IT-32-TN_de_bw.pdf
-mv $1/latest/$2_IT-32-TN_it_bw.pdf $1/latest/IT-32-TN_it_bw.pdf
-mv $1/latest/$2_IT-32-TN_en_bw.pdf $1/latest/IT-32-TN_en_bw.pdf
-mv $1/latest/$2_IT-32-TN_fr_bw.pdf $1/latest/IT-32-TN_fr_bw.pdf
-mv $1/latest/$2_IT-32-TN_es_bw.pdf $1/latest/IT-32-TN_es_bw.pdf
-mv $1/latest/$2_IT-32-TN_ca_bw.pdf $1/latest/IT-32-TN_ca_bw.pdf
-mv $1/latest/$2_IT-32-TN_oc_bw.pdf $1/latest/IT-32-TN_oc_bw.pdf
-mv $1/latest/$2_ES-CT-L_de.pdf $1/latest/ES-CT-L_de.pdf
-mv $1/latest/$2_ES-CT-L_it.pdf $1/latest/ES-CT-L_it.pdf
-mv $1/latest/$2_ES-CT-L_en.pdf $1/latest/ES-CT-L_en.pdf
-mv $1/latest/$2_ES-CT-L_fr.pdf $1/latest/ES-CT-L_fr.pdf
-mv $1/latest/$2_ES-CT-L_es.pdf $1/latest/ES-CT-L_es.pdf
-mv $1/latest/$2_ES-CT-L_ca.pdf $1/latest/ES-CT-L_ca.pdf
-mv $1/latest/$2_ES-CT-L_oc.pdf $1/latest/ES-CT-L_oc.pdf
-mv $1/latest/$2_ES-CT-L_de_bw.pdf $1/latest/ES-CT-L_de_bw.pdf
-mv $1/latest/$2_ES-CT-L_it_bw.pdf $1/latest/ES-CT-L_it_bw.pdf
-mv $1/latest/$2_ES-CT-L_en_bw.pdf $1/latest/ES-CT-L_en_bw.pdf
-mv $1/latest/$2_ES-CT-L_fr_bw.pdf $1/latest/ES-CT-L_fr_bw.pdf
-mv $1/latest/$2_ES-CT-L_es_bw.pdf $1/latest/ES-CT-L_es_bw.pdf
-mv $1/latest/$2_ES-CT-L_ca_bw.pdf $1/latest/ES-CT-L_ca_bw.pdf
-mv $1/latest/$2_ES-CT-L_oc_bw.pdf $1/latest/ES-CT-L_oc_bw.pdf
+for language in de it en fr es ca oc; do
+  rm $1/latest/${language}.pdf
+  rm $1/latest/${language}_bw.pdf
+
+  cp $1/$2/$2_${language}.pdf $1/latest/
+  cp $1/$2/$2_${language}_bw.pdf $1/latest/
+
+  mv $1/latest/${2}_${language}.pdf $1/latest/${language}.pdf
+  mv $1/latest/${2}_${language}_bw.pdf $1/latest/${language}_bw.pdf
+
+  for region in EUREGIO AT-07 IT-32-BZ IT-32-TN ES-CT-L; do
+    rm $1/latest/${region}_${language}.pdf
+    rm $1/latest/${region}_${language}_bw.pdf
+
+    cp $1/$2/$2_${region}_${language}.pdf $1/latest/
+    cp $1/$2/$2_${region}_${language}_bw.pdf $1/latest/
+
+    mv $1/latest/${2}_${region}_${language}.pdf $1/latest/${region}_${language}.pdf
+    mv $1/latest/${2}_${region}_${language}_bw.pdf $1/latest/${region}_${language}_bw.pdf
+  done
+done
 
 chmod -R 755 $1/latest/
 
