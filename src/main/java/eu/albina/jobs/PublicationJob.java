@@ -19,6 +19,7 @@ package eu.albina.jobs;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -73,7 +74,7 @@ public class PublicationJob implements org.quartz.Job {
                 logger.debug("Start date: {}", startDate.toString());
                 logger.debug("End date: {}", endDate.toString());
 
-				Instant publicationDate = Instant.now();
+				Instant publicationDate = Instant.now().truncatedTo(ChronoUnit.SECONDS);
 
                 logger.debug("Publication date: {}", publicationDate.toString());
 
