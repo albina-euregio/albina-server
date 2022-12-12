@@ -166,7 +166,7 @@ public class AvalancheBulletinPublishService {
 								&& !avalancheBulletin.getPublishedRegions().isEmpty())
 							.collect(Collectors.toList());
 						if (result != null && !result.isEmpty())
-							PublicationController.getInstance().publish(result, user, publicationDate, startDate);
+							PublicationController.getInstance().publish(result, RegionController.getInstance().getPublishBulletinRegions(), user, publicationDate, startDate, false);
 					}
 				} catch (AlbinaException e) {
 					logger.error("Error publishing bulletins", e);
@@ -300,8 +300,9 @@ public class AvalancheBulletinPublishService {
 
 			for (Region region: publishBulletinRegions) {
 				try {
-					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
 					avalancheReport.setBulletins(bulletins);
+					avalancheReport.setGlobalBulletins(bulletins);
 					avalancheReport.setServerInstance(localServerInstance);
 					PublicationController.getInstance().createMaps(avalancheReport);
 				} catch (InterruptedException e) {

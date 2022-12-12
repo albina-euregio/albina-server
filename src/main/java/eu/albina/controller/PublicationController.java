@@ -18,6 +18,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -92,96 +93,7 @@ public class PublicationController {
 	 */
 	public void publishAutomatically(List<AvalancheBulletin> bulletins, User user, Instant publicationDate, Instant startDate) {
 		if (ServerInstanceController.getInstance().getLocalServerInstance().isPublishAt5PM())
-			publish(bulletins, user, publicationDate, startDate);
-	}
-
-	public void publish(List<AvalancheBulletin> bulletins, User user, Instant publicationDate, Instant startDate) {
-		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
-		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
-		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-
-		Collections.sort(bulletins);
-
-		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
-
-		for (Region region : RegionController.getInstance().getRegions()) {
-
-			List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
-
-			logger.info("Publishing region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
-
-			AvalancheReport avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
-			avalancheReport.setBulletins(regionBulletins);
-			avalancheReport.setGlobalBulletins(bulletins);
-			avalancheReport.setServerInstance(localServerInstance);
-
-			if (regionBulletins.isEmpty()) {
-				continue;
-			}
-
-			reportMap.put(region, avalancheReport);
-
-			// create CAAML
-			if (region.isCreateCaamlV5())
-				createCaamlV5(avalancheReport);
-			if (region.isCreateCaamlV6())
-				createCaamlV6(avalancheReport);
-
-			// create JSON
-			if (region.isCreateJson())
-				createJson(avalancheReport);
-
-			try {
-				// create maps
-				if (region.isCreateMaps()) {
-
-					createMaps(avalancheReport);
-
-					Map<String, Thread> threads = new HashMap<String, Thread>();
-
-					// create HTML
-					if (region.isCreateSimpleHtml()) {
-						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReport);
-						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
-						createSimpleHtmlThread.start();
-					}
-
-					// create pdfs
-					if (region.isCreatePdf()) {
-						Thread createPdfThread = createPdf(avalancheReport);
-						threads.put("pdf_" + region.getId(), createPdfThread);
-						createPdfThread.start();
-					}
-
-					for (String key : threads.keySet()) {
-						try {
-							threads.get(key).join();
-						} catch (InterruptedException e) {
-							logger.error(key + " thread interrupted", e);
-						}
-					}
-				}
-			} catch (InterruptedException e) {
-				logger.error("Map production interrupted", e);
-			} catch (Exception e1) {
-				logger.error("Error during map production", e1);
-			}
-		}
-
-		// send notifications after all maps were created
-		for (AvalancheReport avalancheReport : reportMap.values()) {
-			if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
-				new Thread(() -> sendEmails(avalancheReport)).start();
-				new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
-				new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
-			}
-		}
-
-		// copy files
-		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
+			publish(bulletins, RegionController.getInstance().getPublishBulletinRegions(), user, publicationDate, startDate, false);
 	}
 
 	/**
@@ -196,129 +108,7 @@ public class PublicationController {
 	 */
 	public void updateAutomatically(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate) {
 		if (ServerInstanceController.getInstance().getLocalServerInstance().isPublishAt8AM())
-			update(bulletins, regions, user, publicationDate, startDate);
-	}
-
-	/**
-	 * Triggers all tasks that have to take place after an update has been published
-	 * (this can be at any time, triggered by one province).
-	 *
-	 * @param bulletins
-	 *            The bulletins that were updated.
-	 * @param regions
-	 *            The regions that were updated.
-	 */
-	public void update(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate) {
-		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
-		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-
-		Collections.sort(bulletins);
-
-		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
-
-		// add super regions to send notifications
-		Set<Region> updatedRegions = new HashSet<Region>(regions);
-		for (Region region : regions) {
-			for (Region superRegion : region.getSuperRegions()) {
-				if (!updatedRegions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
-					updatedRegions.add(superRegion);
-			}
-		}
-
-		// update all regions to create complete maps
-		for (Region region : RegionController.getInstance().getRegions()) {
-
-			AvalancheReport avalancheReport;
-
-			// publish report and add report if region was updated (to send notifications later on)
-			if (updatedRegions.contains(region)) {
-
-				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
-
-				avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
-				avalancheReport.setBulletins(regionBulletins);
-				avalancheReport.setGlobalBulletins(bulletins);
-				avalancheReport.setServerInstance(localServerInstance);
-				
-				if (regionBulletins.isEmpty()) {
-					continue;
-				}
-				
-				reportMap.put(region, avalancheReport);
-			} else {
-				avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
-				if (avalancheReport != null) {
-					avalancheReport.setBulletins(bulletins);
-					avalancheReport.setServerInstance(localServerInstance);
-				}
-			}
-
-			// maybe another region was not published at all
-			if (avalancheReport == null || (avalancheReport.getStatus() != BulletinStatus.published && avalancheReport.getStatus() != BulletinStatus.republished)) {
-				continue;
-			}
-
-			// create CAAML
-			if (region.isCreateCaamlV5())
-				createCaamlV5(avalancheReport);
-			if (region.isCreateCaamlV6())
-				createCaamlV6(avalancheReport);
-
-			// create JSON
-			if (region.isCreateJson())
-				createJson(avalancheReport);
-
-			try {
-				// create maps
-				if (region.isCreateMaps()) {
-
-					createMaps(avalancheReport);
-
-					Map<String, Thread> threads = new HashMap<String, Thread>();
-
-					// create HTML
-					if (region.isCreateSimpleHtml()) {
-						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReport);
-						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
-						createSimpleHtmlThread.start();
-					}
-
-					// create pdf
-					if (region.isCreatePdf()) {
-						Thread createPdfThread = createPdf(avalancheReport);
-						threads.put("pdf_" + region.getId(), createPdfThread);
-						createPdfThread.start();
-					}
-
-					for (String key : threads.keySet()) {
-						try {
-							threads.get(key).join();
-						} catch (InterruptedException e) {
-							logger.error(key + " thread interrupted", e);
-						}
-					}
-				}
-			} catch (InterruptedException e) {
-				logger.error("Map production interrupted", e);
-			} catch (Exception e1) {
-				logger.error("Error during map production", e1);
-			}
-		}
-
-		// send notifications only for updated regions after all maps were created
-		for (AvalancheReport avalancheReport : reportMap.values()) {
-			if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
-				new Thread(() -> sendEmails(avalancheReport)).start();
-				new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
-				new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
-			}
-		}
-
-		// copy files
-		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
+			publish(bulletins, regions, user, publicationDate, startDate, false);
 	}
 
 	/**
@@ -330,23 +120,43 @@ public class PublicationController {
 	 *            The bulletins that were changed.
 	 */
 	public void change(List<AvalancheBulletin> bulletins, User user, Instant startDate, Region changedRegion) {
+		List<Region> regions = new ArrayList<Region>();
+		regions.add(changedRegion);
+		publish(bulletins, regions, user, startDate, startDate, true);
+	}
+
+	/**
+	 * Triggers all tasks that have to take place after a publication has been published.
+	 *
+	 * @param bulletins
+	 *            The bulletins that were published.
+	 * @param regions
+	 *            The regions that were published.
+	 */
+	public void publish(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate, boolean isChange) {
+		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
 		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		Collections.sort(bulletins);
 
-		// reproduce resources for all regions
-		for (Region region : RegionController.getInstance().getRegions()) {
+		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
+
+		// update all regions to create complete maps
+		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
 
 			AvalancheReport avalancheReport;
 
-			// change report if region was changed
-			if (region.equals(changedRegion)) {
-
+			// publish report and add report if region was updated (to send notifications later on)
+			if (regions.contains(region)) {
 				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
-
-				avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
+				logger.info("Publishing region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
+				if (isChange) {
+					avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
+				} else {
+					avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+				}
 				avalancheReport.setBulletins(regionBulletins);
 				avalancheReport.setGlobalBulletins(bulletins);
 				avalancheReport.setServerInstance(localServerInstance);
@@ -354,12 +164,19 @@ public class PublicationController {
 				if (regionBulletins.isEmpty()) {
 					continue;
 				}
+				
+				reportMap.put(region, avalancheReport);
 			} else {
+				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 				avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
-				if (avalancheReport != null) {
-					avalancheReport.setBulletins(bulletins);
-					avalancheReport.setServerInstance(localServerInstance);
+
+				if (avalancheReport == null || regionBulletins.isEmpty()) {
+					continue;
 				}
+
+				avalancheReport.setBulletins(regionBulletins);
+				avalancheReport.setGlobalBulletins(bulletins);
+				avalancheReport.setServerInstance(localServerInstance);
 			}
 
 			// maybe another region was not published at all
@@ -367,50 +184,36 @@ public class PublicationController {
 				continue;
 			}
 
-			// create CAAML
-			if (region.isCreateCaamlV5())
-				createCaamlV5(avalancheReport);
-			if (region.isCreateCaamlV6())
-				createCaamlV6(avalancheReport);
+			createRegionResources(region, avalancheReport);
+		}
 
-			// create JSON
-			if (region.isCreateJson())
-				createJson(avalancheReport);
+		// update all super regions
+		Set<Region> superRegions = new HashSet<Region>();
+		for (Region region : regions) {
+			for (Region superRegion : region.getSuperRegions()) {
+				if (!superRegions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+					superRegions.add(superRegion);
+			}
+		}
+		for (Region region : superRegions) {
+			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, localServerInstance);
+			createRegionResources(region, avalancheReport);
+		}
 
-			try {
-				// create maps
-				if (region.isCreateMaps()) {
-
-					createMaps(avalancheReport);
-
-					Map<String, Thread> threads = new HashMap<String, Thread>();
-
-					// create HTML
-					if (region.isCreateSimpleHtml()) {
-						Thread createSimpleHtmlThread = createSimpleHtml(avalancheReport);
-						threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
-						createSimpleHtmlThread.start();
+		// send notifications only for updated regions after all maps were created
+		if (!isChange) {
+			for (AvalancheReport avalancheReport : reportMap.values()) {
+				if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
+					if (avalancheReport.getRegion().isSendEmails()) {
+						new Thread(() -> sendEmails(avalancheReport)).start();
 					}
-
-					// create pdfs
-					if (region.isCreatePdf()) {
-						Thread createPdfThread = createPdf(avalancheReport);
-						threads.put("pdf_" + region.getId(), createPdfThread);
-						createPdfThread.start();
+					if (avalancheReport.getRegion().isSendTelegramMessages()) {
+						new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
 					}
-
-					for (String key : threads.keySet()) {
-						try {
-							threads.get(key).join();
-						} catch (InterruptedException e) {
-							logger.error(key + " thread interrupted", e);
-						}
+					if (avalancheReport.getRegion().isSendPushNotifications()) {
+						new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
 					}
 				}
-			} catch (InterruptedException e) {
-				logger.error("Map production interrupted", e);
-			} catch (Exception e) {
-				logger.error("Error during map production", e);
 			}
 		}
 
@@ -418,6 +221,54 @@ public class PublicationController {
 		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
 			AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
+	}
+
+	private void createRegionResources(Region region, AvalancheReport avalancheReport) {
+		// create CAAML
+		if (region.isCreateCaamlV5())
+			createCaamlV5(avalancheReport);
+		if (region.isCreateCaamlV6())
+			createCaamlV6(avalancheReport);
+
+		// create JSON
+		if (region.isCreateJson())
+			createJson(avalancheReport);
+
+		try {
+			// create maps
+			if (region.isCreateMaps()) {
+
+				createMaps(avalancheReport);
+
+				Map<String, Thread> threads = new HashMap<String, Thread>();
+
+				// create HTML
+				if (region.isCreateSimpleHtml()) {
+					Thread createSimpleHtmlThread = createSimpleHtml(avalancheReport);
+					threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
+					createSimpleHtmlThread.start();
+				}
+
+				// create pdf
+				if (region.isCreatePdf()) {
+					Thread createPdfThread = createPdf(avalancheReport);
+					threads.put("pdf_" + region.getId(), createPdfThread);
+					createPdfThread.start();
+				}
+
+				for (String key : threads.keySet()) {
+					try {
+						threads.get(key).join();
+					} catch (InterruptedException e) {
+						logger.error(key + " thread interrupted", e);
+					}
+				}
+			}
+		} catch (InterruptedException e) {
+			logger.error("Map production interrupted", e);
+		} catch (Exception e1) {
+			logger.error("Error during map production", e1);
+		}
 	}
 
 	/**
@@ -445,7 +296,7 @@ public class PublicationController {
 						&& !avalancheBulletin.getPublishedRegions().isEmpty())
 					.collect(Collectors.toList());
 				if (result != null && !result.isEmpty())
-					PublicationController.getInstance().update(result, regions, user, publicationDate, startDate);
+					PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, false);
 
 			}
 		}).start();
