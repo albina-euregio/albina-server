@@ -77,6 +77,9 @@ interface Caaml6 {
 	}
 
 	static List<Element> createObsCollectionExtFiles(Document doc, List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance) {
+		if (region == null) {
+			return Collections.emptyList();
+		}
 		List<Element> extFiles = new ArrayList<Element>();
 
 		boolean hasDaytimeDependency = bulletins.stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
@@ -166,12 +169,12 @@ interface Caaml6 {
 		// metaData
 		Element metaData = doc.createElement("metaData");
 		rootElement.appendChild(metaData);
-		if (!isAfternoon) {
+		if (!isAfternoon && region != null) {
 			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + bulletin.getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.am, false, MapImageFormat.jpg);
 			metaData.appendChild(createExtFile(doc, "dangerRatingMap",
 					languageCode.getBundleString("ext-file.thumbnail.description"), fileReferenceURI));
-		} else {
+		} else if (region != null) {
 			String fileReferenceURI = LinkUtil.getMapsUrl(languageCode, region, serverInstance) + "/" + bulletin.getValidityDateString() + "/"
 					+ reportPublicationTime + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.pm, false, MapImageFormat.jpg);
 			metaData.appendChild(createExtFile(doc, "dangerRatingMap",
@@ -225,7 +228,7 @@ interface Caaml6 {
 
 		// region
 		for (String regionId : bulletin.getPublishedRegions()) {
-			if (region.affects(regionId)) {
+			if (region == null || region.affects(regionId)) {
 				Element regionElement = doc.createElement("region");
 				// Element nameElement = doc.createElement("name");
 				// nameElement.appendChild(doc.createTextNode(RegionController.getInstance().getRegionName(languageCode, regionId)));

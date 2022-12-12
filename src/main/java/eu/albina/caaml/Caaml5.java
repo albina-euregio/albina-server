@@ -134,7 +134,7 @@ interface Caaml5 {
 
 		// locRef
 		for (String publishedRegion : bulletin.getPublishedRegions()) {
-			if (region.affects(publishedRegion)) {
+			if (region == null || region.affects(publishedRegion)) {
 				Element locRef = doc.createElement("locRef");
 				locRef.setAttribute("xlink:href", publishedRegion);
 				rootElement.appendChild(locRef);

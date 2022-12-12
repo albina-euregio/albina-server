@@ -158,12 +158,14 @@ public class AvalancheBulletinService {
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 
 		try {
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			List<Region> regions = regionId == null
+				? RegionController.getInstance().getPublishBulletinRegions()
+				: Collections.singletonList(RegionController.getInstance().getRegionOrThrowAlbinaException(regionId));
 			AvalancheBulletinController.getInstance();
 			ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
-				Collections.singletonList(region));
-			AvalancheReport avalancheReport = AvalancheReport.of(result, region, ServerInstanceController.getInstance().getLocalServerInstance());
-			String caaml = Caaml.createCaaml(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V5));
+				regions);
+			AvalancheReport avalancheReport = AvalancheReport.of(result, null, ServerInstanceController.getInstance().getLocalServerInstance());
+			String caaml = Caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
 				final String type = version != CaamlVersion.V6_2022 ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
 				return Response.ok(caaml, type).build();
@@ -489,7 +491,7 @@ public class AvalancheBulletinService {
 				List<AvalancheBulletin> regionBulletins = allBulletins.stream()
 					.filter(bulletin -> bulletin.affectsRegion(region))
 					.collect(Collectors.toList());
-		
+
 				AvalancheReportController.getInstance().submitReport(regionBulletins, startDate, region, user);
 
 				// submit report for super regions

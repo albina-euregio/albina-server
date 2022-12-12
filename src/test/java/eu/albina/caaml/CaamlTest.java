@@ -51,6 +51,7 @@ public class CaamlTest {
 	private String createCaaml(CaamlVersion version) throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		AvalancheReport.of(bulletins, null, serverInstanceEuregio); // test without region for eu.albina.rest.AvalancheBulletinService.getJSONBulletins
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		return Caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 	}
