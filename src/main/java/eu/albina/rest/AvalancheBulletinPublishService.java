@@ -212,7 +212,7 @@ public class AvalancheBulletinPublishService {
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			// update all super regions
-			Set<Region> regions = new HashSet()<Region>(publishBulletinRegions);
+			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
 			for (Region region : regions) {
 				for (Region superRegion : region.getSuperRegions()) {
 					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
