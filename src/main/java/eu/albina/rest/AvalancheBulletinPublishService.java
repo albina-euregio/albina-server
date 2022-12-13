@@ -147,36 +147,39 @@ public class AvalancheBulletinPublishService {
 		logger.debug("POST publish all bulletins");
 
 		try {
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			List<Region> regions = RegionController.getInstance().getPublishBulletinRegions();
-
-			if (!regions.isEmpty()) {
-				try {
-					User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
-
-					Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
-
-					// Set publication date
-					Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
-							.publishBulletins(startDate, endDate, regions, publicationDate, user);
-
-					if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
-						List<AvalancheBulletin> result = publishedBulletins.values().stream()
-							.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
-								&& !avalancheBulletin.getPublishedRegions().isEmpty())
-							.collect(Collectors.toList());
-						if (result != null && !result.isEmpty())
-							PublicationController.getInstance().publish(result, RegionController.getInstance().getPublishBulletinRegions(), user, publicationDate, startDate, false);
+			List<Region> changedRegions = RegionController.getInstance().getActiveRegions().stream()
+				.filter(region -> {
+					try {
+						return AlbinaUtil.isReportSubmitted(startDate, region);
+					} catch (AlbinaException e) {
+						logger.error("Failed isBulletinSubmitted", e);
+						return false;
 					}
-				} catch (AlbinaException e) {
-					logger.error("Error publishing bulletins", e);
-					throw new AlbinaException(e.getMessage());
+				}).collect(Collectors.toList());
+
+			Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
+
+			if (!changedRegions.isEmpty()) {
+				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
+						.publishBulletins(startDate, endDate, changedRegions, publicationDate, user);
+
+				if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
+					List<AvalancheBulletin> result = publishedBulletins.values().stream()
+						.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
+							&& !avalancheBulletin.getPublishedRegions().isEmpty())
+						.collect(Collectors.toList());
+					if (result != null && !result.isEmpty())
+						PublicationController.getInstance().publish(result, changedRegions, user, publicationDate, startDate, false);
 				}
 			} else {
 				logger.info("No bulletins to publish.");
 			}
+
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
