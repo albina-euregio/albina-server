@@ -18,6 +18,7 @@ package eu.albina.controller.publication;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -25,6 +26,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Strings;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 import org.hibernate.HibernateException;
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
@@ -36,7 +41,9 @@ import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HibernateUtil;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class TelegramController {
@@ -92,6 +99,12 @@ public class TelegramController {
 	}
 
 
+	/**
+	 * Send photo to Telegram channel using HTTP multipart/form-data
+	 *
+	 * @see <a href="https://core.telegram.org/bots/api#sendphoto">https://core.telegram.org/bots/api#sendphoto</a>
+	 * @see <a href="https://core.telegram.org/bots/api#inputfile">https://core.telegram.org/bots/api#inputfile</a>
+	 */
 	public Response sendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl, boolean test)
 			throws IOException, URISyntaxException, HibernateException {
 		TelegramConfiguration config = this.getConfiguration(region, lang);
@@ -102,20 +115,40 @@ public class TelegramController {
 
 		String chatId = test ? "@aws_test" : config.getChatId();
 
-		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
+		MultiPart multiPart = new FormDataMultiPart();
+		multiPart.bodyPart(new StreamDataBodyPart(
+			"photo",
+			new URL(attachmentUrl).openStream(),
+			attachmentUrl.substring(attachmentUrl.lastIndexOf("/") + 1),
+			MediaType.APPLICATION_OCTET_STREAM_TYPE));
+
+		Response response = HttpClientUtil
+			.newClientBuilder(80000) // sending photos may a while
+			.register(MultiPartFeature.class)
+			.build()
+			.target(String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
+			.register(MultiPartFeature.class)
 			.queryParam("chat_id", chatId)
 			.queryParam("caption", message)
-			.queryParam("photo", attachmentUrl);
-		return execute(request, config);
+			.request()
+			.post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+		if (response.getStatusInfo().getStatusCode() != 200) {
+			// FIXME throw exception?
+			logger.warn("Error publishing on telegram channel for "
+				+ config.getRegion().getId() + " (error code "
+				+ response.getStatusInfo().getStatusCode() + "): " + response.readEntity(String.class));
+		}
+		return response;
 	}
 
 	public Response sendMessage(Region region, LanguageCode lang, String message, boolean test) throws IOException, URISyntaxException, HibernateException {
 		TelegramConfiguration config = this.getConfiguration(region, lang);
-		
+
 		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
 			throw new IOException("Chat ID not found");
 		}
-		
+
 		String chatId = test ? "aws_test" : config.getChatId();
 
 		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendMessage", config.getApiToken()))

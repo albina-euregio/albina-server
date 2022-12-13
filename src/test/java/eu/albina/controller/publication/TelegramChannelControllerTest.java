@@ -73,6 +73,20 @@ public class TelegramChannelControllerTest {
 	}
 
 	@Test
+	public void sendMessageTest1() throws Exception {
+		try {
+			HibernateUtil.getInstance().setUp();
+			TelegramController telegramController = TelegramController.getInstance();
+			String attachmentUrl = "https://static.avalanche.report/bulletins/2020-01-26/fd_albina_map.jpg";
+			Region region = new Region("IT-32-TN");
+			String message = region + " - " + LanguageCode.it;
+			telegramController.sendPhoto(region, LanguageCode.it, message, attachmentUrl, true);
+		} finally {
+			HibernateUtil.getInstance().shutDown();
+		}
+	}
+
+	@Test
 	public void sendBulletin() throws URISyntaxException, IOException {
 		Region regionTrentino = new Region("IT-32-TN");
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTrentino, serverInstance);
