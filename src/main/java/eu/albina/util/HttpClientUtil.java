@@ -12,9 +12,13 @@ public interface HttpClientUtil {
 	Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
 	static ClientBuilder newClientBuilder() {
+		return newClientBuilder(10000);
+	}
+
+	static ClientBuilder newClientBuilder(int readTimeout) {
 		return ClientBuilder.newBuilder()
 			.connectTimeout(10000, TimeUnit.MILLISECONDS)
-			.readTimeout(10000, TimeUnit.MILLISECONDS)
+			.readTimeout(readTimeout, TimeUnit.MILLISECONDS)
 			.register((ClientRequestFilter) requestContext -> logger.info("Sending {} {}", requestContext.getMethod(), requestContext.getUri()));
 	}
 }
