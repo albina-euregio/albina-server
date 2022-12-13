@@ -23,6 +23,7 @@ import java.util.List;
 
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.util.HibernateUtil;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -77,6 +78,17 @@ public class TelegramChannelControllerTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTrentino, serverInstance);
 		avalancheReport.setStatus(BulletinStatus.test);
 		TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport);
+	}
+
+	@Test
+	public void getMe() throws IOException {
+		try {
+			HibernateUtil.getInstance().setUp();
+			Region regionTrentino = new Region("IT-32-TN");
+			TelegramController.getInstance().getMe(regionTrentino, LanguageCode.it);
+		} finally {
+			HibernateUtil.getInstance().shutDown();
+		}
 	}
 
 	@Ignore

@@ -124,6 +124,19 @@ public class TelegramController {
 		return execute(request, config);
 	}
 
+	/**
+	 * A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.
+	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
+	 */
+	public Response getMe(Region region, LanguageCode lang) throws IOException, HibernateException {
+		TelegramConfiguration config = this.getConfiguration(region, lang);
+		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
+			throw new IOException("Chat ID not found");
+		}
+		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()));
+		return execute(request, config);
+	}
+
 	private Response execute(WebTarget request, TelegramConfiguration config) {
 		final Response response = request.request().get();
 		if (response.getStatusInfo().getStatusCode() != 200) {
