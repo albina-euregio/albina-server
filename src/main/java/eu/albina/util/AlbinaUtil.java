@@ -107,12 +107,12 @@ public class AlbinaUtil {
 		}
 	}
 
-	public static boolean hasBulletinChanged(Instant startDate, Region region) throws AlbinaException {
+	public static boolean isReportSubmitted(Instant startDate, Region region) throws AlbinaException {
 		boolean result = false;
 		Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
 				startDate, region);
-		if (status.size() == 1 && status.get(startDate) != BulletinStatus.published
-				&& status.get(startDate) != BulletinStatus.republished)
+		if (status.size() == 1 && (status.get(startDate) == BulletinStatus.submitted
+				|| status.get(startDate) == BulletinStatus.resubmitted))
 			result = true;
 		return result;
 	}

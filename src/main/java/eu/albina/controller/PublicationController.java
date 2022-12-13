@@ -196,6 +196,7 @@ public class PublicationController {
 			}
 		}
 		for (Region region : superRegions) {
+			logger.info("Publishing super region {} with bulletins {}", region.getId(), bulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, localServerInstance);
 			createRegionResources(region, avalancheReport);
 		}
