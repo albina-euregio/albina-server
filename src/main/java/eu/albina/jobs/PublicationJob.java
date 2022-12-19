@@ -18,7 +18,6 @@ package eu.albina.jobs;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,16 +59,23 @@ public class PublicationJob implements org.quartz.Job {
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-		if (!serverInstance.isPublishAt5PM()) {
+		if (!isEnabled(serverInstance)) {
 			return;
 		}
-		ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
-		Instant startDate = today.plusDays(1).toInstant();
-		Instant endDate = today.plusDays(2).toInstant();
+		Instant startDate = getStartDate();
+		Instant endDate = startDate.atZone(AlbinaUtil.localZone()).plusDays(1).toInstant();
 		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 		logger.info("Publication/update job triggered startDate={} endDate={} publicationDate={}", startDate, endDate, publicationDate);
 
-		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions();
+		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions().stream()
+			.filter(region -> {
+				try {
+					return AlbinaUtil.isReportSubmitted(startDate, region);
+				} catch (AlbinaException e) {
+					logger.error("Failed isBulletinSubmitted", e);
+					return false;
+				}
+			}).collect(Collectors.toList());
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update.");
 			return;
@@ -94,4 +100,13 @@ public class PublicationJob implements org.quartz.Job {
 			logger.error("Error publishing/updating bulletins", e);
 		}
 	}
+
+	protected boolean isEnabled(ServerInstance serverInstance) {
+		return serverInstance.isPublishAt5PM();
+	}
+
+	protected Instant getStartDate() {
+		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).plusDays(1).toInstant();
+	}
+
 }

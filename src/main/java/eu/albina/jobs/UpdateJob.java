@@ -18,26 +18,9 @@ package eu.albina.jobs;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import eu.albina.model.ServerInstance;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.AvalancheBulletinController;
-import eu.albina.controller.PublicationController;
-import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
-import eu.albina.controller.UserController;
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.Region;
-import eu.albina.model.User;
 import eu.albina.util.AlbinaUtil;
 
 /**
@@ -47,59 +30,16 @@ import eu.albina.util.AlbinaUtil;
  * @author Norbert Lanzanasto
  *
  */
-public class UpdateJob implements org.quartz.Job {
+public class UpdateJob extends PublicationJob {
 
-	private static final Logger logger = LoggerFactory.getLogger(UpdateJob.class);
-
-	/**
-	 * Execute all necessary tasks to update the bulletins at 8AM, depending
-	 * on the current settings.
-	 *
-	 * @param arg0
-	 */
 	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-		if (!serverInstance.isPublishAt8AM()) {
-			return;
-		}
-		ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
-		Instant startDate = today.toInstant();
-		Instant endDate = today.plusDays(1).toInstant();
-		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
-		logger.info("Publication/update job triggered startDate={} endDate={} publicationDate={}", startDate, endDate, publicationDate);
-
-		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions().stream()
-			.filter(region -> {
-				try {
-					return AlbinaUtil.isReportSubmitted(startDate, region);
-				} catch (AlbinaException e) {
-					logger.error("Failed isBulletinSubmitted", e);
-					return false;
-				}
-			}).collect(Collectors.toList());
-		if (regions.isEmpty()) {
-			logger.info("No bulletins to publish/update.");
-			return;
-		}
-		try {
-			String userName = serverInstance.getUserName();
-			User user = userName != null ? UserController.getInstance().getUser(userName) : null;
-			Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
-				.publishBulletins(startDate, endDate, regions, publicationDate, user);
-			if (publishedBulletins.values() == null || publishedBulletins.values().isEmpty()) {
-				return;
-			}
-			List<AvalancheBulletin> result = publishedBulletins.values().stream()
-				.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
-					&& !avalancheBulletin.getPublishedRegions().isEmpty())
-				.collect(Collectors.toList());
-			if (result == null || result.isEmpty()) {
-				return;
-			}
-			PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, false);
-		} catch (AlbinaException e) {
-			logger.error("Error publishing/updating bulletins", e);
-		}
+	protected boolean isEnabled(ServerInstance serverInstance) {
+		return serverInstance.isPublishAt8AM();
 	}
+
+	@Override
+	protected Instant getStartDate() {
+		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).toInstant();
+	}
+
 }
