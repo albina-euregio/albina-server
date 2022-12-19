@@ -314,8 +314,7 @@ public class AvalancheBulletinPublishService {
 				try {
 					AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
 					List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
-					avalancheReport.setBulletins(regionBulletins);
-					avalancheReport.setGlobalBulletins(bulletins);
+					avalancheReport.setBulletins(regionBulletins, bulletins);
 					avalancheReport.setServerInstance(localServerInstance);
 					PublicationController.getInstance().createMaps(avalancheReport);
 				} catch (InterruptedException e) {
@@ -372,8 +371,7 @@ public class AvalancheBulletinPublishService {
 				logger.info("Creating CAAML for region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
 
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
-				avalancheReport.setBulletins(regionBulletins);
-				avalancheReport.setGlobalBulletins(bulletins);
+				avalancheReport.setBulletins(regionBulletins, bulletins);
 				avalancheReport.setServerInstance(localServerInstance);
 
 				if (regionBulletins.isEmpty()) {

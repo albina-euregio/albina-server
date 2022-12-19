@@ -129,8 +129,7 @@ public class PublicationController {
 				} else {
 					avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
 				}
-				avalancheReport.setBulletins(regionBulletins);
-				avalancheReport.setGlobalBulletins(bulletins);
+				avalancheReport.setBulletins(regionBulletins, bulletins);
 				avalancheReport.setServerInstance(localServerInstance);
 
 				if (regionBulletins.isEmpty()) {
@@ -146,8 +145,7 @@ public class PublicationController {
 					continue;
 				}
 
-				avalancheReport.setBulletins(regionBulletins);
-				avalancheReport.setGlobalBulletins(bulletins);
+				avalancheReport.setBulletins(regionBulletins, bulletins);
 				avalancheReport.setServerInstance(localServerInstance);
 			}
 

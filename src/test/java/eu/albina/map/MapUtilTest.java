@@ -177,7 +177,7 @@ public class MapUtilTest {
 			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(regionTyrol))
 			.collect(Collectors.toList());
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletinsTyrol, regionTyrol, serverInstance);
-		avalancheReport.setGlobalBulletins(bulletins);
+		avalancheReport.setBulletins(bulletinsTyrol, bulletins);
 		MapUtil.createMapyrusMaps(avalancheReport);
 		assertEquals("2019-01-17/2019-01-16_16-00-00/2019-01-17_AT-07_en.pdf",
 			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
