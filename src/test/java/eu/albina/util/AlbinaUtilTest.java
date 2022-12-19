@@ -206,7 +206,7 @@ public class AlbinaUtilTest {
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, null);
 		assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
 			SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
-		avalancheReport.setStatus(BulletinStatus.updated);
+		avalancheReport.setStatus(BulletinStatus.republished);
 		assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
 			SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",

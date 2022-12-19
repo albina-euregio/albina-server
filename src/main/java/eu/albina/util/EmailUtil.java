@@ -122,7 +122,7 @@ public class EmailUtil {
 		Region region = avalancheReport.getRegion();
 		if (region.isSendEmails()) {
 			String subject;
-			if (avalancheReport.getStatus() == BulletinStatus.updated) {
+			if (avalancheReport.getStatus() == BulletinStatus.republished) {
 				subject = MessageFormat.format(lang.getBundleString("email.subject.update", region), lang.getBundleString("website.name", region)) + AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
 			} else
 				subject = MessageFormat.format(lang.getBundleString("email.subject", region), lang.getBundleString("website.name", region)) + AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
@@ -267,7 +267,7 @@ public class EmailUtil {
 				text.put("publishedAt", lang.getBundleString("published"));
 			text.put("date", AlbinaUtil.getDate(bulletins, lang));
 			text.put("title", lang.getBundleString("headline"));
-			if (avalancheReport.getStatus() == BulletinStatus.updated)
+			if (avalancheReport.getStatus() == BulletinStatus.republished)
 				text.put("headline", lang.getBundleString("headline.update"));
 			else
 				text.put("headline", lang.getBundleString("headline"));

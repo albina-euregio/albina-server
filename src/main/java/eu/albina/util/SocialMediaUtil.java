@@ -44,7 +44,7 @@ interface SocialMediaUtil {
 		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 		String dateString = AlbinaUtil.getDate(bulletins, lang);
 		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, avalancheReport.getRegion());
-		if (avalancheReport.getStatus() == BulletinStatus.updated) {
+		if (avalancheReport.getStatus() == BulletinStatus.republished) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
 				lang.getBundleString("website.name"), dateString, bulletinUrl);
 		} else {
