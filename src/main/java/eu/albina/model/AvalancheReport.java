@@ -22,7 +22,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,7 +36,6 @@ import javax.persistence.Transient;
 import com.github.openjson.JSONObject;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import eu.albina.util.AlbinaUtil;
 
@@ -283,12 +281,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public List<AvalancheBulletin> getBulletins() {
 		return bulletins;
-	}
-
-	public List<AvalancheBulletin> getRegionBulletins() {
-		return getBulletins().stream()
-			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(region))
-			.collect(Collectors.toList());
 	}
 
 	public String getValidityDateString() {

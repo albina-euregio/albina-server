@@ -180,7 +180,7 @@ public class SimpleHtmlUtil {
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
 		// Create data model
-		List<AvalancheBulletin> bulletins = avalancheReport.getRegionBulletins();
+		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 		Region region = avalancheReport.getRegion();
 		ServerInstance serverInstance = avalancheReport.getServerInstance();
 		Map<String, Object> root = new HashMap<>();
@@ -207,21 +207,17 @@ public class SimpleHtmlUtil {
 
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", lang.getBundleString("website.url") + "/bulletin/"
-				+ AlbinaUtil.getValidityDateString(bulletins));
+				+ avalancheReport.getValidityDateString());
 		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1), serverInstance));
 		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1), serverInstance));
-		link.put("linkDe", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_de.html");
-		link.put("linkIt", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_it.html");
-		link.put("linkEn", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_en.html");
-		link.put("linkEs", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_es.html");
-		link.put("linkCa", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_ca.html");
-		link.put("linkAr", LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
-				+ AlbinaUtil.getValidityDateString(bulletins) + "/" + region.getId() + "_ar.html");
+		String prefix = LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+			+ avalancheReport.getValidityDateString() + "/" + region.getId();
+		link.put("linkDe", prefix + "_de.html");
+		link.put("linkIt", prefix + "_it.html");
+		link.put("linkEn", prefix + "_en.html");
+		link.put("linkEs", prefix + "_es.html");
+		link.put("linkCa", prefix + "_ca.html");
+		link.put("linkAr", prefix + "_ar.html");
 
 		root.put("link", link);
 

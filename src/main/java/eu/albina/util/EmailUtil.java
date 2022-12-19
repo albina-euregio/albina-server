@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -126,7 +125,7 @@ public class EmailUtil {
 				subject = MessageFormat.format(lang.getBundleString("email.subject.update", region), lang.getBundleString("website.name", region)) + AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
 			} else
 				subject = MessageFormat.format(lang.getBundleString("email.subject", region), lang.getBundleString("website.name", region)) + AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
-			List<AvalancheBulletin> regionBulletins = avalancheReport.getRegionBulletins();
+			List<AvalancheBulletin> regionBulletins = avalancheReport.getBulletins();
 			if (regionBulletins != null && !regionBulletins.isEmpty()) {
 				String emailHtml = createBulletinEmailHtml(avalancheReport, lang);
 				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, avalancheReport.getStatus() == BulletinStatus.test);

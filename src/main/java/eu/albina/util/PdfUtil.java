@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 import com.google.common.io.Resources;
 
@@ -169,8 +168,7 @@ public class PdfUtil {
 	 * detailed information about each aggregated region touching the province.
 	 */
 	public static void createRegionPdfs(AvalancheReport avalancheReport) {
-		List<AvalancheBulletin> regionBulletins = avalancheReport.getRegionBulletins();
-		if (regionBulletins.isEmpty()) {
+		if (avalancheReport.getBulletins().isEmpty()) {
 			return;
 		}
 		for (LanguageCode lang : LanguageCode.ENABLED) {
