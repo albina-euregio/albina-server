@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import eu.albina.model.ServerInstance;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -58,44 +59,47 @@ public class UpdateJob implements org.quartz.Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		logger.info("Update job triggered!");
+		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+		if (!serverInstance.isPublishAt8AM()) {
+			return;
+		}
+		ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
+		Instant startDate = today.toInstant();
+		Instant endDate = today.plusDays(1).toInstant();
+		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
+		logger.info("Publication/update job triggered startDate={} endDate={} publicationDate={}", startDate, endDate, publicationDate);
 
-		try {
-			String userName = ServerInstanceController.getInstance().getLocalServerInstance().getUserName();
-			User user = userName != null ? UserController.getInstance().getUser(userName) : null;
-
-			ZonedDateTime today = LocalDate.now().atStartOfDay(AlbinaUtil.localZone());
-			Instant startDate = today.toInstant();
-			Instant endDate = today.plusDays(1).toInstant();
-
-			List<Region> changedRegions = RegionController.getInstance().getPublishBulletinRegions().stream()
-				.filter(region -> {
-					try {
-						return AlbinaUtil.isReportSubmitted(startDate, region);
-					} catch (AlbinaException e) {
-						logger.error("Failed isBulletinSubmitted", e);
-						return false;
-					}
-				}).collect(Collectors.toList());
-
-			Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
-
-			if (!changedRegions.isEmpty()) {
-				Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
-						.publishBulletins(startDate, endDate, changedRegions, publicationDate, user);
-				if (publishedBulletins.values() != null && !publishedBulletins.values().isEmpty()) {
-					List<AvalancheBulletin> result = publishedBulletins.values().stream()
-						.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
-							&& !avalancheBulletin.getPublishedRegions().isEmpty())
-						.collect(Collectors.toList());
-					if (result != null && !result.isEmpty())
-						PublicationController.getInstance().updateAutomatically(result, changedRegions, user, publicationDate, startDate);
+		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions().stream()
+			.filter(region -> {
+				try {
+					return AlbinaUtil.isReportSubmitted(startDate, region);
+				} catch (AlbinaException e) {
+					logger.error("Failed isBulletinSubmitted", e);
+					return false;
 				}
-			} else {
-				logger.info("No bulletins to update.");
+			}).collect(Collectors.toList());
+		if (regions.isEmpty()) {
+			logger.info("No bulletins to publish/update.");
+			return;
+		}
+		try {
+			String userName = serverInstance.getUserName();
+			User user = userName != null ? UserController.getInstance().getUser(userName) : null;
+			Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
+				.publishBulletins(startDate, endDate, regions, publicationDate, user);
+			if (publishedBulletins.values() == null || publishedBulletins.values().isEmpty()) {
+				return;
 			}
+			List<AvalancheBulletin> result = publishedBulletins.values().stream()
+				.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
+					&& !avalancheBulletin.getPublishedRegions().isEmpty())
+				.collect(Collectors.toList());
+			if (result == null || result.isEmpty()) {
+				return;
+			}
+			PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, false);
 		} catch (AlbinaException e) {
-			logger.error("Error publishing bulletins", e);
+			logger.error("Error publishing/updating bulletins", e);
 		}
 	}
 }

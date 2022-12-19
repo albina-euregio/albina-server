@@ -84,34 +84,6 @@ public class PublicationController {
 	}
 
 	/**
-	 * Trigger all tasks that have to take place after an avalanche bulletin has
-	 * been published automatically. This happens at 17:00 PM if this is defined in
-	 * the settings.
-	 *
-	 * @param bulletins
-	 *            The bulletins that were published.
-	 */
-	public void publishAutomatically(List<AvalancheBulletin> bulletins, User user, Instant publicationDate, Instant startDate) {
-		if (ServerInstanceController.getInstance().getLocalServerInstance().isPublishAt5PM())
-			publish(bulletins, RegionController.getInstance().getPublishBulletinRegions(), user, publicationDate, startDate, false);
-	}
-
-	/**
-	 * Trigger all tasks that have to take place after an avalanche bulletin has
-	 * been updated automatically. This happens at 08:00 AM (if needed) if this is
-	 * defined in the settings.
-	 *
-	 * @param bulletins
-	 *            The bulletins that were published.
-	 * @param regions
-	 *            The regions that were updated.
-	 */
-	public void updateAutomatically(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate) {
-		if (ServerInstanceController.getInstance().getLocalServerInstance().isPublishAt8AM())
-			publish(bulletins, regions, user, publicationDate, startDate, false);
-	}
-
-	/**
 	 * Triggers all tasks that have to take place after a small change in the
 	 * bulletin has been published. This does not trigger the whole publication
 	 * process.
@@ -160,11 +132,11 @@ public class PublicationController {
 				avalancheReport.setBulletins(regionBulletins);
 				avalancheReport.setGlobalBulletins(bulletins);
 				avalancheReport.setServerInstance(localServerInstance);
-				
+
 				if (regionBulletins.isEmpty()) {
 					continue;
 				}
-				
+
 				reportMap.put(region, avalancheReport);
 			} else {
 				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
