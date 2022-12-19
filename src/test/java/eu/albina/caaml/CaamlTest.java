@@ -21,7 +21,6 @@ import eu.albina.model.Region;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -78,7 +77,7 @@ public class CaamlTest {
 		final String expected = Resources
 				.toString(Resources.getResource("2019-01-16.caaml.v5.xml"), StandardCharsets.UTF_8).replace("\t", "  ");
 		final String xml = createCaaml(CaamlVersion.V5);
-		Assert.assertEquals(expected, xml);
+		assertStringEquals(expected, xml);
 	}
 
 	@Test
@@ -86,7 +85,7 @@ public class CaamlTest {
 		final String expected = Resources
 				.toString(Resources.getResource("2019-01-16.caaml.v6.xml"), StandardCharsets.UTF_8).replace("\t", "  ");
 		final String xml = createCaaml(CaamlVersion.V6);
-		Assert.assertEquals(expected, xml);
+		assertStringEquals(expected, xml);
 	}
 
 	@Ignore
@@ -153,8 +152,12 @@ public class CaamlTest {
 		final String caaml = Caaml6_2022.toCAAMLv6String_2022(avalancheReport, LanguageCode.en);
 		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
 		final String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
-		assertEquals(expected.trim(), caaml.trim());
+		assertStringEquals(expected, caaml);
 		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+	}
+
+	private static void assertStringEquals(String expected, String actual) {
+		assertEquals(expected.trim().replace("\r\n", "\n"), actual.trim().replace("\r\n", "\n"));
 	}
 
 	@Test
