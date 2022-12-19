@@ -452,9 +452,9 @@ public class EmailUtil {
 			root.put("bulletins", arrayList);
 
 			Map<String, Object> links = new HashMap<>();
-			links.put("website", LinkUtil.getBulletinUrl(bulletins, lang, region));
+			links.put("website", LinkUtil.getBulletinUrl(avalancheReport, lang));
 			links.put("unsubscribe", "{%link_unsubscribe}");
-			links.put("pdf", LinkUtil.getPdfLink(bulletins, lang, region, serverInstance));
+			links.put("pdf", LinkUtil.getPdfLink(avalancheReport, lang));
 			links.put("imprint", LinkUtil.getImprintLink(lang, region));
 			Map<String, Object> socialMediaLinks = new HashMap<>();
 			socialMediaLinks.put("facebook", lang.getBundleString("website.url") + "/#followDialog");

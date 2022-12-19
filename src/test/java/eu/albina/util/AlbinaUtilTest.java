@@ -37,8 +37,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.xml.transform.TransformerException;
-
 import eu.albina.controller.AvalancheBulletinController;
 
 import eu.albina.model.AvalancheReport;
@@ -203,16 +201,16 @@ public class AlbinaUtilTest {
 		assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
 		assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
 		assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
-		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, null);
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
 			SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
 		avalancheReport.setStatus(BulletinStatus.republished);
 		assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
 			SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
 		assertEquals("https://lawinen.report/bulletin/2019-01-17",
-			LinkUtil.getBulletinUrl(bulletins, LanguageCode.de, regionEuregio));
-		assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_AT-07_de.pdf",
-			LinkUtil.getPdfLink(bulletins, LanguageCode.de, regionTirol, serverInstanceEuregio));
+			LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de));
+		assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf",
+			LinkUtil.getPdfLink(avalancheReport, LanguageCode.de));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
 		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),

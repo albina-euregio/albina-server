@@ -35,15 +35,15 @@ interface SocialMediaUtil {
 
 	default void sendBulletinNewsletters(AvalancheReport avalancheReport, LanguageCode lang) {
 		String message = getSocialMediaText(avalancheReport, lang);
-		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(avalancheReport.getRegion(), lang, avalancheReport.getBulletins(), avalancheReport.getServerInstance());
-		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport.getBulletins(), lang, avalancheReport.getRegion());
+		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(avalancheReport, lang);
+		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport, lang);
 		sendBulletinNewsletter(message, lang, avalancheReport.getRegion(), attachmentUrl, bulletinUrl, avalancheReport.getStatus() == BulletinStatus.test);
 	}
 
 	static String getSocialMediaText(AvalancheReport avalancheReport, LanguageCode lang) {
 		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 		String dateString = AlbinaUtil.getDate(bulletins, lang);
-		String bulletinUrl = LinkUtil.getBulletinUrl(bulletins, lang, avalancheReport.getRegion());
+		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport, lang);
 		if (avalancheReport.getStatus() == BulletinStatus.republished) {
 			return MessageFormat.format(lang.getBundleString("social-media.message.update"),
 				lang.getBundleString("website.name"), dateString, bulletinUrl);

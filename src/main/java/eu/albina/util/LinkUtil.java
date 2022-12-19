@@ -1,7 +1,7 @@
 package eu.albina.util;
 
 import eu.albina.map.MapUtil;
-import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.DangerPattern;
@@ -10,7 +10,6 @@ import eu.albina.model.enumerations.LanguageCode;
 
 import java.nio.file.Paths;
 import java.text.MessageFormat;
-import java.util.List;
 
 /**
  * Returns URLs (descriptions) for various bulletin elements
@@ -42,23 +41,24 @@ public interface LinkUtil {
 		return String.format("%s/%s", getStaticContentUrl(lang, region), mapsDirectory);
 	}
 
-	static String getPdfUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
-		String pdfDirectory = Paths.get(serverInstance.getPdfDirectory()).getFileName().toString();
-		return String.format("%s/%s", getStaticContentUrl(lang, region), pdfDirectory);
+	static String getPdfUrl(LanguageCode lang, AvalancheReport avalancheReport) {
+		String pdfDirectory = Paths.get(avalancheReport.getServerInstance().getPdfDirectory()).getFileName().toString();
+		return String.format("%s/%s", getStaticContentUrl(lang, avalancheReport.getRegion()), pdfDirectory);
 	}
 
 	static String getAvalancheReportFullBlogUrl(LanguageCode lang, Region region) {
 		return String.format("%s/blog/", getWebsiteUrl(lang, region));
 	}
 
-	static String getBulletinUrl(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region) {
-		String date = AlbinaUtil.getValidityDateString(bulletins);
-		return String.format("%s/bulletin/%s", getWebsiteUrl(lang, region), date);
+	static String getBulletinUrl(AvalancheReport avalancheReport, LanguageCode lang) {
+		String date = avalancheReport.getValidityDateString();
+		return String.format("%s/bulletin/%s", getWebsiteUrl(lang, avalancheReport.getRegion()), date);
 	}
 
-	static String getPdfLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, ServerInstance serverInstance) {
-		String date = AlbinaUtil.getValidityDateString(bulletins);
-		return String.format("%s/%s/%s_%s_%s.pdf", getPdfUrl(lang, region, serverInstance), date, date, region.getId(), lang);
+	static String getPdfLink(AvalancheReport avalancheReport, LanguageCode lang) {
+		String date = avalancheReport.getValidityDateString();
+		String region = avalancheReport.getRegion().getId();
+		return String.format("%s/%s/%s_%s_%s.pdf", getPdfUrl(lang, avalancheReport), date, date, region, lang);
 	}
 
 	static String getDangerPatternLink(LanguageCode lang, Region region, DangerPattern dangerPattern) {
@@ -97,11 +97,13 @@ public interface LinkUtil {
 		return "PDF " + regionName;
 	}
 
-	static String getSocialMediaAttachmentUrl(Region region, LanguageCode lang, List<AvalancheBulletin> bulletins, ServerInstance serverInstance) {
-		String validityDate = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTime = AlbinaUtil.getPublicationTime(bulletins);
+	static String getSocialMediaAttachmentUrl(AvalancheReport avalancheReport, LanguageCode lang) {
+		String validityDate = avalancheReport.getValidityDateString();
+		String publicationTime = avalancheReport.getPublicationTimeString();
+		Region region = avalancheReport.getRegion();
+		ServerInstance serverInstance1 = avalancheReport.getServerInstance();
 		return String.format("%s/%s/%s/%s",
-			getMapsUrl(lang, region, serverInstance), validityDate, publicationTime, MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
+			getMapsUrl(lang, region, serverInstance1), validityDate, publicationTime, MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
 	}
 
 	static String createHtmlLink(String text, String url) {
