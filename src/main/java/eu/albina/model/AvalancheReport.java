@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.github.openjson.JSONObject;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import eu.albina.util.AlbinaUtil;
 
 import eu.albina.model.enumerations.BulletinStatus;
@@ -137,6 +141,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	}
 
 	public void setBulletins(List<AvalancheBulletin> bulletins, List<AvalancheBulletin> globalBulletins) {
+		Preconditions.checkArgument(Sets.difference(new HashSet<>(bulletins), new HashSet<>(globalBulletins)).isEmpty(),
+			"bulletins must be subset of globalBulletins");
 		this.bulletins = bulletins;
 		this.globalBulletins = globalBulletins;
 		this.validityDateString = globalBulletins.isEmpty() ? null : AlbinaUtil.getValidityDateString(globalBulletins);
