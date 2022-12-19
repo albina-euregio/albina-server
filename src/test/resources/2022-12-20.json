@@ -1,0 +1,1145 @@
+[
+	{
+		"id": "c2718324-65e7-4eb8-88e7-efd2cbe4ba15",
+		"highlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "fr",
+				"text": "Neige ancienne fragile constituant le danger principal."
+			},
+			{
+				"languageCode": "es",
+				"text": "El problema de capas débiles persistentes es la principal fuente de peligro."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El problema de capes febles persistents és la principal font de perill."
+			},
+			{
+				"languageCode": "en",
+				"text": "Weakly bonded old snow represents the main danger."
+			},
+			{
+				"languageCode": "de",
+				"text": "Schwacher Altschnee ist die Hauptgefahr."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Eth problèma de coches febles persistentes ei era hònt principau de perilh."
+			},
+			{
+				"languageCode": "it",
+				"text": "La neve vecchia a debole coesione è la principale fonte di pericolo."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "fr",
+				"text": "Des couches fragiles dans la neige ancienne peuvent être déclenchées en certains endroits par des amateurs de sports d'hiver isolés. Les endroits dangereux se situent surtout sur les pentes raides exposées à l'ouest, au nord et à l'est au-dessus d'environ 2000 m. Prudence surtout à proximité des crêtes comme dans les combes, couloirs et derrière les ruptures de terrain. Des bruits sourds et des fissures lors du passage sur le manteau neigeux attirent l'attention sur le danger. Des avalanches peuvent atteindre une taille moyenne. <br/> Les accumulations de neige soufflée généralement petites des derniers jours sont encore de manière isolée fragiles, notamment sur les pentes à l'ombre à haute altitude et en haute montagne comme à proximité des crêtes. <br/> Un choix réfléchi des itinéraires est recommandé. <br/> Des avalanches de glissement et coulées humides sont possibles avec le réchauffement diurne et le rayonnement solaire, surtout sur les pentes ensoleillées comme sur les talus et pentes herbeuses notamment à moyenne altitude."
+			},
+			{
+				"languageCode": "en",
+				"text": "Weak layers in the old snowpack can be released in some places by individual winter sport participants. The avalanche prone locations are to be found in particular on steep west, north and east facing slopes above approximately 2000 m. Caution is to be exercised in particular adjacent to ridgelines, as well as in gullies and bowls, and behind abrupt changes in the terrain. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack indicate the danger. Avalanches can reach medium size. <br/> The mostly small wind slabs of the last few days are in individual cases still prone to triggering, especially on shady slopes at high altitudes and in high Alpine regions, as well as adjacent to ridgelines. <br/> Meticulous route selection is recommended. <br/> As a consequence of warming during the day and solar radiation gliding avalanches and moist snow slides are possible, in particular on sunny slopes, as well as on cut and grassy slopes especially at intermediate altitudes."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli strati deboli presenti nella neve vecchia possono distaccarsi in alcuni punti in seguito al passaggio di un singolo appassionato di sport invernali. I punti pericolosi si trovano soprattutto sui pendii ripidi esposti a ovest, nord ed est al di sopra dei 2000 m circa. Attenzione soprattutto nelle zone in prossimità delle creste, come pure nelle conche, nei canaloni e dietro ai cambi di pendenza. I rumori di \"whum\" e la formazione di fessure quando si calpesta la coltre di neve sono segnali da ricondurre a questo pericolo. Le valanghe possono raggiungere dimensioni medie. <br/> Gli accumuli di neve ventata per lo più di piccole dimensioni degli ultimi giorni sono, a livello isolato, ancora instabili, soprattutto sui pendii ombreggiati ad alta quota e in alta montagna, come pure nelle zone in prossimità delle creste. <br/> Si raccomanda un'accurata scelta dell'itinerario. <br/> Con il rialzo termico e l'irradiazione solare diurni, sono possibili valanghe per scivolamento di neve e colate umide, specialmente sui pendii soleggiati, come pure sulle scarpate e sui pendii erbosi principalmente alle quote di media montagna."
+			},
+			{
+				"languageCode": "de",
+				"text": "Schwachschichten im Altschnee können stellenweise von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an steilen West-, Nord- und Osthängen oberhalb von rund 2000 m. Vorsicht vor allem in Kammlagen sowie in Rinnen, Mulden und hinter Geländekanten. Wummgeräusche und Risse beim Betreten der Schneedecke weisen auf die Gefahr hin. Lawinen können mittlere Größe erreichen. <br/> Die meist kleinen Triebschneeansammlungen der letzten Tage sind vereinzelt noch störanfällig, besonders an Schattenhängen in hohen Lagen und im Hochgebirge sowie in Kammlagen. <br/> Eine überlegte Routenwahl ist empfohlen. <br/> Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung sind Gleitschneelawinen und feuchte Rutsche möglich, vor allem an Sonnenhängen sowie an Böschungen und Grashängen besonders in mittleren Lagen."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es coches febles ena nhèu vielha pòden desencadenar-se en quauqui endrets ath pas d'un solet montanhaire. Es endrets perilhosi se tròben sustot en pales arribentes orientades a oèst, nòrd e èst per dessús des 2000 m aproximativament. Precaucion sustot apròp des crestes, e tanben enes conques, canaus e ath darrèr de cambis abruptes de pendent. Es \"whumpfs\" e es henerècles que propaguen son senhaus de perilh Es lauegi pòden arténher mides mejanes. <br/> Es plaques de vent majoritàriament de mida petita des darrèri dies son, de manèra isolada, encara inestables, sustot enes pales ombrères en còtes nautes e nauta montanha, e tanben apròp des crestes. <br/> S'arrecomane ua eleccion meticulosa der itinerari. <br/> Damb era pujada dera temperatura diürna e era radiacion solara, son possibles lauegi d'esguitlament basau e purgues de nhèu umida, especiaument enes pales soleienques, e tanben enes talussi e enes pales erboses principaument en còtes mejanes."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les capes febles a la neu vella poden ser desencadenades en alguns indrets al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament. Precaució sobretot prop de les carenes, i també en cubetes, canals i darrere de canvis abruptes de pendent. Els \"whumpfs\" i les fissures que propaguen al passar són senyals de perill Les allaus poden atènyer mides mitjanes. <br/> Les plaques de vent majoritàriament de mida petita dels darrers dies són, de manera aïllada, encara inestables, sobretot en vessants obacs en cotes altes i a l'alta muntanya, i també prop de les carenes. <br/> Es recomana una elecció meticulosa de l’itinerari. <br/> Amb l'augment de la temperatura diürna i la radiació solar, són possibles allaus de lliscament basal i purgues de neu humida, especialment en vessants assolellats, i també als talussos i als vessants herbosos principalment en cotes mitges."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las capas débiles en la nieve antigua pueden ser desencadenadas en algunos lugares al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente. Precaución sobre todo cerca de los cordales, y en las cubetas, canales y detrás de los cambios abruptos de pendiente. Los \"whumpfs\" y las fisuras que propagan al pasar son señales de peligro Los aludes pueden alcanzar tamaños medianos. <br/> Las placas de viento, en su mayoría de tamaño pequeño, de los últimos días son, de manera aislada, aún inestables, sobre todo en las laderas umbrías en cotas altas y alta montaña, y cerca de los cordales. <br/> Se recomienda una elección meticulosa del itinerario. <br/> Con la subida de la temperatura diurna y la radiación solar, son posibles avalanchas de deslizamiento basal y purgas de nieve húmeda, especialmente en las laderas solanas, y en los taludes y las laderas herbosas principalmente en cotas medias."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "it"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "es",
+				"text": "La parte inferior del manto se ha facetado y es débil, sobre todo en las laderas inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente, y en las laderas soleadas inclinadas en alta montaña. Los desencadenamientos de aludes y las observaciones sobre el terreno confirman la estructura desfavorable del manto de nieve. <br/> La unión entre las placas de viento es localmente aún desfavorable. Con las temperaturas suaves, el martes las placas de viento se estabilizarán. <br/> El sol y el calor causarán en algunos casos sobre todo en cotas medias un gradual debilitamiento del manto de nieve en las laderas solanas."
+			},
+			{
+				"languageCode": "en",
+				"text": "Towards its base, the snowpack is faceted and weak, especially on steep west, north and east facing slopes above approximately 2000 m, as well as on steep sunny slopes in high Alpine regions. Released avalanches and field observations confirm the unfavourable bonding of the snowpack. <br/> In some cases the wind slabs have bonded still only poorly together. As a consequence of mild temperatures the snow drift accumulations will stabilise on Tuesday. <br/> Sunshine and high temperatures will give rise to gradual softening of the snowpack in some cases on sunny slopes in particular at intermediate altitudes."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Era part inferior deth mantèth s'a facetat e ei febla, sustot enes pales arribentes orientades a oèst, nòrd e èst per dessús des 2000 m aproximativament, e tanben enes pales soleienques arribentes en nauta montanha. Es desencadenaments de lauegi e es observacions sus eth terren confirmen era estructura desfavorabla deth mantèth de nhèu. <br/> Eth ligam entre es plaques de vent ei locaument encara desfavorable. Damb es temperatures doces, eth dimars es plaques de vent s'estabilizaràn. <br/> Eth solei e era calor causaràn enes pales soleienques sustot en còtes mejanes en quauqui casi un graduau debilitament deth mantèth de nhèu."
+			},
+			{
+				"languageCode": "ca",
+				"text": "La part inferior del mantell s'ha facetat i és feble, sobretot en vessants inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament, i també en vessants assolellats inclinats a l'alta muntanya. Els desencadenaments d'allaus i les observacions sobre el terreny confirmen l'estructura desfavorable del mantell de neu. <br/> El lligam entre les plaques de vent és localment encara desfavorable. Amb les temperatures suaus, el dimarts les plaques de vent s'estabilitzaran. <br/> El sol i la calor causaran en alguns casos un gradual debilitament del mantell de neu als vessants assolellats sobretot en cotes mitges."
+			},
+			{
+				"languageCode": "fr",
+				"text": "La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux et est fragile, notamment sur les pentes raides exposées à l'ouest, au nord et à l'est au-dessus d'environ 2000 m comme sur les pentes raides ensoleillées en haute montagne. Les départs d'avalanches et les observations sur le terrain confirment la structure défavorable du manteau neigeux. <br/> Les accumulations de neige soufflée sont parfois encore mal liées entre elles. Avec les températures douces les accumulations de neige soufflée se stabilisent mardi. <br/> Le soleil et la chaleur entraînent sur les pentes au soleil surtout à moyenne altitude partiellement un ramollissement progressif du manteau neigeux."
+			},
+			{
+				"languageCode": "it",
+				"text": "La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati ed è debole, soprattutto sui pendii ripidi esposti a ovest, nord ed est al di sopra dei 2000 m circa, come pure sui pendii soleggiati ripidi in alta montagna. I distacchi di valanghe e le osservazioni sul territorio confermano la sfavorevole struttura del manto nevoso. <br/> Il legame reciproco de(-) gli accumuli di neve ventata è in parte ancora sfavorevole. Con le temperature miti, martedì gli accumuli di neve ventata si stabilizzeranno. <br/> Il sole e il calore causeranno sui pendii soleggiati soprattutto alle quote di media montagna in parte un graduale ammorbidimento del manto nevoso."
+			},
+			{
+				"languageCode": "de",
+				"text": "Der untere Teil der Schneedecke ist kantig aufgebaut und schwach, besonders an steilen West-, Nord- und Osthängen oberhalb von rund 2000 m sowie an steilen Sonnenhängen im Hochgebirge. Lawinenabgänge und Beobachtungen im Gelände bestätigen den ungünstigen Schneedeckenaufbau. <br/> Die Triebschneeansammlungen sind teilweise noch schlecht miteinander verbunden. Mit milden Temperaturen stabilisieren sich die Triebschneeansammlungen am Dienstag. <br/> Sonne und Wärme führen an Sonnenhängen vor allem in mittleren Lagen teilweise zu einer allmählichen Aufweichung der Schneedecke."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "oc",
+				"text": "Eth mantèth de nhèu vielh demore procliu ath desencadenament enes pales ombrères. Damb eth vent de moderat a fòrt, eth dimèrcles se formarèn naues plaques de vent."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die Altschneedecke bleibt an Schattenhängen störanfällig. Mit mäßigem bis starkem Wind entstehen am Mittwoch frische Triebschneeansammlungen."
+			},
+			{
+				"languageCode": "it",
+				"text": "Il manto di neve vecchia rimane instabile sui pendii ombreggiati. Con il vento da moderato a forte, mercoledì si formeranno nuovi accumuli di neve ventata."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Sur les pentes à l'ombre le manteau neigeux ancien reste fragile. Avec le vent modéré à fort, de nouvelles accumulations de neige soufflée se forment mercredi."
+			},
+			{
+				"languageCode": "es",
+				"text": "El manto de nieve antiguo permanece proclive al desencadenamiento en las laderas umbrías. Con el viento de moderado a fuerte, el miércoles se formarán nuevas placas de viento."
+			},
+			{
+				"languageCode": "en",
+				"text": "The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El mantell de neu vell roman procliu al desencadenament als vessants obacs. Amb el vent de moderat a fort, el dimecres es formaran noves plaques de vent."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp1",
+		"dangerPattern2": "dp2",
+		"publicationDate": "2022-12-19T16:00:00Z",
+		"validity": {
+			"from": "2022-12-19T23:00:00Z",
+			"until": "2022-12-20T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-26",
+			"AT-07-27",
+			"AT-07-28",
+			"AT-07-24",
+			"AT-07-25"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "f7984d62-0d6a-44f1-a349-fb53369f9f22",
+			"hasElevationDependency": true,
+			"elevation": 2000,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"W",
+					"E",
+					"NW",
+					"N",
+					"NE"
+				],
+				"elevationLow": 2000,
+				"eawsMatrixInformation": {
+					"dangerRating": "considerable",
+					"dangerRatingModificator": "equal",
+					"avalancheSize": "medium",
+					"snowpackStability": "very_poor",
+					"frequency": "some",
+					"avalancheSizeValue": 31,
+					"snowpackStabilityValue": 75,
+					"frequencyValue": 67
+				}
+			}
+		}
+	},
+	{
+		"id": "cb4cbd03-71e2-449d-9a80-a25ec9a03afe",
+		"highlights": [
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "fr"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "it",
+				"text": "Il manto di neve vecchia rimane instabile."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El mantell de neu vell roman procliu al desencadenament."
+			},
+			{
+				"languageCode": "en",
+				"text": "The old snowpack remains prone to triggering."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die Altschneedecke bleibt störanfällig."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Le manteau neigeux ancien reste fragile."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Eth mantèth de nhèu vielh demore procliu ath desencadenament."
+			},
+			{
+				"languageCode": "es",
+				"text": "El manto de nieve antiguo permanece proclive al desencadenamiento."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "ca",
+				"text": "Les capes febles a la neu vella poden ser desencadenades de manera aïllada al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants molt inclinats obacs per sobre dels 2200 m aproximadament. Precaució en zones obagues i protegides del vent en altitud. Les allaus poden atènyer mides mitjanes. <br/> A més les plaques de vent de mida petita són de manera molt aïllada encara proclius al desencadenament. Aquestes si és possible s’haurien d’evitar. <br/> <br/> Amb l'augment de la temperatura, són probables allaus de lliscament basal i purgues de neu humida, especialment en vessants assolellats."
+			},
+			{
+				"languageCode": "en",
+				"text": "Weak layers in the old snowpack can be released in isolated cases by individual winter sport participants. The avalanche prone locations are to be found in particular on very steep shady slopes above approximately 2200 m. Caution is to be exercised in shady places that are protected from the wind at elevated altitudes. Avalanches can reach medium size. <br/> In addition the small wind slabs are prone to triggering in very isolated cases still. They are to be avoided as far as possible. <br/> <br/> As a consequence of warming gliding avalanches and moist snow slides are to be expected, in particular on sunny slopes."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es coches febles ena nhèu vielha pòden desencadenar-se de manèra isolada ath pas d'un solet montanhaire. Es endrets perilhosi se tròben sustot en pales fòrça arribentes ombrères per dessús des 2200 m aproximativament. Precaucion enes zònes ombrères e emparades deth vent en altitud. Es lauegi pòden arténher mides mejanes. <br/> Ath delà es plaques de vent de mida petita son de manèra fòrça isolada encara favorables ath desencadenament. Aguestes s'ei possible s’aurien d’evitar. <br/> <br/> Damb er aument dera temperatura, son probables lauegi d'esguitlament basau e purgues de nhèu umida, especiaument enes pales soleienques."
+			},
+			{
+				"languageCode": "de",
+				"text": "Schwachschichten im Altschnee können vereinzelt von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an sehr steilen Schattenhängen oberhalb von rund 2200 m. Vorsicht in schattigen, windgeschützten Lagen in der Höhe. Lawinen können mittlere Größe erreichen. <br/> Zudem sind die kleinen Triebschneeansammlungen sehr vereinzelt noch störanfällig. Sie sollten möglichst gemieden werden. <br/> <br/> Mit der Erwärmung sind Gleitschneelawinen und feuchte Rutsche zu erwarten, vor allem an Sonnenhängen."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las capas débiles en la nieve antigua pueden ser desencadenadas de manera aislada al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas muy inclinadas umbrías por encima de los 2200 m aproximadamente. Precaución en las zonas umbrías y protegidas del viento en altitud. Los aludes pueden alcanzar tamaños medianos. <br/> Además las pequeñas placas de viento son de manera muy aislada aún proclives al desencadenamiento. Estas si es posible deberían evitarse. <br/> <br/> Con el aumento de la temperatura, son probables avalanchas de deslizamiento basal y purgas de nieve húmeda, especialmente en las laderas solanas."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli strati deboli presenti nella neve vecchia possono distaccarsi a livello isolato in seguito al passaggio di un singolo appassionato di sport invernali. I punti pericolosi si trovano soprattutto sui pendii molto ripidi ombreggiati al di sopra dei 2200 m circa. Attenzione nelle zone ombreggiate e riparate dal vento in quota. Le valanghe possono raggiungere dimensioni medie. <br/> Inoltre gli accumuli di neve ventata di piccole dimensioni sono a livello molto isolato ancora instabili. Essi dovrebbero se possibile essere evitati. <br/> <br/> Con il rialzo termico, sono previste valanghe per scivolamento di neve e colate umide, specialmente sui pendii soleggiati."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Des couches fragiles dans la neige ancienne peuvent être déclenchées de manière isolée par des amateurs de sports d'hiver isolés. Les endroits dangereux se situent surtout sur les pentes très raides à l'ombre au-dessus d'environ 2200 m. Prudence aux endroits à l'ombre et abrités du vent en altitude. Des avalanches peuvent atteindre une taille moyenne. <br/> En outre les accumulations de neige soufflée petites sont de manière très isolée encore fragiles. Elles devraient être évitées dans la mesure du possible. <br/> <br/> Des avalanches de glissement et coulées humides sont à attendre avec le réchauffement, surtout sur les pentes ensoleillées."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "it"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "it",
+				"text": "All'interno del manto di neve vecchia si trovano strati fragili instabili, soprattutto sui pendii ombreggiati molto ripidi al di sopra dei 2200 m circa, come pure sui pendii soleggiati in alta montagna. <br/> Il legame tra i vari accumuli di neve ventata e quello tra gli accumuli di neve ventata e la neve vecchia è in parte ancora sfavorevole. Essi sono, a livello isolato, ancora instabili soprattutto sui pendii molto ripidi ombreggiati in quota. Con il rialzo termico, martedì gli accumuli di neve ventata si stabilizzeranno. <br/> <br/> Il sole e il calore causeranno nel corso della giornata sui pendii soleggiati soprattutto alle quote di media montagna un graduale inumidimento del manto nevoso."
+			},
+			{
+				"languageCode": "en",
+				"text": "Avalanche prone weak layers exist in the old snowpack, especially on very steep shady slopes above approximately 2200 m, as well as on sunny slopes in high Alpine regions. <br/> In some cases the wind slabs have bonded still only poorly with each other and the old snowpack. They are in individual cases still prone to triggering especially on very steep shady slopes at elevated altitudes. As a consequence of rising temperatures the snow drift accumulations will stabilise on Tuesday. <br/> <br/> Sunshine and high temperatures will give rise as the day progresses to gradual moistening of the snowpack on sunny slopes in particular at intermediate altitudes."
+			},
+			{
+				"languageCode": "de",
+				"text": "In der Altschneedecke sind störanfällige Schwachschichten vorhanden, besonders an sehr steilen Schattenhängen oberhalb von rund 2200 m sowie an Sonnenhängen im Hochgebirge. <br/> Die Triebschneeansammlungen sind teilweise noch schlecht miteinander und mit dem Altschnee verbunden. Sie sind besonders an sehr steilen Schattenhängen in der Höhe vereinzelt noch störanfällig. Mit der Erwärmung stabilisieren sich die Triebschneeansammlungen am Dienstag. <br/> <br/> Sonne und Wärme führen im Tagesverlauf an Sonnenhängen vor allem in mittleren Lagen zu einer allmählichen Anfeuchtung der Schneedecke."
+			},
+			{
+				"languageCode": "es",
+				"text": "En el manto de nieve antigua hay capas débiles inestables, sobre todo en las laderas umbrías muy inclinadas por encima de los 2200 m aproximadamente, y en las laderas soleadas en alta montaña. <br/> La unión entre las placas de viento y con la nieve antigua es localmente aún desfavorable. Estas son, de manera aislada, aún inestables sobre todo en laderas umbrías muy inclinadas en altitud. Con la subida de temperaturas, el martes las placas de viento se estabilizarán. <br/> <br/> En el transcurso de la jornada el sol y el calor causarán sobre todo en cotas medias una gradual humidificación del manto de nieve en las laderas solanas."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Al mantell de neu vella hi ha capes febles inestables, sobretot en vessants obacs molt inclinats per sobre dels 2200 m aproximadament, i també en vessants assolellats a l'alta muntanya. <br/> El lligam entre les plaques de vent i amb la neu vella és localment encara desfavorable. Aquestes són, de manera aïllada, encara inestables sobretot en vessants obacs molt inclinats en altitud. Amb la pujada de temperatures, el dimarts les plaques de vent s'estabilitzaran. <br/> <br/> En el transcurs de la jornada el sol i la calor causaran una gradual humidificació del mantell de neu als vessants assolellats sobretot en cotes mitges."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Dans le manteau neigeux ancien des couches fragiles susceptibles d'être déclenchées sont présentes, notamment sur les pentes très raides à l'ombre au-dessus d'environ 2200 m comme sur les pentes ensoleillées en haute montagne. <br/> Les accumulations de neige soufflée sont parfois encore mal liées entre elles et avec la neige ancienne. Elles sont encore de manière isolée fragiles particulièrement sur les pentes très raides à l'ombre en altitude. Avec le réchauffement les accumulations de neige soufflée se stabilisent mardi. <br/> <br/> Le soleil et la chaleur entraînent en cours de journée sur les pentes au soleil surtout à moyenne altitude une humidification progressive du manteau neigeux."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Ath laguens deth mantèth de nhèu vielha se tròben coches febles inestables, sustot enes pales ombrères fòrça arribentes per dessús des 2200 m aproximativament, e tanben enes pales soleienques en nauta montanha. <br/> Eth ligam entre es plaques de vent e damb era nhèu vielha ei locaument encara desfavorable. Aguestes son, de manèra isolada, encara inestables sustot en pales ombrères fòrça arribentes en altitud. Damb era pujada de temperatures, eth dimars es plaques de vent s'estabilizaràn. <br/> <br/> Ath long dera jornada eth solei e era calor causaràn enes pales soleienques sustot en còtes mejanes ua graduau umidificacion deth mantèth de nhèu."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "ca",
+				"text": "El mantell de neu vell roman procliu al desencadenament als vessants obacs. Amb el vent de moderat a fort, el dimecres es formaran noves plaques de vent."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die Altschneedecke bleibt an Schattenhängen störanfällig. Mit mäßigem bis starkem Wind entstehen am Mittwoch frische Triebschneeansammlungen."
+			},
+			{
+				"languageCode": "en",
+				"text": "The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Eth mantèth de nhèu vielh demore procliu ath desencadenament enes pales ombrères. Damb eth vent de moderat a fòrt, eth dimèrcles se formarèn naues plaques de vent."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Sur les pentes à l'ombre le manteau neigeux ancien reste fragile. Avec le vent modéré à fort, de nouvelles accumulations de neige soufflée se forment mercredi."
+			},
+			{
+				"languageCode": "es",
+				"text": "El manto de nieve antiguo permanece proclive al desencadenamiento en las laderas umbrías. Con el viento de moderado a fuerte, el miércoles se formarán nuevas placas de viento."
+			},
+			{
+				"languageCode": "it",
+				"text": "Il manto di neve vecchia rimane instabile sui pendii ombreggiati. Con il vento da moderato a forte, mercoledì si formeranno nuovi accumuli di neve ventata."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp1",
+		"publicationDate": "2022-12-19T16:00:00Z",
+		"validity": {
+			"from": "2022-12-19T23:00:00Z",
+			"until": "2022-12-20T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-29",
+			"IT-32-BZ-19",
+			"IT-32-BZ-08-01",
+			"IT-32-BZ-08-02",
+			"IT-32-BZ-08-03",
+			"IT-32-BZ-18-02",
+			"IT-32-BZ-18-01",
+			"IT-32-BZ-20",
+			"IT-32-BZ-15",
+			"IT-32-BZ-16",
+			"IT-32-BZ-17",
+			"IT-32-TN-12",
+			"IT-32-TN-15",
+			"IT-32-TN-03",
+			"IT-32-TN-14",
+			"IT-32-TN-06",
+			"IT-32-TN-17",
+			"IT-32-TN-18",
+			"IT-32-TN-09",
+			"IT-32-TN-11",
+			"IT-32-TN-21",
+			"IT-32-TN-10"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "147b5cf7-38aa-49b9-b799-ab17f9a5fe7f",
+			"hasElevationDependency": true,
+			"elevation": 2200,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"W",
+					"E",
+					"NW",
+					"N",
+					"NE"
+				],
+				"elevationLow": 2200,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "few",
+					"avalancheSizeValue": 27,
+					"snowpackStabilityValue": 65,
+					"frequencyValue": 45
+				}
+			}
+		}
+	},
+	{
+		"id": "5a8282b0-632f-417f-aabf-c8946d255c3c",
+		"highlights": [
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "oc"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "es",
+				"text": "El manto de nieve antiguo permanece proclive al desencadenamiento."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Le manteau neigeux ancien reste fragile."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Eth mantèth de nhèu vielh demore procliu ath desencadenament."
+			},
+			{
+				"languageCode": "it",
+				"text": "Il manto di neve vecchia rimane instabile."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El mantell de neu vell roman procliu al desencadenament."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die Altschneedecke bleibt störanfällig."
+			},
+			{
+				"languageCode": "en",
+				"text": "The old snowpack remains prone to triggering."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "oc",
+				"text": "Es coches febles ena nhèu vielha pòden desencadenar-se de manèra isolada ath pas d'un solet montanhaire. Es endrets perilhosi se tròben sustot en pales fòrça arribentes ombrères per dessús des 2200 m aproximativament. Precaucion enes zònes ombrères e emparades deth vent en altitud. Es lauegi pòden arténher mides mejanes. <br/> Ath delà es plaques de vent de mida petita son de manèra fòrça isolada encara favorables ath desencadenament. Aguestes s'ei possible s’aurien d’evitar. <br/> <br/> Damb er aument dera temperatura, son probables lauegi d'esguitlament basau e purgues de nhèu umida, especiaument enes pales soleienques arribentes, e tanben enes talussi e enes pales erboses en còtes baishes e mejanes."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli strati deboli presenti nella neve vecchia possono distaccarsi a livello isolato in seguito al passaggio di un singolo appassionato di sport invernali. I punti pericolosi si trovano soprattutto sui pendii molto ripidi ombreggiati al di sopra dei 2200 m circa. Attenzione nelle zone ombreggiate e riparate dal vento in quota. Le valanghe possono raggiungere dimensioni medie. <br/> Inoltre gli accumuli di neve ventata di piccole dimensioni sono a livello molto isolato ancora instabili. Essi dovrebbero se possibile essere evitati. <br/> <br/> Con il rialzo termico, sono previste valanghe per scivolamento di neve e colate umide, specialmente sui pendii soleggiati ripidi, come pure sulle scarpate e sui pendii erbosi alle quote di bassa e media montagna."
+			},
+			{
+				"languageCode": "en",
+				"text": "Weak layers in the old snowpack can be released in isolated cases by individual winter sport participants. The avalanche prone locations are to be found in particular on very steep shady slopes above approximately 2200 m. Caution is to be exercised in shady places that are protected from the wind at elevated altitudes. Avalanches can reach medium size. <br/> In addition the small wind slabs are prone to triggering in very isolated cases still. They are to be avoided as far as possible. <br/> <br/> As a consequence of warming gliding avalanches and moist snow slides are to be expected, in particular on steep sunny slopes, as well as on cut and grassy slopes at low and intermediate altitudes."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les capes febles a la neu vella poden ser desencadenades de manera aïllada al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants molt inclinats obacs per sobre dels 2200 m aproximadament. Precaució en zones obagues i protegides del vent en altitud. Les allaus poden atènyer mides mitjanes. <br/> A més les plaques de vent de mida petita són de manera molt aïllada encara proclius al desencadenament. Aquestes si és possible s’haurien d’evitar. <br/> <br/> Amb l'augment de la temperatura, són probables allaus de lliscament basal i purgues de neu humida, especialment en vessants assolellats inclinats, i també als talussos i als vessants herbosos en cotes baixes i mitges."
+			},
+			{
+				"languageCode": "de",
+				"text": "Schwachschichten im Altschnee können vereinzelt von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an sehr steilen Schattenhängen oberhalb von rund 2200 m. Vorsicht in schattigen, windgeschützten Lagen in der Höhe. Lawinen können mittlere Größe erreichen. <br/> Zudem sind die kleinen Triebschneeansammlungen sehr vereinzelt noch störanfällig. Sie sollten möglichst gemieden werden. <br/> <br/> Mit der Erwärmung sind Gleitschneelawinen und feuchte Rutsche zu erwarten, vor allem an steilen Sonnenhängen sowie an Böschungen und Grashängen in tiefen und mittleren Lagen."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las capas débiles en la nieve antigua pueden ser desencadenadas de manera aislada al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas muy inclinadas umbrías por encima de los 2200 m aproximadamente. Precaución en las zonas umbrías y protegidas del viento en altitud. Los aludes pueden alcanzar tamaños medianos. <br/> Además las pequeñas placas de viento son de manera muy aislada aún proclives al desencadenamiento. Estas si es posible deberían evitarse. <br/> <br/> Con el aumento de la temperatura, son probables avalanchas de deslizamiento basal y purgas de nieve húmeda, especialmente en las laderas solanas inclinadas, y en los taludes y las laderas herbosas en cotas bajas y medias."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Des couches fragiles dans la neige ancienne peuvent être déclenchées de manière isolée par des amateurs de sports d'hiver isolés. Les endroits dangereux se situent surtout sur les pentes très raides à l'ombre au-dessus d'environ 2200 m. Prudence aux endroits à l'ombre et abrités du vent en altitude. Des avalanches peuvent atteindre une taille moyenne. <br/> En outre les accumulations de neige soufflée petites sont de manière très isolée encore fragiles. Elles devraient être évitées dans la mesure du possible. <br/> <br/> Des avalanches de glissement et coulées humides sont à attendre avec le réchauffement, surtout sur les pentes raides ensoleillées comme sur les talus et pentes herbeuses à basse et moyenne altitude."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "fr"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "ca",
+				"text": "Al mantell de neu vella hi ha capes febles inestables, sobretot en vessants obacs molt inclinats per sobre dels 2200 m aproximadament, i també en vessants assolellats a l'alta muntanya. <br/> El lligam entre les plaques de vent i amb la neu vella és localment encara desfavorable. Aquestes són, de manera aïllada, encara inestables sobretot en vessants obacs molt inclinats en altitud. Amb la pujada de temperatures, el dimarts les plaques de vent s'estabilitzaran. <br/> <br/> En el transcurs de la jornada el sol i la calor causaran una gradual humidificació del mantell de neu sobretot als vessants assolellats en cotes mitges."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Dans le manteau neigeux ancien des couches fragiles susceptibles d'être déclenchées sont présentes, notamment sur les pentes très raides à l'ombre au-dessus d'environ 2200 m comme sur les pentes ensoleillées en haute montagne. <br/> Les accumulations de neige soufflée sont parfois encore mal liées entre elles et avec la neige ancienne. Elles sont encore de manière isolée fragiles particulièrement sur les pentes très raides à l'ombre en altitude. Avec le réchauffement les accumulations de neige soufflée se stabilisent mardi. <br/> <br/> Le soleil et la chaleur entraînent en cours de journée surtout sur les pentes au soleil à moyenne altitude une humidification progressive du manteau neigeux."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Ath laguens deth mantèth de nhèu vielha se tròben coches febles inestables, sustot enes pales ombrères fòrça arribentes per dessús des 2200 m aproximativament, e tanben enes pales soleienques en nauta montanha. <br/> Eth ligam entre es plaques de vent e damb era nhèu vielha ei locaument encara desfavorable. Aguestes son, de manèra isolada, encara inestables sustot en pales ombrères fòrça arribentes en altitud. Damb era pujada de temperatures, eth dimars es plaques de vent s'estabilizaràn. <br/> <br/> Ath long dera jornada eth solei e era calor causaràn sustot enes pales soleienques en còtes mejanes ua graduau umidificacion deth mantèth de nhèu."
+			},
+			{
+				"languageCode": "de",
+				"text": "In der Altschneedecke sind störanfällige Schwachschichten vorhanden, besonders an sehr steilen Schattenhängen oberhalb von rund 2200 m sowie an Sonnenhängen im Hochgebirge. <br/> Die Triebschneeansammlungen sind teilweise noch schlecht miteinander und mit dem Altschnee verbunden. Sie sind besonders an sehr steilen Schattenhängen in der Höhe vereinzelt noch störanfällig. Mit der Erwärmung stabilisieren sich die Triebschneeansammlungen am Dienstag. <br/> <br/> Sonne und Wärme führen im Tagesverlauf vor allem an Sonnenhängen in mittleren Lagen zu einer allmählichen Anfeuchtung der Schneedecke."
+			},
+			{
+				"languageCode": "en",
+				"text": "Avalanche prone weak layers exist in the old snowpack, especially on very steep shady slopes above approximately 2200 m, as well as on sunny slopes in high Alpine regions. <br/> In some cases the wind slabs have bonded still only poorly with each other and the old snowpack. They are in individual cases still prone to triggering especially on very steep shady slopes at elevated altitudes. As a consequence of rising temperatures the snow drift accumulations will stabilise on Tuesday. <br/> <br/> Sunshine and high temperatures will give rise as the day progresses to gradual moistening of the snowpack in particular on sunny slopes at intermediate altitudes."
+			},
+			{
+				"languageCode": "it",
+				"text": "All'interno del manto di neve vecchia si trovano strati fragili instabili, soprattutto sui pendii ombreggiati molto ripidi al di sopra dei 2200 m circa, come pure sui pendii soleggiati in alta montagna. <br/> Il legame tra i vari accumuli di neve ventata e quello tra gli accumuli di neve ventata e la neve vecchia è in parte ancora sfavorevole. Essi sono, a livello isolato, ancora instabili soprattutto sui pendii molto ripidi ombreggiati in quota. Con il rialzo termico, martedì gli accumuli di neve ventata si stabilizzeranno. <br/> <br/> Il sole e il calore causeranno nel corso della giornata soprattutto sui pendii soleggiati alle quote di media montagna un graduale inumidimento del manto nevoso."
+			},
+			{
+				"languageCode": "es",
+				"text": "En el manto de nieve antigua hay capas débiles inestables, sobre todo en las laderas umbrías muy inclinadas por encima de los 2200 m aproximadamente, y en las laderas soleadas en alta montaña. <br/> La unión entre las placas de viento y con la nieve antigua es localmente aún desfavorable. Estas son, de manera aislada, aún inestables sobre todo en laderas umbrías muy inclinadas en altitud. Con la subida de temperaturas, el martes las placas de viento se estabilizarán. <br/> <br/> En el transcurso de la jornada el sol y el calor causarán en cotas medias una gradual humidificación del manto de nieve sobre todo en las laderas solanas."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "en",
+				"text": "The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El mantell de neu vell roman procliu al desencadenament als vessants obacs. Amb el vent de moderat a fort, el dimecres es formaran noves plaques de vent."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Eth mantèth de nhèu vielh demore procliu ath desencadenament enes pales ombrères. Damb eth vent de moderat a fòrt, eth dimèrcles se formarèn naues plaques de vent."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Sur les pentes à l'ombre le manteau neigeux ancien reste fragile. Avec le vent modéré à fort, de nouvelles accumulations de neige soufflée se forment mercredi."
+			},
+			{
+				"languageCode": "it",
+				"text": "Il manto di neve vecchia rimane instabile sui pendii ombreggiati. Con il vento da moderato a forte, mercoledì si formeranno nuovi accumuli di neve ventata."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die Altschneedecke bleibt an Schattenhängen störanfällig. Mit mäßigem bis starkem Wind entstehen am Mittwoch frische Triebschneeansammlungen."
+			},
+			{
+				"languageCode": "es",
+				"text": "El manto de nieve antiguo permanece proclive al desencadenamiento en las laderas umbrías. Con el viento de moderado a fuerte, el miércoles se formarán nuevas placas de viento."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp1",
+		"dangerPattern2": "dp2",
+		"publicationDate": "2022-12-19T16:00:00Z",
+		"validity": {
+			"from": "2022-12-19T23:00:00Z",
+			"until": "2022-12-20T23:00:00Z"
+		},
+		"regions": [
+			"IT-32-TN-02",
+			"IT-32-TN-13",
+			"IT-32-TN-01",
+			"IT-32-TN-04",
+			"IT-32-TN-05",
+			"IT-32-TN-16",
+			"IT-32-TN-19",
+			"IT-32-TN-08",
+			"IT-32-TN-07",
+			"IT-32-TN-20"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "55c120f3-6aec-492a-bf63-96f9b258e0e1",
+			"hasElevationDependency": true,
+			"elevation": 2200,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"W",
+					"E",
+					"NW",
+					"N",
+					"NE"
+				],
+				"elevationLow": 2200,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "few",
+					"avalancheSizeValue": 31,
+					"snowpackStabilityValue": 70,
+					"frequencyValue": 41
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "wet_snow",
+				"aspects": [
+					"W",
+					"E",
+					"SE",
+					"SW",
+					"S"
+				],
+				"elevationLow": 2200,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "some",
+					"avalancheSizeValue": 24,
+					"snowpackStabilityValue": 62,
+					"frequencyValue": 62
+				}
+			}
+		}
+	},
+	{
+		"id": "7a6ed495-0215-4d77-8942-1c5dccfcb6cc",
+		"highlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "it"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "oc",
+				"text": "Eth problèma de coches febles persistentes ei era hònt principau de perilh."
+			},
+			{
+				"languageCode": "es",
+				"text": "El problema de capas débiles persistentes es la principal fuente de peligro."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El problema de capes febles persistents és la principal font de perill."
+			},
+			{
+				"languageCode": "it",
+				"text": "La neve vecchia a debole coesione è la principale fonte di pericolo."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Neige ancienne fragile constituant le danger principal."
+			},
+			{
+				"languageCode": "de",
+				"text": "Schwacher Altschnee ist die Hauptgefahr."
+			},
+			{
+				"languageCode": "en",
+				"text": "Weakly bonded old snow represents the main danger."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "oc",
+				"text": "Es coches febles ena nhèu vielha pòden desencadenar-se en quauqui endrets ath pas d'un solet montanhaire. Es endrets perilhosi se tròben sustot en pales arribentes orientades a oèst, nòrd e èst per dessús des 2000 m aproximativament. Precaucion sustot enes zònes ombrères e emparades deth vent. Es \"whumpfs\" e es henerècles que propaguen son senhaus de perilh Es lauegi pòden arténher mides mejanes. <br/> Es plaques de vent majoritàriament de mida petita des darrèri dies son, de manèra isolada, encara inestables, sustot apròp de còths e crestes, e tanben enes pales fòrça arribentes orientades a nòrd e èst en altitud. <br/> S'arrecomane ua eleccion meticulosa der itinerari. <br/> Damb era pujada dera temperatura diürna e era radiacion solara, son possibles lauegi d'esguitlament basau e purgues de nhèu umida, especiaument enes pales soleienques, e tanben enes talussi e enes pales erboses principaument en còtes mejanes."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Des couches fragiles dans la neige ancienne peuvent être déclenchées en certains endroits par des amateurs de sports d'hiver isolés. Les endroits dangereux se situent surtout sur les pentes raides exposées à l'ouest, au nord et à l'est au-dessus d'environ 2000 m. Prudence surtout aux endroits à l'ombre et abrités du vent. Des bruits sourds et des fissures lors du passage sur le manteau neigeux attirent l'attention sur le danger. Des avalanches peuvent atteindre une taille moyenne. <br/> Les accumulations de neige soufflée généralement petites des derniers jours sont encore de manière isolée fragiles, notamment à proximité des crêtes et des cols comme sur les pentes très raides exposées au nord et à l'est en altitude. <br/> Un choix réfléchi des itinéraires est recommandé. <br/> Des avalanches de glissement et coulées humides sont possibles avec le réchauffement diurne et le rayonnement solaire, surtout sur les pentes ensoleillées comme sur les talus et pentes herbeuses notamment à moyenne altitude."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli strati deboli presenti nella neve vecchia possono distaccarsi in alcuni punti in seguito al passaggio di un singolo appassionato di sport invernali. I punti pericolosi si trovano soprattutto sui pendii ripidi esposti a ovest, nord ed est al di sopra dei 2000 m circa. Attenzione soprattutto nelle zone ombreggiate e riparate dal vento. I rumori di \"whum\" e la formazione di fessure quando si calpesta la coltre di neve sono segnali da ricondurre a questo pericolo. Le valanghe possono raggiungere dimensioni medie. <br/> Gli accumuli di neve ventata per lo più di piccole dimensioni degli ultimi giorni sono, a livello isolato, ancora instabili, soprattutto nelle zone in prossimità delle creste e dei passi, come pure sui pendii molto ripidi esposti a nord ed est in quota. <br/> Si raccomanda un'accurata scelta dell'itinerario. <br/> Con il rialzo termico e l'irradiazione solare diurni, sono possibili valanghe per scivolamento di neve e colate umide, specialmente sui pendii soleggiati, come pure sulle scarpate e sui pendii erbosi principalmente alle quote di media montagna."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les capes febles a la neu vella poden ser desencadenades en alguns indrets al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament. Precaució sobretot en zones obagues i protegides del vent. Els \"whumpfs\" i les fissures que propaguen al passar són senyals de perill Les allaus poden atènyer mides mitjanes. <br/> Les plaques de vent majoritàriament de mida petita dels darrers dies són, de manera aïllada, encara inestables, sobretot prop de colls i carenes, i també en vessants molt inclinats orientats a nord i est en altitud. <br/> Es recomana una elecció meticulosa de l’itinerari. <br/> Amb l'augment de la temperatura diürna i la radiació solar, són possibles allaus de lliscament basal i purgues de neu humida, especialment en vessants assolellats, i també als talussos i als vessants herbosos principalment en cotes mitges."
+			},
+			{
+				"languageCode": "en",
+				"text": "Weak layers in the old snowpack can be released in some places by individual winter sport participants. The avalanche prone locations are to be found in particular on steep west, north and east facing slopes above approximately 2000 m. Caution is to be exercised in particular in shady places that are protected from the wind. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack indicate the danger. Avalanches can reach medium size. <br/> The mostly small wind slabs of the last few days are in individual cases still prone to triggering, especially adjacent to ridgelines and in pass areas, as well as on very steep north and east facing slopes at elevated altitudes. <br/> Meticulous route selection is recommended. <br/> As a consequence of warming during the day and solar radiation gliding avalanches and moist snow slides are possible, in particular on sunny slopes, as well as on cut and grassy slopes especially at intermediate altitudes."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las capas débiles en la nieve antigua pueden ser desencadenadas en algunos lugares al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente. Precaución sobre todo en las zonas umbrías y protegidas del viento. Los \"whumpfs\" y las fisuras que propagan al pasar son señales de peligro Los aludes pueden alcanzar tamaños medianos. <br/> Las placas de viento, en su mayoría de tamaño pequeño, de los últimos días son, de manera aislada, aún inestables, sobre todo cerca de collados y cordales, y en las laderas muy inclinadas orientadas a norte y este en altitud. <br/> Se recomienda una elección meticulosa del itinerario. <br/> Con la subida de la temperatura diurna y la radiación solar, son posibles avalanchas de deslizamiento basal y purgas de nieve húmeda, especialmente en las laderas solanas, y en los taludes y las laderas herbosas principalmente en cotas medias."
+			},
+			{
+				"languageCode": "de",
+				"text": "Schwachschichten im Altschnee können stellenweise von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an steilen West-, Nord- und Osthängen oberhalb von rund 2000 m. Vorsicht vor allem in schattigen, windgeschützten Lagen. Wummgeräusche und Risse beim Betreten der Schneedecke weisen auf die Gefahr hin. Lawinen können mittlere Größe erreichen. <br/> Die meist kleinen Triebschneeansammlungen der letzten Tage sind vereinzelt noch störanfällig, besonders in Kamm- und Passlagen sowie an sehr steilen Nord- und Osthängen in der Höhe. <br/> Eine überlegte Routenwahl ist empfohlen. <br/> Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung sind Gleitschneelawinen und feuchte Rutsche möglich, vor allem an Sonnenhängen sowie an Böschungen und Grashängen besonders in mittleren Lagen."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "de",
+				"text": "Der untere Teil der Schneedecke ist kantig aufgebaut und schwach, besonders an steilen Schattenhängen oberhalb von rund 2000 m sowie an steilen Sonnenhängen im Hochgebirge. Lawinenabgänge und Beobachtungen im Gelände bestätigen den ungünstigen Schneedeckenaufbau. <br/> Die Triebschneeansammlungen sind teilweise noch schlecht miteinander und mit dem Altschnee verbunden. Sie sind besonders an sehr steilen Schattenhängen in der Höhe vereinzelt noch störanfällig. Mit milden Temperaturen stabilisieren sich die Triebschneeansammlungen am Dienstag. <br/> Sonne und Wärme führen an Sonnenhängen vor allem in mittleren Lagen teilweise zu einer allmählichen Aufweichung der Schneedecke."
+			},
+			{
+				"languageCode": "en",
+				"text": "Towards its base, the snowpack is faceted and weak, especially on steep shady slopes above approximately 2000 m, as well as on steep sunny slopes in high Alpine regions. Released avalanches and field observations confirm the unfavourable bonding of the snowpack. <br/> In some cases the wind slabs have bonded still only poorly with each other and the old snowpack. They are in individual cases still prone to triggering especially on very steep shady slopes at elevated altitudes. As a consequence of mild temperatures the snow drift accumulations will stabilise on Tuesday. <br/> Sunshine and high temperatures will give rise to gradual softening of the snowpack in some cases on sunny slopes in particular at intermediate altitudes."
+			},
+			{
+				"languageCode": "es",
+				"text": "La parte inferior del manto se ha facetado y es débil, sobre todo en las laderas umbrías inclinadas por encima de los 2000 m aproximadamente, y en las laderas soleadas inclinadas en alta montaña. Los desencadenamientos de aludes y las observaciones sobre el terreno confirman la estructura desfavorable del manto de nieve. <br/> La unión entre las placas de viento y con la nieve antigua es localmente aún desfavorable. Estas son, de manera aislada, aún inestables sobre todo en laderas umbrías muy inclinadas en altitud. Con las temperaturas suaves, el martes las placas de viento se estabilizarán. <br/> El sol y el calor causarán en algunos casos sobre todo en cotas medias un gradual debilitamiento del manto de nieve en las laderas solanas."
+			},
+			{
+				"languageCode": "it",
+				"text": "La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati ed è debole, soprattutto sui pendii ombreggiati ripidi al di sopra dei 2000 m circa, come pure sui pendii soleggiati ripidi in alta montagna. I distacchi di valanghe e le osservazioni sul territorio confermano la sfavorevole struttura del manto nevoso. <br/> Il legame tra i vari accumuli di neve ventata e quello tra gli accumuli di neve ventata e la neve vecchia è in parte ancora sfavorevole. Essi sono, a livello isolato, ancora instabili soprattutto sui pendii molto ripidi ombreggiati in quota. Con le temperature miti, martedì gli accumuli di neve ventata si stabilizzeranno. <br/> Il sole e il calore causeranno sui pendii soleggiati soprattutto alle quote di media montagna in parte un graduale ammorbidimento del manto nevoso."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Era part inferior deth mantèth s'a facetat e ei febla, sustot enes pales ombrères arribentes per dessús des 2000 m aproximativament, e tanben enes pales soleienques arribentes en nauta montanha. Es desencadenaments de lauegi e es observacions sus eth terren confirmen era estructura desfavorabla deth mantèth de nhèu. <br/> Eth ligam entre es plaques de vent e damb era nhèu vielha ei locaument encara desfavorable. Aguestes son, de manèra isolada, encara inestables sustot en pales ombrères fòrça arribentes en altitud. Damb es temperatures doces, eth dimars es plaques de vent s'estabilizaràn. <br/> Eth solei e era calor causaràn enes pales soleienques sustot en còtes mejanes en quauqui casi un graduau debilitament deth mantèth de nhèu."
+			},
+			{
+				"languageCode": "fr",
+				"text": "La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux et est fragile, notamment sur les pentes raides à l'ombre au-dessus d'environ 2000 m comme sur les pentes raides ensoleillées en haute montagne. Les départs d'avalanches et les observations sur le terrain confirment la structure défavorable du manteau neigeux. <br/> Les accumulations de neige soufflée sont parfois encore mal liées entre elles et avec la neige ancienne. Elles sont encore de manière isolée fragiles particulièrement sur les pentes très raides à l'ombre en altitude. Avec les températures douces les accumulations de neige soufflée se stabilisent mardi. <br/> Le soleil et la chaleur entraînent sur les pentes au soleil surtout à moyenne altitude partiellement un ramollissement progressif du manteau neigeux."
+			},
+			{
+				"languageCode": "ca",
+				"text": "La part inferior del mantell s'ha facetat i és feble, sobretot en vessants obacs inclinats per sobre dels 2000 m aproximadament, i també en vessants assolellats inclinats a l'alta muntanya. Els desencadenaments d'allaus i les observacions sobre el terreny confirmen l'estructura desfavorable del mantell de neu. <br/> El lligam entre les plaques de vent i amb la neu vella és localment encara desfavorable. Aquestes són, de manera aïllada, encara inestables sobretot en vessants obacs molt inclinats en altitud. Amb les temperatures suaus, el dimarts les plaques de vent s'estabilitzaran. <br/> El sol i la calor causaran en alguns casos un gradual debilitament del mantell de neu als vessants assolellats sobretot en cotes mitges."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "es",
+				"text": "El manto de nieve antiguo permanece proclive al desencadenamiento en las laderas umbrías. Con el viento de moderado a fuerte, el miércoles se formarán nuevas placas de viento."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die Altschneedecke bleibt an Schattenhängen störanfällig. Mit mäßigem bis starkem Wind entstehen am Mittwoch frische Triebschneeansammlungen."
+			},
+			{
+				"languageCode": "en",
+				"text": "The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Eth mantèth de nhèu vielh demore procliu ath desencadenament enes pales ombrères. Damb eth vent de moderat a fòrt, eth dimèrcles se formarèn naues plaques de vent."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Sur les pentes à l'ombre le manteau neigeux ancien reste fragile. Avec le vent modéré à fort, de nouvelles accumulations de neige soufflée se forment mercredi."
+			},
+			{
+				"languageCode": "it",
+				"text": "Il manto di neve vecchia rimane instabile sui pendii ombreggiati. Con il vento da moderato a forte, mercoledì si formeranno nuovi accumuli di neve ventata."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El mantell de neu vell roman procliu al desencadenament als vessants obacs. Amb el vent de moderat a fort, el dimecres es formaran noves plaques de vent."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp1",
+		"dangerPattern2": "dp2",
+		"publicationDate": "2022-12-19T16:00:00Z",
+		"validity": {
+			"from": "2022-12-19T23:00:00Z",
+			"until": "2022-12-20T23:00:00Z"
+		},
+		"regions": [
+			"IT-32-BZ-10",
+			"IT-32-BZ-04-02",
+			"IT-32-BZ-11",
+			"IT-32-BZ-02-01",
+			"IT-32-BZ-05-03",
+			"IT-32-BZ-12",
+			"IT-32-BZ-04-01",
+			"IT-32-BZ-05-02",
+			"IT-32-BZ-13",
+			"IT-32-BZ-05-01",
+			"IT-32-BZ-01-02",
+			"IT-32-BZ-14",
+			"IT-32-BZ-03",
+			"IT-32-BZ-01-01",
+			"IT-32-BZ-02-02",
+			"IT-32-BZ-06",
+			"IT-32-BZ-07-01",
+			"IT-32-BZ-09",
+			"IT-32-BZ-07-02"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "115e3cf1-5afc-4c98-a1f5-3852091be0ac",
+			"hasElevationDependency": true,
+			"elevation": 2000,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"W",
+					"E",
+					"NW",
+					"N",
+					"NE"
+				],
+				"elevationLow": 2000,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "plus",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "some",
+					"avalancheSizeValue": 31,
+					"snowpackStabilityValue": 72,
+					"frequencyValue": 64
+				}
+			}
+		}
+	},
+	{
+		"id": "86cfa094-f691-4a28-aa31-cb92c5b05fe2",
+		"highlights": [
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "ca"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "en",
+				"text": "Weakly bonded old snow represents the main danger. <br/>"
+			},
+			{
+				"languageCode": "fr",
+				"text": "Neige ancienne fragile constituant le danger principal. <br/>"
+			},
+			{
+				"languageCode": "it",
+				"text": "La neve vecchia a debole coesione è la principale fonte di pericolo. <br/>"
+			},
+			{
+				"languageCode": "ca",
+				"text": "El problema de capes febles persistents és la principal font de perill. <br/>"
+			},
+			{
+				"languageCode": "oc",
+				"text": "Eth problèma de coches febles persistentes ei era hònt principau de perilh. <br/>"
+			},
+			{
+				"languageCode": "de",
+				"text": "Schwacher Altschnee ist die Hauptgefahr. <br/>"
+			},
+			{
+				"languageCode": "es",
+				"text": "El problema de capas débiles persistentes es la principal fuente de peligro. <br/>"
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "en",
+				"text": "Weak layers in the old snowpack can still be released in some places by individual winter sport participants. The avalanche prone locations are to be found in particular on very steep west, north and east facing slopes above approximately 2000 m and on very steep south facing slopes above approximately 3000 m. <br/> The mostly small wind slabs can be released by a single winter sport participant in some cases in particular on near-ridge shady slopes at elevated altitudes. <br/> Avalanches can reach medium size. <br/> Meticulous route selection is advisable. <br/> As a consequence of warming individual gliding avalanches and moist snow slides are possible as the day progresses, but they will be mostly small. This applies in particular on very steep sunny slopes, as well as on cut and grassy slopes at intermediate altitudes."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli strati deboli presenti nella neve vecchia possono distaccarsi ancora in alcuni punti in seguito al passaggio di un singolo appassionato di sport invernali. I punti pericolosi si trovano soprattutto sui pendii molto ripidi esposti a ovest, nord ed est al di sopra dei 2000 m circa come pure sui pendii molto ripidi esposti a sud al di sopra dei 3000 m circa. <br/> Gli accumuli di neve ventata per lo più di piccole dimensioni possono in parte subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali soprattutto sui pendii vicino alle creste ombreggiati in quota. <br/> Le valanghe possono raggiungere dimensioni medie. <br/> Si consiglia un'accurata scelta dell'itinerario. <br/> Con il rialzo termico, nel corso della giornata sono possibili isolate valanghe per scivolamento di neve e colate umide, ma per lo più solo di piccole dimensioni. Ciò soprattutto sui pendii soleggiati molto ripidi, come pure sulle scarpate e sui pendii erbosi alle quote di media montagna."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las capas débiles en la nieve antigua pueden ser desencadenadas en algunos lugares incluso al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas muy inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente y en las laderas muy inclinadas orientadas a sur por encima de los 3000 m aproximadamente. <br/> Las placas de viento, en su mayoría de tamaño pequeño, pueden, en algunos casos, desencadenarse al paso de un solo montañero sobre todo en laderas umbrías cercanas a los cordales en altitud. <br/> Los aludes pueden alcanzar tamaños medianos. <br/> Se aconseja una elección meticulosa del itinerario. <br/> A consecuencia del aumento de la temperatura, en el transcurso de la jornada son posibles algunas avalanchas de deslizamiento basal y purgas de nieve húmeda, pero en su mayoría pequeñas. Esto se da especialmente en las laderas solanas muy inclinadas, y en los taludes y las laderas herbosas en cotas medias."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les capes febles a la neu vella poden ser desencadenades fins i tot en alguns indrets al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants molt inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament i també als vessants molt inclinats orientats a sud per sobre dels 3000 m aproximadament. <br/> Les plaques de vent majoritàriament de mida petita poden, en alguns casos, desencadenar-se al pas d'un sol muntanyenc sobretot en vessants obacs prop de les carenes en altitud. <br/> Les allaus poden atènyer mides mitjanes. <br/> S'aconsella una elecció meticulosa de l’itinerari. <br/> A conseqüència de l’augment de la temperatura, en el transcurs de la jornada són possibles només de manera aïllada allaus de lliscament basal i purgues de neu humida, però majoritàriament petites. Això es dona especialment en vessants assolellats molt inclinats, i també als talussos i als vessants herbosos en cotes mitges."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Des couches fragiles dans la neige ancienne peuvent encore être déclenchées en certains endroits par des amateurs de sports d'hiver isolés. Les endroits dangereux se situent surtout sur les pentes très raides exposées à l'ouest, au nord et à l'est au-dessus d'environ 2000 m ainsi que sur les pentes très raides exposées au sud au-dessus d'environ 3000 m. <br/> Les accumulations de neige soufflée généralement petites peuvent être parfois déclenchées par un seul amateur de sports d'hiver surtout sur les pentes à proximité des crêtes à l'ombre en altitude. <br/> Des avalanches peuvent atteindre une taille moyenne. <br/> Un choix réfléchi des itinéraires est approprié. <br/> Avec le réchauffement en cours de journée des avalanches de glissement et coulées humides isolées sont possibles, mais en général uniquement de petite taille. Ceci surtout sur les pentes très raides ensoleillées comme sur les talus et pentes herbeuses à moyenne altitude."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es coches febles ena nhèu vielha pòden desencadenar-se e tanben en quauqui endrets ath pas d'un solet montanhaire. Es endrets perilhosi se tròben sustot en pales fòrça arribentes orientades a oèst, nòrd e èst per dessús des 2000 m aproximativament e tanben enes pales fòrça arribentes orientades a sud per dessús des 3000 m aproximativament. <br/> Es plaques de vent majoritàriament de mida petita se pòden desencadenar, en quauqui casi, ath pas d'un unic montanhaire sustot en pales ombrères apròp des crestes en altitud. <br/> Es lauegi pòden arténher mides mejanes. <br/> S'aconselhe ua eleccion meticulosa der itinerari. <br/> A conseqüéncia der aument dera temperatura, ath long dera jornada son possibles sonque isoladament lauegi d'esguitlament basau e purgues de nhèu umida, mès majoritariament petiti. Açò se da especiaument enes pales soleienques fòrça arribentes, e tanben enes talussi e enes pales erboses en còtes mejanes."
+			},
+			{
+				"languageCode": "de",
+				"text": "Schwachschichten im Altschnee können stellenweise noch von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an sehr steilen West-, Nord- und Osthängen oberhalb von rund 2000 m sowie an sehr steilen Südhängen oberhalb von rund 3000 m. <br/> Die meist kleinen Triebschneeansammlungen können vor allem an kammnahen Schattenhängen in der Höhe teilweise von einzelnen Wintersportlern ausgelöst werden. <br/> Lawinen können mittlere Größe erreichen. <br/> Eine überlegte Routenwahl ist angebracht. <br/> Mit der Erwärmung sind im Tagesverlauf einzelne Gleitschneelawinen und feuchte Rutsche möglich, aber meist nur kleine. Dies vor allem an sehr steilen Sonnenhängen sowie an Böschungen und Grashängen in mittleren Lagen."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "ca",
+				"text": "La part inferior del mantell s'ha facetat i és feble, sobretot en vessants inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament, i també en vessants assolellats inclinats a l'alta muntanya. <br/> Els desencadenaments d'allaus i les observacions sobre el terreny confirmen l'estructura desfavorable del mantell de neu. <br/> El dimarts es formaran plaques de vent majoritàriament de mida petita als sectors exposats al fogony. Això es dona prop de colls i carenes. <br/> El sol i la calor causaran un gradual debilitament del mantell de neu en cotes baixes i mitges. Això es dona en vessants assolellats i als sectors exposats al fogony. <br/> De moment només hi ha poca neu."
+			},
+			{
+				"languageCode": "es",
+				"text": "La parte inferior del manto se ha facetado y es débil, sobre todo en las laderas inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente, y en las laderas soleadas inclinadas en alta montaña. <br/> Los desencadenamientos de aludes y las observaciones sobre el terreno confirman la estructura desfavorable del manto de nieve. <br/> El martes se formarán placas de viento en su mayoría de tamaño pequeño en los sectores expuestos al Foehn. Esto se da cerca de collados y cordales. <br/> El sol y el calor causarán en cotas bajas y medias un gradual debilitamiento del manto de nieve. Esto se da en las laderas solanas y en los sectores expuestos al Foehn. <br/> De momento hay poca nieve."
+			},
+			{
+				"languageCode": "fr",
+				"text": "La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux et est fragile, notamment sur les pentes raides exposées à l'ouest, au nord et à l'est au-dessus d'environ 2000 m comme sur les pentes raides ensoleillées en haute montagne. <br/> Les départs d'avalanches et les observations sur le terrain confirment la structure défavorable du manteau neigeux. <br/> Des accumulations de neige soufflée en général petites se forment mardi dans les régions concernées par le foehn. Ceci à proximité des crêtes et des cols. <br/> Le soleil et la chaleur entraînent à basse et moyenne altitude un ramollissement progressif du manteau neigeux. Ceci sur les pentes ensoleillées et dans les régions concernées par le foehn. <br/> Il y a peu de neige pour cette période de l'année."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Era part inferior deth mantèth s'a facetat e ei febla, sustot enes pales arribentes orientades a oèst, nòrd e èst per dessús des 2000 m aproximativament, e tanben enes pales soleienques arribentes en nauta montanha. <br/> Es desencadenaments de lauegi e es observacions sus eth terren confirmen era estructura desfavorabla deth mantèth de nhèu. <br/> Eth dimars enes sectors exposadi ara balaguèra se formaràn plaques de vent majoritàriament de mida petita. Açò se da apròp de còths e crestes. <br/> Eth solei e era calor causaràn en còtes baishes e mejanes un graduau debilitament deth mantèth de nhèu. Açò se da enes pales soleienques e enes sectors exposadi ara balaguèra. <br/> Peth moment i a pòca nhèu."
+			},
+			{
+				"languageCode": "de",
+				"text": "Der untere Teil der Schneedecke ist kantig aufgebaut und schwach, besonders an steilen West-, Nord- und Osthängen oberhalb von rund 2000 m sowie an steilen Sonnenhängen im Hochgebirge. <br/> Lawinenabgänge und Beobachtungen im Gelände bestätigen den ungünstigen Schneedeckenaufbau. <br/> Am Dienstag entstehen in den Föhngebieten meist kleine Triebschneeansammlungen. Dies in Kamm- und Passlagen. <br/> Sonne und Wärme führen in tiefen und mittleren Lagen zu einer allmählichen Aufweichung der Schneedecke. Dies an Sonnenhängen und in den Föhngebieten. <br/> Es liegt für die Jahreszeit wenig Schnee."
+			},
+			{
+				"languageCode": "it",
+				"text": "La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati ed è debole, soprattutto sui pendii ripidi esposti a ovest, nord ed est al di sopra dei 2000 m circa, come pure sui pendii soleggiati ripidi in alta montagna. <br/> I distacchi di valanghe e le osservazioni sul territorio confermano la sfavorevole struttura del manto nevoso. <br/> Nella giornata di martedì nelle regioni esposte al favonio si formeranno accumuli di neve ventata per lo più di piccole dimensioni. Ciò nelle zone in prossimità delle creste e dei passi. <br/> Il sole e il calore causeranno alle quote di bassa e media montagna un graduale ammorbidimento del manto nevoso. Ciò sui pendii soleggiati e nelle regioni esposte al favonio. <br/> È presente poca neve rispetto alla media stagionale."
+			},
+			{
+				"languageCode": "en",
+				"text": "Towards its base, the snowpack is faceted and weak, especially on steep west, north and east facing slopes above approximately 2000 m, as well as on steep sunny slopes in high Alpine regions. <br/> Released avalanches and field observations confirm the unfavourable bonding of the snowpack. <br/> On Tuesday mostly small wind slabs will form in the regions exposed to the foehn wind. This applies adjacent to ridgelines and in pass areas. <br/> Sunshine and high temperatures will give rise to gradual softening of the snowpack at low and intermediate altitudes. This applies on sunny slopes, and in the regions exposed to the foehn wind. <br/> Only a small amount of snow is lying for the time of year."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "fr",
+				"text": "Le manteau neigeux ancien reste fragile. <br/> Avec les chutes de neige au-dessus d'environ 1600 m et le vent modéré à fort, de nouvelles accumulations de neige soufflée se forment mercredi."
+			},
+			{
+				"languageCode": "en",
+				"text": "The old snowpack remains prone to triggering. <br/> As a consequence of snowfall above approximately 1600 m and the moderate to strong wind, fresh snow drift accumulations will form on Wednesday."
+			},
+			{
+				"languageCode": "it",
+				"text": "Il manto di neve vecchia rimane instabile. <br/> Con le nevicate al di sopra dei 1600 m circa e il vento da moderato a forte, mercoledì si formeranno nuovi accumuli di neve ventata."
+			},
+			{
+				"languageCode": "es",
+				"text": "El manto de nieve antiguo permanece proclive al desencadenamiento. <br/> Con la nevada por encima de 1600 m aproximadamente y el viento de moderado a fuerte, el miércoles se formarán nuevas placas de viento."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Eth mantèth de nhèu vielh demore procliu ath desencadenament. <br/> Damb era nheuada per dessús de 1600 m aproximativament e eth vent de moderat a fòrt, eth dimèrcles se formarèn naues plaques de vent."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El mantell de neu vell roman procliu al desencadenament. <br/> Amb la nevada per sobre de 1600 m aproximadament i el vent de moderat a fort, el dimecres es formaran noves plaques de vent."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die Altschneedecke bleibt störanfällig. <br/> Mit Schneefall oberhalb von rund 1600 m und mäßigem bis starkem Wind entstehen am Mittwoch frische Triebschneeansammlungen."
+			}
+		],
+		"tendency": "steady",
+		"dangerPattern1": "dp1",
+		"dangerPattern2": "dp2",
+		"publicationDate": "2022-12-19T16:00:00Z",
+		"validity": {
+			"from": "2022-12-19T23:00:00Z",
+			"until": "2022-12-20T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-14-01",
+			"AT-07-10",
+			"AT-07-11",
+			"AT-07-12",
+			"AT-07-13",
+			"AT-07-15",
+			"AT-07-16",
+			"AT-07-18",
+			"AT-07-19",
+			"AT-07-04-02",
+			"AT-07-04-01",
+			"AT-07-02-02",
+			"AT-07-02-01",
+			"AT-07-20",
+			"AT-07-17-02",
+			"AT-07-17-01",
+			"AT-07-21",
+			"AT-07-22",
+			"AT-07-23",
+			"AT-07-01",
+			"AT-07-03",
+			"AT-07-05",
+			"AT-07-06",
+			"AT-07-07",
+			"AT-07-08",
+			"AT-07-14-04",
+			"AT-07-09",
+			"AT-07-14-05",
+			"AT-07-14-02",
+			"AT-07-14-03"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "d7ddc35e-30de-46cf-87c1-e0390f3e9688",
+			"hasElevationDependency": true,
+			"elevation": 2000,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "persistent_weak_layers",
+				"aspects": [
+					"W",
+					"E",
+					"NW",
+					"N",
+					"NE"
+				],
+				"elevationLow": 2000,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "equal",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "some",
+					"avalancheSizeValue": 33,
+					"snowpackStabilityValue": 70,
+					"frequencyValue": 64
+				}
+			}
+		}
+	}
+]

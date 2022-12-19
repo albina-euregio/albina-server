@@ -176,4 +176,9 @@ public class CaamlTest {
 	public void toCAAMLv6_2022d() throws Exception {
 		toCAAMLv6_2022("2018-12-27.json", "2018-12-27.caaml.v6.json");
 	}
+
+	@Test
+	public void toCAAMLv6_2022e() throws Exception {
+		toCAAMLv6_2022("2022-12-20.json", "2022-12-20.caaml.v6.json");
+	}
 }
