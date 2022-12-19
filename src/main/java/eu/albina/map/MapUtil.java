@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
@@ -108,7 +107,10 @@ public interface MapUtil {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
 
-		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(avalancheReport.getBulletins())) {
+		Set<DaytimeDependency> daytimeDependencies = avalancheReport.hasDaytimeDependency()
+			? EnumSet.of(DaytimeDependency.am, DaytimeDependency.pm)
+			: EnumSet.of(DaytimeDependency.fd);
+		for (DaytimeDependency daytimeDependency : daytimeDependencies) {
 			try {
 				final List<AvalancheBulletin> bulletins = MoreObjects.firstNonNull(
 					// maps need all bulletins to paint neighboring micro regions!
