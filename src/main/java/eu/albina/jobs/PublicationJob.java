@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import eu.albina.model.ServerInstance;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
@@ -35,7 +35,9 @@ import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
 
 /**
@@ -68,12 +70,9 @@ public class PublicationJob implements org.quartz.Job {
 
 		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions().stream()
 			.filter(region -> {
-				try {
-					return AlbinaUtil.isReportSubmitted(startDate, region);
-				} catch (AlbinaException e) {
-					logger.error("Failed isBulletinSubmitted", e);
-					return false;
-				}
+				BulletinStatus status = AvalancheReportController.getInstance().getInternalStatusForDay(startDate, region);
+				return status == BulletinStatus.submitted
+					|| status == BulletinStatus.resubmitted;
 			}).collect(Collectors.toList());
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update.");

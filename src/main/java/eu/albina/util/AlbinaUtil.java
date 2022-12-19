@@ -39,7 +39,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -48,9 +47,7 @@ import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.ServerInstanceController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
@@ -58,7 +55,6 @@ import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -105,16 +101,6 @@ public class AlbinaUtil {
 		} else {
 			return "";
 		}
-	}
-
-	public static boolean isReportSubmitted(Instant startDate, Region region) throws AlbinaException {
-		boolean result = false;
-		Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
-				startDate, region);
-		if (status.size() == 1 && (status.get(startDate) == BulletinStatus.submitted
-				|| status.get(startDate) == BulletinStatus.resubmitted))
-			result = true;
-		return result;
 	}
 
 	public static Instant getInstantNowNoNanos() {
