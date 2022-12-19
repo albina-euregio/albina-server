@@ -108,13 +108,12 @@ public interface MapUtil {
 			throw new AlbinaMapException("Failed to create output directory", ex);
 		}
 
-		final List<AvalancheBulletin> bulletins = MoreObjects.firstNonNull(
-			// maps need all bulletins to paint neighboring micro regions!
-			avalancheReport.getGlobalBulletins(),
-			avalancheReport.getBulletins());
-
-		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(bulletins)) {
+		for (DaytimeDependency daytimeDependency : DaytimeDependency.of(avalancheReport.getBulletins())) {
 			try {
+				final List<AvalancheBulletin> bulletins = MoreObjects.firstNonNull(
+					// maps need all bulletins to paint neighboring micro regions!
+					avalancheReport.getGlobalBulletins(),
+					avalancheReport.getBulletins());
 				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus()));
 				for (MapLevel mapLevel : MapLevel.values()) {
 					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, false, bindings);
