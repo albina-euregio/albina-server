@@ -103,13 +103,7 @@ public class RegionController {
 		});
 	}
 
-	public List<String> getAvailableRegions(String regionId) throws AlbinaException {
-		// TODO implement
-		// return all regions with name starting with regionID or all region IDs from eaws-regions outline
-		return new ArrayList<String>();
-	}
-
-	public List<Region> getActiveRegions() throws AlbinaException {
+	private List<Region> getActiveRegions() throws AlbinaException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			return entityManager.createQuery(HibernateUtil.queryGetRegions, Region.class).getResultList();
 		});
@@ -140,9 +134,9 @@ public class RegionController {
 		}
 	}
 
-	public List<Region> getPublishBulletinRegions() {
+	public List<Region> getRegions() {
 		try {
-			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
+			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).collect(Collectors.toList());
 			return result;
 		} catch (AlbinaException ae) {
 			logger.warn("Active region ids could not be loaded!", ae);
@@ -150,9 +144,9 @@ public class RegionController {
 		}
 	}
 
-	public List<Region> getRegions() {
+	public List<Region> getPublishBulletinRegions() {
 		try {
-			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).collect(Collectors.toList());
+			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
 			return result;
 		} catch (AlbinaException ae) {
 			logger.warn("Active region ids could not be loaded!", ae);
