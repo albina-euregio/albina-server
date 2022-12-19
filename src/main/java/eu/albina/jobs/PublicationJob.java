@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import eu.albina.model.ServerInstance;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +56,7 @@ public class PublicationJob implements org.quartz.Job {
 	 * @param arg0
 	 */
 	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void execute(JobExecutionContext arg0) {
 		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 		if (!isEnabled(serverInstance)) {
 			return;
