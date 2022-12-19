@@ -152,7 +152,7 @@ public class AvalancheBulletinPublishService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			List<Region> changedRegions = RegionController.getInstance().getActiveRegions().stream()
+			List<Region> changedRegions = RegionController.getInstance().getPublishBulletinRegions().stream()
 				.filter(region -> {
 					try {
 						return AlbinaUtil.isReportSubmitted(startDate, region);

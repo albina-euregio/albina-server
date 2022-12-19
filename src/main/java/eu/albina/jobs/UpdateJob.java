@@ -68,7 +68,7 @@ public class UpdateJob implements org.quartz.Job {
 			Instant startDate = today.toInstant();
 			Instant endDate = today.plusDays(1).toInstant();
 
-			List<Region> changedRegions = RegionController.getInstance().getActiveRegions().stream()
+			List<Region> changedRegions = RegionController.getInstance().getPublishBulletinRegions().stream()
 				.filter(region -> {
 					try {
 						return AlbinaUtil.isReportSubmitted(startDate, region);
