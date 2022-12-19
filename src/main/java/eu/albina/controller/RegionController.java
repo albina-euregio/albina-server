@@ -237,4 +237,19 @@ public class RegionController {
 		return new JSONArray(regions);
 	}
 
+	public List<Region> getRegionsOrBulletinRegions(List<String> regionIds) {
+		if (regionIds.isEmpty()) {
+			return getPublishBulletinRegions();
+		}
+
+		return regionIds.stream().map(regionId -> {
+			try {
+				return getRegion(regionId);
+			} catch (HibernateException e) {
+				logger.warn("No region with ID: " + regionId);
+				return null;
+			}
+		}).filter(Objects::nonNull).collect(Collectors.toList());
+	}
+
 }

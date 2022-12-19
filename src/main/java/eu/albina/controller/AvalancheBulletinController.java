@@ -276,37 +276,6 @@ public class AvalancheBulletinController {
 	}
 
 	/**
-	 * Returns a JSON array of all bulletins with status {@code published} for a
-	 * given {@code date} and {@code regions} in a given {@code language} (ordered
-	 * by danger rating).
-	 *
-	 * @param date
-	 *            the date the bulletins should be valid from
-	 * @param regions
-	 *            the regions of the bulletins
-	 * @param language
-	 *            the language in which the texts of the bulletins should be added
-	 *            to the JSON array
-	 * @return the JSON array of all published bulletins for the given time period
-	 *         and regions in the given language
-	 * @throws AlbinaException
-	 *             if the published bulletins can not be loaded from DB
-	 */
-	public JSONArray getPublishedBulletinsJson(Instant date, List<Region> regions) throws AlbinaException {
-		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
-				regions);
-
-		if (result != null) {
-			JSONArray jsonResult = new JSONArray();
-			for (AvalancheBulletin bulletin : result)
-				jsonResult.put(bulletin.toSmallJSON());
-
-			return jsonResult;
-		} else
-			throw new AlbinaException("Published bulletins could not be loaded!");
-	}
-
-	/**
 	 * Returns the highest {@code DangerRating} of all bulletins with status
 	 * {@code published} for a given {@code date} and in a specific {@code regions}.
 	 *

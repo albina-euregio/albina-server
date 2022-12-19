@@ -20,7 +20,6 @@ import java.io.File;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -148,23 +147,35 @@ public class AvalancheBulletinService {
 	@GET
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
-	@Operation(summary = "Get published bulletins for date as CAAML")
+	@Operation(deprecated = true)
 	public Response getPublishedXMLBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+		@QueryParam("region") String regionId,
+		@QueryParam("lang") LanguageCode language,
+		@QueryParam("version") CaamlVersion version) {
+		List<String> regionIds = regionId != null ? Collections.singletonList(regionId) : Collections.emptyList();
+		return getPublishedCaamlBulletins(date, regionIds, language, version);
+	}
+
+	@GET
+	@Path("/caaml")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
+	@Operation(summary = "Get published bulletins for date as CAAML XML")
+	public Response getPublishedCaamlBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language,
+			@QueryParam("regions") List<String> regionIds,
+			@QueryParam("lang") LanguageCode language,
 			@QueryParam("version") CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
+		List<Region> regions = RegionController.getInstance().getRegionsOrBulletinRegions(regionIds);
 
 		try {
-			List<Region> regions = regionId == null
-				? RegionController.getInstance().getPublishBulletinRegions()
-				: Collections.singletonList(RegionController.getInstance().getRegionOrThrowAlbinaException(regionId));
-			AvalancheBulletinController.getInstance();
-			ArrayList<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(startDate,
-				regions);
-			AvalancheReport avalancheReport = AvalancheReport.of(result, null, ServerInstanceController.getInstance().getLocalServerInstance());
+			AvalancheReport avalancheReport = AvalancheReport.of(
+				AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions), null,
+				ServerInstanceController.getInstance().getLocalServerInstance());
 			String caaml = Caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
 				final String type = version != CaamlVersion.V6_2022 ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
@@ -184,6 +195,18 @@ public class AvalancheBulletinService {
 			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
 		}
+	}
+	@GET
+	@Path("/caaml/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get published bulletins for date as CAAML JSON")
+	public Response getPublishedCaamlJsonBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+		@QueryParam("regions") List<String> regionIds,
+		@QueryParam("lang") LanguageCode language,
+		@QueryParam("version") CaamlVersion version) {
+		return getPublishedCaamlBulletins(date, regionIds, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_2022));
 	}
 
 	static class LatestBulletin {
@@ -213,33 +236,31 @@ public class AvalancheBulletinService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
-	@Operation(summary = "Get published bulletins for date")
-	public Response getPublishedJSONBulletins(
+	@Operation(deprecated = true)
+	public Response getPublishedJSONBulletins0(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language) {
+		return getPublishedJSONBulletins(date, regionIds, language);
+	}
+
+	@GET
+	@Path("/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
+	@Operation(summary = "Get published bulletins for date")
+	public Response getPublishedJSONBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+		@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language) {
 		logger.debug("GET published JSON bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
-
-		List<Region> regions = new ArrayList<Region>();
-
-		if (regionIds.isEmpty()) {
-			regions = RegionController.getInstance().getPublishBulletinRegions();
-		} else {
-			for (String regionId : regionIds) {
-				try {
-					Region region = RegionController.getInstance().getRegion(regionId);
-					regions.add(region);
-				} catch (HibernateException e) {
-					logger.warn("No region with ID: " + regionId);
-				}
-			}
-		}
+		List<Region> regions = RegionController.getInstance().getRegionsOrBulletinRegions(regionIds);
 
 		try {
-			JSONArray jsonResult = AvalancheBulletinController.getInstance().getPublishedBulletinsJson(startDate,
-					regions);
-
+			JSONArray jsonResult = new JSONArray();
+			for (AvalancheBulletin bulletin : AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions))
+				jsonResult.put(bulletin.toSmallJSON());
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins", e);
