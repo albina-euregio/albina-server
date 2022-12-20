@@ -98,6 +98,11 @@ public class AvalancheBulletinPublishService {
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				new UpdateJob() {
 					@Override
+					protected boolean isEnabled(ServerInstance serverInstance) {
+						return true;
+					}
+
+					@Override
 					protected Instant getStartDate() {
 						return startDate;
 					}
