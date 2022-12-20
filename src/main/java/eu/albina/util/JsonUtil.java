@@ -62,7 +62,7 @@ public class JsonUtil {
 				// delete all published regions which are foreign
 				if (b.getPublishedRegions() != null) {
 					Set<String> newPublishedRegions = b.getPublishedRegions().stream()
-						.filter(publishedRegion -> publishedRegion.startsWith(region.getId()))
+						.filter(publishedRegion -> region.affects(publishedRegion))
 						.collect(Collectors.toSet());
 					b.setPublishedRegions(newPublishedRegions);
 				}
@@ -70,7 +70,7 @@ public class JsonUtil {
 				// delete all saved regions which are foreign
 				if (b.getSavedRegions() != null) {
 					Set<String> newSavedRegions = b.getSavedRegions().stream()
-						.filter(savedRegion -> savedRegion.startsWith(region.getId()))
+						.filter(savedRegion -> region.affects(savedRegion))
 						.collect(Collectors.toSet());
 					b.setSavedRegions(newSavedRegions);
 				}
@@ -78,7 +78,7 @@ public class JsonUtil {
 				// delete all suggested regions which are foreign
 				if (b.getSuggestedRegions() != null) {
 					Set<String> newSuggestedRegions = b.getSuggestedRegions().stream()
-						.filter(suggestedRegion -> suggestedRegion.startsWith(region.getId()))
+						.filter(suggestedRegion -> region.affects(suggestedRegion))
 						.collect(Collectors.toSet());
 					b.setSuggestedRegions(newSuggestedRegions);
 				}
