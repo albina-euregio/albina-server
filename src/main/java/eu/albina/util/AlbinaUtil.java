@@ -225,6 +225,10 @@ public class AlbinaUtil {
 			return "";
 	}
 
+	public static String getPublicationTime(Instant publicationTime) {
+		return publicationTime.atZone(ZoneId.of("UTC")).format(formatterPublicationTime);
+	}
+
 	public static void setFilePermissions(String fileName) throws IOException {
 		// using PosixFilePermission to set file permissions 755
 		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();

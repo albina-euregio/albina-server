@@ -95,7 +95,7 @@ public class PublicationController {
 	public void publish(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate, boolean isChange) {
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTimeString = publicationDate.atZone(ZoneId.of("UTC")).toString();
+		String publicationTimeString = AlbinaUtil.getPublicationTime(publicationDate);
 		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		Collections.sort(bulletins);
