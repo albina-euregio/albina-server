@@ -400,26 +400,28 @@ public class AvalancheBulletinService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
-
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
+		
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
-
-			JSONArray bulletinsJson = new JSONArray(bulletinsString);
-			List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
-				.mapToObj(bulletinsJson::getJSONObject)
-				.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
-				.collect(Collectors.toList());
-
-			Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-					.saveBulletins(bulletins, startDate, endDate, region, null);
-
-			AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
-
-			// save report for super regions
-			for (Region superRegion : region.getSuperRegions()) {
-				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
-			}
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+		
+			if (region != null && user.hasPermissionForRegion(region.getId())) {
+				JSONArray bulletinsJson = new JSONArray(bulletinsString);
+				List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
+					.mapToObj(bulletinsJson::getJSONObject)
+					.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
+					.collect(Collectors.toList());
+		
+				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
+						.saveBulletins(bulletins, startDate, endDate, region, null);
+		
+				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
+		
+				// save report for super regions
+				for (Region superRegion : region.getSuperRegions()) {
+					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
+				}
+			} else
+				throw new AlbinaException("User is not authorized for this region!");
 
 			JSONObject jsonObject = new JSONObject();
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
@@ -460,9 +462,28 @@ public class AvalancheBulletinService {
 					.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
 					.collect(Collectors.toList());
 
-				AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
-					publicationTime);
-				AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
+				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
+					.saveBulletins(bulletins, startDate, endDate, region, publicationTime);
+				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
+				// save report for super regions
+				for (Region superRegion : region.getSuperRegions()) {
+					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
+				}
+
+				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
+						endDate, region, user);
+				List<AvalancheBulletin> regionBulletins = allBulletins.stream()
+					.filter(bulletin -> bulletin.affectsRegion(region))
+					.collect(Collectors.toList());
+				AvalancheReportController.getInstance().submitReport(regionBulletins, startDate, region, user);
+				// submit report for super regions
+				for (Region superRegion : region.getSuperRegions()) {
+					List<AvalancheBulletin> superRegionBulletins = allBulletins.stream()
+						.filter(bulletin -> bulletin.affectsRegion(superRegion))
+						.collect(Collectors.toList());
+					AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
+				}
+
 				new ChangeJob() {
 					@Override
 					protected Instant getStartDate() {
@@ -500,9 +521,8 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (regionId != null && user.hasPermissionForRegion(regionId)) {
 				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
