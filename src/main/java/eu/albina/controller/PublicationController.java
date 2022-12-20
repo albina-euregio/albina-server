@@ -100,25 +100,23 @@ public class PublicationController {
 
 		Collections.sort(bulletins);
 
-		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
 		try {
 			// publish all regions which have to be published
 			for (Region region : regions) {
 				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 				logger.info("Publishing region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
 				
-				AvalancheReport avalancheReport;
 				if (isChange) {
-					avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user, publicationDate);
+					AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user, publicationDate);
 				} else {
-					avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+					AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
 				}
 				if (regionBulletins.isEmpty()) {
 					continue;
 				}
-
-				reportMap.put(region, avalancheReport);
 			}
+			
+			Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
 
 			// get all published bulletins
 			List<AvalancheBulletin> publishedBulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, 
@@ -143,6 +141,10 @@ public class PublicationController {
 				}
 
 				createRegionResources(region, avalancheReport);
+
+				if (regions.contains(region)) {
+					reportMap.put(region, avalancheReport);
+				}
 			}
 
 			// update all super regions
