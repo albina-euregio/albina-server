@@ -78,7 +78,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
@@ -454,8 +453,6 @@ public class AvalancheBulletinService {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				Instant publicationTime = AlbinaUtil.getInstantNowNoNanos();
-				
 				JSONArray bulletinsJson = new JSONArray(bulletinsString);
 				List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
 					.mapToObj(bulletinsJson::getJSONObject)
@@ -463,7 +460,7 @@ public class AvalancheBulletinService {
 					.collect(Collectors.toList());
 
 				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-					.saveBulletins(bulletins, startDate, endDate, region, publicationTime);
+					.saveBulletins(bulletins, startDate, endDate, region, null);
 				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
 				// save report for super regions
 				for (Region superRegion : region.getSuperRegions()) {
