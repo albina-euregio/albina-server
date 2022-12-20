@@ -101,45 +101,40 @@ public class PublicationController {
 
 		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
 		try {
+			// publish all regions which have to be published
+			for (Region region : regions) {
+				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
+				logger.info("Publishing region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
+				
+				AvalancheReport avalancheReport;
+				if (isChange) {
+					avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
+				} else {
+					avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
+				}
+				if (regionBulletins.isEmpty()) {
+					continue;
+				}
 
-			// load already published bulletins for all regions
-			List<AvalancheBulletin> foreignBulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, 
+				reportMap.put(region, avalancheReport);
+			}
+
+			// get all published bulletins
+			List<AvalancheBulletin> publishedBulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, 
 				RegionController.getInstance().getPublishBulletinRegions());
-			
+
 			// update all regions to create complete maps
 			for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
+				List<AvalancheBulletin> regionBulletins = publishedBulletins.stream().filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
+				logger.info("Load region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
+				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
 
-				AvalancheReport avalancheReport;
-
-				// publish report and add report if region was updated (to send notifications later on)
-				if (regions.contains(region)) {
-					List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
-					logger.info("Publishing region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
-					if (isChange) {
-						avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
-					} else {
-						avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
-					}
-					avalancheReport.setBulletins(regionBulletins, bulletins);
-					avalancheReport.setServerInstance(localServerInstance);
-
-					if (regionBulletins.isEmpty()) {
-						continue;
-					}
-
-					reportMap.put(region, avalancheReport);
-				} else {
-					List<AvalancheBulletin> regionBulletins = foreignBulletins.stream().filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
-					logger.info("Load region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
-					avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
-
-					if (avalancheReport == null || regionBulletins.isEmpty()) {
-						continue;
-					}
-
-					avalancheReport.setBulletins(regionBulletins, bulletins);
-					avalancheReport.setServerInstance(localServerInstance);
+				if (avalancheReport == null || regionBulletins.isEmpty()) {
+					continue;
 				}
+
+				avalancheReport.setBulletins(regionBulletins, publishedBulletins);
+				avalancheReport.setServerInstance(localServerInstance);
 
 				// maybe another region was not published at all
 				if (avalancheReport == null || (avalancheReport.getStatus() != BulletinStatus.published && avalancheReport.getStatus() != BulletinStatus.republished)) {
