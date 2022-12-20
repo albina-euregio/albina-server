@@ -124,6 +124,7 @@ public class PublicationController {
 				reportMap.put(region, avalancheReport);
 			} else {
 				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
+				logger.info("Load region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
 				avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
 
 				if (avalancheReport == null || regionBulletins.isEmpty()) {

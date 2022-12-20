@@ -86,7 +86,10 @@ public class PublicationJob implements org.quartz.Job {
 			if (publishedBulletins.values() == null || publishedBulletins.values().isEmpty()) {
 				return;
 			}
-			List<AvalancheBulletin> result = publishedBulletins.values().stream()
+
+			List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, RegionController.getInstance().getPublishBulletinRegions());
+
+			List<AvalancheBulletin> result = bulletins.stream()
 				.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
 					&& !avalancheBulletin.getPublishedRegions().isEmpty())
 				.collect(Collectors.toList());
