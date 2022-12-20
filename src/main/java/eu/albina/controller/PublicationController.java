@@ -18,7 +18,6 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,20 +80,6 @@ public class PublicationController {
 			instance = new PublicationController();
 		}
 		return instance;
-	}
-
-	/**
-	 * Triggers all tasks that have to take place after a small change in the
-	 * bulletin has been published. This does not trigger the whole publication
-	 * process.
-	 *
-	 * @param bulletins
-	 *            The bulletins that were changed.
-	 */
-	public void change(List<AvalancheBulletin> bulletins, User user, Instant startDate, Region changedRegion) {
-		List<Region> regions = new ArrayList<Region>();
-		regions.add(changedRegion);
-		publish(bulletins, regions, user, startDate, startDate, true);
 	}
 
 	/**
@@ -243,63 +228,6 @@ public class PublicationController {
 	}
 
 	/**
-	 * Start an own thread to trigger all tasks that have to take place after an
-	 * update has been published.
-	 *
-	 * @param allBulletins
-	 *            The bulletins that were updated.
-	 * @param regions
-	 *            The regions that were updated.
-	 * @param publishedBulletins
-	 * @param publicationDate
-	 * @param user
-	 * @param region
-	 * @param startDate
-	 */
-	public void startUpdateThread(List<AvalancheBulletin> allBulletins, List<Region> regions,
-			List<AvalancheBulletin> publishedBulletins, Instant startDate, Region region, User user,
-			Instant publicationDate) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				List<AvalancheBulletin> result = allBulletins.stream()
-					.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
-						&& !avalancheBulletin.getPublishedRegions().isEmpty())
-					.collect(Collectors.toList());
-				if (result != null && !result.isEmpty())
-					PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, false);
-
-			}
-		}).start();
-	}
-
-	/**
-	 * Start an own thread to trigger all tasks that have to take place after a
-	 * change has been published.
-	 *
-	 * @param allBulletins
-	 *            The bulletins that were updated.
-	 * @param user
-	 * @param region
-	 * @param startDate
-	 * @param publishedBulletins
-	 */
-	public void startChangeThread(List<AvalancheBulletin> allBulletins, List<AvalancheBulletin> publishedBulletins,
-			Instant startDate, Region region, User user) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				List<AvalancheBulletin> result = allBulletins.stream()
-					.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
-						&& !avalancheBulletin.getPublishedRegions().isEmpty())
-					.collect(Collectors.toList());
-				if (result != null && !result.isEmpty())
-					PublicationController.getInstance().change(result, user, startDate, region);
-			}
-		}).start();
-	}
-
-	/**
 	 * Trigger the creation of the JSON file.
 	 */
 	public boolean createJson(AvalancheReport avalancheReport) {
@@ -420,6 +348,9 @@ public class PublicationController {
 		}
 	}
 
+	/**
+	 * Trigger the sending of telegram messages.
+	 */
 	public void triggerTelegramChannel(AvalancheReport avalancheReport, LanguageCode language) {
 		try {
 			logger.info("Telegram channel for " + avalancheReport.getRegion().getId() + " triggered");
@@ -436,6 +367,9 @@ public class PublicationController {
 		}
 	}
 
+	/**
+	 * Trigger the sending of push notifications.
+	 */
 	public void triggerPushNotifications(AvalancheReport avalancheReport, LanguageCode language) {
 		try {
 			logger.info("Push notifications for " + avalancheReport.getRegion().getId() + " triggered");

@@ -65,10 +65,10 @@ import com.google.common.base.MoreObjects;
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.jobs.ChangeJob;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -448,37 +448,36 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			if (region != null && user.hasPermissionForRegion(region.getId())) {
+				Instant publicationTime = AlbinaUtil.getInstantNowNoNanos();
+				
+				JSONArray bulletinsJson = new JSONArray(bulletinsString);
+				List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
+					.mapToObj(bulletinsJson::getJSONObject)
+					.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
+					.collect(Collectors.toList());
 
-			JSONArray bulletinsJson = new JSONArray(bulletinsString);
-			List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
-				.mapToObj(bulletinsJson::getJSONObject)
-				.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
-				.collect(Collectors.toList());
-			// TODO validate
+				AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
+					publicationTime);
+				AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
+				new ChangeJob() {
+					@Override
+					protected Instant getStartDate() {
+						return startDate;
+					}
 
-			Instant publicationTime = AlbinaUtil.getInstantNowNoNanos();
-			AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region,
-				publicationTime);
-			AvalancheBulletinController.getInstance().submitBulletins(startDate, endDate, region, user);
-			List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().publishBulletins(startDate,
-					endDate, region, publicationTime, user);
+					@Override
+					protected List<Region> getRegions() {
+						return Collections.singletonList(region);
+					}
+				}.execute(null);
 
-			region.getSuperRegions().stream().forEach(r -> {
-				AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, r, publicationTime, user);
-			});
-
-			// select bulletins within the region
-			List<AvalancheBulletin> publishedBulletins = allBulletins.stream()
-				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
-				.collect(Collectors.toList());
-
-			PublicationController.getInstance().startChangeThread(allBulletins, publishedBulletins, startDate, region,
-					user);
-
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			} else
+				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();

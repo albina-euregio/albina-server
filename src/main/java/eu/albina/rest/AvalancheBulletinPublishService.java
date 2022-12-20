@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
@@ -24,6 +23,7 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
+import eu.albina.jobs.UpdateJob;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -53,7 +53,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -92,31 +91,22 @@ public class AvalancheBulletinPublishService {
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
+				new UpdateJob() {
+					@Override
+					protected Instant getStartDate() {
+						return startDate;
+					}
 
-				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance()
-						.publishBulletins(startDate, endDate, region, publicationDate, user);
-
-				region.getSuperRegions().stream().forEach(r -> {
-					AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, r, publicationDate, user);
-				});
-
-				// select bulletins within the region
-				List<AvalancheBulletin> publishedBulletins = allBulletins.stream()
-					.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
-					.collect(Collectors.toList());
-
-				List<Region> regions = new ArrayList<Region>();
-				regions.add(region);
-
-				PublicationController.getInstance().startUpdateThread(allBulletins, regions, publishedBulletins,
-						startDate, region, user, publicationDate);
+					@Override
+					protected List<Region> getRegions() {
+						return Collections.singletonList(region);
+					}
+				}.execute(null);
 
 				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 			} else
