@@ -18,6 +18,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,7 +95,7 @@ public class PublicationController {
 	public void publish(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate, boolean isChange) {
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+		String publicationTimeString = publicationDate.atZone(ZoneId.of("UTC")).toString();
 		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		Collections.sort(bulletins);
