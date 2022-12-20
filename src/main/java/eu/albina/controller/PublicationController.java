@@ -108,7 +108,7 @@ public class PublicationController {
 				
 				AvalancheReport avalancheReport;
 				if (isChange) {
-					avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user);
+					avalancheReport = AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user, publicationDate);
 				} else {
 					avalancheReport = AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
 				}

@@ -477,12 +477,12 @@ public class AvalancheReportController {
 	 * @return the id of the report
 	 * @throws HibernateException if the report can not be loaded from the DB
 	 */
-	public AvalancheReport changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, Region region, User user) {
+	public AvalancheReport changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, Region region, User user, Instant publicationDate) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport latestReport = getInternalReport(startDate, region);
 			if (latestReport != null) {
 				AvalancheReport avalancheReport = new AvalancheReport();
-				avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
+				avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
 				avalancheReport.setUser(user);
 				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 				avalancheReport.setRegion(region);
