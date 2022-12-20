@@ -21,7 +21,6 @@ import com.github.openjson.JSONObject;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;

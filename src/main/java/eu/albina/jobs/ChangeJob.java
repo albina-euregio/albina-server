@@ -16,48 +16,30 @@
  ******************************************************************************/
 package eu.albina.jobs;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.List;
-
-import eu.albina.controller.RegionController;
-import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
-
-import eu.albina.util.AlbinaUtil;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
- * automatically update the bulletins at 8AM or triggered manually.
+ * manually change the bulletins without sending notifications.
  *
  * @author Norbert Lanzanasto
  *
  */
-public class UpdateJob extends PublicationJob {
+public class ChangeJob extends PublicationJob {
 
 	@Override
 	protected boolean isEnabled(ServerInstance serverInstance) {
-		return serverInstance.isPublishAt8AM();
+		return true;
 	}
 
 	@Override
 	protected boolean isChange() {
-		return false;
-	}
-
-	@Override
-	protected Instant getStartDate() {
-		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).toInstant();
+		return true;
 	}
 
 	@Override
 	protected String getJobName() {
-		return "Update";
-	}
-
-	@Override
-	protected List<Region> getRegions() {
-		return RegionController.getInstance().getPublishBulletinRegions();
+		return "Change";
 	}
 
 }

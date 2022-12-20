@@ -66,16 +66,16 @@ public class PublicationJob implements org.quartz.Job {
 		Instant startDate = getStartDate();
 		Instant endDate = startDate.atZone(AlbinaUtil.localZone()).plusDays(1).toInstant();
 		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
-		logger.info("Publication/update job triggered startDate={} endDate={} publicationDate={}", startDate, endDate, publicationDate);
+		logger.info("{} job triggered startDate={} endDate={} publicationDate={}", getJobName(), startDate, endDate, publicationDate);
 
-		List<Region> regions = RegionController.getInstance().getPublishBulletinRegions().stream()
+		List<Region> regions = getRegions().stream()
 			.filter(region -> {
 				BulletinStatus status = AvalancheReportController.getInstance().getInternalStatusForDay(startDate, region);
 				return status == BulletinStatus.submitted
 					|| status == BulletinStatus.resubmitted;
 			}).collect(Collectors.toList());
 		if (regions.isEmpty()) {
-			logger.info("No bulletins to publish/update.");
+			logger.info("No bulletins to publish/update/change.");
 			return;
 		}
 		try {
@@ -93,9 +93,9 @@ public class PublicationJob implements org.quartz.Job {
 			if (result == null || result.isEmpty()) {
 				return;
 			}
-			PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, false);
+			PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, isChange());
 		} catch (AlbinaException e) {
-			logger.error("Error publishing/updating bulletins", e);
+			logger.error("Error publishing/updating/changing bulletins", e);
 		}
 	}
 
@@ -103,8 +103,20 @@ public class PublicationJob implements org.quartz.Job {
 		return serverInstance.isPublishAt5PM();
 	}
 
+	protected boolean isChange() {
+		return false;
+	}
+
 	protected Instant getStartDate() {
 		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).plusDays(1).toInstant();
+	}
+
+	protected String getJobName() {
+		return "Publication";
+	}
+
+	protected List<Region> getRegions() {
+		return RegionController.getInstance().getPublishBulletinRegions();
 	}
 
 }
