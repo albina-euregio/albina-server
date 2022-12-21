@@ -131,8 +131,8 @@ public class PublicationController {
 			for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
 				List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
 						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
-				logger.info("Load region {} with bulletins {}", region.getId(),
-						regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
+				logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
+						regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
 				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate,
 						region);
 
@@ -166,8 +166,8 @@ public class PublicationController {
 				}
 			}
 			for (Region region : superRegions) {
-				logger.info("Publishing super region {} with bulletins {}", region.getId(),
-						bulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
+				logger.info("Publishing super region {} with bulletins {} and publication time {}", region.getId(),
+						bulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
 				AvalancheReport avalancheReport = AvalancheReport.of(publishedBulletins, region, localServerInstance);
 				createRegionResources(region, avalancheReport);
 			}

@@ -71,6 +71,7 @@ public class PublicationJob implements org.quartz.Job {
 		List<Region> regions = getRegions().stream()
 			.filter(region -> {
 				BulletinStatus status = AvalancheReportController.getInstance().getInternalStatusForDay(startDate, region);
+				logger.info("Internal status for region {} is {}", region.getId(), status);
 				return status == BulletinStatus.submitted
 					|| status == BulletinStatus.resubmitted;
 			}).collect(Collectors.toList());
@@ -92,11 +93,12 @@ public class PublicationJob implements org.quartz.Job {
 					&& !avalancheBulletin.getPublishedRegions().isEmpty())
 				.collect(Collectors.toList());
 			if (result == null || result.isEmpty()) {
+				logger.info("No published regions found in bulletins.");
 				return;
 			}
 			PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, isChange());
 		} catch (AlbinaException e) {
-			logger.error("Error publishing/updating/changing bulletins", e);
+			logger.error(getJobName() + " error", e);
 		}
 	}
 

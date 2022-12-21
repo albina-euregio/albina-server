@@ -461,6 +461,8 @@ public class AvalancheReportController {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
+			logger.info("Report for region {} saved", region.getId());
+
 			return null;
 		});
 	}
@@ -507,6 +509,7 @@ public class AvalancheReportController {
 					break;
 				case submitted:
 					avalancheReport.setStatus(BulletinStatus.published);
+					logger.info("Status set to PUBLISHED for region {}", region.getId());
 					break;
 				case published:
 					logger.warn("Bulletins already published!");
@@ -516,6 +519,7 @@ public class AvalancheReportController {
 					break;
 				case resubmitted:
 					avalancheReport.setStatus(BulletinStatus.republished);
+					logger.info("Status set to REPUBLISHED for region {}", region.getId());
 					break;
 				case republished:
 					logger.warn("Bulletins already republished!");
@@ -530,6 +534,8 @@ public class AvalancheReportController {
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
 			AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
+
+			logger.info("Report for region {} published", region.getId());
 
 			return avalancheReport;
 		});
@@ -563,6 +569,7 @@ public class AvalancheReportController {
 			avalancheReport.setRegion(region);
 			if (report == null) {
 				avalancheReport.setStatus(BulletinStatus.missing);
+				logger.info("Status set to MISSING for region {}", region.getId());
 			} else {
 				avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
 				switch (report.getStatus()) {
@@ -571,6 +578,7 @@ public class AvalancheReportController {
 					break;
 				case draft:
 					avalancheReport.setStatus(BulletinStatus.submitted);
+					logger.info("Status set to SUBMITTED for region {}", region.getId());
 					break;
 				case submitted:
 					logger.warn("Bulletins already submitted!");
@@ -580,9 +588,10 @@ public class AvalancheReportController {
 					break;
 				case updated:
 					avalancheReport.setStatus(BulletinStatus.resubmitted);
+					logger.info("Status set to RESUBMITTED for region {}", region.getId());
 					break;
 				case resubmitted:
-					logger.debug("Bulletins already resubmitted!");
+					logger.info("Bulletins already resubmitted!");
 					break;
 				case republished:
 					logger.warn("Bulletins already republished!");
@@ -601,6 +610,8 @@ public class AvalancheReportController {
 			if (bulletinUpdate != null) {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
+
+			logger.info("Report for region {} submitted", region.getId());
 
 			return null;
 		});

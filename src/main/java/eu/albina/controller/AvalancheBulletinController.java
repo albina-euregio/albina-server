@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 
@@ -52,7 +54,7 @@ import eu.albina.util.HibernateUtil;
  */
 public class AvalancheBulletinController {
 
-	// private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
+	private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
 
 	private static AvalancheBulletinController instance = null;
 	private final List<BulletinLock> bulletinLocks;
@@ -380,6 +382,8 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin avalancheBulletin : bulletins)
 				initializeBulletin(avalancheBulletin);
 
+			logger.info("Bulletins for region {} submitted", region.getId());
+
 			return bulletins;
 		});
 	}
@@ -406,8 +410,11 @@ public class AvalancheBulletinController {
 		Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
 
 		for (Region region : regions) {
+			logger.info("Publish bulletins for region {}", region.getId());
 			BulletinStatus internalStatus = AvalancheReportController.getInstance().getInternalStatusForDay(startDate,
 					region);
+
+			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
 
 			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
 				List<AvalancheBulletin> bulletins = this.publishBulletins(startDate, endDate, region, publicationDate,
