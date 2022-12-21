@@ -18,7 +18,6 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -85,15 +84,18 @@ public class PublicationController {
 	}
 
 	/**
-	 * Triggers all tasks that have to take place after a publication has been published.
+	 * Triggers all tasks that have to take place after a publication has been
+	 * published.
 	 *
 	 * @param bulletins
-	 *            The bulletins that were published.
+	 *                  The bulletins that were published.
 	 * @param regions
-	 *            The regions that were published.
+	 *                  The regions that were published.
 	 */
-	public void publish(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate, Instant startDate, boolean isChange) {
+	public void publish(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate,
+			Instant startDate, boolean isChange) {
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
+		// TODO check if we can use startDate instead
 		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(publicationDate);
 		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
@@ -103,30 +105,36 @@ public class PublicationController {
 		try {
 			// publish all regions which have to be published
 			for (Region region : regions) {
-				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
-				logger.info("Publishing region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
-				
-				if (isChange) {
-					AvalancheReportController.getInstance().changeReport(regionBulletins, startDate, region, user, publicationDate);
-				} else {
-					AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user, publicationDate);
-				}
+				List<AvalancheBulletin> regionBulletins = bulletins.stream()
+						.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
+						.collect(Collectors.toList());
+				logger.info("Publishing region {} with bulletins {} and publication time {}", region.getId(),
+						regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
+						publicationTimeString);
+
+				AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user,
+						publicationDate);
+
 				if (regionBulletins.isEmpty()) {
 					continue;
 				}
 			}
-			
+
 			Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
 
 			// get all published bulletins
-			List<AvalancheBulletin> publishedBulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, 
-				RegionController.getInstance().getPublishBulletinRegions());
+			List<AvalancheBulletin> publishedBulletins = AvalancheReportController.getInstance().getPublishedBulletins(
+					startDate,
+					RegionController.getInstance().getPublishBulletinRegions());
 
 			// update all regions to create complete maps
 			for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
-				List<AvalancheBulletin> regionBulletins = publishedBulletins.stream().filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
-				logger.info("Load region {} with bulletins {}", region.getId(), regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
-				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate, region);
+				List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
+						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
+				logger.info("Load region {} with bulletins {}", region.getId(),
+						regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
+				AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate,
+						region);
 
 				if (avalancheReport == null || regionBulletins.isEmpty()) {
 					continue;
@@ -136,7 +144,8 @@ public class PublicationController {
 				avalancheReport.setServerInstance(localServerInstance);
 
 				// maybe another region was not published at all
-				if (avalancheReport == null || (avalancheReport.getStatus() != BulletinStatus.published && avalancheReport.getStatus() != BulletinStatus.republished)) {
+				if (avalancheReport == null || (avalancheReport.getStatus() != BulletinStatus.published
+						&& avalancheReport.getStatus() != BulletinStatus.republished)) {
 					continue;
 				}
 
@@ -151,12 +160,14 @@ public class PublicationController {
 			Set<Region> superRegions = new HashSet<Region>();
 			for (Region region : regions) {
 				for (Region superRegion : region.getSuperRegions()) {
-					if (!superRegions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+					if (!superRegions.stream()
+							.anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
 						superRegions.add(superRegion);
 				}
 			}
 			for (Region region : superRegions) {
-				logger.info("Publishing super region {} with bulletins {}", region.getId(), bulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
+				logger.info("Publishing super region {} with bulletins {}", region.getId(),
+						bulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()));
 				AvalancheReport avalancheReport = AvalancheReport.of(publishedBulletins, region, localServerInstance);
 				createRegionResources(region, avalancheReport);
 			}
@@ -244,7 +255,8 @@ public class PublicationController {
 		try {
 			logger.info("JSON production for " + avalancheReport.getRegion().getId() + " started");
 			JsonUtil.createJsonFile(avalancheReport);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setJsonCreated);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+					AvalancheReport::setJsonCreated);
 			logger.info("JSON production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
@@ -260,7 +272,8 @@ public class PublicationController {
 		try {
 			logger.info("CAAMLv5 production for " + avalancheReport.getRegion().getId() + " started");
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setCaamlV5Created);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+					AvalancheReport::setCaamlV5Created);
 			logger.info("CAAMLv5 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
@@ -277,7 +290,8 @@ public class PublicationController {
 			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " started");
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_2022);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setCaamlV6Created);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+					AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for " + avalancheReport.getRegion().getId() + " finished");
 			return true;
 		} catch (TransformerException | IOException e) {
@@ -295,7 +309,8 @@ public class PublicationController {
 		try {
 			logger.info("Map production for " + regionId + " started");
 			MapUtil.createMapyrusMaps(avalancheReport);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setMapCreated);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+					AvalancheReport::setMapCreated);
 			logger.info("Map production " + regionId + " finished");
 			return true;
 		} catch (Exception e) {
@@ -314,7 +329,8 @@ public class PublicationController {
 				try {
 					logger.info("PDF production for " + avalancheReport.getRegion().getId() + " started");
 					PdfUtil.createRegionPdfs(avalancheReport);
-					AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setPdfCreated);
+					AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+							AvalancheReport::setPdfCreated);
 				} finally {
 					logger.info("PDF production " + avalancheReport.getRegion().getId() + " finished");
 				}
@@ -332,7 +348,8 @@ public class PublicationController {
 				try {
 					logger.info("Simple HTML production for " + avalancheReport.getRegion().getId() + " started");
 					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(avalancheReport);
-					AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setHtmlCreated);
+					AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+							AvalancheReport::setHtmlCreated);
 				} catch (Exception e) {
 					logger.error("Error creating simple HTML for " + avalancheReport.getRegion().getId(), e);
 				} finally {
@@ -350,7 +367,8 @@ public class PublicationController {
 			logger.info("Email production for " + avalancheReport.getRegion().getId() + " started");
 			EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
 			if (avalancheReport.getStatus() != BulletinStatus.test)
-				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
+				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+						AvalancheReport::setEmailCreated);
 		} catch (Exception e) {
 			logger.error("Error preparing emails " + avalancheReport.getRegion().getId(), e);
 		} finally {
@@ -369,7 +387,8 @@ public class PublicationController {
 			else
 				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport, language);
 			if (avalancheReport.getStatus() != BulletinStatus.test)
-				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);
+				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+						AvalancheReport::setTelegramSent);
 		} catch (Exception e) {
 			logger.error("Error preparing telegram channel", e);
 		} finally {
@@ -388,7 +407,8 @@ public class PublicationController {
 			else
 				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport, language);
 			if (avalancheReport.getStatus() != BulletinStatus.test)
-				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setPushSent);
+				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+						AvalancheReport::setPushSent);
 		} catch (Exception e) {
 			logger.error("Error sending push notifications for " + avalancheReport.getRegion().getId(), e);
 		} finally {

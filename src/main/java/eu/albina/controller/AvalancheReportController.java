@@ -466,38 +466,6 @@ public class AvalancheReportController {
 	}
 
 	/**
-	 * Change a report. This is only a small change and does not trigger the whole
-	 * publication process. The timestamp, user and revoision as well as the JSON
-	 * string of all bulletins is updated in the report.
-	 *
-	 * @param publishedBulletins the bulletins affected by this change
-	 * @param startDate          the start date of the report
-	 * @param region             the region of the report
-	 * @param user               the user who changes the report
-	 * @return the id of the report
-	 * @throws HibernateException if the report can not be loaded from the DB
-	 */
-	public AvalancheReport changeReport(List<AvalancheBulletin> publishedBulletins, Instant startDate, Region region, User user, Instant publicationDate) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport latestReport = getInternalReport(startDate, region);
-			if (latestReport != null) {
-				AvalancheReport avalancheReport = new AvalancheReport();
-				avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
-				avalancheReport.setUser(user);
-				avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
-				avalancheReport.setRegion(region);
-				avalancheReport.setStatus(latestReport.getStatus());
-				avalancheReport.setMediaFileUploaded(latestReport.isMediaFileUploaded());
-				avalancheReport.setJsonString(JsonUtil.createJSONString(publishedBulletins, region, false).toString());
-				entityManager.persist(avalancheReport);
-				return avalancheReport;
-			} else {
-				throw new HibernateException("Report error!");
-			}
-		});
-	}
-
-	/**
 	 * Change status of a report with a given validity time and region to
 	 * <code>published</code> (if the previous status was <code>submitted</code>) or
 	 * <code>republished</code> (if the previous status was
