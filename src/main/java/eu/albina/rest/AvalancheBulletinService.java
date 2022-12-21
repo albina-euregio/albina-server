@@ -467,6 +467,11 @@ public class AvalancheBulletinService {
 					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
 				}
 
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+				}
+
 				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
 						endDate, region, user);
 				List<AvalancheBulletin> regionBulletins = allBulletins.stream()
