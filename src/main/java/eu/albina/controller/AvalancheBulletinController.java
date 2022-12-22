@@ -471,12 +471,10 @@ public class AvalancheBulletinController {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
-				// select bulletins within the region
-			List<AvalancheBulletin> results = bulletins.stream()
-				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
-				.collect(Collectors.toList());
+			for (AvalancheBulletin bulletin : bulletins) {
 
-			for (AvalancheBulletin bulletin : results) {
+				// select bulletins within the region
+				if (bulletin.affectsRegionWithoutSuggestions(region)) {
 
 					// set author
 					if (user != null && !Objects.equals(user.getEmail(), ServerInstanceController.getInstance().getLocalServerInstance().getUserName())) {
@@ -494,6 +492,11 @@ public class AvalancheBulletinController {
 						bulletin.getPublishedRegions().add(entry);
 					}
 
+					bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")));
+					entityManager.merge(bulletin);
+				}
+
+				// set publication date for all bulletins
 				bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")));
 				entityManager.merge(bulletin);
 			}
@@ -504,7 +507,7 @@ public class AvalancheBulletinController {
 			return bulletins;
 		});
 	}
-
+	
 	/**
 	 * Check if a micro region of the specified {@code region} was defined twice in
 	 * the given {@code bulletins}.
