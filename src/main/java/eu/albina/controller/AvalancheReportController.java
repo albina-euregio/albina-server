@@ -633,40 +633,36 @@ public class AvalancheReportController {
 			throws AlbinaException {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
-		Map<String, AvalancheBulletin> tmpMap = new HashMap<String, AvalancheBulletin>();
 
 		for (Region region : regions) {
 			// get bulletins for this region
 			List<AvalancheBulletin> publishedBulletinsForRegion = getPublishedBulletinsForRegion(date, region);
 			for (AvalancheBulletin bulletin : publishedBulletinsForRegion) {
 				if (resultMap.containsKey(bulletin.getId())) {
-					// merge bulletins with same id
-					if (resultMap.get(bulletin.getId()).equals(bulletin)) {
-						for (String publishedRegion : bulletin.getPublishedRegions())
-							resultMap.get(bulletin.getId()).addPublishedRegion(publishedRegion);
-						for (String savedRegion : bulletin.getSavedRegions())
-							resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
-						for (String suggestedRegion : bulletin.getSuggestedRegions())
-							resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
-					} else {
-						tmpMap = new HashMap<String, AvalancheBulletin>();
-						for (String bulletinId : resultMap.keySet()) {
-							if (bulletinId.startsWith(bulletin.getId())) {
-								if (resultMap.get(bulletinId).equals(bulletin)) {
-									for (String publishedRegion : bulletin.getPublishedRegions())
-										resultMap.get(bulletinId).addPublishedRegion(publishedRegion);
-									for (String savedRegion : bulletin.getSavedRegions())
-										resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
-									for (String suggestedRegion : bulletin.getSuggestedRegions())
-										resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
-								} else {
-									bulletin.setId(bulletin.getId() + "_" + revision);
-									revision++;
-									tmpMap.put(bulletin.getId(), bulletin);
-								}
+					boolean match = false;
+
+					// merge bulletins with same base id
+					for (String bulletinId : resultMap.keySet()) {
+						if (bulletinId.split("_")[0].startsWith(bulletin.getId())) {
+							if (resultMap.get(bulletinId).equals(bulletin)) {
+								for (String publishedRegion : bulletin.getPublishedRegions())
+									resultMap.get(bulletinId).addPublishedRegion(publishedRegion);
+								for (String savedRegion : bulletin.getSavedRegions())
+									resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
+								for (String suggestedRegion : bulletin.getSuggestedRegions())
+									resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
+								match = true;
+								break;
+							} else {
+								continue;
 							}
 						}
-						resultMap.putAll(tmpMap);
+					}
+
+					if (!match) {
+						bulletin.setId(bulletin.getId() + "_" + revision);
+						revision++;
+						resultMap.put(bulletin.getId(), bulletin);
 					}
 				} else
 					resultMap.put(bulletin.getId(), bulletin);
