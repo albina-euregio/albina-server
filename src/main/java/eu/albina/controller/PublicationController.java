@@ -18,6 +18,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -119,9 +120,12 @@ public class PublicationController {
 			Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
 
 			// get all published bulletins
+			// FIXME set publicationDate for all bulletins (somehow a hack)
 			List<AvalancheBulletin> publishedBulletins = AvalancheReportController.getInstance().getPublishedBulletins(
 					startDate,
-					RegionController.getInstance().getPublishBulletinRegions());
+					RegionController.getInstance().getPublishBulletinRegions()).stream().peek(
+						bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")))
+					).collect(Collectors.toList());
 
 			// update all regions to create complete maps
 			for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
