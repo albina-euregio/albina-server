@@ -411,7 +411,7 @@ public class AvalancheBulletinService {
 					.collect(Collectors.toList());
 		
 				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-						.saveBulletins(bulletins, startDate, endDate, region, null);
+						.saveBulletins(bulletins, startDate, endDate, region);
 		
 				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
 		
@@ -460,7 +460,7 @@ public class AvalancheBulletinService {
 					.collect(Collectors.toList());
 
 				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-					.saveBulletins(bulletins, startDate, endDate, region, null);
+					.saveBulletins(bulletins, startDate, endDate, region);
 				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
 				// save report for super regions
 				for (Region superRegion : region.getSuperRegions()) {

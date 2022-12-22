@@ -153,7 +153,7 @@ public class AvalancheBulletinController {
 	 *             if a micro region is defined twice in the bulletins
 	 */
 	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> newBulletins, Instant startDate,
-			Instant endDate, Region region, Instant publicationDate) throws AlbinaException {
+			Instant endDate, Region region) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
 		if (checkBulletinsForDuplicateRegion(newBulletins, region))
@@ -171,9 +171,6 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin newBulletin : newBulletins) {
 
 				ids.add(newBulletin.getId());
-
-				if (publicationDate != null)
-					newBulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")));
 
 				// Bulletin already exists
 				if (originalBulletins.containsKey(newBulletin.getId())) {
