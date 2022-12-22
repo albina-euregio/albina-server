@@ -106,7 +106,7 @@ public class PublicationController {
 			// publish all regions which have to be published
 			for (Region region : regions) {
 				List<AvalancheBulletin> regionBulletins = bulletins.stream()
-						.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
+						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
 						.collect(Collectors.toList());
 				logger.info("Publishing region {} with bulletins {} and publication time {}", region.getId(),
 						regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
@@ -114,10 +114,6 @@ public class PublicationController {
 
 				AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user,
 						publicationDate);
-
-				if (regionBulletins.isEmpty()) {
-					continue;
-				}
 			}
 
 			Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
