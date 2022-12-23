@@ -426,8 +426,7 @@ public class AvalancheBulletinController {
 	 * @param user
 	 *            the user who publishes the bulletins
 	 */
-	public void publishBulletins(Instant startDate, Instant endDate, List<Region> regions,
-			Instant publicationDate, User user) throws AlbinaException {
+	public void publishBulletins(Instant startDate, Instant endDate, List<Region> regions, Instant publicationDate, User user) {
 		Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
 
 		for (Region region : regions) {

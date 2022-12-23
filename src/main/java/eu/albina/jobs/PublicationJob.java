@@ -79,27 +79,23 @@ public class PublicationJob implements org.quartz.Job {
 			logger.info("No bulletins to publish/update/change.");
 			return;
 		}
-		try {
-			String userName = serverInstance.getUserName();
-			User user = userName != null ? UserController.getInstance().getUser(userName) : null;
-			AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, regions, publicationDate, user);
-			List<AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance().getAllBulletins(startDate, endDate);
-			if (publishedBulletins.isEmpty()) {
-				return;
-			}
-
-			List<AvalancheBulletin> result = publishedBulletins.stream()
-				.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
-					&& !avalancheBulletin.getPublishedRegions().isEmpty())
-				.collect(Collectors.toList());
-			if (result == null || result.isEmpty()) {
-				logger.info("No published regions found in bulletins.");
-				return;
-			}
-			PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, isChange());
-		} catch (AlbinaException e) {
-			logger.error(getClass().getSimpleName() + " error", e);
+		String userName = serverInstance.getUserName();
+		User user = userName != null ? UserController.getInstance().getUser(userName) : null;
+		AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, regions, publicationDate, user);
+		List<AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance().getAllBulletins(startDate, endDate);
+		if (publishedBulletins.isEmpty()) {
+			return;
 		}
+
+		List<AvalancheBulletin> result = publishedBulletins.stream()
+			.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
+				&& !avalancheBulletin.getPublishedRegions().isEmpty())
+			.collect(Collectors.toList());
+		if (result == null || result.isEmpty()) {
+			logger.info("No published regions found in bulletins.");
+			return;
+		}
+		PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, isChange());
 	}
 
 	protected boolean isEnabled(ServerInstance serverInstance) {
