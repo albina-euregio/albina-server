@@ -41,12 +41,10 @@ import eu.albina.controller.AvalancheBulletinController;
 
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.BulletinStatus;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,12 +59,11 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AlbinaUtilTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtilTest.class);
@@ -86,7 +83,7 @@ public class AlbinaUtilTest {
 	private final List<String> passwords = new ArrayList<String>();
 	private final List<String> recipients = new ArrayList<String>();
 
-	@Before
+	@BeforeEach
 	public void setUp() throws IOException {
 		serverInstanceEuregio = new ServerInstance();
 
@@ -112,7 +109,7 @@ public class AlbinaUtilTest {
 		// recipients.add("chris.mitterer@tirol.gv.at");
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void addSubscriber() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, AlbinaException, IOException, Exception {
@@ -127,7 +124,7 @@ public class AlbinaUtilTest {
 	@Test
 	public void retrieveTranslationTest() throws UnsupportedEncodingException {
 		String string = LanguageCode.ca.getBundleString("headline.tendency");
-		Assert.assertEquals("Tendència", string);
+		Assertions.assertEquals("Tendència", string);
 	}
 
 	@Test
@@ -149,30 +146,30 @@ public class AlbinaUtilTest {
 	public void encodePassword() {
 		String pwd = BCrypt.hashpw("zee3tohDuu7Zi", BCrypt.gensalt());
 		logger.warn("Password: " + pwd);
-		Assert.assertTrue(BCrypt.checkpw("zee3tohDuu7Zi", "$2a$10$/SiPco5fFqCvIPkure0ffuBjMIRN2LPgQCvhwKMfM8HEFLch/xzzy"));
+		Assertions.assertTrue(BCrypt.checkpw("zee3tohDuu7Zi", "$2a$10$/SiPco5fFqCvIPkure0ffuBjMIRN2LPgQCvhwKMfM8HEFLch/xzzy"));
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testIsLatest() {
 		ZonedDateTime dateTime = (ZonedDateTime.now()).minusDays(0);
-		Assert.assertTrue(AlbinaUtil.isLatest(dateTime));
+		Assertions.assertTrue(AlbinaUtil.isLatest(dateTime));
 	}
 
 	@Test
 	public void testIsNotLatest() {
 		ZonedDateTime dateTime = (ZonedDateTime.now()).minusDays(1);
-		Assert.assertFalse(AlbinaUtil.isLatest(dateTime));
+		Assertions.assertFalse(AlbinaUtil.isLatest(dateTime));
 	}
 
 	@Test
 	public void testIsUpdate() throws Exception {
-		Assert.assertTrue(AlbinaUtil.isUpdate(bulletins));
+		Assertions.assertTrue(AlbinaUtil.isUpdate(bulletins));
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(Resources.getResource("2019-01-17.json"));
-		Assert.assertFalse(AlbinaUtil.isUpdate(bulletins));
+		Assertions.assertFalse(AlbinaUtil.isUpdate(bulletins));
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void sortBulletinsTest() {
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
@@ -191,43 +188,39 @@ public class AlbinaUtilTest {
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
-		assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
-		assertEquals("Donnerstag 17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
-		assertEquals("am Freitag, den 18.01.2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
-		assertEquals("16.01.2019", AlbinaUtil.getPreviousValidityDateString(bulletins, LanguageCode.de));
-		assertEquals("18.01.2019", AlbinaUtil.getNextValidityDateString(bulletins, LanguageCode.de));
-		assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
-		assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
-		assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
+		Assertions.assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
+		Assertions.assertEquals("Donnerstag 17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("am Freitag, den 18.01.2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("16.01.2019", AlbinaUtil.getPreviousValidityDateString(bulletins, LanguageCode.de));
+		Assertions.assertEquals("18.01.2019", AlbinaUtil.getNextValidityDateString(bulletins, LanguageCode.de));
+		Assertions.assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
+		Assertions.assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
+		Assertions.assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
-		assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
-			SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
+		Assertions.assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17", SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
 		avalancheReport.setStatus(BulletinStatus.republished);
-		assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17",
-			SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
-		assertEquals("https://lawinen.report/bulletin/2019-01-17",
-			LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de));
-		assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf",
-			LinkUtil.getPdfLink(avalancheReport, LanguageCode.de));
-		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
+		Assertions.assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17", SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
+		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de));
+		Assertions.assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf", LinkUtil.getPdfLink(avalancheReport, LanguageCode.de));
+		Assertions.assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
-		assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
+		Assertions.assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-17T10:40:00Z"), AlbinaUtil.localZone())));
-		assertFalse(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
+		Assertions.assertFalse(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
 			Clock.fixed(Instant.parse("2019-01-17T16:00:00Z"), AlbinaUtil.localZone())));
 
 		// should yield strings in correct timezone, even if publication date is in a different timezone
-		assertEquals("2019-01-16T16:00Z", bulletins.get(0).getPublicationDate().toString());
+		Assertions.assertEquals("2019-01-16T16:00Z", bulletins.get(0).getPublicationDate().toString());
 		bulletins.forEach(b -> b.setPublicationDate(b.getPublicationDate().withZoneSameInstant(ZoneId.of("Canada/Mountain"))));
-		assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.get(0).getPublicationDate().toString());
-		assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.get(0).getPublicationDate().toString());
+		Assertions.assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testDatesHibernate() throws Exception {
 		HibernateUtil.getInstance().setUp();
 		final AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin("4e5bbd7c-7ccf-4a2a-8ac7-5a0bfc322a14");
@@ -235,41 +228,39 @@ public class AlbinaUtilTest {
 		final List<AvalancheBulletin> bulletins = Collections.singletonList(bulletin);
 
 		// Hibernate/MySQL returns timestamps in Europe/Vienna zone?!
-		assertEquals("2021-12-05T17:00+01:00[Europe/Vienna]", bulletin.getPublicationDate().toString());
-		assertEquals("05.12.2021 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		assertEquals("2021-12-05_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2021-12-05T17:00+01:00[Europe/Vienna]", bulletin.getPublicationDate().toString());
+		Assertions.assertEquals("05.12.2021 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("2021-12-05_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
 	}
 
 	@Test
 	public void testInstantStartOfDay() {
 		// code from AlbinaUtil.getInstantStartOfDay
 		Instant startDate = LocalDate.parse("2022-03-27").atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant();
-		assertEquals(Instant.parse("2022-03-26T23:00:00Z"), startDate); // ok
-		assertEquals(ZonedDateTime.parse("2022-03-27T00:00+01:00[Europe/Vienna]"), startDate.atZone(ZoneId.of("Europe/Vienna"))); // ok
+		Assertions.assertEquals(Instant.parse("2022-03-26T23:00:00Z"), startDate); // ok
+		Assertions.assertEquals(ZonedDateTime.parse("2022-03-27T00:00+01:00[Europe/Vienna]"), startDate.atZone(ZoneId.of("Europe/Vienna"))); // ok
 
 		// old code from PublicationJob
 		startDate = startDate.plus(1, ChronoUnit.DAYS);
-		assertEquals(Instant.parse("2022-03-27T23:00:00Z"), startDate); // not good!
-		assertEquals(ZonedDateTime.parse("2022-03-28T01:00+02:00[Europe/Vienna]"), startDate.atZone(ZoneId.of("Europe/Vienna"))); // not good!
-		assertEquals(ZonedDateTime.parse("2022-03-27T23:00Z[UTC]"), startDate.atZone(ZoneId.of("UTC")));
+		Assertions.assertEquals(Instant.parse("2022-03-27T23:00:00Z"), startDate); // not good!
+		Assertions.assertEquals(ZonedDateTime.parse("2022-03-28T01:00+02:00[Europe/Vienna]"), startDate.atZone(ZoneId.of("Europe/Vienna"))); // not good!
+		Assertions.assertEquals(ZonedDateTime.parse("2022-03-27T23:00Z[UTC]"), startDate.atZone(ZoneId.of("UTC")));
 
 		// code from PublicationJob
 		ZonedDateTime today = LocalDate.parse("2022-03-27").atStartOfDay(AlbinaUtil.localZone());
-		assertEquals(Instant.parse("2022-03-26T23:00:00Z"), today.toInstant()); // ok
+		Assertions.assertEquals(Instant.parse("2022-03-26T23:00:00Z"), today.toInstant()); // ok
 		startDate = today.plusDays(1).toInstant();
-		assertEquals(Instant.parse("2022-03-27T22:00:00Z"), startDate); // ok
+		Assertions.assertEquals(Instant.parse("2022-03-27T22:00:00Z"), startDate); // ok
 		Instant endDate = today.plusDays(2).toInstant();
-		assertEquals(Instant.parse("2022-03-28T22:00:00Z"), endDate); // ok
+		Assertions.assertEquals(Instant.parse("2022-03-28T22:00:00Z"), endDate); // ok
 	}
 
 	@Test
 	public void getPublicationDate() {
-		assertNull(AlbinaUtil.getPublicationDate(Collections.emptyList()));
-		assertNull(AlbinaUtil.getPublicationDate(Collections.singletonList(new AvalancheBulletin())));
+		Assertions.assertNull(AlbinaUtil.getPublicationDate(Collections.emptyList()));
+		Assertions.assertNull(AlbinaUtil.getPublicationDate(Collections.singletonList(new AvalancheBulletin())));
 		AvalancheBulletin bulletin = new AvalancheBulletin();
 		bulletin.setPublicationDate(ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
-		assertEquals(
-			bulletin.getPublicationDate(),
-			AlbinaUtil.getPublicationDate(Arrays.asList(new AvalancheBulletin(), bulletin, new AvalancheBulletin())));
+		Assertions.assertEquals(bulletin.getPublicationDate(), AlbinaUtil.getPublicationDate(Arrays.asList(new AvalancheBulletin(), bulletin, new AvalancheBulletin())));
 	}
 }

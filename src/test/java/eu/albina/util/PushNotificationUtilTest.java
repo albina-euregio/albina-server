@@ -5,8 +5,8 @@ import com.github.openjson.JSONObject;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import javax.ws.rs.client.Client;
@@ -57,8 +57,8 @@ public class PushNotificationUtilTest {
 
 		ArgumentCaptor<Entity<?>> entityArgumentCaptor = getEntityArgumentCaptor();
 		verify(builder).post(entityArgumentCaptor.capture());
-		Assert.assertEquals("application/octet-stream", entityArgumentCaptor.getValue().getMediaType().toString());
-		Assert.assertEquals("aes128gcm", entityArgumentCaptor.getValue().getEncoding());
+		Assertions.assertEquals("application/octet-stream", entityArgumentCaptor.getValue().getMediaType().toString());
+		Assertions.assertEquals("aes128gcm", entityArgumentCaptor.getValue().getEncoding());
 	}
 
 	private ArgumentCaptor<Entity<?>> getEntityArgumentCaptor() {

@@ -20,10 +20,10 @@ import java.util.List;
 
 import com.github.openjson.JSONArray;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,18 +35,18 @@ public class UserControllerTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		HibernateUtil.getInstance().setUp();
 	}
 
-	@After
+	@AfterEach
 	public void shutDown() {
 		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getUsersTest() throws AlbinaException {
 		List<User> users = UserController.getInstance().getUsers();
 		for (User user : users) {
@@ -55,21 +55,21 @@ public class UserControllerTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getUserTest() throws AlbinaException {
 		User user = UserController.getInstance().getUser("info@avalanche.report");
 		logger.info(user.getEmail());
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getRegionsTest() throws AlbinaException {
 		JSONArray regionsJson = RegionController.getInstance().getRegionsJson();
 		logger.info(regionsJson.toString());
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getRolesTest() throws AlbinaException {
 		JSONArray rolesJson = UserController.getInstance().getRolesJson();
 		logger.info(rolesJson.toString());

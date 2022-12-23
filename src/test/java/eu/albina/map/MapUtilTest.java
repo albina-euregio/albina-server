@@ -5,7 +5,7 @@ import static eu.albina.RegionTestUtils.regionEuregio;
 import static eu.albina.RegionTestUtils.regionSouthTyrol;
 import static eu.albina.RegionTestUtils.regionTrentino;
 import static eu.albina.RegionTestUtils.regionTyrol;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,11 +26,10 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.PdfUtil;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import com.google.common.io.Resources;
 
@@ -42,12 +41,11 @@ import javax.imageio.ImageIO;
 public class MapUtilTest {
 
 	private ServerInstance serverInstance;
+	private Path folder;
 
-	@Rule
-	public TemporaryFolder folder = TemporaryFolder.builder().assureDeletion().build();
-
-	@Before
-	public void setUp() throws Exception {
+	@BeforeEach
+	public void setUp(@TempDir Path folder) throws Exception {
+		this.folder = folder;
 		serverInstance = new ServerInstance();
 		serverInstance.setMapsPath(folder.toString());
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
@@ -202,7 +200,7 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testMapyrusMapsAranVeryHigh() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -212,7 +210,7 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void testMapyrusMapsAranMatrixInformation() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2022-12-06/ES-CT-L.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -222,7 +220,7 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore("fix path")
+	@Disabled("fix path")
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -236,7 +234,7 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore("slow, only run testMapyrusMaps")
+	@Disabled("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -244,7 +242,7 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore("slow, only run testMapyrusMaps")
+	@Disabled("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime1() throws Exception {
 		final URL resource = Resources.getResource("2020-03-29.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -252,7 +250,7 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Ignore("slow, only run testMapyrusMaps")
+	@Disabled("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime2() throws Exception {
 		final URL resource = Resources.getResource("2020-03-30.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);

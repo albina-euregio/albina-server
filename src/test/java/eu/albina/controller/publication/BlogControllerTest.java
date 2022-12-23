@@ -19,10 +19,10 @@ package eu.albina.controller.publication;
 import java.time.Instant;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.GoogleBloggerConfiguration;
@@ -30,49 +30,44 @@ import eu.albina.util.HibernateUtil;
 
 import static eu.albina.RegionTestUtils.regionSouthTyrol;
 import static eu.albina.RegionTestUtils.regionTyrol;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled
 public class BlogControllerTest {
 
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		HibernateUtil.getInstance().setUp();
 	}
 
-	@After
+	@AfterEach
 	public void shutDown() {
 		HibernateUtil.getInstance().shutDown();
 	}
 
-	@Ignore
 	@Test
 	public void testBlogPosts() throws Exception {
 		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
 		BlogController.getInstance().lastFetch.put(config.getBlogId(), Instant.ofEpochMilli(0L));
 		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(config);
-		assertTrue("size=" + blogPosts.size(), blogPosts.size() > 5);
-		assertTrue("one blog has image", blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()));
+		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
+		assertTrue(blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()), "one blog has image");
 	}
 
-	@Ignore
 	@Test
 	public void testLatestBlogPost() throws Exception {
 		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
 		Blogger.Item blogPost = BlogController.getInstance().getLatestBlogPost(config);
-		assertTrue("blog has >100 chars", blogPost.content.length() > 100);
+		assertTrue(blogPost.content.length() > 100, "blog has >100 chars");
 	}
 
-	@Ignore
 	@Test
 	public void testBlogPost() throws Exception {
 		String blogPost = BlogController.getInstance().getBlogPost("1227558273754407795", regionTyrol, LanguageCode.de);
-		assertThat(blogPost, containsString("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
+		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
 	}
 
-	@Ignore
 	@Test
 	public void sendBlogPostsTest() {
 		HibernateUtil.getInstance().setUp();
@@ -80,10 +75,9 @@ public class BlogControllerTest {
 		HibernateUtil.getInstance().shutDown();
 	}
 
-	@Ignore
 	@Test
 	public void testTicket150() throws Exception {
 		String blogPost = BlogController.getInstance().getBlogPost("4564885875858452565", regionSouthTyrol, LanguageCode.de);
-		assertThat(blogPost, containsString("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
+		assertTrue(blogPost.contains("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
 	}
 }

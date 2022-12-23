@@ -17,8 +17,8 @@
 package eu.albina.util;
 
 import eu.albina.map.MapUtilTest;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class PdfUtilTest {
 
@@ -26,7 +26,7 @@ public class PdfUtilTest {
 	 * @see MapUtilTest#testMapyrusMaps()
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void createPdf() {
 	}
 
@@ -34,7 +34,7 @@ public class PdfUtilTest {
 	 * @see MapUtilTest#testMapyrusMapsAran()
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void createPdfAran() {
 	}
 
