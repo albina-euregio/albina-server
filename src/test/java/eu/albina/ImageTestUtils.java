@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public interface ImageTestUtils {
 
@@ -30,8 +30,8 @@ public interface ImageTestUtils {
 		// Source: https://github.com/openstreetmap/josm/blob/master/test/functional/org/openstreetmap/josm/gui/mappaint/MapCSSRendererTest.java
 		// License: GNU General Public License v2 or later
 
-		assertEquals(String.format("Images %s width", message), image.getWidth(), reference.getWidth());
-		assertEquals(String.format("Images %s height", message), image.getHeight(), reference.getHeight());
+		assertEquals(image.getWidth(), reference.getWidth(), String.format("Images %s width", message));
+		assertEquals(image.getHeight(), reference.getHeight(), String.format("Images %s height", message));
 
 		StringBuilder differences = new StringBuilder();
 		ArrayList<Point> differencePoints = new ArrayList<>();

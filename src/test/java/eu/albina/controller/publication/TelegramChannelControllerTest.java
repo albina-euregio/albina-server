@@ -24,9 +24,9 @@ import java.util.List;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.HibernateUtil;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
 
@@ -38,13 +38,13 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.TelegramChannelUtil;
 
 // TODO test the tests
-@Ignore
+@Disabled
 public class TelegramChannelControllerTest {
 
 	private List<AvalancheBulletin> bulletins;
 	private ServerInstance serverInstance;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		serverInstance = new ServerInstance();
 
@@ -105,7 +105,7 @@ public class TelegramChannelControllerTest {
 		}
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testTrySendPhoto() throws Exception {
 		TelegramController.getInstance().trySendPhoto(null, null, null, null, false, 3);

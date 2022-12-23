@@ -21,9 +21,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
 
@@ -34,7 +34,7 @@ public class StatisticsControllerTest {
 
 	private List<AvalancheBulletin> bulletinsAmPm;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		bulletinsAmPm = Arrays.asList(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")),
 				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_2.json")),
@@ -50,7 +50,7 @@ public class StatisticsControllerTest {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
 		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, false, false);
-		Assert.assertEquals(expected, csvString);
+		Assertions.assertEquals(expected, csvString);
 	}
 
 	@Test
@@ -58,6 +58,6 @@ public class StatisticsControllerTest {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.extended.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
 		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, true, false);
-		Assert.assertEquals(expected, csvString);
+		Assertions.assertEquals(expected, csvString);
 	}
 }

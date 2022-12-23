@@ -17,42 +17,32 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
 import eu.albina.model.AvalancheReport;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
+import org.junit.jupiter.api.io.TempDir;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JsonUtilTest {
 
 	private List<AvalancheBulletin> bulletins;
 	private ServerInstance serverInstanceEuregio;
 	private Region regionTirol;
 
-	@Rule
-	public TemporaryFolder folder = TemporaryFolder.builder().assureDeletion().build();
-
-	@Before
+	@BeforeEach
 	public void setUp() throws IOException {
 		serverInstanceEuregio = new ServerInstance();
-		serverInstanceEuregio.setHtmlDirectory(folder.toString());
-		serverInstanceEuregio.setMapsPath(folder.toString());
-		serverInstanceEuregio.setPdfDirectory(folder.toString());
 
 		regionTirol = new Region();
 		regionTirol.setId("AT-07");
@@ -66,9 +56,11 @@ public class JsonUtilTest {
 		bulletins.add(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")));
 	}
 
-	@Ignore
 	@Test
-	public void createJsonTest() throws TransformerException, IOException {
+	public void createJsonTest(@TempDir Path folder) throws TransformerException, IOException {
+		serverInstanceEuregio.setHtmlDirectory(folder.toString());
+		serverInstanceEuregio.setMapsPath(folder.toString());
+		serverInstanceEuregio.setPdfDirectory(folder.toString());
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTirol, serverInstanceEuregio);
 		JsonUtil.createJsonFile(avalancheReport);
 	}

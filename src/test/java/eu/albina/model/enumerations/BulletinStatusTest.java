@@ -1,12 +1,11 @@
 package eu.albina.model.enumerations;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class BulletinStatusTest {
 	@Test
@@ -16,7 +15,7 @@ public class BulletinStatusTest {
 			final List<BulletinStatus> statusList = Arrays.asList(BulletinStatus.values());
 			Collections.shuffle(statusList);
 			statusList.sort(BulletinStatus::comparePublicationStatus);
-			assertEquals(expected, statusList);
+			Assertions.assertEquals(expected, statusList);
 		}
 
 	}

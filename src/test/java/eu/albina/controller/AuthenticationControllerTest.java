@@ -16,9 +16,9 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +27,14 @@ public class AuthenticationControllerTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthenticationControllerTest.class);
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
 	@Test
 	public void testAccessToken() {
 		String token = AuthenticationController.getInstance().issueAccessToken("foobar");
-		Assert.assertNotNull(token);
+		Assertions.assertNotNull(token);
 	}
 
 	@Test

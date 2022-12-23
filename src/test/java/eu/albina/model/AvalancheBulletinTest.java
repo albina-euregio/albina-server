@@ -18,8 +18,8 @@ package eu.albina.model;
 
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -33,10 +33,7 @@ public class AvalancheBulletinTest {
 	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("validBulletin.json"), StandardCharsets.UTF_8);
 		AvalancheBulletin b = AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json"));
-		Assert.assertEquals(
-			new JSONObject(expected).toString(4),
-			b.toJSON().toString(4)
-		);
+		Assertions.assertEquals(new JSONObject(expected).toString(4), b.toJSON().toString(4));
 	}
 
 	@Test

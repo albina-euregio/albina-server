@@ -17,31 +17,32 @@
 package eu.albina.json;
 
 import com.google.common.io.Resources;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SnowProfileJsonValidatorTest {
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testValidateSnowProfileJSONValid() throws IOException {
 		final URL resource = Resources.getResource("validSnowProfile.json");
 		final String validSnowProfileStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		assertEquals(0, JsonValidator.validateSnowProfile(validSnowProfileStringFromResource).size());
+		Assertions.assertEquals(0, JsonValidator.validateSnowProfile(validSnowProfileStringFromResource).size());
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testValidateSnowProfileJSONInvalid() throws IOException {
 		final URL resource = Resources.getResource("invalidSnowProfile.json");
 		final String invalidSnowProfileStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		assertEquals(1, JsonValidator.validateSnowProfile(invalidSnowProfileStringFromResource).size());
+		Assertions.assertEquals(1, JsonValidator.validateSnowProfile(invalidSnowProfileStringFromResource).size());
 	}
 
 }

@@ -25,10 +25,10 @@ import java.time.ZoneId;
 import java.util.List;
 
 import eu.albina.model.AvalancheReport;
-import org.junit.Before;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
 
@@ -38,15 +38,15 @@ import eu.albina.model.enumerations.LanguageCode;
 
 import static eu.albina.RegionTestUtils.regionAran;
 import static eu.albina.RegionTestUtils.regionTyrol;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EmailUtilTest {
 
 	private ServerInstance serverInstanceEuregio;
 	private ServerInstance serverInstanceAran;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws IOException {
 		serverInstanceEuregio = new ServerInstance();
 		serverInstanceEuregio.setServerImagesUrl("/mnt/images/");
@@ -64,13 +64,13 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, LanguageCode.de);
-		assertEquals("155 kB", 154.7177734375, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1.);
-		assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag 17.01.2019</h2>"));
-		assertTrue(html.contains("Veröffentlicht am <b>16.01.2019 um 17:00</b>"));
-		assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
-		assertTrue(html.contains("Tendenz: Lawinengefahr nimmt ab</p><p style=\"text-align: left; margin-bottom: 0;\">am Freitag, den 18.01.2019"));
-		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/fd_AT-07_map.jpg"));
-		assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/AT-07_6385c958-018d-4c89-aa67-5eddc31ada5a.jpg"));
+		Assertions.assertEquals(154.7177734375, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1., "155 kB");
+		Assertions.assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag 17.01.2019</h2>"));
+		Assertions.assertTrue(html.contains("Veröffentlicht am <b>16.01.2019 um 17:00</b>"));
+		Assertions.assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
+		Assertions.assertTrue(html.contains("Tendenz: Lawinengefahr nimmt ab</p><p style=\"text-align: left; margin-bottom: 0;\">am Freitag, den 18.01.2019"));
+		Assertions.assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/fd_AT-07_map.jpg"));
+		Assertions.assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/AT-07_6385c958-018d-4c89-aa67-5eddc31ada5a.jpg"));
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class EmailUtilTest {
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, LanguageCode.en);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.mail.html"), StandardCharsets.UTF_8);
-		Assert.assertEquals(expected.trim(), html.trim());
+		Assertions.assertEquals(expected.trim(), html.trim());
 		}
 
 	@Test
@@ -89,17 +89,17 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, LanguageCode.de);
-		assertEquals("59 kB", 59, html.getBytes(StandardCharsets.UTF_8).length / 1024);
+		Assertions.assertEquals(59, html.getBytes(StandardCharsets.UTF_8).length / 1024, "59 kB");
 	}
 
 	@Test
 	public void langTest() {
-		assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
-		assertEquals("Tutte le elevazioni", LanguageCode.it.getBundleString("elevation.all"));
-		assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
+		Assertions.assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
+		Assertions.assertEquals("Tutte le elevazioni", LanguageCode.it.getBundleString("elevation.all"));
+		Assertions.assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void sendMediaEmails() throws IOException, URISyntaxException {
 		EmailUtil.getInstance().sendMediaEmails("Test", "test.mp3", "test.txt", LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(), regionTyrol, "Norbert Lanzanasto", true, LanguageCode.de, serverInstanceEuregio, false);

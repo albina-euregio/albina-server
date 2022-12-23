@@ -8,9 +8,9 @@ import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ public class PdfUtilRebuildTest {
 	private List<Region> regions;
 	private ServerInstance serverInstance;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		serverInstance = new ServerInstance();
 		serverInstance.setMapsPath("https://static.avalanche.report/bulletins");
@@ -48,7 +48,7 @@ public class PdfUtilRebuildTest {
 		regions = Arrays.asList(regionEuregio, regionTyrol, regionSouthTyrol, regionTrentino);
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void rebuildMaps() {
 		Stream.iterate(LocalDate.parse("2022-01-20"), date -> date.plusDays(1))

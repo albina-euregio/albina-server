@@ -1,21 +1,22 @@
 package eu.albina.model.enumerations;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Locale;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class DangerRatingTest {
 	@Test
 	public void testI18n() {
-		assertEquals("erheblich", DangerRating.considerable.toString(Locale.GERMAN, false));
-		assertEquals("Gefahrenstufe 3 - Erheblich", DangerRating.considerable.toString(Locale.GERMAN, true));
+		Assertions.assertEquals("erheblich", DangerRating.considerable.toString(Locale.GERMAN, false));
+		Assertions.assertEquals("Gefahrenstufe 3 - Erheblich", DangerRating.considerable.toString(Locale.GERMAN, true));
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void convert() {
 		for (LanguageCode languageCode : LanguageCode.values()) {
 			System.out.println();

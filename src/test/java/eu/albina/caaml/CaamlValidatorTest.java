@@ -21,7 +21,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import com.google.common.io.Resources;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 public class CaamlValidatorTest {
@@ -33,11 +34,13 @@ public class CaamlValidatorTest {
 		CaamlValidator.validateCaamlBulletin(validBulletinStringFromResource, CaamlVersion.V5);
 	}
 
-	@Test(expected = SAXException.class)
+	@Test
 	public void testValidateAvalancheBulletinCaamlInvalid() throws SAXException, IOException {
-		final URL resource = Resources.getResource("invalidBulletin.xml");
-		final String invalidBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		CaamlValidator.validateCaamlBulletin(invalidBulletinStringFromResource, CaamlVersion.V5);
+		Assertions.assertThrows(SAXException.class, () -> {
+			final URL resource = Resources.getResource("invalidBulletin.xml");
+			final String invalidBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
+			CaamlValidator.validateCaamlBulletin(invalidBulletinStringFromResource, CaamlVersion.V5);
+		});
 	}
 
 	@Test

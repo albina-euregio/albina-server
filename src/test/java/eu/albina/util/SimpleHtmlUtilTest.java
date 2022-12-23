@@ -24,9 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import eu.albina.model.AvalancheReport;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 
 import com.google.common.io.Resources;
 
@@ -34,6 +33,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import freemarker.template.TemplateException;
+import org.junit.jupiter.api.Test;
 
 import static eu.albina.RegionTestUtils.regionAran;
 import static eu.albina.RegionTestUtils.regionEuregio;
@@ -44,7 +44,7 @@ public class SimpleHtmlUtilTest {
 	private ServerInstance serverInstanceEuregio;
 	private ServerInstance serverInstanceAran;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		serverInstanceEuregio = new ServerInstance();
 		serverInstanceEuregio.setName("ALBINA-TEST");
@@ -67,7 +67,7 @@ public class SimpleHtmlUtilTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
-		Assert.assertEquals(expected.trim(), htmlString.trim());
+		Assertions.assertEquals(expected.trim(), htmlString.trim());
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class SimpleHtmlUtilTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletinsTyrol, regionTyrol, serverInstanceEuregio);
 		avalancheReport.setBulletins(bulletinsTyrol, bulletins);
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
-		Assert.assertFalse(htmlString.contains("853733e5-cb48-4cf1-91a2-ebde59dda31f")); // IT-32-TN
+		Assertions.assertFalse(htmlString.contains("853733e5-cb48-4cf1-91a2-ebde59dda31f")); // IT-32-TN
 	}
 
 	@Test
@@ -90,7 +90,7 @@ public class SimpleHtmlUtilTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.ca);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
-		Assert.assertEquals(expected.trim(), htmlString.trim());
+		Assertions.assertEquals(expected.trim(), htmlString.trim());
 	}
 }
 

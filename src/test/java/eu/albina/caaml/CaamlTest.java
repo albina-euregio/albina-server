@@ -21,9 +21,10 @@ import eu.albina.model.Region;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXParseException;
 
@@ -34,13 +35,13 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
 import static eu.albina.RegionTestUtils.regionEuregio;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CaamlTest {
 
 	private ServerInstance serverInstanceEuregio;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		serverInstanceEuregio = new ServerInstance();
 		serverInstanceEuregio.setHtmlDirectory("/foo/bar/baz/simple/");
@@ -55,7 +56,7 @@ public class CaamlTest {
 		return Caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 	}
 
-	@Ignore("<Operation> needs gml:id")
+	@Disabled("<Operation> needs gml:id")
 	@Test
 	public void createValidCaamlv5() throws Exception {
 		final String xml = createCaaml(CaamlVersion.V5);
@@ -88,7 +89,7 @@ public class CaamlTest {
 		assertStringEquals(expected, xml);
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void createOldCaamlFiles() throws Exception {
 		HibernateUtil.getInstance().setUp();
@@ -102,7 +103,7 @@ public class CaamlTest {
 		}
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void createOldCaamlFiles2022() throws Exception {
 		for (LocalDate date = LocalDate.parse("2020-11-01");
@@ -153,11 +154,11 @@ public class CaamlTest {
 		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
 		final String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
 		assertStringEquals(expected, caaml);
-		assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+		Assertions.assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
 	}
 
 	private static void assertStringEquals(String expected, String actual) {
-		assertEquals(expected.trim().replace("\r\n", "\n"), actual.trim().replace("\r\n", "\n"));
+		Assertions.assertEquals(expected.trim().replace("\r\n", "\n"), actual.trim().replace("\r\n", "\n"));
 	}
 
 	@Test
