@@ -156,7 +156,8 @@ public class PublicationJob implements org.quartz.Job {
 			avalancheReport.setServerInstance(serverInstance);
 
 			// maybe another region was not published at all
-			if (avalancheReport.getStatus() != BulletinStatus.published && avalancheReport.getStatus() != BulletinStatus.republished) {
+			BulletinStatus status = avalancheReport.getStatus();
+			if (status != BulletinStatus.published && status != BulletinStatus.republished) {
 				continue;
 			}
 
@@ -187,17 +188,7 @@ public class PublicationJob implements org.quartz.Job {
 			return;
 		}
 		for (AvalancheReport avalancheReport : reportMap.values()) {
-			if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
-				if (avalancheReport.getRegion().isSendEmails()) {
-					new Thread(() -> publicationController.sendEmails(avalancheReport)).start();
-				}
-				if (avalancheReport.getRegion().isSendTelegramMessages()) {
-					new Thread(() -> publicationController.triggerTelegramChannel(avalancheReport, null)).start();
-				}
-				if (avalancheReport.getRegion().isSendPushNotifications()) {
-					new Thread(() -> publicationController.triggerPushNotifications(avalancheReport, null)).start();
-				}
-			}
+			publicationController.sendMessages(avalancheReport);
 		}
 
 	}

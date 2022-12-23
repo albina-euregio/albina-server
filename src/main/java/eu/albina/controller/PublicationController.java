@@ -230,6 +230,21 @@ public class PublicationController {
 		});
 	}
 
+	public void sendMessages(AvalancheReport avalancheReport) {
+		if (avalancheReport.getBulletins().isEmpty() || !avalancheReport.getRegion().isCreateMaps()) {
+			return;
+		}
+		if (avalancheReport.getRegion().isSendEmails()) {
+			new Thread(() -> sendEmails(avalancheReport)).start();
+		}
+		if (avalancheReport.getRegion().isSendTelegramMessages()) {
+			new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
+		}
+		if (avalancheReport.getRegion().isSendPushNotifications()) {
+			new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
+		}
+	}
+
 	/**
 	 * Trigger the sending of the emails.
 	 */
