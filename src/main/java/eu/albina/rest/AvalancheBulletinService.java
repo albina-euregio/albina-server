@@ -183,13 +183,6 @@ public class AvalancheBulletinService {
 				logger.debug("No bulletins with status published.");
 				return Response.noContent().build();
 			}
-		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletins", e);
-			try {
-				return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toXML()).build();
-			} catch (Exception ex) {
-				return Response.status(400).type(MediaType.APPLICATION_XML).build();
-			}
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
@@ -256,15 +249,10 @@ public class AvalancheBulletinService {
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		List<Region> regions = RegionController.getInstance().getRegionsOrBulletinRegions(regionIds);
 
-		try {
-			JSONArray jsonResult = new JSONArray();
-			for (AvalancheBulletin bulletin : AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions))
-				jsonResult.put(bulletin.toSmallJSON());
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		}
+		JSONArray jsonResult = new JSONArray();
+		for (AvalancheBulletin bulletin : AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions))
+			jsonResult.put(bulletin.toSmallJSON());
+		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
 	static class Highest {
@@ -399,22 +387,22 @@ public class AvalancheBulletinService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
-		
+
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-		
+
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				JSONArray bulletinsJson = new JSONArray(bulletinsString);
 				List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
 					.mapToObj(bulletinsJson::getJSONObject)
 					.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
 					.collect(Collectors.toList());
-		
+
 				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
 						.saveBulletins(bulletins, startDate, endDate, region);
-		
+
 				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
-		
+
 				// save report for super regions
 				for (Region superRegion : region.getSuperRegions()) {
 					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
