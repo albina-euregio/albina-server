@@ -17,33 +17,20 @@
 package eu.albina.controller;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
 
 import eu.albina.caaml.Caaml;
-import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.BulletinStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
-import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.JsonUtil;
 import eu.albina.map.MapUtil;
@@ -84,118 +71,7 @@ public class PublicationController {
 		return instance;
 	}
 
-	/**
-	 * Triggers all tasks that have to take place after a publication has been
-	 * published.
-	 *
-	 * @param bulletins
-	 *                  The bulletins that were published.
-	 * @param regions
-	 *                  The regions that were published.
-	 */
-	public void publish(List<AvalancheBulletin> bulletins, List<Region> regions, User user, Instant publicationDate,
-			Instant startDate, boolean isChange) {
-		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
-		// TODO check if we can use startDate instead
-		String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-		String publicationTimeString = AlbinaUtil.getPublicationTime(publicationDate);
-		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-
-		Collections.sort(bulletins);
-
-		// publish all regions which have to be published
-		for (Region region : regions) {
-			List<AvalancheBulletin> regionBulletins = bulletins.stream()
-					.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
-					.collect(Collectors.toList());
-			logger.info("Publishing region {} with bulletins {} and publication time {}", region.getId(),
-					regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
-					publicationTimeString);
-
-			AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user,
-					publicationDate);
-		}
-
-		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
-
-		// get all published bulletins
-		// FIXME set publicationDate for all bulletins (somehow a hack)
-		List<AvalancheBulletin> publishedBulletins = AvalancheReportController.getInstance().getPublishedBulletins(
-				startDate,
-				RegionController.getInstance().getPublishBulletinRegions()).stream().peek(
-					bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")))
-				).collect(Collectors.toList());
-
-		// update all regions to create complete maps
-		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
-			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
-					.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
-			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
-					regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
-			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate,
-					region);
-
-			if (avalancheReport == null || regionBulletins.isEmpty()) {
-				continue;
-			}
-
-			avalancheReport.setBulletins(regionBulletins, publishedBulletins);
-			avalancheReport.setServerInstance(localServerInstance);
-
-			// maybe another region was not published at all
-			if (avalancheReport == null || (avalancheReport.getStatus() != BulletinStatus.published
-					&& avalancheReport.getStatus() != BulletinStatus.republished)) {
-				continue;
-			}
-
-			createRegionResources(region, avalancheReport);
-
-			if (regions.contains(region)) {
-				reportMap.put(region, avalancheReport);
-			}
-		}
-
-		// update all super regions
-		Set<Region> superRegions = new HashSet<Region>();
-		for (Region region : regions) {
-			for (Region superRegion : region.getSuperRegions()) {
-				if (!superRegions.stream()
-						.anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
-					superRegions.add(superRegion);
-			}
-		}
-		for (Region region : superRegions) {
-			logger.info("Publishing super region {} with bulletins {} and publication time {}", region.getId(),
-					publishedBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
-			AvalancheReport avalancheReport = AvalancheReport.of(publishedBulletins, region, localServerInstance);
-			createRegionResources(region, avalancheReport);
-		}
-
-		// send notifications only for updated regions after all maps were created
-		if (!isChange) {
-			for (AvalancheReport avalancheReport : reportMap.values()) {
-				if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
-					if (avalancheReport.getRegion().isSendEmails()) {
-						new Thread(() -> sendEmails(avalancheReport)).start();
-					}
-					if (avalancheReport.getRegion().isSendTelegramMessages()) {
-						new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
-					}
-					if (avalancheReport.getRegion().isSendPushNotifications()) {
-						new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
-					}
-				}
-			}
-		}
-
-		// copy files
-		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
-			AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
-
-	}
-
-	private void createRegionResources(Region region, AvalancheReport avalancheReport) {
+	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
 		if (region.isCreateCaamlV5())
 			createCaamlV5(avalancheReport);
