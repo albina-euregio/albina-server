@@ -66,7 +66,7 @@ public class PublicationJob implements org.quartz.Job {
 		Instant startDate = getStartDate();
 		Instant endDate = startDate.atZone(AlbinaUtil.localZone()).plusDays(1).toInstant();
 		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
-		logger.info("{} job triggered startDate={} endDate={} publicationDate={}", getJobName(), startDate, endDate, publicationDate);
+		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
 
 		List<Region> regions = getRegions().stream()
 			.filter(region -> {
@@ -98,7 +98,7 @@ public class PublicationJob implements org.quartz.Job {
 			}
 			PublicationController.getInstance().publish(result, regions, user, publicationDate, startDate, isChange());
 		} catch (AlbinaException e) {
-			logger.error(getJobName() + " error", e);
+			logger.error(getClass().getSimpleName() + " error", e);
 		}
 	}
 
@@ -112,10 +112,6 @@ public class PublicationJob implements org.quartz.Job {
 
 	protected Instant getStartDate() {
 		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).plusDays(1).toInstant();
-	}
-
-	protected String getJobName() {
-		return "Publication";
 	}
 
 	protected List<Region> getRegions() {
