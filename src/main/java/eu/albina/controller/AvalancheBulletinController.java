@@ -40,7 +40,6 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
 import eu.albina.model.User;
-import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
@@ -408,38 +407,6 @@ public class AvalancheBulletinController {
 
 			return bulletins;
 		});
-	}
-
-	/**
-	 * Publish all bulletins for the given {@code regions} in the given time period
-	 * if the status of the corresponding report is {@code submitted} or
-	 * {@code resubmitted}.
-	 *
-	 * @param startDate
-	 *            the start date of the time period
-	 * @param endDate
-	 *            the end date of the time period
-	 * @param regions
-	 *            the regions that should be published
-	 * @param publicationDate
-	 *            the timestamp of the publication
-	 * @param user
-	 *            the user who publishes the bulletins
-	 */
-	public void publishBulletins(Instant startDate, Instant endDate, List<Region> regions, Instant publicationDate, User user) {
-		Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
-
-		for (Region region : regions) {
-			logger.info("Publish bulletins for region {}", region.getId());
-			BulletinStatus internalStatus = AvalancheReportController.getInstance().getInternalStatusForDay(startDate,
-					region);
-
-			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
-
-			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
-				this.publishBulletins(startDate, endDate, region, publicationDate, user);
-			}
-		}
 	}
 
 	/**

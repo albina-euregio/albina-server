@@ -87,7 +87,19 @@ public class PublicationJob implements org.quartz.Job {
 		}
 		String userName = serverInstance.getUserName();
 		User user = userName != null ? UserController.getInstance().getUser(userName) : null;
-		AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, regions, publicationDate, user);
+		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
+
+		for (Region region1 : regions) {
+			logger.info("Publish bulletins for region {}", region1.getId());
+			BulletinStatus internalStatus = AvalancheReportController.getInstance().getInternalStatusForDay(startDate,
+				region1);
+
+			logger.info("Internal status for region {} is {}", region1.getId(), internalStatus);
+
+			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
+				avalancheBulletinController.publishBulletins(startDate, endDate, region1, publicationDate, user);
+			}
+		}
 		List<AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance().getAllBulletins(startDate, endDate);
 		if (publishedBulletins.isEmpty()) {
 			return;
