@@ -65,7 +65,12 @@ public class PublicationJob implements org.quartz.Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext arg0) {
+		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
+		AvalancheReportController avalancheReportController = AvalancheReportController.getInstance();
+		PublicationController publicationController = PublicationController.getInstance();
+		RegionController regionController = RegionController.getInstance();
 		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+
 		if (!isEnabled(serverInstance)) {
 			return;
 		}
@@ -76,95 +81,82 @@ public class PublicationJob implements org.quartz.Job {
 
 		List<Region> regions = getRegions().stream()
 			.filter(region -> {
-				BulletinStatus status = AvalancheReportController.getInstance().getInternalStatusForDay(startDate, region);
+				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
 				logger.info("Internal status for region {} is {}", region.getId(), status);
-				return status == BulletinStatus.submitted
-					|| status == BulletinStatus.resubmitted;
+				return status == BulletinStatus.submitted || status == BulletinStatus.resubmitted;
 			}).collect(Collectors.toList());
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update/change.");
 			return;
 		}
-		String userName = serverInstance.getUserName();
-		User user = userName != null ? UserController.getInstance().getUser(userName) : null;
-		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
+		User user = getUser(serverInstance);
 
-		for (Region region1 : regions) {
-			logger.info("Publish bulletins for region {}", region1.getId());
-			BulletinStatus internalStatus = AvalancheReportController.getInstance().getInternalStatusForDay(startDate,
-				region1);
+		for (Region region : regions) {
+			logger.info("Publish bulletins for region {}", region.getId());
+			BulletinStatus internalStatus = avalancheReportController.getInternalStatusForDay(startDate, region);
 
-			logger.info("Internal status for region {} is {}", region1.getId(), internalStatus);
+			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
 
 			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
-				avalancheBulletinController.publishBulletins(startDate, endDate, region1, publicationDate, user);
+				avalancheBulletinController.publishBulletins(startDate, endDate, region, publicationDate, user);
 			}
 		}
-		List<AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance().getAllBulletins(startDate, endDate);
+		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
 		if (publishedBulletins.isEmpty()) {
 			return;
 		}
 
-		List<AvalancheBulletin> result = publishedBulletins.stream()
+		publishedBulletins = publishedBulletins.stream()
 			.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
 				&& !avalancheBulletin.getPublishedRegions().isEmpty())
 			.collect(Collectors.toList());
-		if (result == null || result.isEmpty()) {
+		if (publishedBulletins.isEmpty()) {
 			logger.info("No published regions found in bulletins.");
 			return;
 		}
-		PublicationController publicationController = PublicationController.getInstance();
-		boolean isChange = isChange();
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		// TODO check if we can use startDate instead
-		String validityDateString = AlbinaUtil.getValidityDateString(result);
+		String validityDateString = AlbinaUtil.getValidityDateString(publishedBulletins);
 		String publicationTimeString = AlbinaUtil.getPublicationTime(publicationDate);
-		ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
-		Collections.sort(result);
+		Collections.sort(publishedBulletins);
 
 		// publish all regions which have to be published
 		for (Region region : regions) {
-			List<AvalancheBulletin> regionBulletins = result.stream()
-					.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
-					.collect(Collectors.toList());
+			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
+				.collect(Collectors.toList());
 			logger.info("Publishing region {} with bulletins {} and publication time {}", region.getId(),
-					regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
-					publicationTimeString);
+				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
+				publicationTimeString);
 
-			AvalancheReportController.getInstance().publishReport(regionBulletins, startDate, region, user,
-				publicationDate);
+			avalancheReportController.publishReport(regionBulletins, startDate, region, user, publicationDate);
 		}
 
-		Map<Region, AvalancheReport> reportMap = new HashMap<Region, AvalancheReport>();
+		Map<Region, AvalancheReport> reportMap = new HashMap<>();
 
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
-		List<AvalancheBulletin> publishedBulletins1 = AvalancheReportController.getInstance().getPublishedBulletins(
-			startDate,
-				RegionController.getInstance().getPublishBulletinRegions()).stream().peek(
-					bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")))
-				).collect(Collectors.toList());
+		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionController.getPublishBulletinRegions());
+		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
 
 		// update all regions to create complete maps
-		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
-			List<AvalancheBulletin> regionBulletins = publishedBulletins1.stream()
-					.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
+		for (Region region : regionController.getPublishBulletinRegions()) {
+			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
-					regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
-			AvalancheReport avalancheReport = AvalancheReportController.getInstance().getPublicReport(startDate,
-					region);
+				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
+			AvalancheReport avalancheReport = avalancheReportController.getPublicReport(startDate, region);
 
 			if (avalancheReport == null || regionBulletins.isEmpty()) {
 				continue;
 			}
 
-			avalancheReport.setBulletins(regionBulletins, publishedBulletins1);
-			avalancheReport.setServerInstance(localServerInstance);
+			avalancheReport.setBulletins(regionBulletins, publishedBulletins);
+			avalancheReport.setServerInstance(serverInstance);
 
 			// maybe another region was not published at all
-			if (avalancheReport == null || (avalancheReport.getStatus() != BulletinStatus.published
-					&& avalancheReport.getStatus() != BulletinStatus.republished)) {
+			if (avalancheReport.getStatus() != BulletinStatus.published && avalancheReport.getStatus() != BulletinStatus.republished) {
 				continue;
 			}
 
@@ -176,43 +168,55 @@ public class PublicationJob implements org.quartz.Job {
 		}
 
 		// update all super regions
-		Set<Region> superRegions = new HashSet<Region>();
-		for (Region region : regions) {
-			for (Region superRegion : region.getSuperRegions()) {
-				if (!superRegions.stream()
-						.anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
-					superRegions.add(superRegion);
-			}
-		}
+		Set<Region> superRegions = getSuperRegions(regions);
 		for (Region region : superRegions) {
 			logger.info("Publishing super region {} with bulletins {} and publication time {}", region.getId(),
-					publishedBulletins1.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
-			AvalancheReport avalancheReport = AvalancheReport.of(publishedBulletins1, region, localServerInstance);
+				publishedBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
+			AvalancheReport avalancheReport = AvalancheReport.of(publishedBulletins, region, serverInstance);
 			publicationController.createRegionResources(region, avalancheReport);
-		}
-
-		// send notifications only for updated regions after all maps were created
-		if (!isChange) {
-			for (AvalancheReport avalancheReport : reportMap.values()) {
-				if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
-					if (avalancheReport.getRegion().isSendEmails()) {
-						new Thread(() -> publicationController.sendEmails(avalancheReport)).start();
-					}
-					if (avalancheReport.getRegion().isSendTelegramMessages()) {
-						new Thread(() -> publicationController.triggerTelegramChannel(avalancheReport, null)).start();
-					}
-					if (avalancheReport.getRegion().isSendPushNotifications()) {
-						new Thread(() -> publicationController.triggerPushNotifications(avalancheReport, null)).start();
-					}
-				}
-			}
 		}
 
 		// copy files
 		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(result)))
+		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(publishedBulletins))) {
 			AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
+		}
 
+		// send notifications only for updated regions after all maps were created
+		if (isChange()) {
+			return;
+		}
+		for (AvalancheReport avalancheReport : reportMap.values()) {
+			if (!avalancheReport.getBulletins().isEmpty() && avalancheReport.getRegion().isCreateMaps()) {
+				if (avalancheReport.getRegion().isSendEmails()) {
+					new Thread(() -> publicationController.sendEmails(avalancheReport)).start();
+				}
+				if (avalancheReport.getRegion().isSendTelegramMessages()) {
+					new Thread(() -> publicationController.triggerTelegramChannel(avalancheReport, null)).start();
+				}
+				if (avalancheReport.getRegion().isSendPushNotifications()) {
+					new Thread(() -> publicationController.triggerPushNotifications(avalancheReport, null)).start();
+				}
+			}
+		}
+
+	}
+
+	protected User getUser(ServerInstance serverInstance) {
+		String userName = serverInstance.getUserName();
+		return userName != null ? UserController.getInstance().getUser(userName) : null;
+	}
+
+	private static Set<Region> getSuperRegions(List<Region> regions) {
+		Set<Region> superRegions = new HashSet<>();
+		for (Region region : regions) {
+			for (Region superRegion : region.getSuperRegions()) {
+				if (superRegions.stream().noneMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId()))) {
+					superRegions.add(superRegion);
+				}
+			}
+		}
+		return superRegions;
 	}
 
 	protected boolean isEnabled(ServerInstance serverInstance) {
