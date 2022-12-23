@@ -82,13 +82,13 @@ public class PublicationJob implements org.quartz.Job {
 		try {
 			String userName = serverInstance.getUserName();
 			User user = userName != null ? UserController.getInstance().getUser(userName) : null;
-			Map<String, AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance()
-					.publishBulletins(startDate, endDate, regions, publicationDate, user);
-			if (publishedBulletins.values() == null || publishedBulletins.values().isEmpty()) {
+			AvalancheBulletinController.getInstance().publishBulletins(startDate, endDate, regions, publicationDate, user);
+			List<AvalancheBulletin> publishedBulletins = AvalancheBulletinController.getInstance().getAllBulletins(startDate, endDate);
+			if (publishedBulletins.isEmpty()) {
 				return;
 			}
 
-			List<AvalancheBulletin> result = publishedBulletins.values().stream()
+			List<AvalancheBulletin> result = publishedBulletins.stream()
 				.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
 					&& !avalancheBulletin.getPublishedRegions().isEmpty())
 				.collect(Collectors.toList());
