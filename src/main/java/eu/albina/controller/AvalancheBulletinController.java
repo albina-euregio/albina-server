@@ -40,11 +40,12 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
 import eu.albina.model.User;
-import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
+
+import javax.persistence.EntityManager;
 
 /**
  * Controller for avalanche bulletins.
@@ -209,7 +210,7 @@ public class AvalancheBulletinController {
 							originalBulletin.getPublishedRegions().remove(tmpRegion);
 
 						originalBulletin.setOwnerRegion(newBulletin.getOwnerRegion());
-					
+
 					// foreign bulletin
 					// no split of bulletin needed, because the published bulletin for the other region remains
 					} else {
@@ -244,7 +245,7 @@ public class AvalancheBulletinController {
 						for (String tmpRegion : tmpRegions)
 							originalBulletin.getSuggestedRegions().remove(tmpRegion);
 
-						// own suggested regions are not possible (they are always in saved regions) -> nothing to add 
+						// own suggested regions are not possible (they are always in saved regions) -> nothing to add
 
 						// remove own published regions from original bulletin which are not present in new bulletin
 						tmpRegions = new HashSet<String>();
@@ -255,7 +256,7 @@ public class AvalancheBulletinController {
 						for (String tmpRegion : tmpRegions)
 							originalBulletin.getPublishedRegions().remove(tmpRegion);
 
-						// own published regions are not possible (they are always in saved regions) -> nothing to add 
+						// own published regions are not possible (they are always in saved regions) -> nothing to add
 					}
 
 					entityManager.merge(originalBulletin);
@@ -270,7 +271,7 @@ public class AvalancheBulletinController {
 						newBulletin.setId(null);
 						entityManager.persist(newBulletin);
 						resultBulletins.put(newBulletin.getId(), newBulletin);
-					
+
 					// foreign bulletin
 					} else {
 						// do not create the bulletin (it was removed by another user)
@@ -409,45 +410,6 @@ public class AvalancheBulletinController {
 	}
 
 	/**
-	 * Publish all bulletins for the given {@code regions} in the given time period
-	 * if the status of the corresponding report is {@code submitted} or
-	 * {@code resubmitted}.
-	 *
-	 * @param startDate
-	 *            the start date of the time period
-	 * @param endDate
-	 *            the end date of the time period
-	 * @param regions
-	 *            the regions that should be published
-	 * @param publicationDate
-	 *            the timestamp of the publication
-	 * @param user
-	 *            the user who publishes the bulletins
-	 * @return a map of all affected bulletin ids and bulletins
-	 */
-	public Map<String, AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, List<Region> regions,
-			Instant publicationDate, User user) throws AlbinaException {
-		Map<String, AvalancheBulletin> results = new HashMap<String, AvalancheBulletin>();
-
-		for (Region region : regions) {
-			logger.info("Publish bulletins for region {}", region.getId());
-			BulletinStatus internalStatus = AvalancheReportController.getInstance().getInternalStatusForDay(startDate,
-					region);
-
-			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
-
-			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
-				List<AvalancheBulletin> bulletins = this.publishBulletins(startDate, endDate, region, publicationDate,
-						user);
-				for (AvalancheBulletin avalancheBulletin : bulletins)
-					results.put(avalancheBulletin.getId(), avalancheBulletin);
-			}
-		}
-
-		return results;
-	}
-
-	/**
 	 * Publish all bulletins for the given {@code region} in the given time period.
 	 * Sets the author of the bulletins and moves all saved regions to published
 	 * regions.
@@ -462,14 +424,12 @@ public class AvalancheBulletinController {
 	 *            the timestamp of the publication
 	 * @param user
 	 *            the user who publishes the bulletins
-	 * @return a list of all affected bulletins
 	 */
-	public List<AvalancheBulletin> publishBulletins(Instant startDate, Instant endDate, Region region,
+	public void publishBulletins(Instant startDate, Instant endDate, Region region,
 			Instant publicationDate, User user) {
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
-					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheBulletin> bulletins = getAllBulletins(startDate, endDate, entityManager);
 
 			for (AvalancheBulletin bulletin : bulletins) {
 
@@ -500,14 +460,26 @@ public class AvalancheBulletinController {
 				bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")));
 				entityManager.merge(bulletin);
 			}
-
-			for (AvalancheBulletin avalancheBulletin : bulletins)
-				initializeBulletin(avalancheBulletin);
-
-			return bulletins;
+			return null;
 		});
 	}
-	
+
+	public List<AvalancheBulletin> getAllBulletins(Instant startDate, Instant endDate) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> getAllBulletins(startDate, endDate, entityManager));
+	}
+
+	private List<AvalancheBulletin> getAllBulletins(Instant startDate, Instant endDate, EntityManager entityManager) {
+		final List<AvalancheBulletin> bulletins = entityManager
+			.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
+			.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate))
+			.setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
+			.getResultList();
+		for (AvalancheBulletin avalancheBulletin : bulletins) {
+			initializeBulletin(avalancheBulletin);
+		}
+		return bulletins;
+	}
+
 	/**
 	 * Check if a micro region of the specified {@code region} was defined twice in
 	 * the given {@code bulletins}.

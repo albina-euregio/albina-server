@@ -637,8 +637,7 @@ public class AvalancheReportController {
 	 * @throws AlbinaException
 	 *             if the report could not be loaded from the DB
 	 */
-	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, List<Region> regions)
-			throws AlbinaException {
+	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, List<Region> regions) {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
 

@@ -51,11 +51,6 @@ public class UpdateJob extends PublicationJob {
 	}
 
 	@Override
-	protected String getJobName() {
-		return "Update";
-	}
-
-	@Override
 	protected List<Region> getRegions() {
 		return RegionController.getInstance().getPublishBulletinRegions();
 	}

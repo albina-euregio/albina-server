@@ -37,9 +37,4 @@ public class ChangeJob extends PublicationJob {
 		return true;
 	}
 
-	@Override
-	protected String getJobName() {
-		return "Change";
-	}
-
 }
