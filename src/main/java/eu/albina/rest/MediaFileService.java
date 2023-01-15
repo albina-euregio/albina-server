@@ -104,13 +104,7 @@ public class MediaFileService {
 			// save mp3 file
 			String mp3FileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".mp3");
 			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
-			try (OutputStream out = Files.newOutputStream(mp3File)) {
-				int read = 0;
-				byte[] bytes = new byte[1024];
-				while ((read = uploadedInputStream.read(bytes)) != -1) {
-					out.write(bytes, 0, read);
-				}
-			}
+			Files.copy(uploadedInputStream, mp3File);
 			logger.info(mp3FileName + " successfully uploaded to: " + mp3File);
 
 			// save text file
