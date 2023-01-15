@@ -105,13 +105,13 @@ public class MediaFileService {
 			String mp3FileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".mp3");
 			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
 			Files.copy(uploadedInputStream, mp3File);
-			logger.info(mp3FileName + " successfully uploaded to: " + mp3File);
+			logger.info("{} successfully uploaded to: {}", mp3FileName, mp3File);
 
 			// save text file
 			String txtFileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".txt");
 			java.nio.file.Path txtFile = fileLocation.resolve(txtFileName);
 			Files.write(txtFile, mediaText.getBytes());
-			logger.info(txtFileName + " successfully uploaded to " + txtFile);
+			logger.info("{} successfully uploaded to {}", txtFileName, txtFile);
 
 			// send emails
 			EmailUtil.getInstance().sendMediaEmails(mediaText, mp3FileName, txtFileName, date, region, user.getName(), false, language, localServerInstance, important);

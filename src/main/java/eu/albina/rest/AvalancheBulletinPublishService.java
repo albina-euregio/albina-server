@@ -198,12 +198,12 @@ public class AvalancheBulletinPublishService {
 			}
 			for (Region region : regions) {
 				try {
-					logger.info("PDF production for " + region.getId() + " started");
+					logger.info("PDF production for {} started", region.getId());
 					List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 					AvalancheReport avalancheReport = AvalancheReport.of(regionBulletins, region, localServerInstance);
 					PdfUtil.createRegionPdfs(avalancheReport);
 				} finally {
-					logger.info("PDF production " + region.getId() + " finished");
+					logger.info("PDF production {} finished", region.getId());
 				}
 			}
 
