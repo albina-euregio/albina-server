@@ -134,20 +134,19 @@ public class EmailUtil {
 	}
 
 	public void sendMediaEmails(String text, String mp3FileName, String txtFileName, Instant date, Region region, String username, boolean test, LanguageCode lang, ServerInstance serverInstance, boolean important) {
-		StringBuilder sb = new StringBuilder();
 		ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
-		sb.append(lang.getBundleString("day." + localDate.getDayOfWeek()));
-		sb.append(", ");
-		sb.append(localDate.format(lang.getFormatter()));
+		String sb = String.format("%s, %s",
+			lang.getBundleString("day." + localDate.getDayOfWeek()),
+			localDate.format(lang.getFormatter()));
 
 		String mp3FileUrl = LinkUtil.getMediaFileUrl(lang, region, serverInstance) + "/" + mp3FileName;
 
-		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb.toString(), username);
+		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb, username);
 		String emailHtml = text.replace("\n", "<br>") + "<br><br>" + LinkUtil.createHtmlLink(lang.getBundleString("email.media.link.mp3"), mp3FileUrl) + "<br><br>" + MessageFormat.format(lang.getBundleString("email.media.text"), username);
 
 		sendMediaEmailRapidmail(lang, region, emailHtml, subject, test, false);
 		if (important) {
-			subject = MessageFormat.format(lang.getBundleString("email.media.important.subject"), lang.getBundleString("website.name"), sb.toString(), username);
+			subject = MessageFormat.format(lang.getBundleString("email.media.important.subject"), lang.getBundleString("website.name"), sb, username);
 			sendMediaEmailRapidmail(lang, region, emailHtml, subject, test, true);
 		}
 	}

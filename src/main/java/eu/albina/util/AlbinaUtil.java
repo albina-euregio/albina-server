@@ -91,16 +91,14 @@ public class AlbinaUtil {
 			.filter(Objects::nonNull)
 			.max(Comparator.naturalOrder())
 			.orElse(null);
-		if (date != null) {
-			date = date.withZoneSameInstant(localZone());
-			StringBuilder result = new StringBuilder();
-			result.append(lang.getBundleString("tendency.binding-word"));
-			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
-			result.append(date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.tendency"))));
-			return result.toString();
-		} else {
+		if (date == null) {
 			return "";
 		}
+		date = date.withZoneSameInstant(localZone());
+		return String.format("%s%s%s",
+			lang.getBundleString("tendency.binding-word"),
+			lang.getBundleString("day." + date.getDayOfWeek()),
+			date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.tendency"))));
 	}
 
 	public static Instant getInstantNowNoNanos() {
@@ -131,19 +129,15 @@ public class AlbinaUtil {
 	}
 
 	public static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		StringBuilder result = new StringBuilder();
 		ZonedDateTime date = getDate(bulletins);
-		if (date != null) {
-			date = date.withZoneSameInstant(localZone());
-			result.append(lang.getBundleString("day." + date.getDayOfWeek()));
-			result.append(" ");
-			result.append(date.format(lang.getFormatter()));
-		} else {
+		if (date == null) {
 			// TODO what if no date is given (should not happen)
-			result.append("-");
+			return "-";
 		}
-
-		return result.toString();
+		date = date.withZoneSameInstant(localZone());
+		return String.format("%s %s",
+			lang.getBundleString("day." + date.getDayOfWeek()),
+			date.format(lang.getFormatter()));
 	}
 
 	public static int getYear(List<AvalancheBulletin> bulletins) {

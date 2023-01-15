@@ -141,21 +141,18 @@ public class ObservationService {
 
 		String statistics = ObservationController.getCsv(start, end);
 
-		StringBuilder sbFilename = new StringBuilder();
-		sbFilename.append("observations_");
-		sbFilename.append(OffsetDateTime.parse(startDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-		sbFilename.append("_");
-		sbFilename.append(OffsetDateTime.parse(endDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-		String filename = sbFilename.toString();
+		String filename = String.format("observations_%s_%s",
+			OffsetDateTime.parse(startDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+			OffsetDateTime.parse(endDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
 		try {
-			File tmpFile = File.createTempFile(filename.toString(), ".csv");
+			File tmpFile = File.createTempFile(filename, ".csv");
 			FileWriter writer = new FileWriter(tmpFile);
 			writer.write(statistics);
 			writer.close();
 
 			return Response.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
-			"attachment; filename=\"" + filename.toString() + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv").build();
+			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv").build();
 		} catch (IOException e) {
 			logger.warn("Error creating statistics", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
