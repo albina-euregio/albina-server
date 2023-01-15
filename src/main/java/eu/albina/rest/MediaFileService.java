@@ -96,8 +96,9 @@ public class MediaFileService {
 			}
 
 			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
+			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
-			java.nio.file.Path fileLocation = getMediaPath(region, language);
+			java.nio.file.Path fileLocation = getMediaPath(localServerInstance, region, language);
 			Files.createDirectories(fileLocation);
 
 			// save mp3 file
@@ -119,7 +120,6 @@ public class MediaFileService {
 			logger.info(txtFileName + " successfully uploaded to " + txtFile);
 
 			// send emails
-			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			EmailUtil.getInstance().sendMediaEmails(mediaText, mp3FileName, txtFileName, date, region, user.getName(), false, language, localServerInstance, important);
 
 			// set publication flag
@@ -147,16 +147,18 @@ public class MediaFileService {
 		@QueryParam("region") @DefaultValue("AT-07") String regionId,
 		@QueryParam("lang") @DefaultValue("de") LanguageCode language
 	) throws Exception {
+		final ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 		final Region region = new Region(regionId);
 		final String rss = RssUtil.getRss(
 			language,
 			region,
-			getMediaPath(region, language));
+			getMediaPath(serverInstance, region, language));
 		return Response.ok(rss, MediaType.APPLICATION_XML).build();
 	}
 
-	private static java.nio.file.Path getMediaPath(Region region, LanguageCode lang) {
-		return Paths.get(ServerInstanceController.getInstance().getLocalServerInstance().getMediaPath())
+	public static java.nio.file.Path getMediaPath(ServerInstance serverInstance, Region region, LanguageCode lang) {
+		java.nio.file.Path mediaPath = Paths.get(serverInstance.getMediaPath());
+		return mediaPath
 			.resolve(region.getId())
 			.resolve(lang.name());
 	}

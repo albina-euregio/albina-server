@@ -67,7 +67,12 @@ public interface RssUtil {
 				guid.setAttribute("isPermaLink", Boolean.FALSE.toString());
 				guid.setTextContent(UUID.nameUUIDFromBytes((path.getFileName() + pubDate.toString()).getBytes(StandardCharsets.UTF_8)).toString());
 				Element enclosure = (Element) item.appendChild(document.createElement("enclosure"));
-				enclosure.setAttribute("url", LinkUtil.getStaticContentUrl(language, region) + "/" + directory.getFileName() + "/" + path.getFileName());
+				enclosure.setAttribute("url", String.format("%s/%s/%s/%s/%s",
+					LinkUtil.getStaticContentUrl(language, region),
+					directory.getName(directory.getNameCount() - 3),
+					directory.getName(directory.getNameCount() - 2),
+					directory.getName(directory.getNameCount() - 1),
+					path.getFileName()));
 				enclosure.setAttribute("type", "audio/mpeg");
 				enclosure.setAttribute("length", Long.toString(Files.size(path)));
 			} catch (IOException e) {
