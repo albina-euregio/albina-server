@@ -42,6 +42,8 @@ import java.util.stream.StreamSupport;
 
 public interface RssUtil {
 
+	String ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd";
+
 	static String getRss(LanguageCode language, Region region, java.nio.file.Path directory) throws ParserConfigurationException, IOException, TransformerException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
@@ -54,7 +56,11 @@ public interface RssUtil {
 		channel.appendChild(document.createElement("description")).setTextContent("albina media files");
 		channel.appendChild(document.createElement("language")).setTextContent(language.name());
 		channel.appendChild(document.createElement("link")).setTextContent(LinkUtil.getWebsiteUrl(language, region));
-		channel.appendChild(document.createElementNS("http://www.itunes.com/dtds/podcast-1.0.dtd", "author")).setTextContent("avalanche.report");
+		channel.appendChild(document.createElementNS(ITUNES_NS, "author")).setTextContent(language.getBundleString("website.name", region));
+		Node owner = channel.appendChild(document.createElementNS(ITUNES_NS, "owner"));
+		owner.appendChild(document.createElementNS(ITUNES_NS, "name")).setTextContent(language.getBundleString("website.name", region));
+		owner.appendChild(document.createElementNS(ITUNES_NS, "email")).setTextContent(language.getBundleString("email", region));
+
 
 		list(directory).sorted(Comparator.comparing(p -> p.getFileName().toString(), Comparator.reverseOrder())).limit(10).forEach(path -> {
 			try {

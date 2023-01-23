@@ -38,7 +38,11 @@ public class RssUtilTest {
 			"    <description>albina media files</description>\n" +
 			"    <language>de</language>\n" +
 			"    <link>https://lawinen.report</link>\n" +
-			"    <author xmlns=\"http://www.itunes.com/dtds/podcast-1.0.dtd\">avalanche.report</author>\n" +
+			"    <author xmlns=\"http://www.itunes.com/dtds/podcast-1.0.dtd\">Lawinen.report</author>\n" +
+			"    <owner xmlns=\"http://www.itunes.com/dtds/podcast-1.0.dtd\">\n" +
+			"      <name>Lawinen.report</name>\n" +
+			"      <email>info@lawinen.report</email>\n" +
+			"    </owner>\n" +
 			"    <item>\n" +
 			"      <title>2022-12-14.mp3</title>\n" +
 			"      <description>2022-12-14.mp3</description>\n" +
