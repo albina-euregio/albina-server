@@ -7,9 +7,9 @@
   <entry key="website.name.IT-32-TN">Valanghe.report</entry>
   <entry key="website.name.ES-CT-L">Lauegi.report</entry>
   <entry key="warning-service.name">Valanghe.report</entry>
-  <entry key="warning-service.name.AT-07">Avalanche Warning Service Tyrol</entry>
-  <entry key="warning-service.name.IT-32-BZ">Avalanche Warning Service South Tyrol</entry>
-  <entry key="warning-service.name.IT-32-TN">Avalanche Warning Service Trentino</entry>
+  <entry key="warning-service.name.AT-07">Servizio Valanghe del Tirolo</entry>
+  <entry key="warning-service.name.IT-32-BZ">Servizio Previsione Valanghe dell’Alto Adige</entry>
+  <entry key="warning-service.name.IT-32-TN">Servizio Valanghe del Trentino</entry>
   <entry key="warning-service.name.ES-CT-L">Centre de Lauegi Val d'Aran</entry>
   <entry key="media-file.name">valanghereport</entry>
   <entry key="website.url">https://valanghe.report</entry>
@@ -108,4 +108,20 @@
   <entry key="pdf.page-number">Pagina {0}</entry>
   <entry key="published">Pubblicato il </entry>
   <entry key="updated">Aggiornamento sulla </entry>
+  <entry key="problem.snowpack-stability">Snowpack stability</entry>
+  <entry key="problem.snowpack-stability.good">buona</entry>
+  <entry key="problem.snowpack-stability.fair">discreta</entry>
+  <entry key="problem.snowpack-stability.poor">scarsa</entry>
+  <entry key="problem.snowpack-stability.very_poor">molto scarsa</entry>
+  <entry key="problem.frequency">Stabilità del manto nevoso</entry>
+  <entry key="problem.frequency.none">pochissimi</entry>
+  <entry key="problem.frequency.few">pochi</entry>
+  <entry key="problem.frequency.some">alcuni</entry>
+  <entry key="problem.frequency.many">molti</entry>
+  <entry key="problem.avalanche-size">Dimensioni valanghe</entry>
+  <entry key="problem.avalanche-size.small">small</entry>
+  <entry key="problem.avalanche-size.medium">medium</entry>
+  <entry key="problem.avalanche-size.large">large</entry>
+  <entry key="problem.avalanche-size.very_large">very large</entry>
+  <entry key="problem.avalanche-size.extreme">extreme</entry>
 </properties>

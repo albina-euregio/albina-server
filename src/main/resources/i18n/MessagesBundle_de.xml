@@ -108,4 +108,20 @@
   <entry key="pdf.page-number">Seite {0}</entry>
   <entry key="published">Veröffentlicht am </entry>
   <entry key="updated">Aktualisiert am </entry>
+  <entry key="problem.snowpack-stability">Schneedeckenstabilität</entry>
+  <entry key="problem.snowpack-stability.good">gut</entry>
+  <entry key="problem.snowpack-stability.fair">mittel</entry>
+  <entry key="problem.snowpack-stability.poor">schlecht</entry>
+  <entry key="problem.snowpack-stability.very_poor">sehr schlecht</entry>
+  <entry key="problem.frequency">Gefahrenstellen</entry>
+  <entry key="problem.frequency.none">keine</entry>
+  <entry key="problem.frequency.few">wenige</entry>
+  <entry key="problem.frequency.some">einige</entry>
+  <entry key="problem.frequency.many">viele</entry>
+  <entry key="problem.avalanche-size">Lawinengröße</entry>
+  <entry key="problem.avalanche-size.small">klein</entry>
+  <entry key="problem.avalanche-size.medium">mittel</entry>
+  <entry key="problem.avalanche-size.large">groß</entry>
+  <entry key="problem.avalanche-size.very_large">sehr groß</entry>
+  <entry key="problem.avalanche-size.extreme">extrem</entry>
 </properties>

@@ -108,4 +108,20 @@
   <entry key="pdf.page-number">Pagina {0}</entry>
   <entry key="published">Publicat </entry>
   <entry key="updated">Actualizaction en </entry>
+  <entry key="problem.snowpack-stability">Estabilitat deth celh de nhèu</entry>
+  <entry key="problem.snowpack-stability.good">bona</entry>
+  <entry key="problem.snowpack-stability.fair">regular</entry>
+  <entry key="problem.snowpack-stability.poor">praube</entry>
+  <entry key="problem.snowpack-stability.very_poor">molt praube</entry>
+  <entry key="problem.frequency">Frecuéncia</entry>
+  <entry key="problem.frequency.none">Cap</entry>
+  <entry key="problem.frequency.few">Pògui</entry>
+  <entry key="problem.frequency.some">Quauqui</entry>
+  <entry key="problem.frequency.many">Molti</entry>
+  <entry key="problem.avalanche-size">Mesura de lauet</entry>
+  <entry key="problem.avalanche-size.small">Petit</entry>
+  <entry key="problem.avalanche-size.medium">Mejan</entry>
+  <entry key="problem.avalanche-size.large">Gran</entry>
+  <entry key="problem.avalanche-size.very_large">Molt gran</entry>
+  <entry key="problem.avalanche-size.extreme">Extremament gran</entry>
 </properties>

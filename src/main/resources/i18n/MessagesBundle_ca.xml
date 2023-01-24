@@ -108,4 +108,20 @@
   <entry key="pdf.page-number">Pàgina {0}</entry>
   <entry key="published">Publicat </entry>
   <entry key="updated">Actualització en </entry>
+  <entry key="problem.snowpack-stability">Estabilitat del mantell de neu</entry>
+  <entry key="problem.snowpack-stability.good">bona</entry>
+  <entry key="problem.snowpack-stability.fair">regular</entry>
+  <entry key="problem.snowpack-stability.poor">pobre</entry>
+  <entry key="problem.snowpack-stability.very_poor">molt pobre</entry>
+  <entry key="problem.frequency">freqüència</entry>
+  <entry key="problem.frequency.none">cap</entry>
+  <entry key="problem.frequency.few">poques</entry>
+  <entry key="problem.frequency.some">algunes</entry>
+  <entry key="problem.frequency.many">moltes</entry>
+  <entry key="problem.avalanche-size">Mida d'allau</entry>
+  <entry key="problem.avalanche-size.small">petita</entry>
+  <entry key="problem.avalanche-size.medium">mitjana</entry>
+  <entry key="problem.avalanche-size.large">gran</entry>
+  <entry key="problem.avalanche-size.very_large">molt gran</entry>
+  <entry key="problem.avalanche-size.extreme">extrema</entry>
 </properties>
