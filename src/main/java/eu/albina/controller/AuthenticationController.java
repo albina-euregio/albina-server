@@ -21,6 +21,7 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.Date;
 
+import ch.rasc.webpush.ServerKeys;
 import eu.albina.util.AlbinaUtil;
 
 import com.auth0.jwt.JWT;
@@ -30,6 +31,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import eu.albina.exception.AlbinaException;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controller handling the authentication and authorization.
@@ -38,6 +40,8 @@ import eu.albina.exception.AlbinaException;
  *
  */
 public class AuthenticationController {
+	public static final String JWT_ES256_PRIVATE_KEY_ENV = "ALBINA_JWT_ES256_PRIVATE_KEY";
+	public static final String JWT_ES256_PUBLIC_KEY_ENV = "ALBINA_JWT_ES256_PUBLIC_KEY";
 	public static final String JWT_SECRET_ENV = "ALBINA_JWT_SECRET";
 	public static final String JWT_ISSUER = "albina";
 
@@ -51,15 +55,28 @@ public class AuthenticationController {
 	 */
 	private AuthenticationController() {
 		try {
-			String tokenEncodingSecret = System.getenv(JWT_SECRET_ENV);
-			if (tokenEncodingSecret == null || tokenEncodingSecret.length() < 32) {
-				tokenEncodingSecret = new BigInteger(512, new SecureRandom()).toString(36);
-			}
-			algorithm = Algorithm.HMAC256(tokenEncodingSecret);
+			algorithm = getAlgorithm();
 			verifier = JWT.require(algorithm).withIssuer(JWT_ISSUER).build();
 		} catch (IllegalArgumentException e) {
 			throw new IllegalStateException("Failed to initialize controller", e);
 		}
+	}
+
+	private Algorithm getAlgorithm() {
+		if (System.getenv(JWT_ES256_PRIVATE_KEY_ENV) != null && System.getenv(JWT_ES256_PUBLIC_KEY_ENV) != null) {
+			try {
+				return new ServerKeys(
+					System.getenv(JWT_ES256_PRIVATE_KEY_ENV),
+					System.getenv(JWT_ES256_PUBLIC_KEY_ENV)).toJwtAlgorithm();
+			} catch (Exception e) {
+				LoggerFactory.getLogger(AuthenticationController.class).warn("Failed to initialize Algorithm.ECDSA256", e);
+			}
+		}
+		String tokenEncodingSecret = System.getenv(JWT_SECRET_ENV);
+		if (tokenEncodingSecret == null || tokenEncodingSecret.length() < 32) {
+			tokenEncodingSecret = new BigInteger(512, new SecureRandom()).toString(36);
+		}
+		return Algorithm.HMAC256(tokenEncodingSecret);
 	}
 
 	/**
@@ -86,6 +103,10 @@ public class AuthenticationController {
 	 *             if the sign process fails
 	 */
 	public String issueAccessToken(String username) throws IllegalArgumentException {
+		return issueAccessToken(algorithm, username);
+	}
+
+	public static String issueAccessToken(Algorithm algorithm, String username) {
 		Date expirationTime = Date.from(LocalDate.now().atStartOfDay(AlbinaUtil.localZone())
 			.plusDays(1)
 			.withHour(3) // tomorrow at 03:00

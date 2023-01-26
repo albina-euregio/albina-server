@@ -22,7 +22,7 @@ public class PushController {
 
 	public PushController(ServerKeys serverKeys) {
 		this.serverKeys = serverKeys;
-		this.jwtAlgorithm = Algorithm.ECDSA256(this.serverKeys.getPublicKey(), this.serverKeys.getPrivateKey());
+		this.jwtAlgorithm = serverKeys.toJwtAlgorithm();
 	}
 
 	private String getToken(String origin) {

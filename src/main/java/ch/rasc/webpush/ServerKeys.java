@@ -1,5 +1,7 @@
 package ch.rasc.webpush;
 
+import com.auth0.jwt.algorithms.Algorithm;
+
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
@@ -36,4 +38,7 @@ public class ServerKeys {
 		return this.publicKey;
 	}
 
+	public Algorithm toJwtAlgorithm() {
+		return Algorithm.ECDSA256(getPublicKey(), getPrivateKey());
+	}
 }
