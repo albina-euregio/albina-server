@@ -203,7 +203,7 @@ public class EmailUtil {
 				.subject(subject)
 				.status("scheduled")
 				.file(file);
-			RapidMailController.getInstance().sendMessage(region, lang, request, test, media, false);
+			RapidMailController.getInstance().sendMessage(region, lang, request, test, media, important);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
 		}
