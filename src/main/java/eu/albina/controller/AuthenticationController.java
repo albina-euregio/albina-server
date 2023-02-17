@@ -66,8 +66,8 @@ public class AuthenticationController {
 		if (System.getenv(JWT_ES256_PRIVATE_KEY_ENV) != null && System.getenv(JWT_ES256_PUBLIC_KEY_ENV) != null) {
 			try {
 				return new ServerKeys(
-					System.getenv(JWT_ES256_PRIVATE_KEY_ENV),
-					System.getenv(JWT_ES256_PUBLIC_KEY_ENV)).toJwtAlgorithm();
+					System.getenv(JWT_ES256_PUBLIC_KEY_ENV),
+					System.getenv(JWT_ES256_PRIVATE_KEY_ENV)).toJwtAlgorithm();
 			} catch (Exception e) {
 				LoggerFactory.getLogger(AuthenticationController.class).warn("Failed to initialize Algorithm.ECDSA256", e);
 			}
