@@ -17,7 +17,7 @@
 package eu.albina.model.publication;
 
 import java.io.Serializable;
-import java.util.Objects;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +30,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.google.common.base.MoreObjects;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -64,6 +65,12 @@ public class GoogleBloggerConfiguration implements Serializable {
 	@Column(name = "LANGUAGE_CODE")
 	private LanguageCode lang;
 
+	@Column(name = "LAST_PUBLISHED_BLOG_ID")
+	private String lastPublishedBlogId;
+
+	@Column(name = "LAST_PUBLISHED_TIMESTAMP")
+	private OffsetDateTime lastPublishedTimestamp;
+
 	public Long getId() {
 		return id;
 	}
@@ -76,22 +83,12 @@ public class GoogleBloggerConfiguration implements Serializable {
 		return region;
 	}
 
-	public GoogleBloggerConfiguration region(Region region) {
-		this.region = region;
-		return this;
-	}
-
 	public void setRegion(Region region) {
 		this.region = region;
 	}
-	
+
 	public String getApiKey() {
 		return apiKey;
-	}
-
-	public GoogleBloggerConfiguration apiKey(String apiKey) {
-		this.apiKey = apiKey;
-		return this;
 	}
 
 	public void setApiKey(String apiKey) {
@@ -102,22 +99,12 @@ public class GoogleBloggerConfiguration implements Serializable {
 		return blogId;
 	}
 
-	public GoogleBloggerConfiguration blogId(String blogId) {
-		this.blogId = blogId;
-		return this;
-	}
-
 	public void setBlogId(String blogId) {
 		this.blogId = blogId;
 	}
 
 	public String getBlogUrl() {
 		return blogUrl;
-	}
-
-	public GoogleBloggerConfiguration blogUrl(String blogUrl) {
-		this.blogUrl = blogUrl;
-		return this;
 	}
 
 	public void setBlogUrl(String blogUrl) {
@@ -128,11 +115,6 @@ public class GoogleBloggerConfiguration implements Serializable {
 		return blogApiUrl;
 	}
 
-	public GoogleBloggerConfiguration blogApiUrl(String blogApiUrl) {
-		this.blogApiUrl = blogApiUrl;
-		return this;
-	}
-
 	public void setBlogApiUrl(String blogApiUrl) {
 		this.blogApiUrl = blogApiUrl;
 	}
@@ -141,38 +123,38 @@ public class GoogleBloggerConfiguration implements Serializable {
 		return lang;
 	}
 
-	public GoogleBloggerConfiguration languageCode(LanguageCode languageCode) {
-		this.lang = languageCode;
-		return this;
-	}
-
-	public void setLanguageCodeId(LanguageCode languageCode) {
+	public void setLanguageCode(LanguageCode languageCode) {
 		this.lang = languageCode;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		TelegramConfiguration telegramConfig = (TelegramConfiguration) o;
-		if (telegramConfig.getId() == null || getId() == null) {
-			return false;
-		}
-		return Objects.equals(getId(), telegramConfig.getId());
+	public String getLastPublishedBlogId() {
+		return lastPublishedBlogId;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(getId());
+	public void setLastPublishedBlogId(String lastPublishedBlogId) {
+		this.lastPublishedBlogId = lastPublishedBlogId;
+	}
+
+	public OffsetDateTime getLastPublishedTimestamp() {
+		return lastPublishedTimestamp;
+	}
+
+	public void setLastPublishedTimestamp(OffsetDateTime lastPublishedTimestamp) {
+		this.lastPublishedTimestamp = lastPublishedTimestamp;
 	}
 
 	@Override
 	public String toString() {
-		return "TelegramConfig{" + "id=" + getId() + ", apiToken='" + getBlogId() + "'" + ", chatId='" + getBlogUrl()
-				+ "'" + ", lanugageCode='" + getLanguageCode() + "'" + "}";
+		return MoreObjects.toStringHelper(this)
+			.add("id", id)
+			.add("region", region)
+			.add("apiKey", apiKey)
+			.add("blogId", blogId)
+			.add("blogUrl", blogUrl)
+			.add("blogApiUrl", blogApiUrl)
+			.add("languageCode", lang)
+			.add("lastPublishedBlogId", lastPublishedBlogId)
+			.add("lastPublishedTimestamp", lastPublishedTimestamp)
+			.toString();
 	}
 }

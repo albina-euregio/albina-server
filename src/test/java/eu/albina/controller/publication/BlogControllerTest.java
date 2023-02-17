@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller.publication;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -49,10 +49,11 @@ public class BlogControllerTest {
 	@Test
 	public void testBlogPosts() throws Exception {
 		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
-		BlogController.getInstance().lastFetch.put(config.getBlogId(), Instant.ofEpochMilli(0L));
+		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
 		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()), "one blog has image");
+		BlogController.getInstance().updateConfigurationLastPublished(config, blogPosts.get(0));
 	}
 
 	@Test
