@@ -76,11 +76,11 @@ public class HibernateUtil {
 	}
 
 	public void setUp() {
-		final EnvConfig ec = EnvConfig.instance();
-		final String connectionUrl = ec.getDbConnectionUrl();
-		final String user = ec.getDbUser();
-		final String pw = ec.getDbPassword();
-		final int maxPoolSize = ec.getDbConnectionPoolMaxSize();
+		final DBEnvConfig dec = DBEnvConfig.instance();
+		final String connectionUrl = dec.getDbConnectionUrl();
+		final String user = dec.getDbUser();
+		final String pw = dec.getDbPassword();
+		final int maxPoolSize = dec.getDbConnectionPoolMaxSize();
 
 		Map<String, String> properties = new HashMap<>();
 
@@ -96,7 +96,7 @@ public class HibernateUtil {
 			properties.put("hibernate.connection.password", pw);
 		}
 
-		if(EnvConfig.NO_MAX_POOL_SIZE != maxPoolSize) {
+		if(DBEnvConfig.NO_MAX_POOL_SIZE != maxPoolSize) {
 			properties.put("hibernate.c3p0.max_size", Integer.toString(maxPoolSize));
 		}
 

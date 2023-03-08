@@ -3,45 +3,38 @@ package eu.albina.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Properties;
 
 /**
- * Configuration from environment
+ * Database configuration from environment
  */
-public final class EnvConfig {
+public final class DBEnvConfig {
 
 	public static final int NO_MAX_POOL_SIZE = -1;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(EnvConfig.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DBEnvConfig.class);
 
-	private static final String ALBINA_SERVER_CONFIG_FILE = "ALBINA_SERVER_CONFIG_FILE";
 	private static final String ALBINA_DB_CONNECTION_USERNAME = "ALBINA_DB_CONNECTION_USERNAME";
 	private static final String ALBINA_DB_CONNECTION_PASSWORD = "ALBINA_DB_CONNECTION_PASSWORD";
-	private static final String ALBINA_DB_CONNECTION_POOL_MAX_SIZE = "ALBINA_DB_CONNECTION_POOL_MAX_SIZE";
+	private static final String ALBINA_DB_CONNECTIONPOOL_MAXSIZE = "ALBINA_DB_CONNECTIONPOOL_MAXSIZE";
 	private static final String ALBINA_DB_CONNECTION_URL = "ALBINA_DB_CONNECTION_URL";
 
-	private static final EnvConfig ENV_CONFIG = initConfig(System.getenv());
+	private static final DBEnvConfig DB_ENV_CONFIG = initConfig(System.getenv());
 
 	private final String dbUser;
 	private final String dbpw;
 	private final String connectionUrl;
 	private final int maxPoolsSize;
 
-	private EnvConfig(Properties env) {
+	private DBEnvConfig(Properties env) {
 		dbUser = env.getProperty(ALBINA_DB_CONNECTION_USERNAME);
 		dbpw = env.getProperty(ALBINA_DB_CONNECTION_PASSWORD);
 		connectionUrl = env.getProperty(ALBINA_DB_CONNECTION_URL);
 
 		int poolsize = NO_MAX_POOL_SIZE;
-		if(env.containsKey(ALBINA_DB_CONNECTION_POOL_MAX_SIZE)) {
-			String pms = env.getProperty(ALBINA_DB_CONNECTION_POOL_MAX_SIZE);
+		if(env.containsKey(ALBINA_DB_CONNECTIONPOOL_MAXSIZE)) {
+			String pms = env.getProperty(ALBINA_DB_CONNECTIONPOOL_MAXSIZE);
 
 			try {
 				poolsize = Integer.parseInt(pms);
@@ -51,7 +44,7 @@ public final class EnvConfig {
 		}
 		maxPoolsSize = poolsize;
 
-		LOGGER.info("environment configuration created");
+		LOGGER.info("database configuration from environment parsed");
 	}
 
 	public String getDbUser() { return dbUser; }
@@ -62,25 +55,15 @@ public final class EnvConfig {
 
 	public String getDbConnectionUrl() { return connectionUrl; }
 
-	public static EnvConfig instance() { return ENV_CONFIG; }
+	public static DBEnvConfig instance() { return DB_ENV_CONFIG; }
 
-	static EnvConfig initConfig(Map<String, String> systemEnv) {
+	static DBEnvConfig initConfig(Map<String, String> systemEnv) {
 		Properties env = new Properties();
-
-		if(systemEnv.containsKey(ALBINA_SERVER_CONFIG_FILE)) {
-			String filepath = systemEnv.get(ALBINA_SERVER_CONFIG_FILE);
-			try(InputStream in = Files.newInputStream(Paths.get(filepath));
-				InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8)) {
-				env.load(r);
-			} catch (IOException e) {
-				LOGGER.error("reading configuration file {} failed.", filepath, e );
-			}
-		}
 
 		String[] keys = {
 			ALBINA_DB_CONNECTION_USERNAME,
 			ALBINA_DB_CONNECTION_PASSWORD,
-			ALBINA_DB_CONNECTION_POOL_MAX_SIZE,
+			ALBINA_DB_CONNECTIONPOOL_MAXSIZE,
 			ALBINA_DB_CONNECTION_URL
 		};
 
@@ -90,7 +73,7 @@ public final class EnvConfig {
 			}
 		}
 
-		return new EnvConfig(env);
+		return new DBEnvConfig(env);
 	}
 
 }
