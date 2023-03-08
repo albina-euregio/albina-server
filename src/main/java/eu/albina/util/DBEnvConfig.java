@@ -3,6 +3,7 @@ package eu.albina.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -20,16 +21,14 @@ public final class DBEnvConfig {
 	private static final String ALBINA_DB_CONNECTIONPOOL_MAXSIZE = "ALBINA_DB_CONNECTIONPOOL_MAXSIZE";
 	private static final String ALBINA_DB_CONNECTION_URL = "ALBINA_DB_CONNECTION_URL";
 
-	private static final DBEnvConfig DB_ENV_CONFIG = initConfig(System.getenv());
-
 	private final String dbUser;
-	private final String dbpw;
+	private final String dbPassword;
 	private final String connectionUrl;
 	private final int maxPoolsSize;
 
 	private DBEnvConfig(Properties env) {
 		dbUser = env.getProperty(ALBINA_DB_CONNECTION_USERNAME);
-		dbpw = env.getProperty(ALBINA_DB_CONNECTION_PASSWORD);
+		dbPassword = env.getProperty(ALBINA_DB_CONNECTION_PASSWORD);
 		connectionUrl = env.getProperty(ALBINA_DB_CONNECTION_URL);
 
 		int poolsize = NO_MAX_POOL_SIZE;
@@ -49,13 +48,11 @@ public final class DBEnvConfig {
 
 	public String getDbUser() { return dbUser; }
 
-	public String getDbPassword() { return dbpw; }
+	public String getDbPassword() { return dbPassword; }
 
 	public int getDbConnectionPoolMaxSize() { return maxPoolsSize; }
 
 	public String getDbConnectionUrl() { return connectionUrl; }
-
-	public static DBEnvConfig instance() { return DB_ENV_CONFIG; }
 
 	static DBEnvConfig initConfig(Map<String, String> systemEnv) {
 		Properties env = new Properties();
@@ -74,6 +71,23 @@ public final class DBEnvConfig {
 		}
 
 		return new DBEnvConfig(env);
+	}
+
+	Map<String, String> asMap() {
+		Map<String, String> properties = new HashMap<>();
+		if (connectionUrl != null) {
+			properties.put("hibernate.connection.url", connectionUrl);
+		}
+		if (dbUser != null) {
+			properties.put("hibernate.connection.username", dbUser);
+		}
+		if (dbPassword != null) {
+			properties.put("hibernate.connection.password", dbPassword);
+		}
+		if (DBEnvConfig.NO_MAX_POOL_SIZE != maxPoolsSize) {
+			properties.put("hibernate.c3p0.max_size", Integer.toString(maxPoolsSize));
+		}
+		return properties;
 	}
 
 }

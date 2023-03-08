@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -76,30 +75,7 @@ public class HibernateUtil {
 	}
 
 	public void setUp() {
-		final DBEnvConfig dec = DBEnvConfig.instance();
-		final String connectionUrl = dec.getDbConnectionUrl();
-		final String user = dec.getDbUser();
-		final String pw = dec.getDbPassword();
-		final int maxPoolSize = dec.getDbConnectionPoolMaxSize();
-
-		Map<String, String> properties = new HashMap<>();
-
-		if(connectionUrl != null) {
-			properties.put("hibernate.connection.url", connectionUrl);
-		}
-
-		if(user != null) {
-			properties.put("hibernate.connection.username", user);
-		}
-
-		if(pw != null) {
-			properties.put("hibernate.connection.password", pw);
-		}
-
-		if(DBEnvConfig.NO_MAX_POOL_SIZE != maxPoolSize) {
-			properties.put("hibernate.c3p0.max_size", Integer.toString(maxPoolSize));
-		}
-
+		Map<String, String> properties = DBEnvConfig.initConfig(System.getenv()).asMap();
 		entityManagerFactory = Persistence.createEntityManagerFactory("eu.albina", properties);
 		logger.info("Entity manager factory created!");
 	}
