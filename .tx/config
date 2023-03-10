@@ -1,43 +1,45 @@
 [main]
 host = https://www.transifex.com
 
-[albina-server.messages-xml]
-source_file = src/main/resources/i18n/MessagesBundle.xml
-source_lang = en
-type = PROPERTIESXML
-file_filter = src/main/resources/i18n/MessagesBundle_<lang>.xml
-
-[albina-server.avalanche-problem-xml]
-source_file = src/main/resources/i18n/AvalancheProblem.xml
-source_lang = en
-type = PROPERTIESXML
-file_filter = src/main/resources/i18n/AvalancheProblem_<lang>.xml
-
-[albina-server.danger-pattern-xml]
-source_file = src/main/resources/i18n/DangerPattern.xml
-source_lang = en
-type = PROPERTIESXML
-file_filter = src/main/resources/i18n/DangerPattern_<lang>.xml
-
-[albina-server.danger-rating-xml]
-source_file = src/main/resources/i18n/DangerRating.xml
-source_lang = en
-type = PROPERTIESXML
-file_filter = src/main/resources/i18n/DangerRating_<lang>.xml
-
-[albina-server.tendency-xml]
-source_file = src/main/resources/i18n/Tendency.xml
-source_lang = en
-type = PROPERTIESXML
-file_filter = src/main/resources/i18n/Tendency_<lang>.xml
-
-[eaws-regions.micro-region-names]
-source_lang = xxx
-type = KEYVALUEJSON
-file_filter = src/main/resources/micro-regions_names/<lang>.json
-
-[albina-server.aspect]
+[o:albina-euregio:p:albina-server:r:aspect]
+file_filter = src/main/resources/i18n/Aspect_<lang>.xml
 source_file = src/main/resources/i18n/Aspect.xml
 source_lang = en
-type = PROPERTIESXML
-file_filter = src/main/resources/i18n/Aspect_<lang>.xml
+type        = PROPERTIESXML
+
+[o:albina-euregio:p:albina-server:r:avalanche-problem-xml]
+file_filter = src/main/resources/i18n/AvalancheProblem_<lang>.xml
+source_file = src/main/resources/i18n/AvalancheProblem.xml
+source_lang = en
+type        = PROPERTIESXML
+
+[o:albina-euregio:p:albina-server:r:danger-pattern-xml]
+file_filter = src/main/resources/i18n/DangerPattern_<lang>.xml
+source_file = src/main/resources/i18n/DangerPattern.xml
+source_lang = en
+type        = PROPERTIESXML
+
+[o:albina-euregio:p:albina-server:r:danger-rating-xml]
+file_filter = src/main/resources/i18n/DangerRating_<lang>.xml
+source_file = src/main/resources/i18n/DangerRating.xml
+source_lang = en
+type        = PROPERTIESXML
+
+[o:albina-euregio:p:albina-server:r:messages-xml]
+file_filter = src/main/resources/i18n/MessagesBundle_<lang>.xml
+source_file = src/main/resources/i18n/MessagesBundle.xml
+source_lang = en
+type        = PROPERTIESXML
+
+[o:albina-euregio:p:albina-server:r:tendency-xml]
+file_filter = src/main/resources/i18n/Tendency_<lang>.xml
+source_file = src/main/resources/i18n/Tendency.xml
+source_lang = en
+type        = PROPERTIESXML
+
+[o:albina-euregio:p:eaws-regions:r:micro-region-names]
+file_filter = src/main/resources/micro-regions_names/<lang>.json
+source_file = src/main/resources/micro-regions_names/xxx.json
+source_lang = xxx
+type        = KEYVALUEJSON
+
