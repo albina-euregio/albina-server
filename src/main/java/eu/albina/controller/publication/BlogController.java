@@ -18,10 +18,10 @@ package eu.albina.controller.publication;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.base.Strings;
 
@@ -32,7 +32,6 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.GoogleBloggerConfiguration;
@@ -47,30 +46,14 @@ public class BlogController {
 	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
 	private static BlogController instance = null;
 
-	protected final HashMap<String, Instant> lastFetch = new HashMap<>();
 	private final Client client = HttpClientUtil.newClientBuilder().build();
-
-	private BlogController() {
-		Instant date = Instant.now();
-		for (Region region : RegionController.getInstance().getPublishBlogRegions()) {
-			for (LanguageCode lang : LanguageCode.ENABLED) {
-				try {
-					GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
-					if (config != null)
-						lastFetch.put(config.getBlogId(), date);
-				} catch (Exception e) {
-					logger.info("No Google Blogger configuration for {} [{}]", region.getId(), lang.toString());
-				}
-			}
-		}
-	}
 
 	/**
 	 * Returns the {@code BlogController} object associated with the current Java
 	 * application.
 	 *
 	 * @return the {@code BlogController} object associated with the current Java
-	 *         application.
+	 * application.
 	 */
 	public static BlogController getInstance() {
 		if (instance == null) {
@@ -98,18 +81,28 @@ public class BlogController {
 		});
 	}
 
+	protected void updateConfigurationLastPublished(GoogleBloggerConfiguration config, Blogger.Item object) {
+		if (!object.published.toInstant().isAfter(config.getLastPublishedTimestamp().toInstant())) {
+			return;
+		}
+		config.setLastPublishedBlogId(object.id);
+		config.setLastPublishedTimestamp(object.published);
+		logger.info("Updating lastPublishedTimestamp={} lastPublishedBlogId={} for {} [{}]",
+			config.getLastPublishedTimestamp(), config.getLastPublishedBlogId(), config.getRegion().getId(), config.getLanguageCode());
+		HibernateUtil.getInstance().runTransaction(entityManager -> entityManager.merge(config));
+	}
+
 	protected List<Blogger.Item> getBlogPosts(GoogleBloggerConfiguration config) throws IOException {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
 		}
 
+		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
 			.queryParam("key", config.getApiKey())
-			.queryParam("startDate", lastFetch.get(config.getBlogId()).toString())
+			.queryParam("startDate", lastPublishedTimestamp.toInstant().plusSeconds(1).toString())
 			.queryParam("fetchBodies", Boolean.TRUE.toString())
 			.queryParam("fetchImages", Boolean.TRUE.toString());
-		logger.debug("Start date for {}: {}", config.getBlogId(), lastFetch.get(config.getBlogId()).toString());
-		lastFetch.put(config.getBlogId(), Instant.now());
 		Blogger.Root root = request.request().get(Blogger.Root.class);
 		List<Blogger.Item> blogPosts = root.items;
 		logger.info("Found {} new blog posts for region={} lang={} url={}", blogPosts.size(), config.getRegion().getId(), config.getLanguageCode().toString(), request.getUri());
@@ -126,7 +119,6 @@ public class BlogController {
 			.queryParam("fetchBodies", Boolean.TRUE.toString())
 			.queryParam("fetchImages", Boolean.TRUE.toString())
 			.queryParam("maxResults", Integer.toString(1));
-		lastFetch.put(config.getBlogId(), Instant.now());
 		Blogger.Root root = request.request().get(Blogger.Root.class);
 		List<Blogger.Item> blogPosts = root.items;
 		logger.info("Fetched latest blog post for region={} lang={} url={}", config.getRegion().getId(), config.getLanguageCode().toString(), request.getUri());
@@ -139,7 +131,7 @@ public class BlogController {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
-		
+
 		return client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId)
 			.queryParam("key", config.getApiKey())
 			.request()
@@ -158,6 +150,7 @@ public class BlogController {
 						sendNewBlogPostToRapidmail(object, region, lang, false);
 						sendNewBlogPostToTelegramChannel(object, region, lang, false);
 						sendNewBlogPostToPushNotification(region, lang, object, false);
+						updateConfigurationLastPublished(config, object);
 					}
 				} catch (IOException e) {
 					logger.warn("Blog posts could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
@@ -177,6 +170,7 @@ public class BlogController {
 					sendNewBlogPostToRapidmail(blogPost, config.getRegion(), config.getLanguageCode(), test);
 					sendNewBlogPostToTelegramChannel(blogPost, config.getRegion(), config.getLanguageCode(), test);
 					sendNewBlogPostToPushNotification(config.getRegion(), config.getLanguageCode(), blogPost, test);
+					updateConfigurationLastPublished(config, blogPost);
 				} catch (IOException e) {
 					logger.warn("Latest blog post could not be retrieved: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
 				}
