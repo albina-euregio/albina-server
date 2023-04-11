@@ -1,4 +1,9 @@
-rm $1/latest/*
+if [ -e "$1/latest" ]; then
+  rm $1/latest/*
+else
+  mkdir $1/latest
+fi
+
 cp $1/$2/*.* $1/latest/
 
 rm $3/*.html
