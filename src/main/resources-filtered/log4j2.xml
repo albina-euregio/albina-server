@@ -4,34 +4,52 @@
 			   strict="false"
 			   xmlns="http://logging.apache.org/log4j/2.0/config">
 
+	<properties>
+		<property name="ALBINA_LOG_PREFIX" value="${albina.log.prefix}"/>
+		<property name="ALBINA_LOG_FILE" value="${albina.log.filepath}${albina.log.filename}"/>
+		<property name="ALBINA_LOG_LEVEL" value="${albina.log.level}"/>
+		<property name="ALBINA_LOG_SENTRY_MIN_EVENT_LEVEL" value="WARN"/>
+		<property name="ALBINA_LOG_LEVEL_SQL" value="${albina.log.level.sql}"/>
+		<property name="ALBINA_LOG_LEVEL_CONNECTIONPOOL" value="${albina.log.level.c3p0}"/>
+		<!-- adhoc debug logger -->
+		<property name="ALBINA_LOG_DEBUGLOGGER_NAME1" value="unused"/>
+		<property name="ALBINA_LOG_DEBUGLOGGER_NAME2" value="unused"/>
+		<property name="ALBINA_LOG_DEBUGLOGGER_NAME3" value="unused"/>
+		<!-- disable appender with value = OFF -->
+		<property name="ALBINA_LOG_STDOUT_MIN_LEVEL" value="ALL"/>
+		<property name="ALBINA_LOG_FILE_MIN_LEVEL" value="ALL"/>
+		<property name="ALBINA_LOG_SENTRY_MIN_LEVEL" value="ALL"/>
+	</properties>
+
 	<Appenders>
 		<Console name="STDOUT">
-			<PatternLayout pattern="${albina.log.prefix}%date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
+			<PatternLayout pattern="${env:ALBINA_LOG_PREFIX}%date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
 		</Console>
 		<RollingFile name="FILE"
-					 fileName="${albina.log.filepath}${albina.log.filename}"
-					 filePattern="${albina.log.filepath}${albina.log.filename}.%d{yyyy-MM-dd}.log.gz">
-			<PatternLayout pattern="${albina.log.prefix} %date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
+					 fileName="${env:ALBINA_LOG_FILE}"
+					 filePattern="${env:ALBINA_LOG_FILE}.%d{yyyy-MM-dd}.log.gz">
+			<PatternLayout pattern="${env:ALBINA_LOG_PREFIX} %date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
 			<TimeBasedTriggeringPolicy/>
 			<DefaultRolloverStrategy/>
 		</RollingFile>
 		<!-- System Environment Variable SENTRY_DSN -->
-		<Sentry name="SENTRY" minimumEventLevel="WARN"/>
+		<Sentry name="SENTRY" minimumEventLevel="${env:ALBINA_LOG_SENTRY_MIN_EVENT_LEVEL}"/>
 	</Appenders>
 
 	<Loggers>
 		<Root level="INFO">
-			<AppenderRef ref="STDOUT"/>
-			<AppenderRef ref="FILE"/>
-			<AppenderRef ref="SENTRY"/>
+			<AppenderRef ref="STDOUT" level="${env:ALBINA_LOG_STDOUT_MIN_LEVEL}"/>
+			<AppenderRef ref="FILE" level="${env:ALBINA_LOG_FILE_MIN_LEVEL}"/>
+			<AppenderRef ref="SENTRY" level="${env:ALBINA_LOG_SENTRY_MIN_LEVEL}"/>
 		</Root>
-		<Logger name="org.hibernate" level="${albina.log.level.sql}"/>
-		<Logger name="com.mchange.v2.c3p0" level="${albina.log.level.c3p0}"/>
-		<Logger name="eu.albina.controller.socialmedia.BlogController" level="DEBUG"/>
-		<Logger name="eu.albina.controller.socialmedia.RapidMailProcessorController" level="DEBUG"/>
-		<Logger name="eu.albina.util.PushNotificationUtil" level="DEBUG"/>
-		<Logger name="eu.albina.rest.AvalancheBulletinService" level="DEBUG"/>
-		<Logger name="eu.albina.util.EmailUtil" level="DEBUG"/>
+		<Logger name="org.hibernate" level="${env:ALBINA_LOG_LEVEL_SQL}"/>
+		<Logger name="com.mchange.v2.c3p0" level="${env:ALBINA_LOG_LEVEL_CONNECTIONPOOL}"/>
+
+		<Logger name="${env:ALBINA_LOG_DEBUGLOGGER_NAME1}" level="DEBUG"/>
+		<Logger name="${env:ALBINA_LOG_DEBUGLOGGER_NAME2}" level="DEBUG"/>
+		<Logger name="${env:ALBINA_LOG_DEBUGLOGGER_NAME3}" level="DEBUG"/>
+
+		<Logger name="eu.albina" level="${env:ALBINA_LOG_LEVEL}"/>
 	</Loggers>
 
 </Configuration>
