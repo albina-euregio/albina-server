@@ -23,7 +23,9 @@ RUN mkdir -p /app/logs \
 # create user
 RUN groupadd --gid 1003 -r albina \
  && useradd --uid 1003 -r -g albina -G audio,video albina \
- && chown -R albina:albina /app
+ && chmod -R 400 ${CATALINA_HOME}/conf/* \
+ && chown -R albina:albina /app \
+ && chown -R albina:albina ${CATALINA_HOME}
 
 # Set java system properties
 ENV JAVA_OPTS="-Xms1024m \
@@ -51,10 +53,10 @@ ENV ALBINA_DB_CONNECTIONPOOL_MAXSIZE=10
 ENV ALBINA_DB_CONNECTION_URL="jdbc:mysql://localhost:3306/albina?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
 # copy tomcat config
-COPY src/main/container/logging.properties /usr/local/tomcat/conf/logging.properties
-COPY src/main/container/server.xml /usr/local/tomcat/conf/server.xml
+COPY --chown=albina:albina --chmod=400 src/main/container/logging.properties ${CATALINA_HOME}/conf/logging.properties
+COPY --chown=albina:albina --chmod=400 src/main/container/server.xml ${CATALINA_HOME}/conf/server.xml
 
 # install application
-COPY --from=builder /webapps /usr/local/tomcat/webapps
+COPY --chown=albina:albina --from=builder /webapps ${CATALINA_HOME}/webapps
 
 USER albina
