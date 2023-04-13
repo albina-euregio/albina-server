@@ -45,12 +45,14 @@ ENV ALBINA_LOG_LEVEL_CONNECTIONPOOL="WARN"
 ENV ALBINA_LOG_STDOUT_MIN_LEVEL="ALL"
 ENV ALBINA_LOG_FILE_MIN_LEVEL="OFF"
 ENV ALBINA_LOG_SENTRY_MIN_LEVEL="OFF"
+# disable sentry SDK
+ENV SENTRY_DSN=""
 
 # Configure default DB (force application configuration via environment)
-ENV ALBINA_DB_CONNECTION_USERNAME="albian";
+ENV ALBINA_DB_CONNECTION_USERNAME="changeit";
 ENV ALBINA_DB_CONNECTION_PASSWORD="changeit"
 ENV ALBINA_DB_CONNECTIONPOOL_MAXSIZE=10
-ENV ALBINA_DB_CONNECTION_URL="jdbc:mysql://localhost:3306/albina?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+ENV ALBINA_DB_CONNECTION_URL="jdbc:mysql://localhost:3306/changeit?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
 # copy tomcat config
 COPY --chown=albina:albina --chmod=400 src/main/container/logging.properties ${CATALINA_HOME}/conf/logging.properties
