@@ -18,7 +18,7 @@ RUN mkdir -p /app/logs \
  && mkdir -p /app/static/pdfs \
  && mkdir -p /app/static/media_files \
  && mkdir -p /app/static/simple \
- && mkdir -p /app/avalanche_warning_maps
+ && mkdir -p /app/avalanche-warning-maps
 
 # create user
 RUN groupadd --gid 1003 -r albina \
