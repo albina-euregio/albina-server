@@ -64,7 +64,8 @@ public class StatisticsService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate,
 			@QueryParam("lang") LanguageCode language, @QueryParam("extended") boolean extended,
-			@QueryParam("duplicate") boolean duplicate) {
+			@QueryParam("duplicate") boolean duplicate,
+			@QueryParam("obsoleteMatrix") boolean obsoleteMatrix) {
 		logger.debug("GET CSV bulletins");
 
 		Instant start = null;
@@ -80,7 +81,7 @@ public class StatisticsService {
 			return Response.notAcceptable(null).build();
 
 		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, RegionController.getInstance().getPublishBulletinRegions(), extended,
-				duplicate);
+				duplicate, obsoleteMatrix);
 
 		String filename = String.format("statistic_%s_%s%s%s%s_%s",
 			OffsetDateTime.parse(startDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),

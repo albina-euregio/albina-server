@@ -38,6 +38,7 @@ import com.github.openjson.JSONObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.AvalancheProblem;
 import eu.albina.model.MatrixInformation;
 import eu.albina.model.Region;
@@ -104,7 +105,7 @@ public class StatisticsController {
 	 *         until {@code endDate} in {@code lang}
 	 */
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, Region region,
-			boolean extended, boolean duplicateBulletinForenoon) {
+			boolean extended, boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			// get latest reports
 			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
@@ -115,7 +116,7 @@ public class StatisticsController {
 
 			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
-			return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon);
+			return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
 		});
 	}
 
@@ -140,7 +141,7 @@ public class StatisticsController {
 	 *         until {@code endDate} in {@code lang}
 	 */
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, List<Region> regions, boolean extended,
-			boolean duplicateBulletinForenoon) {
+			boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = regions.stream()
 				.map(region -> AvalancheReportController.getInstance().getPublicReports(startDate,
@@ -151,7 +152,7 @@ public class StatisticsController {
 
 			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
-			return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon);
+			return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
 		});
 	}
 
@@ -251,7 +252,7 @@ public class StatisticsController {
 	 * @return a CSV string representing all {@code bulletins} in {@code lang}
 	 */
 	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended,
-			boolean duplicateBulletinForenoon) {
+			boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		// sort bulletins by validity
 		bulletins.sort(Comparator.comparing(AvalancheBulletin::getValidFrom));
 
@@ -296,20 +297,33 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem1AspectNW");
 		if (extended) {
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem1ArtificialDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem1ArtificialAvalancheSize");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem1ArtificialAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem1ArtificialHazardSiteDistribution");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem1NaturalDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem1NaturalAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem1NaturalHazardSiteDistribution");
+			if (obsoleteMatrix) {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1ArtificialDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1ArtificialAvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1ArtificialAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1ArtificialHazardSiteDistribution");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1NaturalDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1NaturalAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1NaturalHazardSiteDistribution");
+			} else {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1DangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1DangerRatingModificator");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1SnowpackStability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1Frequency");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1AvalancheSize");
+			}
 		}
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2");
@@ -334,20 +348,33 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem2AspectNW");
 		if (extended) {
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem2ArtificialDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem2ArtificialAvalancheSize");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem2ArtificialAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem2ArtificialHazardSiteDistribution");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem2NaturalDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem2NaturalAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem2NaturalHazardSiteDistribution");
+			if (obsoleteMatrix) {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2ArtificialDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2ArtificialAvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2ArtificialAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2ArtificialHazardSiteDistribution");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2NaturalDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2NaturalAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2NaturalHazardSiteDistribution");
+			} else {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2DangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2DangerRatingModificator");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2SnowpackStability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2Frequency");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2AvalancheSize");
+			}
 		}
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3");
@@ -372,20 +399,33 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem3AspectNW");
 		if (extended) {
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem3ArtificialDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem3ArtificialAvalancheSize");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem3ArtificialAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem3ArtificialHazardSiteDistribution");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem3NaturalDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem3NaturalAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem3NaturalHazardSiteDistribution");
+			if (obsoleteMatrix) {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3ArtificialDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3ArtificialAvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3ArtificialAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3ArtificialHazardSiteDistribution");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3NaturalDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3NaturalAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3NaturalHazardSiteDistribution");
+			} else {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3DangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3DangerRatingModificator");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3SnowpackStability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3Frequency");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3AvalancheSize");
+			}
 		}
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4");
@@ -410,20 +450,33 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem4AspectNW");
 		if (extended) {
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem4ArtificialDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem4ArtificialAvalancheSize");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem4ArtificialAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem4ArtificialHazardSiteDistribution");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem4NaturalDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem4NaturalAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem4NaturalHazardSiteDistribution");
+			if (obsoleteMatrix) {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4ArtificialDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4ArtificialAvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4ArtificialAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4ArtificialHazardSiteDistribution");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4NaturalDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4NaturalAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4NaturalHazardSiteDistribution");
+			} else {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4DangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4DangerRatingModificator");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4SnowpackStability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4Frequency");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4AvalancheSize");
+			}
 		}
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5");
@@ -448,20 +501,33 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("AvalancheProblem5AspectNW");
 		if (extended) {
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem5ArtificialDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem5ArtificialAvalancheSize");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem5ArtificialAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem5ArtificialHazardSiteDistribution");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem5NaturalDangerRating");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem5NaturalAvalancheReleaseProbability");
-			sb.append(csvDeliminator);
-			sb.append("AvalancheProblem5NaturalHazardSiteDistribution");
+			if (obsoleteMatrix) {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5ArtificialDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5ArtificialAvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5ArtificialAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5ArtificialHazardSiteDistribution");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5NaturalDangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5NaturalAvalancheReleaseProbability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5NaturalHazardSiteDistribution");
+			} else {
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5DangerRating");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5DangerRatingModificator");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5SnowpackStability");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5Frequency");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5AvalancheSize");
+			}
 		}
 		sb.append(csvDeliminator);
 		sb.append("Tendency");
@@ -499,11 +565,11 @@ public class StatisticsController {
 		}
 		sb.append(csvLineBreak);
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			addCsvLines(sb, avalancheBulletin, false, lang, extended, false);
+			addCsvLines(sb, avalancheBulletin, false, lang, extended, false, obsoleteMatrix);
 			if (avalancheBulletin.isHasDaytimeDependency()) {
-				addCsvLines(sb, avalancheBulletin, true, lang, extended, false);
+				addCsvLines(sb, avalancheBulletin, true, lang, extended, false, obsoleteMatrix);
 			} else if (duplicateBulletinForenoon) {
-				addCsvLines(sb, avalancheBulletin, false, lang, extended, duplicateBulletinForenoon);
+				addCsvLines(sb, avalancheBulletin, false, lang, extended, true, obsoleteMatrix);
 			}
 		}
 
@@ -528,7 +594,7 @@ public class StatisticsController {
 	 *            the desired language
 	 */
 	private void addCsvLines(StringBuilder sb, AvalancheBulletin avalancheBulletin, boolean isAfternoon,
-			LanguageCode lang, boolean extended, boolean duplicateBulletinForenoon) {
+			LanguageCode lang, boolean extended, boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		AvalancheBulletinDaytimeDescription daytimeDescription;
 		if (!isAfternoon || duplicateBulletinForenoon)
 			daytimeDescription = avalancheBulletin.getForenoon();
@@ -568,11 +634,11 @@ public class StatisticsController {
 			}
 			sb.append(csvDeliminator);
 
-			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem1(), extended, lang);
-			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem2(), extended, lang);
-			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem3(), extended, lang);
-			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem4(), extended, lang);
-			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem5(), extended, lang);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem1(), extended, lang, obsoleteMatrix);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem2(), extended, lang, obsoleteMatrix);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem3(), extended, lang, obsoleteMatrix);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem4(), extended, lang, obsoleteMatrix);
+			addCsvAvalancheProblem(sb, daytimeDescription.getAvalancheProblem5(), extended, lang, obsoleteMatrix);
 
 			if (avalancheBulletin.getTendency() != null)
 				sb.append(avalancheBulletin.getTendency().toString());
@@ -702,6 +768,45 @@ public class StatisticsController {
 		}
 	}
 
+	private void addEawsMatrixInformation(StringBuilder sb, EawsMatrixInformation eawsMatrixInformation) {
+		if (eawsMatrixInformation != null) {
+			if (eawsMatrixInformation.getDangerRating() != null)
+				sb.append(eawsMatrixInformation.getDangerRating());
+			else
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			if (eawsMatrixInformation.getDangerRatingModificator() != null)
+				sb.append(eawsMatrixInformation.getDangerRatingModificator());
+			else
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			if (eawsMatrixInformation.getSnowpackStability() != null)
+				sb.append(eawsMatrixInformation.getSnowpackStability());
+			else
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			if (eawsMatrixInformation.getFrequency() != null)
+				sb.append(eawsMatrixInformation.getFrequency());
+			else
+				sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			if (eawsMatrixInformation.getAvalancheSize() != null)
+				sb.append(eawsMatrixInformation.getAvalancheSize());
+			else
+				sb.append(notAvailableString);
+		} else {
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+		}
+	}
+
 	/**
 	 * Add a CSV string to a {@code StringBuilder} instance representing the
 	 * {@code avalancheProblem}.
@@ -712,7 +817,7 @@ public class StatisticsController {
 	 *            {@code StringBuilder} instance
 	 * @param lang
 	 */
-	private void addCsvAvalancheProblem(StringBuilder sb, AvalancheProblem avalancheProblem, boolean extended, LanguageCode lang) {
+	private void addCsvAvalancheProblem(StringBuilder sb, AvalancheProblem avalancheProblem, boolean extended, LanguageCode lang, boolean obsoleteMatrix) {
 		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
 			sb.append(avalancheProblem.getAvalancheProblem().toStringId());
 			sb.append(csvDeliminator);
@@ -782,8 +887,13 @@ public class StatisticsController {
 				}
 			}
 			if (extended) {
-				addMatrixInformation(sb, avalancheProblem.getMatrixInformation());
-				sb.append(csvDeliminator);
+				if (obsoleteMatrix) {
+					addMatrixInformation(sb, avalancheProblem.getMatrixInformation());
+					sb.append(csvDeliminator);
+				} else {
+					addEawsMatrixInformation(sb, avalancheProblem.getEawsMatrixInformation());
+					sb.append(csvDeliminator);
+				}
 			}
 		} else {
 			for (int i = 0; i < 11; i++) {
