@@ -474,17 +474,19 @@ public class AvalancheBulletinService {
 					AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
 				}
 
-				new ChangeJob() {
-					@Override
-					protected Instant getStartDate() {
-						return startDate;
-					}
-
-					@Override
-					protected List<Region> getRegions() {
-						return Collections.singletonList(region);
-					}
-				}.execute(null);
+				new Thread(() -> {
+					new ChangeJob() {
+						@Override
+						protected Instant getStartDate() {
+							return startDate;
+						}
+	
+						@Override
+						protected List<Region> getRegions() {
+							return Collections.singletonList(region);
+						}
+					}.execute(null);
+				});
 
 				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 			} else
