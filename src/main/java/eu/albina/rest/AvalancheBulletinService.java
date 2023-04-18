@@ -486,7 +486,7 @@ public class AvalancheBulletinService {
 							return Collections.singletonList(region);
 						}
 					}.execute(null);
-				});
+				}, "changeBulletins").start();
 
 				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 			} else
