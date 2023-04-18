@@ -25,6 +25,9 @@ import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.Collections;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -43,7 +46,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.hibernate.HibernateException;
 
 import com.google.common.base.MoreObjects;
@@ -56,7 +58,8 @@ public class RapidMailController {
 	private static final Logger logger = LoggerFactory.getLogger(RapidMailController.class);
 	private static RapidMailController instance = null;
 	private final String baseUrl = "https://apiv3.emailsys.net";
-	private final Client client = HttpClientUtil.newClientBuilder().register(JacksonFeature.class).build();
+	private final ObjectMapper objectMapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+	private final Client client = HttpClientUtil.newClientBuilder().register(new JacksonJsonProvider(objectMapper)).build();
 
 	public static RapidMailController getInstance() throws CertificateException, NoSuchAlgorithmException,
 			KeyStoreException, IOException, KeyManagementException {
