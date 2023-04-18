@@ -143,17 +143,19 @@ public class AvalancheBulletinPublishService {
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			new PublicationJob() {
-				@Override
-				protected boolean isEnabled(ServerInstance serverInstance) {
-					return true;
-				}
-
-				@Override
-				protected Instant getStartDate() {
-					return startDate;
-				}
-			}.execute(null);
+			new Thread(() -> {
+				new PublicationJob() {
+					@Override
+					protected boolean isEnabled(ServerInstance serverInstance) {
+						return true;
+					}
+	
+					@Override
+					protected Instant getStartDate() {
+						return startDate;
+					}
+				}.execute(null);
+				}, "publishAllBulletins").start();
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
