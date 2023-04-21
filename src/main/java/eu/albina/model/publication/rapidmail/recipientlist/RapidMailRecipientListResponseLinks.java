@@ -18,9 +18,11 @@ package eu.albina.model.publication.rapidmail.recipientlist;
 
 import javax.annotation.Generated;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Generated("com.robohorse.robopojogenerator")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RapidMailRecipientListResponseLinks {
 
 	@JsonProperty("self")
