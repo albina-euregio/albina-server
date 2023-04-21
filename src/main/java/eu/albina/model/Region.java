@@ -836,6 +836,11 @@ public class Region implements AvalancheInformationObject {
 	}
 
 	@Override
+	public String toString() {
+		return id;
+	}
+
+	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
