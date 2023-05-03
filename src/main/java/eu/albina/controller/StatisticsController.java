@@ -828,8 +828,8 @@ public class StatisticsController {
 				sb.append(eawsMatrixInformation.getAvalancheSize());
 			else
 				sb.append(notAvailableString);
-			sb.append(eawsMatrixInformation.getAvalancheSizeValue());
 			sb.append(csvDeliminator);
+			sb.append(eawsMatrixInformation.getAvalancheSizeValue());
 		} else {
 			sb.append(notAvailableString);
 			sb.append(csvDeliminator);
