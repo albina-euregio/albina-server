@@ -320,9 +320,15 @@ public class StatisticsController {
 				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem1SnowpackStability");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1SnowpackStabilityValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem1Frequency");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1FrequencyValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem1AvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem1AvalancheSizeValue");
 			}
 		}
 		sb.append(csvDeliminator);
@@ -371,9 +377,15 @@ public class StatisticsController {
 				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem2SnowpackStability");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2SnowpackStabilityValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem2Frequency");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2FrequencyValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem2AvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem2AvalancheSizeValue");
 			}
 		}
 		sb.append(csvDeliminator);
@@ -422,9 +434,15 @@ public class StatisticsController {
 				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem3SnowpackStability");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3SnowpackStabilityValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem3Frequency");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3FrequencyValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem3AvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem3AvalancheSizeValue");
 			}
 		}
 		sb.append(csvDeliminator);
@@ -473,9 +491,15 @@ public class StatisticsController {
 				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem4SnowpackStability");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4SnowpackStabilityValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem4Frequency");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4FrequencyValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem4AvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem4AvalancheSizeValue");
 			}
 		}
 		sb.append(csvDeliminator);
@@ -524,9 +548,15 @@ public class StatisticsController {
 				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem5SnowpackStability");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5SnowpackStabilityValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem5Frequency");
 				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5FrequencyValue");
+				sb.append(csvDeliminator);
 				sb.append("AvalancheProblem5AvalancheSize");
+				sb.append(csvDeliminator);
+				sb.append("AvalancheProblem5AvalancheSizeValue");
 			}
 		}
 		sb.append(csvDeliminator);
@@ -785,16 +815,28 @@ public class StatisticsController {
 			else
 				sb.append(notAvailableString);
 			sb.append(csvDeliminator);
+			sb.append(eawsMatrixInformation.getSnowpackStabilityValue());
+			sb.append(csvDeliminator);
 			if (eawsMatrixInformation.getFrequency() != null)
 				sb.append(eawsMatrixInformation.getFrequency());
 			else
 				sb.append(notAvailableString);
 			sb.append(csvDeliminator);
+			sb.append(eawsMatrixInformation.getFrequencyValue());
+			sb.append(csvDeliminator);
 			if (eawsMatrixInformation.getAvalancheSize() != null)
 				sb.append(eawsMatrixInformation.getAvalancheSize());
 			else
 				sb.append(notAvailableString);
+			sb.append(eawsMatrixInformation.getAvalancheSizeValue());
+			sb.append(csvDeliminator);
 		} else {
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
+			sb.append(notAvailableString);
+			sb.append(csvDeliminator);
 			sb.append(notAvailableString);
 			sb.append(csvDeliminator);
 			sb.append(notAvailableString);
@@ -901,9 +943,16 @@ public class StatisticsController {
 				sb.append(csvDeliminator);
 			}
 			if (extended) {
-				for (int i = 0; i < 7; i++) {
-					sb.append(notAvailableString);
-					sb.append(csvDeliminator);
+				if (obsoleteMatrix) {
+					for (int i = 0; i < 7; i++) {
+						sb.append(notAvailableString);
+						sb.append(csvDeliminator);
+					}
+				} else {
+					for (int i = 0; i < 8; i++) {
+						sb.append(notAvailableString);
+						sb.append(csvDeliminator);
+					}
 				}
 			}
 		}
