@@ -48,3 +48,35 @@ deploy to production:
     only:
         - tags
     when: manual
+
+container_build:
+    stage: build
+    needs:
+        - job: 'production build'
+          artifacts: false
+    variables:
+        GIT_VERSION: ${CI_COMMIT_SHORT_SHA}
+    script:
+        - mvn $MAVEN_CLI_OPTS -Dalbina.conf.git.version=${GIT_VERSION} -Dhibernate.connection.password=changeit -Dmaven.test.skip=true clean verify
+    artifacts:
+        when: always
+        paths:
+            - target/albina.war
+        expire_in: 2h
+    rules:
+        - if: '$CI_COMMIT_BRANCH'
+
+containerize:
+    image:
+        name: gcr.io/kaniko-project/executor:debug
+        entrypoint: [""]
+    stage: build
+    cache: {}
+    needs:
+        - job: container_build
+          artifacts: true
+    script:
+        - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
+        - /kaniko/executor --context ${CI_PROJECT_DIR} --dockerfile ${CI_PROJECT_DIR}/Dockerfile --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME} --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA} --insecure-registry=${CI_REGISTRY} --insecure
+    rules:
+        - if: '$CI_COMMIT_BRANCH'
