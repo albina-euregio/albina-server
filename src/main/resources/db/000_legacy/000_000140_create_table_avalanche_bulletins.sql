@@ -1,0 +1,35 @@
+-- liquibase formatted sql
+-- changeset legacy:000_000140 failOnError:true
+-- comment create table avalanche_bulletins
+-- preconditions onFail:MARK_RAN
+-- precondition-sql-check expectedResult:0 SELECT EXISTS( SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = 'avalanche_bulletins' AND TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = SCHEMA()) 
+CREATE TABLE avalanche_bulletins (
+    ID varchar(191) NOT NULL,
+    AV_ACTIVITY_COMMENT_NOTES longtext,
+    AV_ACTIVITY_COMMENT_TEXTCAT longtext,
+    AV_ACTIVITY_HIGHLIGHTS_NOTES longtext,
+    AV_ACTIVITY_HIGHLIGHTS_TEXTCAT longtext,
+    DANGER_PATTERN_1 varchar(191),
+    DANGER_PATTERN_2 varchar(191),
+    HAS_DAYTIME_DEPENDENCY bit DEFAULT FALSE,
+    HIGHLIGHTS_TEXTCAT longtext,
+    OWNER_REGION varchar(191),
+    PUBLICATION_DATE datetime,
+    SNOWPACK_STRUCTURE_COMMENT_NOTES longtext,
+    SNOWPACK_STRUCTURE_COMMENT_TEXTCAT longtext,
+    SNOWPACK_STRUCTURE_HIGHLIGHTS_NOTES longtext,
+    SNOWPACK_STRUCTURE_HIGHLIGHTS_TEXTCAT longtext,
+    TENDENCY varchar(191),
+    TENDENCY_COMMENT_NOTES longtext,
+    TENDENCY_COMMENT_TEXTCAT longtext,
+    VALID_FROM datetime,
+    VALID_UNTIL datetime,
+    AFTERNOON_ID varchar(191),
+    FORENOON_ID varchar(191),
+    USER_ID varchar(191),
+    PRIMARY KEY (ID),
+    CONSTRAINT FK_AVALANCHE_BULLETIN_AVALANCHE_BULLETIN_DAYTIME_DESCRIPTION_AN FOREIGN KEY (AFTERNOON_ID) REFERENCES avalanche_bulletin_daytime_descriptions (ID),
+    CONSTRAINT FK_AVALANCHE_BULLETIN_AVALANCHE_BULLETIN_DAYTIME_DESCRIPTION_FN FOREIGN KEY (FORENOON_ID) REFERENCES avalanche_bulletin_daytime_descriptions (ID),
+    CONSTRAINT FK_AVALANCHE_BULLETIN_USERS FOREIGN KEY (USER_ID) REFERENCES users (EMAIL)
+);
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
+
+  <!--
+    These scripts should have already been executed on all existing systems.
+    More precisely, the existing systems should have the state that an empty
+    database has after executing these scripts.
+  -->
+
+  <include file="000_legacy/000_000010_create_table_server_instances.sql"/>
+  <include file="000_legacy/000_000020_create_table_regions.sql"/>
+  <include file="000_legacy/000_000030_create_table_regions_neigbors.sql"/>
+  <include file="000_legacy/000_000040_create_table_regions_hierachy.sql"/>
+  <include file="000_legacy/000_000050_create_table_users.sql"/>
+  <include file="000_legacy/000_000060_create_table_user_role.sql"/>
+  <include file="000_legacy/000_000070_create_table_user_region.sql"/>
+  <include file="000_legacy/000_000080_create_table_user_region_role_links.sql"/>
+  <include file="000_legacy/000_000090_create_table_avalanche_problems.sql"/>
+  <include file="000_legacy/000_000100_create_table_avalanche_problem_aspect.sql"/>
+  <include file="000_legacy/000_000110_create_table_texts.sql"/>
+  <include file="000_legacy/000_000120_create_table_text_parts.sql"/>
+  <include file="000_legacy/000_000130_create_table_avalanche_bulletin_daytime_descriptions.sql"/>
+  <include file="000_legacy/000_000140_create_table_avalanche_bulletins.sql"/>
+  <include file="000_legacy/000_000150_create_table_avalanche_bulletin_texts.sql"/>
+  <include file="000_legacy/000_000160_create_table_avalanche_bulletin_additional_users.sql"/>
+  <include file="000_legacy/000_000170_create_table_avalanche_bulletin_suggested_regions.sql"/>
+  <include file="000_legacy/000_000180_create_table_avalanche_bulletin_saved_regions.sql"/>
+  <include file="000_legacy/000_000190_create_table_avalanche_bulletin_published_regions.sql"/>
+  <include file="000_legacy/000_000200_create_table_avalanche_reports.sql"/>
+  <include file="000_legacy/000_000210_create_table_chat_messages.sql"/>
+  <include file="000_legacy/000_000220_create_table_observation.sql"/>
+  <include file="000_legacy/000_000230_create_table_subscribers.sql"/>
+  <include file="000_legacy/000_000240_create_table_subscriber_regions.sql"/>
+  <include file="000_legacy/000_000250_create_table_rapid_mail_configurations.sql"/>
+  <include file="000_legacy/000_000260_create_table_push_configurations.sql"/>
+  <include file="000_legacy/000_000270_create_table_push_subscriptions.sql"/>
+  <include file="000_legacy/000_000280_create_table_google_blogger_configurations.sql"/>
+  <include file="000_legacy/000_000290_create_table_telegram_configurations.sql"/>
+
+</databaseChangeLog>
