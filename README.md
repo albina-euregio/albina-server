@@ -9,10 +9,10 @@ flowchart TD
     missing --> |edit| draft
     draft --> |submit| submitted
     submitted --> |edit| draft
-    submitted --> |publish (automated publication at 5PM)| published
+    submitted --> |publish, automated publication at 5PM| published
     published --> |edit| updated
     updated --> |submit| resubmitted
     resubmitted --> |edit| updated
-    resubmitted --> |publish (automated update at 8AM or manually at any time)| republished
+    resubmitted --> |publish, automated update at 8AM or manually at any time| republished
     republished --> |edit| updated
 ```
