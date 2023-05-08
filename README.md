@@ -6,5 +6,13 @@ The server stores and processes all relevant information for the ALBINA system s
 
 ```mermaid
 flowchart TD
-missing --> draft --> submitted -->|automated publication at 17:00| published --> updated --> resubmitted -->|automated update at 08:00| republished
+    missing --> |edit| draft
+    draft --> |submit| submitted
+    submitted --> |edit| draft
+    submitted --> |publish (automated publication at 5PM)| published
+    published --> |edit| updated
+    updated --> |submit| resubmitted
+    resubmitted --> |edit| updated
+    resubmitted --> |publish (automated update at 8AM or manually at any time)| republished
+    republished --> |edit| updated
 ```
