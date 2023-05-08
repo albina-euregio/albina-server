@@ -7,7 +7,7 @@
     <dbms  type="mysql"/>
   </preConditions>
 
-  <include file="changelog-legacy.xml"/>
-  <include file="changelog-v5.xml"/>
+  <include file="changelog-legacy.xml" relativeToChangelogFile="true"/>
+  <include file="changelog-v5.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
