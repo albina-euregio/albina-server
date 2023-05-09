@@ -76,6 +76,7 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		SchedulerUtil.getInstance().start();
 
 		DBMigration.executeMigration();
+		DBMigration.createAutoConfiguration();
 		logger.debug("ServletContextListener started");
 	}
 
