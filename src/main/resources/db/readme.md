@@ -1,7 +1,9 @@
 SQL script naming convention
 -----
 
+```
 <folder number>_<sequence number>_<description>.sql
+```
 
 The Idea behind:
 
