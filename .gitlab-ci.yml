@@ -33,9 +33,9 @@ deploy to development:
         - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:deploy -Dmaven.test.skip=true
     environment:
         name: development
-    only:
-        - master
-        - ci
+    rules:
+        - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+        - when: manual
 
 deploy to production:
     stage: deploy
