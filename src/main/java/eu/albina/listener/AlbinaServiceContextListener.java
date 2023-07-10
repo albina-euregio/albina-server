@@ -25,6 +25,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import eu.albina.util.DBMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,6 +75,8 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 		SchedulerUtil.getInstance().setUp();
 		SchedulerUtil.getInstance().start();
 
+		DBMigration.executeMigration();
+		DBMigration.createAutoConfiguration();
 		logger.debug("ServletContextListener started");
 	}
 

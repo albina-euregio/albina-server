@@ -1,4 +1,0 @@
-ALTER TABLE `ais`.`avalanche_bulletin_daytime_descriptions`
-ADD `AVALANCHE_PROBLEM_3_ID` varchar(255) DEFAULT NULL,
-ADD `AVALANCHE_PROBLEM_4_ID` varchar(255) DEFAULT NULL,
-ADD `AVALANCHE_PROBLEM_5_ID` varchar(255) DEFAULT NULL
