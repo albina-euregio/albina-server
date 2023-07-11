@@ -5,9 +5,10 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Position;
 import eu.albina.model.enumerations.Role;
-import liquibase.Contexts;
-import liquibase.Liquibase;
 import liquibase.Scope;
+import liquibase.command.CommandScope;
+import liquibase.command.core.UpdateCommandStep;
+import liquibase.command.core.helpers.DbUrlConnectionCommandStep;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
@@ -19,9 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.*;
 
 public class DBMigration {
@@ -39,15 +37,20 @@ public class DBMigration {
 		try (Session session = HibernateUtil.getInstance().getEntityManagerFactory().createEntityManager().unwrap(Session.class)) {
 
 			session.doWork(connection -> {
-				try (ByteArrayOutputStream bout = new ByteArrayOutputStream(); Writer w = new OutputStreamWriter(bout);) {
-					Map<String, Object> config = new HashMap<>();
-					config.put("liquibase.hub.mode", "off");
+				try {
+					Map<String, Object> scopeValues = new HashMap<>();
+					scopeValues.put("liquibase.hub.mode", "off");
+					scopeValues.put(Scope.Attr.resourceAccessor.name(), new ClassLoaderResourceAccessor());
 
-					Scope.child(config, () -> {
+					Scope.child(scopeValues, () -> {
 						JdbcConnection jdbcConnection = new JdbcConnection(connection);
 						Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);
-						Liquibase liquibase = new Liquibase("/db/changelog-main.xml", new ClassLoaderResourceAccessor(), database);
-						liquibase.update(new Contexts());
+
+						CommandScope updateCommand = new CommandScope(UpdateCommandStep.COMMAND_NAME);
+						updateCommand.addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database);
+						updateCommand.addArgumentValue(UpdateCommandStep.CHANGELOG_FILE_ARG, "/db/changelog-main.xml");
+						updateCommand.execute();
+
 					});
 				} catch (Exception e) {
 					throw new HibernateException("database migration failed", e);
