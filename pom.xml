@@ -242,9 +242,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.30</version>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<version>8.1.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>com.google.protobuf</artifactId>
+					<groupId>protobuf-java</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- database migration -->
