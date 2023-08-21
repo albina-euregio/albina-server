@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -412,59 +413,51 @@ public class AvalancheReportController {
 	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user)
 			throws AlbinaException {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			BulletinUpdate bulletinUpdate = null;
 
-			BulletinStatus latestStatus = getInternalStatusForDay(date, region);
+			AvalancheReport latestReport = getInternalReport(date, region);
+			BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
+			BulletinStatus newStatus = deriveStatus(latestStatus);
 
-			AvalancheReport avalancheReport = new AvalancheReport();
+			// reuse existing report if status does not change
+			AvalancheReport avalancheReport = latestReport != null && Objects.equals(latestStatus, newStatus)
+				? latestReport
+				: new AvalancheReport();
+			avalancheReport.setStatus(newStatus);
 			avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
 			avalancheReport.setUser(user);
 			avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
 			avalancheReport.setRegion(region);
-			if (latestStatus != null)
-				switch (latestStatus) {
-				case missing:
-					avalancheReport.setStatus(BulletinStatus.updated);
-					break;
-				case draft:
-					avalancheReport.setStatus(BulletinStatus.draft);
-					break;
-				case submitted:
-					avalancheReport.setStatus(BulletinStatus.draft);
-					break;
-				case published:
-					avalancheReport.setStatus(BulletinStatus.updated);
-					break;
-				case updated:
-					avalancheReport.setStatus(BulletinStatus.updated);
-					break;
-				case resubmitted:
-					avalancheReport.setStatus(BulletinStatus.updated);
-					break;
-				case republished:
-					avalancheReport.setStatus(BulletinStatus.updated);
-					break;
-				default:
-					break;
-				}
-			else
-				avalancheReport.setStatus(BulletinStatus.draft);
-
-			// set json string after status is published/republished
 			avalancheReport
 					.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region, false).toString());
 
 			entityManager.persist(avalancheReport);
-			bulletinUpdate = new BulletinUpdate(region.getId(), date, avalancheReport.getStatus());
 
-			if (bulletinUpdate != null) {
-				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
-			}
+			BulletinUpdate bulletinUpdate = new BulletinUpdate(region.getId(), date, avalancheReport.getStatus());
+			AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 
 			logger.info("Report for region {} saved", region.getId());
 
 			return null;
 		});
+	}
+
+	private static BulletinStatus deriveStatus(BulletinStatus latestStatus) {
+		if (latestStatus == null) {
+			return BulletinStatus.draft;
+		}
+		switch (latestStatus) {
+			case missing:
+			case republished:
+			case resubmitted:
+			case updated:
+			case published:
+				return BulletinStatus.updated;
+			case draft:
+			case submitted:
+				return BulletinStatus.draft;
+			default:
+				return latestStatus;
+		}
 	}
 
 	/**
