@@ -16,7 +16,7 @@
 		<class>eu.albina.model.ChatMessage</class>
 		<class>eu.albina.model.publication.TelegramConfiguration</class>
 		<class>eu.albina.model.publication.RapidMailConfiguration</class>
-		<class>eu.albina.model.publication.GoogleBloggerConfiguration</class>
+		<class>eu.albina.model.publication.BlogConfiguration</class>
 		<class>eu.albina.model.publication.PushConfiguration</class>
 
 		<properties>

@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.GoogleBloggerConfiguration;
+import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.PushNotificationUtil;
@@ -62,13 +62,13 @@ public class BlogController {
 		return instance;
 	}
 
-	protected GoogleBloggerConfiguration getConfiguration(Region region, LanguageCode languageCode) {
+	protected BlogConfiguration getConfiguration(Region region, LanguageCode languageCode) {
 		if (region == null || Strings.isNullOrEmpty(region.getId()) || languageCode == null) {
 			throw new HibernateException("No region or language defined!");
 		}
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			try {
-				return (GoogleBloggerConfiguration) entityManager.createQuery(HibernateUtil.queryGetGoogleBloggerConfiguration)
+				return (BlogConfiguration) entityManager.createQuery(HibernateUtil.queryGetGoogleBloggerConfiguration)
 					.setParameter("region", region)
 					.setParameter("lang", languageCode).getSingleResult();
             } catch (Exception e) {
@@ -78,7 +78,7 @@ public class BlogController {
 		});
 	}
 
-	protected void updateConfigurationLastPublished(GoogleBloggerConfiguration config, Blogger.Item object) {
+	protected void updateConfigurationLastPublished(BlogConfiguration config, Blogger.Item object) {
 		if (!object.published.toInstant().isAfter(config.getLastPublishedTimestamp().toInstant())) {
 			return;
 		}
@@ -89,7 +89,7 @@ public class BlogController {
 		HibernateUtil.getInstance().runTransaction(entityManager -> entityManager.merge(config));
 	}
 
-	protected List<Blogger.Item> getBlogPosts(GoogleBloggerConfiguration config) throws IOException {
+	protected List<Blogger.Item> getBlogPosts(BlogConfiguration config) throws IOException {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
 		}
@@ -106,7 +106,7 @@ public class BlogController {
 		return blogPosts;
 	}
 
-	protected Blogger.Item getLatestBlogPost(GoogleBloggerConfiguration config) throws IOException {
+	protected Blogger.Item getLatestBlogPost(BlogConfiguration config) throws IOException {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
@@ -123,7 +123,7 @@ public class BlogController {
 	}
 
 	protected String getBlogPost(String blogPostId, Region region, LanguageCode lang) throws IOException {
-		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang);
 
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
@@ -140,7 +140,7 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
 			return;
 		}
-        GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+        BlogConfiguration config = this.getConfiguration(region, lang);
         if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
             return;
         }
@@ -161,7 +161,7 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
 			return;
         }
-		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang);
         if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
             return;
         }
@@ -180,7 +180,7 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
             return;
         }
-		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang);
         if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
             return;
         }
@@ -196,7 +196,7 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
             return;
         }
-		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang);
         if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
             return;
         }
@@ -212,7 +212,7 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
             return;
         }
-		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang);
         if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
             return;
         }
@@ -273,7 +273,7 @@ public class BlogController {
 	}
 
 	private String getBlogUrl(Blogger.Item item, Region region, LanguageCode lang) {
-		GoogleBloggerConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang);
 		return LinkUtil.getAvalancheReportFullBlogUrl(lang, region) + config.getBlogUrl() + "/" + item.id;
 	}
 

@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.GoogleBloggerConfiguration;
+import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HibernateUtil;
 
 import static eu.albina.RegionTestUtils.regionSouthTyrol;
@@ -48,7 +48,7 @@ public class BlogControllerTest {
 
 	@Test
 	public void testBlogPosts() throws Exception {
-		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
+		BlogConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
 		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
@@ -58,7 +58,7 @@ public class BlogControllerTest {
 
 	@Test
 	public void testLatestBlogPost() throws Exception {
-		GoogleBloggerConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
+		BlogConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
 		Blogger.Item blogPost = BlogController.getInstance().getLatestBlogPost(config);
 		assertTrue(blogPost.content.length() > 100, "blog has >100 chars");
 	}

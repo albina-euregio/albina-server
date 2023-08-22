@@ -35,8 +35,8 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
-@Table(name = "google_blogger_configurations")
-public class GoogleBloggerConfiguration implements Serializable {
+@Table(name = "blog_configurations")
+public class BlogConfiguration implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
