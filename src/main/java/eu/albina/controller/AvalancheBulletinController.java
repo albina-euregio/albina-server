@@ -641,25 +641,10 @@ public class AvalancheBulletinController {
 	 *             if the bulletin was not locked
 	 */
 	public void unlockBulletin(BulletinLock lock) throws AlbinaException {
-		unlockBulletin(lock.getBulletin(), lock.getDate());
-	}
-
-	/**
-	 * Unlock a specific {@code bulletin} for a specific {@code date}.
-	 *
-	 * @param bulletin
-	 *            the bulletin to be unlocked
-	 * @param date
-	 *            the timestamp
-	 * @throws AlbinaException
-	 *             if the bulletin was not locked
-	 */
-	public void unlockBulletin(String bulletin, Instant date) throws AlbinaException {
-		BulletinLock hit = null;
-		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (bulletinLock.getDate().toEpochMilli() == date.toEpochMilli() && bulletinLock.getBulletin().equals(bulletin))
-				hit = bulletinLock;
-		}
+		BulletinLock hit = bulletinLocks.stream()
+			.filter(bulletinLock -> bulletinLock.getDate().toEpochMilli() == lock.getDate().toEpochMilli()
+				&& Objects.equals(bulletinLock.getBulletin(), lock.getBulletin()))
+			.findFirst().orElse(null);
 
 		if (hit != null)
 			bulletinLocks.remove(hit);
