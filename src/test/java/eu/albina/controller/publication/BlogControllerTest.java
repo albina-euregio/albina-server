@@ -50,22 +50,22 @@ public class BlogControllerTest {
 	public void testBlogPosts() throws Exception {
 		BlogConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
-		List<Blogger.Item> blogPosts = BlogController.getInstance().getBlogPosts(config);
+		List<? extends BlogItem> blogPosts = BlogController.getInstance().getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
-		assertTrue(blogPosts.stream().anyMatch(item -> item.images != null && !item.images.isEmpty()), "one blog has image");
+		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
 		BlogController.getInstance().updateConfigurationLastPublished(config, blogPosts.get(0));
 	}
 
 	@Test
 	public void testLatestBlogPost() throws Exception {
 		BlogConfiguration config = BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de);
-		Blogger.Item blogPost = BlogController.getInstance().getLatestBlogPost(config);
+		Blogger.Item blogPost = (Blogger.Item) BlogController.getInstance().getLatestBlogPost(config);
 		assertTrue(blogPost.content.length() > 100, "blog has >100 chars");
 	}
 
 	@Test
 	public void testBlogPost() throws Exception {
-		String blogPost = BlogController.getInstance().getBlogPost("1227558273754407795", regionTyrol, LanguageCode.de);
+		String blogPost = BlogController.getInstance().getBlogPost(BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de), "1227558273754407795");
 		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
 	}
 
@@ -78,7 +78,8 @@ public class BlogControllerTest {
 
 	@Test
 	public void testTicket150() throws Exception {
-		String blogPost = BlogController.getInstance().getBlogPost("4564885875858452565", regionSouthTyrol, LanguageCode.de);
+        BlogConfiguration config = BlogController.getInstance().getConfiguration(regionSouthTyrol, LanguageCode.de);
+		String blogPost = BlogController.getInstance().getBlogPost(config, "4564885875858452565");
 		assertTrue(blogPost.contains("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
 	}
 }

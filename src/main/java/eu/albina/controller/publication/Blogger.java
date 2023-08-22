@@ -31,7 +31,7 @@ public final class Blogger {
 		public String etag;
 	}
 
-	public static class Item {
+	public static class Item implements BlogItem {
 		public String kind;
 		public String id;
 		public String content;
@@ -46,6 +46,30 @@ public final class Blogger {
 		public Replies replies;
 		public List<String> labels;
 		public String etag;
+
+		@Override
+		public String getId() {
+			return id;
+		}
+
+		@Override
+		public String getTitle() {
+			return title;
+		}
+
+		@Override
+		public OffsetDateTime getPublished() {
+			return published;
+		}
+
+		@Override
+		public String getAttachmentUrl() {
+			if (images != null && !images.isEmpty()) {
+				return images.get(0).url;
+			} else {
+				return null;
+			}
+		}
 	}
 
 	public static class Author {

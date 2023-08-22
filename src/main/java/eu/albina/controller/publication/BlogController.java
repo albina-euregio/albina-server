@@ -78,18 +78,18 @@ public class BlogController {
 		});
 	}
 
-	protected void updateConfigurationLastPublished(BlogConfiguration config, Blogger.Item object) {
-		if (!object.published.toInstant().isAfter(config.getLastPublishedTimestamp().toInstant())) {
+	protected void updateConfigurationLastPublished(BlogConfiguration config, BlogItem object) {
+		if (!object.getPublished().toInstant().isAfter(config.getLastPublishedTimestamp().toInstant())) {
 			return;
 		}
-		config.setLastPublishedBlogId(object.id);
-		config.setLastPublishedTimestamp(object.published);
+		config.setLastPublishedBlogId(object.getId());
+		config.setLastPublishedTimestamp(object.getPublished());
 		logger.info("Updating lastPublishedTimestamp={} lastPublishedBlogId={} for {} [{}]",
 			config.getLastPublishedTimestamp(), config.getLastPublishedBlogId(), config.getRegion().getId(), config.getLanguageCode());
 		HibernateUtil.getInstance().runTransaction(entityManager -> entityManager.merge(config));
 	}
 
-	protected List<Blogger.Item> getBlogPosts(BlogConfiguration config) throws IOException {
+	protected List<? extends BlogItem> getBlogPosts(BlogConfiguration config) throws IOException {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
 		}
@@ -106,7 +106,7 @@ public class BlogController {
 		return blogPosts;
 	}
 
-	protected Blogger.Item getLatestBlogPost(BlogConfiguration config) throws IOException {
+	protected BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
@@ -122,9 +122,7 @@ public class BlogController {
 		return blogPosts.stream().collect(MoreCollectors.onlyElement());
 	}
 
-	protected String getBlogPost(String blogPostId, Region region, LanguageCode lang) throws IOException {
-		BlogConfiguration config = this.getConfiguration(region, lang);
-
+	protected String getBlogPost(BlogConfiguration config, String blogPostId) throws IOException {
 		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
@@ -145,8 +143,8 @@ public class BlogController {
             return;
         }
         try {
-            List<Blogger.Item> blogPosts = getBlogPosts(config);
-            for (Blogger.Item object : blogPosts) {
+            List<? extends BlogItem> blogPosts = getBlogPosts(config);
+            for (BlogItem object : blogPosts) {
                 sendNewBlogPostToRapidmail(object, region, lang, false);
                 sendNewBlogPostToTelegramChannel(object, region, lang, false);
                 sendNewBlogPostToPushNotification(region, lang, object, false);
@@ -166,7 +164,7 @@ public class BlogController {
             return;
         }
         try {
-            Blogger.Item blogPost = getLatestBlogPost(config);
+            BlogItem blogPost = getLatestBlogPost(config);
             sendNewBlogPostToRapidmail(blogPost, config.getRegion(), config.getLanguageCode(), test);
             sendNewBlogPostToTelegramChannel(blogPost, config.getRegion(), config.getLanguageCode(), test);
             sendNewBlogPostToPushNotification(config.getRegion(), config.getLanguageCode(), blogPost, test);
@@ -185,7 +183,7 @@ public class BlogController {
             return;
         }
         try {
-            Blogger.Item blogPost = getLatestBlogPost(config);
+            BlogItem blogPost = getLatestBlogPost(config);
             sendNewBlogPostToRapidmail(blogPost, config.getRegion(), config.getLanguageCode(), test);
         } catch (IOException e) {
             logger.warn("Latest blog post could not be retrieved: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
@@ -201,7 +199,7 @@ public class BlogController {
             return;
         }
         try {
-            Blogger.Item blogPost = getLatestBlogPost(config);
+            BlogItem blogPost = getLatestBlogPost(config);
             sendNewBlogPostToTelegramChannel(blogPost, config.getRegion(), config.getLanguageCode(), test);
         } catch (IOException e) {
             logger.warn("Latest blog post could not be retrieved: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
@@ -217,18 +215,18 @@ public class BlogController {
             return;
         }
         try {
-            Blogger.Item blogPost = getLatestBlogPost(config);
+            BlogItem blogPost = getLatestBlogPost(config);
             sendNewBlogPostToPushNotification(config.getRegion(), config.getLanguageCode(), blogPost, test);
         } catch (IOException e) {
             logger.warn("Latest blog post could not be retrieved: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
         }
     }
 
-	void sendNewBlogPostToTelegramChannel(Blogger.Item item, Region region, LanguageCode lang, boolean test) {
+	void sendNewBlogPostToTelegramChannel(BlogItem item, Region region, LanguageCode lang, boolean test) {
 		logger.info("Sending new blog post to telegram channel ...");
 
 		String message = getBlogMessage(item, region, lang);
-		String attachmentUrl = getAttachmentUrl(item);
+		String attachmentUrl = item.getAttachmentUrl();
 
 		try {
 			TelegramController telegramController = TelegramController.getInstance();
@@ -243,14 +241,14 @@ public class BlogController {
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(Blogger.Item item, Region region, LanguageCode lang, boolean test) {
+	private void sendNewBlogPostToRapidmail(BlogItem item, Region region, LanguageCode lang, boolean test) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
-		String subject = item.title;
-		String blogPostId = item.id;
+		String subject = item.getTitle();
+		String blogPostId = item.getId();
 
 		try {
-			String htmlString = getBlogPost(blogPostId, region, lang);
+			String htmlString = getBlogPost(this.getConfiguration(region, lang), blogPostId);
 			if (htmlString != null && !htmlString.isEmpty())
 				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject, test);
 		} catch (IOException e) {
@@ -260,28 +258,21 @@ public class BlogController {
 		}
 	}
 
-	private void sendNewBlogPostToPushNotification(Region region, LanguageCode lang, Blogger.Item object, boolean test) {
+	private void sendNewBlogPostToPushNotification(Region region, LanguageCode lang, BlogItem object, boolean test) {
 		String message = getBlogMessage(object, region, lang);
-		String attachmentUrl = getAttachmentUrl(object);
+		String attachmentUrl = object.getAttachmentUrl();
 		String blogUrl = getBlogUrl(object, region, lang);
 		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
 		pushNotificationUtil.sendBulletinNewsletter(message, lang, region, attachmentUrl, blogUrl, test);
 	}
 
-	private String getBlogMessage(Blogger.Item item, Region region, LanguageCode lang) {
-		return item.title + ": " + getBlogUrl(item, region, lang);
+	private String getBlogMessage(BlogItem item, Region region, LanguageCode lang) {
+		return item.getTitle() + ": " + getBlogUrl(item, region, lang);
 	}
 
-	private String getBlogUrl(Blogger.Item item, Region region, LanguageCode lang) {
+	private String getBlogUrl(BlogItem item, Region region, LanguageCode lang) {
 		BlogConfiguration config = this.getConfiguration(region, lang);
-		return LinkUtil.getAvalancheReportFullBlogUrl(lang, region) + config.getBlogUrl() + "/" + item.id;
+		return LinkUtil.getAvalancheReportFullBlogUrl(lang, region) + config.getBlogUrl() + "/" + item.getId();
 	}
 
-	private String getAttachmentUrl(Blogger.Item item) {
-		if (item.images != null && !item.images.isEmpty()) {
-			return item.images.get(0).url;
-		} else {
-			return null;
-		}
-	}
 }
