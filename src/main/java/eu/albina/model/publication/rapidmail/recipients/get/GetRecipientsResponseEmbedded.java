@@ -18,11 +18,8 @@ package eu.albina.model.publication.rapidmail.recipients.get;
 
 import java.util.List;
 
-import javax.annotation.Generated;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Generated("com.robohorse.robopojogenerator")
 public class GetRecipientsResponseEmbedded {
 
 	@JsonProperty("recipients")

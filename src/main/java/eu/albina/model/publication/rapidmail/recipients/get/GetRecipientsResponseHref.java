@@ -16,11 +16,8 @@
  ******************************************************************************/
 package eu.albina.model.publication.rapidmail.recipients.get;
 
-import javax.annotation.Generated;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Generated("com.robohorse.robopojogenerator")
 public class GetRecipientsResponseHref {
 
 	@JsonProperty("href")

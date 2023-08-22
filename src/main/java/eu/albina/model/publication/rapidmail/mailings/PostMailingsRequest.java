@@ -18,11 +18,8 @@ package eu.albina.model.publication.rapidmail.mailings;
 
 import java.util.List;
 
-import javax.annotation.Generated;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Generated("com.robohorse.robopojogenerator")
 public class PostMailingsRequest {
 
 	@JsonProperty("check_robinson")
