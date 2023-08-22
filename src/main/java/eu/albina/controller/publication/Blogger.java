@@ -16,12 +16,45 @@
  ******************************************************************************/
 package eu.albina.controller.publication;
 
+import com.google.common.collect.MoreCollectors;
+import eu.albina.model.publication.BlogConfiguration;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public final class Blogger {
-	private Blogger() {
+public interface Blogger {
+
+	static List<Item> getBlogPosts(BlogConfiguration config, Client client) {
+		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
+		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
+			.queryParam("key", config.getApiKey())
+			.queryParam("startDate", lastPublishedTimestamp.toInstant().plusSeconds(1).toString())
+			.queryParam("fetchBodies", Boolean.TRUE.toString())
+			.queryParam("fetchImages", Boolean.TRUE.toString());
+		Root root = request.request().get(Root.class);
+		return root.items;
+	}
+
+	static Item getLatestBlogPost(BlogConfiguration config, Client client) {
+		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
+			.queryParam("key", config.getApiKey())
+			.queryParam("fetchBodies", Boolean.TRUE.toString())
+			.queryParam("fetchImages", Boolean.TRUE.toString())
+			.queryParam("maxResults", Integer.toString(1));
+		Root root = request.request().get(Root.class);
+		return root.items.stream().collect(MoreCollectors.onlyElement());
+	}
+
+	static String getBlogPost(BlogConfiguration config, String blogPostId, Client client) {
+		return client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId)
+			.queryParam("key", config.getApiKey())
+			.request()
+			.get(Item.class)
+			.content;
 	}
 
 	public static class Root {

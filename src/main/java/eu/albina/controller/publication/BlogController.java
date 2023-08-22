@@ -18,14 +18,11 @@ package eu.albina.controller.publication;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import com.google.common.base.Strings;
 
-import com.google.common.collect.MoreCollectors;
 import eu.albina.util.HttpClientUtil;
 import eu.albina.util.LinkUtil;
 import org.hibernate.HibernateException;
@@ -40,7 +37,6 @@ import eu.albina.util.HibernateUtil;
 import eu.albina.util.PushNotificationUtil;
 
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
 
 public class BlogController {
 	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
@@ -94,15 +90,8 @@ public class BlogController {
 			return Collections.emptyList();
 		}
 
-		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
-		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
-			.queryParam("key", config.getApiKey())
-			.queryParam("startDate", lastPublishedTimestamp.toInstant().plusSeconds(1).toString())
-			.queryParam("fetchBodies", Boolean.TRUE.toString())
-			.queryParam("fetchImages", Boolean.TRUE.toString());
-		Blogger.Root root = request.request().get(Blogger.Root.class);
-		List<Blogger.Item> blogPosts = root.items;
-		logger.info("Found {} new blog posts for region={} lang={} url={}", blogPosts.size(), config.getRegion().getId(), config.getLanguageCode().toString(), request.getUri());
+		List<? extends BlogItem> blogPosts = Blogger.getBlogPosts(config, client);
+		logger.info("Found {} new blog posts for region={} lang={}", blogPosts.size(), config.getRegion().getId(), config.getLanguageCode().toString());
 		return blogPosts;
 	}
 
@@ -111,15 +100,9 @@ public class BlogController {
 			throw new IOException("Blog ID not found");
 		}
 
-		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
-			.queryParam("key", config.getApiKey())
-			.queryParam("fetchBodies", Boolean.TRUE.toString())
-			.queryParam("fetchImages", Boolean.TRUE.toString())
-			.queryParam("maxResults", Integer.toString(1));
-		Blogger.Root root = request.request().get(Blogger.Root.class);
-		List<Blogger.Item> blogPosts = root.items;
-		logger.info("Fetched latest blog post for region={} lang={} url={}", config.getRegion().getId(), config.getLanguageCode().toString(), request.getUri());
-		return blogPosts.stream().collect(MoreCollectors.onlyElement());
+		BlogItem blogPost = Blogger.getLatestBlogPost(config, client);
+		logger.info("Fetched latest blog post for region={} lang={}", config.getRegion().getId(), config.getLanguageCode().toString());
+		return blogPost;
 	}
 
 	protected String getBlogPost(BlogConfiguration config, String blogPostId) throws IOException {
@@ -127,11 +110,7 @@ public class BlogController {
 			throw new IOException("Blog ID not found");
 		}
 
-		return client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId)
-			.queryParam("key", config.getApiKey())
-			.request()
-			.get(Blogger.Item.class)
-			.content;
+		return Blogger.getBlogPost(config, blogPostId, client);
 	}
 
 	public void sendNewBlogPosts(Region region, LanguageCode lang) {
