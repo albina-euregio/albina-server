@@ -86,31 +86,37 @@ public class BlogController {
 	}
 
 	protected List<? extends BlogItem> getBlogPosts(BlogConfiguration config) throws IOException {
-		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
+		if (config == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
 		}
 
-		List<? extends BlogItem> blogPosts = Blogger.getBlogPosts(config, client);
+		List<? extends BlogItem> blogPosts = config.isBlogger()
+			? Blogger.getBlogPosts(config, client)
+			: Wordpress.getBlogPosts(config, client);
 		logger.info("Found {} new blog posts for region={} lang={}", blogPosts.size(), config.getRegion().getId(), config.getLanguageCode().toString());
 		return blogPosts;
 	}
 
 	protected BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException {
-		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
+		if (config == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
 
-		BlogItem blogPost = Blogger.getLatestBlogPost(config, client);
+		BlogItem blogPost = config.isBlogger()
+			? Blogger.getLatestBlogPost(config, client)
+			: Wordpress.getLatestBlogPost(config, client);
 		logger.info("Fetched latest blog post for region={} lang={}", config.getRegion().getId(), config.getLanguageCode().toString());
 		return blogPost;
 	}
 
 	protected String getBlogPost(BlogConfiguration config, String blogPostId) throws IOException {
-		if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
+		if (config == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
 
-		return Blogger.getBlogPost(config, blogPostId, client);
+		return config.isBlogger()
+			? Blogger.getBlogPost(config, blogPostId, client)
+			: Wordpress.getBlogPost(config, blogPostId, client);
 	}
 
 	public void sendNewBlogPosts(Region region, LanguageCode lang) {
@@ -118,7 +124,7 @@ public class BlogController {
 			return;
 		}
         BlogConfiguration config = this.getConfiguration(region, lang);
-        if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
+        if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
@@ -139,7 +145,7 @@ public class BlogController {
 			return;
         }
 		BlogConfiguration config = this.getConfiguration(region, lang);
-        if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
+        if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
@@ -158,7 +164,7 @@ public class BlogController {
             return;
         }
 		BlogConfiguration config = this.getConfiguration(region, lang);
-        if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
+        if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
@@ -174,7 +180,7 @@ public class BlogController {
             return;
         }
 		BlogConfiguration config = this.getConfiguration(region, lang);
-        if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
+        if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
@@ -190,7 +196,7 @@ public class BlogController {
             return;
         }
 		BlogConfiguration config = this.getConfiguration(region, lang);
-        if (config == null || config.getBlogId() == null || config.getApiKey() == null || config.getBlogApiUrl() == null) {
+        if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {

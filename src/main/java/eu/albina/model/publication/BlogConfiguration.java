@@ -38,6 +38,10 @@ import eu.albina.model.enumerations.LanguageCode;
 @Table(name = "blog_configurations")
 public class BlogConfiguration implements Serializable {
 
+	public boolean isBlogger() {
+		return "https://www.googleapis.com/blogger/v3/blogs/".equals(blogApiUrl);
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@Id

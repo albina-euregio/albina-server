@@ -31,7 +31,7 @@ public interface Blogger {
 	static List<Item> getBlogPosts(BlogConfiguration config, Client client) {
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
-			.queryParam("key", config.getApiKey())
+			.queryParam("key", Objects.requireNonNull(config.getApiKey(), "apiKey"))
 			.queryParam("startDate", lastPublishedTimestamp.toInstant().plusSeconds(1).toString())
 			.queryParam("fetchBodies", Boolean.TRUE.toString())
 			.queryParam("fetchImages", Boolean.TRUE.toString());
@@ -41,7 +41,7 @@ public interface Blogger {
 
 	static Item getLatestBlogPost(BlogConfiguration config, Client client) {
 		WebTarget request = client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts")
-			.queryParam("key", config.getApiKey())
+			.queryParam("key", Objects.requireNonNull(config.getApiKey(), "apiKey"))
 			.queryParam("fetchBodies", Boolean.TRUE.toString())
 			.queryParam("fetchImages", Boolean.TRUE.toString())
 			.queryParam("maxResults", Integer.toString(1));
@@ -51,7 +51,7 @@ public interface Blogger {
 
 	static String getBlogPost(BlogConfiguration config, String blogPostId, Client client) {
 		return client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId)
-			.queryParam("key", config.getApiKey())
+			.queryParam("key", Objects.requireNonNull(config.getApiKey(), "apiKey"))
 			.request()
 			.get(Item.class)
 			.content;
