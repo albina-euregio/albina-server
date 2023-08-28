@@ -1,7 +1,7 @@
 package org.caaml.v6;
 
 /**
- * Region element describes a (micro) region. The regionId follows the EAWS schema. It is
+ * Region element describes a (micro) region. The regionID follows the EAWS schema. It is
  * recommended to have the region shape's files with the same IDs in
  * gitlab.com/eaws/eaws-regions. Additionally, the region name can be added.
  */

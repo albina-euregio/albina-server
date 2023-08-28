@@ -13,7 +13,7 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheProblemType;
-import org.caaml.v6.AvalancheSituationTendency;
+import org.caaml.v6.Tendency;
 import org.caaml.v6.DangerRatingValue;
 import org.caaml.v6.ElevationBoundaryOrBand;
 import org.caaml.v6.ExpectedAvalancheFrequency;
@@ -78,11 +78,11 @@ interface Caaml6_2022 {
 			.collect(Collectors.toList()));
 		bulletin.setSnowpackStructure(new org.caaml.v6.Texts(avalancheBulletin.getSnowpackStructureHighlightsIn(lang), avalancheBulletin.getSnowpackStructureCommentIn(lang)));
 		bulletin.setSource(null);
-		bulletin.setTendency(new AvalancheSituationTendency(avalancheBulletin.getTendencyCommentIn(lang),
-			avalancheBulletin.getTendency() != null ? TendencyType.forValue(avalancheBulletin.getTendency().name()) : null));
+		bulletin.setTendency(List.of(new Tendency(avalancheBulletin.getTendencyCommentIn(lang),
+			avalancheBulletin.getTendency() != null ? TendencyType.forValue(avalancheBulletin.getTendency().name()) : null)));
 		bulletin.setTravelAdvisory(new org.caaml.v6.Texts(avalancheBulletin.getTravelAdvisoryHighlightsIn(lang), avalancheBulletin.getTravelAdvisoryCommentIn(lang)));
 		bulletin.setValidTime(new ValidTime(avalancheBulletin.getValidFrom().toInstant(), avalancheBulletin.getValidUntil().toInstant()));
-		bulletin.setWxSynopsis(new org.caaml.v6.Texts(avalancheBulletin.getSynopsisHighlightsIn(lang), avalancheBulletin.getSynopsisCommentIn(lang)));
+		bulletin.setWeatherForecast(new org.caaml.v6.Texts(avalancheBulletin.getSynopsisHighlightsIn(lang), avalancheBulletin.getSynopsisCommentIn(lang)));
 		return bulletin;
 	}
 
@@ -96,7 +96,7 @@ interface Caaml6_2022 {
 		final String lowerBound = p.getElevationLow() > 0 ? Integer.toString(p.getElevationLow()) : p.getTreelineLow() ? "treeline" : null;
 		final String upperBound = p.getElevationHigh() > 0 ? Integer.toString(p.getElevationHigh()) : p.getTreelineHigh() ? "treeline" : null;
 		result.setElevation(new ElevationBoundaryOrBand(lowerBound, upperBound));
-		result.setTerrainFeature(p.getTerrainFeature(lang));
+		result.setComment(p.getTerrainFeature(lang));
 		final boolean isForenoon = avalancheBulletin.getForenoon().getAvalancheProblems().contains(p);
 		final boolean isAfternoon = avalancheBulletin.getAfternoon() != null && avalancheBulletin.getAfternoon().getAvalancheProblems().contains(p);
 		if (!avalancheBulletin.isHasDaytimeDependency()) {

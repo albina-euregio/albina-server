@@ -1,5 +1,6 @@
 package org.caaml.v6;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -8,11 +9,15 @@ import java.util.Objects;
  * dangerRating for all the other cases.
  */
 public class DangerRating {
+    private List<Aspect> aspects;
     private Object customData;
     private ElevationBoundaryOrBand elevation;
     private DangerRatingValue mainValue;
     private MetaData metaData;
     private ValidTimePeriod validTimePeriod;
+
+    public List<Aspect> getAspects() { return aspects; }
+    public void setAspects(List<Aspect> value) { this.aspects = value; }
 
     public Object getCustomData() { return customData; }
     public void setCustomData(Object value) { this.customData = value; }

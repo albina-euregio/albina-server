@@ -1,25 +1,36 @@
 package org.caaml.v6;
 
 /**
- * Tendency element for a detailed description of the expected avalanche situation tendency
- * after the bulletin's period of validity.
+ * Texts element with highlight and comment for the avalanche activity.
+ *
+ * Texts contains a highlight and a comment string, where highlights could also be described
+ * as a kind of headline for the longer comment. For text-formatting the HTML-Tags <br/> for
+ * a new line, (<ul>,<ul/>) and (<li>,<li/>) for lists, (<h1>,<h1/>) to (<h6>,<h6/>) for
+ * headings and (<b>,</b>) for a bold text are allowed.
+ *
+ * Texts element with highlight and comment for details on the snowpack structure.
+ *
+ * Texts element with highlight and comment for travel advisory.
+ *
+ * Texts element with highlight and comment for weather forecast information.
+ *
+ * Texts element with highlight and comment for weather review information.
  *
  * Describes the expected tendency of the development of the avalanche situation for a
  * defined time period.
  */
-public class AvalancheSituationTendency {
+public class Tendency {
     private String comment;
-    private Object customData;
     private String highlights;
-	// FIXME highlights, comment -> Texts
+    private Object customData;
     private MetaData metaData;
     private TendencyType tendencyType;
     private ValidTime validTime;
 
-	public AvalancheSituationTendency() {
+	public Tendency() {
 	}
 
-	public AvalancheSituationTendency(String highlights, TendencyType tendencyType) {
+	public Tendency(String highlights, TendencyType tendencyType) {
 		this.highlights = highlights;
 		this.tendencyType = tendencyType;
 	}
@@ -27,11 +38,11 @@ public class AvalancheSituationTendency {
 	public String getComment() { return comment; }
     public void setComment(String value) { this.comment = value; }
 
-    public Object getCustomData() { return customData; }
-    public void setCustomData(Object value) { this.customData = value; }
-
     public String getHighlights() { return highlights; }
     public void setHighlights(String value) { this.highlights = value; }
+
+    public Object getCustomData() { return customData; }
+    public void setCustomData(Object value) { this.customData = value; }
 
     public MetaData getMetaData() { return metaData; }
     public void setMetaData(MetaData value) { this.metaData = value; }

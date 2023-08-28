@@ -7,11 +7,11 @@ package org.caaml.v6;
  * to specify details about the AWS.
  */
 public class AvalancheBulletinSource {
-    private Person contactPerson;
+    private Person person;
     private AvalancheBulletinProvider provider;
 
-    public Person getContactPerson() { return contactPerson; }
-    public void setContactPerson(Person value) { this.contactPerson = value; }
+    public Person getPerson() { return person; }
+    public void setPerson(Person value) { this.person = value; }
 
     public AvalancheBulletinProvider getProvider() { return provider; }
     public void setProvider(AvalancheBulletinProvider value) { this.provider = value; }

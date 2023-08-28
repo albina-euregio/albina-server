@@ -19,14 +19,18 @@ public class AvalancheBulletin {
     private String lang;
     private MetaData metaData;
 	@JsonSerialize(using = ToStringSerializer.class)
-    private Instant publicationTime;
+    private Instant nextUpdate;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Instant publicationTime;
     private List<Region> regions;
     private Texts snowpackStructure;
     private AvalancheBulletinSource source;
-    private AvalancheSituationTendency tendency;
+    private List<Tendency> tendency;
     private Texts travelAdvisory;
+    private Boolean unscheduled;
     private ValidTime validTime;
-    private Texts wxSynopsis;
+    private Texts weatherForecast;
+    private Texts weatherReview;
 
     /**
      * Texts element with highlight and comment for the avalanche activity.
@@ -71,6 +75,13 @@ public class AvalancheBulletin {
     public void setMetaData(MetaData value) { this.metaData = value; }
 
     /**
+     * Time and date when the next bulletin will be published by the AWS to the Public. ISO 8601
+     * timestamp in UTC or with time zone information.
+     */
+    public Instant getNextUpdate() { return nextUpdate; }
+    public void setNextUpdate(Instant value) { this.nextUpdate = value; }
+
+    /**
      * Time and date when the bulletin was issued by the AWS to the Public. ISO 8601 timestamp
      * in UTC or with time zone information.
      */
@@ -99,14 +110,20 @@ public class AvalancheBulletin {
      * Tendency element for a detailed description of the expected avalanche situation tendency
      * after the bulletin's period of validity.
      */
-    public AvalancheSituationTendency getTendency() { return tendency; }
-    public void setTendency(AvalancheSituationTendency value) { this.tendency = value; }
+    public List<Tendency> getTendency() { return tendency; }
+    public void setTendency(List<Tendency> value) { this.tendency = value; }
 
     /**
      * Texts element with highlight and comment for travel advisory.
      */
     public Texts getTravelAdvisory() { return travelAdvisory; }
     public void setTravelAdvisory(Texts value) { this.travelAdvisory = value; }
+
+    /**
+     * Flag if bulletin is unscheduled or not.
+     */
+    public Boolean getUnscheduled() { return unscheduled; }
+    public void setUnscheduled(Boolean value) { this.unscheduled = value; }
 
     /**
      * Date and Time from and until this bulletin is valid. ISO 8601 Timestamp in UTC or with
@@ -116,8 +133,14 @@ public class AvalancheBulletin {
     public void setValidTime(ValidTime value) { this.validTime = value; }
 
     /**
-     * Texts element with highlight and comment for weather forcast information.
+     * Texts element with highlight and comment for weather forecast information.
      */
-    public Texts getWxSynopsis() { return wxSynopsis; }
-    public void setWxSynopsis(Texts value) { this.wxSynopsis = value; }
+    public Texts getWeatherForecast() { return weatherForecast; }
+    public void setWeatherForecast(Texts value) { this.weatherForecast = value; }
+
+    /**
+     * Texts element with highlight and comment for weather review information.
+     */
+    public Texts getWeatherReview() { return weatherReview; }
+    public void setWeatherReview(Texts value) { this.weatherReview = value; }
 }

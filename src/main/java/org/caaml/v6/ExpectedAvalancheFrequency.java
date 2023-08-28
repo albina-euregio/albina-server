@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * stage scale (few, some, many).
  */
 public enum ExpectedAvalancheFrequency {
-    FEW, MANY, SOME;
+    FEW, MANY, NONE, SOME;
 
 	@JsonValue
 	@Override
@@ -15,6 +15,7 @@ public enum ExpectedAvalancheFrequency {
         switch (this) {
             case FEW: return "few";
             case MANY: return "many";
+            case NONE: return "none";
             case SOME: return "some";
         }
         return null;
@@ -23,6 +24,7 @@ public enum ExpectedAvalancheFrequency {
     public static ExpectedAvalancheFrequency forValue(String value) {
         if (value.equals("few")) return FEW;
         if (value.equals("many")) return MANY;
+        if (value.equals("none")) return NONE;
         if (value.equals("some")) return SOME;
         throw new IllegalArgumentException("Cannot deserialize ExpectedAvalancheFrequency");
     }
