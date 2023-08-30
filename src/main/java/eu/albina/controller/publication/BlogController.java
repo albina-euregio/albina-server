@@ -64,11 +64,11 @@ public class BlogController {
 		}
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			try {
-				return (BlogConfiguration) entityManager.createQuery(HibernateUtil.queryGetGoogleBloggerConfiguration)
+				return (BlogConfiguration) entityManager.createQuery(HibernateUtil.queryGetBlogConfiguration)
 					.setParameter("region", region)
 					.setParameter("lang", languageCode).getSingleResult();
             } catch (Exception e) {
-                logger.warn("No google blogger configuration found for {} [{}]", region.getId(), languageCode);
+                logger.warn("No blog configuration found for {} [{}]", region.getId(), languageCode);
                 return null;
             }
 		});
