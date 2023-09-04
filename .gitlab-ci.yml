@@ -70,7 +70,7 @@ containerize:
     image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
-    stage: build
+    stage: deploy
     cache: {}
     needs:
         - job: container_build
