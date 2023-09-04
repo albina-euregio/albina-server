@@ -21,6 +21,8 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +30,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.google.common.base.MoreObjects;
 import eu.albina.model.Region;
+import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
 @Table(name = "rapid_mail_configurations")
@@ -51,6 +55,16 @@ public class RapidMailConfiguration implements Serializable {
 	@Column(name = "PASSWORD")
 	private String password;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE_CODE")
+	private LanguageCode lang;
+
+	@Column(name = "MAILINGLIST_NAME")
+	private String mailinglistName;
+
+	@Column(name = "SUBJECT_MATTER")
+	private String subjectMatter;
+
 	public Long getId() {
 		return id;
 	}
@@ -63,22 +77,12 @@ public class RapidMailConfiguration implements Serializable {
 		return region;
 	}
 
-	public RapidMailConfiguration region(Region region) {
-		this.region = region;
-		return this;
-	}
-
 	public void setRegion(Region region) {
 		this.region = region;
 	}
 
 	public String getUsername() {
 		return username;
-	}
-
-	public RapidMailConfiguration username(String username) {
-		this.username = username;
-		return this;
 	}
 
 	public void setUsername(String username) {
@@ -89,13 +93,32 @@ public class RapidMailConfiguration implements Serializable {
 		return password;
 	}
 
-	public RapidMailConfiguration password(String password) {
-		this.password = password;
-		return this;
-	}
-
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public LanguageCode getLang() {
+		return lang;
+	}
+
+	public void setLang(LanguageCode lang) {
+		this.lang = lang;
+	}
+
+	public String getMailinglistName() {
+		return mailinglistName;
+	}
+
+	public void setMailinglistName(String mailinglistName) {
+		this.mailinglistName = mailinglistName;
+	}
+
+	public String getSubjectMatter() {
+		return subjectMatter;
+	}
+
+	public void setSubjectMatter(String subjectMatter) {
+		this.subjectMatter = subjectMatter;
 	}
 
 	@Override
@@ -105,7 +128,14 @@ public class RapidMailConfiguration implements Serializable {
 
 	@Override
 	public String toString() {
-		return "RapidMailConfig{" + "id=" + getId() + ", username='" + getUsername() + "'" + ", password='"
-				+ getPassword() + "'" + "}";
+		return MoreObjects.toStringHelper(this)
+			.add("id", id)
+			.add("region", region)
+			.add("username", username)
+			.add("password", password)
+			.add("lang", lang)
+			.add("mailinglistName", mailinglistName)
+			.add("subjectMatter", subjectMatter)
+			.toString();
 	}
 }

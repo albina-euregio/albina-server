@@ -59,35 +59,30 @@ public class RapidMailController {
 	private final Client client = HttpClientUtil.newClientBuilder().register(JacksonFeature.class).build();
 
 	public static RapidMailController getInstance() throws CertificateException, NoSuchAlgorithmException,
-			KeyStoreException, IOException, KeyManagementException {
+		KeyStoreException, IOException, KeyManagementException {
 		if (instance == null) {
 			instance = new RapidMailController();
 		}
 		return instance;
 	}
 
-	private RapidMailConfiguration getConfiguration(Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			RapidMailConfiguration result = null;
-			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				result = (RapidMailConfiguration) entityManager.createQuery(HibernateUtil.queryGetRapidMailConfiguration)
-				.setParameter("region", region).getSingleResult();
-			} else {
-				throw new HibernateException("No region defined!");
-			}
-			if (result != null)
-				return result;
-			else
-				throw new HibernateException("No rapid mail configuration found for " + region.getId());
-		});
+	private RapidMailConfiguration getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
+		if (region == null || Strings.isNullOrEmpty(region.getId())) {
+			throw new HibernateException("No region defined!");
+		}
+		return HibernateUtil.getInstance().runTransaction(entityManager ->
+			entityManager.createQuery(HibernateUtil.queryGetRapidMailConfiguration, RapidMailConfiguration.class)
+				.setParameter("region", region)
+				.setParameter("lang", languageCode)
+				.setParameter("subjectMatter", subjectMatter)
+				.getSingleResult());
 	}
 
 	private String calcBasicAuth(String user, String pass) {
 		return "Basic " + Base64.getEncoder().encodeToString((user + ":" + pass).getBytes(StandardCharsets.UTF_8));
 	}
 
-	public RapidMailRecipientListResponse getRecipientsList(Region region) throws IOException, HibernateException {
-		RapidMailConfiguration config = this.getConfiguration(region);
+	public RapidMailRecipientListResponse getRecipientsList(RapidMailConfiguration config) throws IOException, HibernateException {
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/get_recipientlists
 		Response response = client.target(baseUrl + "/recipientlists")
@@ -99,13 +94,13 @@ public class RapidMailController {
 		return response.readEntity(RapidMailRecipientListResponse.class);
 	}
 
-	public Response createRecipient(Region region, PostRecipientsRequest recipient,
-			String sendActivationmail, LanguageCode language) throws AlbinaException, IOException, HibernateException {
-		RapidMailConfiguration config = this.getConfiguration(region);
+	public Response createRecipient(Region region, PostRecipientsRequest recipient, String sendActivationmail, LanguageCode language)
+		throws AlbinaException, IOException, HibernateException {
+
+		RapidMailConfiguration config = this.getConfiguration(region, language, null);
 
 		if (recipient.getRecipientlistId() == null) {
-			String recipientName = getRecipientName(region, language);
-			Integer recipientListId = getRecipientId(region, recipientName);
+			int recipientListId = getRecipientId(config);
 			recipient.setRecipientlistId(recipientListId);
 		}
 		return client.target(baseUrl + "/recipients")
@@ -116,37 +111,23 @@ public class RapidMailController {
 			.post(Entity.entity(recipient, MediaType.APPLICATION_JSON));
 	}
 
-	public Response deleteRecipient(Region region, Integer recipientId) throws IOException, HibernateException {
-		RapidMailConfiguration config = this.getConfiguration(region);
-
-		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/delete_recipientlists__recipientlist_id_
-		return client.target(baseUrl + "/recipients/" + recipientId)
-			.request()
-			.header("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
-			.header("Accept", MediaType.APPLICATION_JSON)
-			.delete();
-	}
-
-	public PostMailingsResponse sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test)
-			throws AlbinaException, IOException, HibernateException {
-		return sendMessage(region, language, mailingsPost, test, false, false);
-	}
-
 	public PostMailingsResponse sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test, boolean media, boolean important)
-			throws AlbinaException, IOException, HibernateException {
-		RapidMailConfiguration config = this.getConfiguration(region);
+		throws AlbinaException, IOException, HibernateException {
+
+		if (test) {
+			throw new UnsupportedOperationException("test=true is no longer supported!");
+		}
+		String subjectMatter = media && important ? "media+" : media ? "media" : null;
+		RapidMailConfiguration config = this.getConfiguration(region, language, subjectMatter);
 
 		if (config == null || config.getUsername() == null || config.getUsername().isEmpty() || config.getPassword() == null || config.getPassword().isEmpty()) {
 			throw new AlbinaException("No rapid mail configuration for " + region.getId() + " in " + language);
 		}
 
 		if (mailingsPost.getDestinations() == null) {
-			String recipientName = test ? "TEST" : getRecipientName(region, language, media, important);
-			logger.info("Retrieving recipient for {} ...", recipientName);
-			int recipientListId = getRecipientId(region, recipientName);
-			logger.info("Retrieving recipient for {} -> {}", recipientName, recipientListId);
+			int recipientListId = getRecipientId(config);
 			mailingsPost.setDestinations(Collections.singletonList(
-					new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
+				new PostMailingsRequestDestination().id(recipientListId).type("recipientlist").action("include")));
 		}
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Mailings#/Mailings/post_mailings
@@ -162,25 +143,10 @@ public class RapidMailController {
 		return entity;
 	}
 
- 	private String getRecipientName(Region region, LanguageCode language) throws HibernateException {
-		 return getRecipientName(region, language, false, false);
-	}
-
- 	private String getRecipientName(Region region, LanguageCode language, boolean media, boolean important) throws HibernateException {
-		RapidMailConfiguration config = this.getConfiguration(region);
-		if (media) {
-			if (important) {
-				return config.getRegion().getId() + "_" + language.name().toUpperCase() + "_media+";
-			} else {
-				return config.getRegion().getId() + "_" + language.name().toUpperCase() + "_media";
-			}
-		} else {
-			return config.getRegion().getId() + "_" + language.name().toUpperCase();
-		}
-	}
-
-	public int getRecipientId(Region region, String recipientName) throws AlbinaException, HibernateException, IOException {
-		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(region);
+	public int getRecipientId(RapidMailConfiguration config) throws AlbinaException, HibernateException, IOException {
+		String recipientName = config.getMailinglistName();
+		logger.info("Retrieving recipient for {} ...", recipientName);
+		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(config);
 		return recipientListResponse.getEmbedded().getRecipientlists().stream()
 			.filter(x -> recipientName.equalsIgnoreCase(x.getName()))
 			.mapToInt(RapidMailRecipientListResponseItem::getId)
