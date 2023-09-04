@@ -51,6 +51,8 @@ import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
 
+import javax.persistence.EntityManager;
+
 /**
  * Controller for avalanche reports.
  *
@@ -367,27 +369,29 @@ public class AvalancheReportController {
 	 *         or null if no report was found
 	 */
 	public AvalancheReport getInternalReport(Instant date, Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport result = null;
-			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
+		return HibernateUtil.getInstance().runTransaction(entityManager -> getInternalReport(date, region, entityManager));
+	}
 
-			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion, AvalancheReport.class)
-						.setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
-						.setParameter("region", region).getResultList();
-			}
+	private static AvalancheReport getInternalReport(Instant date, Region region, EntityManager entityManager) {
+		AvalancheReport result = null;
+		List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
-			// select most recent report
-			for (AvalancheReport avalancheReport : reports) {
-				avalancheReport.setRegion(region);
-				if (result == null)
-					result = avalancheReport;
-				else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
-					result = avalancheReport;
-			}
+		if (region != null && !Strings.isNullOrEmpty(region.getId())) {
+			reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion, AvalancheReport.class)
+					.setParameter("date", AlbinaUtil.getZonedDateTimeUtc(date))
+					.setParameter("region", region).getResultList();
+		}
 
-			return result;
-		});
+		// select most recent report
+		for (AvalancheReport avalancheReport : reports) {
+			avalancheReport.setRegion(region);
+			if (result == null)
+				result = avalancheReport;
+			else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
+				result = avalancheReport;
+		}
+
+		return result;
 	}
 
 	/**
@@ -414,7 +418,7 @@ public class AvalancheReportController {
 			throws AlbinaException {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 
-			AvalancheReport latestReport = getInternalReport(date, region);
+			AvalancheReport latestReport = getInternalReport(date, region, entityManager);
 			BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
 			BulletinStatus newStatus = deriveStatus(latestStatus);
 
