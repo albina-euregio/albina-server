@@ -38,6 +38,9 @@ import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsReque
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.HttpClientUtil;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -70,12 +73,20 @@ public class RapidMailController {
 		if (region == null || Strings.isNullOrEmpty(region.getId())) {
 			throw new HibernateException("No region defined!");
 		}
-		return HibernateUtil.getInstance().runTransaction(entityManager ->
-			entityManager.createQuery(HibernateUtil.queryGetRapidMailConfiguration, RapidMailConfiguration.class)
-				.setParameter("region", region)
-				.setParameter("lang", languageCode)
-				.setParameter("subjectMatter", subjectMatter)
-				.getSingleResult());
+
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<RapidMailConfiguration> select = criteriaBuilder.createQuery(RapidMailConfiguration.class);
+			Root<RapidMailConfiguration> root = select.from(RapidMailConfiguration.class);
+			select.where(
+				criteriaBuilder.equal(root.get("region"), region),
+				criteriaBuilder.equal(root.get("lang"), languageCode),
+				subjectMatter == null
+					? criteriaBuilder.isNull(root.get("subjectMatter"))
+					: criteriaBuilder.equal(root.get("subjectMatter"), subjectMatter)
+			);
+			return entityManager.createQuery(select).getSingleResult();
+		});
 	}
 
 	private String calcBasicAuth(String user, String pass) {

@@ -56,7 +56,6 @@ public class HibernateUtil {
 	public static String queryGetLocalServerInstance = "from ServerInstance as i where i.externalServer = false";
 	public static String queryGetExternalServerInstances = "from ServerInstance as i where i.externalServer = true";
 	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :region and c.lang = :lang";
-	public static String queryGetRapidMailConfiguration = "from RapidMailConfiguration as c where c.region = :region and c.lang = :lang and c.subjectMatter = :subjectMatter";
 	public static String queryGetBlogConfiguration = "from BlogConfiguration as c where c.region = :region and c.lang = :lang";
 	public static String queryGetPushConfiguration = "from PushConfiguration as c";
 
