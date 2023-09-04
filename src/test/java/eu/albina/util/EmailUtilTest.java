@@ -52,6 +52,7 @@ public class EmailUtilTest {
 		serverInstanceEuregio.setServerImagesUrl("/mnt/images/");
 		serverInstanceEuregio.setMapsPath("/mnt/bulletins/");
 		serverInstanceEuregio.setPdfDirectory("/mnt/bulletins/");
+		serverInstanceEuregio.setMediaPath("/mnt/media/");
 		serverInstanceAran = new ServerInstance();
 		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
 		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
@@ -102,6 +103,18 @@ public class EmailUtilTest {
 	@Disabled
 	@Test
 	public void sendMediaEmails() throws IOException, URISyntaxException {
-		EmailUtil.getInstance().sendMediaEmails("Test", "test.mp3", "test.txt", LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(), regionTyrol, "Norbert Lanzanasto", true, LanguageCode.de, serverInstanceEuregio, false);
+		HibernateUtil.getInstance().setUp();
+		EmailUtil.getInstance().sendMediaEmails(
+			"Test",
+			"test.mp3",
+			"test.txt",
+			LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(),
+			regionTyrol,
+			"Norbert Lanzanasto",
+			false,
+			LanguageCode.de,
+			serverInstanceEuregio,
+			false);
+		HibernateUtil.getInstance().shutDown();
 	}
 }
