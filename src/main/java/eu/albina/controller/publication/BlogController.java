@@ -140,7 +140,7 @@ public class BlogController {
         }
     }
 
-	public void sendLatestBlogPost(Region region, LanguageCode lang, boolean test) {
+	public void sendLatestBlogPost(Region region, LanguageCode lang) {
         if (!region.isPublishBlogs()) {
 			return;
         }

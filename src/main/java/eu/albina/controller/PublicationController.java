@@ -24,7 +24,6 @@ import javax.xml.transform.TransformerException;
 
 import eu.albina.caaml.Caaml;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.enumerations.BulletinStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -252,9 +251,8 @@ public class PublicationController {
 		try {
 			logger.info("Email production for {} started", avalancheReport.getRegion().getId());
 			EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
-			if (avalancheReport.getStatus() != BulletinStatus.test)
-				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-						AvalancheReport::setEmailCreated);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+					AvalancheReport::setEmailCreated);
 		} catch (Exception e) {
 			logger.error("Error preparing emails " + avalancheReport.getRegion().getId(), e);
 		} finally {
@@ -272,9 +270,8 @@ public class PublicationController {
 				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport);
 			else
 				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport, language);
-			if (avalancheReport.getStatus() != BulletinStatus.test)
-				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-						AvalancheReport::setTelegramSent);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+					AvalancheReport::setTelegramSent);
 		} catch (Exception e) {
 			logger.error("Error preparing telegram channel", e);
 		} finally {
@@ -292,9 +289,8 @@ public class PublicationController {
 				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport);
 			else
 				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport, language);
-			if (avalancheReport.getStatus() != BulletinStatus.test)
-				AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-						AvalancheReport::setPushSent);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+					AvalancheReport::setPushSent);
 		} catch (Exception e) {
 			logger.error("Error sending push notifications for " + avalancheReport.getRegion().getId(), e);
 		} finally {
