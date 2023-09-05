@@ -28,9 +28,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +124,7 @@ public class BlogService {
 
 			logger.debug("POST send latest blog post for {} in {} via email", region, language);
 
-			BlogController.getInstance().sendLatestBlogPostEmail(region, language, false);
+			BlogController.getInstance().sendLatestBlogPostEmail(region, language);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -134,35 +132,6 @@ public class BlogService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		}
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/publish/latest/email/test")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostEmailTest(@QueryParam("region") String regionId,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
-		try {
-			if (language == null)
-				throw new AlbinaException("No language defined!");
-
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
-			logger.debug("POST send latest blog post TEST for {} in {} via email", region, language);
-
-			BlogController.getInstance().sendLatestBlogPostEmail(region, language, true);
-
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending latest blog post TEST", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (Exception e) {
-			logger.warn("Error sending latest blog post TEST", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -184,7 +153,7 @@ public class BlogService {
 
 			logger.debug("POST send latest blog post for {} in {} via telegram", region, language);
 
-			BlogController.getInstance().sendLatestBlogPostTelegram(region, language, false);
+			BlogController.getInstance().sendLatestBlogPostTelegram(region, language);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -192,35 +161,6 @@ public class BlogService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		}
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/publish/latest/telegram/test")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostTelegramTest(@QueryParam("region") String regionId,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
-		try {
-			if (language == null)
-				throw new AlbinaException("No language defined!");
-
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
-			logger.debug("POST send latest blog post TEST for {} in {} via telegram", region, language);
-
-			BlogController.getInstance().sendLatestBlogPostTelegram(region, language, true);
-
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending latest blog post TEST", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (Exception e) {
-			logger.warn("Error sending latest blog post TEST", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -242,7 +182,7 @@ public class BlogService {
 
 			logger.debug("POST send latest blog post for {} in {} via push", region, language);
 
-			BlogController.getInstance().sendLatestBlogPostPush(region, language, false);
+			BlogController.getInstance().sendLatestBlogPostPush(region, language);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -250,35 +190,6 @@ public class BlogService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		}
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/publish/latest/push/test")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostPushTest(@QueryParam("region") String regionId,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
-		try {
-			if (language == null)
-				throw new AlbinaException("No language defined!");
-
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
-			logger.debug("POST send latest blog post TEST for {} in {} via push", region, language);
-
-			BlogController.getInstance().sendLatestBlogPostPush(region, language, true);
-
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending latest blog post TEST", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (Exception e) {
-			logger.warn("Error sending latest blog post TEST", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}

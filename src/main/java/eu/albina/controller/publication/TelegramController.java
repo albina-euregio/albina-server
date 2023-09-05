@@ -79,9 +79,9 @@ public class TelegramController {
 		});
 	}
 
-	public Void trySendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl, boolean test, int retry) throws Exception {
+	public Void trySendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl, int retry) throws Exception {
 		try {
-			sendPhoto(region, lang, message, attachmentUrl, test);
+			sendPhoto(region, lang, message, attachmentUrl);
 		} catch (Exception e) {
 			if (retry <= 0) {
 				throw e;
@@ -92,7 +92,7 @@ public class TelegramController {
 			final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 			executorService.schedule(() -> {
 				executorService.shutdown();
-				return trySendPhoto(region, lang, message, attachmentUrl, test, newRetry);
+				return trySendPhoto(region, lang, message, attachmentUrl, newRetry);
 			}, delay, TimeUnit.MILLISECONDS);
 		}
 		return null;
@@ -105,7 +105,7 @@ public class TelegramController {
 	 * @see <a href="https://core.telegram.org/bots/api#sendphoto">https://core.telegram.org/bots/api#sendphoto</a>
 	 * @see <a href="https://core.telegram.org/bots/api#inputfile">https://core.telegram.org/bots/api#inputfile</a>
 	 */
-	public Response sendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl, boolean test)
+	public Response sendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl)
 			throws IOException, URISyntaxException, HibernateException {
 		TelegramConfiguration config = this.getConfiguration(region, lang);
 
@@ -113,7 +113,7 @@ public class TelegramController {
 			throw new IOException("Chat ID not found");
 		}
 
-		String chatId = test ? "@aws_test" : config.getChatId();
+		String chatId = config.getChatId();
 
 		MultiPart multiPart = new FormDataMultiPart();
 		multiPart.bodyPart(new StreamDataBodyPart(
@@ -142,14 +142,14 @@ public class TelegramController {
 		return response;
 	}
 
-	public Response sendMessage(Region region, LanguageCode lang, String message, boolean test) throws IOException, URISyntaxException, HibernateException {
+	public Response sendMessage(Region region, LanguageCode lang, String message) throws IOException, URISyntaxException, HibernateException {
 		TelegramConfiguration config = this.getConfiguration(region, lang);
 
 		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
 			throw new IOException("Chat ID not found");
 		}
 
-		String chatId = test ? "aws_test" : config.getChatId();
+		String chatId = config.getChatId();
 
 		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendMessage", config.getApiToken()))
 			.queryParam("chat_id", chatId)

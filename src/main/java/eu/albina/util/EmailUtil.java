@@ -128,12 +128,12 @@ public class EmailUtil {
 			List<AvalancheBulletin> regionBulletins = avalancheReport.getBulletins();
 			if (regionBulletins != null && !regionBulletins.isEmpty()) {
 				String emailHtml = createBulletinEmailHtml(avalancheReport, lang);
-				sendBulletinEmailRapidmail(lang, region, emailHtml, subject, avalancheReport.getStatus() == BulletinStatus.test);
+				sendBulletinEmailRapidmail(lang, region, emailHtml, subject);
 			}
 		}
 	}
 
-	public void sendMediaEmails(String text, String mp3FileName, String txtFileName, Instant date, Region region, String username, boolean test, LanguageCode lang, ServerInstance serverInstance, boolean important) {
+	public void sendMediaEmails(String text, String mp3FileName, String txtFileName, Instant date, Region region, String username, LanguageCode lang, ServerInstance serverInstance, boolean important) {
 		ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
 		String sb = String.format("%s, %s",
 			lang.getBundleString("day." + localDate.getDayOfWeek()),
@@ -144,10 +144,10 @@ public class EmailUtil {
 		String subject = MessageFormat.format(lang.getBundleString("email.media.subject"), lang.getBundleString("website.name"), sb, username);
 		String emailHtml = text.replace("\n", "<br>") + "<br><br>" + LinkUtil.createHtmlLink(lang.getBundleString("email.media.link.mp3"), mp3FileUrl) + "<br><br>" + MessageFormat.format(lang.getBundleString("email.media.text"), username);
 
-		sendMediaEmailRapidmail(lang, region, emailHtml, subject, test, false);
+		sendMediaEmailRapidmail(lang, region, emailHtml, subject, false);
 		if (important) {
 			subject = MessageFormat.format(lang.getBundleString("email.media.important.subject"), lang.getBundleString("website.name"), sb, username);
-			sendMediaEmailRapidmail(lang, region, emailHtml, subject, test, true);
+			sendMediaEmailRapidmail(lang, region, emailHtml, subject, true);
 		}
 	}
 
@@ -174,22 +174,22 @@ public class EmailUtil {
 		}
 	}
 
-	public void sendBulletinEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
+	public void sendBulletinEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject) {
 		logger.info("Sending bulletin email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		sendEmail(lang, region, emailHtml, subject, test, false, false);
+		sendEmail(lang, region, emailHtml, subject, false, false);
 	}
 
-	public void sendBlogPostEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test) {
+	public void sendBlogPostEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject) {
 		logger.info("Sending blog post email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		sendEmail(lang, region, emailHtml, subject, test, false, false);
+		sendEmail(lang, region, emailHtml, subject, false, false);
 	}
 
-	public void sendMediaEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test, boolean important) {
+	public void sendMediaEmailRapidmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean important) {
 		logger.info("Sending media email in {} for {} ({} bytes)...", lang, region.getId(), emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		sendEmail(lang, region, emailHtml, subject, test, true, important);
+		sendEmail(lang, region, emailHtml, subject, true, important);
 	}
 
-	private void sendEmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean test, boolean media, boolean important) {
+	private void sendEmail(LanguageCode lang, Region region, String emailHtml, String subject, boolean media, boolean important) {
 		try {
 			PostMailingsRequestPostFile file = new PostMailingsRequestPostFile()
 				.description("mail-content.zip")
@@ -203,7 +203,7 @@ public class EmailUtil {
 				.subject(subject)
 				.status("scheduled")
 				.file(file);
-			RapidMailController.getInstance().sendMessage(region, lang, request, test, media, important);
+			RapidMailController.getInstance().sendMessage(region, lang, request, media, important);
 		} catch (Exception e) {
 			logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
 		}

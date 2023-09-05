@@ -35,7 +35,6 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
 import static eu.albina.RegionTestUtils.regionEuregio;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CaamlTest {
 

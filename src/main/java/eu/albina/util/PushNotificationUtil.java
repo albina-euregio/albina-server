@@ -59,7 +59,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl, boolean test) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl) {
 		final JSONObject payload = new JSONObject();
 		payload.put("title", lang.getBundleString("website.name"));
 		payload.put("body", message);
@@ -69,7 +69,7 @@ public class PushNotificationUtil implements SocialMediaUtil {
 
 		if (region.isSendPushNotifications()) {
 			List<String> regions = Arrays.asList(region.getId());
-			List<PushSubscription> subscriptions = test ? PushSubscription.getTestSubscriptions(lang) : PushSubscriptionController.get(lang, regions);
+			List<PushSubscription> subscriptions = PushSubscriptionController.get(lang, regions);
 
 			logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, region, payload);
 			for (PushSubscription subscription : subscriptions) {

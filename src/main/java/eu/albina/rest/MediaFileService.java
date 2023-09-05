@@ -19,7 +19,6 @@ package eu.albina.rest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -114,7 +113,7 @@ public class MediaFileService {
 			logger.info("{} successfully uploaded to {}", txtFileName, txtFile);
 
 			// send emails
-			EmailUtil.getInstance().sendMediaEmails(mediaText, mp3FileName, txtFileName, date, region, user.getName(), false, language, localServerInstance, important);
+			EmailUtil.getInstance().sendMediaEmails(mediaText, mp3FileName, txtFileName, date, region, user.getName(), language, localServerInstance, important);
 
 			// set publication flag
 			AvalancheReportController.getInstance().setMediaFileFlag(date, region);

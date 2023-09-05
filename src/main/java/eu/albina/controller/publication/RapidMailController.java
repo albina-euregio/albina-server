@@ -122,12 +122,9 @@ public class RapidMailController {
 			.post(Entity.entity(recipient, MediaType.APPLICATION_JSON));
 	}
 
-	public PostMailingsResponse sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean test, boolean media, boolean important)
+	public PostMailingsResponse sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean media, boolean important)
 		throws AlbinaException, IOException, HibernateException {
 
-		if (test) {
-			throw new UnsupportedOperationException("test=true is no longer supported!");
-		}
 		String subjectMatter = media && important ? "media+" : media ? "media" : null;
 		RapidMailConfiguration config = this.getConfiguration(region, language, subjectMatter);
 

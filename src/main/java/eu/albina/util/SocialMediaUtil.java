@@ -37,7 +37,7 @@ interface SocialMediaUtil {
 		String message = getSocialMediaText(avalancheReport, lang);
 		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(avalancheReport, lang);
 		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport, lang);
-		sendBulletinNewsletter(message, lang, avalancheReport.getRegion(), attachmentUrl, bulletinUrl, avalancheReport.getStatus() == BulletinStatus.test);
+		sendBulletinNewsletter(message, lang, avalancheReport.getRegion(), attachmentUrl, bulletinUrl);
 	}
 
 	static String getSocialMediaText(AvalancheReport avalancheReport, LanguageCode lang) {
@@ -53,5 +53,5 @@ interface SocialMediaUtil {
 		}
 	}
 
-	void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl, boolean test);
+	void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl);
 }

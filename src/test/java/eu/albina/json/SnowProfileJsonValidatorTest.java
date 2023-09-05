@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class SnowProfileJsonValidatorTest {
 
 	@Disabled
