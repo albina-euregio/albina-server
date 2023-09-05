@@ -37,12 +37,12 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 	}
 
 	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl, boolean test) {
+	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl) {
 		TelegramController ctTc = TelegramController.getInstance();
 		if (region.isSendTelegramMessages()) {
 			try {
 				logger.info("Publishing report on telegram channel for {} in {}", region.getId(), lang);
-				ctTc.trySendPhoto(region, lang, message, attachmentUrl, test, 3);
+				ctTc.trySendPhoto(region, lang, message, attachmentUrl, 3);
 			} catch (Exception e) {
 				logger.error("Error while sending bulletin newsletter to telegram channel in " + lang + " for region "
 						+ region.getId(), e);

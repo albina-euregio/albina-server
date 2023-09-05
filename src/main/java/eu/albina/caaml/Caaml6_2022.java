@@ -11,7 +11,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.AlbinaUtil;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.AvalancheSituationTendency;

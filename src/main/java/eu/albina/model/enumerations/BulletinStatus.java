@@ -19,7 +19,7 @@ package eu.albina.model.enumerations;
 import java.util.Arrays;
 
 public enum BulletinStatus {
-	republished, resubmitted, updated, published, submitted, draft, missing, test;
+	republished, resubmitted, updated, published, submitted, draft, missing;
 
 	public static boolean isDraftOrUpdated(BulletinStatus status) {
 		return status == draft || status == updated;

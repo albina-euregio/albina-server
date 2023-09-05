@@ -30,7 +30,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
-import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
@@ -149,7 +148,7 @@ public class AvalancheBulletinPublishService {
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
 					}
-	
+
 					@Override
 					protected Instant getStartDate() {
 						return startDate;
@@ -401,27 +400,10 @@ public class AvalancheBulletinPublishService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
-		return sendEmail0(regionId, date, language, null);
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/email/test")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendTestEmail(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
-		return sendEmail0(regionId, date, language, BulletinStatus.test);
-	}
-
-	private static Response sendEmail0(String regionId, String date, LanguageCode language, BulletinStatus status) {
 		try {
-			logger.debug("POST send TEST emails for {} in {} [{}]", regionId, language, date);
+			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 
-			AvalancheReport avalancheReport = getAvalancheReport(regionId, date, status);
+			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
 
 			if (language == null)
 				EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
@@ -430,10 +412,10 @@ public class AvalancheBulletinPublishService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
-			logger.warn("Error sending TEST emails", e);
+			logger.warn("Error sending emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (Exception e) {
-			logger.warn("Error sending TEST emails", e);
+			logger.warn("Error sending emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
@@ -448,27 +430,10 @@ public class AvalancheBulletinPublishService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
-		return triggerTelegramChannel0(regionId, date, language, null);
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/telegram/test")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response triggerTestTelegramChannel(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
-		return triggerTelegramChannel0(regionId, date, language, BulletinStatus.test);
-	}
-
-	private static Response triggerTelegramChannel0(String regionId, String date, LanguageCode language, BulletinStatus status) {
 		try {
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 
-			AvalancheReport avalancheReport = getAvalancheReport(regionId, date, status);
+			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
 
 			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(avalancheReport, language)).start();
 
@@ -489,27 +454,10 @@ public class AvalancheBulletinPublishService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
-		return triggerPushNotifications0(regionId, date, language, null);
-	}
-
-	@POST
-	@Secured({ Role.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/push/test")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response triggerTestPushNotifications(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
-		return triggerPushNotifications0(regionId, date, language, BulletinStatus.test);
-	}
-
-	private static Response triggerPushNotifications0(String regionId, String date, LanguageCode language, BulletinStatus status) {
 		try {
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 
-			AvalancheReport avalancheReport = getAvalancheReport(regionId, date, status);
+			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
 
 			PublicationController.getInstance().triggerPushNotifications(avalancheReport, language);
 
@@ -520,7 +468,7 @@ public class AvalancheBulletinPublishService {
 		}
 	}
 
-	private static AvalancheReport getAvalancheReport(String regionId, String date, BulletinStatus status) throws AlbinaException {
+	private static AvalancheReport getAvalancheReport(String regionId, String date) throws AlbinaException {
 		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 		Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 		ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
@@ -528,9 +476,6 @@ public class AvalancheBulletinPublishService {
 		AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 		avalancheReport.setBulletins(bulletins);
 		avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
-		if (status != null) {
-			avalancheReport.setStatus(status);
-		}
 		return avalancheReport;
 	}
 }

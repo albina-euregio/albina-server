@@ -38,8 +38,6 @@ import eu.albina.model.enumerations.LanguageCode;
 
 import static eu.albina.RegionTestUtils.regionAran;
 import static eu.albina.RegionTestUtils.regionTyrol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EmailUtilTest {
 
@@ -111,7 +109,6 @@ public class EmailUtilTest {
 			LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(),
 			regionTyrol,
 			"Norbert Lanzanasto",
-			false,
 			LanguageCode.de,
 			serverInstanceEuregio,
 			false);
