@@ -148,7 +148,7 @@ public class AvalancheBulletinPublishService {
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
 					}
-	
+
 					@Override
 					protected Instant getStartDate() {
 						return startDate;
@@ -401,7 +401,7 @@ public class AvalancheBulletinPublishService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			logger.debug("POST send TEST emails for {} in {} [{}]", regionId, language, date);
+			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 
 			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
 
@@ -412,10 +412,10 @@ public class AvalancheBulletinPublishService {
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
-			logger.warn("Error sending TEST emails", e);
+			logger.warn("Error sending emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (Exception e) {
-			logger.warn("Error sending TEST emails", e);
+			logger.warn("Error sending emails", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
