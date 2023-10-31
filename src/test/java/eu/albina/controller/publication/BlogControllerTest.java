@@ -29,6 +29,7 @@ import eu.albina.util.HibernateUtil;
 
 import static eu.albina.RegionTestUtils.regionSouthTyrol;
 import static eu.albina.RegionTestUtils.regionTyrol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
@@ -49,7 +50,9 @@ public class BlogControllerTest {
 		List<? extends BlogItem> blogPosts = BlogController.getInstance().getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
-		assertTrue(BlogController.getInstance().getBlogPost(config, blogPosts.get(0).getId()).length() > 100, "blog has >100 chars");
+		assertTrue(BlogController.getInstance().getBlogPost(config, blogPosts.get(0).getId()).getContent().length() > 100, "blog has >100 chars");
+		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
+		assertEquals("Inizio dell’inverno in montagna", BlogController.getInstance().getBlogPost(config, "1851").getTitle());
 	}
 
 	@Disabled
@@ -77,7 +80,7 @@ public class BlogControllerTest {
 	@Test
 	public void testBlogPost() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		String blogPost = BlogController.getInstance().getBlogPost(BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de), "1227558273754407795");
+		String blogPost = BlogController.getInstance().getBlogPost(BlogController.getInstance().getConfiguration(regionTyrol, LanguageCode.de), "1227558273754407795").getContent();
 		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
 	}
 
@@ -92,7 +95,7 @@ public class BlogControllerTest {
 	@Test
 	public void testTicket150() throws Exception {
 		BlogConfiguration config = BlogController.getInstance().getConfiguration(regionSouthTyrol, LanguageCode.de);
-		String blogPost = BlogController.getInstance().getBlogPost(config, "4564885875858452565");
+		String blogPost = BlogController.getInstance().getBlogPost(config, "4564885875858452565").getContent();
 		assertTrue(blogPost.contains("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
 	}
 }

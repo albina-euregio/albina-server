@@ -18,6 +18,7 @@ package eu.albina.controller.publication;
 
 import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
+import org.apache.commons.text.StringEscapeUtils;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -47,11 +48,10 @@ public interface Wordpress {
 		return Arrays.stream(items).collect(MoreCollectors.onlyElement());
 	}
 
-	static String getBlogPost(BlogConfiguration config, String blogPostId, Client client) {
+	static Item getBlogPost(BlogConfiguration config, String blogPostId, Client client) {
 		return client.target(config.getBlogApiUrl() + "posts/" + blogPostId)
 			.request()
-			.get(Item.class)
-			.content.rendered;
+			.get(Item.class);
 	}
 
 	class Item implements BlogItem {
@@ -74,7 +74,12 @@ public interface Wordpress {
 
 		@Override
 		public String getTitle() {
-			return title.rendered;
+			return StringEscapeUtils.unescapeHtml4(title.rendered);
+		}
+
+		@Override
+		public String getContent() {
+			return content.rendered;
 		}
 
 		@Override

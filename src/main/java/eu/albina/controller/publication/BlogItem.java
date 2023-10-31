@@ -7,7 +7,9 @@ public interface BlogItem {
 
 	String getTitle();
 
-	OffsetDateTime getPublished();
+    String getContent();
+
+    OffsetDateTime getPublished();
 
 	String getAttachmentUrl();
 }

@@ -109,7 +109,7 @@ public class BlogController {
 		return blogPost;
 	}
 
-	protected String getBlogPost(BlogConfiguration config, String blogPostId) throws IOException {
+	protected BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException {
 		if (config == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");
 		}
@@ -233,7 +233,7 @@ public class BlogController {
 		String blogPostId = item.getId();
 
 		try {
-			String htmlString = getBlogPost(this.getConfiguration(region, lang), blogPostId);
+			String htmlString = getBlogPost(this.getConfiguration(region, lang), blogPostId).getContent();
 			if (htmlString != null && !htmlString.isEmpty())
 				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject);
 		} catch (IOException e) {

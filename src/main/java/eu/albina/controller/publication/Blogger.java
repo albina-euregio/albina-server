@@ -49,12 +49,11 @@ public interface Blogger {
 		return root.items.stream().collect(MoreCollectors.onlyElement());
 	}
 
-	static String getBlogPost(BlogConfiguration config, String blogPostId, Client client) {
+	static Item getBlogPost(BlogConfiguration config, String blogPostId, Client client) {
 		return client.target(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId)
 			.queryParam("key", Objects.requireNonNull(config.getApiKey(), "apiKey"))
 			.request()
-			.get(Item.class)
-			.content;
+			.get(Item.class);
 	}
 
 	public static class Root {
@@ -88,6 +87,11 @@ public interface Blogger {
 		@Override
 		public String getTitle() {
 			return title;
+		}
+
+		@Override
+		public String getContent() {
+			return content;
 		}
 
 		@Override
