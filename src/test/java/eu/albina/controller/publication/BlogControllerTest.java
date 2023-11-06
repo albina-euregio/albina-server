@@ -30,6 +30,7 @@ import eu.albina.util.HibernateUtil;
 import static eu.albina.RegionTestUtils.regionSouthTyrol;
 import static eu.albina.RegionTestUtils.regionTyrol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
@@ -53,6 +54,8 @@ public class BlogControllerTest {
 		assertTrue(BlogController.getInstance().getBlogPost(config, blogPosts.get(0).getId()).getContent().length() > 100, "blog has >100 chars");
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
 		assertEquals("Inizio dell’inverno in montagna", BlogController.getInstance().getBlogPost(config, "1851").getTitle());
+		config.setBlogApiUrl("https://blog.avalanche.report/it-32-tn/wp-json/wp/v2/");
+		assertNull(BlogController.getInstance().getBlogPost(config, "495").getAttachmentUrl());
 	}
 
 	@Disabled
