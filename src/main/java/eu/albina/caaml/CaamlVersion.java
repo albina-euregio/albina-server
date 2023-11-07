@@ -14,7 +14,7 @@ public enum CaamlVersion {
 		if (this == V5)
 			return ".xml";
 		else if (this == V6_JSON)
-			return "_CAAMLv6_2022.json";
+			return "_CAAMLv6.json";
 		else
 			return "_CAAMLv6.xml";
 	}
