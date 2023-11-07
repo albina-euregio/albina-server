@@ -16,8 +16,8 @@
  ******************************************************************************/
 package eu.albina.caaml;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 
 import javax.xml.XMLConstants;
@@ -27,6 +27,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -51,17 +52,12 @@ public interface CaamlValidator {
 	 */
 	static boolean validateCaamlBulletin(String caamlString, CaamlVersion version)
 			throws SAXException, IOException {
+		if (version == CaamlVersion.V6) {
+			try (InputStream xsd = Resources.getResource("CAAMLv6_BulletinEAWS.xsd").openStream()) {
+				return CaamlValidator.validate(caamlString, new StreamSource(xsd));
+			}
+		}
 		return validate(caamlString, new StreamSource(version.schemaLocation()));
-	}
-
-	static boolean validateCaamlBulletinLocalV5(String caamlString) throws SAXException, IOException {
-		return validate(caamlString, new StreamSource(
-				new File("D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\5.0\\CAAMLv5_BulletinEAWS.xsd")));
-	}
-
-	static boolean validateCaamlBulletinLocalV6(String caamlString) throws SAXException, IOException {
-		return validate(caamlString, new StreamSource(
-				new File("D:\\norbert\\workspaces\\albina-euregio\\albina-caaml\\6.0\\CAAMLv6_BulletinEAWS.xsd")));
 	}
 
 	static boolean validate(String caamlString, Source schemaFile) throws SAXException, IOException {
