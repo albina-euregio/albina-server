@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import eu.albina.caaml.Caaml;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import org.w3c.dom.Document;
@@ -84,7 +83,7 @@ public interface RssUtil {
 				throw new UncheckedIOException(e);
 			}
 		});
-		return Caaml.convertDocToString(document);
+		return XmlUtil.convertDocToString(document);
 	}
 
 	static Stream<Path> list(Path directory) throws IOException {
