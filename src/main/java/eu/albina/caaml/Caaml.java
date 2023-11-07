@@ -25,8 +25,6 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.EnumSet;
 import java.util.Set;
 
-import javax.xml.transform.TransformerException;
-
 import eu.albina.model.AvalancheReport;
 import eu.albina.util.AlbinaUtil;
 import org.slf4j.Logger;
@@ -45,7 +43,7 @@ public interface Caaml {
 
 	Logger logger = LoggerFactory.getLogger(Caaml.class);
 
-	static void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws TransformerException, IOException {
+	static void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
 		Files.createDirectories(dirPath);
 

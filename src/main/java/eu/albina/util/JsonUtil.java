@@ -24,8 +24,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.xml.transform.TransformerException;
-
 import com.github.openjson.JSONArray;
 
 import eu.albina.model.AvalancheBulletin;
@@ -36,7 +34,7 @@ public class JsonUtil {
 
 	// private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
-	public static void createJsonFile(AvalancheReport avalancheReport) throws TransformerException, IOException {
+	public static void createJsonFile(AvalancheReport avalancheReport) throws IOException {
 		Path pdfDirectory = avalancheReport.getPdfDirectory();
 		Files.createDirectories(pdfDirectory);
 		Path path = pdfDirectory.resolve(avalancheReport.getRegion().getId() + ".json");

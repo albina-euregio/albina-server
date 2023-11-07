@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.transform.TransformerException;
-
 import eu.albina.caaml.Caaml;
 import eu.albina.model.AvalancheReport;
 import org.slf4j.Logger;
@@ -129,7 +127,7 @@ public class PublicationController {
 					AvalancheReport::setJsonCreated);
 			logger.info("JSON production for {} finished", avalancheReport.getRegion().getId());
 			return true;
-		} catch (TransformerException | IOException e) {
+		} catch (IOException e) {
 			logger.error("Error producing JSON for " + avalancheReport.getRegion().getId(), e);
 			return false;
 		}
@@ -146,7 +144,7 @@ public class PublicationController {
 					AvalancheReport::setCaamlV5Created);
 			logger.info("CAAMLv5 production for {} finished", avalancheReport.getRegion().getId());
 			return true;
-		} catch (TransformerException | IOException e) {
+		} catch (IOException e) {
 			logger.error("Error producing CAAMLv5 for " + avalancheReport.getRegion().getId(), e);
 			return false;
 		}
@@ -164,7 +162,7 @@ public class PublicationController {
 					AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport.getRegion().getId());
 			return true;
-		} catch (TransformerException | IOException e) {
+		} catch (IOException e) {
 			logger.error("Error producing CAAMLv6 for " + avalancheReport.getRegion().getId(), e);
 			return false;
 		}
