@@ -35,7 +35,7 @@ interface Caaml6 {
 			return new ObjectMapper()
 				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 				.writerWithDefaultPrettyPrinter()
-				.writeValueAsString(toCAAMLv6_2022(avalancheReport, lang));
+				.writeValueAsString(toCAAML(avalancheReport, lang));
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
@@ -46,18 +46,18 @@ interface Caaml6 {
 			return new XmlMapper()
 				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 				.writerWithDefaultPrettyPrinter()
-				.writeValueAsString(toCAAMLv6_2022(avalancheReport, lang))
+				.writeValueAsString(toCAAML(avalancheReport, lang))
 				.replaceFirst("^<bulletins>", String.format("<bulletins xmlns=\"%s\">", CaamlVersion.V6.namespace()));
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	static org.caaml.v6.AvalancheBulletins toCAAMLv6_2022(AvalancheReport avalancheReport, LanguageCode lang) {
-		return new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAMLv6_2022(b, lang)).collect(Collectors.toList()));
+	static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
+		return new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).collect(Collectors.toList()));
 	}
 
-	static org.caaml.v6.AvalancheBulletin toCAAMLv6_2022(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
+	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
 		bulletin.setAvalancheActivity(new org.caaml.v6.Texts(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
 		bulletin.setAvalancheProblems(Stream.concat(
