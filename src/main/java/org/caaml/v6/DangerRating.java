@@ -1,5 +1,9 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -8,7 +12,10 @@ import java.util.Objects;
  * validTimePeriod or elevation are constrained for a rating, it is expected to define a
  * dangerRating for all the other cases.
  */
+@JsonPropertyOrder({"mainValue", "elevation", "aspect", "validTimePeriod", "metaData", "customData"})
 public class DangerRating {
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "aspect")
     private List<Aspect> aspects;
     private Object customData;
     private ElevationBoundaryOrBand elevation;

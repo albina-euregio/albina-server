@@ -1,5 +1,8 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import java.util.Objects;
 
 /**
@@ -12,6 +15,8 @@ import java.util.Objects;
 public class ElevationBoundaryOrBand {
     private String lowerBound;
     private String upperBound;
+	@JacksonXmlProperty(isAttribute = true)
+	private String uom = "m";
 
 	public ElevationBoundaryOrBand() {
 	}

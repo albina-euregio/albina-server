@@ -1,5 +1,7 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * Texts element with highlight and comment for the avalanche activity.
  *
@@ -16,6 +18,7 @@ package org.caaml.v6;
  *
  * Texts element with highlight and comment for weather review information.
  */
+@JsonPropertyOrder({"highlights", "comment"})
 public class Texts {
     private String comment;
     private String highlights;

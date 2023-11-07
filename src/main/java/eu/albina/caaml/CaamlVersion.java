@@ -30,7 +30,7 @@ public enum CaamlVersion {
 
 	String schemaLocation() {
 		return this == V5 ? "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd"
-				: "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS/CAAMLv6_BulletinEAWS.xsd";
+				: "http://caaml.org/Schemas/BulletinEAWS/v6.0/xml/CAAMLv6_BulletinEAWS.xsd";
 	}
 
 	Element setNamespaceAttributes(Element rootElement) {

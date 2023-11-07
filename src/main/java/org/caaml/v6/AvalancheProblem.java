@@ -1,5 +1,9 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -9,7 +13,10 @@ import java.util.Objects;
  * the expected avalanche size, snowpack stability and its frequency can be defined. The
  * implied danger rating value is optional.
  */
+@JsonPropertyOrder({"problemType", "elevation", "aspect", "validTimePeriod", "snowpackStability", "frequency", "avalancheSize", "dangerRatingValue", "comment", "metaData", "customData"})
 public class AvalancheProblem {
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "aspect")
     private List<Aspect> aspects;
     private Integer avalancheSize;
     private String comment;

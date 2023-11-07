@@ -3,6 +3,7 @@ package eu.albina.caaml;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.google.common.collect.ImmutableMap;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -28,13 +29,25 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-interface Caaml6_JSON {
-	static String createCaamlv6(AvalancheReport avalancheReport, LanguageCode lang) {
+interface Caaml6 {
+	static String createJSON(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
 			return new ObjectMapper()
 				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 				.writerWithDefaultPrettyPrinter()
 				.writeValueAsString(toCAAMLv6_2022(avalancheReport, lang));
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	static String createXML(AvalancheReport avalancheReport, LanguageCode lang)  {
+		try {
+			return new XmlMapper()
+				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+				.writerWithDefaultPrettyPrinter()
+				.writeValueAsString(toCAAMLv6_2022(avalancheReport, lang))
+				.replaceFirst("^<bulletins>", String.format("<bulletins xmlns=\"%s\">", CaamlVersion.V6.namespace()));
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}

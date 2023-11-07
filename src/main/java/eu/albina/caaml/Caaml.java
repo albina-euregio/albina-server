@@ -68,9 +68,9 @@ public interface Caaml {
 		if (version == CaamlVersion.V5) {
 			return Caaml5.createCaamlv5(avalancheReport, lang);
 		} else if (version == CaamlVersion.V6_JSON) {
-			return Caaml6_JSON.createCaamlv6(avalancheReport, lang);
+			return Caaml6.createJSON(avalancheReport, lang);
 		} else {
-			return Caaml6.createCaamlv6(avalancheReport, lang);
+			return Caaml6.createXML(avalancheReport, lang);
 		}
 	}
 

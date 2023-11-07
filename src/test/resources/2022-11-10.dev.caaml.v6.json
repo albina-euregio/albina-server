@@ -1,31 +1,87 @@
 {
   "bulletins" : [ {
+    "publicationTime" : "2022-11-09T16:29:01Z",
+    "validTime" : {
+      "startTime" : "2022-11-09T23:00:00Z",
+      "endTime" : "2022-11-10T23:00:00Z"
+    },
+    "weatherForecast" : { },
     "avalancheActivity" : {
-      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary.",
-      "highlights" : "The fresh wind slabs represent the main danger."
+      "highlights" : "The fresh wind slabs represent the main danger.",
+      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+    },
+    "snowpackStructure" : {
+      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+    },
+    "travelAdvisory" : { },
+    "tendency" : [ {
+      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
+      "tendencyType" : "steady"
+    } ],
+    "customData" : {
+      "ALBINA" : {
+        "mainDate" : "2022-11-10"
+      },
+      "LWD_Tyrol" : {
+        "dangerPatterns" : [ "DP6" ]
+      }
     },
     "avalancheProblems" : [ {
-      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ],
-      "avalancheSize" : 3,
+      "problemType" : "new_snow",
       "elevation" : {
         "lowerBound" : "1800"
       },
-      "frequency" : "many",
-      "problemType" : "new_snow",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "poor",
-      "validTimePeriod" : "all_day"
-    }, {
-      "aspects" : [ "NE", "NW", "N" ],
+      "frequency" : "many",
       "avalancheSize" : 3,
+      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ]
+    }, {
+      "problemType" : "persistent_weak_layers",
       "elevation" : {
         "lowerBound" : "2600"
       },
-      "frequency" : "few",
-      "problemType" : "persistent_weak_layers",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "fair",
-      "validTimePeriod" : "all_day"
+      "frequency" : "few",
+      "avalancheSize" : 3,
+      "aspects" : [ "NE", "NW", "N" ]
     } ],
     "bulletinID" : "06888f8d-9e6e-4b0b-9523-9aed9e52d9e7",
+    "dangerRatings" : [ {
+      "mainValue" : "low",
+      "elevation" : {
+        "upperBound" : "1800"
+      },
+      "validTimePeriod" : "all_day"
+    }, {
+      "mainValue" : "high",
+      "elevation" : {
+        "lowerBound" : "1800"
+      },
+      "validTimePeriod" : "all_day"
+    } ],
+    "lang" : "en",
+    "regions" : [ ]
+  }, {
+    "publicationTime" : "2022-11-09T16:00:00Z",
+    "validTime" : {
+      "startTime" : "2022-11-09T23:00:00Z",
+      "endTime" : "2022-11-10T23:00:00Z"
+    },
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "The fresh wind slabs represent the main danger.",
+      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+    },
+    "snowpackStructure" : {
+      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+    },
+    "travelAdvisory" : { },
+    "tendency" : [ {
+      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
+      "tendencyType" : "steady"
+    } ],
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2022-11-10"
@@ -34,62 +90,62 @@
         "dangerPatterns" : [ "DP6" ]
       }
     },
-    "dangerRatings" : [ {
-      "elevation" : {
-        "upperBound" : "1800"
-      },
-      "mainValue" : "low",
-      "validTimePeriod" : "all_day"
-    }, {
-      "elevation" : {
-        "lowerBound" : "1800"
-      },
-      "mainValue" : "high",
-      "validTimePeriod" : "all_day"
-    } ],
-    "lang" : "en",
-    "publicationTime" : "2022-11-09T16:29:01Z",
-    "regions" : [ ],
-    "snowpackStructure" : {
-      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
-    },
-    "tendency" : [ {
-      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
-    } ],
-    "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2022-11-10T23:00:00Z",
-      "startTime" : "2022-11-09T23:00:00Z"
-    },
-    "weatherForecast" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary.",
-      "highlights" : "The fresh wind slabs represent the main danger."
-    },
     "avalancheProblems" : [ {
-      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ],
-      "avalancheSize" : 3,
+      "problemType" : "new_snow",
       "elevation" : {
         "lowerBound" : "1800"
       },
-      "frequency" : "many",
-      "problemType" : "new_snow",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "poor",
-      "validTimePeriod" : "all_day"
-    }, {
-      "aspects" : [ "NE", "NW", "N" ],
+      "frequency" : "many",
       "avalancheSize" : 3,
+      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ]
+    }, {
+      "problemType" : "persistent_weak_layers",
       "elevation" : {
         "lowerBound" : "2600"
       },
-      "frequency" : "few",
-      "problemType" : "persistent_weak_layers",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "fair",
-      "validTimePeriod" : "all_day"
+      "frequency" : "few",
+      "avalancheSize" : 3,
+      "aspects" : [ "NE", "NW", "N" ]
     } ],
     "bulletinID" : "f4c31d95-94d0-47de-b678-8499f3ea080d",
+    "dangerRatings" : [ {
+      "mainValue" : "low",
+      "elevation" : {
+        "upperBound" : "1800"
+      },
+      "validTimePeriod" : "all_day"
+    }, {
+      "mainValue" : "high",
+      "elevation" : {
+        "lowerBound" : "1800"
+      },
+      "validTimePeriod" : "all_day"
+    } ],
+    "lang" : "en",
+    "regions" : [ ]
+  }, {
+    "publicationTime" : "2022-11-09T16:29:01Z",
+    "validTime" : {
+      "startTime" : "2022-11-09T23:00:00Z",
+      "endTime" : "2022-11-10T23:00:00Z"
+    },
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "The fresh wind slabs represent the main danger.",
+      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+    },
+    "snowpackStructure" : {
+      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+    },
+    "travelAdvisory" : { },
+    "tendency" : [ {
+      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
+      "tendencyType" : "steady"
+    } ],
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2022-11-10"
@@ -98,62 +154,62 @@
         "dangerPatterns" : [ "DP6" ]
       }
     },
-    "dangerRatings" : [ {
-      "elevation" : {
-        "upperBound" : "1800"
-      },
-      "mainValue" : "low",
-      "validTimePeriod" : "all_day"
-    }, {
-      "elevation" : {
-        "lowerBound" : "1800"
-      },
-      "mainValue" : "high",
-      "validTimePeriod" : "all_day"
-    } ],
-    "lang" : "en",
-    "publicationTime" : "2022-11-09T16:00:00Z",
-    "regions" : [ ],
-    "snowpackStructure" : {
-      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
-    },
-    "tendency" : [ {
-      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
-    } ],
-    "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2022-11-10T23:00:00Z",
-      "startTime" : "2022-11-09T23:00:00Z"
-    },
-    "weatherForecast" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary.",
-      "highlights" : "The fresh wind slabs represent the main danger."
-    },
     "avalancheProblems" : [ {
-      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ],
-      "avalancheSize" : 2,
+      "problemType" : "new_snow",
       "elevation" : {
         "lowerBound" : "1800"
       },
-      "frequency" : "many",
-      "problemType" : "new_snow",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "poor",
-      "validTimePeriod" : "all_day"
+      "frequency" : "many",
+      "avalancheSize" : 2,
+      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ]
     }, {
-      "aspects" : [ "NE", "NW", "N" ],
-      "avalancheSize" : 3,
+      "problemType" : "persistent_weak_layers",
       "elevation" : {
         "lowerBound" : "2600"
       },
-      "frequency" : "few",
-      "problemType" : "persistent_weak_layers",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "fair",
-      "validTimePeriod" : "all_day"
+      "frequency" : "few",
+      "avalancheSize" : 3,
+      "aspects" : [ "NE", "NW", "N" ]
     } ],
     "bulletinID" : "5263ea68-d47a-45f2-85ae-4e1938c82044",
+    "dangerRatings" : [ {
+      "mainValue" : "low",
+      "elevation" : {
+        "upperBound" : "1800"
+      },
+      "validTimePeriod" : "all_day"
+    }, {
+      "mainValue" : "considerable",
+      "elevation" : {
+        "lowerBound" : "1800"
+      },
+      "validTimePeriod" : "all_day"
+    } ],
+    "lang" : "en",
+    "regions" : [ ]
+  }, {
+    "publicationTime" : "2022-11-09T16:00:00Z",
+    "validTime" : {
+      "startTime" : "2022-11-09T23:00:00Z",
+      "endTime" : "2022-11-10T23:00:00Z"
+    },
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "The fresh wind slabs represent the main danger.",
+      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+    },
+    "snowpackStructure" : {
+      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+    },
+    "travelAdvisory" : { },
+    "tendency" : [ {
+      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
+      "tendencyType" : "steady"
+    } ],
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2022-11-10"
@@ -162,62 +218,62 @@
         "dangerPatterns" : [ "DP6" ]
       }
     },
-    "dangerRatings" : [ {
-      "elevation" : {
-        "upperBound" : "1800"
-      },
-      "mainValue" : "low",
-      "validTimePeriod" : "all_day"
-    }, {
-      "elevation" : {
-        "lowerBound" : "1800"
-      },
-      "mainValue" : "considerable",
-      "validTimePeriod" : "all_day"
-    } ],
-    "lang" : "en",
-    "publicationTime" : "2022-11-09T16:29:01Z",
-    "regions" : [ ],
-    "snowpackStructure" : {
-      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
-    },
-    "tendency" : [ {
-      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
-    } ],
-    "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2022-11-10T23:00:00Z",
-      "startTime" : "2022-11-09T23:00:00Z"
-    },
-    "weatherForecast" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary.",
-      "highlights" : "The fresh wind slabs represent the main danger."
-    },
     "avalancheProblems" : [ {
-      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ],
-      "avalancheSize" : 2,
+      "problemType" : "new_snow",
       "elevation" : {
         "lowerBound" : "1800"
       },
-      "frequency" : "many",
-      "problemType" : "new_snow",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "poor",
-      "validTimePeriod" : "all_day"
+      "frequency" : "many",
+      "avalancheSize" : 2,
+      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ]
     }, {
-      "aspects" : [ "NE", "NW", "N" ],
-      "avalancheSize" : 3,
+      "problemType" : "persistent_weak_layers",
       "elevation" : {
         "lowerBound" : "2600"
       },
-      "frequency" : "few",
-      "problemType" : "persistent_weak_layers",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "fair",
-      "validTimePeriod" : "all_day"
+      "frequency" : "few",
+      "avalancheSize" : 3,
+      "aspects" : [ "NE", "NW", "N" ]
     } ],
     "bulletinID" : "da6f43e1-ca07-4975-9ef6-42a335b5901d",
+    "dangerRatings" : [ {
+      "mainValue" : "low",
+      "elevation" : {
+        "upperBound" : "1800"
+      },
+      "validTimePeriod" : "all_day"
+    }, {
+      "mainValue" : "considerable",
+      "elevation" : {
+        "lowerBound" : "1800"
+      },
+      "validTimePeriod" : "all_day"
+    } ],
+    "lang" : "en",
+    "regions" : [ ]
+  }, {
+    "publicationTime" : "2022-11-09T16:29:01Z",
+    "validTime" : {
+      "startTime" : "2022-11-09T23:00:00Z",
+      "endTime" : "2022-11-10T23:00:00Z"
+    },
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "The fresh wind slabs represent the main danger.",
+      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary."
+    },
+    "snowpackStructure" : {
+      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
+    },
+    "travelAdvisory" : { },
+    "tendency" : [ {
+      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
+      "tendencyType" : "steady"
+    } ],
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2022-11-10"
@@ -226,98 +282,42 @@
         "dangerPatterns" : [ "DP6" ]
       }
     },
-    "dangerRatings" : [ {
-      "elevation" : {
-        "upperBound" : "1800"
-      },
-      "mainValue" : "low",
-      "validTimePeriod" : "all_day"
-    }, {
-      "elevation" : {
-        "lowerBound" : "1800"
-      },
-      "mainValue" : "considerable",
-      "validTimePeriod" : "all_day"
-    } ],
-    "lang" : "en",
-    "publicationTime" : "2022-11-09T16:00:00Z",
-    "regions" : [ ],
-    "snowpackStructure" : {
-      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
-    },
-    "tendency" : [ {
-      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
-    } ],
-    "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2022-11-10T23:00:00Z",
-      "startTime" : "2022-11-09T23:00:00Z"
-    },
-    "weatherForecast" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "The fresh snow of the last two days represents the main danger. It can be released easily or naturally in all aspects above the tree line. The fresh snow can be released by a single winter sport participant especially on west to north to south facing aspects above the tree line. Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. In particular in the regions exposed to heavier precipitation numerous medium-sized and, in isolated cases, large slab avalanches are to be expected as the snowfall becomes more intense. As a consequence of fresh snow and a sometimes storm force wind, sometimes large wind slabs will form as the day progresses in all aspects. The off-piste conditions are dangerous. Temporary safety measures may be necessary.",
-      "highlights" : "The fresh wind slabs represent the main danger."
-    },
     "avalancheProblems" : [ {
-      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ],
-      "avalancheSize" : 2,
+      "problemType" : "new_snow",
       "elevation" : {
         "lowerBound" : "1800"
       },
-      "frequency" : "many",
-      "problemType" : "new_snow",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "poor",
-      "validTimePeriod" : "all_day"
+      "frequency" : "many",
+      "avalancheSize" : 2,
+      "aspects" : [ "NE", "E", "S", "NW", "SE", "N", "SW", "W" ]
     }, {
-      "aspects" : [ "NE", "NW", "N" ],
-      "avalancheSize" : 3,
+      "problemType" : "persistent_weak_layers",
       "elevation" : {
         "lowerBound" : "2600"
       },
-      "frequency" : "few",
-      "problemType" : "persistent_weak_layers",
+      "validTimePeriod" : "all_day",
       "snowpackStability" : "fair",
-      "validTimePeriod" : "all_day"
+      "frequency" : "few",
+      "avalancheSize" : 3,
+      "aspects" : [ "NE", "NW", "N" ]
     } ],
     "bulletinID" : "dba44dec-d2c5-43cd-8ee3-70d3fa58c2dc",
-    "customData" : {
-      "ALBINA" : {
-        "mainDate" : "2022-11-10"
-      },
-      "LWD_Tyrol" : {
-        "dangerPatterns" : [ "DP6" ]
-      }
-    },
     "dangerRatings" : [ {
+      "mainValue" : "low",
       "elevation" : {
         "upperBound" : "1800"
       },
-      "mainValue" : "low",
       "validTimePeriod" : "all_day"
     }, {
+      "mainValue" : "considerable",
       "elevation" : {
         "lowerBound" : "1800"
       },
-      "mainValue" : "considerable",
       "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2022-11-09T16:29:01Z",
-    "regions" : [ ],
-    "snowpackStructure" : {
-      "comment" : "Over a wide area 50 cm of snow, and up to 70 cm in some localities, will fall until the early morning above approximately 1800 m. The new snow can be released easily or naturally in all aspects above the tree line. Snow profiles and stability tests have confirmed the distinct danger. The covering of new snow is soft. Distinct weak layers in the upper part of the snowpack are difficult to recognise. The new snow will be deposited on surface hoar in areas close to the tree line. Above the tree line: Towards its base, the snowpack is faceted and weak. Over a wide area new snow is lying on a weakly bonded old snowpack. Avalanches can be released in deeper layers very easily."
-    },
-    "tendency" : [ {
-      "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
-    } ],
-    "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2022-11-10T23:00:00Z",
-      "startTime" : "2022-11-09T23:00:00Z"
-    },
-    "weatherForecast" : { }
+    "regions" : [ ]
   } ]
 }

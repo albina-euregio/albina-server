@@ -166,7 +166,7 @@
 	<!-- CUSTOM DATA-->
 	<complexType name="CustomDataType" final="#all">
 		<sequence>
-			<any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+			<any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		</sequence>
 	</complexType>
 

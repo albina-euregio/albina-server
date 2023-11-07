@@ -1,7 +1,11 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import eu.albina.caaml.CaamlVersion;
 
 import java.time.Instant;
 import java.util.List;
@@ -9,22 +13,35 @@ import java.util.List;
 /**
  * Avalanche Bulletin valid for a given set of regions.
  */
+@JsonPropertyOrder({"publicationTime", "validTime", "nextUpdate", "unscheduled", "source", "region", "dangerRating", "avalancheProblem", "highlights", "weatherForecast", "weatherReview", "avalancheActivity", "snowpackStructure", "travelAdvisory", "tendency", "metaData", "customData"})
 public class AvalancheBulletin {
     private Texts avalancheActivity;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "avalancheProblem")
     private List<AvalancheProblem> avalancheProblems;
+	@JacksonXmlProperty(isAttribute = true)
     private String bulletinID;
     private Object customData;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "dangerRating")
     private List<DangerRating> dangerRatings;
     private String highlights;
+	@JacksonXmlProperty(isAttribute = true)
     private String lang;
     private MetaData metaData;
 	@JsonSerialize(using = ToStringSerializer.class)
+	@JacksonXmlProperty(localName = "nextUpdate")
     private Instant nextUpdate;
 	@JsonSerialize(using = ToStringSerializer.class)
+	@JacksonXmlProperty(localName = "publicationTime")
 	private Instant publicationTime;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "region")
     private List<Region> regions;
     private Texts snowpackStructure;
     private AvalancheBulletinSource source;
+	@JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "tendency")
     private List<Tendency> tendency;
     private Texts travelAdvisory;
     private Boolean unscheduled;

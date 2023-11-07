@@ -1,5 +1,7 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * Texts element with highlight and comment for the avalanche activity.
  *
@@ -19,6 +21,7 @@ package org.caaml.v6;
  * Describes the expected tendency of the development of the avalanche situation for a
  * defined time period.
  */
+@JsonPropertyOrder({"highlights", "comment", "tendencyType", "validTime", "metaData", "customData"})
 public class Tendency {
     private String comment;
     private String highlights;
