@@ -159,7 +159,7 @@ public class PublicationController {
 		try {
 			logger.info("CAAMLv6 production for {} started", avalancheReport.getRegion().getId());
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
-			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_2022);
+			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_JSON);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 					AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport.getRegion().getId());

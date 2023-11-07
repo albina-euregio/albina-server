@@ -28,8 +28,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-interface Caaml6_2022 {
-	static String toCAAMLv6String_2022(AvalancheReport avalancheReport, LanguageCode lang) {
+interface Caaml6_JSON {
+	static String createCaamlv6(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
 			return new ObjectMapper()
 				.setSerializationInclusion(JsonInclude.Include.NON_NULL)

@@ -94,11 +94,11 @@ public class CaamlTest {
 		HibernateUtil.getInstance().setUp();
 		for (LocalDate date = LocalDate.parse("2018-12-04"); date
 				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_2022);
+			createOldCaamlFiles(date, CaamlVersion.V6_JSON);
 		}
 		for (LocalDate date = LocalDate.parse("2019-11-16"); date
 				.isBefore(LocalDate.parse("2020-05-04")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_2022);
+			createOldCaamlFiles(date, CaamlVersion.V6_JSON);
 		}
 	}
 
@@ -109,7 +109,7 @@ public class CaamlTest {
 			 date.isBefore(LocalDate.parse("2022-05-02"));
 			 date = date.plusDays(1)) {
 			try {
-				createOldCaamlFiles(date, CaamlVersion.V6_2022);
+				createOldCaamlFiles(date, CaamlVersion.V6_JSON);
 			} catch (FileNotFoundException e) {
 				LoggerFactory.getLogger(getClass()).warn("Not found {}", e.getMessage());
 			}
@@ -145,11 +145,11 @@ public class CaamlTest {
 		return report;
 	}
 
-	private static void toCAAMLv6_2022(String bulletinResource, String expectedCaamlResource) throws IOException {
+	private static void toCAAMLv6_JSON(String bulletinResource, String expectedCaamlResource) throws IOException {
 		final URL resource = Resources.getResource(bulletinResource);
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
-		final String caaml = Caaml6_2022.toCAAMLv6String_2022(avalancheReport, LanguageCode.en);
+		final String caaml = Caaml6_JSON.createCaamlv6(avalancheReport, LanguageCode.en);
 		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
 		final String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
 		assertStringEquals(expected, caaml);
@@ -161,27 +161,27 @@ public class CaamlTest {
 	}
 
 	@Test
-	public void toCAAMLv6_2022a() throws Exception {
-		toCAAMLv6_2022("2019-01-16.json", "2019-01-16.caaml.v6.json");
+	public void toCAAMLv6_JSON_a() throws Exception {
+		toCAAMLv6_JSON("2019-01-16.json", "2019-01-16.caaml.v6.json");
 	}
 
 	@Test
-	public void toCAAMLv6_2022b() throws Exception {
-		toCAAMLv6_2022("2019-01-17.json", "2019-01-17.caaml.v6.json");
+	public void toCAAMLv6_JSON_b() throws Exception {
+		toCAAMLv6_JSON("2019-01-17.json", "2019-01-17.caaml.v6.json");
 	}
 
 	@Test
-	public void toCAAMLv6_2022c() throws Exception {
-		toCAAMLv6_2022("2022-11-10.dev.json", "2022-11-10.dev.caaml.v6.json");
+	public void toCAAMLv6_JSON_c() throws Exception {
+		toCAAMLv6_JSON("2022-11-10.dev.json", "2022-11-10.dev.caaml.v6.json");
 	}
 
 	@Test
-	public void toCAAMLv6_2022d() throws Exception {
-		toCAAMLv6_2022("2018-12-27.json", "2018-12-27.caaml.v6.json");
+	public void toCAAMLv6_JSON_d() throws Exception {
+		toCAAMLv6_JSON("2018-12-27.json", "2018-12-27.caaml.v6.json");
 	}
 
 	@Test
-	public void toCAAMLv6_2022e() throws Exception {
-		toCAAMLv6_2022("2022-12-20.json", "2022-12-20.caaml.v6.json");
+	public void toCAAMLv6_JSON_e() throws Exception {
+		toCAAMLv6_JSON("2022-12-20.json", "2022-12-20.caaml.v6.json");
 	}
 }

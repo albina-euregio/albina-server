@@ -177,7 +177,7 @@ public class AvalancheBulletinService {
 				ServerInstanceController.getInstance().getLocalServerInstance());
 			String caaml = Caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
 			if (caaml != null) {
-				final String type = version != CaamlVersion.V6_2022 ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
+				final String type = version != CaamlVersion.V6_JSON ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
 				return Response.ok(caaml, type).build();
 			} else {
 				logger.debug("No bulletins with status published.");
@@ -198,7 +198,7 @@ public class AvalancheBulletinService {
 		@QueryParam("regions") List<String> regionIds,
 		@QueryParam("lang") LanguageCode language,
 		@QueryParam("version") CaamlVersion version) {
-		return getPublishedCaamlBulletins(date, regionIds, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_2022));
+		return getPublishedCaamlBulletins(date, regionIds, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 	}
 
 	static class LatestBulletin {
@@ -480,7 +480,7 @@ public class AvalancheBulletinService {
 						protected Instant getStartDate() {
 							return startDate;
 						}
-	
+
 						@Override
 						protected List<Region> getRegions() {
 							return Collections.singletonList(region);
