@@ -9,11 +9,11 @@ for region in EUREGIO AT-07 IT-32-BZ IT-32-TN ES-CT-L; do
   for language in de it en fr es ca oc; do
     mv $1/latest/${2}_${region}_${language}.xml $1/latest/${region}_${language}.xml
     mv $1/latest/${2}_${region}_${language}_CAAMLv6.xml $1/latest/${region}_${language}_CAAMLv6.xml
-    mv $1/latest/${2}_${region}_${language}_CAAMLv6_2022.json $1/latest/${region}_${language}_CAAMLv6_2022.json
+    mv $1/latest/${2}_${region}_${language}_CAAMLv6.json $1/latest/${region}_${language}_CAAMLv6.json
     # rename files without region ID
     mv $1/latest/${2}_${language}.xml $1/latest/${language}.xml
     mv $1/latest/${2}_${language}_CAAMLv6.xml $1/latest/${language}_CAAMLv6.xml
-    mv $1/latest/${2}_${language}_CAAMLv6_2022.json $1/latest/${language}_CAAMLv6_2022.json
+    mv $1/latest/${2}_${language}_CAAMLv6.json $1/latest/${language}_CAAMLv6.json
   done
 done
 
