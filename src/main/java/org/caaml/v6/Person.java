@@ -1,8 +1,11 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 /**
  * Details on a person.
  */
+@JsonPropertyOrder({"name", "website", "metaData", "customData"})
 public class Person {
     private Object customData;
     private MetaData metaData;

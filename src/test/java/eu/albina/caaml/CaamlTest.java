@@ -10,12 +10,10 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.List;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
-import eu.albina.json.JsonValidator;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.util.AlbinaUtil;
@@ -26,13 +24,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXParseException;
 
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import static eu.albina.RegionTestUtils.regionEuregio;
 
@@ -63,28 +62,10 @@ public class CaamlTest {
 	}
 
 	@Test
-	public void createValidCaamlv6() throws Exception {
-		final String xml = createCaaml(CaamlVersion.V6);
-		try {
-			CaamlValidator.validateCaamlBulletin(xml, CaamlVersion.V6);
-		} catch (SAXParseException e) {
-			// TODO CAAMLv6 schema file currently not in place
-		}
-	}
-
-	@Test
 	public void createExpectedCaamlv5() throws Exception {
 		final String expected = Resources
 				.toString(Resources.getResource("2019-01-16.caaml.v5.xml"), StandardCharsets.UTF_8).replace("\t", "  ");
 		final String xml = createCaaml(CaamlVersion.V5);
-		assertStringEquals(expected, xml);
-	}
-
-	@Test
-	public void createExpectedCaamlV6() throws Exception {
-		final String expected = Resources
-				.toString(Resources.getResource("2019-01-16.caaml.v6.xml"), StandardCharsets.UTF_8).replace("\t", "  ");
-		final String xml = createCaaml(CaamlVersion.V6);
 		assertStringEquals(expected, xml);
 	}
 
@@ -94,11 +75,11 @@ public class CaamlTest {
 		HibernateUtil.getInstance().setUp();
 		for (LocalDate date = LocalDate.parse("2018-12-04"); date
 				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_2022);
+			createOldCaamlFiles(date, CaamlVersion.V6_JSON);
 		}
 		for (LocalDate date = LocalDate.parse("2019-11-16"); date
 				.isBefore(LocalDate.parse("2020-05-04")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_2022);
+			createOldCaamlFiles(date, CaamlVersion.V6_JSON);
 		}
 	}
 
@@ -109,7 +90,7 @@ public class CaamlTest {
 			 date.isBefore(LocalDate.parse("2022-05-02"));
 			 date = date.plusDays(1)) {
 			try {
-				createOldCaamlFiles(date, CaamlVersion.V6_2022);
+				createOldCaamlFiles(date, CaamlVersion.V6_JSON);
 			} catch (FileNotFoundException e) {
 				LoggerFactory.getLogger(getClass()).warn("Not found {}", e.getMessage());
 			}
@@ -145,15 +126,21 @@ public class CaamlTest {
 		return report;
 	}
 
-	private static void toCAAMLv6_2022(String bulletinResource, String expectedCaamlResource) throws IOException {
+	private static void toCAAMLv6(String bulletinResource, String expectedCaamlResource) throws Exception {
 		final URL resource = Resources.getResource(bulletinResource);
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
-		final String caaml = Caaml6_2022.toCAAMLv6String_2022(avalancheReport, LanguageCode.en);
+
+		toCAAMLv6(avalancheReport, expectedCaamlResource, CaamlVersion.V6_JSON);
+		toCAAMLv6(avalancheReport, expectedCaamlResource.replaceFirst(".json$", ".xml"), CaamlVersion.V6);
+	}
+
+	private static void toCAAMLv6(AvalancheReport avalancheReport, String expectedCaamlResource, CaamlVersion version) throws IOException, SAXException {
+		String caaml = Caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
-		final String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
+        String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
 		assertStringEquals(expected, caaml);
-		Assertions.assertEquals(Collections.emptySet(), JsonValidator.validateCAAMLv6(caaml));
+		CaamlValidator.validateCaamlBulletin(caaml, version);
 	}
 
 	private static void assertStringEquals(String expected, String actual) {
@@ -161,27 +148,27 @@ public class CaamlTest {
 	}
 
 	@Test
-	public void toCAAMLv6_2022a() throws Exception {
-		toCAAMLv6_2022("2019-01-16.json", "2019-01-16.caaml.v6.json");
+	public void toCAAMLv6_a() throws Exception {
+		toCAAMLv6("2019-01-16.json", "2019-01-16.caaml.v6.json");
 	}
 
 	@Test
-	public void toCAAMLv6_2022b() throws Exception {
-		toCAAMLv6_2022("2019-01-17.json", "2019-01-17.caaml.v6.json");
+	public void toCAAMLv6_b() throws Exception {
+		toCAAMLv6("2019-01-17.json", "2019-01-17.caaml.v6.json");
 	}
 
 	@Test
-	public void toCAAMLv6_2022c() throws Exception {
-		toCAAMLv6_2022("2022-11-10.dev.json", "2022-11-10.dev.caaml.v6.json");
+	public void toCAAMLv6_c() {
+		Assertions.assertThrowsExactly(SAXParseException.class, () -> toCAAMLv6("2022-11-10.dev.json", "2022-11-10.dev.caaml.v6.json"));
 	}
 
 	@Test
-	public void toCAAMLv6_2022d() throws Exception {
-		toCAAMLv6_2022("2018-12-27.json", "2018-12-27.caaml.v6.json");
+	public void toCAAMLv6_d() throws Exception {
+		toCAAMLv6("2018-12-27.json", "2018-12-27.caaml.v6.json");
 	}
 
 	@Test
-	public void toCAAMLv6_2022e() throws Exception {
-		toCAAMLv6_2022("2022-12-20.json", "2022-12-20.caaml.v6.json");
+	public void toCAAMLv6_e() throws Exception {
+		toCAAMLv6("2022-12-20.json", "2022-12-20.caaml.v6.json");
 	}
 }

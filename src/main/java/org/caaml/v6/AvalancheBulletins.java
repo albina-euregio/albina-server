@@ -1,11 +1,21 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import eu.albina.caaml.CaamlVersion;
+
 import java.util.List;
 
 /**
  * JSON schema for EAWS avalanche bulletin collection following the CAAMLv6 schema
  */
+@JacksonXmlRootElement(localName = "bulletins")
+@JsonPropertyOrder({"bulletins", "customData", "metaData"})
 public class AvalancheBulletins {
+    @JacksonXmlElementWrapper(useWrapping = false)
+	@JacksonXmlProperty(localName = "bulletin")
     private List<AvalancheBulletin> bulletins;
     private Object customData;
     private MetaData metaData;

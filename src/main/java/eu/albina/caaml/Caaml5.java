@@ -12,6 +12,7 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.XmlUtil;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -66,7 +67,7 @@ interface Caaml5 {
 
 			doc.appendChild(rootElement);
 
-			return Caaml.convertDocToString(doc);
+			return XmlUtil.convertDocToString(doc);
 		} catch (ParserConfigurationException | TransformerException e1) {
 			LoggerFactory.getLogger(Caaml5.class).error("Error producing CAAML", e1);
 			return null;

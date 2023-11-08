@@ -1,33 +1,23 @@
 {
   "bulletins" : [ {
-    "avalancheActivity" : {
-      "comment" : "The sometimes large wind slabs of the last three days represent the main danger, especially above approximately 2200 m. Single winter sport participants can release avalanches as before, including dangerously large ones, in particular, along the border with Italy. Dry avalanches can additionally be released in the old snowpack by a single winter sport participant, in particular in areas where the snow cover is rather shallow between approximately 2200 and 2700 m and on very steep slopes. The avalanche prone locations are to be found in all aspects. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. In the afternoon as a consequence of warming during the day and solar radiation there will be only a slight increase in the danger of moist and wet avalanches. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger.",
-      "highlights" : "Wind slabs require caution, especially above approximately 2200 m, in particular on very steep shady slopes and adjacent to ridgelines. Weakly bonded old snow at intermediate and high altitudes. Slight increase in danger of moist and wet avalanches as a consequence of warming during the day and solar radiation."
+    "publicationTime" : "2018-12-26T16:00:00Z",
+    "validTime" : {
+      "startTime" : "2018-12-26T23:00:00Z",
+      "endTime" : "2018-12-27T23:00:00Z"
     },
-    "avalancheProblems" : [ {
-      "aspects" : [ "NW", "NE", "N" ],
-      "elevation" : {
-        "lowerBound" : "2200"
-      },
-      "problemType" : "wind_slab",
-      "validTimePeriod" : "earlier"
-    }, {
-      "aspects" : [ "SE", "E", "S", "NW", "NE", "W", "SW", "N" ],
-      "elevation" : {
-        "lowerBound" : "2200",
-        "upperBound" : "2700"
-      },
-      "problemType" : "persistent_weak_layers",
-      "validTimePeriod" : "all_day"
-    }, {
-      "aspects" : [ "SE", "E", "S", "W", "SW" ],
-      "elevation" : {
-        "upperBound" : "2400"
-      },
-      "problemType" : "wet_snow",
-      "validTimePeriod" : "later"
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "Wind slabs require caution, especially above approximately 2200 m, in particular on very steep shady slopes and adjacent to ridgelines. Weakly bonded old snow at intermediate and high altitudes. Slight increase in danger of moist and wet avalanches as a consequence of warming during the day and solar radiation.",
+      "comment" : "The sometimes large wind slabs of the last three days represent the main danger, especially above approximately 2200 m. Single winter sport participants can release avalanches as before, including dangerously large ones, in particular, along the border with Italy. Dry avalanches can additionally be released in the old snowpack by a single winter sport participant, in particular in areas where the snow cover is rather shallow between approximately 2200 and 2700 m and on very steep slopes. The avalanche prone locations are to be found in all aspects. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. In the afternoon as a consequence of warming during the day and solar radiation there will be only a slight increase in the danger of moist and wet avalanches. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger."
+    },
+    "snowpackStructure" : {
+      "comment" : "The fresh snow and wind slabs of the last few days are lying on soft layers above approximately 2200 m. Avalanche prone weak layers exist in the centre of the snowpack, in particular between approximately 2200 and 2700 m. The somewhat older wind slabs are bonding only slowly with the old snowpack in all aspects above approximately 2200 m. The surface of the snowpack will soften during the day. This applies on steep sunny slopes in particular at low and intermediate altitudes in these regions."
+    },
+    "travelAdvisory" : { },
+    "tendency" : [ {
+      "highlights" : "The avalanche danger will persist.",
+      "tendencyType" : "steady"
     } ],
-    "bulletinID" : "bbd97cc3-7de3-468c-afaf-2dfe0ffc3d7a",
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2018-12-27"
@@ -36,6 +26,30 @@
         "dangerPatterns" : [ "DP6", "DP5" ]
       }
     },
+    "avalancheProblems" : [ {
+      "problemType" : "wind_slab",
+      "elevation" : {
+        "lowerBound" : "2200"
+      },
+      "validTimePeriod" : "earlier",
+      "aspects" : [ "NW", "NE", "N" ]
+    }, {
+      "problemType" : "persistent_weak_layers",
+      "elevation" : {
+        "lowerBound" : "2200",
+        "upperBound" : "2700"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "SE", "E", "S", "NW", "NE", "W", "SW", "N" ]
+    }, {
+      "problemType" : "wet_snow",
+      "elevation" : {
+        "upperBound" : "2400"
+      },
+      "validTimePeriod" : "later",
+      "aspects" : [ "SE", "E", "S", "W", "SW" ]
+    } ],
+    "bulletinID" : "bbd97cc3-7de3-468c-afaf-2dfe0ffc3d7a",
     "dangerRatings" : [ {
       "mainValue" : "considerable",
       "validTimePeriod" : "earlier"
@@ -44,7 +58,6 @@
       "validTimePeriod" : "later"
     } ],
     "lang" : "en",
-    "publicationTime" : "2018-12-26T16:00:00Z",
     "regions" : [ {
       "name" : "Durreck Range",
       "regionID" : "IT-32-BZ-11"
@@ -111,41 +124,26 @@
     }, {
       "name" : "Grieskogel Mountains",
       "regionID" : "AT-07-09"
-    } ],
-    "snowpackStructure" : {
-      "comment" : "The fresh snow and wind slabs of the last few days are lying on soft layers above approximately 2200 m. Avalanche prone weak layers exist in the centre of the snowpack, in particular between approximately 2200 and 2700 m. The somewhat older wind slabs are bonding only slowly with the old snowpack in all aspects above approximately 2200 m. The surface of the snowpack will soften during the day. This applies on steep sunny slopes in particular at low and intermediate altitudes in these regions."
+    } ]
+  }, {
+    "publicationTime" : "2018-12-26T16:00:00Z",
+    "validTime" : {
+      "startTime" : "2018-12-26T23:00:00Z",
+      "endTime" : "2018-12-27T23:00:00Z"
     },
-    "tendency" : {
-      "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "Wind slabs require caution, especially above approximately 2200 m. Gliding avalanches and snow slides on grassy slopes. This applies in particular below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day.",
+      "comment" : "The sometimes large wind slabs of the last three days represent the main danger. The fresh wind slabs can be released, in particular by large loads and reach large size in isolated cases. The number and size of avalanche prone locations will increase with altitude. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day. Below approximately 2600 m small and medium-sized moist loose snow avalanches are possible. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger."
+    },
+    "snowpackStructure" : {
+      "comment" : "By the evening the wind has been strong over a wide area. The fresh snow and wind slabs of the last few days are lying on soft layers above approximately 2200 m. Isolated avalanche prone weak layers exist in the centre of the snowpack, in particular between approximately 2200 and 2700 m. The surface of the snowpack will soften during the day."
     },
     "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2018-12-27T23:00:00Z",
-      "startTime" : "2018-12-26T23:00:00Z"
-    },
-    "wxSynopsis" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "The sometimes large wind slabs of the last three days represent the main danger. The fresh wind slabs can be released, in particular by large loads and reach large size in isolated cases. The number and size of avalanche prone locations will increase with altitude. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day. Below approximately 2600 m small and medium-sized moist loose snow avalanches are possible. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger.",
-      "highlights" : "Wind slabs require caution, especially above approximately 2200 m. Gliding avalanches and snow slides on grassy slopes. This applies in particular below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day."
-    },
-    "avalancheProblems" : [ {
-      "aspects" : [ "NW", "NE", "N" ],
-      "elevation" : {
-        "lowerBound" : "2200"
-      },
-      "problemType" : "wind_slab",
-      "validTimePeriod" : "all_day"
-    }, {
-      "aspects" : [ "SE", "E", "S", "W", "SW" ],
-      "elevation" : {
-        "upperBound" : "2400"
-      },
-      "problemType" : "gliding_snow",
-      "validTimePeriod" : "all_day"
+    "tendency" : [ {
+      "highlights" : "The avalanche danger will persist.",
+      "tendencyType" : "steady"
     } ],
-    "bulletinID" : "c343a071-3c30-4d36-9796-225cb4db1ffa",
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2018-12-27"
@@ -154,12 +152,27 @@
         "dangerPatterns" : [ "DP6", "DP2" ]
       }
     },
+    "avalancheProblems" : [ {
+      "problemType" : "wind_slab",
+      "elevation" : {
+        "lowerBound" : "2200"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "NW", "NE", "N" ]
+    }, {
+      "problemType" : "gliding_snow",
+      "elevation" : {
+        "upperBound" : "2400"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "SE", "E", "S", "W", "SW" ]
+    } ],
+    "bulletinID" : "c343a071-3c30-4d36-9796-225cb4db1ffa",
     "dangerRatings" : [ {
       "mainValue" : "moderate",
       "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2018-12-26T16:00:00Z",
     "regions" : [ {
       "name" : "Karwendel Mountains",
       "regionID" : "AT-07-04"
@@ -178,42 +191,26 @@
     }, {
       "name" : "Mieming Mountains",
       "regionID" : "AT-07-03"
-    } ],
-    "snowpackStructure" : {
-      "comment" : "By the evening the wind has been strong over a wide area. The fresh snow and wind slabs of the last few days are lying on soft layers above approximately 2200 m. Isolated avalanche prone weak layers exist in the centre of the snowpack, in particular between approximately 2200 and 2700 m. The surface of the snowpack will soften during the day."
+    } ]
+  }, {
+    "publicationTime" : "2018-12-26T16:00:00Z",
+    "validTime" : {
+      "startTime" : "2018-12-26T23:00:00Z",
+      "endTime" : "2018-12-27T23:00:00Z"
     },
-    "tendency" : {
-      "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "Fresh wind slabs represent the main danger. This applies in particular adjacent to ridgelines. Weakly bonded old snow especially on west, north and east facing slopes, in particular between approximately 2200 and 2700 m.",
+      "comment" : "The wind slabs of the last few days are prone to triggering above approximately 2200 m. These represent the main danger. The number and size of avalanche prone locations will increase with altitude. In particular transitions from a shallow to a deep snowpack are unfavourable, especially on very steep shady slopes and adjacent to ridgelines. As a consequence of warming during the day and solar radiation more mostly small moist loose snow avalanches are possible."
+    },
+    "snowpackStructure" : {
+      "comment" : "In some places fresh snow and wind slabs are lying on soft layers, in particular above approximately 2200 m. The fresh wind slabs are rather small and in some cases prone to triggering. These are clearly recognisable to the trained eye. Faceted weak layers exist in the centre of the snowpack in particular on west, north and east facing slopes, especially between approximately 2200 and 2700 m. Whumpfing and hissing sounds can indicate the danger. The surface of the snowpack will soften during the day."
     },
     "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2018-12-27T23:00:00Z",
-      "startTime" : "2018-12-26T23:00:00Z"
-    },
-    "wxSynopsis" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "The wind slabs of the last few days are prone to triggering above approximately 2200 m. These represent the main danger. The number and size of avalanche prone locations will increase with altitude. In particular transitions from a shallow to a deep snowpack are unfavourable, especially on very steep shady slopes and adjacent to ridgelines. As a consequence of warming during the day and solar radiation more mostly small moist loose snow avalanches are possible.",
-      "highlights" : "Fresh wind slabs represent the main danger. This applies in particular adjacent to ridgelines. Weakly bonded old snow especially on west, north and east facing slopes, in particular between approximately 2200 and 2700 m."
-    },
-    "avalancheProblems" : [ {
-      "aspects" : [ "NW", "NE", "N" ],
-      "elevation" : {
-        "lowerBound" : "2200"
-      },
-      "problemType" : "wind_slab",
-      "validTimePeriod" : "all_day"
-    }, {
-      "aspects" : [ "E", "NW", "NE", "W", "N" ],
-      "elevation" : {
-        "lowerBound" : "2200",
-        "upperBound" : "2700"
-      },
-      "problemType" : "persistent_weak_layers",
-      "validTimePeriod" : "all_day"
+    "tendency" : [ {
+      "highlights" : "Gradual decrease in avalanche danger.",
+      "tendencyType" : "decreasing"
     } ],
-    "bulletinID" : "8604e1dc-ecab-4947-9989-9ea9d73b7f32",
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2018-12-27"
@@ -222,12 +219,28 @@
         "dangerPatterns" : [ "DP6", "DP5" ]
       }
     },
+    "avalancheProblems" : [ {
+      "problemType" : "wind_slab",
+      "elevation" : {
+        "lowerBound" : "2200"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "NW", "NE", "N" ]
+    }, {
+      "problemType" : "persistent_weak_layers",
+      "elevation" : {
+        "lowerBound" : "2200",
+        "upperBound" : "2700"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "E", "NW", "NE", "W", "N" ]
+    } ],
+    "bulletinID" : "8604e1dc-ecab-4947-9989-9ea9d73b7f32",
     "dangerRatings" : [ {
       "mainValue" : "considerable",
       "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2018-12-26T16:00:00Z",
     "regions" : [ {
       "name" : "Glockner Range",
       "regionID" : "AT-07-26"
@@ -246,41 +259,26 @@
     }, {
       "name" : "Lasörling Range",
       "regionID" : "AT-07-25"
-    } ],
-    "snowpackStructure" : {
-      "comment" : "In some places fresh snow and wind slabs are lying on soft layers, in particular above approximately 2200 m. The fresh wind slabs are rather small and in some cases prone to triggering. These are clearly recognisable to the trained eye. Faceted weak layers exist in the centre of the snowpack in particular on west, north and east facing slopes, especially between approximately 2200 and 2700 m. Whumpfing and hissing sounds can indicate the danger. The surface of the snowpack will soften during the day."
+    } ]
+  }, {
+    "publicationTime" : "2018-12-26T16:00:00Z",
+    "validTime" : {
+      "startTime" : "2018-12-26T23:00:00Z",
+      "endTime" : "2018-12-27T23:00:00Z"
     },
-    "tendency" : {
-      "highlights" : "Gradual decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "The wind slabs represent the main danger.",
+      "comment" : "As a consequence of fresh snow and a strong wind from northerly directions, wind slabs formed in particular adjacent to ridgelines and in gullies and bowls. In particular on wind-loaded slopes avalanches can be released easily and reach a dangerous size. Especially in regions with a lot of snow and in high Alpine regions avalanche prone locations are more prevalent and the danger is greater. The avalanche prone locations are clearly recognisable to the trained eye. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls."
+    },
+    "snowpackStructure" : {
+      "comment" : "The snowpack will be subject to considerable local variations. In many cases fresh snow and wind slabs are lying on the soft surface of an old snowpack. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack are a clear indication of a weakly bonded snowpack."
     },
     "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2018-12-27T23:00:00Z",
-      "startTime" : "2018-12-26T23:00:00Z"
-    },
-    "wxSynopsis" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "As a consequence of fresh snow and a strong wind from northerly directions, wind slabs formed in particular adjacent to ridgelines and in gullies and bowls. In particular on wind-loaded slopes avalanches can be released easily and reach a dangerous size. Especially in regions with a lot of snow and in high Alpine regions avalanche prone locations are more prevalent and the danger is greater. The avalanche prone locations are clearly recognisable to the trained eye. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls.",
-      "highlights" : "The wind slabs represent the main danger."
-    },
-    "avalancheProblems" : [ {
-      "aspects" : [ "SE", "E", "NW", "NE", "W", "N" ],
-      "elevation" : {
-        "lowerBound" : "2300"
-      },
-      "problemType" : "wind_slab",
-      "validTimePeriod" : "all_day"
-    }, {
-      "aspects" : [ "NW", "NE", "N" ],
-      "elevation" : {
-        "lowerBound" : "2300"
-      },
-      "problemType" : "persistent_weak_layers",
-      "validTimePeriod" : "all_day"
+    "tendency" : [ {
+      "highlights" : "Moderate, level 2.",
+      "tendencyType" : "steady"
     } ],
-    "bulletinID" : "e9cc9692-76d4-4b7f-a709-13ad0dd5faf6",
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2018-12-27"
@@ -289,12 +287,27 @@
         "dangerPatterns" : [ ]
       }
     },
+    "avalancheProblems" : [ {
+      "problemType" : "wind_slab",
+      "elevation" : {
+        "lowerBound" : "2300"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "SE", "E", "NW", "NE", "W", "N" ]
+    }, {
+      "problemType" : "persistent_weak_layers",
+      "elevation" : {
+        "lowerBound" : "2300"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "NW", "NE", "N" ]
+    } ],
+    "bulletinID" : "e9cc9692-76d4-4b7f-a709-13ad0dd5faf6",
     "dangerRatings" : [ {
       "mainValue" : "moderate",
       "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2018-12-26T16:00:00Z",
     "regions" : [ {
       "name" : "Eastern Pfunderer Mountains",
       "regionID" : "IT-32-BZ-10"
@@ -334,34 +347,26 @@
     }, {
       "name" : "Maddalene",
       "regionID" : "IT-32-TN-20"
-    } ],
-    "snowpackStructure" : {
-      "comment" : "The snowpack will be subject to considerable local variations. In many cases fresh snow and wind slabs are lying on the soft surface of an old snowpack. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack are a clear indication of a weakly bonded snowpack."
+    } ]
+  }, {
+    "publicationTime" : "2018-12-26T16:00:00Z",
+    "validTime" : {
+      "startTime" : "2018-12-26T23:00:00Z",
+      "endTime" : "2018-12-27T23:00:00Z"
     },
-    "tendency" : {
-      "highlights" : "Moderate, level 2.",
-      "tendencyType" : "steady"
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "Fresh wind slabs require caution, in particular adjacent to ridgelines.",
+      "comment" : "The fresh wind slabs represent the main danger, especially on very steep shady slopes and adjacent to ridgelines, in particular above approximately 2200 m. The number and size of avalanche prone locations will increase with altitude. At low and intermediate altitudes a low avalanche danger will be encountered over a wide area."
+    },
+    "snowpackStructure" : {
+      "comment" : "The fresh wind slabs of Tuesday represent the main danger. They are in some cases prone to triggering. In some places fresh snow and wind slabs are lying on soft layers, in particular above approximately 2000 m. The somewhat older wind slabs have bonded quite well with the old snowpack. The surface of the snowpack will soften during the day."
     },
     "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2018-12-27T23:00:00Z",
-      "startTime" : "2018-12-26T23:00:00Z"
-    },
-    "wxSynopsis" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "The fresh wind slabs represent the main danger, especially on very steep shady slopes and adjacent to ridgelines, in particular above approximately 2200 m. The number and size of avalanche prone locations will increase with altitude. At low and intermediate altitudes a low avalanche danger will be encountered over a wide area.",
-      "highlights" : "Fresh wind slabs require caution, in particular adjacent to ridgelines."
-    },
-    "avalancheProblems" : [ {
-      "aspects" : [ "NW", "NE", "N" ],
-      "elevation" : {
-        "lowerBound" : "2200"
-      },
-      "problemType" : "wind_slab",
-      "validTimePeriod" : "all_day"
+    "tendency" : [ {
+      "highlights" : "The avalanche danger will persist.",
+      "tendencyType" : "steady"
     } ],
-    "bulletinID" : "45fbe7ff-2c98-4371-8ad8-6f9cb52aa541",
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2018-12-27"
@@ -370,12 +375,20 @@
         "dangerPatterns" : [ "DP6" ]
       }
     },
+    "avalancheProblems" : [ {
+      "problemType" : "wind_slab",
+      "elevation" : {
+        "lowerBound" : "2200"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "NW", "NE", "N" ]
+    } ],
+    "bulletinID" : "45fbe7ff-2c98-4371-8ad8-6f9cb52aa541",
     "dangerRatings" : [ {
       "mainValue" : "moderate",
       "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2018-12-26T16:00:00Z",
     "regions" : [ {
       "name" : "Brandenberg Alps",
       "regionID" : "AT-07-05"
@@ -388,34 +401,26 @@
     }, {
       "name" : "Eastern Kitzbühel Alps",
       "regionID" : "AT-07-18"
-    } ],
-    "snowpackStructure" : {
-      "comment" : "The fresh wind slabs of Tuesday represent the main danger. They are in some cases prone to triggering. In some places fresh snow and wind slabs are lying on soft layers, in particular above approximately 2000 m. The somewhat older wind slabs have bonded quite well with the old snowpack. The surface of the snowpack will soften during the day."
+    } ]
+  }, {
+    "publicationTime" : "2018-12-26T16:00:00Z",
+    "validTime" : {
+      "startTime" : "2018-12-26T23:00:00Z",
+      "endTime" : "2018-12-27T23:00:00Z"
     },
-    "tendency" : {
-      "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+    "weatherForecast" : { },
+    "avalancheActivity" : {
+      "highlights" : "Hardly any snow is lying on south facing slopes.",
+      "comment" : "The wind slabs represent the main danger. The wind slabs are to be found in particular adjacent to ridgelines and in gullies and bowls as well as in the high Alpine regions. The avalanche prone locations are rather rare and are easy to recognise."
+    },
+    "snowpackStructure" : {
+      "comment" : "From a snow sport perspective, in most cases insufficient snow is lying. The sometimes strong wind has transported only a little snow."
     },
     "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2018-12-27T23:00:00Z",
-      "startTime" : "2018-12-26T23:00:00Z"
-    },
-    "wxSynopsis" : { }
-  }, {
-    "avalancheActivity" : {
-      "comment" : "The wind slabs represent the main danger. The wind slabs are to be found in particular adjacent to ridgelines and in gullies and bowls as well as in the high Alpine regions. The avalanche prone locations are rather rare and are easy to recognise.",
-      "highlights" : "Hardly any snow is lying on south facing slopes."
-    },
-    "avalancheProblems" : [ {
-      "aspects" : [ "E", "NW", "NE", "N" ],
-      "elevation" : {
-        "lowerBound" : "2200"
-      },
-      "problemType" : "wind_slab",
-      "validTimePeriod" : "all_day"
+    "tendency" : [ {
+      "highlights" : "Low, level 1.",
+      "tendencyType" : "steady"
     } ],
-    "bulletinID" : "2f57292b-a9e7-48c4-bc65-1d9641fe7d3e",
     "customData" : {
       "ALBINA" : {
         "mainDate" : "2018-12-27"
@@ -424,12 +429,20 @@
         "dangerPatterns" : [ ]
       }
     },
+    "avalancheProblems" : [ {
+      "problemType" : "wind_slab",
+      "elevation" : {
+        "lowerBound" : "2200"
+      },
+      "validTimePeriod" : "all_day",
+      "aspects" : [ "E", "NW", "NE", "N" ]
+    } ],
+    "bulletinID" : "2f57292b-a9e7-48c4-bc65-1d9641fe7d3e",
     "dangerRatings" : [ {
       "mainValue" : "low",
       "validTimePeriod" : "all_day"
     } ],
     "lang" : "en",
-    "publicationTime" : "2018-12-26T16:00:00Z",
     "regions" : [ {
       "name" : "Sexten Dolomites",
       "regionID" : "IT-32-BZ-20"
@@ -487,19 +500,6 @@
     }, {
       "name" : "Pine' - Mocheni Valley",
       "regionID" : "IT-32-TN-21"
-    } ],
-    "snowpackStructure" : {
-      "comment" : "From a snow sport perspective, in most cases insufficient snow is lying. The sometimes strong wind has transported only a little snow."
-    },
-    "tendency" : {
-      "highlights" : "Low, level 1.",
-      "tendencyType" : "steady"
-    },
-    "travelAdvisory" : { },
-    "validTime" : {
-      "endTime" : "2018-12-27T23:00:00Z",
-      "startTime" : "2018-12-26T23:00:00Z"
-    },
-    "wxSynopsis" : { }
+    } ]
   } ]
 }

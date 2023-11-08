@@ -1,7 +1,9 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 /**
- * Region element describes a (micro) region. The regionId follows the EAWS schema. It is
+ * Region element describes a (micro) region. The regionID follows the EAWS schema. It is
  * recommended to have the region shape's files with the same IDs in
  * gitlab.com/eaws/eaws-regions. Additionally, the region name can be added.
  */
@@ -9,6 +11,7 @@ public class Region {
     private Object customData;
     private MetaData metaData;
     private String name;
+	@JacksonXmlProperty(isAttribute = true)
     private String regionID;
 
 	public Region() {

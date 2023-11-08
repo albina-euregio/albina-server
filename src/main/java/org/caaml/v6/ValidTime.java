@@ -1,5 +1,6 @@
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -11,6 +12,7 @@ import java.time.Instant;
  * Date and Time from and until this bulletin is valid. ISO 8601 Timestamp in UTC or with
  * time zone information.
  */
+@JsonPropertyOrder({"startTime", "endTime"})
 public class ValidTime {
 	@JsonSerialize(using = ToStringSerializer.class)
     private Instant endTime;

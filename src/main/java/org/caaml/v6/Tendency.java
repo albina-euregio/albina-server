@@ -17,18 +17,25 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * Texts element with highlight and comment for weather forecast information.
  *
  * Texts element with highlight and comment for weather review information.
+ *
+ * Describes the expected tendency of the development of the avalanche situation for a
+ * defined time period.
  */
-@JsonPropertyOrder({"highlights", "comment"})
-public class Texts {
+@JsonPropertyOrder({"highlights", "comment", "tendencyType", "validTime", "metaData", "customData"})
+public class Tendency {
     private String comment;
     private String highlights;
+    private Object customData;
+    private MetaData metaData;
+    private TendencyType tendencyType;
+    private ValidTime validTime;
 
-	public Texts() {
+	public Tendency() {
 	}
 
-	public Texts(String highlights, String comment) {
-		this.comment = comment;
+	public Tendency(String highlights, TendencyType tendencyType) {
 		this.highlights = highlights;
+		this.tendencyType = tendencyType;
 	}
 
 	public String getComment() { return comment; }
@@ -36,4 +43,16 @@ public class Texts {
 
     public String getHighlights() { return highlights; }
     public void setHighlights(String value) { this.highlights = value; }
+
+    public Object getCustomData() { return customData; }
+    public void setCustomData(Object value) { this.customData = value; }
+
+    public MetaData getMetaData() { return metaData; }
+    public void setMetaData(MetaData value) { this.metaData = value; }
+
+    public TendencyType getTendencyType() { return tendencyType; }
+    public void setTendencyType(TendencyType value) { this.tendencyType = value; }
+
+    public ValidTime getValidTime() { return validTime; }
+    public void setValidTime(ValidTime value) { this.validTime = value; }
 }

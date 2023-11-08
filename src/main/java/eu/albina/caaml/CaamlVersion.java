@@ -8,13 +8,13 @@ import org.w3c.dom.Element;
  */
 public enum CaamlVersion {
 
-	V5, V6, V6_2022;
+	V5, V6, V6_JSON;
 
 	String filenameSuffix() {
 		if (this == V5)
 			return ".xml";
-		else if (this == V6_2022)
-			return "_CAAMLv6_2022.json";
+		else if (this == V6_JSON)
+			return "_CAAMLv6.json";
 		else
 			return "_CAAMLv6.xml";
 	}
@@ -30,7 +30,7 @@ public enum CaamlVersion {
 
 	String schemaLocation() {
 		return this == V5 ? "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd"
-				: "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS/CAAMLv6_BulletinEAWS.xsd";
+				: "http://caaml.org/Schemas/BulletinEAWS/v6.0/xml/CAAMLv6_BulletinEAWS.xsd";
 	}
 
 	Element setNamespaceAttributes(Element rootElement) {

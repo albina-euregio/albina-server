@@ -6,7 +6,7 @@ for region in EUREGIO; do
   for language in de it en fr es ca oc; do
     cp $1/${2}/${3}/${2}_${region}_${language}.xml $1/${2}/${3}/${2}_${language}.xml
     cp $1/${2}/${3}/${2}_${region}_${language}_CAAMLv6.xml $1/${2}/${3}/${2}_${language}_CAAMLv6.xml
-    cp $1/${2}/${3}/${2}_${region}_${language}_CAAMLv6_2022.json $1/${2}/${3}/${2}_${language}_CAAMLv6_2022.json
+    cp $1/${2}/${3}/${2}_${region}_${language}_CAAMLv6.json $1/${2}/${3}/${2}_${language}_CAAMLv6.json
   done
 done
 

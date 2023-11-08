@@ -3,7 +3,7 @@ package org.caaml.v6;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Valid time period can be used to limit the validity of an element to an erlier or later
+ * Valid time period can be used to limit the validity of an element to an earlier or later
  * period. It can be used to distinguish danger ratings or avalanche problems.
  */
 public enum ValidTimePeriod {
