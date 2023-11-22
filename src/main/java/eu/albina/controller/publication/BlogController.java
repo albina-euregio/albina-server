@@ -97,6 +97,10 @@ public class BlogController {
 		return blogPosts;
 	}
 
+	public BlogItem getLatestBlogPost(Region region, LanguageCode lang) throws IOException {
+		return getLatestBlogPost(getConfiguration(region, lang));
+	}
+
 	protected BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException {
 		if (config == null || config.getBlogApiUrl() == null) {
 			throw new IOException("Blog ID not found");

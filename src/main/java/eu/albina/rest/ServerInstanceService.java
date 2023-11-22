@@ -17,6 +17,7 @@
 package eu.albina.rest;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -24,14 +25,21 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import com.google.common.base.MoreObjects;
 import eu.albina.controller.RegionController;
 
+import eu.albina.controller.publication.BlogController;
+import eu.albina.controller.publication.BlogItem;
+import eu.albina.controller.publication.TelegramController;
+import eu.albina.model.Region;
+import eu.albina.model.enumerations.LanguageCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -151,5 +159,28 @@ public class ServerInstanceService {
 			logger.warn("Error loading local server configuration", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
 		}
+	}
+
+	@GET
+	@Secured({Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/health")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Perform health checks")
+	public Map<String, Object> getHealth(
+		@QueryParam("region") String regionId,
+		@QueryParam("lang") LanguageCode language
+	) throws Exception {
+		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+		logger.info("Testing TelegramController");
+		Response me = TelegramController.getInstance().getMe(region, language);
+		logger.info("Testing Blog");
+		BlogItem latestBlogPost = BlogController.getInstance().getLatestBlogPost(region, language);
+		return Map.of(
+			"region", MoreObjects.firstNonNull(region, ""),
+			"telegram", MoreObjects.firstNonNull(me, ""),
+			"blog", MoreObjects.firstNonNull(latestBlogPost, "")
+		);
 	}
 }
