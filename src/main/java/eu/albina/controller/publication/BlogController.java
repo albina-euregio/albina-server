@@ -35,6 +35,7 @@ import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.PushNotificationUtil;
 
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.ws.rs.client.Client;
 
@@ -68,7 +69,10 @@ public class BlogController {
 					.setParameter("region", region)
 					.setParameter("lang", languageCode)
 					.getSingleResult();
-				return Optional.ofNullable(configuration);
+				if (configuration == null || configuration.getBlogApiUrl() == null) {
+					throw new NoResultException();
+				}
+				return Optional.of(configuration);
 			} catch (PersistenceException e) {
                 logger.warn("No blog configuration found for {} [{}]", region.getId(), languageCode);
                 return Optional.empty();
