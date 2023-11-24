@@ -74,7 +74,7 @@ public class RegionEndpoint {
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		// Do error handling here
-		logger.error("Region lock error", throwable);
+		logger.debug("Region lock error", throwable);
 	}
 
 	public static void broadcast(RegionLock lock) {

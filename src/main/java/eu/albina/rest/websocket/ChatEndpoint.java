@@ -88,7 +88,7 @@ public class ChatEndpoint {
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		// Do error handling here
-		logger.error("Chat error", throwable);
+		logger.debug("Chat error", throwable);
 	}
 
 	private static void broadcast(ChatMessage message) {

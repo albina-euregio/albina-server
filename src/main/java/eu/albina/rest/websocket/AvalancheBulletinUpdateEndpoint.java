@@ -65,7 +65,7 @@ public class AvalancheBulletinUpdateEndpoint {
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		// Do error handling here
-		logger.error("Bulletin update error", throwable);
+		logger.debug("Bulletin update error", throwable);
 	}
 
 	public static void broadcast(BulletinUpdate lock) {
