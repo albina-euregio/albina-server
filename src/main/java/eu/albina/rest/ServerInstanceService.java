@@ -40,6 +40,7 @@ import eu.albina.controller.publication.BlogItem;
 import eu.albina.controller.publication.TelegramController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.BlogConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -176,7 +177,8 @@ public class ServerInstanceService {
 		logger.info("Testing TelegramController");
 		Response me = TelegramController.getInstance().getMe(region, language);
 		logger.info("Testing Blog");
-		BlogItem latestBlogPost = BlogController.getInstance().getLatestBlogPost(region, language);
+		BlogConfiguration config = BlogController.getConfiguration(region, language).orElseThrow();
+		BlogItem latestBlogPost = BlogController.getLatestBlogPost(config);
 		return Map.of(
 			"region", MoreObjects.firstNonNull(region, ""),
 			"telegram", MoreObjects.firstNonNull(me, ""),

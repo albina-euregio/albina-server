@@ -28,6 +28,8 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
+import eu.albina.controller.publication.BlogItem;
+import eu.albina.model.publication.BlogConfiguration;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,14 +61,10 @@ public class BlogService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (language == null)
-				throw new AlbinaException("No language defined!");
-
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
-			logger.debug("POST send latest blog post for {} in {}", region.getId(), language);
-
-			BlogController.getInstance().sendLatestBlogPost(region, language);
+			logger.debug("POST send latest blog post for {} in {}", regionId, language);
+			BlogConfiguration config = getBlogConfiguration(regionId, language);
+			BlogItem blogPost = BlogController.getLatestBlogPost(config);
+			BlogController.sendBlogPost(config, blogPost);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -88,14 +86,10 @@ public class BlogService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (language == null)
-				throw new AlbinaException("No language defined!");
-
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
-			logger.debug("POST send latest blog post for {} in {} via email", region, language);
-
-			BlogController.getInstance().sendLatestBlogPostEmail(region, language);
+			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
+			BlogConfiguration config = getBlogConfiguration(regionId, language);
+			BlogItem blogPost = BlogController.getLatestBlogPost(config);
+			BlogController.sendBlogPostToRapidmail(config, blogPost);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -117,14 +111,10 @@ public class BlogService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (language == null)
-				throw new AlbinaException("No language defined!");
-
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
-			logger.debug("POST send latest blog post for {} in {} via telegram", region, language);
-
-			BlogController.getInstance().sendLatestBlogPostTelegram(region, language);
+			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
+			BlogConfiguration config = getBlogConfiguration(regionId, language);
+			BlogItem blogPost = BlogController.getLatestBlogPost(config);
+			BlogController.sendBlogPostToTelegramChannel(config, blogPost);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -146,14 +136,10 @@ public class BlogService {
 			@QueryParam("lang") LanguageCode language,
 			@Context SecurityContext securityContext) {
 		try {
-			if (language == null)
-				throw new AlbinaException("No language defined!");
-
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-
-			logger.debug("POST send latest blog post for {} in {} via push", region, language);
-
-			BlogController.getInstance().sendLatestBlogPostPush(region, language);
+			logger.debug("POST send latest blog post for {} in {} via push", regionId, language);
+			BlogConfiguration config = getBlogConfiguration(regionId, language);
+			BlogItem blogPost = BlogController.getLatestBlogPost(config);
+			BlogController.sendBlogPostToPushNotification(config, blogPost);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -163,5 +149,16 @@ public class BlogService {
 			logger.warn("Error sending latest blog post", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
+	}
+
+	private static BlogConfiguration getBlogConfiguration(String regionId, LanguageCode language) throws AlbinaException {
+		if (language == null) {
+			throw new AlbinaException("No language defined!");
+		}
+		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+		if (region.isPublishBlogs()) {
+			throw new AlbinaException("Publishing blogs is disabled for region " + regionId);
+		}
+		return BlogController.getConfiguration(region, language).orElseThrow();
 	}
 }
