@@ -17,15 +17,14 @@
 package eu.albina.controller.publication;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.base.Strings;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 
 import eu.albina.util.HttpClientUtil;
 import eu.albina.util.LinkUtil;
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +35,7 @@ import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.PushNotificationUtil;
 
+import javax.persistence.PersistenceException;
 import javax.ws.rs.client.Client;
 
 public class BlogController {
@@ -58,18 +58,20 @@ public class BlogController {
 		return instance;
 	}
 
-	protected BlogConfiguration getConfiguration(Region region, LanguageCode languageCode) {
-		if (region == null || Strings.isNullOrEmpty(region.getId()) || languageCode == null) {
-			throw new HibernateException("No region or language defined!");
-		}
+	protected Optional<BlogConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+		Objects.requireNonNull(region, "region");
+		Objects.requireNonNull(region.getId(), "region.getId()");
+		Objects.requireNonNull(languageCode, "languageCode");
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			try {
-				return (BlogConfiguration) entityManager.createQuery(HibernateUtil.queryGetBlogConfiguration)
+                BlogConfiguration configuration = (BlogConfiguration) entityManager.createQuery(HibernateUtil.queryGetBlogConfiguration)
 					.setParameter("region", region)
-					.setParameter("lang", languageCode).getSingleResult();
-            } catch (Exception e) {
+					.setParameter("lang", languageCode)
+					.getSingleResult();
+				return Optional.ofNullable(configuration);
+			} catch (PersistenceException e) {
                 logger.warn("No blog configuration found for {} [{}]", region.getId(), languageCode);
-                return null;
+                return Optional.empty();
             }
 		});
 	}
@@ -97,8 +99,8 @@ public class BlogController {
 		return blogPosts;
 	}
 
-	public BlogItem getLatestBlogPost(Region region, LanguageCode lang) throws IOException {
-		return getLatestBlogPost(getConfiguration(region, lang));
+	public BlogItem getLatestBlogPost(Region region, LanguageCode lang) throws IOException, NoSuchElementException {
+		return getLatestBlogPost(getConfiguration(region, lang).orElseThrow());
 	}
 
 	protected BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException {
@@ -127,16 +129,16 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
 			return;
 		}
-        BlogConfiguration config = this.getConfiguration(region, lang);
+        BlogConfiguration config = this.getConfiguration(region, lang).orElse(null);
         if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
             List<? extends BlogItem> blogPosts = getBlogPosts(config);
             for (BlogItem object : blogPosts) {
-                sendNewBlogPostToRapidmail(object, region, lang);
-                sendNewBlogPostToTelegramChannel(object, region, lang);
-                sendNewBlogPostToPushNotification(region, lang, object);
+                sendNewBlogPostToRapidmail(config, object);
+                sendNewBlogPostToTelegramChannel(config, object);
+                sendNewBlogPostToPushNotification(config, object);
                 updateConfigurationLastPublished(config, object);
             }
         } catch (IOException e) {
@@ -148,15 +150,15 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
 			return;
         }
-		BlogConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang).orElse(null);
         if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
             BlogItem blogPost = getLatestBlogPost(config);
-            sendNewBlogPostToRapidmail(blogPost, config.getRegion(), config.getLanguageCode());
-            sendNewBlogPostToTelegramChannel(blogPost, config.getRegion(), config.getLanguageCode());
-            sendNewBlogPostToPushNotification(config.getRegion(), config.getLanguageCode(), blogPost);
+            sendNewBlogPostToRapidmail(config, blogPost);
+            sendNewBlogPostToTelegramChannel(config, blogPost);
+            sendNewBlogPostToPushNotification(config, blogPost);
             updateConfigurationLastPublished(config, blogPost);
         } catch (IOException e) {
             logger.warn("Latest blog post could not be retrieved: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
@@ -167,13 +169,13 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
             return;
         }
-		BlogConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang).orElse(null);
         if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
             BlogItem blogPost = getLatestBlogPost(config);
-            sendNewBlogPostToRapidmail(blogPost, config.getRegion(), config.getLanguageCode());
+            sendNewBlogPostToRapidmail(config, blogPost);
         } catch (IOException e) {
             logger.warn("Latest blog post could not be retrieved: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
         }
@@ -183,13 +185,13 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
             return;
         }
-		BlogConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang).orElse(null);
         if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
             BlogItem blogPost = getLatestBlogPost(config);
-            sendNewBlogPostToTelegramChannel(blogPost, config.getRegion(), config.getLanguageCode());
+            sendNewBlogPostToTelegramChannel(config, blogPost);
         } catch (IOException e) {
             logger.warn("Latest blog post could not be retrieved: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
         }
@@ -199,69 +201,64 @@ public class BlogController {
         if (!region.isPublishBlogs()) {
             return;
         }
-		BlogConfiguration config = this.getConfiguration(region, lang);
+		BlogConfiguration config = this.getConfiguration(region, lang).orElse(null);
         if (config == null || config.getBlogApiUrl() == null) {
             return;
         }
         try {
             BlogItem blogPost = getLatestBlogPost(config);
-            sendNewBlogPostToPushNotification(config.getRegion(), config.getLanguageCode(), blogPost);
+            sendNewBlogPostToPushNotification(config, blogPost);
         } catch (IOException e) {
             logger.warn("Latest blog post could not be retrieved: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
         }
     }
 
-	void sendNewBlogPostToTelegramChannel(BlogItem item, Region region, LanguageCode lang) {
+	void sendNewBlogPostToTelegramChannel(BlogConfiguration config, BlogItem item) {
 		logger.info("Sending new blog post to telegram channel ...");
 
-		String message = getBlogMessage(item, region, lang);
-		String attachmentUrl = item.getAttachmentUrl();
-
 		try {
+			String message = getBlogMessage(config, item);
+			String attachmentUrl = item.getAttachmentUrl();
 			TelegramController telegramController = TelegramController.getInstance();
 
 			if (attachmentUrl != null) {
-				telegramController.sendPhoto(region, lang, message, attachmentUrl);
+				telegramController.sendPhoto(config.getRegion(), config.getLanguageCode(), message, attachmentUrl);
 			} else {
-				telegramController.sendMessage(region, lang, message);
+				telegramController.sendMessage(config.getRegion(), config.getLanguageCode(), message);
 			}
-		} catch (IOException | URISyntaxException e) {
-			logger.warn("Blog post could not be sent to telegram channel: " + region + "," + lang.toString(), e);
+		} catch (Exception e) {
+			logger.warn("Blog post could not be sent to telegram channel: " + config.getRegion() + "," + config.getLanguageCode().toString(), e);
 		}
 	}
 
-	private void sendNewBlogPostToRapidmail(BlogItem item, Region region, LanguageCode lang) {
+	private void sendNewBlogPostToRapidmail(BlogConfiguration config, BlogItem item) {
 		logger.debug("Sending new blog post to rapidmail ...");
 
-		String subject = item.getTitle();
-		String blogPostId = item.getId();
-
 		try {
-			String htmlString = getBlogPost(this.getConfiguration(region, lang), blogPostId).getContent();
+			String subject = item.getTitle();
+			String blogPostId = item.getId();
+			String htmlString = getBlogPost(config, blogPostId).getContent();
 			if (htmlString != null && !htmlString.isEmpty())
-				EmailUtil.getInstance().sendBlogPostEmailRapidmail(lang, region, htmlString, subject);
-		} catch (IOException e) {
-			logger.warn("Blog post could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
-		} catch (URISyntaxException e) {
-			logger.warn("Blog post email could not be sent: " + region.getId() + ", " + lang.toString(), e);
+				EmailUtil.getInstance().sendBlogPostEmailRapidmail(config.getLanguageCode(), config.getRegion(), htmlString, subject);
+		} catch (Exception e) {
+			logger.warn("Blog post email could not be sent: " + config.getRegion().getId() + ", " + config.getLanguageCode().toString(), e);
 		}
 	}
 
-	private void sendNewBlogPostToPushNotification(Region region, LanguageCode lang, BlogItem object) {
-		String message = getBlogMessage(object, region, lang);
+	private void sendNewBlogPostToPushNotification(BlogConfiguration config, BlogItem object) {
+		String message = getBlogMessage(config, object);
 		String attachmentUrl = object.getAttachmentUrl();
-		String blogUrl = getBlogUrl(object, region, lang);
+		String blogUrl = getBlogUrl(config, object);
 		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
-		pushNotificationUtil.sendBulletinNewsletter(message, lang, region, attachmentUrl, blogUrl);
+		pushNotificationUtil.sendBulletinNewsletter(message, config.getLanguageCode(), config.getRegion(), attachmentUrl, blogUrl);
 	}
 
-	private String getBlogMessage(BlogItem item, Region region, LanguageCode lang) {
-		return item.getTitle() + ": " + getBlogUrl(item, region, lang);
+	private String getBlogMessage(BlogConfiguration config, BlogItem item) {
+		return item.getTitle() + ": " + getBlogUrl(config, item);
 	}
 
-	private String getBlogUrl(BlogItem item, Region region, LanguageCode lang) {
-		BlogConfiguration config = this.getConfiguration(region, lang);
-		return LinkUtil.getAvalancheReportFullBlogUrl(lang, region) + config.getBlogUrl() + "/" + item.getId();
+	private String getBlogUrl(BlogConfiguration config, BlogItem item) {
+		return LinkUtil.getAvalancheReportFullBlogUrl(config.getLanguageCode(), config.getRegion()) + config.getBlogUrl() + "/" + item.getId();
 	}
 
 }
