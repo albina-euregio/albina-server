@@ -20,12 +20,13 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.base.Strings;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -40,6 +41,7 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HibernateUtil;
 
+import javax.persistence.PersistenceException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -62,20 +64,21 @@ public class TelegramController {
 	public TelegramController() {
 	}
 
-	private TelegramConfiguration getConfiguration(Region region, LanguageCode languageCode) {
+	private Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+		Objects.requireNonNull(region, "region");
+		Objects.requireNonNull(region.getId(), "region.getId()");
+		Objects.requireNonNull(languageCode, "languageCode");
+
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			TelegramConfiguration result = null;
-			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
-				result = (TelegramConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
-				.setParameter("region", region)
-				.setParameter("lang", languageCode).getSingleResult();
-			} else {
-				throw new HibernateException("No region defined!");
+			try {
+				TelegramConfiguration result = (TelegramConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
+					.setParameter("region", region)
+					.setParameter("lang", languageCode)
+					.getSingleResult();
+				return Optional.ofNullable(result);
+			} catch (PersistenceException e) {
+				return Optional.empty();
 			}
-			if (result != null)
-				return result;
-			else
-				throw new HibernateException("No telegram configuration found for " + region + " [" + languageCode + "]");
 		});
 	}
 
@@ -107,8 +110,7 @@ public class TelegramController {
 	 */
 	public Response sendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl)
 			throws IOException, URISyntaxException, HibernateException {
-		TelegramConfiguration config = this.getConfiguration(region, lang);
-
+		TelegramConfiguration config = this.getConfiguration(region, lang).orElse(null);
 		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
 			throw new IOException("Chat ID not found");
 		}
@@ -143,8 +145,7 @@ public class TelegramController {
 	}
 
 	public Response sendMessage(Region region, LanguageCode lang, String message) throws IOException, URISyntaxException, HibernateException {
-		TelegramConfiguration config = this.getConfiguration(region, lang);
-
+		TelegramConfiguration config = this.getConfiguration(region, lang).orElse(null);
 		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
 			throw new IOException("Chat ID not found");
 		}
@@ -162,7 +163,7 @@ public class TelegramController {
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
 	public Response getMe(Region region, LanguageCode lang) throws IOException, HibernateException {
-		TelegramConfiguration config = this.getConfiguration(region, lang);
+		TelegramConfiguration config = this.getConfiguration(region, lang).orElse(null);
 		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
 			throw new IOException("Chat ID not found");
 		}
