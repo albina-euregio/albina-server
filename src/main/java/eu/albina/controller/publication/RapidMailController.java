@@ -24,6 +24,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -38,6 +40,7 @@ import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsReque
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.HttpClientUtil;
 
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -50,7 +53,6 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.hibernate.HibernateException;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Strings;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,10 +71,10 @@ public class RapidMailController {
 		return instance;
 	}
 
-	private RapidMailConfiguration getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
-		if (region == null || Strings.isNullOrEmpty(region.getId())) {
-			throw new HibernateException("No region defined!");
-		}
+	private Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
+		Objects.requireNonNull(region, "region");
+		Objects.requireNonNull(region.getId(), "region.getId()");
+		Objects.requireNonNull(languageCode, "languageCode");
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -85,7 +87,11 @@ public class RapidMailController {
 					? criteriaBuilder.isNull(root.get("subjectMatter"))
 					: criteriaBuilder.equal(root.get("subjectMatter"), subjectMatter)
 			);
-			return entityManager.createQuery(select).getSingleResult();
+			try {
+				return Optional.ofNullable(entityManager.createQuery(select).getSingleResult());
+			} catch (PersistenceException e) {
+				return Optional.empty();
+			}
 		});
 	}
 
@@ -105,16 +111,19 @@ public class RapidMailController {
 		return response.readEntity(RapidMailRecipientListResponse.class);
 	}
 
-	public Response createRecipient(Region region, PostRecipientsRequest recipient, String sendActivationmail, LanguageCode language)
+	public void createRecipient(Region region, PostRecipientsRequest recipient, String sendActivationmail, LanguageCode language)
 		throws AlbinaException, IOException, HibernateException {
 
-		RapidMailConfiguration config = this.getConfiguration(region, language, null);
+		RapidMailConfiguration config = this.getConfiguration(region, language, null).orElse(null);
+		if (config == null) {
+			return;
+		}
 
 		if (recipient.getRecipientlistId() == null) {
 			int recipientListId = getRecipientId(config);
 			recipient.setRecipientlistId(recipientListId);
 		}
-		return client.target(baseUrl + "/recipients")
+		client.target(baseUrl + "/recipients")
 			.queryParam("send_activationmail", MoreObjects.firstNonNull(sendActivationmail, "yes"))
 			.request()
 			.header("Authorization", calcBasicAuth(config.getUsername(), config.getPassword()))
@@ -122,13 +131,16 @@ public class RapidMailController {
 			.post(Entity.entity(recipient, MediaType.APPLICATION_JSON));
 	}
 
-	public PostMailingsResponse sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean media, boolean important)
+	public void sendMessage(Region region, LanguageCode language, PostMailingsRequest mailingsPost, boolean media, boolean important)
 		throws AlbinaException, IOException, HibernateException {
 
 		String subjectMatter = media && important ? "media+" : media ? "media" : null;
-		RapidMailConfiguration config = this.getConfiguration(region, language, subjectMatter);
+		RapidMailConfiguration config = this.getConfiguration(region, language, subjectMatter).orElse(null);
+		if (config == null) {
+			return;
+		}
 
-		if (config == null || config.getUsername() == null || config.getUsername().isEmpty() || config.getPassword() == null || config.getPassword().isEmpty()) {
+		if (config.getUsername() == null || config.getUsername().isEmpty() || config.getPassword() == null || config.getPassword().isEmpty()) {
 			throw new AlbinaException("No rapid mail configuration for " + region.getId() + " in " + language);
 		}
 
@@ -148,7 +160,6 @@ public class RapidMailController {
 		logger.info("... returned {}", response);
 		PostMailingsResponse entity = response.readEntity(PostMailingsResponse.class);
 		logger.info("... returned {}", entity);
-		return entity;
 	}
 
 	public int getRecipientId(RapidMailConfiguration config) throws AlbinaException, HibernateException, IOException {
