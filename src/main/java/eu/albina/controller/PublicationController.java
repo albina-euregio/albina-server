@@ -17,11 +17,14 @@
 package eu.albina.controller;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 import eu.albina.caaml.Caaml;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.publication.RapidMailConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -246,15 +249,26 @@ public class PublicationController {
 	 * Trigger the sending of the emails.
 	 */
 	public void sendEmails(AvalancheReport avalancheReport) {
+		Region region = avalancheReport.getRegion();
 		try {
-			logger.info("Email production for {} started", avalancheReport.getRegion().getId());
-			EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
+			logger.info("Email production for {} started", region.getId());
+			for (LanguageCode lang : LanguageCode.ENABLED) {
+				try {
+					RapidMailConfiguration config = RapidMailController.getConfiguration(region, lang, null).orElse(null);
+					if (config == null) {
+						continue;
+					}
+					EmailUtil.getInstance().sendBulletinEmails(config, avalancheReport);
+				} catch (Exception e) {
+					logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
+				}
+            }
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 					AvalancheReport::setEmailCreated);
 		} catch (Exception e) {
-			logger.error("Error preparing emails " + avalancheReport.getRegion().getId(), e);
+			logger.error("Error preparing emails " + region.getId(), e);
 		} finally {
-			logger.info("Email production {} finished", avalancheReport.getRegion().getId());
+			logger.info("Email production {} finished", region.getId());
 		}
 	}
 

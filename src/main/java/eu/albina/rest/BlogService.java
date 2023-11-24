@@ -29,7 +29,9 @@ import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogItem;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.publication.BlogConfiguration;
+import eu.albina.model.publication.RapidMailConfiguration;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +91,8 @@ public class BlogService {
 			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			BlogController.sendBlogPostToRapidmail(config, blogPost);
+			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(config.getRegion(), config.getLanguageCode(), null).orElseThrow();
+			BlogController.sendBlogPostToRapidmail(config, blogPost, mailConfig);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {

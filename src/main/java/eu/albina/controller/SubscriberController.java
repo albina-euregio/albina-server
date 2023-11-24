@@ -16,24 +16,16 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 
-import eu.albina.controller.publication.RapidMailController;
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.Region;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -208,28 +200,4 @@ public class SubscriberController {
 		Hibernate.initialize(subscriber.getRegions());
 	}
 
-	/**
-	 * Create a subscriber on rapidmail.
-	 *
-	 * @param subscriber
-	 *            the subscriber that should be created
-	 * @throws AlbinaException
-	 * @throws KeyManagementException
-	 * @throws CertificateException
-	 * @throws NoSuchAlgorithmException
-	 * @throws KeyStoreException
-	 * @throws IOException
-	 * @throws Exception
-	 */
-	public void createSubscriberRapidmail(Subscriber subscriber) throws AlbinaException, KeyManagementException,
-			CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, Exception {
-		if (subscriber.getLanguage() == null)
-			throw new AlbinaException("No language defined!");
-		for (Region region : subscriber.getRegions()) {
-			PostRecipientsRequest recipient = new PostRecipientsRequest();
-			recipient.setEmail(subscriber.getEmail());
-
-			RapidMailController.getInstance().createRecipient(region, recipient, null, subscriber.getLanguage());
-		}
-	}
 }

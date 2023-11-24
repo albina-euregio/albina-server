@@ -21,6 +21,7 @@ import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
 import eu.albina.jobs.UpdateJob;
@@ -32,6 +33,7 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
+import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
@@ -405,10 +407,13 @@ public class AvalancheBulletinPublishService {
 
 			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
 
-			if (language == null)
-				EmailUtil.getInstance().sendBulletinEmails(avalancheReport);
-			else
-				EmailUtil.getInstance().sendBulletinEmails(avalancheReport, language);
+			for (LanguageCode lang : language != null ? Collections.singleton(language) : LanguageCode.ENABLED) {
+				RapidMailConfiguration config = RapidMailController.getConfiguration(avalancheReport.getRegion(), lang, null).orElse(null);
+				if (config == null) {
+					continue;
+				}
+				EmailUtil.getInstance().sendBulletinEmails(config, avalancheReport);
+			}
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {

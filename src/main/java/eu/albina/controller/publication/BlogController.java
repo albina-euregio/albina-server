@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.util.HttpClientUtil;
 import eu.albina.util.LinkUtil;
 import org.slf4j.Logger;
@@ -31,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
-import eu.albina.util.EmailUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.PushNotificationUtil;
 
@@ -111,7 +112,8 @@ public interface BlogController {
 
 	static void sendBlogPost(BlogConfiguration config, BlogItem object) {
 		try {
-			sendBlogPostToRapidmail(config, object);
+			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(config.getRegion(), config.getLanguageCode(), null).orElseThrow();
+			sendBlogPostToRapidmail(config, object, mailConfig);
 		} catch (Exception e) {
 			logger.warn("Blog post could not be sent to email: " + config, e);
 		}
@@ -145,7 +147,7 @@ public interface BlogController {
 		}
 	}
 
-	static void sendBlogPostToRapidmail(BlogConfiguration config, BlogItem item) throws IOException, URISyntaxException {
+	static void sendBlogPostToRapidmail(BlogConfiguration config, BlogItem item, RapidMailConfiguration mailConfig) throws IOException, AlbinaException {
 		logger.debug("Sending new blog post to rapidmail ...");
 
 		String subject = item.getTitle();
@@ -155,7 +157,7 @@ public interface BlogController {
 			return;
 		}
 
-		EmailUtil.getInstance().sendBlogPostEmailRapidmail(config.getLanguageCode(), config.getRegion(), htmlString, subject);
+		RapidMailController.sendEmail(mailConfig, htmlString, subject);
 	}
 
 	static void sendBlogPostToPushNotification(BlogConfiguration config, BlogItem object) {

@@ -17,17 +17,13 @@
 package eu.albina.util;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 
 import eu.albina.model.AvalancheReport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
@@ -58,7 +54,7 @@ public class EmailUtilTest {
 	}
 
 	@Test
-	public void createBulletinEmailHtml() throws IOException, URISyntaxException {
+	public void createBulletinEmailHtml() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
@@ -83,7 +79,7 @@ public class EmailUtilTest {
 		}
 
 	@Test
-	public void createBulletinEmailHtml2021() throws IOException, URISyntaxException {
+	public void createBulletinEmailHtml2021() throws Exception {
 		final URL resource = Resources.getResource("2021-12-01.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
@@ -96,22 +92,5 @@ public class EmailUtilTest {
 		Assertions.assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
 		Assertions.assertEquals("Tutte le elevazioni", LanguageCode.it.getBundleString("elevation.all"));
 		Assertions.assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
-	}
-
-	@Disabled
-	@Test
-	public void sendMediaEmails() throws IOException, URISyntaxException {
-		HibernateUtil.getInstance().setUp();
-		EmailUtil.getInstance().sendMediaEmails(
-			"Test",
-			"test.mp3",
-			"test.txt",
-			LocalDate.now(ZoneId.of("Europe/Vienna")).atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant(),
-			regionTyrol,
-			"Norbert Lanzanasto",
-			LanguageCode.de,
-			serverInstanceEuregio,
-			false);
-		HibernateUtil.getInstance().shutDown();
 	}
 }

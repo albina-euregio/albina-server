@@ -104,18 +104,6 @@ public class AlbinaUtilTest {
 		// recipients.add("chris.mitterer@tirol.gv.at");
 	}
 
-	@Disabled
-	@Test
-	public void addSubscriber() throws KeyManagementException, CertificateException, NoSuchAlgorithmException,
-			KeyStoreException, AlbinaException, IOException, Exception {
-		Subscriber subscriber = new Subscriber();
-		subscriber.setEmail("n.lanzanasto@gmail.com");
-		subscriber.setLanguage(LanguageCode.it);
-		subscriber.setRegions(Arrays.asList(regionTirol));
-
-		SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
-	}
-
 	@Test
 	public void retrieveTranslationTest() throws UnsupportedEncodingException {
 		String string = LanguageCode.ca.getBundleString("headline.tendency");

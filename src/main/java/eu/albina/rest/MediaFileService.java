@@ -16,13 +16,12 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -40,6 +39,9 @@ import javax.ws.rs.core.UriInfo;
 import com.github.openjson.JSONObject;
 
 import eu.albina.controller.RegionController;
+import eu.albina.controller.publication.RapidMailController;
+import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.util.LinkUtil;
 import eu.albina.util.RssUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -58,7 +60,6 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.EmailUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 
@@ -113,7 +114,24 @@ public class MediaFileService {
 			logger.info("{} successfully uploaded to {}", txtFileName, txtFile);
 
 			// send emails
-			EmailUtil.getInstance().sendMediaEmails(mediaText, mp3FileName, txtFileName, date, region, user.getName(), language, localServerInstance, important);
+			ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
+			String formattedDate = language.getBundleString("day." + localDate.getDayOfWeek()) + ", " + localDate.format(language.getFormatter());
+
+			String mp3FileUrl = LinkUtil.getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
+
+			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), language.getBundleString("website.name"), formattedDate, user.getName());
+			String emailHtml = String.format("%s<br><br>%s<br><br>%s",
+				mediaText.replace("\n", "<br>"),
+				LinkUtil.createHtmlLink(language.getBundleString("email.media.link.mp3"), mp3FileUrl),
+				MessageFormat.format(language.getBundleString("email.media.text"), user.getName()));
+			RapidMailConfiguration config = RapidMailController.getConfiguration(region, language, "media").orElseThrow();
+			RapidMailController.sendEmail(config, emailHtml, subject);
+
+			if (important) {
+				subject = MessageFormat.format(language.getBundleString("email.media.important.subject"), language.getBundleString("website.name"), formattedDate, user.getName());
+				config = RapidMailController.getConfiguration(region, language, "media+").orElseThrow();
+				RapidMailController.sendEmail(config, emailHtml, subject);
+			}
 
 			// set publication flag
 			AvalancheReportController.getInstance().setMediaFileFlag(date, region);
@@ -121,12 +139,6 @@ public class MediaFileService {
 			return Response.status(200).type(MediaType.APPLICATION_JSON).entity(new JSONObject().append("file", fileLocation)).build();
 		} catch (AlbinaException e) {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
-		} catch (FileNotFoundException e) {
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		} catch (IOException e) {
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		} catch (URISyntaxException e) {
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		} catch (Exception e) {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}

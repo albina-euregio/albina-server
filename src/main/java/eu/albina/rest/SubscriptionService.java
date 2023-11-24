@@ -18,7 +18,7 @@ package eu.albina.rest;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.Objects;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -30,8 +30,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import org.hibernate.HibernateException;
 import com.github.openjson.JSONException;
@@ -71,16 +74,20 @@ public class SubscriptionService {
 	@Operation(summary = "Subscribe email notification")
 	public Response addSubscriber(EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
+		Objects.requireNonNull(json.language, "language");
 		final Region region = RegionController.getInstance().getRegion(json.regions);
-		final List<Region> regions = Collections.singletonList(region);
 		final Subscriber subscriber = new Subscriber();
 		subscriber.setEmail(json.email);
-		subscriber.setRegions(regions);
+		subscriber.setRegions(Collections.singletonList(region));
 		subscriber.setLanguage(json.language);
 
+		PostRecipientsRequest recipient = new PostRecipientsRequest();
+		recipient.setEmail(subscriber.getEmail());
+
 		try {
+			RapidMailConfiguration config = RapidMailController.getConfiguration(region, subscriber.getLanguage(), null).orElseThrow();
 			SubscriberController.getInstance().createSubscriber(subscriber);
-			SubscriberController.getInstance().createSubscriberRapidmail(subscriber);
+			RapidMailController.createRecipient(config, recipient);
 			return Response.ok().build();
 		} catch (Exception e) {
 			logger.warn("Error subscribe", e);
