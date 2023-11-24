@@ -17,7 +17,6 @@
 package eu.albina.controller.publication;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Objects;
@@ -48,23 +47,11 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-public class TelegramController {
-	private static final Logger logger = LoggerFactory.getLogger(TelegramController.class);
+public interface TelegramController {
+	Logger logger = LoggerFactory.getLogger(TelegramController.class);
+	Client client = HttpClientUtil.newClientBuilder().build();
 
-	private static TelegramController instance = null;
-	private final Client client = HttpClientUtil.newClientBuilder().build();
-
-	public static TelegramController getInstance() {
-		if (instance == null) {
-			instance = new TelegramController();
-		}
-		return instance;
-	}
-
-	public TelegramController() {
-	}
-
-	private Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+	static Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
 		Objects.requireNonNull(region, "region");
 		Objects.requireNonNull(region.getId(), "region.getId()");
 		Objects.requireNonNull(languageCode, "languageCode");
@@ -82,9 +69,9 @@ public class TelegramController {
 		});
 	}
 
-	public Void trySendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl, int retry) throws Exception {
+	static Void trySendPhoto(TelegramConfiguration config, String message, String attachmentUrl, int retry) throws Exception {
 		try {
-			sendPhoto(region, lang, message, attachmentUrl);
+			sendPhoto(config, message, attachmentUrl);
 		} catch (Exception e) {
 			if (retry <= 0) {
 				throw e;
@@ -95,12 +82,19 @@ public class TelegramController {
 			final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 			executorService.schedule(() -> {
 				executorService.shutdown();
-				return trySendPhoto(region, lang, message, attachmentUrl, newRetry);
+				return trySendPhoto(config, message, attachmentUrl, newRetry);
 			}, delay, TimeUnit.MILLISECONDS);
 		}
 		return null;
 	}
 
+	static void sendPhotoOrMessage(TelegramConfiguration telegramConfig, String message, String attachmentUrl) throws IOException {
+		if (attachmentUrl != null) {
+			sendPhoto(telegramConfig, message, attachmentUrl);
+		} else {
+			sendMessage(telegramConfig, message);
+		}
+	}
 
 	/**
 	 * Send photo to Telegram channel using HTTP multipart/form-data
@@ -108,14 +102,11 @@ public class TelegramController {
 	 * @see <a href="https://core.telegram.org/bots/api#sendphoto">https://core.telegram.org/bots/api#sendphoto</a>
 	 * @see <a href="https://core.telegram.org/bots/api#inputfile">https://core.telegram.org/bots/api#inputfile</a>
 	 */
-	public Response sendPhoto(Region region, LanguageCode lang, String message, String attachmentUrl)
-			throws IOException, URISyntaxException, HibernateException {
-		TelegramConfiguration config = this.getConfiguration(region, lang).orElse(null);
-		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
-			throw new IOException("Chat ID not found");
-		}
-
-		String chatId = config.getChatId();
+	static Response sendPhoto(TelegramConfiguration config, String message, String attachmentUrl)
+			throws IOException, HibernateException {
+		Objects.requireNonNull(config, "config");
+		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
+		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
 		MultiPart multiPart = new FormDataMultiPart();
 		multiPart.bodyPart(new StreamDataBodyPart(
@@ -128,7 +119,7 @@ public class TelegramController {
 			.newClientBuilder(80000) // sending photos may a while
 			.register(MultiPartFeature.class)
 			.build()
-			.target(String.format("https://api.telegram.org/bot%s/sendPhoto", config.getApiToken()))
+			.target(String.format("https://api.telegram.org/bot%s/sendPhoto", apiToken))
 			.register(MultiPartFeature.class)
 			.queryParam("chat_id", chatId)
 			.queryParam("caption", message)
@@ -144,15 +135,12 @@ public class TelegramController {
 		return response;
 	}
 
-	public Response sendMessage(Region region, LanguageCode lang, String message) throws IOException, URISyntaxException, HibernateException {
-		TelegramConfiguration config = this.getConfiguration(region, lang).orElse(null);
-		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
-			throw new IOException("Chat ID not found");
-		}
+	static Response sendMessage(TelegramConfiguration config, String message) throws HibernateException {
+		Objects.requireNonNull(config, "config");
+		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
+		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
-		String chatId = config.getChatId();
-
-		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendMessage", config.getApiToken()))
+		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendMessage", apiToken))
 			.queryParam("chat_id", chatId)
 			.queryParam("text", message);
 		return execute(request, config);
@@ -162,16 +150,12 @@ public class TelegramController {
 	 * A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
-	public Response getMe(Region region, LanguageCode lang) throws IOException, HibernateException {
-		TelegramConfiguration config = this.getConfiguration(region, lang).orElse(null);
-		if (config == null || config.getChatId() == null || config.getApiToken() == null) {
-			throw new IOException("Chat ID not found");
-		}
+	static Response getMe(TelegramConfiguration config) throws HibernateException {
 		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()));
 		return execute(request, config);
 	}
 
-	private Response execute(WebTarget request, TelegramConfiguration config) {
+	static Response execute(WebTarget request, TelegramConfiguration config) {
 		final Response response = request.request().get();
 		if (response.getStatusInfo().getStatusCode() != 200) {
 			logger.warn("Error publishing on telegram channel for "

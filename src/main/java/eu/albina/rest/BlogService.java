@@ -30,8 +30,10 @@ import javax.ws.rs.core.UriInfo;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogItem;
 import eu.albina.controller.publication.RapidMailController;
+import eu.albina.controller.publication.TelegramController;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.model.publication.TelegramConfiguration;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,7 +119,8 @@ public class BlogService {
 			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			BlogController.sendBlogPostToTelegramChannel(config, blogPost);
+			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(config.getRegion(), config.getLanguageCode()).orElseThrow();
+			BlogController.sendBlogPostToTelegramChannel(config, blogPost, telegramConfig);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {

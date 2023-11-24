@@ -17,7 +17,6 @@
 package eu.albina.controller.publication;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +24,7 @@ import java.util.Optional;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HttpClientUtil;
 import eu.albina.util.LinkUtil;
 import org.slf4j.Logger;
@@ -119,7 +119,8 @@ public interface BlogController {
 		}
 
 		try {
-			sendBlogPostToTelegramChannel(config, object);
+			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(config.getRegion(), config.getLanguageCode()).orElseThrow();
+			sendBlogPostToTelegramChannel(config, object, telegramConfig);
 		} catch (Exception e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + config, e);
 		}
@@ -133,18 +134,12 @@ public interface BlogController {
 		updateConfigurationLastPublished(config, object);
 	}
 
-	static void sendBlogPostToTelegramChannel(BlogConfiguration config, BlogItem item) throws IOException, URISyntaxException {
-		logger.info("Sending new blog post to telegram channel ...");
-
+	static void sendBlogPostToTelegramChannel(BlogConfiguration config, BlogItem item, TelegramConfiguration telegramConfig) throws IOException {
+		logger.info("Sending blog post to telegram channel ...");
 		String message = getBlogMessage(config, item);
 		String attachmentUrl = item.getAttachmentUrl();
-		TelegramController telegramController = TelegramController.getInstance();
 
-		if (attachmentUrl != null) {
-			telegramController.sendPhoto(config.getRegion(), config.getLanguageCode(), message, attachmentUrl);
-		} else {
-			telegramController.sendMessage(config.getRegion(), config.getLanguageCode(), message);
-		}
+		TelegramController.sendPhotoOrMessage(telegramConfig, message, attachmentUrl);
 	}
 
 	static void sendBlogPostToRapidmail(BlogConfiguration config, BlogItem item, RapidMailConfiguration mailConfig) throws IOException, AlbinaException {

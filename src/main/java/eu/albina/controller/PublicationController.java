@@ -17,9 +17,9 @@
 package eu.albina.controller;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import eu.albina.caaml.Caaml;
 import eu.albina.controller.publication.RapidMailController;
@@ -235,24 +235,24 @@ public class PublicationController {
 			return;
 		}
 		if (avalancheReport.getRegion().isSendEmails()) {
-			new Thread(() -> sendEmails(avalancheReport)).start();
+			new Thread(() -> sendEmails(avalancheReport, LanguageCode.ENABLED)).start();
 		}
 		if (avalancheReport.getRegion().isSendTelegramMessages()) {
-			new Thread(() -> triggerTelegramChannel(avalancheReport, null)).start();
+			new Thread(() -> triggerTelegramChannel(avalancheReport, LanguageCode.ENABLED)).start();
 		}
 		if (avalancheReport.getRegion().isSendPushNotifications()) {
-			new Thread(() -> triggerPushNotifications(avalancheReport, null)).start();
+			new Thread(() -> triggerPushNotifications(avalancheReport, LanguageCode.ENABLED)).start();
 		}
 	}
 
 	/**
 	 * Trigger the sending of the emails.
 	 */
-	public void sendEmails(AvalancheReport avalancheReport) {
+	public void sendEmails(AvalancheReport avalancheReport, Set<LanguageCode> languages) {
 		Region region = avalancheReport.getRegion();
 		try {
 			logger.info("Email production for {} started", region.getId());
-			for (LanguageCode lang : LanguageCode.ENABLED) {
+			for (LanguageCode lang : languages) {
 				try {
 					RapidMailConfiguration config = RapidMailController.getConfiguration(region, lang, null).orElse(null);
 					if (config == null) {
@@ -275,13 +275,12 @@ public class PublicationController {
 	/**
 	 * Trigger the sending of telegram messages.
 	 */
-	public void triggerTelegramChannel(AvalancheReport avalancheReport, LanguageCode language) {
+	public void triggerTelegramChannel(AvalancheReport avalancheReport, Set<LanguageCode> languages) {
 		try {
 			logger.info("Telegram channel for {} triggered", avalancheReport.getRegion().getId());
-			if (language == null)
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport);
-			else
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport, language);
+			for (LanguageCode lang : languages) {
+				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport, lang);
+			}
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 					AvalancheReport::setTelegramSent);
 		} catch (Exception e) {
@@ -294,13 +293,12 @@ public class PublicationController {
 	/**
 	 * Trigger the sending of push notifications.
 	 */
-	public void triggerPushNotifications(AvalancheReport avalancheReport, LanguageCode language) {
+	public void triggerPushNotifications(AvalancheReport avalancheReport, Set<LanguageCode> languages) {
 		try {
 			logger.info("Push notifications for {} triggered", avalancheReport.getRegion().getId());
-			if (language == null)
-				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport);
-			else
-				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport, language);
+			for (LanguageCode lang : languages) {
+				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport, lang);
+			}
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 					AvalancheReport::setPushSent);
 		} catch (Exception e) {

@@ -41,6 +41,7 @@ import eu.albina.controller.publication.TelegramController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
+import eu.albina.model.publication.TelegramConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -175,7 +176,8 @@ public class ServerInstanceService {
 	) throws Exception {
 		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 		logger.info("Testing TelegramController");
-		Response me = TelegramController.getInstance().getMe(region, language);
+		TelegramConfiguration telegramConfig = TelegramController.getConfiguration(region, language).orElseThrow();
+		Response me = TelegramController.getMe(telegramConfig);
 		logger.info("Testing Blog");
 		BlogConfiguration config = BlogController.getConfiguration(region, language).orElseThrow();
 		BlogItem latestBlogPost = BlogController.getLatestBlogPost(config);

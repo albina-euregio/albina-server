@@ -406,14 +406,7 @@ public class AvalancheBulletinPublishService {
 			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 
 			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
-
-			for (LanguageCode lang : language != null ? Collections.singleton(language) : LanguageCode.ENABLED) {
-				RapidMailConfiguration config = RapidMailController.getConfiguration(avalancheReport.getRegion(), lang, null).orElse(null);
-				if (config == null) {
-					continue;
-				}
-				EmailUtil.getInstance().sendBulletinEmails(config, avalancheReport);
-			}
+			PublicationController.getInstance().sendEmails(avalancheReport, getLanguages(language));
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -439,8 +432,7 @@ public class AvalancheBulletinPublishService {
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 
 			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
-
-			new Thread(() -> PublicationController.getInstance().triggerTelegramChannel(avalancheReport, language)).start();
+			PublicationController.getInstance().triggerTelegramChannel(avalancheReport, getLanguages(language));
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -463,8 +455,7 @@ public class AvalancheBulletinPublishService {
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 
 			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
-
-			PublicationController.getInstance().triggerPushNotifications(avalancheReport, language);
+			PublicationController.getInstance().triggerPushNotifications(avalancheReport, getLanguages(language));
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -482,5 +473,9 @@ public class AvalancheBulletinPublishService {
 		avalancheReport.setBulletins(bulletins);
 		avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 		return avalancheReport;
+	}
+
+	private static Set<LanguageCode> getLanguages(LanguageCode language) {
+		return language != null ? Collections.singleton(language) : LanguageCode.ENABLED;
 	}
 }

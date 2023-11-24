@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import eu.albina.model.publication.TelegramConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,11 +39,11 @@ public class TelegramChannelUtil implements SocialMediaUtil {
 
 	@Override
 	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl) {
-		TelegramController ctTc = TelegramController.getInstance();
 		if (region.isSendTelegramMessages()) {
 			try {
 				logger.info("Publishing report on telegram channel for {} in {}", region.getId(), lang);
-				ctTc.trySendPhoto(region, lang, message, attachmentUrl, 3);
+				TelegramConfiguration config = TelegramController.getConfiguration(region, lang).orElseThrow();
+				TelegramController.trySendPhoto(config, message, attachmentUrl, 3);
 			} catch (Exception e) {
 				logger.error("Error while sending bulletin newsletter to telegram channel in " + lang + " for region "
 						+ region.getId(), e);

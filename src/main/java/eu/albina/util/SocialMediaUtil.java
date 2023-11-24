@@ -27,12 +27,6 @@ import eu.albina.model.enumerations.LanguageCode;
 
 interface SocialMediaUtil {
 
-	default void sendBulletinNewsletters(AvalancheReport avalancheReport) {
-		for (LanguageCode lang : LanguageCode.ENABLED) {
-			sendBulletinNewsletters(avalancheReport, lang);
-		}
-	}
-
 	default void sendBulletinNewsletters(AvalancheReport avalancheReport, LanguageCode lang) {
 		String message = getSocialMediaText(avalancheReport, lang);
 		String attachmentUrl = LinkUtil.getSocialMediaAttachmentUrl(avalancheReport, lang);
