@@ -92,15 +92,11 @@ public class SubscriberController {
 	 *             if the {@code Subscriber} could not be saved
 	 */
 	public Serializable createSubscriber(Subscriber subscriber) throws HibernateException {
-
-		try {
-			Subscriber s = getSubscriber(subscriber.getEmail());
-			if (s != null)
-				deleteSubscriber(subscriber.getEmail());
-		} catch (Exception e) {
-		}
-
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			Subscriber existing = entityManager.find(Subscriber.class, subscriber.getEmail());
+			if (existing != null) {
+				entityManager.remove(subscriber);
+			}
 			entityManager.persist(subscriber);
 			return subscriber.getEmail();
 		});
@@ -133,7 +129,7 @@ public class SubscriberController {
 	 */
 	public void confirmSubscriber(String email) throws AlbinaException {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			Subscriber subscriber = getSubscriber(email);
+			Subscriber subscriber = entityManager.find(Subscriber.class, email);
 			subscriber.setConfirmed(true);
 			entityManager.merge(subscriber);
 			return null;
