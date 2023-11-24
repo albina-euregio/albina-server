@@ -86,8 +86,8 @@ public class BlogController {
 		}
 		config.setLastPublishedBlogId(object.getId());
 		config.setLastPublishedTimestamp(object.getPublished());
-		logger.info("Updating lastPublishedTimestamp={} lastPublishedBlogId={} for {} [{}]",
-			config.getLastPublishedTimestamp(), config.getLastPublishedBlogId(), config.getRegion().getId(), config.getLanguageCode());
+		logger.info("Updating lastPublishedTimestamp={} lastPublishedBlogId={} for {}",
+			config.getLastPublishedTimestamp(), config.getLastPublishedBlogId(), config);
 		HibernateUtil.getInstance().runTransaction(entityManager -> entityManager.merge(config));
 	}
 
@@ -99,7 +99,7 @@ public class BlogController {
 		List<? extends BlogItem> blogPosts = config.isBlogger()
 			? Blogger.getBlogPosts(config, client)
 			: Wordpress.getBlogPosts(config, client);
-		logger.info("Found {} new blog posts for region={} lang={}", blogPosts.size(), config.getRegion().getId(), config.getLanguageCode().toString());
+		logger.info("Found {} new blog posts for {}", blogPosts.size(), config);
 		return blogPosts;
 	}
 
