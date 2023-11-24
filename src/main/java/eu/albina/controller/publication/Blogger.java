@@ -68,8 +68,8 @@ public interface Blogger {
 		public String id;
 		public String content;
 		public Blog blog;
-		public OffsetDateTime published;
-		public OffsetDateTime updated;
+		public String published;
+		public String updated;
 		public String url;
 		public String selfLink;
 		public String title;
@@ -96,7 +96,7 @@ public interface Blogger {
 
 		@Override
 		public OffsetDateTime getPublished() {
-			return published;
+			return OffsetDateTime.parse(published);
 		}
 
 		@Override

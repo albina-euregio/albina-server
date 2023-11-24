@@ -56,7 +56,7 @@ public interface Wordpress {
 
 	class Item implements BlogItem {
 		public long id;
-		public OffsetDateTime date;
+		public String date;
 		public String link;
 		public Rendered title;
 		public Rendered content;
@@ -84,7 +84,7 @@ public interface Wordpress {
 
 		@Override
 		public OffsetDateTime getPublished() {
-			return date;
+			return OffsetDateTime.parse(date);
 		}
 
 		@Override

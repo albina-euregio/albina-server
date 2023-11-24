@@ -16,10 +16,13 @@
  ******************************************************************************/
 package eu.albina.controller.publication;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -101,5 +104,21 @@ public class BlogControllerTest {
 		BlogConfiguration config = BlogController.getInstance().getConfiguration(regionSouthTyrol, LanguageCode.de).orElseThrow();
 		String blogPost = BlogController.getInstance().getBlogPost(config, "4564885875858452565").getContent();
 		assertTrue(blogPost.contains("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
+	}
+
+	@Disabled
+	@Test
+	public void testTicket280() throws Exception {
+		BlogConfiguration config = new BlogConfiguration();
+		config.setBlogApiUrl("https://www.googleapis.com/blogger/v3/blogs/");
+		config.setBlogId("5267718003722031964");
+		config.setApiKey("xxx");
+		BlogItem blogPost = BlogController.getInstance().getBlogPost(config, "576660231960838111");
+		assertEquals("2023-11-22T08:44-08:00", blogPost.getPublished().toString());
+		assertEquals("2023-11-22T16:44:00Z", blogPost.getPublished().toInstant().toString());
+		assertEquals("Boletín de Aludes para el Jueves 23/11/2023", blogPost.getTitle());
+		config.setLastPublishedTimestamp(blogPost.getPublished());
+		Assumptions.assumeTrue(Instant.now().isBefore(Instant.parse("2023-11-24T12:00:00Z")));
+		assertEquals(Collections.emptyList(), BlogController.getInstance().getBlogPosts(config));
 	}
 }
