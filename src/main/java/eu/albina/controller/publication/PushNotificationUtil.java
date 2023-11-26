@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package eu.albina.util;
+package eu.albina.controller.publication;
 
-import java.util.Arrays;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +27,8 @@ import ch.rasc.webpush.ServerKeys;
 import ch.rasc.webpush.dto.Subscription;
 import ch.rasc.webpush.dto.SubscriptionKeys;
 import eu.albina.exception.AlbinaException;
+import eu.albina.util.HibernateUtil;
+import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +36,6 @@ import com.github.openjson.JSONObject;
 
 import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.PushConfiguration;
 
 import javax.persistence.PersistenceException;
@@ -46,7 +46,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Variant;
 
-public class PushNotificationUtil implements SocialMediaUtil {
+public class PushNotificationUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
 	private final Client client;
@@ -59,25 +59,23 @@ public class PushNotificationUtil implements SocialMediaUtil {
 		this.client = client;
 	}
 
-	@Override
-	public void sendBulletinNewsletter(String message, LanguageCode lang, Region region, String attachmentUrl, String bulletinUrl) {
-		final JSONObject payload = new JSONObject();
-		payload.put("title", lang.getBundleString("website.name"));
-		payload.put("body", message);
-		payload.put("image", attachmentUrl);
-		bulletinUrl = bulletinUrl.replace("map.jpg", "thumbnail.jpg");
-		payload.put("url", bulletinUrl);
-
-		if (region.isSendPushNotifications()) {
-			List<String> regions = Arrays.asList(region.getId());
-			List<PushSubscription> subscriptions = PushSubscriptionController.get(lang, regions);
-
-			logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), lang, region, payload);
-			for (PushSubscription subscription : subscriptions) {
-				sendPushMessage(subscription, payload, null);
-			}
+	public void send(MultichannelMessage posting) {
+		if (!posting.getRegion().isSendPushNotifications()) {
+			return;
 		}
-	}
+
+		final JSONObject payload = new JSONObject();
+		payload.put("title", posting.getLanguageCode().getBundleString("website.name"));
+		payload.put("body", posting.getSocialMediaText());
+		payload.put("image", posting.getAttachmentUrl());
+		payload.put("url", posting.getWebsiteUrl());
+
+        List<PushSubscription> subscriptions = PushSubscriptionController.get(posting.getLanguageCode(), Collections.singleton(posting.getRegion().getId()));
+        logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), posting.getLanguageCode(), posting.getRegion(), payload);
+        for (PushSubscription subscription : subscriptions) {
+            sendPushMessage(subscription, payload, null);
+        }
+    }
 
 	public void sendWelcomePushMessage(PushSubscription subscription) {
 		final JSONObject payload = new JSONObject();

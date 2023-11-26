@@ -23,21 +23,22 @@ import java.util.Set;
 
 import eu.albina.caaml.Caaml;
 import eu.albina.controller.publication.RapidMailController;
+import eu.albina.controller.publication.TelegramController;
 import eu.albina.model.AvalancheReport;
+import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.model.publication.TelegramConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.EmailUtil;
 import eu.albina.util.JsonUtil;
 import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
-import eu.albina.util.PushNotificationUtil;
+import eu.albina.controller.publication.PushNotificationUtil;
 import eu.albina.util.SimpleHtmlUtil;
-import eu.albina.util.TelegramChannelUtil;
 
 /**
  * Controller for avalanche reports.
@@ -254,19 +255,17 @@ public class PublicationController {
 			logger.info("Email production for {} started", region.getId());
 			for (LanguageCode lang : languages) {
 				try {
-					RapidMailConfiguration config = RapidMailController.getConfiguration(region, lang, null).orElse(null);
-					if (config == null) {
-						continue;
-					}
-					EmailUtil.getInstance().sendBulletinEmails(config, avalancheReport);
+					MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
+					RapidMailConfiguration config = RapidMailController.getConfiguration(region, lang, null).orElseThrow();
+					RapidMailController.sendEmail(config, posting);
 				} catch (Exception e) {
-					logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
+					logger.error(String.format("Error sending emails for %s/%s", region.getId(), lang), e);
 				}
             }
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 					AvalancheReport::setEmailCreated);
 		} catch (Exception e) {
-			logger.error("Error preparing emails " + region.getId(), e);
+			logger.error("Error sending emails for " + region.getId(), e);
 		} finally {
 			logger.info("Email production {} finished", region.getId());
 		}
@@ -276,17 +275,24 @@ public class PublicationController {
 	 * Trigger the sending of telegram messages.
 	 */
 	public void triggerTelegramChannel(AvalancheReport avalancheReport, Set<LanguageCode> languages) {
+		Region region = avalancheReport.getRegion();
 		try {
-			logger.info("Telegram channel for {} triggered", avalancheReport.getRegion().getId());
+			logger.info("Telegram channel for {} triggered", region.getId());
 			for (LanguageCode lang : languages) {
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport, lang);
+				MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
+				TelegramConfiguration config = TelegramController.getConfiguration(region, lang).orElseThrow();
+				try {
+					TelegramController.trySend(config, posting, 3);
+				} catch (Exception e) {
+					logger.error(String.format("Error while sending to telegram channel for %s/%s", region.getId(), lang), e);
+				}
 			}
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 					AvalancheReport::setTelegramSent);
 		} catch (Exception e) {
-			logger.error("Error preparing telegram channel", e);
+			logger.error("Error while sending to telegram channel for " + region, e);
 		} finally {
-			logger.info("Telegram channel for {} finished", avalancheReport.getRegion().getId());
+			logger.info("Telegram channel for {} finished", region.getId());
 		}
 	}
 
@@ -297,7 +303,8 @@ public class PublicationController {
 		try {
 			logger.info("Push notifications for {} triggered", avalancheReport.getRegion().getId());
 			for (LanguageCode lang : languages) {
-				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport, lang);
+				MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
+				new PushNotificationUtil().send(posting);
 			}
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 					AvalancheReport::setPushSent);

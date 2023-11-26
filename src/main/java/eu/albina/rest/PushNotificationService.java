@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
-import eu.albina.util.PushNotificationUtil;
+import eu.albina.controller.publication.PushNotificationUtil;
 
 @Path("/push")
 @Tag(name = "push")

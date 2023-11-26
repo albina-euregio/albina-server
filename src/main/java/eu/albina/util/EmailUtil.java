@@ -19,20 +19,16 @@ package eu.albina.util;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.model.publication.RapidMailConfiguration;
 
-import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.Region;
@@ -69,25 +65,6 @@ public class EmailUtil {
 		cfg.setLogTemplateExceptions(false);
 		cfg.setWrapUncheckedExceptions(true);
 		return cfg.getTemplate("albina-email.html");
-	}
-
-	public void sendBulletinEmails(RapidMailConfiguration config, AvalancheReport avalancheReport) throws IOException, AlbinaException, TemplateException {
-		Region region = avalancheReport.getRegion();
-		if (!region.isSendEmails()) {
-			return;
-		}
-		LanguageCode lang = config.getLang();
-		String bundleString = avalancheReport.getStatus() == BulletinStatus.republished
-			? lang.getBundleString("email.subject.update", region)
-			: lang.getBundleString("email.subject", region);
-		String subject = MessageFormat.format(bundleString, lang.getBundleString("website.name", region))
-			+ AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
-		List<AvalancheBulletin> regionBulletins = avalancheReport.getBulletins();
-		if (regionBulletins == null || regionBulletins.isEmpty()) {
-			return;
-		}
-		String emailHtml = createBulletinEmailHtml(avalancheReport, lang);
-		RapidMailController.sendEmail(config, emailHtml, subject);
 	}
 
 	public String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) throws IOException, TemplateException {

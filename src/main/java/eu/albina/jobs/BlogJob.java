@@ -16,8 +16,6 @@
  ******************************************************************************/
 package eu.albina.jobs;
 
-import eu.albina.controller.publication.BlogItem;
-import eu.albina.model.publication.BlogConfiguration;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -27,9 +25,6 @@ import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
@@ -52,33 +47,9 @@ public class BlogJob implements org.quartz.Job {
 		for (Region region : RegionController.getInstance().getPublishBlogRegions()) {
 			logger.info("Blog job triggered for {}!", region.getId());
 			for (LanguageCode lang : LanguageCode.ENABLED) {
-				sendNewBlogPosts(region, lang);
+				BlogController.sendNewBlogPosts(region, lang);
 			}
 		}
 	}
 
-	private static void sendNewBlogPosts(Region region, LanguageCode lang) {
-		if (!region.isPublishBlogs()) {
-			logger.debug("Publishing blogs is disabled for region {}", region);
-			return;
-		}
-
-		BlogConfiguration config = BlogController.getConfiguration(region, lang).orElse(null);
-		if (config == null) {
-			logger.debug("No blog configuration found for region {} and lang {}", region, lang);
-			return;
-		}
-
-		List<? extends BlogItem> blogPosts;
-		try {
-			blogPosts = BlogController.getBlogPosts(config);
-		} catch (IOException e) {
-			logger.warn("Blog posts could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
-			return;
-		}
-
-		for (BlogItem object : blogPosts) {
-			BlogController.sendBlogPost(config, object);
-		}
-	}
 }

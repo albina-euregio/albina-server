@@ -22,11 +22,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HttpClientUtil;
-import eu.albina.util.LinkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +32,6 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.PushNotificationUtil;
 
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
@@ -88,10 +85,9 @@ public interface BlogController {
 		return blogPosts;
 	}
 
-	static BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException {
-		if (config == null || config.getBlogApiUrl() == null) {
-			throw new IOException("Blog ID not found");
-		}
+	static BlogItem getLatestBlogPost(BlogConfiguration config) {
+		Objects.requireNonNull(config, "config");
+		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
 		BlogItem blogPost = config.isBlogger()
 			? Blogger.getLatestBlogPost(config, client)
@@ -100,75 +96,106 @@ public interface BlogController {
 		return blogPost;
 	}
 
-	static BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException {
-		if (config == null || config.getBlogApiUrl() == null) {
-			throw new IOException("Blog ID not found");
-		}
+	static BlogItem getBlogPost(BlogConfiguration config, String blogPostId) {
+		Objects.requireNonNull(config, "config");
+		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
 		return config.isBlogger()
 			? Blogger.getBlogPost(config, blogPostId, client)
 			: Wordpress.getBlogPost(config, blogPostId, client);
 	}
 
-	static void sendBlogPost(BlogConfiguration config, BlogItem object) {
+	static MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) {
+		BlogItem blogPost = getBlogPost(config, blogPostId);
+		return new MultichannelMessage() {
+			@Override
+			public Region getRegion() {
+				return config.getRegion();
+			}
+
+			@Override
+			public LanguageCode getLanguageCode() {
+				return config.getLanguageCode();
+			}
+
+			@Override
+			public String getWebsiteUrl() {
+				return blogPost.getAvalancheReportUrl(config);
+			}
+
+			@Override
+			public String getAttachmentUrl() {
+				return blogPost.getAttachmentUrl();
+			}
+
+			@Override
+			public String getSubject() {
+				return blogPost.getTitle();
+			}
+
+			@Override
+			public String getSocialMediaText() {
+				return blogPost.getTitleAndUrl(config);
+			}
+
+			@Override
+			public String getHtmlMessage() {
+				return blogPost.getContent();
+			}
+
+			@Override
+			public String toString() {
+				return toDefaultString();
+			}
+		};
+	}
+
+	static void sendNewBlogPosts(Region region, LanguageCode lang) {
+		if (!region.isPublishBlogs()) {
+			logger.debug("Publishing blogs is disabled for region {}", region);
+			return;
+		}
+
+		BlogConfiguration config = getConfiguration(region, lang).orElse(null);
+		if (config == null) {
+			logger.debug("No blog configuration found for region {} and lang {}", region, lang);
+			return;
+		}
+
+		List<? extends BlogItem> blogPosts;
+		try {
+			blogPosts = getBlogPosts(config);
+		} catch (IOException e) {
+			logger.warn("Blog posts could not be retrieved: " + region.getId() + ", " + lang.toString(), e);
+			return;
+		}
+
+		for (BlogItem object : blogPosts) {
+			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
+			sendBlogPost(config, posting);
+			updateConfigurationLastPublished(config, object);
+		}
+	}
+
+	static void sendBlogPost(BlogConfiguration config, MultichannelMessage posting) {
 		try {
 			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(config.getRegion(), config.getLanguageCode(), null).orElseThrow();
-			sendBlogPostToRapidmail(config, object, mailConfig);
+			RapidMailController.sendEmail(mailConfig, posting);
 		} catch (Exception e) {
 			logger.warn("Blog post could not be sent to email: " + config, e);
 		}
 
 		try {
 			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(config.getRegion(), config.getLanguageCode()).orElseThrow();
-			sendBlogPostToTelegramChannel(config, object, telegramConfig);
+			TelegramController.trySend(telegramConfig, posting, 3);
 		} catch (Exception e) {
 			logger.warn("Blog post could not be sent to telegram channel: " + config, e);
 		}
 
 		try {
-			sendBlogPostToPushNotification(config, object);
+			new PushNotificationUtil().send(posting);
 		} catch (Exception e) {
 			logger.warn("Blog post could not be sent to push notifications: " + config, e);
 		}
-
-		updateConfigurationLastPublished(config, object);
 	}
-
-	static void sendBlogPostToTelegramChannel(BlogConfiguration config, BlogItem item, TelegramConfiguration telegramConfig) throws IOException {
-		logger.info("Sending blog post to telegram channel ...");
-		String message = getBlogMessage(config, item);
-		String attachmentUrl = item.getAttachmentUrl();
-
-		TelegramController.sendPhotoOrMessage(telegramConfig, message, attachmentUrl);
-	}
-
-	static void sendBlogPostToRapidmail(BlogConfiguration config, BlogItem item, RapidMailConfiguration mailConfig) throws IOException, AlbinaException {
-		logger.debug("Sending new blog post to rapidmail ...");
-
-		String subject = item.getTitle();
-		String blogPostId = item.getId();
-		String htmlString = getBlogPost(config, blogPostId).getContent();
-		if (htmlString == null || htmlString.isEmpty()) {
-			return;
-		}
-
-		RapidMailController.sendEmail(mailConfig, htmlString, subject);
-	}
-
-	static void sendBlogPostToPushNotification(BlogConfiguration config, BlogItem object) {
-		String message = getBlogMessage(config, object);
-		String attachmentUrl = object.getAttachmentUrl();
-		String blogUrl = getBlogUrl(config, object);
-		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
-		pushNotificationUtil.sendBulletinNewsletter(message, config.getLanguageCode(), config.getRegion(), attachmentUrl, blogUrl);
-	}
-
-	static String getBlogMessage(BlogConfiguration config, BlogItem item) {
-		return item.getTitle() + ": " + getBlogUrl(config, item);
-	}
-
-	static String getBlogUrl(BlogConfiguration config, BlogItem item) {
-		return LinkUtil.getAvalancheReportFullBlogUrl(config.getLanguageCode(), config.getRegion()) + config.getBlogUrl() + "/" + item.getId();
-	}
-
 }

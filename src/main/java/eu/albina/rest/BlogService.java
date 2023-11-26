@@ -24,16 +24,17 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogItem;
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.controller.publication.TelegramController;
+import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
+import eu.albina.controller.publication.PushNotificationUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,19 +62,14 @@ public class BlogService {
 	@Path("/publish/latest")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPost(@QueryParam("region") String regionId,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
+	public Response sendLatestBlogPost(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {}", regionId, language);
-			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			BlogController.sendBlogPost(config, blogPost);
+			sendLatestBlogPostEmail(regionId, language);
+			sendLatestBlogPostTelegram(regionId, language);
+			sendLatestBlogPostPush(regionId, language);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -86,15 +82,14 @@ public class BlogService {
 	@Path("/publish/latest/email")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostEmail(@QueryParam("region") String regionId,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
+	public Response sendLatestBlogPostEmail(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
 			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(config.getRegion(), config.getLanguageCode(), null).orElseThrow();
-			BlogController.sendBlogPostToRapidmail(config, blogPost, mailConfig);
+			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
+			RapidMailController.sendEmail(mailConfig, posting);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -112,15 +107,14 @@ public class BlogService {
 	@Path("/publish/latest/telegram")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostTelegram(@QueryParam("region") String regionId,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
+	public Response sendLatestBlogPostTelegram(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
+			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
 			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(config.getRegion(), config.getLanguageCode()).orElseThrow();
-			BlogController.sendBlogPostToTelegramChannel(config, blogPost, telegramConfig);
+			TelegramController.trySend(telegramConfig, posting, 3);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
@@ -138,14 +132,13 @@ public class BlogService {
 	@Path("/publish/latest/push")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostPush(@QueryParam("region") String regionId,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
+	public Response sendLatestBlogPostPush(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via push", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			BlogController.sendBlogPostToPushNotification(config, blogPost);
+			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
+			new PushNotificationUtil().send(posting);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
