@@ -19,6 +19,7 @@ package eu.albina.util;
 import java.util.Arrays;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import ch.rasc.webpush.CryptoService;
 import ch.rasc.webpush.PushController;
@@ -26,7 +27,6 @@ import ch.rasc.webpush.ServerKeys;
 import ch.rasc.webpush.dto.Subscription;
 import ch.rasc.webpush.dto.SubscriptionKeys;
 import eu.albina.exception.AlbinaException;
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +38,7 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.PushConfiguration;
 
+import javax.persistence.PersistenceException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -86,22 +87,23 @@ public class PushNotificationUtil implements SocialMediaUtil {
 	}
 
 
-	public static PushConfiguration getConfiguration() {
+	public static Optional<PushConfiguration> getConfiguration() {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			PushConfiguration result = (PushConfiguration) entityManager.createQuery(HibernateUtil.queryGetPushConfiguration).getSingleResult();
-			if (result != null)
-				return result;
-			else
-				throw new HibernateException("No push configuration found");
+			try {
+				PushConfiguration configuration = entityManager.createQuery(entityManager.getCriteriaBuilder().createQuery(PushConfiguration.class)).getSingleResult();
+				return Optional.ofNullable(configuration);
+			} catch (PersistenceException e) {
+				return Optional.empty();
+			}
 		});
 	}
-
 
 	public void sendPushMessage(PushSubscription subscription, JSONObject payload, ServerKeys serverKeys) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
 			if (serverKeys == null) {
-				serverKeys = new ServerKeys(getConfiguration().getVapidPublicKey(), getConfiguration().getVapidPrivateKey());
+				PushConfiguration configuration = getConfiguration().orElseThrow();
+				serverKeys = new ServerKeys(configuration.getVapidPublicKey(), configuration.getVapidPrivateKey());
 			}
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);

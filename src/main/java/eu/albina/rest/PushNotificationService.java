@@ -38,16 +38,14 @@ import eu.albina.util.PushNotificationUtil;
 public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 
-	static class VapidKey {
-		public String vapidPublicKey = PushNotificationUtil.getConfiguration().getVapidPublicKey();
-	}
-
 	@GET
 	@Path("/key")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get VAPID public key")
-	public VapidKey key() {
-		return new VapidKey();
+	public Object key() {
+		return new Object() {
+			public String vapidPublicKey = PushNotificationUtil.getConfiguration().orElseThrow().getVapidPublicKey();
+		};
 	}
 
 	@POST
