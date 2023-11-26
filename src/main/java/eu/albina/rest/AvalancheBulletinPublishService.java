@@ -21,7 +21,7 @@ import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
-import eu.albina.controller.publication.RapidMailController;
+import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
 import eu.albina.jobs.UpdateJob;
@@ -33,10 +33,8 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
-import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.EmailUtil;
 import eu.albina.util.PdfUtil;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -404,10 +402,9 @@ public class AvalancheBulletinPublishService {
 			@Context SecurityContext securityContext) {
 		try {
 			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
-
-			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
-			PublicationController.getInstance().sendEmails(avalancheReport, getLanguages(language));
-
+			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
+				posting.sendMails();
+			}
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending emails", e);
@@ -430,14 +427,16 @@ public class AvalancheBulletinPublishService {
 			@Context SecurityContext securityContext) {
 		try {
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
-
-			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
-			PublicationController.getInstance().triggerTelegramChannel(avalancheReport, getLanguages(language));
-
+			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
+				posting.sendTelegramMessage();
+			}
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering telegram channel", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (Exception e) {
+			logger.warn("Error triggering telegram channel", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -453,10 +452,9 @@ public class AvalancheBulletinPublishService {
 			@Context SecurityContext securityContext) {
 		try {
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
-
-			AvalancheReport avalancheReport = getAvalancheReport(regionId, date);
-			PublicationController.getInstance().triggerPushNotifications(avalancheReport, getLanguages(language));
-
+			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
+				posting.sendPushNotifications();
+			}
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering push notifications", e);
@@ -464,7 +462,7 @@ public class AvalancheBulletinPublishService {
 		}
 	}
 
-	private static AvalancheReport getAvalancheReport(String regionId, String date) throws AlbinaException {
+	private static List<MultichannelMessage> getMultichannelMessage(String regionId, String date, LanguageCode language) throws AlbinaException {
 		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 		Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 		ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
@@ -472,10 +470,9 @@ public class AvalancheBulletinPublishService {
 		AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 		avalancheReport.setBulletins(bulletins);
 		avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
-		return avalancheReport;
+		return (language != null ? Collections.singleton(language) : LanguageCode.ENABLED).stream()
+			.map(lang -> MultichannelMessage.of(avalancheReport, lang))
+			.collect(Collectors.toList());
 	}
 
-	private static Set<LanguageCode> getLanguages(LanguageCode language) {
-		return language != null ? Collections.singleton(language) : LanguageCode.ENABLED;
-	}
 }

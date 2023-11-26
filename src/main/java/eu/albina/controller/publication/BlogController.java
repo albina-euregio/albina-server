@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import eu.albina.model.publication.RapidMailConfiguration;
-import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -172,30 +170,9 @@ public interface BlogController {
 
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
-			sendBlogPost(config, posting);
+			posting.sendToAllChannels();
 			updateConfigurationLastPublished(config, object);
 		}
 	}
 
-	static void sendBlogPost(BlogConfiguration config, MultichannelMessage posting) {
-		try {
-			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(config.getRegion(), config.getLanguageCode(), null).orElseThrow();
-			RapidMailController.sendEmail(mailConfig, posting);
-		} catch (Exception e) {
-			logger.warn("Blog post could not be sent to email: " + config, e);
-		}
-
-		try {
-			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(config.getRegion(), config.getLanguageCode()).orElseThrow();
-			TelegramController.trySend(telegramConfig, posting, 3);
-		} catch (Exception e) {
-			logger.warn("Blog post could not be sent to telegram channel: " + config, e);
-		}
-
-		try {
-			new PushNotificationUtil().send(posting);
-		} catch (Exception e) {
-			logger.warn("Blog post could not be sent to push notifications: " + config, e);
-		}
-	}
 }

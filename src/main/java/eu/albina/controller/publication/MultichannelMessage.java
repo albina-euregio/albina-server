@@ -17,14 +17,19 @@
 package eu.albina.controller.publication;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Stopwatch;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.LinkUtil;
 import freemarker.template.TemplateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -58,6 +63,63 @@ public interface MultichannelMessage {
 			.add("socialMediaText", getSocialMediaText())
 			.add("htmlMessage", getHtmlMessage())
 			.toString();
+	}
+
+	default void sendToAllChannels() {
+		sendMails();
+		sendTelegramMessage();
+		sendPushNotifications();
+	}
+
+	default void sendMails() {
+		if (!getRegion().isSendEmails()) {
+			return;
+		}
+		Logger logger = LoggerFactory.getLogger(getClass());
+		Stopwatch stopwatch = Stopwatch.createStarted();
+		try {
+            logger.info("Email production for {} started", getRegion().getId());
+            RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(getRegion(), getLanguageCode(), null).orElseThrow();
+            RapidMailController.sendEmail(mailConfig, this);
+        } catch (Exception e) {
+			logger.warn("Message could not be sent to email: " + this, e);
+		} finally {
+			logger.info("Email production {} finished in {}", getRegion().getId(), stopwatch);
+		}
+	}
+
+	default void sendTelegramMessage() {
+		if (!getRegion().isSendTelegramMessages()) {
+			return;
+		}
+		Logger logger = LoggerFactory.getLogger(getClass());
+		Stopwatch stopwatch = Stopwatch.createStarted();
+		try {
+            logger.info("Telegram channel for {} triggered", getRegion().getId());
+            TelegramConfiguration telegramConfig = TelegramController.getConfiguration(getRegion(), getLanguageCode()).orElseThrow();
+            TelegramController.trySend(telegramConfig, this, 3);
+        } catch (Exception e) {
+			logger.warn("Message could not be sent to telegram channel: " + this, e);
+		} finally {
+			logger.info("Telegram channel for {} finished in {}", getRegion().getId(), stopwatch);
+		}
+	}
+
+	default void sendPushNotifications() {
+		if (!getRegion().isSendPushNotifications()) {
+			return;
+		}
+		Logger logger = LoggerFactory.getLogger(getClass());
+		Stopwatch stopwatch = Stopwatch.createStarted();
+		try {
+            logger.info("Push notifications for {} triggered", getRegion().getId());
+            logger.info("Telegram channel for {} triggered", getRegion().getId());
+            new PushNotificationUtil().send(this);
+        } catch (Exception e) {
+			logger.warn("Message could not be sent to push notifications: " + this, e);
+		} finally {
+			logger.info("Telegram channel for {} finished in {}", getRegion().getId(), stopwatch);
+		}
 	}
 
 	static MultichannelMessage of(AvalancheReport avalancheReport, LanguageCode lang) {

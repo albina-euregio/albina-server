@@ -188,7 +188,7 @@ public class PublicationJob implements org.quartz.Job {
 			return;
 		}
 		for (AvalancheReport avalancheReport : reportMap.values()) {
-			publicationController.sendMessages(avalancheReport);
+			publicationController.sendToAllChannels(avalancheReport);
 		}
 
 	}
