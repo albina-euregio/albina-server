@@ -33,8 +33,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.concurrent.Callable;
 import java.util.function.Supplier;
+
+import static com.google.common.base.Strings.nullToEmpty;
 
 /**
  * A digital communication message meant to be sent via email, push notification, telegram, etc.
@@ -63,7 +67,7 @@ public interface MultichannelMessage {
 			.add("attachmentUrl", getAttachmentUrl())
 			.add("subject", getSubject())
 			.add("socialMediaText", getSocialMediaText())
-			.add("htmlMessage", getHtmlMessage())
+			.add("htmlMessage", String.format("(%d bytes)", nullToEmpty(getHtmlMessage()).getBytes(StandardCharsets.UTF_8).length))
 			.toString();
 	}
 
@@ -77,50 +81,44 @@ public interface MultichannelMessage {
 		if (!getRegion().isSendEmails()) {
 			return;
 		}
-		Logger logger = LoggerFactory.getLogger(getClass());
-		Stopwatch stopwatch = Stopwatch.createStarted();
-		try {
-            logger.info("Email production for {} started", getRegion().getId());
-            RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(getRegion(), getLanguageCode(), null).orElseThrow();
-            RapidMailController.sendEmail(mailConfig, this);
-        } catch (Exception e) {
-			logger.warn("Message could not be sent to email: " + this, e);
-		} finally {
-			logger.info("Email production {} finished in {}", getRegion().getId(), stopwatch);
-		}
+		tryRunWithLogging("Email newsletter", () -> {
+			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(getRegion(), getLanguageCode(), null).orElseThrow();
+			RapidMailController.sendEmail(mailConfig, this);
+			return null;
+		});
 	}
 
 	default void sendTelegramMessage() {
 		if (!getRegion().isSendTelegramMessages()) {
 			return;
 		}
-		Logger logger = LoggerFactory.getLogger(getClass());
-		Stopwatch stopwatch = Stopwatch.createStarted();
-		try {
-            logger.info("Telegram channel for {} triggered", getRegion().getId());
-            TelegramConfiguration telegramConfig = TelegramController.getConfiguration(getRegion(), getLanguageCode()).orElseThrow();
-            TelegramController.trySend(telegramConfig, this, 3);
-        } catch (Exception e) {
-			logger.warn("Message could not be sent to telegram channel: " + this, e);
-		} finally {
-			logger.info("Telegram channel for {} finished in {}", getRegion().getId(), stopwatch);
-		}
+		tryRunWithLogging("Telegram message", () -> {
+			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(getRegion(), getLanguageCode()).orElseThrow();
+			TelegramController.trySend(telegramConfig, this, 3);
+			return null;
+		});
 	}
 
 	default void sendPushNotifications() {
 		if (!getRegion().isSendPushNotifications()) {
 			return;
 		}
+		tryRunWithLogging("Push notifications", () -> {
+			new PushNotificationUtil().send(this);
+			return null;
+		});
+	}
+
+	default void tryRunWithLogging(String logPrefix, Callable<?> callable) {
 		Logger logger = LoggerFactory.getLogger(getClass());
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
-            logger.info("Push notifications for {} triggered", getRegion().getId());
-            logger.info("Telegram channel for {} triggered", getRegion().getId());
-            new PushNotificationUtil().send(this);
-        } catch (Exception e) {
-			logger.warn("Message could not be sent to push notifications: " + this, e);
+			logger.info("{} for {} triggered", logPrefix, this);
+			callable.call();
+		} catch (Exception e) {
+			logger.atWarn().setCause(e).log("{} for {} could not be sent!", logPrefix, this);
 		} finally {
-			logger.info("Telegram channel for {} finished in {}", getRegion().getId(), stopwatch);
+			logger.info("{} for {} finished in {}", logPrefix, this, stopwatch);
 		}
 	}
 
