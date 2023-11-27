@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Formatter;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
@@ -112,7 +111,7 @@ public interface MultichannelMessage {
 			logger.info("{} for {} triggered", logPrefix, this);
 			callable.call();
 		} catch (Exception e) {
-			logger.atWarn().setCause(e).log("{} for {} could not be sent!", logPrefix, this);
+			logger.warn(String.format("%s for %s could not be sent!", logPrefix, this), e);
 		} finally {
 			logger.info("{} for {} finished in {}", logPrefix, this, stopwatch);
 		}

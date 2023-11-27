@@ -16,7 +16,7 @@
 		<jersey.version>2.40</jersey.version>
 		<jackson.version>2.15.2</jackson.version>
 		<log4j.version>2.20.0</log4j.version>
-		<slf4j.version>2.0.9</slf4j.version>
+		<slf4j.version>1.7.36</slf4j.version>
 		<hibernate.version>5.4.32.Final</hibernate.version>
 		<itextpdf.version>7.2.3</itextpdf.version>
 	</properties>
@@ -86,13 +86,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-bom</artifactId>
-				<version>${slf4j.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
 			<dependency>
 				<groupId>org.glassfish.jersey</groupId>
 				<artifactId>jersey-bom</artifactId>
@@ -223,6 +216,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<dependency>
