@@ -18,6 +18,7 @@ package eu.albina.controller.publication;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Stopwatch;
+import com.google.common.base.Suppliers;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.function.Supplier;
 
 /**
  * A digital communication message meant to be sent via email, push notification, telegram, etc.
@@ -123,6 +125,13 @@ public interface MultichannelMessage {
 	}
 
 	static MultichannelMessage of(AvalancheReport avalancheReport, LanguageCode lang) {
+		Supplier<String> htmlMessage = Suppliers.memoize(() -> {
+			try {
+				return EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, lang);
+			} catch (IOException | TemplateException e) {
+				throw new RuntimeException("Failed to create bulletin email", e);
+			}
+		});
 		return new MultichannelMessage() {
 			@Override
 			public Region getRegion() {
@@ -165,11 +174,7 @@ public interface MultichannelMessage {
 
 			@Override
 			public String getHtmlMessage() {
-				try {
-					return EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, lang);
-				} catch (IOException | TemplateException e) {
-					throw new RuntimeException("Failed to create bulletin email", e);
-				}
+				return htmlMessage.get();
 			}
 
 			@Override
