@@ -18,25 +18,16 @@ package eu.albina.controller.publication;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Stopwatch;
-import com.google.common.base.Suppliers;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
-import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
-import eu.albina.util.AlbinaUtil;
-import eu.albina.util.EmailUtil;
-import eu.albina.util.LinkUtil;
-import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.concurrent.Callable;
-import java.util.function.Supplier;
 
 import static com.google.common.base.Strings.nullToEmpty;
 
@@ -123,62 +114,7 @@ public interface MultichannelMessage {
 	}
 
 	static MultichannelMessage of(AvalancheReport avalancheReport, LanguageCode lang) {
-		Supplier<String> htmlMessage = Suppliers.memoize(() -> {
-			try {
-				return EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, lang);
-			} catch (IOException | TemplateException e) {
-				throw new RuntimeException("Failed to create bulletin email", e);
-			}
-		});
-		return new MultichannelMessage() {
-			@Override
-			public Region getRegion() {
-				return avalancheReport.getRegion();
-			}
-
-			@Override
-			public LanguageCode getLanguageCode() {
-				return lang;
-			}
-
-			@Override
-			public String getWebsiteUrl() {
-				return LinkUtil.getBulletinUrl(avalancheReport, lang);
-			}
-
-			@Override
-			public String getAttachmentUrl() {
-				return LinkUtil.getSocialMediaAttachmentUrl(avalancheReport, lang);
-			}
-
-			@Override
-			public String getSubject() {
-				Region region = avalancheReport.getRegion();
-				String bundleString = avalancheReport.getStatus() == BulletinStatus.republished
-					? lang.getBundleString("email.subject.update", region)
-					: lang.getBundleString("email.subject", region);
-				return MessageFormat.format(bundleString, lang.getBundleString("website.name", region))
-					+ AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
-			}
-
-			@Override
-			public String getSocialMediaText() {
-				String dateString = AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
-				String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport, lang);
-				return avalancheReport.getStatus() == BulletinStatus.republished
-					? MessageFormat.format(lang.getBundleString("social-media.message.update"), lang.getBundleString("website.name"), dateString, bulletinUrl)
-					: MessageFormat.format(lang.getBundleString("social-media.message"), lang.getBundleString("website.name"), dateString, bulletinUrl);
-			}
-
-			@Override
-			public String getHtmlMessage() {
-				return htmlMessage.get();
-			}
-
-			@Override
-			public String toString() {
-				return toDefaultString();
-			}
-		};
+		return new AvalancheReportMultichannelMessage(avalancheReport, lang);
 	}
+
 }
