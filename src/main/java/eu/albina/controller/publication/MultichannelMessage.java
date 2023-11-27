@@ -28,6 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Formatter;
+import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
 import static com.google.common.base.Strings.nullToEmpty;
@@ -74,7 +76,8 @@ public interface MultichannelMessage {
 			return;
 		}
 		tryRunWithLogging("Email newsletter", () -> {
-			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(getRegion(), getLanguageCode(), null).orElseThrow();
+			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(getRegion(), getLanguageCode(), null)
+				.orElseThrow(() -> new NoSuchElementException(String.format("No RapidMailConfiguration for %s/%s", getRegion(), getLanguageCode())));
 			RapidMailController.sendEmail(mailConfig, this);
 			return null;
 		});
@@ -85,7 +88,8 @@ public interface MultichannelMessage {
 			return;
 		}
 		tryRunWithLogging("Telegram message", () -> {
-			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(getRegion(), getLanguageCode()).orElseThrow();
+			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(getRegion(), getLanguageCode()).
+				orElseThrow(() -> new NoSuchElementException(String.format("No TelegramConfiguration for %s/%s", getRegion(), getLanguageCode())));
 			TelegramController.trySend(telegramConfig, this, 3);
 			return null;
 		});
