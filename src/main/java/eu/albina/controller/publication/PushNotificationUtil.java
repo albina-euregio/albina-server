@@ -60,10 +60,6 @@ public class PushNotificationUtil {
 	}
 
 	public void send(MultichannelMessage posting) {
-		if (!posting.getRegion().isSendPushNotifications()) {
-			return;
-		}
-
 		final JSONObject payload = new JSONObject();
 		payload.put("title", posting.getLanguageCode().getBundleString("website.name"));
 		payload.put("body", posting.getSocialMediaText());

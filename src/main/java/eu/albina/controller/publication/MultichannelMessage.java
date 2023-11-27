@@ -77,7 +77,7 @@ public interface MultichannelMessage {
 		tryRunWithLogging("Email newsletter", () -> {
 			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(getRegion(), getLanguageCode(), null)
 				.orElseThrow(() -> new NoSuchElementException(String.format("No RapidMailConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			RapidMailController.sendEmail(mailConfig, this);
+			RapidMailController.sendEmail(mailConfig, getHtmlMessage(), getSubject());
 			return null;
 		});
 	}

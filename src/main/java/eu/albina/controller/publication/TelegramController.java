@@ -70,9 +70,6 @@ public interface TelegramController {
 	}
 
 	static Void trySend(TelegramConfiguration config, MultichannelMessage posting, int retry) throws Exception {
-		if (!posting.getRegion().isSendTelegramMessages()) {
-			return null;
-		}
 		try {
 			String message = posting.getSocialMediaText();
 			String attachmentUrl = posting.getAttachmentUrl();

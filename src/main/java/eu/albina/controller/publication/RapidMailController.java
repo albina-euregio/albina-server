@@ -171,13 +171,6 @@ public interface RapidMailController {
 		}
 	}
 
-	static void sendEmail(RapidMailConfiguration config, MultichannelMessage posting) throws IOException, AlbinaException {
-		if (!posting.getRegion().isSendPushNotifications()) {
-			return;
-		}
-		sendEmail(config, posting.getHtmlMessage(), posting.getSubject());
-	}
-
 	static void sendEmail(RapidMailConfiguration config, String emailHtml, String subject) throws IOException, AlbinaException {
 		Objects.requireNonNull(config, "config");
 		logger.info("Sending [{}] email for {} ({} bytes)...", subject, config, emailHtml.getBytes(StandardCharsets.UTF_8).length);
