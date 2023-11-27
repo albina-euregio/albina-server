@@ -105,47 +105,7 @@ public interface BlogController {
 
 	static MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) {
 		BlogItem blogPost = getBlogPost(config, blogPostId);
-		return new MultichannelMessage() {
-			@Override
-			public Region getRegion() {
-				return config.getRegion();
-			}
-
-			@Override
-			public LanguageCode getLanguageCode() {
-				return config.getLanguageCode();
-			}
-
-			@Override
-			public String getWebsiteUrl() {
-				return blogPost.getAvalancheReportUrl(config);
-			}
-
-			@Override
-			public String getAttachmentUrl() {
-				return blogPost.getAttachmentUrl();
-			}
-
-			@Override
-			public String getSubject() {
-				return blogPost.getTitle();
-			}
-
-			@Override
-			public String getSocialMediaText() {
-				return blogPost.getTitleAndUrl(config);
-			}
-
-			@Override
-			public String getHtmlMessage() {
-				return blogPost.getContent();
-			}
-
-			@Override
-			public String toString() {
-				return toDefaultString();
-			}
-		};
+		return MultichannelMessage.of(config, blogPost);
 	}
 
 	static void sendNewBlogPosts(Region region, LanguageCode lang) {
