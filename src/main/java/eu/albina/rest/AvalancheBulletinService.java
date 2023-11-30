@@ -455,6 +455,7 @@ public class AvalancheBulletinService {
 					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
 				}
 
+				// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -472,6 +473,12 @@ public class AvalancheBulletinService {
 						.filter(bulletin -> bulletin.affectsRegion(superRegion))
 						.collect(Collectors.toList());
 					AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
+				}
+
+				// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
 				}
 
 				new Thread(() -> {
