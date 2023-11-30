@@ -1,5 +1,8 @@
 package eu.albina.controller.publication;
 
+import eu.albina.model.publication.BlogConfiguration;
+import eu.albina.util.LinkUtil;
+
 import java.time.OffsetDateTime;
 
 public interface BlogItem {
@@ -7,9 +10,17 @@ public interface BlogItem {
 
 	String getTitle();
 
-    String getContent();
+	String getContent();
 
-    OffsetDateTime getPublished();
+	OffsetDateTime getPublished();
 
 	String getAttachmentUrl();
+
+	default String getTitleAndUrl(BlogConfiguration config) {
+		return getTitle() + ": " + this.getAvalancheReportUrl(config);
+	}
+
+	default String getAvalancheReportUrl(BlogConfiguration config) {
+		return LinkUtil.getWebsiteUrl(config.getLanguageCode(), config.getRegion()) + "/blog/" + config.getBlogUrl() + "/" + getId();
+	}
 }

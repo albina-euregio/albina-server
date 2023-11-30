@@ -20,10 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -39,6 +35,7 @@ import java.util.List;
 
 import eu.albina.controller.AvalancheBulletinController;
 
+import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.BulletinStatus;
 import org.junit.jupiter.api.Assertions;
@@ -51,12 +48,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Resources;
 
-import eu.albina.controller.SubscriberController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
-import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class AlbinaUtilTest {
@@ -182,9 +176,9 @@ public class AlbinaUtilTest {
 		Assertions.assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
 		Assertions.assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
-		Assertions.assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17", SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
+		Assertions.assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
 		avalancheReport.setStatus(BulletinStatus.republished);
-		Assertions.assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17", SocialMediaUtil.getSocialMediaText(avalancheReport, LanguageCode.de));
+		Assertions.assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
 		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de));
 		Assertions.assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf", LinkUtil.getPdfLink(avalancheReport, LanguageCode.de));
 		Assertions.assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),

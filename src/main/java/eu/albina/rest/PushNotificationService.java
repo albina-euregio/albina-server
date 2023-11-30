@@ -31,23 +31,21 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.PushSubscriptionController;
 import eu.albina.model.PushSubscription;
-import eu.albina.util.PushNotificationUtil;
+import eu.albina.controller.publication.PushNotificationUtil;
 
 @Path("/push")
 @Tag(name = "push")
 public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 
-	static class VapidKey {
-		public String vapidPublicKey = PushNotificationUtil.getConfiguration().getVapidPublicKey();
-	}
-
 	@GET
 	@Path("/key")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get VAPID public key")
-	public VapidKey key() {
-		return new VapidKey();
+	public Object key() {
+		return new Object() {
+			public String vapidPublicKey = PushNotificationUtil.getConfiguration().orElseThrow().getVapidPublicKey();
+		};
 	}
 
 	@POST

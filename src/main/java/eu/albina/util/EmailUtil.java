@@ -16,29 +16,19 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.model.publication.RapidMailConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.Region;
@@ -57,70 +47,24 @@ public class EmailUtil {
 
 	private static EmailUtil instance = null;
 
-	private static final Logger logger = LoggerFactory.getLogger(EmailUtil.class);
-
-	private static Configuration cfg;
-
-	protected EmailUtil() throws IOException, URISyntaxException {
-		createFreemarkerConfigurationInstance();
+	protected EmailUtil() {
 	}
 
-	public static EmailUtil getInstance() throws IOException, URISyntaxException {
+	public static EmailUtil getInstance() {
 		if (instance == null) {
 			instance = new EmailUtil();
 		}
 		return instance;
 	}
 
-	private void createFreemarkerConfigurationInstance() throws IOException, URISyntaxException {
-		cfg = new Configuration(Configuration.VERSION_2_3_27);
-
-		// Specify the source where the template files come from. Here I set a
-		// plain directory for it, but non-file-system sources are possible too:
-		URL resource = this.getClass().getResource("/templates");
-
-		URI uri = resource.toURI();
-		File file = new File(uri);
-		cfg.setDirectoryForTemplateLoading(file);
-
-		// Set the preferred charset template files are stored in. UTF-8 is
-		// a good choice in most applications:
+	private static Template getTemplate() throws IOException {
+		Configuration cfg = new Configuration(Configuration.VERSION_2_3_27);
+		cfg.setClassForTemplateLoading(EmailUtil.class, "/templates");
 		cfg.setDefaultEncoding("UTF-8");
-
-		// Sets how errors will appear.
-		// During web page *development* TemplateExceptionHandler.HTML_DEBUG_HANDLER is
-		// better.
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-		// Don't log exceptions inside FreeMarker that it will thrown at you anyway:
 		cfg.setLogTemplateExceptions(false);
-
-		// Wrap unchecked exceptions thrown during template processing into
-		// TemplateException-s.
 		cfg.setWrapUncheckedExceptions(true);
-	}
-
-	public Configuration getFreeMarkerConfiguration() {
-		return cfg;
-	}
-
-	public void sendBulletinEmails(RapidMailConfiguration config, AvalancheReport avalancheReport) throws IOException, AlbinaException, TemplateException {
-		Region region = avalancheReport.getRegion();
-		if (!region.isSendEmails()) {
-			return;
-		}
-		LanguageCode lang = config.getLang();
-		String bundleString = avalancheReport.getStatus() == BulletinStatus.republished
-			? lang.getBundleString("email.subject.update", region)
-			: lang.getBundleString("email.subject", region);
-		String subject = MessageFormat.format(bundleString, lang.getBundleString("website.name", region))
-			+ AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
-		List<AvalancheBulletin> regionBulletins = avalancheReport.getBulletins();
-		if (regionBulletins == null || regionBulletins.isEmpty()) {
-			return;
-		}
-		String emailHtml = createBulletinEmailHtml(avalancheReport, lang);
-		RapidMailController.sendEmail(config, emailHtml, subject);
+		return cfg.getTemplate("albina-email.html");
 	}
 
 	public String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) throws IOException, TemplateException {
@@ -376,7 +320,7 @@ public class EmailUtil {
 		root.put("link", links);
 
 		// Get template
-		Template temp = cfg.getTemplate("albina-email.html");
+		Template temp = getTemplate();
 
 		// Merge template and model
 		Writer out = new StringWriter();

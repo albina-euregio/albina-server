@@ -1,7 +1,8 @@
-package eu.albina.util;
+package eu.albina.controller.publication;
 
 import ch.rasc.webpush.ServerKeys;
 import com.github.openjson.JSONObject;
+import eu.albina.controller.publication.PushNotificationUtil;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
 

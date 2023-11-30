@@ -69,9 +69,15 @@ public interface TelegramController {
 		});
 	}
 
-	static Void trySendPhoto(TelegramConfiguration config, String message, String attachmentUrl, int retry) throws Exception {
+	static Void trySend(TelegramConfiguration config, MultichannelMessage posting, int retry) throws Exception {
 		try {
-			sendPhoto(config, message, attachmentUrl);
+			String message = posting.getSocialMediaText();
+			String attachmentUrl = posting.getAttachmentUrl();
+			if (attachmentUrl != null) {
+				sendPhoto(config, message, attachmentUrl);
+			} else {
+				sendMessage(config, message);
+			}
 		} catch (Exception e) {
 			if (retry <= 0) {
 				throw e;
@@ -82,18 +88,10 @@ public interface TelegramController {
 			final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 			executorService.schedule(() -> {
 				executorService.shutdown();
-				return trySendPhoto(config, message, attachmentUrl, newRetry);
+				return trySend(config, posting, newRetry);
 			}, delay, TimeUnit.MILLISECONDS);
 		}
 		return null;
-	}
-
-	static void sendPhotoOrMessage(TelegramConfiguration telegramConfig, String message, String attachmentUrl) throws IOException {
-		if (attachmentUrl != null) {
-			sendPhoto(telegramConfig, message, attachmentUrl);
-		} else {
-			sendMessage(telegramConfig, message);
-		}
 	}
 
 	/**
@@ -107,6 +105,7 @@ public interface TelegramController {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
+		logger.info("Sending photo {} and message {} to telegram channel using config {}", attachmentUrl, message, config);
 
 		MultiPart multiPart = new FormDataMultiPart();
 		multiPart.bodyPart(new StreamDataBodyPart(
@@ -139,6 +138,7 @@ public interface TelegramController {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
+		logger.info("Sending message {} to telegram channel using config {}", message, config);
 
 		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendMessage", apiToken))
 			.queryParam("chat_id", chatId)

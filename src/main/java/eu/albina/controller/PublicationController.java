@@ -19,31 +19,25 @@ package eu.albina.controller;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import eu.albina.caaml.Caaml;
-import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.controller.publication.MultichannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.caaml.CaamlVersion;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.EmailUtil;
 import eu.albina.util.JsonUtil;
 import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
-import eu.albina.util.PushNotificationUtil;
 import eu.albina.util.SimpleHtmlUtil;
-import eu.albina.util.TelegramChannelUtil;
 
 /**
  * Controller for avalanche reports.
  *
  * @author Norbert Lanzanasto
- *
  */
 public class PublicationController {
 
@@ -62,7 +56,7 @@ public class PublicationController {
 	 * Java application.
 	 *
 	 * @return the {@code PublicationController} object associated with the current
-	 *         Java application.
+	 * Java application.
 	 */
 	public static PublicationController getInstance() {
 		if (instance == null) {
@@ -127,7 +121,7 @@ public class PublicationController {
 			logger.info("JSON production for {} started", avalancheReport.getRegion().getId());
 			JsonUtil.createJsonFile(avalancheReport);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-					AvalancheReport::setJsonCreated);
+				AvalancheReport::setJsonCreated);
 			logger.info("JSON production for {} finished", avalancheReport.getRegion().getId());
 			return true;
 		} catch (IOException e) {
@@ -144,7 +138,7 @@ public class PublicationController {
 			logger.info("CAAMLv5 production for {} started", avalancheReport.getRegion().getId());
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-					AvalancheReport::setCaamlV5Created);
+				AvalancheReport::setCaamlV5Created);
 			logger.info("CAAMLv5 production for {} finished", avalancheReport.getRegion().getId());
 			return true;
 		} catch (IOException e) {
@@ -162,7 +156,7 @@ public class PublicationController {
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_JSON);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-					AvalancheReport::setCaamlV6Created);
+				AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport.getRegion().getId());
 			return true;
 		} catch (IOException e) {
@@ -175,13 +169,13 @@ public class PublicationController {
 	 * Trigger the creation of the maps.
 	 */
 	public boolean createMaps(AvalancheReport avalancheReport)
-			throws Exception {
+		throws Exception {
 		final String regionId = avalancheReport.getRegion().getId();
 		try {
 			logger.info("Map production for {} started", regionId);
 			MapUtil.createMapyrusMaps(avalancheReport);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-					AvalancheReport::setMapCreated);
+				AvalancheReport::setMapCreated);
 			logger.info("Map production {} finished", regionId);
 			return true;
 		} catch (Exception e) {
@@ -201,7 +195,7 @@ public class PublicationController {
 					logger.info("PDF production for {} started", avalancheReport.getRegion().getId());
 					PdfUtil.createRegionPdfs(avalancheReport);
 					AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-							AvalancheReport::setPdfCreated);
+						AvalancheReport::setPdfCreated);
 				} finally {
 					logger.info("PDF production {} finished", avalancheReport.getRegion().getId());
 				}
@@ -220,7 +214,7 @@ public class PublicationController {
 					logger.info("Simple HTML production for {} started", avalancheReport.getRegion().getId());
 					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(avalancheReport);
 					AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-							AvalancheReport::setHtmlCreated);
+						AvalancheReport::setHtmlCreated);
 				} catch (Exception e) {
 					logger.error("Error creating simple HTML for " + avalancheReport.getRegion().getId(), e);
 				} finally {
@@ -230,81 +224,24 @@ public class PublicationController {
 		});
 	}
 
-	public void sendMessages(AvalancheReport avalancheReport) {
-		if (avalancheReport.getBulletins().isEmpty() || !avalancheReport.getRegion().isCreateMaps()) {
+	public void sendToAllChannels(AvalancheReport avalancheReport) {
+		if (!avalancheReport.getRegion().isPublishBulletins() || avalancheReport.getBulletins().isEmpty() || !avalancheReport.getRegion().isCreateMaps()) {
 			return;
 		}
-		if (avalancheReport.getRegion().isSendEmails()) {
-			new Thread(() -> sendEmails(avalancheReport, LanguageCode.ENABLED)).start();
-		}
-		if (avalancheReport.getRegion().isSendTelegramMessages()) {
-			new Thread(() -> triggerTelegramChannel(avalancheReport, LanguageCode.ENABLED)).start();
-		}
-		if (avalancheReport.getRegion().isSendPushNotifications()) {
-			new Thread(() -> triggerPushNotifications(avalancheReport, LanguageCode.ENABLED)).start();
-		}
-	}
-
-	/**
-	 * Trigger the sending of the emails.
-	 */
-	public void sendEmails(AvalancheReport avalancheReport, Set<LanguageCode> languages) {
-		Region region = avalancheReport.getRegion();
-		try {
-			logger.info("Email production for {} started", region.getId());
-			for (LanguageCode lang : languages) {
+		new Thread(() -> {
+			for (LanguageCode lang : LanguageCode.ENABLED) {
+				MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
 				try {
-					RapidMailConfiguration config = RapidMailController.getConfiguration(region, lang, null).orElse(null);
-					if (config == null) {
-						continue;
-					}
-					EmailUtil.getInstance().sendBulletinEmails(config, avalancheReport);
+					posting.sendToAllChannels();
+					AvalancheReportController c = AvalancheReportController.getInstance();
+					c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
+					c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);
+					c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setPushSent);
 				} catch (Exception e) {
-					logger.error("Emails could not be sent in " + lang + " for " + region.getId(), e);
+					logger.error("Error sending " + posting, e);
 				}
-            }
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-					AvalancheReport::setEmailCreated);
-		} catch (Exception e) {
-			logger.error("Error preparing emails " + region.getId(), e);
-		} finally {
-			logger.info("Email production {} finished", region.getId());
-		}
+			}
+		}).start();
 	}
 
-	/**
-	 * Trigger the sending of telegram messages.
-	 */
-	public void triggerTelegramChannel(AvalancheReport avalancheReport, Set<LanguageCode> languages) {
-		try {
-			logger.info("Telegram channel for {} triggered", avalancheReport.getRegion().getId());
-			for (LanguageCode lang : languages) {
-				TelegramChannelUtil.getInstance().sendBulletinNewsletters(avalancheReport, lang);
-			}
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-					AvalancheReport::setTelegramSent);
-		} catch (Exception e) {
-			logger.error("Error preparing telegram channel", e);
-		} finally {
-			logger.info("Telegram channel for {} finished", avalancheReport.getRegion().getId());
-		}
-	}
-
-	/**
-	 * Trigger the sending of push notifications.
-	 */
-	public void triggerPushNotifications(AvalancheReport avalancheReport, Set<LanguageCode> languages) {
-		try {
-			logger.info("Push notifications for {} triggered", avalancheReport.getRegion().getId());
-			for (LanguageCode lang : languages) {
-				new PushNotificationUtil().sendBulletinNewsletters(avalancheReport, lang);
-			}
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-					AvalancheReport::setPushSent);
-		} catch (Exception e) {
-			logger.error("Error sending push notifications for " + avalancheReport.getRegion().getId(), e);
-		} finally {
-			logger.info("Push notifications for {} finished", avalancheReport.getRegion().getId());
-		}
-	}
 }

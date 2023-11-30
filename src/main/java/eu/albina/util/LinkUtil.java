@@ -46,10 +46,6 @@ public interface LinkUtil {
 		return String.format("%s/%s", getStaticContentUrl(lang, avalancheReport.getRegion()), pdfDirectory);
 	}
 
-	static String getAvalancheReportFullBlogUrl(LanguageCode lang, Region region) {
-		return String.format("%s/blog/", getWebsiteUrl(lang, region));
-	}
-
 	static String getBulletinUrl(AvalancheReport avalancheReport, LanguageCode lang) {
 		String date = avalancheReport.getValidityDateString();
 		return String.format("%s/bulletin/%s", getWebsiteUrl(lang, avalancheReport.getRegion()), date);
