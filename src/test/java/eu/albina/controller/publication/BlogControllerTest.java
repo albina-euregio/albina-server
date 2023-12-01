@@ -38,11 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BlogControllerTest {
 
-	@AfterEach
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
-	}
-
 	@Test
 	void testWordpress() throws Exception {
 		BlogConfiguration config = new BlogConfiguration();
@@ -73,6 +68,7 @@ public class BlogControllerTest {
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
 		BlogController.updateConfigurationLastPublished(config, blogPosts.get(0));
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled
@@ -82,6 +78,7 @@ public class BlogControllerTest {
 		BlogConfiguration config = BlogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
 		Blogger.Item blogPost = (Blogger.Item) BlogController.getLatestBlogPost(config);
 		assertTrue(blogPost.content.length() > 100, "blog has >100 chars");
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled
@@ -91,6 +88,7 @@ public class BlogControllerTest {
         BlogConfiguration configuration = BlogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
 		String blogPost = BlogController.getBlogPost(configuration, "1227558273754407795").getContent();
 		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled
