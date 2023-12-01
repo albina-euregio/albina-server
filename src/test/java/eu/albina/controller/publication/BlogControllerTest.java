@@ -36,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Disabled
 public class BlogControllerTest {
 
 	@AfterEach
@@ -55,8 +54,11 @@ public class BlogControllerTest {
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
 		assertTrue(BlogController.getBlogPost(config, blogPosts.get(0).getId()).getContent().length() > 100, "blog has >100 chars");
+
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
 		assertEquals("Inizio dell’inverno in montagna", BlogController.getBlogPost(config, "1851").getTitle());
+		assertEquals(OffsetDateTime.parse("2023-11-30T14:20:44Z"), BlogController.getBlogPost(config, "2084").getPublished());
+
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-tn/wp-json/wp/v2/");
 		assertNull(BlogController.getBlogPost(config, "495").getAttachmentUrl());
 	}
