@@ -5,6 +5,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Wind slabs require caution, especially above approximately 2200 m, in particular on very steep shady slopes and adjacent to ridgelines. Weakly bonded old snow at intermediate and high altitudes. Slight increase in danger of moist and wet avalanches as a consequence of warming during the day and solar radiation.",
@@ -131,6 +132,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Wind slabs require caution, especially above approximately 2200 m. Gliding avalanches and snow slides on grassy slopes. This applies in particular below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day.",
@@ -198,6 +200,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs represent the main danger. This applies in particular adjacent to ridgelines. Weakly bonded old snow especially on west, north and east facing slopes, in particular between approximately 2200 and 2700 m.",
@@ -266,6 +269,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The wind slabs represent the main danger.",
@@ -354,6 +358,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs require caution, in particular adjacent to ridgelines.",
@@ -408,6 +413,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Hardly any snow is lying on south facing slopes.",

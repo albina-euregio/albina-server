@@ -5,6 +5,7 @@
       <startTime>2022-12-19T23:00:00Z</startTime>
       <endTime>2022-12-20T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-26">
       <name>Glockner Range</name>
     </region>
@@ -78,6 +79,7 @@
       <startTime>2022-12-19T23:00:00Z</startTime>
       <endTime>2022-12-20T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-29">
       <name>Lienzer Dolomites</name>
     </region>
@@ -201,6 +203,7 @@
       <startTime>2022-12-19T23:00:00Z</startTime>
       <endTime>2022-12-20T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-TN-02">
       <name>Southern Adamello</name>
     </region>
@@ -304,6 +307,7 @@
       <startTime>2022-12-19T23:00:00Z</startTime>
       <endTime>2022-12-20T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-10">
       <name>Eastern Pfunderer Mountains</name>
     </region>
@@ -419,6 +423,7 @@
       <startTime>2022-12-19T23:00:00Z</startTime>
       <endTime>2022-12-20T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-14-01">
       <name>Kauner Ridge</name>
     </region>

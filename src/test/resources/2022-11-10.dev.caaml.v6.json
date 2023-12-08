@@ -5,6 +5,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : true,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -69,6 +70,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -133,6 +135,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : true,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -197,6 +200,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -261,6 +265,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : true,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",

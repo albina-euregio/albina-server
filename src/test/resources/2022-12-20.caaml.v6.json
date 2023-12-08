@@ -5,6 +5,7 @@
       "startTime" : "2022-12-19T23:00:00Z",
       "endTime" : "2022-12-20T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Weakly bonded old snow represents the main danger.",
@@ -74,6 +75,7 @@
       "startTime" : "2022-12-19T23:00:00Z",
       "endTime" : "2022-12-20T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The old snowpack remains prone to triggering.",
@@ -194,6 +196,7 @@
       "startTime" : "2022-12-19T23:00:00Z",
       "endTime" : "2022-12-20T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The old snowpack remains prone to triggering.",
@@ -288,6 +291,7 @@
       "startTime" : "2022-12-19T23:00:00Z",
       "endTime" : "2022-12-20T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Weakly bonded old snow represents the main danger.",
@@ -399,6 +403,7 @@
       "startTime" : "2022-12-19T23:00:00Z",
       "endTime" : "2022-12-20T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Weakly bonded old snow represents the main danger. <br/>",

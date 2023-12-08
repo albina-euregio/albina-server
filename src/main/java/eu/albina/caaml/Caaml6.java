@@ -12,6 +12,7 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.AlbinaUtil;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.Tendency;
@@ -59,6 +60,7 @@ interface Caaml6 {
 
 	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
+		bulletin.setUnscheduled(AlbinaUtil.isUpdate(List.of(avalancheBulletin)));
 		bulletin.setAvalancheActivity(new org.caaml.v6.Texts(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
 		bulletin.setAvalancheProblems(Stream.concat(
 				avalancheBulletin.getForenoon().getAvalancheProblems().stream(),

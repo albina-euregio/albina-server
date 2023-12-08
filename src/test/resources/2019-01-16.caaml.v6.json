@@ -5,6 +5,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "highlights" : "Many starting zones have released the snow but not entirely.",
     "weatherForecast" : { },
     "avalancheActivity" : {
@@ -95,6 +96,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs require caution.",
@@ -155,6 +157,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The wind slabs represent the main danger.",
@@ -225,6 +228,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Single winter sport participants can release avalanches in many places, including dangerously large ones. Areas with glide cracks are to be avoided.",
@@ -358,6 +362,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs require caution.",
@@ -412,6 +417,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The sometimes large wind slabs represent the main danger.",
@@ -472,6 +478,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh snow and wind slabs require caution.",
@@ -548,6 +555,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "In all regions from a snow sport perspective, in most cases insufficient snow is lying.",
@@ -623,6 +631,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The backcountry touring conditions are to some extent critical.",
@@ -693,6 +702,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs are prone to triggering.",
@@ -760,6 +770,7 @@
       "startTime" : "2019-01-15T23:00:00Z",
       "endTime" : "2019-01-16T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The wind slabs represent the main danger.",

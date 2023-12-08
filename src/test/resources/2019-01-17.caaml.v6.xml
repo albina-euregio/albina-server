@@ -5,6 +5,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-10">
       <name>Western Verwall Mountains</name>
     </region>
@@ -112,6 +113,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-27">
       <name>Eastern Deferegger Alps</name>
     </region>
@@ -190,6 +192,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-15">
       <name>Western Tuxer Alps</name>
     </region>
@@ -286,6 +289,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-TN-02">
       <name>Southern Adamello</name>
     </region>
@@ -381,6 +385,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-14">
       <name>Ortler Range</name>
     </region>
@@ -439,6 +444,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-TN-12">
       <name>Prealps</name>
     </region>
@@ -514,6 +520,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-16">
       <name>Eastern Nonsberger Alps</name>
     </region>
@@ -562,6 +569,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-07">
       <name>Texel Mountains</name>
     </region>
@@ -663,6 +671,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-29">
       <name>Lienzer Dolomites</name>
     </region>
@@ -721,6 +730,7 @@
       <startTime>2019-01-16T23:00:00Z</startTime>
       <endTime>2019-01-17T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-18">
       <name>Gröden Dolomites</name>
     </region>

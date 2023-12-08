@@ -5,6 +5,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The somewhat older wind slabs must be evaluated with care and prudence. Gliding avalanches are still to be expected.",
@@ -102,6 +103,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Wind slabs and weakly bonded old snow require caution.",
@@ -169,6 +171,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The somewhat older wind slabs must be evaluated with care and prudence.",
@@ -254,6 +257,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs represent the main danger.",
@@ -342,6 +346,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The sometimes large wind slabs represent the main danger.",
@@ -396,6 +401,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Only a little snow is lying on north and northeast facing slopes.",
@@ -471,6 +477,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The wind slabs represent the main danger.",
@@ -519,6 +526,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "For those venturing off piste a dangerous avalanche situation will be encountered over a wide area.",
@@ -611,6 +619,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Old wind slabs represent the main danger.",
@@ -665,6 +674,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs require caution.",

@@ -5,6 +5,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-11">
       <name>Durreck Range</name>
     </region>
@@ -146,6 +147,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-04">
       <name>Karwendel Mountains</name>
     </region>
@@ -219,6 +221,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-26">
       <name>Glockner Range</name>
     </region>
@@ -293,6 +296,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-10">
       <name>Eastern Pfunderer Mountains</name>
     </region>
@@ -385,6 +389,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-05">
       <name>Brandenberg Alps</name>
     </region>
@@ -439,6 +444,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-20">
       <name>Sexten Dolomites</name>
     </region>
