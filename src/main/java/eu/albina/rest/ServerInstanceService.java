@@ -42,6 +42,7 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
+import eu.albina.util.GlobalVariables;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -114,6 +115,24 @@ public class ServerInstanceService {
 			JSONObject json = new JSONObject();
 			json.append("message", "Error creating server instance - Server instance already exists");
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+		}
+	}
+
+	@GET
+	@Path("/info")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get public local server configuration")
+	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
+	public Response getPublicLocalServerConfiguration() {
+		try {
+			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			JSONObject json = serverInstance.toPublicJSON();
+			json.put("version", GlobalVariables.version);
+            return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (HibernateException he) {
+			logger.warn("Error loading local server configuration", he);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
 		}
 	}
 

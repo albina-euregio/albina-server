@@ -255,6 +255,13 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 		return json;
 	}
 
+	public JSONObject toPublicJSON() {
+		JSONObject json = new JSONObject();
+		json.put("name", getName());
+		json.put("apiUrl", getApiUrl());
+		return json;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
