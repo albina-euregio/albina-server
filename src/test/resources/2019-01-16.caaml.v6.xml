@@ -100,6 +100,10 @@
     <tendency>
       <highlights>Gradual decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -163,6 +167,10 @@
     <tendency>
       <highlights>Moderate, level 2.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -243,6 +251,10 @@
     <tendency>
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -389,6 +401,10 @@
     <tendency>
       <highlights>Further decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -447,6 +463,10 @@
     <tendency>
       <highlights>Slight decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -514,6 +534,10 @@
     <tendency>
       <highlights>Fresh wind slabs represent the main danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -600,6 +624,10 @@
     <tendency>
       <highlights>Moderate, level 2.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -676,6 +704,10 @@
     <tendency>
       <highlights>Low, level 1.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -759,6 +791,10 @@
     <tendency>
       <highlights>Fresh wind slabs represent the main danger.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -839,6 +875,10 @@
     <tendency>
       <highlights>Further decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -891,6 +931,10 @@
     <tendency>
       <highlights>Low, level 1.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>

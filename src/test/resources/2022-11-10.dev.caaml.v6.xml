@@ -63,6 +63,10 @@
     <tendency>
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2022-11-10T23:00:00Z</startTime>
+        <endTime>2022-11-11T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -137,6 +141,10 @@
     <tendency>
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2022-11-10T23:00:00Z</startTime>
+        <endTime>2022-11-11T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -211,6 +219,10 @@
     <tendency>
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2022-11-10T23:00:00Z</startTime>
+        <endTime>2022-11-11T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -285,6 +297,10 @@
     <tendency>
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2022-11-10T23:00:00Z</startTime>
+        <endTime>2022-11-11T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -359,6 +375,10 @@
     <tendency>
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2022-11-10T23:00:00Z</startTime>
+        <endTime>2022-11-11T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>

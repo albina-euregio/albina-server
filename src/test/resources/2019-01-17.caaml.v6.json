@@ -17,7 +17,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -115,7 +119,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -183,7 +191,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -269,7 +281,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -358,7 +374,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Fresh wind slabs represent the main danger.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -413,7 +433,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -489,7 +513,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -538,7 +566,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "In some localities some fresh snow.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -631,7 +663,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Slight decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -686,7 +722,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {

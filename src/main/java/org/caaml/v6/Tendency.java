@@ -33,9 +33,10 @@ public class Tendency {
 	public Tendency() {
 	}
 
-	public Tendency(String highlights, TendencyType tendencyType) {
+	public Tendency(String highlights, TendencyType tendencyType, ValidTime validTime) {
 		this.highlights = highlights;
 		this.tendencyType = tendencyType;
+		this.validTime = validTime;
 	}
 
 	public String getComment() { return comment; }

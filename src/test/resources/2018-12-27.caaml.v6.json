@@ -17,7 +17,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -144,7 +148,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -212,7 +220,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Gradual decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -281,7 +293,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -370,7 +386,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -425,7 +445,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {

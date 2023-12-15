@@ -17,7 +17,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution.",
-      "tendencyType" : "increasing"
+      "tendencyType" : "increasing",
+      "validTime" : {
+        "startTime" : "2023-12-01T23:00:00Z",
+        "endTime" : "2023-12-02T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -157,7 +161,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.",
-      "tendencyType" : "increasing"
+      "tendencyType" : "increasing",
+      "validTime" : {
+        "startTime" : "2023-12-01T23:00:00Z",
+        "endTime" : "2023-12-02T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -282,7 +290,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.",
-      "tendencyType" : "increasing"
+      "tendencyType" : "increasing",
+      "validTime" : {
+        "startTime" : "2023-12-01T23:00:00Z",
+        "endTime" : "2023-12-02T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -515,7 +527,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger.",
-      "tendencyType" : "increasing"
+      "tendencyType" : "increasing",
+      "validTime" : {
+        "startTime" : "2023-12-01T23:00:00Z",
+        "endTime" : "2023-12-02T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -604,7 +620,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "As a consequence of new snow and wind there will be an increase in the avalanche danger. Over a wide area 15 to 30 cm of snow will fall on Saturday. In the Sexten Dolomites and in the Lienzer Dolomites in some localities up to 50 cm of snow will fall. A critical avalanche situation will be encountered in some regions.",
-      "tendencyType" : "increasing"
+      "tendencyType" : "increasing",
+      "validTime" : {
+        "startTime" : "2023-12-01T23:00:00Z",
+        "endTime" : "2023-12-02T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -720,7 +740,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will increase.",
-      "tendencyType" : "increasing"
+      "tendencyType" : "increasing",
+      "validTime" : {
+        "startTime" : "2023-12-01T23:00:00Z",
+        "endTime" : "2023-12-02T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {

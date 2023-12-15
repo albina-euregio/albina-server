@@ -130,6 +130,10 @@
     <tendency>
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -204,6 +208,10 @@
     <tendency>
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -279,6 +287,10 @@
     <tendency>
       <highlights>Gradual decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -375,6 +387,10 @@
     <tendency>
       <highlights>Moderate, level 2.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -428,6 +444,10 @@
     <tendency>
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -529,6 +549,10 @@
     <tendency>
       <highlights>Low, level 1.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
