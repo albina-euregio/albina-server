@@ -68,7 +68,7 @@ public interface TextToSpeech {
 			paragraph(dangerRatingTexts(bulletin.getDangerRatings()).map(this::sentence));
 			break1s();
 
-			paragraph(Streams.mapWithIndex(bulletin.getAvalancheProblems().stream().sorted(Comparator.comparingInt(p -> p.getProblemType().ordinal())), (avalancheProblem, i) -> {
+			paragraph(Streams.mapWithIndex(bulletin.getAvalancheProblems().stream().sorted(Comparator.comparingInt(p -> p.getValidTimePeriod().ordinal())), (avalancheProblem, i) -> {
 				String avalancheProblemText = this.avalancheProblemText(avalancheProblem);
 				if (i > 0) {
 					avalancheProblemText = lang.getBundleString("speech.furthermore", Map.of("text", avalancheProblemText));
@@ -173,7 +173,7 @@ public interface TextToSpeech {
 		}
 
 		private String avalancheProblemTypeText(AvalancheProblemType problemType) {
-			return lang.getBundle("i18n.AvalancheProblem").getString(problemType.toString());
+			return lang.getBundle("i18n.AvalancheProblem").getString(problemType.toString() + ".speech");
 		}
 
 		private Stream<String> dangerRatingTexts(List<DangerRating> dangerRatings) {

@@ -139,10 +139,10 @@
   <entry key="speech.tendency.decreasing">The tendency for {tendencyDate} indicates a decreasing avalanche danger.</entry>
   <entry key="speech.tendency.increasing">The tendency for {tendencyDate} indicates an increasing avalanche danger.</entry>
   <entry key="speech.tendency.steady">The tendency for {tendencyDate} indicates a steady avalanche danger.</entry>
-  <entry key="speech.avalanche-problem.between">between {lowerBound} and {upperBound}, we have a {avalancheProblemType} problem {validTimePeriod}.</entry>
-  <entry key="speech.avalanche-problem.below">below {upperBound}, we have {validTimePeriod} a {avalancheProblemType} problem.</entry>
-  <entry key="speech.avalanche-problem.above">above {lowerBound}, we have {validTimePeriod} a {avalancheProblemType} problem.</entry>
-  <entry key="speech.avalanche-problem">{validTimePeriod}, we have a {avalancheProblemType}.</entry>
+  <entry key="speech.avalanche-problem.between">{validTimePeriod}, between {lowerBound} and {upperBound}, we have {avalancheProblemType}.</entry>
+  <entry key="speech.avalanche-problem.below">{validTimePeriod}, below {upperBound}, we have {avalancheProblemType}.</entry>
+  <entry key="speech.avalanche-problem.above">{validTimePeriod}, above {lowerBound}, we have {avalancheProblemType}.</entry>
+  <entry key="speech.avalanche-problem">{validTimePeriod}, we have {avalancheProblemType}.</entry>
   <entry key="speech.aspects.0">This in all aspects.</entry>
   <entry key="speech.aspects.1">Especially in aspect {aspect1}.</entry>
   <entry key="speech.aspects.2">Especially in the aspects {aspect1} and {aspect2}.</entry>
