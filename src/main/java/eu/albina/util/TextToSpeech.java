@@ -1,5 +1,6 @@
 package eu.albina.util;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.cloud.texttospeech.v1.AudioConfig;
 import com.google.cloud.texttospeech.v1.AudioEncoding;
 import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
@@ -12,6 +13,7 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import com.google.protobuf.ByteString;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
+import org.caaml.v6.Aspect;
 import org.caaml.v6.AvalancheBulletin;
 import org.caaml.v6.AvalancheProblem;
 import org.caaml.v6.AvalancheProblemType;
@@ -29,6 +31,8 @@ import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -69,7 +73,8 @@ public interface TextToSpeech {
 				if (i > 0) {
 					avalancheProblemText = lang.getBundleString("speech.furthermore", Map.of("text", avalancheProblemText));
 				}
-				return avalancheProblemText;
+				String aspectsText = this.aspectsText(Objects.requireNonNullElse(avalancheProblem.getAspects(), List.of()));
+				return String.join(" ", avalancheProblemText, aspectsText);
 			}).map(this::sentence));
 			break1s();
 
@@ -111,6 +116,38 @@ public interface TextToSpeech {
 
 			lines.println("</speak>");
 			return stringWriter.toString().replace("<br/>", "<break time=\"1s\"/>");
+		}
+
+		private String aspectsText(List<Aspect> aspects) {
+			List<String> texts = sortAspects(aspects).stream()
+				.map(Aspect::toString)
+				.map(lang.getBundle("i18n.Aspect")::getString)
+				.collect(Collectors.toList());
+			switch (texts.size()) {
+				case 0:
+					return lang.getBundleString("speech.aspects.0");
+				case 1:
+					return lang.getBundleString("speech.aspects.1", Map.of("aspect1", texts.get(0)));
+				case 2:
+					return lang.getBundleString("speech.aspects.2", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1)));
+				default:
+					return lang.getBundleString("speech.aspects.3", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1), "aspect3", texts.get(2)));
+			}
+		}
+
+
+		private List<Aspect> sortAspects(List<Aspect> aspects) {
+			List<Aspect> order = List.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW);
+			List<Aspect> sorted = Stream.concat(order.stream(), order.stream())
+				.dropWhile(aspects::contains)
+				.dropWhile(Predicate.not(aspects::contains))
+				.takeWhile(aspects::contains)
+				.collect(Collectors.toList());
+			if (sorted.size() < 4) {
+				return sorted;
+			}
+			Aspect middleAspect = Stream.of(Aspect.N, Aspect.S, Aspect.W, Aspect.E).filter(aspects::contains).findFirst().orElseThrow();
+			return List.of(sorted.get(0), middleAspect, sorted.get(sorted.size() - 1));
 		}
 
 		private String avalancheProblemText(AvalancheProblem p) {

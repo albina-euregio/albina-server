@@ -11,11 +11,11 @@
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>below 2400 meter, we have earlier the day a Gliding snow problem.</s>
-<s>Furthermore, below 2400 meter, we have later the day a Gliding snow problem.</s>
-<s>Furthermore, above the treeline, we have later the day a New snow problem.</s>
-<s>Furthermore, above 2000 meter, we have earlier the day a Persistent weak layer problem.</s>
-<s>Furthermore, above 2000 meter, we have later the day a Persistent weak layer problem.</s>
+<s>below 2400 meter, we have earlier the day a Gliding snow problem. This in all aspects.</s>
+<s>Furthermore, below 2400 meter, we have later the day a Gliding snow problem. This in all aspects.</s>
+<s>Furthermore, above the treeline, we have later the day a New snow problem. This in all aspects.</s>
+<s>Furthermore, above 2000 meter, we have earlier the day a Persistent weak layer problem. This in all aspects.</s>
+<s>Furthermore, above 2000 meter, we have later the day a Persistent weak layer problem. This in all aspects.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Avalanches can be triggered in the old snowpack, especially on steep slopes above approximately 2000 m. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack serve as an alarm indicating the danger. Experience in the assessment of avalanche danger is required. Mostly avalanches are medium-sized. <break time="1s"/> <break time="1s"/> The fresh snow and the isolated winds slabs that are forming can be released by a single winter sport participant. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. As the snowfall becomes more intense the avalanche prone locations will become more prevalent as the day progresses. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. <break time="1s"/> <break time="1s"/> On steep grassy slopes small and, in isolated cases, medium-sized gliding avalanches are possible. In the regions exposed to rain this applies in particular.</s></p>
@@ -49,11 +49,11 @@ We have the following danger patterns: dp.4: cold following warm / warm followin
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>below 2400 meter, we have later the day a Gliding snow problem.</s>
-<s>Furthermore, above the treeline, we have later the day a New snow problem.</s>
-<s>Furthermore, above 2200 meter, we have earlier the day a Persistent weak layer problem.</s>
-<s>Furthermore, above 2200 meter, we have later the day a Persistent weak layer problem.</s>
-<s>Furthermore, above the treeline, we have earlier the day a Wind slab problem.</s>
+<s>below 2400 meter, we have later the day a Gliding snow problem. This in all aspects.</s>
+<s>Furthermore, above the treeline, we have later the day a New snow problem. This in all aspects.</s>
+<s>Furthermore, above 2200 meter, we have earlier the day a Persistent weak layer problem. This in all aspects.</s>
+<s>Furthermore, above 2200 meter, we have later the day a Persistent weak layer problem. This in all aspects.</s>
+<s>Furthermore, above the treeline, we have earlier the day a Wind slab problem. This in all aspects.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>The new snow and wind slabs are lying on the unfavourable surface of an old snowpack in all aspects above approximately 2000 m. These conditions will foster a gradual rise in the avalanche danger as the day progresses in all aspects. Small and medium-sized avalanches are possible in particular on very steep slopes. The new snow and wind slabs can be released, especially by large additional loads, in all aspects above approximately 2000 m. The number and size of avalanche prone locations will increase with altitude. <break time="1s"/> Afternoon: The fresh snow and the sometimes large wind slabs that are forming over a wide area can be released easily, or, in isolated cases naturally. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. Avalanche prone locations are to be found in particular in places that are protected from the wind above approximately 2200 m. Experience in the assessment of avalanche danger is required. <break time="1s"/> On steep grassy slopes more small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</s></p>
@@ -87,11 +87,11 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: co
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>below 2400 meter, we have later the day a Gliding snow problem.</s>
-<s>Furthermore, above the treeline, we have later the day a New snow problem.</s>
-<s>Furthermore, above 2200 meter, we have earlier the day a Persistent weak layer problem.</s>
-<s>Furthermore, above 2200 meter, we have later the day a Persistent weak layer problem.</s>
-<s>Furthermore, above the treeline, we have earlier the day a Wind slab problem.</s>
+<s>below 2400 meter, we have later the day a Gliding snow problem. This in all aspects.</s>
+<s>Furthermore, above the treeline, we have later the day a New snow problem. This in all aspects.</s>
+<s>Furthermore, above 2200 meter, we have earlier the day a Persistent weak layer problem. This in all aspects.</s>
+<s>Furthermore, above 2200 meter, we have later the day a Persistent weak layer problem. This in all aspects.</s>
+<s>Furthermore, above the treeline, we have earlier the day a Wind slab problem. This in all aspects.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Afternoon: The fresh snow and the sometimes large wind slabs that are forming over a wide area can be released easily, or, in isolated cases naturally. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. They are sometimes covered with new snow and are therefore difficult to recognise. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. <break time="1s"/> <break time="1s"/> Additionally avalanches can also be triggered in the old snowpack, especially on very steep slopes above approximately 2200 m. Avalanche prone locations are to be found in particular in places that are protected from the wind above approximately 2200 m. Experience in the assessment of avalanche danger is required. <break time="1s"/> <break time="1s"/> On steep grassy slopes more small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</s></p>
@@ -125,8 +125,8 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: co
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>above the treeline, we have later the day a New snow problem.</s>
-<s>Furthermore, above the treeline, we have earlier the day a Wind slab problem.</s>
+<s>above the treeline, we have later the day a New snow problem. This in all aspects.</s>
+<s>Furthermore, above the treeline, we have earlier the day a Wind slab problem. This in all aspects.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>The fresh snow and the isolated winds slabs that are forming can be released by a single winter sport participant. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. As the snowfall becomes more intense the avalanche prone locations will become more prevalent as the day progresses. They are sometimes covered with new snow and are therefore difficult to recognise. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. <break time="1s"/> <break time="1s"/> On steep grassy slopes small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</s></p>
@@ -160,8 +160,8 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>above 2400 meter, we have earlier the day a Wind slab problem.</s>
-<s>Furthermore, above the treeline, we have later the day a Wind slab problem.</s>
+<s>above 2400 meter, we have earlier the day a Wind slab problem. Especially in the aspects North-West to North to North-East.</s>
+<s>Furthermore, above the treeline, we have later the day a Wind slab problem. This in all aspects.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>As a consequence of new snow and a strong southwesterly wind, wind slabs will form on Friday especially in gullies and bowls and behind abrupt changes in the terrain. The wind slabs can be released by a single winter sport participant in all aspects above the tree line. As the snowfall becomes more intense the prevalence and size of the avalanche prone locations will increase as the day progresses. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls. <break time="1s"/> The Avalanche Warning Service currently has only a small amount of information, so that the avalanche danger should be investigated especially thoroughly in the relevant locality.</s></p>
@@ -194,7 +194,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>all day, we have a New snow.</s>
+<s>all day, we have a New snow. This in all aspects.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>The avalanche prone locations are to be found especially in steep terrain at intermediate and high altitudes and on wind-loaded slopes. Avalanches can in some places be released by small loads, but they will be small in most cases.</s></p>

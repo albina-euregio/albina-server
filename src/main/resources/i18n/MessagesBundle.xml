@@ -144,7 +144,7 @@
   <entry key="speech.avalanche-problem.above">above {lowerBound}, we have {validTimePeriod} a {avalancheProblemType} problem.</entry>
   <entry key="speech.avalanche-problem">{validTimePeriod}, we have a {avalancheProblemType}.</entry>
   <entry key="speech.aspects.0">This in all aspects.</entry>
-  <entry key="speech.aspects.1">Especially in aspect {aspect}.</entry>
+  <entry key="speech.aspects.1">Especially in aspect {aspect1}.</entry>
   <entry key="speech.aspects.2">Especially in the aspects {aspect1} and {aspect2}.</entry>
   <entry key="speech.aspects.3">Especially in the aspects {aspect1} to {aspect2} to {aspect3}.</entry>
   <entry key="valid-time-period.all_day">all day</entry>

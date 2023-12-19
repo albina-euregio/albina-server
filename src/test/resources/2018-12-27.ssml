@@ -11,9 +11,9 @@
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>between 2200 meter and 2700 meter, we have a Persistent weak layer problem all day.</s>
-<s>Furthermore, below 2400 meter, we have later the day a Wet snow problem.</s>
-<s>Furthermore, above 2200 meter, we have earlier the day a Wind slab problem.</s>
+<s>between 2200 meter and 2700 meter, we have a Persistent weak layer problem all day. This in all aspects.</s>
+<s>Furthermore, below 2400 meter, we have later the day a Wet snow problem. Especially in the aspects East to South to West.</s>
+<s>Furthermore, above 2200 meter, we have earlier the day a Wind slab problem. Especially in the aspects North-West to North to North-East.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>The sometimes large wind slabs of the last three days represent the main danger, especially above approximately 2200 m. Single winter sport participants can release avalanches as before, including dangerously large ones, in particular, along the border with Italy. Dry avalanches can additionally be released in the old snowpack by a single winter sport participant, in particular in areas where the snow cover is rather shallow between approximately 2200 and 2700 m and on very steep slopes. The avalanche prone locations are to be found in all aspects. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. In the afternoon as a consequence of warming during the day and solar radiation there will be only a slight increase in the danger of moist and wet avalanches. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger.</s></p>
@@ -46,8 +46,8 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.5: sn
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>below 2400 meter, we have all day a Gliding snow problem.</s>
-<s>Furthermore, above 2200 meter, we have all day a Wind slab problem.</s>
+<s>below 2400 meter, we have all day a Gliding snow problem. Especially in the aspects East to South to West.</s>
+<s>Furthermore, above 2200 meter, we have all day a Wind slab problem. Especially in the aspects North-West to North to North-East.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>The sometimes large wind slabs of the last three days represent the main danger. The fresh wind slabs can be released, in particular by large loads and reach large size in isolated cases. The number and size of avalanche prone locations will increase with altitude. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day. Below approximately 2600 m small and medium-sized moist loose snow avalanches are possible. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger.</s></p>
@@ -80,8 +80,8 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>between 2200 meter and 2700 meter, we have a Persistent weak layer problem all day.</s>
-<s>Furthermore, above 2200 meter, we have all day a Wind slab problem.</s>
+<s>between 2200 meter and 2700 meter, we have a Persistent weak layer problem all day. Especially in the aspects West to North to East.</s>
+<s>Furthermore, above 2200 meter, we have all day a Wind slab problem. Especially in the aspects North-West to North to North-East.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>The wind slabs of the last few days are prone to triggering above approximately 2200 m. These represent the main danger. The number and size of avalanche prone locations will increase with altitude. In particular transitions from a shallow to a deep snowpack are unfavourable, especially on very steep shady slopes and adjacent to ridgelines. As a consequence of warming during the day and solar radiation more mostly small moist loose snow avalanches are possible.</s></p>
@@ -114,8 +114,8 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.5: sn
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>above 2300 meter, we have all day a Persistent weak layer problem.</s>
-<s>Furthermore, above 2300 meter, we have all day a Wind slab problem.</s>
+<s>above 2300 meter, we have all day a Persistent weak layer problem. Especially in the aspects North-West to North to North-East.</s>
+<s>Furthermore, above 2300 meter, we have all day a Wind slab problem. Especially in the aspects West to North to South-East.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>As a consequence of fresh snow and a strong wind from northerly directions, wind slabs formed in particular adjacent to ridgelines and in gullies and bowls. In particular on wind-loaded slopes avalanches can be released easily and reach a dangerous size. Especially in regions with a lot of snow and in high Alpine regions avalanche prone locations are more prevalent and the danger is greater. The avalanche prone locations are clearly recognisable to the trained eye. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls.</s></p>
@@ -148,7 +148,7 @@ We have the following danger patterns: .
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>above 2200 meter, we have all day a Wind slab problem.</s>
+<s>above 2200 meter, we have all day a Wind slab problem. Especially in the aspects North-West to North to North-East.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>The fresh wind slabs represent the main danger, especially on very steep shady slopes and adjacent to ridgelines, in particular above approximately 2200 m. The number and size of avalanche prone locations will increase with altitude. At low and intermediate altitudes a low avalanche danger will be encountered over a wide area.</s></p>
@@ -181,7 +181,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>above 2200 meter, we have all day a Wind slab problem.</s>
+<s>above 2200 meter, we have all day a Wind slab problem. Especially in the aspects North-West to North to East.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>The wind slabs represent the main danger. The wind slabs are to be found in particular adjacent to ridgelines and in gullies and bowls as well as in the high Alpine regions. The avalanche prone locations are rather rare and are easy to recognise.</s></p>
