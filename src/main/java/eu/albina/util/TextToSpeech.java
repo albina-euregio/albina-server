@@ -229,10 +229,27 @@ public interface TextToSpeech {
 		try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
 			SynthesisInput input = SynthesisInput.newBuilder().setText("Hello, World!").build();
 			VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
-				.setLanguageCode("en-US")
-				.setSsmlGender(SsmlVoiceGender.NEUTRAL)
+				.setLanguageCode("en-GB")
+				.setName("en-GB-Wavenet-B")
+				.setSsmlGender(SsmlVoiceGender.MALE)
+				// or
+				// .setName("en-GB-Wavenet-A")
+				// .setSsmlGender(SsmlVoiceGender.FEMALE)
+				// or
+				// .setLanguageCode("de-DE")
+				// .setName("de-DE-Standard-E")
+				// .setSsmlGender(SsmlVoiceGender.MALE)
+				// or
+				// .setLanguageCode("de-DE")
+				// .setName("de-DE-Neural2-C")
+				// .setSsmlGender(SsmlVoiceGender.FEMALE)
 				.build();
-			AudioConfig audioConfig = AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.MP3).build();
+			AudioConfig audioConfig = AudioConfig.newBuilder()
+				.setAudioEncoding(AudioEncoding.MP3)
+				.addEffectsProfileId("handset-class-device")
+				// .setPitch(-2.0) // de MALE
+				// .setSpeakingRate(1.06) // de FEMALE
+				.build();
 			SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
 			ByteString audioContents = response.getAudioContent();
 			Path path = Path.of("output.mp3");
