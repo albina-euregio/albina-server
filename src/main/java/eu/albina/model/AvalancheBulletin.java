@@ -776,11 +776,15 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return sum;
 	}
 
-	public ZonedDateTime getValidityDate() {
+	public static ZonedDateTime getValidityDate(ZonedDateTime validFrom) {
 		ZonedDateTime date = validFrom;
 		if (validFrom.getHour() > 12)
 			date = date.plusDays(1);
 		return date;
+	}
+
+	public ZonedDateTime getValidityDate() {
+		return getValidityDate(validFrom);
 	}
 
 	public String getValidityDateString() {

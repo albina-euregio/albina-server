@@ -21,7 +21,7 @@ public enum AvalancheProblemType {
             case WET_SNOW: return "wet_snow";
             case WIND_SLAB: return "wind_slab";
         }
-        return null;
+        throw new IllegalStateException();
     }
 
     public static AvalancheProblemType forValue(String value) {

@@ -134,6 +134,10 @@ public class AlbinaUtil {
 			// TODO what if no date is given (should not happen)
 			return "-";
 		}
+		return getDate(date, lang);
+	}
+
+	public static String getDate(ZonedDateTime date, LanguageCode lang) {
 		date = date.withZoneSameInstant(localZone());
 		return String.format("%s %s",
 			lang.getBundleString("day." + date.getDayOfWeek()),

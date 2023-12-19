@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-interface Caaml6 {
+public interface Caaml6 {
 	static String createJSON(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
 			return new ObjectMapper()
