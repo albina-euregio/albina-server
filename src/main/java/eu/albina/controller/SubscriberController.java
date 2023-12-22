@@ -95,7 +95,7 @@ public class SubscriberController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Subscriber existing = entityManager.find(Subscriber.class, subscriber.getEmail());
 			if (existing != null) {
-				entityManager.remove(subscriber);
+				entityManager.remove(existing);
 			}
 			entityManager.persist(subscriber);
 			return subscriber.getEmail();
