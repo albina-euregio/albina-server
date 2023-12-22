@@ -39,6 +39,8 @@ import eu.albina.model.PushSubscription;
 import eu.albina.model.publication.PushConfiguration;
 
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -84,7 +86,10 @@ public class PushNotificationUtil {
 	public static Optional<PushConfiguration> getConfiguration() {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			try {
-				PushConfiguration configuration = entityManager.createQuery(entityManager.getCriteriaBuilder().createQuery(PushConfiguration.class)).getSingleResult();
+				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+				CriteriaQuery<PushConfiguration> select = criteriaBuilder.createQuery(PushConfiguration.class);
+				select.from(PushConfiguration.class);
+				PushConfiguration configuration = entityManager.createQuery(select).getSingleResult();
 				return Optional.ofNullable(configuration);
 			} catch (PersistenceException e) {
 				return Optional.empty();
