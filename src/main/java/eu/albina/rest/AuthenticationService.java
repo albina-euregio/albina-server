@@ -126,6 +126,7 @@ public class AuthenticationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Test access token")
 	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Username.class)))
+	@Path("/test")
 	public Response testAuth(@Context SecurityContext securityContext) {
 		try {
 			Principal principal = securityContext.getUserPrincipal();
