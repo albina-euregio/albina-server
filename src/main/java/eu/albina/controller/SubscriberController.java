@@ -27,6 +27,8 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.HibernateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controller for email subscribers. The sending of emails is handled by
@@ -41,6 +43,7 @@ public class SubscriberController {
 	// private static Logger logger =
 	// LoggerFactory.getLogger(SubscriberController.class);
 	private static SubscriberController instance = null;
+	private static final Logger logger = LoggerFactory.getLogger(SubscriberController.class);
 
 	/**
 	 * Private constructor.
@@ -95,8 +98,10 @@ public class SubscriberController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Subscriber existing = entityManager.find(Subscriber.class, subscriber.getEmail());
 			if (existing != null) {
+				logger.info("Removing existing subscriber {}", existing.getEmail());
 				entityManager.remove(existing);
 			}
+			logger.info("Creating subscriber {}", subscriber.getEmail());
 			entityManager.persist(subscriber);
 			return subscriber.getEmail();
 		});
@@ -115,6 +120,7 @@ public class SubscriberController {
 			if (subscriber == null) {
 				throw new HibernateException("No subscriber with email: " + email);
 			}
+			logger.info("Removing existing subscriber {}", subscriber.getEmail());
 			entityManager.remove(subscriber);
 			return subscriber.getEmail();
 		});
