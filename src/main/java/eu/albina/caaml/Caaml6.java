@@ -42,7 +42,7 @@ interface Caaml6 {
 		}
 	}
 
-	static String createXML(AvalancheReport avalancheReport, LanguageCode lang)  {
+	static String createXML(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
 			return new XmlMapper()
 				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
@@ -62,12 +62,16 @@ interface Caaml6 {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
 		bulletin.setUnscheduled(AlbinaUtil.isUpdate(List.of(avalancheBulletin)));
 		bulletin.setAvalancheActivity(new org.caaml.v6.Texts(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
-		bulletin.setAvalancheProblems(Stream.concat(
-				avalancheBulletin.getForenoon().getAvalancheProblems().stream(),
-				avalancheBulletin.getAfternoon() == null ? Stream.empty() : avalancheBulletin.getAfternoon().getAvalancheProblems().stream()
-			)
-			.map(p -> getAvalancheProblem(avalancheBulletin, p, lang))
-			.filter(Objects::nonNull).distinct().collect(Collectors.toList()));
+		if (avalancheBulletin.isHasDaytimeDependency()) {
+			bulletin.setAvalancheProblems(Stream.concat(
+				avalancheBulletin.getForenoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.EARLIER)),
+				avalancheBulletin.getAfternoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.LATER))
+			).filter(Objects::nonNull).collect(Collectors.toList()));
+		} else {
+			bulletin.setAvalancheProblems(avalancheBulletin.getForenoon().getAvalancheProblems().stream()
+				.map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.ALL_DAY))
+				.filter(Objects::nonNull).collect(Collectors.toList()));
+		}
 		bulletin.setBulletinID(avalancheBulletin.getId());
 		List<String> dangerPatterns = Stream.of(avalancheBulletin.getDangerPattern1(), avalancheBulletin.getDangerPattern2())
 			.filter(Objects::nonNull)
@@ -104,7 +108,7 @@ interface Caaml6 {
 		return bulletin;
 	}
 
-	static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheBulletin avalancheBulletin, AvalancheProblem p, LanguageCode lang) {
+	static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, LanguageCode lang, ValidTimePeriod validTimePeriod) {
 		if (p == null || p.getAvalancheProblem() == null) {
 			return null;
 		}
@@ -115,17 +119,7 @@ interface Caaml6 {
 		final String upperBound = p.getElevationHigh() > 0 ? Integer.toString(p.getElevationHigh()) : p.getTreelineHigh() ? "treeline" : null;
 		result.setElevation(new ElevationBoundaryOrBand(lowerBound, upperBound));
 		result.setComment(p.getTerrainFeature(lang));
-		final boolean isForenoon = avalancheBulletin.getForenoon().getAvalancheProblems().contains(p);
-		final boolean isAfternoon = avalancheBulletin.getAfternoon() != null && avalancheBulletin.getAfternoon().getAvalancheProblems().contains(p);
-		if (!avalancheBulletin.isHasDaytimeDependency()) {
-			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);
-		} else if (isForenoon && isAfternoon) {
-			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);
-		} else if (isForenoon) {
-			result.setValidTimePeriod(ValidTimePeriod.EARLIER);
-		} else if (isAfternoon) {
-			result.setValidTimePeriod(ValidTimePeriod.LATER);
-		}
+		result.setValidTimePeriod(validTimePeriod);
 		final EawsMatrixInformation matrixInformation = p.getEawsMatrixInformation();
 		if (matrixInformation != null) {
 			if (matrixInformation.getAvalancheSize() != null) {

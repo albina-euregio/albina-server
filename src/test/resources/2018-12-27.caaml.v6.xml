@@ -104,7 +104,23 @@
       <aspect>W</aspect>
       <aspect>SW</aspect>
       <aspect>N</aspect>
-      <validTimePeriod>all_day</validTimePeriod>
+      <validTimePeriod>earlier</validTimePeriod>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+        <upperBound>2700</upperBound>
+      </elevation>
+      <aspect>SE</aspect>
+      <aspect>E</aspect>
+      <aspect>S</aspect>
+      <aspect>NW</aspect>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>SW</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>later</validTimePeriod>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>wet_snow</problemType>

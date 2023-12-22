@@ -1,0 +1,1233 @@
+[
+	{
+		"id": "00d8122e-89aa-4bc4-8120-9698dd4f7b7a",
+		"highlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "ca"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "de",
+				"text": "Vorsicht vor Gleitschnee. Nachmittag: Anstieg der Lawinengefahr mit Neuschnee und starkem Wind."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Atencion ath problèma d'esguitlaments basaus. Tarde: A conseqüéncia dera nhèu recenta e eth vent fòrt, aument deth perilh de lauegi."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Atenció al problema de lliscaments basals. Tarda: A conseqüència de la neu recent i el vent fort, augment del perill d'allaus."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Attention à la neige glissante. L'après-midi: Augmentation du danger d'avalanches avec la neige fraîche et le vent fort."
+			},
+			{
+				"languageCode": "en",
+				"text": "Gliding snow requires caution. Afternoon: Increase in avalanche danger as a consequence of new snow and strong wind."
+			},
+			{
+				"languageCode": "es",
+				"text": "Atención al problema de deslizamientos basales. Tarde: A consecuencia de la nieve reciente y el viento fuerte, aumento del peligro de aludes."
+			},
+			{
+				"languageCode": "it",
+				"text": "Attenzione alla neve slittante. Pomeriggio: Con neve fresca e forte vento, aumento del pericolo di valanghe."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "oc",
+				"text": "I a un perilh pronunciat de lauegi d'esguitlament basau. Açò se da especiaument enes pales soleienques fòrça arribentes per dejós des 2400 m aproximativament. Evitar es zònes damb henerècles d'esguitlament basau s'ei possible. Damb era intensificacion dera nheuada, son possibles cada viatge mès nombrosi lauegi d'esguitlament basau. <br/> <br/> Damb era nheuada e eth vent damb bohades fòrtes deth nòrd-oèst, a compdar deth maitin se formarèn naues plaques de vent. Es lauegi pòden desencadenar-se ath pas d'un montanhaire e arténher mida mejana. Damb era nhèu recenta e eth vent fòrt, pendent era tarde eth nombre e era extension des endrets perilhosi aumentarà."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Hi ha un perill pronunciat d'allaus de lliscament basal. Això es dona especialment en vessants assolellats molt inclinats per sota dels 2400 m aproximadament. Evitar les zones amb esquerdes de lliscament basal si és possible. Amb la intensificació de la nevada, són possibles cada cop més nombroses allaus de lliscament basal. <br/> <br/> Amb la nevada i el vent amb ratxes fortes del nord-oest, a partir del matí es formaran noves plaques de vent. Les allaus poden ser desencadenades al pas d'un muntanyenc i assolir mida mitjana. Amb la neu recent i el vent fort, durant la tarda el nombre i l'extensió dels indrets perillosos augmentarà."
+			},
+			{
+				"languageCode": "en",
+				"text": "A substantial danger of gliding avalanches exists. This applies in particular on very steep sunny slopes below approximately 2400 m. Areas with glide cracks are to be avoided as far as possible. As the snowfall becomes more intense more frequent gliding avalanches are possible. <br/> <br/> As a consequence of snowfall and the occasionally strong northwesterly wind, fresh snow drift accumulations will form from early morning. Avalanches can be released by a single winter sport participant and reach medium size. As a consequence of new snow and strong wind the prevalence and size of the avalanche prone locations will increase in the afternoon."
+			},
+			{
+				"languageCode": "de",
+				"text": "Es besteht eine ausgeprägte Gefahr von Gleitschneelawinen. Dies vor allem an sehr steilen Sonnenhängen unterhalb von rund 2400 m. Zonen mit Gleitschneerissen sollten möglichst gemieden werden. Mit der Intensivierung der Schneefälle sind vermehrt Gleitschneelawinen möglich. <br/> <br/> Mit Schneefall und teils starkem Nordwestwind entstehen ab dem Morgen frische Triebschneeansammlungen. Lawinen können von einzelnen Wintersportlern ausgelöst werden und mittlere Größe erreichen. Mit Neuschnee und starkem Wind nehmen Anzahl und Größe der Gefahrenstellen am Nachmittag zu."
+			},
+			{
+				"languageCode": "es",
+				"text": "Hay un peligro pronunciado de aludes de deslizamiento basal. Esto se da especialmente en las laderas solanas muy inclinadas por debajo de los 2400 m aproximadamente. Evitar las zonas con grietas de deslizamiento basal si es posible. Con la intensificación de la nevada, son posibles cada vez más numerosas avalanchas de deslizamiento basal. <br/> <br/> Con la nevada y el viento con rachas fuertes del noroeste, a partir de la mañana se formarán nuevas placas de viento. Los aludes pueden ser desencadenadas al paso de un montañero y alcanzar un tamaño mediano. Con la nieve reciente y el viento fuerte, durante la tarde el número y la extensión de los lugares peligrosos aumentará."
+			},
+			{
+				"languageCode": "it",
+				"text": "Sussiste un pronunciato pericolo di valanghe per scivolamento di neve. Ciò soprattutto sui pendii soleggiati molto ripidi al di sotto dei 2400 m circa. Evitare se possibile le zone con rotture da scivolamento. Con l'intensificarsi delle nevicate, sono possibili sempre più numerose valanghe per scivolamento di neve. <br/> <br/> Con le nevicate e il vento a tratti forte proveniente da nord ovest, a partire dal mattino si formeranno nuovi accumuli di neve ventata. Le valanghe possono distaccarsi in seguito al passaggio di un singolo appassionato di sport invernali e raggiungere dimensioni medie. Con neve fresca e forte vento, durante il pomeriggio il numero e le dimensioni dei punti pericolosi aumenteranno."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Il existe un danger prononcé d'avalanches de glissement. Ceci surtout sur les pentes très raides ensoleillées en dessous d'environ 2400 m. Les zones présentant des fissures de glissement doivent être évitées dans la mesure du possible. Des avalanches de glissement de plus en plus nombreuses sont possibles avec l'intensification des chutes de neige. <br/> <br/> Avec les chutes de neige et le vent de nord-ouest parfois fort, de nouvelles accumulations de neige soufflée se forment à partir du matin. Des avalanches peuvent être déclenchées par un seul amateur de sports d'hiver et atteindre une taille moyenne. Avec la neige fraîche et le vent fort le nombre et l'étendue des endroits dangereux augmentent l'après-midi."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "en",
+				"text": "The wind will be strong to storm force over a wide area. Over a wide area 20 to 30 cm of snow, and up to 40 cm in some localities, will fall from the afternoon. The fresh snow and the wind slabs that are forming over a wide area will be deposited on soft layers in particular on shady slopes. Towards its base, the snowpack is faceted."
+			},
+			{
+				"languageCode": "es",
+				"text": "El viento soplará de fuerte a muy fuerte en una zona amplia. A partir de la tarde caerán en una zona extensa de 20 a 30 cm de nieve, localmente hasta 40 cm. La nieve reciente y las placas de viento y generalizadas se depositarán encima de capas blandas sobre todo en laderas umbrías. La parte inferior del manto se ha facetado."
+			},
+			{
+				"languageCode": "it",
+				"text": "In molte regioni, il vento sarà da forte a tempestoso. A partire dal pomeriggio cadranno diffusamente da 20 a 30 cm di neve, localmente sino a 40 cm. La neve fresca e gli accumuli di neve ventata che si formeranno in molti punti si depositeranno su strati soffici soprattutto sui pendii ombreggiati. La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Le vent souffle fortement à tempétueusement en général. À partir de l'après-midi il tombera en général de 20 à 30 cm de neige, localement jusqu'à 40 cm. La neige fraîche et les accumulations de neige soufflée se formant en de nombreux endroits se déposeront sur des couches meubles surtout sur les pentes à l'ombre. La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux."
+			},
+			{
+				"languageCode": "de",
+				"text": "Der Wind bläst verbreitet stark bis stürmisch. Ab dem Nachmittag fallen verbreitet 20 bis 30 cm Schnee, lokal bis zu 40 cm. Der Neuschnee und die verbreitet entstehenden Triebschneeansammlungen werden vor allem an Schattenhängen auf weiche Schichten abgelagert. Der untere Teil der Schneedecke ist kantig aufgebaut."
+			},
+			{
+				"languageCode": "ca",
+				"text": "El vent serà de fort a molt fort en una zona àmplia. A partir de la tarda cauran en una zona extensa de 20 a 30 cm de neu, localment fins a 40 cm. La neu recent i les plaques de vent i generalitzades es dipositaran a sobre de capes toves sobretot en vessants obacs. La part inferior del mantell s'ha facetat."
+			},
+			{
+				"languageCode": "oc",
+				"text": "En ua zòna vasta eth vent serà de fòrt a plan fòrt. A compdar dera tarde queiràn en una àrea extensa de 20 a 30 cm de nhèu, locaument enquia 40 cm. Era nhèu recenta e plaques de vent e generalizades se depositaràn ath dessús de coches trendes sustot en pales ombrères. Era part inferior deth mantèth s'a facetat."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "it",
+				"text": "Con l'intensificarsi delle precipitazioni, ulteriore aumento del pericolo di valanghe."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Damb era intensificacion des precipitacions, adicionau aument deth perilh de lauegi."
+			},
+			{
+				"languageCode": "es",
+				"text": "Con la intensificación de las precipitaciones, adicional aumento del peligro de aludes."
+			},
+			{
+				"languageCode": "de",
+				"text": "Weiterer Anstieg der Lawinengefahr mit der Intensivierung der Niederschläge."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Amb la intensificació de les precipitacions, addicional augment del perill d'allaus."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Augmentation étendue du danger d'avalanches avec l'intensification des précipitations."
+			},
+			{
+				"languageCode": "en",
+				"text": "Further increase in avalanche danger as the precipitation becomes more intense."
+			}
+		],
+		"tendency": "increasing",
+		"dangerPattern1": "dp6",
+		"dangerPattern2": "dp2",
+		"publicationDate": "2023-12-20T16:00:00Z",
+		"validity": {
+			"from": "2023-12-20T23:00:00Z",
+			"until": "2023-12-21T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-07",
+			"AT-07-10",
+			"AT-07-01",
+			"AT-07-12"
+		],
+		"hasDaytimeDependency": true,
+		"forenoon": {
+			"id": "61a245b1-decc-4861-bc7c-04f52f74cfff",
+			"hasElevationDependency": true,
+			"elevation": 2400,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "minus",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "few",
+					"avalancheSizeValue": 28,
+					"snowpackStabilityValue": 62,
+					"frequencyValue": 48
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "gliding_snow",
+				"aspects": [
+					"SE",
+					"W",
+					"S",
+					"SW",
+					"E"
+				],
+				"elevationHigh": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "equal",
+					"avalancheSize": "medium",
+					"snowpackStability": "very_poor",
+					"frequency": "few",
+					"avalancheSizeValue": 34,
+					"snowpackStabilityValue": 79,
+					"frequencyValue": 45
+				}
+			}
+		},
+		"afternoon": {
+			"id": "c81eb80d-ea59-473e-819d-5f1aef43654d",
+			"hasElevationDependency": true,
+			"treeline": true,
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem1": {
+				"avalancheProblem": "new_snow",
+				"aspects": [
+					"SE",
+					"W",
+					"S",
+					"SW",
+					"E",
+					"NE",
+					"NW",
+					"N"
+				],
+				"treelineLow": true,
+				"eawsMatrixInformation": {
+					"dangerRating": "considerable",
+					"dangerRatingModificator": "equal",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "many",
+					"avalancheSizeValue": 28,
+					"snowpackStabilityValue": 62,
+					"frequencyValue": 75
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "gliding_snow",
+				"aspects": [
+					"SE",
+					"W",
+					"S",
+					"SW",
+					"E"
+				],
+				"elevationHigh": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "equal",
+					"avalancheSize": "medium",
+					"snowpackStability": "very_poor",
+					"frequency": "few",
+					"avalancheSizeValue": 34,
+					"snowpackStabilityValue": 79,
+					"frequencyValue": 45
+				}
+			}
+		}
+	},
+	{
+		"id": "b0340769-c1c7-45c5-b3cd-657154bee719",
+		"highlights": [
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "oc"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "oc",
+				"text": "Atencion ath problèma de nhèu ventada recenta. Eth problèma d'esguitlaments basaus ei era hònt principau de perilh."
+			},
+			{
+				"languageCode": "en",
+				"text": "Fresh wind slabs require caution. Gliding snow represents the main danger."
+			},
+			{
+				"languageCode": "de",
+				"text": "Vorsicht vor frischem Triebschnee. Gleitschnee ist die Hauptgefahr."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Attention à la neige récemment soufflée. Neige glissante constituant le danger principal."
+			},
+			{
+				"languageCode": "es",
+				"text": "Atención al problema de nieve venteada reciente. El problema de deslizamientos basales es la principal fuente de peligro."
+			},
+			{
+				"languageCode": "it",
+				"text": "Attenzione alla neve ventata recente. La neve slittante è la principale fonte di pericolo."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Atenció al problema de neu ventada recent. El problema de lliscaments basals és la principal font de perill."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "ca",
+				"text": "Les plaques de vent més recents són, de manera aïllada, inestables sobretot en vessants obacs molt inclinats per sobre dels 2400 m aproximadament. Aquestes poden ser desencadenades al pas d'un muntanyenc sobretot als extrems i assolir mida mitjana. Els indrets perillosos són fàcils de reconèixer. Precaució sobretot en cubetes, canals i darrere de canvis abruptes de pendent. <br/> <br/> Hi ha un cert perill d'allaus de lliscament basal. Això es dona en vessants inclinats orientats a est, sud i oest per sota dels 2400 m aproximadament. Evitar les zones amb esquerdes de lliscament basal si és possible. <br/> <br/> Les capes febles a la neu vella poden ser desencadenades especialment amb sobrecàrregues fortes sobretot en zones de transició de mantell prim a gruixut, com per exemple a l'entrada de canals i cubetes. Indrets perillosos es troben als vessants obacs molt inclinats per sobre dels 2200 m aproximadament. Aquests indrets són molt rars però difícils de reconèixer. Les allaus poden atènyer mides grans de manera aïllada."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es plaques de vent mès recentes son, de manèra isolada, inestables sustot en pales ombrères fòrça arribentes per dessús des 2400 m aproximativament. Aguestes pòden desencadenar-se ath pas d'un montanhaire sustot enes extrems e arténher mida mejana. Es endrets perilhosi son de bon reconéisher. Precaucion sustot enes conques, canaus e ath darrèr de cambis abruptes de pendent. <br/> <br/> I a un cèrt perilh de lauegi d'esguitlament basau. Açò se da enes pales arribentes orientades a èst, sud e oèst per dejós des 2400 m aproximativament. Evitar es zònes damb henerècles d'esguitlament basau s'ei possible. <br/> <br/> Sustot en zònes de transicion de celh prim a grossut, coma per exemple ena entrada de canaus e conques es coches febles ena nhèu vielha pòden desencadenar-se especiaument damb subrecargues fòrtes. Endrets perilhosi se tròben enes pales ombrères fòrça arribentes per dessús des 2200 m aproximativament. Aguesti endrets son fòrça rari mès de mau reconéisher. Es lauegi pòden arténher mides granes de manèra isolada."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations de neige soufflée fraîches sont de manière isolée fragiles particulièrement sur les pentes très raides à l'ombre au-dessus d'environ 2400 m. Celles-ci peuvent surtout à leur périphérie être déclenchées par un seul amateur de sports d'hiver et atteindre une taille moyenne. Les endroits dangereux sont facilement identifiables. Prudence surtout dans les combes, couloirs et derrière les ruptures de terrain. <br/> <br/> Il existe un certain danger d'avalanches de glissement. Ceci sur les pentes raides exposées à l'est, au sud et à l'ouest en dessous d'environ 2400 m. Les zones présentant des fissures de glissement doivent être évitées dans la mesure du possible. <br/> <br/> Des couches fragiles dans la neige ancienne peuvent être déclenchées notamment avec une surcharge importante, surtout aux transitions entre les endroits peu enneigés et les endroits très enneigés, notamment à l'entrée des combes et des couloirs. Des endroits dangereux se situent sur les pentes très raides à l'ombre au-dessus d'environ 2200 m. Ces endroits sont très rares mais difficilement identifiables. Des avalanches peuvent atteindre une grande taille de manière isolée."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las placas de viento más recientes son, de manera aislada, inestables sobre todo en laderas umbrías muy inclinadas por encima de los 2400 m aproximadamente. Estas pueden ser desencadenadas al paso de un montañero sobre todo en los extremos y alcanzar un tamaño mediano. Los lugares peligrosos son resultan fáciles de reconocer. Precaución sobre todo en las cubetas, canales y detrás de los cambios abruptos de pendiente. <br/> <br/> Hay un cierto peligro de aludes de deslizamiento basal. Esto se da en las laderas inclinadas orientadas a este, sur y oeste por debajo de los 2400 m aproximadamente. Evitar las zonas con grietas de deslizamiento basal si es posible. <br/> <br/> Las capas débiles en la nieve antigua pueden ser desencadenadas especialmente con sobrecargas fuertes sobre todo en zonas de transición de manto delgado a grueso, como por ejemplo en la entrada de canales y cubetas. Lugares peligrosos se encuentran en las laderas umbrías muy inclinadas por encima de los 2200 m aproximadamente. Estos lugares son muy raros pero resultan difíciles de reconocer. Los aludes pueden alcanzar tamaños grandes de manera aislada."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli accumuli di neve ventata di più recente formazione sono, a livello isolato, instabili soprattutto sui pendii molto ripidi ombreggiati al di sopra dei 2400 m circa. Questi possono distaccarsi in seguito al passaggio di un singolo appassionato di sport invernali soprattutto nelle zone marginali e raggiungere dimensioni medie. I punti pericolosi sono facili da individuare. Attenzione soprattutto nelle conche, nei canaloni e dietro ai cambi di pendenza. <br/> <br/> Sussiste un determinato pericolo di valanghe per scivolamento di neve. Ciò sui pendii ripidi esposti a est, sud e ovest al di sotto dei 2400 m circa. Evitare se possibile le zone con rotture da scivolamento. <br/> <br/> Soprattutto nelle zone di passaggio da poca a molta neve come p.es. all'ingresso di conche e canaloni, gli strati deboli presenti nella neve vecchia possono distaccarsi soprattutto con un forte sovraccarico. Punti pericolosi si trovano sui pendii ombreggiati molto ripidi al di sopra dei 2200 m circa. Questi punti sono molto rari ma difficili da individuare. Le valanghe possono raggiungere grandi dimensioni a livello isolato."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh wind slabs are in isolated cases prone to triggering especially on very steep shady slopes above approximately 2400 m. These can especially at their margins be released by a single winter sport participant and reach medium size. The avalanche prone locations are easy to recognise. Caution is to be exercised in particular in gullies and bowls, and behind abrupt changes in the terrain. <br/> <br/> A certain danger of gliding avalanches exists. This applies on steep east, south and west facing slopes below approximately 2400 m. Areas with glide cracks are to be avoided as far as possible. <br/> <br/> Weak layers in the old snowpack can be released especially by large additional loads in particular at transitions from a shallow to a deep snowpack, when entering gullies and bowls for example. Avalanche prone locations are to be found on very steep shady slopes above approximately 2200 m. These places are very rare but are difficult to recognise. Avalanches can reach large size in isolated cases."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die frischen Triebschneeansammlungen sind besonders an sehr steilen Schattenhängen oberhalb von rund 2400 m vereinzelt störanfällig. Diese können vor allem in ihren Randbereichen von einzelnen Wintersportlern ausgelöst werden und mittlere Größe erreichen. Die Gefahrenstellen sind gut zu erkennen. Vorsicht vor allem in Rinnen, Mulden und hinter Geländekanten. <br/> <br/> Es besteht eine gewisse Gefahr von Gleitschneelawinen. Dies an steilen Ost-, Süd- und Westhängen unterhalb von rund 2400 m. Zonen mit Gleitschneerissen sollten möglichst gemieden werden. <br/> <br/> Schwachschichten im Altschnee können vor allem an Übergängen von wenig zu viel Schnee wie z.B. bei der Einfahrt in Rinnen und Mulden besonders mit großer Zusatzbelastung ausgelöst werden. Gefahrenstellen liegen an sehr steilen Schattenhängen oberhalb von rund 2200 m. Diese Stellen sind sehr selten aber schwer zu erkennen. Lawinen können vereinzelt groß werden."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "it",
+				"text": "Le condizioni meteo hanno causato un progressivo consolidamento del manto nevoso. I nuovi accumuli di neve ventata e quelli meno recenti poggiano su strati soffici soprattutto sui pendii vicino alle creste ombreggiati ad alta quota e in alta montagna. Ciò soprattutto sui pendii ombreggiati. La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati. Il manto nevoso è estremamente variabile a distanza di pochi metri a livello generale. <br/> <br/> Alle quote di bassa e media montagna: La parte basale del manto nevoso è umida. <br/> <br/> Sera e prima metà della notte: In molte regioni cadranno da 10 a 20 cm di neve al di sopra dei 1800 m circa, localmente anche di più."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las condiciones meteorológicas han causado una progresiva consolidación del manto de nieve. Las nuevas acumulaciones de nieve venteada y las menos recientes descansan encima de capas blandas sobre todo en laderas umbrías cercanas a los cordales en cotas altas y alta montaña. Esto se da especialmente en las laderas umbrías. La parte inferior del manto se ha facetado. El manto de nieve es extremadamente variable en pocos metros en general. <br/> <br/> En cotas bajas y medias: La parte inferior del manto es húmeda. <br/> <br/> Última hora de la tarde y primera mitad de la noche: En una zona amplia caerán de 10 a 20 cm de nieve por encima de los 1800 m aproximadamente, localmente más."
+			},
+			{
+				"languageCode": "en",
+				"text": "The weather conditions gave rise to increasing consolidation of the snowpack. The fresh and somewhat older wind slabs are lying on soft layers in particular on near-ridge shady slopes at high altitudes and in high Alpine regions. This applies in particular on shady slopes. Towards its base, the snowpack is faceted. The snowpack will be generally subject to considerable local variations. <br/> <br/> Low and intermediate altitudes: Towards its base, the snowpack is moist. <br/> <br/> Evening and first half of night: Over a wide area 10 to 20 cm of snow, and even more in some localities, will fall above approximately 1800 m."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les conditions météorologiques ont entraîné une solidification croissante du manteau neigeux. Les accumulations récentes et déjà plus anciennes de neige soufflée reposent sur des couches meubles surtout sur les pentes à proximité des crêtes à l'ombre à haute altitude et en haute montagne. Ceci surtout sur les pentes à l'ombre. La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux. Le manteau neigeux est généralement très variable à petite échelle. <br/> <br/> À basses et moyennes altitudes: La partie inférieure du manteau neigeux est humide. <br/> <br/> Le soir et en première partie de nuit: Il tombe en général au-dessus d'environ 1800 m de 10 à 20 cm de neige, localement plus."
+			},
+			{
+				"languageCode": "de",
+				"text": "Die Wetterbedingungen führten zu einer zunehmenden Verfestigung der Schneedecke. Die frischen und schon etwas älteren Triebschneeansammlungen liegen vor allem an kammnahen Schattenhängen in hohen Lagen und im Hochgebirge auf weichen Schichten. Dies vor allem an Schattenhängen. Der untere Teil der Schneedecke ist kantig aufgebaut. Die Schneedecke ist allgemein kleinräumig sehr unterschiedlich. <br/> <br/> Tiefe und mittlere Lagen: Der untere Teil der Schneedecke ist feucht. <br/> <br/> Abend und erste Nachthälfte: Es fallen verbreitet oberhalb von rund 1800 m 10 bis 20 cm Schnee, lokal auch mehr."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les condicions de temps han causat una progressiva consolidació del mantell de neu. Les noves acumulacions de neu ventada i les menys recents descansen a sobre de capes toves sobretot en vessants obacs prop de les carenes en cotes altes i a l'alta muntanya. Això es dona especialment en vessants obacs. La part inferior del mantell s'ha facetat. El mantell de neu és extremadament variable en pocs metres de manera generalitzada. <br/> <br/> A cotes baixes i mitges: La part inferior del mantell és humida. <br/> <br/> Vespre i primera meitat de la nit: En una zona àmplia cauran de 10 a 20 cm de neu per sobre dels 1800 m aproximadament, localment més."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es condicions de temps an causat ua progressiua consolidacion deth mantèth de nhèu. Es naues acumulacions de nhèu ventada e es mens recentes repòsen ath dessús de coches trendes sustot en pales ombrères apròp des crestes en còtes nautes e nauta montanha. Açò se da especiaument enes pales ombrères. Era part inferior deth mantèth s'a facetat. Eth mantèth de nhèu ei extrèmament variable en pòqui mètres en generau. <br/> <br/> En còtes baishes e mejanes: Era part inferior deth mantèth ei umida. <br/> <br/> Vèspe e prumèra mitat dera net: En ua zòna grana queiràn de 10 a 20 cm de nhèu per dessús des 1800 m aproximativament, locaument mès."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "en",
+				"text": "Over a wide area 40 to 80 cm of snow, and even more in some localities, will fall on Friday above approximately 1800 m. During the day: Significant increase in avalanche danger as a consequence of new snow and stormy weather. On wind-loaded slopes more frequent natural avalanches are to be expected as the day progresses, even large ones in isolated cases. Gliding avalanches are also to be expected, in particular on steep grassy slopes below approximately 2400 m."
+			},
+			{
+				"languageCode": "it",
+				"text": "Venerdì cadranno diffusamente da 40 a 80 cm di neve al di sopra dei 1800 m circa, localmente anche di più. Nel corso della giornata: Con neve fresca e venti tempestosi, netto aumento del pericolo di valanghe. Sui pendii carichi di neve ventata, nel corso della giornata sono previste sempre più numerose valanghe spontanee, a livello isolato anche di grandi dimensioni. Inoltre sono previste valanghe per scivolamento di neve, specialmente sui pendii erbosi ripidi al di sotto dei 2400 m circa."
+			},
+			{
+				"languageCode": "ca",
+				"text": "En el període fins el divendres cauran en una zona extensa de 40 a 80 cm de neu per sobre dels 1800 m aproximadament, localment més. En el transcurs de la jornada: A conseqüència de la neu recent i el vent molt fort, clar augment del perill d'allaus. Als vessants amb acumulacions de neu ventada, en el transcurs de la jornada són probables cada cop més nombroses allaus naturals, de manera aïllada també grans. A més, són d'esperar allaus de lliscament basal, especialment en vessants herbosos inclinats per sota dels 2400 m aproximadament."
+			},
+			{
+				"languageCode": "es",
+				"text": "En el período hasta el viernes caerán en una zona extensa de 40 a 80 cm de nieve por encima de los 1800 m aproximadamente, localmente más. En el transcurso de la jornada: A consecuencia de la nieve reciente y el viento muy fuerte, claro aumento del peligro de aludes. En las laderas con acumulaciones de nieve venteada, en el transcurso de la jornada son probables cada vez más numerosas avalanchas naturales, de manera aislada grandes. Además son de esperar aludes de deslizamiento basal, especialmente en las laderas herbosas inclinadas por debajo de los 2400 m aproximadamente."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Queiràn en periòde enquiath diuendres en una àrea extensa de 40 a 80 cm de nhèu per dessús des 1800 m aproximativament, locaument mès. Ath long dera jornada: A conseqüéncia dera nhèu recenta e eth vent plan fòrt, clar aument deth perilh de lauegi. Enes pales damb acumulacions de nhèu ventada, ath long dera jornada son probables cada viatge mès nombrosi lauegi naturaus, de manèra isolada tanben grani. Ath delà, cau demorar lauegi d'esguitlament basau, especiaument enes pales erboses arribentes per dejós des 2400 m aproximativament."
+			},
+			{
+				"languageCode": "de",
+				"text": "Am Freitag fallen oberhalb von rund 1800 m verbreitet 40 bis 80 cm Schnee, lokal auch mehr. Tagesverlauf: Markanter Anstieg der Lawinengefahr mit Neuschnee und Sturm. An Triebschneehängen sind im Tagesverlauf vermehrt spontane Lawinen zu erwarten, vereinzelt auch große. Zudem sind Gleitschneelawinen zu erwarten, vor allem an steilen Grashängen unterhalb von rund 2400 m."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Vendredi il tombera au-dessus d'environ 1800 m en général de 40 à 80 cm de neige, localement plus. En cours de journée: Augmentation marquée du danger d'avalanches avec la neige fraîche et la tempête. Sur les versants où s'est accumulée la neige soufflée en cours de journée des avalanches spontanées de plus en plus nombreuses sont à attendre, de manière isolée, également de grande taille. En outre, des avalanches de glissement sont à attendre, surtout sur les pentes raides herbeuses en dessous d'environ 2400 m."
+			}
+		],
+		"tendency": "increasing",
+		"dangerPattern1": "dp2",
+		"dangerPattern2": "dp6",
+		"publicationDate": "2023-12-20T16:00:00Z",
+		"validity": {
+			"from": "2023-12-20T23:00:00Z",
+			"until": "2023-12-21T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-26",
+			"AT-07-19",
+			"AT-07-20",
+			"AT-07-21",
+			"AT-07-22",
+			"AT-07-23",
+			"AT-07-24",
+			"AT-07-25"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "3748589d-bc4e-4321-8354-3ee4ce54e3f5",
+			"hasElevationDependency": true,
+			"elevation": 2400,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "plus",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "some",
+					"avalancheSizeValue": 28,
+					"snowpackStabilityValue": 60,
+					"frequencyValue": 56
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "gliding_snow",
+				"aspects": [
+					"SE",
+					"W",
+					"S",
+					"SW",
+					"E"
+				],
+				"elevationHigh": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "minus",
+					"avalancheSize": "medium",
+					"snowpackStability": "very_poor",
+					"frequency": "few",
+					"avalancheSizeValue": 34,
+					"snowpackStabilityValue": 79,
+					"frequencyValue": 38
+				}
+			}
+		}
+	},
+	{
+		"id": "b9867f87-8d5b-4884-85a0-43bf38aa5cc3",
+		"highlights": [
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "it"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "fr",
+				"text": "Attention à la neige glissante. L'après-midi: Neige récemment soufflée à surveiller."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Atencion ath problèma d'esguitlaments basaus. Tarde: Eth problèma de nhèu ventada recenta requerís atencion."
+			},
+			{
+				"languageCode": "en",
+				"text": "Gliding snow requires caution. Afternoon: Fresh wind slabs require caution."
+			},
+			{
+				"languageCode": "es",
+				"text": "Atención al problema de deslizamientos basales. Tarde: El problema de nieve venteada reciente requiere atención."
+			},
+			{
+				"languageCode": "de",
+				"text": "Vorsicht vor Gleitschnee. Nachmittag: Frischen Triebschnee beachten."
+			},
+			{
+				"languageCode": "it",
+				"text": "Attenzione alla neve slittante. Pomeriggio: La neve ventata recente richiede attenzione."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Atenció al problema de lliscaments basals. Tarda: El problema de neu ventada recent requereix atenció."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "oc",
+				"text": "I a un perilh latent de lauegi d'esguitlament basau. Açò se da especiaument enes pales soleienques fòrça arribentes per dejós des 2400 m aproximativament. Evitar es zònes damb henerècles d'esguitlament basau s'ei possible. <br/> <br/> Era nhèu recenta e plaques de vent extenses formades peth vent deth nòrd-oèst plan fòrt seràn progressivament mès inestables en totes es orientacions per dessús deth limit deth bòsc. Açò se da especiaument enes pales ombrères. Precaucion sustot enes conques, canaus e ath darrèr de cambis abruptes de pendent. Es lauegi pòden desencadenar-se ath pas d'un montanhaire e arténher mida mejana."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Hi ha un perill latent d'allaus de lliscament basal. Això es dona especialment en vessants assolellats molt inclinats per sota dels 2400 m aproximadament. Evitar les zones amb esquerdes de lliscament basal si és possible. <br/> <br/> La neu recent i les plaques de vent extenses formades pel vent del nord-oest molt fort esdevindran progressivament més inestables en totes les orientacions per sobre del límit del bosc. Això es dona especialment en vessants obacs. Precaució sobretot en cubetes, canals i darrere de canvis abruptes de pendent. Les allaus poden ser desencadenades al pas d'un muntanyenc i assolir mida mitjana."
+			},
+			{
+				"languageCode": "es",
+				"text": "Hay un peligro latente de aludes de deslizamiento basal. Esto se da especialmente en las laderas solanas muy inclinadas por debajo de los 2400 m aproximadamente. Evitar las zonas con grietas de deslizamiento basal si es posible. <br/> <br/> La nieve reciente y las placas de viento extensas formadas por el viento del noroeste muy fuerte se volverán progresivamente más inestables en todas las orientaciones por encima del límite del bosque. Esto se da especialmente en las laderas umbrías. Precaución sobre todo en las cubetas, canales y detrás de los cambios abruptos de pendiente. Los aludes pueden ser desencadenadas al paso de un montañero y alcanzar un tamaño mediano."
+			},
+			{
+				"languageCode": "en",
+				"text": "A latent danger of gliding avalanches exists. This applies in particular on very steep sunny slopes below approximately 2400 m. Areas with glide cracks are to be avoided as far as possible. <br/> <br/> The fresh snow and the extensive wind slabs that are being formed by the storm force northwesterly wind will become increasingly prone to triggering in all aspects above the tree line. This applies in particular on shady slopes. Caution is to be exercised in particular in gullies and bowls, and behind abrupt changes in the terrain. Avalanches can be released by a single winter sport participant and reach medium size."
+			},
+			{
+				"languageCode": "it",
+				"text": "Sussiste un pericolo latente di valanghe per scivolamento di neve. Ciò soprattutto sui pendii soleggiati molto ripidi al di sotto dei 2400 m circa. Evitare se possibile le zone con rotture da scivolamento. <br/> <br/> La neve fresca e gli accumuli di neve ventata che si formeranno con il vento proveniente da nord ovest tempestoso ed estesi diventeranno progressivamente sempre più instabili a tutte le esposizioni al di sopra del limite del bosco. Ciò soprattutto sui pendii ombreggiati. Attenzione soprattutto nelle conche, nei canaloni e dietro ai cambi di pendenza. Le valanghe possono distaccarsi in seguito al passaggio di un singolo appassionato di sport invernali e raggiungere dimensioni medie."
+			},
+			{
+				"languageCode": "de",
+				"text": "Es besteht eine latente Gefahr von Gleitschneelawinen. Dies vor allem an sehr steilen Sonnenhängen unterhalb von rund 2400 m. Zonen mit Gleitschneerissen sollten möglichst gemieden werden. <br/> <br/> Der Neuschnee und die mit dem stürmischen Nordwestwind entstehenden, umfangreichen Triebschneeansammlungen werden an allen Expositionen oberhalb der Waldgrenze zunehmend störanfällig. Dies vor allem an Schattenhängen. Vorsicht vor allem in Rinnen, Mulden und hinter Geländekanten. Lawinen können von einzelnen Wintersportlern ausgelöst werden und mittlere Größe erreichen."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Il existe un danger latent d'avalanches de glissement. Ceci surtout sur les pentes très raides ensoleillées en dessous d'environ 2400 m. Les zones présentant des fissures de glissement doivent être évitées dans la mesure du possible. <br/> <br/> La neige fraîche et les accumulations de neige soufflée très larges se formant avec le vent de nord-ouest tempétueux deviennent de plus en plus fragiles à toutes les expositions au-dessus de la limite de la forêt. Ceci surtout sur les pentes à l'ombre. Prudence surtout dans les combes, couloirs et derrière les ruptures de terrain. Des avalanches peuvent être déclenchées par un seul amateur de sports d'hiver et atteindre une taille moyenne."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "ca"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "de",
+				"text": "Ab dem Mittag bläst der Wind verbreitet in Gipfellagen stürmisch. Es fallen gebietsweise bis zu 15 cm Schnee. Der teilweise stürmische Wind verfrachtet den Schnee. Neu- und Triebschnee liegen auf weichen Schichten. Dies vor allem an Schattenhängen. Der untere Teil der Schneedecke ist kantig aufgebaut, besonders an Schattenhängen sowie in hohen Lagen und im Hochgebirge sowie. <br/> <br/> Tiefe und mittlere Lagen: Der untere Teil der Schneedecke ist feucht."
+			},
+			{
+				"languageCode": "oc",
+				"text": "En ua zòna vasta a compdar de meddia eth vent serà, apròp des soms, plan fòrt. Queiràn en quauqui sectors enquia 15 cm de nhèu. Eth vent damb bohades plan fòrtes transportarà era nhèu. Era nhèu recenta e era ventada arrepòsen ath dessús de coches trendes. Açò se da especiaument enes pales ombrères. Era part inferior deth mantèth s'a facetat, sustot enes pales ombrères e tanben en còtes nautes e nauta montanha, e tanben. <br/> <br/> En còtes baishes e mejanes: Era part inferior deth mantèth ei umida."
+			},
+			{
+				"languageCode": "ca",
+				"text": "A partir del migdia el vent serà, prop dels cims, molt fort en una zona àmplia. Cauran en alguns sectors fins a 15 cm de neu. El vent amb ratxes molt fortes transportarà la neu. La neu recent i la ventada reposen a sobre de capes toves. Això es dona especialment en vessants obacs. La part inferior del mantell s'ha facetat, sobretot en vessants obacs i també en cotes altes i a l'alta muntanya, i també. <br/> <br/> A cotes baixes i mitges: La part inferior del mantell és humida."
+			},
+			{
+				"languageCode": "es",
+				"text": "A partir del mediodía el viento soplará, cerca de las cumbres, muy fuerte en una zona amplia. Caerán en algunos sectores hasta 15 cm de nieve. El viento con rachas muy fuertes transportará la nieve. La nieve reciente y la nieve venteada descansan encima de capas blandas. Esto se da especialmente en las laderas umbrías. La parte inferior del manto se ha facetado, sobre todo en las laderas umbrías y en cotas altas y alta montaña, y. <br/> <br/> En cotas bajas y medias: La parte inferior del manto es húmeda."
+			},
+			{
+				"languageCode": "it",
+				"text": "In molte regioni, a partire da mezzogiorno il vento sarà, in prossimità delle cime, tempestoso. Cadranno in alcune regioni sino a 15 cm di neve. Il vento a tratti tempestoso causerà il trasporto della neve. La neve fresca e quella ventata poggiano su strati soffici. Ciò soprattutto sui pendii ombreggiati. La parte basale del manto nevoso ha subito un metamorfismo costruttivo a cristalli sfaccettati, soprattutto sui pendii ombreggiati come pure ad alta quota e in alta montagna, come pure. <br/> <br/> Alle quote di bassa e media montagna: La parte basale del manto nevoso è umida."
+			},
+			{
+				"languageCode": "en",
+				"text": "From midday the wind will be storm force in the vicinity of peaks over a wide area. In some regions up to 15 cm of snow will fall. The sometimes storm force wind will transport the snow. New snow and wind slabs are lying on soft layers. This applies in particular on shady slopes. Towards its base, the snowpack is faceted, especially on shady slopes as well as at high altitudes and in high Alpine regions, as well as. <br/> <br/> Low and intermediate altitudes: Towards its base, the snowpack is moist."
+			},
+			{
+				"languageCode": "fr",
+				"text": "À partir de midi le vent soufflera à proximité des sommets tempétueusement en général. Il tombe par régions jusqu'à 15 cm de neige. Le vent parfois tempétueux transporte la neige. La neige fraîche et soufflée reposent sur des couches molles. Ceci surtout sur les pentes à l'ombre. La partie inférieure du manteau neigeux a subi une métamorphose constructive à grains anguleux, notamment sur les pentes à l'ombre comme à haute altitude et en haute montagne comme. <br/> <br/> À basses et moyennes altitudes: La partie inférieure du manteau neigeux est humide."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "fr",
+				"text": "Augmentation du danger d'avalanches avec la neige fraîche et le vent fort."
+			},
+			{
+				"languageCode": "en",
+				"text": "Increase in avalanche danger as a consequence of new snow and strong wind."
+			},
+			{
+				"languageCode": "de",
+				"text": "Anstieg der Lawinengefahr mit Neuschnee und starkem Wind."
+			},
+			{
+				"languageCode": "es",
+				"text": "A consecuencia de la nieve reciente y el viento fuerte, aumento del peligro de aludes."
+			},
+			{
+				"languageCode": "it",
+				"text": "Con neve fresca e forte vento, aumento del pericolo di valanghe."
+			},
+			{
+				"languageCode": "oc",
+				"text": "A conseqüéncia dera nhèu recenta e eth vent fòrt, aument deth perilh de lauegi."
+			},
+			{
+				"languageCode": "ca",
+				"text": "A conseqüència de la neu recent i el vent fort, augment del perill d'allaus."
+			}
+		],
+		"tendency": "increasing",
+		"dangerPattern1": "dp6",
+		"dangerPattern2": "dp2",
+		"publicationDate": "2023-12-20T16:00:00Z",
+		"validity": {
+			"from": "2023-12-20T23:00:00Z",
+			"until": "2023-12-21T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-02-02",
+			"AT-07-02-01",
+			"AT-07-14-01",
+			"AT-07-17-02",
+			"AT-07-17-01",
+			"AT-07-11",
+			"AT-07-13",
+			"AT-07-03",
+			"AT-07-15",
+			"AT-07-16",
+			"AT-07-05",
+			"AT-07-06",
+			"AT-07-18",
+			"AT-07-08",
+			"AT-07-14-04",
+			"AT-07-09",
+			"AT-07-14-05",
+			"AT-07-14-02",
+			"AT-07-14-03",
+			"AT-07-04-02",
+			"AT-07-04-01"
+		],
+		"hasDaytimeDependency": true,
+		"forenoon": {
+			"id": "1fdd4dcd-6631-4301-bf9d-a5e9b93e8d21",
+			"hasElevationDependency": true,
+			"elevation": 2400,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem1": {
+				"avalancheProblem": "gliding_snow",
+				"aspects": [
+					"SE",
+					"W",
+					"S",
+					"SW",
+					"E"
+				],
+				"elevationHigh": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "equal",
+					"avalancheSize": "medium",
+					"snowpackStability": "very_poor",
+					"frequency": "few",
+					"avalancheSizeValue": 34,
+					"snowpackStabilityValue": 79,
+					"frequencyValue": 45
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "minus",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "few",
+					"avalancheSizeValue": 28,
+					"snowpackStabilityValue": 62,
+					"frequencyValue": 48
+				}
+			}
+		},
+		"afternoon": {
+			"id": "e1dbd9f8-9ca8-47bf-bd4e-942f612a01cb",
+			"hasElevationDependency": true,
+			"treeline": true,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"SE",
+					"E",
+					"NW",
+					"NE",
+					"N"
+				],
+				"treelineLow": true,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "plus",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "some",
+					"avalancheSizeValue": 28,
+					"snowpackStabilityValue": 62,
+					"frequencyValue": 62
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "gliding_snow",
+				"aspects": [
+					"SE",
+					"W",
+					"S",
+					"SW",
+					"E"
+				],
+				"elevationHigh": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "equal",
+					"avalancheSize": "medium",
+					"snowpackStability": "very_poor",
+					"frequency": "few",
+					"avalancheSizeValue": 34,
+					"snowpackStabilityValue": 79,
+					"frequencyValue": 45
+				}
+			}
+		}
+	},
+	{
+		"id": "9720c6a8-0cd6-4d09-be54-7b1f16b6cf17",
+		"highlights": [
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "de"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "ca",
+				"text": "La situació d'allaus és més aviat favorable. El problema de neu ventada requereix atenció."
+			},
+			{
+				"languageCode": "es",
+				"text": "La situación de aludes es más bien favorable. El problema de nieve venteada requiere atención."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Situation avalancheuse assez favorable. Neige soufflée à surveiller."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Era situacion de lauegi qu'ei mès a lèu favorabla. Eth problèma de nhèu ventada requerís atencion."
+			},
+			{
+				"languageCode": "de",
+				"text": "Recht günstige Lawinensituation. Triebschnee beachten."
+			},
+			{
+				"languageCode": "en",
+				"text": "A quite favourable avalanche situation will prevail. Wind slabs require caution."
+			},
+			{
+				"languageCode": "it",
+				"text": "La situazione valanghiva è piuttosto favorevole. La neve ventata richiede attenzione."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "de",
+				"text": "Die frischen und älteren Triebschneeansammlungen sind oberhalb von rund 2400 m teils noch störanfällig. Triebschneeansammlungen können vereinzelt von einzelnen Wintersportlern ausgelöst werden und mittlere Größe erreichen. Vorsicht vor allem in Kammlagen, Rinnen und Mulden. <br/> <br/> Schwachschichten im Altschnee können vor allem an Übergängen von wenig zu viel Schnee wie z.B. bei der Einfahrt in Rinnen und Mulden sehr vereinzelt ausgelöst werden. Dies an sehr steilen Schattenhängen oberhalb von rund 2400 m. Die Gefahrenstellen sind sehr selten aber kaum zu erkennen. <br/> <br/> In den schneereichen Gebieten sind Gleitschneelawinen möglich."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les plaques de vent recents i antigues són en part encara inestables per sobre dels 2400 m aproximadament. Les plaques de vent poden de manera aïllada ser desencadenades al pas d'un muntanyenc i assolir mida mitjana. Precaució sobretot prop de les carenes, a canals i cubetes. <br/> <br/> Les capes febles a la neu vella poden ser desencadenades de manera molt aïllada sobretot en zones de transició de mantell prim a gruixut, com per exemple a l'entrada de canals i cubetes. Això es dona en vessants obacs molt inclinats per sobre dels 2400 m aproximadament. Els indrets perillosos són molt rars però molt difícils de reconèixer. <br/> <br/> Als sectors amb molta neu, són possibles allaus de lliscament basal."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las placas de viento recientes y antiguas son en parte aún inestables por encima de los 2400 m aproximadamente. Las placas de viento pueden de manera aislada ser desencadenadas al paso de un montañero y alcanzar un tamaño mediano. Precaución sobre todo cerca de los cordales, en canales y cubetas. <br/> <br/> Las capas débiles en la nieve antigua pueden ser desencadenadas de manera muy aislada sobre todo en zonas de transición de manto delgado a grueso, como por ejemplo en la entrada de canales y cubetas. Esto se da en las laderas umbrías muy inclinadas por encima de los 2400 m aproximadamente. Los lugares peligrosos son muy raros pero resultan muy difíciles de reconocer. <br/> <br/> En los sectores con mucha nieve, son posibles avalanchas de deslizamiento basal."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli accumuli di neve ventata nuovi e meno recenti sono in parte ancora instabili al di sopra dei 2400 m circa. Gli accumuli di neve ventata possono a livello isolato distaccarsi in seguito al passaggio di un singolo appassionato di sport invernali e raggiungere dimensioni medie. Attenzione soprattutto nelle zone in prossimità delle creste, nelle conche e nei canaloni. <br/> <br/> Soprattutto nelle zone di passaggio da poca a molta neve come p.es. all'ingresso di conche e canaloni, gli strati deboli presenti nella neve vecchia possono distaccarsi a livello molto isolato. Ciò sui pendii ombreggiati molto ripidi al di sopra dei 2400 m circa. I punti pericolosi sono molto rari ma appena individuabili. <br/> <br/> Nelle regioni con tanta neve, sono possibili valanghe per scivolamento di neve."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es plaques de vent recentes e antigues son en part encara inestables per dessús des 2400 m aproximativament. Es plaques de vent pòden de manèra isolada desencadenar-se ath pas d'un montanhaire e arténher mida mejana. Precaucion sustot apròp des crestes, en canaus e conques. <br/> <br/> Sustot en zònes de transicion de celh prim a grossut, coma per exemple ena entrada de canaus e conques es coches febles ena nhèu vielha pòden desencadenar-se de manèra fòrça isolada. Açò se da enes pales ombrères fòrça arribentes per dessús des 2400 m aproximativament. Es endrets perilhosi son fòrça rari mès de fòrça mau reconéisher. <br/> <br/> Enes sectors damb fòrça nhèu, son possibles lauegi d'esguitlament basau."
+			},
+			{
+				"languageCode": "en",
+				"text": "The fresh and older wind slabs are in some cases still prone to triggering above approximately 2400 m. Wind slabs can in isolated cases be released by a single winter sport participant and reach medium size. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. <br/> <br/> Weak layers in the old snowpack can be released in very isolated cases in particular at transitions from a shallow to a deep snowpack, when entering gullies and bowls for example. This applies on very steep shady slopes above approximately 2400 m. The avalanche prone locations are very rare but are barely recognisable. <br/> <br/> In the regions with a lot of snow gliding avalanches are possible."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations de neige soufflée fraîches et relativement anciennes sont partiellement encore fragiles au-dessus d'environ 2400 m. Les accumulations de neige soufflée peuvent de manière isolée être déclenchées par un seul amateur de sports d'hiver et atteindre une taille moyenne. Prudence surtout à proximité des crêtes, dans les combes et couloirs. <br/> <br/> Des couches fragiles dans la neige ancienne peuvent être déclenchées de manière très isolée, surtout aux transitions entre les endroits peu enneigés et les endroits très enneigés, notamment à l'entrée des combes et des couloirs. Ceci sur les pentes très raides à l'ombre au-dessus d'environ 2400 m. Les endroits dangereux sont très rares mais à peine identifiables. <br/> <br/> Dans les régions bien enneigées des avalanches de glissement sont possibles."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "de",
+				"text": "Die Triebschneeansammlungen liegen vor allem an Schattenhängen in der Höhe auf weichen Schichten. <br/> Im mittleren Teil der Schneedecke sind vor allem oberhalb von rund 2400 m kantig aufgebaute Schwachschichten vorhanden. Die Wetterbedingungen führten zu einer zunehmenden Verfestigung der Schneedecke. <br/> Abend und erste Nachthälfte: Es fällt lokal etwas Schnee."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es acumulacions de nhèu ventada repòsen ath dessús de coches trendes sustot en pales ombrères en altitud. <br/> Sustot per dessús des 2400 m aproximativament, ena part centrau deth mantèth de nhèu se tròben coches febles de cristalhs angulosi. Es condicions de temps an causat ua progressiua consolidacion deth mantèth de nhèu. <br/> Vèspe e prumèra mitat dera net: Locaument queirà un shinhau de nhèu."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations de neige soufflée reposent sur des couches meubles surtout sur les pentes à l'ombre en altitude. <br/> Au milieu du manteau neigeux des couches fragiles ayant subi une métamorphose constructive à grains anguleux sont présentes, surtout au-dessus d'environ 2400 m. Les conditions météorologiques ont entraîné une solidification croissante du manteau neigeux. <br/> Le soir et en première partie de nuit: Il tombe localement un peu de neige."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les acumulacions de neu ventada descansen a sobre de capes toves sobretot en vessants obacs en altitud. <br/> A la part central del mantell de neu hi ha capes febles de cristalls facetats sobretot per sobre dels 2400 m aproximadament. Les condicions de temps han causat una progressiva consolidació del mantell de neu. <br/> Vespre i primera meitat de la nit: Caurà una mica de neu localment."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las acumulaciones de nieve venteada descansan encima de capas blandas sobre todo en laderas umbrías en altitud. <br/> En la parte central del manto de nieve hay capas débiles de cristales facetados sobre todo por encima de los 2400 m aproximadamente. Las condiciones meteorológicas han causado una progresiva consolidación del manto de nieve. <br/> Última hora de la tarde y primera mitad de la noche: Caerá un poco de nieve localmente."
+			},
+			{
+				"languageCode": "en",
+				"text": "The wind slabs are lying on soft layers in particular on shady slopes at elevated altitudes. <br/> Faceted weak layers exist in the centre of the snowpack in particular above approximately 2400 m. The weather conditions gave rise to increasing consolidation of the snowpack. <br/> Evening and first half of night: Some snow will fall in some localities."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli accumuli di neve ventata poggiano su strati soffici soprattutto sui pendii ombreggiati in quota. <br/> Soprattutto al di sopra dei 2400 m circa, nella parte centrale del manto nevoso si trovano strati fragili a cristalli angolari. Le condizioni meteo hanno causato un progressivo consolidamento del manto nevoso. <br/> Sera e prima metà della notte: A livello locale, cadrà un po' di neve."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "en",
+				"text": "In particular in the north 25 to 50 cm of snow, and even more in some localities, will fall above approximately 1800 m. As the day progresses as a consequence of new snow and stormy weather there will be an appreciable increase in the avalanche danger. The large quantity of fresh snow and in particular the extensive wind slabs represent the main danger. Gliding snow requires caution."
+			},
+			{
+				"languageCode": "de",
+				"text": "Es fallen vor allem im Norden oberhalb von rund 1800 m 25 bis 50 cm Schnee, lokal auch mehr. Mit Neuschnee und Sturm steigt die Lawinengefahr im Tagesverlauf deutlich an. Der viele Neuschnee und insbesondere die umfangreichen Triebschneeansammlungen bilden die Hauptgefahr. Vorsicht vor Gleitschnee."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Sobretot al nord cauran de 25 a 50 cm de neu per sobre dels 1800 m aproximadament, localment més. Amb la neu recent i el vent molt fort, en el transcurs de la jornada el perill d'allaus augmentarà fortament. La gran quantitat de neu recent i en particular les plaques de vent extenses representen la principal font de perill. Atenció al problema de lliscaments basals."
+			},
+			{
+				"languageCode": "it",
+				"text": "Soprattutto nelle regioni settentrionali cadranno da 25 a 50 cm di neve al di sopra dei 1800 m circa, localmente anche di più. Con neve fresca e vento tempestoso, nel corso della giornata il pericolo di valanghe aumenterà prepotentemente. L'abbondante neve fresca e soprattutto gli accumuli di neve ventata estesi rappresentano la principale fonte di pericolo. Attenzione alla neve slittante."
+			},
+			{
+				"languageCode": "es",
+				"text": "Sobre todo al norte caerán de 25 a 50 cm de nieve por encima de los 1800 m aproximadamente, localmente más. Con la nieve reciente y el viento muy fuerte, en el transcurso de la jornada el peligro de aludes aumentará fuertemente. La nieve reciente abundante y en particular las placas de viento extensas representan la principal fuente de peligro. Atención al problema de deslizamientos basales."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Sustot ath nòrd queiràn de 25 a 50 cm de nhèu per dessús des 1800 m aproximativament, locaument mès. Damb era nhèu recenta e eth vent plan fòrt, ath long dera jornada eth perilh de lauegi aumentarà fòrtament. Era nhèu recenta abondiua e en particular plaques de vent extenses representen era hònt principau de perilh. Atencion ath problèma d'esguitlaments basaus."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Il tombe surtout au nord au-dessus d'environ 1800 m de 25 à 50 cm de neige, localement plus. Avec la neige fraîche et la tempête le danger d'avalanches augmente notoirement en cours de journée. La neige fraîche abondante et en particulier les accumulations de neige soufflée très larges constituent le danger principal. Attention à la neige glissante."
+			}
+		],
+		"tendency": "increasing",
+		"dangerPattern1": "dp6",
+		"dangerPattern2": "dp7",
+		"publicationDate": "2023-12-20T16:00:00Z",
+		"validity": {
+			"from": "2023-12-20T23:00:00Z",
+			"until": "2023-12-21T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-27",
+			"AT-07-28"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "ab6edb4d-8505-48f2-a16d-e1d63e8e38c8",
+			"hasElevationDependency": true,
+			"elevation": 2400,
+			"dangerRatingAbove": "moderate",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"E",
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"dangerRatingModificator": "minus",
+					"avalancheSize": "medium",
+					"snowpackStability": "poor",
+					"frequency": "few",
+					"avalancheSizeValue": 23,
+					"snowpackStabilityValue": 60,
+					"frequencyValue": 46
+				}
+			}
+		}
+	},
+	{
+		"id": "24ca8108-e2f7-413c-ba42-fde521076ef3",
+		"highlights": [
+			{
+				"languageCode": "es"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "en"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"languageCode": "ca",
+				"text": "La situació d'allaus és majoritàriament favorable. El problema de neu ventada requereix atenció."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Era situacion de lauegi qu'ei majoritàriament favorabla. Eth problèma de nhèu ventada requerís atencion."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Situation avalancheuse majoritairement favorable. Neige soufflée à surveiller."
+			},
+			{
+				"languageCode": "it",
+				"text": "La situazione valanghiva è per lo più favorevole. La neve ventata richiede attenzione."
+			},
+			{
+				"languageCode": "es",
+				"text": "La situación de aludes es en su mayoría favorable. El problema de nieve venteada requiere atención."
+			},
+			{
+				"languageCode": "de",
+				"text": "Mehrheitlich günstige Lawinensituation. Triebschnee beachten."
+			},
+			{
+				"languageCode": "en",
+				"text": "A generally favourable avalanche situation will prevail. Wind slabs require caution."
+			}
+		],
+		"avActivityComment": [
+			{
+				"languageCode": "de",
+				"text": "Die Triebschneeansammlungen sind vor allem an sehr steilen Schattenhängen oberhalb von rund 2400 m vereinzelt noch störanfällig. Die meist kleinen Triebschneeansammlungen sind für Geübte gut erkennbar. Vorsicht vor allem in Kammlagen, Rinnen und Mulden."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations de neige soufflée sont encore de manière isolée fragiles surtout sur les pentes très raides à l'ombre au-dessus d'environ 2400 m. Les accumulations de neige soufflée généralement petites sont facilement reconnaissables pour un oeil exercé. Prudence surtout à proximité des crêtes, dans les combes et couloirs."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli accumuli di neve ventata sono, a livello isolato, ancora instabili soprattutto sui pendii molto ripidi ombreggiati al di sopra dei 2400 m circa. Gli accumuli di neve ventata per lo più di piccole dimensioni sono ben individuabili dall'escursionista esperto. Attenzione soprattutto nelle zone in prossimità delle creste, nelle conche e nei canaloni."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es plaques de vent son, de manèra isolada, encara inestables sustot en pales ombrères fòrça arribentes per dessús des 2400 m aproximativament. Es plaques de vent majoritàriament de mida petita son clarament identificables peth montanhaire expèrt. Precaucion sustot apròp des crestes, en canaus e conques."
+			},
+			{
+				"languageCode": "en",
+				"text": "The wind slabs are in individual cases still prone to triggering in particular on very steep shady slopes above approximately 2400 m. The mostly small wind slabs are clearly recognisable to the trained eye. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las placas de viento son, de manera aislada, aún inestables sobre todo en laderas umbrías muy inclinadas por encima de los 2400 m aproximadamente. Las placas de viento, en su mayoría de tamaño pequeño, son claramente identificables por un montañero experto. Precaución sobre todo cerca de los cordales, en canales y cubetas."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les plaques de vent són, de manera aïllada, encara inestables sobretot en vessants obacs molt inclinats per sobre dels 2400 m aproximadament. Les plaques de vent majoritàriament de mida petita són clarament identificables pel muntanyenc expert. Precaució sobretot prop de les carenes, a canals i cubetes."
+			}
+		],
+		"snowpackStructureHighlights": [
+			{
+				"languageCode": "ca"
+			},
+			{
+				"languageCode": "en"
+			},
+			{
+				"languageCode": "de"
+			},
+			{
+				"languageCode": "oc"
+			},
+			{
+				"languageCode": "it"
+			},
+			{
+				"languageCode": "fr"
+			},
+			{
+				"languageCode": "es"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"languageCode": "de",
+				"text": "Die Triebschneeansammlungen liegen vor allem an Schattenhängen in der Höhe auf weichen Schichten. Die Wetterbedingungen führen zu einer zunehmenden Verfestigung der Schneedecke. <br/> Abend und Nacht: Es fällt lokal etwas Schnee."
+			},
+			{
+				"languageCode": "it",
+				"text": "Gli accumuli di neve ventata poggiano su strati soffici soprattutto sui pendii ombreggiati in quota. Le condizioni meteo causeranno un progressivo consolidamento del manto nevoso. <br/> Sera e notte: A livello locale, cadrà un po' di neve."
+			},
+			{
+				"languageCode": "en",
+				"text": "The wind slabs are lying on soft layers in particular on shady slopes at elevated altitudes. The weather conditions will give rise to increasing consolidation of the snowpack. <br/> Evening and night: Some snow will fall in some localities."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Les acumulacions de neu ventada descansen a sobre de capes toves sobretot en vessants obacs en altitud. Les condicions de temps causaran una progressiva consolidació del mantell de neu. <br/> Vespre i nit: Caurà una mica de neu localment."
+			},
+			{
+				"languageCode": "es",
+				"text": "Las acumulaciones de nieve venteada descansan encima de capas blandas sobre todo en laderas umbrías en altitud. Las condiciones meteorológicas causarán una progresiva consolidación del manto de nieve. <br/> Última hora de la tarde y noche: Caerá un poco de nieve localmente."
+			},
+			{
+				"languageCode": "fr",
+				"text": "Les accumulations de neige soufflée reposent sur des couches meubles surtout sur les pentes à l'ombre en altitude. Les conditions météorologiques entraînent une solidification croissante du manteau neigeux. <br/> Le soir et la nuit: Il tombe localement un peu de neige."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Es acumulacions de nhèu ventada repòsen ath dessús de coches trendes sustot en pales ombrères en altitud. Es condicions de temps causaràn ua progressiua consolidacion deth mantèth de nhèu. <br/> Vèspe e net: Locaument queirà un shinhau de nhèu."
+			}
+		],
+		"tendencyComment": [
+			{
+				"languageCode": "fr",
+				"text": "Vendredi il tombera surtout au nord au-dessus d'environ 1800 m de 10 à 20 cm de neige, localement plus. Avec la neige fraîche et la tempête le danger d'avalanches augmente en cours de journée. Neige récemment soufflée à surveiller."
+			},
+			{
+				"languageCode": "en",
+				"text": "In particular in the north 10 to 20 cm of snow, and even more in some localities, will fall on Friday above approximately 1800 m. As the day progresses as a consequence of new snow and stormy weather there will be an increase in the avalanche danger. Fresh wind slabs require caution."
+			},
+			{
+				"languageCode": "ca",
+				"text": "Sobretot al nord en el període fins el divendres cauran de 10 a 20 cm de neu per sobre dels 1800 m aproximadament, localment més. Amb la neu recent i el vent molt fort, en el transcurs de la jornada el perill d'allaus augmentarà. El problema de neu ventada recent requereix atenció."
+			},
+			{
+				"languageCode": "it",
+				"text": "Soprattutto nelle regioni settentrionali venerdì cadranno da 10 a 20 cm di neve al di sopra dei 1800 m circa, localmente anche di più. Con neve fresca e vento tempestoso, nel corso della giornata il pericolo di valanghe aumenterà. La neve ventata recente richiede attenzione."
+			},
+			{
+				"languageCode": "oc",
+				"text": "Sustot ath nòrd queiràn en periòde enquiath diuendres de 10 a 20 cm de nhèu per dessús des 1800 m aproximativament, locaument mès. Damb era nhèu recenta e eth vent plan fòrt, ath long dera jornada eth perilh de lauegi aumentarà. Eth problèma de nhèu ventada recenta requerís atencion."
+			},
+			{
+				"languageCode": "de",
+				"text": "Am Freitag fallen vor allem im Norden oberhalb von rund 1800 m 10 bis 20 cm Schnee, lokal auch mehr. Mit Neuschnee und Sturm steigt die Lawinengefahr im Tagesverlauf an. Frischen Triebschnee beachten."
+			},
+			{
+				"languageCode": "es",
+				"text": "Sobre todo al norte en el período hasta el viernes caerán de 10 a 20 cm de nieve por encima de los 1800 m aproximadamente, localmente más. Con la nieve reciente y el viento muy fuerte, en el transcurso de la jornada el peligro de aludes aumentará. El problema de nieve venteada reciente requiere atención."
+			}
+		],
+		"tendency": "increasing",
+		"dangerPattern1": "dp6",
+		"publicationDate": "2023-12-20T16:00:00Z",
+		"validity": {
+			"from": "2023-12-20T23:00:00Z",
+			"until": "2023-12-21T23:00:00Z"
+		},
+		"regions": [
+			"AT-07-29"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"id": "1a7eb5b8-2609-45a2-9831-e56f63c9ac2e",
+			"hasElevationDependency": true,
+			"elevation": 2400,
+			"dangerRatingAbove": "low",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"aspects": [
+					"E",
+					"NW",
+					"NE",
+					"N"
+				],
+				"elevationLow": 2400,
+				"eawsMatrixInformation": {
+					"dangerRating": "low",
+					"dangerRatingModificator": "plus",
+					"avalancheSize": "small",
+					"snowpackStability": "poor",
+					"frequency": "few",
+					"avalancheSizeValue": 17,
+					"snowpackStabilityValue": 55,
+					"frequencyValue": 45
+				}
+			}
+		}
+	}
+]
