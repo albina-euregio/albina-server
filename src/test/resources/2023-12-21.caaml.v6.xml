@@ -59,7 +59,7 @@
       <aspect>S</aspect>
       <aspect>SW</aspect>
       <aspect>E</aspect>
-      <validTimePeriod>all_day</validTimePeriod>
+      <validTimePeriod>earlier</validTimePeriod>
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
@@ -80,6 +80,21 @@
       <validTimePeriod>later</validTimePeriod>
       <snowpackStability>poor</snowpackStability>
       <frequency>many</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>gliding_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2400</upperBound>
+      </elevation>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>S</aspect>
+      <aspect>SW</aspect>
+      <aspect>E</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
     </avalancheProblem>
     <weatherForecast/>
@@ -287,7 +302,7 @@
       <aspect>S</aspect>
       <aspect>SW</aspect>
       <aspect>E</aspect>
-      <validTimePeriod>all_day</validTimePeriod>
+      <validTimePeriod>earlier</validTimePeriod>
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
@@ -318,6 +333,21 @@
       <validTimePeriod>later</validTimePeriod>
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>gliding_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2400</upperBound>
+      </elevation>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>S</aspect>
+      <aspect>SW</aspect>
+      <aspect>E</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
     </avalancheProblem>
     <weatherForecast/>

@@ -46,7 +46,7 @@
       "elevation" : {
         "upperBound" : "2400"
       },
-      "validTimePeriod" : "all_day",
+      "validTimePeriod" : "earlier",
       "snowpackStability" : "very_poor",
       "frequency" : "few",
       "avalancheSize" : 2,
@@ -61,6 +61,16 @@
       "frequency" : "many",
       "avalancheSize" : 2,
       "aspects" : [ "SE", "W", "S", "SW", "E", "NE", "NW", "N" ]
+    }, {
+      "problemType" : "gliding_snow",
+      "elevation" : {
+        "upperBound" : "2400"
+      },
+      "validTimePeriod" : "later",
+      "snowpackStability" : "very_poor",
+      "frequency" : "few",
+      "avalancheSize" : 2,
+      "aspects" : [ "SE", "W", "S", "SW", "E" ]
     } ],
     "bulletinID" : "00d8122e-89aa-4bc4-8120-9698dd4f7b7a",
     "dangerRatings" : [ {
@@ -214,7 +224,7 @@
       "elevation" : {
         "upperBound" : "2400"
       },
-      "validTimePeriod" : "all_day",
+      "validTimePeriod" : "earlier",
       "snowpackStability" : "very_poor",
       "frequency" : "few",
       "avalancheSize" : 2,
@@ -239,6 +249,16 @@
       "frequency" : "some",
       "avalancheSize" : 2,
       "aspects" : [ "SE", "E", "NW", "NE", "N" ]
+    }, {
+      "problemType" : "gliding_snow",
+      "elevation" : {
+        "upperBound" : "2400"
+      },
+      "validTimePeriod" : "later",
+      "snowpackStability" : "very_poor",
+      "frequency" : "few",
+      "avalancheSize" : 2,
+      "aspects" : [ "SE", "W", "S", "SW", "E" ]
     } ],
     "bulletinID" : "b9867f87-8d5b-4884-85a0-43bf38aa5cc3",
     "dangerRatings" : [ {

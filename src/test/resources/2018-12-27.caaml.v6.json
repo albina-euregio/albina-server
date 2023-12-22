@@ -44,7 +44,15 @@
         "lowerBound" : "2200",
         "upperBound" : "2700"
       },
-      "validTimePeriod" : "all_day",
+      "validTimePeriod" : "earlier",
+      "aspects" : [ "SE", "E", "S", "NW", "NE", "W", "SW", "N" ]
+    }, {
+      "problemType" : "persistent_weak_layers",
+      "elevation" : {
+        "lowerBound" : "2200",
+        "upperBound" : "2700"
+      },
+      "validTimePeriod" : "later",
       "aspects" : [ "SE", "E", "S", "NW", "NE", "W", "SW", "N" ]
     }, {
       "problemType" : "wet_snow",
