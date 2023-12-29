@@ -20,12 +20,14 @@ class TextToSpeechTest {
 		URL resource = Resources.getResource(bulletinResource);
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
-		AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, LanguageCode.en);
-		String ssml = caaml.getBulletins().stream().map(TextToSpeech::createScript).collect(Collectors.joining(String.format("%n%n")));
-		String expectedResource = bulletinResource.replaceAll(".json$", ".ssml");
-		// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/" + expectedResource), ssml);
-		String expected = Resources.toString(Resources.getResource(expectedResource), StandardCharsets.UTF_8);
-		Assertions.assertEquals(expected, ssml);
+		for (LanguageCode lang : List.of(LanguageCode.en, LanguageCode.de)) {
+			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
+			String ssml = caaml.getBulletins().stream().map(TextToSpeech::createScript).collect(Collectors.joining(String.format("%n%n")));
+			String expectedResource = bulletinResource.replaceAll(".json$", String.format(".%s.ssml", lang));
+			// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/" + expectedResource), ssml);
+			String expected = Resources.toString(Resources.getResource(expectedResource), StandardCharsets.UTF_8);
+			Assertions.assertEquals(expected, ssml);
+		}
 	}
 
 	@Test
