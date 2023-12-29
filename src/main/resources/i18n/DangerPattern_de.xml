@@ -11,14 +11,4 @@
   <entry key="dp8">gm.8: eingeschneiter oberflächenreif</entry>
   <entry key="dp9">gm.9: eingeschneiter graupel</entry>
   <entry key="dp10">gm.10: frühjahrssituation</entry>
-  <entry key="dp1.long">danger pattern 1: deep persistent weak layer</entry>
-  <entry key="dp2.long">danger pattern 2: gliding snow</entry>
-  <entry key="dp3.long">danger pattern 3: rain</entry>
-  <entry key="dp4.long">danger pattern 4: cold following warm / warm following cold</entry>
-  <entry key="dp5.long">danger pattern 5: snowfall after a long period of cold</entry>
-  <entry key="dp6.long">danger pattern 6: cold, loose snow and wind</entry>
-  <entry key="dp7.long">danger pattern 7: snow-poor zones in snow-rich surrounding</entry>
-  <entry key="dp8.long">danger pattern 8: surface hoar blanketed with snow</entry>
-  <entry key="dp9.long">danger pattern 9: graupel blanketed with snow</entry>
-  <entry key="dp10.long">danger pattern 10: springtime scenario</entry>
 </properties>
