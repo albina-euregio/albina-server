@@ -1,6 +1,6 @@
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>The somewhat older wind slabs must be evaluated with care and prudence. Gliding avalanches are still to be expected.</s></emphasis></p>
@@ -25,7 +25,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -34,7 +34,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>Wind slabs and weakly bonded old snow require caution.</s></emphasis></p>
@@ -59,7 +59,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: co
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -68,7 +68,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: co
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>The somewhat older wind slabs must be evaluated with care and prudence.</s></emphasis></p>
@@ -93,7 +93,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -102,7 +102,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>Fresh wind slabs represent the main danger.</s></emphasis></p>
@@ -127,7 +127,7 @@ We have the following danger patterns: .
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -136,7 +136,7 @@ We have the following danger patterns: .
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>The sometimes large wind slabs represent the main danger.</s></emphasis></p>
@@ -160,7 +160,7 @@ We have the following danger patterns: .
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -169,7 +169,7 @@ We have the following danger patterns: .
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>Only a little snow is lying on north and northeast facing slopes.</s></emphasis></p>
@@ -193,7 +193,7 @@ We have the following danger patterns: .
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -202,7 +202,7 @@ We have the following danger patterns: .
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
@@ -226,7 +226,7 @@ We have the following danger patterns: .
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -235,7 +235,7 @@ We have the following danger patterns: .
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>For those venturing off piste a dangerous avalanche situation will be encountered over a wide area.</s></emphasis></p>
@@ -260,7 +260,7 @@ We have the following danger patterns: .
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -269,7 +269,7 @@ We have the following danger patterns: .
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>Old wind slabs represent the main danger.</s></emphasis></p>
@@ -293,7 +293,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -302,7 +302,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Thursday 17.01.2019.</s></p>
 <p><emphasis><s>Fresh wind slabs require caution.</s></emphasis></p>
@@ -326,7 +326,7 @@ We have the following danger patterns: .
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>

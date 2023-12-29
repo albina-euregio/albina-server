@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public interface TextToSpeech {
-	String jingle = "https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3";
+	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
 
 	class ScriptEngine {
 		private final AvalancheBulletin bulletin;

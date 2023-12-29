@@ -1,6 +1,6 @@
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Tuesday 20.12.2022.</s></p>
 <p><emphasis><s>Weakly bonded old snow represents the main danger.</s></emphasis></p>
@@ -24,7 +24,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -33,7 +33,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Tuesday 20.12.2022.</s></p>
 <p><emphasis><s>The old snowpack remains prone to triggering.</s></emphasis></p>
@@ -57,7 +57,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer.
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -66,7 +66,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer.
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Tuesday 20.12.2022.</s></p>
 <p><emphasis><s>The old snowpack remains prone to triggering.</s></emphasis></p>
@@ -91,7 +91,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -100,7 +100,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Tuesday 20.12.2022.</s></p>
 <p><emphasis><s>Weakly bonded old snow represents the main danger.</s></emphasis></p>
@@ -124,7 +124,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
@@ -133,7 +133,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 
 <speak>
 <par>
-<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Avalanche report for Tuesday 20.12.2022.</s></p>
 <p><emphasis><s>Weakly bonded old snow represents the main danger. <break time="1s"/></s></emphasis></p>
@@ -157,7 +157,7 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 </media>
 </par>
 <par>
-<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://storage.googleapis.com/avalnache-podcast-audio/intro_0_1.mp3"></audio></media><media>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
