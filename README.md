@@ -16,3 +16,7 @@ flowchart TD
     resubmitted --> |publish, automated update at 8AM or manually at any time| republished
     republished --> |edit| updated
 ```
+
+## Translations
+
+This project uses Transifex for its translations: https://app.transifex.com/albina-euregio/albina-server/dashboard/
