@@ -229,6 +229,9 @@ public interface TextToSpeech {
 				.map(DangerPattern::fromString)
 				.map(p -> p.toString(lang.getLocale()))
 				.collect(Collectors.joining(", "));
+			if (string.isEmpty()) {
+				return;
+			}
 			lines.println(lang.getBundleString("speech.danger-patterns", Map.of("dangerPatterns", string)));
 		}
 
