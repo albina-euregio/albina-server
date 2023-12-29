@@ -69,11 +69,11 @@ public interface TextToSpeech {
 			break1s();
 
 			paragraph(Streams.mapWithIndex(bulletin.getAvalancheProblems().stream().sorted(Comparator.comparingInt(p -> p.getValidTimePeriod().ordinal())), (avalancheProblem, i) -> {
-				String avalancheProblemText = this.avalancheProblemText(avalancheProblem);
+				String avalancheProblemText = avalancheProblemText(avalancheProblem);
 				if (i > 0) {
 					avalancheProblemText = lang.getBundleString("speech.furthermore", Map.of("text", avalancheProblemText));
 				}
-				String aspectsText = this.aspectsText(Objects.requireNonNullElse(avalancheProblem.getAspects(), List.of()));
+				String aspectsText = aspectsText(Objects.requireNonNullElse(avalancheProblem.getAspects(), List.of()));
 				return String.join(" ", avalancheProblemText, aspectsText);
 			}).map(this::sentence));
 			break1s();
@@ -100,7 +100,7 @@ public interface TextToSpeech {
 			break1s();
 
 			for (Tendency tendency : bulletin.getTendency()) {
-				paragraph(sentence(this.tendencyText(tendency)));
+				paragraph(sentence(tendencyText(tendency)));
 				break1s();
 			}
 
@@ -152,13 +152,13 @@ public interface TextToSpeech {
 
 		private String avalancheProblemText(AvalancheProblem p) {
 			Map<String, String> options = Map.of(
-				"avalancheProblemType", this.avalancheProblemTypeText(p.getProblemType()),
-				"validTimePeriod", this.validTimePeriodText(p.getValidTimePeriod()),
+				"avalancheProblemType", avalancheProblemTypeText(p.getProblemType()),
+				"validTimePeriod", validTimePeriodText(p.getValidTimePeriod()),
 				"lowerBound", p.getElevation() != null && p.getElevation().getLowerBound() != null
-					? this.elevationText(p.getElevation().getLowerBound())
+					? elevationText(p.getElevation().getLowerBound())
 					: "",
 				"upperBound", p.getElevation() != null && p.getElevation().getUpperBound() != null
-					? this.elevationText(p.getElevation().getUpperBound())
+					? elevationText(p.getElevation().getUpperBound())
 					: ""
 			);
 			if (!options.get("upperBound").isEmpty() && !options.get("lowerBound").isEmpty()) {
@@ -179,11 +179,11 @@ public interface TextToSpeech {
 		private Stream<String> dangerRatingTexts(List<DangerRating> dangerRatings) {
 			boolean isAllDay = dangerRatings.stream().allMatch(dr -> dr.getValidTimePeriod() == ValidTimePeriod.ALL_DAY);
 			if (isAllDay) {
-				return Stream.of(this.dangerRatingTexts0(dangerRatings, ValidTimePeriod.ALL_DAY));
+				return Stream.of(dangerRatingTexts0(dangerRatings, ValidTimePeriod.ALL_DAY));
 			} else {
 				return Stream.of(
-					this.dangerRatingTexts0(dangerRatings, ValidTimePeriod.EARLIER),
-					this.dangerRatingTexts0(dangerRatings, ValidTimePeriod.LATER));
+					dangerRatingTexts0(dangerRatings, ValidTimePeriod.EARLIER),
+					dangerRatingTexts0(dangerRatings, ValidTimePeriod.LATER));
 			}
 		}
 
@@ -192,18 +192,18 @@ public interface TextToSpeech {
 			if (dangerRatings.stream().allMatch(dr -> dr.getElevation() == null)) {
 				DangerRating rating = dangerRatings.iterator().next();
 				return lang.getBundleString("speech.danger-rating", Map.of(
-					"validTimePeriod", this.validTimePeriodText(validTimePeriod),
-					"dangerRating", this.dangerRatingValueText(rating.getMainValue())
+					"validTimePeriod", validTimePeriodText(validTimePeriod),
+					"dangerRating", dangerRatingValueText(rating.getMainValue())
 				));
 			} else {
 				DangerRating upper = dangerRatings.stream().filter(dr -> dr.getElevation().getUpperBound() != null).findFirst().orElseThrow();
 				DangerRating lower = dangerRatings.stream().filter(dr -> dr.getElevation().getLowerBound() != null).findFirst().orElseThrow();
 				return lang.getBundleString("speech.danger-rating.above-below", Map.of(
-					"validTimePeriod", this.validTimePeriodText(validTimePeriod),
-					"elevationUpper", this.elevationText(lower.getElevation().getLowerBound()),
-					"dangerRatingUpper", this.dangerRatingValueText(lower.getMainValue()),
-					"elevationLower", this.elevationText(upper.getElevation().getUpperBound()),
-					"dangerRatingLower", this.dangerRatingValueText(upper.getMainValue())
+					"validTimePeriod", validTimePeriodText(validTimePeriod),
+					"elevationUpper", elevationText(lower.getElevation().getLowerBound()),
+					"dangerRatingUpper", dangerRatingValueText(lower.getMainValue()),
+					"elevationLower", elevationText(upper.getElevation().getUpperBound()),
+					"dangerRatingLower", dangerRatingValueText(upper.getMainValue())
 				));
 			}
 		}
