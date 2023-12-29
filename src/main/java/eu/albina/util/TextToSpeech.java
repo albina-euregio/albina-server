@@ -87,16 +87,7 @@ public interface TextToSpeech {
 
 			paragraph(sentence(lang.getBundleString("speech.snowpack")));
 			paragraph(bulletin.getSnowpackStructure().getComment());
-			if (bulletin.getCustomData() instanceof Map) {
-				Object lwdTyrol = ((Map<?, ?>) bulletin.getCustomData()).get("LWD_Tyrol");
-				if (lwdTyrol instanceof Map) {
-					Object dangerPatterns = ((Map<?, ?>) lwdTyrol).get("dangerPatterns");
-					if (dangerPatterns instanceof List) {
-						String string = ((List<?>) dangerPatterns).stream().map(String::valueOf).map(DangerPattern::fromString).map(p -> p.toString(lang.getLocale())).collect(Collectors.joining(", "));
-						lines.println(lang.getBundleString("speech.danger-patterns", Map.of("dangerPatterns", string)));
-					}
-				}
-			}
+			dangerPatterns();
 			break1s();
 
 			for (Tendency tendency : bulletin.getTendency()) {
@@ -220,6 +211,25 @@ public interface TextToSpeech {
 
 		private String validTimePeriodText(ValidTimePeriod validTimePeriod) {
 			return lang.getBundleString("valid-time-period." + validTimePeriod.toString());
+		}
+
+		private void dangerPatterns() {
+			if (!(bulletin.getCustomData() instanceof Map)) {
+				return;
+			}
+			Object lwdTyrol = ((Map<?, ?>) bulletin.getCustomData()).get("LWD_Tyrol");
+			if (!(lwdTyrol instanceof Map)) {
+				return;
+			}
+			Object dangerPatterns = ((Map<?, ?>) lwdTyrol).get("dangerPatterns");
+			if (!(dangerPatterns instanceof List)) {
+				return;
+			}
+			String string = ((List<?>) dangerPatterns).stream().map(String::valueOf)
+				.map(DangerPattern::fromString)
+				.map(p -> p.toString(lang.getLocale()))
+				.collect(Collectors.joining(", "));
+			lines.println(lang.getBundleString("speech.danger-patterns", Map.of("dangerPatterns", string)));
 		}
 
 		private String tendencyText(Tendency tendency) {
