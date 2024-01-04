@@ -2,11 +2,11 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="new_snow">Neve fresca</entry>
-  <entry key="wind_slab">Neve ventata</entry>
+  <entry key="wind_slab">Lastrone da vento</entry>
   <entry key="persistent_weak_layers">Strati deboli persistenti</entry>
   <entry key="wet_snow">Neve bagnata</entry>
   <entry key="gliding_snow">Valanghe di slittamento</entry>
   <entry key="favourable_situation">Situazione favorevole</entry>
-  <entry key="cornices">Cornices</entry>
-  <entry key="no_distinct_problem">No distinct problem</entry>
+  <entry key="cornices">Cornici</entry>
+  <entry key="no_distinct_problem">Nessun problema specifico</entry>
 </properties>

@@ -3,7 +3,7 @@
 <properties>
   <entry key="dp1">gm.1: bodennahe schwachschicht</entry>
   <entry key="dp2">gm.2: gleitschnee</entry>
-  <entry key="dp3">gm.3: regen</entry>
+  <entry key="dp3">gm.3: regen auf schnee</entry>
   <entry key="dp4">gm.4: kalt auf warm / warm auf kalt</entry>
   <entry key="dp5">gm.5: schnee nach langer kälteperiode</entry>
   <entry key="dp6">gm.6: lockerer schnee und wind</entry>

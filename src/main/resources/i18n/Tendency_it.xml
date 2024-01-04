@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="decreasing">Tendenza: Pericolo valanghe in diminuzione</entry>
-  <entry key="steady">Tendenza: Pericolo valanghe stabile</entry>
-  <entry key="increasing">Tendenza: Pericolo valanghe in aumento</entry>
+  <entry key="decreasing">Tendenza: pericolo valanghe in diminuzione</entry>
+  <entry key="steady">Tendenza: pericolo valanghe stabile</entry>
+  <entry key="increasing">Tendenza: pericolo valanghe in aumento</entry>
 </properties>
