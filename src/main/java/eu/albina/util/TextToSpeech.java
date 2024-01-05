@@ -15,6 +15,7 @@ import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 import org.caaml.v6.Aspect;
 import org.caaml.v6.AvalancheBulletin;
+import org.caaml.v6.AvalancheBulletinCustomData;
 import org.caaml.v6.AvalancheProblem;
 import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.DangerRating;
@@ -224,18 +225,14 @@ public interface TextToSpeech {
 		}
 
 		private void dangerPatterns() {
-			if (!(bulletin.getCustomData() instanceof Map)) {
+			if (!(bulletin.getCustomData() instanceof AvalancheBulletinCustomData)) {
 				return;
 			}
-			Object lwdTyrol = ((Map<?, ?>) bulletin.getCustomData()).get("LWD_Tyrol");
-			if (!(lwdTyrol instanceof Map)) {
+			AvalancheBulletinCustomData customData = (AvalancheBulletinCustomData) bulletin.getCustomData();
+			if (customData.LWD_Tyrol == null) {
 				return;
 			}
-			Object dangerPatterns = ((Map<?, ?>) lwdTyrol).get("dangerPatterns");
-			if (!(dangerPatterns instanceof List)) {
-				return;
-			}
-			String string = ((List<?>) dangerPatterns).stream().map(String::valueOf)
+			String string = customData.LWD_Tyrol.dangerPatterns.stream().map(String::valueOf)
 				.map(DangerPattern::fromString)
 				.map(p -> p.toString(lang.getLocale()))
 				.collect(Collectors.joining(", "));

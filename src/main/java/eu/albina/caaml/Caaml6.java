@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.google.common.collect.ImmutableMap;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
@@ -13,6 +12,7 @@ import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
+import org.caaml.v6.AvalancheBulletinCustomData;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.Tendency;
@@ -77,11 +77,10 @@ public interface Caaml6 {
 			.filter(Objects::nonNull)
 			.map(dp -> dp.name().toUpperCase())
 			.collect(Collectors.toList());
-		bulletin.setCustomData(ImmutableMap.of(
-				"ALBINA", ImmutableMap.of("mainDate", avalancheBulletin.getValidityDate().toLocalDate().toString()),
-				"LWD_Tyrol", ImmutableMap.of("dangerPatterns", dangerPatterns)
-			)
-		);
+		bulletin.setCustomData(new AvalancheBulletinCustomData(
+			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDate().toLocalDate().toString()),
+			new AvalancheBulletinCustomData.LwdTyrol(dangerPatterns)
+		));
 		bulletin.setDangerRatings(Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
 			.filter(Objects::nonNull)
 			.flatMap(daytime -> Stream.of(
