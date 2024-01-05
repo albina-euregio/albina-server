@@ -130,8 +130,8 @@ public class EmailUtil {
 		text.put("unsubscribe", lang.getBundleString("email.unsubscribe"));
 		text.put("imprint", lang.getBundleString("email.imprint"));
 		if (avalancheReport.hasDaytimeDependency()) {
-			text.put("am", lang.getBundleString("daytime.am.capitalized"));
-			text.put("pm", lang.getBundleString("daytime.pm.capitalized"));
+			text.put("am", lang.getBundleString("valid-time-period.earlier"));
+			text.put("pm", lang.getBundleString("valid-time-period.later"));
 		} else {
 			text.put("am", "");
 			text.put("pm", "");
@@ -155,8 +155,8 @@ public class EmailUtil {
 			bulletin.put("stylepmtable", getPMStyleTable(avalancheBulletin.isHasDaytimeDependency()));
 
 			if (avalancheBulletin.isHasDaytimeDependency()) {
-				bulletin.put("textam", lang.getBundleString("daytime.am.capitalized"));
-				bulletin.put("textpm", lang.getBundleString("daytime.pm.capitalized"));
+				bulletin.put("textam", lang.getBundleString("valid-time-period.earlier"));
+				bulletin.put("textpm", lang.getBundleString("valid-time-period.later"));
 			} else {
 				bulletin.put("textam", "");
 				bulletin.put("textpm", "");
