@@ -264,9 +264,9 @@ public class SimpleHtmlUtil {
 				if (avalancheBulletin.isHasDaytimeDependency()) {
 					bulletin.put("afternoon", getDaytime(avalancheBulletin.getAfternoon(), lang, serverInstance));
 					bulletin.put("am",
-							"<b>" + lang.getBundleString("daytime.am.capitalized").toUpperCase() + "</b><br>");
+							"<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>");
 					bulletin.put("pm",
-							"<b>" + lang.getBundleString("daytime.pm.capitalized").toUpperCase() + "</b><br>");
+							"<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>");
 				} else {
 					bulletin.put("afternoon", getEmptyDaytime());
 					bulletin.put("am", "");
