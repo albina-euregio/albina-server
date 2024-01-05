@@ -53,7 +53,8 @@ public interface TextToSpeech {
 
 		String createScript() {
 
-			lines.println("<speak>");
+			lines.format("<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"http://www.w3.org/2001/mstts\" xml:lang=\"%s\">%n", voice().getLanguageCode());
+			lines.format("<voice xml:lang=\"%s\" xml:gender=\"%s\" name=\"%sl\">%n", voice().getLanguageCode(), voice().getSsmlGender(), voice().getName());
 			lines.println("<par>");
 			lines.format("<media repeatCount=\"1\" fadeOutDur=\"10s\" end=\"10s\"><audio src=\"%s\"></audio></media>%n", jingle);
 			lines.println("<media begin=\"+5s\">");
@@ -106,6 +107,7 @@ public interface TextToSpeech {
 			lines.println("</media>");
 			lines.println("</par>");
 
+			lines.println("</voice>");
 			lines.println("</speak>");
 			return stringWriter.toString().replace("<br/>", "<break time=\"1s\"/>");
 		}
