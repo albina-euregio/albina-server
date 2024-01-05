@@ -238,7 +238,9 @@ public class MapUtilTest {
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		MapUtil.createMapyrusMaps(AvalancheReport.of(bulletins, regionEuregio, serverInstance));
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
+		MapUtil.createMapyrusMaps(avalancheReport);
+		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
 	}
 
 	@Test
