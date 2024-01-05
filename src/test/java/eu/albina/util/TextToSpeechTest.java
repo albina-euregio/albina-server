@@ -20,7 +20,7 @@ class TextToSpeechTest {
 		URL resource = Resources.getResource(bulletinResource);
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
-		for (LanguageCode lang : List.of(LanguageCode.en, LanguageCode.de)) {
+		for (LanguageCode lang : TextToSpeech.ENABLED) {
 			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
 			String ssml = caaml.getBulletins().stream().map(TextToSpeech::createScript).collect(Collectors.joining(String.format("%n%n")));
 			String expectedResource = bulletinResource.replaceAll(".json$", String.format(".%s.ssml", lang));
