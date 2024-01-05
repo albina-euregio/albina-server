@@ -10,6 +10,7 @@ import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
 import com.google.common.collect.Streams;
 import com.google.errorprone.annotations.CheckReturnValue;
 import com.google.protobuf.ByteString;
+import eu.albina.caaml.Caaml6;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 import org.caaml.v6.Aspect;
@@ -21,11 +22,13 @@ import org.caaml.v6.DangerRatingValue;
 import org.caaml.v6.Tendency;
 import org.caaml.v6.ValidTime;
 import org.caaml.v6.ValidTimePeriod;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Comparator;
@@ -332,6 +335,19 @@ public interface TextToSpeech {
 		try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
 			SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
 			return response.getAudioContent();
+		}
+	}
+
+	static void createAudioFiles(eu.albina.model.AvalancheReport avalancheReport) throws Exception {
+		for (eu.albina.model.AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
+			for (LanguageCode lang : LanguageCode.ENABLED) {
+				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
+				ByteString audioFile = createAudioFile(caaml);
+				Path path = avalancheReport.getPdfDirectory().resolve(String.format("%s_%s_%s.mp3", avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang.toString()));
+				LoggerFactory.getLogger(TextToSpeech.class).info("Writing audio file {} ({} bytes)", path, audioFile.size());
+				Files.write(path, audioFile.toByteArray());
+				AlbinaUtil.setFilePermissions(path.toString());
+			}
 		}
 	}
 
