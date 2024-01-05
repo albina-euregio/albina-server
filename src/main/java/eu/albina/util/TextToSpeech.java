@@ -1,6 +1,5 @@
 package eu.albina.util;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.google.cloud.texttospeech.v1.AudioConfig;
 import com.google.cloud.texttospeech.v1.AudioEncoding;
 import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
@@ -42,12 +41,14 @@ public interface TextToSpeech {
 	class ScriptEngine {
 		private final AvalancheBulletin bulletin;
 		private final LanguageCode lang;
+		private final SsmlVoiceGender gender;
 		private final StringWriter stringWriter = new StringWriter();
 		private final PrintWriter lines = new PrintWriter(stringWriter);
 
 		private ScriptEngine(AvalancheBulletin bulletin) {
 			this.bulletin = bulletin;
 			this.lang = LanguageCode.valueOf(bulletin.getLang());
+			this.gender = bulletin.getBulletinID().hashCode() % 2 == 1 ? SsmlVoiceGender.FEMALE : SsmlVoiceGender.MALE;
 		}
 
 		String createScript() {
@@ -269,42 +270,62 @@ public interface TextToSpeech {
 			lines.println("<break time=\"1s\" strength=\"strong\"></break>");
 		}
 
+		VoiceSelectionParams voice() {
+			if (lang == LanguageCode.de && gender == SsmlVoiceGender.FEMALE) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("de-DE")
+					.setName("de-DE-Neural2-C")
+					.setSsmlGender(SsmlVoiceGender.FEMALE)
+					.build();
+			} else if (lang == LanguageCode.de && gender == SsmlVoiceGender.MALE) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("de-DE")
+					.setName("de-DE-Standard-E")
+					.setSsmlGender(SsmlVoiceGender.MALE)
+					.build();
+			} else if (lang == LanguageCode.en && gender == SsmlVoiceGender.FEMALE) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("en-GB")
+					.setName("en-GB-Wavenet-A")
+					.setSsmlGender(SsmlVoiceGender.FEMALE)
+					.build();
+			} else if (lang == LanguageCode.en && gender == SsmlVoiceGender.MALE) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("en-GB")
+					.setName("en-GB-Wavenet-B")
+					.setSsmlGender(SsmlVoiceGender.MALE)
+					.build();
+			}
+			throw new IllegalArgumentException();
+		}
+
+		AudioConfig audioConfig() {
+			AudioConfig.Builder audioConfig = AudioConfig.newBuilder()
+				.setAudioEncoding(AudioEncoding.MP3)
+				.addEffectsProfileId("handset-class-device");
+			if (lang == LanguageCode.de && gender == SsmlVoiceGender.FEMALE) {
+				audioConfig.setSpeakingRate(1.06);
+			} else if (lang == LanguageCode.de && gender == SsmlVoiceGender.MALE) {
+				audioConfig.setPitch(-2.0);
+			}
+			return audioConfig.build();
+		}
+
 	}
 
 	static String createScript(AvalancheBulletin bulletin) {
 		return new ScriptEngine(bulletin).createScript();
 	}
 
-	static void main(String... args) throws Exception {
+	static ByteString createAudioFile(AvalancheBulletin bulletin) throws Exception {
+		ScriptEngine scriptEngine = new ScriptEngine(bulletin);
+		String ssml = scriptEngine.createScript();
+		SynthesisInput input = SynthesisInput.newBuilder().setSsml(ssml).build();
+		VoiceSelectionParams voice = scriptEngine.voice();
+		AudioConfig audioConfig = scriptEngine.audioConfig();
 		try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
-			SynthesisInput input = SynthesisInput.newBuilder().setText("Hello, World!").build();
-			VoiceSelectionParams voice = VoiceSelectionParams.newBuilder()
-				.setLanguageCode("en-GB")
-				.setName("en-GB-Wavenet-B")
-				.setSsmlGender(SsmlVoiceGender.MALE)
-				// or
-				// .setName("en-GB-Wavenet-A")
-				// .setSsmlGender(SsmlVoiceGender.FEMALE)
-				// or
-				// .setLanguageCode("de-DE")
-				// .setName("de-DE-Standard-E")
-				// .setSsmlGender(SsmlVoiceGender.MALE)
-				// or
-				// .setLanguageCode("de-DE")
-				// .setName("de-DE-Neural2-C")
-				// .setSsmlGender(SsmlVoiceGender.FEMALE)
-				.build();
-			AudioConfig audioConfig = AudioConfig.newBuilder()
-				.setAudioEncoding(AudioEncoding.MP3)
-				.addEffectsProfileId("handset-class-device")
-				// .setPitch(-2.0) // de MALE
-				// .setSpeakingRate(1.06) // de FEMALE
-				.build();
 			SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
-			ByteString audioContents = response.getAudioContent();
-			Path path = Path.of("output.mp3");
-			Files.write(path, audioContents.toByteArray());
-			System.out.println("Audio content written to file \"output.mp3\"");
+			return response.getAudioContent();
 		}
 	}
 
