@@ -337,7 +337,7 @@ public interface TextToSpeech {
 
 	static void createAudioFiles(eu.albina.model.AvalancheReport avalancheReport) throws Exception {
 		for (eu.albina.model.AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
-			for (LanguageCode lang : LanguageCode.ENABLED) {
+			for (LanguageCode lang : ENABLED) {
 				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
 				ByteString audioFile = createAudioFile(caaml);
 				Path path = avalancheReport.getPdfDirectory().resolve(String.format("%s_%s_%s.mp3", avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang.toString()));
