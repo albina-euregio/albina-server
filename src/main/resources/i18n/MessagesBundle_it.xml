@@ -113,12 +113,12 @@
   <entry key="problem.snowpack-stability.fair">discreta</entry>
   <entry key="problem.snowpack-stability.poor">scarsa</entry>
   <entry key="problem.snowpack-stability.very_poor">molto scarsa</entry>
-  <entry key="problem.frequency">Stabilità del manto nevoso</entry>
+  <entry key="problem.frequency">Punti pericolosi</entry>
   <entry key="problem.frequency.none">pochissimi</entry>
   <entry key="problem.frequency.few">pochi</entry>
   <entry key="problem.frequency.some">alcuni</entry>
   <entry key="problem.frequency.many">molti</entry>
-  <entry key="problem.avalanche-size">Dimensioni valanghe</entry>
+  <entry key="problem.avalanche-size">Dimensione valanga</entry>
   <entry key="problem.avalanche-size.small">piccole</entry>
   <entry key="problem.avalanche-size.medium">medie</entry>
   <entry key="problem.avalanche-size.large">grandi</entry>
