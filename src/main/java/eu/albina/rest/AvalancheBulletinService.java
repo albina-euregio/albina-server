@@ -441,44 +441,48 @@ public class AvalancheBulletinService {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				JSONArray bulletinsJson = new JSONArray(bulletinsString);
-				List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
-					.mapToObj(bulletinsJson::getJSONObject)
-					.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
-					.collect(Collectors.toList());
+				BulletinStatus status = AvalancheReportController.getInstance().getInternalStatusForDay(startDate, region);
 
-				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-					.saveBulletins(bulletins, startDate, endDate, region);
-				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
-				// save report for super regions
-				for (Region superRegion : region.getSuperRegions()) {
-					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
-				}
-
-				// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-				}
-
-				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
-						endDate, region, user);
-				List<AvalancheBulletin> regionBulletins = allBulletins.stream()
-					.filter(bulletin -> bulletin.affectsRegion(region))
-					.collect(Collectors.toList());
-				AvalancheReportController.getInstance().submitReport(regionBulletins, startDate, region, user);
-				// submit report for super regions
-				for (Region superRegion : region.getSuperRegions()) {
-					List<AvalancheBulletin> superRegionBulletins = allBulletins.stream()
-						.filter(bulletin -> bulletin.affectsRegion(superRegion))
+				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted)) {
+					JSONArray bulletinsJson = new JSONArray(bulletinsString);
+					List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
+						.mapToObj(bulletinsJson::getJSONObject)
+						.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
 						.collect(Collectors.toList());
-					AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
-				}
 
-				// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+					Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
+						.saveBulletins(bulletins, startDate, endDate, region);
+					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
+					// save report for super regions
+					for (Region superRegion : region.getSuperRegions()) {
+						AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
+					}
+
+					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+					}
+
+					List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
+							endDate, region, user);
+					List<AvalancheBulletin> regionBulletins = allBulletins.stream()
+						.filter(bulletin -> bulletin.affectsRegion(region))
+						.collect(Collectors.toList());
+					AvalancheReportController.getInstance().submitReport(regionBulletins, startDate, region, user);
+					// submit report for super regions
+					for (Region superRegion : region.getSuperRegions()) {
+						List<AvalancheBulletin> superRegionBulletins = allBulletins.stream()
+							.filter(bulletin -> bulletin.affectsRegion(superRegion))
+							.collect(Collectors.toList());
+						AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
+					}
+
+					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+					}
 				}
 
 				new Thread(() -> {
