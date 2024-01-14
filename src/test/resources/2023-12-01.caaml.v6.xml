@@ -1,0 +1,946 @@
+<bulletins xmlns="http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS">
+  <bulletin bulletinID="0c235b8b-dcfa-419a-a043-32020ea24118" lang="en">
+    <publicationTime>2023-12-01T07:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2023-11-30T23:00:00Z</startTime>
+      <endTime>2023-12-01T23:00:00Z</endTime>
+    </validTime>
+    <unscheduled>true</unscheduled>
+    <region regionID="AT-07-07">
+      <name>Western Lechtal Alps</name>
+    </region>
+    <region regionID="AT-07-08">
+      <name>Central Lechtal Alps</name>
+    </region>
+    <region regionID="AT-07-02-02">
+      <name>Eastern Lechtal Alps</name>
+    </region>
+    <region regionID="AT-07-02-01">
+      <name>Ammergau Alps</name>
+    </region>
+    <region regionID="AT-07-04-02">
+      <name>Eastern Karwendel Mountains</name>
+    </region>
+    <region regionID="AT-07-04-01">
+      <name>Western Karwendel Mountains</name>
+    </region>
+    <region regionID="AT-07-10">
+      <name>Western Verwall Mountains</name>
+    </region>
+    <region regionID="AT-07-11">
+      <name>Eastern Verwall Mountains</name>
+    </region>
+    <region regionID="AT-07-01">
+      <name>Allgäu Alps</name>
+    </region>
+    <region regionID="AT-07-12">
+      <name>Silvretta</name>
+    </region>
+    <region regionID="AT-07-03">
+      <name>Mieming Mountains</name>
+    </region>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <upperBound>2000</upperBound>
+      </elevation>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <lowerBound>2000</lowerBound>
+      </elevation>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <upperBound>2000</upperBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <lowerBound>2000</lowerBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2000</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>earlier</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>gliding_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2400</upperBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>earlier</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2000</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>new_snow</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>gliding_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2400</upperBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <weatherForecast/>
+    <avalancheActivity>
+      <highlights>Weakly bonded old snow above approximately 2000 m. Gliding snow at intermediate altitudes.</highlights>
+      <comment>Avalanches can be triggered in the old snowpack, especially on steep slopes above approximately 2000 m. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack serve as an alarm indicating the danger. Experience in the assessment of avalanche danger is required. Mostly avalanches are medium-sized. &lt;br/> &lt;br/> The fresh snow and the isolated winds slabs that are forming can be released by a single winter sport participant. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. As the snowfall becomes more intense the avalanche prone locations will become more prevalent as the day progresses. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. &lt;br/> &lt;br/> On steep grassy slopes small and, in isolated cases, medium-sized gliding avalanches are possible. In the regions exposed to rain this applies in particular.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Up to 1600 m rain has fallen since yesterday. Over a wide area up to 20 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. &lt;br/> &lt;br/> In its middle, the snowpack is faceted and weak. This applies in particular above approximately 2000 m, and below approximately 2600 m. Field observations confirm the unfavourable bonding of the snowpack. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</comment>
+    </snowpackStructure>
+    <travelAdvisory/>
+    <tendency>
+      <highlights>Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution.</highlights>
+      <tendencyType>increasing</tendencyType>
+      <validTime>
+        <startTime>2023-12-01T23:00:00Z</startTime>
+        <endTime>2023-12-02T23:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2023-12-01</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP4</dangerPatterns>
+        <dangerPatterns>DP2</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="8170c764-4835-49b2-9159-4c45ec4a6816" lang="en">
+    <publicationTime>2023-12-01T07:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2023-11-30T23:00:00Z</startTime>
+      <endTime>2023-12-01T23:00:00Z</endTime>
+    </validTime>
+    <unscheduled>true</unscheduled>
+    <region regionID="IT-32-TN-02">
+      <name>Southern Adamello</name>
+    </region>
+    <region regionID="IT-32-TN-01">
+      <name>Adamello - Presanella</name>
+    </region>
+    <region regionID="IT-32-TN-04">
+      <name>Northern Brenta - Peller</name>
+    </region>
+    <region regionID="IT-32-TN-05">
+      <name>Southern Brenta</name>
+    </region>
+    <region regionID="IT-32-TN-19">
+      <name>Sole, Pejo and Rabbi</name>
+    </region>
+    <region regionID="IT-32-TN-20">
+      <name>Maddalene</name>
+    </region>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wind_slab</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>earlier</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>earlier</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>new_snow</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>3</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>gliding_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2400</upperBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <weatherForecast/>
+    <avalancheActivity>
+      <highlights>As the day progresses as a consequence of new snow and wind there will be a gradual increase in the danger.</highlights>
+      <comment>The new snow and wind slabs are lying on the unfavourable surface of an old snowpack in all aspects above approximately 2000 m. These conditions will foster a gradual rise in the avalanche danger as the day progresses in all aspects. Small and medium-sized avalanches are possible in particular on very steep slopes. The new snow and wind slabs can be released, especially by large additional loads, in all aspects above approximately 2000 m. The number and size of avalanche prone locations will increase with altitude. &lt;br/> Afternoon: The fresh snow and the sometimes large wind slabs that are forming over a wide area can be released easily, or, in isolated cases naturally. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. Avalanche prone locations are to be found in particular in places that are protected from the wind above approximately 2200 m. Experience in the assessment of avalanche danger is required. &lt;br/> On steep grassy slopes more small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Over a wide area 20 to 40 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. These weather conditions will foster a weakening of the snowpack in particular on very steep slopes. &lt;br/> &lt;br/> Field observations and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack confirm the unfavourable bonding of the snowpack. The snowpack will be subject to considerable local variations. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</comment>
+    </snowpackStructure>
+    <travelAdvisory/>
+    <tendency>
+      <highlights>Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.</highlights>
+      <tendencyType>increasing</tendencyType>
+      <validTime>
+        <startTime>2023-12-01T23:00:00Z</startTime>
+        <endTime>2023-12-02T23:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2023-12-01</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP6</dangerPatterns>
+        <dangerPatterns>DP4</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="6b5e7429-5ebb-44eb-9efa-17e2e28a5f3e" lang="en">
+    <publicationTime>2023-12-01T07:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2023-11-30T23:00:00Z</startTime>
+      <endTime>2023-12-01T23:00:00Z</endTime>
+    </validTime>
+    <unscheduled>true</unscheduled>
+    <region regionID="AT-07-14-01">
+      <name>Kauner Ridge</name>
+    </region>
+    <region regionID="IT-32-BZ-05-03">
+      <name>Upper Ahr Valley</name>
+    </region>
+    <region regionID="IT-32-BZ-05-02">
+      <name>Southern Zillertal Alps</name>
+    </region>
+    <region regionID="IT-32-BZ-05-01">
+      <name>Pfitsch</name>
+    </region>
+    <region regionID="IT-32-BZ-01-02">
+      <name>Southern Sesvenna Group</name>
+    </region>
+    <region regionID="IT-32-BZ-03">
+      <name>Schnals Ridge</name>
+    </region>
+    <region regionID="IT-32-BZ-01-01">
+      <name>Northern Sesvenna Group</name>
+    </region>
+    <region regionID="AT-07-13">
+      <name>Samnaun Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-06">
+      <name>Saldurn-Mastaun Ridge</name>
+    </region>
+    <region regionID="AT-07-15">
+      <name>Western Tuxer Alps</name>
+    </region>
+    <region regionID="AT-07-16">
+      <name>Eastern Tuxer Alps</name>
+    </region>
+    <region regionID="IT-32-BZ-08-01">
+      <name>Hirzer Range</name>
+    </region>
+    <region regionID="IT-32-BZ-09">
+      <name>Western Pfunderer Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-08-02">
+      <name>Mount Saint Jakob Range</name>
+    </region>
+    <region regionID="AT-07-19">
+      <name>Glockturm Range</name>
+    </region>
+    <region regionID="IT-32-BZ-10">
+      <name>Eastern Pfunderer Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-04-02">
+      <name>Ratschings</name>
+    </region>
+    <region regionID="IT-32-BZ-11">
+      <name>Durreck Range</name>
+    </region>
+    <region regionID="IT-32-BZ-02-01">
+      <name>Langtaufers</name>
+    </region>
+    <region regionID="AT-07-20">
+      <name>Weißkugel Range</name>
+    </region>
+    <region regionID="IT-32-BZ-12">
+      <name>Rieserferner Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-04-01">
+      <name>Southern Stubai Alps</name>
+    </region>
+    <region regionID="AT-07-17-01">
+      <name>Western Kitzbühel Alps</name>
+    </region>
+    <region regionID="AT-07-21">
+      <name>Gurgler Range</name>
+    </region>
+    <region regionID="IT-32-BZ-13">
+      <name>Western Deferegger Alps</name>
+    </region>
+    <region regionID="AT-07-22">
+      <name>Central Stubai Alps</name>
+    </region>
+    <region regionID="IT-32-BZ-14">
+      <name>Ortler Range</name>
+    </region>
+    <region regionID="AT-07-23">
+      <name>Northern Zillertal Alps</name>
+    </region>
+    <region regionID="IT-32-BZ-15">
+      <name>Ulten Valley</name>
+    </region>
+    <region regionID="AT-07-24">
+      <name>Venediger Range</name>
+    </region>
+    <region regionID="IT-32-BZ-02-02">
+      <name>Planeil Mountains</name>
+    </region>
+    <region regionID="AT-07-25">
+      <name>Lasörling Range</name>
+    </region>
+    <region regionID="AT-07-26">
+      <name>Glockner Range</name>
+    </region>
+    <region regionID="AT-07-27">
+      <name>Eastern Deferegger Alps</name>
+    </region>
+    <region regionID="AT-07-28">
+      <name>Schober Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-07-01">
+      <name>Upper Passeier Valley</name>
+    </region>
+    <region regionID="IT-32-BZ-07-02">
+      <name>Texel Mountains</name>
+    </region>
+    <region regionID="AT-07-14-04">
+      <name>Kalkkögel</name>
+    </region>
+    <region regionID="AT-07-09">
+      <name>Grieskogel Mountains</name>
+    </region>
+    <region regionID="AT-07-14-05">
+      <name>Serles Ridge</name>
+    </region>
+    <region regionID="AT-07-14-02">
+      <name>Kühtai - Geigen Ridge</name>
+    </region>
+    <region regionID="AT-07-14-03">
+      <name>Sellrain - Alpein Mountains</name>
+    </region>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wind_slab</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>earlier</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>earlier</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>new_snow</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>3</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>gliding_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2400</upperBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <weatherForecast/>
+    <avalancheActivity>
+      <highlights>As the day progresses as a consequence of new snow and wind there will be a gradual increase in the danger.</highlights>
+      <comment>Afternoon: The fresh snow and the sometimes large wind slabs that are forming over a wide area can be released easily, or, in isolated cases naturally. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. They are sometimes covered with new snow and are therefore difficult to recognise. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. &lt;br/> &lt;br/> Additionally avalanches can also be triggered in the old snowpack, especially on very steep slopes above approximately 2200 m. Avalanche prone locations are to be found in particular in places that are protected from the wind above approximately 2200 m. Experience in the assessment of avalanche danger is required. &lt;br/> &lt;br/> On steep grassy slopes more small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Over a wide area 20 to 40 cm of snow will fall from midday. From the Venediger Range to the Glockner Range up to 60 cm of snow will fall. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. &lt;br/> &lt;br/> In its middle, the snowpack is faceted and weak. This applies in particular above the tree line, and below approximately 2600 m. Field observations and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack confirm the unfavourable bonding of the snowpack. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</comment>
+    </snowpackStructure>
+    <travelAdvisory/>
+    <tendency>
+      <highlights>Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.</highlights>
+      <tendencyType>increasing</tendencyType>
+      <validTime>
+        <startTime>2023-12-01T23:00:00Z</startTime>
+        <endTime>2023-12-02T23:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2023-12-01</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP6</dangerPatterns>
+        <dangerPatterns>DP4</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="f96e4a54-8a82-4d6f-bc1a-95b2c35c0ce4" lang="en">
+    <publicationTime>2023-12-01T07:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2023-11-30T23:00:00Z</startTime>
+      <endTime>2023-12-01T23:00:00Z</endTime>
+    </validTime>
+    <unscheduled>true</unscheduled>
+    <region regionID="AT-07-05">
+      <name>Brandenberg Alps</name>
+    </region>
+    <region regionID="AT-07-06">
+      <name>Wilder Kaiser Mountains - Waidring Alps</name>
+    </region>
+    <region regionID="AT-07-18">
+      <name>Eastern Kitzbühel Alps</name>
+    </region>
+    <region regionID="AT-07-17-02">
+      <name>Central Kitzbühel Alps</name>
+    </region>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wind_slab</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>earlier</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>new_snow</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+    </avalancheProblem>
+    <weatherForecast/>
+    <avalancheActivity>
+      <highlights>As the day progresses as a consequence of new snow and wind there will be only a slight increase in the danger.</highlights>
+      <comment>The fresh snow and the isolated winds slabs that are forming can be released by a single winter sport participant. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. As the snowfall becomes more intense the avalanche prone locations will become more prevalent as the day progresses. They are sometimes covered with new snow and are therefore difficult to recognise. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. &lt;br/> &lt;br/> On steep grassy slopes small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Over a wide area up to 20 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind.</comment>
+    </snowpackStructure>
+    <travelAdvisory/>
+    <tendency>
+      <highlights>Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger.</highlights>
+      <tendencyType>increasing</tendencyType>
+      <validTime>
+        <startTime>2023-12-01T23:00:00Z</startTime>
+        <endTime>2023-12-02T23:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2023-12-01</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP6</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="e6905e60-782b-4ee2-919d-db49a8a85af6" lang="en">
+    <publicationTime>2023-12-01T07:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2023-11-30T23:00:00Z</startTime>
+      <endTime>2023-12-01T23:00:00Z</endTime>
+    </validTime>
+    <unscheduled>true</unscheduled>
+    <region regionID="IT-32-BZ-18-02">
+      <name>Gröden Dolomites</name>
+    </region>
+    <region regionID="IT-32-BZ-18-01">
+      <name>Lüsner Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-20">
+      <name>Sexten Dolomites</name>
+    </region>
+    <region regionID="IT-32-TN-09">
+      <name>Latemar</name>
+    </region>
+    <region regionID="IT-32-BZ-16">
+      <name>Eastern Nonsberger Alps</name>
+    </region>
+    <region regionID="IT-32-BZ-17">
+      <name>Northern Dolomites of Fiemme</name>
+    </region>
+    <region regionID="IT-32-TN-13">
+      <name>Primiero - Pale di S. Martino</name>
+    </region>
+    <region regionID="IT-32-BZ-19">
+      <name>Prags Dolomites</name>
+    </region>
+    <region regionID="IT-32-TN-15">
+      <name>Cembra Valley</name>
+    </region>
+    <region regionID="AT-07-29">
+      <name>Lienzer Dolomites</name>
+    </region>
+    <region regionID="IT-32-BZ-08-03">
+      <name>Southern Sarntal Alps</name>
+    </region>
+    <region regionID="IT-32-TN-17">
+      <name>Western Nonsberg Alps</name>
+    </region>
+    <region regionID="IT-32-TN-16">
+      <name>Fassa Valley</name>
+    </region>
+    <region regionID="IT-32-TN-08">
+      <name>Southern Lagorai</name>
+    </region>
+    <region regionID="IT-32-TN-07">
+      <name>Northern Lagorai</name>
+    </region>
+    <region regionID="IT-32-TN-21">
+      <name>Pine' - Mocheni Valley</name>
+    </region>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>earlier</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>later</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wind_slab</problemType>
+      <elevation uom="m">
+        <lowerBound>2400</lowerBound>
+      </elevation>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>earlier</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>1</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>wind_slab</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>SE</aspect>
+      <aspect>W</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>later</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>1</avalancheSize>
+    </avalancheProblem>
+    <weatherForecast/>
+    <avalancheActivity>
+      <highlights>Fresh wind slabs are to be evaluated critically.</highlights>
+      <comment>As a consequence of new snow and a strong southwesterly wind, wind slabs will form on Friday especially in gullies and bowls and behind abrupt changes in the terrain. The wind slabs can be released by a single winter sport participant in all aspects above the tree line. As the snowfall becomes more intense the prevalence and size of the avalanche prone locations will increase as the day progresses. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls. &lt;br/> The Avalanche Warning Service currently has only a small amount of information, so that the avalanche danger should be investigated especially thoroughly in the relevant locality.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>15 to 30 cm of snow will fall on Friday, in particular above the tree line. &lt;br/> The old snowpack is largely stable and its surface has a crust, in particular on steep sunny slopes in all altitude zones, as well as on shady slopes below approximately 2400 m. &lt;br/> The snowpack will be subject to considerable local variations. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</comment>
+    </snowpackStructure>
+    <travelAdvisory/>
+    <tendency>
+      <highlights>As a consequence of new snow and wind there will be an increase in the avalanche danger. Over a wide area 15 to 30 cm of snow will fall on Saturday. In the Sexten Dolomites and in the Lienzer Dolomites in some localities up to 50 cm of snow will fall. A critical avalanche situation will be encountered in some regions.</highlights>
+      <tendencyType>increasing</tendencyType>
+      <validTime>
+        <startTime>2023-12-01T23:00:00Z</startTime>
+        <endTime>2023-12-02T23:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2023-12-01</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP6</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="dbb52110-5f65-4156-bc64-b0d2e60f560a" lang="en">
+    <publicationTime>2023-12-01T07:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2023-11-30T23:00:00Z</startTime>
+      <endTime>2023-12-01T23:00:00Z</endTime>
+    </validTime>
+    <unscheduled>true</unscheduled>
+    <region regionID="IT-32-TN-12">
+      <name>Prealps</name>
+    </region>
+    <region regionID="IT-32-TN-03">
+      <name>Bondone and Stivo</name>
+    </region>
+    <region regionID="IT-32-TN-14">
+      <name>Vallarsa</name>
+    </region>
+    <region regionID="IT-32-TN-06">
+      <name>Folgaria - Laverone</name>
+    </region>
+    <region regionID="IT-32-TN-18">
+      <name>Ledro Valley</name>
+    </region>
+    <region regionID="IT-32-TN-11">
+      <name>Paganella</name>
+    </region>
+    <region regionID="IT-32-TN-10">
+      <name>Marzola - Valsugana</name>
+    </region>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>new_snow</problemType>
+      <elevation uom="m"/>
+      <aspect>S</aspect>
+      <aspect>E</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <aspect>SW</aspect>
+      <aspect>W</aspect>
+      <aspect>SE</aspect>
+      <aspect>NE</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>fair</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>1</avalancheSize>
+    </avalancheProblem>
+    <weatherForecast/>
+    <avalancheActivity>
+      <highlights>In all aspects in all altitude zones a little snow is lying. Fresh wind slabs are to be evaluated critically.</highlights>
+      <comment>The avalanche prone locations are to be found especially in steep terrain at intermediate and high altitudes and on wind-loaded slopes. Avalanches can in some places be released by small loads, but they will be small in most cases.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Below approximately 1800 m a little snow is lying. Over a wide area new snow and wind slabs are lying on a hard crust. At higher altitudes there are 10 to 20 cm of snow, and even more in some localities.</comment>
+    </snowpackStructure>
+    <travelAdvisory/>
+    <tendency>
+      <highlights>The avalanche danger will increase.</highlights>
+      <tendencyType>increasing</tendencyType>
+      <validTime>
+        <startTime>2023-12-01T23:00:00Z</startTime>
+        <endTime>2023-12-02T23:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2023-12-01</mainDate>
+      </ALBINA>
+      <LWD_Tyrol/>
+    </customData>
+  </bulletin>
+</bulletins>

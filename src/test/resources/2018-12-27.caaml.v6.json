@@ -5,6 +5,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Wind slabs require caution, especially above approximately 2200 m, in particular on very steep shady slopes and adjacent to ridgelines. Weakly bonded old snow at intermediate and high altitudes. Slight increase in danger of moist and wet avalanches as a consequence of warming during the day and solar radiation.",
@@ -16,7 +17,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -39,7 +44,15 @@
         "lowerBound" : "2200",
         "upperBound" : "2700"
       },
-      "validTimePeriod" : "all_day",
+      "validTimePeriod" : "earlier",
+      "aspects" : [ "SE", "E", "S", "NW", "NE", "W", "SW", "N" ]
+    }, {
+      "problemType" : "persistent_weak_layers",
+      "elevation" : {
+        "lowerBound" : "2200",
+        "upperBound" : "2700"
+      },
+      "validTimePeriod" : "later",
       "aspects" : [ "SE", "E", "S", "NW", "NE", "W", "SW", "N" ]
     }, {
       "problemType" : "wet_snow",
@@ -131,6 +144,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Wind slabs require caution, especially above approximately 2200 m. Gliding avalanches and snow slides on grassy slopes. This applies in particular below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day.",
@@ -142,7 +156,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -198,6 +216,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs represent the main danger. This applies in particular adjacent to ridgelines. Weakly bonded old snow especially on west, north and east facing slopes, in particular between approximately 2200 and 2700 m.",
@@ -209,7 +228,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Gradual decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -266,6 +289,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The wind slabs represent the main danger.",
@@ -277,7 +301,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -354,6 +382,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs require caution, in particular adjacent to ridgelines.",
@@ -365,7 +394,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -408,6 +441,7 @@
       "startTime" : "2018-12-26T23:00:00Z",
       "endTime" : "2018-12-27T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Hardly any snow is lying on south facing slopes.",
@@ -419,7 +453,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2018-12-27T23:00:00Z",
+        "endTime" : "2018-12-28T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {

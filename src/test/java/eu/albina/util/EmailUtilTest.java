@@ -90,7 +90,7 @@ public class EmailUtilTest {
 	@Test
 	public void langTest() {
 		Assertions.assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
-		Assertions.assertEquals("Tutte le elevazioni", LanguageCode.it.getBundleString("elevation.all"));
+		Assertions.assertEquals("Tutte le quote", LanguageCode.it.getBundleString("elevation.all"));
 		Assertions.assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
 	}
 }

@@ -5,6 +5,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-11">
       <name>Durreck Range</name>
     </region>
@@ -103,7 +104,23 @@
       <aspect>W</aspect>
       <aspect>SW</aspect>
       <aspect>N</aspect>
-      <validTimePeriod>all_day</validTimePeriod>
+      <validTimePeriod>earlier</validTimePeriod>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+        <upperBound>2700</upperBound>
+      </elevation>
+      <aspect>SE</aspect>
+      <aspect>E</aspect>
+      <aspect>S</aspect>
+      <aspect>NW</aspect>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>SW</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>later</validTimePeriod>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
@@ -129,6 +146,10 @@
     <tendency>
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -146,6 +167,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-04">
       <name>Karwendel Mountains</name>
     </region>
@@ -202,6 +224,10 @@
     <tendency>
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -219,6 +245,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-26">
       <name>Glockner Range</name>
     </region>
@@ -276,6 +303,10 @@
     <tendency>
       <highlights>Gradual decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -293,6 +324,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-10">
       <name>Eastern Pfunderer Mountains</name>
     </region>
@@ -371,6 +403,10 @@
     <tendency>
       <highlights>Moderate, level 2.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -385,6 +421,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-05">
       <name>Brandenberg Alps</name>
     </region>
@@ -423,6 +460,10 @@
     <tendency>
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -439,6 +480,7 @@
       <startTime>2018-12-26T23:00:00Z</startTime>
       <endTime>2018-12-27T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-20">
       <name>Sexten Dolomites</name>
     </region>
@@ -523,6 +565,10 @@
     <tendency>
       <highlights>Low, level 1.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2018-12-27T23:00:00Z</startTime>
+        <endTime>2018-12-28T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>

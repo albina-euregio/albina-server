@@ -36,13 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Disabled
 public class BlogControllerTest {
-
-	@AfterEach
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
-	}
 
 	@Test
 	void testWordpress() throws Exception {
@@ -55,8 +49,11 @@ public class BlogControllerTest {
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
 		assertTrue(BlogController.getBlogPost(config, blogPosts.get(0).getId()).getContent().length() > 100, "blog has >100 chars");
+
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
 		assertEquals("Inizio dell’inverno in montagna", BlogController.getBlogPost(config, "1851").getTitle());
+		assertEquals(OffsetDateTime.parse("2023-11-30T14:20:44Z"), BlogController.getBlogPost(config, "2084").getPublished());
+
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-tn/wp-json/wp/v2/");
 		assertNull(BlogController.getBlogPost(config, "495").getAttachmentUrl());
 	}
@@ -71,6 +68,7 @@ public class BlogControllerTest {
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
 		BlogController.updateConfigurationLastPublished(config, blogPosts.get(0));
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled
@@ -80,6 +78,7 @@ public class BlogControllerTest {
 		BlogConfiguration config = BlogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
 		Blogger.Item blogPost = (Blogger.Item) BlogController.getLatestBlogPost(config);
 		assertTrue(blogPost.content.length() > 100, "blog has >100 chars");
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled
@@ -89,6 +88,7 @@ public class BlogControllerTest {
         BlogConfiguration configuration = BlogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
 		String blogPost = BlogController.getBlogPost(configuration, "1227558273754407795").getContent();
 		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
+		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled

@@ -54,7 +54,7 @@ public interface BlogController {
 				}
 				return Optional.of(configuration);
 			} catch (PersistenceException e) {
-                logger.warn("No blog configuration found for {} [{}]", region.getId(), languageCode);
+                logger.debug("No blog configuration found for {} [{}]", region.getId(), languageCode);
                 return Optional.empty();
             }
 		});

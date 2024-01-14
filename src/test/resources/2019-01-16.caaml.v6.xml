@@ -5,6 +5,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-07">
       <name>Texel Mountains</name>
     </region>
@@ -99,6 +100,10 @@
     <tendency>
       <highlights>Gradual decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -113,6 +118,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-18">
       <name>Gröden Dolomites</name>
     </region>
@@ -161,6 +167,10 @@
     <tendency>
       <highlights>Moderate, level 2.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -175,6 +185,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-TN-02">
       <name>Southern Adamello</name>
     </region>
@@ -240,6 +251,10 @@
     <tendency>
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -254,6 +269,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-10">
       <name>Western Verwall Mountains</name>
     </region>
@@ -385,6 +401,10 @@
     <tendency>
       <highlights>Further decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -402,6 +422,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-29">
       <name>Lienzer Dolomites</name>
     </region>
@@ -442,6 +463,10 @@
     <tendency>
       <highlights>Slight decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -458,6 +483,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-08">
       <name>Sarntal Alps</name>
     </region>
@@ -508,6 +534,10 @@
     <tendency>
       <highlights>Fresh wind slabs represent the main danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -522,6 +552,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-TN-13">
       <name>Primiero - Pale di S. Martino</name>
     </region>
@@ -593,6 +624,10 @@
     <tendency>
       <highlights>Moderate, level 2.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -607,6 +642,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-TN-12">
       <name>Prealps</name>
     </region>
@@ -668,6 +704,10 @@
     <tendency>
       <highlights>Low, level 1.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -682,6 +722,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-09">
       <name>Western Pfunderer Mountains</name>
     </region>
@@ -750,6 +791,10 @@
     <tendency>
       <highlights>Fresh wind slabs represent the main danger.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -764,6 +809,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="AT-07-27">
       <name>Eastern Deferegger Alps</name>
     </region>
@@ -829,6 +875,10 @@
     <tendency>
       <highlights>Further decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>
@@ -846,6 +896,7 @@
       <startTime>2019-01-15T23:00:00Z</startTime>
       <endTime>2019-01-16T23:00:00Z</endTime>
     </validTime>
+    <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-16">
       <name>Eastern Nonsberger Alps</name>
     </region>
@@ -880,6 +931,10 @@
     <tendency>
       <highlights>Low, level 1.</highlights>
       <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2019-01-16T23:00:00Z</startTime>
+        <endTime>2019-01-17T23:00:00Z</endTime>
+      </validTime>
     </tendency>
     <customData>
       <ALBINA>

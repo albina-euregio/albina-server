@@ -22,7 +22,9 @@ import org.apache.commons.text.StringEscapeUtils;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -57,6 +59,7 @@ public interface Wordpress {
 	class Item implements BlogItem {
 		public long id;
 		public String date;
+		public String date_gmt;
 		public String link;
 		public Rendered title;
 		public Rendered content;
@@ -84,7 +87,7 @@ public interface Wordpress {
 
 		@Override
 		public OffsetDateTime getPublished() {
-			return OffsetDateTime.parse(date);
+			return LocalDateTime.parse(date_gmt).atOffset(ZoneOffset.UTC);
 		}
 
 		@Override

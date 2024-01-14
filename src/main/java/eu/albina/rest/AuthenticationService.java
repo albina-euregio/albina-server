@@ -69,6 +69,10 @@ public class AuthenticationService {
 		public String access_token;
 	}
 
+	static class Username {
+		public String username;
+	}
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -108,6 +112,28 @@ public class AuthenticationService {
 
 			JSONObject jsonResult = new JSONObject();
 			jsonResult.put("access_token", accessToken);
+
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (Exception e) {
+			return Response.status(Response.Status.UNAUTHORIZED).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Test access token")
+	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Username.class)))
+	@Path("/test")
+	public Response testAuth(@Context SecurityContext securityContext) {
+		try {
+			Principal principal = securityContext.getUserPrincipal();
+			String username = principal.getName();
+
+			JSONObject jsonResult = new JSONObject();
+			jsonResult.put("username", username);
 
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {

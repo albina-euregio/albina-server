@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="missing">mancha</entry>
-  <entry key="missing.long">Manche</entry>
-  <entry key="no_snow">niente neve</entry>
-  <entry key="no_snow.long">Niente Neve</entry>
+  <entry key="missing">mancante</entry>
+  <entry key="missing.long">Mancante</entry>
+  <entry key="no_snow">privo di neve</entry>
+  <entry key="no_snow.long">Privo di neve</entry>
   <entry key="no_rating">senza valutazione</entry>
   <entry key="no_rating.long">Senza Valutazione</entry>
   <entry key="low">debole</entry>
-  <entry key="low.long">Grado Pericolo 1 - Debole</entry>
+  <entry key="low.long">Grado di pericolo 1 - Debole</entry>
   <entry key="moderate">moderato</entry>
-  <entry key="moderate.long">Grado Pericolo 2 - Moderato</entry>
+  <entry key="moderate.long">Grado di pericolo 2 - Moderato</entry>
   <entry key="considerable">marcato</entry>
-  <entry key="considerable.long">Grado Pericolo 3 - Marcato</entry>
+  <entry key="considerable.long">Grado di pericolo 3 - Marcato</entry>
   <entry key="high">forte</entry>
-  <entry key="high.long">Grado Pericolo 4 - Forte</entry>
+  <entry key="high.long">Grado di pericolo 4 - Forte</entry>
   <entry key="very_high">molto forte</entry>
-  <entry key="very_high.long">Grado Pericolo 5 - Molto Forte</entry>
+  <entry key="very_high.long">Grado di pericolo 5 - Molto Forte</entry>
 </properties>

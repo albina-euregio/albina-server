@@ -2,13 +2,13 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="dp1">st.1: strato debole persistente basale</entry>
-  <entry key="dp2">st.2: valanga per scivolamento di neve</entry>
-  <entry key="dp3">st.3: pioggia</entry>
+  <entry key="dp2">st.2: neve da slittamento</entry>
+  <entry key="dp3">st.3: pioggia su neve</entry>
   <entry key="dp4">st.4: freddo su caldo / caldo su freddo</entry>
   <entry key="dp5">st.5: neve dopo un lungo periodo di freddo</entry>
-  <entry key="dp6">st.6: neve fresca fredda a debole coesione e vento</entry>
-  <entry key="dp7">st.7: zone con poca neve durante inverni ricchi di neve</entry>
+  <entry key="dp6">st.6: neve a debole coesione e vento</entry>
+  <entry key="dp7">st.7: passaggio da poca a molta neve</entry>
   <entry key="dp8">st.8: brina di superficie sepolta</entry>
-  <entry key="dp9">st.9: neve pallottolare coperta da neve fresca</entry>
+  <entry key="dp9">st.9: neve pallottolare sepolta</entry>
   <entry key="dp10">st.10: situazione primaverile</entry>
 </properties>

@@ -5,6 +5,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The somewhat older wind slabs must be evaluated with care and prudence. Gliding avalanches are still to be expected.",
@@ -16,7 +17,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -102,6 +107,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Wind slabs and weakly bonded old snow require caution.",
@@ -113,7 +119,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -169,6 +179,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The somewhat older wind slabs must be evaluated with care and prudence.",
@@ -180,7 +191,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -254,6 +269,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs represent the main danger.",
@@ -265,7 +281,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -342,6 +362,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The sometimes large wind slabs represent the main danger.",
@@ -353,7 +374,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Fresh wind slabs represent the main danger.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -396,6 +421,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Only a little snow is lying on north and northeast facing slopes.",
@@ -407,7 +433,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -471,6 +501,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The wind slabs represent the main danger.",
@@ -482,7 +513,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -519,6 +554,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "For those venturing off piste a dangerous avalanche situation will be encountered over a wide area.",
@@ -530,7 +566,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "In some localities some fresh snow.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -611,6 +651,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Old wind slabs represent the main danger.",
@@ -622,7 +663,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Slight decrease in avalanche danger.",
-      "tendencyType" : "decreasing"
+      "tendencyType" : "decreasing",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -665,6 +710,7 @@
       "startTime" : "2019-01-16T23:00:00Z",
       "endTime" : "2019-01-17T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs require caution.",
@@ -676,7 +722,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2019-01-17T23:00:00Z",
+        "endTime" : "2019-01-18T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {

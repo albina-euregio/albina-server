@@ -5,6 +5,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : true,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -16,7 +17,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2022-11-10T23:00:00Z",
+        "endTime" : "2022-11-11T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -69,6 +74,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -80,7 +86,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2022-11-10T23:00:00Z",
+        "endTime" : "2022-11-11T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -133,6 +143,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : true,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -144,7 +155,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2022-11-10T23:00:00Z",
+        "endTime" : "2022-11-11T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -197,6 +212,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : false,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -208,7 +224,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2022-11-10T23:00:00Z",
+        "endTime" : "2022-11-11T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
@@ -261,6 +281,7 @@
       "startTime" : "2022-11-09T23:00:00Z",
       "endTime" : "2022-11-10T23:00:00Z"
     },
+    "unscheduled" : true,
     "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs represent the main danger.",
@@ -272,7 +293,11 @@
     "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
-      "tendencyType" : "steady"
+      "tendencyType" : "steady",
+      "validTime" : {
+        "startTime" : "2022-11-10T23:00:00Z",
+        "endTime" : "2022-11-11T23:00:00Z"
+      }
     } ],
     "customData" : {
       "ALBINA" : {
