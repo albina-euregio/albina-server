@@ -18,6 +18,7 @@ package eu.albina.rest;
 
 import java.io.File;
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,6 +72,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.ChangeJob;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -584,6 +586,26 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		}
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/locked")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getLockedBulletins(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @Context SecurityContext securityContext) {
+		logger.debug("GET JSON locked bulletins");
+
+		try {
+			JSONArray json = new JSONArray();
+			for (BulletinLock bulletinLock : AvalancheBulletinController.getInstance().getLockedBulletins(DateControllerUtil.parseDateOrThrow(date)))
+				json.put(bulletinLock);
+			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error loading bulletin locks", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
 		}
 	}

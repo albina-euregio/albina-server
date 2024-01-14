@@ -668,4 +668,18 @@ public class AvalancheBulletinController {
 			AvalancheBulletinEndpoint.broadcast(bulletinLock);
 		}
 	}
+
+	/**
+	 * Return all bulletin locks that are locked for {@code region}.
+	 *
+	 * @param date
+	 *            the date of interest
+	 * @return all bulletin locks that are locked for {@code date}
+	 */
+	public List<BulletinLock> getLockedBulletins(Instant date) {
+		return bulletinLocks.stream()
+			.filter(bulletinLock -> bulletinLock.getDate().equals(date))
+			.collect(Collectors.toList());
+	}
+
 }
