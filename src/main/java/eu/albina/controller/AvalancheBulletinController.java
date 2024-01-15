@@ -299,6 +299,134 @@ public class AvalancheBulletinController {
 	}
 
 	/**
+	 * Creates a {@code bulletin} in the database.
+	 *
+	 * @param startDate
+	 *            the start date the bulletin is valid from
+	 * @param endDate
+	 *            the end date the bulletin is valid until
+	 * @param region
+	 *            the active region of the user who is creating the bulletin
+	 * @return a map of all bulletin ids and bulletins for this day
+	 */
+	public Map<String, AvalancheBulletin> createBulletin(AvalancheBulletin newBulletin, Instant startDate, Instant endDate,
+			Region region) {
+		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
+
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
+					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+
+			for (AvalancheBulletin loadedBulletin : loadedBulletins) {
+				// check micro-regions for each bulletin to prevent duplicates
+				for (String microRegion : newBulletin.getPublishedAndSavedRegions()) {
+					if (loadedBulletin.getPublishedRegions().contains(microRegion))
+						loadedBulletin.getPublishedRegions().remove(microRegion);
+					if (loadedBulletin.getSavedRegions().contains(microRegion))
+						loadedBulletin.getSavedRegions().remove(microRegion);
+				}
+				if (!loadedBulletin.getPublishedAndSavedRegions().isEmpty()) {
+					entityManager.merge(loadedBulletin);
+					resultBulletins.put(loadedBulletin.getId(), loadedBulletin);
+				} else {
+					entityManager.remove(loadedBulletin);
+				}
+			}
+			
+			// Bulletin has to be created
+			newBulletin.setId(null);
+			entityManager.persist(newBulletin);
+			resultBulletins.put(newBulletin.getId(), newBulletin);
+
+			for (AvalancheBulletin bulletin : resultBulletins.values())
+				initializeBulletin(bulletin);
+
+			return resultBulletins;
+		});
+	}
+
+	/**
+	 * Update a {@code bulletin} in the database.
+	 *
+	 * @param startDate
+	 *            the start date the bulletin is valid from
+	 * @param endDate
+	 *            the end date the bulletin is valid until
+	 * @param region
+	 *            the active region of the user who is updating the bulletin
+	 * @return a map of all bulletin ids and bulletins for this day
+	 */
+	public Map<String, AvalancheBulletin> updateBulletin(AvalancheBulletin updatedBulletin, Instant startDate, Instant endDate,
+			Region region) {
+		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
+
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
+					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+
+			for (AvalancheBulletin loadedBulletin : loadedBulletins) {
+				if (!loadedBulletin.getId().equals(updatedBulletin.getId())) {
+					// check micro-regions for each bulletin to prevent duplicates
+					for (String microRegion : updatedBulletin.getPublishedAndSavedRegions()) {
+						if (loadedBulletin.getPublishedRegions().contains(microRegion))
+							loadedBulletin.getPublishedRegions().remove(microRegion);
+						if (loadedBulletin.getSavedRegions().contains(microRegion))
+							loadedBulletin.getSavedRegions().remove(microRegion);
+					}
+					if (!loadedBulletin.getPublishedAndSavedRegions().isEmpty()) {
+						entityManager.merge(loadedBulletin);
+						resultBulletins.put(loadedBulletin.getId(), loadedBulletin);
+					} else {
+						entityManager.remove(loadedBulletin);
+					}
+				}
+			}
+			
+			// Bulletin has to be updated
+			entityManager.merge(updatedBulletin);
+			resultBulletins.put(updatedBulletin.getId(), updatedBulletin);
+
+			for (AvalancheBulletin bulletin : resultBulletins.values())
+				initializeBulletin(bulletin);
+
+			return resultBulletins;
+		});
+	}
+
+	/**
+	 * Deletes a {@code bulletin} from the database.
+	 *
+	 * @param startDate
+	 *            the start date the bulletin is valid from
+	 * @param endDate
+	 *            the end date the bulletin is valid until
+	 * @param region
+	 *            the active region of the user who is deleting the bulletin
+	 * @return a map of all bulletin ids and bulletins for this day
+	 */
+    public Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
+            Region region) {
+		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
+
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
+					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+
+			for (AvalancheBulletin loadedBulletin : loadedBulletins) {
+				if (!loadedBulletin.getId().equals(bulletinId))
+					resultBulletins.put(loadedBulletin.getId(), loadedBulletin);
+				else
+					entityManager.remove(loadedBulletin);
+			}
+
+			for (AvalancheBulletin bulletin : resultBulletins.values())
+				initializeBulletin(bulletin);
+
+			return resultBulletins;
+		});
+	}
+
+	/**
 	 * Returns the highest {@code DangerRating} of all bulletins with status
 	 * {@code published} for a given {@code date} and in a specific {@code regions}.
 	 *
