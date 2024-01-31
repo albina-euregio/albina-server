@@ -23,6 +23,7 @@ import org.caaml.v6.DangerRatingValue;
 import org.caaml.v6.Tendency;
 import org.caaml.v6.ValidTime;
 import org.caaml.v6.ValidTimePeriod;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
@@ -45,6 +46,7 @@ import java.util.stream.Stream;
 public interface TextToSpeech {
 	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
 	Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(LanguageCode.de, LanguageCode.en));
+	Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
 
 	class ScriptEngine {
 		private final AvalancheBulletin bulletin;
@@ -328,6 +330,8 @@ public interface TextToSpeech {
 		VoiceSelectionParams voice = scriptEngine.voice();
 		AudioConfig audioConfig = scriptEngine.audioConfig();
 		try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
+			logger.info("Synthesize speech for bulletin={} lang={} voice={} audioConfig={}",
+				bulletin.getBulletinID(), bulletin.getLang(), voice, audioConfig);
 			SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
 			return response.getAudioContent();
 		}
@@ -339,7 +343,7 @@ public interface TextToSpeech {
 				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
 				ByteString audioFile = createAudioFile(caaml);
 				Path path = avalancheReport.getPdfDirectory().resolve(String.format("%s_%s_%s.mp3", avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang.toString()));
-				LoggerFactory.getLogger(TextToSpeech.class).info("Writing audio file {} ({} bytes)", path, audioFile.size());
+				logger.info("Writing audio file {} ({} bytes)", path, audioFile.size());
 				Files.write(path, audioFile.toByteArray());
 				AlbinaUtil.setFilePermissions(path.toString());
 			}
