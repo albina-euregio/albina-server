@@ -44,6 +44,7 @@ import org.w3c.dom.Element;
 import eu.albina.model.enumerations.Position;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -854,6 +855,7 @@ public class Region implements AvalancheInformationObject {
 		}
     }
 
+	@JsonIgnore
 	public boolean isCreateAudioFiles() {
 		return true;
 	}
