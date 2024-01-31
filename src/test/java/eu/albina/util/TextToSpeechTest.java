@@ -60,6 +60,11 @@ class TextToSpeechTest {
 	}
 
 	@Test
+	public void test20240128() throws Exception {
+		toCAAMLv6("2024-01-28.json");
+	}
+
+	@Test
 	@Disabled
 	public void test20231201mp3() throws Exception {
 		// GOOGLE_APPLICATION_CREDENTIALS
