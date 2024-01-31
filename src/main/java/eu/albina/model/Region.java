@@ -853,4 +853,8 @@ public class Region implements AvalancheInformationObject {
 			throw new UncheckedIOException(e);
 		}
     }
+
+	public boolean isCreateAudioFiles() {
+		return true;
+	}
 }

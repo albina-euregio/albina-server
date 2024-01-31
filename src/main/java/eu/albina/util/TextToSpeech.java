@@ -7,6 +7,7 @@ import com.google.cloud.texttospeech.v1.SynthesisInput;
 import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
 import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
+import com.google.common.base.Strings;
 import com.google.common.collect.Streams;
 import com.google.errorprone.annotations.CheckReturnValue;
 import com.google.protobuf.ByteString;
@@ -338,6 +339,10 @@ public interface TextToSpeech {
 	}
 
 	static void createAudioFiles(eu.albina.model.AvalancheReport avalancheReport) throws Exception {
+		if (Strings.isNullOrEmpty(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"))) {
+			logger.info("Skipping synthesize speech since GOOGLE_APPLICATION_CREDENTIALS is undefined.");
+			return;
+		}
 		for (eu.albina.model.AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
 			for (LanguageCode lang : ENABLED) {
 				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
