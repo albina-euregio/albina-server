@@ -9,4 +9,13 @@
   <entry key="favourable_situation">Favourable situation</entry>
   <entry key="cornices">Cornices</entry>
   <entry key="no_distinct_problem">No distinct problem</entry>
+
+  <entry key="new_snow.speech">a new snow problem</entry>
+  <entry key="wind_slab.speech">a wind slab problem</entry>
+  <entry key="persistent_weak_layers.speech">a persistent weak layer problem</entry>
+  <entry key="wet_snow.speech">a wet snow problem</entry>
+  <entry key="gliding_snow.speech">a gliding snow problem</entry>
+  <entry key="favourable_situation.speech">a favourable situation</entry>
+  <entry key="cornices.speech">a cornices problem </entry>
+  <entry key="no_distinct_problem.speech">no distinct problem</entry>
 </properties>

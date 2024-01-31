@@ -9,12 +9,17 @@
   <entry key="no_rating.long">Keine Beurteilung</entry>
   <entry key="low">gering</entry>
   <entry key="low.long">Gefahrenstufe 1 - Gering</entry>
+  <entry key="low.speech">geringe Lawinengefahr, also Gefahrenstufe eins</entry>
   <entry key="moderate">mäßig</entry>
   <entry key="moderate.long">Gefahrenstufe 2 - Mäßig</entry>
+  <entry key="moderate.speech">mäßige Lawinengefahr, also Gefahrenstufe zwei</entry>
   <entry key="considerable">erheblich</entry>
   <entry key="considerable.long">Gefahrenstufe 3 - Erheblich</entry>
+  <entry key="considerable.speech">erhebliche Lawinengefahr, also Gefahrenstufe drei</entry>
   <entry key="high">groß</entry>
   <entry key="high.long">Gefahrenstufe 4 - Groß</entry>
+  <entry key="high.speech">große Lawinengefahr, also Gefahrenstufe vier</entry>
   <entry key="very_high">sehr groß</entry>
   <entry key="very_high.long">Gefahrenstufe 5 - Sehr Groß</entry>
+  <entry key="very_high.speech">sehr große Lawinengefahr, also Gefahrenstufe fünf</entry>
 </properties>

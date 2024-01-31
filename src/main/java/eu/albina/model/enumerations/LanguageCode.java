@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -56,6 +57,14 @@ public enum LanguageCode {
 
 	public String getBundleString(String key) {
 		return getBundle("i18n.MessagesBundle").getString(key);
+	}
+
+	public String getBundleString(String key, Map<String, String> replacements) {
+		String bundleString = getBundleString(key);
+		for (Map.Entry<String, String> replacement : replacements.entrySet()) {
+			bundleString = bundleString.replace("{" + replacement.getKey() + "}", replacement.getValue());
+		}
+		return bundleString;
 	}
 
 	public String getBundleString(String key, Region region) {

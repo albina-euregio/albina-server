@@ -20,9 +20,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Stopwatch;
 import eu.albina.caaml.Caaml;
 import eu.albina.model.AvalancheReport;
 import eu.albina.controller.publication.MultichannelMessage;
+import eu.albina.util.TextToSpeech;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,6 +98,12 @@ public class PublicationController {
 					Thread createPdfThread = createPdf(avalancheReport);
 					threads.put("pdf_" + region.getId(), createPdfThread);
 					createPdfThread.start();
+				}
+
+				if (region.isCreateAudioFiles()) {
+					Thread createAudioFilesThread = createAudioFiles(avalancheReport);
+					threads.put("mp3_" + region.getId(), createAudioFilesThread);
+					createAudioFilesThread.start();
 				}
 
 				for (String key : threads.keySet()) {
@@ -219,6 +227,23 @@ public class PublicationController {
 					logger.error("Error creating simple HTML for " + avalancheReport.getRegion().getId(), e);
 				} finally {
 					logger.info("Simple HTML production for {} finished", avalancheReport.getRegion().getId());
+				}
+			}
+		});
+	}
+
+	public Thread createAudioFiles(AvalancheReport avalancheReport) {
+		return new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Stopwatch stopwatch = Stopwatch.createStarted();
+				try {
+					logger.info("Synthesize speech for {} started", avalancheReport.getRegion().getId());
+					TextToSpeech.createAudioFiles(avalancheReport);
+				} catch (Exception e) {
+					logger.error("Synthesize speech error for " + avalancheReport.getRegion().getId(), e);
+				} finally {
+					logger.info("Synthesize speech for {} finished in {}", avalancheReport.getRegion().getId(), stopwatch);
 				}
 			}
 		});

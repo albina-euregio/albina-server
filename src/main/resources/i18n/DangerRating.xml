@@ -9,12 +9,17 @@
 	<entry key="no_rating.long">No Rating</entry>
 	<entry key="low">low</entry>
 	<entry key="low.long">Danger Level 1 - Low</entry>
+	<entry key="low.speech">low avalanche danger, so danger level one</entry>
 	<entry key="moderate">moderate</entry>
 	<entry key="moderate.long">Danger Level 2 - Moderate</entry>
+	<entry key="moderate.speech">moderate avalanche danger, so danger level two</entry>
 	<entry key="considerable">considerable</entry>
 	<entry key="considerable.long">Danger Level 3 - Considerable</entry>
+	<entry key="considerable.speech">considerable avalanche danger, so danger level three</entry>
 	<entry key="high">high</entry>
 	<entry key="high.long">Danger Level 4 - High</entry>
+	<entry key="high.speech">high avalanche danger, so danger level four</entry>
 	<entry key="very_high">very high</entry>
 	<entry key="very_high.long">Danger Level 5 - Very High</entry>
+	<entry key="very_high.speech">very high avalanche danger, so danger level five</entry>
 </properties>
