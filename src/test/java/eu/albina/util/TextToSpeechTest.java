@@ -1,16 +1,20 @@
 package eu.albina.util;
 
 import com.google.common.io.Resources;
+import com.google.protobuf.ByteString;
 import eu.albina.caaml.Caaml6;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.LanguageCode;
 import org.caaml.v6.AvalancheBulletins;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +57,20 @@ class TextToSpeechTest {
 	@Test
 	public void test20231201() throws Exception {
 		toCAAMLv6("2023-12-01.json");
+	}
+
+	@Test
+	@Disabled
+	public void test20231201mp3() throws Exception {
+		// GOOGLE_APPLICATION_CREDENTIALS
+		URL resource = Resources.getResource("2023-12-01.json");
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
+		AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, LanguageCode.de);
+		org.caaml.v6.AvalancheBulletin bulletin = caaml.getBulletins().get(0);
+		ByteString mp3 = TextToSpeech.createAudioFile(bulletin);
+		Path path = Path.of(bulletin.getBulletinID() + ".mp3");
+		Files.write(path, mp3.toByteArray());
 	}
 
 }
