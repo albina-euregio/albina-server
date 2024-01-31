@@ -124,6 +124,12 @@
   <entry key="problem.avalanche-size.large">large</entry>
   <entry key="problem.avalanche-size.very_large">very large</entry>
   <entry key="problem.avalanche-size.extreme">extreme</entry>
+  <entry key="valid-time-period.all_day">all day</entry>
+  <entry key="valid-time-period.all_day.long">all day</entry>
+  <entry key="valid-time-period.earlier">earlier</entry>
+  <entry key="valid-time-period.earlier.long">earlier in the day</entry>
+  <entry key="valid-time-period.later">later</entry>
+  <entry key="valid-time-period.later.long">later in the day</entry>
 
   <entry key="speech.bulletin.update">Update of the avalanche report for {validityDate}.</entry>
   <entry key="speech.bulletin">Avalanche report for {validityDate}.</entry>
@@ -147,7 +153,4 @@
   <entry key="speech.aspects.1">Especially in aspect {aspect1}.</entry>
   <entry key="speech.aspects.2">Especially in the aspects {aspect1} and {aspect2}.</entry>
   <entry key="speech.aspects.3">Especially in the aspects {aspect1} to {aspect2} to {aspect3}.</entry>
-  <entry key="valid-time-period.all_day">all day</entry>
-  <entry key="valid-time-period.earlier">earlier the day</entry>
-  <entry key="valid-time-period.later">later the day</entry>
 </properties>

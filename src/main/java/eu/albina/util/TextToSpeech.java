@@ -219,7 +219,7 @@ public interface TextToSpeech {
 		}
 
 		private String validTimePeriodText(ValidTimePeriod validTimePeriod) {
-			return lang.getBundleString("valid-time-period." + validTimePeriod.toString());
+			return lang.getBundleString("valid-time-period." + validTimePeriod.toString() + ".long");
 		}
 
 		private void dangerPatterns() {
