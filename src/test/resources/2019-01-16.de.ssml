@@ -1,5 +1,4 @@
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -32,12 +31,10 @@
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -66,12 +63,10 @@
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -101,12 +96,10 @@
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -137,12 +130,10 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -172,12 +163,10 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -206,12 +195,10 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -241,12 +228,10 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -275,12 +260,10 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -310,12 +293,10 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -346,12 +327,10 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="de-DE">
-<voice xml:lang="de-DE" xml:gender="MALE" name="de-DE-Standard-El">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -380,5 +359,4 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 <p><s>Wir wünschen euch einen sicheren Tag!</s></p>
 </media>
 </par>
-</voice>
 </speak>

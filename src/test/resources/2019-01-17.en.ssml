@@ -1,5 +1,4 @@
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -30,12 +29,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -66,12 +63,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: co
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -102,12 +97,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -137,12 +130,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -171,12 +162,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -205,12 +194,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -239,12 +226,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -274,12 +259,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -309,12 +292,10 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
 
 
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-GB">
-<voice xml:lang="en-GB" xml:gender="MALE" name="en-GB-Wavenet-Bl">
+<speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
@@ -343,5 +324,4 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 <p><s>Have a nice day and don't forget to be careful!</s></p>
 </media>
 </par>
-</voice>
 </speak>
