@@ -22,6 +22,11 @@
   <entry key="website.url.capitalized.IT-32-BZ">WWW.AVALANCHE.REPORT/FR</entry>
   <entry key="website.url.capitalized.IT-32-TN">WWW.AVALANCHE.REPORT/FR</entry>
   <entry key="website.url.capitalized.ES-CT-L">WWW.LAUEGI.REPORT</entry>
+  <entry key="website.static.url">https://static.avalanche.report</entry>
+  <entry key="website.static.url.AT-07">https://static.avalanche.report</entry>
+  <entry key="website.static.url.IT-32-BZ">https://static.avalanche.report</entry>
+  <entry key="website.static.url.IT-32-TN">https://static.avalanche.report</entry>
+  <entry key="website.static.url.ES-CT-L">https://static.lauegi.report/</entry>
   <entry key="email">info@avalanche.report</entry>
   <entry key="email.AT-07">info@avalanche.report</entry>
   <entry key="email.IT-32-BZ">info@avalanche.report</entry>
@@ -97,8 +102,16 @@
   <entry key="email.subject.update">UPDATE on {0}, </entry>
   <entry key="email.imprint">Mentions légales</entry>
   <entry key="email.media.subject">{0} for {1} from {2}</entry>
+  <entry key="email.media.important.subject">IMPORTANT {0} for {1} from {2}</entry>
   <entry key="email.media.text">Best regards, {0}</entry>
+  <entry key="email.media.link.mp3">MP3 File</entry>
   <entry key="pdf.page-number">Page {0}</entry>
   <entry key="published">Publié </entry>
   <entry key="updated">Update du </entry>
+  <entry key="valid-time-period.all_day">all day</entry>
+  <entry key="valid-time-period.all_day.long">all day</entry>
+  <entry key="valid-time-period.earlier">AM</entry>
+  <entry key="valid-time-period.earlier.long">AM</entry>
+  <entry key="valid-time-period.later">PM</entry>
+  <entry key="valid-time-period.later.long">PM</entry>
 </properties>

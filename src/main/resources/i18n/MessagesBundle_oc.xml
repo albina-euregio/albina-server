@@ -124,4 +124,10 @@
   <entry key="problem.avalanche-size.large">Gran</entry>
   <entry key="problem.avalanche-size.very_large">Molt gran</entry>
   <entry key="problem.avalanche-size.extreme">Extremament gran</entry>
+  <entry key="valid-time-period.all_day">all day</entry>
+  <entry key="valid-time-period.all_day.long">all day</entry>
+  <entry key="valid-time-period.earlier">AM</entry>
+  <entry key="valid-time-period.earlier.long">AM</entry>
+  <entry key="valid-time-period.later">PM</entry>
+  <entry key="valid-time-period.later.long">PM</entry>
 </properties>
