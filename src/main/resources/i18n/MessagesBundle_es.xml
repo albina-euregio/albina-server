@@ -126,10 +126,10 @@
   <entry key="problem.avalanche-size.extreme">extremadamente grande</entry>
   <entry key="valid-time-period.all_day">all day</entry>
   <entry key="valid-time-period.all_day.long">all day</entry>
-  <entry key="valid-time-period.earlier">earlier</entry>
-  <entry key="valid-time-period.earlier.long">earlier in the day</entry>
-  <entry key="valid-time-period.later">later</entry>
-  <entry key="valid-time-period.later.long">later in the day</entry>
+  <entry key="valid-time-period.earlier">AM</entry>
+  <entry key="valid-time-period.earlier.long">AM</entry>
+  <entry key="valid-time-period.later">PM</entry>
+  <entry key="valid-time-period.later.long">PM</entry>
   <entry key="speech.bulletin.update">Update of the avalanche report for {validityDate}.</entry>
   <entry key="speech.bulletin">Avalanche report for {validityDate}.</entry>
   <entry key="speech.furthermore">Furthermore, {text}</entry>
