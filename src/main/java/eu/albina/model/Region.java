@@ -857,6 +857,6 @@ public class Region implements AvalancheInformationObject {
 
 	@JsonIgnore
 	public boolean isCreateAudioFiles() {
-		return true;
+		return superRegions == null || superRegions.isEmpty();
 	}
 }
