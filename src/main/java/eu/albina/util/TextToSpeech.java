@@ -346,7 +346,7 @@ public interface TextToSpeech {
 			for (LanguageCode lang : ENABLED) {
 				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
 				ByteString audioFile = createAudioFile(caaml);
-				String filename = String.format("%s_%s_%s_%s.mp3", avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang.toString());
+				String filename = String.format("%s_%s_%s.mp3", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang.toString());
 				Path path = avalancheReport.getPdfDirectory().resolve(filename);
 				logger.info("Writing audio file {} ({} bytes)", path, audioFile.size());
 				Files.write(path, audioFile.toByteArray());
