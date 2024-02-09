@@ -183,14 +183,19 @@ public class AvalancheBulletinController {
 					// Do we have to split the bulletin and create a new one for this region with only savedRegions?
 					// Check: if !originalBulletin.hasPublishedRegions().startsWith(region) => split bulletin in two
 					if (originalBulletins.get(newBulletin.getId()).getOwnerRegion().startsWith(region.getId())) {
+
+						// get all own micro-regions from new bulletin
+						Set<String> newSavedRegions = newBulletin.getSavedRegions();
+						newSavedRegions.removeIf(r -> !r.startsWith(region.getId()));
+
+						// get all foreign micro-regions from original bulletin
 						Set<String> savedRegions = originalBulletin.getSavedRegions();
+						savedRegions.removeIf(r -> r.startsWith(region.getId()));
+						savedRegions.addAll(newSavedRegions);
+
 						originalBulletin.copy(newBulletin);
-						for (String savedRegion : savedRegions) {
-							if (!savedRegion.startsWith(region.getId())) {
-								if (!originalBulletin.getSavedRegions().contains(savedRegion))
-									originalBulletin.addSavedRegion(savedRegion);
-							}
-						}
+						originalBulletin.setSavedRegions(savedRegions);
+
 						Set<String> tmpRegions = new HashSet<String>();
 						for (String suggestedRegion : originalBulletin.getSuggestedRegions()) {
 							if (newBulletin.getSavedRegions().contains(suggestedRegion))
