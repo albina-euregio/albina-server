@@ -183,7 +183,7 @@ public class AlbinaUtilTest {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		Assertions.assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 		Assertions.assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
 		Assertions.assertEquals("Donnerstag 17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
 		Assertions.assertEquals("am Freitag, den 18.01.2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
@@ -210,7 +210,7 @@ public class AlbinaUtilTest {
 		bulletins.forEach(b -> b.setPublicationDate(b.getPublicationDate().withZoneSameInstant(ZoneId.of("Canada/Mountain"))));
 		Assertions.assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.get(0).getPublicationDate().toString());
 		Assertions.assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 	}
 
 	@Test
@@ -224,7 +224,7 @@ public class AlbinaUtilTest {
 		// Hibernate/MySQL returns timestamps in Europe/Vienna zone?!
 		Assertions.assertEquals("2021-12-05T17:00+01:00[Europe/Vienna]", bulletin.getPublicationDate().toString());
 		Assertions.assertEquals("05.12.2021 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		Assertions.assertEquals("2021-12-05_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2021-12-05_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 	}
 
 	@Test

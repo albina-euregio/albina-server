@@ -165,12 +165,12 @@ public interface AlbinaUtil {
         return instant.atZone(localZone()).format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication")));
     }
 
-	static String getPublicationTime(List<AvalancheBulletin> bulletins) {
+	static String getPublicationDateDirectory(List<AvalancheBulletin> bulletins) {
 		Instant instant = getPublicationDate(bulletins);
-		return getPublicationTime(instant);
+		return getPublicationDateDirectory(instant);
 	}
 
-	static String getPublicationTime(Instant publicationTime) {
+	static String getPublicationDateDirectory(Instant publicationTime) {
 		return publicationTime.atZone(ZoneId.of("UTC")).format(formatterPublicationTime);
 	}
 

@@ -186,7 +186,7 @@ public class AvalancheBulletinPublishService {
 			Collections.sort(bulletins);
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+			String publicationTimeString = AlbinaUtil.getPublicationDateDirectory(bulletins);
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			// update all super regions
@@ -294,7 +294,7 @@ public class AvalancheBulletinPublishService {
 					.getPublishedBulletins(startDate, publishBulletinRegions);
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+			String publicationTimeString = AlbinaUtil.getPublicationDateDirectory(bulletins);
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			// update all super regions
@@ -349,7 +349,7 @@ public class AvalancheBulletinPublishService {
 					.getPublishedBulletins(startDate, publishBulletinRegions);
 
 			String validityDateString = AlbinaUtil.getValidityDateString(bulletins);
-			String publicationTimeString = AlbinaUtil.getPublicationTime(bulletins);
+			String publicationTimeString = AlbinaUtil.getPublicationDateDirectory(bulletins);
 			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 			// update all super regions

@@ -94,17 +94,17 @@ public class EmailUtil {
 		if (avalancheReport.hasDaytimeDependency()) {
 			mapImage.put("overview",
 					LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
-							+ AlbinaUtil.getPublicationTime(bulletins) + "/"
+							+ AlbinaUtil.getPublicationDateDirectory(bulletins) + "/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
 			mapImage.put("overviewPM",
 					LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
-							+ AlbinaUtil.getPublicationTime(bulletins) + "/"
+							+ AlbinaUtil.getPublicationDateDirectory(bulletins) + "/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false));
 			mapImage.put("widthPM", "width=\"600\"");
 		} else {
 			mapImage.put("overview",
 					LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
-							+ AlbinaUtil.getPublicationTime(bulletins) + "/"
+							+ AlbinaUtil.getPublicationDateDirectory(bulletins) + "/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
 			mapImage.put("overviewPM", serverImagesUrl + "/empty.png");
 			mapImage.put("widthPM", "");
@@ -295,12 +295,12 @@ public class EmailUtil {
 					getDangerRatingColorStyle(avalancheBulletin.getHighestDangerRating(), serverInstance));
 			bulletin.put("headlinestyle", getHeadlineStyle(avalancheBulletin.getHighestDangerRating()));
 
-			addDaytimeInfo(lang, region, avalancheBulletin, bulletin, false, AlbinaUtil.getPublicationTime(bulletins), serverInstance);
+			addDaytimeInfo(lang, region, avalancheBulletin, bulletin, false, AlbinaUtil.getPublicationDateDirectory(bulletins), serverInstance);
 			Map<String, Object> pm = new HashMap<>();
 			if (avalancheBulletin.isHasDaytimeDependency())
-				addDaytimeInfo(lang, region, avalancheBulletin, pm, true, AlbinaUtil.getPublicationTime(bulletins), serverInstance);
+				addDaytimeInfo(lang, region, avalancheBulletin, pm, true, AlbinaUtil.getPublicationDateDirectory(bulletins), serverInstance);
 			else
-				addDaytimeInfo(lang, region, avalancheBulletin, pm, false, AlbinaUtil.getPublicationTime(bulletins), serverInstance);
+				addDaytimeInfo(lang, region, avalancheBulletin, pm, false, AlbinaUtil.getPublicationDateDirectory(bulletins), serverInstance);
 			bulletin.put("pm", pm);
 
 			arrayList.add(bulletin);
