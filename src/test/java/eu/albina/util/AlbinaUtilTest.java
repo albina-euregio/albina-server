@@ -240,4 +240,10 @@ public class AlbinaUtilTest {
 		bulletin.setPublicationDate(ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
 		Assertions.assertEquals(bulletin.getPublicationDate(), AlbinaUtil.getPublicationDate(Arrays.asList(new AvalancheBulletin(), bulletin, new AvalancheBulletin())));
 	}
+
+	@Test
+	void getScriptPath() {
+		String path = AlbinaUtil.getScriptPath("scripts/updateLatestFiles.sh");
+		Assertions.assertTrue(path.endsWith("updateLatestFiles.sh"), path + " ends with updateLatestFiles.sh");
+	}
 }

@@ -19,6 +19,7 @@ package eu.albina.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -62,7 +63,6 @@ import eu.albina.model.enumerations.LanguageCode;
 public interface AlbinaUtil {
 
 	Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
-	ClassLoader classLoader = AlbinaUtil.class.getClassLoader();
 	String greyDarkColor = "#565F61";
 	DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
 
@@ -262,15 +262,15 @@ public interface AlbinaUtil {
 
 	static void runUpdateMapsScript(String date, String publicationTime) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateMaps.sh").getFile());
+			String path = getScriptPath("scripts/updateMaps.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-						URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 						date, publicationTime).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-						URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 						date, publicationTime).inheritIO();
 			}
 			Process p = pb.start();
@@ -283,15 +283,15 @@ public interface AlbinaUtil {
 
 	static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateFiles.sh").getFile());
+			String path = getScriptPath("scripts/updateFiles.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			}
 			Process p = pb.start();
@@ -304,15 +304,15 @@ public interface AlbinaUtil {
 
 	static void runUpdatePdfsScript(String date, String publicationTime) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updatePdfs.sh").getFile());
+			String path = getScriptPath("scripts/updatePdfs.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			}
 			Process p = pb.start();
@@ -325,15 +325,15 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestPdfsScript(String date) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestPdfs.sh").getFile());
+			String path = getScriptPath("scripts/updateLatestPdfs.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			}
 			Process p = pb.start();
@@ -346,15 +346,15 @@ public interface AlbinaUtil {
 
 	static void runUpdateCaamlsScript(String date, String publicationTime) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateCaamls.sh").getFile());
+			String path = getScriptPath("scripts/updateCaamls.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			}
 			Process p = pb.start();
@@ -367,15 +367,15 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestCaamlsScript(String date) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestCaamls.sh").getFile());
+			String path = getScriptPath("scripts/updateLatestCaamls.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			}
 			Process p = pb.start();
@@ -388,15 +388,15 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestMapsScript(String date) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestMaps.sh").getFile());
+			String path = getScriptPath("scripts/updateLatestMaps.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date).inheritIO();
 			}
 			Process p = pb.start();
@@ -409,15 +409,15 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestFilesScript(String date) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestFiles.sh").getFile());
+			String path = getScriptPath("scripts/updateLatestFiles.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			}
 			Process p = pb.start();
@@ -430,15 +430,15 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestHtmlsScript(String date) {
 		try {
-			final File file = new File(classLoader.getResource("scripts/updateLatestHtmls.sh").getFile());
+			String path = getScriptPath("scripts/updateLatestHtmls.sh");
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8),
+					path,
 					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8),
+					path,
 					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
 			}
 			Process p = pb.start();
@@ -447,6 +447,12 @@ public interface AlbinaUtil {
 		} catch (Exception e) {
 			logger.error("HTMLs for " + date + " could not be udpated in latest directory!", e);
 		}
+	}
+
+	static String getScriptPath(String name) {
+		URL resource = AlbinaUtil.class.getClassLoader().getResource(name);
+		File file = new File(resource.getFile());
+        return URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8);
 	}
 
 	static String getDangerRatingText(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang) {
