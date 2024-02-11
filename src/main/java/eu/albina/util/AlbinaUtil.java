@@ -88,10 +88,7 @@ public interface AlbinaUtil {
 			return "";
 		}
 		date = date.withZoneSameInstant(localZone());
-		return String.format("%s%s%s",
-			lang.getBundleString("tendency.binding-word"),
-			lang.getBundleString("day." + date.getDayOfWeek()),
-			date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.tendency"))));
+		return lang.getTendencyDate(date);
 	}
 
 	static Instant getInstantNowNoNanos() {

@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.model.enumerations;
 
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
@@ -94,5 +95,12 @@ public enum LanguageCode {
 
 	public DateTimeFormatter getFormatter() {
 		return DateTimeFormatter.ofPattern(getBundleString("date-time-format").trim());
+	}
+
+	public String getTendencyDate(ZonedDateTime date) {
+		return String.format("%s%s%s",
+			getBundleString("tendency.binding-word"),
+			getBundleString("day." + date.getDayOfWeek()),
+			date.format(DateTimeFormatter.ofPattern(getBundleString("date-time-format.tendency"))));
 	}
 }
