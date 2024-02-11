@@ -26,7 +26,6 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.Period;
@@ -58,7 +57,6 @@ import eu.albina.model.enumerations.LanguageCode;
 public interface AlbinaUtil {
 
 	Logger logger = LoggerFactory.getLogger(AlbinaUtil.class);
-	String greyDarkColor = "#565F61";
 	DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
 
 	static ZoneId localZone() {
