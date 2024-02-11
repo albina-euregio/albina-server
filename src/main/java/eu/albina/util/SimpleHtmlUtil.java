@@ -208,8 +208,8 @@ public class SimpleHtmlUtil {
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", lang.getBundleString("website.url") + "/bulletin/"
 				+ avalancheReport.getValidityDateString());
-		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1), serverInstance));
-		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1), serverInstance));
+		link.put("previousDay", LinkUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1), serverInstance));
+		link.put("nextDay", LinkUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1), serverInstance));
 		String prefix = LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
 			+ avalancheReport.getValidityDateString() + "/" + region.getId();
 		link.put("linkDe", prefix + "_de.html");

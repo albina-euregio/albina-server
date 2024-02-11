@@ -50,8 +50,6 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
-import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
@@ -138,16 +136,6 @@ public interface AlbinaUtil {
 		date = date.withZoneSameInstant(localZone());
 		date = date.plusDays(1);
 		return lang.getDate(date);
-	}
-
-	static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, Period offset, ServerInstance serverInstance) {
-		if (region != null && !region.getId().isEmpty())
-			return LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
-					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + region.getId() + "_" + lang.toString()
-					+ ".html";
-		else
-			return LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
-					+ AlbinaUtil.getValidityDateString(bulletins, offset) + "/" + lang.toString() + ".html";
 	}
 
 	static ZonedDateTime getDate(List<AvalancheBulletin> bulletins) {
