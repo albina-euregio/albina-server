@@ -266,11 +266,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-						URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+						URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 						date, publicationTime).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-						URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+						URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 						date, publicationTime).inheritIO();
 			}
 			Process p = pb.start();
@@ -287,11 +287,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			}
 			Process p = pb.start();
@@ -308,11 +308,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			}
 			Process p = pb.start();
@@ -329,11 +329,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			}
 			Process p = pb.start();
@@ -350,11 +350,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, publicationTime).inheritIO();
 			}
 			Process p = pb.start();
@@ -371,11 +371,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date).inheritIO();
 			}
 			Process p = pb.start();
@@ -392,11 +392,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
 					date).inheritIO();
 			}
 			Process p = pb.start();
@@ -413,11 +413,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8), ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
 					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
 			}
 			Process p = pb.start();
@@ -434,11 +434,11 @@ public interface AlbinaUtil {
 			ProcessBuilder pb;
 			if (SystemUtils.IS_OS_WINDOWS) {
 				pb = new ProcessBuilder("cmd.exe", "/C",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8),
 					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
 			} else {
 				pb = new ProcessBuilder("/bin/sh",
-					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8.name()),
+					URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8),
 					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
 			}
 			Process p = pb.start();
