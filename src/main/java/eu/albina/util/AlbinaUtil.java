@@ -211,17 +211,13 @@ public interface AlbinaUtil {
 
 	static void runUpdateMapsScript(String date, String publicationTime) {
 		try {
-			String path = getScriptPath("scripts/updateMaps.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
-						date, publicationTime).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
-						date, publicationTime).inheritIO();
-			}
+			ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updateMaps.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+				date,
+				publicationTime
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps for {} copied using {}", date, pb.command());
@@ -232,17 +228,14 @@ public interface AlbinaUtil {
 
 	static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
-			String path = getScriptPath("scripts/updateFiles.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
-			}
+            ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updateFiles.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+				date,
+				publicationTime,
+				ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Files updated for {} using {}", date, pb.command());
@@ -253,17 +246,13 @@ public interface AlbinaUtil {
 
 	static void runUpdatePdfsScript(String date, String publicationTime) {
 		try {
-			String path = getScriptPath("scripts/updatePdfs.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
-			}
+            ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updatePdfs.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+				date,
+				publicationTime
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PDFs updated in date directory for {} using {}", date, pb.command());
@@ -274,17 +263,12 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestPdfsScript(String date) {
 		try {
-			String path = getScriptPath("scripts/updateLatestPdfs.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date).inheritIO();
-			}
+            ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updateLatestPdfs.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+				date
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("PDFs for {} updated in latest directory using {}", date, pb.command());
@@ -295,17 +279,13 @@ public interface AlbinaUtil {
 
 	static void runUpdateCaamlsScript(String date, String publicationTime) {
 		try {
-			String path = getScriptPath("scripts/updateCaamls.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, publicationTime).inheritIO();
-			}
+            ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updateCaamls.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+				date,
+				publicationTime
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("CAAMLs updated in date directory for {} using {}", date, pb.command());
@@ -316,17 +296,12 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestCaamlsScript(String date) {
 		try {
-			String path = getScriptPath("scripts/updateLatestCaamls.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date).inheritIO();
-			}
+            ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updateLatestCaamls.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+				date
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("CAAMLs for region {} for {} update in latest directory using {}", date, pb.command());
@@ -337,17 +312,12 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestMapsScript(String date) {
 		try {
-			String path = getScriptPath("scripts/updateLatestMaps.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
-					date).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
-					date).inheritIO();
-			}
+            ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updateLatestMaps.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
+				date
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Maps for {} updated in latest directory using {}", date, pb.command());
@@ -358,17 +328,13 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestFilesScript(String date) {
 		try {
-			String path = getScriptPath("scripts/updateLatestFiles.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path, ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-					date, ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()).inheritIO();
-			}
+            ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updateLatestFiles.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
+				date,
+				ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("Latest files updated using {}", pb.command());
@@ -379,22 +345,25 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestHtmlsScript(String date) {
 		try {
-			String path = getScriptPath("scripts/updateLatestHtmls.sh");
-			ProcessBuilder pb;
-			if (SystemUtils.IS_OS_WINDOWS) {
-				pb = new ProcessBuilder("cmd.exe", "/C",
-					path,
-					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
-			} else {
-				pb = new ProcessBuilder("/bin/sh",
-					path,
-					ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(), date).inheritIO();
-			}
+            ProcessBuilder pb = newShellProcessBuilder();
+			pb.command().addAll(List.of(
+				getScriptPath("scripts/updateLatestHtmls.sh"),
+				ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(),
+				date
+			));
 			Process p = pb.start();
 			p.waitFor();
 			logger.info("HTMLs for {} updated in latest directory using {}", date, pb.command());
 		} catch (Exception e) {
 			logger.error("HTMLs for " + date + " could not be udpated in latest directory!", e);
+		}
+	}
+
+	private static ProcessBuilder newShellProcessBuilder() {
+		if (SystemUtils.IS_OS_WINDOWS) {
+			return new ProcessBuilder("cmd.exe", "/C").inheritIO();
+		} else {
+			return new ProcessBuilder("/bin/sh").inheritIO();
 		}
 	}
 
@@ -478,17 +447,17 @@ public interface AlbinaUtil {
 		}
 	}
 
-    static String getAspectString(Set<Aspect> aspects, Locale locale) {
+	static String getAspectString(Set<Aspect> aspects, Locale locale) {
 		StringJoiner aspectString = new StringJoiner(", ");
 		for (Aspect aspect : aspects) {
 			aspectString.add(aspect.toString(locale));
 		}
 		return aspectString.toString();
-    }
+	}
 
-    static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {
+	static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {
 		String stringDate = OffsetDateTime.parse(date).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return stringDate + "_" + language.getBundleString("media-file.name") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
-    }
+		return stringDate + "_" + language.getBundleString("media-file.name") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
+	}
 
 }
