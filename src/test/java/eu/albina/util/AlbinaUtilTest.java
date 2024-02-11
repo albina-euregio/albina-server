@@ -255,7 +255,7 @@ public class AlbinaUtilTest {
 		Assertions.assertNull(AlbinaUtil.getPublicationDate(Collections.singletonList(new AvalancheBulletin())));
 		AvalancheBulletin bulletin = new AvalancheBulletin();
 		bulletin.setPublicationDate(ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
-		Assertions.assertEquals(bulletin.getPublicationDate(), AlbinaUtil.getPublicationDate(Arrays.asList(new AvalancheBulletin(), bulletin, new AvalancheBulletin())));
+		Assertions.assertEquals(bulletin.getPublicationDate().toInstant(), AlbinaUtil.getPublicationDate(Arrays.asList(new AvalancheBulletin(), bulletin, new AvalancheBulletin())));
 	}
 
 	@Test

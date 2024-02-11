@@ -147,35 +147,29 @@ public interface AlbinaUtil {
 	}
 
 	static boolean isUpdate(List<AvalancheBulletin> bulletins) {
-		ZonedDateTime publicationDate = getPublicationDate(bulletins);
-		LocalDateTime localDateTime = publicationDate.withZoneSameInstant(localZone()).toLocalDateTime();
-		return !LocalTime.of(17, 0).equals(localDateTime.toLocalTime());
+		Instant instant = getPublicationDate(bulletins);
+		LocalTime localTime = instant.atZone(localZone()).toLocalTime();
+		return !LocalTime.of(17, 0).equals(localTime);
 	}
 
-	static ZonedDateTime getPublicationDate(List<AvalancheBulletin> bulletins) {
+	static Instant getPublicationDate(List<AvalancheBulletin> bulletins) {
 		return bulletins.stream()
 			.map(AvalancheBulletin::getPublicationDate)
 			.filter(Objects::nonNull)
+			.map(ZonedDateTime::toInstant)
 			.max(Comparator.naturalOrder())
 			.orElse(null);
 
 	}
 
 	static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getPublicationDate(bulletins);
-		if (date != null) {
-			date = date.withZoneSameInstant(localZone());
-			return date.format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication")));
-		} else
-			return "";
-	}
+		Instant instant = getPublicationDate(bulletins);
+        return instant.atZone(localZone()).format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication")));
+    }
 
 	static String getPublicationTime(List<AvalancheBulletin> bulletins) {
-		ZonedDateTime utcTime = getPublicationDate(bulletins);
-		if (utcTime != null)
-			return utcTime.format(formatterPublicationTime);
-		else
-			return "";
+		Instant instant = getPublicationDate(bulletins);
+		return getPublicationTime(instant);
 	}
 
 	static String getPublicationTime(Instant publicationTime) {
