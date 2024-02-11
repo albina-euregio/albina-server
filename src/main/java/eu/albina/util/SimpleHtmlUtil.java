@@ -290,12 +290,12 @@ public class SimpleHtmlUtil {
 					bulletin.put("avAvalancheComment", "");
 				if (avalancheBulletin.getDangerPattern1() != null)
 					bulletin.put("dangerPattern1",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang) + "<br>");
+                        	avalancheBulletin.getDangerPattern1().toString(lang.getLocale()) + "<br>");
 				else
 					bulletin.put("dangerPattern1", "");
 				if (avalancheBulletin.getDangerPattern2() != null)
 					bulletin.put("dangerPattern2",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang) + "<br>");
+                        	avalancheBulletin.getDangerPattern2().toString(lang.getLocale()) + "<br>");
 				else
 					bulletin.put("dangerPattern2", "");
 				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null

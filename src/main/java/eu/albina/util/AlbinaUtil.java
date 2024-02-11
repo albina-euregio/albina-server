@@ -56,7 +56,6 @@ import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -68,10 +67,6 @@ public interface AlbinaUtil {
 
 	static ZoneId localZone() {
 		return ZoneId.of("Europe/Vienna");
-	}
-
-	static String getDangerPatternText(DangerPattern dp, LanguageCode lang) {
-		return dp.toString(lang.getLocale());
 	}
 
 	static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription) {

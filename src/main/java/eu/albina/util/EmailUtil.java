@@ -201,8 +201,8 @@ public class EmailUtil {
 							|| avalancheBulletin.getDangerPattern2() != null) {
 						bulletin.put("dangerPatternsHeadline", lang.getBundleString("headline.danger-patterns"));
 						if (avalancheBulletin.getDangerPattern1() != null) {
-							bulletin.put("dangerPattern1",
-									AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
+                            bulletin.put("dangerPattern1",
+									avalancheBulletin.getDangerPattern1().toString(lang.getLocale()));
 							bulletin.put("dangerPatternLink1", LinkUtil.getDangerPatternLink(lang, region,
 									avalancheBulletin.getDangerPattern1()));
 							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
@@ -212,8 +212,8 @@ public class EmailUtil {
 							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
 						}
 						if (avalancheBulletin.getDangerPattern2() != null) {
-							bulletin.put("dangerPattern2",
-									AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
+                            bulletin.put("dangerPattern2",
+									avalancheBulletin.getDangerPattern2().toString(lang.getLocale()));
 							bulletin.put("dangerPatternLink2", LinkUtil.getDangerPatternLink(lang, region,
 									avalancheBulletin.getDangerPattern2()));
 							bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
