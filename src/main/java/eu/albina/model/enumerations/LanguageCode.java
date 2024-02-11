@@ -93,8 +93,14 @@ public enum LanguageCode {
 		return getBundle("micro-regions_names").getString(regionId);
 	}
 
-	public DateTimeFormatter getFormatter() {
-		return DateTimeFormatter.ofPattern(getBundleString("date-time-format").trim());
+	public String getDate(ZonedDateTime date) {
+		return date.format(DateTimeFormatter.ofPattern(getBundleString("date-time-format").trim()));
+	}
+
+	public String getLongDate(ZonedDateTime date) {
+		return String.format("%s %s",
+			getBundleString("day." + date.getDayOfWeek()),
+			getDate(date));
 	}
 
 	public String getTendencyDate(ZonedDateTime date) {

@@ -124,14 +124,8 @@ public interface AlbinaUtil {
 			// TODO what if no date is given (should not happen)
 			return "-";
 		}
-		return getDate(date, lang);
-	}
-
-	static String getDate(ZonedDateTime date, LanguageCode lang) {
 		date = date.withZoneSameInstant(localZone());
-		return String.format("%s %s",
-			lang.getBundleString("day." + date.getDayOfWeek()),
-			date.format(lang.getFormatter()));
+		return lang.getLongDate(date);
 	}
 
 	static int getYear(List<AvalancheBulletin> bulletins) {
@@ -153,14 +147,14 @@ public interface AlbinaUtil {
 		ZonedDateTime date = getDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		date = date.minusDays(1);
-		return date.format(lang.getFormatter());
+		return lang.getDate(date);
 	}
 
 	static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		ZonedDateTime date = getDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		date = date.plusDays(1);
-		return date.format(lang.getFormatter());
+		return lang.getDate(date);
 	}
 
 	static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, Period offset, ServerInstance serverInstance) {
