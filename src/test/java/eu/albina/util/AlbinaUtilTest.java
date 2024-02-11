@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -30,6 +31,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -111,12 +113,27 @@ public class AlbinaUtilTest {
 
 		for (int i = 0; i < names.size(); i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
-			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
+			String encodstring = encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
 			logger.warn(names.get(i));
 			logger.warn("Image: " + encodstring);
 			logger.warn("Password: " + pwd);
 		}
+	}
+
+	public static String encodeFileToBase64Binary(File file) {
+		String encodedfile = null;
+		try {
+			FileInputStream fileInputStreamReader = new FileInputStream(file);
+			byte[] bytes = new byte[(int) file.length()];
+			fileInputStreamReader.read(bytes);
+			encodedfile = Base64.getEncoder().encodeToString(bytes);
+			fileInputStreamReader.close();
+		} catch (IOException e) {
+			AlbinaUtil.logger.error("Failed to encode to base64", e);
+		}
+
+		return encodedfile;
 	}
 
 	@Test

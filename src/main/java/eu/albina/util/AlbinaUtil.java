@@ -17,7 +17,6 @@
 package eu.albina.util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -35,7 +34,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.text.MessageFormat;
-import java.util.Base64;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -101,21 +99,6 @@ public interface AlbinaUtil {
 
 	static ZonedDateTime getZonedDateTimeUtc(Instant instant) {
 		return ZonedDateTime.ofInstant(instant, ZoneId.of("UTC"));
-	}
-
-	static String encodeFileToBase64Binary(File file) {
-		String encodedfile = null;
-		try {
-			FileInputStream fileInputStreamReader = new FileInputStream(file);
-			byte[] bytes = new byte[(int) file.length()];
-			fileInputStreamReader.read(bytes);
-			encodedfile = Base64.getEncoder().encodeToString(bytes);
-			fileInputStreamReader.close();
-		} catch (IOException e) {
-			logger.error("Failed to encode to base64", e);
-		}
-
-		return encodedfile;
 	}
 
 	static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
