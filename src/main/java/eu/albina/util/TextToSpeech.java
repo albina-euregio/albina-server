@@ -31,11 +31,15 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -248,8 +252,10 @@ public interface TextToSpeech {
 		}
 
 		private String getValidityDate(ValidTime validTime) {
-			ZonedDateTime mainDate = eu.albina.model.AvalancheBulletin.getValidityDate(validTime.getStartTime().atZone(AlbinaUtil.localZone()));
-			return AlbinaUtil.getDate(mainDate, lang);
+			LocalDate localDate = validTime.getStartTime().atZone(AlbinaUtil.localZone()).toLocalDate();
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+				.withLocale(lang.getLocale() == Locale.GERMAN ? new Locale("de", "AT") : lang.getLocale());
+			return localDate.format(dateTimeFormatter);
 		}
 
 		void paragraph(String element) {

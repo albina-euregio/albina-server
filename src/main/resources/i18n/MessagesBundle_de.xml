@@ -141,9 +141,9 @@
   <entry key="speech.danger-rating.above-below">{validTimePeriod} gilt über {elevationUpper} {dangerRatingUpper}, darunter {dangerRatingLower}.</entry>
   <entry key="speech.elevation.treeline">der Baumgrenze</entry>
   <entry key="speech.elevation.meter">{elevation} Meter</entry>
-  <entry key="speech.tendency.decreasing">Die Tendenz für #{tendencyDate} lässt eine sinkende Lawinengefahr erwarten.</entry>
-  <entry key="speech.tendency.increasing">Die Tendenz für #{tendencyDate} lässt eine steigende Lawinengefahr erwarten.</entry>
-  <entry key="speech.tendency.steady">Die Tendenz für #{tendencyDate} lässt eine gleichbleibende Lawinengefahr erwarten.</entry>
+  <entry key="speech.tendency.decreasing">Die Tendenz für {tendencyDate} lässt eine sinkende Lawinengefahr erwarten.</entry>
+  <entry key="speech.tendency.increasing">Die Tendenz für {tendencyDate} lässt eine steigende Lawinengefahr erwarten.</entry>
+  <entry key="speech.tendency.steady">Die Tendenz für {tendencyDate} lässt eine gleichbleibende Lawinengefahr erwarten.</entry>
   <entry key="speech.avalanche-problem.between">{validTimePeriod}, zwischen {lowerBound} und {upperBound} haben wir {avalancheProblemType}.</entry>
   <entry key="speech.avalanche-problem.below">{validTimePeriod} unter {upperBound} erwartet uns {avalancheProblemType}.</entry>
   <entry key="speech.avalanche-problem.above">{validTimePeriod} über {lowerBound} müssen wir auf ein {avalancheProblemType} achten.</entry>

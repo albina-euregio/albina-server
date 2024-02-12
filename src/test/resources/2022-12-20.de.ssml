@@ -2,7 +2,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag 20.12.2022.</s></p>
+<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Schwacher Altschnee ist die Hauptgefahr.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -19,7 +19,7 @@
 <p>Der untere Teil der Schneedecke ist kantig aufgebaut und schwach, besonders an steilen West-, Nord- und Osthängen oberhalb von rund 2000 m sowie an steilen Sonnenhängen im Hochgebirge. Lawinenabgänge und Beobachtungen im Gelände bestätigen den ungünstigen Schneedeckenaufbau. <break time="1s"/> Die Triebschneeansammlungen sind teilweise noch schlecht miteinander verbunden. Mit milden Temperaturen stabilisieren sich die Triebschneeansammlungen am Dienstag. <break time="1s"/> Sonne und Wärme führen an Sonnenhängen vor allem in mittleren Lagen teilweise zu einer allmählichen Aufweichung der Schneedecke.</p>
 Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: gleitschnee.
 <break time="1s" strength="strong"></break>
-<p><s>Die Tendenz für #Mittwoch 21.12.2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
+<p><s>Die Tendenz für Mittwoch, 21. Dezember 2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -35,7 +35,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag 20.12.2022.</s></p>
+<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Die Altschneedecke bleibt störanfällig.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -52,7 +52,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <p>In der Altschneedecke sind störanfällige Schwachschichten vorhanden, besonders an sehr steilen Schattenhängen oberhalb von rund 2200 m sowie an Sonnenhängen im Hochgebirge. <break time="1s"/> Die Triebschneeansammlungen sind teilweise noch schlecht miteinander und mit dem Altschnee verbunden. Sie sind besonders an sehr steilen Schattenhängen in der Höhe vereinzelt noch störanfällig. Mit der Erwärmung stabilisieren sich die Triebschneeansammlungen am Dienstag. <break time="1s"/> <break time="1s"/> Sonne und Wärme führen im Tagesverlauf an Sonnenhängen vor allem in mittleren Lagen zu einer allmählichen Anfeuchtung der Schneedecke.</p>
 Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht.
 <break time="1s" strength="strong"></break>
-<p><s>Die Tendenz für #Mittwoch 21.12.2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
+<p><s>Die Tendenz für Mittwoch, 21. Dezember 2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -68,7 +68,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag 20.12.2022.</s></p>
+<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Die Altschneedecke bleibt störanfällig.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -86,7 +86,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht.
 <p>In der Altschneedecke sind störanfällige Schwachschichten vorhanden, besonders an sehr steilen Schattenhängen oberhalb von rund 2200 m sowie an Sonnenhängen im Hochgebirge. <break time="1s"/> Die Triebschneeansammlungen sind teilweise noch schlecht miteinander und mit dem Altschnee verbunden. Sie sind besonders an sehr steilen Schattenhängen in der Höhe vereinzelt noch störanfällig. Mit der Erwärmung stabilisieren sich die Triebschneeansammlungen am Dienstag. <break time="1s"/> <break time="1s"/> Sonne und Wärme führen im Tagesverlauf vor allem an Sonnenhängen in mittleren Lagen zu einer allmählichen Anfeuchtung der Schneedecke.</p>
 Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: gleitschnee.
 <break time="1s" strength="strong"></break>
-<p><s>Die Tendenz für #Mittwoch 21.12.2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
+<p><s>Die Tendenz für Mittwoch, 21. Dezember 2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -102,7 +102,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag 20.12.2022.</s></p>
+<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Schwacher Altschnee ist die Hauptgefahr.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -119,7 +119,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <p>Der untere Teil der Schneedecke ist kantig aufgebaut und schwach, besonders an steilen Schattenhängen oberhalb von rund 2000 m sowie an steilen Sonnenhängen im Hochgebirge. Lawinenabgänge und Beobachtungen im Gelände bestätigen den ungünstigen Schneedeckenaufbau. <break time="1s"/> Die Triebschneeansammlungen sind teilweise noch schlecht miteinander und mit dem Altschnee verbunden. Sie sind besonders an sehr steilen Schattenhängen in der Höhe vereinzelt noch störanfällig. Mit milden Temperaturen stabilisieren sich die Triebschneeansammlungen am Dienstag. <break time="1s"/> Sonne und Wärme führen an Sonnenhängen vor allem in mittleren Lagen teilweise zu einer allmählichen Aufweichung der Schneedecke.</p>
 Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: gleitschnee.
 <break time="1s" strength="strong"></break>
-<p><s>Die Tendenz für #Mittwoch 21.12.2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
+<p><s>Die Tendenz für Mittwoch, 21. Dezember 2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -135,7 +135,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag 20.12.2022.</s></p>
+<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Schwacher Altschnee ist die Hauptgefahr. <break time="1s"/></s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -152,7 +152,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <p>Der untere Teil der Schneedecke ist kantig aufgebaut und schwach, besonders an steilen West-, Nord- und Osthängen oberhalb von rund 2000 m sowie an steilen Sonnenhängen im Hochgebirge. <break time="1s"/> Lawinenabgänge und Beobachtungen im Gelände bestätigen den ungünstigen Schneedeckenaufbau. <break time="1s"/> Am Dienstag entstehen in den Föhngebieten meist kleine Triebschneeansammlungen. Dies in Kamm- und Passlagen. <break time="1s"/> Sonne und Wärme führen in tiefen und mittleren Lagen zu einer allmählichen Aufweichung der Schneedecke. Dies an Sonnenhängen und in den Föhngebieten. <break time="1s"/> Es liegt für die Jahreszeit wenig Schnee.</p>
 Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: gleitschnee.
 <break time="1s" strength="strong"></break>
-<p><s>Die Tendenz für #Mittwoch 21.12.2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
+<p><s>Die Tendenz für Mittwoch, 21. Dezember 2022 lässt eine gleichbleibende Lawinengefahr erwarten.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
