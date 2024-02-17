@@ -357,8 +357,8 @@ public class PdfUtil {
 					dangerPatternTable.addCell(cell);
 
 					if (avalancheBulletin.getDangerPattern1() != null) {
-						Paragraph paragraph = new Paragraph(
-								AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang))
+                        Paragraph paragraph = new Paragraph(
+								avalancheBulletin.getDangerPattern1().toString(lang.getLocale()))
 										.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -370,8 +370,8 @@ public class PdfUtil {
 						dangerPatternTable.addCell(cell);
 					}
 					if (avalancheBulletin.getDangerPattern2() != null) {
-						Paragraph paragraph = new Paragraph(
-								AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang))
+                        Paragraph paragraph = new Paragraph(
+								avalancheBulletin.getDangerPattern2().toString(lang.getLocale()))
 										.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
 						cell.setTextAlignment(TextAlignment.LEFT);

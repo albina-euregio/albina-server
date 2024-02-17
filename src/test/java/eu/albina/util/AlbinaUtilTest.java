@@ -17,6 +17,7 @@
 package eu.albina.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -30,6 +31,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
@@ -111,12 +113,27 @@ public class AlbinaUtilTest {
 
 		for (int i = 0; i < names.size(); i++) {
 			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
-			String encodstring = AlbinaUtil.encodeFileToBase64Binary(f);
+			String encodstring = encodeFileToBase64Binary(f);
 			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
 			logger.warn(names.get(i));
 			logger.warn("Image: " + encodstring);
 			logger.warn("Password: " + pwd);
 		}
+	}
+
+	public static String encodeFileToBase64Binary(File file) {
+		String encodedfile = null;
+		try {
+			FileInputStream fileInputStreamReader = new FileInputStream(file);
+			byte[] bytes = new byte[(int) file.length()];
+			fileInputStreamReader.read(bytes);
+			encodedfile = Base64.getEncoder().encodeToString(bytes);
+			fileInputStreamReader.close();
+		} catch (IOException e) {
+			AlbinaUtil.logger.error("Failed to encode to base64", e);
+		}
+
+		return encodedfile;
 	}
 
 	@Test
@@ -166,7 +183,7 @@ public class AlbinaUtilTest {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		Assertions.assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 		Assertions.assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
 		Assertions.assertEquals("Donnerstag 17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
 		Assertions.assertEquals("am Freitag, den 18.01.2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
@@ -193,7 +210,7 @@ public class AlbinaUtilTest {
 		bulletins.forEach(b -> b.setPublicationDate(b.getPublicationDate().withZoneSameInstant(ZoneId.of("Canada/Mountain"))));
 		Assertions.assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.get(0).getPublicationDate().toString());
 		Assertions.assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 	}
 
 	@Test
@@ -207,7 +224,7 @@ public class AlbinaUtilTest {
 		// Hibernate/MySQL returns timestamps in Europe/Vienna zone?!
 		Assertions.assertEquals("2021-12-05T17:00+01:00[Europe/Vienna]", bulletin.getPublicationDate().toString());
 		Assertions.assertEquals("05.12.2021 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
-		Assertions.assertEquals("2021-12-05_16-00-00", AlbinaUtil.getPublicationTime(bulletins));
+		Assertions.assertEquals("2021-12-05_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 	}
 
 	@Test
@@ -238,6 +255,12 @@ public class AlbinaUtilTest {
 		Assertions.assertNull(AlbinaUtil.getPublicationDate(Collections.singletonList(new AvalancheBulletin())));
 		AvalancheBulletin bulletin = new AvalancheBulletin();
 		bulletin.setPublicationDate(ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
-		Assertions.assertEquals(bulletin.getPublicationDate(), AlbinaUtil.getPublicationDate(Arrays.asList(new AvalancheBulletin(), bulletin, new AvalancheBulletin())));
+		Assertions.assertEquals(bulletin.getPublicationDate().toInstant(), AlbinaUtil.getPublicationDate(Arrays.asList(new AvalancheBulletin(), bulletin, new AvalancheBulletin())));
+	}
+
+	@Test
+	void getScriptPath() {
+		String path = AlbinaUtil.getScriptPath("scripts/updateLatestFiles.sh");
+		Assertions.assertTrue(path.endsWith("updateLatestFiles.sh"), path + " ends with updateLatestFiles.sh");
 	}
 }

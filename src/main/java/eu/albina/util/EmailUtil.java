@@ -94,17 +94,17 @@ public class EmailUtil {
 		if (avalancheReport.hasDaytimeDependency()) {
 			mapImage.put("overview",
 					LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
-							+ AlbinaUtil.getPublicationTime(bulletins) + "/"
+							+ AlbinaUtil.getPublicationDateDirectory(bulletins) + "/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
 			mapImage.put("overviewPM",
 					LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
-							+ AlbinaUtil.getPublicationTime(bulletins) + "/"
+							+ AlbinaUtil.getPublicationDateDirectory(bulletins) + "/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false));
 			mapImage.put("widthPM", "width=\"600\"");
 		} else {
 			mapImage.put("overview",
 					LinkUtil.getMapsUrl(lang, region, serverInstance) + "/" + AlbinaUtil.getValidityDateString(bulletins) + "/"
-							+ AlbinaUtil.getPublicationTime(bulletins) + "/"
+							+ AlbinaUtil.getPublicationDateDirectory(bulletins) + "/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
 			mapImage.put("overviewPM", serverImagesUrl + "/empty.png");
 			mapImage.put("widthPM", "");
@@ -201,8 +201,8 @@ public class EmailUtil {
 							|| avalancheBulletin.getDangerPattern2() != null) {
 						bulletin.put("dangerPatternsHeadline", lang.getBundleString("headline.danger-patterns"));
 						if (avalancheBulletin.getDangerPattern1() != null) {
-							bulletin.put("dangerPattern1",
-									AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang));
+                            bulletin.put("dangerPattern1",
+									avalancheBulletin.getDangerPattern1().toString(lang.getLocale()));
 							bulletin.put("dangerPatternLink1", LinkUtil.getDangerPatternLink(lang, region,
 									avalancheBulletin.getDangerPattern1()));
 							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
@@ -212,8 +212,8 @@ public class EmailUtil {
 							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
 						}
 						if (avalancheBulletin.getDangerPattern2() != null) {
-							bulletin.put("dangerPattern2",
-									AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang));
+                            bulletin.put("dangerPattern2",
+									avalancheBulletin.getDangerPattern2().toString(lang.getLocale()));
 							bulletin.put("dangerPatternLink2", LinkUtil.getDangerPatternLink(lang, region,
 									avalancheBulletin.getDangerPattern2()));
 							bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
@@ -295,12 +295,12 @@ public class EmailUtil {
 					getDangerRatingColorStyle(avalancheBulletin.getHighestDangerRating(), serverInstance));
 			bulletin.put("headlinestyle", getHeadlineStyle(avalancheBulletin.getHighestDangerRating()));
 
-			addDaytimeInfo(lang, region, avalancheBulletin, bulletin, false, AlbinaUtil.getPublicationTime(bulletins), serverInstance);
+			addDaytimeInfo(lang, region, avalancheBulletin, bulletin, false, AlbinaUtil.getPublicationDateDirectory(bulletins), serverInstance);
 			Map<String, Object> pm = new HashMap<>();
 			if (avalancheBulletin.isHasDaytimeDependency())
-				addDaytimeInfo(lang, region, avalancheBulletin, pm, true, AlbinaUtil.getPublicationTime(bulletins), serverInstance);
+				addDaytimeInfo(lang, region, avalancheBulletin, pm, true, AlbinaUtil.getPublicationDateDirectory(bulletins), serverInstance);
 			else
-				addDaytimeInfo(lang, region, avalancheBulletin, pm, false, AlbinaUtil.getPublicationTime(bulletins), serverInstance);
+				addDaytimeInfo(lang, region, avalancheBulletin, pm, false, AlbinaUtil.getPublicationDateDirectory(bulletins), serverInstance);
 			bulletin.put("pm", pm);
 
 			arrayList.add(bulletin);
@@ -480,7 +480,7 @@ public class EmailUtil {
 	private String getHeadlineStyle(DangerRating dangerRating) {
 		if (dangerRating.equals(DangerRating.low) || dangerRating.equals(DangerRating.moderate)) {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-					+ AlbinaUtil.greyDarkColor + "; background-color: " + dangerRating.getColor() + ";\"";
+					+ "#565F61" + "; background-color: " + dangerRating.getColor() + ";\"";
 		} else {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
 					+ dangerRating.getColor() + ";\"";

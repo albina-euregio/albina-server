@@ -21,6 +21,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ interface Caaml5 {
 			// create meta data
 			List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 			if (bulletins != null && !bulletins.isEmpty()) {
-				ZonedDateTime publicationDate = AlbinaUtil.getPublicationDate(bulletins);
+				ZonedDateTime publicationDate = AlbinaUtil.getPublicationDate(bulletins).atZone(ZoneOffset.UTC);
 
 				// metaData
 				Element metaDataProperty = createMetaDataProperty(doc, publicationDate, language);

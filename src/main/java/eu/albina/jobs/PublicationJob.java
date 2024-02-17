@@ -117,7 +117,7 @@ public class PublicationJob implements org.quartz.Job {
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		// TODO check if we can use startDate instead
 		String validityDateString = AlbinaUtil.getValidityDateString(publishedBulletins);
-		String publicationTimeString = AlbinaUtil.getPublicationTime(publicationDate);
+		String publicationTimeString = AlbinaUtil.getPublicationDateDirectory(publicationDate);
 
 		Collections.sort(publishedBulletins);
 

@@ -115,7 +115,7 @@ public class MediaFileService {
 
 			// send emails
 			ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
-			String formattedDate = language.getBundleString("day." + localDate.getDayOfWeek()) + ", " + localDate.format(language.getFormatter());
+			String formattedDate = language.getLongDate(localDate);
 
 			String mp3FileUrl = LinkUtil.getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
 

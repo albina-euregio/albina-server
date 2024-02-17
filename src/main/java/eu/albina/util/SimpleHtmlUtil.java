@@ -208,8 +208,8 @@ public class SimpleHtmlUtil {
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", lang.getBundleString("website.url") + "/bulletin/"
 				+ avalancheReport.getValidityDateString());
-		link.put("previousDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1), serverInstance));
-		link.put("nextDay", AlbinaUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1), serverInstance));
+		link.put("previousDay", LinkUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1), serverInstance));
+		link.put("nextDay", LinkUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1), serverInstance));
 		String prefix = LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
 			+ avalancheReport.getValidityDateString() + "/" + region.getId();
 		link.put("linkDe", prefix + "_de.html");
@@ -290,12 +290,12 @@ public class SimpleHtmlUtil {
 					bulletin.put("avAvalancheComment", "");
 				if (avalancheBulletin.getDangerPattern1() != null)
 					bulletin.put("dangerPattern1",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern1(), lang) + "<br>");
+                        	avalancheBulletin.getDangerPattern1().toString(lang.getLocale()) + "<br>");
 				else
 					bulletin.put("dangerPattern1", "");
 				if (avalancheBulletin.getDangerPattern2() != null)
 					bulletin.put("dangerPattern2",
-							AlbinaUtil.getDangerPatternText(avalancheBulletin.getDangerPattern2(), lang) + "<br>");
+                        	avalancheBulletin.getDangerPattern2().toString(lang.getLocale()) + "<br>");
 				else
 					bulletin.put("dangerPattern2", "");
 				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
