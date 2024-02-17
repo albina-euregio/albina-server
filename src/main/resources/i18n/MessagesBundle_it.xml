@@ -144,9 +144,9 @@
   <entry key="speech.tendency.decreasing">La tendenza per {tendencyDate} indica un pericolo valanghe in diminuzione.</entry>
   <entry key="speech.tendency.increasing">La tendenza per {tendencyDate} indica un aumento del pericolo valanghe.</entry>
   <entry key="speech.tendency.steady">La tendenza per {tendencyDate} indica un pericolo di valanghe stabile.</entry>
-  <entry key="speech.avalanche-problem.between">{validTimePeriod}, tra {bound inferiore} e {bound superiore}, troviamo {avalancheProblemType}.</entry>
+  <entry key="speech.avalanche-problem.between">{validTimePeriod}, tra {lowerBound} e {upperBound}, troviamo {avalancheProblemType}.</entry>
   <entry key="speech.avalanche-problem.below">{validTimePeriod}, al di sotto di {upperBound}, troviamo {avalancheProblemType}.</entry>
-  <entry key="speech.avalanche-problem.above">{validTimePeriod}, al di sopra di {upperBound}, troviamo {avalancheProblemType}.</entry>
+  <entry key="speech.avalanche-problem.above">{validTimePeriod}, al di sopra di {lowerBound}, troviamo {avalancheProblemType}.</entry>
   <entry key="speech.avalanche-problem">{validTimePeriod}, troviamo {avalancheProblemType}.</entry>
   <entry key="speech.aspects.0">Ciò in tutte le esposizioni</entry>
   <entry key="speech.aspects.1">Soprattutto nell'esposizione {aspect1}.</entry>

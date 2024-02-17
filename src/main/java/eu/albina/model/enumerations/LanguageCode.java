@@ -64,6 +64,9 @@ public enum LanguageCode {
 		for (Map.Entry<String, String> replacement : replacements.entrySet()) {
 			bundleString = bundleString.replace("{" + replacement.getKey() + "}", replacement.getValue());
 		}
+		if (bundleString.contains("{") || bundleString.contains("}")) {
+			throw new IllegalArgumentException("Missing replacements in: " + bundleString);
+		}
 		return bundleString;
 	}
 

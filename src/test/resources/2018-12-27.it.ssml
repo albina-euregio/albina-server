@@ -11,9 +11,9 @@
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>nella prima parte della giornata, al di sopra di , troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
-<s>Inoltre, nella prima parte della giornata, tra {bound inferiore} e {bound superiore}, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
-<s>Inoltre, più tardi nella giornata, tra {bound inferiore} e {bound superiore}, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
+<s>nella prima parte della giornata, al di sopra di 2200 metri, troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
+<s>Inoltre, nella prima parte della giornata, tra 2200 metri e 2700 metri, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
+<s>Inoltre, più tardi nella giornata, tra 2200 metri e 2700 metri, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
 <s>Inoltre, più tardi nella giornata, al di sotto di 2400 metri, troviamo un problema di neve bagnata. Soprattutto nelle esposizioni partendo da Est passando Sud e Ovest.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -47,7 +47,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.5: 
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>tutto il giorno, al di sopra di , troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
+<s>tutto il giorno, al di sopra di 2200 metri, troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
 <s>Inoltre, tutto il giorno, al di sotto di 2400 metri, troviamo un problema di valanghe di slittamento. Soprattutto nelle esposizioni partendo da Est passando Sud e Ovest.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -81,8 +81,8 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>tutto il giorno, al di sopra di , troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
-<s>Inoltre, tutto il giorno, tra {bound inferiore} e {bound superiore}, troviamo un problema di strati deboli persistenti. Soprattutto nelle esposizioni partendo da Ovest passando Nord e Est.</s>
+<s>tutto il giorno, al di sopra di 2200 metri, troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
+<s>Inoltre, tutto il giorno, tra 2200 metri e 2700 metri, troviamo un problema di strati deboli persistenti. Soprattutto nelle esposizioni partendo da Ovest passando Nord e Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Gli accumuli di neve ventata degli ultimi giorni sono instabili al di sopra dei 2200 m circa. Questi ultimi rappresentano la principale fonte di pericolo. Il numero e le dimensioni dei punti pericolosi aumenteranno con l'altitudine. Sfavorevoli sono soprattutto i punti di passaggio da poca a molta neve, soprattutto sui pendii ombreggiati molto ripidi e nelle zone in prossimità delle creste. Con il rialzo termico e l'irradiazione solare diurni, sono ancora possibili valanghe umide di neve a debole coesione per lo più di piccole dimensioni.</s></p>
@@ -115,8 +115,8 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.5: 
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>tutto il giorno, al di sopra di , troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Ovest passando Nord e Sud-Est.</s>
-<s>Inoltre, tutto il giorno, al di sopra di , troviamo un problema di strati deboli persistenti. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
+<s>tutto il giorno, al di sopra di 2300 metri, troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Ovest passando Nord e Sud-Est.</s>
+<s>Inoltre, tutto il giorno, al di sopra di 2300 metri, troviamo un problema di strati deboli persistenti. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Con neve fresca e vento forte proveniente dai quadranti settentrionali soprattutto nelle zone in prossimità delle creste, nelle conche e nei canaloni si sono formati accumuli di neve ventata. Soprattutto sui pendii carichi di neve ventata le valanghe possono facilmente subire un distacco e raggiungere dimensioni pericolose. Principalmente nelle regioni con tanta neve e in alta montagna, i punti pericolosi sono più frequenti e il pericolo superiore. I punti pericolosi sono facilmente individuabili dall'escursionista esperto. Oltre al pericolo di seppellimento, occorre fare attenzione anche al pericolo di trascinamento e caduta.</s></p>
@@ -148,7 +148,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.5: 
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>tutto il giorno, al di sopra di , troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
+<s>tutto il giorno, al di sopra di 2200 metri, troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Gli accumuli di neve ventata di più recente formazione rappresentano la principale fonte di pericolo, soprattutto sui pendii ombreggiati molto ripidi e nelle zone in prossimità delle creste, specialmente al di sopra dei 2200 m circa. Il numero e le dimensioni dei punti pericolosi aumenteranno con l'altitudine. Alle quote di bassa e media montagna in molti punti debole pericolo di valanghe.</s></p>
@@ -181,7 +181,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento.
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>tutto il giorno, al di sopra di , troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Est.</s>
+<s>tutto il giorno, al di sopra di 2200 metri, troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Gli accumuli di neve ventata rappresentano la principale fonte di pericolo. Gli accumuli di neve ventata si trovano soprattutto nelle zone in prossimità delle creste, nelle conche e nei canaloni così come in alta montagna. I punti pericolosi sono piuttosto rari e facili da individuare.</s></p>
