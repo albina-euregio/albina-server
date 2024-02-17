@@ -9,12 +9,17 @@
   <entry key="no_rating.long">Senza Valutazione</entry>
   <entry key="low">debole</entry>
   <entry key="low.long">Grado di pericolo 1 - Debole</entry>
+  <entry key="low.speech">pericolo valanghe debole, dunque grado uno</entry>
   <entry key="moderate">moderato</entry>
   <entry key="moderate.long">Grado di pericolo 2 - Moderato</entry>
+  <entry key="moderate.speech">pericolo valanghe moderato, dunque grado due</entry>
   <entry key="considerable">marcato</entry>
   <entry key="considerable.long">Grado di pericolo 3 - Marcato</entry>
+  <entry key="considerable.speech">pericolo valanghe marcato, dunque grado tre</entry>
   <entry key="high">forte</entry>
   <entry key="high.long">Grado di pericolo 4 - Forte</entry>
+  <entry key="high.speech">pericolo valanghe forte, dunque grado quattro</entry>
   <entry key="very_high">molto forte</entry>
   <entry key="very_high.long">Grado di pericolo 5 - Molto Forte</entry>
+  <entry key="very_high.speech">pericolo valanghe molto forte, dunque grado cinque</entry>
 </properties>

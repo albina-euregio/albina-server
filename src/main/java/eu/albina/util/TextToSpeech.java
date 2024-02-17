@@ -49,7 +49,7 @@ import java.util.stream.Stream;
 
 public interface TextToSpeech {
 	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
-	Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(LanguageCode.de, LanguageCode.en));
+	Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(LanguageCode.de, LanguageCode.en, LanguageCode.it));
 	Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
 
 	class ScriptEngine {
