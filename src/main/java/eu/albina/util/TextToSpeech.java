@@ -88,6 +88,9 @@ public interface TextToSpeech {
 				if (i > 0) {
 					avalancheProblemText = lang.getBundleString("speech.furthermore", Map.of("text", avalancheProblemText));
 				}
+				if (lang == LanguageCode.it) {
+					avalancheProblemText = avalancheProblemText.replace("di limite del bosco", "del limite del bosco");
+				}
 				String aspectsText = aspectsText(Objects.requireNonNullElse(avalancheProblem.getAspects(), List.of()));
 				return String.join(" ", avalancheProblemText, aspectsText);
 			}).map(this::sentence));

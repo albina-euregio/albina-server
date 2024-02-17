@@ -14,7 +14,7 @@
 <s>nella prima parte della giornata, al di sopra di 2000 metri, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
 <s>Inoltre, nella prima parte della giornata, al di sotto di 2400 metri, troviamo un problema di valanghe di slittamento. Ciò in tutte le esposizioni</s>
 <s>Inoltre, più tardi nella giornata, al di sopra di 2000 metri, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
-<s>Inoltre, più tardi nella giornata, al di sopra di limite del bosco, troviamo un problema di neve fresca. Ciò in tutte le esposizioni</s>
+<s>Inoltre, più tardi nella giornata, al di sopra del limite del bosco, troviamo un problema di neve fresca. Ciò in tutte le esposizioni</s>
 <s>Inoltre, più tardi nella giornata, al di sotto di 2400 metri, troviamo un problema di valanghe di slittamento. Ciò in tutte le esposizioni</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -49,9 +49,9 @@ Abbiamo i seguenti situazioni tipo: st.4: freddo su caldo / caldo su freddo, st.
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>nella prima parte della giornata, al di sopra di limite del bosco, troviamo un problema di lastroni da vento. Ciò in tutte le esposizioni</s>
+<s>nella prima parte della giornata, al di sopra del limite del bosco, troviamo un problema di lastroni da vento. Ciò in tutte le esposizioni</s>
 <s>Inoltre, nella prima parte della giornata, al di sopra di 2200 metri, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
-<s>Inoltre, più tardi nella giornata, al di sopra di limite del bosco, troviamo un problema di neve fresca. Ciò in tutte le esposizioni</s>
+<s>Inoltre, più tardi nella giornata, al di sopra del limite del bosco, troviamo un problema di neve fresca. Ciò in tutte le esposizioni</s>
 <s>Inoltre, più tardi nella giornata, al di sopra di 2200 metri, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
 <s>Inoltre, più tardi nella giornata, al di sotto di 2400 metri, troviamo un problema di valanghe di slittamento. Ciò in tutte le esposizioni</s>
 </p>
@@ -87,9 +87,9 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.4: 
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>nella prima parte della giornata, al di sopra di limite del bosco, troviamo un problema di lastroni da vento. Ciò in tutte le esposizioni</s>
+<s>nella prima parte della giornata, al di sopra del limite del bosco, troviamo un problema di lastroni da vento. Ciò in tutte le esposizioni</s>
 <s>Inoltre, nella prima parte della giornata, al di sopra di 2200 metri, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
-<s>Inoltre, più tardi nella giornata, al di sopra di limite del bosco, troviamo un problema di neve fresca. Ciò in tutte le esposizioni</s>
+<s>Inoltre, più tardi nella giornata, al di sopra del limite del bosco, troviamo un problema di neve fresca. Ciò in tutte le esposizioni</s>
 <s>Inoltre, più tardi nella giornata, al di sopra di 2200 metri, troviamo un problema di strati deboli persistenti. Ciò in tutte le esposizioni</s>
 <s>Inoltre, più tardi nella giornata, al di sotto di 2400 metri, troviamo un problema di valanghe di slittamento. Ciò in tutte le esposizioni</s>
 </p>
@@ -125,8 +125,8 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.4: 
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>nella prima parte della giornata, al di sopra di limite del bosco, troviamo un problema di lastroni da vento. Ciò in tutte le esposizioni</s>
-<s>Inoltre, più tardi nella giornata, al di sopra di limite del bosco, troviamo un problema di neve fresca. Ciò in tutte le esposizioni</s>
+<s>nella prima parte della giornata, al di sopra del limite del bosco, troviamo un problema di lastroni da vento. Ciò in tutte le esposizioni</s>
+<s>Inoltre, più tardi nella giornata, al di sopra del limite del bosco, troviamo un problema di neve fresca. Ciò in tutte le esposizioni</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>La neve fresca e gli accumuli di neve ventata che si formeranno a livello isolato possono subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali. Punti pericolosi si trovano al di sopra del limite del bosco così come in prossimità del limite del bosco. Con l'intensificarsi delle nevicate, nel corso della giornata i punti pericolosi aumenteranno. Essi sono in parte innevati e quindi difficili da individuare. Attenzione soprattutto nelle zone in prossimità delle creste, nelle conche e nei canaloni. Le valanghe sono per lo più di dimensioni medie. <break time="1s"/> <break time="1s"/> Sui pendii erbosi ripidi, sono possibili valanghe per scivolamento di neve di piccole e, a livello isolato, di medie dimensioni. Ciò soprattutto nelle regioni con tanta neve.</s></p>
@@ -161,7 +161,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento.
 <break time="1s" strength="strong"></break>
 <p>
 <s>nella prima parte della giornata, al di sopra di 2400 metri, troviamo un problema di lastroni da vento. Soprattutto nelle esposizioni partendo da Nord-Ovest passando Nord e Nord-Est.</s>
-<s>Inoltre, più tardi nella giornata, al di sopra di limite del bosco, troviamo un problema di lastroni da vento. Ciò in tutte le esposizioni</s>
+<s>Inoltre, più tardi nella giornata, al di sopra del limite del bosco, troviamo un problema di lastroni da vento. Ciò in tutte le esposizioni</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Con neve fresca e vento forte proveniente da sud ovest nella giornata di venerdì principalmente nelle conche, nei canaloni e dietro ai cambi di pendenza si formeranno accumuli di neve ventata. Gli accumuli di neve ventata possono subire un distacco in seguito al passaggio di un singolo appassionato di sport invernali a tutte le esposizioni al di sopra del limite del bosco. Con l'intensificarsi delle nevicate, nel corso della giornata il numero e le dimensioni dei punti pericolosi aumenteranno. Oltre al pericolo di seppellimento, occorre fare attenzione anche al pericolo di trascinamento e caduta. <break time="1s"/> Attualmente il servizio di previsione valanghe dispone di informazioni limitate. Il pericolo di valanghe dovrebbe quindi essere valutato con particolare attenzione sul posto.</s></p>
