@@ -286,6 +286,7 @@ public interface TextToSpeech {
 		}
 
 		VoiceSelectionParams voice() {
+			// https://cloud.google.com/text-to-speech/docs/voices
 			if (lang == LanguageCode.de && gender == SsmlVoiceGender.FEMALE) {
 				return VoiceSelectionParams.newBuilder()
 					.setLanguageCode("de-DE")
@@ -309,6 +310,18 @@ public interface TextToSpeech {
 					.setLanguageCode("en-GB")
 					.setName("en-GB-Wavenet-B")
 					.setSsmlGender(SsmlVoiceGender.MALE)
+					.build();
+			} else if (lang == LanguageCode.it && gender == SsmlVoiceGender.MALE) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("it-IT")
+					.setName("it-IT-Wavenet-C")
+					.setSsmlGender(SsmlVoiceGender.MALE)
+					.build();
+			} else if (lang == LanguageCode.it && gender == SsmlVoiceGender.FEMALE) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("it-IT")
+					.setName("it-IT-Wavenet-A")
+					.setSsmlGender(SsmlVoiceGender.FEMALE)
 					.build();
 			}
 			throw new IllegalArgumentException();
