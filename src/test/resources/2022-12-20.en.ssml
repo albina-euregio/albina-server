@@ -1,3 +1,10 @@
+<!--
+language_code: "en-GB"
+name: "en-GB-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -31,6 +38,13 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 </speak>
 
 
+<!--
+language_code: "en-GB"
+name: "en-GB-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -64,6 +78,13 @@ We have the following danger patterns: dp.1: deep persistent weak layer.
 </speak>
 
 
+<!--
+language_code: "en-GB"
+name: "en-GB-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -98,6 +119,13 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 </speak>
 
 
+<!--
+language_code: "en-GB"
+name: "en-GB-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -131,6 +159,13 @@ We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: g
 </speak>
 
 
+<!--
+language_code: "en-GB"
+name: "en-GB-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>

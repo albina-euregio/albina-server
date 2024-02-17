@@ -1,3 +1,11 @@
+<!--
+language_code: "de-DE"
+name: "de-DE-Standard-E"
+ssml_gender: MALE
+audio_encoding: MP3
+pitch: -2.0
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -35,6 +43,14 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.5: s
 </speak>
 
 
+<!--
+language_code: "de-DE"
+name: "de-DE-Standard-E"
+ssml_gender: MALE
+audio_encoding: MP3
+pitch: -2.0
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -69,6 +85,14 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 </speak>
 
 
+<!--
+language_code: "de-DE"
+name: "de-DE-Standard-E"
+ssml_gender: MALE
+audio_encoding: MP3
+pitch: -2.0
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -103,6 +127,14 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.5: s
 </speak>
 
 
+<!--
+language_code: "de-DE"
+name: "de-DE-Standard-E"
+ssml_gender: MALE
+audio_encoding: MP3
+pitch: -2.0
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -136,6 +168,14 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.5: s
 </speak>
 
 
+<!--
+language_code: "de-DE"
+name: "de-DE-Standard-E"
+ssml_gender: MALE
+audio_encoding: MP3
+pitch: -2.0
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -169,6 +209,14 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 </speak>
 
 
+<!--
+language_code: "de-DE"
+name: "de-DE-Standard-E"
+ssml_gender: MALE
+audio_encoding: MP3
+pitch: -2.0
+effects_profile_id: "handset-class-device"
+-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>

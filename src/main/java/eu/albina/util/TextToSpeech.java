@@ -342,7 +342,11 @@ public interface TextToSpeech {
 	}
 
 	static String createScript(AvalancheBulletin bulletin) {
-		return new ScriptEngine(bulletin).createScript();
+		ScriptEngine scriptEngine = new ScriptEngine(bulletin);
+		String ssml = scriptEngine.createScript();
+		VoiceSelectionParams voice = scriptEngine.voice();
+		AudioConfig audioConfig = scriptEngine.audioConfig();
+		return String.format("<!--%n%s%s-->%n%s", voice, audioConfig, ssml);
 	}
 
 	static ByteString createAudioFile(AvalancheBulletin bulletin) throws Exception {
