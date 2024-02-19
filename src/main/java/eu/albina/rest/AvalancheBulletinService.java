@@ -18,7 +18,6 @@ package eu.albina.rest;
 
 import java.io.File;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -374,7 +373,7 @@ public class AvalancheBulletinService {
 			return Response.status(400).type(MediaType.TEXT_PLAIN).entity(e.toString().toString()).build();
 		}
 	}
-	
+
 	@POST
 	@Secured({ Role.FORECASTER, Role.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -401,15 +400,7 @@ public class AvalancheBulletinService {
 				JSONObject bulletinJson = new JSONObject(bulletinString);
 				AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser);
 
-				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-						.updateBulletin(bulletin, startDate, endDate, region);
-
-				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
-
-				// save report for super regions
-				for (Region superRegion : region.getSuperRegions()) {
-					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
-				}
+				AvalancheBulletinController.getInstance().updateBulletin(bulletin, startDate, endDate, region, user);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -489,15 +480,8 @@ public class AvalancheBulletinService {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-						.deleteBulletin(bulletinId, startDate, endDate, region);
+				AvalancheBulletinController.getInstance().deleteBulletin(bulletinId, startDate, endDate, region, user);
 
-				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
-
-				// save report for super regions
-				for (Region superRegion : region.getSuperRegions()) {
-					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
-				}
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -537,15 +521,7 @@ public class AvalancheBulletinService {
 					.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
 					.collect(Collectors.toList());
 
-				Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-						.saveBulletins(bulletins, startDate, endDate, region);
-
-				AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
-
-				// save report for super regions
-				for (Region superRegion : region.getSuperRegions()) {
-					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
-				}
+				AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -589,13 +565,7 @@ public class AvalancheBulletinService {
 						.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
 						.collect(Collectors.toList());
 
-					Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-						.saveBulletins(bulletins, startDate, endDate, region);
-					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user);
-					// save report for super regions
-					for (Region superRegion : region.getSuperRegions()) {
-						AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user);
-					}
+					AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
 
 					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
 					try {

@@ -154,7 +154,7 @@ public class AvalancheBulletinController {
 	 *             if a micro region is defined twice in the bulletins
 	 */
 	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> newBulletins, Instant startDate,
-			Instant endDate, Region region) throws AlbinaException {
+			Instant endDate, Region region, User user) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
 		if (checkBulletinsForDuplicateRegion(newBulletins, region))
@@ -299,6 +299,13 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : resultBulletins.values())
 				initializeBulletin(bulletin);
 
+
+			AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, region, user, entityManager);
+			// save report for super regions
+			for (Region superRegion : region.getSuperRegions()) {
+				AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, superRegion, user, entityManager);
+			}
+
 			return resultBulletins;
 		});
 	}
@@ -337,7 +344,7 @@ public class AvalancheBulletinController {
 					entityManager.remove(loadedBulletin);
 				}
 			}
-			
+
 			// Bulletin has to be created
 			newBulletin.setId(null);
 			entityManager.persist(newBulletin);
@@ -362,7 +369,7 @@ public class AvalancheBulletinController {
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
 	public Map<String, AvalancheBulletin> updateBulletin(AvalancheBulletin updatedBulletin, Instant startDate, Instant endDate,
-			Region region) {
+			Region region, User user) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
@@ -386,13 +393,21 @@ public class AvalancheBulletinController {
 					}
 				}
 			}
-			
+
 			// Bulletin has to be updated
 			entityManager.merge(updatedBulletin);
 			resultBulletins.put(updatedBulletin.getId(), updatedBulletin);
 
 			for (AvalancheBulletin bulletin : resultBulletins.values())
 				initializeBulletin(bulletin);
+
+			AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, region, user, entityManager);
+			// save report for super regions
+			for (Region superRegion : region.getSuperRegions()) {
+				AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, superRegion, user, entityManager);
+			}
+
+			logger.info("Bulletin {} for region {} updated by {}", updatedBulletin.getId(), region.getId(), user);
 
 			return resultBulletins;
 		});
@@ -410,7 +425,7 @@ public class AvalancheBulletinController {
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
     public Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
-            Region region) {
+			Region region, User user) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
@@ -426,6 +441,12 @@ public class AvalancheBulletinController {
 
 			for (AvalancheBulletin bulletin : resultBulletins.values())
 				initializeBulletin(bulletin);
+
+			AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, region, user, entityManager);
+			// save report for super regions
+			for (Region superRegion : region.getSuperRegions()) {
+				AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, superRegion, user, entityManager);
+			}
 
 			return resultBulletins;
 		});

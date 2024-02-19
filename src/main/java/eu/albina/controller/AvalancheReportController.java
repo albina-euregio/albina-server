@@ -416,33 +416,34 @@ public class AvalancheReportController {
 	 */
 	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user)
 			throws AlbinaException {
-		HibernateUtil.getInstance().runTransaction(entityManager -> {
+		HibernateUtil.getInstance().runTransaction(entityManager -> saveReport(avalancheBulletins, date, region, user, entityManager));
+	}
 
-			AvalancheReport latestReport = getInternalReport(date, region, entityManager);
-			BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
-			BulletinStatus newStatus = deriveStatus(latestStatus);
+	Void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user, EntityManager entityManager) {
+		AvalancheReport latestReport = getInternalReport(date, region, entityManager);
+		BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
+		BulletinStatus newStatus = deriveStatus(latestStatus);
 
-			// reuse existing report if status does not change
-			AvalancheReport avalancheReport = latestReport != null && Objects.equals(latestStatus, newStatus)
-				? latestReport
-				: new AvalancheReport();
-			avalancheReport.setStatus(newStatus);
-			avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
-			avalancheReport.setUser(user);
-			avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
-			avalancheReport.setRegion(region);
-			avalancheReport
-					.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region, false).toString());
+		// reuse existing report if status does not change
+		AvalancheReport avalancheReport = latestReport != null && Objects.equals(latestStatus, newStatus)
+			? latestReport
+			: new AvalancheReport();
+		avalancheReport.setStatus(newStatus);
+		avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
+		avalancheReport.setUser(user);
+		avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
+		avalancheReport.setRegion(region);
+		avalancheReport
+				.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region, false).toString());
 
-			entityManager.persist(avalancheReport);
+		entityManager.persist(avalancheReport);
 
-			BulletinUpdate bulletinUpdate = new BulletinUpdate(region.getId(), date, avalancheReport.getStatus());
-			AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
+		BulletinUpdate bulletinUpdate = new BulletinUpdate(region.getId(), date, avalancheReport.getStatus());
+		AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 
-			logger.info("Report for region {} saved by {}", region.getId(), user);
+		logger.info("Report for region {} saved by {}", region.getId(), user);
 
-			return null;
-		});
+		return null;
 	}
 
 	private static BulletinStatus deriveStatus(BulletinStatus latestStatus) {
