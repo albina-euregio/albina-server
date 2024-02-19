@@ -153,7 +153,7 @@ public class AvalancheBulletinController {
 	 * @throws AlbinaException
 	 *             if a micro region is defined twice in the bulletins
 	 */
-	public Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> newBulletins, Instant startDate,
+	public synchronized Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> newBulletins, Instant startDate,
 			Instant endDate, Region region, User user) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
@@ -321,7 +321,7 @@ public class AvalancheBulletinController {
 	 *            the active region of the user who is creating the bulletin
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
-	public Map<String, AvalancheBulletin> createBulletin(AvalancheBulletin newBulletin, Instant startDate, Instant endDate,
+	public synchronized Map<String, AvalancheBulletin> createBulletin(AvalancheBulletin newBulletin, Instant startDate, Instant endDate,
 			Region region) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
@@ -424,7 +424,7 @@ public class AvalancheBulletinController {
 	 *            the active region of the user who is deleting the bulletin
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
-    public Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
+    public synchronized Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
 			Region region, User user) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
