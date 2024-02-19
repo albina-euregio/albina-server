@@ -439,7 +439,7 @@ public class AvalancheReportController {
 			BulletinUpdate bulletinUpdate = new BulletinUpdate(region.getId(), date, avalancheReport.getStatus());
 			AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 
-			logger.info("Report for region {} saved", region.getId());
+			logger.info("Report for region {} saved by {}", region.getId(), user);
 
 			return null;
 		});
@@ -535,7 +535,7 @@ public class AvalancheReportController {
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
 			AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 
-			logger.info("Report for region {} published", region.getId());
+			logger.info("Report for region {} published by {}", region.getId(), user);
 
 			return avalancheReport;
 		});
@@ -616,7 +616,7 @@ public class AvalancheReportController {
 				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
-			logger.info("Report for region {} submitted", region.getId());
+			logger.info("Report for region {} submitted by {}", region.getId(), user);
 
 			return null;
 		});

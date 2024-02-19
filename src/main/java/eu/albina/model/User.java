@@ -284,4 +284,9 @@ public class User {
 	public boolean hasRole(Role role) {
 		return getRoles().stream().anyMatch(userRole -> userRole.equals(role));
 	}
+
+	@Override
+	public String toString() {
+		return email;
+	}
 }
