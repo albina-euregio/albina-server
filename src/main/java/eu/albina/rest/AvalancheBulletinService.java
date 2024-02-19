@@ -404,9 +404,8 @@ public class AvalancheBulletinService {
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
-			JSONObject jsonObject = new JSONObject();
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
+			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return getJSONBulletins(date, regionIDs);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -449,9 +448,8 @@ public class AvalancheBulletinService {
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
-			JSONObject jsonObject = new JSONObject();
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
+			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return getJSONBulletins(date, regionIDs);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -485,9 +483,8 @@ public class AvalancheBulletinService {
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
-			JSONObject jsonObject = new JSONObject();
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
+			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return getJSONBulletins(date, regionIDs);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -525,9 +522,8 @@ public class AvalancheBulletinService {
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
-			JSONObject jsonObject = new JSONObject();
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
+			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return getJSONBulletins(date, regionIDs);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
