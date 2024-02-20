@@ -9,12 +9,17 @@
   <entry key="no_rating.long">Sense Grau de Perill</entry>
   <entry key="low">feble</entry>
   <entry key="low.long">Grau de Perill 1 - Feble</entry>
+  <entry key="low.speech">low avalanche danger, so danger level one</entry>
   <entry key="moderate">moderat</entry>
   <entry key="moderate.long">Grau de Perill 2 - Moderat</entry>
+  <entry key="moderate.speech">moderate avalanche danger, so danger level two</entry>
   <entry key="considerable">Marcat</entry>
   <entry key="considerable.long">Grau de Perill 3 - Marcat</entry>
+  <entry key="considerable.speech">considerable avalanche danger, so danger level three</entry>
   <entry key="high">Fort</entry>
   <entry key="high.long">Grau de Perill 4 - Fort</entry>
+  <entry key="high.speech">high avalanche danger, so danger level four</entry>
   <entry key="very_high">molt fort</entry>
   <entry key="very_high.long">Grau de Perill 5 - Molt Fort</entry>
+  <entry key="very_high.speech">very high avalanche danger, so danger level five</entry>
 </properties>

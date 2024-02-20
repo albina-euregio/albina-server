@@ -9,12 +9,17 @@
   <entry key="no_rating.long">Pas Noté</entry>
   <entry key="low">faible</entry>
   <entry key="low.long">Degré de danger 1 - Faible</entry>
+  <entry key="low.speech">low avalanche danger, so danger level one</entry>
   <entry key="moderate">limité</entry>
   <entry key="moderate.long">Degré de danger 2 - Limité</entry>
+  <entry key="moderate.speech">moderate avalanche danger, so danger level two</entry>
   <entry key="considerable">marqué</entry>
   <entry key="considerable.long">Degré de danger 3 - Marqué</entry>
+  <entry key="considerable.speech">considerable avalanche danger, so danger level three</entry>
   <entry key="high">fort</entry>
   <entry key="high.long">Degré de danger 4 - Fort</entry>
+  <entry key="high.speech">high avalanche danger, so danger level four</entry>
   <entry key="very_high">très fort</entry>
   <entry key="very_high.long">Degré de danger 5 - Très Fort</entry>
+  <entry key="very_high.speech">very high avalanche danger, so danger level five</entry>
 </properties>
