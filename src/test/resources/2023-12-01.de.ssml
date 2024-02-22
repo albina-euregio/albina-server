@@ -1,9 +1,8 @@
 <!--
 language_code: "de-DE"
-name: "de-DE-Neural2-C"
+name: "de-DE-Wavenet-F"
 ssml_gender: FEMALE
 audio_encoding: MP3
-speaking_rate: 1.06
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -46,10 +45,9 @@ Wir finden die folgenden Gefahrenmuster: gm.4: kalt auf warm / warm auf kalt, gm
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Neural2-C"
+name: "de-DE-Wavenet-F"
 ssml_gender: FEMALE
 audio_encoding: MP3
-speaking_rate: 1.06
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -92,10 +90,9 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
+name: "de-DE-Wavenet-E"
 ssml_gender: MALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -138,10 +135,9 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
+name: "de-DE-Wavenet-E"
 ssml_gender: MALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -181,10 +177,9 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Neural2-C"
+name: "de-DE-Wavenet-F"
 ssml_gender: FEMALE
 audio_encoding: MP3
-speaking_rate: 1.06
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -224,10 +219,9 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Neural2-C"
+name: "de-DE-Wavenet-F"
 ssml_gender: FEMALE
 audio_encoding: MP3
-speaking_rate: 1.06
 effects_profile_id: "handset-class-device"
 -->
 <speak>
