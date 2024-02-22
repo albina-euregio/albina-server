@@ -43,10 +43,10 @@ Wir finden die folgenden Gefahrenmuster: gm.4: kalt auf warm / warm auf kalt, gm
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
-ssml_gender: MALE
+name: "de-DE-Neural2-C"
+ssml_gender: FEMALE
 audio_encoding: MP3
-pitch: -2.0
+speaking_rate: 1.06
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -167,10 +167,10 @@ effects_profile_id: "handset-class-device"
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
-ssml_gender: MALE
+name: "de-DE-Neural2-C"
+ssml_gender: FEMALE
 audio_encoding: MP3
-pitch: -2.0
+speaking_rate: 1.06
 effects_profile_id: "handset-class-device"
 -->
 <speak>

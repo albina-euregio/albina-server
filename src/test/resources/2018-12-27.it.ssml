@@ -44,8 +44,8 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.5: 
 
 <!--
 language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
+name: "it-IT-Wavenet-A"
+ssml_gender: FEMALE
 audio_encoding: MP3
 effects_profile_id: "handset-class-device"
 -->
@@ -85,8 +85,8 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 
 <!--
 language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
+name: "it-IT-Wavenet-A"
+ssml_gender: FEMALE
 audio_encoding: MP3
 effects_profile_id: "handset-class-device"
 -->
@@ -206,8 +206,8 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento.
 
 <!--
 language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
+name: "it-IT-Wavenet-A"
+ssml_gender: FEMALE
 audio_encoding: MP3
 effects_profile_id: "handset-class-device"
 -->

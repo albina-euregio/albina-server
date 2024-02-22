@@ -62,7 +62,7 @@ public interface TextToSpeech {
 		private ScriptEngine(AvalancheBulletin bulletin) {
 			this.bulletin = bulletin;
 			this.lang = LanguageCode.valueOf(bulletin.getLang());
-			this.gender = bulletin.getBulletinID().chars().sum() == 1 ? SsmlVoiceGender.FEMALE : SsmlVoiceGender.MALE;
+			this.gender = bulletin.getBulletinID().chars().sum() % 2 == 1 ? SsmlVoiceGender.FEMALE : SsmlVoiceGender.MALE;
 		}
 
 		String createScript() {
