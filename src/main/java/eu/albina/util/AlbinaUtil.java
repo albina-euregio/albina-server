@@ -162,11 +162,18 @@ public interface AlbinaUtil {
 
 	static String getPublicationDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
 		Instant instant = getPublicationDate(bulletins);
+		if (instant == null) {
+			return "";
+		}
         return instant.atZone(localZone()).format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication")));
     }
 
 	static String getPublicationDateDirectory(List<AvalancheBulletin> bulletins) {
 		Instant instant = getPublicationDate(bulletins);
+		if (instant == null) {
+			// PDF preview, for instance
+			return "";
+		}
 		return getPublicationDateDirectory(instant);
 	}
 
