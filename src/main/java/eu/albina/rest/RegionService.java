@@ -64,7 +64,7 @@ public class RegionService {
 	UriInfo uri;
 
 	@GET
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ public class RegionService {
 
 	@GET
 	@Path("/region")
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
