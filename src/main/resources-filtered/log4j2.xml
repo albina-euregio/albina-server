@@ -28,7 +28,7 @@
 		<RollingFile name="FILE"
 					 fileName="${env:ALBINA_LOG_FILE}"
 					 filePattern="${env:ALBINA_LOG_FILE}.%d{yyyy-MM-dd}.log.gz">
-			<PatternLayout pattern="${env:ALBINA_LOG_PREFIX} %date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
+			<PatternLayout pattern="${env:ALBINA_LOG_PREFIX}%date{ISO8601} [%thread] %-5level %logger:%line - %message%n"/>
 			<TimeBasedTriggeringPolicy/>
 			<DefaultRolloverStrategy/>
 		</RollingFile>
