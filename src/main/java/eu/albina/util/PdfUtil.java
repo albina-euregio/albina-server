@@ -595,7 +595,7 @@ public class PdfUtil {
 		table.addCell(getAvalancheProblemCell(avalancheProblem.getAvalancheProblem()));
 		table.addCell(getAspectsCell(avalancheProblem.getAspects()));
 		table.addCell(getElevationCell(avalancheProblem, table));
-		table.addCell(getMatrixInformationCell(avalancheProblem.getEawsMatrixInformation()));
+		table.addCell(getMatrixInformationCell(avalancheProblem.getAvalancheProblem(), avalancheProblem.getEawsMatrixInformation()));
 	}
 
 	private Cell getAvalancheProblemCell(eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
@@ -818,12 +818,12 @@ public class PdfUtil {
 		return cell;
 	}
 
-	private Cell getMatrixInformationCell(EawsMatrixInformation matrixInformation) {
+	private Cell getMatrixInformationCell(eu.albina.model.enumerations.AvalancheProblem avalancheProblem, EawsMatrixInformation matrixInformation) {
 		if (matrixInformation == null) {
 			return new Cell().setBorder(null);
 		}
 		Paragraph paragraph = new Paragraph().setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
-		if (matrixInformation.getSnowpackStability() != null) {
+		if (!avalancheProblem.equals(eu.albina.model.enumerations.AvalancheProblem.gliding_snow) && matrixInformation.getSnowpackStability() != null) {
 			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability") + ": "));
 			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability." + matrixInformation.getSnowpackStability()) + "\n")
 				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
