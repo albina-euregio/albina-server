@@ -252,7 +252,7 @@ public class AvalancheBulletinController {
 
 						// own suggested regions are not possible (they are always in saved regions) -> nothing to add
 
-						// remove own published regions from original bulletin which are not present in new bulletin
+						// remove own published regions from original bulletin
 						tmpRegions = new HashSet<String>();
 						for (String publishedRegion : originalBulletin.getPublishedRegions()) {
 							if (publishedRegion.startsWith(region.getId()))
@@ -261,7 +261,14 @@ public class AvalancheBulletinController {
 						for (String tmpRegion : tmpRegions)
 							originalBulletin.getPublishedRegions().remove(tmpRegion);
 
-						// own published regions are not possible (they are always in saved regions) -> nothing to add
+						// add own published regions from new bulletin as saved regions to original bulletin
+						tmpRegions = new HashSet<String>();
+						for (String publishedRegion : newBulletin.getPublishedRegions()) {
+							if (publishedRegion.startsWith(region.getId()))
+								tmpRegions.add(publishedRegion);
+						}
+						for (String tmpRegion : tmpRegions)
+							originalBulletin.addSavedRegion(tmpRegion);
 					}
 
 					entityManager.merge(originalBulletin);
