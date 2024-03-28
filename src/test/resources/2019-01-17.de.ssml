@@ -1,9 +1,8 @@
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
+name: "de-DE-Wavenet-E"
 ssml_gender: MALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -42,10 +41,9 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
+name: "de-DE-Wavenet-E"
 ssml_gender: MALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -84,10 +82,9 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
+name: "de-DE-Wavenet-E"
 ssml_gender: MALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -126,10 +123,9 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
+name: "de-DE-Wavenet-E"
 ssml_gender: MALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -167,10 +163,9 @@ effects_profile_id: "handset-class-device"
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
+name: "de-DE-Wavenet-E"
 ssml_gender: MALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -207,10 +202,9 @@ effects_profile_id: "handset-class-device"
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
-ssml_gender: MALE
+name: "de-DE-Wavenet-F"
+ssml_gender: FEMALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -247,10 +241,9 @@ effects_profile_id: "handset-class-device"
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
-ssml_gender: MALE
+name: "de-DE-Wavenet-F"
+ssml_gender: FEMALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -287,10 +280,9 @@ effects_profile_id: "handset-class-device"
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
-ssml_gender: MALE
+name: "de-DE-Wavenet-F"
+ssml_gender: FEMALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -328,10 +320,9 @@ effects_profile_id: "handset-class-device"
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
+name: "de-DE-Wavenet-E"
 ssml_gender: MALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>
@@ -369,10 +360,9 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 
 <!--
 language_code: "de-DE"
-name: "de-DE-Standard-E"
-ssml_gender: MALE
+name: "de-DE-Wavenet-F"
+ssml_gender: FEMALE
 audio_encoding: MP3
-pitch: -2.0
 effects_profile_id: "handset-class-device"
 -->
 <speak>

@@ -62,7 +62,7 @@ public interface TextToSpeech {
 		private ScriptEngine(AvalancheBulletin bulletin) {
 			this.bulletin = bulletin;
 			this.lang = LanguageCode.valueOf(bulletin.getLang());
-			this.gender = bulletin.getBulletinID().chars().sum() == 1 ? SsmlVoiceGender.FEMALE : SsmlVoiceGender.MALE;
+			this.gender = bulletin.getBulletinID().chars().sum() % 2 == 1 ? SsmlVoiceGender.FEMALE : SsmlVoiceGender.MALE;
 		}
 
 		String createScript() {
@@ -290,13 +290,13 @@ public interface TextToSpeech {
 			if (lang == LanguageCode.de && gender == SsmlVoiceGender.FEMALE) {
 				return VoiceSelectionParams.newBuilder()
 					.setLanguageCode("de-DE")
-					.setName("de-DE-Neural2-C")
+					.setName("de-DE-Wavenet-F")
 					.setSsmlGender(SsmlVoiceGender.FEMALE)
 					.build();
 			} else if (lang == LanguageCode.de && gender == SsmlVoiceGender.MALE) {
 				return VoiceSelectionParams.newBuilder()
 					.setLanguageCode("de-DE")
-					.setName("de-DE-Standard-E")
+					.setName("de-DE-Wavenet-E")
 					.setSsmlGender(SsmlVoiceGender.MALE)
 					.build();
 			} else if (lang == LanguageCode.en && gender == SsmlVoiceGender.FEMALE) {
@@ -328,15 +328,10 @@ public interface TextToSpeech {
 		}
 
 		AudioConfig audioConfig() {
-			AudioConfig.Builder audioConfig = AudioConfig.newBuilder()
-				.setAudioEncoding(AudioEncoding.MP3)
-				.addEffectsProfileId("handset-class-device");
-			if (lang == LanguageCode.de && gender == SsmlVoiceGender.FEMALE) {
-				audioConfig.setSpeakingRate(1.06);
-			} else if (lang == LanguageCode.de && gender == SsmlVoiceGender.MALE) {
-				audioConfig.setPitch(-2.0);
-			}
-			return audioConfig.build();
+            return AudioConfig.newBuilder()
+                .setAudioEncoding(AudioEncoding.MP3)
+                .addEffectsProfileId("handset-class-device")
+				.build();
 		}
 
 	}

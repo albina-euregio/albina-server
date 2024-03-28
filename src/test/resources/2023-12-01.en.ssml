@@ -1,7 +1,7 @@
 <!--
 language_code: "en-GB"
-name: "en-GB-Wavenet-B"
-ssml_gender: MALE
+name: "en-GB-Wavenet-A"
+ssml_gender: FEMALE
 audio_encoding: MP3
 effects_profile_id: "handset-class-device"
 -->
@@ -45,8 +45,8 @@ We have the following danger patterns: dp.4: cold following warm / warm followin
 
 <!--
 language_code: "en-GB"
-name: "en-GB-Wavenet-B"
-ssml_gender: MALE
+name: "en-GB-Wavenet-A"
+ssml_gender: FEMALE
 audio_encoding: MP3
 effects_profile_id: "handset-class-device"
 -->
@@ -177,8 +177,8 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 
 <!--
 language_code: "en-GB"
-name: "en-GB-Wavenet-B"
-ssml_gender: MALE
+name: "en-GB-Wavenet-A"
+ssml_gender: FEMALE
 audio_encoding: MP3
 effects_profile_id: "handset-class-device"
 -->
@@ -219,8 +219,8 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 
 <!--
 language_code: "en-GB"
-name: "en-GB-Wavenet-B"
-ssml_gender: MALE
+name: "en-GB-Wavenet-A"
+ssml_gender: FEMALE
 audio_encoding: MP3
 effects_profile_id: "handset-class-device"
 -->
