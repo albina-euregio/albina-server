@@ -65,12 +65,6 @@
   <entry key="date-time-format"> dd.MM.yyyy</entry>
   <entry key="date-time-format.publication">dd MM yyyy, HH:mm</entry>
   <entry key="date-time-format.tendency"> dd MM yyyy</entry>
-  <entry key="daytime.fd">toute la journée</entry>
-  <entry key="daytime.fd.capitalized">Toute la journée</entry>
-  <entry key="daytime.am">Matin</entry>
-  <entry key="daytime.am.capitalized">Matin</entry>
-  <entry key="daytime.pm">Après-midi</entry>
-  <entry key="daytime.pm.capitalized">Après-midi</entry>
   <entry key="ext-file.regions.description">GeoJSON pour les régions ({0})</entry>
   <entry key="ext-file.thumbnail.description">Carte simplifiée de degré de danger</entry>
   <entry key="ext-file.simple-link.description">Lien vers le site web simplifié</entry>
@@ -126,10 +120,10 @@
   <entry key="problem.avalanche-size.extreme">extreme</entry>
   <entry key="valid-time-period.all_day">all day</entry>
   <entry key="valid-time-period.all_day.long">all day</entry>
-  <entry key="valid-time-period.earlier">AM</entry>
-  <entry key="valid-time-period.earlier.long">AM</entry>
-  <entry key="valid-time-period.later">PM</entry>
-  <entry key="valid-time-period.later.long">PM</entry>
+  <entry key="valid-time-period.earlier">earlier</entry>
+  <entry key="valid-time-period.earlier.long">earlier in the day</entry>
+  <entry key="valid-time-period.later">later</entry>
+  <entry key="valid-time-period.later.long">later in the day</entry>
   <entry key="speech.bulletin.update">Update of the avalanche report for {validityDate}.</entry>
   <entry key="speech.bulletin">Avalanche report for {validityDate}.</entry>
   <entry key="speech.furthermore">Furthermore, {text}</entry>

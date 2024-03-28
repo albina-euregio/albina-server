@@ -65,12 +65,6 @@
   <entry key="date-time-format"> dd.MM.yyyy</entry>
   <entry key="date-time-format.publication">dd.MM.yyyy 'um' HH:mm</entry>
   <entry key="date-time-format.tendency">, 'den' dd.MM.yyyy</entry>
-  <entry key="daytime.fd">ganzer Tag</entry>
-  <entry key="daytime.fd.capitalized">Ganzer Tag</entry>
-  <entry key="daytime.am">Vormittag</entry>
-  <entry key="daytime.am.capitalized">Vormittag</entry>
-  <entry key="daytime.pm">Nachmittag</entry>
-  <entry key="daytime.pm.capitalized">Nachmittag</entry>
   <entry key="ext-file.regions.description">GeoJSON für Regionen ({0})</entry>
   <entry key="ext-file.thumbnail.description">Vereinfachte Gefahrenstufenkarte der Region</entry>
   <entry key="ext-file.simple-link.description">Link zur vereinfachten Webseite</entry>
@@ -126,9 +120,9 @@
   <entry key="problem.avalanche-size.extreme">extrem</entry>
   <entry key="valid-time-period.all_day">Den ganzen Tag</entry>
   <entry key="valid-time-period.all_day.long">Den ganzen Tag</entry>
-  <entry key="valid-time-period.earlier">Früher am Tag</entry>
-  <entry key="valid-time-period.earlier.long">Zu Beginn des Tages</entry>
-  <entry key="valid-time-period.later">Später am Tag</entry>
+  <entry key="valid-time-period.earlier">früher</entry>
+  <entry key="valid-time-period.earlier.long">Früher am Tag</entry>
+  <entry key="valid-time-period.later">später</entry>
   <entry key="valid-time-period.later.long">Später am Tag</entry>
   <entry key="speech.bulletin.update">Update zum Lawinenreport für {validityDate}.</entry>
   <entry key="speech.bulletin">Lawinenreport für {validityDate}.</entry>
