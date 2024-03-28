@@ -14,11 +14,9 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.release>11</maven.compiler.release>
 		<jersey.version>2.40</jersey.version>
-		<jackson.version>2.15.2</jackson.version>
-		<log4j.version>2.20.0</log4j.version>
 		<slf4j.version>1.7.36</slf4j.version>
-		<hibernate.version>5.4.32.Final</hibernate.version>
-		<itextpdf.version>7.2.3</itextpdf.version>
+		<hibernate.version>5.6.15.Final</hibernate.version>
+		<itextpdf.version>7.2.6</itextpdf.version>
 	</properties>
 
 	<profiles>
@@ -87,6 +85,13 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-bom</artifactId>
+				<version>2.23.0</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
 				<groupId>org.glassfish.jersey</groupId>
 				<artifactId>jersey-bom</artifactId>
 				<version>${jersey.version}</version>
@@ -96,7 +101,7 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson</groupId>
 				<artifactId>jackson-bom</artifactId>
-				<version>${jackson.version}</version>
+				<version>2.16.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -127,7 +132,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>30.1.1-jre</version>
+			<version>33.0.0-jre</version>
 		</dependency>
 
 		<dependency>
@@ -142,8 +147,12 @@
 			<version>2.3.2</version>
 			<exclusions>
 				<exclusion>
+					<groupId>com.mchange</groupId>
 					<artifactId>c3p0</artifactId>
-					<groupId>c3p0</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.zaxxer</groupId>
+					<artifactId>HikariCP-java7</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -180,11 +189,6 @@
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.31</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.5.0-b01</version>
 		</dependency>
 
 		<!-- pdf -->
@@ -234,17 +238,14 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j.version}</version>
 		</dependency>
 
 		<!-- database -->
@@ -263,7 +264,7 @@
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
-			<version>8.1.0</version>
+			<version>8.3.0</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>com.google.protobuf</artifactId>
