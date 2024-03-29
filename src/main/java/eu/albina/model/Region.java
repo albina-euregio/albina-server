@@ -159,6 +159,12 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_AVALANCHE_PROBLEM_NO_DISTINCT_AVALANCHE_PROBLEM")
 	private boolean enableAvalancheProblemNoDistinctAvalancheProblem;
 
+	@Column(name = "ENABLE_OBSERVATIONS")
+	private boolean enableObservations;
+
+	@Column(name = "ENABLE_MODELLING")
+	private boolean enableModelling;
+
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
 
@@ -317,6 +323,10 @@ public class Region implements AvalancheInformationObject {
 			this.enableAvalancheProblemCornices = json.getBoolean("enableAvalancheProblemCornices");
 		if (json.has("enableAvalancheProblemNoDistinctAvalancheProblem") && !json.isNull("enableAvalancheProblemNoDistinctAvalancheProblem"))
 			this.enableAvalancheProblemNoDistinctAvalancheProblem = json.getBoolean("enableAvalancheProblemNoDistinctAvalancheProblem");
+		if (json.has("enableObservations") && !json.isNull("enableObservations"))
+			this.enableObservations = json.getBoolean("enableObservations");
+		if (json.has("enableModelling") && !json.isNull("enableModelling"))
+			this.enableModelling = json.getBoolean("enableModelling");
 		if (json.has("showMatrix") && !json.isNull("showMatrix"))
 			this.showMatrix = json.getBoolean("showMatrix");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
@@ -733,6 +743,22 @@ public class Region implements AvalancheInformationObject {
 		this.imageColorbarBwPath = imageColorbarBwPath;
 	}
 
+	public boolean isEnableObservations() {
+		return enableObservations;
+	}
+
+	public void setEnableObservations(boolean enableObservations) {
+		this.enableObservations = enableObservations;
+	}
+
+	public boolean isEnableModelling() {
+		return enableModelling;
+	}
+
+	public void setEnableModelling(boolean enableModelling) {
+		this.enableModelling = enableModelling;
+	}
+
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
@@ -795,6 +821,8 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableMediaFile", isEnableMediaFile());
 		json.put("enableAvalancheProblemCornices", isEnableAvalancheProblemCornices());
 		json.put("enableAvalancheProblemNoDistinctAvalancheProblem", isEnableAvalancheProblemNoDistinctAvalancheProblem());
+		json.put("enableObservations", isEnableObservations());
+		json.put("enableModelling", isEnableModelling());
 		json.put("showMatrix", isShowMatrix());
 		if (getServerInstance() != null) {
 			json.put("serverInstance", getServerInstance().toJSON());
