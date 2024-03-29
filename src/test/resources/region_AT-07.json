@@ -18,6 +18,8 @@
     "enableMediaFile": true,
     "enableAvalancheProblemCornices": false,
     "enableAvalancheProblemNoDistinctAvalancheProblem": false,
+	"enableObservations": false,
+	"enableModelling": false,
     "showMatrix": true,
     "pdfColor": "00ACFB",
     "emailColor": "1AABFF",
