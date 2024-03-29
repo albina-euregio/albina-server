@@ -946,10 +946,14 @@ public class PdfUtil {
 		return cell;
 	}
 
-	public static Image getImage(String resourceName) {
-		URL resource = Resources.getResource("images/" + resourceName);
-		ImageData imageData = ImageDataFactory.create(resource);
-		return new Image(imageData);
+	private final Map<String, Image> imageMap = new HashMap<>();
+
+	public Image getImage(String name) {
+		return imageMap.computeIfAbsent(name, resourceName -> {
+			URL resource = Resources.getResource("images/" + resourceName);
+			ImageData imageData = ImageDataFactory.create(resource);
+			return new Image(imageData);
+		});
 	}
 
 	private Color getDangerRatingColor(DangerRating dangerRating, boolean grayscale) {
