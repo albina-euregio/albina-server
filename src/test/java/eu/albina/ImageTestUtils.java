@@ -1,9 +1,13 @@
 package eu.albina;
 
+import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,20 +19,23 @@ public interface ImageTestUtils {
 	 * Compares the reference image file with the actual images given as {@link BufferedImage}.
 	 *
 	 * @param message                 message for assertions
-	 * @param reference               the reference image
-	 * @param image                   the actual image
+	 * @param referenceBytes          the reference image bytes
+	 * @param imageBytes              the actual image bytes
 	 * @param thresholdPixels         maximum number of differing pixels
 	 * @param thresholdTotalColorDiff maximum sum of color value differences
 	 * @param diffImageConsumer       a consumer for a rendered image highlighting the differing pixels, may be null
 	 */
 	static void assertImageEquals(
 		String message,
-		BufferedImage reference, BufferedImage image,
-		int thresholdPixels, int thresholdTotalColorDiff, Consumer<BufferedImage> diffImageConsumer) {
+		byte[] referenceBytes, byte[] imageBytes,
+		int thresholdPixels, int thresholdTotalColorDiff, Consumer<BufferedImage> diffImageConsumer) throws IOException {
 
 		// Adapted from ...
 		// Source: https://github.com/openstreetmap/josm/blob/master/test/functional/org/openstreetmap/josm/gui/mappaint/MapCSSRendererTest.java
 		// License: GNU General Public License v2 or later
+
+		BufferedImage reference = ImageIO.read(new ByteArrayInputStream(referenceBytes));
+		BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
 
 		assertEquals(image.getWidth(), reference.getWidth(), String.format("Images %s width", message));
 		assertEquals(image.getHeight(), reference.getHeight(), String.format("Images %s height", message));
@@ -94,12 +101,15 @@ public interface ImageTestUtils {
 			diffImageConsumer.accept(diffImage);
 		}
 
+		String referenceBase64 = Base64.getEncoder().encodeToString(referenceBytes);
+		String imageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+
 		if (differencePoints.size() > thresholdPixels) {
-			fail(String.format("Images %s differ at %d points, threshold is %d: %s", message,
-				differencePoints.size(), thresholdPixels, differences));
+			fail(String.format("Images %s differ at %d points, threshold is %d: %s %nReference image: %s %nImage: %s",
+				message, differencePoints.size(), thresholdPixels, differences, referenceBase64, imageBase64));
 		} else {
-			fail(String.format("Images %s differ too much in color, value is %d, permitted threshold is %d: %s", message,
-				colorDiffSum, thresholdTotalColorDiff, differences));
+			fail(String.format("Images %s differ too much in color, value is %d, permitted threshold is %d: %s %nReference image: %s %nImage: %s",
+				message, colorDiffSum, thresholdTotalColorDiff, differences, referenceBase64, imageBase64));
 		}
 	}
 }
