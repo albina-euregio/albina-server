@@ -18,6 +18,7 @@ package eu.albina.model.enumerations;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -36,8 +37,13 @@ import eu.albina.util.XMLResourceBundleControl;
  * @author Norbert Lanzanasto
  */
 public enum LanguageCode {
-	de(Locale.GERMAN), it(Locale.ITALIAN), en(Locale.ENGLISH), fr(Locale.FRENCH), es(new Locale("es")), ca(
-			new Locale("ca")), oc(new Locale("oc"));
+	de(new Locale("de", "AT")),
+	it(Locale.ITALIAN),
+	en(new Locale("en", "IE")),
+	fr(Locale.FRENCH),
+	es(new Locale("es")),
+	ca(new Locale("ca")),
+	oc(new Locale("oc"));
 
 	// LANG
 	public static final Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(de, it, en, fr, es, ca, oc));
@@ -93,20 +99,16 @@ public enum LanguageCode {
 		return getBundle("micro-regions_names").getString(regionId);
 	}
 
+	public String getDateTime(ZonedDateTime date) {
+		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM).withLocale(getLocale()).format(date);
+	}
+
 	public String getDate(ZonedDateTime date) {
-		return date.format(DateTimeFormatter.ofPattern(getBundleString("date-time-format").trim()));
+		return DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(getLocale()).format(date);
 	}
 
 	public String getLongDate(ZonedDateTime date) {
-		return String.format("%s %s",
-			getBundleString("day." + date.getDayOfWeek()),
-			getDate(date));
+		return DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(getLocale()).format(date);
 	}
 
-	public String getTendencyDate(ZonedDateTime date) {
-		return String.format("%s%s%s",
-			getBundleString("tendency.binding-word"),
-			getBundleString("day." + date.getDayOfWeek()),
-			date.format(DateTimeFormatter.ofPattern(getBundleString("date-time-format.tendency"))));
-	}
 }

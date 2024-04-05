@@ -9,7 +9,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday, January 28, 2024.</s></p>
+<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>Weak layers in the upper part of the snowpack necessitate caution and restraint. In addition a latent danger of gliding avalanches exists.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -28,7 +28,7 @@ effects_profile_id: "handset-class-device"
 <p>High altitudes and the high Alpine regions: <break time="1s"/> The northwesterly wind has transported a lot of snow. Faceted weak layers exist in the top section of the snowpack, in particular on very steep sunny slopes above approximately 2600 m. Field observations and released avalanches indicate the existence of a weak snowack. Towards its base, the snowpack is largely stable. <break time="1s"/> Low and intermediate altitudes: <break time="1s"/> The old snowpack is wet and its surface has a melt-freeze crust that is strong in many cases. The high temperatures as the day progresses will give rise to slight moistening of the snowpack. This applies on very steep sunny slopes.</p>
 We have the following danger patterns: dp.4: cold following warm / warm following cold, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Monday, January 29, 2024 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Monday 29 January 2024 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -51,7 +51,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday, January 28, 2024.</s></p>
+<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>Wind slabs and gliding snow require caution.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -69,7 +69,7 @@ effects_profile_id: "handset-class-device"
 <p>High altitudes and the high Alpine regions: <break time="1s"/> The northwesterly wind has transported a lot of snow. Avalanche prone weak layers exist in the top section of the snowpack. Towards its base, the snowpack is largely stable. <break time="1s"/> Low and intermediate altitudes: <break time="1s"/> The old snowpack is wet and its surface has a melt-freeze crust that is strong in many cases. The high temperatures as the day progresses will give rise to slight moistening of the snowpack. This applies on very steep sunny slopes.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Monday, January 29, 2024 indicates a decreasing avalanche danger.</s></p>
+<p><s>The tendency for Monday 29 January 2024 indicates a decreasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -92,7 +92,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday, January 28, 2024.</s></p>
+<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -109,7 +109,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>More recent wind slabs are poorly bonded with the old snowpack above the tree line. The spring-like weather conditions gave rise to moistening of the snowpack. As a consequence of mild temperatures and the moderate to strong northwesterly wind, the snow drift accumulations have increased in size during the last few days. The snowpack will be subject to considerable local variations. Early and late morning: The snowpack is wet and its surface has a crust that is strong in many cases.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Monday, January 29, 2024 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Monday 29 January 2024 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -132,7 +132,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday, January 28, 2024.</s></p>
+<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -149,7 +149,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>More recent wind slabs are poorly bonded with the old snowpack above the tree line. The spring-like weather conditions gave rise to moistening of the snowpack below approximately 2700 m. As a consequence of mild temperatures and the moderate to strong northwesterly wind, the snow drift accumulations have increased in size during the last few days. Snow depths vary greatly, depending on the infuence of the wind. Intermediate altitudes: Early and late morning: The snowpack is wet and its surface has a melt-freeze crust that is not capable of bearing a load.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Monday, January 29, 2024 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Monday 29 January 2024 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -172,7 +172,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday, January 28, 2024.</s></p>
+<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>The conditions are favourable over a wide area.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -190,7 +190,7 @@ effects_profile_id: "handset-class-device"
 <p>High altitudes and the high Alpine regions: <break time="1s"/> The northwesterly wind has transported the new snow and, in some cases, old snow as well. The fresh wind slabs are lying on soft layers at elevated altitudes. They are in some cases prone to triggering. <break time="1s"/> Towards its base, the snowpack consists of faceted crystals. The snowpack will be subject to considerable local variations above the tree line. <break time="1s"/> <break time="1s"/> Intermediate altitudes: Early and late morning: The snowpack is wet and its surface has a melt-freeze crust that is strong in many cases.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Monday, January 29, 2024 indicates a decreasing avalanche danger.</s></p>
+<p><s>The tendency for Monday 29 January 2024 indicates a decreasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -213,7 +213,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday, January 28, 2024.</s></p>
+<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>Fresh and older wind slabs at high altitude. Moist snow slides are possible during the day.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -230,7 +230,7 @@ effects_profile_id: "handset-class-device"
 <p>Wind slabs are lying on soft layers in particular on steep shady slopes at high altitude. The old snowpack will be quite stable. Early and late morning: The snowpack is moist and its surface has a melt-freeze crust.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind, dp.10: springtime scenario.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Monday, January 29, 2024 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Monday 29 January 2024 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
