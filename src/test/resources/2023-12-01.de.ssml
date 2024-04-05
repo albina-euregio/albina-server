@@ -13,13 +13,13 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Schwacher Altschnee oberhalb von rund 2000 m. Gleitschnee in mittleren Lagen.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages gilt über 2000 Meter erhebliche Lawinengefahr, also Gefahrenstufe drei, darunter mäßige Lawinengefahr, also Gefahrenstufe zwei.</s>
+<s>Früher am Tag gilt über 2000 Meter erhebliche Lawinengefahr, also Gefahrenstufe drei, darunter mäßige Lawinengefahr, also Gefahrenstufe zwei.</s>
 <s>Später am Tag gilt über 2000 Meter erhebliche Lawinengefahr, also Gefahrenstufe drei, darunter mäßige Lawinengefahr, also Gefahrenstufe zwei.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Zu Beginn des Tages unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
+<s>Früher am Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Früher am Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
@@ -58,13 +58,13 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Mit Neuschnee und Wind steigt die Gefahr im Tagesverlauf allmählich an.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages gilt über der Baumgrenze mäßige Lawinengefahr, also Gefahrenstufe zwei, darunter geringe Lawinengefahr, also Gefahrenstufe eins.</s>
+<s>Früher am Tag gilt über der Baumgrenze mäßige Lawinengefahr, also Gefahrenstufe zwei, darunter geringe Lawinengefahr, also Gefahrenstufe eins.</s>
 <s>Später am Tag gilt über der Baumgrenze erhebliche Lawinengefahr, also Gefahrenstufe drei, darunter mäßige Lawinengefahr, also Gefahrenstufe zwei.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Zu Beginn des Tages über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Früher am Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Früher am Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
@@ -103,13 +103,13 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Mit Neuschnee und Wind steigt die Gefahr im Tagesverlauf allmählich an.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages gilt über der Baumgrenze mäßige Lawinengefahr, also Gefahrenstufe zwei, darunter geringe Lawinengefahr, also Gefahrenstufe eins.</s>
+<s>Früher am Tag gilt über der Baumgrenze mäßige Lawinengefahr, also Gefahrenstufe zwei, darunter geringe Lawinengefahr, also Gefahrenstufe eins.</s>
 <s>Später am Tag gilt über der Baumgrenze erhebliche Lawinengefahr, also Gefahrenstufe drei, darunter mäßige Lawinengefahr, also Gefahrenstufe zwei.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Zu Beginn des Tages über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Früher am Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Früher am Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
@@ -148,12 +148,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Mit Neuschnee und Wind steigt die Gefahr im Tagesverlauf etwas an.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages gilt über der Baumgrenze mäßige Lawinengefahr, also Gefahrenstufe zwei, darunter geringe Lawinengefahr, also Gefahrenstufe eins.</s>
+<s>Früher am Tag gilt über der Baumgrenze mäßige Lawinengefahr, also Gefahrenstufe zwei, darunter geringe Lawinengefahr, also Gefahrenstufe eins.</s>
 <s>Später am Tag gilt über der Baumgrenze mäßige Lawinengefahr, also Gefahrenstufe zwei, darunter geringe Lawinengefahr, also Gefahrenstufe eins.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Früher am Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -190,12 +190,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Frischen Triebschnee kritisch beurteilen.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages gilt geringe Lawinengefahr, also Gefahrenstufe eins.</s>
+<s>Früher am Tag gilt geringe Lawinengefahr, also Gefahrenstufe eins.</s>
 <s>Später am Tag gilt über der Baumgrenze mäßige Lawinengefahr, also Gefahrenstufe zwei, darunter geringe Lawinengefahr, also Gefahrenstufe eins.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages über 2400 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Nord-Ost.</s>
+<s>Früher am Tag über 2400 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Nord-Ost.</s>
 <s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
