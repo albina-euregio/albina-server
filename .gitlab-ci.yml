@@ -24,6 +24,10 @@ production build:
             junit:
                 - target/surefire-reports/TEST-*.xml
                 - target/failsafe-reports/TEST-*.xml
+    rules:
+        - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+        - if: $CI_COMMIT_TAG
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 deploy to development:
     stage: deploy
@@ -34,7 +38,7 @@ deploy to development:
     environment:
         name: development
     rules:
-        - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
         - when: manual
 
 deploy to production:
