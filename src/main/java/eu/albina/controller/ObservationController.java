@@ -27,7 +27,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -113,9 +112,9 @@ public interface ObservationController {
 
 	static void addCsvLines(StringBuilder sb, Observation observation) {
 		if (observation.getEventDate() != null) {
-			sb.append(observation.getEventDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			sb.append(observation.getEventDate().toLocalDate());
 			sb.append(StatisticsController.csvDeliminator);
-			sb.append(observation.getEventDate().format(DateTimeFormatter.ofPattern("HH:mm")));
+			sb.append(observation.getEventDate().toLocalTime());
 		} else {
 			sb.append(StatisticsController.notAvailableString);
 			sb.append(StatisticsController.csvDeliminator);
@@ -128,7 +127,7 @@ public interface ObservationController {
 			sb.append(StatisticsController.notAvailableString);
 		sb.append(StatisticsController.csvDeliminator);
 		if (observation.getReportDate() != null)
-			sb.append(observation.getReportDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			sb.append(observation.getReportDate().toLocalDate());
 		else
 			sb.append(StatisticsController.notAvailableString);
 		sb.append(StatisticsController.csvDeliminator);

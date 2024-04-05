@@ -21,7 +21,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -84,8 +83,8 @@ public class StatisticsService {
 				duplicate, obsoleteMatrix);
 
 		String filename = String.format("statistic_%s_%s%s%s%s_%s",
-			OffsetDateTime.parse(startDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-			OffsetDateTime.parse(endDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+			OffsetDateTime.parse(startDate).toLocalDate(),
+			OffsetDateTime.parse(endDate).toLocalDate(),
 			duplicate || extended ? "_" : "",
 			duplicate ? "d" : "",
 			extended ? "e" : "",
