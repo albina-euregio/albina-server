@@ -1,0 +1,242 @@
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualización del boletín de aludes para domingo, 28 de enero de 2024.</s></p>
+<p><emphasis><s>Las capas débiles en la parte superior del manto de nieve requieren cautela y prudencia. Además hay un peligro latente de aludes de deslizamiento basal.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero aplica por encima de 2600 metros considerable avalanche danger, so danger level three, por debajo moderate avalanche danger, so danger level two.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2600 metros, tenemos a persistent weak layer problem. Especialmente en orientaciones Este a Sur a Oeste.</s>
+<s>Además, día entero, por debajo 2600 metros, tenemos a gliding snow problem. Esto en todas las orientaciones.</s>
+<s>Además, día entero, encima 2600 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Las capas débiles en la parte superior del manto de nieve pueden ser desencadenadas en algunos lugares al paso de un solo montañero. Esto se da especialmente en las laderas solanas muy inclinadas por encima de los 2600 m aproximadamente. Los "whumpfs" y las fisuras que propagan al pasar son señales de alarma que indican este peligro Los aludes son en parte de tamaño grande. <break time="1s"/> <break time="1s"/> Las nuevas acumulaciones de nieve venteada pueden en algunos casos aún desencadenarse accidentalmente sobre todo en laderas umbrías muy inclinadas por encima de los 2400 m aproximadamente. Precaución sobre todo cerca de los cordales en alta montaña. <break time="1s"/> <break time="1s"/> Son posibles de forma aislada avalanchas de deslizamiento basal, de manera aislada grandes. Esto se da especialmente en las laderas herbosas inclinadas por debajo de los 2600 m aproximadamente. Evitar las zonas con grietas de deslizamiento basal.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>En cotas altas y en zonas de alta montaña: <break time="1s"/> El viento del noroeste ha transportado mucha nieve. En la parte superior del manto de nieve hay capas débiles de cristales facetados, especialmente en las laderas solanas muy inclinadas por encima de los 2600 m aproximadamente. Las observaciones sobre el terreno y los desencadenamientos de aludes indican la estructura débil del manto de nieve. La parte inferior del manto es en su mayor parte estable. <break time="1s"/> En cotas bajas y medias: <break time="1s"/> La nieve antigua es muy húmeda, con una costra de rehielo gruesa portante en superficie. En el transcurso de la jornada el calor causará una ligera humidificación del manto de nieve. Esto se da en las laderas solanas muy inclinadas.</p>
+Tenemos los siguientes patrones de peligro: pp.4: frío después de cálido / cálido después de frío, pp.2: deslizamientos.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para lunes, 29 de enero de 2024 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-C"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualización del boletín de aludes para domingo, 28 de enero de 2024.</s></p>
+<p><emphasis><s>La nieve venteada y los aludes de deslizamiento requieren atención.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero aplica moderate avalanche danger, so danger level two.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2400 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Sudeste.</s>
+<s>Además, día entero, por debajo 2600 metros, tenemos a gliding snow problem. Esto en todas las orientaciones.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Con la nieve reciente y el viento fuerte del cuadrante noroeste , se han formado abundantes placas de viento en altitud. Los aludes pueden ser desencadenadas como mínimo por una sobrecarga fuerte y alcanzar un tamaño mediano. Line:en altura la probabilidad de desencadenamiento es mayor. Lugares peligrosos se encuentran en las laderas con acumulaciones de nieve venteada por encima de los 2400 m aproximadamente. Precaución sobre todo en las laderas muy inclinadas cerca de los cordales en alta montaña. <break time="1s"/> <break time="1s"/> Son posibles de forma aislada avalanchas de deslizamiento basal, de manera aislada grandes. Esto se da especialmente en las laderas herbosas inclinadas por debajo de los 2600 m aproximadamente. Evitar las zonas con grietas de deslizamiento basal.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>En cotas altas y en zonas de alta montaña: <break time="1s"/> El viento del noroeste ha transportado mucha nieve. En la parte superior del manto de nieve hay capas débiles inestables. La parte inferior del manto es en su mayor parte estable. <break time="1s"/> En cotas bajas y medias: <break time="1s"/> La nieve antigua es muy húmeda, con una costra de rehielo gruesa portante en superficie. En el transcurso de la jornada el calor causará una ligera humidificación del manto de nieve. Esto se da en las laderas solanas muy inclinadas.</p>
+Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, pp.2: deslizamientos.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para lunes, 29 de enero de 2024 indica un peligro de aludes en disminución.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualización del boletín de aludes para domingo, 28 de enero de 2024.</s></p>
+<p><emphasis><s>Las placas de viento representan la principal fuente de peligro.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero aplica por encima de el límite del bosque moderate avalanche danger, so danger level two, por debajo low avalanche danger, so danger level one.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima el límite del bosque, tenemos a wind slab problem. Esto en todas las orientaciones.</s>
+<s>Además, día entero, encima el límite del bosque, tenemos a wet snow problem. Esto en todas las orientaciones.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Con el viento fuerte del cuadrante noroeste , se han formado placas de viento en algunos casos fácilmente desencadenables. Además se debe tener cuidado con las placas de viento más antiguas. Acumulaciones de nieve venteada más recientes pueden, de manera aislada, desencadenarse al paso de un solo montañero. <break time="1s"/> Los lugares peligrosos se encuentran sobre todo cerca de cordales, cubetas y canales de todas las orientaciones. Además, en particular al pie de las paredes rocosas y detrás de los cambios abruptos de pendiente, son posibles más avalanchas naturales como mínimo de tamaño pequeño. Con la subida de la temperatura diurna y la radiación solar, son aún posibles avalanchas de nieve muy húmeda sin cohesión como mínimo de tamaño pequeño.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>Acumulaciones de nieve venteada más recientes no se han unido bien con la nieve antigua por encima del límite del bosque. Las condiciones meteorológicas primaverales han causado una humidificación del manto de nieve. Con las temperaturas suaves y el viento de moderado a fuerte del noroeste, en los últimos días las placas de viento han crecido. El manto de nieve es extremadamente variable en pocos metros. Mañana y madrugada: El manto de nieve es muy húmedo, con una costra gruesa portante en superficie.</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para lunes, 29 de enero de 2024 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualización del boletín de aludes para domingo, 28 de enero de 2024.</s></p>
+<p><emphasis><s>Las placas de viento representan la principal fuente de peligro.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero aplica por encima de el límite del bosque moderate avalanche danger, so danger level two, por debajo low avalanche danger, so danger level one.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima el límite del bosque, tenemos a wind slab problem. Esto en todas las orientaciones.</s>
+<s>Además, día entero, entre el límite del bosque y 2700 metros, tenemos a wet snow problem. Esto en todas las orientaciones.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Con el viento fuerte del cuadrante noroeste , se han formado placas de viento en algunos casos fácilmente desencadenables. Además se debe tener cuidado con las placas de viento más antiguas. Acumulaciones de nieve venteada más recientes ya pueden desencadenarse al paso de un solo montañero. <break time="1s"/> Los lugares peligrosos se encuentran sobre todo cerca de cordales, cubetas y canales de todas las orientaciones. Además, en particular al pie de las paredes rocosas y detrás de los cambios abruptos de pendiente, son posibles más avalanchas naturales de tamaño pequeño y mediano. Con la subida de la temperatura diurna y la radiación solar, son posibles avalanchas de nieve muy húmeda sin cohesión de tamaño pequeño y mediano.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>Acumulaciones de nieve venteada más recientes no se han unido bien con la nieve antigua por encima del límite del bosque. Las condiciones meteorológicas primaverales han causado por debajo de los 2700 m aproximadamente una humidificación del manto de nieve. Con las temperaturas suaves y el viento de moderado a fuerte del noroeste, en los últimos días las placas de viento han crecido. Los espesores de nieve varían mucho por la influencia del viento. En cotas medias: Mañana y madrugada: El manto de nieve es muy húmedo, con una costra de rehielo no portante en superficie.</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para lunes, 29 de enero de 2024 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-C"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualización del boletín de aludes para domingo, 28 de enero de 2024.</s></p>
+<p><emphasis><s>Las condiciones son favorables en muchos sectores.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero aplica por encima de 2400 metros moderate avalanche danger, so danger level two, por debajo low avalanche danger, so danger level one.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2400 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Este.</s>
+<s>Además, día entero, por debajo 2600 metros, tenemos a gliding snow problem. Especialmente en orientaciones Este a Sur a Oeste.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Con el viento con rachas fuertes del cuadrante noroeste , se han formado placas de viento en algunos casos inestables. Estos se encuentran sobre todo en laderas orientadas a noroeste por el norte este por encima de los 2400 m aproximadamente. Precaución sobre todo en las laderas muy inclinadas cerca de los cordales en alta montaña. Los aludes pueden alcanzar tamaños medianos de manera aislada. <break time="1s"/> <break time="1s"/> Son posibles de forma aislada avalanchas de deslizamiento basal, especialmente en las laderas inclinadas orientadas a este, sur y oeste por debajo de los 2600 m aproximadamente. Evitar las zonas con grietas de deslizamiento basal.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>En cotas altas y en zonas de alta montaña: <break time="1s"/> El viento del noroeste ha transportado la nieve reciente y, en parte, la nieve antigua. Las nuevas acumulaciones de nieve venteada descansan encima de capas blandas en altitud. Estas son en parte inestables. <break time="1s"/> La parte inferior del manto consiste en cristales facetados. El manto de nieve es extremadamente variable en pocos metros por encima del límite del bosque. <break time="1s"/> <break time="1s"/> En cotas medias: Mañana y madrugada: El manto de nieve es muy húmedo, con una costra de rehielo gruesa portante en superficie.</p>
+Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, pp.2: deslizamientos.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para lunes, 29 de enero de 2024 indica un peligro de aludes en disminución.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualización del boletín de aludes para domingo, 28 de enero de 2024.</s></p>
+<p><emphasis><s>Nieve venteada reciente y nieve venteada antigua en cotas altas. En el transcurso de la jornada serán posibles purgas de nieve húmeda.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero aplica low avalanche danger, so danger level one.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima el límite del bosque, tenemos a wind slab problem. Esto en todas las orientaciones.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Las nuevas acumulaciones de nieve venteada y las menos recientes pueden, de manera aislada, desencadenarse, especialmente en los márgenes. Precaución sobre todo cerca de los cordales en las cubetas, canales y detrás de los cambios abruptos de pendiente en cotas altas. Los aludes son como mínimo de tamaño pequeño. <break time="1s"/> <break time="1s"/> A consecuencia del aumento de la temperatura diurna y la radiación solar, son posibles algunas avalanchas de deslizamiento basal y purgas de nieve húmeda, pero en su mayoría pequeñas.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>Acumulaciones de nieve venteada descansan encima de capas blandas sobre todo en laderas umbrías inclinadas en cotas altas. El manto de nieve antiguo es más bien estable. Mañana y madrugada: El manto de nieve es húmedo, con una costra de rehielo en superficie.</p>
+Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, pp.10: escenario de primavera.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para lunes, 29 de enero de 2024 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>

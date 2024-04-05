@@ -1,0 +1,243 @@
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>més aviat durant el dia aplica considerable avalanche danger, so danger level three.</s>
+<s>més tard durant el dia aplica considerable avalanche danger, so danger level three.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>més aviat durant el dia, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
+<s>A més, més aviat durant el dia, entre 2200 metres i 2700 metres, tenim a persistent weak layer problem. Això en totes les orientacions.</s>
+<s>A més, més tard durant el dia, entre 2200 metres i 2700 metres, tenim a persistent weak layer problem. Això en totes les orientacions.</s>
+<s>A més, més tard durant el dia, per sota 2400 metres, tenim a wet snow problem. Especialment en orientacions Est fins a Sud i Oest.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>null</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5: nevada després d'un període llarg fred.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer aplica moderate avalanche danger, so danger level two.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
+<s>A més, dia sencer, per sota 2400 metres, tenim a gliding snow problem. Especialment en orientacions Est fins a Sud i Oest.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>null</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.2: lliscaments.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer aplica considerable avalanche danger, so danger level three.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
+<s>A més, dia sencer, entre 2200 metres i 2700 metres, tenim a persistent weak layer problem. Especialment en orientacions Oest fins a Nord i Est.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>null</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5: nevada després d'un període llarg fred.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus en disminució.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer aplica moderate avalanche danger, so danger level two.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre 2300 metres, tenim a wind slab problem. Especialment en orientacions Oest fins a Nord i Sud-Est.</s>
+<s>A més, dia sencer, per sobre 2300 metres, tenim a persistent weak layer problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer aplica moderate avalanche danger, so danger level two.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>null</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer aplica low avalanche danger, so danger level one.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Est.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
