@@ -13,13 +13,13 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Die Lawinengefahr steigt im Tagesverlauf rasch an.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages gilt erhebliche Lawinengefahr, also Gefahrenstufe drei.</s>
+<s>Früher am Tag gilt erhebliche Lawinengefahr, also Gefahrenstufe drei.</s>
 <s>Später am Tag gilt über 1600 Meter große Lawinengefahr, also Gefahrenstufe vier, darunter erhebliche Lawinengefahr, also Gefahrenstufe drei.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Zu Beginn des Tages finden wir ein Neuschnee-Problem. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Zu Beginn des Tages finden wir ein Triebschnee-Problem. Dies in allen Expositionen.</s>
+<s>Früher am Tag finden wir ein Neuschnee-Problem. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Früher am Tag finden wir ein Triebschnee-Problem. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag unter 2800 Meter erwartet uns ein Nassschnee-Problem. Vor allem in den Expositionen Ost über Süd bis West.</s>
 </p>
 <break time="1s" strength="strong"></break>

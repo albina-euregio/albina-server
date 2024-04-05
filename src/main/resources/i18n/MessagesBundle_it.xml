@@ -65,12 +65,6 @@
   <entry key="date-time-format"> dd.MM.yyyy</entry>
   <entry key="date-time-format.publication">dd.MM.yyyy 'alle ore' HH:mm</entry>
   <entry key="date-time-format.tendency"> 'il' dd.MM.yyyy</entry>
-  <entry key="daytime.fd">tutto il giorno</entry>
-  <entry key="daytime.fd.capitalized">Tutto il giorno</entry>
-  <entry key="daytime.am">Mattina</entry>
-  <entry key="daytime.am.capitalized">Mattina</entry>
-  <entry key="daytime.pm">pomeriggio</entry>
-  <entry key="daytime.pm.capitalized">pomeriggio</entry>
   <entry key="ext-file.regions.description">GeoJSON per le regioni ({0})</entry>
   <entry key="ext-file.thumbnail.description">Mappa di classificazione del pericolo semplificata della regione</entry>
   <entry key="ext-file.simple-link.description">Link al sito web semplificato</entry>

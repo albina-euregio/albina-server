@@ -92,5 +92,15 @@ public class SimpleHtmlUtilTest {
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
 		Assertions.assertEquals(expected.trim(), htmlString.trim());
 	}
+
+	@Test
+	public void createSimpleHtmlStringAranDaytimeDependency() throws Exception {
+		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
+		String html = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.en);
+		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.simple.html"), StandardCharsets.UTF_8);
+		Assertions.assertEquals(expected.trim(), html.trim());
+	}
 }
 

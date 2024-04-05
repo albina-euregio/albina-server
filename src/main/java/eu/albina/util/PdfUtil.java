@@ -217,13 +217,14 @@ public class PdfUtil {
 
 		float[] secondColumnWidths;
 		if (avalancheBulletin.isHasDaytimeDependency()) {
-			secondColumnWidths = new float[]{1, 1, 1};
+			secondColumnWidths = new float[]{1, 1};
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
-			Paragraph am = new Paragraph("AM:").setFont(openSansBoldFont).setFontSize(14).setFontColor(blackColor);
-			cell = new Cell(1, 1).add(am);
+			Paragraph am = new Paragraph(lang.getBundleString("valid-time-period.earlier"))
+				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor);
+			cell = new Cell(2, 1).add(am);
 			cell.setBorder(Border.NO_BORDER);
 			cell.setTextAlignment(TextAlignment.LEFT);
-			secondTable.addCell(cell);
+			secondTable.addHeaderCell(cell);
 			ImageData regionAMImageDate = ImageDataFactory.create(getMapImage(DaytimeDependency.am, avalancheBulletin));
 			Image regionAMImg = new Image(regionAMImageDate);
 			regionAMImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
@@ -250,11 +251,12 @@ public class PdfUtil {
 
 			secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			secondTable.setBorderTop(new SolidBorder(blackColor, 1));
-			Paragraph pm = new Paragraph("PM:").setFont(openSansBoldFont).setFontSize(14).setFontColor(blackColor);
-			cell = new Cell(1, 1).add(pm);
+			Paragraph pm = new Paragraph(lang.getBundleString("valid-time-period.later"))
+				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor);
+			cell = new Cell(2, 1).add(pm);
 			cell.setBorder(Border.NO_BORDER);
 			cell.setTextAlignment(TextAlignment.LEFT);
-			secondTable.addCell(cell);
+			secondTable.addHeaderCell(cell);
 			ImageData regionPMImageDate = ImageDataFactory.create(getMapImage(DaytimeDependency.pm, avalancheBulletin));
 			Image regionPMImg = new Image(regionPMImageDate);
 			regionPMImg.getAccessibilityProperties().setAlternateDescription(String.join(", ", avalancheBulletin.getPublishedRegions()));
@@ -980,7 +982,7 @@ public class PdfUtil {
 			canvas.add(overviewMapAMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
-					.showText(lang.getBundleString("daytime.am.capitalized")).endText();
+					.showText(lang.getBundleString("valid-time-period.earlier")).endText();
 
 			ImageData overviewMapPMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.pm));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
@@ -990,7 +992,7 @@ public class PdfUtil {
 			canvas.add(overviewMapPMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
 					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(blackColor, true)
-					.showText(lang.getBundleString("daytime.pm.capitalized")).endText();
+					.showText(lang.getBundleString("valid-time-period.later")).endText();
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.fd));
 			Image overviewMapImg = new Image(overviewMapImageData);
