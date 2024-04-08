@@ -21,7 +21,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.io.Resources;
@@ -34,6 +37,7 @@ import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
+import eu.albina.model.enumerations.BulletinStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,8 +107,9 @@ public class PdfUtil {
 	public static final Color dangerLevel5ColorBlackBw = new DeviceRgb(70, 70, 70);
 	public static final Color greyVeryVeryLightColorBw = new DeviceRgb(246, 246, 246);
 
-	private static PdfFont openSansRegularFont;
-	private static PdfFont openSansBoldFont;
+	private PdfFont openSansRegularFont;
+	private PdfFont openSansBoldFont;
+	private PdfFont openSansLightFont;
 	protected final AvalancheReport avalancheReport;
 	private final LanguageCode lang;
 	private final boolean grayscale;
@@ -131,9 +136,9 @@ public class PdfUtil {
 
 			openSansRegularFont = createFont("fonts/open-sans/OpenSans-Regular.ttf");
 			openSansBoldFont = createFont("fonts/open-sans/OpenSans-Bold.ttf");
+			openSansLightFont = createFont("fonts/open-sans/OpenSans-Light.ttf");
 
-			pdf.addEventHandler(PdfDocumentEvent.END_PAGE,
-					new AvalancheBulletinEventHandler(avalancheReport, lang, grayscale));
+			pdf.addEventHandler(PdfDocumentEvent.END_PAGE, event -> addHeaderFooter((PdfDocumentEvent) event));
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 
@@ -146,6 +151,100 @@ public class PdfUtil {
 			AlbinaUtil.setFilePermissions(path.toString());
 			return path;
 		}
+	}
+
+	private void addHeaderFooter(PdfDocumentEvent docEvent) {
+		PdfDocument pdfDoc = docEvent.getDocument();
+		PdfPage page = docEvent.getPage();
+		Rectangle pageSize = page.getPageSize();
+		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
+
+		Region region = avalancheReport.getRegion();
+		Color blue = grayscale ? blueColorBw : PdfUtil.getColor(region.getPdfColor());
+
+		// Add headline
+		String headline = lang.getBundleString("website.name", region);
+		pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
+			.setColor(greyDarkColor, true).showText(headline).endText();
+		String date = AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
+		if (BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {
+			String preview = lang.getBundleString("preview");
+			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
+				.setColor(redColor, true).showText(date + preview).endText();
+		} else {
+			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
+				.setColor(blue, true).showText(date).endText();
+		}
+
+		String publicationDate = AlbinaUtil.getPublicationDate(avalancheReport.getBulletins(), lang);
+		if (!publicationDate.isEmpty()) {
+			if (AlbinaUtil.isUpdate(avalancheReport.getBulletins()))
+				pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
+					.setColor(greyDarkColor, true).showText(lang.getBundleString("updated") + publicationDate)
+					.endText();
+			else
+				pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
+					.setColor(greyDarkColor, true).showText(lang.getBundleString("published") + publicationDate)
+					.endText();
+		}
+
+		Canvas canvas = new Canvas(pdfCanvas, page.getPageSize());
+
+		// Add copyright
+		String copyright = "";
+		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
+			.showText(copyright).endText();
+
+		String urlString = lang.getBundleString("website.url.capitalized", region);
+		Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
+		pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
+		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)
+			.moveText(buttonRectangle.getLeft() + 15, buttonRectangle.getBottom() + 9)
+			.setColor(whiteColor, true).showText(urlString).endText();
+
+		// Draw lines
+		pdfCanvas.setLineWidth(1).setStrokeColor(blue).moveTo(0, pageSize.getHeight() - 90)
+			.lineTo(pageSize.getWidth(), pageSize.getHeight() - 90).stroke();
+		pdfCanvas.setLineWidth(1).setStrokeColor(blue).moveTo(0, 48).lineTo(pageSize.getWidth(), 48).stroke();
+
+		// Add CI
+		Image ciImg;
+		if (grayscale)
+			ciImg = PdfUtil.this.getImage(region.getImageColorbarBwPath());
+		else
+			ciImg = PdfUtil.this.getImage(region.getImageColorbarColorPath());
+		ciImg.scaleAbsolute(pageSize.getWidth(), 4);
+		ciImg.setFixedPosition(0, pageSize.getHeight() - 4);
+		canvas.add(ciImg);
+
+		// Add logo
+		Image logoImg;
+		if (grayscale)
+			logoImg = PdfUtil.this.getImage(lang.getBundleString("logo.path.bw", region));
+		else
+			logoImg = PdfUtil.this.getImage(lang.getBundleString("logo.path", region));
+		logoImg.scaleToFit(130, 55);
+		logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
+		canvas.add(logoImg);
+
+		// Add secondary logo
+		if (region.isPdfFooterLogo()) {
+			Image footerImg = PdfUtil.this.getImage(grayscale ? region.getPdfFooterLogoBwPath() : region.getPdfFooterLogoColorPath());
+			footerImg.scaleToFit(120, 40);
+			footerImg.setFixedPosition(15, 5);
+			canvas.add(footerImg);
+		}
+
+		// Add page number
+		int pageNumber = docEvent.getDocument().getPageNumber(page);
+		String pageText = MessageFormat.format(lang.getBundleString("pdf.page-number"), pageNumber);
+		double width = openSansRegularFont.getContentWidth(new PdfString(pageText)) * 0.001f * 12 / 2;
+		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 9)
+			.moveText(pageSize.getWidth() / 2 - width / 2, 20).setColor(greyDarkColor, true).showText(pageText)
+			.endText();
+
+		canvas.close();
+		pdfCanvas.release();
 	}
 
 	public Path getPath() {
@@ -849,10 +948,14 @@ public class PdfUtil {
 		return cell;
 	}
 
-	public static Image getImage(String resourceName) {
-		URL resource = Resources.getResource("images/" + resourceName);
-		ImageData imageData = ImageDataFactory.create(resource);
-		return new Image(imageData);
+	private final Map<String, Image> imageMap = new HashMap<>();
+
+	public Image getImage(String name) {
+		return imageMap.computeIfAbsent(name, resourceName -> {
+			URL resource = Resources.getResource("images/" + resourceName);
+			ImageData imageData = ImageDataFactory.create(resource);
+			return new Image(imageData);
+		});
 	}
 
 	private Color getDangerRatingColor(DangerRating dangerRating, boolean grayscale) {
