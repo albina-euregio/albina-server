@@ -43,7 +43,45 @@ public enum LanguageCode {
 	fr(Locale.FRENCH),
 	es(new Locale("es")),
 	ca(new Locale("ca")),
-	oc(new Locale("oc"));
+	oc(new Locale("ca")) {
+		private String replaceAranes(String date) {
+			date = date.replaceAll("(lunes|dilluns|monday)", "deluns");
+			date = date.replaceAll("(martes|dimarts|tuesday)", "dimars");
+			date = date.replaceAll("(miércoles|dimecres|wednesday)", "dimèrcles");
+			date = date.replaceAll("(jueves|dijous|thursday)", "dijaus");
+			date = date.replaceAll("(viernes|divendres|monday)", "diuendres");
+			date = date.replaceAll("(sábado|dissabte|saturday)", "dissabte");
+			date = date.replaceAll("(domingo|diumenge|sunday)", "dimenge");
+			date = date.replaceAll("(enero|gener|january)", "Gèr");
+			date = date.replaceAll("(febrero|febrer|february)", "Heruèr");
+			date = date.replaceAll("(marzo|març|march)", "Març");
+			date = date.replaceAll("(abril|april)", "Abriu");
+			date = date.replaceAll("(mayo|maig|may)", "Mai");
+			date = date.replaceAll("(junio|juny|june)", "Junh");
+			date = date.replaceAll("(julio|juliol|july)", "Junhsèga");
+			date = date.replaceAll("(agosto|agost|august)", "Agost");
+			date = date.replaceAll("(septiembre|setembre|september)", "Seteme");
+			date = date.replaceAll("(octubre|october)", "Octubre");
+			date = date.replaceAll("(noviembre|novembre|november)", "Noveme");
+			date = date.replaceAll("(diciembre|desembre|december)", "Deseme");
+			return date;
+		}
+
+		@Override
+		public String getDateTime(ZonedDateTime date) {
+			return replaceAranes(super.getDateTime(date));
+		}
+
+		@Override
+		public String getDate(ZonedDateTime date) {
+			return replaceAranes(super.getDate(date));
+		}
+
+		@Override
+		public String getLongDate(ZonedDateTime date) {
+			return replaceAranes(super.getLongDate(date));
+		}
+	};
 
 	// LANG
 	public static final Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(de, it, en, fr, es, ca, oc));

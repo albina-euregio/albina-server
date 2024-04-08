@@ -186,6 +186,12 @@ public class AlbinaUtilTest {
 		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 		Assertions.assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
 		Assertions.assertEquals("Donnerstag, 17. Jänner 2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("giovedì 17 gennaio 2019", AlbinaUtil.getDate(bulletins, LanguageCode.it));
+		Assertions.assertEquals("Thursday 17 January 2019", AlbinaUtil.getDate(bulletins, LanguageCode.en));
+		Assertions.assertEquals("jeudi 17 janvier 2019", AlbinaUtil.getDate(bulletins, LanguageCode.fr));
+		Assertions.assertEquals("jueves, 17 de enero de 2019", AlbinaUtil.getDate(bulletins, LanguageCode.es));
+		Assertions.assertEquals("dijous, 17 de gener de 2019", AlbinaUtil.getDate(bulletins, LanguageCode.ca));
+		Assertions.assertEquals("dijaus, 17 de Gèr de 2019", AlbinaUtil.getDate(bulletins, LanguageCode.oc));
 		Assertions.assertEquals("am Freitag, 18. Jänner 2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
 		Assertions.assertEquals("16.01.2019", AlbinaUtil.getPreviousValidityDateString(bulletins, LanguageCode.de));
 		Assertions.assertEquals("18.01.2019", AlbinaUtil.getNextValidityDateString(bulletins, LanguageCode.de));
