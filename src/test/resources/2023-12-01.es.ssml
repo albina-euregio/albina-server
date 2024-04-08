@@ -13,16 +13,16 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Capas débiles persistentes por encima de los 2000 m aproximadamente. Problema de deslizamientos basales en cotas medias.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día aplica por encima de 2000 metros considerable avalanche danger, so danger level three, por debajo moderate avalanche danger, so danger level two.</s>
-<s>más tarde en el día aplica por encima de 2000 metros considerable avalanche danger, so danger level three, por debajo moderate avalanche danger, so danger level two.</s>
+<s>al inicio del día hay Peligro de aludes notable, por lo que el grado de peligro es tres. por encima de 2000 metros, Peligro de aludes limitado, por lo que el grado de peligro es dos. por debajo.</s>
+<s>al final del día hay Peligro de aludes notable, por lo que el grado de peligro es tres. por encima de 2000 metros, Peligro de aludes limitado, por lo que el grado de peligro es dos. por debajo.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día, encima 2000 metros, tenemos a persistent weak layer problem. Esto en todas las orientaciones.</s>
-<s>Además, más temprano en el día, por debajo 2400 metros, tenemos a gliding snow problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, encima 2000 metros, tenemos a persistent weak layer problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, encima el límite del bosque, tenemos a new snow problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, por debajo 2400 metros, tenemos a gliding snow problem. Esto en todas las orientaciones.</s>
+<s>al inicio del día, encima 2000 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+<s>Además, al inicio del día, por debajo 2400 metros, tenemos un problema de deslizamiento basal. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, encima 2000 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, encima el límite del bosque, tenemos un problema de nieve reciente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, por debajo 2400 metros, tenemos un problema de deslizamiento basal. Esto en todas las orientaciones.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Los aludes pueden desencadenarse por la nieve antigua, sobre todo en las laderas inclinadas por encima de los 2000 m aproximadamente. Los "whumpfs" y las fisuras que propagan al pasar son señales de alarma que indican este peligro Es necesaria una cierta experiencia en la evaluación del peligro de aludes. Los aludes son como mínimo de tamaño mediano. <break time="1s"/> <break time="1s"/> La nieve reciente y las placas de viento y dispersas pueden ser desencadenadas al paso de un solo montañero. Lugares peligrosos se encuentran por encima del límite del bosque, como también cerca del límite del bosque. Con la intensificación de la nevada, en el transcurso de la jornada los lugares peligrosos aumentarán. Precaución sobre todo cerca de los cordales, en canales y cubetas. Los aludes son como mínimo de tamaño mediano. <break time="1s"/> <break time="1s"/> En las laderas herbosas inclinadas, son posibles avalanchas de deslizamiento basal de tamaño pequeño y, localmente, mediano. Esto se da especialmente en los sectores afectados por la lluvia.</s></p>
@@ -58,16 +58,16 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Con la nieve reciente y el viento, en el transcurso de la jornada el peligro aumentará progresivamente.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día aplica por encima de el límite del bosque moderate avalanche danger, so danger level two, por debajo low avalanche danger, so danger level one.</s>
-<s>más tarde en el día aplica por encima de el límite del bosque considerable avalanche danger, so danger level three, por debajo moderate avalanche danger, so danger level two.</s>
+<s>al inicio del día hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de el límite del bosque, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+<s>al final del día hay Peligro de aludes notable, por lo que el grado de peligro es tres. por encima de el límite del bosque, Peligro de aludes limitado, por lo que el grado de peligro es dos. por debajo.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día, encima el límite del bosque, tenemos a wind slab problem. Esto en todas las orientaciones.</s>
-<s>Además, más temprano en el día, encima 2200 metros, tenemos a persistent weak layer problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, encima el límite del bosque, tenemos a new snow problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, encima 2200 metros, tenemos a persistent weak layer problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, por debajo 2400 metros, tenemos a gliding snow problem. Esto en todas las orientaciones.</s>
+<s>al inicio del día, encima el límite del bosque, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, al inicio del día, encima 2200 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, encima el límite del bosque, tenemos un problema de nieve reciente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, encima 2200 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, por debajo 2400 metros, tenemos un problema de deslizamiento basal. Esto en todas las orientaciones.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>La nieve reciente y la nieve venteada descansan encima de una superficie desfavorable del manto de nieve antigua en todas las orientaciones por encima de los 2000 m aproximadamente. Estas condiciones favorecerán en el transcurso de la jornada un gradual aumento del peligro de aludes en todas las orientaciones. Sobre todo en las laderas muy inclinadas son son posibles aludes de tamaño pequeño y mediano. La nieve reciente y la nieve venteada pueden desencadenarse especialmente por sobrecargas fuertes en todas las orientaciones por encima de los 2000 m aproximadamente. El número y la dimensión de los lugares peligrosos aumentarán con la altitud. <break time="1s"/> Tarde: La nieve reciente y las placas de viento a veces grandes y generalizadas pueden fácilmente desencadenarse de manera accidental o, de manera aislada, natural. Lugares peligrosos se encuentran por encima del límite del bosque, como también cerca del límite del bosque. Precaución sobre todo cerca de los cordales, en canales y cubetas. Los aludes son como mínimo de tamaño mediano. Lugares peligrosos se encuentran sobre todo en las zonas protegidas del viento por encima de los 2200 m aproximadamente. Es necesaria una cierta experiencia en la evaluación del peligro de aludes. <break time="1s"/> En las laderas herbosas inclinadas, son aún posibles avalanchas de deslizamiento basal de tamaño pequeño y, localmente, mediano. Esto se da especialmente en los sectores con mucha nieve.</s></p>
@@ -103,16 +103,16 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Con la nieve reciente y el viento, en el transcurso de la jornada el peligro aumentará progresivamente.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día aplica por encima de el límite del bosque moderate avalanche danger, so danger level two, por debajo low avalanche danger, so danger level one.</s>
-<s>más tarde en el día aplica por encima de el límite del bosque considerable avalanche danger, so danger level three, por debajo moderate avalanche danger, so danger level two.</s>
+<s>al inicio del día hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de el límite del bosque, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+<s>al final del día hay Peligro de aludes notable, por lo que el grado de peligro es tres. por encima de el límite del bosque, Peligro de aludes limitado, por lo que el grado de peligro es dos. por debajo.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día, encima el límite del bosque, tenemos a wind slab problem. Esto en todas las orientaciones.</s>
-<s>Además, más temprano en el día, encima 2200 metros, tenemos a persistent weak layer problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, encima el límite del bosque, tenemos a new snow problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, encima 2200 metros, tenemos a persistent weak layer problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, por debajo 2400 metros, tenemos a gliding snow problem. Esto en todas las orientaciones.</s>
+<s>al inicio del día, encima el límite del bosque, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, al inicio del día, encima 2200 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, encima el límite del bosque, tenemos un problema de nieve reciente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, encima 2200 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, por debajo 2400 metros, tenemos un problema de deslizamiento basal. Esto en todas las orientaciones.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Tarde: La nieve reciente y las placas de viento a veces grandes y generalizadas pueden fácilmente desencadenarse de manera accidental o, de manera aislada, natural. Lugares peligrosos se encuentran por encima del límite del bosque, como también cerca del límite del bosque. Estos están parcialmente cubiertos de nieve reciente y por lo tanto resultan difíciles de reconocer. Precaución sobre todo cerca de los cordales, en canales y cubetas. Los aludes son como mínimo de tamaño mediano. <break time="1s"/> <break time="1s"/> Los aludes pueden desencadenarse por la nieve antigua, sobre todo en las laderas muy inclinadas por encima de los 2200 m aproximadamente. Lugares peligrosos se encuentran sobre todo en las zonas protegidas del viento por encima de los 2200 m aproximadamente. Es necesaria una cierta experiencia en la evaluación del peligro de aludes. <break time="1s"/> <break time="1s"/> En las laderas herbosas inclinadas, son aún posibles avalanchas de deslizamiento basal de tamaño pequeño y, localmente, mediano. Esto se da especialmente en los sectores con mucha nieve.</s></p>
@@ -148,13 +148,13 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>Con la nieve reciente y el viento, en el transcurso de la jornada el peligro aumentará ligeramente.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día aplica por encima de el límite del bosque moderate avalanche danger, so danger level two, por debajo low avalanche danger, so danger level one.</s>
-<s>más tarde en el día aplica por encima de el límite del bosque moderate avalanche danger, so danger level two, por debajo low avalanche danger, so danger level one.</s>
+<s>al inicio del día hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de el límite del bosque, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+<s>al final del día hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de el límite del bosque, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día, encima el límite del bosque, tenemos a wind slab problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, encima el límite del bosque, tenemos a new snow problem. Esto en todas las orientaciones.</s>
+<s>al inicio del día, encima el límite del bosque, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, encima el límite del bosque, tenemos un problema de nieve reciente. Esto en todas las orientaciones.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>La nieve reciente y las placas de viento y dispersas pueden ser desencadenadas al paso de un solo montañero. Lugares peligrosos se encuentran por encima del límite del bosque, como también cerca del límite del bosque. Con la intensificación de la nevada, en el transcurso de la jornada los lugares peligrosos aumentarán. Estos están parcialmente cubiertos de nieve reciente y por lo tanto resultan difíciles de reconocer. Precaución sobre todo cerca de los cordales, en canales y cubetas. Los aludes son como mínimo de tamaño mediano. <break time="1s"/> <break time="1s"/> En las laderas herbosas inclinadas, son posibles avalanchas de deslizamiento basal de tamaño pequeño y, localmente, mediano. Esto se da especialmente en los sectores con mucha nieve.</s></p>
@@ -190,13 +190,13 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>El problema de nieve venteada reciente debe evaluarse de manera crítica.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día aplica low avalanche danger, so danger level one.</s>
-<s>más tarde en el día aplica por encima de el límite del bosque moderate avalanche danger, so danger level two, por debajo low avalanche danger, so danger level one.</s>
+<s>al inicio del día hay Peligro de aludes débil, por lo que el grado de peligro es uno..</s>
+<s>al final del día hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de el límite del bosque, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día, encima 2400 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
-<s>Además, más tarde en el día, encima el límite del bosque, tenemos a wind slab problem. Esto en todas las orientaciones.</s>
+<s>al inicio del día, encima 2400 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
+<s>Además, al final del día, encima el límite del bosque, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>El viernes , con la nieve reciente y el viento fuerte del sudoeste , se formarán placas de viento especialmente en canales y cubetas y detrás de los cambios abruptos de pendiente. Las placas de viento pueden desencadenarse al paso de un solo montañero en todas las orientaciones por encima del límite del bosque. Con la intensificación de la nevada, en el transcurso de la jornada el número y la extensión de los lugares peligrosos aumentará. Además del peligro de ser enterrado por un alud, se debe tener en cuenta también el peligro de ser arrastrado hacia una trampa del terreno. <break time="1s"/> Actualmente, el servicio de predicción de aludes tiene información limitada. Por lo tanto, debe evaluarse detenidamente el peligro de aludes local.</s></p>
@@ -232,11 +232,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>En todas las orientaciones en todas las cotas hay un poco de nieve. El problema de nieve venteada reciente debe evaluarse de manera crítica.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero aplica low avalanche danger, so danger level one.</s>
+<s>día entero hay Peligro de aludes débil, por lo que el grado de peligro es uno..</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero, tenemos a new snow problem. Esto en todas las orientaciones.</s>
+<s>día entero, tenemos un problema de nieve reciente. Esto en todas las orientaciones.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Los lugares peligrosos se encuentran especialmente en terreno inclinado en cotas medias y altas y en las laderas con acumulaciones de nieve venteada. Los aludes pueden en algunos lugares ser desencadenadas con una sobrecarga débil, pero en su mayoría ser de dimensiones pequeñas.</s></p>

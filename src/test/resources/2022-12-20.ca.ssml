@@ -13,11 +13,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>El problema de capes febles persistents és la principal font de perill.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica per sobre 2000 metres considerable avalanche danger, so danger level three, per sota low avalanche danger, so danger level one.</s>
+<s>dia sencer hi ha Perill d'allaus marcat, doncs grau de perill tres per sobre 2000 metres, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2000 metres, tenim a persistent weak layer problem. Especialment en orientacions Oest fins a Nord i Est.</s>
+<s>dia sencer, per sobre 2000 metres, tenim un problema de capa feble persistent. Especialment en orientacions Oest a Nord a Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Les capes febles a la neu vella poden ser desencadenades en alguns indrets al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament. Precaució sobretot prop de les carenes, i també en cubetes, canals i darrere de canvis abruptes de pendent. Els "whumpfs" i les fissures que propaguen al passar són senyals de perill Les allaus poden atènyer mides mitjanes. <break time="1s"/> Les plaques de vent majoritàriament de mida petita dels darrers dies són, de manera aïllada, encara inestables, sobretot en vessants obacs en cotes altes i a l'alta muntanya, i també prop de les carenes. <break time="1s"/> Es recomana una elecció meticulosa de l’itinerari. <break time="1s"/> Amb l'augment de la temperatura diürna i la radiació solar, són possibles allaus de lliscament basal i purgues de neu humida, especialment en vessants assolellats, i també als talussos i als vessants herbosos principalment en cotes mitges.</s></p>
@@ -26,7 +26,7 @@ effects_profile_id: "handset-class-device"
 <p>La part inferior del mantell s'ha facetat i és feble, sobretot en vessants inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament, i també en vessants assolellats inclinats a l'alta muntanya. Els desencadenaments d'allaus i les observacions sobre el terreny confirmen l'estructura desfavorable del mantell de neu. <break time="1s"/> El lligam entre les plaques de vent és localment encara desfavorable. Amb les temperatures suaus, el dimarts les plaques de vent s'estabilitzaran. <break time="1s"/> El sol i la calor causaran en alguns casos un gradual debilitament del mantell de neu als vessants assolellats sobretot en cotes mitges.</p>
 Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscaments.
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -53,11 +53,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>El mantell de neu vell roman procliu al desencadenament.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica per sobre 2200 metres moderate avalanche danger, so danger level two, per sota low avalanche danger, so danger level one.</s>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre 2200 metres, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2200 metres, tenim a persistent weak layer problem. Especialment en orientacions Oest fins a Nord i Est.</s>
+<s>dia sencer, per sobre 2200 metres, tenim un problema de capa feble persistent. Especialment en orientacions Oest a Nord a Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Les capes febles a la neu vella poden ser desencadenades de manera aïllada al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants molt inclinats obacs per sobre dels 2200 m aproximadament. Precaució en zones obagues i protegides del vent en altitud. Les allaus poden atènyer mides mitjanes. <break time="1s"/> A més les plaques de vent de mida petita són de manera molt aïllada encara proclius al desencadenament. Aquestes si és possible s’haurien d’evitar. <break time="1s"/> <break time="1s"/> Amb l'augment de la temperatura, són probables allaus de lliscament basal i purgues de neu humida, especialment en vessants assolellats.</s></p>
@@ -66,7 +66,7 @@ effects_profile_id: "handset-class-device"
 <p>Al mantell de neu vella hi ha capes febles inestables, sobretot en vessants obacs molt inclinats per sobre dels 2200 m aproximadament, i també en vessants assolellats a l'alta muntanya. <break time="1s"/> El lligam entre les plaques de vent i amb la neu vella és localment encara desfavorable. Aquestes són, de manera aïllada, encara inestables sobretot en vessants obacs molt inclinats en altitud. Amb la pujada de temperatures, el dimarts les plaques de vent s'estabilitzaran. <break time="1s"/> <break time="1s"/> En el transcurs de la jornada el sol i la calor causaran una gradual humidificació del mantell de neu als vessants assolellats sobretot en cotes mitges.</p>
 Tenim els segënts patrons de perill: pp.1: capa feble persistent.
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -93,12 +93,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>El mantell de neu vell roman procliu al desencadenament.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica per sobre 2200 metres moderate avalanche danger, so danger level two, per sota low avalanche danger, so danger level one.</s>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre 2200 metres, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2200 metres, tenim a persistent weak layer problem. Especialment en orientacions Oest fins a Nord i Est.</s>
-<s>A més, dia sencer, per sobre 2200 metres, tenim a wet snow problem. Especialment en orientacions Est fins a Sud i Oest.</s>
+<s>dia sencer, per sobre 2200 metres, tenim un problema de capa feble persistent. Especialment en orientacions Oest a Nord a Est.</s>
+<s>A més, dia sencer, per sobre 2200 metres, tenim un problema de neu humida. Especialment en orientacions Est a Sud a Oest.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Les capes febles a la neu vella poden ser desencadenades de manera aïllada al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants molt inclinats obacs per sobre dels 2200 m aproximadament. Precaució en zones obagues i protegides del vent en altitud. Les allaus poden atènyer mides mitjanes. <break time="1s"/> A més les plaques de vent de mida petita són de manera molt aïllada encara proclius al desencadenament. Aquestes si és possible s’haurien d’evitar. <break time="1s"/> <break time="1s"/> Amb l'augment de la temperatura, són probables allaus de lliscament basal i purgues de neu humida, especialment en vessants assolellats inclinats, i també als talussos i als vessants herbosos en cotes baixes i mitges.</s></p>
@@ -107,7 +107,7 @@ effects_profile_id: "handset-class-device"
 <p>Al mantell de neu vella hi ha capes febles inestables, sobretot en vessants obacs molt inclinats per sobre dels 2200 m aproximadament, i també en vessants assolellats a l'alta muntanya. <break time="1s"/> El lligam entre les plaques de vent i amb la neu vella és localment encara desfavorable. Aquestes són, de manera aïllada, encara inestables sobretot en vessants obacs molt inclinats en altitud. Amb la pujada de temperatures, el dimarts les plaques de vent s'estabilitzaran. <break time="1s"/> <break time="1s"/> En el transcurs de la jornada el sol i la calor causaran una gradual humidificació del mantell de neu sobretot als vessants assolellats en cotes mitges.</p>
 Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscaments.
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -134,11 +134,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>El problema de capes febles persistents és la principal font de perill.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica per sobre 2000 metres moderate avalanche danger, so danger level two, per sota low avalanche danger, so danger level one.</s>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre 2000 metres, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2000 metres, tenim a persistent weak layer problem. Especialment en orientacions Oest fins a Nord i Est.</s>
+<s>dia sencer, per sobre 2000 metres, tenim un problema de capa feble persistent. Especialment en orientacions Oest a Nord a Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Les capes febles a la neu vella poden ser desencadenades en alguns indrets al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament. Precaució sobretot en zones obagues i protegides del vent. Els "whumpfs" i les fissures que propaguen al passar són senyals de perill Les allaus poden atènyer mides mitjanes. <break time="1s"/> Les plaques de vent majoritàriament de mida petita dels darrers dies són, de manera aïllada, encara inestables, sobretot prop de colls i carenes, i també en vessants molt inclinats orientats a nord i est en altitud. <break time="1s"/> Es recomana una elecció meticulosa de l’itinerari. <break time="1s"/> Amb l'augment de la temperatura diürna i la radiació solar, són possibles allaus de lliscament basal i purgues de neu humida, especialment en vessants assolellats, i també als talussos i als vessants herbosos principalment en cotes mitges.</s></p>
@@ -147,7 +147,7 @@ effects_profile_id: "handset-class-device"
 <p>La part inferior del mantell s'ha facetat i és feble, sobretot en vessants obacs inclinats per sobre dels 2000 m aproximadament, i també en vessants assolellats inclinats a l'alta muntanya. Els desencadenaments d'allaus i les observacions sobre el terreny confirmen l'estructura desfavorable del mantell de neu. <break time="1s"/> El lligam entre les plaques de vent i amb la neu vella és localment encara desfavorable. Aquestes són, de manera aïllada, encara inestables sobretot en vessants obacs molt inclinats en altitud. Amb les temperatures suaus, el dimarts les plaques de vent s'estabilitzaran. <break time="1s"/> El sol i la calor causaran en alguns casos un gradual debilitament del mantell de neu als vessants assolellats sobretot en cotes mitges.</p>
 Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscaments.
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -174,11 +174,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>El problema de capes febles persistents és la principal font de perill. <break time="1s"/></s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica per sobre 2000 metres moderate avalanche danger, so danger level two, per sota low avalanche danger, so danger level one.</s>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre 2000 metres, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2000 metres, tenim a persistent weak layer problem. Especialment en orientacions Oest fins a Nord i Est.</s>
+<s>dia sencer, per sobre 2000 metres, tenim un problema de capa feble persistent. Especialment en orientacions Oest a Nord a Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Les capes febles a la neu vella poden ser desencadenades fins i tot en alguns indrets al pas d'un sol muntanyenc. Els indrets perillosos es troben sobretot en vessants molt inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament i també als vessants molt inclinats orientats a sud per sobre dels 3000 m aproximadament. <break time="1s"/> Les plaques de vent majoritàriament de mida petita poden, en alguns casos, desencadenar-se al pas d'un sol muntanyenc sobretot en vessants obacs prop de les carenes en altitud. <break time="1s"/> Les allaus poden atènyer mides mitjanes. <break time="1s"/> S'aconsella una elecció meticulosa de l’itinerari. <break time="1s"/> A conseqüència de l’augment de la temperatura, en el transcurs de la jornada són possibles només de manera aïllada allaus de lliscament basal i purgues de neu humida, però majoritàriament petites. Això es dona especialment en vessants assolellats molt inclinats, i també als talussos i als vessants herbosos en cotes mitges.</s></p>
@@ -187,7 +187,7 @@ effects_profile_id: "handset-class-device"
 <p>La part inferior del mantell s'ha facetat i és feble, sobretot en vessants inclinats orientats a oest, nord i est per sobre dels 2000 m aproximadament, i també en vessants assolellats inclinats a l'alta muntanya. <break time="1s"/> Els desencadenaments d'allaus i les observacions sobre el terreny confirmen l'estructura desfavorable del mantell de neu. <break time="1s"/> El dimarts es formaran plaques de vent majoritàriament de mida petita als sectors exposats al fogony. Això es dona prop de colls i carenes. <break time="1s"/> El sol i la calor causaran un gradual debilitament del mantell de neu en cotes baixes i mitges. Això es dona en vessants assolellats i als sectors exposats al fogony. <break time="1s"/> De moment només hi ha poca neu.</p>
 Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscaments.
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per dimecres, 21 de desembre de 2022 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>

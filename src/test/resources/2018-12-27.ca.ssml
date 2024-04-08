@@ -13,15 +13,15 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>més aviat durant el dia aplica considerable avalanche danger, so danger level three.</s>
-<s>més tard durant el dia aplica considerable avalanche danger, so danger level three.</s>
+<s>a primera hora hi ha Perill d'allaus marcat, doncs grau de perill tres.</s>
+<s>al final del dia hi ha Perill d'allaus marcat, doncs grau de perill tres.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>més aviat durant el dia, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
-<s>A més, més aviat durant el dia, entre 2200 metres i 2700 metres, tenim a persistent weak layer problem. Això en totes les orientacions.</s>
-<s>A més, més tard durant el dia, entre 2200 metres i 2700 metres, tenim a persistent weak layer problem. Això en totes les orientacions.</s>
-<s>A més, més tard durant el dia, per sota 2400 metres, tenim a wet snow problem. Especialment en orientacions Est fins a Sud i Oest.</s>
+<s>a primera hora, per sobre 2200 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
+<s>A més, a primera hora, entre 2200 metres i 2700 metres, tenim un problema de capa feble persistent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, entre 2200 metres i 2700 metres, tenim un problema de capa feble persistent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sota 2400 metres, tenim un problema de neu humida. Especialment en orientacions Est a Sud a Oest.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -30,7 +30,7 @@ effects_profile_id: "handset-class-device"
 <p>null</p>
 Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5: nevada després d'un període llarg fred.
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -57,12 +57,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica moderate avalanche danger, so danger level two.</s>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
-<s>A més, dia sencer, per sota 2400 metres, tenim a gliding snow problem. Especialment en orientacions Est fins a Sud i Oest.</s>
+<s>dia sencer, per sobre 2200 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
+<s>A més, dia sencer, per sota 2400 metres, tenim un problema de lliscaments basals. Especialment en orientacions Est a Sud a Oest.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -71,7 +71,7 @@ effects_profile_id: "handset-class-device"
 <p>null</p>
 Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.2: lliscaments.
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -98,12 +98,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica considerable avalanche danger, so danger level three.</s>
+<s>dia sencer hi ha Perill d'allaus marcat, doncs grau de perill tres.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
-<s>A més, dia sencer, entre 2200 metres i 2700 metres, tenim a persistent weak layer problem. Especialment en orientacions Oest fins a Nord i Est.</s>
+<s>dia sencer, per sobre 2200 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
+<s>A més, dia sencer, entre 2200 metres i 2700 metres, tenim un problema de capa feble persistent. Especialment en orientacions Oest a Nord a Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -139,12 +139,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica moderate avalanche danger, so danger level two.</s>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2300 metres, tenim a wind slab problem. Especialment en orientacions Oest fins a Nord i Sud-Est.</s>
-<s>A més, dia sencer, per sobre 2300 metres, tenim a persistent weak layer problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
+<s>dia sencer, per sobre 2300 metres, tenim un problema de plaques de vent. Especialment en orientacions Oest a Nord a Sud-Est.</s>
+<s>A més, dia sencer, per sobre 2300 metres, tenim un problema de capa feble persistent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -152,7 +152,7 @@ effects_profile_id: "handset-class-device"
 <p><s>I ara el mantell de neu:</s></p>
 <p>null</p>
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -179,11 +179,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica moderate avalanche danger, so danger level two.</s>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Nord-Est.</s>
+<s>dia sencer, per sobre 2200 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -192,7 +192,7 @@ effects_profile_id: "handset-class-device"
 <p>null</p>
 Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -219,11 +219,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer aplica low avalanche danger, so danger level one.</s>
+<s>dia sencer hi ha Perill d'allaus feble, doncs grau de perill 1.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>dia sencer, per sobre 2200 metres, tenim a wind slab problem. Especialment en orientacions Nord-Oest fins a Nord i Est.</s>
+<s>dia sencer, per sobre 2200 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -231,7 +231,7 @@ effects_profile_id: "handset-class-device"
 <p><s>I ara el mantell de neu:</s></p>
 <p>null</p>
 <break time="1s" strength="strong"></break>
-<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus sense canvis.</s></p>
+<p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>

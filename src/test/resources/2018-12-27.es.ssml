@@ -13,15 +13,15 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día aplica considerable avalanche danger, so danger level three.</s>
-<s>más tarde en el día aplica considerable avalanche danger, so danger level three.</s>
+<s>al inicio del día hay Peligro de aludes notable, por lo que el grado de peligro es tres..</s>
+<s>al final del día hay Peligro de aludes notable, por lo que el grado de peligro es tres..</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>más temprano en el día, encima 2200 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
-<s>Además, más temprano en el día, entre 2200 metros y 2700 metros, tenemos a persistent weak layer problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, entre 2200 metros y 2700 metros, tenemos a persistent weak layer problem. Esto en todas las orientaciones.</s>
-<s>Además, más tarde en el día, por debajo 2400 metros, tenemos a wet snow problem. Especialmente en orientaciones Este a Sur a Oeste.</s>
+<s>al inicio del día, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
+<s>Además, al inicio del día, entre 2200 metros y 2700 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, entre 2200 metros y 2700 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, por debajo 2400 metros, tenemos un poblema de nieve húmeda. Especialmente en orientaciones Este a Sur a Oeste.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -57,12 +57,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero aplica moderate avalanche danger, so danger level two.</s>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos..</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero, encima 2200 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
-<s>Además, día entero, por debajo 2400 metros, tenemos a gliding snow problem. Especialmente en orientaciones Este a Sur a Oeste.</s>
+<s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
+<s>Además, día entero, por debajo 2400 metros, tenemos un problema de deslizamiento basal. Especialmente en orientaciones Este a Sur a Oeste.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -98,12 +98,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero aplica considerable avalanche danger, so danger level three.</s>
+<s>día entero hay Peligro de aludes notable, por lo que el grado de peligro es tres..</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero, encima 2200 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
-<s>Además, día entero, entre 2200 metros y 2700 metros, tenemos a persistent weak layer problem. Especialmente en orientaciones Oeste a Norte a Este.</s>
+<s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
+<s>Además, día entero, entre 2200 metros y 2700 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -139,12 +139,12 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero aplica moderate avalanche danger, so danger level two.</s>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos..</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero, encima 2300 metros, tenemos a wind slab problem. Especialmente en orientaciones Oeste a Norte a Sudeste.</s>
-<s>Además, día entero, encima 2300 metros, tenemos a persistent weak layer problem. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
+<s>día entero, encima 2300 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Oeste a Norte a Sudeste.</s>
+<s>Además, día entero, encima 2300 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -179,11 +179,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero aplica moderate avalanche danger, so danger level two.</s>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos..</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero, encima 2200 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
+<s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
@@ -219,11 +219,11 @@ effects_profile_id: "handset-class-device"
 <p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero aplica low avalanche danger, so danger level one.</s>
+<s>día entero hay Peligro de aludes débil, por lo que el grado de peligro es uno..</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>día entero, encima 2200 metros, tenemos a wind slab problem. Especialmente en orientaciones Noroeste a Norte a Este.</s>
+<s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Este.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>null</s></p>
