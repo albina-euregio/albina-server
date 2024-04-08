@@ -182,20 +182,26 @@ public class AlbinaUtilTest {
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		Assertions.assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("16.01.2019, 17:00:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
 		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 		Assertions.assertEquals("2019-01-16T23:00Z", AlbinaUtil.getDate(bulletins).toString());
-		Assertions.assertEquals("Donnerstag 17.01.2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
-		Assertions.assertEquals("am Freitag, den 18.01.2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("Donnerstag, 17. Jänner 2019", AlbinaUtil.getDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("giovedì 17 gennaio 2019", AlbinaUtil.getDate(bulletins, LanguageCode.it));
+		Assertions.assertEquals("Thursday 17 January 2019", AlbinaUtil.getDate(bulletins, LanguageCode.en));
+		Assertions.assertEquals("jeudi 17 janvier 2019", AlbinaUtil.getDate(bulletins, LanguageCode.fr));
+		Assertions.assertEquals("jueves, 17 de enero de 2019", AlbinaUtil.getDate(bulletins, LanguageCode.es));
+		Assertions.assertEquals("dijous, 17 de gener de 2019", AlbinaUtil.getDate(bulletins, LanguageCode.ca));
+		Assertions.assertEquals("dijaus, 17 de Gèr de 2019", AlbinaUtil.getDate(bulletins, LanguageCode.oc));
+		Assertions.assertEquals("am Freitag, 18. Jänner 2019", AlbinaUtil.getTendencyDate(bulletins, LanguageCode.de));
 		Assertions.assertEquals("16.01.2019", AlbinaUtil.getPreviousValidityDateString(bulletins, LanguageCode.de));
 		Assertions.assertEquals("18.01.2019", AlbinaUtil.getNextValidityDateString(bulletins, LanguageCode.de));
 		Assertions.assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
 		Assertions.assertEquals("2019-01-17", AlbinaUtil.getValidityDateString(bulletins));
 		Assertions.assertEquals("2019-01-24", AlbinaUtil.getValidityDateString(bulletins, Period.ofDays(7)));
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
-		Assertions.assertEquals("Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
+		Assertions.assertEquals("Lawinen.report für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
 		avalancheReport.setStatus(BulletinStatus.republished);
-		Assertions.assertEquals("UPDATE zum Lawinen.report für Donnerstag 17.01.2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
+		Assertions.assertEquals("UPDATE zum Lawinen.report für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
 		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de));
 		Assertions.assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf", LinkUtil.getPdfLink(avalancheReport, LanguageCode.de));
 		Assertions.assertTrue(AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins),
@@ -209,7 +215,7 @@ public class AlbinaUtilTest {
 		Assertions.assertEquals("2019-01-16T16:00Z", bulletins.get(0).getPublicationDate().toString());
 		bulletins.forEach(b -> b.setPublicationDate(b.getPublicationDate().withZoneSameInstant(ZoneId.of("Canada/Mountain"))));
 		Assertions.assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.get(0).getPublicationDate().toString());
-		Assertions.assertEquals("16.01.2019 um 17:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
+		Assertions.assertEquals("16.01.2019, 17:00:00", AlbinaUtil.getPublicationDate(bulletins, LanguageCode.de));
 		Assertions.assertEquals("2019-01-16_16-00-00", AlbinaUtil.getPublicationDateDirectory(bulletins));
 	}
 

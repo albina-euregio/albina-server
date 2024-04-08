@@ -255,10 +255,7 @@ public interface TextToSpeech {
 		}
 
 		private String getValidityDate(ValidTime validTime) {
-			LocalDate localDate = validTime.getStartTime().atZone(AlbinaUtil.localZone()).toLocalDate();
-			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
-				.withLocale(lang.getLocale() == Locale.GERMAN ? new Locale("de", "AT") : lang.getLocale());
-			return localDate.format(dateTimeFormatter);
+			return lang.getLongDate(validTime.getStartTime().atZone(AlbinaUtil.localZone()));
 		}
 
 		void paragraph(String element) {

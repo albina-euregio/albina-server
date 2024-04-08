@@ -9,7 +9,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Tuesday, December 20, 2022.</s></p>
+<p><s>Avalanche report for Tuesday 20 December 2022.</s></p>
 <p><emphasis><s>Weakly bonded old snow represents the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -26,7 +26,7 @@ effects_profile_id: "handset-class-device"
 <p>Towards its base, the snowpack is faceted and weak, especially on steep west, north and east facing slopes above approximately 2000 m, as well as on steep sunny slopes in high Alpine regions. Released avalanches and field observations confirm the unfavourable bonding of the snowpack. <break time="1s"/> In some cases the wind slabs have bonded still only poorly together. As a consequence of mild temperatures the snow drift accumulations will stabilise on Tuesday. <break time="1s"/> Sunshine and high temperatures will give rise to gradual softening of the snowpack in some cases on sunny slopes in particular at intermediate altitudes.</p>
 We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Wednesday, December 21, 2022 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Wednesday 21 December 2022 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -49,7 +49,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Tuesday, December 20, 2022.</s></p>
+<p><s>Avalanche report for Tuesday 20 December 2022.</s></p>
 <p><emphasis><s>The old snowpack remains prone to triggering.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -66,7 +66,7 @@ effects_profile_id: "handset-class-device"
 <p>Avalanche prone weak layers exist in the old snowpack, especially on very steep shady slopes above approximately 2200 m, as well as on sunny slopes in high Alpine regions. <break time="1s"/> In some cases the wind slabs have bonded still only poorly with each other and the old snowpack. They are in individual cases still prone to triggering especially on very steep shady slopes at elevated altitudes. As a consequence of rising temperatures the snow drift accumulations will stabilise on Tuesday. <break time="1s"/> <break time="1s"/> Sunshine and high temperatures will give rise as the day progresses to gradual moistening of the snowpack on sunny slopes in particular at intermediate altitudes.</p>
 We have the following danger patterns: dp.1: deep persistent weak layer.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Wednesday, December 21, 2022 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Wednesday 21 December 2022 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -89,7 +89,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Tuesday, December 20, 2022.</s></p>
+<p><s>Avalanche report for Tuesday 20 December 2022.</s></p>
 <p><emphasis><s>The old snowpack remains prone to triggering.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -107,7 +107,7 @@ effects_profile_id: "handset-class-device"
 <p>Avalanche prone weak layers exist in the old snowpack, especially on very steep shady slopes above approximately 2200 m, as well as on sunny slopes in high Alpine regions. <break time="1s"/> In some cases the wind slabs have bonded still only poorly with each other and the old snowpack. They are in individual cases still prone to triggering especially on very steep shady slopes at elevated altitudes. As a consequence of rising temperatures the snow drift accumulations will stabilise on Tuesday. <break time="1s"/> <break time="1s"/> Sunshine and high temperatures will give rise as the day progresses to gradual moistening of the snowpack in particular on sunny slopes at intermediate altitudes.</p>
 We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Wednesday, December 21, 2022 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Wednesday 21 December 2022 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -130,7 +130,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Tuesday, December 20, 2022.</s></p>
+<p><s>Avalanche report for Tuesday 20 December 2022.</s></p>
 <p><emphasis><s>Weakly bonded old snow represents the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -147,7 +147,7 @@ effects_profile_id: "handset-class-device"
 <p>Towards its base, the snowpack is faceted and weak, especially on steep shady slopes above approximately 2000 m, as well as on steep sunny slopes in high Alpine regions. Released avalanches and field observations confirm the unfavourable bonding of the snowpack. <break time="1s"/> In some cases the wind slabs have bonded still only poorly with each other and the old snowpack. They are in individual cases still prone to triggering especially on very steep shady slopes at elevated altitudes. As a consequence of mild temperatures the snow drift accumulations will stabilise on Tuesday. <break time="1s"/> Sunshine and high temperatures will give rise to gradual softening of the snowpack in some cases on sunny slopes in particular at intermediate altitudes.</p>
 We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Wednesday, December 21, 2022 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Wednesday 21 December 2022 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -170,7 +170,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Tuesday, December 20, 2022.</s></p>
+<p><s>Avalanche report for Tuesday 20 December 2022.</s></p>
 <p><emphasis><s>Weakly bonded old snow represents the main danger. <break time="1s"/></s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -187,7 +187,7 @@ effects_profile_id: "handset-class-device"
 <p>Towards its base, the snowpack is faceted and weak, especially on steep west, north and east facing slopes above approximately 2000 m, as well as on steep sunny slopes in high Alpine regions. <break time="1s"/> Released avalanches and field observations confirm the unfavourable bonding of the snowpack. <break time="1s"/> On Tuesday mostly small wind slabs will form in the regions exposed to the foehn wind. This applies adjacent to ridgelines and in pass areas. <break time="1s"/> Sunshine and high temperatures will give rise to gradual softening of the snowpack at low and intermediate altitudes. This applies on sunny slopes, and in the regions exposed to the foehn wind. <break time="1s"/> Only a small amount of snow is lying for the time of year.</p>
 We have the following danger patterns: dp.1: deep persistent weak layer, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Wednesday, December 21, 2022 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Wednesday 21 December 2022 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>

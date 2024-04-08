@@ -33,6 +33,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.text.MessageFormat;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -82,7 +84,7 @@ public interface AlbinaUtil {
 			return "";
 		}
 		date = date.withZoneSameInstant(localZone());
-		return lang.getTendencyDate(date);
+		return lang.getBundleString("tendency.binding-word").strip() + " " + lang.getLongDate(date);
 	}
 
 	static Instant getInstantNowNoNanos() {
@@ -165,7 +167,8 @@ public interface AlbinaUtil {
 		if (instant == null) {
 			return "";
 		}
-        return instant.atZone(localZone()).format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication")));
+		ZonedDateTime dateTime = instant.atZone(localZone()).truncatedTo(ChronoUnit.MINUTES);
+		return lang.getDateTime(dateTime);
     }
 
 	static String getPublicationDateDirectory(List<AvalancheBulletin> bulletins) {
@@ -463,7 +466,7 @@ public interface AlbinaUtil {
 	}
 
 	static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {
-		String stringDate = OffsetDateTime.parse(date).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		String stringDate = OffsetDateTime.parse(date).toLocalDate().toString();
 		return stringDate + "_" + language.getBundleString("media-file.name") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
 	}
 
