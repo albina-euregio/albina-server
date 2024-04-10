@@ -1,0 +1,242 @@
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per diumenge, 28 de gener de 2024.</s></p>
+<p><emphasis><s>Les capes febles a la part superior del mantell de neu requereixen cautela i prudència. A més hi ha un perill latent d'allaus de lliscament basal.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer hi ha Perill d'allaus marcat, doncs grau de perill tres per sobre 2600 metres, Perill d'allaus moderat, doncs grau de perill dos per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre 2600 metres, tenim un problema de capa feble persistent. Especialment en orientacions Est a Sud a Oest.</s>
+<s>A més, dia sencer, per sota 2600 metres, tenim un problema de lliscaments basals. Això en totes les orientacions.</s>
+<s>A més, dia sencer, per sobre 2600 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Les capes febles a la part superior del mantell de neu poden ser desencadenades en alguns indrets al pas d'un sol muntanyenc. Això es dona especialment en vessants assolellats molt inclinats per sobre dels 2600 m aproximadament. Els "whumpfs" i les fissures que propaguen al passar són senyals d'alarma que indiquen aquest perill Les allaus són en part de mida gran. <break time="1s"/> <break time="1s"/> Les noves acumulacions de neu ventada poden en alguns casos encara ser desencadenades accidentalment sobretot en vessants obacs molt inclinats per sobre dels 2400 m aproximadament. Precaució sobretot prop de les carenes a l'alta muntanya. <break time="1s"/> <break time="1s"/> Són possibles noves allaus de lliscament basal, de manera aïllada també grans. Això es dona especialment en vessants herbosos inclinats per sota dels 2600 m aproximadament. Evitar les zones amb esquerdes de lliscament basal.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>A cotes altes i a zones d’alta muntanya: <break time="1s"/> El vent del nord-oest ha transportat molta neu. A la part superior del mantell de neu hi ha capes febles de cristalls facetats, especialment en vessants assolellats molt inclinats per sobre dels 2600 m aproximadament. Les observacions sobre el terreny i els desencadenaments d'allaus indiquen l'estructura feble del mantell de neu. La part inferior del mantell és majoritàriament estable. <break time="1s"/> A cotes baixes i mitges: <break time="1s"/> La neu vella és molt humida, amb una crosta de regel sovint portant a la superfície. En el transcurs de la jornada la calor causarà una lleugera humidificació del mantell de neu. Això es dona en vessants assolellats molt inclinats.</p>
+Tenim els segënts patrons de perill: pp.4: fred desprès de càlid /càlid desprès de fred, pp.2: lliscaments.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dilluns, 29 de gener de 2024 indica un perill d'allaus constant.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per diumenge, 28 de gener de 2024.</s></p>
+<p><emphasis><s>La neu ventada i les allaus de lliscament requereixen atenció.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre 2400 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Sud-Est.</s>
+<s>A més, dia sencer, per sota 2600 metres, tenim un problema de lliscaments basals. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Amb la neu recent i el vent del quadrant nord-oest fort , s'han format plaques de vent abundants en altitud. Les allaus poden ser desencadenades com a mínim per una sobrecàrrega forta i assolir mida mitjana. En altitud la probabilitat de desencadenament és major. Indrets perillosos es troben als vessants amb plaques de vent per sobre dels 2400 m aproximadament. Precaució sobretot en vessants molt inclinats prop de les carenes a l'alta muntanya. <break time="1s"/> <break time="1s"/> Són possibles noves allaus de lliscament basal, de manera aïllada també grans. Això es dona especialment en vessants herbosos inclinats per sota dels 2600 m aproximadament. Evitar les zones amb esquerdes de lliscament basal.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>A cotes altes i a zones d’alta muntanya: <break time="1s"/> El vent del nord-oest ha transportat molta neu. A la part superior del mantell de neu hi ha capes febles inestables. La part inferior del mantell és majoritàriament estable. <break time="1s"/> A cotes baixes i mitges: <break time="1s"/> La neu vella és molt humida, amb una crosta de regel sovint portant a la superfície. En el transcurs de la jornada la calor causarà una lleugera humidificació del mantell de neu. Això es dona en vessants assolellats molt inclinats.</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.2: lliscaments.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dilluns, 29 de gener de 2024 indica un perill d'allaus en disminució.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per diumenge, 28 de gener de 2024.</s></p>
+<p><emphasis><s>Les plaques de vent representen la principal font de perill.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre el límit del bosc, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre el límit del bosc, tenim un problema de plaques de vent. Això en totes les orientacions.</s>
+<s>A més, dia sencer, per sobre el límit del bosc, tenim un problema de neu humida. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Amb el vent del quadrant nord-oest fort , s'han format plaques de vent en alguns casos fàcilment desencadenables. A més s’ha de tenir compte amb les plaques de vent més velles. Acumulacions de neu ventada més recents poden, de manera aïllada, ser desencadenades al pas d'un sol muntanyenc. <break time="1s"/> Els indrets perillosos es troben sobretot prop de carenes, cubetes i canals de totes les orientacions. A més, en particular al peu de parets rocoses i darrere de canvis abruptes de pendent, són més possibles allaus naturals com a mínim de mida petita. Amb l'augment de la temperatura diürna i la radiació solar, són encara possibles allaus de neu molt humida sense cohesió com a mínim de mida petita.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>Acumulacions de neu ventada més recents no s'han lligat bé amb la neu vella per sobre del límit del bosc. Les condicions de temps primaveral han causat una humidificació del mantell de neu. Amb les temperatures suaus i el vent de moderat a fort del nord-oest, en els darrers dies les plaques de vent han crescut. El mantell de neu és extremadament variable en pocs metres. Matí i matinada: El mantell de neu és molt humit, amb una crosta sovint portant a la superfície.</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dilluns, 29 de gener de 2024 indica un perill d'allaus constant.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per diumenge, 28 de gener de 2024.</s></p>
+<p><emphasis><s>Les plaques de vent representen la principal font de perill.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre el límit del bosc, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre el límit del bosc, tenim un problema de plaques de vent. Això en totes les orientacions.</s>
+<s>A més, dia sencer, entre el límit del bosc i 2700 metres, tenim un problema de neu humida. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Amb el vent del quadrant nord-oest fort , s'han format plaques de vent en alguns casos fàcilment desencadenables. A més s’ha de tenir compte amb les plaques de vent més velles. Acumulacions de neu ventada més recents ja poden ser desencadenades al pas d'un sol muntanyenc. <break time="1s"/> Els indrets perillosos es troben sobretot prop de carenes, cubetes i canals de totes les orientacions. A més, en particular al peu de parets rocoses i darrere de canvis abruptes de pendent, són més possibles allaus naturals de mida petita i mitjana. Amb l'augment de la temperatura diürna i la radiació solar, són possibles allaus de neu molt humida sense cohesió de mida petita i mitjana.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>Acumulacions de neu ventada més recents no s'han lligat bé amb la neu vella per sobre del límit del bosc. Les condicions de temps primaveral han causat una humidificació del mantell de neu per sota dels 2700 m aproximadament. Amb les temperatures suaus i el vent de moderat a fort del nord-oest, en els darrers dies les plaques de vent han crescut. Els gruixos de neu varien molt per la influència del vent. A cotes mitges: Matí i matinada: El mantell de neu és molt humit, amb una crosta de regel no portant a la superfície.</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dilluns, 29 de gener de 2024 indica un perill d'allaus constant.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per diumenge, 28 de gener de 2024.</s></p>
+<p><emphasis><s>Les condicions són favorables en molts sectors.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre 2400 metres, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre 2400 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Est.</s>
+<s>A més, dia sencer, per sota 2600 metres, tenim un problema de lliscaments basals. Especialment en orientacions Est a Sud a Oest.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Amb el vent del quadrant nord-oest amb ratxes fortes , s'han format plaques de vent en alguns casos inestables. Aquests es troben sobretot en vessants orientats a nord-oest pel nord fins a l'est per sobre dels 2400 m aproximadament. Precaució sobretot en vessants molt inclinats prop de les carenes a l'alta muntanya. Les allaus poden atènyer mides mitjanes de manera aïllada. <break time="1s"/> <break time="1s"/> Són possibles noves allaus de lliscament basal, especialment en vessants inclinats orientats a est, sud i oest per sota dels 2600 m aproximadament. Evitar les zones amb esquerdes de lliscament basal.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>A cotes altes i a zones d’alta muntanya: <break time="1s"/> El vent del nord-oest ha transportat la neu recent i, en part, també la neu vella. Les noves acumulacions de neu ventada descansen a sobre de capes toves en altitud. Aquestes són en part inestables. <break time="1s"/> La part inferior del mantell consisteix en cristalls facetats. El mantell de neu és extremadament variable en pocs metres per sobre del límit del bosc. <break time="1s"/> <break time="1s"/> A cotes mitges: Matí i matinada: El mantell de neu és molt humit, amb una crosta de regel sovint portant a la superfície.</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.2: lliscaments.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dilluns, 29 de gener de 2024 indica un perill d'allaus en disminució.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per diumenge, 28 de gener de 2024.</s></p>
+<p><emphasis><s>Neu ventada recent i neu ventada antiga a cotes altes. En el transcurs de la jornada seran possibles purgues de neu humida.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer hi ha Perill d'allaus feble, doncs grau de perill 1.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, per sobre el límit del bosc, tenim un problema de plaques de vent. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Les noves acumulacions de neu ventada i les menys recents poden, de manera aïllada, desencadenar-se, especialment als seus marges. Precaució sobretot prop de les carenes en cubetes, canals i darrere de canvis abruptes de pendent en cotes altes. Les allaus són com a mínim de mida petita. <break time="1s"/> <break time="1s"/> A conseqüència de l'augment de la temperatura diürna i la radiació solar, són possibles només de manera aïllada allaus de lliscament basal i purgues de neu humida, però majoritàriament petites.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>Acumulacions de neu ventada descansen a sobre de capes toves sobretot en vessants obacs inclinats en cotes altes. El mantell de neu vell és més aviat estable. Matí i matinada: El mantell de neu és humit, amb una crosta de regel a la superfície.</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.10: escenari de primavera.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dilluns, 29 de gener de 2024 indica un perill d'allaus constant.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>

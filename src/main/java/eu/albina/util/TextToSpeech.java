@@ -49,7 +49,7 @@ import java.util.stream.Stream;
 
 public interface TextToSpeech {
 	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
-	Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(LanguageCode.de, LanguageCode.en, LanguageCode.it));
+	Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(LanguageCode.de, LanguageCode.en, LanguageCode.it, LanguageCode.es, LanguageCode.ca));
 	Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
 
 	class ScriptEngine {
@@ -320,14 +320,32 @@ public interface TextToSpeech {
 					.setName("it-IT-Wavenet-A")
 					.setSsmlGender(SsmlVoiceGender.FEMALE)
 					.build();
+			} else if (lang == LanguageCode.es && gender == SsmlVoiceGender.MALE) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("es-ES")
+					.setName("es-ES-Wavenet-B")
+					.setSsmlGender(SsmlVoiceGender.MALE)
+					.build();
+			} else if (lang == LanguageCode.es && gender == SsmlVoiceGender.FEMALE) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("es-ES")
+					.setName("es-ES-Wavenet-C")
+					.setSsmlGender(SsmlVoiceGender.FEMALE)
+					.build();
+			} else if (lang == LanguageCode.ca) {
+				return VoiceSelectionParams.newBuilder()
+					.setLanguageCode("ca-ES")
+					.setName("ca-ES-Standard-A")
+					.setSsmlGender(SsmlVoiceGender.FEMALE)
+					.build();
 			}
 			throw new IllegalArgumentException();
 		}
 
 		AudioConfig audioConfig() {
-            return AudioConfig.newBuilder()
-                .setAudioEncoding(AudioEncoding.MP3)
-                .addEffectsProfileId("handset-class-device")
+			return AudioConfig.newBuilder()
+				.setAudioEncoding(AudioEncoding.MP3)
+				.addEffectsProfileId("handset-class-device")
 				.build();
 		}
 
