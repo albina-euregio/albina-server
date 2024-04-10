@@ -19,10 +19,17 @@ package eu.albina.rest;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -102,5 +109,25 @@ public class StatisticsService {
 			logger.warn("Error creating statistics", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
+	}
+
+	@POST
+	@Path("/vr")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Save VR statistics")
+	public Response saveMediaFile(
+		@HeaderParam(HttpHeaders.AUTHORIZATION) String authorization,
+		InputStream inputStream
+	) throws IOException {
+		String token = System.getenv("ALBINA_VR_STATISTICS_TOKEN");
+		if (token == null || token.isEmpty() || !token.equals(authorization)) {
+			return Response.status(Response.Status.FORBIDDEN).build();
+		}
+		String directory = System.getenv("ALBINA_VR_STATISTICS_DIRECTORY");
+		java.nio.file.Path file = java.nio.file.Path.of(directory).resolve(UUID.randomUUID() + ".json");
+		try (OutputStream outputStream = Files.newOutputStream(file)) {
+			inputStream.transferTo(outputStream);
+		}
+		return Response.status(Response.Status.CREATED).build();
 	}
 }
