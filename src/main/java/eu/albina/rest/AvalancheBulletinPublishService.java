@@ -55,10 +55,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -237,8 +235,6 @@ public class AvalancheBulletinPublishService {
 			ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
 					.getPublishedBulletins(startDate, publishBulletinRegions);
 
-			Map<String, Thread> threads = new HashMap<String, Thread>();
-
 			// update all super regions
 			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
 			for (Region region : publishBulletinRegions) {
@@ -252,17 +248,7 @@ public class AvalancheBulletinPublishService {
 				List<AvalancheBulletin> regionBulletins = bulletins.stream().filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region)).collect(Collectors.toList());
 				avalancheReport.setBulletins(regionBulletins);
 				avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
-				Thread createSimpleHtmlThread = PublicationController.getInstance().createSimpleHtml(avalancheReport);
-				threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
-				createSimpleHtmlThread.start();
-			}
-
-			for (String key : threads.keySet()) {
-				try {
-					threads.get(key).join();
-				} catch (InterruptedException e) {
-					logger.error(key + " thread interrupted", e);
-				}
+				PublicationController.getInstance().createSimpleHtml(avalancheReport);
 			}
 
 			// copy files
@@ -312,8 +298,6 @@ public class AvalancheBulletinPublishService {
 					avalancheReport.setBulletins(regionBulletins, bulletins);
 					avalancheReport.setServerInstance(localServerInstance);
 					PublicationController.getInstance().createMaps(avalancheReport);
-				} catch (InterruptedException e) {
-					logger.error("Map production for " + region.getId() + " interrupted", e);
 				} catch (Exception e1) {
 					logger.error("Error during map production for " + region.getId(), e1);
 				}

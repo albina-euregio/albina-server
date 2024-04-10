@@ -20,10 +20,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,7 +65,6 @@ public class PublicationJob implements org.quartz.Job {
 	public void execute(JobExecutionContext arg0) {
 		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
 		AvalancheReportController avalancheReportController = AvalancheReportController.getInstance();
-		PublicationController publicationController = PublicationController.getInstance();
 		RegionController regionController = RegionController.getInstance();
 		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
@@ -137,35 +134,38 @@ public class PublicationJob implements org.quartz.Job {
 		// FIXME set publicationDate for all bulletins (somehow a hack)
 		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionController.getPublishBulletinRegions());
 		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
+		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		// update all regions to create complete maps
-		for (Region region : regionController.getPublishBulletinRegions()) {
-			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
+		// parallelStream uses ForkJoinPool.commonPool()
+		regionController.getPublishBulletinRegions().parallelStream().forEach(region -> {
+			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
 				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
 			AvalancheReport avalancheReport = avalancheReportController.getPublicReport(startDate, region);
 
 			if (avalancheReport == null || regionBulletins.isEmpty()) {
-				continue;
+				return;
 			}
 
-			avalancheReport.setBulletins(regionBulletins, publishedBulletins);
+			avalancheReport.setBulletins(regionBulletins, publishedBulletins0);
 			avalancheReport.setServerInstance(serverInstance);
 
 			// maybe another region was not published at all
 			BulletinStatus status = avalancheReport.getStatus();
 			if (status != BulletinStatus.published && status != BulletinStatus.republished) {
-				continue;
+				return;
 			}
 
+			PublicationController publicationController = PublicationController.getInstance();
 			publicationController.createRegionResources(region, avalancheReport);
 
 			// send notifications only for updated regions after all maps were created
 			if (regions.contains(region) && !isChange()) {
 				publicationController.sendToAllChannels(avalancheReport);
 			}
-		}
+		});
 
 		// copy files
 		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
