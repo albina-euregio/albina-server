@@ -87,6 +87,7 @@ public class UserController {
 			originalUser.setOrganization(user.getOrganization());
 			originalUser.setRoles(user.getRoles());
 			originalUser.setRegions(user.getRegions());
+			originalUser.setLanguage(user.getLanguage());
 			entityManager.persist(originalUser);
 
 			return user;
@@ -124,8 +125,7 @@ public class UserController {
 		List<User> users = this.getUsers();
 		if (users != null) {
 			JSONArray jsonResult = new JSONArray();
-			for (User user : users)
-				jsonResult.put(user.toMediumJSON());
+			users.stream().filter(user -> !user.isDeleted()).forEach(user -> jsonResult.put(user.toMediumJSON()));
 
 			return jsonResult;
 		} else
@@ -219,6 +219,10 @@ public class UserController {
 	 */
 	public void authenticate(String username, String password) throws Exception {
 		User user = getUser(username);
+		if (user == null)
+			throw new AlbinaException("User does not exist!");
+		if (user.isDeleted())
+			throw new AlbinaException("User has been deleted!");
 		if (!BCrypt.checkpw(password, user.getPassword()))
 			throw new AlbinaException("Password not correct!");
 	}
@@ -226,7 +230,8 @@ public class UserController {
 	public static void delete(String id) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			User user = entityManager.find(User.class, id);
-			entityManager.remove(user);
+			user.setDeleted(true);
+			entityManager.persist(user);
 			return null;
 		});
 	}
