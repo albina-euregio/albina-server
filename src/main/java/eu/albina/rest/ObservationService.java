@@ -45,7 +45,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Path("/observations")
@@ -142,8 +141,8 @@ public class ObservationService {
 		String statistics = ObservationController.getCsv(start, end);
 
 		String filename = String.format("observations_%s_%s",
-			OffsetDateTime.parse(startDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-			OffsetDateTime.parse(endDate).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			OffsetDateTime.parse(startDate).toLocalDate(),
+			OffsetDateTime.parse(endDate).toLocalDate());
 
 		try {
 			File tmpFile = File.createTempFile(filename, ".csv");

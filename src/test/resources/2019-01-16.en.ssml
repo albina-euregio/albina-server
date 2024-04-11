@@ -9,7 +9,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The avalanche danger will increase quickly during the day.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -29,7 +29,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>Weak layers in the upper part of the snowpack represent the main danger. The wind slabs have bonded insufficiently with each other and the old snowpack. The fresh snow and wind slabs of last week are lying on the unfavourable surface of an old snowpack in all aspects. Dunes on the snow surface and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack can indicate the danger. Remotely triggered avalanches are possible.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a decreasing avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a decreasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -52,7 +52,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>Fresh wind slabs require caution.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -68,7 +68,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>In some cases the wind slabs have bonded poorly with the old snowpack. The snowpack will be subject to considerable local variations.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -91,7 +91,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -108,7 +108,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>Faceted weak layers exist in the snowpack in particular on shady slopes. The mostly small wind slabs must be evaluated with care and prudence in all aspects above approximately 2500 m. In steep terrain there is a danger of falling on the hard crust. Below approximately 2000 m a little snow is lying.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -131,7 +131,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>Single winter sport participants can release avalanches in many places, including dangerously large ones. Areas with glide cracks are to be avoided.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -149,7 +149,7 @@ effects_profile_id: "handset-class-device"
 <p>By the evening the wind has been moderate to strong adjacent to ridgelines in some regions. The fresh wind slabs of the last few days are prone to triggering. Weak layers in the upper part of the snowpack represent the main danger. No distinct weak layers exist in the bottom section of the snowpack. The snowpack will become moist at low and intermediate altitudes.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a decreasing avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a decreasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -172,7 +172,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>Fresh wind slabs require caution.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -189,7 +189,7 @@ effects_profile_id: "handset-class-device"
 <p>Thus far only a little snow is lying. The snowpack will be subject to considerable local variations. In some cases the wind slabs have bonded poorly with the old snowpack.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a decreasing avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a decreasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -212,7 +212,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The sometimes large wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -228,7 +228,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>In some cases fresh snow and wind slabs are lying on soft layers. Isolated avalanche prone weak layers exist in the old snowpack. The snowpack will be generally prone to triggering. As a consequence of warming during the day and the solar radiation, the likelihood of dry and moist avalanches being released will increase in particular on steep sunny slopes.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a decreasing avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a decreasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -251,7 +251,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>Fresh snow and wind slabs require caution.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -268,7 +268,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>In many cases fresh snow and wind slabs are lying on a hard crust. The mostly small wind slabs of the day before yesterday must be evaluated with care and prudence in all aspects. Faceted weak layers exist in the snowpack especially on steep, rather lightly snow-covered shady slopes. Below approximately 2000 m thus far only a little snow is lying.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -291,7 +291,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>In all regions from a snow sport perspective, in most cases insufficient snow is lying.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -307,7 +307,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>The snowpack remains generally well bonded. Below approximately 1800 m only a little snow is lying.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -330,7 +330,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The backcountry touring conditions are to some extent critical.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -347,7 +347,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>In the last few days extensive wind slabs formed in all aspects. Over a wide area fresh snow and wind slabs are lying on soft layers. Faceted weak layers exist in the old snowpack. The snowpack will be quite prone to triggering. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack serve as an alarm indicating the danger.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -370,7 +370,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The fresh wind slabs are prone to triggering.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -388,7 +388,7 @@ effects_profile_id: "handset-class-device"
 <p>During the night the wind will be moderate to strong over a wide area. The wind will transport the fresh snow. In many cases various wind slab layers are lying on soft layers. Faceted weak layers exist in the old snowpack.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: cold following warm / warm following cold.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a decreasing avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a decreasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -411,7 +411,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday, January 16, 2019.</s></p>
+<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -427,7 +427,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>0 to 10 cm of snow. has fallen in the last two days. The strong wind will transport the fresh snow. The snowpack will be subject to considerable local variations. In some places wind slabs are lying on a weakly bonded old snowpack. Only a little snow is lying.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Thursday, January 17, 2019 indicates a steady avalanche danger.</s></p>
+<p><s>The tendency for Thursday 17 January 2019 indicates a steady avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>

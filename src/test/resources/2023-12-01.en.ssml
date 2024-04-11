@@ -9,7 +9,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Friday, December 1, 2023.</s></p>
+<p><s>Update of the avalanche report for Friday 1 December 2023.</s></p>
 <p><emphasis><s>Weakly bonded old snow above approximately 2000 m. Gliding snow at intermediate altitudes.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -31,7 +31,7 @@ effects_profile_id: "handset-class-device"
 <p>Up to 1600 m rain has fallen since yesterday. Over a wide area up to 20 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. <break time="1s"/> <break time="1s"/> In its middle, the snowpack is faceted and weak. This applies in particular above approximately 2000 m, and below approximately 2600 m. Field observations confirm the unfavourable bonding of the snowpack. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</p>
 We have the following danger patterns: dp.4: cold following warm / warm following cold, dp.2: gliding snow.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Saturday, December 2, 2023 indicates an increasing avalanche danger.</s></p>
+<p><s>The tendency for Saturday 2 December 2023 indicates an increasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -54,7 +54,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Friday, December 1, 2023.</s></p>
+<p><s>Update of the avalanche report for Friday 1 December 2023.</s></p>
 <p><emphasis><s>As the day progresses as a consequence of new snow and wind there will be a gradual increase in the danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -76,7 +76,7 @@ effects_profile_id: "handset-class-device"
 <p>Over a wide area 20 to 40 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. These weather conditions will foster a weakening of the snowpack in particular on very steep slopes. <break time="1s"/> <break time="1s"/> Field observations and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack confirm the unfavourable bonding of the snowpack. The snowpack will be subject to considerable local variations. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: cold following warm / warm following cold.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Saturday, December 2, 2023 indicates an increasing avalanche danger.</s></p>
+<p><s>The tendency for Saturday 2 December 2023 indicates an increasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -99,7 +99,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Friday, December 1, 2023.</s></p>
+<p><s>Update of the avalanche report for Friday 1 December 2023.</s></p>
 <p><emphasis><s>As the day progresses as a consequence of new snow and wind there will be a gradual increase in the danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -121,7 +121,7 @@ effects_profile_id: "handset-class-device"
 <p>Over a wide area 20 to 40 cm of snow will fall from midday. From the Venediger Range to the Glockner Range up to 60 cm of snow will fall. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. <break time="1s"/> <break time="1s"/> In its middle, the snowpack is faceted and weak. This applies in particular above the tree line, and below approximately 2600 m. Field observations and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack confirm the unfavourable bonding of the snowpack. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: cold following warm / warm following cold.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Saturday, December 2, 2023 indicates an increasing avalanche danger.</s></p>
+<p><s>The tendency for Saturday 2 December 2023 indicates an increasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -144,7 +144,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Friday, December 1, 2023.</s></p>
+<p><s>Update of the avalanche report for Friday 1 December 2023.</s></p>
 <p><emphasis><s>As the day progresses as a consequence of new snow and wind there will be only a slight increase in the danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -163,7 +163,7 @@ effects_profile_id: "handset-class-device"
 <p>Over a wide area up to 20 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Saturday, December 2, 2023 indicates an increasing avalanche danger.</s></p>
+<p><s>The tendency for Saturday 2 December 2023 indicates an increasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -186,7 +186,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Friday, December 1, 2023.</s></p>
+<p><s>Update of the avalanche report for Friday 1 December 2023.</s></p>
 <p><emphasis><s>Fresh wind slabs are to be evaluated critically.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -205,7 +205,7 @@ effects_profile_id: "handset-class-device"
 <p>15 to 30 cm of snow will fall on Friday, in particular above the tree line. <break time="1s"/> The old snowpack is largely stable and its surface has a crust, in particular on steep sunny slopes in all altitude zones, as well as on shady slopes below approximately 2400 m. <break time="1s"/> The snowpack will be subject to considerable local variations. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</p>
 We have the following danger patterns: dp.6: cold, loose snow and wind.
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Saturday, December 2, 2023 indicates an increasing avalanche danger.</s></p>
+<p><s>The tendency for Saturday 2 December 2023 indicates an increasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>
@@ -228,7 +228,7 @@ effects_profile_id: "handset-class-device"
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Friday, December 1, 2023.</s></p>
+<p><s>Update of the avalanche report for Friday 1 December 2023.</s></p>
 <p><emphasis><s>In all aspects in all altitude zones a little snow is lying. Fresh wind slabs are to be evaluated critically.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -244,7 +244,7 @@ effects_profile_id: "handset-class-device"
 <p><s>And now the snowpack:</s></p>
 <p>Below approximately 1800 m a little snow is lying. Over a wide area new snow and wind slabs are lying on a hard crust. At higher altitudes there are 10 to 20 cm of snow, and even more in some localities.</p>
 <break time="1s" strength="strong"></break>
-<p><s>The tendency for Saturday, December 2, 2023 indicates an increasing avalanche danger.</s></p>
+<p><s>The tendency for Saturday 2 December 2023 indicates an increasing avalanche danger.</s></p>
 <break time="1s" strength="strong"></break>
 </media>
 </par>

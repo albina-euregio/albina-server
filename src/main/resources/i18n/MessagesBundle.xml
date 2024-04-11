@@ -55,16 +55,6 @@
   <entry key="preview"> - PREVIEW</entry>
   <entry key="standard.link.text">Load standard view</entry>
   <entry key="danger-rating.elevation">{0} below {1}, {2} above {3}</entry>
-  <entry key="day.MONDAY">Monday</entry>
-  <entry key="day.TUESDAY">Tuesday</entry>
-  <entry key="day.WEDNESDAY">Wednesday</entry>
-  <entry key="day.THURSDAY">Thursday</entry>
-  <entry key="day.FRIDAY">Friday</entry>
-  <entry key="day.SATURDAY">Saturday</entry>
-  <entry key="day.SUNDAY">Sunday</entry>
-  <entry key="date-time-format"> dd.MM.yyyy</entry>
-  <entry key="date-time-format.publication">dd MM yyyy, HH:mm</entry>
-  <entry key="date-time-format.tendency"> dd MM yyyy</entry>
   <entry key="ext-file.regions.description">GeoJSON for regions ({0})</entry>
   <entry key="ext-file.thumbnail.description">Simplified danger rating map of the region</entry>
   <entry key="ext-file.simple-link.description">Link to the simplified website</entry>
