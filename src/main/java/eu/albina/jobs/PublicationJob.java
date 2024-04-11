@@ -23,10 +23,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ForkJoinWorkerThread;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Throwables;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheReport;
 import org.quartz.JobExecutionContext;
@@ -51,16 +55,11 @@ import eu.albina.util.AlbinaUtil;
  * automatically publish the bulletins at 5PM.
  *
  * @author Norbert Lanzanasto
- *
  */
 public class PublicationJob implements org.quartz.Job {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
-	private final ForkJoinPool pool = new ForkJoinPool(ForkJoinPool.getCommonPoolParallelism(), p -> {
-		final ForkJoinWorkerThread worker = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(p);
-		worker.setName("PublicationJob-" + worker.getPoolIndex());
-		return worker;
-	}, null, false);
+	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("publication-pool-%d").build());
 
 	/**
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
@@ -144,8 +143,7 @@ public class PublicationJob implements org.quartz.Job {
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		// update all regions to create complete maps
-		// parallelStream uses ForkJoinPool
-		pool.submit(() -> regionController.getPublishBulletinRegions().parallelStream().forEach(region -> {
+		regionController.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
@@ -172,7 +170,14 @@ public class PublicationJob implements org.quartz.Job {
 			if (regions.contains(region) && !isChange()) {
 				publicationController.sendToAllChannels(avalancheReport);
 			}
-		}));
+		}, executor)).forEach(future -> {
+			try {
+				future.get();
+			} catch (InterruptedException | ExecutionException ex) {
+				Throwables.throwIfUnchecked(ex);
+				throw new RuntimeException(ex);
+			}
+		});
 
 		// copy files
 		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
