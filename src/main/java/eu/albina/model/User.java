@@ -41,6 +41,7 @@ import com.github.openjson.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 
 @Entity
@@ -85,6 +86,14 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<AvalancheBulletin> bulletins;
 
+	/** Prefered language of the user */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE_CODE")
+	private LanguageCode languageCode;
+
+	@Column(name = "DELETED")
+	private boolean deleted;
+
 	/**
 	 * Standard constructor for a user.
 	 */
@@ -121,6 +130,10 @@ public class User {
 				this.roles.add(Role.fromString((String) role));
 			}
 		}
+		if (json.has("languageCode") && !json.isNull("languageCode"))
+			this.languageCode = LanguageCode.valueOf((json.getString("languageCode").toLowerCase()));
+		if (json.has("deleted") && !json.isNull("deleted"))
+			this.deleted = json.getBoolean("deleted");
 	}
 
 	public List<AvalancheBulletin> getBulletins() {
@@ -197,6 +210,22 @@ public class User {
 		this.organization = organization;
 	}
 
+	public LanguageCode getLanguage() {
+		return languageCode;
+	}
+
+	public void setLanguage(LanguageCode language) {
+		this.languageCode = language;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 
@@ -220,6 +249,11 @@ public class User {
 			}
 			json.put("regions", jsonRegions);
 		}
+
+		if (languageCode != null)
+			json.put("languageCode", this.languageCode.toString());
+
+		json.put("deleted", isDeleted());
 
 		return json;
 	}
@@ -247,6 +281,11 @@ public class User {
 			}
 			json.put("regions", jsonRegions);
 		}
+
+		if (languageCode != null)
+			json.put("languageCode", this.languageCode.toString());
+
+		json.put("deleted", isDeleted());
 
 		return json;
 	}
