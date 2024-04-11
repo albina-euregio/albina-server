@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.stream.Collectors;
 
 import eu.albina.model.AbstractPersistentObject;
@@ -55,7 +56,11 @@ import eu.albina.util.AlbinaUtil;
 public class PublicationJob implements org.quartz.Job {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
-	private final ForkJoinPool pool = new ForkJoinPool();
+	private final ForkJoinPool pool = new ForkJoinPool(ForkJoinPool.getCommonPoolParallelism(), p -> {
+		final ForkJoinWorkerThread worker = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(p);
+		worker.setName("PublicationJob-" + worker.getPoolIndex());
+		return worker;
+	}, null, false);
 
 	/**
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
