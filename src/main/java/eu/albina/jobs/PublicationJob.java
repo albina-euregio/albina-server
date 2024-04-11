@@ -133,8 +133,6 @@ public class PublicationJob implements org.quartz.Job {
 			avalancheReportController.publishReport(regionBulletins, startDate, region, user, publicationDate);
 		}
 
-		Map<Region, AvalancheReport> reportMap = new HashMap<>();
-
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
 		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionController.getPublishBulletinRegions());
@@ -163,32 +161,16 @@ public class PublicationJob implements org.quartz.Job {
 
 			publicationController.createRegionResources(region, avalancheReport);
 
-			if (regions.contains(region)) {
-				reportMap.put(region, avalancheReport);
+			// send notifications only for updated regions after all maps were created
+			if (regions.contains(region) && !isChange()) {
+				publicationController.sendToAllChannels(avalancheReport);
 			}
-		}
-
-		// update all super regions
-		Set<Region> superRegions = getSuperRegions(regions);
-		for (Region region : superRegions) {
-			logger.info("Publishing super region {} with bulletins {} and publication time {}", region.getId(),
-				publishedBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
-			AvalancheReport avalancheReport = AvalancheReport.of(publishedBulletins, region, serverInstance);
-			publicationController.createRegionResources(region, avalancheReport);
 		}
 
 		// copy files
 		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
 		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(publishedBulletins))) {
 			AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
-		}
-
-		// send notifications only for updated regions after all maps were created
-		if (isChange()) {
-			return;
-		}
-		for (AvalancheReport avalancheReport : reportMap.values()) {
-			publicationController.sendToAllChannels(avalancheReport);
 		}
 
 	}
