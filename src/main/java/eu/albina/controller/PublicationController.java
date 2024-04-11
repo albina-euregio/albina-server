@@ -17,8 +17,6 @@
 package eu.albina.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.common.base.Stopwatch;
 import eu.albina.caaml.Caaml;
@@ -69,14 +67,17 @@ public class PublicationController {
 
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
-		if (region.isCreateCaamlV5())
+		if (region.isCreateCaamlV5()) {
 			createCaamlV5(avalancheReport);
-		if (region.isCreateCaamlV6())
+		}
+		if (region.isCreateCaamlV6()) {
 			createCaamlV6(avalancheReport);
+		}
 
 		// create JSON
-		if (region.isCreateJson())
+		if (region.isCreateJson()) {
 			createJson(avalancheReport);
+		}
 
 		try {
 			// create maps
@@ -84,38 +85,21 @@ public class PublicationController {
 
 				createMaps(avalancheReport);
 
-				Map<String, Thread> threads = new HashMap<String, Thread>();
-
 				// create HTML
 				if (region.isCreateSimpleHtml()) {
-					Thread createSimpleHtmlThread = createSimpleHtml(avalancheReport);
-					threads.put("simpleHtml_" + region.getId(), createSimpleHtmlThread);
-					createSimpleHtmlThread.start();
+					createSimpleHtml(avalancheReport);
 				}
 
 				// create pdf
 				if (region.isCreatePdf()) {
-					Thread createPdfThread = createPdf(avalancheReport);
-					threads.put("pdf_" + region.getId(), createPdfThread);
-					createPdfThread.start();
+					createPdf(avalancheReport);
 				}
 
 				if (region.isCreateAudioFiles()) {
-					Thread createAudioFilesThread = createAudioFiles(avalancheReport);
-					threads.put("mp3_" + region.getId(), createAudioFilesThread);
-					createAudioFilesThread.start();
+					createAudioFiles(avalancheReport);
 				}
 
-				for (String key : threads.keySet()) {
-					try {
-						threads.get(key).join();
-					} catch (InterruptedException e) {
-						logger.error(key + " thread interrupted", e);
-					}
-				}
 			}
-		} catch (InterruptedException e) {
-			logger.error("Map production interrupted", e);
 		} catch (Exception e1) {
 			logger.error("Error during map production", e1);
 		}
@@ -124,41 +108,37 @@ public class PublicationController {
 	/**
 	 * Trigger the creation of the JSON file.
 	 */
-	public boolean createJson(AvalancheReport avalancheReport) {
+	public void createJson(AvalancheReport avalancheReport) {
 		try {
 			logger.info("JSON production for {} started", avalancheReport.getRegion().getId());
 			JsonUtil.createJsonFile(avalancheReport);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setJsonCreated);
 			logger.info("JSON production for {} finished", avalancheReport.getRegion().getId());
-			return true;
 		} catch (IOException e) {
 			logger.error("Error producing JSON for " + avalancheReport.getRegion().getId(), e);
-			return false;
 		}
 	}
 
 	/**
 	 * Trigger the creation of the CAAMLv5 (XML) files.
 	 */
-	public boolean createCaamlV5(AvalancheReport avalancheReport) {
+	public void createCaamlV5(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv5 production for {} started", avalancheReport.getRegion().getId());
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV5Created);
 			logger.info("CAAMLv5 production for {} finished", avalancheReport.getRegion().getId());
-			return true;
 		} catch (IOException e) {
 			logger.error("Error producing CAAMLv5 for " + avalancheReport.getRegion().getId(), e);
-			return false;
 		}
 	}
 
 	/**
 	 * Trigger the creation of the CAAMLv6 (XML) files.
 	 */
-	public boolean createCaamlV6(AvalancheReport avalancheReport) {
+	public void createCaamlV6(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv6 production for {} started", avalancheReport.getRegion().getId());
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
@@ -166,18 +146,15 @@ public class PublicationController {
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport.getRegion().getId());
-			return true;
 		} catch (IOException e) {
 			logger.error("Error producing CAAMLv6 for " + avalancheReport.getRegion().getId(), e);
-			return false;
 		}
 	}
 
 	/**
 	 * Trigger the creation of the maps.
 	 */
-	public boolean createMaps(AvalancheReport avalancheReport)
-		throws Exception {
+	public void createMaps(AvalancheReport avalancheReport) {
 		final String regionId = avalancheReport.getRegion().getId();
 		try {
 			logger.info("Map production for {} started", regionId);
@@ -185,88 +162,69 @@ public class PublicationController {
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setMapCreated);
 			logger.info("Map production {} finished", regionId);
-			return true;
 		} catch (Exception e) {
 			logger.error("Error producing maps for " + regionId, e);
-			return false;
 		}
 	}
 
 	/**
 	 * Trigger the creation of the pdfs.
 	 */
-	public Thread createPdf(AvalancheReport avalancheReport) {
-		return new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					logger.info("PDF production for {} started", avalancheReport.getRegion().getId());
-					PdfUtil.createRegionPdfs(avalancheReport);
-					AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-						AvalancheReport::setPdfCreated);
-				} finally {
-					logger.info("PDF production {} finished", avalancheReport.getRegion().getId());
-				}
-			}
-		});
+	public void createPdf(AvalancheReport avalancheReport) {
+		try {
+			logger.info("PDF production for {} started", avalancheReport.getRegion().getId());
+			PdfUtil.createRegionPdfs(avalancheReport);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+				AvalancheReport::setPdfCreated);
+		} finally {
+			logger.info("PDF production {} finished", avalancheReport.getRegion().getId());
+		}
 	}
 
 	/**
 	 * Trigger the creation of the simple html files.
 	 */
-	public Thread createSimpleHtml(AvalancheReport avalancheReport) {
-		return new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					logger.info("Simple HTML production for {} started", avalancheReport.getRegion().getId());
-					SimpleHtmlUtil.getInstance().createRegionSimpleHtml(avalancheReport);
-					AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
-						AvalancheReport::setHtmlCreated);
-				} catch (Exception e) {
-					logger.error("Error creating simple HTML for " + avalancheReport.getRegion().getId(), e);
-				} finally {
-					logger.info("Simple HTML production for {} finished", avalancheReport.getRegion().getId());
-				}
-			}
-		});
+	public void createSimpleHtml(AvalancheReport avalancheReport) {
+		try {
+			logger.info("Simple HTML production for {} started", avalancheReport.getRegion().getId());
+			SimpleHtmlUtil.getInstance().createRegionSimpleHtml(avalancheReport);
+			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+				AvalancheReport::setHtmlCreated);
+		} catch (Exception e) {
+			logger.error("Error creating simple HTML for " + avalancheReport.getRegion().getId(), e);
+		} finally {
+			logger.info("Simple HTML production for {} finished", avalancheReport.getRegion().getId());
+		}
 	}
 
-	public Thread createAudioFiles(AvalancheReport avalancheReport) {
-		return new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Stopwatch stopwatch = Stopwatch.createStarted();
-				try {
-					logger.info("Synthesize speech for {} started", avalancheReport.getRegion().getId());
-					TextToSpeech.createAudioFiles(avalancheReport);
-				} catch (Exception e) {
-					logger.error("Synthesize speech error for " + avalancheReport.getRegion().getId(), e);
-				} finally {
-					logger.info("Synthesize speech for {} finished in {}", avalancheReport.getRegion().getId(), stopwatch);
-				}
-			}
-		});
+	public void createAudioFiles(AvalancheReport avalancheReport) {
+		Stopwatch stopwatch = Stopwatch.createStarted();
+		try {
+			logger.info("Synthesize speech for {} started", avalancheReport.getRegion().getId());
+			TextToSpeech.createAudioFiles(avalancheReport);
+		} catch (Exception e) {
+			logger.error("Synthesize speech error for " + avalancheReport.getRegion().getId(), e);
+		} finally {
+			logger.info("Synthesize speech for {} finished in {}", avalancheReport.getRegion().getId(), stopwatch);
+		}
 	}
 
 	public void sendToAllChannels(AvalancheReport avalancheReport) {
 		if (!avalancheReport.getRegion().isPublishBulletins() || avalancheReport.getBulletins().isEmpty() || !avalancheReport.getRegion().isCreateMaps()) {
 			return;
 		}
-		new Thread(() -> {
-			for (LanguageCode lang : LanguageCode.ENABLED) {
-				MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
-				try {
-					posting.sendToAllChannels();
-					AvalancheReportController c = AvalancheReportController.getInstance();
-					c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
-					c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);
-					c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setPushSent);
-				} catch (Exception e) {
-					logger.error("Error sending " + posting, e);
-				}
+		for (LanguageCode lang : LanguageCode.ENABLED) {
+			MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
+			try {
+				posting.sendToAllChannels();
+				AvalancheReportController c = AvalancheReportController.getInstance();
+				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
+				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);
+				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setPushSent);
+			} catch (Exception e) {
+				logger.error("Error sending " + posting, e);
 			}
-		}).start();
+		}
 	}
 
 }
