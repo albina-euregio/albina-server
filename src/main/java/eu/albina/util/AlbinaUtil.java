@@ -27,13 +27,11 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.text.MessageFormat;
-import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -51,7 +49,6 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
-import eu.albina.model.User;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -463,11 +460,6 @@ public interface AlbinaUtil {
 			aspectString.add(aspect.toString(locale));
 		}
 		return aspectString.toString();
-	}
-
-	static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {
-		String stringDate = OffsetDateTime.parse(date).toLocalDate().toString();
-		return stringDate + "_" + language.getBundleString("media-file.name") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
 	}
 
 }

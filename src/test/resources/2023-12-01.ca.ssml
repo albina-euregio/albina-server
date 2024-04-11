@@ -1,0 +1,256 @@
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per divendres, 1 de desembre de 2023.</s></p>
+<p><emphasis><s>Capes febles persistents per sobre dels 2000 m aproximadament. Problema de lliscaments basals a cotes mitges.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora hi ha Perill d'allaus marcat, doncs grau de perill tres per sobre 2000 metres, Perill d'allaus moderat, doncs grau de perill dos per sota.</s>
+<s>al final del dia hi ha Perill d'allaus marcat, doncs grau de perill tres per sobre 2000 metres, Perill d'allaus moderat, doncs grau de perill dos per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora, per sobre 2000 metres, tenim un problema de capa feble persistent. Això en totes les orientacions.</s>
+<s>A més, a primera hora, per sota 2400 metres, tenim un problema de lliscaments basals. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sobre 2000 metres, tenim un problema de capa feble persistent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sobre el límit del bosc, tenim un problema de neu recent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sota 2400 metres, tenim un problema de lliscaments basals. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Les allaus poden desencadenar-se per la neu vella, sobretot en vessants inclinats per sobre dels 2000 m aproximadament. Els "whumpfs" i les fissures que propaguen al passar són senyals d'alarma que indiquen aquest perill És necessària una certa experiència en l'avaluació del perill d'allaus. Les allaus són com a mínim de mida mitjana. <break time="1s"/> <break time="1s"/> La neu recent i les plaques de vent i disperses poden ser desencadenades al pas d’un sol muntanyenc. Indrets perillosos es troben per sobre del límit del bosc així com prop del límit del bosc. Amb la intensificació de la nevada, en el transcurs de la jornada els indrets perillosos augmentaran. Precaució sobretot prop de les carenes, a canals i cubetes. Les allaus són com a mínim de mida mitjana. <break time="1s"/> <break time="1s"/> Als vessants herbosos inclinats, són possibles allaus de lliscament basal de mida petita i, localment, mitjana. Això es dona especialment als sectors afectats per la pluja.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>Des d'ahir ha caigut pluja fins als 1600 m. En una zona àmplia a partir del migdia cauran fins a 20 cm de neu. El vent amb ratxes fortes transportarà la neu recent. La neu recent i les plaques de vent es dipositaran a sobre de capes toves. Això s'aplica principalment en zones protegides del vent. <break time="1s"/> <break time="1s"/> La part central del mantell s'ha facetat i és feble. Això es dona especialment per sobre dels 2000 m aproximadament i per sota dels 2600 m aproximadament. Les observacions sobre el terreny confirmen l'estructura desfavorable del mantell de neu. Els gruixos de neu varien molt per sobre del límit del bosc per la influència del vent.</p>
+Tenim els segënts patrons de perill: pp.4: fred desprès de càlid /càlid desprès de fred, pp.2: lliscaments.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dissabte, 2 de desembre de 2023 indica un perill d'allaus en augment.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per divendres, 1 de desembre de 2023.</s></p>
+<p><emphasis><s>Amb la neu recent i el vent, en el transcurs de la jornada el perill augmentarà progressivament.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre el límit del bosc, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
+<s>al final del dia hi ha Perill d'allaus marcat, doncs grau de perill tres per sobre el límit del bosc, Perill d'allaus moderat, doncs grau de perill dos per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora, per sobre el límit del bosc, tenim un problema de plaques de vent. Això en totes les orientacions.</s>
+<s>A més, a primera hora, per sobre 2200 metres, tenim un problema de capa feble persistent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sobre el límit del bosc, tenim un problema de neu recent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sobre 2200 metres, tenim un problema de capa feble persistent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sota 2400 metres, tenim un problema de lliscaments basals. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>La neu recent i les plaques de vent descansen a sobre d'una superfície desfavorable del mantell de neu vella en totes les orientacions per sobre dels 2000 m aproximadament. Aquestes condicions afavoriran en el transcurs de la jornada un gradual augment del perill d'allaus a totes les orientacions. Sobretot als vessants molt inclinats són possibles allaus de mida petita i mitjana. La neu recent i les plaques de vent poden desencadenar-se especialment per sobrecàrregues fortes en totes les orientacions per sobre dels 2000 m aproximadament. El nombre i la dimensió dels indrets perillosos augmentaran amb l'altitud. <break time="1s"/> Tarda: La neu recent i les plaques de vent a vegades grans i generalitzades poden fàcilment ser desencadenades de manera accidental o, de manera aïllada, natural. Indrets perillosos es troben per sobre del límit del bosc així com prop del límit del bosc. Precaució sobretot prop de les carenes, a canals i cubetes. Les allaus són com a mínim de mida mitjana. Indrets perillosos es troben sobretot en zones protegides del vent per sobre dels 2200 m aproximadament. És necessària una certa experiència en l'avaluació del perill d'allaus. <break time="1s"/> Als vessants herbosos inclinats, són encara possibles allaus de lliscament basal de mida petita i, localment, mitjana. Això es dona especialment als sectors amb molta neu.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>En una zona àmplia a partir del migdia cauran de 20 a 40 cm de neu. El vent amb ratxes fortes transportarà la neu recent. La neu recent i les plaques de vent es dipositaran a sobre de capes toves. Això s'aplica principalment en zones protegides del vent. Aquestes condicions del temps afavoriran un afebliment del mantell de neu sobretot als vessants molt inclinats. <break time="1s"/> <break time="1s"/> Les observacions sobre el terreny i els "whumpfs" i les fissures que propaguen al passar confirmen l'estructura desfavorable del mantell de neu. El mantell de neu és extremadament variable en pocs metres. Els gruixos de neu varien molt per sobre del límit del bosc per la influència del vent.</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.4: fred desprès de càlid /càlid desprès de fred.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dissabte, 2 de desembre de 2023 indica un perill d'allaus en augment.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per divendres, 1 de desembre de 2023.</s></p>
+<p><emphasis><s>Amb la neu recent i el vent, en el transcurs de la jornada el perill augmentarà progressivament.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre el límit del bosc, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
+<s>al final del dia hi ha Perill d'allaus marcat, doncs grau de perill tres per sobre el límit del bosc, Perill d'allaus moderat, doncs grau de perill dos per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora, per sobre el límit del bosc, tenim un problema de plaques de vent. Això en totes les orientacions.</s>
+<s>A més, a primera hora, per sobre 2200 metres, tenim un problema de capa feble persistent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sobre el límit del bosc, tenim un problema de neu recent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sobre 2200 metres, tenim un problema de capa feble persistent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sota 2400 metres, tenim un problema de lliscaments basals. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Tarda: La neu recent i les plaques de vent a vegades grans i generalitzades poden fàcilment ser desencadenades de manera accidental o, de manera aïllada, natural. Indrets perillosos es troben per sobre del límit del bosc així com prop del límit del bosc. Aquests són parcialment coberts de neu recent i per tant difícils de reconèixer. Precaució sobretot prop de les carenes, a canals i cubetes. Les allaus són com a mínim de mida mitjana. <break time="1s"/> <break time="1s"/> També, les allaus poden també desencadenar-se per la neu vella, sobretot en vessants molt inclinats per sobre dels 2200 m aproximadament. Indrets perillosos es troben sobretot en zones protegides del vent per sobre dels 2200 m aproximadament. És necessària una certa experiència en l'avaluació del perill d'allaus. <break time="1s"/> <break time="1s"/> Als vessants herbosos inclinats, són encara possibles allaus de lliscament basal de mida petita i, localment, mitjana. Això es dona especialment als sectors amb molta neu.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>En una zona àmplia a partir del migdia cauran de 20 a 40 cm de neu. Del Grup del Venediger fins al Grup del Glockner cauran fins a 60 cm de neu. El vent amb ratxes fortes transportarà la neu recent. La neu recent i les plaques de vent es dipositaran a sobre de capes toves. Això s'aplica principalment en zones protegides del vent. <break time="1s"/> <break time="1s"/> La part central del mantell s'ha facetat i és feble. Això es dona especialment per sobre del límit del bosc i per sota dels 2600 m aproximadament. Les observacions sobre el terreny i els "whumpfs" i les fissures que propaguen al passar confirmen l'estructura desfavorable del mantell de neu. Els gruixos de neu varien molt per sobre del límit del bosc per la influència del vent.</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.4: fred desprès de càlid /càlid desprès de fred.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dissabte, 2 de desembre de 2023 indica un perill d'allaus en augment.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per divendres, 1 de desembre de 2023.</s></p>
+<p><emphasis><s>Amb la neu recent i el vent, en el transcurs de la jornada el perill augmentarà lleugerament.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre el límit del bosc, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
+<s>al final del dia hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre el límit del bosc, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora, per sobre el límit del bosc, tenim un problema de plaques de vent. Això en totes les orientacions.</s>
+<s>A més, al final del dia, per sobre el límit del bosc, tenim un problema de neu recent. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>La neu recent i les plaques de vent i disperses poden ser desencadenades al pas d’un sol muntanyenc. Indrets perillosos es troben per sobre del límit del bosc així com prop del límit del bosc. Amb la intensificació de la nevada, en el transcurs de la jornada els indrets perillosos augmentaran. Aquests són parcialment coberts de neu recent i per tant difícils de reconèixer. Precaució sobretot prop de les carenes, a canals i cubetes. Les allaus són com a mínim de mida mitjana. <break time="1s"/> <break time="1s"/> Als vessants herbosos inclinats, són possibles allaus de lliscament basal de mida petita i, localment, mitjana. Això es dona especialment als sectors amb molta neu.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>En una zona àmplia a partir del migdia cauran fins a 20 cm de neu. El vent amb ratxes fortes transportarà la neu recent. La neu recent i les plaques de vent es dipositaran a sobre de capes toves. Això s'aplica principalment en zones protegides del vent.</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dissabte, 2 de desembre de 2023 indica un perill d'allaus en augment.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per divendres, 1 de desembre de 2023.</s></p>
+<p><emphasis><s>El problema de neu ventada recent ha d'avaluar-se de manera crítica.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora hi ha Perill d'allaus feble, doncs grau de perill 1.</s>
+<s>al final del dia hi ha Perill d'allaus moderat, doncs grau de perill dos per sobre el límit del bosc, Perill d'allaus feble, doncs grau de perill 1 per sota.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>a primera hora, per sobre 2400 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
+<s>A més, al final del dia, per sobre el límit del bosc, tenim un problema de plaques de vent. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>El divendres , amb la neu recent i el vent del sud-oest fort , es formaran plaques de vent especialment en canals i cubetes i darrere dels canvis abrutes de pendent. Les plaques de vent poden desencadenar-se al pas d'un sol muntanyenc en totes les orientacions per sobre del límit del bosc. Amb la intensificació de la nevada, en el transcurs de la jornada el nombre i l'extensió dels indrets perillosos augmentarà. A més del perill de ser enterrat per una allau, cal tenir en compte també el perill de ser arrossegat cap a una trampa del terreny. <break time="1s"/> Actualment, el servei de predicció d’allaus té informació limitada. Per tant, s'ha d'avaluar detingudament el perill d'allaus local.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>En el període fins el divendres cauran de 15 a 30 cm de neu, especialment per sobre del límit del bosc. <break time="1s"/> La neu vella és majoritàriament estable, amb una crosta a la superfície, especialment en vessants assolellats inclinats en totes les cotes, i també en vessants obacs per sota dels 2400 m aproximadament. <break time="1s"/> El mantell de neu és extremadament variable en pocs metres. Els gruixos de neu varien molt per sobre del límit del bosc per la influència del vent.</p>
+Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dissabte, 2 de desembre de 2023 indica un perill d'allaus en augment.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "ca-ES"
+name: "ca-ES-Standard-A"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Actualització del butlletí d'allaus per divendres, 1 de desembre de 2023.</s></p>
+<p><emphasis><s>En totes les orientacions en totes les cotes hi ha una mica de neu. El problema de neu ventada recent ha d'avaluar-se de manera crítica.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer hi ha Perill d'allaus feble, doncs grau de perill 1.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>dia sencer, tenim un problema de neu recent. Això en totes les orientacions.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Els indrets perillosos es troben especialment en terreny inclinat a cotes mitges i altes i també als vessants amb acumulacions de neu ventada. Les allaus poden en alguns indrets ser desencadenades amb una sobrecàrrega feble, però majoritàriament mantenir petites dimensions.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>I ara el mantell de neu:</s></p>
+<p>Per sota dels 1800 m aproximadament hi ha una mica de neu. En molts indrets la neu recent i la ventada reposen a sobre d'una crosta dura. A cotes superiors són presents de 10 a 20 cm de neu, localment més.</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendència per dissabte, 2 de desembre de 2023 indica un perill d'allaus en augment.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>Que passeu un bon dia i no oblideu anar amb compte!</s></p>
+</media>
+</par>
+</speak>

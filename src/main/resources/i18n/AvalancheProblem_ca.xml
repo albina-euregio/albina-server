@@ -2,19 +2,19 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="new_snow">Neu recent</entry>
-  <entry key="wind_slab">Plaques de vent</entry>
+  <entry key="wind_slab">Placa de vent</entry>
   <entry key="persistent_weak_layers">Capa feble persistent</entry>
   <entry key="wet_snow">Neu humida</entry>
-  <entry key="gliding_snow">Lliscaments</entry>
+  <entry key="gliding_snow">Lliscament de neu</entry>
   <entry key="favourable_situation">Situació favorable</entry>
   <entry key="cornices">Cornises</entry>
   <entry key="no_distinct_problem">Cap problema d'allaus evident</entry>
-  <entry key="new_snow.speech">a new snow problem</entry>
-  <entry key="wind_slab.speech">a wind slab problem</entry>
-  <entry key="persistent_weak_layers.speech">a persistent weak layer problem</entry>
-  <entry key="wet_snow.speech">a wet snow problem</entry>
-  <entry key="gliding_snow.speech">a gliding snow problem</entry>
-  <entry key="favourable_situation.speech">a favourable situation</entry>
-  <entry key="cornices.speech">a cornices problem </entry>
-  <entry key="no_distinct_problem.speech">no distinct problem</entry>
+  <entry key="new_snow.speech">un problema de neu recent</entry>
+  <entry key="wind_slab.speech">un problema de plaques de vent</entry>
+  <entry key="persistent_weak_layers.speech">un problema de capa feble persistent</entry>
+  <entry key="wet_snow.speech">un problema de neu humida</entry>
+  <entry key="gliding_snow.speech">un problema de lliscaments basals</entry>
+  <entry key="favourable_situation.speech">una situació favorable</entry>
+  <entry key="cornices.speech">un problema de cornises</entry>
+  <entry key="no_distinct_problem.speech">cap problema d'allaus evident</entry>
 </properties>

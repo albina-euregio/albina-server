@@ -120,10 +120,10 @@
   <entry key="problem.avalanche-size.extreme">extremadamente grande</entry>
   <entry key="valid-time-period.all_day">día entero</entry>
   <entry key="valid-time-period.all_day.long">día entero</entry>
-  <entry key="valid-time-period.earlier">más temprano</entry>
-  <entry key="valid-time-period.earlier.long">más temprano en el día</entry>
-  <entry key="valid-time-period.later">más tarde</entry>
-  <entry key="valid-time-period.later.long">más tarde en el día</entry>
+  <entry key="valid-time-period.earlier">AM</entry>
+  <entry key="valid-time-period.earlier.long">al inicio del día</entry>
+  <entry key="valid-time-period.later">PM</entry>
+  <entry key="valid-time-period.later.long">al final del día</entry>
   <entry key="speech.bulletin.update">Actualización del boletín de aludes para {validityDate}.</entry>
   <entry key="speech.bulletin">Boletín de aludes para {validityDate}.</entry>
   <entry key="speech.furthermore">Además, {text}</entry>
@@ -131,8 +131,8 @@
   <entry key="speech.snowpack">Y ahora el manto de nieve:</entry>
   <entry key="speech.danger-patterns">Tenemos los siguientes patrones de peligro: {dangerPatterns}.</entry>
   <entry key="speech.outro">¡Que tengas un buen día y no olvides ir con cuidado!</entry>
-  <entry key="speech.danger-rating">{validTimePeriod} aplica {dangerRating}.</entry>
-  <entry key="speech.danger-rating.above-below">{validTimePeriod} aplica por encima de {elevationUpper} {dangerRatingUpper}, por debajo {dangerRatingLower}.</entry>
+  <entry key="speech.danger-rating">{validTimePeriod} hay {dangerRating}.</entry>
+  <entry key="speech.danger-rating.above-below">{validTimePeriod} hay {dangerRatingUpper} por encima de {elevationUpper}, {dangerRatingLower} por debajo.</entry>
   <entry key="speech.elevation.treeline">el límite del bosque</entry>
   <entry key="speech.elevation.meter">{elevation} metros</entry>
   <entry key="speech.tendency.decreasing">La tendencia para {tendencyDate} indica un peligro de aludes en disminución.</entry>
