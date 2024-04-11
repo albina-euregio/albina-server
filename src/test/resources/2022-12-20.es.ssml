@@ -1,0 +1,199 @@
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para martes, 20 de diciembre de 2022.</s></p>
+<p><emphasis><s>El problema de capas débiles persistentes es la principal fuente de peligro.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes notable, por lo que el grado de peligro es tres. por encima de 2000 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2000 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Las capas débiles en la nieve antigua pueden ser desencadenadas en algunos lugares al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente. Precaución sobre todo cerca de los cordales, y en las cubetas, canales y detrás de los cambios abruptos de pendiente. Los "whumpfs" y las fisuras que propagan al pasar son señales de peligro Los aludes pueden alcanzar tamaños medianos. <break time="1s"/> Las placas de viento, en su mayoría de tamaño pequeño, de los últimos días son, de manera aislada, aún inestables, sobre todo en las laderas umbrías en cotas altas y alta montaña, y cerca de los cordales. <break time="1s"/> Se recomienda una elección meticulosa del itinerario. <break time="1s"/> Con la subida de la temperatura diurna y la radiación solar, son posibles avalanchas de deslizamiento basal y purgas de nieve húmeda, especialmente en las laderas solanas, y en los taludes y las laderas herbosas principalmente en cotas medias.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>La parte inferior del manto se ha facetado y es débil, sobre todo en las laderas inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente, y en las laderas soleadas inclinadas en alta montaña. Los desencadenamientos de aludes y las observaciones sobre el terreno confirman la estructura desfavorable del manto de nieve. <break time="1s"/> La unión entre las placas de viento es localmente aún desfavorable. Con las temperaturas suaves, el martes las placas de viento se estabilizarán. <break time="1s"/> El sol y el calor causarán en algunos casos sobre todo en cotas medias un gradual debilitamiento del manto de nieve en las laderas solanas.</p>
+Tenemos los siguientes patrones de peligro: pp.1: capas débiles persistentes profundas, pp.2: deslizamientos.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para miércoles, 21 de diciembre de 2022 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para martes, 20 de diciembre de 2022.</s></p>
+<p><emphasis><s>El manto de nieve antiguo permanece proclive al desencadenamiento.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de 2200 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2200 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Las capas débiles en la nieve antigua pueden ser desencadenadas de manera aislada al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas muy inclinadas umbrías por encima de los 2200 m aproximadamente. Precaución en las zonas umbrías y protegidas del viento en altitud. Los aludes pueden alcanzar tamaños medianos. <break time="1s"/> Además las pequeñas placas de viento son de manera muy aislada aún proclives al desencadenamiento. Estas si es posible deberían evitarse. <break time="1s"/> <break time="1s"/> Con el aumento de la temperatura, son probables avalanchas de deslizamiento basal y purgas de nieve húmeda, especialmente en las laderas solanas.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>En el manto de nieve antigua hay capas débiles inestables, sobre todo en las laderas umbrías muy inclinadas por encima de los 2200 m aproximadamente, y en las laderas soleadas en alta montaña. <break time="1s"/> La unión entre las placas de viento y con la nieve antigua es localmente aún desfavorable. Estas son, de manera aislada, aún inestables sobre todo en laderas umbrías muy inclinadas en altitud. Con la subida de temperaturas, el martes las placas de viento se estabilizarán. <break time="1s"/> <break time="1s"/> En el transcurso de la jornada el sol y el calor causarán sobre todo en cotas medias una gradual humidificación del manto de nieve en las laderas solanas.</p>
+Tenemos los siguientes patrones de peligro: pp.1: capas débiles persistentes profundas.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para miércoles, 21 de diciembre de 2022 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para martes, 20 de diciembre de 2022.</s></p>
+<p><emphasis><s>El manto de nieve antiguo permanece proclive al desencadenamiento.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de 2200 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2200 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
+<s>Además, día entero, encima 2200 metros, tenemos un poblema de nieve húmeda. Especialmente en orientaciones Este a Sur a Oeste.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Las capas débiles en la nieve antigua pueden ser desencadenadas de manera aislada al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas muy inclinadas umbrías por encima de los 2200 m aproximadamente. Precaución en las zonas umbrías y protegidas del viento en altitud. Los aludes pueden alcanzar tamaños medianos. <break time="1s"/> Además las pequeñas placas de viento son de manera muy aislada aún proclives al desencadenamiento. Estas si es posible deberían evitarse. <break time="1s"/> <break time="1s"/> Con el aumento de la temperatura, son probables avalanchas de deslizamiento basal y purgas de nieve húmeda, especialmente en las laderas solanas inclinadas, y en los taludes y las laderas herbosas en cotas bajas y medias.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>En el manto de nieve antigua hay capas débiles inestables, sobre todo en las laderas umbrías muy inclinadas por encima de los 2200 m aproximadamente, y en las laderas soleadas en alta montaña. <break time="1s"/> La unión entre las placas de viento y con la nieve antigua es localmente aún desfavorable. Estas son, de manera aislada, aún inestables sobre todo en laderas umbrías muy inclinadas en altitud. Con la subida de temperaturas, el martes las placas de viento se estabilizarán. <break time="1s"/> <break time="1s"/> En el transcurso de la jornada el sol y el calor causarán en cotas medias una gradual humidificación del manto de nieve sobre todo en las laderas solanas.</p>
+Tenemos los siguientes patrones de peligro: pp.1: capas débiles persistentes profundas, pp.2: deslizamientos.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para miércoles, 21 de diciembre de 2022 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para martes, 20 de diciembre de 2022.</s></p>
+<p><emphasis><s>El problema de capas débiles persistentes es la principal fuente de peligro.</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de 2000 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2000 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Las capas débiles en la nieve antigua pueden ser desencadenadas en algunos lugares al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente. Precaución sobre todo en las zonas umbrías y protegidas del viento. Los "whumpfs" y las fisuras que propagan al pasar son señales de peligro Los aludes pueden alcanzar tamaños medianos. <break time="1s"/> Las placas de viento, en su mayoría de tamaño pequeño, de los últimos días son, de manera aislada, aún inestables, sobre todo cerca de collados y cordales, y en las laderas muy inclinadas orientadas a norte y este en altitud. <break time="1s"/> Se recomienda una elección meticulosa del itinerario. <break time="1s"/> Con la subida de la temperatura diurna y la radiación solar, son posibles avalanchas de deslizamiento basal y purgas de nieve húmeda, especialmente en las laderas solanas, y en los taludes y las laderas herbosas principalmente en cotas medias.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>La parte inferior del manto se ha facetado y es débil, sobre todo en las laderas umbrías inclinadas por encima de los 2000 m aproximadamente, y en las laderas soleadas inclinadas en alta montaña. Los desencadenamientos de aludes y las observaciones sobre el terreno confirman la estructura desfavorable del manto de nieve. <break time="1s"/> La unión entre las placas de viento y con la nieve antigua es localmente aún desfavorable. Estas son, de manera aislada, aún inestables sobre todo en laderas umbrías muy inclinadas en altitud. Con las temperaturas suaves, el martes las placas de viento se estabilizarán. <break time="1s"/> El sol y el calor causarán en algunos casos sobre todo en cotas medias un gradual debilitamiento del manto de nieve en las laderas solanas.</p>
+Tenemos los siguientes patrones de peligro: pp.1: capas débiles persistentes profundas, pp.2: deslizamientos.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para miércoles, 21 de diciembre de 2022 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para martes, 20 de diciembre de 2022.</s></p>
+<p><emphasis><s>El problema de capas débiles persistentes es la principal fuente de peligro. <break time="1s"/></s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de 2000 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2000 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>Las capas débiles en la nieve antigua pueden ser desencadenadas en algunos lugares incluso al paso de un solo montañero. Los lugares peligrosos se encuentran sobre todo en laderas muy inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente y en las laderas muy inclinadas orientadas a sur por encima de los 3000 m aproximadamente. <break time="1s"/> Las placas de viento, en su mayoría de tamaño pequeño, pueden, en algunos casos, desencadenarse al paso de un solo montañero sobre todo en laderas umbrías cercanas a los cordales en altitud. <break time="1s"/> Los aludes pueden alcanzar tamaños medianos. <break time="1s"/> Se aconseja una elección meticulosa del itinerario. <break time="1s"/> A consecuencia del aumento de la temperatura, en el transcurso de la jornada son posibles algunas avalanchas de deslizamiento basal y purgas de nieve húmeda, pero en su mayoría pequeñas. Esto se da especialmente en las laderas solanas muy inclinadas, y en los taludes y las laderas herbosas en cotas medias.</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>La parte inferior del manto se ha facetado y es débil, sobre todo en las laderas inclinadas orientadas a oeste, norte y este por encima de los 2000 m aproximadamente, y en las laderas soleadas inclinadas en alta montaña. <break time="1s"/> Los desencadenamientos de aludes y las observaciones sobre el terreno confirman la estructura desfavorable del manto de nieve. <break time="1s"/> El martes se formarán placas de viento en su mayoría de tamaño pequeño en los sectores expuestos al Foehn. Esto se da cerca de collados y cordales. <break time="1s"/> El sol y el calor causarán en cotas bajas y medias un gradual debilitamiento del manto de nieve. Esto se da en las laderas solanas y en los sectores expuestos al Foehn. <break time="1s"/> De momento hay poca nieve.</p>
+Tenemos los siguientes patrones de peligro: pp.1: capas débiles persistentes profundas, pp.2: deslizamientos.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para miércoles, 21 de diciembre de 2022 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>

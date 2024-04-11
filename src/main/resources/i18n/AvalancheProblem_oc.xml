@@ -2,19 +2,19 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="new_snow">Nhèu recenta</entry>
-  <entry key="wind_slab">Plaques de vent</entry>
-  <entry key="persistent_weak_layers">Coches fèbles persistentes</entry>
+  <entry key="wind_slab">Placa de vent</entry>
+  <entry key="persistent_weak_layers">Cocha fèble persistenta</entry>
   <entry key="wet_snow">Nhèu umida</entry>
   <entry key="gliding_snow">Esguitlament de nhèu</entry>
   <entry key="favourable_situation">Situacion favorabla</entry>
   <entry key="cornices">Cornises</entry>
   <entry key="no_distinct_problem">Cap problèma de lauegi evident</entry>
-  <entry key="new_snow.speech">a new snow problem</entry>
-  <entry key="wind_slab.speech">a wind slab problem</entry>
-  <entry key="persistent_weak_layers.speech">a persistent weak layer problem</entry>
-  <entry key="wet_snow.speech">a wet snow problem</entry>
-  <entry key="gliding_snow.speech">a gliding snow problem</entry>
-  <entry key="favourable_situation.speech">a favourable situation</entry>
-  <entry key="cornices.speech">a cornices problem </entry>
-  <entry key="no_distinct_problem.speech">no distinct problem</entry>
+  <entry key="new_snow.speech">un problema de nhèu recenta</entry>
+  <entry key="wind_slab.speech">un problema de plaques de vent</entry>
+  <entry key="persistent_weak_layers.speech">un problema de cocha fèbla persistenta</entry>
+  <entry key="wet_snow.speech">un problema de nhèu umida</entry>
+  <entry key="gliding_snow.speech">un problema d'esguitlaments basaus</entry>
+  <entry key="favourable_situation.speech">ua situacion favorabla</entry>
+  <entry key="cornices.speech">un problema de cornises</entry>
+  <entry key="no_distinct_problem.speech">cap problèma de lauegi evident</entry>
 </properties>

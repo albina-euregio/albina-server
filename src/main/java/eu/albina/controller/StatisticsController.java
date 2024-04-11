@@ -17,7 +17,6 @@
 package eu.albina.controller;
 
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -204,15 +203,7 @@ public class StatisticsController {
 		for (AvalancheReport avalancheReport : reports) {
 			try {
 				if (avalancheReport.getJsonString() == null || avalancheReport.getJsonString().isEmpty()) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("JSON string empty: ");
-					if (avalancheReport.getDate() != null) {
-						sb.append(
-								avalancheReport.getDate().format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication"))));
-						sb.append(", ");
-					}
-					sb.append(avalancheReport.getRegion());
-					logger.warn(sb.toString());
+					logger.warn("JSON string empty: {}, {}", avalancheReport.getDate(), avalancheReport.getRegion());
 				}
 				JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
 				for (Object object : jsonArray) {
@@ -224,14 +215,7 @@ public class StatisticsController {
 					}
 				}
 			} catch (JSONException e) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("Error parsing report JSON: ");
-				if (avalancheReport.getDate() != null) {
-					sb.append(avalancheReport.getDate().format(DateTimeFormatter.ofPattern(lang.getBundleString("date-time-format.publication"))));
-					sb.append(", ");
-				}
-				sb.append(avalancheReport.getRegion());
-				logger.warn(sb.toString());
+				logger.warn("Error parsing report JSON: {}, {}", avalancheReport.getDate(), avalancheReport.getRegion());
 			}
 		}
 		return bulletins;

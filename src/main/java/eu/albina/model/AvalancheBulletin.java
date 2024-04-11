@@ -788,7 +788,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public String getValidityDateString() {
-		return getValidityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		return getValidityDate().toLocalDate().toString();
 	}
 
 	@Override

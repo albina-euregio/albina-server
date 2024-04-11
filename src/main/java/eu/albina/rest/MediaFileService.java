@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 
 import javax.ws.rs.Consumes;
@@ -102,13 +103,13 @@ public class MediaFileService {
 			Files.createDirectories(fileLocation);
 
 			// save mp3 file
-			String mp3FileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".mp3");
+			String mp3FileName = getMediaFileName(dateString, user, language, ".mp3");
 			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
 			Files.copy(uploadedInputStream, mp3File);
 			logger.info("{} successfully uploaded to: {}", mp3FileName, mp3File);
 
 			// save text file
-			String txtFileName = AlbinaUtil.getMediaFileName(dateString, user, language, ".txt");
+			String txtFileName = getMediaFileName(dateString, user, language, ".txt");
 			java.nio.file.Path txtFile = fileLocation.resolve(txtFileName);
 			Files.write(txtFile, mediaText.getBytes());
 			logger.info("{} successfully uploaded to {}", txtFileName, txtFile);
@@ -117,7 +118,7 @@ public class MediaFileService {
 			ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
 			String formattedDate = language.getLongDate(localDate);
 
-			String mp3FileUrl = LinkUtil.getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
+			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
 
 			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), language.getBundleString("website.name"), formattedDate, user.getName());
 			String emailHtml = String.format("%s<br><br>%s<br><br>%s",
@@ -166,6 +167,16 @@ public class MediaFileService {
 		return mediaPath
 			.resolve(region.getId())
 			.resolve(lang.name());
+	}
+
+	public static String getMediaFileUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
+		String mediaFileDirectory = Paths.get(serverInstance.getMediaPath()).getFileName().toString();
+		return String.format("%s/%s/%s/%s", LinkUtil.getStaticContentUrl(lang, region), mediaFileDirectory, region.getId(), lang);
+	}
+
+	public static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {
+		String stringDate = OffsetDateTime.parse(date).toLocalDate().toString();
+		return stringDate + "_" + language.getBundleString("media-file.name") + "_" + user.getName().toLowerCase().replace(" ", "-") + fileExtension;
 	}
 
 }

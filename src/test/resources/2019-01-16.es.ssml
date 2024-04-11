@@ -1,0 +1,438 @@
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>al inicio del día hay Peligro de aludes notable, por lo que el grado de peligro es tres..</s>
+<s>al final del día hay Peligro de aludes fuerte, por lo que el grado de peligro es cuatro. por encima de 1600 metros, Peligro de aludes notable, por lo que el grado de peligro es tres. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>al inicio del día, tenemos un problema de nieve reciente. Esto en todas las orientaciones.</s>
+<s>Además, al inicio del día, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, al final del día, por debajo 2800 metros, tenemos un poblema de nieve húmeda. Especialmente en orientaciones Este a Sur a Oeste.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes en disminución.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de 2000 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima el límite del bosque, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Sur.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de 2300 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2300 metros, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, día entero, encima 2000 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes fuerte, por lo que el grado de peligro es cuatro. por encima de 1800 metros, Peligro de aludes notable, por lo que el grado de peligro es tres. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 1800 metros, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, día entero, por debajo 2400 metros, tenemos un problema de deslizamiento basal. Esto en todas las orientaciones.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, pp.2: deslizamientos.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes en disminución.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de 2000 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2000 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Norte a Norte a Sudeste.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes en disminución.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-C"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes notable, por lo que el grado de peligro es tres. por encima de el límite del bosque, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima el límite del bosque, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes en disminución.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-C"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos. por encima de 2200 metros, Peligro de aludes débil, por lo que el grado de peligro es uno. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, día entero, encima 2000 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-B"
+ssml_gender: MALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes débil, por lo que el grado de peligro es uno..</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Oeste a Norte a Este.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-C"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes notable, por lo que el grado de peligro es tres. por encima de 1800 metros, Peligro de aludes limitado, por lo que el grado de peligro es dos. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 1800 metros, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, día entero, encima 1800 metros, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-C"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes notable, por lo que el grado de peligro es tres. por encima de el límite del bosque, Peligro de aludes limitado, por lo que el grado de peligro es dos. por debajo.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima el límite del bosque, tenemos un problema de placas de viento. Esto en todas las orientaciones.</s>
+<s>Además, día entero, encima el límite del bosque, tenemos un problema de capa débil persistente. Esto en todas las orientaciones.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, pp.4: frío después de cálido / cálido después de frío.
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes en disminución.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
+
+
+<!--
+language_code: "es-ES"
+name: "es-ES-Wavenet-C"
+ssml_gender: FEMALE
+audio_encoding: MP3
+effects_profile_id: "handset-class-device"
+-->
+<speak>
+<par>
+<media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
+<media begin="+5s">
+<p><s>Boletín de aludes para miércoles, 16 de enero de 2019.</s></p>
+<p><emphasis><s>null</s></emphasis></p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero hay Peligro de aludes débil, por lo que el grado de peligro es uno..</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p>
+<s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Oeste a Norte a Este.</s>
+</p>
+<break time="1s" strength="strong"></break>
+<p><s>null</s></p>
+<break time="1s" strength="strong"></break>
+<p><s>Y ahora el manto de nieve:</s></p>
+<p>null</p>
+<break time="1s" strength="strong"></break>
+<p><s>La tendencia para jueves, 17 de enero de 2019 indica un peligro de aludes constante.</s></p>
+<break time="1s" strength="strong"></break>
+</media>
+</par>
+<par>
+<media repeatCount="1" fadeInDur="6s" fadeOutDur="2s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media><media>
+<p><s>¡Que tengas un buen día y no olvides ir con cuidado!</s></p>
+</media>
+</par>
+</speak>
