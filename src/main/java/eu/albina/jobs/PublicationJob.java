@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
 import eu.albina.model.AbstractPersistentObject;
@@ -54,6 +55,7 @@ import eu.albina.util.AlbinaUtil;
 public class PublicationJob implements org.quartz.Job {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
+	private final ForkJoinPool pool = new ForkJoinPool();
 
 	/**
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
@@ -137,8 +139,8 @@ public class PublicationJob implements org.quartz.Job {
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		// update all regions to create complete maps
-		// parallelStream uses ForkJoinPool.commonPool()
-		regionController.getPublishBulletinRegions().parallelStream().forEach(region -> {
+		// parallelStream uses ForkJoinPool
+		pool.submit(() -> regionController.getPublishBulletinRegions().parallelStream().forEach(region -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
@@ -165,7 +167,7 @@ public class PublicationJob implements org.quartz.Job {
 			if (regions.contains(region) && !isChange()) {
 				publicationController.sendToAllChannels(avalancheReport);
 			}
-		});
+		}));
 
 		// copy files
 		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
