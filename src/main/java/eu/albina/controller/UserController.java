@@ -83,6 +83,7 @@ public class UserController {
 			if (originalUser == null) {
 				throw new HibernateException("No user with username: " + user.getEmail());
 			}
+			originalUser.setImage(user.getImage());
 			originalUser.setName(user.getName());
 			originalUser.setOrganization(user.getOrganization());
 			originalUser.setRoles(user.getRoles());
