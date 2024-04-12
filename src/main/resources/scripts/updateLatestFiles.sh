@@ -4,10 +4,10 @@ else
   mkdir $1/latest
 fi
 
-cp $1/$2/*.* $1/latest/
+ln --symbolic --relative --force $1/$2/*.* $1/latest/
 
 rm $3/*.html
-cp $3/$2/*.html $3/
+ln --symbolic --relative --force $3/$2/*.html $3/
 
 for region in EUREGIO AT-07 IT-32-BZ IT-32-TN ES-CT-L; do
   for language in de it en fr es ca oc; do

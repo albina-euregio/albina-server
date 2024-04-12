@@ -1,8 +1,8 @@
 rm $1/latest/*.xml
 rm $1/latest/*.json
 
-cp $1/$2/$2_*.xml $1/latest/
-cp $1/$2/*.json $1/latest/
+ln --symbolic --relative --force $1/$2/$2_*.xml $1/latest/
+ln --symbolic --relative --force $1/$2/*.json $1/latest/
 
 
 for region in EUREGIO AT-07 IT-32-BZ IT-32-TN ES-CT-L; do
