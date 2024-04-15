@@ -109,6 +109,9 @@ public interface TextToSpeech {
 			break1s();
 
 			for (Tendency tendency : bulletin.getTendency()) {
+				if (tendency == null || tendency.getTendencyType() == null) {
+					continue;
+				}
 				paragraph(sentence(tendencyText(tendency)));
 				break1s();
 			}
