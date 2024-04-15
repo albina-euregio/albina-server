@@ -59,6 +59,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Path("/bulletins/publish")
 @Tag(name = "bulletins/publish")
@@ -91,8 +92,12 @@ public class AvalancheBulletinPublishService {
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			List<Region> regions = Stream.concat(
+				Stream.of(region),
+				region.getSuperRegions().stream().filter(Region::isPublishBulletins)
+			).distinct().collect(Collectors.toList());
 
-			if (region != null && user.hasPermissionForRegion(region.getId())) {
+			if (user.hasPermissionForRegion(region.getId())) {
 				new UpdateJob() {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
@@ -106,7 +111,7 @@ public class AvalancheBulletinPublishService {
 
 					@Override
 					protected List<Region> getRegions() {
-						return Collections.singletonList(region);
+						return regions;
 					}
 				}.execute(null);
 

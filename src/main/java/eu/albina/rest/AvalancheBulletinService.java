@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -590,6 +591,11 @@ public class AvalancheBulletinService {
 					}
 				}
 
+				List<Region> regions = Stream.concat(
+					Stream.of(region),
+					region.getSuperRegions().stream().filter(Region::isPublishBulletins)
+				).distinct().collect(Collectors.toList());
+
 				new Thread(() -> {
 					new ChangeJob() {
 						@Override
@@ -599,7 +605,7 @@ public class AvalancheBulletinService {
 
 						@Override
 						protected List<Region> getRegions() {
-							return Collections.singletonList(region);
+							return regions;
 						}
 					}.execute(null);
 				}, "changeBulletins").start();
