@@ -190,15 +190,19 @@ public class UserService {
 		public String newPassword;
 	}
 
+	static class ResetPassword {
+		public String newPassword;
+	}
+
 	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/change")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Change password")
 	public Response changePassword(ChangePassword data, @Context SecurityContext securityContext) {
-		logger.debug("POST JSON user");
+		logger.debug("PUT JSON password");
 		try {
 			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
@@ -218,7 +222,7 @@ public class UserService {
 	}
 
 	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/check")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -252,4 +256,25 @@ public class UserService {
 		logger.info("DELETE JSON user {}", id);
 		UserController.delete(id);
 	}
+
+	@PUT
+	@Secured({ Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/{id}/change")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Reset user password")
+	public Response changeUserPassword(@PathParam("id") String id, ResetPassword data, @Context SecurityContext securityContext) {
+		logger.debug("PUT JSON user password");
+		try {
+			UserController.getInstance().resetPassword(id, data.newPassword);
+
+			JSONObject jsonObject = new JSONObject();
+			return Response.ok().type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
+		} catch (AlbinaException e) {
+			logger.warn("Error changing password", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
+
 }

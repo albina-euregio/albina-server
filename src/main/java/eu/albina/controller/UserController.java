@@ -190,6 +190,28 @@ public class UserController {
 	}
 
 	/**
+	 * Reset the password of a user.
+	 *
+	 * @param username
+	 *            the username of the user whose password should be changed
+	 * @param newPassword
+	 *            the new password (encrypted)
+	 * @return the email address of the user whose password was changed
+	 * @throws AlbinaException
+	 *             if the user does not exist
+	 */
+	public Serializable resetPassword(String username, String newPassword) throws AlbinaException {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			User user = entityManager.find(User.class, username);
+			if (user == null) {
+				throw new HibernateException("No user with username: " + username);
+			}
+			user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+			return user.getEmail();
+		});
+	}
+
+	/**
 	 * Check the {@code password} for the user with the specified {@code username}.
 	 *
 	 * @param username
