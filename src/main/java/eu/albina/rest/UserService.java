@@ -260,11 +260,11 @@ public class UserService {
 	@PUT
 	@Secured({ Role.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{id}/change")
+	@Path("/{id}/reset")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Reset user password")
-	public Response changeUserPassword(@PathParam("id") String id, ResetPassword data, @Context SecurityContext securityContext) {
+	public Response resetPassword(@PathParam("id") String id, ResetPassword data, @Context SecurityContext securityContext) {
 		logger.debug("PUT JSON user password");
 		try {
 			UserController.getInstance().resetPassword(id, data.newPassword);
