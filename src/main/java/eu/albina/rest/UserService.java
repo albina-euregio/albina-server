@@ -41,6 +41,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.hibernate.HibernateException;
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,6 +139,7 @@ public class UserService {
 		logger.debug("POST JSON user");
 		JSONObject userJson = new JSONObject(userString);
 		User user = new User(userJson, RegionController.getInstance()::getRegion);
+		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
 		// check if email already exists
 		if (!UserController.getInstance().userExists(user.getEmail())) {
