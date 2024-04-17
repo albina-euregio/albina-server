@@ -156,12 +156,12 @@ public class UserService {
 	}
 
 	@PUT
-	@Secured({ Role.ADMIN })
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Operation(summary = "Update user")
-	public Response updateUser(
+	@Operation(summary = "Update own user")
+	public Response updateOwnUser(
 		@Parameter(schema = @Schema(implementation = User.class)) String userString,
 		@Context SecurityContext securityContext) {
 		logger.debug("PUT JSON user");
@@ -169,16 +169,19 @@ public class UserService {
 			JSONObject userJson = new JSONObject(userString);
 			User user = new User(userJson, RegionController.getInstance()::getRegion);
 
+			Principal principal = securityContext.getUserPrincipal();
+			String username = principal.getName();
+
 			// check if email already exists
-			if (UserController.getInstance().userExists(user.getEmail())) {
+			if (user.getEmail().equals(username)) {
 				UserController.getInstance().updateUser(user);
 				JSONObject jsonObject = new JSONObject();
 				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 						.entity(jsonObject.toString()).build();
 			} else {
-				logger.warn("Error updating user - User does not exist");
+				logger.warn("Updating user not allowed");
 				JSONObject json = new JSONObject();
-				json.append("message", "Error updating user - User does not exists");
+				json.append("message", "Updating user not allowed");
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
 			}
 		} catch (AlbinaException e) {
@@ -275,6 +278,40 @@ public class UserService {
 			return Response.ok().type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error changing password", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+		}
+	}
+
+	@PUT
+	@Secured({ Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Update user")
+	public Response updateUser(
+		@PathParam("id") String id,
+		@Parameter(schema = @Schema(implementation = User.class)) String userString,
+		@Context SecurityContext securityContext) {
+		logger.debug("PUT JSON user");
+		try {
+			JSONObject userJson = new JSONObject(userString);
+			User user = new User(userJson, RegionController.getInstance()::getRegion);
+
+			// check if email already exists
+			if (UserController.getInstance().userExists(user.getEmail())) {
+				UserController.getInstance().updateUser(user);
+				JSONObject jsonObject = new JSONObject();
+				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
+						.entity(jsonObject.toString()).build();
+			} else {
+				logger.warn("Error updating user - User does not exist");
+				JSONObject json = new JSONObject();
+				json.append("message", "Error updating user - User does not exists");
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+			}
+		} catch (AlbinaException e) {
+			logger.warn("Error updating user", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
