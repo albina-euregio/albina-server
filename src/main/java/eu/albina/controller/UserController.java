@@ -167,9 +167,9 @@ public class UserController {
 	 * @param username
 	 *            the username of the user whose password should be changed
 	 * @param oldPassword
-	 *            the old password (encrypted)
+	 *            the old password
 	 * @param newPassword
-	 *            the new password (encrypted)
+	 *            the new password
 	 * @return the email address of the user whose password was changed
 	 * @throws AlbinaException
 	 *             if the user does not exist or the password is wrong
@@ -195,7 +195,7 @@ public class UserController {
 	 * @param username
 	 *            the username of the user whose password should be changed
 	 * @param newPassword
-	 *            the new password (encrypted)
+	 *            the new password
 	 * @return the email address of the user whose password was changed
 	 * @throws AlbinaException
 	 *             if the user does not exist
