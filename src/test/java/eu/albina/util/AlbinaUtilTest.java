@@ -106,43 +106,6 @@ public class AlbinaUtilTest {
 		Assertions.assertEquals("Tendència", string);
 	}
 
-	@Test
-	public void encodeImageAndPassword() {
-		List<String> names = new ArrayList<String>();
-		List<String> passwords = new ArrayList<String>();
-
-		for (int i = 0; i < names.size(); i++) {
-			File f = new File(imgBaseUrl + names.get(i) + ".jpg");
-			String encodstring = encodeFileToBase64Binary(f);
-			String pwd = BCrypt.hashpw(passwords.get(i), BCrypt.gensalt());
-			logger.warn(names.get(i));
-			logger.warn("Image: " + encodstring);
-			logger.warn("Password: " + pwd);
-		}
-	}
-
-	public static String encodeFileToBase64Binary(File file) {
-		String encodedfile = null;
-		try {
-			FileInputStream fileInputStreamReader = new FileInputStream(file);
-			byte[] bytes = new byte[(int) file.length()];
-			fileInputStreamReader.read(bytes);
-			encodedfile = Base64.getEncoder().encodeToString(bytes);
-			fileInputStreamReader.close();
-		} catch (IOException e) {
-			AlbinaUtil.logger.error("Failed to encode to base64", e);
-		}
-
-		return encodedfile;
-	}
-
-	@Test
-	public void encodePassword() {
-		String pwd = BCrypt.hashpw("zee3tohDuu7Zi", BCrypt.gensalt());
-		logger.warn("Password: " + pwd);
-		Assertions.assertTrue(BCrypt.checkpw("zee3tohDuu7Zi", "$2a$10$/SiPco5fFqCvIPkure0ffuBjMIRN2LPgQCvhwKMfM8HEFLch/xzzy"));
-	}
-
 	@Disabled
 	@Test
 	public void testIsLatest() {
