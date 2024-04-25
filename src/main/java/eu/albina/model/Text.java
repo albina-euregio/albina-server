@@ -27,8 +27,12 @@ import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
 import eu.albina.model.enumerations.LanguageCode;
 
+import java.util.Comparator;
+
 @Embeddable
-public class Text implements AvalancheInformationObject {
+public class Text implements AvalancheInformationObject, Comparable<Text> {
+
+	private static final Comparator<Text> COMPARATOR = Comparator.comparing(Text::getLanguage, Comparator.nullsLast(Comparator.naturalOrder()));
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE_CODE")
@@ -75,5 +79,10 @@ public class Text implements AvalancheInformationObject {
 			json.put("text", this.text);
 
 		return json;
+	}
+
+	@Override
+	public int compareTo(Text o) {
+		return COMPARATOR.compare(this, o);
 	}
 }

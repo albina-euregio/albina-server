@@ -19,6 +19,7 @@ package eu.albina.model;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -114,7 +115,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 
 	public AvalancheProblem() {
 		this.aspects = new LinkedHashSet<Aspect>();
-		this.terrainFeature = new LinkedHashSet<Text>();
+		this.terrainFeature = new TreeSet<>(); // sort texts by language to allow caching of API calls
 	}
 
 	public AvalancheProblem(JSONObject json) {

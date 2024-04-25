@@ -16,8 +16,8 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -40,7 +40,7 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 	private Set<Text> texts;
 
 	public Texts() {
-		texts = new LinkedHashSet<>();
+		texts = new TreeSet<>(); // sort texts by language to allow caching of API calls
 	}
 
 	public Texts(JSONArray json) {
