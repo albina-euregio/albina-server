@@ -19,7 +19,6 @@ package eu.albina.model;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.persistence.AttributeOverride;
@@ -112,7 +111,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "TEXT_PARTS", joinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@Column(name = "TERRAIN_FEATURE")
-	private SortedSet<Text> terrainFeature;
+	private Set<Text> terrainFeature;
 
 	public AvalancheProblem() {
 		this.aspects = new LinkedHashSet<Aspect>();
@@ -239,7 +238,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 		this.terrainFeatureTextcat = terrainFeatureTextcat;
 	}
 
-	public SortedSet<Text> getTerrainFeature() {
+	public Set<Text> getTerrainFeature() {
 		return terrainFeature;
 	}
 
@@ -247,7 +246,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 		return terrainFeature.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
 	}
 
-	public void setTerrainFeature(SortedSet<Text> terrainFeature) {
+	public void setTerrainFeature(Set<Text> terrainFeature) {
 		this.terrainFeature = terrainFeature;
 	}
 

@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.persistence.ElementCollection;
@@ -37,7 +37,7 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
-	private SortedSet<Text> texts;
+	private Set<Text> texts;
 
 	public Texts() {
 		texts = new TreeSet<>(); // sort texts by language to allow caching of API calls
@@ -50,7 +50,7 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 		}
 	}
 
-	public SortedSet<Text> getTexts() {
+	public Set<Text> getTexts() {
 		return texts;
 	}
 
@@ -58,7 +58,7 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 		return texts.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
 	}
 
-	public void setTexts(SortedSet<Text> texts) {
+	public void setTexts(Set<Text> texts) {
 		this.texts = texts;
 	}
 
