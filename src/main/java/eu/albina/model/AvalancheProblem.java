@@ -286,7 +286,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 			json.put("terrainFeatureTextcat", terrainFeatureTextcat);
 		if (terrainFeature != null && !terrainFeature.isEmpty()) {
 			JSONArray array = new JSONArray();
-			for (Text text : terrainFeature) {
+			for (Text text : new TreeSet<>(terrainFeature)) {
 				array.put(text.toJSON());
 			}
 			json.put("terrainFeature", array);

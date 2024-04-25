@@ -68,7 +68,7 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 
 	public JSONArray toJSONArray() {
 		JSONArray array = new JSONArray();
-		for (Text text : texts) {
+		for (Text text : new TreeSet<>(texts)) {
 			array.put(text.toJSON());
 		}
 		return array;
