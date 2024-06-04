@@ -108,9 +108,9 @@ interface Caaml5 {
 
 			if (bulletin.isHasDaytimeDependency()) {
 				if (isAfternoon)
-					start = start.plusHours(12);
+					start = start.plusHours(19);
 				else
-					end = end.minusHours(12);
+					end = end.minusHours(5);
 			}
 
 			Element validTime = doc.createElement("validTime");
