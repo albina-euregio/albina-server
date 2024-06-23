@@ -22,7 +22,7 @@
 		<properties>
 
 			<!-- Database connection settings -->
-			<property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+			<property name="hibernate.connection.driver_class" value="org.mariadb.jdbc.Driver"/>
 			<property name="hibernate.connection.url" value="${hibernate.connection.url}"/>
 			<property name="hibernate.connection.username" value="${hibernate.connection.username}"/>
 			<property name="hibernate.connection.password" value="${hibernate.connection.password}"/>
@@ -40,7 +40,7 @@
 			<property name="hibernate.c3p0.idle_test_period" value="3000"/>
 
 			<!-- SQL dialect -->
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL55Dialect"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB106Dialect"/>
 
 			<!-- Disable the second-level cache -->
 			<property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>
