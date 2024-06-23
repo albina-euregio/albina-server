@@ -268,7 +268,7 @@
 			<exclusions>
 				<exclusion>
 					<groupId>com.github.waffle</groupId>
-					<artifactId>waffle-jna:jar</artifactId>
+					<artifactId>waffle-jna</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
