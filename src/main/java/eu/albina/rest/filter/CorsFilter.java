@@ -70,6 +70,7 @@ public class CorsFilter implements Filter {
 				"origin, content-type, accept, authorization");
 		((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Credentials", "true");
 		((HttpServletResponse) servletResponse).addHeader("Access-Control-Max-Age", "1209600");
+		((HttpServletResponse) servletResponse).addHeader("Access-Control-Expose-Headers", "ETag");
 
 		HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
