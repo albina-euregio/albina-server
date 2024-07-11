@@ -2,8 +2,8 @@
   "bulletins" : [ {
     "publicationTime" : "2018-12-26T16:00:00Z",
     "validTime" : {
-      "startTime" : "2018-12-26T23:00:00Z",
-      "endTime" : "2018-12-27T23:00:00Z"
+      "startTime" : "2018-12-26T16:00:00Z",
+      "endTime" : "2018-12-27T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -19,8 +19,8 @@
       "highlights" : "The avalanche danger will persist.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2018-12-27T23:00:00Z",
-        "endTime" : "2018-12-28T23:00:00Z"
+        "startTime" : "2018-12-27T16:00:00Z",
+        "endTime" : "2018-12-28T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -141,8 +141,8 @@
   }, {
     "publicationTime" : "2018-12-26T16:00:00Z",
     "validTime" : {
-      "startTime" : "2018-12-26T23:00:00Z",
-      "endTime" : "2018-12-27T23:00:00Z"
+      "startTime" : "2018-12-26T16:00:00Z",
+      "endTime" : "2018-12-27T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -158,8 +158,8 @@
       "highlights" : "The avalanche danger will persist.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2018-12-27T23:00:00Z",
-        "endTime" : "2018-12-28T23:00:00Z"
+        "startTime" : "2018-12-27T16:00:00Z",
+        "endTime" : "2018-12-28T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -213,8 +213,8 @@
   }, {
     "publicationTime" : "2018-12-26T16:00:00Z",
     "validTime" : {
-      "startTime" : "2018-12-26T23:00:00Z",
-      "endTime" : "2018-12-27T23:00:00Z"
+      "startTime" : "2018-12-26T16:00:00Z",
+      "endTime" : "2018-12-27T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -230,8 +230,8 @@
       "highlights" : "Gradual decrease in avalanche danger.",
       "tendencyType" : "decreasing",
       "validTime" : {
-        "startTime" : "2018-12-27T23:00:00Z",
-        "endTime" : "2018-12-28T23:00:00Z"
+        "startTime" : "2018-12-27T16:00:00Z",
+        "endTime" : "2018-12-28T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -286,8 +286,8 @@
   }, {
     "publicationTime" : "2018-12-26T16:00:00Z",
     "validTime" : {
-      "startTime" : "2018-12-26T23:00:00Z",
-      "endTime" : "2018-12-27T23:00:00Z"
+      "startTime" : "2018-12-26T16:00:00Z",
+      "endTime" : "2018-12-27T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -303,8 +303,8 @@
       "highlights" : "Moderate, level 2.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2018-12-27T23:00:00Z",
-        "endTime" : "2018-12-28T23:00:00Z"
+        "startTime" : "2018-12-27T16:00:00Z",
+        "endTime" : "2018-12-28T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -379,8 +379,8 @@
   }, {
     "publicationTime" : "2018-12-26T16:00:00Z",
     "validTime" : {
-      "startTime" : "2018-12-26T23:00:00Z",
-      "endTime" : "2018-12-27T23:00:00Z"
+      "startTime" : "2018-12-26T16:00:00Z",
+      "endTime" : "2018-12-27T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -396,8 +396,8 @@
       "highlights" : "The avalanche danger will persist.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2018-12-27T23:00:00Z",
-        "endTime" : "2018-12-28T23:00:00Z"
+        "startTime" : "2018-12-27T16:00:00Z",
+        "endTime" : "2018-12-28T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -438,8 +438,8 @@
   }, {
     "publicationTime" : "2018-12-26T16:00:00Z",
     "validTime" : {
-      "startTime" : "2018-12-26T23:00:00Z",
-      "endTime" : "2018-12-27T23:00:00Z"
+      "startTime" : "2018-12-26T16:00:00Z",
+      "endTime" : "2018-12-27T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -455,8 +455,8 @@
       "highlights" : "Low, level 1.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2018-12-27T23:00:00Z",
-        "endTime" : "2018-12-28T23:00:00Z"
+        "startTime" : "2018-12-27T16:00:00Z",
+        "endTime" : "2018-12-28T16:00:00Z"
       }
     } ],
     "customData" : {

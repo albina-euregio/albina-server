@@ -172,8 +172,8 @@
 		"dangerPattern2": "dp2",
 		"publicationDate": "2023-12-01T07:00:00Z",
 		"validity": {
-			"from": "2023-11-30T23:00:00Z",
-			"until": "2023-12-01T23:00:00Z"
+			"from": "2023-11-30T16:00:00Z",
+			"until": "2023-12-01T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-07",
@@ -498,8 +498,8 @@
 		"dangerPattern2": "dp4",
 		"publicationDate": "2023-12-01T07:00:00Z",
 		"validity": {
-			"from": "2023-11-30T23:00:00Z",
-			"until": "2023-12-01T23:00:00Z"
+			"from": "2023-11-30T16:00:00Z",
+			"until": "2023-12-01T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-TN-02",
@@ -818,8 +818,8 @@
 		"dangerPattern2": "dp4",
 		"publicationDate": "2023-12-01T07:00:00Z",
 		"validity": {
-			"from": "2023-11-30T23:00:00Z",
-			"until": "2023-12-01T23:00:00Z"
+			"from": "2023-11-30T16:00:00Z",
+			"until": "2023-12-01T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-14-01",
@@ -1172,8 +1172,8 @@
 		"dangerPattern1": "dp6",
 		"publicationDate": "2023-12-01T07:00:00Z",
 		"validity": {
-			"from": "2023-11-30T23:00:00Z",
-			"until": "2023-12-01T23:00:00Z"
+			"from": "2023-11-30T16:00:00Z",
+			"until": "2023-12-01T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-05",
@@ -1417,8 +1417,8 @@
 		"dangerPattern1": "dp6",
 		"publicationDate": "2023-12-01T07:00:00Z",
 		"validity": {
-			"from": "2023-11-30T23:00:00Z",
-			"until": "2023-12-01T23:00:00Z"
+			"from": "2023-11-30T16:00:00Z",
+			"until": "2023-12-01T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-BZ-18-02",
@@ -1668,8 +1668,8 @@
 		"tendency": "increasing",
 		"publicationDate": "2023-12-01T07:00:00Z",
 		"validity": {
-			"from": "2023-11-30T23:00:00Z",
-			"until": "2023-12-01T23:00:00Z"
+			"from": "2023-11-30T16:00:00Z",
+			"until": "2023-12-01T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-TN-12",

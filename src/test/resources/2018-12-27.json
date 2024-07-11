@@ -96,8 +96,8 @@
 		"dangerPattern2": "dp5",
 		"publicationDate": "2018-12-26T16:00:00Z",
 		"validity": {
-			"from": "2018-12-26T23:00:00Z",
-			"until": "2018-12-27T23:00:00Z"
+			"from": "2018-12-26T16:00:00Z",
+			"until": "2018-12-27T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-BZ-11",
@@ -284,8 +284,8 @@
 		"dangerPattern2": "dp2",
 		"publicationDate": "2018-12-26T16:00:00Z",
 		"validity": {
-			"from": "2018-12-26T23:00:00Z",
-			"until": "2018-12-27T23:00:00Z"
+			"from": "2018-12-26T16:00:00Z",
+			"until": "2018-12-27T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-04",
@@ -420,8 +420,8 @@
 		"dangerPattern2": "dp5",
 		"publicationDate": "2018-12-26T16:00:00Z",
 		"validity": {
-			"from": "2018-12-26T23:00:00Z",
-			"until": "2018-12-27T23:00:00Z"
+			"from": "2018-12-26T16:00:00Z",
+			"until": "2018-12-27T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-26",
@@ -555,8 +555,8 @@
 		"tendency": "steady",
 		"publicationDate": "2018-12-26T16:00:00Z",
 		"validity": {
-			"from": "2018-12-26T23:00:00Z",
-			"until": "2018-12-27T23:00:00Z"
+			"from": "2018-12-26T16:00:00Z",
+			"until": "2018-12-27T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-BZ-10",
@@ -698,8 +698,8 @@
 		"dangerPattern1": "dp6",
 		"publicationDate": "2018-12-26T16:00:00Z",
 		"validity": {
-			"from": "2018-12-26T23:00:00Z",
-			"until": "2018-12-27T23:00:00Z"
+			"from": "2018-12-26T16:00:00Z",
+			"until": "2018-12-27T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-05",
@@ -822,8 +822,8 @@
 		"tendency": "steady",
 		"publicationDate": "2018-12-26T16:00:00Z",
 		"validity": {
-			"from": "2018-12-26T23:00:00Z",
-			"until": "2018-12-27T23:00:00Z"
+			"from": "2018-12-26T16:00:00Z",
+			"until": "2018-12-27T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-BZ-20",

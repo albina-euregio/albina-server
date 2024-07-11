@@ -2,8 +2,8 @@
   "bulletins" : [ {
     "publicationTime" : "2023-12-20T16:00:00Z",
     "validTime" : {
-      "startTime" : "2023-12-20T23:00:00Z",
-      "endTime" : "2023-12-21T23:00:00Z"
+      "startTime" : "2023-12-20T16:00:00Z",
+      "endTime" : "2023-12-21T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -19,8 +19,8 @@
       "highlights" : "Further increase in avalanche danger as the precipitation becomes more intense.",
       "tendencyType" : "increasing",
       "validTime" : {
-        "startTime" : "2023-12-21T23:00:00Z",
-        "endTime" : "2023-12-22T23:00:00Z"
+        "startTime" : "2023-12-21T16:00:00Z",
+        "endTime" : "2023-12-22T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -106,8 +106,8 @@
   }, {
     "publicationTime" : "2023-12-20T16:00:00Z",
     "validTime" : {
-      "startTime" : "2023-12-20T23:00:00Z",
-      "endTime" : "2023-12-21T23:00:00Z"
+      "startTime" : "2023-12-20T16:00:00Z",
+      "endTime" : "2023-12-21T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -123,8 +123,8 @@
       "highlights" : "Over a wide area 40 to 80 cm of snow, and even more in some localities, will fall on Friday above approximately 1800 m. During the day: Significant increase in avalanche danger as a consequence of new snow and stormy weather. On wind-loaded slopes more frequent natural avalanches are to be expected as the day progresses, even large ones in isolated cases. Gliding avalanches are also to be expected, in particular on steep grassy slopes below approximately 2400 m.",
       "tendencyType" : "increasing",
       "validTime" : {
-        "startTime" : "2023-12-21T23:00:00Z",
-        "endTime" : "2023-12-22T23:00:00Z"
+        "startTime" : "2023-12-21T16:00:00Z",
+        "endTime" : "2023-12-22T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -190,8 +190,8 @@
   }, {
     "publicationTime" : "2023-12-20T16:00:00Z",
     "validTime" : {
-      "startTime" : "2023-12-20T23:00:00Z",
-      "endTime" : "2023-12-21T23:00:00Z"
+      "startTime" : "2023-12-20T16:00:00Z",
+      "endTime" : "2023-12-21T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -207,8 +207,8 @@
       "highlights" : "Increase in avalanche danger as a consequence of new snow and strong wind.",
       "tendencyType" : "increasing",
       "validTime" : {
-        "startTime" : "2023-12-21T23:00:00Z",
-        "endTime" : "2023-12-22T23:00:00Z"
+        "startTime" : "2023-12-21T16:00:00Z",
+        "endTime" : "2023-12-22T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -336,8 +336,8 @@
   }, {
     "publicationTime" : "2023-12-20T16:00:00Z",
     "validTime" : {
-      "startTime" : "2023-12-20T23:00:00Z",
-      "endTime" : "2023-12-21T23:00:00Z"
+      "startTime" : "2023-12-20T16:00:00Z",
+      "endTime" : "2023-12-21T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -353,8 +353,8 @@
       "highlights" : "In particular in the north 25 to 50 cm of snow, and even more in some localities, will fall above approximately 1800 m. As the day progresses as a consequence of new snow and stormy weather there will be an appreciable increase in the avalanche danger. The large quantity of fresh snow and in particular the extensive wind slabs represent the main danger. Gliding snow requires caution.",
       "tendencyType" : "increasing",
       "validTime" : {
-        "startTime" : "2023-12-21T23:00:00Z",
-        "endTime" : "2023-12-22T23:00:00Z"
+        "startTime" : "2023-12-21T16:00:00Z",
+        "endTime" : "2023-12-22T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -401,8 +401,8 @@
   }, {
     "publicationTime" : "2023-12-20T16:00:00Z",
     "validTime" : {
-      "startTime" : "2023-12-20T23:00:00Z",
-      "endTime" : "2023-12-21T23:00:00Z"
+      "startTime" : "2023-12-20T16:00:00Z",
+      "endTime" : "2023-12-21T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -418,8 +418,8 @@
       "highlights" : "In particular in the north 10 to 20 cm of snow, and even more in some localities, will fall on Friday above approximately 1800 m. As the day progresses as a consequence of new snow and stormy weather there will be an increase in the avalanche danger. Fresh wind slabs require caution.",
       "tendencyType" : "increasing",
       "validTime" : {
-        "startTime" : "2023-12-21T23:00:00Z",
-        "endTime" : "2023-12-22T23:00:00Z"
+        "startTime" : "2023-12-21T16:00:00Z",
+        "endTime" : "2023-12-22T16:00:00Z"
       }
     } ],
     "customData" : {

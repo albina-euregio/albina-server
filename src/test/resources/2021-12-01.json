@@ -176,8 +176,8 @@
 		"dangerPattern2": "dp6",
 		"publicationDate": "2021-11-30T16:03:56Z",
 		"validity": {
-			"from": "2021-11-30T23:00:00Z",
-			"until": "2021-12-01T23:00:00Z"
+			"from": "2021-11-30T16:00:00Z",
+			"until": "2021-12-01T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-BZ-20",
@@ -460,8 +460,8 @@
 		"dangerPattern2": "dp2",
 		"publicationDate": "2021-11-30T16:03:56Z",
 		"validity": {
-			"from": "2021-11-30T23:00:00Z",
-			"until": "2021-12-01T23:00:00Z"
+			"from": "2021-11-30T16:00:00Z",
+			"until": "2021-12-01T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-16",
@@ -693,8 +693,8 @@
 		"dangerPattern2": "dp5",
 		"publicationDate": "2021-11-30T16:03:56Z",
 		"validity": {
-			"from": "2021-11-30T23:00:00Z",
-			"until": "2021-12-01T23:00:00Z"
+			"from": "2021-11-30T16:00:00Z",
+			"until": "2021-12-01T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-04",

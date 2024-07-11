@@ -2,8 +2,8 @@
   <bulletin bulletinID="00d8122e-89aa-4bc4-8120-9698dd4f7b7a" lang="en">
     <publicationTime>2023-12-20T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-12-20T23:00:00Z</startTime>
-      <endTime>2023-12-21T23:00:00Z</endTime>
+      <startTime>2023-12-20T16:00:00Z</startTime>
+      <endTime>2023-12-21T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-07">
@@ -110,8 +110,8 @@
       <highlights>Further increase in avalanche danger as the precipitation becomes more intense.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-21T23:00:00Z</startTime>
-        <endTime>2023-12-22T23:00:00Z</endTime>
+        <startTime>2023-12-21T16:00:00Z</startTime>
+        <endTime>2023-12-22T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -127,8 +127,8 @@
   <bulletin bulletinID="b0340769-c1c7-45c5-b3cd-657154bee719" lang="en">
     <publicationTime>2023-12-20T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-12-20T23:00:00Z</startTime>
-      <endTime>2023-12-21T23:00:00Z</endTime>
+      <startTime>2023-12-20T16:00:00Z</startTime>
+      <endTime>2023-12-21T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-26">
@@ -200,8 +200,8 @@
       <highlights>Over a wide area 40 to 80 cm of snow, and even more in some localities, will fall on Friday above approximately 1800 m. During the day: Significant increase in avalanche danger as a consequence of new snow and stormy weather. On wind-loaded slopes more frequent natural avalanches are to be expected as the day progresses, even large ones in isolated cases. Gliding avalanches are also to be expected, in particular on steep grassy slopes below approximately 2400 m.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-21T23:00:00Z</startTime>
-        <endTime>2023-12-22T23:00:00Z</endTime>
+        <startTime>2023-12-21T16:00:00Z</startTime>
+        <endTime>2023-12-22T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -217,8 +217,8 @@
   <bulletin bulletinID="b9867f87-8d5b-4884-85a0-43bf38aa5cc3" lang="en">
     <publicationTime>2023-12-20T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-12-20T23:00:00Z</startTime>
-      <endTime>2023-12-21T23:00:00Z</endTime>
+      <startTime>2023-12-20T16:00:00Z</startTime>
+      <endTime>2023-12-21T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-02-02">
@@ -363,8 +363,8 @@
       <highlights>Increase in avalanche danger as a consequence of new snow and strong wind.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-21T23:00:00Z</startTime>
-        <endTime>2023-12-22T23:00:00Z</endTime>
+        <startTime>2023-12-21T16:00:00Z</startTime>
+        <endTime>2023-12-22T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -380,8 +380,8 @@
   <bulletin bulletinID="9720c6a8-0cd6-4d09-be54-7b1f16b6cf17" lang="en">
     <publicationTime>2023-12-20T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-12-20T23:00:00Z</startTime>
-      <endTime>2023-12-21T23:00:00Z</endTime>
+      <startTime>2023-12-20T16:00:00Z</startTime>
+      <endTime>2023-12-21T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-27">
@@ -431,8 +431,8 @@
       <highlights>In particular in the north 25 to 50 cm of snow, and even more in some localities, will fall above approximately 1800 m. As the day progresses as a consequence of new snow and stormy weather there will be an appreciable increase in the avalanche danger. The large quantity of fresh snow and in particular the extensive wind slabs represent the main danger. Gliding snow requires caution.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-21T23:00:00Z</startTime>
-        <endTime>2023-12-22T23:00:00Z</endTime>
+        <startTime>2023-12-21T16:00:00Z</startTime>
+        <endTime>2023-12-22T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -448,8 +448,8 @@
   <bulletin bulletinID="24ca8108-e2f7-413c-ba42-fde521076ef3" lang="en">
     <publicationTime>2023-12-20T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-12-20T23:00:00Z</startTime>
-      <endTime>2023-12-21T23:00:00Z</endTime>
+      <startTime>2023-12-20T16:00:00Z</startTime>
+      <endTime>2023-12-21T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-29">
@@ -486,8 +486,8 @@
       <highlights>In particular in the north 10 to 20 cm of snow, and even more in some localities, will fall on Friday above approximately 1800 m. As the day progresses as a consequence of new snow and stormy weather there will be an increase in the avalanche danger. Fresh wind slabs require caution.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-21T23:00:00Z</startTime>
-        <endTime>2023-12-22T23:00:00Z</endTime>
+        <startTime>2023-12-21T16:00:00Z</startTime>
+        <endTime>2023-12-22T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>

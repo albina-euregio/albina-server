@@ -200,18 +200,18 @@ public class AlbinaUtilTest {
 	public void testInstantStartOfDay() {
 		// code from AlbinaUtil.getInstantStartOfDay
 		Instant startDate = LocalDate.parse("2022-03-27").atStartOfDay(ZoneId.of("Europe/Vienna")).toInstant();
-		Assertions.assertEquals(Instant.parse("2022-03-26T23:00:00Z"), startDate); // ok
+		Assertions.assertEquals(Instant.parse("2022-03-26T16:00:00Z"), startDate); // ok
 		Assertions.assertEquals(ZonedDateTime.parse("2022-03-27T00:00+01:00[Europe/Vienna]"), startDate.atZone(ZoneId.of("Europe/Vienna"))); // ok
 
 		// old code from PublicationJob
 		startDate = startDate.plus(1, ChronoUnit.DAYS);
-		Assertions.assertEquals(Instant.parse("2022-03-27T23:00:00Z"), startDate); // not good!
+		Assertions.assertEquals(Instant.parse("2022-03-27T16:00:00Z"), startDate); // not good!
 		Assertions.assertEquals(ZonedDateTime.parse("2022-03-28T01:00+02:00[Europe/Vienna]"), startDate.atZone(ZoneId.of("Europe/Vienna"))); // not good!
 		Assertions.assertEquals(ZonedDateTime.parse("2022-03-27T23:00Z[UTC]"), startDate.atZone(ZoneId.of("UTC")));
 
 		// code from PublicationJob
 		ZonedDateTime today = LocalDate.parse("2022-03-27").atStartOfDay(AlbinaUtil.localZone());
-		Assertions.assertEquals(Instant.parse("2022-03-26T23:00:00Z"), today.toInstant()); // ok
+		Assertions.assertEquals(Instant.parse("2022-03-26T16:00:00Z"), today.toInstant()); // ok
 		startDate = today.plusDays(1).toInstant();
 		Assertions.assertEquals(Instant.parse("2022-03-27T22:00:00Z"), startDate); // ok
 		Instant endDate = today.plusDays(2).toInstant();

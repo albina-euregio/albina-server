@@ -2,8 +2,8 @@
   <bulletin bulletinID="0c235b8b-dcfa-419a-a043-32020ea24118" lang="en">
     <publicationTime>2023-12-01T07:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-11-30T23:00:00Z</startTime>
-      <endTime>2023-12-01T23:00:00Z</endTime>
+      <startTime>2023-11-30T16:00:00Z</startTime>
+      <endTime>2023-12-01T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <region regionID="AT-07-07">
@@ -170,8 +170,8 @@
       <highlights>Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-01T23:00:00Z</startTime>
-        <endTime>2023-12-02T23:00:00Z</endTime>
+        <startTime>2023-12-01T16:00:00Z</startTime>
+        <endTime>2023-12-02T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -187,8 +187,8 @@
   <bulletin bulletinID="8170c764-4835-49b2-9159-4c45ec4a6816" lang="en">
     <publicationTime>2023-12-01T07:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-11-30T23:00:00Z</startTime>
-      <endTime>2023-12-01T23:00:00Z</endTime>
+      <startTime>2023-11-30T16:00:00Z</startTime>
+      <endTime>2023-12-01T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <region regionID="IT-32-TN-02">
@@ -340,8 +340,8 @@
       <highlights>Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-01T23:00:00Z</startTime>
-        <endTime>2023-12-02T23:00:00Z</endTime>
+        <startTime>2023-12-01T16:00:00Z</startTime>
+        <endTime>2023-12-02T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -357,8 +357,8 @@
   <bulletin bulletinID="6b5e7429-5ebb-44eb-9efa-17e2e28a5f3e" lang="en">
     <publicationTime>2023-12-01T07:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-11-30T23:00:00Z</startTime>
-      <endTime>2023-12-01T23:00:00Z</endTime>
+      <startTime>2023-11-30T16:00:00Z</startTime>
+      <endTime>2023-12-01T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <region regionID="AT-07-14-01">
@@ -618,8 +618,8 @@
       <highlights>Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-01T23:00:00Z</startTime>
-        <endTime>2023-12-02T23:00:00Z</endTime>
+        <startTime>2023-12-01T16:00:00Z</startTime>
+        <endTime>2023-12-02T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -635,8 +635,8 @@
   <bulletin bulletinID="f96e4a54-8a82-4d6f-bc1a-95b2c35c0ce4" lang="en">
     <publicationTime>2023-12-01T07:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-11-30T23:00:00Z</startTime>
-      <endTime>2023-12-01T23:00:00Z</endTime>
+      <startTime>2023-11-30T16:00:00Z</startTime>
+      <endTime>2023-12-01T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <region regionID="AT-07-05">
@@ -728,8 +728,8 @@
       <highlights>Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-01T23:00:00Z</startTime>
-        <endTime>2023-12-02T23:00:00Z</endTime>
+        <startTime>2023-12-01T16:00:00Z</startTime>
+        <endTime>2023-12-02T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -744,8 +744,8 @@
   <bulletin bulletinID="e6905e60-782b-4ee2-919d-db49a8a85af6" lang="en">
     <publicationTime>2023-12-01T07:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-11-30T23:00:00Z</startTime>
-      <endTime>2023-12-01T23:00:00Z</endTime>
+      <startTime>2023-11-30T16:00:00Z</startTime>
+      <endTime>2023-12-01T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <region regionID="IT-32-BZ-18-02">
@@ -858,8 +858,8 @@
       <highlights>As a consequence of new snow and wind there will be an increase in the avalanche danger. Over a wide area 15 to 30 cm of snow will fall on Saturday. In the Sexten Dolomites and in the Lienzer Dolomites in some localities up to 50 cm of snow will fall. A critical avalanche situation will be encountered in some regions.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-01T23:00:00Z</startTime>
-        <endTime>2023-12-02T23:00:00Z</endTime>
+        <startTime>2023-12-01T16:00:00Z</startTime>
+        <endTime>2023-12-02T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -874,8 +874,8 @@
   <bulletin bulletinID="dbb52110-5f65-4156-bc64-b0d2e60f560a" lang="en">
     <publicationTime>2023-12-01T07:00:00Z</publicationTime>
     <validTime>
-      <startTime>2023-11-30T23:00:00Z</startTime>
-      <endTime>2023-12-01T23:00:00Z</endTime>
+      <startTime>2023-11-30T16:00:00Z</startTime>
+      <endTime>2023-12-01T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <region regionID="IT-32-TN-12">
@@ -932,8 +932,8 @@
       <highlights>The avalanche danger will increase.</highlights>
       <tendencyType>increasing</tendencyType>
       <validTime>
-        <startTime>2023-12-01T23:00:00Z</startTime>
-        <endTime>2023-12-02T23:00:00Z</endTime>
+        <startTime>2023-12-01T16:00:00Z</startTime>
+        <endTime>2023-12-02T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>

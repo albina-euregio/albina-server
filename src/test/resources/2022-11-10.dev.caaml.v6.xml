@@ -2,8 +2,8 @@
   <bulletin bulletinID="06888f8d-9e6e-4b0b-9523-9aed9e52d9e7" lang="en">
     <publicationTime>2022-11-09T16:29:01Z</publicationTime>
     <validTime>
-      <startTime>2022-11-09T23:00:00Z</startTime>
-      <endTime>2022-11-10T23:00:00Z</endTime>
+      <startTime>2022-11-09T16:00:00Z</startTime>
+      <endTime>2022-11-10T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <dangerRating>
@@ -64,8 +64,8 @@
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-11-10T23:00:00Z</startTime>
-        <endTime>2022-11-11T23:00:00Z</endTime>
+        <startTime>2022-11-10T16:00:00Z</startTime>
+        <endTime>2022-11-11T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -80,8 +80,8 @@
   <bulletin bulletinID="f4c31d95-94d0-47de-b678-8499f3ea080d" lang="en">
     <publicationTime>2022-11-09T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2022-11-09T23:00:00Z</startTime>
-      <endTime>2022-11-10T23:00:00Z</endTime>
+      <startTime>2022-11-09T16:00:00Z</startTime>
+      <endTime>2022-11-10T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <dangerRating>
@@ -142,8 +142,8 @@
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-11-10T23:00:00Z</startTime>
-        <endTime>2022-11-11T23:00:00Z</endTime>
+        <startTime>2022-11-10T16:00:00Z</startTime>
+        <endTime>2022-11-11T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -158,8 +158,8 @@
   <bulletin bulletinID="5263ea68-d47a-45f2-85ae-4e1938c82044" lang="en">
     <publicationTime>2022-11-09T16:29:01Z</publicationTime>
     <validTime>
-      <startTime>2022-11-09T23:00:00Z</startTime>
-      <endTime>2022-11-10T23:00:00Z</endTime>
+      <startTime>2022-11-09T16:00:00Z</startTime>
+      <endTime>2022-11-10T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <dangerRating>
@@ -220,8 +220,8 @@
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-11-10T23:00:00Z</startTime>
-        <endTime>2022-11-11T23:00:00Z</endTime>
+        <startTime>2022-11-10T16:00:00Z</startTime>
+        <endTime>2022-11-11T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -236,8 +236,8 @@
   <bulletin bulletinID="da6f43e1-ca07-4975-9ef6-42a335b5901d" lang="en">
     <publicationTime>2022-11-09T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2022-11-09T23:00:00Z</startTime>
-      <endTime>2022-11-10T23:00:00Z</endTime>
+      <startTime>2022-11-09T16:00:00Z</startTime>
+      <endTime>2022-11-10T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <dangerRating>
@@ -298,8 +298,8 @@
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-11-10T23:00:00Z</startTime>
-        <endTime>2022-11-11T23:00:00Z</endTime>
+        <startTime>2022-11-10T16:00:00Z</startTime>
+        <endTime>2022-11-11T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -314,8 +314,8 @@
   <bulletin bulletinID="dba44dec-d2c5-43cd-8ee3-70d3fa58c2dc" lang="en">
     <publicationTime>2022-11-09T16:29:01Z</publicationTime>
     <validTime>
-      <startTime>2022-11-09T23:00:00Z</startTime>
-      <endTime>2022-11-10T23:00:00Z</endTime>
+      <startTime>2022-11-09T16:00:00Z</startTime>
+      <endTime>2022-11-10T16:00:00Z</endTime>
     </validTime>
     <unscheduled>true</unscheduled>
     <dangerRating>
@@ -376,8 +376,8 @@
       <highlights>Hardly any decrease in avalanche danger as a consequence of the snowfall.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-11-10T23:00:00Z</startTime>
-        <endTime>2022-11-11T23:00:00Z</endTime>
+        <startTime>2022-11-10T16:00:00Z</startTime>
+        <endTime>2022-11-11T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
