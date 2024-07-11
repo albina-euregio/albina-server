@@ -298,8 +298,7 @@ public class AvalancheBulletinController {
 				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId())
 						&& avalancheBulletin.getOwnerRegion().startsWith(region.getId())) {
 					entityManager.remove(avalancheBulletin);
-					if (resultBulletins.containsKey(avalancheBulletin.getId()))
-						resultBulletins.remove(avalancheBulletin.getId());
+					resultBulletins.remove(avalancheBulletin.getId());
 				}
 			}
 
@@ -339,10 +338,8 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin loadedBulletin : loadedBulletins) {
 				// check micro-regions for each bulletin to prevent duplicates
 				for (String microRegion : newBulletin.getPublishedAndSavedRegions()) {
-					if (loadedBulletin.getPublishedRegions().contains(microRegion))
-						loadedBulletin.getPublishedRegions().remove(microRegion);
-					if (loadedBulletin.getSavedRegions().contains(microRegion))
-						loadedBulletin.getSavedRegions().remove(microRegion);
+					loadedBulletin.getPublishedRegions().remove(microRegion);
+					loadedBulletin.getSavedRegions().remove(microRegion);
 				}
 				if (!loadedBulletin.getPublishedAndSavedRegions().isEmpty()) {
 					entityManager.merge(loadedBulletin);
@@ -387,10 +384,8 @@ public class AvalancheBulletinController {
 				if (!loadedBulletin.getId().equals(updatedBulletin.getId())) {
 					// check micro-regions for each bulletin to prevent duplicates
 					for (String microRegion : updatedBulletin.getPublishedAndSavedRegions()) {
-						if (loadedBulletin.getPublishedRegions().contains(microRegion))
-							loadedBulletin.getPublishedRegions().remove(microRegion);
-						if (loadedBulletin.getSavedRegions().contains(microRegion))
-							loadedBulletin.getSavedRegions().remove(microRegion);
+						loadedBulletin.getPublishedRegions().remove(microRegion);
+						loadedBulletin.getSavedRegions().remove(microRegion);
 					}
 					if (!loadedBulletin.getPublishedAndSavedRegions().isEmpty()) {
 						entityManager.merge(loadedBulletin);

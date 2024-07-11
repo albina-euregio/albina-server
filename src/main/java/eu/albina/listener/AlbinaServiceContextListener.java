@@ -29,8 +29,6 @@ import eu.albina.util.DBMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
-
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.SchedulerUtil;
@@ -70,7 +68,6 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 				logger.warn(String.format("Error deregistering driver %s", d), ex);
 			}
 		}
-		AbandonedConnectionCleanupThread.checkedShutdown();
 
 		SchedulerUtil.getInstance().setUp();
 		SchedulerUtil.getInstance().start();
@@ -90,7 +87,6 @@ public class AlbinaServiceContextListener implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent arg0) {
 		HibernateUtil.getInstance().shutDown();
 		SchedulerUtil.getInstance().shutDown();
-		AbandonedConnectionCleanupThread.checkedShutdown();
 		logger.debug("ServletContextListener destroyed");
 	}
 }

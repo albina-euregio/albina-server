@@ -22,7 +22,8 @@
 		<properties>
 
 			<!-- Database connection settings -->
-			<property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+			<property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
+			<property name="hibernate.connection.driver_class" value="org.mariadb.jdbc.Driver"/>
 			<property name="hibernate.connection.url" value="${hibernate.connection.url}"/>
 			<property name="hibernate.connection.username" value="${hibernate.connection.username}"/>
 			<property name="hibernate.connection.password" value="${hibernate.connection.password}"/>
@@ -30,17 +31,8 @@
 			<property name="hibernate.connection.username" value="ais"/>
 			<property name="hibernate.connection.password" value="MD>5:X*n%)1V"/> -->
 
-			<!-- c3p0 connection pool -->
-			<property name="hibernate.c3p0.min_size" value="5"/>
-			<property name="hibernate.c3p0.max_size" value="20"/>
-			<property name="hibernate.c3p0.timeout" value="0"/>
-			<!-- Statement caching (0 means no caching) -->
-			<property name="hibernate.c3p0.max_statements" value="50"/>
-			<property name="hibernate.c3p0.acquire_increment" value="1"/>
-			<property name="hibernate.c3p0.idle_test_period" value="3000"/>
-
 			<!-- SQL dialect -->
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL55Dialect"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB106Dialect"/>
 
 			<!-- Disable the second-level cache -->
 			<property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>

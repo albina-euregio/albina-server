@@ -26,7 +26,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<hibernate.connection.url>jdbc:mysql://localhost:3306/ais_tmp?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
+				<hibernate.connection.url>jdbc:mariadb://localhost:3306/albina_dev?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
@@ -45,7 +45,7 @@
 		<profile>
 			<id>env-dev</id>
 			<properties>
-				<hibernate.connection.url>jdbc:mysql://localhost:3306/albina_dev?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
+				<hibernate.connection.url>jdbc:mariadb://localhost:3306/albina_dev?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
@@ -64,7 +64,7 @@
 		<profile>
 			<id>env-prod</id>
 			<properties>
-				<hibernate.connection.url>jdbc:mysql://localhost:3306/albina?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
+				<hibernate.connection.url>jdbc:mariadb://localhost:3306/albina?useSSL=false&amp;amp;useUnicode=true&amp;amp;useJDBCCompliantTimezoneShift=true&amp;amp;useLegacyDatetimeCode=false&amp;amp;serverTimezone=UTC</hibernate.connection.url>
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
@@ -132,7 +132,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>33.0.0-jre</version>
+			<version>33.2.0-jre</version>
 		</dependency>
 
 		<dependency>
@@ -254,21 +254,25 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
+			<artifactId>hibernate-hikaricp</artifactId>
 			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>1.12.22</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
-			<version>8.3.0</version>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>3.4.0</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>com.google.protobuf</artifactId>
-					<groupId>protobuf-java</groupId>
+					<groupId>com.github.waffle</groupId>
+					<artifactId>waffle-jna</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -285,11 +289,13 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>5.9.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>5.9.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -298,14 +304,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy</artifactId>
-			<version>1.12.20</version>
-		</dependency>
-		<dependency>
 			<groupId>org.objenesis</groupId>
 			<artifactId>objenesis</artifactId>
 			<version>3.2</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- websocket -->
