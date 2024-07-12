@@ -72,15 +72,11 @@ public interface AlbinaUtil {
 	}
 
 	static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = bulletins.stream()
-			.map(AvalancheBulletin::getValidUntil)
-			.filter(Objects::nonNull)
-			.max(Comparator.naturalOrder())
-			.orElse(null);
+		ZonedDateTime date = getValidityDate(bulletins);
+		date = date.plusDays(1);
 		if (date == null) {
 			return "";
 		}
-		date = date.withZoneSameInstant(localZone());
 		return lang.getBundleString("tendency.binding-word").strip() + " " + lang.getLongDate(date);
 	}
 
@@ -97,7 +93,7 @@ public interface AlbinaUtil {
 	}
 
 	static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		if (date == null) {
 			// TODO what if no date is given (should not happen)
 			return "-";
@@ -114,11 +110,11 @@ public interface AlbinaUtil {
 		return getValidityDateString(bulletins, Period.ZERO);
 	}
 
-	private static ZonedDateTime getValidityDate(List<AvalancheBulletin> bulletins) {
+	static ZonedDateTime getValidityDate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime date = getDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		if (date.getHour() > 12) {
-			date.plusDays(1);
+			date = date.plusDays(1);
 		}
 		return date;
 	}
