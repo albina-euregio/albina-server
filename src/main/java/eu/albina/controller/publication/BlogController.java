@@ -31,8 +31,8 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HibernateUtil;
 
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceException;
 import javax.ws.rs.client.Client;
 
 public interface BlogController {

@@ -40,7 +40,7 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HibernateUtil;
 
-import javax.persistence.PersistenceException;
+import jakarta.persistence.PersistenceException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
