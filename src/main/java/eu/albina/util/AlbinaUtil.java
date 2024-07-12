@@ -114,22 +114,30 @@ public interface AlbinaUtil {
 		return getValidityDateString(bulletins, Period.ZERO);
 	}
 
-	static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset) {
+	private static ZonedDateTime getValidityDate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime date = getDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
+		if (date.getHour() > 12) {
+			date.plusDays(1);
+		}
+		return date;
+	}
+
+	static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset) {
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.plus(offset);
 		return date.toLocalDate().toString();
 	}
 
 	static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		date = date.minusDays(1);
 		return lang.getDate(date);
 	}
 
 	static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		date = date.plusDays(1);
 		return lang.getDate(date);
