@@ -17,7 +17,7 @@
 package eu.albina.rest;
 
 import eu.albina.controller.ObservationController;
-import eu.albina.model.Observation;
+import eu.albina.model.GenericObservation;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,7 +59,7 @@ public class ObservationService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "List observations")
-	public List<Observation> getObservations(
+	public List<GenericObservation> getObservations(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
@@ -75,7 +75,7 @@ public class ObservationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
 	@Operation(summary = "Get observation")
-	public Observation getObservation(@PathParam("id") long id) {
+	public GenericObservation getObservation(@PathParam("id") long id) {
 		return ObservationController.get(id);
 	}
 
@@ -85,7 +85,7 @@ public class ObservationService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create observation")
-	public Observation postObservation(Observation observation) {
+	public GenericObservation postObservation(GenericObservation observation) {
 		observation.setId(null);
 		logger.info("Creating observation {}", observation);
 		return ObservationController.create(observation);
@@ -98,7 +98,7 @@ public class ObservationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
 	@Operation(summary = "Update observation")
-	public Observation putObservation(@PathParam("id") long id, Observation observation) {
+	public GenericObservation putObservation(@PathParam("id") String id, GenericObservation observation) {
 		observation.setId(id);
 		logger.info("Updating observation {}", observation);
 		return ObservationController.update(observation);

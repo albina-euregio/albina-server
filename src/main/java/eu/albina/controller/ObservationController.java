@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import eu.albina.model.Observation;
+import eu.albina.model.GenericObservation;
 import eu.albina.util.HibernateUtil;
 
 import org.apache.commons.text.StringEscapeUtils;
@@ -32,30 +32,30 @@ import java.util.List;
 
 public interface ObservationController {
 
-	static Observation create(Observation observation) throws HibernateException {
+	static GenericObservation create(GenericObservation observation) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.persist(observation);
 			return observation;
 		});
 	}
 
-	static Observation update(Observation observation) throws HibernateException {
+	static GenericObservation update(GenericObservation observation) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.merge(observation);
 			return observation;
 		});
 	}
 
-	static Observation get(long id) throws HibernateException {
+	static GenericObservation get(long id) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager ->
-			entityManager.find(Observation.class, id));
+			entityManager.find(GenericObservation.class, id));
 	}
 
-	static List<Observation> get(LocalDateTime startDate, LocalDateTime endDate) throws HibernateException {
+	static List<GenericObservation> get(LocalDateTime startDate, LocalDateTime endDate) throws HibernateException {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<Observation> select = criteriaBuilder.createQuery(Observation.class);
-			Root<Observation> root = select.from(Observation.class);
+			CriteriaQuery<GenericObservation> select = criteriaBuilder.createQuery(GenericObservation.class);
+			Root<GenericObservation> root = select.from(GenericObservation.class);
 			select.where(criteriaBuilder.between(root.get("eventDate"), startDate, endDate));
 			return entityManager.createQuery(select).getResultList();
 		});
@@ -63,17 +63,17 @@ public interface ObservationController {
 
 	static void delete(long id) throws HibernateException {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			Observation observation = entityManager.find(Observation.class, id);
+			GenericObservation observation = entityManager.find(GenericObservation.class, id);
 			entityManager.remove(observation);
 			return null;
 		});
 	}
 
 	static String getCsv(LocalDateTime start, LocalDateTime end) {
-		List<Observation> observations = get(start, end);
+		List<GenericObservation> observations = get(start, end);
 
 		// sort observations by event date
-		observations.sort(Comparator.comparing(Observation::getEventDate));
+		observations.sort(Comparator.comparing(GenericObservation::getEventDate));
 
 		StringBuilder sb = new StringBuilder();
 
@@ -103,14 +103,14 @@ public interface ObservationController {
 		sb.append("Content");
 		sb.append(StatisticsController.csvLineBreak);
 
-		for (Observation observation : observations) {
+		for (GenericObservation observation : observations) {
 			addCsvLines(sb, observation);
 		}
 
 		return sb.toString();
 	}
 
-	static void addCsvLines(StringBuilder sb, Observation observation) {
+	static void addCsvLines(StringBuilder sb, GenericObservation observation) {
 		if (observation.getEventDate() != null) {
 			sb.append(observation.getEventDate().toLocalDate());
 			sb.append(StatisticsController.csvDeliminator);
@@ -121,10 +121,7 @@ public interface ObservationController {
 			sb.append(StatisticsController.notAvailableString);
 		}
 		sb.append(StatisticsController.csvDeliminator);
-		if (observation.getEventType() != null)
-			sb.append(observation.getEventType());
-		else
-			sb.append(StatisticsController.notAvailableString);
+		sb.append(StatisticsController.notAvailableString);
 		sb.append(StatisticsController.csvDeliminator);
 		if (observation.getReportDate() != null)
 			sb.append(observation.getReportDate().toLocalDate());
@@ -156,18 +153,18 @@ public interface ObservationController {
 		else
 			sb.append(StatisticsController.notAvailableString);
 		sb.append(StatisticsController.csvDeliminator);
-		if (observation.getAspect() != null)
-			sb.append(observation.getAspect());
+		if (observation.getAspects() != null)
+			sb.append(observation.getAspects());
 		else
 			sb.append(StatisticsController.notAvailableString);
 		sb.append(StatisticsController.csvDeliminator);
-		if (observation.getRegion() != null)
-			sb.append(observation.getRegion());
+		if (observation.getRegionId() != null)
+			sb.append(observation.getRegionId());
 		else
 			sb.append(StatisticsController.notAvailableString);
 		sb.append(StatisticsController.csvDeliminator);
-		if (observation.getContent() != null) {
-			sb.append(StringEscapeUtils.escapeCsv(observation.getContent()));
+		if (observation.getObsContent() != null) {
+			sb.append(StringEscapeUtils.escapeCsv(observation.getObsContent()));
 		} else
 			sb.append(StatisticsController.notAvailableString);
 		sb.append(StatisticsController.csvLineBreak);
