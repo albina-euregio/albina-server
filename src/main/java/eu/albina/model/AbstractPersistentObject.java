@@ -16,10 +16,11 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -27,8 +28,7 @@ import org.hibernate.annotations.GenericGenerator;
 public abstract class AbstractPersistentObject implements PersistentObject {
 
 	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "ID")
 	protected String id;
 

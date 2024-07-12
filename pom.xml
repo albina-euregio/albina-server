@@ -15,7 +15,7 @@
 		<maven.compiler.release>11</maven.compiler.release>
 		<jersey.version>2.40</jersey.version>
 		<slf4j.version>1.7.36</slf4j.version>
-		<hibernate.version>5.6.15.Final</hibernate.version>
+		<hibernate.version>6.5.2.Final</hibernate.version>
 		<itextpdf.version>7.2.6</itextpdf.version>
 	</properties>
 
@@ -30,8 +30,6 @@
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
-				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
-				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
 				<albina.conf.git.version>SNAPSHOT</albina.conf.git.version>
 				<albina.log.prefix>LOCAL </albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
@@ -49,8 +47,6 @@
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
-				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina_dev/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
-				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina_dev/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
 				<albina.log.prefix>DEV </albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
@@ -68,8 +64,6 @@
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
-				<javax.persistence.schema-generation.scripts.create-target>/opt/tomcat/webapps/albina/albina_create.sql</javax.persistence.schema-generation.scripts.create-target>
-				<javax.persistence.schema-generation.scripts.drop-target>/opt/tomcat/webapps/albina/albina_drop.sql</javax.persistence.schema-generation.scripts.drop-target>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
 				<albina.log.prefix></albina.log.prefix>
 				<albina.log.level>INFO</albina.log.level>
@@ -250,14 +244,19 @@
 
 		<!-- database -->
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-hikaricp</artifactId>
 			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
