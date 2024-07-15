@@ -213,7 +213,7 @@ public class PublicationJob implements org.quartz.Job {
 	}
 
 	protected Instant getStartDate() {
-		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).plusDays(1).toInstant();
+		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).plusHours(17).toInstant();
 	}
 
 	protected List<Region> getRegions() {

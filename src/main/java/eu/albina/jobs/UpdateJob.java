@@ -47,7 +47,7 @@ public class UpdateJob extends PublicationJob {
 
 	@Override
 	protected Instant getStartDate() {
-		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).toInstant();
+		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).minusHours(7).toInstant();
 	}
 
 	@Override
