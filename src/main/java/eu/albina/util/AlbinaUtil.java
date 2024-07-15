@@ -62,6 +62,10 @@ public interface AlbinaUtil {
 		return ZoneId.of("Europe/Vienna");
 	}
 
+	static LocalTime validityStart() {
+		return LocalTime.of(17, 0);
+	}
+
 	static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription) {
 		if (avalancheBulletinDaytimeDescription.isHasElevationDependency())
 			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"

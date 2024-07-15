@@ -16,9 +16,11 @@
  ******************************************************************************/
 package eu.albina.jobs;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -77,8 +79,9 @@ public class PublicationJob implements org.quartz.Job {
 		if (!isEnabled(serverInstance)) {
 			return;
 		}
-		Instant startDate = getStartDate();
-		Instant endDate = startDate.atZone(AlbinaUtil.localZone()).plusDays(1).toInstant();
+		Clock system = Clock.system(AlbinaUtil.localZone());
+		Instant startDate = getStartDate(system);
+		Instant endDate = getEndDate(system);
 		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
 
@@ -212,8 +215,16 @@ public class PublicationJob implements org.quartz.Job {
 		return false;
 	}
 
-	protected Instant getStartDate() {
-		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).plusHours(17).toInstant();
+	protected Instant getStartDate(Clock clock) {
+		return ZonedDateTime.of(
+			LocalDate.now(clock),
+			AlbinaUtil.validityStart(),
+			clock.getZone()
+		).toInstant();
+	}
+
+	protected Instant getEndDate(Clock clock) {
+		return getStartDate(clock).atZone(clock.getZone()).plusDays(1).toInstant();
 	}
 
 	protected List<Region> getRegions() {

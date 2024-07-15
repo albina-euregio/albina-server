@@ -17,6 +17,7 @@
 package eu.albina.rest;
 
 import java.io.File;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -599,7 +600,7 @@ public class AvalancheBulletinService {
 				new Thread(() -> {
 					new ChangeJob() {
 						@Override
-						protected Instant getStartDate() {
+						protected Instant getStartDate(Clock clock) {
 							return startDate;
 						}
 

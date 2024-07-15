@@ -197,25 +197,6 @@ public class AlbinaUtilTest {
 	}
 
 	@Test
-	public void testInstantStartOfValidity() {
-		// code from PublicationJob
-		ZonedDateTime today = LocalDate.parse("2022-03-26").atStartOfDay(AlbinaUtil.localZone()).plusHours(17);
-		Assertions.assertEquals(Instant.parse("2022-03-26T16:00:00Z"), today.toInstant()); // ok
-		Instant startDate = today.toInstant();
-		Assertions.assertEquals(Instant.parse("2022-03-26T16:00:00Z"), startDate); // ok
-		Instant endDate = today.plusDays(1).toInstant();
-		Assertions.assertEquals(Instant.parse("2022-03-27T15:00:00Z"), endDate); // ok (time change)
-
-		// code from UpdateJob
-		today = LocalDate.parse("2022-03-27").atStartOfDay(AlbinaUtil.localZone()).minusHours(7);
-		Assertions.assertEquals(Instant.parse("2022-03-26T16:00:00Z"), today.toInstant()); // ok
-		startDate = today.toInstant();
-		Assertions.assertEquals(Instant.parse("2022-03-26T16:00:00Z"), startDate); // ok
-		endDate = today.plusDays(1).toInstant();
-		Assertions.assertEquals(Instant.parse("2022-03-27T15:00:00Z"), endDate); // ok (time change)
-	}
-
-	@Test
 	public void getPublicationDate() {
 		Assertions.assertNull(AlbinaUtil.getPublicationDate(Collections.emptyList()));
 		Assertions.assertNull(AlbinaUtil.getPublicationDate(Collections.singletonList(new AvalancheBulletin())));
@@ -230,3 +211,4 @@ public class AlbinaUtilTest {
 		Assertions.assertTrue(path.endsWith("updateLatestFiles.sh"), path + " ends with updateLatestFiles.sh");
 	}
 }
+

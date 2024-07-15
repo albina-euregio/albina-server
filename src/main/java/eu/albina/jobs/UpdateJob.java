@@ -16,8 +16,10 @@
  ******************************************************************************/
 package eu.albina.jobs;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import eu.albina.controller.RegionController;
@@ -46,8 +48,12 @@ public class UpdateJob extends PublicationJob {
 	}
 
 	@Override
-	protected Instant getStartDate() {
-		return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).minusHours(7).toInstant();
+	protected Instant getStartDate(Clock clock) {
+		return ZonedDateTime.of(
+			LocalDate.now(clock).minusDays(1),
+			AlbinaUtil.validityStart(),
+			clock.getZone()
+		).toInstant();
 	}
 
 	@Override
