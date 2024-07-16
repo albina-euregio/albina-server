@@ -2,8 +2,8 @@
   "bulletins" : [ {
     "publicationTime" : "2022-12-19T16:00:00Z",
     "validTime" : {
-      "startTime" : "2022-12-19T23:00:00Z",
-      "endTime" : "2022-12-20T23:00:00Z"
+      "startTime" : "2022-12-19T16:00:00Z",
+      "endTime" : "2022-12-20T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -19,8 +19,8 @@
       "highlights" : "The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-12-20T23:00:00Z",
-        "endTime" : "2022-12-21T23:00:00Z"
+        "startTime" : "2022-12-20T16:00:00Z",
+        "endTime" : "2022-12-21T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -76,8 +76,8 @@
   }, {
     "publicationTime" : "2022-12-19T16:00:00Z",
     "validTime" : {
-      "startTime" : "2022-12-19T23:00:00Z",
-      "endTime" : "2022-12-20T23:00:00Z"
+      "startTime" : "2022-12-19T16:00:00Z",
+      "endTime" : "2022-12-20T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -93,8 +93,8 @@
       "highlights" : "The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-12-20T23:00:00Z",
-        "endTime" : "2022-12-21T23:00:00Z"
+        "startTime" : "2022-12-20T16:00:00Z",
+        "endTime" : "2022-12-21T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -201,8 +201,8 @@
   }, {
     "publicationTime" : "2022-12-19T16:00:00Z",
     "validTime" : {
-      "startTime" : "2022-12-19T23:00:00Z",
-      "endTime" : "2022-12-20T23:00:00Z"
+      "startTime" : "2022-12-19T16:00:00Z",
+      "endTime" : "2022-12-20T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -218,8 +218,8 @@
       "highlights" : "The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-12-20T23:00:00Z",
-        "endTime" : "2022-12-21T23:00:00Z"
+        "startTime" : "2022-12-20T16:00:00Z",
+        "endTime" : "2022-12-21T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -300,8 +300,8 @@
   }, {
     "publicationTime" : "2022-12-19T16:00:00Z",
     "validTime" : {
-      "startTime" : "2022-12-19T23:00:00Z",
-      "endTime" : "2022-12-20T23:00:00Z"
+      "startTime" : "2022-12-19T16:00:00Z",
+      "endTime" : "2022-12-20T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -317,8 +317,8 @@
       "highlights" : "The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-12-20T23:00:00Z",
-        "endTime" : "2022-12-21T23:00:00Z"
+        "startTime" : "2022-12-20T16:00:00Z",
+        "endTime" : "2022-12-21T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -416,8 +416,8 @@
   }, {
     "publicationTime" : "2022-12-19T16:00:00Z",
     "validTime" : {
-      "startTime" : "2022-12-19T23:00:00Z",
-      "endTime" : "2022-12-20T23:00:00Z"
+      "startTime" : "2022-12-19T16:00:00Z",
+      "endTime" : "2022-12-20T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -433,8 +433,8 @@
       "highlights" : "The old snowpack remains prone to triggering. <br/> As a consequence of snowfall above approximately 1600 m and the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-12-20T23:00:00Z",
-        "endTime" : "2022-12-21T23:00:00Z"
+        "startTime" : "2022-12-20T16:00:00Z",
+        "endTime" : "2022-12-21T16:00:00Z"
       }
     } ],
     "customData" : {

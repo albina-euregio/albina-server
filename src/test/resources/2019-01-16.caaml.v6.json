@@ -2,8 +2,8 @@
   "bulletins" : [ {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "highlights" : "Many starting zones have released the snow but not entirely.",
@@ -20,8 +20,8 @@
       "highlights" : "Gradual decrease in avalanche danger.",
       "tendencyType" : "decreasing",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -97,8 +97,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -114,8 +114,8 @@
       "highlights" : "Moderate, level 2.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -162,8 +162,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -179,8 +179,8 @@
       "highlights" : "The avalanche danger will persist.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -237,8 +237,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -254,8 +254,8 @@
       "highlights" : "Further decrease in avalanche danger.",
       "tendencyType" : "decreasing",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -375,8 +375,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -392,8 +392,8 @@
       "highlights" : "Slight decrease in avalanche danger.",
       "tendencyType" : "decreasing",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -434,8 +434,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -451,8 +451,8 @@
       "highlights" : "Fresh wind slabs represent the main danger.",
       "tendencyType" : "decreasing",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -499,8 +499,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -516,8 +516,8 @@
       "highlights" : "Moderate, level 2.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -580,8 +580,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -597,8 +597,8 @@
       "highlights" : "Low, level 1.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -660,8 +660,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -677,8 +677,8 @@
       "highlights" : "Fresh wind slabs represent the main danger.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -735,8 +735,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -752,8 +752,8 @@
       "highlights" : "Further decrease in avalanche danger.",
       "tendencyType" : "decreasing",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -807,8 +807,8 @@
   }, {
     "publicationTime" : "2019-01-15T16:00:00Z",
     "validTime" : {
-      "startTime" : "2019-01-15T23:00:00Z",
-      "endTime" : "2019-01-16T23:00:00Z"
+      "startTime" : "2019-01-15T16:00:00Z",
+      "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -824,8 +824,8 @@
       "highlights" : "Low, level 1.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2019-01-16T23:00:00Z",
-        "endTime" : "2019-01-17T23:00:00Z"
+        "startTime" : "2019-01-16T16:00:00Z",
+        "endTime" : "2019-01-17T16:00:00Z"
       }
     } ],
     "customData" : {

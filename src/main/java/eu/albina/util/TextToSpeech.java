@@ -258,7 +258,7 @@ public interface TextToSpeech {
 		}
 
 		private String getValidityDate(ValidTime validTime) {
-			return lang.getLongDate(validTime.getStartTime().atZone(AlbinaUtil.localZone()));
+			return lang.getLongDate(validTime.getStartTime().atZone(AlbinaUtil.localZone()).plusDays(1));
 		}
 
 		void paragraph(String element) {

@@ -2,8 +2,8 @@
   "bulletins" : [ {
     "publicationTime" : "2022-11-09T16:29:01Z",
     "validTime" : {
-      "startTime" : "2022-11-09T23:00:00Z",
-      "endTime" : "2022-11-10T23:00:00Z"
+      "startTime" : "2022-11-09T16:00:00Z",
+      "endTime" : "2022-11-10T16:00:00Z"
     },
     "unscheduled" : true,
     "weatherForecast" : { },
@@ -19,8 +19,8 @@
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-11-10T23:00:00Z",
-        "endTime" : "2022-11-11T23:00:00Z"
+        "startTime" : "2022-11-10T16:00:00Z",
+        "endTime" : "2022-11-11T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -71,8 +71,8 @@
   }, {
     "publicationTime" : "2022-11-09T16:00:00Z",
     "validTime" : {
-      "startTime" : "2022-11-09T23:00:00Z",
-      "endTime" : "2022-11-10T23:00:00Z"
+      "startTime" : "2022-11-09T16:00:00Z",
+      "endTime" : "2022-11-10T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -88,8 +88,8 @@
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-11-10T23:00:00Z",
-        "endTime" : "2022-11-11T23:00:00Z"
+        "startTime" : "2022-11-10T16:00:00Z",
+        "endTime" : "2022-11-11T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -140,8 +140,8 @@
   }, {
     "publicationTime" : "2022-11-09T16:29:01Z",
     "validTime" : {
-      "startTime" : "2022-11-09T23:00:00Z",
-      "endTime" : "2022-11-10T23:00:00Z"
+      "startTime" : "2022-11-09T16:00:00Z",
+      "endTime" : "2022-11-10T16:00:00Z"
     },
     "unscheduled" : true,
     "weatherForecast" : { },
@@ -157,8 +157,8 @@
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-11-10T23:00:00Z",
-        "endTime" : "2022-11-11T23:00:00Z"
+        "startTime" : "2022-11-10T16:00:00Z",
+        "endTime" : "2022-11-11T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -209,8 +209,8 @@
   }, {
     "publicationTime" : "2022-11-09T16:00:00Z",
     "validTime" : {
-      "startTime" : "2022-11-09T23:00:00Z",
-      "endTime" : "2022-11-10T23:00:00Z"
+      "startTime" : "2022-11-09T16:00:00Z",
+      "endTime" : "2022-11-10T16:00:00Z"
     },
     "unscheduled" : false,
     "weatherForecast" : { },
@@ -226,8 +226,8 @@
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-11-10T23:00:00Z",
-        "endTime" : "2022-11-11T23:00:00Z"
+        "startTime" : "2022-11-10T16:00:00Z",
+        "endTime" : "2022-11-11T16:00:00Z"
       }
     } ],
     "customData" : {
@@ -278,8 +278,8 @@
   }, {
     "publicationTime" : "2022-11-09T16:29:01Z",
     "validTime" : {
-      "startTime" : "2022-11-09T23:00:00Z",
-      "endTime" : "2022-11-10T23:00:00Z"
+      "startTime" : "2022-11-09T16:00:00Z",
+      "endTime" : "2022-11-10T16:00:00Z"
     },
     "unscheduled" : true,
     "weatherForecast" : { },
@@ -295,8 +295,8 @@
       "highlights" : "Hardly any decrease in avalanche danger as a consequence of the snowfall.",
       "tendencyType" : "steady",
       "validTime" : {
-        "startTime" : "2022-11-10T23:00:00Z",
-        "endTime" : "2022-11-11T23:00:00Z"
+        "startTime" : "2022-11-10T16:00:00Z",
+        "endTime" : "2022-11-11T16:00:00Z"
       }
     } ],
     "customData" : {

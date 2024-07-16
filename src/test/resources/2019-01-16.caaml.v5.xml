@@ -24,7 +24,7 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
           <endPosition>2019-01-16T11:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
@@ -81,8 +81,8 @@
             <type>decreasing</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -108,7 +108,7 @@
       <validTime>
         <TimePeriod>
           <beginPosition>2019-01-16T11:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -151,8 +151,8 @@
             <type>decreasing</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -177,8 +177,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -217,8 +217,8 @@
             <type>steady</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -242,8 +242,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -294,8 +294,8 @@
             <type>steady</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -319,8 +319,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -403,8 +403,8 @@
             <type>decreasing</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -428,8 +428,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -469,8 +469,8 @@
             <type>decreasing</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -494,8 +494,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -536,8 +536,8 @@
             <type>decreasing</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -561,8 +561,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -615,8 +615,8 @@
             <type>steady</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -640,8 +640,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -682,8 +682,8 @@
             <type>steady</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -707,8 +707,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -762,8 +762,8 @@
             <type>steady</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -787,8 +787,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -849,8 +849,8 @@
             <type>decreasing</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>
@@ -874,8 +874,8 @@
       </metaDataProperty>
       <validTime>
         <TimePeriod>
-          <beginPosition>2019-01-15T23:00:00Z</beginPosition>
-          <endPosition>2019-01-16T23:00:00Z</endPosition>
+          <beginPosition>2019-01-15T16:00:00Z</beginPosition>
+          <endPosition>2019-01-16T16:00:00Z</endPosition>
         </TimePeriod>
       </validTime>
       <srcRef>
@@ -907,8 +907,8 @@
             <type>steady</type>
             <validTime>
               <TimePeriod>
-                <beginPosition>2019-01-16T23:00:00Z</beginPosition>
-                <endPosition>2019-01-17T23:00:00Z</endPosition>
+                <beginPosition>2019-01-16T16:00:00Z</beginPosition>
+                <endPosition>2019-01-17T16:00:00Z</endPosition>
               </TimePeriod>
             </validTime>
           </tendency>

@@ -62,6 +62,10 @@ public interface AlbinaUtil {
 		return ZoneId.of("Europe/Vienna");
 	}
 
+	static LocalTime validityStart() {
+		return LocalTime.of(17, 0);
+	}
+
 	static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription) {
 		if (avalancheBulletinDaytimeDescription.isHasElevationDependency())
 			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
@@ -72,15 +76,11 @@ public interface AlbinaUtil {
 	}
 
 	static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = bulletins.stream()
-			.map(AvalancheBulletin::getValidUntil)
-			.filter(Objects::nonNull)
-			.max(Comparator.naturalOrder())
-			.orElse(null);
+		ZonedDateTime date = getValidityDate(bulletins);
+		date = date.plusDays(1);
 		if (date == null) {
 			return "";
 		}
-		date = date.withZoneSameInstant(localZone());
 		return lang.getBundleString("tendency.binding-word").strip() + " " + lang.getLongDate(date);
 	}
 
@@ -97,7 +97,7 @@ public interface AlbinaUtil {
 	}
 
 	static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		if (date == null) {
 			// TODO what if no date is given (should not happen)
 			return "-";
@@ -114,22 +114,30 @@ public interface AlbinaUtil {
 		return getValidityDateString(bulletins, Period.ZERO);
 	}
 
-	static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset) {
+	static ZonedDateTime getValidityDate(List<AvalancheBulletin> bulletins) {
 		ZonedDateTime date = getDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
+		if (date.getHour() > 12) {
+			date = date.plusDays(1);
+		}
+		return date;
+	}
+
+	static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset) {
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.plus(offset);
 		return date.toLocalDate().toString();
 	}
 
 	static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		date = date.minusDays(1);
 		return lang.getDate(date);
 	}
 
 	static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getDate(bulletins);
+		ZonedDateTime date = getValidityDate(bulletins);
 		date = date.withZoneSameInstant(localZone());
 		date = date.plusDays(1);
 		return lang.getDate(date);

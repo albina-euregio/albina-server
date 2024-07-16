@@ -2,8 +2,8 @@
   <bulletin bulletinID="c2718324-65e7-4eb8-88e7-efd2cbe4ba15" lang="en">
     <publicationTime>2022-12-19T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2022-12-19T23:00:00Z</startTime>
-      <endTime>2022-12-20T23:00:00Z</endTime>
+      <startTime>2022-12-19T16:00:00Z</startTime>
+      <endTime>2022-12-20T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-26">
@@ -63,8 +63,8 @@
       <highlights>The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-12-20T23:00:00Z</startTime>
-        <endTime>2022-12-21T23:00:00Z</endTime>
+        <startTime>2022-12-20T16:00:00Z</startTime>
+        <endTime>2022-12-21T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -80,8 +80,8 @@
   <bulletin bulletinID="cb4cbd03-71e2-449d-9a80-a25ec9a03afe" lang="en">
     <publicationTime>2022-12-19T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2022-12-19T23:00:00Z</startTime>
-      <endTime>2022-12-20T23:00:00Z</endTime>
+      <startTime>2022-12-19T16:00:00Z</startTime>
+      <endTime>2022-12-20T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-29">
@@ -192,8 +192,8 @@
       <highlights>The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-12-20T23:00:00Z</startTime>
-        <endTime>2022-12-21T23:00:00Z</endTime>
+        <startTime>2022-12-20T16:00:00Z</startTime>
+        <endTime>2022-12-21T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -208,8 +208,8 @@
   <bulletin bulletinID="5a8282b0-632f-417f-aabf-c8946d255c3c" lang="en">
     <publicationTime>2022-12-19T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2022-12-19T23:00:00Z</startTime>
-      <endTime>2022-12-20T23:00:00Z</endTime>
+      <startTime>2022-12-19T16:00:00Z</startTime>
+      <endTime>2022-12-20T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="IT-32-TN-02">
@@ -299,8 +299,8 @@
       <highlights>The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-12-20T23:00:00Z</startTime>
-        <endTime>2022-12-21T23:00:00Z</endTime>
+        <startTime>2022-12-20T16:00:00Z</startTime>
+        <endTime>2022-12-21T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -316,8 +316,8 @@
   <bulletin bulletinID="7a6ed495-0215-4d77-8942-1c5dccfcb6cc" lang="en">
     <publicationTime>2022-12-19T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2022-12-19T23:00:00Z</startTime>
-      <endTime>2022-12-20T23:00:00Z</endTime>
+      <startTime>2022-12-19T16:00:00Z</startTime>
+      <endTime>2022-12-20T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-10">
@@ -419,8 +419,8 @@
       <highlights>The old snowpack remains prone to triggering on shady slopes. As a consequence of the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-12-20T23:00:00Z</startTime>
-        <endTime>2022-12-21T23:00:00Z</endTime>
+        <startTime>2022-12-20T16:00:00Z</startTime>
+        <endTime>2022-12-21T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -436,8 +436,8 @@
   <bulletin bulletinID="86cfa094-f691-4a28-aa31-cb92c5b05fe2" lang="en">
     <publicationTime>2022-12-19T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2022-12-19T23:00:00Z</startTime>
-      <endTime>2022-12-20T23:00:00Z</endTime>
+      <startTime>2022-12-19T16:00:00Z</startTime>
+      <endTime>2022-12-20T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-14-01">
@@ -572,8 +572,8 @@
       <highlights>The old snowpack remains prone to triggering. &lt;br/> As a consequence of snowfall above approximately 1600 m and the moderate to strong wind, fresh snow drift accumulations will form on Wednesday.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2022-12-20T23:00:00Z</startTime>
-        <endTime>2022-12-21T23:00:00Z</endTime>
+        <startTime>2022-12-20T16:00:00Z</startTime>
+        <endTime>2022-12-21T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>

@@ -172,8 +172,8 @@
 		"dangerPattern2": "dp2",
 		"publicationDate": "2022-12-19T16:00:00Z",
 		"validity": {
-			"from": "2022-12-19T23:00:00Z",
-			"until": "2022-12-20T23:00:00Z"
+			"from": "2022-12-19T16:00:00Z",
+			"until": "2022-12-20T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-26",
@@ -384,8 +384,8 @@
 		"dangerPattern1": "dp1",
 		"publicationDate": "2022-12-19T16:00:00Z",
 		"validity": {
-			"from": "2022-12-19T23:00:00Z",
-			"until": "2022-12-20T23:00:00Z"
+			"from": "2022-12-19T16:00:00Z",
+			"until": "2022-12-20T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-29",
@@ -613,8 +613,8 @@
 		"dangerPattern2": "dp2",
 		"publicationDate": "2022-12-19T16:00:00Z",
 		"validity": {
-			"from": "2022-12-19T23:00:00Z",
-			"until": "2022-12-20T23:00:00Z"
+			"from": "2022-12-19T16:00:00Z",
+			"until": "2022-12-20T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-TN-02",
@@ -850,8 +850,8 @@
 		"dangerPattern2": "dp2",
 		"publicationDate": "2022-12-19T16:00:00Z",
 		"validity": {
-			"from": "2022-12-19T23:00:00Z",
-			"until": "2022-12-20T23:00:00Z"
+			"from": "2022-12-19T16:00:00Z",
+			"until": "2022-12-20T16:00:00Z"
 		},
 		"regions": [
 			"IT-32-BZ-10",
@@ -1077,8 +1077,8 @@
 		"dangerPattern2": "dp2",
 		"publicationDate": "2022-12-19T16:00:00Z",
 		"validity": {
-			"from": "2022-12-19T23:00:00Z",
-			"until": "2022-12-20T23:00:00Z"
+			"from": "2022-12-19T16:00:00Z",
+			"until": "2022-12-20T16:00:00Z"
 		},
 		"regions": [
 			"AT-07-14-01",

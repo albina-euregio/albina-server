@@ -51,6 +51,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.time.Clock;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -105,7 +106,7 @@ public class AvalancheBulletinPublishService {
 					}
 
 					@Override
-					protected Instant getStartDate() {
+					protected Instant getStartDate(Clock clock) {
 						return startDate;
 					}
 
@@ -153,7 +154,7 @@ public class AvalancheBulletinPublishService {
 					}
 
 					@Override
-					protected Instant getStartDate() {
+					protected Instant getStartDate(Clock clock) {
 						return startDate;
 					}
 				}.execute(null);

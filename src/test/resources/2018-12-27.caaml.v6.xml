@@ -2,8 +2,8 @@
   <bulletin bulletinID="bbd97cc3-7de3-468c-afaf-2dfe0ffc3d7a" lang="en">
     <publicationTime>2018-12-26T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2018-12-26T23:00:00Z</startTime>
-      <endTime>2018-12-27T23:00:00Z</endTime>
+      <startTime>2018-12-26T16:00:00Z</startTime>
+      <endTime>2018-12-27T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-11">
@@ -147,8 +147,8 @@
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2018-12-27T23:00:00Z</startTime>
-        <endTime>2018-12-28T23:00:00Z</endTime>
+        <startTime>2018-12-27T16:00:00Z</startTime>
+        <endTime>2018-12-28T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -164,8 +164,8 @@
   <bulletin bulletinID="c343a071-3c30-4d36-9796-225cb4db1ffa" lang="en">
     <publicationTime>2018-12-26T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2018-12-26T23:00:00Z</startTime>
-      <endTime>2018-12-27T23:00:00Z</endTime>
+      <startTime>2018-12-26T16:00:00Z</startTime>
+      <endTime>2018-12-27T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-04">
@@ -225,8 +225,8 @@
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2018-12-27T23:00:00Z</startTime>
-        <endTime>2018-12-28T23:00:00Z</endTime>
+        <startTime>2018-12-27T16:00:00Z</startTime>
+        <endTime>2018-12-28T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -242,8 +242,8 @@
   <bulletin bulletinID="8604e1dc-ecab-4947-9989-9ea9d73b7f32" lang="en">
     <publicationTime>2018-12-26T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2018-12-26T23:00:00Z</startTime>
-      <endTime>2018-12-27T23:00:00Z</endTime>
+      <startTime>2018-12-26T16:00:00Z</startTime>
+      <endTime>2018-12-27T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-26">
@@ -304,8 +304,8 @@
       <highlights>Gradual decrease in avalanche danger.</highlights>
       <tendencyType>decreasing</tendencyType>
       <validTime>
-        <startTime>2018-12-27T23:00:00Z</startTime>
-        <endTime>2018-12-28T23:00:00Z</endTime>
+        <startTime>2018-12-27T16:00:00Z</startTime>
+        <endTime>2018-12-28T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -321,8 +321,8 @@
   <bulletin bulletinID="e9cc9692-76d4-4b7f-a709-13ad0dd5faf6" lang="en">
     <publicationTime>2018-12-26T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2018-12-26T23:00:00Z</startTime>
-      <endTime>2018-12-27T23:00:00Z</endTime>
+      <startTime>2018-12-26T16:00:00Z</startTime>
+      <endTime>2018-12-27T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-10">
@@ -404,8 +404,8 @@
       <highlights>Moderate, level 2.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2018-12-27T23:00:00Z</startTime>
-        <endTime>2018-12-28T23:00:00Z</endTime>
+        <startTime>2018-12-27T16:00:00Z</startTime>
+        <endTime>2018-12-28T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -418,8 +418,8 @@
   <bulletin bulletinID="45fbe7ff-2c98-4371-8ad8-6f9cb52aa541" lang="en">
     <publicationTime>2018-12-26T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2018-12-26T23:00:00Z</startTime>
-      <endTime>2018-12-27T23:00:00Z</endTime>
+      <startTime>2018-12-26T16:00:00Z</startTime>
+      <endTime>2018-12-27T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-05">
@@ -461,8 +461,8 @@
       <highlights>The avalanche danger will persist.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2018-12-27T23:00:00Z</startTime>
-        <endTime>2018-12-28T23:00:00Z</endTime>
+        <startTime>2018-12-27T16:00:00Z</startTime>
+        <endTime>2018-12-28T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
@@ -477,8 +477,8 @@
   <bulletin bulletinID="2f57292b-a9e7-48c4-bc65-1d9641fe7d3e" lang="en">
     <publicationTime>2018-12-26T16:00:00Z</publicationTime>
     <validTime>
-      <startTime>2018-12-26T23:00:00Z</startTime>
-      <endTime>2018-12-27T23:00:00Z</endTime>
+      <startTime>2018-12-26T16:00:00Z</startTime>
+      <endTime>2018-12-27T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-20">
@@ -566,8 +566,8 @@
       <highlights>Low, level 1.</highlights>
       <tendencyType>steady</tendencyType>
       <validTime>
-        <startTime>2018-12-27T23:00:00Z</startTime>
-        <endTime>2018-12-28T23:00:00Z</endTime>
+        <startTime>2018-12-27T16:00:00Z</startTime>
+        <endTime>2018-12-28T16:00:00Z</endTime>
       </validTime>
     </tendency>
     <customData>
