@@ -1,6 +1,5 @@
 {
 	"$schema" : "http://json-schema.org/draft-04/schema#",
-	"id" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#",
 	"title" : "AWS JSON Schemas",
 	"description" : "JSON Schema definitions for Avalanche Warning Services.",
 
@@ -126,7 +125,7 @@
 			"type" : "object",
 			"properties" : {
 				"text" : { "type" : "string" },
-				"languageCode" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/languageCode" }
+				"languageCode" : { "$ref" : "#/languageCode" }
 			},
 			"additionalProperties" : false
 		}

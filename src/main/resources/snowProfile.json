@@ -4,11 +4,11 @@
 	"description" : "JSON description of a snow profile.",
 	"type" : "object",
 	"properties" : {
-		"author" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/author" },
+		"author" : { "$ref" : "aws.json#/author" },
 		"location" : {
 			"type" : "object",
 			"properties" : {
-				"country" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/countryAlpha2Code"},
+				"country" : { "$ref" : "aws.json#/countryAlpha2Code"},
 				"region" : { "type" : "string" },
 				"subregion" : { "type" : "string" },
 				"name" : { "type" : "string" },
@@ -19,8 +19,8 @@
 					"maximum" : 8850
 				},
 				"angle" : { "type" : "integer" },
-				"aspect" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/aspect" },
-				"quality" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/quality" },
+				"aspect" : { "$ref" : "aws.json#/aspect" },
+				"quality" : { "$ref" : "aws.json#/quality" },
 				"customData" : {
 					"type" : "object",
 					"patternProperties": {
@@ -35,7 +35,7 @@
 			"type" : "object",
 			"properties" : {
 				"date" : { "format" : "date-time", "type" : "string" },
-				"quality" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/quality" }
+				"quality" : { "$ref" : "aws.json#/quality" }
 			},
 			"additionalProperties" : false
 		},
@@ -47,7 +47,7 @@
 				"precipitationType" : { "$ref" : "#/definitions/precipitationType" },
 				"precipitationIntensity" : { "$ref" : "#/definitions/precipitationIntensity" },
 				"windSpeed" : { "$ref" : "#/definitions/windSpeed" },
-				"windDirection" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/aspect" },
+				"windDirection" : { "$ref" : "aws.json#/aspect" },
 				"customData" : {
 					"type" : "object",
 					"patternProperties": {
@@ -86,7 +86,7 @@
 		"temperatureProfile" : { "$ref" : "#/definitions/temperatureProfile" },
 		"ramProfile" : { "$ref" : "#/definitions/ramProfile" },
 		"densityProfile" : { "$ref" : "#/definitions/densityProfile" },
-		"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" },
+		"comment" : { "$ref" : "aws.json#/textPart" },
 		"customData" : {
 			"type" : "object",
 			"patternProperties": {
@@ -116,7 +116,7 @@
 					"minimum" : 0
 				},
 				"fractureType" : { "$ref" : "#/definitions/ctFractureType" },
-				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+				"comment" : { "$ref" : "aws.json#/textPart" }
 			},
 			"additionalProperties" : false
 		},
@@ -137,7 +137,7 @@
 					"minimum" : 0
 				},
 				"fractureType" : { "$ref" : "#/definitions/ectFractureType" },
-				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+				"comment" : { "$ref" : "aws.json#/textPart" }
 			},
 			"additionalProperties" : false
 		},
@@ -158,7 +158,7 @@
 					"minimum" : 0
 				},
 				"fractureType" : { "$ref" : "#/definitions/rbFractureType" },
-				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+				"comment" : { "$ref" : "aws.json#/textPart" }
 			},
 			"additionalProperties" : false
 		},
@@ -185,7 +185,7 @@
 					"type" : "string"
 				},
 				"fractureType" : { "$ref" : "#/definitions/pstFractureType" },
-				"comment" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#/textPart" }
+				"comment" : { "$ref" : "aws.json#/textPart" }
 			}
 		},
 		"temperatureProfile" : {

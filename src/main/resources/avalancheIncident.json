@@ -4,11 +4,11 @@
 	"description" : "JSON description of an avalanche incident.",
 	"type" : "object",
 	"properties" : {
-		"author" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#author" },
+		"author" : { "$ref" : "aws.json#author" },
 		"location" : {
 			"type" : "object",
 			"properties" : {
-				"country" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#countryAlpha2Code"},
+				"country" : { "$ref" : "aws.json#countryAlpha2Code"},
 				"region" : { "type" : "string" },
 				"subregion" : { "type" : "string" },
 				"name" : { "type" : "string" },
@@ -21,7 +21,7 @@
 				},
 				"elevation" : { "type" : "integer" },
 				"angle" : { "type" : "integer" },
-				"aspect" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#aspect" },
+				"aspect" : { "$ref" : "aws.json#aspect" },
 				"quality" : { "$ref" : "#/definitions/quality" },
 				"customData" : {
 					"type" : "object",
@@ -73,19 +73,19 @@
 		"avalancheProblem" : {
 			"type" : "object",
 			"properties" : {
-				"dangerRating" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#dangerRating" },
+				"dangerRating" : { "$ref" : "aws.json#dangerRating" },
 				"avalancheProblems" : {
 					"type" : "array",
 					"maxItems" : 2,
 					"uniqueItems": true,
-					"items" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#avalancheProblem" },
+					"items" : { "$ref" : "aws.json#avalancheProblem" },
 					"additionalProperties" : false
 				},
 				"dangerPatterns" : {
 					"type" : "array",
 					"maxItems" : 3,
 					"uniqueItems": true,
-					"items" : { "$ref" : "https://apps.tirol.gv.at/lwd/produkte/json_schema/aws.json#dangerPattern" },
+					"items" : { "$ref" : "aws.json#dangerPattern" },
 					"additionalProperties" : false
 				},
 				"comment" : { "type" : "string" },
