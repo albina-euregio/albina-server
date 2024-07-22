@@ -408,7 +408,7 @@
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<!-- https://stackoverflow.com/questions/66361859/jetty-11-doesnt-detect-servlets -->
-				<version>9.4.44.v20210927</version>
+				<version>9.4.55.v20240627</version>
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<webApp>
