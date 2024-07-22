@@ -197,7 +197,7 @@ public class AvalancheBulletinPublishService {
 			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
 			for (Region region : publishBulletinRegions) {
 				for (Region superRegion : region.getSuperRegions()) {
-					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+					if (regions.stream().noneMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
 						regions.add(superRegion);
 				}
 			}
@@ -245,7 +245,7 @@ public class AvalancheBulletinPublishService {
 			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
 			for (Region region : publishBulletinRegions) {
 				for (Region superRegion : region.getSuperRegions()) {
-					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+					if (regions.stream().noneMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
 						regions.add(superRegion);
 				}
 			}
@@ -293,7 +293,7 @@ public class AvalancheBulletinPublishService {
 			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
 			for (Region region : publishBulletinRegions) {
 				for (Region superRegion : region.getSuperRegions()) {
-					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+					if (regions.stream().noneMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
 						regions.add(superRegion);
 				}
 			}
@@ -346,7 +346,7 @@ public class AvalancheBulletinPublishService {
 			Set<Region> regions = new HashSet<Region>(publishBulletinRegions);
 			for (Region region : publishBulletinRegions) {
 				for (Region superRegion : region.getSuperRegions()) {
-					if (!regions.stream().anyMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
+					if (regions.stream().noneMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId())))
 						regions.add(superRegion);
 				}
 			}

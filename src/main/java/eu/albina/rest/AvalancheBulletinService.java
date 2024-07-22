@@ -127,7 +127,7 @@ public class AvalancheBulletinService {
 		}
 
 		List<Region> regions = new ArrayList<Region>();
-		regionIds.stream().forEach(regionId -> {
+		regionIds.forEach(regionId -> {
 			try {
 				Region region = RegionController.getInstance().getRegion(regionId);
 				regions.add(region);
@@ -283,7 +283,7 @@ public class AvalancheBulletinService {
 		}
 
 		List<Region> regions = new ArrayList<Region>();
-		regionIds.stream().forEach(regionId -> regions.add(RegionController.getInstance().getRegion(regionId)));
+		regionIds.forEach(regionId -> regions.add(RegionController.getInstance().getRegion(regionId)));
 
 		try {
 			DangerRating highestDangerRating = AvalancheBulletinController.getInstance()
