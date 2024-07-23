@@ -21,6 +21,7 @@
 	"enableObservations": false,
 	"enableModelling": false,
     "showMatrix": true,
+    "enableStrategicMindset": false,
     "pdfColor": "00ACFB",
     "emailColor": "1AABFF",
     "pdfMapYAmPm": 130,
