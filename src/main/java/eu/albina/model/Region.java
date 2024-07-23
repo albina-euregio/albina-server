@@ -168,6 +168,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
 
+	@Column(name = "ENABLE_STRATEGIC_MINDSET")
+	private boolean enableStrategicMindset;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -329,6 +332,8 @@ public class Region implements AvalancheInformationObject {
 			this.enableModelling = json.getBoolean("enableModelling");
 		if (json.has("showMatrix") && !json.isNull("showMatrix"))
 			this.showMatrix = json.getBoolean("showMatrix");
+		if (json.has("enableStrategicMindset") && !json.isNull("enableStrategicMindset"))
+			this.enableStrategicMindset = json.getBoolean("enableStrategicMindset");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
 			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"), regionFunction);
 		if (json.has("pdfColor") && !json.isNull("pdfColor"))
@@ -549,6 +554,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void setShowMatrix(boolean showMatrix) {
 		this.showMatrix = showMatrix;
+	}
+
+	public boolean isEnableStrategicMindset() {
+		return enableStrategicMindset;
+	}
+
+	public void setEnableStrategicMindset(boolean enableStrategicMindset) {
+		this.enableStrategicMindset = enableStrategicMindset;
 	}
 
 	public ServerInstance getServerInstance() {

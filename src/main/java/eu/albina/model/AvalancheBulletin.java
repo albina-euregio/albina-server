@@ -61,6 +61,7 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.StrategicMindset;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
 
@@ -114,6 +115,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@CollectionTable(name = "avalanche_bulletin_saved_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> savedRegions;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "STRATEGIC_MINDSET")
+	private StrategicMindset strategicMindset;
 
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
 	private boolean hasDaytimeDependency;
@@ -303,6 +308,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				this.savedRegions.add((String) entry);
 			}
 		}
+
+		if (json.has("strategicMindset"))
+			this.strategicMindset = StrategicMindset.valueOf(json.getString("strategicMindset"));
 
 		if (json.has("hasDaytimeDependency"))
 			this.hasDaytimeDependency = json.getBoolean("hasDaytimeDependency");
@@ -655,6 +663,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.publishedRegions.add(region);
 	}
 
+	public StrategicMindset getStrategicMindset() {
+		return strategicMindset;
+	}
+
+	public void setStrategicMindset(StrategicMindset strategicMindset) {
+		this.strategicMindset = strategicMindset;
+	}
+
 	public AvalancheBulletinDaytimeDescription getForenoon() {
 		return forenoon;
 	}
@@ -860,6 +876,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		json.put("savedRegions", savedRegions);
 		json.put("publishedRegions", publishedRegions);
 
+		if (strategicMindset != null)
+			json.put("strategicMindset", strategicMindset);
+
 		json.put("hasDaytimeDependency", hasDaytimeDependency);
 
 		if (forenoon != null)
@@ -946,6 +965,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		setSavedRegions(bulletin.getSavedRegions());
 		setHasDaytimeDependency(bulletin.isHasDaytimeDependency());
 		setTendency(bulletin.getTendency());
+		setStrategicMindset(bulletin.getStrategicMindset());
 		setDangerPattern1(bulletin.getDangerPattern1());
 		setDangerPattern2(bulletin.getDangerPattern2());
 
