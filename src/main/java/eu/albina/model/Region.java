@@ -837,6 +837,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableObservations", isEnableObservations());
 		json.put("enableModelling", isEnableModelling());
 		json.put("showMatrix", isShowMatrix());
+		json.put("enableStrategicMindset", isEnableStrategicMindset());
 		if (getServerInstance() != null) {
 			json.put("serverInstance", getServerInstance().toJSON());
 		}
