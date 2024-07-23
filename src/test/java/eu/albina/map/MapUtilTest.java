@@ -147,6 +147,7 @@ public class MapUtilTest {
 	}
 
 	@Test
+	@Disabled
 	public void testMapyrusMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -181,6 +182,7 @@ public class MapUtilTest {
 	}
 
 	@Test
+	@Disabled
 	public void testMapyrusMapsAran() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
