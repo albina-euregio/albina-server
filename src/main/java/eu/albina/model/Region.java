@@ -165,6 +165,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_MODELLING")
 	private boolean enableModelling;
 
+	@Column(name = "ENABLE_WEATHERBOX")
+	private boolean enableWeatherbox;
+
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
 
@@ -330,6 +333,8 @@ public class Region implements AvalancheInformationObject {
 			this.enableObservations = json.getBoolean("enableObservations");
 		if (json.has("enableModelling") && !json.isNull("enableModelling"))
 			this.enableModelling = json.getBoolean("enableModelling");
+		if (json.has("enableWeatherbox") && !json.isNull("enableWeatherbox"))
+			this.enableWeatherbox = json.getBoolean("enableWeatherbox");
 		if (json.has("showMatrix") && !json.isNull("showMatrix"))
 			this.showMatrix = json.getBoolean("showMatrix");
 		if (json.has("enableStrategicMindset") && !json.isNull("enableStrategicMindset"))
@@ -772,6 +777,14 @@ public class Region implements AvalancheInformationObject {
 		this.enableModelling = enableModelling;
 	}
 
+	public boolean isEnableWeatherbox() {
+		return enableWeatherbox;
+	}
+
+	public void setEnableWeatherbox(boolean enableWeatherbox) {
+		this.enableWeatherbox = enableWeatherbox;
+	}
+
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
@@ -836,6 +849,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableAvalancheProblemNoDistinctAvalancheProblem", isEnableAvalancheProblemNoDistinctAvalancheProblem());
 		json.put("enableObservations", isEnableObservations());
 		json.put("enableModelling", isEnableModelling());
+		json.put("enableWeatherbox", isEnableWeatherbox());
 		json.put("showMatrix", isShowMatrix());
 		json.put("enableStrategicMindset", isEnableStrategicMindset());
 		if (getServerInstance() != null) {
