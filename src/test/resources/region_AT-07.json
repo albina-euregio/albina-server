@@ -20,6 +20,7 @@
     "enableAvalancheProblemNoDistinctAvalancheProblem": false,
 	"enableObservations": false,
 	"enableModelling": false,
+	"enableWeatherbox": false,
     "showMatrix": true,
     "enableStrategicMindset": false,
     "pdfColor": "00ACFB",
