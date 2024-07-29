@@ -46,6 +46,7 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Direction;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -56,6 +57,10 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	@OneToOne
 	@PrimaryKeyJoinColumn
 	private AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "AVALANCHE_TYPE")
+	private eu.albina.model.enumerations.AvalancheType avalancheType;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "AVALANCHE_PROBLEM")
@@ -121,6 +126,10 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	public AvalancheProblem(JSONObject json) {
 		this();
 
+		if (json.has("avalancheType")) {
+			this.avalancheType = eu.albina.model.enumerations.AvalancheType
+					.valueOf(json.getString("avalancheType").toLowerCase());
+		}
 		if (json.has("avalancheProblem")) {
 			this.avalancheProblem = eu.albina.model.enumerations.AvalancheProblem
 					.valueOf(json.getString("avalancheProblem").toLowerCase());
@@ -150,6 +159,14 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 		if (json.has("terrainFeature"))
 			for (Object entry : json.getJSONArray("terrainFeature"))
 				terrainFeature.add(new Text((JSONObject) entry));
+	}
+
+	public AvalancheType getAvalancheType() {
+		return avalancheType;
+	}
+
+	public void setAvalancheType(AvalancheType avalancheType) {
+		this.avalancheType = avalancheType;
 	}
 
 	public eu.albina.model.enumerations.AvalancheProblem getAvalancheProblem() {
@@ -257,6 +274,8 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
+		if (avalancheType != null)
+			json.put("avalancheType", this.avalancheType.toString());
 		if (avalancheProblem != null)
 			json.put("avalancheProblem", this.avalancheProblem.toString());
 		if (aspects != null && aspects.size() > 0) {
@@ -305,6 +324,8 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 		}
 		final AvalancheProblem other = (AvalancheProblem) obj;
 
+		if (this.avalancheType != other.avalancheType)
+			return false;
 		if (this.avalancheProblem != other.avalancheProblem)
 			return false;
 		if (!this.aspects.containsAll(other.getAspects()) || !other.getAspects().containsAll(this.aspects))
