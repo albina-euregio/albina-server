@@ -16,6 +16,8 @@
  ******************************************************************************/
 package eu.albina.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.albina.controller.StressLevelController;
 import eu.albina.controller.UserController;
 import eu.albina.model.StressLevel;
@@ -53,17 +55,19 @@ public class StressLevelService {
 	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "List stress level entries of user")
-	public List<StressLevel> getObservations(
+	public Response getObservations(
 		@Context SecurityContext securityContext,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) throws JsonProcessingException {
 
 		User user = new User(securityContext.getUserPrincipal().getName());
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		return StressLevelController.get(user, startDate, endDate);
+		List<StressLevel> stressLevels = StressLevelController.get(user, startDate, endDate);
+		logger.info("Sending stress levels {}", stressLevels);
+		String json = new ObjectMapper().writeValueAsString(stressLevels);
+		return Response.ok(json).build();
 	}
 
 	@POST
@@ -74,13 +78,14 @@ public class StressLevelService {
 	@Operation(summary = "Create stress level entry")
 	public Response postObservation(
 		@Context SecurityContext securityContext,
-		StressLevel stressLevel) {
+		StressLevel stressLevel) throws JsonProcessingException {
 
 		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 		stressLevel.setUser(user);
-		StressLevelController.create(stressLevel);
+		stressLevel = StressLevelController.create(stressLevel);
 		logger.info("Creating stress level {}", stressLevel);
-		return Response.ok().build();
+		String json = new ObjectMapper().writeValueAsString(stressLevel);
+		return Response.ok(json).build();
 	}
 
 }
