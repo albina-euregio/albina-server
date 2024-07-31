@@ -6,5 +6,9 @@
   <include file="005_v5/005_000010_comment_table_server_instances.sql" relativeToChangelogFile="true"/>
   <include file="005_v5/005_000020_comment_table_regions.sql" relativeToChangelogFile="true"/>
   <include file="005_v5/005_000030_rename_table_blog_configuration.sql" relativeToChangelogFile="true"/>
+  <include file="005_v5/005_000040_extend_rapid_mail_configurations.sql" relativeToChangelogFile="true"/>
+  <include file="005_v5/005_000050_extend_regions.sql" relativeToChangelogFile="true"/>
+  <include file="005_v5/005_000050_extend_regions.sql" relativeToChangelogFile="true"/>
+  <include file="005_v5/005_000100_stress_levels.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
