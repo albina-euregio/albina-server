@@ -14,6 +14,7 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 import org.caaml.v6.AvalancheBulletinCustomData;
 import org.caaml.v6.AvalancheBulletins;
+import org.caaml.v6.AvalancheProblemCustomData;
 import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.Tendency;
 import org.caaml.v6.DangerRatingValue;
@@ -127,6 +128,10 @@ public interface Caaml6 {
 			result.setFrequency(ExpectedAvalancheFrequency.forValue(matrixInformation.getFrequency().toString()));
 			result.setSnowpackStability(ExpectedSnowpackStability.forValue(matrixInformation.getSnowpackStability().toString()));
 		}
+		result.setCustomData(new AvalancheProblemCustomData(
+			new AvalancheProblemCustomData.ALBINA(p.getAvalancheType().toString())
+		));
+
 		return result;
 	}
 
