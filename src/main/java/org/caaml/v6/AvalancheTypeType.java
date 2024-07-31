@@ -19,7 +19,7 @@ public enum AvalancheTypeType {
         throw new IllegalStateException();
     }
 
-    public static AvalancheProblemType forValue(String value) {
+    public static AvalancheTypeType forValue(String value) {
         if (value.equals("slab")) return SLAB;
         if (value.equals("loose")) return LOOSE;
         if (value.equals("glide")) return GLIDE;
