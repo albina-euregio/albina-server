@@ -32,7 +32,7 @@
 			<property name="hibernate.connection.password" value="MD>5:X*n%)1V"/> -->
 
 			<!-- SQL dialect -->
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MariaDB106Dialect"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect"/>
 
 			<!-- Disable the second-level cache -->
 			<property name="cache_provider_class" value="org.hibernate.cache.NoCacheProvider"/>
