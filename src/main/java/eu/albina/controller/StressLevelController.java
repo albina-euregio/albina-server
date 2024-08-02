@@ -37,8 +37,10 @@ public interface StressLevelController {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<StressLevel> select = criteriaBuilder.createQuery(StressLevel.class);
 			Root<StressLevel> root = select.from(StressLevel.class);
-			select.where(root.get("user").in(users));
-			select.where(criteriaBuilder.between(root.get("date"), startDate, endDate));
+			select.where(
+				root.get("user").in(users),
+				criteriaBuilder.between(root.get("date"), startDate, endDate)
+			);
 			return entityManager.createQuery(select).getResultList();
 		});
 	}
