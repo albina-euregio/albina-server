@@ -13,7 +13,7 @@ import java.util.Objects;
  * the expected avalanche size, snowpack stability and its frequency can be defined. The
  * implied danger rating value is optional.
  */
-@JsonPropertyOrder({"problemType", "elevation", "aspect", "validTimePeriod", "snowpackStability", "frequency", "avalancheSize", "dangerRatingValue", "comment", "metaData", "customData"})
+@JsonPropertyOrder({"problemType", "avalancheType", "elevation", "aspect", "validTimePeriod", "snowpackStability", "frequency", "avalancheSize", "dangerRatingValue", "comment", "metaData", "customData"})
 public class AvalancheProblem {
 	@JacksonXmlElementWrapper(useWrapping = false)
 	@JacksonXmlProperty(localName = "aspect")
@@ -26,6 +26,7 @@ public class AvalancheProblem {
     private ExpectedAvalancheFrequency frequency;
     private MetaData metaData;
     private AvalancheProblemType problemType;
+    private AvalancheTypeType avalancheType;
     private ExpectedSnowpackStability snowpackStability;
     private ValidTimePeriod validTimePeriod;
 
@@ -56,6 +57,9 @@ public class AvalancheProblem {
     public AvalancheProblemType getProblemType() { return problemType; }
     public void setProblemType(AvalancheProblemType value) { this.problemType = value; }
 
+    public AvalancheTypeType getAvalancheType() { return avalancheType; }
+    public void setAvalancheType(AvalancheTypeType value) { this.avalancheType = value; }
+
     public ExpectedSnowpackStability getSnowpackStability() { return snowpackStability; }
     public void setSnowpackStability(ExpectedSnowpackStability value) { this.snowpackStability = value; }
 
@@ -67,11 +71,11 @@ public class AvalancheProblem {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		AvalancheProblem that = (AvalancheProblem) o;
-		return Objects.equals(aspects, that.aspects) && Objects.equals(avalancheSize, that.avalancheSize) && Objects.equals(elevation, that.elevation) && frequency == that.frequency && problemType == that.problemType && snowpackStability == that.snowpackStability && Objects.equals(comment, that.comment) && validTimePeriod == that.validTimePeriod;
+		return Objects.equals(aspects, that.aspects) && Objects.equals(avalancheSize, that.avalancheSize) && Objects.equals(elevation, that.elevation) && frequency == that.frequency && problemType == that.problemType && avalancheType == that.avalancheType && snowpackStability == that.snowpackStability && Objects.equals(comment, that.comment) && validTimePeriod == that.validTimePeriod;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(aspects, avalancheSize, elevation, frequency, problemType, snowpackStability, comment, validTimePeriod);
+		return Objects.hash(aspects, avalancheSize, elevation, frequency, problemType, avalancheType, snowpackStability, comment, validTimePeriod);
 	}
 }
