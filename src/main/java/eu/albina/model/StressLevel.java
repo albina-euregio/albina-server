@@ -16,12 +16,13 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.google.common.base.MoreObjects;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,12 +45,13 @@ public class StressLevel {
 	@Id
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID", nullable = false)
+	@JsonIgnore
 	private User user;
 
 	@Id
 	@Column(name = "DATE", nullable = false)
-	@JsonSerialize(using = LocalDateSerializer.class)
-	@JsonDeserialize(using = LocalDateDeserializer.class)
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonDeserialize(using = FromStringDeserializer.class)
 	private LocalDate date;
 
 	@Column(name = "STRESS_LEVEL")

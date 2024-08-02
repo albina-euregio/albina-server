@@ -61,6 +61,11 @@
       <aspect>N</aspect>
       <validTimePeriod>earlier</validTimePeriod>
       <comment> Many starting zones have released the snow but not entirely.</comment>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>wind_slab</problemType>
@@ -74,6 +79,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>earlier</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
@@ -86,6 +96,11 @@
       <aspect>SE</aspect>
       <aspect>E</aspect>
       <validTimePeriod>later</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <highlights>Many starting zones have released the snow but not entirely.</highlights>
     <weatherForecast/>
@@ -154,6 +169,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -226,6 +246,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -238,6 +263,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -373,6 +403,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -388,6 +423,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>glide</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -450,6 +490,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -521,6 +566,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -599,6 +649,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -611,6 +666,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -691,6 +751,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -763,6 +828,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -778,6 +848,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -847,6 +922,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -862,6 +942,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>
@@ -918,6 +1003,11 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
     </avalancheProblem>
     <weatherForecast/>
     <avalancheActivity>

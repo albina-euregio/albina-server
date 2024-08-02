@@ -117,7 +117,7 @@ public class UserController {
 	 *
 	 * @return list of all {@code User}
 	 */
-	public List<User> getUsers() throws AlbinaException {
+	public List<User> getUsers() {
 		return HibernateUtil.getInstance().runTransaction(entityManager ->
 			entityManager.createQuery(HibernateUtil.queryGetUsers, User.class).getResultList());
 	}

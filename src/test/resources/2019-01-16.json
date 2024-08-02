@@ -20,6 +20,7 @@
 			"avalancheProblem2": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
 				"avalancheProblem": "wind_slab",
+				"avalancheType": "slab",
 				"matrixInformation" : {
 					"artificialDangerRating": "considerable",
 					"artificialAvalancheSize": "large",
@@ -33,6 +34,7 @@
 			"avalancheProblem1": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
 				"avalancheProblem": "new_snow",
+				"avalancheType": "slab",
 				"matrixInformation" : {
 					"artificialDangerRating": "considerable",
 					"artificialAvalancheSize": "large",
@@ -78,6 +80,7 @@
 			"avalancheProblem1": {
 				"aspects": ["s", "sw", "w", "se", "e"],
 				"elevationHigh": 2800,
+				"avalancheType": "slab",
 				"avalancheProblem": "wet_snow"
 			},
 			"id": "3b2357a1-8650-4139-b8c0-429e27bc9fc1",
@@ -177,6 +180,7 @@
 			"avalancheProblem1": {
 				"treelineLow": true,
 				"aspects": ["s", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "174214b2-e616-4cb7-a418-ec1991edafbd",
@@ -256,11 +260,13 @@
 			"avalancheProblem2": {
 				"elevationLow": 2000,
 				"aspects": ["w", "nw", "ne", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "persistent_weak_layers"
 			},
 			"avalancheProblem1": {
 				"elevationLow": 2300,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "b752d785-78e1-41a3-8024-d488c47eacc6",
@@ -371,11 +377,13 @@
 			"avalancheProblem2": {
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
 				"elevationHigh": 2400,
+				"avalancheType": "glide",
 				"avalancheProblem": "gliding_snow"
 			},
 			"avalancheProblem1": {
 				"elevationLow": 1800,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "f3ef960e-9a2c-4d21-9e5b-ddf2e8b0ab1a",
@@ -469,6 +477,7 @@
 			"avalancheProblem1": {
 				"elevationLow": 2000,
 				"aspects": ["ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "e82b15fe-60c9-4cfd-8f6b-f6037dc552d6",
@@ -549,6 +558,7 @@
 			"avalancheProblem1": {
 				"treelineLow": true,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "afeb599f-2f07-449e-bbc8-b20b7f2ee9f6",
@@ -643,11 +653,13 @@
 			"avalancheProblem2": {
 				"elevationLow": 2000,
 				"aspects": ["w", "nw", "ne", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "persistent_weak_layers"
 			},
 			"avalancheProblem1": {
 				"elevationLow": 2200,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "f4061017-2437-47d4-81ed-fcad4555bc1b",
@@ -737,6 +749,7 @@
 			"avalancheProblem1": {
 				"elevationLow": 2200,
 				"aspects": ["w", "nw", "ne", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "810cc6c0-76bc-405b-810b-1e64add220ba",
@@ -827,11 +840,13 @@
 			"avalancheProblem2": {
 				"elevationLow": 1800,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "persistent_weak_layers"
 			},
 			"avalancheProblem1": {
 				"elevationLow": 1800,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "3568d355-a95e-459b-9f5c-8d45d4dd1fb9",
@@ -916,11 +931,13 @@
 			"avalancheProblem2": {
 				"treelineLow": true,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "persistent_weak_layers"
 			},
 			"avalancheProblem1": {
 				"treelineLow": true,
 				"aspects": ["s", "sw", "w", "nw", "ne", "se", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "67100c15-0ed4-4869-bc92-4de569455677",
@@ -1003,6 +1020,7 @@
 			"avalancheProblem1": {
 				"elevationLow": 2200,
 				"aspects": ["w", "nw", "ne", "e", "n"],
+				"avalancheType": "slab",
 				"avalancheProblem": "wind_slab"
 			},
 			"id": "a72e96a6-96ab-4628-a994-b9190037f2b3",

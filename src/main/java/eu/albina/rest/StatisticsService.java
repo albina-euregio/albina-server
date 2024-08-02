@@ -24,6 +24,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -46,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.RegionController;
 import eu.albina.controller.StatisticsController;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
@@ -71,6 +74,7 @@ public class StatisticsService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate,
 			@QueryParam("lang") LanguageCode language, @QueryParam("extended") boolean extended,
 			@QueryParam("duplicate") boolean duplicate,
+			@QueryParam("regions") List<String> regionIds,
 			@QueryParam("obsoleteMatrix") boolean obsoleteMatrix) {
 		logger.debug("GET CSV bulletins");
 
@@ -86,7 +90,16 @@ public class StatisticsService {
 		else
 			return Response.notAcceptable(null).build();
 
-		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, RegionController.getInstance().getPublishBulletinRegions(), extended,
+		List<Region> regions = new ArrayList<Region>();
+		if (regionIds != null && !regionIds.isEmpty()) {
+			for (String regionId : regionIds) {
+				regions.add(RegionController.getInstance().getRegion(regionId));
+			}
+		} else {
+			regions = RegionController.getInstance().getPublishBulletinRegions();
+		}
+
+		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, regions, extended,
 				duplicate, obsoleteMatrix);
 
 		String filename = String.format("statistic_%s_%s%s%s%s_%s",

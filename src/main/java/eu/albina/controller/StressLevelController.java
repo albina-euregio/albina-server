@@ -27,16 +27,17 @@ import org.hibernate.HibernateException;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 public interface StressLevelController {
 
-	static List<StressLevel> get(User user, LocalDate startDate, LocalDate endDate) {
+	static List<StressLevel> get(Collection<User> users, LocalDate startDate, LocalDate endDate) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<StressLevel> select = criteriaBuilder.createQuery(StressLevel.class);
 			Root<StressLevel> root = select.from(StressLevel.class);
-			select.where(criteriaBuilder.equal(root.get("user"), user));
+			select.where(root.get("user").in(users));
 			select.where(criteriaBuilder.between(root.get("date"), startDate, endDate));
 			return entityManager.createQuery(select).getResultList();
 		});
