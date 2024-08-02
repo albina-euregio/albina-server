@@ -94,6 +94,7 @@ public class StressLevelService {
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
 		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 		List<User> users = UserController.getInstance().getUsers().stream()
+				.filter(u -> !u.isDeleted())
 				.filter(u -> u.hasRole(Role.FORECASTER) || u.hasRole(Role.FOREMAN))
 				.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
 				.collect(Collectors.toList());
