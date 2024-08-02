@@ -174,6 +174,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_STRATEGIC_MINDSET")
 	private boolean enableStrategicMindset;
 
+	@Column(name = "ENABLE_STRESS_LEVEL")
+	private boolean enableStressLevel;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -339,6 +342,8 @@ public class Region implements AvalancheInformationObject {
 			this.showMatrix = json.getBoolean("showMatrix");
 		if (json.has("enableStrategicMindset") && !json.isNull("enableStrategicMindset"))
 			this.enableStrategicMindset = json.getBoolean("enableStrategicMindset");
+		if (json.has("enableStressLevel") && !json.isNull("enableStressLevel"))
+			this.enableStressLevel = json.getBoolean("enableStressLevel");
 		if (json.has("serverInstance") && !json.isNull("serverInstance"))
 			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"), regionFunction);
 		if (json.has("pdfColor") && !json.isNull("pdfColor"))
@@ -567,6 +572,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void setEnableStrategicMindset(boolean enableStrategicMindset) {
 		this.enableStrategicMindset = enableStrategicMindset;
+	}
+
+	public boolean isEnableStressLevel() {
+		return enableStressLevel;
+	}
+
+	public void setEnableStressLevel(boolean enableStressLevel) {
+		this.enableStressLevel = enableStressLevel;
 	}
 
 	public ServerInstance getServerInstance() {
@@ -852,6 +865,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableWeatherbox", isEnableWeatherbox());
 		json.put("showMatrix", isShowMatrix());
 		json.put("enableStrategicMindset", isEnableStrategicMindset());
+		json.put("enableStressLevel", isEnableStressLevel());
 		if (getServerInstance() != null) {
 			json.put("serverInstance", getServerInstance().toJSON());
 		}
