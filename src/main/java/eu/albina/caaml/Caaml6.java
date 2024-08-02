@@ -128,9 +128,11 @@ public interface Caaml6 {
 			result.setFrequency(ExpectedAvalancheFrequency.forValue(matrixInformation.getFrequency().toString()));
 			result.setSnowpackStability(ExpectedSnowpackStability.forValue(matrixInformation.getSnowpackStability().toString()));
 		}
-		result.setCustomData(new AvalancheProblemCustomData(
-			new AvalancheProblemCustomData.ALBINA(p.getAvalancheType().toString())
-		));
+		if (p.getAvalancheType() != null) {
+			result.setCustomData(new AvalancheProblemCustomData(
+				new AvalancheProblemCustomData.ALBINA(p.getAvalancheType().toString())
+			));
+		}
 
 		return result;
 	}
