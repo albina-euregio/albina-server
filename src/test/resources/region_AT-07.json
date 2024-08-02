@@ -23,6 +23,7 @@
 	"enableWeatherbox": false,
     "showMatrix": true,
     "enableStrategicMindset": false,
+    "enableStressLevel": false,
     "pdfColor": "00ACFB",
     "emailColor": "1AABFF",
     "pdfMapYAmPm": 130,
