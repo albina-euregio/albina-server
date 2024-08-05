@@ -18,12 +18,8 @@ package eu.albina.model;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
-import java.util.function.Function;
-
-import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
-import com.google.common.base.Strings;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -31,7 +27,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -42,17 +37,8 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "danger_sources")
-public class DangerSource extends AbstractPersistentObject
-		implements AvalancheInformationObject {
+public class DangerSource extends AbstractPersistentObject {
 
-	/** Information about the author of the danger source */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USER_ID")
-	private User user;
-
-	@Column(name = "OWNER_REGION")		
-	private String ownerRegion;
-		
 	@Column(name = "CREATION_DATE")
 	private ZonedDateTime creationDate;
 	
@@ -77,48 +63,18 @@ public class DangerSource extends AbstractPersistentObject
 	 * @param json
 	 *            JSONObject holding information about a danger source.
 	 */
-	public DangerSource(JSONObject json, Function<String, User> userFunction) {
+	public DangerSource(JSONObject json) {
 		this();
 
 		if (json.has("id")) {
 			this.id = json.getString("id");
-			
-			if (json.has("author")) {
-				JSONObject author = json.getJSONObject("author");
-				if (author.has("email")) {
-					try {
-						this.user = userFunction.apply(author.getString("email"));
-					} catch (Exception e) {
-						LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
-					}
-				}
-			}
 		}
 			
-		if (json.has("ownerRegion"))
-			this.ownerRegion = json.getString("ownerRegion");
-
 		if (json.has("creationDate"))
 			this.creationDate = ZonedDateTime.parse(json.getString("creationDate"));
 
 		if (json.has("description"))
 			this.description = json.getString("description");
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getOwnerRegion() {
-		return ownerRegion;
-	}
-
-	public void setOwnerRegion(String ownerRegion) {
-		this.ownerRegion = ownerRegion;
 	}
 
 	public ZonedDateTime getCreationDate() {
@@ -143,35 +99,6 @@ public class DangerSource extends AbstractPersistentObject
 
 	public void setDangerSourceVariants(Set<DangerSourceVariant> dangerSourceVariants) {
 		this.dangerSourceVariants = dangerSourceVariants;
-	}
-
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		if (!Strings.isNullOrEmpty(id))
-			json.put("id", id);
-
-		if (user != null && !Strings.isNullOrEmpty(user.getName()))
-			json.put("author", user.toSmallJSON());
-
-		if (user != null && user.getRoles() != null)
-			json.put("ownerRegion", ownerRegion);
-
-		return json;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (!DangerSource.class.isAssignableFrom(obj.getClass())) {
-			return false;
-		}
-		final DangerSource other = (DangerSource) obj;
-
-		return true;
 	}
 
 }

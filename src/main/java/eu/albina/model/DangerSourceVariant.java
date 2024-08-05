@@ -17,7 +17,6 @@
 package eu.albina.model;
 
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -28,13 +27,13 @@ import org.hibernate.annotations.FetchMode;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
-import com.google.common.base.Strings;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.Characteristic;
 import eu.albina.model.enumerations.CreationProcess;
 import eu.albina.model.enumerations.DangerSign;
 import eu.albina.model.enumerations.DangerSourceStatus;
+import eu.albina.model.enumerations.DangerSourceType;
 import eu.albina.model.enumerations.Distribution;
 import eu.albina.model.enumerations.GlidingSnowActivity;
 import eu.albina.model.enumerations.GrainShape;
@@ -67,7 +66,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "danger_source_variants")
 public class DangerSourceVariant extends AbstractPersistentObject
-		implements AvalancheInformationObject, Comparable<DangerSourceVariant> {
+		implements Comparable<DangerSourceVariant> {
 
 	@Column(name = "DANGER_SOURCE_VARIANT_ID")
 	private String dangerSourceVariantId;
@@ -78,16 +77,24 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "UPDATE_DATE")
 	private ZonedDateTime updateDate;
 
-	/** Validity of the danger source */
+	/** Validity of the danger source variant. */
 	@Column(name = "VALID_FROM")
 	private ZonedDateTime validFrom;
 	@Column(name = "VALID_UNTIL")
 	private ZonedDateTime validUntil;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
 	private DangerSourceStatus status;
 
-	/** The regions the danger source is for. */
+	@Enumerated(EnumType.STRING)
+	@Column(name = "TYPE")
+	private DangerSourceType type;
+
+	@Column(name = "OWNER_REGION")		
+	private String ownerRegion;
+
+	/** The regions where the danger source variant is present. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_regions", joinColumns = @JoinColumn(name = "DANGER_SOURCE_ID"))
 	@Column(name = "REGION_ID")
@@ -154,6 +161,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 			@AttributeOverride(name = "snowpackStability", column = @Column(name = "SNOWPACK_STABILITY")),
 			@AttributeOverride(name = "frequency", column = @Column(name = "FREQUENCY")) })
 	private EawsMatrixInformation eawsMatrixInformation;
+
+	// TODO add uncertainties
 
 	/** --------------------- */
 	/** GLIDE SNOW AVALANCHES */
@@ -358,6 +367,22 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.status = status;
 	}
 
+	public DangerSourceType getType() {
+		return this.type;
+	}
+
+	public void setType(DangerSourceType type) {
+		this.type = type;
+	}
+
+	public String getOwnerRegion() {
+		return this.ownerRegion;
+	}
+
+	public void setOwnerRegion(String ownerRegion) {
+		this.ownerRegion = ownerRegion;
+	}
+		
 	public Set<String> getRegions() {
 		return this.regions;
 	}
@@ -777,25 +802,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		return getValidityDate().toLocalDate().toString();
 	}
 
-	@Override
-	public JSONObject toJSON() {
-
-		// TODO implement
-
-		JSONObject json = new JSONObject();
-
-		if (!Strings.isNullOrEmpty(id))
-			json.put("id", id);
-
-		JSONObject validity = new JSONObject();
-		validity.put("from", DateTimeFormatter.ISO_INSTANT.format(validFrom));
-		validity.put("until", DateTimeFormatter.ISO_INSTANT.format(validUntil));
-		json.put("validity", validity);
-
-		json.put("regions", regions);
-		json.put("hasDaytimeDependency", hasDaytimeDependency);
-
-		return json;
+	public boolean affectsRegion(Region region) {
+		return getRegions().stream().anyMatch(region::affects);
 	}
 
 	public void copy(DangerSourceVariant dangerSourceVariant) {
@@ -824,6 +832,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Override
 	public int compareTo(DangerSourceVariant other) {
 		// TODO implement
+		// compare by danger level, danger level in paranthesis, snowpack stability, avalanche size
 		return 0;
 	}
 
