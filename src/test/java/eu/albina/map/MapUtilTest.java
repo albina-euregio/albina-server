@@ -35,8 +35,6 @@ import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
 
-import javax.imageio.ImageIO;
-
 public class MapUtilTest {
 
 	private ServerInstance serverInstance;
@@ -147,7 +145,6 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Disabled
 	public void testMapyrusMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
@@ -182,7 +179,6 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Disabled
 	public void testMapyrusMapsAran() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
