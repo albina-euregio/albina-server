@@ -73,7 +73,6 @@ public class StressLevelService {
 		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 		Set<User> users = Collections.singleton(user);
 		List<StressLevel> stressLevels = StressLevelController.get(users, startDate, endDate);
-		logger.info("Sending stress levels {}", stressLevels);
 		String json = new ObjectMapper().writeValueAsString(stressLevels);
 		return Response.ok(json).build();
 	}
@@ -100,8 +99,10 @@ public class StressLevelService {
 				.collect(Collectors.toList());
 		Map<UUID, List<StressLevel>> stressLevels = StressLevelController.get(users, startDate, endDate).stream()
 				.collect(Collectors.groupingBy(stressLevel -> randomization.computeIfAbsent(stressLevel.getUser(), i -> UUID.randomUUID())));
-		logger.info("Sending stress levels {}", stressLevels);
 		String json = new ObjectMapper().writeValueAsString(stressLevels);
+		if (json.contains("@")) {
+			throw new IllegalStateException("Found unexpected '@'. Randomization of users emails does not work.");
+		}
 		return Response.ok(json).build();
 	}
 
