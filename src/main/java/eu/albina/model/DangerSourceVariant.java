@@ -45,6 +45,7 @@ import eu.albina.model.enumerations.Thickness;
 import eu.albina.model.enumerations.Wetness;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -54,6 +55,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -69,6 +71,10 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Column(name = "DANGER_SOURCE_VARIANT_ID")
 	private String dangerSourceVariantId;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "DANGER_SOURCE_ID")
+	private DangerSource dangerSource;
 
 	@Column(name = "CREATION_DATE")
 	@JsonSerialize(using = ZonedDateTimeSerializer.class)
@@ -299,6 +305,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setDangerSourceVariantId(String dangerSourceVariantId) {
 		this.dangerSourceVariantId = dangerSourceVariantId;
+	}
+
+	public DangerSource getDangerSource() {
+		return this.dangerSource;
+	}
+
+	public void setDangerSource(DangerSource dangerSource) {
+		this.dangerSource = dangerSource;
 	}
 
 	public ZonedDateTime getCreationDate() {
