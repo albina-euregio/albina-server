@@ -19,14 +19,13 @@ package eu.albina.model;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collector.Characteristics;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.Characteristic;
@@ -72,15 +71,19 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private String dangerSourceVariantId;
 
 	@Column(name = "CREATION_DATE")
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	private ZonedDateTime creationDate;
 
 	@Column(name = "UPDATE_DATE")
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	private ZonedDateTime updateDate;
 
 	/** Validity of the danger source variant. */
 	@Column(name = "VALID_FROM")
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	private ZonedDateTime validFrom;
 	@Column(name = "VALID_UNTIL")
+	@JsonSerialize(using = ZonedDateTimeSerializer.class)
 	private ZonedDateTime validUntil;
 
 	@Enumerated(EnumType.STRING)
@@ -288,35 +291,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		aspects = new LinkedHashSet<>();
 		dangerSigns = new LinkedHashSet<>();
 		terrainTypes = new LinkedHashSet<>();
-	}
-
-	/**
-	 * Custom constructor that creates a danger source variant object from JSON input.
-	 *
-	 * @param json
-	 *            JSONObject holding information about a danger source variant.
-	 */
-	public DangerSourceVariant(JSONObject json, Function<String, User> userFunction) {
-		this();
-
-		if (json.has("id"))
-			this.id = json.getString("id");
-
-		if (json.has("validity")) {
-			JSONObject validity = json.getJSONObject("validity");
-			this.validFrom = ZonedDateTime.parse(validity.getString("from"));
-			this.validUntil = ZonedDateTime.parse(validity.getString("until"));
-		}
-
-		if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("regions");
-			for (Object entry : regions) {
-				this.regions.add((String) entry);
-			}
-		}
-
-		if (json.has("hasDaytimeDependency"))
-			this.hasDaytimeDependency = json.getBoolean("hasDaytimeDependency");
 	}
 
 	public String getDangerSourceVariantId() {
@@ -831,9 +805,31 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	 */
 	@Override
 	public int compareTo(DangerSourceVariant other) {
-		// TODO implement
-		// compare by danger level, danger level in paranthesis, snowpack stability, avalanche size
-		return 0;
+		// selected dangerRating
+		int result = this.getEawsMatrixInformation().getDangerRating().compareTo(other.getEawsMatrixInformation().getDangerRating());
+		if (result != 0) {
+			return result;
+		} else {
+			// primary matrix danger rating
+			result = this.getEawsMatrixInformation().getPrimaryDangerRatingFromParameters().compareTo(other.getEawsMatrixInformation().getPrimaryDangerRatingFromParameters());
+			if (result != 0) {
+				return result;
+			} else {
+				// secondary matrix danger rating
+				result = this.getEawsMatrixInformation().getSecondaryDangerRatingFromParameters().compareTo(other.getEawsMatrixInformation().getSecondaryDangerRatingFromParameters());
+				if (result != 0) {
+					return result;
+				} else {
+					// snowpack stability
+					result = this.getEawsMatrixInformation().getSnowpackStability().compareTo(other.getEawsMatrixInformation().getSnowpackStability());
+					if (result != 0) {
+						return result;
+					} else {
+						// avalanche size
+						return this.getEawsMatrixInformation().getAvalancheSize().compareTo(other.getEawsMatrixInformation().getAvalancheSize());
+					}
+				}
+			}
+		}
 	}
-
 }

@@ -19,8 +19,6 @@ package eu.albina.model;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-import com.github.openjson.JSONObject;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -49,33 +47,6 @@ public class DangerSource extends AbstractPersistentObject {
 	@JoinTable(name = "danger_source_danger_source_variants", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "DANGER_SOURCE_VARIANTS")
 	private Set<DangerSourceVariant> dangerSourceVariants;
-
-
-	/**
-	 * Standard constructor for a danger source.
-	 */
-	public DangerSource() {
-	}
-
-	/**
-	 * Custom constructor that creates a danger source object from JSON input.
-	 *
-	 * @param json
-	 *            JSONObject holding information about a danger source.
-	 */
-	public DangerSource(JSONObject json) {
-		this();
-
-		if (json.has("id")) {
-			this.id = json.getString("id");
-		}
-			
-		if (json.has("creationDate"))
-			this.creationDate = ZonedDateTime.parse(json.getString("creationDate"));
-
-		if (json.has("description"))
-			this.description = json.getString("description");
-	}
 
 	public ZonedDateTime getCreationDate() {
 		return this.creationDate;

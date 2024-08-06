@@ -16,11 +16,6 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -31,6 +26,10 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DangerRatingModificator;
 import eu.albina.model.enumerations.Frequency;
 import eu.albina.model.enumerations.SnowpackStability;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Embeddable
 public class EawsMatrixInformation implements AvalancheInformationObject {
@@ -150,6 +149,332 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 
 	public void setFrequencyValue(int frequencyValue) {
 		this.frequencyValue = frequencyValue;
+	}
+
+	public DangerRating getPrimaryDangerRatingFromParameters() {
+		switch (getSnowpackStability()) {
+			case fair:
+				switch (getFrequency()) {
+					case none:
+						return DangerRating.low;
+					case few:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.low;
+							case medium:
+								return DangerRating.low;
+							case large:
+								return DangerRating.moderate;
+							case very_large:
+								return DangerRating.moderate;
+							case extreme:
+								return DangerRating.considerable;
+							default:
+								return DangerRating.missing;
+						}
+					case some:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.low;
+							case medium:
+								return DangerRating.moderate;
+							case large:
+								return DangerRating.moderate;
+							case very_large:
+								return DangerRating.considerable;
+							case extreme:
+								return DangerRating.considerable;
+							default:
+								return DangerRating.missing;
+						}
+					case many:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.low;
+							case medium:
+								return DangerRating.moderate;
+							case large:
+								return DangerRating.considerable;
+							case very_large:
+								return DangerRating.considerable;
+							case extreme:
+								return DangerRating.high;
+							default:
+								return DangerRating.missing;
+						}
+					default:
+						return DangerRating.missing;
+				}
+			case poor:
+				switch (getFrequency()) {
+					case none:
+						return DangerRating.low;
+					case few:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.low;
+							case medium:
+								return DangerRating.moderate;
+							case large:
+								return DangerRating.moderate;
+							case very_large:
+								return DangerRating.considerable;
+							case extreme:
+								return DangerRating.considerable;
+							default:
+								return DangerRating.missing;
+						}
+					case some:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.moderate;
+							case medium:
+								return DangerRating.moderate;
+							case large:
+								return DangerRating.considerable;
+							case very_large:
+								return DangerRating.high;
+							case extreme:
+								return DangerRating.high;
+							default:
+								return DangerRating.missing;
+						}
+					case many:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.moderate;
+							case medium:
+								return DangerRating.considerable;
+							case large:
+								return DangerRating.high;
+							case very_large:
+								return DangerRating.high;
+							case extreme:
+								return DangerRating.very_high;
+							default:
+								return DangerRating.missing;
+						}
+					default:
+						return DangerRating.missing;
+				}
+			case very_poor:
+				switch (getFrequency()) {
+					case none:
+						return DangerRating.low;
+					case few:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.low;
+							case medium:
+								return DangerRating.moderate;
+							case large:
+								return DangerRating.considerable;
+							case very_large:
+								return DangerRating.considerable;
+							case extreme:
+								return DangerRating.high;
+							default:
+								return DangerRating.missing;
+						}
+					case some:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.moderate;
+							case medium:
+								return DangerRating.considerable;
+							case large:
+								return DangerRating.considerable;
+							case very_large:
+								return DangerRating.high;
+							case extreme:
+								return DangerRating.very_high;
+							default:
+								return DangerRating.missing;
+						}
+					case many:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.moderate;
+							case medium:
+								return DangerRating.considerable;
+							case large:
+								return DangerRating.high;
+							case very_large:
+								return DangerRating.very_high;
+							case extreme:
+								return DangerRating.very_high;
+							default:
+								return DangerRating.missing;
+						}
+					default:
+						return DangerRating.missing;
+				}
+			default:
+				return DangerRating.missing;
+		}
+	}
+
+	public DangerRating getSecondaryDangerRatingFromParameters() {
+		switch (getSnowpackStability()) {
+			case fair:
+				switch (getFrequency()) {
+					case none:
+						return DangerRating.low;
+					case few:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.missing;
+							case medium:
+								return DangerRating.moderate;
+							case large:
+								return DangerRating.low;
+							case very_large:
+								return DangerRating.considerable;
+							case extreme:
+								return DangerRating.missing;
+							default:
+								return DangerRating.missing;
+						}
+					case some:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.moderate;
+							case medium:
+								return DangerRating.missing;
+							case large:
+								return DangerRating.considerable;
+							case very_large:
+								return DangerRating.missing;
+							case extreme:
+								return DangerRating.high;
+							default:
+								return DangerRating.missing;
+						}
+					case many:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.moderate;
+							case medium:
+								return DangerRating.missing;
+							case large:
+								return DangerRating.moderate;
+							case very_large:
+								return DangerRating.high;
+							case extreme:
+								return DangerRating.considerable;
+							default:
+								return DangerRating.missing;
+						}
+					default:
+						return DangerRating.missing;
+				}
+			case poor:
+				switch (getFrequency()) {
+					case none:
+						return DangerRating.low;
+					case few:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.missing;
+							case medium:
+								return DangerRating.low;
+							case large:
+								return DangerRating.considerable;
+							case very_large:
+								return DangerRating.missing;
+							case extreme:
+								return DangerRating.high;
+							default:
+								return DangerRating.missing;
+						}
+					case some:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.low;
+							case medium:
+								return DangerRating.considerable;
+							case large:
+								return DangerRating.missing;
+							case very_large:
+								return DangerRating.considerable;
+							case extreme:
+								return DangerRating.missing;
+							default:
+								return DangerRating.missing;
+						}
+					case many:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.missing;
+							case medium:
+								return DangerRating.missing;
+							case large:
+								return DangerRating.considerable;
+							case very_large:
+								return DangerRating.missing;
+							case extreme:
+								return DangerRating.high;
+							default:
+								return DangerRating.missing;
+						}
+					default:
+						return DangerRating.missing;
+				}
+			case very_poor:
+				switch (getFrequency()) {
+					case none:
+						return DangerRating.low;
+					case few:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.moderate;
+							case medium:
+								return DangerRating.missing;
+							case large:
+								return DangerRating.moderate;
+							case very_large:
+								return DangerRating.high;
+							case extreme:
+								return DangerRating.missing;
+							default:
+								return DangerRating.missing;
+						}
+					case some:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.missing;
+							case medium:
+								return DangerRating.moderate;
+							case large:
+								return DangerRating.high;
+							case very_large:
+								return DangerRating.missing;
+							case extreme:
+								return DangerRating.high;
+							default:
+								return DangerRating.missing;
+						}
+					case many:
+						switch (getAvalancheSize()) {
+							case small:
+								return DangerRating.considerable;
+							case medium:
+								return DangerRating.high;
+							case large:
+								return DangerRating.missing;
+							case very_large:
+								return DangerRating.high;
+							case extreme:
+								return DangerRating.missing;
+							default:
+								return DangerRating.missing;
+						}
+					default:
+						return DangerRating.missing;
+				}
+			default:
+				return DangerRating.missing;
+		}
 	}
 
 	@Override
