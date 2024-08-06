@@ -91,6 +91,7 @@ public class DangerSourceVariantController {
 	 *            the danger source variant that should be initialized
 	 */
 	private void initializeDangerSourceVariant(DangerSourceVariant variant) {
+		Hibernate.initialize(variant.getDangerSource());
 		Hibernate.initialize(variant.getAspects());
 		Hibernate.initialize(variant.getRegions());
 		Hibernate.initialize(variant.getDangerSigns());
@@ -117,19 +118,21 @@ public class DangerSourceVariantController {
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
 			for (DangerSourceVariant loadedVariant : loadedVariants) {
-				// check micro-regions for each bulletin to prevent duplicates
-				for (String microRegion : newVariant.getRegions()) {
-					loadedVariant.getRegions().remove(microRegion);
-				}
-				if (!loadedVariant.getRegions().isEmpty()) {
-					entityManager.merge(loadedVariant);
-					resultVariants.put(loadedVariant.getId(), loadedVariant);
-				} else {
-					entityManager.remove(loadedVariant);
+				if (loadedVariant.getDangerSource().equals(newVariant.getDangerSource())) {
+					// check micro-regions to prevent duplicates
+					for (String microRegion : newVariant.getRegions()) {
+						loadedVariant.getRegions().remove(microRegion);
+					}
+					if (!loadedVariant.getRegions().isEmpty()) {
+						entityManager.merge(loadedVariant);
+						resultVariants.put(loadedVariant.getId(), loadedVariant);
+					} else {
+						entityManager.remove(loadedVariant);
+					}
 				}
 			}
 
-			// Bulletin has to be created
+			// Variant has to be created
 			newVariant.setId(null);
 			entityManager.persist(newVariant);
 			resultVariants.put(newVariant.getId(), newVariant);
@@ -165,7 +168,7 @@ public class DangerSourceVariantController {
 
 			for (DangerSourceVariant loadedVariant : loadedVariants) {
 				if (!loadedVariant.getId().equals(updatedVariant.getId())) {
-					// check micro-regions for each bulletin to prevent duplicates
+					// check micro-regions to prevent duplicates
 					for (String microRegion : updatedVariant.getRegions()) {
 						loadedVariant.getRegions().remove(microRegion);
 					}
@@ -178,7 +181,7 @@ public class DangerSourceVariantController {
 				}
 			}
 
-			// Bulletin has to be updated
+			// Variant has to be updated
 			entityManager.merge(updatedVariant);
 			resultVariants.put(updatedVariant.getId(), updatedVariant);
 
