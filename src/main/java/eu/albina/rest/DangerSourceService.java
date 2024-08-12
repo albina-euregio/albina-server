@@ -71,9 +71,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 	license = @License(name = "GNU General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"),
 	contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")
 ), servers = {@Server(url = "/albina/api")})
-public class DangerSourceVariantService {
+public class DangerSourceService {
 
-	private static final Logger logger = LoggerFactory.getLogger(DangerSourceVariantService.class);
+	private static final Logger logger = LoggerFactory.getLogger(DangerSourceService.class);
 
 	@Context
 	UriInfo uri;
@@ -110,6 +110,41 @@ public class DangerSourceVariantService {
 		});
 
 		return DangerSourceVariantController.getInstance().getDangerSourceVariants(startDate, endDate, regions);
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/{dangerSourceId}/edit")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
+	@Operation(summary = "Get danger source variants for danger source and date")
+	public List<DangerSourceVariant> getJSONDangerSourceVariantsForDangerSource(
+			@PathParam("variantId") String dangerSourceId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@QueryParam("regions") List<String> regionIds) {
+		logger.debug("GET JSON danger source variants for danger source");
+
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
+		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+
+		if (regionIds.isEmpty()) {
+			logger.warn("No region defined.");
+			return new ArrayList<DangerSourceVariant>();
+		}
+
+		List<Region> regions = new ArrayList<Region>();
+		regionIds.forEach(regionId -> {
+			try {
+				Region region = RegionController.getInstance().getRegion(regionId);
+				regions.add(region);
+			} catch (HibernateException e) {
+				logger.warn("No region with ID: " + regionId);
+			}
+		});
+
+		return DangerSourceVariantController.getInstance().getDangerSourceVariants(startDate, endDate, regions, dangerSourceId);
 	}
 
 	@GET
