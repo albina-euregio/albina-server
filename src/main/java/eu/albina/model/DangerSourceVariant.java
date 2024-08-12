@@ -216,7 +216,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SLAB_ENERGY_TRANSFER_POTENTIAL")
-	private Characteristics slabEneryTransferPotential;
+	private Characteristics slabEnergyTransferPotential;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SLAB_DISTRIBUTION")
@@ -603,12 +603,12 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.slabHardnessProfile = slabHardnessProfile;
 	}
 
-	public Characteristics getSlabEneryTransferPotential() {
-		return this.slabEneryTransferPotential;
+	public Characteristics getSlabEnergyTransferPotential() {
+		return this.slabEnergyTransferPotential;
 	}
 
-	public void setSlabEneryTransferPotential(Characteristics slabEneryTransferPotential) {
-		this.slabEneryTransferPotential = slabEneryTransferPotential;
+	public void setSlabEnergyTransferPotential(Characteristics slabEnergyTransferPotential) {
+		this.slabEnergyTransferPotential = slabEnergyTransferPotential;
 	}
 
 	public Distribution getSlabDistribution() {
