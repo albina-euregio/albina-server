@@ -46,11 +46,6 @@ public class DangerSource extends AbstractPersistentObject {
 	@Column(name = "DESCRIPTION")
 	private String description;
 		
-	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "danger_source_danger_source_variants", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "DANGER_SOURCE_VARIANTS")
-	private Set<DangerSourceVariant> dangerSourceVariants;
-
 	public ZonedDateTime getCreationDate() {
 		return this.creationDate;
 	}
@@ -74,13 +69,4 @@ public class DangerSource extends AbstractPersistentObject {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Set<DangerSourceVariant> getDangerSourceVariants() {
-		return this.dangerSourceVariants;
-	}
-
-	public void setDangerSourceVariants(Set<DangerSourceVariant> dangerSourceVariants) {
-		this.dangerSourceVariants = dangerSourceVariants;
-	}
-
 }
