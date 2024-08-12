@@ -40,6 +40,9 @@ public class DangerSource extends AbstractPersistentObject {
 	@Column(name = "CREATION_DATE")
 	private ZonedDateTime creationDate;
 	
+	@Column(name = "TITLE")
+	private String title;
+		
 	@Column(name = "DESCRIPTION")
 	private String description;
 		
@@ -54,6 +57,14 @@ public class DangerSource extends AbstractPersistentObject {
 
 	public void setCreationDate(ZonedDateTime creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getDescription() {
