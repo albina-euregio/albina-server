@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.Region;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
 
@@ -109,13 +108,13 @@ public class DangerSourceVariantController {
 	 *            the active region of the user who is creating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
-	public synchronized Map<String, DangerSourceVariant> createDangerSourceVariant(DangerSourceVariant newVariant, Instant startDate, Instant endDate,
+	public synchronized Map<String, DangerSourceVariant> createDangerSourceVariant(DangerSourceVariant newVariant, LocalDateTime startDate, LocalDateTime endDate,
 			Region region) {
 		Map<String, DangerSourceVariant> resultVariants = new HashMap<String, DangerSourceVariant>();
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
-					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 
 			for (DangerSourceVariant loadedVariant : loadedVariants) {
 				if (loadedVariant.getDangerSource().equals(newVariant.getDangerSource())) {
@@ -154,13 +153,13 @@ public class DangerSourceVariantController {
 	 *            the active region of the user who is updating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
-	public Map<String, DangerSourceVariant> updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant startDate, Instant endDate,
+	public Map<String, DangerSourceVariant> updateDangerSourceVariant(DangerSourceVariant updatedVariant, LocalDateTime startDate, LocalDateTime endDate,
 			Region region) {
 		Map<String, DangerSourceVariant> resultVariants = new HashMap<String, DangerSourceVariant>();
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
-					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 
 			for (DangerSourceVariant loadedVariant : loadedVariants) {
 				if (!loadedVariant.getId().equals(updatedVariant.getId())) {
@@ -198,10 +197,10 @@ public class DangerSourceVariantController {
 	 *            the regions of the variants
 	 * @return the most recent variants for the given time period and regions
 	 */
-	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions) {
+	public List<DangerSourceVariant> getDangerSourceVariants(LocalDateTime startDate, LocalDateTime endDate, List<Region> regions) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> variants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
-				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<DangerSourceVariant> results = variants.stream()
 				.filter(variant -> regions.stream()
 					.anyMatch(variant::affectsRegion))
@@ -228,10 +227,10 @@ public class DangerSourceVariantController {
 	 *            the id of the danger source
 	 * @return the most recent variants for the given time period and regions
 	 */
-	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions, String dangerSourceId) {
+	public List<DangerSourceVariant> getDangerSourceVariants(LocalDateTime startDate, LocalDateTime endDate, List<Region> regions, String dangerSourceId) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> variants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
-				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
+				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<DangerSourceVariant> results = variants.stream()
 				.filter(variant -> regions.stream()
 					.anyMatch(variant::affectsRegion))
@@ -245,15 +244,15 @@ public class DangerSourceVariantController {
 		});
 	}
 
-	public List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate) {
+	public List<DangerSourceVariant> getAllDangerSourceVariants(LocalDateTime startDate, LocalDateTime endDate) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> getAllDangerSourceVariants(startDate, endDate, entityManager));
 	}
 
-	private List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate, EntityManager entityManager) {
+	private List<DangerSourceVariant> getAllDangerSourceVariants(LocalDateTime startDate, LocalDateTime endDate, EntityManager entityManager) {
 		final List<DangerSourceVariant> variants = entityManager
 			.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
-			.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate))
-			.setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate))
+			.setParameter("startDate", startDate)
+			.setParameter("endDate", endDate)
 			.getResultList();
 		for (DangerSourceVariant variant : variants) {
 			initializeDangerSourceVariant(variant);

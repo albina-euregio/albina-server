@@ -2,6 +2,7 @@ package eu.albina.rest;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -57,11 +58,11 @@ interface DateControllerUtil {
 		}
 	}
 
-	static Instant getEndOfHydrologicalYear(String date) {
-		ZonedDateTime endDate = parseDateString(date);
-		if (endDate.getMonthValue() >= 10) {
-			endDate.plusYears(1);
+	static LocalDateTime getStartOfHydrologicalYear(LocalDateTime date) {
+		LocalDateTime startDate = date;
+		if (startDate.getMonthValue() < 10) {
+			startDate = startDate.minusYears(1);
 		}
-		return endDate.withMonth(10).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).toInstant();
+		return startDate.withMonth(10).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
 	}
 }

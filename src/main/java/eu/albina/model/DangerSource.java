@@ -16,7 +16,12 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +38,9 @@ import jakarta.persistence.Table;
 public class DangerSource extends AbstractPersistentObject {
 
 	@Column(name = "CREATION_DATE")
-	private ZonedDateTime creationDate;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime creationDate;
 	
 	@Column(name = "TITLE")
 	private String title;
@@ -41,11 +48,11 @@ public class DangerSource extends AbstractPersistentObject {
 	@Column(name = "DESCRIPTION")
 	private String description;
 		
-	public ZonedDateTime getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return this.creationDate;
 	}
 
-	public void setCreationDate(ZonedDateTime creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 

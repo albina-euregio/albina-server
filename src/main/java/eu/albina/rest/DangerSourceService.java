@@ -16,8 +16,8 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,8 +93,8 @@ public class DangerSourceService {
 			@Context SecurityContext securityContext) {
 		logger.debug("GET JSON danger sources");
 
-		Instant startDate = DateControllerUtil.parseDateOrToday(date);
-		Instant endDate = DateControllerUtil.getEndOfHydrologicalYear(date);
+		LocalDateTime endDate = OffsetDateTime.parse(date).toLocalDateTime();
+		LocalDateTime startDate = DateControllerUtil.getStartOfHydrologicalYear(endDate);
 
 		if (regionIds.isEmpty()) {
 			logger.warn("No region defined.");
@@ -128,8 +128,8 @@ public class DangerSourceService {
 			@Context SecurityContext securityContext) {
 		logger.debug("GET JSON danger source variants");
 
-		Instant startDate = DateControllerUtil.parseDateOrToday(date);
-		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+		LocalDateTime startDate = OffsetDateTime.parse(date).toLocalDateTime();
+		LocalDateTime endDate = startDate.plusDays(1);
 
 		if (regionIds.isEmpty()) {
 			logger.warn("No region defined.");
@@ -163,8 +163,8 @@ public class DangerSourceService {
 			@QueryParam("regions") List<String> regionIds) {
 		logger.debug("GET JSON danger source variants for danger source");
 
-		Instant startDate = DateControllerUtil.parseDateOrToday(date);
-		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+		LocalDateTime startDate = OffsetDateTime.parse(date).toLocalDateTime();
+		LocalDateTime endDate = startDate.plusDays(1);
 
 		if (regionIds.isEmpty()) {
 			logger.warn("No region defined.");
@@ -216,8 +216,8 @@ public class DangerSourceService {
 		logger.debug("POST JSON danger source variant");
 
 		try {
-			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+			LocalDateTime startDate = OffsetDateTime.parse(date).toLocalDateTime();
+			LocalDateTime endDate = startDate.plusDays(1);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
@@ -251,8 +251,8 @@ public class DangerSourceService {
 		logger.debug("POST JSON danger source variant");
 
 		try {
-			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+			LocalDateTime startDate = OffsetDateTime.parse(date).toLocalDateTime();
+			LocalDateTime endDate = startDate.plusDays(1);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);

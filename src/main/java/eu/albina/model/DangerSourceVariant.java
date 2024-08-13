@@ -16,15 +16,17 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.Characteristic;
@@ -76,20 +78,24 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private DangerSource dangerSource;
 
 	@Column(name = "CREATION_DATE")
-	@JsonSerialize(using = ZonedDateTimeSerializer.class)
-	private ZonedDateTime creationDate;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime creationDate;
 
 	@Column(name = "UPDATE_DATE")
-	@JsonSerialize(using = ZonedDateTimeSerializer.class)
-	private ZonedDateTime updateDate;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime updateDate;
 
 	/** Validity of the danger source variant. */
 	@Column(name = "VALID_FROM")
-	@JsonSerialize(using = ZonedDateTimeSerializer.class)
-	private ZonedDateTime validFrom;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime validFrom;
 	@Column(name = "VALID_UNTIL")
-	@JsonSerialize(using = ZonedDateTimeSerializer.class)
-	private ZonedDateTime validUntil;
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime validUntil;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
@@ -109,7 +115,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Set<String> regions;
 
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
-	private boolean hasDaytimeDependency;
+	private Boolean hasDaytimeDependency;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "AVALANCHE_TYPE")
@@ -125,16 +131,16 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private int elevationHigh;
 
 	@Column(name = "TREELINE_HIGH")
-	private boolean treelineHigh;
+	private Boolean treelineHigh;
 
 	@Column(name = "ELEVATION_LOW")
 	private int elevationLow;
 
 	@Column(name = "TREELINE_LOW")
-	private boolean treelineLow;
+	private Boolean treelineLow;
 
 	@Column(name = "DANGER_INCREASE_WITH_ELEVATION")
-	private boolean dangerIncreaseWithElevation;
+	private Boolean dangerIncreaseWithElevation;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "HIGHEST_DANGER_ASPECT")
@@ -149,7 +155,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private eu.albina.model.enumerations.SlopeGradient slopeGradient;
 
 	@Column(name = "RUNOUT_INTO_GREEN")
-	private boolean runoutIntoGreen;
+	private Boolean runoutIntoGreen;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURAL_RELEASE")
@@ -186,7 +192,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private int snowHeightLowerLimit;
 
 	@Column(name = "ZERO_DEGREE_ISOTHERM")
-	private boolean zeroDegreeIsotherm;
+	private Boolean zeroDegreeIsotherm;
 
 	/** --------------- */
 	/** SLAB AVALANCHES */
@@ -232,7 +238,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private double weakLayerGrainSizeLowerLimit;
 	
 	@Column(name = "WEAK_LAYER_PERSISTENT")
-	private boolean weakLayerPersistent;
+	private Boolean weakLayerPersistent;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_THICKNESS")
@@ -243,13 +249,13 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Characteristic weakLayerStrength;
 	
 	@Column(name = "WEAK_LAYER_WET")
-	private boolean weakLayerWet;
+	private Boolean weakLayerWet;
 	
 	@Column(name = "WEAK_LAYER_CRUST_ABOVE")
-	private boolean weakLayerCrustAbove;
+	private Boolean weakLayerCrustAbove;
 	
 	@Column(name = "WEAK_LAYER_CRUST_BELOW")
-	private boolean weakLayerCrustBelow;
+	private Boolean weakLayerCrustBelow;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_POSTION")
@@ -268,7 +274,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Recognizability dangerSpotRecognizability;
 
 	@Column(name = "REMOTE_TRIGGERING")
-	private boolean remoteTriggering;
+	private Boolean remoteTriggering;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
@@ -314,35 +320,35 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.dangerSource = dangerSource;
 	}
 
-	public ZonedDateTime getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return this.creationDate;
 	}
 
-	public void setCreationDate(ZonedDateTime creationDate) {
+	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public ZonedDateTime getUpdateDate() {
+	public LocalDateTime getUpdateDate() {
 		return this.updateDate;
 	}
 
-	public void setUpdateDate(ZonedDateTime updateDate) {
+	public void setUpdateDate(LocalDateTime updateDate) {
 		this.updateDate = updateDate;
 	}
 
-	public ZonedDateTime getValidFrom() {
+	public LocalDateTime getValidFrom() {
 		return this.validFrom;
 	}
 
-	public void setValidFrom(ZonedDateTime validFrom) {
+	public void setValidFrom(LocalDateTime validFrom) {
 		this.validFrom = validFrom;
 	}
 
-	public ZonedDateTime getValidUntil() {
+	public LocalDateTime getValidUntil() {
 		return this.validUntil;
 	}
 
-	public void setValidUntil(ZonedDateTime validUntil) {
+	public void setValidUntil(LocalDateTime validUntil) {
 		this.validUntil = validUntil;
 	}
 
@@ -378,15 +384,15 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.regions = regions;
 	}
 
-	public boolean isHasDaytimeDependency() {
+	public Boolean isHasDaytimeDependency() {
 		return this.hasDaytimeDependency;
 	}
 
-	public boolean getHasDaytimeDependency() {
+	public Boolean getHasDaytimeDependency() {
 		return this.hasDaytimeDependency;
 	}
 
-	public void setHasDaytimeDependency(boolean hasDaytimeDependency) {
+	public void setHasDaytimeDependency(Boolean hasDaytimeDependency) {
 		this.hasDaytimeDependency = hasDaytimeDependency;
 	}
 
@@ -414,15 +420,15 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.elevationHigh = elevationHigh;
 	}
 
-	public boolean isTreelineHigh() {
+	public Boolean isTreelineHigh() {
 		return this.treelineHigh;
 	}
 
-	public boolean getTreelineHigh() {
+	public Boolean getTreelineHigh() {
 		return this.treelineHigh;
 	}
 
-	public void setTreelineHigh(boolean treelineHigh) {
+	public void setTreelineHigh(Boolean treelineHigh) {
 		this.treelineHigh = treelineHigh;
 	}
 
@@ -434,27 +440,27 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.elevationLow = elevationLow;
 	}
 
-	public boolean isTreelineLow() {
+	public Boolean isTreelineLow() {
 		return this.treelineLow;
 	}
 
-	public boolean getTreelineLow() {
+	public Boolean getTreelineLow() {
 		return this.treelineLow;
 	}
 
-	public void setTreelineLow(boolean treelineLow) {
+	public void setTreelineLow(Boolean treelineLow) {
 		this.treelineLow = treelineLow;
 	}
 
-	public boolean isDangerIncreaseWithElevation() {
+	public Boolean isDangerIncreaseWithElevation() {
 		return this.dangerIncreaseWithElevation;
 	}
 
-	public boolean getDangerIncreaseWithElevation() {
+	public Boolean getDangerIncreaseWithElevation() {
 		return this.dangerIncreaseWithElevation;
 	}
 
-	public void setDangerIncreaseWithElevation(boolean dangerIncreaseWithElevation) {
+	public void setDangerIncreaseWithElevation(Boolean dangerIncreaseWithElevation) {
 		this.dangerIncreaseWithElevation = dangerIncreaseWithElevation;
 	}
 
@@ -482,15 +488,15 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.slopeGradient = slopeGradient;
 	}
 
-	public boolean isRunoutIntoGreen() {
+	public Boolean isRunoutIntoGreen() {
 		return this.runoutIntoGreen;
 	}
 
-	public boolean getRunoutIntoGreen() {
+	public Boolean getRunoutIntoGreen() {
 		return this.runoutIntoGreen;
 	}
 
-	public void setRunoutIntoGreen(boolean runoutIntoGreen) {
+	public void setRunoutIntoGreen(Boolean runoutIntoGreen) {
 		this.runoutIntoGreen = runoutIntoGreen;
 	}
 
@@ -542,15 +548,15 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.snowHeightLowerLimit = snowHeightLowerLimit;
 	}
 
-	public boolean isZeroDegreeIsotherm() {
+	public Boolean isZeroDegreeIsotherm() {
 		return this.zeroDegreeIsotherm;
 	}
 
-	public boolean getZeroDegreeIsotherm() {
+	public Boolean getZeroDegreeIsotherm() {
 		return this.zeroDegreeIsotherm;
 	}
 
-	public void setZeroDegreeIsotherm(boolean zeroDegreeIsotherm) {
+	public void setZeroDegreeIsotherm(Boolean zeroDegreeIsotherm) {
 		this.zeroDegreeIsotherm = zeroDegreeIsotherm;
 	}
 
@@ -642,15 +648,15 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.weakLayerGrainSizeLowerLimit = weakLayerGrainSizeLowerLimit;
 	}
 
-	public boolean isWeakLayerPersistent() {
+	public Boolean isWeakLayerPersistent() {
 		return this.weakLayerPersistent;
 	}
 
-	public boolean getWeakLayerPersistent() {
+	public Boolean getWeakLayerPersistent() {
 		return this.weakLayerPersistent;
 	}
 
-	public void setWeakLayerPersistent(boolean weakLayerPersistent) {
+	public void setWeakLayerPersistent(Boolean weakLayerPersistent) {
 		this.weakLayerPersistent = weakLayerPersistent;
 	}
 
@@ -670,39 +676,39 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.weakLayerStrength = weakLayerStrength;
 	}
 
-	public boolean isWeakLayerWet() {
+	public Boolean isWeakLayerWet() {
 		return this.weakLayerWet;
 	}
 
-	public boolean getWeakLayerWet() {
+	public Boolean getWeakLayerWet() {
 		return this.weakLayerWet;
 	}
 
-	public void setWeakLayerWet(boolean weakLayerWet) {
+	public void setWeakLayerWet(Boolean weakLayerWet) {
 		this.weakLayerWet = weakLayerWet;
 	}
 
-	public boolean isWeakLayerCrustAbove() {
+	public Boolean isWeakLayerCrustAbove() {
 		return this.weakLayerCrustAbove;
 	}
 
-	public boolean getWeakLayerCrustAbove() {
+	public Boolean getWeakLayerCrustAbove() {
 		return this.weakLayerCrustAbove;
 	}
 
-	public void setWeakLayerCrustAbove(boolean weakLayerCrustAbove) {
+	public void setWeakLayerCrustAbove(Boolean weakLayerCrustAbove) {
 		this.weakLayerCrustAbove = weakLayerCrustAbove;
 	}
 
-	public boolean isWeakLayerCrustBelow() {
+	public Boolean isWeakLayerCrustBelow() {
 		return this.weakLayerCrustBelow;
 	}
 
-	public boolean getWeakLayerCrustBelow() {
+	public Boolean getWeakLayerCrustBelow() {
 		return this.weakLayerCrustBelow;
 	}
 
-	public void setWeakLayerCrustBelow(boolean weakLayerCrustBelow) {
+	public void setWeakLayerCrustBelow(Boolean weakLayerCrustBelow) {
 		this.weakLayerCrustBelow = weakLayerCrustBelow;
 	}
 
@@ -738,15 +744,15 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.dangerSpotRecognizability = dangerSpotRecognizability;
 	}
 
-	public boolean isRemoteTriggering() {
+	public Boolean isRemoteTriggering() {
 		return this.remoteTriggering;
 	}
 
-	public boolean getRemoteTriggering() {
+	public Boolean getRemoteTriggering() {
 		return this.remoteTriggering;
 	}
 
-	public void setRemoteTriggering(boolean remoteTriggering) {
+	public void setRemoteTriggering(Boolean remoteTriggering) {
 		this.remoteTriggering = remoteTriggering;
 	}
 
@@ -774,14 +780,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.looseSnowMoisture = looseSnowMoisture;
 	}
 
-	public static ZonedDateTime getValidityDate(ZonedDateTime validFrom) {
-		ZonedDateTime date = validFrom;
+	public static LocalDateTime getValidityDate(LocalDateTime validFrom) {
+		LocalDateTime date = validFrom;
 		if (validFrom.getHour() > 12)
 			date = date.plusDays(1);
 		return date;
 	}
 
-	public ZonedDateTime getValidityDate() {
+	public LocalDateTime getValidityDate() {
 		return getValidityDate(validFrom);
 	}
 
@@ -789,7 +795,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		return getValidityDate().toLocalDate().toString();
 	}
 
-	public boolean affectsRegion(Region region) {
+	public Boolean affectsRegion(Region region) {
 		return getRegions().stream().anyMatch(region::affects);
 	}
 
