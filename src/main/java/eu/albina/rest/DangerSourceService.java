@@ -39,10 +39,12 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.albina.controller.DangerSourceController;
 import eu.albina.controller.DangerSourceVariantController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.DangerSource;
 import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.Region;
 import eu.albina.model.User;
@@ -77,6 +79,40 @@ public class DangerSourceService {
 
 	@Context
 	UriInfo uri;
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSource.class))))
+	@Operation(summary = "Get danger sources for season")
+	public List<DangerSource> getJSONDangerSources(
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@QueryParam("regions") List<String> regionIds,
+			@Context SecurityContext securityContext) {
+		logger.debug("GET JSON danger sources");
+
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
+		Instant endDate = DateControllerUtil.getEndOfHydrologicalYear(date);
+
+		if (regionIds.isEmpty()) {
+			logger.warn("No region defined.");
+			return new ArrayList<DangerSource>();
+		}
+
+		List<Region> regions = new ArrayList<Region>();
+		regionIds.forEach(regionId -> {
+			try {
+				Region region = RegionController.getInstance().getRegion(regionId);
+				regions.add(region);
+			} catch (HibernateException e) {
+				logger.warn("No region with ID: " + regionId);
+			}
+		});
+
+		return DangerSourceController.getInstance().getDangerSources(startDate, endDate);
+	}
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })

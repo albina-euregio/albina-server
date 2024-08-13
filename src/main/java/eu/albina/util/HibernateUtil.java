@@ -60,7 +60,7 @@ public class HibernateUtil {
 	public static String queryGetPushConfiguration = "from PushConfiguration as c";
 
 	public static String queryGetDangerSourceVariants = "from DangerSourceVariant as v where v.validFrom = :startDate or v.validUntil = :endDate";
-	public static String queryGetDangerSources = "from DangerSource as d";
+	public static String queryGetDangerSources = "from DangerSource as d where d.creationDate between :startDate and :endDate";
 
 	public static HibernateUtil getInstance() {
 		if (System.getenv("CI_JOB_NAME") != null) {
