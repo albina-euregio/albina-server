@@ -19,7 +19,6 @@ package eu.albina.model;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collector.Characteristics;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -105,7 +104,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	/** The regions where the danger source variant is present. */
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_regions", joinColumns = @JoinColumn(name = "DANGER_SOURCE_ID"))
+	@CollectionTable(name = "danger_source_variant_regions", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> regions;
 
@@ -117,7 +116,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private eu.albina.model.enumerations.AvalancheType avalancheType;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
 	@Fetch(FetchMode.JOIN)
 	private Set<Aspect> aspects;
@@ -157,7 +156,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private eu.albina.model.enumerations.Propability naturalRelease;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
 	@Column(name = "DANGER_SIGN")
 	@Fetch(FetchMode.JOIN)
 	private Set<DangerSign> dangerSigns;
@@ -216,7 +215,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SLAB_ENERGY_TRANSFER_POTENTIAL")
-	private Characteristics slabEnergyTransferPotential;
+	private Characteristic slabEnergyTransferPotential;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SLAB_DISTRIBUTION")
@@ -272,7 +271,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private boolean remoteTriggering;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
 	@Column(name = "TERRAIN_TYPE")
 	@Fetch(FetchMode.JOIN)
 	private Set<TerrainType> terrainTypes;
@@ -603,11 +602,11 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.slabHardnessProfile = slabHardnessProfile;
 	}
 
-	public Characteristics getSlabEnergyTransferPotential() {
+	public Characteristic getSlabEnergyTransferPotential() {
 		return this.slabEnergyTransferPotential;
 	}
 
-	public void setSlabEnergyTransferPotential(Characteristics slabEnergyTransferPotential) {
+	public void setSlabEnergyTransferPotential(Characteristic slabEnergyTransferPotential) {
 		this.slabEnergyTransferPotential = slabEnergyTransferPotential;
 	}
 

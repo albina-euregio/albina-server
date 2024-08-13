@@ -34,7 +34,7 @@ import eu.albina.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
 
 /**
- * Controller for danger sources.
+ * Controller for danger sources variants.
  *
  * @author Norbert Lanzanasto
  *

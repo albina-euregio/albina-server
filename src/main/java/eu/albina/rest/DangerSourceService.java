@@ -62,7 +62,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/danger-sources")
+@Path("/danger-sources/variants")
 @Tag(name = "danger-sources")
 @OpenAPIDefinition(info = @Info(
 	title = "albina-server",
@@ -88,7 +88,8 @@ public class DangerSourceService {
 	@Operation(summary = "Get danger source variants for date")
 	public List<DangerSourceVariant> getJSONDangerSourceVariants(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("regions") List<String> regionIds) {
+			@QueryParam("regions") List<String> regionIds,
+			@Context SecurityContext securityContext) {
 		logger.debug("GET JSON danger source variants");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -155,7 +156,10 @@ public class DangerSourceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "variant", content = @Content(schema = @Schema(implementation = DangerSourceVariant.class)))
 	@Operation(summary = "Get variant by ID")
-	public DangerSourceVariant getJSONDangerSourceVariant(@PathParam("variantId") String variantId) {
+	public DangerSourceVariant getJSONDangerSourceVariant(
+		@PathParam("variantId") String variantId,
+		@Context SecurityContext securityContext
+	) {
 		logger.debug("GET JSON danger source variant: {}", variantId);
 		return DangerSourceVariantController.getInstance().getDangerSourceVariant(variantId);
 	}
@@ -188,11 +192,11 @@ public class DangerSourceService {
 				throw new AlbinaException("User is not authorized for this region!");
 
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONDangerSourceVariants(date, regionIDs);
+			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating danger source variant", e);
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONDangerSourceVariants(date, regionIDs);
+			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
 		}
 	}
 
@@ -222,11 +226,11 @@ public class DangerSourceService {
 				throw new AlbinaException("User is not authorized for this region!");
 
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONDangerSourceVariants(date, regionIDs);
+			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating danger source variant", e);
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONDangerSourceVariants(date, regionIDs);
+			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
 		}
 	}
 }
