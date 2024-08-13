@@ -62,7 +62,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/danger-sources/variants")
+@Path("/danger-sources")
 @Tag(name = "danger-sources")
 @OpenAPIDefinition(info = @Info(
 	title = "albina-server",
@@ -122,7 +122,7 @@ public class DangerSourceService {
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for danger source and date")
 	public List<DangerSourceVariant> getJSONDangerSourceVariantsForDangerSource(
-			@PathParam("variantId") String dangerSourceId,
+			@PathParam("dangerSourceId") String dangerSourceId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds) {
 		logger.debug("GET JSON danger source variants for danger source");
@@ -151,7 +151,7 @@ public class DangerSourceService {
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{variantId}")
+	@Path("/variants/{variantId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "variant", content = @Content(schema = @Schema(implementation = DangerSourceVariant.class)))
@@ -167,7 +167,7 @@ public class DangerSourceService {
 	@POST
 	@Secured({ Role.FORECASTER, Role.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{variantId}")
+	@Path("/variants/{variantId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update danger source variant")
@@ -203,6 +203,7 @@ public class DangerSourceService {
 	@PUT
 	@Secured({ Role.FORECASTER, Role.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/variants")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create danger source variant")
