@@ -24,6 +24,10 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.openjson.JSONArray;
 
 import eu.albina.model.AvalancheBulletin;
@@ -88,5 +92,12 @@ public class JsonUtil {
 			}
 		}
 		return jsonResult;
+	}
+
+	public static <T> T parseUsingJackson(String json, Class<T> valueType) throws JsonProcessingException {
+		return new ObjectMapper()
+			.registerModule(new JavaTimeModule())
+			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+			.readValue(json, valueType);
 	}
 }

@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +108,7 @@ public class DangerSourceVariantController {
 	 *            the active region of the user who is creating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
-	public synchronized Map<String, DangerSourceVariant> createDangerSourceVariant(DangerSourceVariant newVariant, LocalDateTime startDate, LocalDateTime endDate,
+	public synchronized Map<String, DangerSourceVariant> createDangerSourceVariant(DangerSourceVariant newVariant, Instant startDate, Instant endDate,
 			Region region) {
 		Map<String, DangerSourceVariant> resultVariants = new HashMap<String, DangerSourceVariant>();
 
@@ -153,7 +153,7 @@ public class DangerSourceVariantController {
 	 *            the active region of the user who is updating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
-	public Map<String, DangerSourceVariant> updateDangerSourceVariant(DangerSourceVariant updatedVariant, LocalDateTime startDate, LocalDateTime endDate,
+	public Map<String, DangerSourceVariant> updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant startDate, Instant endDate,
 			Region region) {
 		Map<String, DangerSourceVariant> resultVariants = new HashMap<String, DangerSourceVariant>();
 
@@ -197,7 +197,7 @@ public class DangerSourceVariantController {
 	 *            the regions of the variants
 	 * @return the most recent variants for the given time period and regions
 	 */
-	public List<DangerSourceVariant> getDangerSourceVariants(LocalDateTime startDate, LocalDateTime endDate, List<Region> regions) {
+	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> variants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
@@ -227,7 +227,7 @@ public class DangerSourceVariantController {
 	 *            the id of the danger source
 	 * @return the most recent variants for the given time period and regions
 	 */
-	public List<DangerSourceVariant> getDangerSourceVariants(LocalDateTime startDate, LocalDateTime endDate, List<Region> regions, String dangerSourceId) {
+	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions, String dangerSourceId) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> variants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
@@ -244,11 +244,11 @@ public class DangerSourceVariantController {
 		});
 	}
 
-	public List<DangerSourceVariant> getAllDangerSourceVariants(LocalDateTime startDate, LocalDateTime endDate) {
+	public List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> getAllDangerSourceVariants(startDate, endDate, entityManager));
 	}
 
-	private List<DangerSourceVariant> getAllDangerSourceVariants(LocalDateTime startDate, LocalDateTime endDate, EntityManager entityManager) {
+	private List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate, EntityManager entityManager) {
 		final List<DangerSourceVariant> variants = entityManager
 			.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 			.setParameter("startDate", startDate)

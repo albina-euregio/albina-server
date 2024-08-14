@@ -35,6 +35,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,7 @@ import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
+import eu.albina.util.JsonUtil;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -93,7 +95,8 @@ public class DangerSourceService {
 			@Context SecurityContext securityContext) {
 		logger.debug("GET JSON danger sources");
 
-		LocalDateTime endDate = OffsetDateTime.parse(date).toLocalDateTime();
+		OffsetDateTime offsetDateTime = OffsetDateTime.parse(date);
+		LocalDateTime endDate = offsetDateTime.toLocalDateTime();
 		LocalDateTime startDate = DateControllerUtil.getStartOfHydrologicalYear(endDate);
 
 		if (regionIds.isEmpty()) {
@@ -111,7 +114,7 @@ public class DangerSourceService {
 			}
 		});
 
-		return DangerSourceController.getInstance().getDangerSources(startDate, endDate);
+		return DangerSourceController.getInstance().getDangerSources(startDate.toInstant(offsetDateTime.getOffset()), endDate.toInstant(offsetDateTime.getOffset()));
 	}
 
 	@GET
@@ -128,7 +131,8 @@ public class DangerSourceService {
 			@Context SecurityContext securityContext) {
 		logger.debug("GET JSON danger source variants");
 
-		LocalDateTime startDate = OffsetDateTime.parse(date).toLocalDateTime();
+		OffsetDateTime offsetDateTime = OffsetDateTime.parse(date);
+		LocalDateTime startDate = offsetDateTime.toLocalDateTime();
 		LocalDateTime endDate = startDate.plusDays(1);
 
 		if (regionIds.isEmpty()) {
@@ -146,7 +150,7 @@ public class DangerSourceService {
 			}
 		});
 
-		return DangerSourceVariantController.getInstance().getDangerSourceVariants(startDate, endDate, regions);
+		return DangerSourceVariantController.getInstance().getDangerSourceVariants(startDate.toInstant(offsetDateTime.getOffset()), endDate.toInstant(offsetDateTime.getOffset()), regions);
 	}
 
 	@GET
@@ -163,7 +167,8 @@ public class DangerSourceService {
 			@QueryParam("regions") List<String> regionIds) {
 		logger.debug("GET JSON danger source variants for danger source");
 
-		LocalDateTime startDate = OffsetDateTime.parse(date).toLocalDateTime();
+		OffsetDateTime offsetDateTime = OffsetDateTime.parse(date);
+		LocalDateTime startDate = offsetDateTime.toLocalDateTime();
 		LocalDateTime endDate = startDate.plusDays(1);
 
 		if (regionIds.isEmpty()) {
@@ -181,7 +186,7 @@ public class DangerSourceService {
 			}
 		});
 
-		return DangerSourceVariantController.getInstance().getDangerSourceVariants(startDate, endDate, regions, dangerSourceId);
+		return DangerSourceVariantController.getInstance().getDangerSourceVariants(startDate.toInstant(offsetDateTime.getOffset()), endDate.toInstant(offsetDateTime.getOffset()), regions, dangerSourceId);
 	}
 
 	@GET
@@ -212,24 +217,26 @@ public class DangerSourceService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext,
-			DangerSourceVariant variant) {
+			String json) {
 		logger.debug("POST JSON danger source variant");
 
 		try {
-			LocalDateTime startDate = OffsetDateTime.parse(date).toLocalDateTime();
+			DangerSourceVariant variant = JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
+			OffsetDateTime offsetDateTime = OffsetDateTime.parse(date);
+			LocalDateTime startDate = offsetDateTime.toLocalDateTime();
 			LocalDateTime endDate = startDate.plusDays(1);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				DangerSourceVariantController.getInstance().updateDangerSourceVariant(variant, startDate, endDate, region);
+				DangerSourceVariantController.getInstance().updateDangerSourceVariant(variant, startDate.toInstant(offsetDateTime.getOffset()), endDate.toInstant(offsetDateTime.getOffset()), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
 			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
-		} catch (AlbinaException e) {
+		} catch (AlbinaException | JsonProcessingException e) {
 			logger.warn("Error creating danger source variant", e);
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
 			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
@@ -247,27 +254,30 @@ public class DangerSourceService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext,
-			DangerSourceVariant variant) {
+			String json) {
 		logger.debug("POST JSON danger source variant");
 
 		try {
-			LocalDateTime startDate = OffsetDateTime.parse(date).toLocalDateTime();
+			DangerSourceVariant variant = JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
+			OffsetDateTime offsetDateTime = OffsetDateTime.parse(date);
+			LocalDateTime startDate = offsetDateTime.toLocalDateTime();
 			LocalDateTime endDate = startDate.plusDays(1);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				DangerSourceVariantController.getInstance().createDangerSourceVariant(variant, startDate, endDate, region);
+				DangerSourceVariantController.getInstance().createDangerSourceVariant(variant, startDate.toInstant(offsetDateTime.getOffset()), endDate.toInstant(offsetDateTime.getOffset()), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
 			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
-		} catch (AlbinaException e) {
+		} catch (AlbinaException | JsonProcessingException e) {
 			logger.warn("Error creating danger source variant", e);
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
 			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
 		}
 	}
+
 }

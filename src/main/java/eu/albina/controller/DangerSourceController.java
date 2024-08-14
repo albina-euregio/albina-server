@@ -16,7 +16,7 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -83,7 +83,7 @@ public class DangerSourceController {
 	 */
 	public synchronized List<DangerSource> createDangerSource(DangerSource newDangerSource) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			
+
 			newDangerSource.setId(null);
 			entityManager.persist(newDangerSource);
 			List<DangerSource> loadedDangerSources = entityManager.createQuery(HibernateUtil.queryGetDangerSources, DangerSource.class).getResultList();
@@ -115,7 +115,7 @@ public class DangerSourceController {
 	 *
 	 * @return danger sources
 	 */
-	public List<DangerSource> getDangerSources(LocalDateTime startDate, LocalDateTime endDate) {
+	public List<DangerSource> getDangerSources(Instant startDate, Instant endDate) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSource> dangerSources = entityManager.createQuery(HibernateUtil.queryGetDangerSources, DangerSource.class).setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			return dangerSources;

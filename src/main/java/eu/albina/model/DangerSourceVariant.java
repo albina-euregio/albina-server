@@ -16,17 +16,12 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.Characteristic;
@@ -78,24 +73,16 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private DangerSource dangerSource;
 
 	@Column(name = "CREATION_DATE")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime creationDate;
+	private Instant creationDate;
 
 	@Column(name = "UPDATE_DATE")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime updateDate;
+	private Instant updateDate;
 
 	/** Validity of the danger source variant. */
 	@Column(name = "VALID_FROM")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime validFrom;
+	private Instant validFrom;
 	@Column(name = "VALID_UNTIL")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime validUntil;
+	private Instant validUntil;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
@@ -105,7 +92,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "TYPE")
 	private DangerSourceType type;
 
-	@Column(name = "OWNER_REGION")		
+	@Column(name = "OWNER_REGION")
 	private String ownerRegion;
 
 	/** The regions where the danger source variant is present. */
@@ -156,7 +143,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Column(name = "RUNOUT_INTO_GREEN")
 	private Boolean runoutIntoGreen;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURAL_RELEASE")
 	private eu.albina.model.enumerations.Propability naturalRelease;
@@ -233,38 +220,38 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Column(name = "WEAK_LAYER_GRAIN_SIZE_UPPER_LIMIT")
 	private double weakLayerGrainSizeUpperLimit;
-	
+
 	@Column(name = "WEAK_LAYER_GRAIN_SIZE_LOWER_LIMIT")
 	private double weakLayerGrainSizeLowerLimit;
-	
+
 	@Column(name = "WEAK_LAYER_PERSISTENT")
 	private Boolean weakLayerPersistent;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_THICKNESS")
 	private Thickness weakLayerThickness;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_STRENGTH")
 	private Characteristic weakLayerStrength;
-	
+
 	@Column(name = "WEAK_LAYER_WET")
 	private Boolean weakLayerWet;
-	
+
 	@Column(name = "WEAK_LAYER_CRUST_ABOVE")
 	private Boolean weakLayerCrustAbove;
-	
+
 	@Column(name = "WEAK_LAYER_CRUST_BELOW")
 	private Boolean weakLayerCrustBelow;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_POSTION")
 	private SnowpackPosition weakLayerPosition;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_CREATION")
 	private CreationProcess weakLayerCreation;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_DISTRIBUTION")
 	private Distribution weakLayerDistribution;
@@ -275,7 +262,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Column(name = "REMOTE_TRIGGERING")
 	private Boolean remoteTriggering;
-	
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
 	@Column(name = "TERRAIN_TYPE")
@@ -320,35 +307,35 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.dangerSource = dangerSource;
 	}
 
-	public LocalDateTime getCreationDate() {
+	public Instant getCreationDate() {
 		return this.creationDate;
 	}
 
-	public void setCreationDate(LocalDateTime creationDate) {
+	public void setCreationDate(Instant creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public LocalDateTime getUpdateDate() {
+	public Instant getUpdateDate() {
 		return this.updateDate;
 	}
 
-	public void setUpdateDate(LocalDateTime updateDate) {
+	public void setUpdateDate(Instant updateDate) {
 		this.updateDate = updateDate;
 	}
 
-	public LocalDateTime getValidFrom() {
+	public Instant getValidFrom() {
 		return this.validFrom;
 	}
 
-	public void setValidFrom(LocalDateTime validFrom) {
+	public void setValidFrom(Instant validFrom) {
 		this.validFrom = validFrom;
 	}
 
-	public LocalDateTime getValidUntil() {
+	public Instant getValidUntil() {
 		return this.validUntil;
 	}
 
-	public void setValidUntil(LocalDateTime validUntil) {
+	public void setValidUntil(Instant validUntil) {
 		this.validUntil = validUntil;
 	}
 
@@ -375,7 +362,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	public void setOwnerRegion(String ownerRegion) {
 		this.ownerRegion = ownerRegion;
 	}
-		
+
 	public Set<String> getRegions() {
 		return this.regions;
 	}
@@ -778,21 +765,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setLooseSnowMoisture(Wetness looseSnowMoisture) {
 		this.looseSnowMoisture = looseSnowMoisture;
-	}
-
-	public static LocalDateTime getValidityDate(LocalDateTime validFrom) {
-		LocalDateTime date = validFrom;
-		if (validFrom.getHour() > 12)
-			date = date.plusDays(1);
-		return date;
-	}
-
-	public LocalDateTime getValidityDate() {
-		return getValidityDate(validFrom);
-	}
-
-	public String getValidityDateString() {
-		return getValidityDate().toLocalDate().toString();
 	}
 
 	public Boolean affectsRegion(Region region) {

@@ -16,12 +16,7 @@
  ******************************************************************************/
 package eu.albina.model;
 
-import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import java.time.Instant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,21 +33,19 @@ import jakarta.persistence.Table;
 public class DangerSource extends AbstractPersistentObject {
 
 	@Column(name = "CREATION_DATE")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime creationDate;
-	
+	private Instant creationDate;
+
 	@Column(name = "TITLE")
 	private String title;
-		
+
 	@Column(name = "DESCRIPTION")
 	private String description;
-		
-	public LocalDateTime getCreationDate() {
+
+	public Instant getCreationDate() {
 		return this.creationDate;
 	}
 
-	public void setCreationDate(LocalDateTime creationDate) {
+	public void setCreationDate(Instant creationDate) {
 		this.creationDate = creationDate;
 	}
 
