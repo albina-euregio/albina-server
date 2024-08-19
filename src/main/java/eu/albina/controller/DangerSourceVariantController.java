@@ -17,6 +17,7 @@
 package eu.albina.controller;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +66,11 @@ public class DangerSourceVariantController {
 	}
 
 	/**
-	 * Retrieve an avalanche bulletin from the database by {@code bulletinID}.
+	 * Retrieve a variant from the database by {@code variantID}.
 	 *
 	 * @param variantId
-	 *            The ID of the desired avalanche bulletin.
-	 * @return The avalanche bulletin with the given ID.
+	 *            The ID of the desired variant.
+	 * @return The variant with the given ID.
 	 */
 	public DangerSourceVariant getDangerSourceVariant(String variantId) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
@@ -143,6 +144,59 @@ public class DangerSourceVariantController {
 	}
 
 	/**
+	 * Deletes a {@code variant} from the database.
+	 *
+	 * @param startDate
+	 *            the start date the variant is valid from
+	 * @param endDate
+	 *            the end date the variant is valid until
+	 * @param region
+	 *            the active region of the user who is deleting the variant
+	 * @return a list of all variants for this day
+	 */
+    public synchronized void deleteDangerSourceVariant(String variantId) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
+			DangerSourceVariant variant = entityManager.find(DangerSourceVariant.class, variantId);
+			entityManager.remove(variant);
+			return null;
+		});
+	}
+
+	public List<DangerSourceVariant> saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Instant startDate, Instant endDate, Region region) {
+		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
+			Map<String, DangerSourceVariant> originalVariants = new HashMap<String, DangerSourceVariant>();
+
+			for (DangerSourceVariant loadedVariant : loadedVariants)
+				originalVariants.put(loadedVariant.getId(), loadedVariant);
+
+			List<String> ids = new ArrayList<String>();
+			for (DangerSourceVariant newVariant : newVariants) {
+
+				ids.add(newVariant.getId());
+
+				if (!originalVariants.containsKey(newVariant.getId())) {
+					newVariant.setId(null);
+				}
+				entityManager.merge(newVariant);
+			}
+
+			// Delete obsolete variants
+			for (DangerSourceVariant variant : originalVariants.values()) {
+
+				// variant has to be removed
+				if (variant.affectsRegion(region) && !ids.contains(variant.getId())
+						&& variant.getOwnerRegion().startsWith(region.getId())) {
+					entityManager.remove(variant);
+				}
+			}
+
+			return this.getAllDangerSourceVariants(startDate, endDate);
+		});
+	}
+
+	/**
 	 * Update a {@code variant} in the database.
 	 *
 	 * @param startDate
@@ -153,10 +207,8 @@ public class DangerSourceVariantController {
 	 *            the active region of the user who is updating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
-	public Map<String, DangerSourceVariant> updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant startDate, Instant endDate,
+	public List<DangerSourceVariant> updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant startDate, Instant endDate,
 			Region region) {
-		Map<String, DangerSourceVariant> resultVariants = new HashMap<String, DangerSourceVariant>();
-
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
@@ -168,20 +220,18 @@ public class DangerSourceVariantController {
 						loadedVariant.getRegions().remove(microRegion);
 					}
 					entityManager.merge(loadedVariant);
-					resultVariants.put(loadedVariant.getId(), loadedVariant);
 				}
 			}
 
 			// Variant has to be updated
 			entityManager.merge(updatedVariant);
-			resultVariants.put(updatedVariant.getId(), updatedVariant);
 
-			for (DangerSourceVariant variant : resultVariants.values())
+			for (DangerSourceVariant variant : loadedVariants)
 				initializeDangerSourceVariant(variant);
 
 			logger.info("Danger source variant {} for region {} updated", updatedVariant.getId(), region.getId());
 
-			return resultVariants;
+			return loadedVariants;
 		});
 	}
 

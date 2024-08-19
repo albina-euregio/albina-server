@@ -16,13 +16,17 @@
  ******************************************************************************/
 package eu.albina.rest;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -35,10 +39,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import eu.albina.controller.DangerSourceController;
 import eu.albina.controller.DangerSourceVariantController;
@@ -89,7 +94,7 @@ public class DangerSourceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSource.class))))
 	@Operation(summary = "Get danger sources for season")
-	public List<DangerSource> getJSONDangerSources(
+	public List<DangerSource> getDangerSources(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds,
 			@Context SecurityContext securityContext) {
@@ -125,7 +130,7 @@ public class DangerSourceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for date")
-	public List<DangerSourceVariant> getJSONDangerSourceVariants(
+	public List<DangerSourceVariant> getVariants(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds,
 			@Context SecurityContext securityContext) {
@@ -161,7 +166,7 @@ public class DangerSourceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for danger source and date")
-	public List<DangerSourceVariant> getJSONDangerSourceVariantsForDangerSource(
+	public List<DangerSourceVariant> getVariantsForDangerSource(
 			@PathParam("dangerSourceId") String dangerSourceId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds) {
@@ -189,6 +194,41 @@ public class DangerSourceService {
 		return DangerSourceVariantController.getInstance().getDangerSourceVariants(startDate.toInstant(offsetDateTime.getOffset()), endDate.toInstant(offsetDateTime.getOffset()), regions, dangerSourceId);
 	}
 
+	@POST
+	@Secured({ Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Create variants")
+	public List<DangerSourceVariant> createVariants(
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@QueryParam("region") String regionId,
+			@Context SecurityContext securityContext,
+			String json) {
+		logger.debug("POST JSON variants");
+
+		try {
+			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+
+			if (region != null && user.hasPermissionForRegion(region.getId())) {
+				DangerSourceVariant[] variants = JsonUtil.parseUsingJackson(json, DangerSourceVariant[].class);
+				DangerSourceVariantController.getInstance().saveDangerSourceVariants(Arrays.asList(variants), startDate, endDate, region);
+			} else
+				throw new AlbinaException("User is not authorized for this region!");
+
+			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return getVariants(date, regionIDs, securityContext);
+		} catch (AlbinaException | JsonProcessingException e) {
+			logger.warn("Error creating variants", e);
+			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return getVariants(date, regionIDs, securityContext);
+		}
+	}
+
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -197,7 +237,7 @@ public class DangerSourceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "variant", content = @Content(schema = @Schema(implementation = DangerSourceVariant.class)))
 	@Operation(summary = "Get variant by ID")
-	public DangerSourceVariant getJSONDangerSourceVariant(
+	public DangerSourceVariant getVariantById(
 		@PathParam("variantId") String variantId,
 		@Context SecurityContext securityContext
 	) {
@@ -212,7 +252,7 @@ public class DangerSourceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update danger source variant")
-	public List<DangerSourceVariant> updateJSONDangerSourceVariant(
+	public List<DangerSourceVariant> updateDangerSourceVariant(
 			@PathParam("variantId") String variantId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("region") String regionId,
@@ -235,11 +275,44 @@ public class DangerSourceService {
 				throw new AlbinaException("User is not authorized for this region!");
 
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionIDs, securityContext);
 		} catch (AlbinaException | JsonProcessingException e) {
 			logger.warn("Error creating danger source variant", e);
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionIDs, securityContext);
+		}
+	}
+
+	@DELETE
+	@Secured({ Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/variants/{variantId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Delete danger source variant")
+	public List<DangerSourceVariant> deleteVariant(
+			@PathParam("variantId") String variantId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@QueryParam("region") String regionId,
+			@Context SecurityContext securityContext) {
+		logger.debug("DELETE JSON danger source variant");
+
+		try {
+			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			
+			if (region != null && user.hasPermissionForRegion(region.getId())) {
+				DangerSourceVariantController.getInstance().deleteDangerSourceVariant(variantId);				
+			} else {
+				throw new AlbinaException("User is not authorized for this region!");
+			}
+			
+			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return getVariants(date, regionIDs, securityContext);
+		} catch (AlbinaException e) {
+			logger.warn("Error deleting variant", e);
+			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return getVariants(date, regionIDs, securityContext);
 		}
 	}
 
@@ -250,12 +323,12 @@ public class DangerSourceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create danger source variant")
-	public List<DangerSourceVariant> createJSONDangerSourceVariant(
+	public List<DangerSourceVariant> createVariant(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext,
 			String json) {
-		logger.debug("POST JSON danger source variant");
+		logger.debug("PUT JSON danger source variant");
 
 		try {
 			DangerSourceVariant variant = JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
@@ -272,12 +345,11 @@ public class DangerSourceService {
 				throw new AlbinaException("User is not authorized for this region!");
 
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionIDs, securityContext);
 		} catch (AlbinaException | JsonProcessingException e) {
 			logger.warn("Error creating danger source variant", e);
 			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONDangerSourceVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionIDs, securityContext);
 		}
 	}
-
 }
