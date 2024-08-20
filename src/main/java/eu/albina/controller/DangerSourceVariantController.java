@@ -84,21 +84,6 @@ public class DangerSourceVariantController {
 	}
 
 	/**
-	 * Initialize all fields of the {@code danger source variant} to be able to access it after
-	 * the DB transaction was closed.
-	 *
-	 * @param variant
-	 *            the danger source variant that should be initialized
-	 */
-	private void initializeDangerSourceVariant(DangerSourceVariant variant) {
-		Hibernate.initialize(variant.getDangerSource());
-		Hibernate.initialize(variant.getAspects());
-		Hibernate.initialize(variant.getRegions());
-		Hibernate.initialize(variant.getDangerSigns());
-		Hibernate.initialize(variant.getTerrainTypes());
-	}
-
-	/**
 	 * Creates a {@code variant} in the database.
 	 *
 	 * @param startDate
@@ -109,37 +94,21 @@ public class DangerSourceVariantController {
 	 *            the active region of the user who is creating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
-	public synchronized Map<String, DangerSourceVariant> createDangerSourceVariant(DangerSourceVariant newVariant, Instant startDate, Instant endDate,
+	public synchronized void createDangerSourceVariant(DangerSourceVariant newVariant, Instant startDate, Instant endDate,
 			Region region) {
-		Map<String, DangerSourceVariant> resultVariants = new HashMap<String, DangerSourceVariant>();
-
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 
-			for (DangerSourceVariant loadedVariant : loadedVariants) {
-				if (loadedVariant.getDangerSource().equals(newVariant.getDangerSource())) {
-					// check micro-regions to prevent duplicates
-					for (String microRegion : newVariant.getRegions()) {
-						loadedVariant.getRegions().remove(microRegion);
-					}
-					entityManager.merge(loadedVariant);
-					resultVariants.put(loadedVariant.getId(), loadedVariant);
-				}
-			}
+			this.removeDuplicateRegions(newVariant, entityManager, loadedVariants);
 
 			// Variant has to be created
 			newVariant.setId(null);
 			entityManager.persist(newVariant);
-			resultVariants.put(newVariant.getId(), newVariant);
-
-			for (DangerSourceVariant variant : resultVariants.values()) {
-				initializeDangerSourceVariant(variant);
-			}
 
 			logger.info("Danger source variant {} for region {} created", newVariant.getId(), region.getId());
 
-			return resultVariants;
+			return null;
 		});
 	}
 
@@ -162,8 +131,8 @@ public class DangerSourceVariantController {
 		});
 	}
 
-	public List<DangerSourceVariant> saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Instant startDate, Instant endDate, Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+	public void saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Instant startDate, Instant endDate, Region region) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			Map<String, DangerSourceVariant> originalVariants = new HashMap<String, DangerSourceVariant>();
@@ -192,7 +161,7 @@ public class DangerSourceVariantController {
 				}
 			}
 
-			return this.getAllDangerSourceVariants(startDate, endDate);
+			return null;
 		});
 	}
 
@@ -207,31 +176,17 @@ public class DangerSourceVariantController {
 	 *            the active region of the user who is updating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
-	public List<DangerSourceVariant> updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant startDate, Instant endDate,
+	public void updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant startDate, Instant endDate,
 			Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
-
-			for (DangerSourceVariant loadedVariant : loadedVariants) {
-				if (!loadedVariant.getId().equals(updatedVariant.getId())) {
-					// check micro-regions to prevent duplicates
-					for (String microRegion : updatedVariant.getRegions()) {
-						loadedVariant.getRegions().remove(microRegion);
-					}
-					entityManager.merge(loadedVariant);
-				}
-			}
-
-			// Variant has to be updated
+			removeDuplicateRegions(updatedVariant, entityManager, loadedVariants);
 			entityManager.merge(updatedVariant);
-
-			for (DangerSourceVariant variant : loadedVariants)
-				initializeDangerSourceVariant(variant);
 
 			logger.info("Danger source variant {} for region {} updated", updatedVariant.getId(), region.getId());
 
-			return loadedVariants;
+			return null;
 		});
 	}
 
@@ -308,5 +263,36 @@ public class DangerSourceVariantController {
 			initializeDangerSourceVariant(variant);
 		}
 		return variants;
+	}
+
+	/**
+	 * Initialize all fields of the {@code danger source variant} to be able to access it after
+	 * the DB transaction was closed.
+	 *
+	 * @param variant
+	 *            the danger source variant that should be initialized
+	 */
+	private void initializeDangerSourceVariant(DangerSourceVariant variant) {
+		Hibernate.initialize(variant.getDangerSource());
+		Hibernate.initialize(variant.getAspects());
+		Hibernate.initialize(variant.getRegions());
+		Hibernate.initialize(variant.getDangerSigns());
+		Hibernate.initialize(variant.getTerrainTypes());
+	}
+
+	private void removeDuplicateRegions(DangerSourceVariant updatedVariant, EntityManager entityManager,
+			List<DangerSourceVariant> loadedVariants) {
+		for (DangerSourceVariant loadedVariant : loadedVariants) {
+			if (
+				!loadedVariant.getId().equals(updatedVariant.getId()) &&
+				loadedVariant.getDangerSource().getId().equals(updatedVariant.getDangerSource().getId()))
+			{
+				// check micro-regions to prevent duplicates
+				for (String microRegion : updatedVariant.getRegions()) {
+					loadedVariant.getRegions().remove(microRegion);
+				}
+				entityManager.merge(loadedVariant);
+			}
+		}
 	}
 }
