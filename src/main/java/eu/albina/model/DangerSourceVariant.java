@@ -167,6 +167,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "GLIDING_SNOW_ACTIVITY")
 	private GlidingSnowActivity glidingSnowActivity;
 
+	@Column(name = "GLIDING_SNOW_ACTIVITY_VALUE")
+	private int glidingSnowActivityValue;
+
 	@Column(name = "SNOW_HEIGHT_UPPER_LIMIT")
 	private int snowHeightUpperLimit;
 
@@ -504,6 +507,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setGlidingSnowActivity(GlidingSnowActivity glidingSnowActivity) {
 		this.glidingSnowActivity = glidingSnowActivity;
+	}
+
+	public int getGlidingSnowActivityValue() {
+		return this.glidingSnowActivityValue;
+	}
+
+	public void setGlidingSnowActivityValue(int glidingSnowActivityValue) {
+		this.glidingSnowActivityValue = glidingSnowActivityValue;
 	}
 
 	public int getSnowHeightUpperLimit() {
