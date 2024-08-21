@@ -27,7 +27,7 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.Characteristic;
 import eu.albina.model.enumerations.CreationProcess;
 import eu.albina.model.enumerations.DangerSign;
-import eu.albina.model.enumerations.DangerSourceStatus;
+import eu.albina.model.enumerations.DangerSourceVariantStatus;
 import eu.albina.model.enumerations.Distribution;
 import eu.albina.model.enumerations.GlidingSnowActivity;
 import eu.albina.model.enumerations.GrainShape;
@@ -84,8 +84,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Instant validUntil;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_SOURCE_STATUS")
-	private DangerSourceStatus dangerSourceStatus;
+	@Column(name = "DANGER_SOURCE_VARIANT_STATUS")
+	private DangerSourceVariantStatus dangerSourceVariantStatus;
 
 	@Column(name = "OWNER_REGION")
 	private String ownerRegion;
@@ -337,12 +337,12 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.validUntil = validUntil;
 	}
 
-	public DangerSourceStatus getDangerSourceStatus() {
-		return this.dangerSourceStatus;
+	public DangerSourceVariantStatus getDangerSourceVariantStatus() {
+		return this.dangerSourceVariantStatus;
 	}
 
-	public void setDangerSourceStatus(DangerSourceStatus status) {
-		this.dangerSourceStatus = status;
+	public void setDangerSourceVariantStatus(DangerSourceVariantStatus status) {
+		this.dangerSourceVariantStatus = status;
 	}
 
 	public String getOwnerRegion() {

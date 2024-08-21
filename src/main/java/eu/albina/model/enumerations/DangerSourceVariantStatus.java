@@ -18,12 +18,12 @@ package eu.albina.model.enumerations;
 
 import java.util.Arrays;
 
-public enum DangerSourceStatus {
+public enum DangerSourceVariantStatus {
 	active, dormant, inactive;
 
-	public static DangerSourceStatus fromString(String text) {
+	public static DangerSourceVariantStatus fromString(String text) {
 		if (text != null) {
-			return Arrays.stream(DangerSourceStatus.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
+			return Arrays.stream(DangerSourceVariantStatus.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}
