@@ -141,7 +141,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURAL_RELEASE")
-	private eu.albina.model.enumerations.Propability naturalRelease;
+	private eu.albina.model.enumerations.Probability naturalRelease;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
@@ -477,11 +477,11 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.runoutIntoGreen = runoutIntoGreen;
 	}
 
-	public eu.albina.model.enumerations.Propability getNaturalRelease() {
+	public eu.albina.model.enumerations.Probability getNaturalRelease() {
 		return this.naturalRelease;
 	}
 
-	public void setNaturalRelease(eu.albina.model.enumerations.Propability naturalRelease) {
+	public void setNaturalRelease(eu.albina.model.enumerations.Probability naturalRelease) {
 		this.naturalRelease = naturalRelease;
 	}
 

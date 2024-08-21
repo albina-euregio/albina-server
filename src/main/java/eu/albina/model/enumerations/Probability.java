@@ -1,5 +1,5 @@
 package eu.albina.model.enumerations;
 
-public enum Propability {
+public enum Probability {
 	likely, possible, unlikely;
 }
