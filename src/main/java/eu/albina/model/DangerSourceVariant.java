@@ -84,8 +84,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Instant validUntil;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "STATUS")
-	private DangerSourceStatus status;
+	@Column(name = "DANGER_SOURCE_STATUS")
+	private DangerSourceStatus dangerSourceStatus;
 
 	@Column(name = "OWNER_REGION")
 	private String ownerRegion;
@@ -243,7 +243,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Boolean weakLayerCrustBelow;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "WEAK_LAYER_POSTION")
+	@Column(name = "WEAK_LAYER_POSITION")
 	private SnowpackPosition weakLayerPosition;
 
 	@Enumerated(EnumType.STRING)
@@ -337,12 +337,12 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.validUntil = validUntil;
 	}
 
-	public DangerSourceStatus getStatus() {
-		return this.status;
+	public DangerSourceStatus getDangerSourceStatus() {
+		return this.dangerSourceStatus;
 	}
 
-	public void setStatus(DangerSourceStatus status) {
-		this.status = status;
+	public void setDangerSourceStatus(DangerSourceStatus status) {
+		this.dangerSourceStatus = status;
 	}
 
 	public String getOwnerRegion() {

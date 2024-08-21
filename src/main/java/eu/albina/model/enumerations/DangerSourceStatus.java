@@ -19,7 +19,7 @@ package eu.albina.model.enumerations;
 import java.util.Arrays;
 
 public enum DangerSourceStatus {
-	activ, dormant, inactive;
+	active, dormant, inactive;
 
 	public static DangerSourceStatus fromString(String text) {
 		if (text != null) {
