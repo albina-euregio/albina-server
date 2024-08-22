@@ -104,7 +104,7 @@ public class DangerSourceVariantController {
 
 			// Variant has to be created
 			newVariant.setId(null);
-			entityManager.persist(newVariant);
+			entityManager.merge(newVariant);
 
 			logger.info("Danger source variant {} for region {} created", newVariant.getId(), region.getId());
 
