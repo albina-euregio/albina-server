@@ -282,7 +282,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	 * Standard constructor for a danger source.
 	 */
 	public DangerSourceVariant() {
-		// TODO create dangerSourceVariantId
 		regions = new LinkedHashSet<>();
 		aspects = new LinkedHashSet<>();
 		dangerSigns = new LinkedHashSet<>();
