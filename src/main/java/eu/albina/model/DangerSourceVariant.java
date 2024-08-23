@@ -24,6 +24,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Characteristic;
 import eu.albina.model.enumerations.CreationProcess;
 import eu.albina.model.enumerations.DangerSign;
@@ -101,7 +102,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "AVALANCHE_TYPE")
-	private eu.albina.model.enumerations.AvalancheType avalancheType;
+	private AvalancheType avalancheType;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
