@@ -39,6 +39,13 @@ public class JsonUtil {
 
 	// private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
+	public static final ObjectMapper ALBINA_OBJECT_MAPPER = new ObjectMapper()
+		.registerModule(new JavaTimeModule())
+		.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
+		.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
+		.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
 	public static void createJsonFile(AvalancheReport avalancheReport) throws IOException {
 		Path pdfDirectory = avalancheReport.getPdfDirectory();
 		Files.createDirectories(pdfDirectory);
@@ -96,12 +103,9 @@ public class JsonUtil {
 	}
 
 	public static <T> T parseUsingJackson(String json, Class<T> valueType) throws JsonProcessingException {
-		return new ObjectMapper()
-			.registerModule(new JavaTimeModule())
-			.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
-    		.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
-			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+		return ALBINA_OBJECT_MAPPER
 			.readValue(json, valueType);
 	}
+
+
 }

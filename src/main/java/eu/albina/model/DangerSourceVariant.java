@@ -23,6 +23,8 @@ import java.util.Set;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Characteristic;
@@ -39,6 +41,7 @@ import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TerrainType;
 import eu.albina.model.enumerations.Thickness;
 import eu.albina.model.enumerations.Wetness;
+import eu.albina.util.DangerSourceVariantSerializer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
@@ -62,6 +65,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "danger_source_variants")
+@JsonSerialize(using = DangerSourceVariantSerializer.class)
 public class DangerSourceVariant extends AbstractPersistentObject
 		implements Comparable<DangerSourceVariant> {
 
