@@ -2,12 +2,13 @@ package eu.albina.rest;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Range;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.util.AlbinaUtil;
@@ -58,11 +59,27 @@ interface DateControllerUtil {
 		}
 	}
 
-	static LocalDateTime getStartOfHydrologicalYear(LocalDateTime date) {
-		LocalDateTime startDate = date;
+	static OffsetDateTime getStartOfHydrologicalYear(OffsetDateTime date) {
+		OffsetDateTime startDate = date;
 		if (startDate.getMonthValue() < 10) {
 			startDate = startDate.minusYears(1);
 		}
 		return startDate.withMonth(10).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+	}
+
+	static Range<Instant> parseHydrologicalYearInstantRange(String date) {
+		OffsetDateTime endDate = OffsetDateTime.parse(date);
+		OffsetDateTime startDate = DateControllerUtil.getStartOfHydrologicalYear(endDate);
+		Instant startInstant = startDate.toInstant();
+		Instant endInstant = endDate.toInstant();
+		return Range.closed(startInstant, endInstant);
+	}
+
+	static Range<Instant> parseInstantRange(String date) {
+		OffsetDateTime startDate = OffsetDateTime.parse(date);
+		OffsetDateTime endDate = startDate.plusDays(1);
+		Instant startInstant = startDate.toInstant();
+		Instant endInstant = endDate.toInstant();
+		return Range.closed(startInstant, endInstant);
 	}
 }

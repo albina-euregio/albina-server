@@ -102,10 +102,19 @@ public class JsonUtil {
 		return jsonResult;
 	}
 
-	public static <T> T parseUsingJackson(String json, Class<T> valueType) throws JsonProcessingException {
-		return ALBINA_OBJECT_MAPPER
-			.readValue(json, valueType);
+	public static <T> T parseUsingJackson(String json, Class<T> valueType) {
+		try {
+			return ALBINA_OBJECT_MAPPER.readValue(json, valueType);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-
+	public static String writeValueUsingJackson(Object value) {
+		try {
+			return ALBINA_OBJECT_MAPPER.writeValueAsString(value);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
