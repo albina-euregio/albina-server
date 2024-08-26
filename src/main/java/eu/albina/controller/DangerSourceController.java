@@ -99,14 +99,11 @@ public class DangerSourceController {
 	 *
 	 * @return a map of all danger sources ids
 	 */
-	public List<DangerSource> updateDangerSource(DangerSource updatedDangerSource) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+	public void updateDangerSource(DangerSource updatedDangerSource) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.merge(updatedDangerSource);
-			List<DangerSource> loadedDangerSources = entityManager.createQuery(HibernateUtil.queryGetDangerSources, DangerSource.class).getResultList();
-
 			logger.info("Danger source {} updated", updatedDangerSource.getId());
-
-			return loadedDangerSources;
+			return null;
 		});
 	}
 

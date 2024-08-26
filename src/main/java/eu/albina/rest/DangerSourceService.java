@@ -122,6 +122,26 @@ public class DangerSourceService {
 		return DangerSourceController.getInstance().getDangerSources(startDate.toInstant(offsetDateTime.getOffset()), endDate.toInstant(offsetDateTime.getOffset()));
 	}
 
+	@POST
+	@Secured({ Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/{dangerSourceId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Update danger source")
+	public void updateDangerSource(
+			@PathParam("dangerSourceId") String dangerSourceId,
+			@Context SecurityContext securityContext,
+			String json) {
+		logger.debug("POST JSON danger source");
+
+		try {
+			DangerSource dangerSource = JsonUtil.parseUsingJackson(json, DangerSource.class);
+			DangerSourceController.getInstance().updateDangerSource(dangerSource);
+		} catch (JsonProcessingException e) {
+			logger.warn("Error creating danger source variant", e);
+		}
+	}
+
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -252,7 +272,7 @@ public class DangerSourceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update danger source variant")
-	public List<DangerSourceVariant> updateDangerSourceVariant(
+	public List<DangerSourceVariant> updateDangerSource(
 			@PathParam("variantId") String variantId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("region") String regionId,
