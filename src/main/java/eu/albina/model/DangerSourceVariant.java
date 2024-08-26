@@ -68,7 +68,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "DANGER_SOURCE_VARIANT_ID")
 	private String dangerSourceVariantId;
 
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "DANGER_SOURCE_ID")
 	private DangerSource dangerSource;
 
@@ -111,13 +111,13 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")
-	private int elevationHigh;
+	private Integer elevationHigh;
 
 	@Column(name = "TREELINE_HIGH")
 	private Boolean treelineHigh;
 
 	@Column(name = "ELEVATION_LOW")
-	private int elevationLow;
+	private Integer elevationLow;
 
 	@Column(name = "TREELINE_LOW")
 	private Boolean treelineLow;
@@ -389,11 +389,11 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.aspects = aspects;
 	}
 
-	public int getElevationHigh() {
+	public Integer getElevationHigh() {
 		return this.elevationHigh;
 	}
 
-	public void setElevationHigh(int elevationHigh) {
+	public void setElevationHigh(Integer elevationHigh) {
 		this.elevationHigh = elevationHigh;
 	}
 
@@ -409,11 +409,11 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.treelineHigh = treelineHigh;
 	}
 
-	public int getElevationLow() {
+	public Integer getElevationLow() {
 		return this.elevationLow;
 	}
 
-	public void setElevationLow(int elevationLow) {
+	public void setElevationLow(Integer elevationLow) {
 		this.elevationLow = elevationLow;
 	}
 
@@ -789,33 +789,39 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	}
 
 	/**
-	 * Sort {@code DangerSourceVariant} by danger rating (descending), snowpack stability, and avalanche size.
+	 * Sort {@code DangerSourceVariant} by danger rating (descending), snowpack
+	 * stability, and avalanche size.
 	 *
 	 */
 	@Override
 	public int compareTo(DangerSourceVariant other) {
 		// selected dangerRating
-		int result = this.getEawsMatrixInformation().getDangerRating().compareTo(other.getEawsMatrixInformation().getDangerRating());
+		int result = this.getEawsMatrixInformation().getDangerRating()
+				.compareTo(other.getEawsMatrixInformation().getDangerRating());
 		if (result != 0) {
 			return result;
 		} else {
 			// primary matrix danger rating
-			result = this.getEawsMatrixInformation().getPrimaryDangerRatingFromParameters().compareTo(other.getEawsMatrixInformation().getPrimaryDangerRatingFromParameters());
+			result = this.getEawsMatrixInformation().getPrimaryDangerRatingFromParameters()
+					.compareTo(other.getEawsMatrixInformation().getPrimaryDangerRatingFromParameters());
 			if (result != 0) {
 				return result;
 			} else {
 				// secondary matrix danger rating
-				result = this.getEawsMatrixInformation().getSecondaryDangerRatingFromParameters().compareTo(other.getEawsMatrixInformation().getSecondaryDangerRatingFromParameters());
+				result = this.getEawsMatrixInformation().getSecondaryDangerRatingFromParameters()
+						.compareTo(other.getEawsMatrixInformation().getSecondaryDangerRatingFromParameters());
 				if (result != 0) {
 					return result;
 				} else {
 					// snowpack stability
-					result = this.getEawsMatrixInformation().getSnowpackStability().compareTo(other.getEawsMatrixInformation().getSnowpackStability());
+					result = this.getEawsMatrixInformation().getSnowpackStability()
+							.compareTo(other.getEawsMatrixInformation().getSnowpackStability());
 					if (result != 0) {
 						return result;
 					} else {
 						// avalanche size
-						return this.getEawsMatrixInformation().getAvalancheSize().compareTo(other.getEawsMatrixInformation().getAvalancheSize());
+						return this.getEawsMatrixInformation().getAvalancheSize()
+								.compareTo(other.getEawsMatrixInformation().getAvalancheSize());
 					}
 				}
 			}
