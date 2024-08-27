@@ -32,8 +32,10 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
+import java.util.Comparator;
+
 @Embeddable
-public class EawsMatrixInformation implements AvalancheInformationObject {
+public class EawsMatrixInformation implements AvalancheInformationObject, Comparable<EawsMatrixInformation> {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_RATING")
@@ -556,5 +558,17 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 			return false;
 
 		return true;
+	}
+
+	private static final Comparator<EawsMatrixInformation> COMPARATOR = Comparator
+		.comparing(EawsMatrixInformation::getDangerRating)
+		.thenComparing(EawsMatrixInformation::getPrimaryDangerRatingFromParameters)
+		.thenComparing(EawsMatrixInformation::getSecondaryDangerRatingFromParameters)
+		.thenComparing(EawsMatrixInformation::getSnowpackStability)
+		.thenComparing(EawsMatrixInformation::getAvalancheSize);
+
+	@Override
+	public int compareTo(EawsMatrixInformation other) {
+		return COMPARATOR.compare(this, other);
 	}
 }

@@ -794,40 +794,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	/**
 	 * Sort {@code DangerSourceVariant} by danger rating (descending), snowpack
 	 * stability, and avalanche size.
-	 *
 	 */
 	@Override
 	public int compareTo(DangerSourceVariant other) {
-		// selected dangerRating
-		int result = this.getEawsMatrixInformation().getDangerRating()
-				.compareTo(other.getEawsMatrixInformation().getDangerRating());
-		if (result != 0) {
-			return result;
-		} else {
-			// primary matrix danger rating
-			result = this.getEawsMatrixInformation().getPrimaryDangerRatingFromParameters()
-					.compareTo(other.getEawsMatrixInformation().getPrimaryDangerRatingFromParameters());
-			if (result != 0) {
-				return result;
-			} else {
-				// secondary matrix danger rating
-				result = this.getEawsMatrixInformation().getSecondaryDangerRatingFromParameters()
-						.compareTo(other.getEawsMatrixInformation().getSecondaryDangerRatingFromParameters());
-				if (result != 0) {
-					return result;
-				} else {
-					// snowpack stability
-					result = this.getEawsMatrixInformation().getSnowpackStability()
-							.compareTo(other.getEawsMatrixInformation().getSnowpackStability());
-					if (result != 0) {
-						return result;
-					} else {
-						// avalanche size
-						return this.getEawsMatrixInformation().getAvalancheSize()
-								.compareTo(other.getEawsMatrixInformation().getAvalancheSize());
-					}
-				}
-			}
-		}
+		return this.getEawsMatrixInformation().compareTo(other.getEawsMatrixInformation());
 	}
 }
