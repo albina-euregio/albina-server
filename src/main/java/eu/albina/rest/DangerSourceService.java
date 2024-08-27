@@ -17,7 +17,6 @@
 package eu.albina.rest;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,9 +34,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
-import com.google.common.collect.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Range;
 
 import eu.albina.controller.DangerSourceController;
 import eu.albina.controller.DangerSourceVariantController;
@@ -146,7 +146,7 @@ public class DangerSourceService {
 			@QueryParam("regions") List<String> regionIds) {
 		logger.debug("GET JSON danger source variants for danger source");
 
-		Range<Instant> instantRange = DateControllerUtil.parseHydrologicalYearInstantRange(date);
+		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 		List<Region> regions = regionIds.stream().map(RegionController.getInstance()::getRegion).collect(Collectors.toList());
 		List<DangerSourceVariant> variants = DangerSourceVariantController.getInstance().getDangerSourceVariants(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions, dangerSourceId);
 		return JsonUtil.writeValueUsingJackson(variants);
