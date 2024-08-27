@@ -19,6 +19,7 @@ package eu.albina.model;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.AvalancheSize;
@@ -151,6 +152,7 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 		this.frequencyValue = frequencyValue;
 	}
 
+	@JsonIgnore
 	public DangerRating getPrimaryDangerRatingFromParameters() {
 		switch (getSnowpackStability()) {
 			case fair:
@@ -314,6 +316,7 @@ public class EawsMatrixInformation implements AvalancheInformationObject {
 		}
 	}
 
+	@JsonIgnore
 	public DangerRating getSecondaryDangerRatingFromParameters() {
 		switch (getSnowpackStability()) {
 			case fair:
