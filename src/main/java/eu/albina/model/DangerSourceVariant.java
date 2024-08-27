@@ -67,8 +67,8 @@ import jakarta.persistence.Table;
 public class DangerSourceVariant extends AbstractPersistentObject
 		implements Comparable<DangerSourceVariant> {
 
-	@Column(name = "DANGER_SOURCE_VARIANT_ID")
-	private String dangerSourceVariantId;
+	@Column(name = "ORIGINAL_DANGER_SOURCE_VARIANT_ID")
+	private String originalDangerSourceVariantId;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "DANGER_SOURCE_ID")
@@ -95,7 +95,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	/** The regions where the danger source variant is present. */
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_regions", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "danger_source_variant_regions", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "REGION_ID")
 	private Set<String> regions;
 
@@ -107,7 +107,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private AvalancheType avalancheType;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "ASPECT")
 	@JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 	@Fetch(FetchMode.JOIN)
@@ -148,7 +148,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private eu.albina.model.enumerations.Probability naturalRelease;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "DANGER_SIGN")
 	@Fetch(FetchMode.JOIN)
 	private Set<DangerSign> dangerSigns;
@@ -266,7 +266,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Boolean remoteTriggering;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID", referencedColumnName = "ID"))
+	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "TERRAIN_TYPE")
 	@Fetch(FetchMode.JOIN)
 	private Set<TerrainType> terrainTypes;
@@ -292,12 +292,12 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		terrainTypes = new LinkedHashSet<>();
 	}
 
-	public String getDangerSourceVariantId() {
-		return this.dangerSourceVariantId;
+	public String getOriginalDangerSourceVariantId() {
+		return this.originalDangerSourceVariantId;
 	}
 
-	public void setDangerSourceVariantId(String dangerSourceVariantId) {
-		this.dangerSourceVariantId = dangerSourceVariantId;
+	public void setOriginalDangerSourceVariantId(String dangerSourceVariantId) {
+		this.originalDangerSourceVariantId = dangerSourceVariantId;
 	}
 
 	public DangerSource getDangerSource() {
