@@ -21,6 +21,17 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
+import com.google.common.base.Strings;
+
+import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheType;
+import eu.albina.model.enumerations.Direction;
+import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CollectionTable;
@@ -37,18 +48,6 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
-
-import com.google.common.base.Strings;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
-
-import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.AvalancheType;
-import eu.albina.model.enumerations.Direction;
-import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
 @Table(name = "avalanche_problems")
@@ -281,7 +280,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 		if (aspects != null && aspects.size() > 0) {
 			JSONArray aspects = new JSONArray();
 			for (Aspect aspect : this.aspects) {
-				aspects.put(aspect.toUpperCaseString());
+				aspects.put(aspect.toString());
 			}
 			json.put("aspects", aspects);
 		}
