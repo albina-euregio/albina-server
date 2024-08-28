@@ -324,7 +324,8 @@ public class DangerSourceVariantController {
 		for (DangerSourceVariant loadedVariant : loadedVariants) {
 			if (
 				!loadedVariant.getId().equals(updatedVariant.getId()) &&
-				loadedVariant.getDangerSource().getId().equals(updatedVariant.getDangerSource().getId()))
+				loadedVariant.getDangerSource().getId().equals(updatedVariant.getDangerSource().getId()) &&
+				loadedVariant.getDangerSourceVariantType().equals(updatedVariant.getDangerSourceVariantType()))
 			{
 				// check micro-regions to prevent duplicates
 				for (String microRegion : updatedVariant.getRegions()) {
