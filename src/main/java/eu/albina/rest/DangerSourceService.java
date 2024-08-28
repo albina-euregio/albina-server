@@ -46,6 +46,7 @@ import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.DangerSource;
 import eu.albina.model.DangerSourceVariant;
+import eu.albina.model.DangerSourceVariantsStatus;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -77,6 +78,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class DangerSourceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(DangerSourceService.class);
+
+	static class Status {
+		public String date;
+		public boolean forecast;
+		public boolean analysis;
+	}
 
 	@GET
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
@@ -130,6 +137,25 @@ public class DangerSourceService {
 		List<Region> regions = regionIds.stream().map(RegionController.getInstance()::getRegion).collect(Collectors.toList());
 		List<DangerSourceVariant> variants = DangerSourceVariantController.getInstance().getDangerSourceVariants(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions);
 		return JsonUtil.writeValueUsingJackson(variants);
+	}
+
+	@GET
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/status")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
+	public String getInternalStatus(@QueryParam("region") String regionId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate) {
+
+		Range<Instant> instantRangeStart = DateControllerUtil.parseInstantRange(startDate);
+		Range<Instant> instantRangeEnd = DateControllerUtil.parseInstantRange(endDate);
+		Region region = RegionController.getInstance().getRegion(regionId);
+
+		List<DangerSourceVariantsStatus> status = DangerSourceVariantController.getInstance().getDangerSourceVariantsStatus(instantRangeStart, instantRangeEnd, region);
+		return JsonUtil.writeValueUsingJackson(status);
 	}
 
 	@GET

@@ -17,6 +17,7 @@
 package eu.albina.controller;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,10 +29,15 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Range;
+
 import eu.albina.model.DangerSourceVariant;
+import eu.albina.model.DangerSourceVariantsStatus;
 import eu.albina.model.Region;
+import eu.albina.model.enumerations.DangerSourceVariantType;
 import eu.albina.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
+
 
 /**
  * Controller for danger sources variants.
@@ -216,6 +222,39 @@ public class DangerSourceVariantController {
 
 			return results;
 		});
+	}
+
+	/**
+	 * Returns the status for a given time period and
+	 * {@code region}.
+	 *
+	 * @param startDate
+	 *            the start date the variants should be valid from
+	 * @param endDate
+	 *            the end date the variants should be valid until
+	 * @param region
+	 *            the region of the variants
+	 * @return the most recent variants for the given time period and regions
+	 */
+	public List<DangerSourceVariantsStatus> getDangerSourceVariantsStatus(Range<Instant> startDate, Range<Instant> endDate, Region region) {
+		List<DangerSourceVariantsStatus> result = new ArrayList<DangerSourceVariantsStatus>();
+		Instant date = startDate.lowerEndpoint();
+		while (date.isBefore(endDate.lowerEndpoint()) || date.equals(endDate.lowerEndpoint())) {
+			result.add(this.getDangerSourceVariantsStatusForDay(date, date.plus(1, ChronoUnit.DAYS), region));
+			date = date.plus(1, ChronoUnit.DAYS);
+		}
+		return result;
+	}
+
+	public DangerSourceVariantsStatus getDangerSourceVariantsStatusForDay(Instant startDate, Instant endDate, Region region) {
+		DangerSourceVariantsStatus status = new DangerSourceVariantsStatus();
+		status.date = startDate;
+		ArrayList<Region> regions = new ArrayList<Region>();
+		regions.add(region);
+		List<DangerSourceVariant> dangerSourceVariants = this.getDangerSourceVariants(startDate, endDate, regions);
+		status.forecast = dangerSourceVariants.stream().anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.forecast);
+		status.analysis = dangerSourceVariants.stream().anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.analysis);
+		return status;
 	}
 
 	/**

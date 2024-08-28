@@ -18,12 +18,12 @@ package eu.albina.model.enumerations;
 
 import java.util.Arrays;
 
-public enum DangerSourceType {
+public enum DangerSourceVariantType {
 	forecast, analysis;
 
-	public static DangerSourceType fromString(String text) {
+	public static DangerSourceVariantType fromString(String text) {
 		if (text != null) {
-			return Arrays.stream(DangerSourceType.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
+			return Arrays.stream(DangerSourceVariantType.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
 		}
 		return null;
 	}
