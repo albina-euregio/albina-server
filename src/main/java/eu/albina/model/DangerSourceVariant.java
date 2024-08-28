@@ -71,6 +71,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "ORIGINAL_DANGER_SOURCE_VARIANT_ID")
 	private String originalDangerSourceVariantId;
 
+	@Column(name = "FORECAST_DANGER_SOURCE_VARIANT_ID")
+	private String forecastDangerSourceVariantId;
+
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "DANGER_SOURCE_ID")
 	private DangerSource dangerSource;
@@ -303,6 +306,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setOriginalDangerSourceVariantId(String dangerSourceVariantId) {
 		this.originalDangerSourceVariantId = dangerSourceVariantId;
+	}
+
+	public String getForecastDangerSourceVariantId() {
+		return this.forecastDangerSourceVariantId;
+	}
+
+	public void setForecastDangerSourceVariantId(String dangerSourceVariantId) {
+		this.forecastDangerSourceVariantId = dangerSourceVariantId;
 	}
 
 	public DangerSource getDangerSource() {
