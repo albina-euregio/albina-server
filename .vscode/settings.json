@@ -6,5 +6,15 @@
     },
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
-    }
+    },
+    "cSpell.words": [
+        "albina",
+        "caaml",
+        "Caamlv",
+        "Eaws",
+        "Euregio",
+        "Lanzanasto",
+        "Ssml",
+        "Tyrol"
+    ]
 }
