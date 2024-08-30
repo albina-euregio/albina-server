@@ -159,6 +159,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_AVALANCHE_PROBLEM_NO_DISTINCT_AVALANCHE_PROBLEM")
 	private boolean enableAvalancheProblemNoDistinctAvalancheProblem;
 
+	@Column(name = "ENABLE_DANGER_SOURCES")
+	private boolean enableDangerSources;
+
 	@Column(name = "ENABLE_OBSERVATIONS")
 	private boolean enableObservations;
 
@@ -332,6 +335,8 @@ public class Region implements AvalancheInformationObject {
 			this.enableAvalancheProblemCornices = json.getBoolean("enableAvalancheProblemCornices");
 		if (json.has("enableAvalancheProblemNoDistinctAvalancheProblem") && !json.isNull("enableAvalancheProblemNoDistinctAvalancheProblem"))
 			this.enableAvalancheProblemNoDistinctAvalancheProblem = json.getBoolean("enableAvalancheProblemNoDistinctAvalancheProblem");
+		if (json.has("enableDangerSources") && !json.isNull("enableDangerSources"))
+			this.enableDangerSources = json.getBoolean("enableDangerSources");
 		if (json.has("enableObservations") && !json.isNull("enableObservations"))
 			this.enableObservations = json.getBoolean("enableObservations");
 		if (json.has("enableModelling") && !json.isNull("enableModelling"))
@@ -774,6 +779,14 @@ public class Region implements AvalancheInformationObject {
 		this.imageColorbarBwPath = imageColorbarBwPath;
 	}
 
+	public boolean isEnableDangerSources() {
+		return enableDangerSources;
+	}
+
+	public void setEnableDangerSources(boolean enableDangerSources) {
+		this.enableDangerSources = enableDangerSources;
+	}
+
 	public boolean isEnableObservations() {
 		return enableObservations;
 	}
@@ -860,6 +873,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableMediaFile", isEnableMediaFile());
 		json.put("enableAvalancheProblemCornices", isEnableAvalancheProblemCornices());
 		json.put("enableAvalancheProblemNoDistinctAvalancheProblem", isEnableAvalancheProblemNoDistinctAvalancheProblem());
+		json.put("enableDangerSources", isEnableDangerSources());
 		json.put("enableObservations", isEnableObservations());
 		json.put("enableModelling", isEnableModelling());
 		json.put("enableWeatherbox", isEnableWeatherbox());

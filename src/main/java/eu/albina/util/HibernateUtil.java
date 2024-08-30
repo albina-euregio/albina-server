@@ -21,14 +21,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HibernateUtil {
 
@@ -58,6 +58,9 @@ public class HibernateUtil {
 	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :region and c.lang = :lang";
 	public static String queryGetBlogConfiguration = "from BlogConfiguration as c where c.region = :region and c.lang = :lang";
 	public static String queryGetPushConfiguration = "from PushConfiguration as c";
+
+	public static String queryGetDangerSourceVariants = "from DangerSourceVariant as v where v.validFrom = :startDate or v.validUntil = :endDate";
+	public static String queryGetDangerSources = "from DangerSource as d where d.creationDate between :startDate and :endDate";
 
 	public static HibernateUtil getInstance() {
 		if (System.getenv("CI_JOB_NAME") != null) {

@@ -39,34 +39,10 @@ public enum Aspect {
 	}
 
 	public String toCaamlString() {
-		return "AspectRange_" + this.toString();
+		return "AspectRange_" + this.toLowerCaseString();
 	}
 
 	public String toString() {
-		switch (this) {
-		case N:
-			return "n";
-		case NE:
-			return "ne";
-		case E:
-			return "e";
-		case SE:
-			return "se";
-		case S:
-			return "s";
-		case SW:
-			return "sw";
-		case W:
-			return "w";
-		case NW:
-			return "nw";
-
-		default:
-			return null;
-		}
-	}
-
-	public String toUpperCaseString() {
 		switch (this) {
 		case N:
 			return "N";
@@ -84,6 +60,30 @@ public enum Aspect {
 			return "W";
 		case NW:
 			return "NW";
+
+		default:
+			return null;
+		}
+	}
+
+	public String toLowerCaseString() {
+		switch (this) {
+		case N:
+			return "n";
+		case NE:
+			return "ne";
+		case E:
+			return "e";
+		case SE:
+			return "se";
+		case S:
+			return "s";
+		case SW:
+			return "sw";
+		case W:
+			return "w";
+		case NW:
+			return "nw";
 
 		default:
 			return null;

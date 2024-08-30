@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "streetsidesoftware.code-spell-checker",
+    "lokalise.i18n-ally",
+    "vscjava.vscode-java-debug",
+    "vscjava.vscode-maven",
+    "redhat.java"
+  ]
+}

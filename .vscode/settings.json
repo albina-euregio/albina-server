@@ -1,3 +1,10 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "disabled",
+    "[java]": {
+        "editor.formatOnSave": false
+    },
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    }
 }

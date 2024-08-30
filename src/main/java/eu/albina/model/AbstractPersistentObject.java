@@ -22,8 +22,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
-import org.hibernate.annotations.GenericGenerator;
-
 @MappedSuperclass
 public abstract class AbstractPersistentObject implements PersistentObject {
 

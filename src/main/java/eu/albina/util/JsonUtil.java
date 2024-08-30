@@ -24,6 +24,11 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.openjson.JSONArray;
 
 import eu.albina.model.AvalancheBulletin;
@@ -33,6 +38,13 @@ import eu.albina.model.Region;
 public class JsonUtil {
 
 	// private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
+
+	public static final ObjectMapper ALBINA_OBJECT_MAPPER = new ObjectMapper()
+		.registerModule(new JavaTimeModule())
+		.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
+		.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
+		.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 	public static void createJsonFile(AvalancheReport avalancheReport) throws IOException {
 		Path pdfDirectory = avalancheReport.getPdfDirectory();
@@ -88,5 +100,21 @@ public class JsonUtil {
 			}
 		}
 		return jsonResult;
+	}
+
+	public static <T> T parseUsingJackson(String json, Class<T> valueType) {
+		try {
+			return ALBINA_OBJECT_MAPPER.readValue(json, valueType);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static String writeValueUsingJackson(Object value) {
+		try {
+			return ALBINA_OBJECT_MAPPER.writeValueAsString(value);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
