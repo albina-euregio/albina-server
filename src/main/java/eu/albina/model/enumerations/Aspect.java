@@ -83,7 +83,7 @@ public enum Aspect {
 		case W:
 			return "w";
 		case NW:
-			return "ns";
+			return "nw";
 
 		default:
 			return null;
