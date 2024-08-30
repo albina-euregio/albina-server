@@ -1,28 +1,29 @@
 package eu.albina.controller.publication;
 
-import ch.rasc.webpush.ServerKeys;
-import com.github.openjson.JSONObject;
-import eu.albina.controller.publication.PushNotificationUtil;
-import eu.albina.model.PushSubscription;
-import eu.albina.model.enumerations.LanguageCode;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
-import java.net.URI;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.net.URI;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+
+import com.github.openjson.JSONObject;
+
+import ch.rasc.webpush.ServerKeys;
+import eu.albina.model.PushSubscription;
+import eu.albina.model.enumerations.LanguageCode;
 
 public class PushNotificationUtilTest {
 

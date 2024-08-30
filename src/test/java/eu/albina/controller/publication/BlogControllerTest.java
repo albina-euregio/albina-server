@@ -16,12 +16,17 @@
  ******************************************************************************/
 package eu.albina.controller.publication;
 
+import static eu.albina.RegionTestUtils.regionSouthTyrol;
+import static eu.albina.RegionTestUtils.regionTyrol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -29,12 +34,6 @@ import org.junit.jupiter.api.Test;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HibernateUtil;
-
-import static eu.albina.RegionTestUtils.regionSouthTyrol;
-import static eu.albina.RegionTestUtils.regionTyrol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BlogControllerTest {
 

@@ -1,5 +1,7 @@
 package eu.albina.caaml;
 
+import static eu.albina.RegionTestUtils.regionEuregio;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -12,28 +14,26 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 
-import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.Region;
-import eu.albina.util.AlbinaUtil;
-import eu.albina.util.HibernateUtil;
-import eu.albina.util.JsonUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.io.Resources;
-
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.ServerInstance;
-import eu.albina.model.enumerations.LanguageCode;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import static eu.albina.RegionTestUtils.regionEuregio;
+import com.google.common.io.Resources;
+
+import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.RegionController;
+import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.AlbinaUtil;
+import eu.albina.util.HibernateUtil;
+import eu.albina.util.JsonUtil;
 
 public class CaamlTest {
 

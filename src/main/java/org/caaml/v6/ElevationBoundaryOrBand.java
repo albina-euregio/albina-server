@@ -1,9 +1,8 @@
 package org.caaml.v6;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
 import java.util.Objects;
+
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * Elevation describes either an elevation range below a certain bound (only upperBound is

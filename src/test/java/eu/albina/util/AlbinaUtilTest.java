@@ -16,48 +16,37 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 
-import eu.albina.controller.AvalancheBulletinController;
-
-import eu.albina.controller.publication.MultichannelMessage;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.enumerations.BulletinStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mindrot.jbcrypt.BCrypt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Resources;
 
+import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 
 public class AlbinaUtilTest {
-
-	private static final Logger logger = LoggerFactory.getLogger(AlbinaUtilTest.class);
 
 	private ServerInstance serverInstanceEuregio;
 
@@ -67,7 +56,6 @@ public class AlbinaUtilTest {
 	private Region regionTirol;
 	private Region regionEuregio;
 
-	private final String imgBaseUrl = "D:/norbert/vs_workspace/albina-server/src/test/resources/images/";
 	@SuppressWarnings("unused")
 	private final List<String> names = new ArrayList<String>();
 	@SuppressWarnings("unused")

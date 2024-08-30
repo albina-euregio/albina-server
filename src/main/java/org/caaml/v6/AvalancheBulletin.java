@@ -1,14 +1,13 @@
 package org.caaml.v6;
 
+import java.time.Instant;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import eu.albina.caaml.CaamlVersion;
-
-import java.time.Instant;
-import java.util.List;
 
 /**
  * Avalanche Bulletin valid for a given set of regions.

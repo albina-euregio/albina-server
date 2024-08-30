@@ -1,19 +1,20 @@
 package eu.albina.util;
 
-import com.google.cloud.texttospeech.v1.AudioConfig;
-import com.google.cloud.texttospeech.v1.AudioEncoding;
-import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
-import com.google.cloud.texttospeech.v1.SynthesisInput;
-import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
-import com.google.cloud.texttospeech.v1.TextToSpeechClient;
-import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
-import com.google.common.base.Strings;
-import com.google.common.collect.Streams;
-import com.google.errorprone.annotations.CheckReturnValue;
-import com.google.protobuf.ByteString;
-import eu.albina.caaml.Caaml6;
-import eu.albina.model.enumerations.DangerPattern;
-import eu.albina.model.enumerations.LanguageCode;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.caaml.v6.Aspect;
 import org.caaml.v6.AvalancheBulletin;
 import org.caaml.v6.AvalancheBulletinCustomData;
@@ -27,25 +28,21 @@ import org.caaml.v6.ValidTimePeriod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.google.cloud.texttospeech.v1.AudioConfig;
+import com.google.cloud.texttospeech.v1.AudioEncoding;
+import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
+import com.google.cloud.texttospeech.v1.SynthesisInput;
+import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
+import com.google.cloud.texttospeech.v1.TextToSpeechClient;
+import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
+import com.google.common.base.Strings;
+import com.google.common.collect.Streams;
+import com.google.errorprone.annotations.CheckReturnValue;
+import com.google.protobuf.ByteString;
+
+import eu.albina.caaml.Caaml6;
+import eu.albina.model.enumerations.DangerPattern;
+import eu.albina.model.enumerations.LanguageCode;
 
 public interface TextToSpeech {
 	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
