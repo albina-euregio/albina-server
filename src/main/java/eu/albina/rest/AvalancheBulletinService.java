@@ -298,49 +298,37 @@ public class AvalancheBulletinService {
 		}
 	}
 
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@POST
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
     @Path("/preview")
     @Produces("application/pdf")
 	@Operation(summary = "Get bulletin preview as PDF")
-    public Response getPreviewPdf(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
+	public Response getPreviewPdf(
+		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
+		@QueryParam("region") String regionId,
+		@QueryParam("lang") LanguageCode language) {
 
-		logger.debug("GET PDF preview [{}, {}]", date, regionId);
+		logger.debug("POST PDF preview {}", regionId);
 
 		try {
-			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-			AvalancheReport report = AvalancheReportController.getInstance().getInternalReport(startDate, region);
-			List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-			if (report != null	&& report.getJsonString() != null) {
-				JSONArray jsonArray = new JSONArray(report.getJsonString());
-				for (Object object : jsonArray) {
-					if (object instanceof JSONObject) {
-						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
-						if (bulletin.affectsRegionWithoutSuggestions(region)) {
-							bulletins.add(bulletin);
-						}
-					}
-				}
-				Collections.sort(bulletins);
+			List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString);
+			Collections.sort(bulletins);
 
-				ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-				serverInstance.setMapsPath(GlobalVariables.getTmpPdfDirectory());
-				serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
-				AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
-				avalancheReport.setStatus(BulletinStatus.draft); // preview
+			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			serverInstance.setMapsPath(GlobalVariables.getTmpPdfDirectory());
+			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
+			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
+			avalancheReport.setStatus(BulletinStatus.draft); // preview
 
-				MapUtil.createMapyrusMaps(avalancheReport);
+			MapUtil.createMapyrusMaps(avalancheReport);
 
-				final java.nio.file.Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
-				File file = pdf.toFile();
+			final java.nio.file.Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
 
-				return Response.ok(file).header(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=\"" + pdf.getFileName() + "\"").header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
-			} else {
-				return Response.noContent().build();
-			}
+			return Response.ok(pdf.toFile())
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + pdf.getFileName() + "\"")
+				.header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating PDFs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
@@ -514,12 +502,7 @@ public class AvalancheBulletinService {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				JSONArray bulletinsJson = new JSONArray(bulletinsString);
-				List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
-					.mapToObj(bulletinsJson::getJSONObject)
-					.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
-					.collect(Collectors.toList());
-
+				List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString);
 				AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
@@ -530,6 +513,14 @@ public class AvalancheBulletinService {
 			logger.warn("Error creating bulletin", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
+	}
+
+	private static List<AvalancheBulletin> getAvalancheBulletins(String bulletinsString) {
+		JSONArray bulletinsJson = new JSONArray(bulletinsString);
+		return IntStream.range(0, bulletinsJson.length())
+			.mapToObj(bulletinsJson::getJSONObject)
+			.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
+			.collect(Collectors.toList());
 	}
 
 	@POST
@@ -557,12 +548,7 @@ public class AvalancheBulletinService {
 				BulletinStatus status = AvalancheReportController.getInstance().getInternalStatusForDay(startDate, region);
 
 				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted)) {
-					JSONArray bulletinsJson = new JSONArray(bulletinsString);
-					List<AvalancheBulletin> bulletins = IntStream.range(0, bulletinsJson.length())
-						.mapToObj(bulletinsJson::getJSONObject)
-						.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
-						.collect(Collectors.toList());
-
+					List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString);
 					AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
 
 					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
