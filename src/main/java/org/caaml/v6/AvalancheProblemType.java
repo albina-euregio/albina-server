@@ -1,6 +1,9 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 /**
  * Expected avalanche problem, according to the EAWS avalanche problem definition.
@@ -25,14 +28,24 @@ public enum AvalancheProblemType {
     }
 
     public static AvalancheProblemType forValue(String value) {
+        if (Objects.isNull(value)) {
+            LoggerFactory.getLogger(AvalancheProblemType.class).warn("Null value for AvalancheProblemType; will deserialize as no_distinct_avalanche_problem.");
+            return NO_DISTINCT_AVALANCHE_PROBLEM;
+        }
+        if (value.isBlank()) {
+            LoggerFactory.getLogger(AvalancheProblemType.class).warn("Blank string for AvalancheProblemType; will deserialize as no_distinct_avalanche_problem.");
+            return NO_DISTINCT_AVALANCHE_PROBLEM;
+        }
         if (value.equals("cornices")) return CORNICES;
         if (value.equals("favourable_situation")) return FAVOURABLE_SITUATION;
         if (value.equals("gliding_snow")) return GLIDING_SNOW;
         if (value.equals("new_snow")) return NEW_SNOW;
+        if (value.equals("no_distinct_problem")) return NO_DISTINCT_AVALANCHE_PROBLEM;
         if (value.equals("no_distinct_avalanche_problem")) return NO_DISTINCT_AVALANCHE_PROBLEM;
         if (value.equals("persistent_weak_layers")) return PERSISTENT_WEAK_LAYERS;
         if (value.equals("wet_snow")) return WET_SNOW;
         if (value.equals("wind_slab")) return WIND_SLAB;
+        LoggerFactory.getLogger(AvalancheProblemType.class).error("Unexpected value for AvalancheProblemType: {}", value);
         throw new IllegalArgumentException("Cannot deserialize AvalancheProblemType");
     }
 }
