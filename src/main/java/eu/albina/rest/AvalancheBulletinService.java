@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import java.io.File;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -44,6 +43,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import com.google.common.base.Stopwatch;
+import com.google.common.util.concurrent.RateLimiter;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
@@ -238,6 +239,37 @@ public class AvalancheBulletinService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language) {
 		return getPublishedJSONBulletins(date, regionIds, language);
+	}
+
+	private final RateLimiter pdfRateLimiter = RateLimiter. create(2.0); // allow 2 PDFs per second
+
+	@GET
+	@Path("/{bulletinId}/pdf")
+	@Produces("application/pdf")
+	@Operation(summary = "Get published bulletin as PDF")
+	public Response getPublishedBulletinAsPDF(
+		@PathParam("bulletinId") String bulletinId,
+		@QueryParam("region") String regionId,
+		@QueryParam("grayscale") boolean grayscale,
+		@QueryParam("lang") LanguageCode language) {
+
+		Stopwatch stopwatch = Stopwatch.createStarted();
+		logger.info("Get published bulletin as PDF {}", bulletinId);
+		try {
+			pdfRateLimiter.acquire();
+			AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin(bulletinId);
+			Region region = RegionController.getInstance().getRegion(regionId);
+			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
+			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
+			java.nio.file.Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
+			return Response.ok(pdf.toFile(), "application/pdf").build();
+		} catch (Exception e) {
+			logger.warn("Error creating PDF", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		} finally {
+			logger.info("Get published bulletin as PDF {} took {}", bulletinId, stopwatch);
+		}
 	}
 
 	@GET
