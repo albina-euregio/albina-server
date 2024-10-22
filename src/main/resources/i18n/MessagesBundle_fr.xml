@@ -55,16 +55,6 @@
   <entry key="preview"> - PRÉVIEW</entry>
   <entry key="standard.link.text">Charger la vue standard</entry>
   <entry key="danger-rating.elevation">{0} au-dessous de {1}, {2} au-dessus de {3}</entry>
-  <entry key="day.MONDAY">Lundi</entry>
-  <entry key="day.TUESDAY">Mardi</entry>
-  <entry key="day.WEDNESDAY">Mercredi</entry>
-  <entry key="day.THURSDAY">Jeudi</entry>
-  <entry key="day.FRIDAY">Vendredi</entry>
-  <entry key="day.SATURDAY">Samedi</entry>
-  <entry key="day.SUNDAY">Dimanche</entry>
-  <entry key="date-time-format"> dd.MM.yyyy</entry>
-  <entry key="date-time-format.publication">dd MM yyyy, HH:mm</entry>
-  <entry key="date-time-format.tendency"> dd MM yyyy</entry>
   <entry key="ext-file.regions.description">GeoJSON pour les régions ({0})</entry>
   <entry key="ext-file.thumbnail.description">Carte simplifiée de degré de danger</entry>
   <entry key="ext-file.simple-link.description">Lien vers le site web simplifié</entry>
@@ -118,8 +108,8 @@
   <entry key="problem.avalanche-size.large">large</entry>
   <entry key="problem.avalanche-size.very_large">very large</entry>
   <entry key="problem.avalanche-size.extreme">extreme</entry>
-  <entry key="valid-time-period.all_day">all day</entry>
-  <entry key="valid-time-period.all_day.long">all day</entry>
+  <entry key="valid-time-period.all_day">toute la journée</entry>
+  <entry key="valid-time-period.all_day.long">toute la journée</entry>
   <entry key="valid-time-period.earlier">earlier</entry>
   <entry key="valid-time-period.earlier.long">earlier in the day</entry>
   <entry key="valid-time-period.later">later</entry>

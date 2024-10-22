@@ -8,7 +8,7 @@
   <entry key="gliding_snow">Lliscament de neu</entry>
   <entry key="favourable_situation">Situació favorable</entry>
   <entry key="cornices">Cornises</entry>
-  <entry key="no_distinct_problem">Cap problema d'allaus evident</entry>
+  <entry key="no_distinct_avalanche_problem">Cap problema d'allaus evident</entry>
   <entry key="new_snow.speech">un problema de neu recent</entry>
   <entry key="wind_slab.speech">un problema de plaques de vent</entry>
   <entry key="persistent_weak_layers.speech">un problema de capa feble persistent</entry>
@@ -16,5 +16,5 @@
   <entry key="gliding_snow.speech">un problema de lliscaments basals</entry>
   <entry key="favourable_situation.speech">una situació favorable</entry>
   <entry key="cornices.speech">un problema de cornises</entry>
-  <entry key="no_distinct_problem.speech">cap problema d'allaus evident</entry>
+  <entry key="no_distinct_avalanche_problem.speech">cap problema d'allaus evident</entry>
 </properties>

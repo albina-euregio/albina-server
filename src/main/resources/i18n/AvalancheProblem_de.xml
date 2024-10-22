@@ -8,7 +8,7 @@
   <entry key="gliding_snow">Gleitschnee</entry>
   <entry key="favourable_situation">Günstige Situation</entry>
   <entry key="cornices">Wechten</entry>
-  <entry key="no_distinct_problem">Kein ausgeprägtes Problem</entry>
+  <entry key="no_distinct_avalanche_problem">Kein ausgeprägtes Lawinenproblem</entry>
   <entry key="new_snow.speech">ein Neuschnee-Problem</entry>
   <entry key="wind_slab.speech">ein Triebschnee-Problem</entry>
   <entry key="persistent_weak_layers.speech">ein Altschnee-Problem</entry>
@@ -16,5 +16,5 @@
   <entry key="gliding_snow.speech">ein Gleitschnee-Problem</entry>
   <entry key="favourable_situation.speech">eine günstige Situation</entry>
   <entry key="cornices.speech">ein Wechten-Problem</entry>
-  <entry key="no_distinct_problem.speech">kein ausgeprägtes Problem</entry>
+  <entry key="no_distinct_avalanche_problem.speech">kein ausgeprägtes Lawinenproblem</entry>
 </properties>

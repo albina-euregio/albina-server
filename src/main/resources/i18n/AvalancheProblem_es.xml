@@ -8,7 +8,7 @@
   <entry key="gliding_snow">Deslizamiento de nieve</entry>
   <entry key="favourable_situation">Situación favorable</entry>
   <entry key="cornices">Cornisas</entry>
-  <entry key="no_distinct_problem">Ningún problema de aludes evidente</entry>
+  <entry key="no_distinct_avalanche_problem">Ningún problema de aludes evidente</entry>
   <entry key="new_snow.speech">un problema de nieve reciente</entry>
   <entry key="wind_slab.speech">un problema de placas de viento</entry>
   <entry key="persistent_weak_layers.speech">un problema de capa débil persistente</entry>
@@ -16,5 +16,5 @@
   <entry key="gliding_snow.speech">un problema de deslizamiento basal</entry>
   <entry key="favourable_situation.speech">una situación favorable</entry>
   <entry key="cornices.speech">un problema de cornisas</entry>
-  <entry key="no_distinct_problem.speech">ningún problema evidente</entry>
+  <entry key="no_distinct_avalanche_problem.speech">ningún problema de aludes evidente</entry>
 </properties>

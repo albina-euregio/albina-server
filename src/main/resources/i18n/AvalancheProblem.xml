@@ -8,7 +8,7 @@
   <entry key="gliding_snow">Gliding snow</entry>
   <entry key="favourable_situation">Favourable situation</entry>
   <entry key="cornices">Cornices</entry>
-  <entry key="no_distinct_problem">No distinct problem</entry>
+  <entry key="no_distinct_avalanche_problem">No distinct avalanche problem</entry>
 
   <entry key="new_snow.speech">a new snow problem</entry>
   <entry key="wind_slab.speech">a wind slab problem</entry>
@@ -17,5 +17,5 @@
   <entry key="gliding_snow.speech">a gliding snow problem</entry>
   <entry key="favourable_situation.speech">a favourable situation</entry>
   <entry key="cornices.speech">a cornices problem </entry>
-  <entry key="no_distinct_problem.speech">no distinct problem</entry>
+  <entry key="no_distinct_avalanche_problem.speech">no distinct avalanche problem</entry>
 </properties>

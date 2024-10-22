@@ -55,16 +55,6 @@
   <entry key="preview"> - VISTA PREVIA</entry>
   <entry key="standard.link.text">Cargar vista estandar</entry>
   <entry key="danger-rating.elevation">{0} por debajo de {1}, {2} por encima de {3}</entry>
-  <entry key="day.MONDAY">Lunes</entry>
-  <entry key="day.TUESDAY">Martes</entry>
-  <entry key="day.WEDNESDAY">Miércoles</entry>
-  <entry key="day.THURSDAY">Jueves</entry>
-  <entry key="day.FRIDAY">Viernes</entry>
-  <entry key="day.SATURDAY">Sábado</entry>
-  <entry key="day.SUNDAY">Domingo</entry>
-  <entry key="date-time-format">dd.MM.yyyy</entry>
-  <entry key="date-time-format.publication">dd MM yyyy, HH:mm</entry>
-  <entry key="date-time-format.tendency">dd MM yyyy</entry>
   <entry key="ext-file.regions.description">GeoJSON por regiones({0})</entry>
   <entry key="ext-file.thumbnail.description">Mapa simplificado de grados de peligro de aludes de la región</entry>
   <entry key="ext-file.simple-link.description">Enlace a la web simplificada</entry>

@@ -55,16 +55,6 @@
   <entry key="preview">  - ANTEPRIMA</entry>
   <entry key="standard.link.text">Vista standard del carico</entry>
   <entry key="danger-rating.elevation">{0} sotto i {1}, {2} sopra i {3}</entry>
-  <entry key="day.MONDAY">Lunedì</entry>
-  <entry key="day.TUESDAY">Martedì</entry>
-  <entry key="day.WEDNESDAY">Mercoledì</entry>
-  <entry key="day.THURSDAY">Giovedì</entry>
-  <entry key="day.FRIDAY">Venerdì</entry>
-  <entry key="day.SATURDAY">Sabato</entry>
-  <entry key="day.SUNDAY">Domenica</entry>
-  <entry key="date-time-format"> dd.MM.yyyy</entry>
-  <entry key="date-time-format.publication">dd.MM.yyyy 'alle ore' HH:mm</entry>
-  <entry key="date-time-format.tendency"> 'il' dd.MM.yyyy</entry>
   <entry key="ext-file.regions.description">GeoJSON per le regioni ({0})</entry>
   <entry key="ext-file.thumbnail.description">Mappa di classificazione del pericolo semplificata della regione</entry>
   <entry key="ext-file.simple-link.description">Link al sito web semplificato</entry>

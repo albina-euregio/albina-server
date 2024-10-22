@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 import eu.albina.util.XMLResourceBundleControl;
 
 public enum AvalancheProblem {
-	new_snow, wind_slab, persistent_weak_layers, wet_snow, gliding_snow, favourable_situation, cornices, no_distinct_problem;
+	new_snow, wind_slab, persistent_weak_layers, wet_snow, gliding_snow, favourable_situation, cornices, no_distinct_avalanche_problem;
 
 	public String toString(Locale locale) {
 
@@ -54,8 +54,8 @@ public enum AvalancheProblem {
 			return "favourable_situation";
 		case cornices:
 			return "cornices";
-		case no_distinct_problem:
-			return "no_distinct_problem";
+		case no_distinct_avalanche_problem:
+			return "no_distinct_avalanche_problem";
 
 		default:
 			return null;
@@ -78,8 +78,8 @@ public enum AvalancheProblem {
 			return "favourable_situation";
 		case cornices:
 			return "cornices";
-		case no_distinct_problem:
-			return "no_distinct_problem";
+		case no_distinct_avalanche_problem:
+			return "no_distinct_avalanche_problem";
 		default:
 			return "";
 		}
