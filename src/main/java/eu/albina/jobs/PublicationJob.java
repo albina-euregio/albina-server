@@ -212,7 +212,6 @@ public class PublicationJob implements org.quartz.Job {
 	}
 
 	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
-		Files.createDirectories(toDirectory);
 		// clean target directory
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(toDirectory, "*.*")) {
 			for (Path path : stream) {
