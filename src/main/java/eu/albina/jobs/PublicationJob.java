@@ -202,7 +202,7 @@ public class PublicationJob implements org.quartz.Job {
 				stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
 				createSymbolicLinks(
 					Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
-					Paths.get(serverInstance.getHtmlDirectory(), "latest")
+					Paths.get(serverInstance.getHtmlDirectory())
 				);
 			}
 		} catch (IOException e) {
@@ -212,6 +212,7 @@ public class PublicationJob implements org.quartz.Job {
 	}
 
 	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
+		Files.createDirectories(toDirectory);
 		// clean target directory
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(toDirectory, "*.*")) {
 			for (Path path : stream) {
