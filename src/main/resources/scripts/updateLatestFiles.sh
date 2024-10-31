@@ -14,7 +14,3 @@ for file in $1/latest/${2}_*; do
   filename=$(basename $file)
   mv $1/latest/${filename} $1/latest/${filename:11}
 done
-
-chmod 755 $3/*.html
-chmod -R 755 $1/latest/
-

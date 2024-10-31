@@ -26,7 +26,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import eu.albina.model.AvalancheReport;
-import eu.albina.util.AlbinaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +59,6 @@ public interface Caaml {
 			String caamlString = createCaaml(avalancheReport, lang, version);
 			String fileName = dirPath + "/" + avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString() + version.filenameSuffix();
 			Files.write(Paths.get(fileName), caamlString.getBytes(StandardCharsets.UTF_8));
-			AlbinaUtil.setFilePermissions(fileName);
 		}
 	}
 

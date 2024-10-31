@@ -17,13 +17,9 @@
 package eu.albina.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -35,7 +31,6 @@ import java.time.format.DateTimeFormatter;
 import java.text.MessageFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -162,26 +157,6 @@ public interface AlbinaUtil {
 
 	static String getPublicationDateDirectory(Instant publicationTime) {
 		return publicationTime.atZone(ZoneId.of("UTC")).format(formatterPublicationTime);
-	}
-
-	static void setFilePermissions(String fileName) throws IOException {
-		// using PosixFilePermission to set file permissions 755
-		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
-		// add owners permission
-		perms.add(PosixFilePermission.OWNER_READ);
-		perms.add(PosixFilePermission.OWNER_WRITE);
-		perms.add(PosixFilePermission.OWNER_EXECUTE);
-		// add group permissions
-		perms.add(PosixFilePermission.GROUP_READ);
-		perms.add(PosixFilePermission.GROUP_WRITE);
-		// add others permissions
-		perms.add(PosixFilePermission.OTHERS_READ);
-
-		try {
-			Files.setPosixFilePermissions(Paths.get(fileName), perms);
-		} catch (UnsupportedOperationException | IOException e) {
-			logger.debug("File permission could not be set!");
-		}
 	}
 
 	static boolean isLatest(List<AvalancheBulletin> bulletins) {

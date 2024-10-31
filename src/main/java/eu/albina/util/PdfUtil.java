@@ -148,7 +148,6 @@ public class PdfUtil {
 				createPdfBulletinPage(bulletin, document);
 			}
 
-			AlbinaUtil.setFilePermissions(path.toString());
 			return path;
 		}
 	}
