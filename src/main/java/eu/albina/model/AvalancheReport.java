@@ -307,6 +307,10 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		return Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString);
 	}
 
+	public Path getHtmlDirectory() {
+		return Paths.get(serverInstance.getHtmlDirectory(), validityDateString);
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();

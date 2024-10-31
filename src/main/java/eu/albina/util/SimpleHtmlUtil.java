@@ -27,7 +27,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -135,9 +134,9 @@ public class SimpleHtmlUtil {
 			if (avalancheReport.getBulletins() != null && !avalancheReport.getBulletins().isEmpty()) {
 				String simpleHtmlString = createSimpleHtmlString(avalancheReport, lang);
 				String filename = avalancheReport.getRegion().getId() + "_" + lang.toString() + ".html";
-				String dirPath = avalancheReport.getServerInstance().getHtmlDirectory() + "/" + avalancheReport.getValidityDateString();
-				new File(dirPath).mkdirs();
-				Path newHtmlFile = Paths.get(dirPath + "/" + filename);
+				Path dirPath = avalancheReport.getHtmlDirectory();
+				Files.createDirectories(dirPath);
+				Path newHtmlFile = dirPath.resolve(filename);
 				Files.write(newHtmlFile, simpleHtmlString.getBytes(StandardCharsets.UTF_8));
 				return true;
 			} else
