@@ -9,20 +9,10 @@ ln --symbolic --relative --force $1/$2/*.* $1/latest/
 rm $3/*.html
 ln --symbolic --relative --force $3/$2/*.html $3/
 
-for region in EUREGIO AT-07 IT-32-BZ IT-32-TN ES-CT-L; do
-  for language in de it en fr es ca oc; do
-    mv $1/latest/${2}_${region}_${language}.pdf $1/latest/${region}_${language}.pdf
-    mv $1/latest/${2}_${region}_${language}_bw.pdf $1/latest/${region}_${language}_bw.pdf
-    mv $1/latest/${2}_${region}_${language}.xml $1/latest/${region}_${language}.xml
-    mv $1/latest/${2}_${region}_${language}_CAAMLv6.xml $1/latest/${region}_${language}_CAAMLv6.xml
-    mv $1/latest/${2}_${region}_${language}_CAAMLv6.json $1/latest/${region}_${language}_CAAMLv6.json
-    # rename files without region ID
-    mv $1/latest/${2}_${language}.pdf $1/latest/${language}.pdf
-    mv $1/latest/${2}_${language}_bw.pdf $1/latest/${language}_bw.pdf
-    mv $1/latest/${2}_${language}.xml $1/latest/${language}.xml
-    mv $1/latest/${2}_${language}_CAAMLv6.xml $1/latest/${language}_CAAMLv6.xml
-    mv $1/latest/${2}_${language}_CAAMLv6.json $1/latest/${language}_CAAMLv6.json
-  done
+# drop date prefix from files (2024-10-30_IT-32-BZ_fr_CAAMLv6.xml -> IT-32-BZ_fr_CAAMLv6.xml; 2024-10-30_ has 11 chars)
+for file in $1/latest/${2}_*; do
+  filename=$(basename $file)
+  mv $1/latest/${filename} $1/latest/${filename:11}
 done
 
 chmod 755 $3/*.html
