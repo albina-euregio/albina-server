@@ -2,6 +2,7 @@ package eu.albina.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -63,6 +64,7 @@ public interface TextToSpeech {
 		}
 
 		String createScript() {
+			// https://cloud.google.com/text-to-speech/docs/ssml
 			lines.format("<!--%n%s%s-->%n", voice(), audioConfig());
 			lines.println("<speak>");
 			lines.println("<par>");
@@ -373,9 +375,13 @@ public interface TextToSpeech {
 		for (eu.albina.model.AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
 			for (LanguageCode lang : ENABLED) {
 				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
-				ByteString audioFile = createAudioFile(caaml);
-				String filename = String.format("%s_%s_%s.mp3", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang.toString());
+				String filename = String.format("%s_%s_%s.ssml", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang.toString());
 				Path path = avalancheReport.getPdfDirectory().resolve(filename);
+				logger.info("Writing SSML file {}", path);
+				Files.writeString(path, new ScriptEngine(caaml).createScript(), StandardCharsets.UTF_8);
+				ByteString audioFile = createAudioFile(caaml);
+				filename = String.format("%s_%s_%s.mp3", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang.toString());
+				path = avalancheReport.getPdfDirectory().resolve(filename);
 				logger.info("Writing audio file {} ({} bytes)", path, audioFile.size());
 				Files.write(path, audioFile.toByteArray());
 			}
