@@ -28,14 +28,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import eu.albina.model.AvalancheReport;
 import eu.albina.map.MapImageFormat;
@@ -137,31 +134,9 @@ public class SimpleHtmlUtil {
 		try {
 			if (avalancheReport.getBulletins() != null && !avalancheReport.getBulletins().isEmpty()) {
 				String simpleHtmlString = createSimpleHtmlString(avalancheReport, lang);
-
 				String filename = avalancheReport.getRegion().getId() + "_" + lang.toString() + ".html";
-
 				String dirPath = avalancheReport.getServerInstance().getHtmlDirectory() + "/" + avalancheReport.getValidityDateString();
 				new File(dirPath).mkdirs();
-
-				// using PosixFilePermission to set file permissions 755
-				Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
-				// add owners permission
-				perms.add(PosixFilePermission.OWNER_READ);
-				perms.add(PosixFilePermission.OWNER_WRITE);
-				perms.add(PosixFilePermission.OWNER_EXECUTE);
-				// add group permissions
-				perms.add(PosixFilePermission.GROUP_READ);
-				perms.add(PosixFilePermission.GROUP_EXECUTE);
-				// add others permissions
-				perms.add(PosixFilePermission.OTHERS_READ);
-				perms.add(PosixFilePermission.OTHERS_EXECUTE);
-
-				try {
-					Files.setPosixFilePermissions(Paths.get(dirPath), perms);
-				} catch (IOException | UnsupportedOperationException e) {
-					logger.warn("File permissions could not be set!");
-				}
-
 				Path newHtmlFile = Paths.get(dirPath + "/" + filename);
 				Files.write(newHtmlFile, simpleHtmlString.getBytes(StandardCharsets.UTF_8));
 				return true;

@@ -21,9 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
-import java.util.EnumSet;
-import java.util.Set;
 
 import eu.albina.model.AvalancheReport;
 import org.slf4j.Logger;
@@ -45,15 +42,6 @@ public interface Caaml {
 	static void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
 		Files.createDirectories(dirPath);
-
-		// using PosixFilePermission to set file permissions 777
-		Set<PosixFilePermission> perms = EnumSet.allOf(PosixFilePermission.class);
-		try {
-			Files.setPosixFilePermissions(dirPath.getParent(), perms);
-			Files.setPosixFilePermissions(dirPath, perms);
-		} catch (IOException | UnsupportedOperationException e) {
-			logger.warn("File permissions could not be set!");
-		}
 
 		for (LanguageCode lang : LanguageCode.ENABLED) {
 			String caamlString = createCaaml(avalancheReport, lang, version);
