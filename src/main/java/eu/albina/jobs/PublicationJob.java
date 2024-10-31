@@ -213,15 +213,21 @@ public class PublicationJob implements org.quartz.Job {
 
 	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
 		// clean target directory
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(toDirectory, "*.*")) {
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(toDirectory)) {
 			for (Path path : stream) {
+				if (Files.isDirectory(path)) {
+					continue;
+				}
 				logger.info("Removing existing file {}", path);
 				Files.delete(path);
 			}
 		}
 		// create symbolic links
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(fromDirectory, "*.*")) {
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(fromDirectory)) {
 			for (Path path : stream) {
+				if (Files.isDirectory(path)) {
+					continue;
+				}
 				Path link = toDirectory.resolve(path.getFileName());
 				logger.info("Creating symbolic link from {} to {}", path, link);
 				Files.createSymbolicLink(link, link.relativize(path));
