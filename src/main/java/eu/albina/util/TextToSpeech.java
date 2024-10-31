@@ -56,14 +56,14 @@ public interface TextToSpeech {
 		private final StringWriter stringWriter = new StringWriter();
 		private final PrintWriter lines = new PrintWriter(stringWriter);
 
-		private ScriptEngine(AvalancheBulletin bulletin) {
+		ScriptEngine(AvalancheBulletin bulletin) {
 			this.bulletin = bulletin;
 			this.lang = LanguageCode.valueOf(bulletin.getLang());
 			this.gender = bulletin.getBulletinID().chars().sum() % 2 == 1 ? SsmlVoiceGender.FEMALE : SsmlVoiceGender.MALE;
 		}
 
 		String createScript() {
-
+			lines.format("<!--%n%s%s-->%n", voice(), audioConfig());
 			lines.println("<speak>");
 			lines.println("<par>");
 			lines.format("<media repeatCount=\"1\" fadeOutDur=\"10s\" end=\"10s\"><audio src=\"%s\"></audio></media>%n", jingle);
@@ -349,14 +349,6 @@ public interface TextToSpeech {
 				.build();
 		}
 
-	}
-
-	static String createScript(AvalancheBulletin bulletin) {
-		ScriptEngine scriptEngine = new ScriptEngine(bulletin);
-		String ssml = scriptEngine.createScript();
-		VoiceSelectionParams voice = scriptEngine.voice();
-		AudioConfig audioConfig = scriptEngine.audioConfig();
-		return String.format("<!--%n%s%s-->%n%s", voice, audioConfig, ssml);
 	}
 
 	static ByteString createAudioFile(AvalancheBulletin bulletin) throws Exception {

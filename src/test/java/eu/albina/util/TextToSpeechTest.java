@@ -26,7 +26,9 @@ class TextToSpeechTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 		for (LanguageCode lang : TextToSpeech.ENABLED) {
 			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
-			String ssml = caaml.getBulletins().stream().map(TextToSpeech::createScript).collect(Collectors.joining(String.format("%n%n")));
+			String ssml = caaml.getBulletins().stream()
+				.map(bulletin -> new TextToSpeech.ScriptEngine(bulletin).createScript())
+				.collect(Collectors.joining(String.format("%n%n")));
 			String expectedResource = bulletinResource.replaceAll(".json$", String.format(".%s.ssml", lang));
 			// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/" + expectedResource), ssml);
 			String expected = Resources.toString(Resources.getResource(expectedResource), StandardCharsets.UTF_8);
