@@ -222,9 +222,9 @@ public class PublicationJob implements org.quartz.Job {
 		// create symbolic links
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(fromDirectory, "*.*")) {
 			for (Path path : stream) {
-				Path target = toDirectory.resolve(path.getFileName());
-				logger.info("Creating symbolic link from {} to {}", path, target);
-				Files.createSymbolicLink(path, target);
+				Path link = toDirectory.resolve(path.getFileName());
+				logger.info("Creating symbolic link from {} to {}", path, link);
+				Files.createSymbolicLink(link, path.relativize(link));
 			}
 		}
 	}
