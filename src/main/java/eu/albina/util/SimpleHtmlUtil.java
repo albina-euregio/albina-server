@@ -164,8 +164,6 @@ public class SimpleHtmlUtil {
 
 				Path newHtmlFile = Paths.get(dirPath + "/" + filename);
 				Files.write(newHtmlFile, simpleHtmlString.getBytes(StandardCharsets.UTF_8));
-				AlbinaUtil.setFilePermissions(dirPath + "/" + filename);
-
 				return true;
 			} else
 				return false;

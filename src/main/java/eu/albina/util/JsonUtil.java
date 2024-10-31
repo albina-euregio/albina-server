@@ -56,7 +56,6 @@ public class JsonUtil {
 			String jsonString = jsonArray.toString();
 
 			Files.write(path, jsonString.getBytes(StandardCharsets.UTF_8));
-			AlbinaUtil.setFilePermissions(path.toString());
 		}
 	}
 

@@ -386,7 +386,6 @@ public interface TextToSpeech {
 				Path path = avalancheReport.getPdfDirectory().resolve(filename);
 				logger.info("Writing audio file {} ({} bytes)", path, audioFile.size());
 				Files.write(path, audioFile.toByteArray());
-				AlbinaUtil.setFilePermissions(path.toString());
 			}
 		}
 	}
