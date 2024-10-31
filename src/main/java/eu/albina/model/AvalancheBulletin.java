@@ -19,6 +19,8 @@ package eu.albina.model;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -32,6 +34,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import eu.albina.util.AlbinaUtil;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -792,19 +795,23 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return sum;
 	}
 
-	public static ZonedDateTime getValidityDate(ZonedDateTime validFrom) {
-		ZonedDateTime date = validFrom;
-		if (validFrom.getHour() > 12)
-			date = date.plusDays(1);
-		return date;
-	}
-
-	public ZonedDateTime getValidityDate() {
-		return getValidityDate(validFrom);
+	public LocalDate getValidityDate() {
+		ZonedDateTime zonedDateTime = validUntil.withZoneSameInstant(AlbinaUtil.localZone());
+		LocalTime localTime = zonedDateTime.toLocalTime();
+		if (localTime.equals(LocalTime.of(0, 0))) {
+			// used until 2024-05-01
+			return zonedDateTime.toLocalDate().minusDays(1);
+		} else if (localTime.equals(LocalTime.of(17, 0))) {
+			// used starting with 2024-12-01
+			return zonedDateTime.toLocalDate();
+		} else {
+			// unspecified
+			return zonedDateTime.toLocalDate();
+		}
 	}
 
 	public String getValidityDateString() {
-		return getValidityDate().toLocalDate().toString();
+		return getValidityDate().toString();
 	}
 
 	@Override

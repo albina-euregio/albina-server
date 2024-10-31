@@ -79,7 +79,7 @@ public interface Caaml6 {
 			.map(dp -> dp.name().toUpperCase())
 			.collect(Collectors.toList());
 		bulletin.setCustomData(new AvalancheBulletinCustomData(
-			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDate().toLocalDate().toString()),
+			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDateString()),
 			new AvalancheBulletinCustomData.LwdTyrol(dangerPatterns)
 		));
 		bulletin.setDangerRatings(Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())

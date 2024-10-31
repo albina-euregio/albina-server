@@ -214,7 +214,7 @@ public class AvalancheBulletinPublishService {
 
 			// copy files
 			AlbinaUtil.runUpdatePdfsScript(validityDateString, publicationTimeString);
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			if (AlbinaUtil.isLatest(bulletins))
 				AlbinaUtil.runUpdateLatestPdfsScript(validityDateString);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
@@ -258,7 +258,7 @@ public class AvalancheBulletinPublishService {
 			}
 
 			// copy files
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			if (AlbinaUtil.isLatest(bulletins))
 				AlbinaUtil.runUpdateLatestHtmlsScript(AlbinaUtil.getValidityDateString(bulletins));
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
@@ -311,7 +311,7 @@ public class AvalancheBulletinPublishService {
 
 			// copy files
 			AlbinaUtil.runUpdateMapsScript(validityDateString, publicationTimeString);
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			if (AlbinaUtil.isLatest(bulletins))
 				AlbinaUtil.runUpdateLatestMapsScript(validityDateString);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
@@ -370,7 +370,7 @@ public class AvalancheBulletinPublishService {
 
 			// copy files
 			AlbinaUtil.runUpdateCaamlsScript(validityDateString, publicationTimeString);
-			if (AlbinaUtil.isLatest(AlbinaUtil.getDate(bulletins)))
+			if (AlbinaUtil.isLatest(bulletins))
 				AlbinaUtil.runUpdateLatestCaamlsScript(validityDateString);
 
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();

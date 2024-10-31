@@ -184,7 +184,7 @@ public class PublicationJob implements org.quartz.Job {
 
 		// copy files
 		AlbinaUtil.runUpdateFilesScript(validityDateString, publicationTimeString);
-		if (AlbinaUtil.isLatest(AlbinaUtil.getDate(publishedBulletins))) {
+		if (AlbinaUtil.isLatest(publishedBulletins)) {
 			AlbinaUtil.runUpdateLatestFilesScript(validityDateString);
 		}
 

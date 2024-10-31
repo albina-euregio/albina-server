@@ -23,7 +23,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -61,7 +61,7 @@ public interface MapUtil {
 	static SimpleBindings createMayrusBindings(List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, boolean preview) {
 		Table<String, String, Argument> bindings = TreeBasedTable.create();
 		for (AvalancheBulletin bulletin : bulletins) {
-			Stream<String> regions = bulletin.getValidityDate().isBefore(ZonedDateTime.parse("2022-10-01T00:00:00Z"))
+			Stream<String> regions = bulletin.getValidityDate().isBefore(LocalDate.parse("2022-10-01"))
 				? bulletin.regions(preview).stream().flatMap(MapUtil::mapRegions)
 				: bulletin.regions(preview).stream();
 			regions.forEach(region -> {

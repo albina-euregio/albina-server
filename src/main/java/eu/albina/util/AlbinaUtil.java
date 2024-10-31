@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.Clock;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -69,19 +70,15 @@ public interface AlbinaUtil {
 	static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription) {
 		if (avalancheBulletinDaytimeDescription.isHasElevationDependency())
 			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
-					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
+				+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 		else
 			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove()) + "_"
-					+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
+				+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
 	}
 
 	static String getTendencyDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getValidityDate(bulletins);
-		date = date.plusDays(1);
-		if (date == null) {
-			return "";
-		}
-		return lang.getBundleString("tendency.binding-word").strip() + " " + lang.getLongDate(date);
+		LocalDate date = getValidityDate(bulletins).plusDays(1);
+		return lang.getBundleString("tendency.binding-word").strip() + " " + lang.getLongDate(date.atStartOfDay(localZone()));
 	}
 
 	static Instant getInstantNowNoNanos() {
@@ -97,58 +94,36 @@ public interface AlbinaUtil {
 	}
 
 	static String getDate(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getValidityDate(bulletins);
-		if (date == null) {
-			// TODO what if no date is given (should not happen)
-			return "-";
-		}
-		date = date.withZoneSameInstant(localZone());
-		return lang.getLongDate(date);
-	}
-
-	static int getYear(List<AvalancheBulletin> bulletins) {
-		return getDate(bulletins).getYear();
+		LocalDate date = getValidityDate(bulletins);
+		return lang.getLongDate(date.atStartOfDay(localZone()));
 	}
 
 	static String getValidityDateString(List<AvalancheBulletin> bulletins) {
-		return getValidityDateString(bulletins, Period.ZERO);
+		return getValidityDate(bulletins).toString();
 	}
 
-	static ZonedDateTime getValidityDate(List<AvalancheBulletin> bulletins) {
-		ZonedDateTime date = getDate(bulletins);
-		date = date.withZoneSameInstant(localZone());
-		if (date.getHour() > 12) {
-			date = date.plusDays(1);
-		}
-		return date;
+	static LocalDate getValidityDate(List<AvalancheBulletin> bulletins) {
+		return bulletins.stream()
+			.map(AvalancheBulletin::getValidityDate)
+			.max(Comparator.naturalOrder())
+			.orElseThrow();
 	}
 
 	static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset) {
-		ZonedDateTime date = getValidityDate(bulletins);
-		date = date.plus(offset);
-		return date.toLocalDate().toString();
+		return getValidityDate(bulletins).plus(offset).toString();
+	}
+
+	static String getValidityDateString(List<AvalancheBulletin> bulletins, Period offset, LanguageCode lang) {
+		LocalDate date = getValidityDate(bulletins).plus(offset);
+		return lang.getDate(date.atStartOfDay(localZone()));
 	}
 
 	static String getPreviousValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getValidityDate(bulletins);
-		date = date.withZoneSameInstant(localZone());
-		date = date.minusDays(1);
-		return lang.getDate(date);
+		return getValidityDateString(bulletins, Period.ofDays(-1), lang);
 	}
 
 	static String getNextValidityDateString(List<AvalancheBulletin> bulletins, LanguageCode lang) {
-		ZonedDateTime date = getValidityDate(bulletins);
-		date = date.withZoneSameInstant(localZone());
-		date = date.plusDays(1);
-		return lang.getDate(date);
-	}
-
-	static ZonedDateTime getDate(List<AvalancheBulletin> bulletins) {
-		return bulletins.stream()
-			.map(AvalancheBulletin::getValidFrom)
-			.filter(Objects::nonNull)
-			.max(Comparator.naturalOrder())
-			.orElse(null);
+		return getValidityDateString(bulletins, Period.ofDays(1), lang);
 	}
 
 	static boolean isUpdate(List<AvalancheBulletin> bulletins) {
@@ -174,7 +149,7 @@ public interface AlbinaUtil {
 		}
 		ZonedDateTime dateTime = instant.atZone(localZone()).truncatedTo(ChronoUnit.MINUTES);
 		return lang.getDateTime(dateTime);
-    }
+	}
 
 	static String getPublicationDateDirectory(List<AvalancheBulletin> bulletins) {
 		Instant instant = getPublicationDate(bulletins);
@@ -209,18 +184,18 @@ public interface AlbinaUtil {
 		}
 	}
 
-	static boolean isLatest(ZonedDateTime date) {
-		return isLatest(date, Clock.system(localZone()));
+	static boolean isLatest(List<AvalancheBulletin> bulletins) {
+		return isLatest(bulletins, Clock.system(localZone()));
 	}
 
-	static boolean isLatest(ZonedDateTime date, Clock clock) {
-		date = date.withZoneSameInstant(localZone());
+	static boolean isLatest(List<AvalancheBulletin> bulletins, Clock clock) {
+		LocalDate date = getValidityDate(bulletins);
 		ZonedDateTime now = ZonedDateTime.now(clock);
 
 		if (now.getHour() >= 17) {
-			return date.toLocalDate().equals(now.toLocalDate().plusDays(1));
+			return date.equals(now.toLocalDate().plusDays(1));
 		} else {
-			return date.toLocalDate().equals(now.toLocalDate());
+			return date.equals(now.toLocalDate());
 		}
 	}
 
@@ -243,7 +218,7 @@ public interface AlbinaUtil {
 
 	static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
-            ProcessBuilder pb = newShellProcessBuilder();
+			ProcessBuilder pb = newShellProcessBuilder();
 			pb.command().addAll(List.of(
 				getScriptPath("scripts/updateFiles.sh"),
 				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
@@ -261,7 +236,7 @@ public interface AlbinaUtil {
 
 	static void runUpdatePdfsScript(String date, String publicationTime) {
 		try {
-            ProcessBuilder pb = newShellProcessBuilder();
+			ProcessBuilder pb = newShellProcessBuilder();
 			pb.command().addAll(List.of(
 				getScriptPath("scripts/updatePdfs.sh"),
 				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
@@ -278,7 +253,7 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestPdfsScript(String date) {
 		try {
-            ProcessBuilder pb = newShellProcessBuilder();
+			ProcessBuilder pb = newShellProcessBuilder();
 			pb.command().addAll(List.of(
 				getScriptPath("scripts/updateLatestPdfs.sh"),
 				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
@@ -294,7 +269,7 @@ public interface AlbinaUtil {
 
 	static void runUpdateCaamlsScript(String date, String publicationTime) {
 		try {
-            ProcessBuilder pb = newShellProcessBuilder();
+			ProcessBuilder pb = newShellProcessBuilder();
 			pb.command().addAll(List.of(
 				getScriptPath("scripts/updateCaamls.sh"),
 				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
@@ -311,7 +286,7 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestCaamlsScript(String date) {
 		try {
-            ProcessBuilder pb = newShellProcessBuilder();
+			ProcessBuilder pb = newShellProcessBuilder();
 			pb.command().addAll(List.of(
 				getScriptPath("scripts/updateLatestCaamls.sh"),
 				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
@@ -327,7 +302,7 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestMapsScript(String date) {
 		try {
-            ProcessBuilder pb = newShellProcessBuilder();
+			ProcessBuilder pb = newShellProcessBuilder();
 			pb.command().addAll(List.of(
 				getScriptPath("scripts/updateLatestMaps.sh"),
 				ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
@@ -343,7 +318,7 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestFilesScript(String date) {
 		try {
-            ProcessBuilder pb = newShellProcessBuilder();
+			ProcessBuilder pb = newShellProcessBuilder();
 			pb.command().addAll(List.of(
 				getScriptPath("scripts/updateLatestFiles.sh"),
 				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
@@ -360,7 +335,7 @@ public interface AlbinaUtil {
 
 	static void runUpdateLatestHtmlsScript(String date) {
 		try {
-            ProcessBuilder pb = newShellProcessBuilder();
+			ProcessBuilder pb = newShellProcessBuilder();
 			pb.command().addAll(List.of(
 				getScriptPath("scripts/updateLatestHtmls.sh"),
 				ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(),
@@ -385,7 +360,7 @@ public interface AlbinaUtil {
 	static String getScriptPath(String name) {
 		URL resource = AlbinaUtil.class.getClassLoader().getResource(name);
 		File file = new File(resource.getFile());
-        return URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8);
+		return URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8);
 	}
 
 	static String getDangerRatingText(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang) {
