@@ -225,7 +225,7 @@ public class PublicationJob implements org.quartz.Job {
 			for (Path path : stream) {
 				Path link = toDirectory.resolve(path.getFileName());
 				logger.info("Creating symbolic link from {} to {}", path, link);
-				Files.createSymbolicLink(link, path.relativize(link));
+				Files.createSymbolicLink(link, link.relativize(path));
 			}
 		}
 	}
