@@ -24,8 +24,10 @@ import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import com.google.common.io.Resources;
 
@@ -559,7 +561,7 @@ public class PdfUtil {
 		else
 			regionImg = getImage("warning_pictos/color/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
 		if (regionImg != null) {
-			regionImg.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getDangerRatingText(daytimeBulletin, lang));
+			regionImg.getAccessibilityProperties().setAlternateDescription(getDangerRatingText(daytimeBulletin, lang));
 			regionImg.scaleToFit(70, 30);
 			firstRow.add(regionImg);
 		}
@@ -737,7 +739,7 @@ public class PdfUtil {
 			return new Cell().setBorder(null);
 		}
 		Image img = getImage(Aspect.getSymbolPath(aspects, grayscale));
-		img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getAspectString(aspects, lang.getLocale()));
+		img.getAccessibilityProperties().setAlternateDescription(getAspectString(aspects, lang.getLocale()));
 		img.scaleToFit(30, 30);
 		Cell cell = new Cell(1, 1).add(img);
 		cell.setBorder(Border.NO_BORDER);
@@ -761,7 +763,7 @@ public class PdfUtil {
 					img = getImage("elevation/grey/levels_middle_two.png");
 				else
 					img = getImage("elevation/color/levels_middle_two.png");
-				img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
+				img.getAccessibilityProperties().setAlternateDescription(getElevationString(avalancheProblem, lang));
 				img.scaleToFit(70, 25);
 				cell = new Cell(1, 1);
 				cell.setTextAlignment(TextAlignment.LEFT);
@@ -822,7 +824,7 @@ public class PdfUtil {
 					img = getImage("elevation/grey/levels_below.png");
 				else
 					img = getImage("elevation/color/levels_below.png");
-				img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
+				img.getAccessibilityProperties().setAlternateDescription(getElevationString(avalancheProblem, lang));
 				img.scaleToFit(70, 25);
 				cell = new Cell(1, 1);
 				cell.setTextAlignment(TextAlignment.LEFT);
@@ -860,7 +862,7 @@ public class PdfUtil {
 				img = getImage("elevation/grey/levels_above.png");
 			else
 				img = getImage("elevation/color/levels_above.png");
-			img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
+			img.getAccessibilityProperties().setAlternateDescription(getElevationString(avalancheProblem, lang));
 			img.scaleToFit(70, 25);
 			img.setMarginLeft(5);
 			cell = new Cell(1, 1);
@@ -898,7 +900,7 @@ public class PdfUtil {
 				img = getImage("elevation/grey/levels_all.png");
 			else
 				img = getImage("elevation/color/levels_all.png");
-			img.getAccessibilityProperties().setAlternateDescription(AlbinaUtil.getElevationString(avalancheProblem, lang));
+			img.getAccessibilityProperties().setAlternateDescription(getElevationString(avalancheProblem, lang));
 			img.scaleToFit(70, 25);
 			img.setMarginLeft(5);
 			cell = new Cell(1, 1);
@@ -1242,5 +1244,87 @@ public class PdfUtil {
 
 	private String replaceLinebreaks(String text) {
 		return text.replaceAll("[ ]*<br\\/>[ ]*", "\n");
+	}
+
+	public static String getDangerRatingText(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang) {
+		String dangerRatingBelow;
+		String dangerRatingAbove;
+		if (daytimeBulletin.getDangerRatingBelow() == null || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.missing) || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.no_rating) || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.no_snow)) {
+			dangerRatingBelow = DangerRating.no_rating.toString(lang.getLocale(), true);
+		} else {
+			dangerRatingBelow = daytimeBulletin.getDangerRatingBelow().toString(lang.getLocale(), true);
+		}
+		if (daytimeBulletin.getDangerRatingAbove() == null || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.missing) || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.no_rating) || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.no_snow)) {
+			dangerRatingAbove = DangerRating.no_rating.toString(lang.getLocale(), true);
+		} else {
+			dangerRatingAbove = daytimeBulletin.getDangerRatingAbove().toString(lang.getLocale(), true);
+		}
+
+		if (daytimeBulletin.getTreeline()) {
+			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, lang.getBundleString("elevation.treeline"), dangerRatingAbove, lang.getBundleString("elevation.treeline"));
+		} else if (daytimeBulletin.getElevation() > 0) {
+			String elevation = daytimeBulletin.getElevation() + lang.getBundleString("unit.meter");
+			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, elevation, dangerRatingAbove, elevation);
+		} else {
+			return dangerRatingAbove;
+		}
+	}
+
+	public static String getElevationString(AvalancheProblem avalancheProblem, LanguageCode lang) {
+		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
+			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
+				// elevation high and low set
+				String low = "";
+				String high = "";
+				if (avalancheProblem.getTreelineLow()) {
+					// elevation low treeline
+					low = lang.getBundleString("elevation.treeline");
+				} else if (avalancheProblem.getElevationLow() > 0) {
+					// elevation low number
+					low = avalancheProblem.getElevationLow() + lang.getBundleString("unit.meter");
+				}
+				if (avalancheProblem.getTreelineHigh()) {
+					// elevation high treeline
+					high = lang.getBundleString("elevation.treeline");
+				} else if (avalancheProblem.getElevationHigh() > 0) {
+					// elevation high number
+					high = avalancheProblem.getElevationHigh() + lang.getBundleString("unit.meter");
+				}
+				return MessageFormat.format(lang.getBundleString("elevation.band"), low, high);
+			} else {
+				// elevation high set
+				String high = "";
+				if (avalancheProblem.getTreelineHigh()) {
+					// elevation high treeline
+					high = lang.getBundleString("elevation.treeline");
+				} else if (avalancheProblem.getElevationHigh() > 0) {
+					// elevation high number
+					high = avalancheProblem.getElevationHigh() + lang.getBundleString("unit.meter");
+				}
+				return MessageFormat.format(lang.getBundleString("elevation.below"), high);
+			}
+		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
+			// elevation low set
+			String low = "";
+			if (avalancheProblem.getTreelineLow()) {
+				// elevation low treeline
+				low = lang.getBundleString("elevation.treeline");
+			} else if (avalancheProblem.getElevationLow() > 0) {
+				// elevation low number
+				low = avalancheProblem.getElevationLow() + lang.getBundleString("unit.meter");
+			}
+			return MessageFormat.format(lang.getBundleString("elevation.above"), low);
+		} else {
+			// no elevation set
+			return lang.getBundleString("elevation.all");
+		}
+	}
+
+	public static String getAspectString(Set<Aspect> aspects, Locale locale) {
+		StringJoiner aspectString = new StringJoiner(", ");
+		for (Aspect aspect : aspects) {
+			aspectString.add(aspect.toString(locale));
+		}
+		return aspectString.toString();
 	}
 }
