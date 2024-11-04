@@ -16,10 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.File;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -32,13 +28,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.enumerations.DangerRating;
@@ -167,55 +160,6 @@ public interface AlbinaUtil {
 		} else {
 			return date.equals(now.toLocalDate());
 		}
-	}
-
-	static void runUpdateFilesScript(String date, String publicationTime) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updateFiles.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-				date,
-				publicationTime,
-				ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("Files updated for {} using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("Files could not be deleted for " + date + "!", e);
-		}
-	}
-
-	static void runUpdateLatestFilesScript(String date) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updateLatestFiles.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-				date,
-				ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory()
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("Latest files updated using {}", pb.command());
-		} catch (Exception e) {
-			logger.error("Latest files could not be updated!", e);
-		}
-	}
-
-	private static ProcessBuilder newShellProcessBuilder() {
-		if (SystemUtils.IS_OS_WINDOWS) {
-			return new ProcessBuilder("cmd.exe", "/C").inheritIO();
-		} else {
-			return new ProcessBuilder("/bin/sh").inheritIO();
-		}
-	}
-
-	static String getScriptPath(String name) {
-		URL resource = AlbinaUtil.class.getClassLoader().getResource(name);
-		File file = new File(resource.getFile());
-		return URLDecoder.decode(file.getPath(), StandardCharsets.UTF_8);
 	}
 
 }
