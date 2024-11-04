@@ -159,14 +159,14 @@ public class SimpleHtmlUtil {
 
 		Map<String, Object> text = new HashMap<>();
 		text.put("standardView", lang.getBundleString("standard.link.text"));
-		text.put("tabtitle", lang.getBundleString("website.name") + " " + AlbinaUtil.getDate(bulletins, lang));
+		text.put("tabtitle", lang.getBundleString("website.name") + " " + avalancheReport.getDate(lang));
 		text.put("title", lang.getBundleString("website.name"));
-		text.put("subtitle", AlbinaUtil.getDate(bulletins, lang));
-		String publicationDate = AlbinaUtil.getPublicationDate(bulletins, lang);
+		text.put("subtitle", avalancheReport.getDate(lang));
+		String publicationDate = avalancheReport.getPublicationDate(lang);
 		text.put("publicationDate", publicationDate);
 
-		text.put("previousDay", " &#8592; " + AlbinaUtil.getPreviousValidityDateString(bulletins, lang));
-		text.put("nextDay", AlbinaUtil.getNextValidityDateString(bulletins, lang) + " &#8594;");
+		text.put("previousDay", " &#8592; " + avalancheReport.getPreviousValidityDateString(lang));
+		text.put("nextDay", avalancheReport.getNextValidityDateString(lang) + " &#8594;");
 
 		if (publicationDate.isEmpty())
 			text.put("publishedAt", "");
@@ -180,8 +180,8 @@ public class SimpleHtmlUtil {
 		Map<String, Object> link = new HashMap<>();
 		link.put("website", lang.getBundleString("website.url") + "/bulletin/"
 				+ avalancheReport.getValidityDateString());
-		link.put("previousDay", LinkUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(-1), serverInstance));
-		link.put("nextDay", LinkUtil.getBulletinLink(bulletins, lang, region, Period.ofDays(1), serverInstance));
+		link.put("previousDay", LinkUtil.getBulletinLink(avalancheReport, lang, region, Period.ofDays(-1), serverInstance));
+		link.put("nextDay", LinkUtil.getBulletinLink(avalancheReport, lang, region, Period.ofDays(1), serverInstance));
 		String prefix = LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
 			+ avalancheReport.getValidityDateString() + "/" + region.getId();
 		link.put("linkDe", prefix + "_de.html");

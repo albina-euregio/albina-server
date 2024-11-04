@@ -27,7 +27,6 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.XmlUtil;
 
 interface Caaml5 {
@@ -43,7 +42,7 @@ interface Caaml5 {
 			// create meta data
 			List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 			if (bulletins != null && !bulletins.isEmpty()) {
-				ZonedDateTime publicationDate = AlbinaUtil.getPublicationDate(bulletins).atZone(ZoneOffset.UTC);
+				ZonedDateTime publicationDate = avalancheReport.getPublicationDate().atZone(ZoneOffset.UTC);
 
 				// metaData
 				Element metaDataProperty = createMetaDataProperty(doc, publicationDate, language);

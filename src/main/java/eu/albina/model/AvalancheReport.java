@@ -18,11 +18,21 @@ package eu.albina.model;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
+import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,9 +47,10 @@ import com.github.openjson.JSONObject;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import eu.albina.util.AlbinaUtil;
 
 import eu.albina.model.enumerations.BulletinStatus;
+
+import static eu.albina.util.AlbinaUtil.localZone;
 
 /**
  * This class holds all information about one avalanche report.
@@ -143,8 +154,8 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			"bulletins must be subset of globalBulletins");
 		this.bulletins = bulletins;
 		this.globalBulletins = globalBulletins;
-		this.validityDateString = globalBulletins.isEmpty() ? null : AlbinaUtil.getValidityDateString(globalBulletins);
-		this.publicationTimeString = globalBulletins.isEmpty() ? null : AlbinaUtil.getPublicationDateDirectory(globalBulletins);
+		this.validityDateString = globalBulletins.isEmpty() ? null : getValidityDate().toString();
+		this.publicationTimeString = globalBulletins.isEmpty() ? null : getPublicationDateDirectory();
 	}
 
 	public User getUser() {
@@ -352,5 +363,82 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public boolean hasDaytimeDependency() {
 		return getBulletins().stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
+	}
+
+	public String getTendencyDate(LanguageCode lang) {
+		LocalDate date = getValidityDate().plusDays(1);
+		return lang.getBundleString("tendency.binding-word").strip() + " " + lang.getLongDate(date.atStartOfDay(localZone()));
+	}
+
+	public String getDate(LanguageCode lang) {
+		LocalDate date = getValidityDate();
+		return lang.getLongDate(date.atStartOfDay(localZone()));
+	}
+
+	public LocalDate getValidityDate() {
+		return globalBulletins.stream()
+			.map(AvalancheBulletin::getValidityDate)
+			.filter(Objects::nonNull)
+			.max(Comparator.naturalOrder())
+			.orElseThrow();
+	}
+
+	public String getValidityDateString(Period offset) {
+		return getValidityDate().plus(offset).toString();
+	}
+
+	public String getValidityDateString(Period offset, LanguageCode lang) {
+		LocalDate date = getValidityDate().plus(offset);
+		return lang.getDate(date.atStartOfDay(localZone()));
+	}
+
+	public String getPreviousValidityDateString(LanguageCode lang) {
+		return getValidityDateString(Period.ofDays(-1), lang);
+	}
+
+	public String getNextValidityDateString(LanguageCode lang) {
+		return getValidityDateString(Period.ofDays(1), lang);
+	}
+
+	public boolean isUpdate() {
+		Instant instant = getPublicationDate();
+		LocalTime localTime = instant.atZone(localZone()).toLocalTime();
+		return !LocalTime.of(17, 0).equals(localTime);
+	}
+
+	public Instant getPublicationDate() {
+		return globalBulletins.stream()
+			.map(AvalancheBulletin::getPublicationDate)
+			.filter(Objects::nonNull)
+			.map(ZonedDateTime::toInstant)
+			.max(Comparator.naturalOrder())
+			.orElse(null);
+	}
+
+	public String getPublicationDate(LanguageCode lang) {
+		Instant instant = getPublicationDate();
+		ZonedDateTime dateTime = instant.atZone(localZone()).truncatedTo(ChronoUnit.MINUTES);
+		return lang.getDateTime(dateTime);
+	}
+
+	private String getPublicationDateDirectory() {
+		Instant instant = getPublicationDate();
+		DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
+		return instant.atZone(ZoneId.of("UTC")).format(formatterPublicationTime);
+	}
+
+	public boolean isLatest() {
+		return isLatest(Clock.system(localZone()));
+	}
+
+	public boolean isLatest(Clock clock) {
+		LocalDate date = getValidityDate();
+		ZonedDateTime now = ZonedDateTime.now(clock);
+
+		if (now.getHour() >= 17) {
+			return date.equals(now.toLocalDate().plusDays(1));
+		} else {
+			return date.equals(now.toLocalDate());
+		}
 	}
 }

@@ -1,7 +1,6 @@
 package eu.albina.util;
 
 import eu.albina.map.MapUtil;
-import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
@@ -12,7 +11,6 @@ import eu.albina.model.enumerations.LanguageCode;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.time.Period;
-import java.util.List;
 
 /**
  * Returns URLs (descriptions) for various bulletin elements
@@ -104,10 +102,10 @@ public interface LinkUtil {
 		return "<a href=\"" + url + "\">" + text + "</a>";
 	}
 
-	static String getBulletinLink(List<AvalancheBulletin> bulletins, LanguageCode lang, Region region, Period offset, ServerInstance serverInstance) {
+	static String getBulletinLink(AvalancheReport avalancheReport, LanguageCode lang, Region region, Period offset, ServerInstance serverInstance) {
 		return String.format("%s/%s/%s%s.html",
 			getSimpleHtmlUrl(lang, region, serverInstance),
-			AlbinaUtil.getValidityDateString(bulletins, offset),
+			avalancheReport.getValidityDateString(offset),
 			region != null && !region.getId().isEmpty() ? region.getId() + "_" : "",
 			lang.toString());
 	}

@@ -21,7 +21,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.LinkUtil;
 import freemarker.template.TemplateException;
@@ -74,12 +73,12 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 			? lang.getBundleString("email.subject.update", region)
 			: lang.getBundleString("email.subject", region);
 		return MessageFormat.format(bundleString, lang.getBundleString("website.name", region))
-			+ AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
+			+ avalancheReport.getDate(lang);
 	}
 
 	@Override
 	public String getSocialMediaText() {
-		String dateString = AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
+		String dateString = avalancheReport.getDate(lang);
 		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport, lang);
 		return avalancheReport.getStatus() == BulletinStatus.republished
 			? MessageFormat.format(lang.getBundleString("social-media.message.update"), lang.getBundleString("website.name"), dateString, bulletinUrl)

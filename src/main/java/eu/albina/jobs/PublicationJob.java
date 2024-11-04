@@ -128,9 +128,8 @@ public class PublicationJob implements org.quartz.Job {
 			return;
 		}
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
-		// TODO check if we can use startDate instead
-		String validityDateString = AlbinaUtil.getValidityDateString(publishedBulletins);
-		String publicationTimeString = AlbinaUtil.getPublicationDateDirectory(publicationDate);
+		String validityDateString = AvalancheReport.of(publishedBulletins, null, serverInstance).getValidityDateString();
+		String publicationTimeString = AvalancheReport.of(publishedBulletins, null, serverInstance).getPublicationTimeString();
 
 		Collections.sort(publishedBulletins);
 
@@ -194,7 +193,7 @@ public class PublicationJob implements org.quartz.Job {
 				Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
 				Paths.get(serverInstance.getPdfDirectory(), validityDateString)
 			);
-			if (AlbinaUtil.isLatest(publishedBulletins)) {
+			if (AvalancheReport.of(publishedBulletins, null, null).isLatest()) {
 				createSymbolicLinks(
 					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
 					Paths.get(serverInstance.getPdfDirectory(), "latest")
