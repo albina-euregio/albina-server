@@ -42,7 +42,7 @@ interface Caaml5 {
 			// create meta data
 			List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 			if (bulletins != null && !bulletins.isEmpty()) {
-				ZonedDateTime publicationDate = avalancheReport.getPublicationDate().atZone(ZoneOffset.UTC);
+				ZonedDateTime publicationDate = avalancheReport.getPublicationDate().withZoneSameInstant(ZoneOffset.UTC);
 
 				// metaData
 				Element metaDataProperty = createMetaDataProperty(doc, publicationDate, language);

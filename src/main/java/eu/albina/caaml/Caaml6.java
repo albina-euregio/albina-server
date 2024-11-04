@@ -60,7 +60,7 @@ public interface Caaml6 {
 
 	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
-		bulletin.setUnscheduled(AvalancheReport.of(List.of(avalancheBulletin), null, null).isUpdate());
+		bulletin.setUnscheduled(avalancheBulletin.isUpdate());
 		bulletin.setAvalancheActivity(new org.caaml.v6.Texts(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			bulletin.setAvalancheProblems(Stream.concat(

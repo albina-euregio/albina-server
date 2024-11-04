@@ -150,7 +150,7 @@ public class AvalancheReportTest {
 		Assertions.assertNull(AvalancheReport.of(List.of(new AvalancheBulletin()), null, null).getPublicationDate());
 		AvalancheBulletin bulletin = new AvalancheBulletin();
 		bulletin.setPublicationDate(ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
-		Assertions.assertEquals(bulletin.getPublicationDate().toInstant(), AvalancheReport.of(List.of(new AvalancheBulletin(), bulletin, new AvalancheBulletin()), null, null).getPublicationDate());
+		Assertions.assertEquals(bulletin.getPublicationDate(), AvalancheReport.of(List.of(new AvalancheBulletin(), bulletin, new AvalancheBulletin()), null, null).getPublicationDate());
 	}
 }
 
