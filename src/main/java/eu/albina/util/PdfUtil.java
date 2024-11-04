@@ -22,7 +22,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -167,7 +166,7 @@ public class PdfUtil {
 		String headline = lang.getBundleString("website.name", region);
 		pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 			.setColor(greyDarkColor, true).showText(headline).endText();
-		String date = AlbinaUtil.getDate(avalancheReport.getBulletins(), lang);
+		String date = avalancheReport.getDate(lang);
 		if (BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {
 			String preview = lang.getBundleString("preview");
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 16).moveText(20, pageSize.getTop() - 60)
@@ -177,9 +176,9 @@ public class PdfUtil {
 				.setColor(blue, true).showText(date).endText();
 		}
 
-		String publicationDate = AlbinaUtil.getPublicationDate(avalancheReport.getBulletins(), lang);
+		String publicationDate = avalancheReport.getPublicationDate(lang);
 		if (!publicationDate.isEmpty()) {
-			if (AlbinaUtil.isUpdate(avalancheReport.getBulletins()))
+			if (avalancheReport.isUpdate())
 				pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, pageSize.getTop() - 75)
 					.setColor(greyDarkColor, true).showText(lang.getBundleString("updated") + publicationDate)
 					.endText();
@@ -612,7 +611,7 @@ public class PdfUtil {
 			paragraph.add(
 					new Text(avalancheBulletin.getTendency().toString(lang.getLocale())).setFont(openSansBoldFont));
 			paragraph.add(new Text("\n"));
-			paragraph.add(new Text(AlbinaUtil.getTendencyDate(Collections.singletonList(avalancheBulletin), lang)).setFont(openSansRegularFont));
+			paragraph.add(new Text(avalancheReport.getTendencyDate(lang)).setFont(openSansRegularFont));
 			cell.add(paragraph);
 			firstRowTable.addCell(cell);
 

@@ -18,10 +18,13 @@ package eu.albina.model;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,7 +40,6 @@ import com.github.openjson.JSONObject;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import eu.albina.util.AlbinaUtil;
 
 import eu.albina.model.enumerations.BulletinStatus;
 
@@ -45,15 +47,16 @@ import eu.albina.model.enumerations.BulletinStatus;
  * This class holds all information about one avalanche report.
  *
  * @author Norbert Lanzanasto
- *
  */
 @Entity
 @Table(name = "avalanche_reports", indexes = {
-		@Index(name = "avalanche_reports_DATE_IDX", columnList = "DATE"),
+	@Index(name = "avalanche_reports_DATE_IDX", columnList = "DATE"),
 })
-public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject {
+public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject, HasValidityDate, HasPublicationDate {
 
-	/** Information about the author of the avalanche bulletin */
+	/**
+	 * Information about the author of the avalanche bulletin
+	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	private User user;
@@ -112,12 +115,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	private List<AvalancheBulletin> globalBulletins;
 
 	@Transient
-	private String validityDateString;
-
-	@Transient
-	private String publicationTimeString;
-
-	@Transient
 	private ServerInstance serverInstance;
 
 	/**
@@ -143,8 +140,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			"bulletins must be subset of globalBulletins");
 		this.bulletins = bulletins;
 		this.globalBulletins = globalBulletins;
-		this.validityDateString = globalBulletins.isEmpty() ? null : AlbinaUtil.getValidityDateString(globalBulletins);
-		this.publicationTimeString = globalBulletins.isEmpty() ? null : AlbinaUtil.getPublicationDateDirectory(globalBulletins);
 	}
 
 	public User getUser() {
@@ -283,14 +278,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		return bulletins;
 	}
 
-	public String getValidityDateString() {
-		return validityDateString;
-	}
-
-	public String getPublicationTimeString() {
-		return publicationTimeString;
-	}
-
 	public ServerInstance getServerInstance() {
 		return serverInstance;
 	}
@@ -300,15 +287,15 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	}
 
 	public Path getMapsPath() {
-		return Paths.get(serverInstance.getMapsPath(), validityDateString, publicationTimeString);
+		return Paths.get(getServerInstance().getMapsPath(), getValidityDateString(), getPublicationTimeString());
 	}
 
 	public Path getPdfDirectory() {
-		return Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString);
+		return Paths.get(getServerInstance().getPdfDirectory(), getValidityDateString(), getPublicationTimeString());
 	}
 
 	public Path getHtmlDirectory() {
-		return Paths.get(serverInstance.getHtmlDirectory(), validityDateString);
+		return Paths.get(getServerInstance().getHtmlDirectory(), getValidityDateString());
 	}
 
 	@Override
@@ -352,5 +339,24 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public boolean hasDaytimeDependency() {
 		return getBulletins().stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
+	}
+
+
+	@Override
+	public LocalDate getValidityDate() {
+		return globalBulletins.stream()
+			.map(AvalancheBulletin::getValidityDate)
+			.filter(Objects::nonNull)
+			.max(Comparator.naturalOrder())
+			.orElseThrow();
+	}
+
+	@Override
+	public ZonedDateTime getPublicationDate() {
+		return globalBulletins.stream()
+			.map(AvalancheBulletin::getPublicationDate)
+			.filter(Objects::nonNull)
+			.max(Comparator.naturalOrder())
+			.orElse(null);
 	}
 }

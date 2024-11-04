@@ -77,7 +77,7 @@ import eu.albina.model.enumerations.TextPart;
 @Entity
 @Table(name = "avalanche_bulletins")
 public class AvalancheBulletin extends AbstractPersistentObject
-		implements AvalancheInformationObject, Comparable<AvalancheBulletin> {
+		implements AvalancheInformationObject, Comparable<AvalancheBulletin>, HasValidityDate, HasPublicationDate {
 
 	/** Information about the author of the avalanche bulletin */
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -606,6 +606,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.dangerPattern2 = dangerPattern;
 	}
 
+	@Override
 	public ZonedDateTime getPublicationDate() {
 		return publicationDate;
 	}
@@ -795,6 +796,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return sum;
 	}
 
+	@Override
 	public LocalDate getValidityDate() {
 		ZonedDateTime zonedDateTime = validUntil.withZoneSameInstant(AlbinaUtil.localZone());
 		LocalTime localTime = zonedDateTime.toLocalTime();
@@ -808,10 +810,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			// unspecified
 			return zonedDateTime.toLocalDate();
 		}
-	}
-
-	public String getValidityDateString() {
-		return getValidityDate().toString();
 	}
 
 	@Override
