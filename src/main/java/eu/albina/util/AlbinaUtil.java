@@ -174,23 +174,6 @@ public interface AlbinaUtil {
 		}
 	}
 
-	static void runUpdateMapsScript(String date, String publicationTime) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updateMaps.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
-				date,
-				publicationTime
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("Maps for {} copied using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("Maps could not be copied to directory for " + date + "!", e);
-		}
-	}
-
 	static void runUpdateFilesScript(String date, String publicationTime) {
 		try {
 			ProcessBuilder pb = newShellProcessBuilder();
@@ -209,88 +192,6 @@ public interface AlbinaUtil {
 		}
 	}
 
-	static void runUpdatePdfsScript(String date, String publicationTime) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updatePdfs.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-				date,
-				publicationTime
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("PDFs updated in date directory for {} using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("PDFs could not be updated in date directory for " + date + "!", e);
-		}
-	}
-
-	static void runUpdateLatestPdfsScript(String date) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updateLatestPdfs.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-				date
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("PDFs for {} updated in latest directory using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("PDFs for " + date + " could not be updated in latest directory!", e);
-		}
-	}
-
-	static void runUpdateCaamlsScript(String date, String publicationTime) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updateCaamls.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-				date,
-				publicationTime
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("CAAMLs updated in date directory for {} using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("CAAMLs could not be updated in date directory for " + date + "!", e);
-		}
-	}
-
-	static void runUpdateLatestCaamlsScript(String date) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updateLatestCaamls.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getPdfDirectory(),
-				date
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("CAAMLs for region {} for {} update in latest directory using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("CAAMLs for " + date + " could not be updated in latest directory!", e);
-		}
-	}
-
-	static void runUpdateLatestMapsScript(String date) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updateLatestMaps.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getMapsPath(),
-				date
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("Maps for {} updated in latest directory using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("Maps for " + date + " could not be updated in latest directory!", e);
-		}
-	}
-
 	static void runUpdateLatestFilesScript(String date) {
 		try {
 			ProcessBuilder pb = newShellProcessBuilder();
@@ -305,22 +206,6 @@ public interface AlbinaUtil {
 			logger.info("Latest files updated using {}", pb.command());
 		} catch (Exception e) {
 			logger.error("Latest files could not be updated!", e);
-		}
-	}
-
-	static void runUpdateLatestHtmlsScript(String date) {
-		try {
-			ProcessBuilder pb = newShellProcessBuilder();
-			pb.command().addAll(List.of(
-				getScriptPath("scripts/updateLatestHtmls.sh"),
-				ServerInstanceController.getInstance().getLocalServerInstance().getHtmlDirectory(),
-				date
-			));
-			Process p = pb.start();
-			p.waitFor();
-			logger.info("HTMLs for {} updated in latest directory using {}", date, pb.command());
-		} catch (Exception e) {
-			logger.error("HTMLs for " + date + " could not be udpated in latest directory!", e);
 		}
 	}
 
