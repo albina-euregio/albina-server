@@ -345,8 +345,10 @@ public class AvalancheBulletinService {
 
 		try {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-			List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString);
-			Collections.sort(bulletins);
+			List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString).stream()
+				.filter(bulletin-> bulletin.affectsRegionWithoutSuggestions(region))
+				.sorted()
+				.collect(Collectors.toList());
 
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			serverInstance.setMapsPath(GlobalVariables.getTmpPdfDirectory());
