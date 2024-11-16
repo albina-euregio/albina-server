@@ -19,8 +19,10 @@ package eu.albina.controller.publication;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,6 +135,44 @@ public interface BlogController {
 			posting.sendToAllChannels();
 			updateConfigurationLastPublished(config, object);
 		}
+	}
+
+	static void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) {
+		BlogConfiguration config;
+		try {
+			config = HibernateUtil.getInstance().runTransaction(entityManager -> {
+				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+				CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
+				Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
+				select.where(criteriaBuilder.equal(root.get("blogId"), blogId));
+				return entityManager.createQuery(select).getSingleResult();
+			});
+		} catch (NoResultException e) {
+			logger.debug("No blog configuration found for {}", blogId);
+			return;
+		}
+		config.setRegion(regionOverride);
+
+		List<? extends BlogItem> blogPosts;
+		try {
+			blogPosts = getBlogPosts(config);
+		} catch (IOException e) {
+			logger.warn("Blog posts could not be retrieved: " + config, e);
+			return;
+		}
+
+		for (BlogItem object : blogPosts) {
+			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
+			posting.tryRunWithLogging("Email newsletter", () -> {
+				RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
+					.orElseThrow(() -> new NoSuchElementException("No RapidMailConfiguration found for " + subjectMatter));
+				mailConfig.setRegion(regionOverride);
+				RapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
+				return null;
+			});
+			updateConfigurationLastPublished(config, object);
+		}
+
 	}
 
 }

@@ -25,6 +25,8 @@ import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.BlogConfiguration;
+import eu.albina.model.publication.RapidMailConfiguration;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
@@ -50,6 +52,7 @@ public class BlogJob implements org.quartz.Job {
 				BlogController.sendNewBlogPosts(region, lang);
 			}
 		}
+		BlogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, new Region("AT-07"));
 	}
 
 }

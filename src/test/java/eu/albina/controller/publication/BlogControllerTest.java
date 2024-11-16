@@ -27,6 +27,8 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import eu.albina.model.Region;
+import eu.albina.model.publication.RapidMailConfiguration;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -112,5 +114,13 @@ public class BlogControllerTest {
 		config.setLastPublishedTimestamp(blogPost.getPublished());
 		Assumptions.assumeTrue(Instant.now().isBefore(Instant.parse("2023-11-24T12:00:00Z")));
 		assertEquals(Collections.emptyList(), BlogController.getBlogPosts(config));
+	}
+
+	@Disabled
+	@Test
+	public void testTechBlog() throws Exception {
+		HibernateUtil.getInstance().setUp();
+		BlogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, new Region("AT-07"));
+		HibernateUtil.getInstance().shutDown();
 	}
 }

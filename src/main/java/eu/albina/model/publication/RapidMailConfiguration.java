@@ -38,7 +38,8 @@ import eu.albina.model.enumerations.LanguageCode;
 @Table(name = "rapid_mail_configurations")
 public class RapidMailConfiguration implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    public static final String TECH_SUBJECT_MATTER = "tech";
+    private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID")

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
 
@@ -99,6 +100,8 @@ public class HibernateUtil {
 			final T result = function.apply(entityManager);
 			transaction.commit();
 			return result;
+		} catch (NoResultException e) {
+			throw e;
 		} catch (PersistenceException e) {
 			logger.warn("PersistenceException: " + e.getMessage(), e);
 			transaction.rollback();
