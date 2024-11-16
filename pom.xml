@@ -15,7 +15,7 @@
 		<maven.compiler.release>11</maven.compiler.release>
 		<jersey.version>2.40</jersey.version>
 		<slf4j.version>1.7.36</slf4j.version>
-		<hibernate.version>6.5.2.Final</hibernate.version>
+		<hibernate.version>6.6.2.Final</hibernate.version>
 		<itextpdf.version>7.2.6</itextpdf.version>
 	</properties>
 
