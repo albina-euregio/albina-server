@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
@@ -32,7 +31,6 @@ import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HibernateUtil;
 
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -43,29 +41,20 @@ public interface BlogController {
 	Logger logger = LoggerFactory.getLogger(BlogController.class);
 	Client client = HttpClientUtil.newClientBuilder().build();
 
-	static Optional<BlogConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+	static BlogConfiguration getConfiguration(Region region, LanguageCode languageCode) throws NoResultException {
 		Objects.requireNonNull(region, "region");
 		Objects.requireNonNull(region.getId(), "region.getId()");
 		Objects.requireNonNull(languageCode, "languageCode");
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			try {
-				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-				CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
-				Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
-				select.where(
-					criteriaBuilder.equal(root.get("lang"), languageCode),
-					criteriaBuilder.equal(root.get("region"), region)
-				);
-				BlogConfiguration configuration = entityManager.createQuery(select).getSingleResult();
-				if (configuration == null || configuration.getBlogApiUrl() == null) {
-					throw new NoResultException();
-				}
-				return Optional.of(configuration);
-			} catch (PersistenceException e) {
-				logger.debug("No blog configuration found for {} [{}]", region.getId(), languageCode);
-				return Optional.empty();
-			}
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
+			Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
+			select.where(
+				criteriaBuilder.equal(root.get("lang"), languageCode),
+				criteriaBuilder.equal(root.get("region"), region)
+			);
+			return entityManager.createQuery(select).getSingleResult();
 		});
 	}
 
@@ -123,8 +112,10 @@ public interface BlogController {
 			return;
 		}
 
-		BlogConfiguration config = getConfiguration(region, lang).orElse(null);
-		if (config == null) {
+		BlogConfiguration config;
+		try {
+			config = getConfiguration(region, lang);
+		} catch (NoResultException e) {
 			logger.debug("No blog configuration found for region {} and lang {}", region, lang);
 			return;
 		}
