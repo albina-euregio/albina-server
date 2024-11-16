@@ -56,8 +56,6 @@ public class HibernateUtil {
 	public static String queryGetLocalServerInstance = "from ServerInstance as i where i.externalServer = false";
 	public static String queryGetExternalServerInstances = "from ServerInstance as i where i.externalServer = true";
 	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :region and c.lang = :lang";
-	public static String queryGetBlogConfiguration = "from BlogConfiguration as c where c.region = :region and c.lang = :lang";
-	public static String queryGetPushConfiguration = "from PushConfiguration as c";
 
 	public static String queryGetDangerSourceVariants = "from DangerSourceVariant as v where v.validFrom = :startDate or v.validUntil = :endDate";
 	public static String queryGetDangerSources = "from DangerSource as d where d.creationDate between :startDate and :endDate";

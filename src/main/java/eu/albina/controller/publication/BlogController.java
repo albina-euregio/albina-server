@@ -33,30 +33,39 @@ import eu.albina.util.HibernateUtil;
 
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+
 import javax.ws.rs.client.Client;
 
 public interface BlogController {
-	 Logger logger = LoggerFactory.getLogger(BlogController.class);
-	 Client client = HttpClientUtil.newClientBuilder().build();
+	Logger logger = LoggerFactory.getLogger(BlogController.class);
+	Client client = HttpClientUtil.newClientBuilder().build();
 
 	static Optional<BlogConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
 		Objects.requireNonNull(region, "region");
 		Objects.requireNonNull(region.getId(), "region.getId()");
 		Objects.requireNonNull(languageCode, "languageCode");
+
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			try {
-                BlogConfiguration configuration = (BlogConfiguration) entityManager.createQuery(HibernateUtil.queryGetBlogConfiguration)
-					.setParameter("region", region)
-					.setParameter("lang", languageCode)
-					.getSingleResult();
+				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+				CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
+				Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
+				select.where(
+					criteriaBuilder.equal(root.get("lang"), languageCode),
+					criteriaBuilder.equal(root.get("region"), region)
+				);
+				BlogConfiguration configuration = entityManager.createQuery(select).getSingleResult();
 				if (configuration == null || configuration.getBlogApiUrl() == null) {
 					throw new NoResultException();
 				}
 				return Optional.of(configuration);
 			} catch (PersistenceException e) {
-                logger.debug("No blog configuration found for {} [{}]", region.getId(), languageCode);
-                return Optional.empty();
-            }
+				logger.debug("No blog configuration found for {} [{}]", region.getId(), languageCode);
+				return Optional.empty();
+			}
 		});
 	}
 

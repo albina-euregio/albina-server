@@ -75,8 +75,8 @@ public class BlogControllerTest {
 	public void testLatestBlogPost() throws Exception {
 		HibernateUtil.getInstance().setUp();
 		BlogConfiguration config = BlogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
-		Blogger.Item blogPost = (Blogger.Item) BlogController.getLatestBlogPost(config);
-		assertTrue(blogPost.content.length() > 100, "blog has >100 chars");
+		BlogItem blogItem = BlogController.getLatestBlogPost(config);
+		assertTrue(blogItem.getContent().length() > 100, "blog has >100 chars");
 		HibernateUtil.getInstance().shutDown();
 	}
 
