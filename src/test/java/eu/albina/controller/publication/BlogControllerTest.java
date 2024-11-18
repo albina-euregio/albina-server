@@ -27,6 +27,8 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import eu.albina.model.Region;
+import eu.albina.model.publication.RapidMailConfiguration;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -61,7 +63,7 @@ public class BlogControllerTest {
 	@Test
 	public void testBlogPosts() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		BlogConfiguration config = BlogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
+		BlogConfiguration config = BlogController.getConfiguration(regionTyrol, LanguageCode.de);
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
 		List<? extends BlogItem> blogPosts = BlogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
@@ -74,9 +76,9 @@ public class BlogControllerTest {
 	@Test
 	public void testLatestBlogPost() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		BlogConfiguration config = BlogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
-		Blogger.Item blogPost = (Blogger.Item) BlogController.getLatestBlogPost(config);
-		assertTrue(blogPost.content.length() > 100, "blog has >100 chars");
+		BlogConfiguration config = BlogController.getConfiguration(regionTyrol, LanguageCode.de);
+		BlogItem blogItem = BlogController.getLatestBlogPost(config);
+		assertTrue(blogItem.getContent().length() > 100, "blog has >100 chars");
 		HibernateUtil.getInstance().shutDown();
 	}
 
@@ -84,7 +86,7 @@ public class BlogControllerTest {
 	@Test
 	public void testBlogPost() throws Exception {
 		HibernateUtil.getInstance().setUp();
-        BlogConfiguration configuration = BlogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
+        BlogConfiguration configuration = BlogController.getConfiguration(regionTyrol, LanguageCode.de);
 		String blogPost = BlogController.getBlogPost(configuration, "1227558273754407795").getContent();
 		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
 		HibernateUtil.getInstance().shutDown();
@@ -93,7 +95,7 @@ public class BlogControllerTest {
 	@Disabled
 	@Test
 	public void testTicket150() throws Exception {
-		BlogConfiguration config = BlogController.getConfiguration(regionSouthTyrol, LanguageCode.de).orElseThrow();
+		BlogConfiguration config = BlogController.getConfiguration(regionSouthTyrol, LanguageCode.de);
 		String blogPost = BlogController.getBlogPost(config, "4564885875858452565").getContent();
 		assertTrue(blogPost.contains("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
 	}
@@ -112,5 +114,13 @@ public class BlogControllerTest {
 		config.setLastPublishedTimestamp(blogPost.getPublished());
 		Assumptions.assumeTrue(Instant.now().isBefore(Instant.parse("2023-11-24T12:00:00Z")));
 		assertEquals(Collections.emptyList(), BlogController.getBlogPosts(config));
+	}
+
+	@Disabled
+	@Test
+	public void testTechBlog() throws Exception {
+		HibernateUtil.getInstance().setUp();
+		BlogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, new Region("AT-07"));
+		HibernateUtil.getInstance().shutDown();
 	}
 }

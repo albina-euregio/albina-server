@@ -44,6 +44,7 @@ import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -61,8 +62,6 @@ public interface RapidMailController {
 	Client client = HttpClientUtil.newClientBuilder().register(JacksonFeature.class).build();
 
 	static Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
-		Objects.requireNonNull(region, "region");
-		Objects.requireNonNull(region.getId(), "region.getId()");
 		Objects.requireNonNull(languageCode, "languageCode");
 
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
@@ -70,7 +69,9 @@ public interface RapidMailController {
 			CriteriaQuery<RapidMailConfiguration> select = criteriaBuilder.createQuery(RapidMailConfiguration.class);
 			Root<RapidMailConfiguration> root = select.from(RapidMailConfiguration.class);
 			select.where(
-				criteriaBuilder.equal(root.get("region"), region),
+				region == null
+					? criteriaBuilder.isNull(root.get("region"))
+					: criteriaBuilder.equal(root.get("region"), region),
 				criteriaBuilder.equal(root.get("lang"), languageCode),
 				subjectMatter == null
 					? criteriaBuilder.isNull(root.get("subjectMatter"))

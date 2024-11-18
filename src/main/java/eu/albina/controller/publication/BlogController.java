@@ -19,9 +19,10 @@ package eu.albina.controller.publication;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Optional;
 
+import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,31 +33,30 @@ import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HibernateUtil;
 
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceException;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+
 import javax.ws.rs.client.Client;
 
 public interface BlogController {
-	 Logger logger = LoggerFactory.getLogger(BlogController.class);
-	 Client client = HttpClientUtil.newClientBuilder().build();
+	Logger logger = LoggerFactory.getLogger(BlogController.class);
+	Client client = HttpClientUtil.newClientBuilder().build();
 
-	static Optional<BlogConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+	static BlogConfiguration getConfiguration(Region region, LanguageCode languageCode) throws NoResultException {
 		Objects.requireNonNull(region, "region");
 		Objects.requireNonNull(region.getId(), "region.getId()");
 		Objects.requireNonNull(languageCode, "languageCode");
+
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			try {
-                BlogConfiguration configuration = (BlogConfiguration) entityManager.createQuery(HibernateUtil.queryGetBlogConfiguration)
-					.setParameter("region", region)
-					.setParameter("lang", languageCode)
-					.getSingleResult();
-				if (configuration == null || configuration.getBlogApiUrl() == null) {
-					throw new NoResultException();
-				}
-				return Optional.of(configuration);
-			} catch (PersistenceException e) {
-                logger.debug("No blog configuration found for {} [{}]", region.getId(), languageCode);
-                return Optional.empty();
-            }
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
+			Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
+			select.where(
+				criteriaBuilder.equal(root.get("lang"), languageCode),
+				criteriaBuilder.equal(root.get("region"), region)
+			);
+			return entityManager.createQuery(select).getSingleResult();
 		});
 	}
 
@@ -114,8 +114,10 @@ public interface BlogController {
 			return;
 		}
 
-		BlogConfiguration config = getConfiguration(region, lang).orElse(null);
-		if (config == null) {
+		BlogConfiguration config;
+		try {
+			config = getConfiguration(region, lang);
+		} catch (NoResultException e) {
 			logger.debug("No blog configuration found for region {} and lang {}", region, lang);
 			return;
 		}
@@ -133,6 +135,44 @@ public interface BlogController {
 			posting.sendToAllChannels();
 			updateConfigurationLastPublished(config, object);
 		}
+	}
+
+	static void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) {
+		BlogConfiguration config;
+		try {
+			config = HibernateUtil.getInstance().runTransaction(entityManager -> {
+				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+				CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
+				Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
+				select.where(criteriaBuilder.equal(root.get("blogId"), blogId));
+				return entityManager.createQuery(select).getSingleResult();
+			});
+		} catch (NoResultException e) {
+			logger.debug("No blog configuration found for {}", blogId);
+			return;
+		}
+		config.setRegion(regionOverride);
+
+		List<? extends BlogItem> blogPosts;
+		try {
+			blogPosts = getBlogPosts(config);
+		} catch (IOException e) {
+			logger.warn("Blog posts could not be retrieved: " + config, e);
+			return;
+		}
+
+		for (BlogItem object : blogPosts) {
+			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
+			posting.tryRunWithLogging("Email newsletter", () -> {
+				RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
+					.orElseThrow(() -> new NoSuchElementException("No RapidMailConfiguration found for " + subjectMatter));
+				mailConfig.setRegion(regionOverride);
+				RapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
+				return null;
+			});
+			updateConfigurationLastPublished(config, object);
+		}
+
 	}
 
 }

@@ -198,7 +198,7 @@ public class ServerInstanceService {
 		TelegramConfiguration telegramConfig = TelegramController.getConfiguration(region, language).orElseThrow();
 		Response me = TelegramController.getMe(telegramConfig);
 		logger.info("Testing Blog");
-		BlogConfiguration config = BlogController.getConfiguration(region, language).orElseThrow();
+		BlogConfiguration config = BlogController.getConfiguration(region, language);
 		BlogItem latestBlogPost = BlogController.getLatestBlogPost(config);
 		return Map.of(
 			"region", MoreObjects.firstNonNull(region, ""),

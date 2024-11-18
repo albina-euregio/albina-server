@@ -152,6 +152,6 @@ public class BlogService {
 		if (region.isPublishBlogs()) {
 			throw new AlbinaException("Publishing blogs is disabled for region " + regionId);
 		}
-		return BlogController.getConfiguration(region, language).orElseThrow();
+		return BlogController.getConfiguration(region, language);
 	}
 }
