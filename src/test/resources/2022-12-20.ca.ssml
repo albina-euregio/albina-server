@@ -1,10 +1,4 @@
-<!--
-language_code: "ca-ES"
-name: "ca-ES-Standard-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -38,13 +32,7 @@ Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscam
 </speak>
 
 
-<!--
-language_code: "ca-ES"
-name: "ca-ES-Standard-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -78,13 +66,7 @@ Tenim els segënts patrons de perill: pp.1: capa feble persistent.
 </speak>
 
 
-<!--
-language_code: "ca-ES"
-name: "ca-ES-Standard-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -119,13 +101,7 @@ Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscam
 </speak>
 
 
-<!--
-language_code: "ca-ES"
-name: "ca-ES-Standard-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -159,13 +135,7 @@ Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscam
 </speak>
 
 
-<!--
-language_code: "ca-ES"
-name: "ca-ES-Standard-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>

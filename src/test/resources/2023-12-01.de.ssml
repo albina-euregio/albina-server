@@ -1,10 +1,4 @@
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -43,13 +37,7 @@ Wir finden die folgenden Gefahrenmuster: gm.4: kalt auf warm / warm auf kalt, gm
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -88,13 +76,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -133,13 +115,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -175,13 +151,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -217,13 +187,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
