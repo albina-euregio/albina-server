@@ -30,6 +30,8 @@
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
+				<hibernate.hikari.minimumIdle>10</hibernate.hikari.minimumIdle>
+				<hibernate.hikari.maximumPoolSize>20</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>SNAPSHOT</albina.conf.git.version>
 				<albina.log.prefix>LOCAL </albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
@@ -47,6 +49,8 @@
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
+				<hibernate.hikari.minimumIdle>10</hibernate.hikari.minimumIdle>
+				<hibernate.hikari.maximumPoolSize>50</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
 				<albina.log.prefix>DEV </albina.log.prefix>
 				<albina.log.level>DEBUG</albina.log.level>
@@ -64,6 +68,8 @@
 				<hibernate.connection.username>ais</hibernate.connection.username>
 				<hibernate.connection.password>MD>5:X*n%)1V</hibernate.connection.password>
 				<hibernate.show-sql>false</hibernate.show-sql>
+				<hibernate.hikari.minimumIdle>20</hibernate.hikari.minimumIdle>
+				<hibernate.hikari.maximumPoolSize>100</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
 				<albina.log.prefix></albina.log.prefix>
 				<albina.log.level>INFO</albina.log.level>
