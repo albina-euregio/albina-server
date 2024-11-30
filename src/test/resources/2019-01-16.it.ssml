@@ -1,10 +1,4 @@
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -41,13 +35,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -80,13 +68,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -120,13 +102,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -161,13 +137,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -201,13 +171,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento.
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -240,13 +204,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -280,13 +238,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-C"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -319,13 +271,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -359,13 +305,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -400,13 +340,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.4: 
 </speak>
 
 
-<!--
-language_code: "it-IT"
-name: "it-IT-Wavenet-A"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
