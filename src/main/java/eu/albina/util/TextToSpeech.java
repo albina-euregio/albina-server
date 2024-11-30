@@ -364,7 +364,7 @@ public interface TextToSpeech {
 
 		// https://cloud.google.com/text-to-speech/docs/create-audio#text-to-speech-text-protocol
 		String json = new Gson().toJson(Map.of(
-			"input", Map.of("text", ssml),
+			"input", Map.of("ssml", ssml),
 			"voice", voice,
 			"audioConfig", Map.of("audioEncoding", "MP3")
 		));
