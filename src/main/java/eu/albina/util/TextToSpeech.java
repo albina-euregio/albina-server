@@ -50,6 +50,8 @@ import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
 public interface TextToSpeech {
+	String API_URL = "https://eu-texttospeech.googleapis.com/v1/text:synthesize";
+	String API_AUTH_SCOPE = "https://www.googleapis.com/auth/cloud-platform";
 	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
 	Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(LanguageCode.de, LanguageCode.en, LanguageCode.it, LanguageCode.es, LanguageCode.ca));
 	Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
@@ -358,7 +360,7 @@ public interface TextToSpeech {
 			bulletin.getBulletinID(), bulletin.getLang(), voice);
 
 		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
-			.createScoped("https://www.googleapis.com/auth/cloud-platform");
+			.createScoped(API_AUTH_SCOPE);
 		credentials.refreshIfExpired();
 		AccessToken token = credentials.getAccessToken();
 
@@ -368,7 +370,7 @@ public interface TextToSpeech {
 			"voice", voice,
 			"audioConfig", Map.of("audioEncoding", "MP3")
 		));
-		URI uri = URI.create("https://eu-texttospeech.googleapis.com/v1/text:synthesize");
+		URI uri = URI.create(API_URL);
 		HttpRequest request = HttpRequest.newBuilder(uri)
 			.POST(HttpRequest.BodyPublishers.ofString(json))
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getTokenValue())
