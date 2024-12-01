@@ -12,10 +12,10 @@
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Früher am Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Früher am Tag über 2000 Meter müssen wir auf ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Früher am Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Später am Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Später am Tag über 2000 Meter müssen wir auf ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -51,10 +51,10 @@ Wir finden die folgenden Gefahrenmuster: gm.4: kalt auf warm / warm auf kalt, gm
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Früher am Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Früher am Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Später am Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Früher am Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Früher am Tag über 2200 Meter müssen wir auf ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Später am Tag über 2200 Meter müssen wir auf ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -90,10 +90,10 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Früher am Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Früher am Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Später am Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Früher am Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Früher am Tag über 2200 Meter müssen wir auf ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Später am Tag über 2200 Meter müssen wir auf ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Später am Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -129,8 +129,8 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Früher am Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Früher am Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein Neuschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Der Neuschnee und die vereinzelt entstehenden Triebschneeansammlungen können von einzelnen Wintersportlern ausgelöst werden. Gefahrenstellen liegen oberhalb der Waldgrenze sowie im Bereich der Waldgrenze. Mit der Intensivierung der Schneefälle nehmen die Gefahrenstellen im Tagesverlauf zu. Sie sind teils überschneit und damit schwer zu erkennen. Vorsicht vor allem in Kammlagen, Rinnen und Mulden. Lawinen sind meist mittelgroß. <break time="1s"/> <break time="1s"/> An steilen Grashängen sind kleine und vereinzelt mittlere Gleitschneelawinen möglich. Dies vor allem in den schneereichen Gebieten.</s></p>
@@ -165,8 +165,8 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Früher am Tag über 2400 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Nord-Ost.</s>
-<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Früher am Tag über 2400 Meter müssen wir auf ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Nord-Ost.</s>
+<s>Des Weiteren, Später am Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Mit Neuschnee und starkem Südwestwind entstehen am Freitag besonders in Rinnen, Mulden und hinter Geländekanten Triebschneeansammlungen. Die Triebschneeansammlungen können an allen Expositionen oberhalb der Waldgrenze von einzelnen Wintersportlern ausgelöst werden. Mit der Intensivierung der Schneefälle nehmen Anzahl und Größe der Gefahrenstellen im Tagesverlauf zu. Nebst der Verschüttungsgefahr sollte auch die Mitreiß- und Absturzgefahr beachtet werden. <break time="1s"/> Der Lawinenwarndienst hat derzeit wenig Informationen, weshalb die Lawinengefahr vor Ort besonders gründlich überprüft werden sollte.</s></p>
