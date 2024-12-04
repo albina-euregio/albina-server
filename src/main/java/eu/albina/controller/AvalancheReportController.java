@@ -28,18 +28,18 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Strings;
-
-import eu.albina.model.AbstractPersistentObject;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.proxy.HibernateProxy;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
+import com.google.common.base.Strings;
+
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.BulletinUpdate;
@@ -50,7 +50,6 @@ import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
-
 import jakarta.persistence.EntityManager;
 
 /**
@@ -422,7 +421,7 @@ public class AvalancheReportController {
 	Void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user, EntityManager entityManager) {
 		AvalancheReport latestReport = getInternalReport(date, region, entityManager);
 		BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
-		BulletinStatus newStatus = deriveStatus(latestStatus);
+		BulletinStatus newStatus = deriveStatus(avalancheBulletins, latestStatus);
 
 		// reuse existing report if status does not change
 		AvalancheReport avalancheReport = latestReport != null && Objects.equals(latestStatus, newStatus)
@@ -446,10 +445,15 @@ public class AvalancheReportController {
 		return null;
 	}
 
-	private static BulletinStatus deriveStatus(BulletinStatus latestStatus) {
+	private static BulletinStatus deriveStatus(Map<String, AvalancheBulletin> avalancheBulletins, BulletinStatus latestStatus) {
 		if (latestStatus == null) {
-			return BulletinStatus.draft;
+			if (avalancheBulletins.isEmpty()) {
+				return BulletinStatus.missing;
+			} else {
+				return BulletinStatus.draft;
+			}
 		}
+
 		switch (latestStatus) {
 			case missing:
 			case republished:
@@ -458,6 +462,11 @@ public class AvalancheReportController {
 			case published:
 				return BulletinStatus.updated;
 			case draft:
+				if (avalancheBulletins.isEmpty()) {
+					return BulletinStatus.missing;
+				} else {
+					return BulletinStatus.draft;
+				}
 			case submitted:
 				return BulletinStatus.draft;
 			default:
