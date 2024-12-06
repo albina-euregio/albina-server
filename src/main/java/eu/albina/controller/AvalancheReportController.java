@@ -448,7 +448,7 @@ public class AvalancheReportController {
 	private static BulletinStatus deriveStatus(Map<String, AvalancheBulletin> avalancheBulletins, BulletinStatus latestStatus) {
 		if (latestStatus == null) {
 			if (avalancheBulletins.isEmpty()) {
-				return BulletinStatus.missing;
+				return null;
 			} else {
 				return BulletinStatus.draft;
 			}
@@ -463,7 +463,7 @@ public class AvalancheReportController {
 				return BulletinStatus.updated;
 			case draft:
 				if (avalancheBulletins.isEmpty()) {
-					return BulletinStatus.missing;
+					return null;
 				} else {
 					return BulletinStatus.draft;
 				}
