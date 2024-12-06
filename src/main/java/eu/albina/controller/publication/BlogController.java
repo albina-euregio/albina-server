@@ -53,6 +53,7 @@ public interface BlogController {
 			CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
 			Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
 			select.where(
+				criteriaBuilder.notEqual(root.get("blogId"), BlogConfiguration.TECH_BLOG_ID),
 				criteriaBuilder.equal(root.get("lang"), languageCode),
 				criteriaBuilder.equal(root.get("region"), region)
 			);

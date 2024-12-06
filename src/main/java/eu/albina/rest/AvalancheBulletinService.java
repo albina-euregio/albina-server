@@ -18,6 +18,7 @@ package eu.albina.rest;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -345,10 +346,12 @@ public class AvalancheBulletinService {
 
 		try {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			ZonedDateTime publicationDate = ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 			List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString).stream()
 				.filter(bulletin-> bulletin.affectsRegionWithoutSuggestions(region))
 				.sorted()
 				.collect(Collectors.toList());
+			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			serverInstance.setMapsPath(GlobalVariables.getTmpPdfDirectory());
