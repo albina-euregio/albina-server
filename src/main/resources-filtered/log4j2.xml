@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO"
-			   packages="org.apache.logging.log4j.core,io.sentry.log4j2"
+			   packages="org.apache.logging.log4j.core"
 			   strict="false"
 			   xmlns="http://logging.apache.org/log4j/2.0/config">
 
@@ -8,7 +8,6 @@
 		<property name="ALBINA_LOG_PREFIX" value="${albina.log.prefix}"/>
 		<property name="ALBINA_LOG_FILE" value="${albina.log.filepath}${albina.log.filename}"/>
 		<property name="ALBINA_LOG_LEVEL" value="${albina.log.level}"/>
-		<property name="ALBINA_LOG_SENTRY_MIN_EVENT_LEVEL" value="WARN"/>
 		<property name="ALBINA_LOG_LEVEL_SQL" value="${albina.log.level.sql}"/>
 		<property name="ALBINA_LOG_LEVEL_CONNECTIONPOOL" value="${albina.log.level.c3p0}"/>
 		<!-- adhoc debug logger -->
@@ -18,7 +17,6 @@
 		<!-- disable appender with value = OFF -->
 		<property name="ALBINA_LOG_STDOUT_MIN_LEVEL" value="ALL"/>
 		<property name="ALBINA_LOG_FILE_MIN_LEVEL" value="ALL"/>
-		<property name="ALBINA_LOG_SENTRY_MIN_LEVEL" value="ALL"/>
 	</properties>
 
 	<Appenders>
@@ -32,15 +30,12 @@
 			<TimeBasedTriggeringPolicy/>
 			<DefaultRolloverStrategy/>
 		</RollingFile>
-		<!-- System Environment Variable SENTRY_DSN -->
-		<Sentry name="SENTRY" minimumEventLevel="${env:ALBINA_LOG_SENTRY_MIN_EVENT_LEVEL}"/>
 	</Appenders>
 
 	<Loggers>
 		<Root level="INFO">
 			<AppenderRef ref="STDOUT" level="${env:ALBINA_LOG_STDOUT_MIN_LEVEL}"/>
 			<AppenderRef ref="FILE" level="${env:ALBINA_LOG_FILE_MIN_LEVEL}"/>
-			<AppenderRef ref="SENTRY" level="${env:ALBINA_LOG_SENTRY_MIN_LEVEL}"/>
 		</Root>
 		<Logger name="org.hibernate" level="${env:ALBINA_LOG_LEVEL_SQL}"/>
 		<Logger name="com.mchange.v2.c3p0" level="${env:ALBINA_LOG_LEVEL_CONNECTIONPOOL}"/>
