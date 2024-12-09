@@ -1,10 +1,4 @@
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -17,9 +11,9 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2600 Meter müssen wir auf ein ein Altschnee-Problem achten. Vor allem in den Expositionen Ost über Süd bis West.</s>
+<s>Den ganzen Tag über 2600 Meter müssen wir auf ein Altschnee-Problem achten. Vor allem in den Expositionen Ost über Süd bis West.</s>
 <s>Des Weiteren, Den ganzen Tag unter 2600 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Den ganzen Tag über 2600 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Nord-Ost.</s>
+<s>Des Weiteren, Den ganzen Tag über 2600 Meter müssen wir auf ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Nord-Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Schwachschichten im oberen Teil der Schneedecke können stellenweise von einzelnen Wintersportlern ausgelöst werden. Dies vor allem an sehr steilen Sonnenhängen oberhalb von rund 2600 m. Wummgeräusche und Risse beim Betreten der Schneedecke sind Alarmzeichen und weisen auf die Gefahr hin. Die Lawinen sind teilweise groß. <break time="1s"/> <break time="1s"/> Die frischen Triebschneeansammlungen können vor allem an sehr steilen Schattenhängen oberhalb von rund 2400 m teilweise noch ausgelöst werden. Vorsicht vor allem in Kammlagen im Hochgebirge. <break time="1s"/> <break time="1s"/> Es sind weiterhin Gleitschneelawinen möglich, vereinzelt auch große. Dies vor allem an steilen Grashängen unterhalb von rund 2600 m. Zonen mit Gleitschneerissen sollten gemieden werden.</s></p>
@@ -40,13 +34,7 @@ Wir finden die folgenden Gefahrenmuster: gm.4: kalt auf warm / warm auf kalt, gm
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -59,7 +47,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2400 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Süd-Ost.</s>
+<s>Den ganzen Tag über 2400 Meter müssen wir auf ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Süd-Ost.</s>
 <s>Des Weiteren, Den ganzen Tag unter 2600 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -81,13 +69,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -100,8 +82,8 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Den ganzen Tag über der Baumgrenze müssen wir auf ein ein Nassschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Den ganzen Tag über der Baumgrenze müssen wir auf ein Nassschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Mit starkem Wind aus nordwestlichen Richtungen entstanden teils leicht auslösbare Triebschneeansammlungen. Zudem müssen die älteren Triebschneeansammlungen beachtet werden. Frischere Triebschneeansammlungen können vereinzelt von einzelnen Wintersportlern ausgelöst werden. <break time="1s"/> Die Gefahrenstellen liegen vor allem in Kammlagen, Rinnen und Mulden aller Expositionen. Zudem sind v.a. an Felswandfüßen und hinter Geländekanten weiterhin meist kleine spontane Lawinen möglich. Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung sind weiterhin meist kleine nasse Lockerschneelawinen möglich.</s></p>
@@ -121,13 +103,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -140,7 +116,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Den ganzen Tag, zwischen der Baumgrenze und 2700 Meter haben wir ein Nassschnee-Problem. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -161,13 +137,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -180,7 +150,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2400 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2400 Meter müssen wir auf ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Ost.</s>
 <s>Des Weiteren, Den ganzen Tag unter 2600 Meter erwartet uns ein Gleitschnee-Problem. Vor allem in den Expositionen Ost über Süd bis West.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -202,13 +172,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -221,7 +185,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Die frischen und schon etwas älteren Triebschneeansammlungen können vereinzelt ausgelöst werden, besonders in ihren Randbereichen. Vorsicht vor allem in Kammlagen in Rinnen, Mulden und hinter Geländekanten in hohen Lagen. Lawinen sind meist klein. <break time="1s"/> <break time="1s"/> Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung sind einzelne Gleitschneelawinen und feuchte Rutsche möglich, aber meist nur kleine.</s></p>

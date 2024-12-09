@@ -1,10 +1,4 @@
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -17,7 +11,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2000 Meter müssen wir auf ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Schwachschichten im Altschnee können stellenweise von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an steilen West-, Nord- und Osthängen oberhalb von rund 2000 m. Vorsicht vor allem in Kammlagen sowie in Rinnen, Mulden und hinter Geländekanten. Wummgeräusche und Risse beim Betreten der Schneedecke weisen auf die Gefahr hin. Lawinen können mittlere Größe erreichen. <break time="1s"/> Die meist kleinen Triebschneeansammlungen der letzten Tage sind vereinzelt noch störanfällig, besonders an Schattenhängen in hohen Lagen und im Hochgebirge sowie in Kammlagen. <break time="1s"/> Eine überlegte Routenwahl ist empfohlen. <break time="1s"/> Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung sind Gleitschneelawinen und feuchte Rutsche möglich, vor allem an Sonnenhängen sowie an Böschungen und Grashängen besonders in mittleren Lagen.</s></p>
@@ -38,13 +32,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -57,7 +45,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2200 Meter müssen wir auf ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Schwachschichten im Altschnee können vereinzelt von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an sehr steilen Schattenhängen oberhalb von rund 2200 m. Vorsicht in schattigen, windgeschützten Lagen in der Höhe. Lawinen können mittlere Größe erreichen. <break time="1s"/> Zudem sind die kleinen Triebschneeansammlungen sehr vereinzelt noch störanfällig. Sie sollten möglichst gemieden werden. <break time="1s"/> <break time="1s"/> Mit der Erwärmung sind Gleitschneelawinen und feuchte Rutsche zu erwarten, vor allem an Sonnenhängen.</s></p>
@@ -78,13 +66,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht.
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -97,8 +79,8 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2200 Meter müssen wir auf ein ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
-<s>Des Weiteren, Den ganzen Tag über 2200 Meter müssen wir auf ein ein Nassschnee-Problem achten. Vor allem in den Expositionen Ost über Süd bis West.</s>
+<s>Den ganzen Tag über 2200 Meter müssen wir auf ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Des Weiteren, Den ganzen Tag über 2200 Meter müssen wir auf ein Nassschnee-Problem achten. Vor allem in den Expositionen Ost über Süd bis West.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Schwachschichten im Altschnee können vereinzelt von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an sehr steilen Schattenhängen oberhalb von rund 2200 m. Vorsicht in schattigen, windgeschützten Lagen in der Höhe. Lawinen können mittlere Größe erreichen. <break time="1s"/> Zudem sind die kleinen Triebschneeansammlungen sehr vereinzelt noch störanfällig. Sie sollten möglichst gemieden werden. <break time="1s"/> <break time="1s"/> Mit der Erwärmung sind Gleitschneelawinen und feuchte Rutsche zu erwarten, vor allem an steilen Sonnenhängen sowie an Böschungen und Grashängen in tiefen und mittleren Lagen.</s></p>
@@ -119,13 +101,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -138,7 +114,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2000 Meter müssen wir auf ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Schwachschichten im Altschnee können stellenweise von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an steilen West-, Nord- und Osthängen oberhalb von rund 2000 m. Vorsicht vor allem in schattigen, windgeschützten Lagen. Wummgeräusche und Risse beim Betreten der Schneedecke weisen auf die Gefahr hin. Lawinen können mittlere Größe erreichen. <break time="1s"/> Die meist kleinen Triebschneeansammlungen der letzten Tage sind vereinzelt noch störanfällig, besonders in Kamm- und Passlagen sowie an sehr steilen Nord- und Osthängen in der Höhe. <break time="1s"/> Eine überlegte Routenwahl ist empfohlen. <break time="1s"/> Mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung sind Gleitschneelawinen und feuchte Rutsche möglich, vor allem an Sonnenhängen sowie an Böschungen und Grashängen besonders in mittleren Lagen.</s></p>
@@ -159,13 +135,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -178,7 +148,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2000 Meter müssen wir auf ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Schwachschichten im Altschnee können stellenweise noch von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen vor allem an sehr steilen West-, Nord- und Osthängen oberhalb von rund 2000 m sowie an sehr steilen Südhängen oberhalb von rund 3000 m. <break time="1s"/> Die meist kleinen Triebschneeansammlungen können vor allem an kammnahen Schattenhängen in der Höhe teilweise von einzelnen Wintersportlern ausgelöst werden. <break time="1s"/> Lawinen können mittlere Größe erreichen. <break time="1s"/> Eine überlegte Routenwahl ist angebracht. <break time="1s"/> Mit der Erwärmung sind im Tagesverlauf einzelne Gleitschneelawinen und feuchte Rutsche möglich, aber meist nur kleine. Dies vor allem an sehr steilen Sonnenhängen sowie an Böschungen und Grashängen in mittleren Lagen.</s></p>

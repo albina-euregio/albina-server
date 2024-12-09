@@ -1,7 +1,6 @@
 package eu.albina.util;
 
 import com.google.common.io.Resources;
-import com.google.protobuf.ByteString;
 import eu.albina.caaml.Caaml6;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -75,9 +74,9 @@ class TextToSpeechTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 		AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, LanguageCode.de);
 		org.caaml.v6.AvalancheBulletin bulletin = caaml.getBulletins().get(0);
-		ByteString mp3 = TextToSpeech.createAudioFile(bulletin);
+		byte[] mp3 = TextToSpeech.createAudioFile(bulletin);
 		Path path = Path.of(bulletin.getBulletinID() + ".mp3");
-		Files.write(path, mp3.toByteArray());
+		Files.write(path, mp3);
 	}
 
 }

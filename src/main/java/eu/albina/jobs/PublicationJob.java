@@ -28,10 +28,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -151,6 +153,8 @@ public class PublicationJob implements org.quartz.Job {
 		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
+		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
+
 		// update all regions to create complete maps
 		regionController.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
@@ -177,16 +181,9 @@ public class PublicationJob implements org.quartz.Job {
 
 			// send notifications only for updated regions after all maps were created
 			if (regions.contains(region) && !isChange()) {
-				publicationController.sendToAllChannels(avalancheReport);
+				tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
 			}
-		}, executor)).forEach(future -> {
-			try {
-				future.get();
-			} catch (InterruptedException | ExecutionException ex) {
-				Throwables.throwIfUnchecked(ex);
-				throw new RuntimeException(ex);
-			}
-		});
+		}, executor)).forEach(PublicationJob::await);
 
 		try {
 			createSymbolicLinks(
@@ -207,6 +204,19 @@ public class PublicationJob implements org.quartz.Job {
 		} catch (IOException e) {
 			logger.error("Failed to create symbolic links", e);
 			throw new UncheckedIOException(e);
+		}
+
+		tasksAfterDirectoryUpdate.stream()
+			.map(CompletableFuture::runAsync)
+			.forEach(PublicationJob::await);
+	}
+
+	private static void await(CompletableFuture<Void> future) {
+		try {
+			future.get();
+		} catch (InterruptedException | ExecutionException ex) {
+			Throwables.throwIfUnchecked(ex);
+			throw new RuntimeException(ex);
 		}
 	}
 

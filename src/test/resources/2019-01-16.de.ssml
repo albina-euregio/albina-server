@@ -1,10 +1,4 @@
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -41,13 +35,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -60,7 +48,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Süd.</s>
+<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord-West über Nord bis Süd.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Vor allem in Kammlagen, Rinnen und Mulden sowie im Hochgebirge entstanden meist kleine Triebschneeansammlungen. Diese können mit geringer Belastung ausgelöst werden. Gefahrenstellen und Auslösebereitschaft nehmen in hohen Lagen und im Hochgebirge zu.</s></p>
@@ -80,13 +68,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -99,8 +81,8 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2300 Meter müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Den ganzen Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2300 Meter müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Den ganzen Tag über 2000 Meter müssen wir auf ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Mit Nordwind entstanden vor allem in Kammlagen, Rinnen und Mulden sowie oberhalb von rund 2300 m meist kleine Triebschneeansammlungen. Sie sind oft klein und meist nur mit grosser Belastung auslösbar. Die Gefahrenstellen sind eher selten und für Geübte gut zu erkennen. V.a. in hohen Lagen sind die Gefahrenstellen häufiger und die Gefahr höher. Nebst der Verschüttungsgefahr sollte auch die Mitreiss- und Absturzgefahr beachtet werden.</s></p>
@@ -120,13 +102,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -139,7 +115,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 1800 Meter müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Den ganzen Tag über 1800 Meter müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
 <s>Des Weiteren, Den ganzen Tag unter 2400 Meter erwartet uns ein Gleitschnee-Problem. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
@@ -161,13 +137,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -180,7 +150,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2000 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord über Nord bis Süd-Ost.</s>
+<s>Den ganzen Tag über 2000 Meter müssen wir auf ein Triebschnee-Problem achten. Vor allem in den Expositionen Nord über Nord bis Süd-Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Mit Neuschnee und starkem Nordwestwind entstanden in den letzten Tagen störanfällige Triebschneeansammlungen. Die frischen Triebschneeansammlungen sind meist klein aber leicht auslösbar. Die Gefahrenstellen liegen in Rinnen und Mulden oberhalb von rund 2000 m, sowie in Kammlagen aller Expositionen. Gefahrenstellen und Auslösebereitschaft nehmen in hohen Lagen und im Hochgebirge zu.</s></p>
@@ -201,13 +171,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -220,7 +184,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Mit Neuschnee und starkem Wind wuchsen die Triebschneeansammlungen in den letzten Tagen weiter an. Schon einzelne Tourengeher oder Freerider können an vielen Orten Lawinen auslösen, auch gefährlich grosse. Besonders an Triebschneehängen muss vereinzelt mit spontanen mittelgrossen Lawinen gerechnet werden. Die Gefahrenstellen liegen vor allem an steilen Hängen oberhalb der Waldgrenze. Sie sind weit verbreitet aber für Geübte gut zu erkennen. Für Touren und Variantenabfahrten sind die Verhältnisse teils ungünstig.</s></p>
@@ -240,13 +204,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -259,8 +217,8 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2200 Meter müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Den ganzen Tag über 2000 Meter müssen wir auf ein ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2200 Meter müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Den ganzen Tag über 2000 Meter müssen wir auf ein Altschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Neu- und Triebschnee vom Montag bilden die Hauptgefahr. Besonders an Triebschneehängen muss vereinzelt mit spontanen mittelgrossen Lawinen gerechnet werden. Die meist kleinen Triebschneeansammlungen der letzten Tage können an allen Expositionen oberhalb von rund 2200 m vereinzelt von einzelnen Wintersportlern ausgelöst werden. Die Gefahrenstellen liegen in Rinnen und Mulden, sowie in Kammlagen aller Expositionen. Diese Stellen sind recht häufig aber für Geübte gut zu erkennen. Vor allem am Cevedale, in den Maddalene und in den an die Gefahrenstufe 3, "erheblich" angrenzenden Gebieten und oberhalb von rund 2500 m sind die Gefahrenstellen häufiger und die Gefahr höher.</s></p>
@@ -280,13 +238,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-E"
-ssml_gender: MALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-E, ssmlGender=MALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -299,7 +251,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2200 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2200 Meter müssen wir auf ein Triebschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Die meist kleinen Triebschneeansammlungen bilden die Hauptgefahr. Diese liegen besonders in Kammlagen, Rinnen und Mulden und allgemein in hohen Lagen. Die Gefahrenstellen sind eher selten und gut zu erkennen. Die Lawinen sind meist klein und mit grosser Belastung auslösbar. Nebst der Verschüttungsgefahr sollte auch die Mitreiss- und Absturzgefahr beachtet werden.</s></p>
@@ -319,13 +271,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -338,8 +284,8 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 1800 Meter müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Den ganzen Tag über 1800 Meter müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Den ganzen Tag über 1800 Meter müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Den ganzen Tag über 1800 Meter müssen wir auf ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Die Triebschneeansammlungen sind störanfällig. Diese können oft mit geringer Belastung ausgelöst werden. Besonders aus noch nicht entladenen Einzugsgebieten muss vereinzelt mit spontanen grossen Lawinen gerechnet werden. Ungünstig sind vor allem Übergänge von wenig zu viel Schnee. V.a. in den schneereichen Gebieten und oberhalb von rund 2000 m sind die Gefahrenstellen häufiger und die Gefahr etwas höher. Für Touren und Variantenabfahrten sind die Verhältnisse teils kritisch.</s></p>
@@ -359,13 +305,7 @@ effects_profile_id: "handset-class-device"
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -378,8 +318,8 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
-<s>Des Weiteren, Den ganzen Tag über der Baumgrenze müssen wir auf ein ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Den ganzen Tag über der Baumgrenze müssen wir auf ein Triebschnee-Problem achten. Dies in allen Expositionen.</s>
+<s>Des Weiteren, Den ganzen Tag über der Baumgrenze müssen wir auf ein Altschnee-Problem achten. Dies in allen Expositionen.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Mit Neuschnee und starkem bis stürmischem Nordwestwind entstanden in den letzten Tagen v.a. oberhalb der Waldgrenze störanfällige Triebschneeansammlungen. Diese können oft mit geringer Belastung ausgelöst werden. Die Gefahrenstellen für trockene Lawinen liegen in Kammlagen aller Expositionen sowie in Rinnen, Mulden und hinter Geländekanten. Diese Stellen sind für Geübte gut zu erkennen. Zudem können Lawinen im Altschnee ausgelöst werden und vereinzelt gross werden, dies vor allem mit grosser Belastung. Ungünstig sind vor allem Übergänge von wenig zu viel Schnee. Es sind einzelne Gleitschneelawinen möglich. Touren und Variantenabfahrten erfordern Erfahrung in der Beurteilung der Lawinengefahr.</s></p>
@@ -400,13 +340,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 </speak>
 
 
-<!--
-language_code: "de-DE"
-name: "de-DE-Wavenet-F"
-ssml_gender: FEMALE
-audio_encoding: MP3
-effects_profile_id: "handset-class-device"
--->
+<!--VoiceSelectionParams{languageCode=de-DE, name=de-DE-Wavenet-F, ssmlGender=FEMALE}-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -419,7 +353,7 @@ effects_profile_id: "handset-class-device"
 </p>
 <break time="1s" strength="strong"></break>
 <p>
-<s>Den ganzen Tag über 2200 Meter müssen wir auf ein ein Triebschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
+<s>Den ganzen Tag über 2200 Meter müssen wir auf ein Triebschnee-Problem achten. Vor allem in den Expositionen West über Nord bis Ost.</s>
 </p>
 <break time="1s" strength="strong"></break>
 <p><s>Die Triebschneeansammlungen liegen besonders in Kammlagen, Rinnen und Mulden und allgemein in hohen Lagen. Diese Gefahrenstellen sind eher selten und gut zu erkennen. Die Lawinen sind meist klein aber teilweise von einzelnen Wintersportlern auslösbar. Nebst der Verschüttungsgefahr sollte auch die Mitreiss- und Absturzgefahr beachtet werden.</s></p>

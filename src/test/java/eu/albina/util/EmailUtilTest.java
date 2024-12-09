@@ -16,12 +16,14 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import static eu.albina.RegionTestUtils.regionAran;
+import static eu.albina.RegionTestUtils.regionTyrol;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import eu.albina.model.AvalancheReport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,11 +31,9 @@ import org.junit.jupiter.api.Test;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
-
-import static eu.albina.RegionTestUtils.regionAran;
-import static eu.albina.RegionTestUtils.regionTyrol;
 
 public class EmailUtilTest {
 
@@ -84,7 +84,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, LanguageCode.de);
-		Assertions.assertEquals(59, html.getBytes(StandardCharsets.UTF_8).length / 1024, "59 kB");
+		Assertions.assertEquals(58, html.getBytes(StandardCharsets.UTF_8).length / 1024, "59 kB");
 	}
 
 	@Test

@@ -101,6 +101,7 @@ public class HibernateUtil {
 			transaction.commit();
 			return result;
 		} catch (NoResultException e) {
+			transaction.rollback();
 			throw e;
 		} catch (PersistenceException e) {
 			logger.warn("PersistenceException: " + e.getMessage(), e);

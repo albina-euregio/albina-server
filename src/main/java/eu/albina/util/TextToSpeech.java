@@ -2,9 +2,15 @@ package eu.albina.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -16,6 +22,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.auth.oauth2.AccessToken;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.common.base.MoreObjects;
+import com.google.common.net.HttpHeaders;
+import com.google.common.net.MediaType;
+import com.google.gson.Gson;
 import org.caaml.v6.Aspect;
 import org.caaml.v6.AvalancheBulletin;
 import org.caaml.v6.AvalancheBulletinCustomData;
@@ -29,26 +41,22 @@ import org.caaml.v6.ValidTimePeriod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.cloud.texttospeech.v1.AudioConfig;
-import com.google.cloud.texttospeech.v1.AudioEncoding;
-import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
-import com.google.cloud.texttospeech.v1.SynthesisInput;
-import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
-import com.google.cloud.texttospeech.v1.TextToSpeechClient;
-import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
 import com.google.common.base.Strings;
 import com.google.common.collect.Streams;
 import com.google.errorprone.annotations.CheckReturnValue;
-import com.google.protobuf.ByteString;
 
 import eu.albina.caaml.Caaml6;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
 public interface TextToSpeech {
+	String API_URL = "https://eu-texttospeech.googleapis.com/v1/text:synthesize";
+	String API_AUTH_SCOPE = "https://www.googleapis.com/auth/cloud-platform";
 	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
 	Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(LanguageCode.de, LanguageCode.en, LanguageCode.it, LanguageCode.es, LanguageCode.ca));
 	Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
+
+	enum SsmlVoiceGender {FEMALE, MALE}
 
 	class ScriptEngine {
 		private final AvalancheBulletin bulletin;
@@ -65,7 +73,7 @@ public interface TextToSpeech {
 
 		String createScript() {
 			// https://cloud.google.com/text-to-speech/docs/ssml
-			lines.format("<!--%n%s%s-->%n", voice(), audioConfig());
+			lines.format("<!--%s-->%n", voice());
 			lines.println("<speak>");
 			lines.println("<par>");
 			lines.format("<media repeatCount=\"1\" fadeOutDur=\"10s\" end=\"10s\"><audio src=\"%s\"></audio></media>%n", jingle);
@@ -287,84 +295,93 @@ public interface TextToSpeech {
 		VoiceSelectionParams voice() {
 			// https://cloud.google.com/text-to-speech/docs/voices
 			if (lang == LanguageCode.de && gender == SsmlVoiceGender.FEMALE) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("de-DE")
-					.setName("de-DE-Wavenet-F")
-					.setSsmlGender(SsmlVoiceGender.FEMALE)
-					.build();
+				return new VoiceSelectionParams("de-DE", "de-DE-Wavenet-F", SsmlVoiceGender.FEMALE);
 			} else if (lang == LanguageCode.de && gender == SsmlVoiceGender.MALE) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("de-DE")
-					.setName("de-DE-Wavenet-E")
-					.setSsmlGender(SsmlVoiceGender.MALE)
-					.build();
+				return new VoiceSelectionParams("de-DE", "de-DE-Wavenet-E", SsmlVoiceGender.MALE);
 			} else if (lang == LanguageCode.en && gender == SsmlVoiceGender.FEMALE) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("en-GB")
-					.setName("en-GB-Wavenet-A")
-					.setSsmlGender(SsmlVoiceGender.FEMALE)
-					.build();
+				return new VoiceSelectionParams("en-GB", "en-GB-Wavenet-A", SsmlVoiceGender.FEMALE);
 			} else if (lang == LanguageCode.en && gender == SsmlVoiceGender.MALE) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("en-GB")
-					.setName("en-GB-Wavenet-B")
-					.setSsmlGender(SsmlVoiceGender.MALE)
-					.build();
+				return new VoiceSelectionParams("en-GB", "en-GB-Wavenet-B", SsmlVoiceGender.MALE);
 			} else if (lang == LanguageCode.it && gender == SsmlVoiceGender.MALE) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("it-IT")
-					.setName("it-IT-Wavenet-C")
-					.setSsmlGender(SsmlVoiceGender.MALE)
-					.build();
+				return new VoiceSelectionParams("it-IT", "it-IT-Wavenet-C", SsmlVoiceGender.MALE);
 			} else if (lang == LanguageCode.it && gender == SsmlVoiceGender.FEMALE) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("it-IT")
-					.setName("it-IT-Wavenet-A")
-					.setSsmlGender(SsmlVoiceGender.FEMALE)
-					.build();
+				return new VoiceSelectionParams("it-IT", "it-IT-Wavenet-A", SsmlVoiceGender.FEMALE);
 			} else if (lang == LanguageCode.es && gender == SsmlVoiceGender.MALE) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("es-ES")
-					.setName("es-ES-Wavenet-B")
-					.setSsmlGender(SsmlVoiceGender.MALE)
-					.build();
+				return new VoiceSelectionParams("es-ES", "es-ES-Wavenet-B", SsmlVoiceGender.MALE);
 			} else if (lang == LanguageCode.es && gender == SsmlVoiceGender.FEMALE) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("es-ES")
-					.setName("es-ES-Wavenet-C")
-					.setSsmlGender(SsmlVoiceGender.FEMALE)
-					.build();
+				return new VoiceSelectionParams("es-ES", "es-ES-Wavenet-C", SsmlVoiceGender.FEMALE);
 			} else if (lang == LanguageCode.ca) {
-				return VoiceSelectionParams.newBuilder()
-					.setLanguageCode("ca-ES")
-					.setName("ca-ES-Standard-A")
-					.setSsmlGender(SsmlVoiceGender.FEMALE)
-					.build();
+				return new VoiceSelectionParams("ca-ES", "ca-ES-Standard-A", SsmlVoiceGender.FEMALE);
 			}
 			throw new IllegalArgumentException();
 		}
 
-		AudioConfig audioConfig() {
-			return AudioConfig.newBuilder()
-				.setAudioEncoding(AudioEncoding.MP3)
-				.addEffectsProfileId("handset-class-device")
-				.build();
-		}
-
 	}
 
-	static ByteString createAudioFile(AvalancheBulletin bulletin) throws Exception {
+	final class VoiceSelectionParams {
+		private final String languageCode;
+		private final String name;
+		private final SsmlVoiceGender ssmlGender;
+
+		VoiceSelectionParams(String languageCode, String name, SsmlVoiceGender ssmlGender) {
+			this.languageCode = languageCode;
+			this.name = name;
+			this.ssmlGender = ssmlGender;
+		}
+
+		@Override
+		public String toString() {
+			return MoreObjects.toStringHelper(this)
+				.add("languageCode", languageCode)
+				.add("name", name)
+				.add("ssmlGender", ssmlGender)
+				.toString();
+		}
+	}
+
+	final class Response {
+		private final String audioContent;
+
+		Response(String audioContent) {
+			this.audioContent = audioContent;
+		}
+
+		byte[] asBytes() {
+			return Base64.getDecoder().decode(audioContent);
+		}
+	}
+
+	static byte[] createAudioFile(AvalancheBulletin bulletin) throws Exception {
 		ScriptEngine scriptEngine = new ScriptEngine(bulletin);
 		String ssml = scriptEngine.createScript();
-		SynthesisInput input = SynthesisInput.newBuilder().setSsml(ssml).build();
 		VoiceSelectionParams voice = scriptEngine.voice();
-		AudioConfig audioConfig = scriptEngine.audioConfig();
-		try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
-			logger.info("Synthesize speech for bulletin={} lang={} voice={} audioConfig={}",
-				bulletin.getBulletinID(), bulletin.getLang(), voice, audioConfig);
-			SynthesizeSpeechResponse response = textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
-			return response.getAudioContent();
-		}
+
+		logger.info("Synthesize speech for bulletin={} lang={} voice={}",
+			bulletin.getBulletinID(), bulletin.getLang(), voice);
+
+		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
+			.createScoped(API_AUTH_SCOPE);
+		credentials.refreshIfExpired();
+		AccessToken token = credentials.getAccessToken();
+
+		// https://cloud.google.com/text-to-speech/docs/create-audio#text-to-speech-text-protocol
+		String json = new Gson().toJson(Map.of(
+			"input", Map.of("ssml", ssml),
+			"voice", voice,
+			"audioConfig", Map.of("audioEncoding", "MP3")
+		));
+		URI uri = URI.create(API_URL);
+		HttpRequest request = HttpRequest.newBuilder(uri)
+			.POST(HttpRequest.BodyPublishers.ofString(json))
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getTokenValue())
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
+			.build();
+		HttpResponse<String> response = HttpClient.newBuilder()
+			.connectTimeout(Duration.ofSeconds(10))
+			.build()
+			.send(request, HttpResponse.BodyHandlers.ofString());
+		Response audio = new Gson().fromJson(response.body(), Response.class);
+		return audio.asBytes();
 	}
 
 	static void createAudioFiles(eu.albina.model.AvalancheReport avalancheReport) throws Exception {
@@ -375,15 +392,15 @@ public interface TextToSpeech {
 		for (eu.albina.model.AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
 			for (LanguageCode lang : ENABLED) {
 				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
-				String filename = String.format("%s_%s_%s.ssml", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang.toString());
+				String filename = String.format("%s_%s_%s.ssml", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang);
 				Path path = avalancheReport.getPdfDirectory().resolve(filename);
 				logger.info("Writing SSML file {}", path);
 				Files.writeString(path, new ScriptEngine(caaml).createScript(), StandardCharsets.UTF_8);
-				ByteString audioFile = createAudioFile(caaml);
-				filename = String.format("%s_%s_%s.mp3", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang.toString());
+				byte[] audioFile = createAudioFile(caaml);
+				filename = String.format("%s_%s_%s.mp3", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang);
 				path = avalancheReport.getPdfDirectory().resolve(filename);
-				logger.info("Writing audio file {} ({} bytes)", path, audioFile.size());
-				Files.write(path, audioFile.toByteArray());
+				logger.info("Writing audio file {} ({} bytes)", path, audioFile.length);
+				Files.write(path, audioFile);
 			}
 		}
 	}

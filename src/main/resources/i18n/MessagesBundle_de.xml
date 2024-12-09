@@ -130,7 +130,7 @@
   <entry key="speech.tendency.steady">Die Tendenz für {tendencyDate} lässt eine gleichbleibende Lawinengefahr erwarten.</entry>
   <entry key="speech.avalanche-problem.between">{validTimePeriod}, zwischen {lowerBound} und {upperBound} haben wir {avalancheProblemType}.</entry>
   <entry key="speech.avalanche-problem.below">{validTimePeriod} unter {upperBound} erwartet uns {avalancheProblemType}.</entry>
-  <entry key="speech.avalanche-problem.above">{validTimePeriod} über {lowerBound} müssen wir auf ein {avalancheProblemType} achten.</entry>
+  <entry key="speech.avalanche-problem.above">{validTimePeriod} über {lowerBound} müssen wir auf {avalancheProblemType} achten.</entry>
   <entry key="speech.avalanche-problem">{validTimePeriod} finden wir {avalancheProblemType}.</entry>
   <entry key="speech.aspects.0">Dies in allen Expositionen.</entry>
   <entry key="speech.aspects.1">Vor allem in der Exposition {aspect1}.</entry>
