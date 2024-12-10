@@ -2,16 +2,63 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
-## [unreleased]
+## [7.0.6] - 2024-12-09
+
+### 🐛 Bug Fixes
+
+- _(danger-sources)_ Remove MySQL check from DANGER_SIGN/TERRAIN_TYPE
+- _(PublicationJob)_ Run sendToAllChannels after directory update
+
+## [7.0.5] - 2024-12-05
+
+### 🐛 Bug Fixes
+
+- _(AvalancheReportController)_ PDF preview
+
+## [7.0.4] - 2024-12-05
+
+### 🐛 Bug Fixes
+
+- _(HibernateUtil)_ Transaction.rollback for NoResultException
+
+## [7.0.3] - 2024-12-05
+
+### 🐛 Bug Fixes
+
+- _(BlogController)_ NonUniqueResultException
+
+### ⚙️ Miscellaneous Tasks
+
+- _(pom)_ Update HikariCP from 3.2.0 to 6.2.1
+- _(pom)_ Update log4j2
+
+## [7.0.2] - 2024-12-02
 
 ### 🚀 Features
 
 - _(BlogController)_ Send new tech blogs
 
+### 🐛 Bug Fixes
+
+- _(email)_ Remove pdf button from email due to dynamic pdf creation per warning region, closes #307
+- _(email)_ Tests
+- _(email)_ Remove pdf button from email due to dynamic pdf creation per warning region, closes #307
+- _(email)_ Remove pdf link due to dynamic pdf creation
+- _(TextToSpeech)_ Text -> ssml
+- _(TextToSpeech)_ German
+
 ### 🚜 Refactor
 
 - _(BlogController)_ Use CriteriaBuilder
 - _(BlogController)_ Do not return Optional
+- _(TextToSpeech)_ Migrate to Google REST API
+- _(TextToSpeech)_ Extract constants
+- Migrate to GenericObservation
+- _(observations)_ Remove obsolete code
+
+### 📚 Documentation
+
+- _(Changelog)_ Use git-cliff to generate a changelog
 
 ### ⚙️ Miscellaneous Tasks
 
