@@ -391,6 +391,12 @@ public class AvalancheBulletinController {
 					} else {
 						entityManager.remove(loadedBulletin);
 					}
+				} else {
+					if (isOwnBulletin(loadedBulletin, region)) {
+						modifyOwnBulletin(region, updatedBulletin, loadedBulletin);
+					} else {
+						modifyForeignBulletin(region, updatedBulletin, loadedBulletin);
+					}
 				}
 			}
 
