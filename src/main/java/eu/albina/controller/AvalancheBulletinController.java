@@ -328,10 +328,9 @@ public class AvalancheBulletinController {
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
 	public synchronized Map<String, AvalancheBulletin> createBulletin(AvalancheBulletin newBulletin, Instant startDate, Instant endDate,
-			Region region) {
+			Region region, EntityManager entityManager) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
@@ -358,7 +357,6 @@ public class AvalancheBulletinController {
 				initializeBulletin(bulletin);
 
 			return resultBulletins;
-		});
 	}
 
 	/**
@@ -372,11 +370,9 @@ public class AvalancheBulletinController {
 	 *            the active region of the user who is updating the bulletin
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
-	public Map<String, AvalancheBulletin> updateBulletin(AvalancheBulletin updatedBulletin, Instant startDate, Instant endDate,
-			Region region, User user) {
+	public Map<String, AvalancheBulletin> updateBulletin(AvalancheBulletin updatedBulletin, Instant startDate, Instant endDate, Region region, User user, EntityManager entityManager) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
@@ -412,7 +408,6 @@ public class AvalancheBulletinController {
 			logger.info("Bulletin {} for region {} updated by {}", updatedBulletin.getId(), region.getId(), user);
 
 			return resultBulletins;
-		});
 	}
 
 	/**
@@ -427,10 +422,9 @@ public class AvalancheBulletinController {
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
     public synchronized Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
-			Region region, User user) {
+			Region region, User user, EntityManager entityManager) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
@@ -451,7 +445,6 @@ public class AvalancheBulletinController {
 			}
 
 			return resultBulletins;
-		});
 	}
 
 	/**
@@ -495,8 +488,7 @@ public class AvalancheBulletinController {
 	 *            the regions of the bulletins
 	 * @return the most recent bulletins for the given time period and regions
 	 */
-	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<Region> regions) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<Region> regions, EntityManager entityManager) {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 			List<AvalancheBulletin> results = bulletins.stream()
@@ -508,7 +500,6 @@ public class AvalancheBulletinController {
 				initializeBulletin(bulletin);
 
 			return results;
-		});
 	}
 
 	/**
