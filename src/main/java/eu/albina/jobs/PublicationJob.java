@@ -179,6 +179,14 @@ public class PublicationJob implements org.quartz.Job {
 			PublicationController publicationController = PublicationController.getInstance();
 			publicationController.createRegionResources(region, avalancheReport);
 
+			// update all super regions
+			for (Region superRegion : getSuperRegions(regions)) {
+				logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion.getId(),
+					publishedBulletins0.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
+				AvalancheReport report = AvalancheReport.of(publishedBulletins0, superRegion, serverInstance);
+				publicationController.createRegionResources(superRegion, report);
+			}
+
 			// send notifications only for updated regions after all maps were created
 			if (regions.contains(region) && !isChange()) {
 				tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
