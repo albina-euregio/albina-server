@@ -417,30 +417,32 @@ public class AvalancheBulletinService {
 			@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
 			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST JSON bulletin");
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			try {
-				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+		synchronized (regionId.intern()) {
+			logger.info("POST JSON bulletin {} from date {}", bulletinId, date);
+			return HibernateUtil.getInstance().runTransaction(entityManager -> {
+				try {
+					Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+					Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
-				Region region = entityManager.find(Region.class, regionId);
-				List<Region> regions = RegionController.getInstance().getRegions(entityManager);
+					User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
+					Region region = entityManager.find(Region.class, regionId);
+					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
-				if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
-					JSONObject bulletinJson = new JSONObject(bulletinString);
-					AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, u -> entityManager.find(User.class, u));
-					AvalancheBulletinController.getInstance().updateBulletin(bulletin, startDate, endDate, region, user, entityManager);
-				} else
-					throw new AlbinaException("User is not authorized for this region!");
+					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
+						JSONObject bulletinJson = new JSONObject(bulletinString);
+						AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, u -> entityManager.find(User.class, u));
+						AvalancheBulletinController.getInstance().updateBulletin(bulletin, startDate, endDate, region, user, entityManager);
+					} else
+						throw new AlbinaException("User is not authorized for this region!");
 
-				return getJSONBulletins(date, regions, entityManager);
-			} catch (AlbinaException e) {
-				logger.warn("Error creating bulletin", e);
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
-			}
-		});
+					return getJSONBulletins(date, regions, entityManager);
+				} catch (AlbinaException e) {
+					logger.warn("Error creating bulletin", e);
+					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+				}
+			});
+		}
 	}
 
 	@PUT
@@ -454,37 +456,39 @@ public class AvalancheBulletinService {
 			@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
 			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST JSON bulletin");
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			try {
-				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+		synchronized (regionId.intern()) {
+			logger.info("PUT JSON bulletin from date {}", date);
+			return HibernateUtil.getInstance().runTransaction(entityManager -> {
+				try {
+					Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+					Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
-				Region region = entityManager.find(Region.class, regionId);
-				List<Region> regions = RegionController.getInstance().getRegions(entityManager);
+					User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
+					Region region = entityManager.find(Region.class, regionId);
+					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
-				if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
-					JSONObject bulletinJson = new JSONObject(bulletinString);
-					AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, u -> entityManager.find(User.class, u));
-					Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
-						.createBulletin(bulletin, startDate, endDate, region, entityManager);
-					AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user, entityManager);
+					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
+						JSONObject bulletinJson = new JSONObject(bulletinString);
+						AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, u -> entityManager.find(User.class, u));
+						Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
+							.createBulletin(bulletin, startDate, endDate, region, entityManager);
+						AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user, entityManager);
 
-					// save report for super regions
-					for (Region superRegion : region.getSuperRegions()) {
-						AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user, entityManager);
-					}
-				} else
-					throw new AlbinaException("User is not authorized for this region!");
+						// save report for super regions
+						for (Region superRegion : region.getSuperRegions()) {
+							AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user, entityManager);
+						}
+					} else
+						throw new AlbinaException("User is not authorized for this region!");
 
-				return getJSONBulletins(date, regions, entityManager);
-			} catch (AlbinaException e) {
-				logger.warn("Error creating bulletin", e);
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
-			}
-		});
+					return getJSONBulletins(date, regions, entityManager);
+				} catch (AlbinaException e) {
+					logger.warn("Error creating bulletin", e);
+					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+				}
+			});
+		}
 	}
 
 	@DELETE
@@ -499,29 +503,31 @@ public class AvalancheBulletinService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
 			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext) {
-		logger.debug("DELETE JSON bulletin");
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			try {
-				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+		synchronized (regionId.intern()) {
+			logger.info("DELETE JSON bulletin {} from date {}", bulletinId, date);
+			return HibernateUtil.getInstance().runTransaction(entityManager -> {
+				try {
+					Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+					Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
-				Region region = entityManager.find(Region.class, regionId);
-				List<Region> regions = RegionController.getInstance().getRegions(entityManager);
+					User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
+					Region region = entityManager.find(Region.class, regionId);
+					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
-				if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
-					AvalancheBulletinController.getInstance().deleteBulletin(bulletinId, startDate, endDate, region, user, entityManager);
+					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
+						AvalancheBulletinController.getInstance().deleteBulletin(bulletinId, startDate, endDate, region, user, entityManager);
 
-				} else
-					throw new AlbinaException("User is not authorized for this region!");
+					} else
+						throw new AlbinaException("User is not authorized for this region!");
 
-				return getJSONBulletins(date, regions, entityManager);
-			} catch (AlbinaException e) {
-				logger.warn("Error creating bulletin", e);
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
-			}
-		});
+					return getJSONBulletins(date, regions, entityManager);
+				} catch (AlbinaException e) {
+					logger.warn("Error creating bulletin", e);
+					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+				}
+			});
+		}
 	}
 
 	@POST
@@ -535,26 +541,28 @@ public class AvalancheBulletinService {
 			@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinsString,
 			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext) {
-		logger.debug("POST JSON bulletins");
 
-		try {
-			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+		synchronized (regionId.intern()) {
+			logger.debug("POST JSON bulletins for date {}", date);
+			try {
+				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
+				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+				User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+				Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
-			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString);
-				AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
-			} else
-				throw new AlbinaException("User is not authorized for this region!");
+				if (region != null && user.hasPermissionForRegion(region.getId())) {
+					List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString);
+					AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
+				} else
+					throw new AlbinaException("User is not authorized for this region!");
 
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getJSONBulletins(date, regionIDs);
-		} catch (AlbinaException e) {
-			logger.warn("Error creating bulletin", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+				List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+				return getJSONBulletins(date, regionIDs);
+			} catch (AlbinaException e) {
+				logger.warn("Error creating bulletin", e);
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			}
 		}
 	}
 
