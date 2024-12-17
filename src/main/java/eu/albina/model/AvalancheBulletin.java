@@ -60,7 +60,6 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
-import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -689,25 +688,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void setAfternoon(AvalancheBulletinDaytimeDescription afternoon) {
 		this.afternoon = afternoon;
-	}
-
-	public BulletinStatus getStatus(List<String> regions) {
-		BulletinStatus result = BulletinStatus.draft;
-		for (String entry : getPublishedRegions())
-			for (String region : regions)
-				if (entry.startsWith(region))
-					result = BulletinStatus.published;
-
-		return result;
-	}
-
-	public BulletinStatus getStatus(String region) {
-		BulletinStatus result = BulletinStatus.draft;
-		for (String entry : getPublishedRegions())
-			if (entry.startsWith(region))
-				result = BulletinStatus.published;
-
-		return result;
 	}
 
 	public Set<String> getPublishedAndSavedRegions() {
