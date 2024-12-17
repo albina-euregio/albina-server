@@ -29,6 +29,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import eu.albina.model.AbstractPersistentObject;
+import eu.albina.model.ServerInstance;
+import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -570,6 +572,7 @@ public class AvalancheBulletinController {
 	 * @param user
 	 *            the user who publishes the bulletins
 	 */
+	@Transactional
 	public void publishBulletins(Instant startDate, Instant endDate, Region region,
 			Instant publicationDate, User user) {
 
@@ -582,7 +585,8 @@ public class AvalancheBulletinController {
 				if (bulletin.affectsRegionWithoutSuggestions(region)) {
 
 					// set author
-					if (user != null && !Objects.equals(user.getEmail(), ServerInstanceController.getInstance().getLocalServerInstance().getUserName())) {
+					ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance(entityManager);
+					if (user != null && !Objects.equals(user.getEmail(), serverInstance.getUserName())) {
 						if (!bulletin.getAdditionalAuthors().contains(user.getName()))
 							bulletin.addAdditionalAuthor(user.getName());
 						bulletin.setUser(user);
