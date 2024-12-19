@@ -77,10 +77,7 @@ public class RegionController {
 	 * @return {@code true} if the region with {@code id} exists
 	 */
 	public boolean regionExists(String id) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			Region region = entityManager.find(Region.class, id);
-			return region != null;
-		});
+		return HibernateUtil.getInstance().run(entityManager -> entityManager.find(Region.class, id) != null);
 	}
 
 	/**
@@ -105,7 +102,7 @@ public class RegionController {
 	}
 
 	private List<Region> getActiveRegions() throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(this::getActiveRegions);
+		return HibernateUtil.getInstance().run(this::getActiveRegions);
 	}
 
 	private List<Region> getActiveRegions(EntityManager entityManager) {
@@ -113,7 +110,7 @@ public class RegionController {
 	}
 
 	public Region getRegion(String regionId) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			Region region = entityManager.find(Region.class, regionId);
 			if (region == null) {
 				throw new HibernateException("No region with ID: " + regionId);
@@ -138,17 +135,16 @@ public class RegionController {
 	}
 
 	public List<Region> getRegions() {
-		return HibernateUtil.getInstance().runTransaction(this::getRegions);
+		return HibernateUtil.getInstance().run(this::getRegions);
 	}
 
 	public List<Region> getRegions(EntityManager entityManager) {
-		return RegionController.getInstance().getActiveRegions(entityManager).stream().filter(region -> !region.getServerInstance().isExternalServer()).collect(Collectors.toList());
+		return getActiveRegions(entityManager).stream().filter(region -> !region.getServerInstance().isExternalServer()).collect(Collectors.toList());
 	}
 
 	public List<Region> getPublishBulletinRegions() {
 		try {
-			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
-			return result;
+			return getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
 		} catch (AlbinaException ae) {
 			logger.warn("Active region ids could not be loaded!", ae);
 			return new ArrayList<Region>();
@@ -157,7 +153,7 @@ public class RegionController {
 
 	public List<Region> getPublishBlogRegions() {
 		try {
-			return RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBlogs()).collect(Collectors.toList());
+			return getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBlogs()).collect(Collectors.toList());
 		} catch (AlbinaException ae) {
 			logger.warn("Active regions could not be loaded!", ae);
 			return new ArrayList<Region>();

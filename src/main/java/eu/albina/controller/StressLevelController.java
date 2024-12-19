@@ -33,7 +33,7 @@ import java.util.List;
 public interface StressLevelController {
 
 	static List<StressLevel> get(Collection<User> users, LocalDate startDate, LocalDate endDate) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<StressLevel> select = criteriaBuilder.createQuery(StressLevel.class);
 			Root<StressLevel> root = select.from(StressLevel.class);

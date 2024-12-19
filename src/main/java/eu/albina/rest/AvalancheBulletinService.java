@@ -130,7 +130,7 @@ public class AvalancheBulletinService {
 				logger.warn("No region with ID: " + regionId);
 			}
 		});
-		return HibernateUtil.getInstance().runTransaction(entityManager -> getJSONBulletins(date, regions, entityManager));
+		return HibernateUtil.getInstance().run(entityManager -> getJSONBulletins(date, regions, entityManager));
 	}
 
 	@GET

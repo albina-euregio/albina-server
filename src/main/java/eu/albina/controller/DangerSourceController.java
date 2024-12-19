@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.DangerSource;
 import eu.albina.util.HibernateUtil;
-import jakarta.persistence.EntityManager;
 
 /**
  * Controller for danger sources.
@@ -67,7 +66,7 @@ public class DangerSourceController {
 	 * @return The danger source with the given ID.
 	 */
 	public DangerSource getDangerSource(String dangerSourceId) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			DangerSource dangerSource = entityManager.find(DangerSource.class, dangerSourceId);
 			if (dangerSource == null) {
 				throw new HibernateException("No danger source with ID: " + dangerSourceId);
@@ -113,20 +112,11 @@ public class DangerSourceController {
 	 * @return danger sources
 	 */
 	public List<DangerSource> getDangerSources(Instant startDate, Instant endDate) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<DangerSource> dangerSources = entityManager.createQuery(HibernateUtil.queryGetDangerSources, DangerSource.class).setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
-			return dangerSources;
-		});
+		return HibernateUtil.getInstance().run(entityManager -> entityManager.createQuery(HibernateUtil.queryGetDangerSources, DangerSource.class).setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList());
 	}
 
 	public List<DangerSource> getAllDangerSources() {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> getAllDangerSources(entityManager));
+		return HibernateUtil.getInstance().run(entityManager -> entityManager.createQuery(HibernateUtil.queryGetDangerSources, DangerSource.class).getResultList());
 	}
 
-	private List<DangerSource> getAllDangerSources(EntityManager entityManager) {
-		final List<DangerSource> dangerSources = entityManager
-			.createQuery(HibernateUtil.queryGetDangerSources, DangerSource.class)
-			.getResultList();
-		return dangerSources;
-	}
 }

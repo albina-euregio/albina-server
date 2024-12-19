@@ -64,7 +64,7 @@ public interface RapidMailController {
 	static Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
 		Objects.requireNonNull(languageCode, "languageCode");
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<RapidMailConfiguration> select = criteriaBuilder.createQuery(RapidMailConfiguration.class);
 			Root<RapidMailConfiguration> root = select.from(RapidMailConfiguration.class);

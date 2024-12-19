@@ -56,7 +56,7 @@ public interface TelegramController {
 		Objects.requireNonNull(region.getId(), "region.getId()");
 		Objects.requireNonNull(languageCode, "languageCode");
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			try {
 				TelegramConfiguration result = (TelegramConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
 					.setParameter("region", region)

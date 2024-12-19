@@ -236,7 +236,7 @@ public class AvalancheReportController {
 	 * @return all public reports for a specific time period and {@code region}
 	 */
 	public Collection<AvalancheReport> getPublicReports(Instant startDate, Instant endDate, Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForTimePeriodAndRegion, AvalancheReport.class)
@@ -267,7 +267,7 @@ public class AvalancheReportController {
 	 *         null if not report was found
 	 */
 	public AvalancheReport getPublicReport(Instant date, Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 			if (region != null && !Strings.isNullOrEmpty(region.getId())) {
 				reports = entityManager.createQuery(HibernateUtil.queryGetReportsForDayAndRegion, AvalancheReport.class)
@@ -332,7 +332,7 @@ public class AvalancheReportController {
 	 * @return all most recent reports for a specific time period and {@code region}
 	 */
 	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
 			List<AvalancheReport> reports = new ArrayList<AvalancheReport>();
 
@@ -368,7 +368,7 @@ public class AvalancheReportController {
 	 *         or null if no report was found
 	 */
 	public AvalancheReport getInternalReport(Instant date, Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> getInternalReport(date, region, entityManager));
+		return HibernateUtil.getInstance().run(entityManager -> getInternalReport(date, region, entityManager));
 	}
 
 	private static AvalancheReport getInternalReport(Instant date, Region region, EntityManager entityManager) {
@@ -799,14 +799,7 @@ public class AvalancheReportController {
 	 *             if no report was found
 	 */
 	public Instant getLatestDate() throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			AvalancheReport report = (AvalancheReport) entityManager.createQuery(HibernateUtil.queryGetLatestDate)
-					.setMaxResults(1).getSingleResult();
-
-			if (report != null)
-				return report.getDate().toInstant();
-			else
-				throw new HibernateException("No report found!");
-		});
+		return HibernateUtil.getInstance().run(entityManager
+			-> entityManager.createQuery(HibernateUtil.queryGetLatestDate, AvalancheReport.class).setMaxResults(1).getSingleResult().getDate().toInstant());
 	}
 }

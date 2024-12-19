@@ -40,7 +40,7 @@ public interface PushSubscriptionController {
 	}
 
 	static List<PushSubscription> get(LanguageCode lang, Collection<String> regionIds) throws HibernateException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<PushSubscription> select = criteriaBuilder.createQuery(PushSubscription.class);
 			Root<PushSubscription> root = select.from(PushSubscription.class);

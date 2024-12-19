@@ -80,7 +80,7 @@ public class ServerInstanceController {
 	}
 
     public ServerInstance getServerInstance(String serverInstanceId) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			ServerInstance serverInstance = entityManager.find(ServerInstance.class, serverInstanceId);
 			if (serverInstance == null) {
 				throw new HibernateException("No server instance with ID: " + serverInstanceId);
@@ -90,7 +90,7 @@ public class ServerInstanceController {
     }
 
 	public ServerInstance getLocalServerInstance() {
-		return HibernateUtil.getInstance().runTransaction(this::getLocalServerInstance);
+		return HibernateUtil.getInstance().run(this::getLocalServerInstance);
 	}
 
 	public ServerInstance getLocalServerInstance(EntityManager entityManager) {
@@ -98,7 +98,7 @@ public class ServerInstanceController {
 	}
 
 	public List<ServerInstance> getExternalServerInstances() {
-		return HibernateUtil.getInstance().runTransaction(this::getExternalServerInstances);
+		return HibernateUtil.getInstance().run(this::getExternalServerInstances);
 	}
 
 	public List<ServerInstance> getExternalServerInstances(EntityManager entityManager) {
@@ -106,9 +106,6 @@ public class ServerInstanceController {
 	}
 
 	public boolean serverInstanceExists(Long id) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			ServerInstance serverInstance = entityManager.find(ServerInstance.class, id);
-			return serverInstance != null;
-		});
+		return HibernateUtil.getInstance().run(entityManager -> entityManager.find(ServerInstance.class, id) != null);
 	}
 }

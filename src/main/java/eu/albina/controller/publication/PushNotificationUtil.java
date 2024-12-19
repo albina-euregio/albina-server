@@ -84,7 +84,7 @@ public class PushNotificationUtil {
 
 
 	public static Optional<PushConfiguration> getConfiguration() {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			try {
 				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 				CriteriaQuery<PushConfiguration> select = criteriaBuilder.createQuery(PushConfiguration.class);
