@@ -82,8 +82,8 @@
   <entry key="tendency.binding-word">on </entry>
   <entry key="email.follow-us">Follow us</entry>
   <entry key="email.unsubscribe">Unsubscribe</entry>
-  <entry key="email.subject">{0}, </entry>
-  <entry key="email.subject.update">UPDATE on {0}, </entry>
+  <entry key="email.subject">{0} {1} for </entry>
+  <entry key="email.subject.update">UPDATE on {0} {1} for </entry>
   <entry key="email.imprint">Imprint</entry>
   <entry key="email.media.subject">{0} for {1} from {2}</entry>
   <entry key="email.media.important.subject">IMPORTANT {0} for {1} from {2}</entry>

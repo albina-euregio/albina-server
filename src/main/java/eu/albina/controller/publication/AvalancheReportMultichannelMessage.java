@@ -16,7 +16,12 @@
  ******************************************************************************/
 package eu.albina.controller.publication;
 
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.function.Supplier;
+
 import com.google.common.base.Suppliers;
+
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -24,10 +29,6 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.EmailUtil;
 import eu.albina.util.LinkUtil;
 import freemarker.template.TemplateException;
-
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.function.Supplier;
 
 class AvalancheReportMultichannelMessage implements MultichannelMessage {
 	private final AvalancheReport avalancheReport;
@@ -70,10 +71,11 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 	public String getSubject() {
 		Region region = avalancheReport.getRegion();
 		String bundleString = avalancheReport.getStatus() == BulletinStatus.republished
-			? lang.getBundleString("email.subject.update", region)
-			: lang.getBundleString("email.subject", region);
+			? lang.getBundleString("email.subject.update")
+			: lang.getBundleString("email.subject");
+
 		return MessageFormat.format(bundleString, lang.getBundleString("website.name", region))
-			+ avalancheReport.getDate(lang);
+			+ lang.getRegionName(region.getId()) + avalancheReport.getDate(lang);
 	}
 
 	@Override
