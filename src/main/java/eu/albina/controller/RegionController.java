@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.github.openjson.JSONArray;
+import jakarta.persistence.EntityManager;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,12 +105,14 @@ public class RegionController {
 	}
 
 	private List<Region> getActiveRegions() throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return entityManager.createQuery(HibernateUtil.queryGetRegions, Region.class).getResultList();
-		});
+		return HibernateUtil.getInstance().runTransaction(this::getActiveRegions);
 	}
 
-    public Region getRegion(String regionId) {
+	private List<Region> getActiveRegions(EntityManager entityManager) {
+		return entityManager.createQuery(HibernateUtil.queryGetRegions, Region.class).getResultList();
+	}
+
+	public Region getRegion(String regionId) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			Region region = entityManager.find(Region.class, regionId);
 			if (region == null) {
@@ -135,13 +138,11 @@ public class RegionController {
 	}
 
 	public List<Region> getRegions() {
-		try {
-			List<Region> result = RegionController.getInstance().getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).collect(Collectors.toList());
-			return result;
-		} catch (AlbinaException ae) {
-			logger.warn("Active region ids could not be loaded!", ae);
-			return new ArrayList<Region>();
-		}
+		return HibernateUtil.getInstance().runTransaction(this::getRegions);
+	}
+
+	public List<Region> getRegions(EntityManager entityManager) {
+		return RegionController.getInstance().getActiveRegions(entityManager).stream().filter(region -> !region.getServerInstance().isExternalServer()).collect(Collectors.toList());
 	}
 
 	public List<Region> getPublishBulletinRegions() {

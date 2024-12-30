@@ -19,6 +19,7 @@ package eu.albina.controller;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.persistence.EntityManager;
 import org.hibernate.HibernateException;
 
 import eu.albina.exception.AlbinaException;
@@ -89,13 +90,19 @@ public class ServerInstanceController {
     }
 
 	public ServerInstance getLocalServerInstance() {
-		return HibernateUtil.getInstance().runTransaction(entityManager ->
-			entityManager.createQuery(HibernateUtil.queryGetLocalServerInstance, ServerInstance.class).getSingleResult());
+		return HibernateUtil.getInstance().runTransaction(this::getLocalServerInstance);
+	}
+
+	public ServerInstance getLocalServerInstance(EntityManager entityManager) {
+		return entityManager.createQuery(HibernateUtil.queryGetLocalServerInstance, ServerInstance.class).getSingleResult();
 	}
 
 	public List<ServerInstance> getExternalServerInstances() {
-		return HibernateUtil.getInstance().runTransaction(entityManager ->
-			entityManager.createQuery(HibernateUtil.queryGetExternalServerInstances, ServerInstance.class).getResultList());
+		return HibernateUtil.getInstance().runTransaction(this::getExternalServerInstances);
+	}
+
+	public List<ServerInstance> getExternalServerInstances(EntityManager entityManager) {
+		return entityManager.createQuery(HibernateUtil.queryGetExternalServerInstances, ServerInstance.class).getResultList();
 	}
 
 	public boolean serverInstanceExists(Long id) {

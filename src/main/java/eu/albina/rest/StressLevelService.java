@@ -18,11 +18,13 @@ package eu.albina.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.albina.controller.RegionController;
 import eu.albina.controller.StressLevelController;
 import eu.albina.controller.UserController;
 import eu.albina.model.StressLevel;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
+import eu.albina.model.Region;
 import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -85,6 +87,7 @@ public class StressLevelService {
 	@Operation(summary = "List stress level entries of team")
 	public Response getTeamStressLevels(
 			@Context SecurityContext securityContext,
+			@QueryParam("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) throws JsonProcessingException {
 
@@ -92,18 +95,29 @@ public class StressLevelService {
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
 		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
-		List<User> users = UserController.getInstance().getUsers().stream()
-				.filter(u -> !u.isDeleted())
-				.filter(u -> u.hasRole(Role.FORECASTER) || u.hasRole(Role.FOREMAN))
-				.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
-				.collect(Collectors.toList());
-		Map<UUID, List<StressLevel>> stressLevels = StressLevelController.get(users, startDate, endDate).stream()
-				.collect(Collectors.groupingBy(stressLevel -> randomization.computeIfAbsent(stressLevel.getUser(), i -> UUID.randomUUID())));
-		String json = new ObjectMapper().writeValueAsString(stressLevels);
-		if (json.contains("@")) {
-			throw new IllegalStateException("Found unexpected '@'. Randomization of users emails does not work.");
+		try {
+			// check that user is member of requested region
+			Region region = RegionController.getInstance().getRegion(regionId);
+			if (!user.hasPermissionForRegion(region.getId())) {
+				return Response.status(403).build();
+			}
+			List<User> users = UserController.getInstance().getUsers().stream()
+					.filter(u -> !u.isDeleted())
+					.filter(u -> u.hasRole(Role.FORECASTER) || u.hasRole(Role.FOREMAN))
+					.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
+					.filter(u -> u.hasPermissionForRegion(region.getId()))
+					.collect(Collectors.toList());
+			Map<UUID, List<StressLevel>> stressLevels = StressLevelController.get(users, startDate, endDate).stream()
+					.collect(Collectors.groupingBy(stressLevel -> randomization.computeIfAbsent(stressLevel.getUser(), i -> UUID.randomUUID())));
+			String json = new ObjectMapper().writeValueAsString(stressLevels);
+			if (json.contains("@")) {
+				throw new IllegalStateException("Found unexpected '@'. Randomization of users emails does not work.");
+			}
+			return Response.ok(json).build();
+		} catch (Exception e) {
+			logger.warn("Failed to get stress levels for region: " + regionId, e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
-		return Response.ok(json).build();
 	}
 
 	@POST

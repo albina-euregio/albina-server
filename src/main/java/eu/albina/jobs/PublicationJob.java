@@ -39,6 +39,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -80,6 +81,7 @@ public class PublicationJob implements org.quartz.Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext arg0) {
+		PublicationController publicationController = PublicationController.getInstance();
 		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
 		AvalancheReportController avalancheReportController = AvalancheReportController.getInstance();
 		RegionController regionController = RegionController.getInstance();
@@ -156,7 +158,7 @@ public class PublicationJob implements org.quartz.Job {
 		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
 
 		// update all regions to create complete maps
-		regionController.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
+		Stream<CompletableFuture<Void>> futures1 = regionController.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
@@ -176,14 +178,23 @@ public class PublicationJob implements org.quartz.Job {
 				return;
 			}
 
-			PublicationController publicationController = PublicationController.getInstance();
 			publicationController.createRegionResources(region, avalancheReport);
 
 			// send notifications only for updated regions after all maps were created
 			if (regions.contains(region) && !isChange()) {
 				tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
 			}
-		}, executor)).forEach(PublicationJob::await);
+		}, executor));
+
+		// update all super regions
+		Stream<CompletableFuture<Void>> futures2 = getSuperRegions(regions).stream().map(superRegion -> CompletableFuture.runAsync(() -> {
+			logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion.getId(),
+				publishedBulletins0.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
+			AvalancheReport report = AvalancheReport.of(publishedBulletins0, superRegion, serverInstance);
+			publicationController.createRegionResources(superRegion, report);
+		}, executor));
+
+		Stream.concat(futures1, futures2).forEach(PublicationJob::await);
 
 		try {
 			createSymbolicLinks(
