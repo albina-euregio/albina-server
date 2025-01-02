@@ -2,6 +2,55 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.2] - 2024-12-19
+
+### 🐛 Bug Fixes
+
+- *(PublicationJob)* Handle super regions only once
+
+### ⚙️ Miscellaneous Tasks
+
+- *(pom.xml)* Update quartz scheduler
+
+## [7.1.1] - 2024-12-17
+
+### 🐛 Bug Fixes
+
+- AvalancheBulletinController.updateBulletin
+- *(AvalancheBulletinController)* Pass EntityManager to ServerInstanceController
+- *(AvalancheBulletinController)* Unintended change
+
+### 🚜 Refactor
+
+- AvalancheBulletinController.saveBulletins
+
+### ⚙️ Miscellaneous Tasks
+
+- *(pom)* Remove sentry
+
+## [7.1.0] - 2024-12-17
+
+### 🐛 Bug Fixes
+
+- *(AvalancheBulletinService)* Use one big transaction for create/delete/update
+- *(AvalancheBulletinService)* Synchronize create/delete/update operations
+
+### 🚜 Refactor
+
+- Remove unused AvalancheBulletin.getStatus
+
+### 📚 Documentation
+
+- *(Changelog)* Use git-cliff to generate a changelog
+- Document and set up workflow for changelog
+- Update CHANGELOG
+- *(changelog)* Clean up
+- *(README)* Local development setup
+
+### ⚙️ Miscellaneous Tasks
+
+- *(StressLevelService)* Team stress level per region
+
 ## [7.0.6] - 2024-12-09
 
 ### 🐛 Bug Fixes
