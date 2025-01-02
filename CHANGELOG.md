@@ -6,50 +6,29 @@
 
 ### 🐛 Bug Fixes
 
-- *(PublicationJob)* Handle super regions only once
+- Handle super regions only once during publication
 
 ### ⚙️ Miscellaneous Tasks
 
-- *(pom.xml)* Update quartz scheduler
+- Update quartz scheduler
+- Add HikariCP configuration for connection pooling.
 
 ## [7.1.1] - 2024-12-17
 
 ### 🐛 Bug Fixes
 
-- AvalancheBulletinController.updateBulletin
-- *(AvalancheBulletinController)* Pass EntityManager to ServerInstanceController
-- *(AvalancheBulletinController)* Unintended change
-
-### 🚜 Refactor
-
-- AvalancheBulletinController.saveBulletins
-
-### ⚙️ Miscellaneous Tasks
-
-- *(pom)* Remove sentry
+- Fix issues with publication and bulletin updates involving super regions
 
 ## [7.1.0] - 2024-12-17
 
 ### 🐛 Bug Fixes
 
-- *(AvalancheBulletinService)* Use one big transaction for create/delete/update
-- *(AvalancheBulletinService)* Synchronize create/delete/update operations
-
-### 🚜 Refactor
-
-- Remove unused AvalancheBulletin.getStatus
-
-### 📚 Documentation
-
-- *(Changelog)* Use git-cliff to generate a changelog
-- Document and set up workflow for changelog
-- Update CHANGELOG
-- *(changelog)* Clean up
-- *(README)* Local development setup
+- Synchronize create/delete/update operations
 
 ### ⚙️ Miscellaneous Tasks
 
-- *(StressLevelService)* Team stress level per region
+- Team stress level per region
+- Use git-cliff to generate a changelog
 
 ## [7.0.6] - 2024-12-09
 
