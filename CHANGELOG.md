@@ -45,6 +45,8 @@
 
 ## [7.0.4] - 2024-12-05 (and [7.0.3] - 2024-12-05)
 
+### 🐛 Bug Fixes
+
 - Fix problems related to HikariPool connections resulting from introduction of tech blog in v7.0.2
 
 ## [7.0.2] - 2024-12-02
