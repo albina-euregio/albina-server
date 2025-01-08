@@ -82,8 +82,8 @@
   <entry key="tendency.binding-word">en</entry>
   <entry key="email.follow-us">Síguenos</entry>
   <entry key="email.unsubscribe">Cancela la suscripción</entry>
-  <entry key="email.subject">{0}, </entry>
-  <entry key="email.subject.update">UPDATE en {0}, </entry>
+  <entry key="email.subject">{0} por {1}, </entry>
+  <entry key="email.subject.update">ACTUALIZACIÓN en {0} por {1}, </entry>
   <entry key="email.imprint">Imprimir</entry>
   <entry key="email.media.subject">{0} para {1} de {2}</entry>
   <entry key="email.media.important.subject">IMPORTANTE {0} para {1} de {2}</entry>
