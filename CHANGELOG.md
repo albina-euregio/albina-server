@@ -2,6 +2,22 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.3] - 2025-01-08
+
+### 🐛 Bug Fixes
+
+- Override existing mp3 file
+
+### 📚 Documentation
+
+- Use git-cliff to generate a changelog
+- Document and set up workflow for changelog
+
+### ⚙️ Miscellaneous Tasks
+
+- Add region name to email subject
+- Update translations
+
 ## [7.1.2] - 2024-12-19
 
 ### 🐛 Bug Fixes
