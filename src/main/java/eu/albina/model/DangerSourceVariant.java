@@ -54,6 +54,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -169,6 +170,10 @@ public class DangerSourceVariant extends AbstractPersistentObject
 			@AttributeOverride(name = "snowpackStability", column = @Column(name = "SNOWPACK_STABILITY")),
 			@AttributeOverride(name = "frequency", column = @Column(name = "FREQUENCY")) })
 	private EawsMatrixInformation eawsMatrixInformation;
+
+	@Lob
+	@Column(name = "COMMENT")
+	private String comment;
 
 	// TODO add uncertainties
 
@@ -526,6 +531,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setEawsMatrixInformation(EawsMatrixInformation eawsMatrixInformation) {
 		this.eawsMatrixInformation = eawsMatrixInformation;
+	}
+
+	public String getComment() {
+		return this.comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public GlidingSnowActivity getGlidingSnowActivity() {
