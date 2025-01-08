@@ -37,32 +37,32 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import com.github.openjson.JSONObject;
-
-import eu.albina.controller.RegionController;
-import eu.albina.controller.publication.RapidMailController;
-import eu.albina.model.publication.RapidMailConfiguration;
-import eu.albina.util.LinkUtil;
-import eu.albina.util.RssUtil;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONObject;
+
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
+import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import eu.albina.util.LinkUtil;
+import eu.albina.util.RssUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/media")
 @Tag(name = "media")
@@ -105,7 +105,7 @@ public class MediaFileService {
 			// save mp3 file
 			String mp3FileName = getMediaFileName(dateString, user, language, ".mp3");
 			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
-			Files.copy(uploadedInputStream, mp3File);
+			Files.copy(uploadedInputStream, mp3File, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 			logger.info("{} successfully uploaded to: {}", mp3FileName, mp3File);
 
 			// save text file
