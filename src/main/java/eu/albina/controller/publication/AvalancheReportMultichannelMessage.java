@@ -74,8 +74,8 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 			? lang.getBundleString("email.subject.update")
 			: lang.getBundleString("email.subject");
 
-		return MessageFormat.format(bundleString, lang.getBundleString("website.name", region))
-			+ lang.getRegionName(region.getId()) + avalancheReport.getDate(lang);
+		return MessageFormat.format(bundleString, lang.getBundleString("website.name", region), lang.getRegionName(region.getId()))
+			+ avalancheReport.getDate(lang);
 	}
 
 	@Override
