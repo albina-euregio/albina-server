@@ -20,14 +20,14 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 
+import com.github.openjson.JSONObject;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-import com.github.openjson.JSONObject;
 
 /**
  * This class holds all information about a server instance.
@@ -85,6 +85,9 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 	@Column(name = "SERVER_IMAGES_URL")
 	private String serverImagesUrl;
 
+	@Column(name = "DANGER_LEVEL_ELEVATION_DEPENDENCY")
+	private boolean dangerLevelElevationDependency;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -121,6 +124,8 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 			this.mapProductionUrl = json.getString("mapProductionUrl");
 		if (json.has("serverImagesUrl") && !json.isNull("serverImagesUrl"))
 			this.serverImagesUrl = json.getString("serverImagesUrl");
+		if (json.has("dangerLevelElevationDependency") && !json.isNull("dangerLevelElevationDependency"))
+			this.dangerLevelElevationDependency = json.getBoolean("dangerLevelElevationDependency");
 	}
 
 	public Long getId() {
@@ -235,6 +240,14 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 		this.serverImagesUrl = serverImagesUrl;
 	}
 
+	public boolean isDangerLevelElevationDependency() {
+		return dangerLevelElevationDependency;
+	}
+
+	public void setDangerLevelElevationDependency(boolean dangerLevelElevationDependency) {
+		this.dangerLevelElevationDependency = dangerLevelElevationDependency;
+	}
+
 	@Override
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
@@ -252,6 +265,7 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 		json.put("mediaPath", getMediaPath());
 		json.put("mapProductionUrl", getMapProductionUrl());
 		json.put("serverImagesUrl", getServerImagesUrl());
+		json.put("dangerLevelElevationDependency", isDangerLevelElevationDependency());
 		return json;
 	}
 

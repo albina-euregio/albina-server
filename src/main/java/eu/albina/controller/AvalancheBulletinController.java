@@ -28,8 +28,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import eu.albina.model.AbstractPersistentObject;
-import eu.albina.model.ServerInstance;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -38,15 +36,16 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONArray;
 
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
-
 import jakarta.persistence.EntityManager;
 
 /**
@@ -726,18 +725,18 @@ public class AvalancheBulletinController {
 						missingSnowpackStructureComment = true;
 
 					if (bulletin.getForenoon() == null
-							|| bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
+							|| bulletin.getForenoon().dangerRating(true) == DangerRating.missing
 							|| (bulletin.getForenoon() != null && bulletin.getForenoon().isHasElevationDependency()
-									&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
+									&& bulletin.getForenoon().dangerRating(false) == DangerRating.missing)) {
 						missingDangerRating = true;
 					}
 
 					if (missingDangerRating || (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() == null)
 							|| (bulletin.isHasDaytimeDependency()
-									&& bulletin.getAfternoon().getDangerRatingAbove() == DangerRating.missing)
+									&& bulletin.getAfternoon().dangerRating(true) == DangerRating.missing)
 							|| (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() != null
 									&& bulletin.getAfternoon().isHasElevationDependency()
-									&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
+									&& bulletin.getAfternoon().dangerRating(false) == DangerRating.missing)) {
 						missingDangerRating = true;
 					}
 				}

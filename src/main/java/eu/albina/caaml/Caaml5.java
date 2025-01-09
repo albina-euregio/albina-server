@@ -157,10 +157,10 @@ interface Caaml5 {
 					bulletinDaytimeDescription.getElevation(), true, bulletinDaytimeDescription.getTreeline()));
 			dangerRatingAbove.appendChild(validElevationAbove);
 
-			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingAbove() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.dangerRating(true) != null) {
 				Element mainValueAbove = doc.createElement("mainValue");
 				mainValueAbove.appendChild(doc.createTextNode(
-						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.getDangerRatingAbove())));
+						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.dangerRating(true))));
 				dangerRatingAbove.appendChild(mainValueAbove);
 			}
 			dangerRatings.appendChild(dangerRatingAbove);
@@ -170,10 +170,10 @@ interface Caaml5 {
 					bulletinDaytimeDescription.getElevation(), false, bulletinDaytimeDescription.getTreeline()));
 			dangerRatingBelow.appendChild(validElevationBelow);
 
-			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingBelow() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.dangerRating(false) != null) {
 				Element mainValueBelow = doc.createElement("mainValue");
 				mainValueBelow.appendChild(doc.createTextNode(
-						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.getDangerRatingBelow())));
+						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.dangerRating(false))));
 				dangerRatingBelow.appendChild(mainValueBelow);
 			}
 			dangerRatings.appendChild(dangerRatingBelow);
@@ -181,10 +181,10 @@ interface Caaml5 {
 			// NOTE if no elevation dependency is set, the elevation description is above
 			Element dangerRating = doc.createElement("DangerRating");
 
-			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.getDangerRatingAbove() != null) {
+			if (bulletinDaytimeDescription != null && bulletinDaytimeDescription.dangerRating(true) != null) {
 				Element mainValue = doc.createElement("mainValue");
 				mainValue.appendChild(doc.createTextNode(
-						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.getDangerRatingAbove())));
+						DangerRating.getCAAMLv5String(bulletinDaytimeDescription.dangerRating(true))));
 				dangerRating.appendChild(mainValue);
 			}
 			dangerRatings.appendChild(dangerRating);

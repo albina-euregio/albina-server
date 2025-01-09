@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +35,9 @@ import com.github.openjson.JSONObject;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.AvalancheProblem;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.EawsMatrixInformation;
-import eu.albina.model.AvalancheProblem;
 import eu.albina.model.MatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
@@ -401,12 +400,12 @@ public class StatisticsController {
 			sb.append(region);
 			sb.append(csvDeliminator);
 			if (!daytimeDescription.isHasElevationDependency()) {
-				sb.append(daytimeDescription.getDangerRatingAbove().toString());
+				sb.append(daytimeDescription.dangerRating(true).toString());
 			} else {
-				sb.append(daytimeDescription.getDangerRatingBelow().toString());
+				sb.append(daytimeDescription.dangerRating(false).toString());
 			}
 			sb.append(csvDeliminator);
-			sb.append(daytimeDescription.getDangerRatingAbove().toString());
+			sb.append(daytimeDescription.dangerRating(true).toString());
 			sb.append(csvDeliminator);
 			if (!daytimeDescription.isHasElevationDependency())
 				sb.append(notAvailableString);

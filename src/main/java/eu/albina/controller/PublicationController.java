@@ -18,21 +18,22 @@ package eu.albina.controller;
 
 import java.io.IOException;
 
-import com.google.common.base.Stopwatch;
-import eu.albina.caaml.Caaml;
-import eu.albina.model.AvalancheReport;
-import eu.albina.controller.publication.MultichannelMessage;
-import eu.albina.util.TextToSpeech;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Stopwatch;
+
+import eu.albina.caaml.Caaml;
 import eu.albina.caaml.CaamlVersion;
+import eu.albina.controller.publication.MultichannelMessage;
+import eu.albina.map.MapUtil;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.JsonUtil;
-import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.SimpleHtmlUtil;
+import eu.albina.util.TextToSpeech;
 
 /**
  * Controller for avalanche reports.
