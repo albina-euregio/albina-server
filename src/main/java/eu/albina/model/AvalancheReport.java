@@ -284,6 +284,17 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public void setServerInstance(ServerInstance serverInstance) {
 		this.serverInstance = serverInstance;
+		if (this.bulletins == null) {
+			return;
+		}
+		for (AvalancheBulletin bulletin : this.bulletins) {
+			if (bulletin.getForenoon() != null) {
+				bulletin.getForenoon().serverInstance(serverInstance);
+			}
+			if (bulletin.getAfternoon() != null) {
+				bulletin.getAfternoon().serverInstance(serverInstance);
+			}
+		}
 	}
 
 	public Path getMapsPath() {

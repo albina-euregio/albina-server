@@ -25,7 +25,6 @@ import java.util.Set;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.enumerations.Complexity;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -42,6 +41,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "avalanche_bulletin_daytime_descriptions")
@@ -111,6 +111,9 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@JoinColumn(name = "AVALANCHE_PROBLEM_5_ID")
 	private AvalancheProblem avalancheProblem5;
 
+	@Transient
+	private transient ServerInstance serverInstance;
+
 	public AvalancheBulletinDaytimeDescription() {
 		this.terrainFeatureAbove = new HashSet<Text>();
 		this.terrainFeatureBelow = new HashSet<Text>();
@@ -161,7 +164,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public boolean isHasElevationDependency() {
-		if (ServerInstanceController.getInstance().getLocalServerInstance().isDangerLevelElevationDependency()) {
+		if (isDangerLevelElevationDependency()) {
 			return hasElevationDependency;
 		} else {
 			return false;
@@ -173,7 +176,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public int getElevation() {
-		if (ServerInstanceController.getInstance().getLocalServerInstance().isDangerLevelElevationDependency()) {
+		if (isDangerLevelElevationDependency()) {
 			return elevation;
 		} else {
 			return 0;
@@ -185,7 +188,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public boolean getTreeline() {
-		if (ServerInstanceController.getInstance().getLocalServerInstance().isDangerLevelElevationDependency()) {
+		if (isDangerLevelElevationDependency()) {
 			return treeline;
 		} else {
 			return false;
@@ -314,7 +317,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public DangerRating dangerRating(boolean above) {
-		if (ServerInstanceController.getInstance().getLocalServerInstance().isDangerLevelElevationDependency()) {
+		if (isDangerLevelElevationDependency()) {
 			if (isHasElevationDependency() && !above) {
 				return getDangerRatingBelow();
 			} else {
@@ -339,7 +342,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public Set<Text> terrainFeature(boolean above) {
-		if (ServerInstanceController.getInstance().getLocalServerInstance().isDangerLevelElevationDependency()) {
+		if (isDangerLevelElevationDependency()) {
 			if (isHasElevationDependency() && !above) {
 				return getTerrainFeatureBelow();
 			} else {
@@ -364,7 +367,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public String terrainFeatureTextcat(boolean above) {
-		if (ServerInstanceController.getInstance().getLocalServerInstance().isDangerLevelElevationDependency()) {
+		if (isDangerLevelElevationDependency()) {
 			if (isHasElevationDependency() && !above) {
 				return getTerrainFeatureBelowTextcat();
 			} else {
@@ -386,6 +389,18 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			terrainFeatureTextcat = getTerrainFeatureBelowTextcat();
 		}
 		return terrainFeatureTextcat;
+	}
+
+	boolean isDangerLevelElevationDependency() {
+		return serverInstance == null || serverInstance.isDangerLevelElevationDependency();
+	}
+
+	ServerInstance serverInstance() {
+		return serverInstance;
+	}
+
+	void serverInstance(ServerInstance serverInstance) {
+		this.serverInstance = serverInstance;
 	}
 
 	@Override
