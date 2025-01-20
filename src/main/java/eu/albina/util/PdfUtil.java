@@ -85,6 +85,8 @@ public class PdfUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PdfUtil.class);
 
+	public static final String MEDIA_TYPE = "application/pdf";
+
 	public static final Color blackColor = ColorConstants.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
 	public static final Color whiteColor = ColorConstants.WHITE;
