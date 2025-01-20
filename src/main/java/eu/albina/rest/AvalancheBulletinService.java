@@ -249,7 +249,7 @@ public class AvalancheBulletinService {
 
 	@GET
 	@Path("/{bulletinId}/pdf")
-	@Produces("application/pdf")
+	@Produces(PdfUtil.MEDIA_TYPE)
 	@Operation(summary = "Get published bulletin as PDF")
 	public Response getPublishedBulletinAsPDF(
 		@PathParam("bulletinId") String bulletinId,
@@ -267,7 +267,7 @@ public class AvalancheBulletinService {
 			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
 			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
 			java.nio.file.Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
-			return Response.ok(pdf.toFile(), "application/pdf").build();
+			return Response.ok(pdf.toFile(), PdfUtil.MEDIA_TYPE).build();
 		} catch (Exception e) {
 			logger.warn("Error creating PDF", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -338,7 +338,7 @@ public class AvalancheBulletinService {
 	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
     @Path("/preview")
-    @Produces("application/pdf")
+    @Produces(PdfUtil.MEDIA_TYPE)
 	@Operation(summary = "Get bulletin preview as PDF")
 	public Response getPreviewPdf(
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
@@ -368,7 +368,7 @@ public class AvalancheBulletinService {
 
 			return Response.ok(pdf.toFile())
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + pdf.getFileName() + "\"")
-				.header(HttpHeaders.CONTENT_TYPE, "application/pdf").build();
+				.header(HttpHeaders.CONTENT_TYPE, PdfUtil.MEDIA_TYPE).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating PDFs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();

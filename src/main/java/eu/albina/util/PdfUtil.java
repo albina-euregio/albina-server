@@ -30,6 +30,7 @@ import java.util.StringJoiner;
 
 import com.google.common.io.Resources;
 
+import com.google.common.net.MediaType;
 import eu.albina.map.MapImageFormat;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.WebColors;
@@ -85,6 +86,8 @@ import eu.albina.model.enumerations.LanguageCode;
 public class PdfUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PdfUtil.class);
+
+	public static final String MEDIA_TYPE = "application/pdf";
 
 	public static final Color blackColor = ColorConstants.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
