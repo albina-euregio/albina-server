@@ -2,6 +2,17 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.4] - 2025-01-27
+
+### 🚀 Features
+
+- API: create region bulletin PDF on demand
+
+### ⚙️ Miscellaneous Tasks
+
+- CorsFilter: allow if-none-match
+- Update translations
+
 ## [7.1.3] - 2025-01-08
 
 ### 🐛 Bug Fixes
