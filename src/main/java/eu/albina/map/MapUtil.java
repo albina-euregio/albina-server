@@ -24,28 +24,31 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 import javax.script.SimpleBindings;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.Table;
-import com.google.common.collect.TreeBasedTable;
-import com.google.common.io.Resources;
-
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.enumerations.BulletinStatus;
 import org.mapyrus.Argument;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.MapyrusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Table;
+import com.google.common.collect.TreeBasedTable;
+import com.google.common.io.Resources;
+
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
 

@@ -41,11 +41,11 @@ public interface AlbinaUtil {
 
 	static String getWarningLevelId(AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription) {
 		if (avalancheBulletinDaytimeDescription.isHasElevationDependency())
-			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingBelow()) + "_"
-				+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
+			return DangerRating.getString(avalancheBulletinDaytimeDescription.dangerRating(false)) + "_"
+				+ DangerRating.getString(avalancheBulletinDaytimeDescription.dangerRating(true));
 		else
-			return DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove()) + "_"
-				+ DangerRating.getString(avalancheBulletinDaytimeDescription.getDangerRatingAbove());
+			return DangerRating.getString(avalancheBulletinDaytimeDescription.dangerRating(true)) + "_"
+				+ DangerRating.getString(avalancheBulletinDaytimeDescription.dangerRating(true));
 	}
 
 	static Instant getInstantNowNoNanos() {

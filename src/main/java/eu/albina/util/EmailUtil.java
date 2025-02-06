@@ -26,14 +26,13 @@ import java.util.Map;
 
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.enumerations.BulletinStatus;
-
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
@@ -342,12 +341,12 @@ public class EmailUtil {
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
-		if ((daytimeBulletin.getDangerRatingBelow() == null
-				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.missing
-				|| daytimeBulletin.getDangerRatingBelow() == DangerRating.no_rating)
-				&& (daytimeBulletin.getDangerRatingAbove() == null
-						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.missing
-						|| daytimeBulletin.getDangerRatingAbove() == DangerRating.no_rating)) {
+		if ((daytimeBulletin.dangerRating(false) == null
+				|| daytimeBulletin.dangerRating(false) == DangerRating.missing
+				|| daytimeBulletin.dangerRating(false) == DangerRating.no_rating)
+				&& (daytimeBulletin.dangerRating(true) == null
+						|| daytimeBulletin.dangerRating(true) == DangerRating.missing
+						|| daytimeBulletin.dangerRating(true) == DangerRating.no_rating)) {
 			dangerRating.put("symbol", serverImagesUrl + "warning_pictos/color/level_0_0.png");
 		} else {
 			dangerRating.put("symbol", serverImagesUrl + "warning_pictos/color/level_"
@@ -357,7 +356,7 @@ public class EmailUtil {
 		// getWarningLevelId(daytimeBulletin,
 		// avalancheBulletin.isHasElevationDependency()));
 		if (daytimeBulletin.isHasElevationDependency()
-				&& (daytimeBulletin.getDangerRatingAbove() != daytimeBulletin.getDangerRatingBelow())) {
+				&& (daytimeBulletin.dangerRating(true) != daytimeBulletin.dangerRating(false))) {
 			if (daytimeBulletin.getTreeline())
 				dangerRating.put("elevation", lang.getBundleString("elevation.treeline.capitalized"));
 			else if (daytimeBulletin.getElevation() > 0)

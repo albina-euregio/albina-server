@@ -1,9 +1,29 @@
 package eu.albina.caaml;
 
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.caaml.v6.AvalancheBulletinCustomData;
+import org.caaml.v6.AvalancheBulletins;
+import org.caaml.v6.AvalancheProblemCustomData;
+import org.caaml.v6.AvalancheProblemType;
+import org.caaml.v6.DangerRatingValue;
+import org.caaml.v6.ElevationBoundaryOrBand;
+import org.caaml.v6.ExpectedAvalancheFrequency;
+import org.caaml.v6.ExpectedSnowpackStability;
+import org.caaml.v6.Tendency;
+import org.caaml.v6.TendencyType;
+import org.caaml.v6.ValidTime;
+import org.caaml.v6.ValidTimePeriod;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
@@ -11,24 +31,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
-import org.caaml.v6.AvalancheBulletinCustomData;
-import org.caaml.v6.AvalancheBulletins;
-import org.caaml.v6.AvalancheProblemCustomData;
-import org.caaml.v6.AvalancheProblemType;
-import org.caaml.v6.Tendency;
-import org.caaml.v6.DangerRatingValue;
-import org.caaml.v6.ElevationBoundaryOrBand;
-import org.caaml.v6.ExpectedAvalancheFrequency;
-import org.caaml.v6.ExpectedSnowpackStability;
-import org.caaml.v6.TendencyType;
-import org.caaml.v6.ValidTime;
-import org.caaml.v6.ValidTimePeriod;
-
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public interface Caaml6 {
 	static String createJSON(AvalancheReport avalancheReport, LanguageCode lang) {
@@ -84,8 +86,8 @@ public interface Caaml6 {
 		bulletin.setDangerRatings(Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
 			.filter(Objects::nonNull)
 			.flatMap(daytime -> Stream.of(
-				getDangerRating(avalancheBulletin, daytime, daytime.getDangerRatingBelow()),
-				getDangerRating(avalancheBulletin, daytime, daytime.getDangerRatingAbove())))
+				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
+				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
 			.distinct().collect(Collectors.toList()));
 		bulletin.setHighlights(avalancheBulletin.getHighlightsIn(lang));
 		bulletin.setLang(lang.name());
@@ -138,14 +140,14 @@ public interface Caaml6 {
 
 	static org.caaml.v6.DangerRating getDangerRating(AvalancheBulletin avalancheBulletin, AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
 		org.caaml.v6.DangerRating result = new org.caaml.v6.DangerRating();
-		if (!daytime.isHasElevationDependency() || Objects.equals(daytime.getDangerRatingBelow(), daytime.getDangerRatingAbove())) {
-			result.setMainValue(DangerRatingValue.forValue(daytime.getDangerRatingAbove().name()));
+		if (!daytime.isHasElevationDependency() || Objects.equals(daytime.dangerRating(false), daytime.dangerRating(true))) {
+			result.setMainValue(DangerRatingValue.forValue(daytime.dangerRating(true).name()));
 			result.setElevation(null);
-		} else if (rating == daytime.getDangerRatingAbove()) {
+		} else if (rating == daytime.dangerRating(true)) {
 			result.setMainValue(DangerRatingValue.forValue(rating.name()));
 			String bound = daytime.getTreeline() ? "treeline" : Integer.toString(daytime.getElevation());
 			result.setElevation(new ElevationBoundaryOrBand(bound, null));
-		} else if (rating == daytime.getDangerRatingBelow()) {
+		} else if (rating == daytime.dangerRating(false)) {
 			result.setMainValue(DangerRatingValue.forValue(rating.name()));
 			String bound = daytime.getTreeline() ? "treeline" : Integer.toString(daytime.getElevation());
 			result.setElevation(new ElevationBoundaryOrBand(null, bound));
