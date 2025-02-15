@@ -77,7 +77,7 @@ public class MediaFileService {
 	@Secured({ Role.ADMIN, Role.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Consumes({ MediaType.MULTIPART_FORM_DATA })
-	@Produces({ MediaType.MULTIPART_FORM_DATA })
+	@Produces({ MediaType.APPLICATION_JSON })
 	@Operation(summary = "Save media file")
 	public Response saveMediaFile(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
