@@ -77,10 +77,10 @@ public class MediaFileService {
 	UriInfo uri;
 
 	@POST
-	@Secured({ Role.ADMIN, Role.FORECASTER})
+	@Secured({Role.ADMIN, Role.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Consumes({ MediaType.MULTIPART_FORM_DATA })
-	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({MediaType.MULTIPART_FORM_DATA})
+	@Produces({MediaType.APPLICATION_JSON})
 	@Operation(summary = "Save media file")
 	public Response saveMediaFile(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
@@ -88,13 +88,11 @@ public class MediaFileService {
 		@QueryParam("lang") LanguageCode language,
 		@QueryParam("important") boolean important,
 		@FormDataParam("text") String mediaText,
-        @FormDataParam("file") InputStream uploadedInputStream,
+		@FormDataParam("file") InputStream uploadedInputStream,
 		@FormDataParam("file") FormDataContentDisposition fileDetail,
 		@Context SecurityContext securityContext) {
 		try {
-			logger.info("Received file: {}", fileDetail.getFileName());
-			logger.info("File size: {}", fileDetail.getSize());
-			logger.info("File type: {}", fileDetail.getType());
+			logger.info("Saving media file: {} (size={}, type={})", fileDetail.getFileName(), fileDetail.getSize(), fileDetail.getType());
 
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
@@ -147,8 +145,10 @@ public class MediaFileService {
 
 			return Response.status(200).type(MediaType.APPLICATION_JSON).entity(new JSONObject().append("file", fileLocation)).build();
 		} catch (AlbinaException e) {
+			logger.warn("Failed to save media file", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
+			logger.warn("Failed to save media file", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
