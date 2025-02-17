@@ -28,18 +28,18 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Strings;
-
-import eu.albina.model.AbstractPersistentObject;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.proxy.HibernateProxy;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
+import com.google.common.base.Strings;
+
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.BulletinUpdate;
@@ -50,7 +50,6 @@ import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
-
 import jakarta.persistence.EntityManager;
 
 /**
@@ -772,7 +771,10 @@ public class AvalancheReportController {
 				else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
 					result = avalancheReport;
 
-			result.setMediaFileUploaded(true);
+			if (result != null) {
+				result.setMediaFileUploaded(true);
+			}
+			
 			entityManager.persist(result);
 			entityManager.flush();
 			return null;
