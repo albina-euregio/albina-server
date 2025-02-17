@@ -2,6 +2,13 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.6] - 2025-02-17
+
+### 🐛 Bug Fixes
+
+- Create avalanche reports always at 5pm and 8am regardless of status
+- Fix upload of media file
+
 ## [7.1.5] - 2025-02-10
 
 ### 🚀 Features
