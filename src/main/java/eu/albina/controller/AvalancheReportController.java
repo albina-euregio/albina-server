@@ -773,10 +773,10 @@ public class AvalancheReportController {
 
 			if (result != null) {
 				result.setMediaFileUploaded(true);
+				entityManager.persist(result);
+				entityManager.flush();
 			}
 			
-			entityManager.persist(result);
-			entityManager.flush();
 			return null;
 		});
 	}
