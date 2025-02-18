@@ -24,6 +24,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -37,33 +38,35 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import com.github.openjson.JSONObject;
-
-import eu.albina.controller.RegionController;
-import eu.albina.controller.publication.RapidMailController;
-import eu.albina.model.publication.RapidMailConfiguration;
-import eu.albina.util.LinkUtil;
-import eu.albina.util.RssUtil;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONObject;
+
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
+import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import eu.albina.util.LinkUtil;
+import eu.albina.util.RssUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@MultipartConfig
 @Path("/media")
 @Tag(name = "media")
 public class MediaFileService {
@@ -74,9 +77,10 @@ public class MediaFileService {
 	UriInfo uri;
 
 	@POST
-	@Secured({ Role.ADMIN, Role.FORECASTER})
+	@Secured({Role.ADMIN, Role.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Consumes({ MediaType.MULTIPART_FORM_DATA })
+	@Consumes({MediaType.MULTIPART_FORM_DATA})
+	@Produces({MediaType.APPLICATION_JSON})
 	@Operation(summary = "Save media file")
 	public Response saveMediaFile(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
@@ -84,9 +88,11 @@ public class MediaFileService {
 		@QueryParam("lang") LanguageCode language,
 		@QueryParam("important") boolean important,
 		@FormDataParam("text") String mediaText,
-        @FormDataParam("file") InputStream uploadedInputStream,
+		@FormDataParam("file") InputStream uploadedInputStream,
+		@FormDataParam("file") FormDataContentDisposition fileDetail,
 		@Context SecurityContext securityContext) {
 		try {
+			logger.info("Saving media file: {} (size={}, type={})", fileDetail.getFileName(), fileDetail.getSize(), fileDetail.getType());
 
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
@@ -105,7 +111,7 @@ public class MediaFileService {
 			// save mp3 file
 			String mp3FileName = getMediaFileName(dateString, user, language, ".mp3");
 			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
-			Files.copy(uploadedInputStream, mp3File);
+			Files.copy(uploadedInputStream, mp3File, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 			logger.info("{} successfully uploaded to: {}", mp3FileName, mp3File);
 
 			// save text file
@@ -139,8 +145,10 @@ public class MediaFileService {
 
 			return Response.status(200).type(MediaType.APPLICATION_JSON).entity(new JSONObject().append("file", fileLocation)).build();
 		} catch (AlbinaException e) {
+			logger.warn("Failed to save media file", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
+			logger.warn("Failed to save media file", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}

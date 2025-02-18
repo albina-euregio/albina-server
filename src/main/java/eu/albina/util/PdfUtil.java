@@ -28,25 +28,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import com.google.common.io.Resources;
-
-import eu.albina.map.MapImageFormat;
-import com.itextpdf.kernel.colors.ColorConstants;
-import com.itextpdf.kernel.colors.WebColors;
-import com.itextpdf.layout.properties.UnitValue;
-import eu.albina.map.MapUtil;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.EawsMatrixInformation;
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.BulletinStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.Resources;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.colors.WebColors;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -71,13 +63,20 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
 import com.itextpdf.layout.renderer.DocumentRenderer;
 
+import eu.albina.map.MapImageFormat;
+import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.EawsMatrixInformation;
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
@@ -85,6 +84,8 @@ import eu.albina.model.enumerations.LanguageCode;
 public class PdfUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PdfUtil.class);
+
+	public static final String MEDIA_TYPE = "application/pdf";
 
 	public static final Color blackColor = ColorConstants.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
@@ -579,10 +580,10 @@ public class PdfUtil {
 		cell.setHeight(height);
 		cell.setPaddingRight(10);
 		if (daytimeBulletin.isHasElevationDependency()) {
-			if (!(isAfternoon && avalancheBulletin.getAfternoon().getDangerRatingAbove()
-					.equals(avalancheBulletin.getAfternoon().getDangerRatingBelow()))
-					&& !(!isAfternoon && avalancheBulletin.getForenoon().getDangerRatingAbove()
-							.equals(avalancheBulletin.getForenoon().getDangerRatingBelow()))) {
+			if (!(isAfternoon && avalancheBulletin.getAfternoon().dangerRating(true)
+					.equals(avalancheBulletin.getAfternoon().dangerRating(false)))
+					&& !(!isAfternoon && avalancheBulletin.getForenoon().dangerRating(true)
+							.equals(avalancheBulletin.getForenoon().dangerRating(false)))) {
 				if (daytimeBulletin.getTreeline()) {
 					Paragraph paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
 							.setFontColor(blackColor).setFontSize(8).setFont(openSansBoldFont);
@@ -1248,15 +1249,15 @@ public class PdfUtil {
 	public static String getDangerRatingText(AvalancheBulletinDaytimeDescription daytimeBulletin, LanguageCode lang) {
 		String dangerRatingBelow;
 		String dangerRatingAbove;
-		if (daytimeBulletin.getDangerRatingBelow() == null || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.missing) || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.no_rating) || daytimeBulletin.getDangerRatingBelow().equals(DangerRating.no_snow)) {
+		if (daytimeBulletin.dangerRating(false) == null || daytimeBulletin.dangerRating(false).equals(DangerRating.missing) || daytimeBulletin.dangerRating(false).equals(DangerRating.no_rating) || daytimeBulletin.dangerRating(false).equals(DangerRating.no_snow)) {
 			dangerRatingBelow = DangerRating.no_rating.toString(lang.getLocale(), true);
 		} else {
-			dangerRatingBelow = daytimeBulletin.getDangerRatingBelow().toString(lang.getLocale(), true);
+			dangerRatingBelow = daytimeBulletin.dangerRating(false).toString(lang.getLocale(), true);
 		}
-		if (daytimeBulletin.getDangerRatingAbove() == null || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.missing) || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.no_rating) || daytimeBulletin.getDangerRatingAbove().equals(DangerRating.no_snow)) {
+		if (daytimeBulletin.dangerRating(true) == null || daytimeBulletin.dangerRating(true).equals(DangerRating.missing) || daytimeBulletin.dangerRating(true).equals(DangerRating.no_rating) || daytimeBulletin.dangerRating(true).equals(DangerRating.no_snow)) {
 			dangerRatingAbove = DangerRating.no_rating.toString(lang.getLocale(), true);
 		} else {
-			dangerRatingAbove = daytimeBulletin.getDangerRatingAbove().toString(lang.getLocale(), true);
+			dangerRatingAbove = daytimeBulletin.dangerRating(true).toString(lang.getLocale(), true);
 		}
 
 		if (daytimeBulletin.getTreeline()) {

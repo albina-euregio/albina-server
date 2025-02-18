@@ -410,15 +410,8 @@ public class AvalancheReportController {
 	 *            the region of the report
 	 * @param user
 	 *            the user who saves the report
-	 * @throws AlbinaException
-	 *             if more than one report was found for the given day
 	 */
-	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user)
-			throws AlbinaException {
-		HibernateUtil.getInstance().runTransaction(entityManager -> saveReport(avalancheBulletins, date, region, user, entityManager));
-	}
-
-	Void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user, EntityManager entityManager) {
+	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user, EntityManager entityManager) {
 		AvalancheReport latestReport = getInternalReport(date, region, entityManager);
 		BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
 		BulletinStatus newStatus = deriveStatus(avalancheBulletins, latestStatus);
@@ -441,8 +434,6 @@ public class AvalancheReportController {
 		AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 
 		logger.info("Report for region {} saved by {}", region.getId(), user);
-
-		return null;
 	}
 
 	private static BulletinStatus deriveStatus(Map<String, AvalancheBulletin> avalancheBulletins, BulletinStatus latestStatus) {
@@ -790,9 +781,12 @@ public class AvalancheReportController {
 				else if (result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
 					result = avalancheReport;
 
-			result.setMediaFileUploaded(true);
-			entityManager.persist(result);
-			entityManager.flush();
+			if (result != null) {
+				result.setMediaFileUploaded(true);
+				entityManager.persist(result);
+				entityManager.flush();
+			}
+			
 			return null;
 		});
 	}

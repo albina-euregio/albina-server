@@ -34,6 +34,19 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.slf4j.LoggerFactory;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
+import com.google.common.base.Strings;
+import com.google.common.io.Resources;
+
+import eu.albina.model.enumerations.DangerPattern;
+import eu.albina.model.enumerations.DangerRating;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.StrategicMindset;
+import eu.albina.model.enumerations.Tendency;
+import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -52,21 +65,6 @@ import jakarta.persistence.MapKeyEnumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
-import com.google.common.base.Strings;
-import org.slf4j.LoggerFactory;
-
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
-import com.google.common.io.Resources;
-
-import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.model.enumerations.DangerPattern;
-import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.StrategicMindset;
-import eu.albina.model.enumerations.Tendency;
-import eu.albina.model.enumerations.TextPart;
 
 /**
  * This class holds all information about one avalanche bulletin.
@@ -691,25 +689,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.afternoon = afternoon;
 	}
 
-	public BulletinStatus getStatus(List<String> regions) {
-		BulletinStatus result = BulletinStatus.draft;
-		for (String entry : getPublishedRegions())
-			for (String region : regions)
-				if (entry.startsWith(region))
-					result = BulletinStatus.published;
-
-		return result;
-	}
-
-	public BulletinStatus getStatus(String region) {
-		BulletinStatus result = BulletinStatus.draft;
-		for (String entry : getPublishedRegions())
-			if (entry.startsWith(region))
-				result = BulletinStatus.published;
-
-		return result;
-	}
-
 	public Set<String> getPublishedAndSavedRegions() {
 		Set<String> result = new LinkedHashSet<>();
 		result.addAll(savedRegions);
@@ -750,19 +729,19 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public DangerRating getHighestDangerRating() {
 		DangerRating result = DangerRating.missing;
-		if (forenoon != null && forenoon.getDangerRatingAbove() != null
-				&& result.compareTo(forenoon.getDangerRatingAbove()) < 0)
-			result = forenoon.getDangerRatingAbove();
-		if (forenoon != null && forenoon.getDangerRatingBelow() != null
-				&& result.compareTo(forenoon.getDangerRatingBelow()) < 0)
-			result = forenoon.getDangerRatingBelow();
+		if (forenoon != null && forenoon.dangerRating(true) != null
+				&& result.compareTo(forenoon.dangerRating(true)) < 0)
+			result = forenoon.dangerRating(true);
+		if (forenoon != null && forenoon.dangerRating(false) != null
+				&& result.compareTo(forenoon.dangerRating(false)) < 0)
+			result = forenoon.dangerRating(false);
 		if (hasDaytimeDependency) {
-			if (afternoon != null && afternoon.getDangerRatingAbove() != null
-					&& result.compareTo(afternoon.getDangerRatingAbove()) < 0)
-				result = afternoon.getDangerRatingAbove();
-			if (afternoon != null && afternoon.getDangerRatingBelow() != null
-					&& result.compareTo(afternoon.getDangerRatingBelow()) < 0)
-				result = afternoon.getDangerRatingBelow();
+			if (afternoon != null && afternoon.dangerRating(true) != null
+					&& result.compareTo(afternoon.dangerRating(true)) < 0)
+				result = afternoon.dangerRating(true);
+			if (afternoon != null && afternoon.dangerRating(false) != null
+					&& result.compareTo(afternoon.dangerRating(false)) < 0)
+				result = afternoon.dangerRating(false);
 		}
 		return result;
 	}
@@ -770,27 +749,27 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	public int getHighestDangerRatingDouble() {
 		int sum = 0;
 		if (forenoon != null) {
-			if (forenoon.getDangerRatingAbove() != null)
-				sum += DangerRating.getInt(forenoon.getDangerRatingAbove());
-			if (forenoon.getDangerRatingBelow() != null)
-				sum += DangerRating.getInt(forenoon.getDangerRatingBelow());
+			if (forenoon.dangerRating(true) != null)
+				sum += DangerRating.getInt(forenoon.dangerRating(true));
+			if (forenoon.dangerRating(false) != null)
+				sum += DangerRating.getInt(forenoon.dangerRating(false));
 			else
-				sum += DangerRating.getInt(forenoon.getDangerRatingAbove());
+				sum += DangerRating.getInt(forenoon.dangerRating(true));
 		}
 		if (afternoon != null) {
-			if (afternoon.getDangerRatingAbove() != null)
-				sum += DangerRating.getInt(afternoon.getDangerRatingAbove());
-			if (afternoon.getDangerRatingBelow() != null)
-				sum += DangerRating.getInt(afternoon.getDangerRatingBelow());
+			if (afternoon.dangerRating(true) != null)
+				sum += DangerRating.getInt(afternoon.dangerRating(true));
+			if (afternoon.dangerRating(false) != null)
+				sum += DangerRating.getInt(afternoon.dangerRating(false));
 			else
-				sum += DangerRating.getInt(afternoon.getDangerRatingAbove());
+				sum += DangerRating.getInt(afternoon.dangerRating(true));
 		} else if (forenoon != null) {
-			if (forenoon.getDangerRatingAbove() != null)
-				sum += DangerRating.getInt(forenoon.getDangerRatingAbove());
-			if (forenoon.getDangerRatingBelow() != null)
-				sum += DangerRating.getInt(forenoon.getDangerRatingBelow());
+			if (forenoon.dangerRating(true) != null)
+				sum += DangerRating.getInt(forenoon.dangerRating(true));
+			if (forenoon.dangerRating(false) != null)
+				sum += DangerRating.getInt(forenoon.dangerRating(false));
 			else
-				sum += DangerRating.getInt(forenoon.getDangerRatingAbove());
+				sum += DangerRating.getInt(forenoon.dangerRating(true));
 		}
 
 		return sum;
@@ -981,12 +960,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				forenoon.setHasElevationDependency(bulletin.getForenoon().isHasElevationDependency());
 				forenoon.setTreeline(bulletin.getForenoon().getTreeline());
 				forenoon.setElevation(bulletin.getForenoon().getElevation());
-				forenoon.setDangerRatingAbove(bulletin.getForenoon().getDangerRatingAbove());
-				forenoon.setTerrainFeatureAboveTextcat(bulletin.getForenoon().getTerrainFeatureAboveTextcat());
-				forenoon.setTerrainFeatureAbove(bulletin.getForenoon().getTerrainFeatureAbove());
-				forenoon.setDangerRatingBelow(bulletin.getForenoon().getDangerRatingBelow());
-				forenoon.setTerrainFeatureBelowTextcat(bulletin.getForenoon().getTerrainFeatureBelowTextcat());
-				forenoon.setTerrainFeatureBelow(bulletin.getForenoon().getTerrainFeatureBelow());
+				forenoon.setDangerRatingAbove(bulletin.getForenoon().dangerRating(true));
+				forenoon.setTerrainFeatureAboveTextcat(bulletin.getForenoon().terrainFeatureTextcat(true));
+				forenoon.setTerrainFeatureAbove(bulletin.getForenoon().terrainFeature(true));
+				forenoon.setDangerRatingBelow(bulletin.getForenoon().dangerRating(false));
+				forenoon.setTerrainFeatureBelowTextcat(bulletin.getForenoon().terrainFeatureTextcat(false));
+				forenoon.setTerrainFeatureBelow(bulletin.getForenoon().terrainFeature(false));
 				forenoon.setComplexity(bulletin.getForenoon().getComplexity());
 				forenoon.setAvalancheProblem1(bulletin.getForenoon().getAvalancheProblem1());
 				forenoon.setAvalancheProblem2(bulletin.getForenoon().getAvalancheProblem2());
@@ -1003,12 +982,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				afternoon.setHasElevationDependency(bulletin.getAfternoon().isHasElevationDependency());
 				afternoon.setTreeline(bulletin.getAfternoon().getTreeline());
 				afternoon.setElevation(bulletin.getAfternoon().getElevation());
-				afternoon.setDangerRatingAbove(bulletin.getAfternoon().getDangerRatingAbove());
-				afternoon.setTerrainFeatureAboveTextcat(bulletin.getAfternoon().getTerrainFeatureAboveTextcat());
-				afternoon.setTerrainFeatureAbove(bulletin.getAfternoon().getTerrainFeatureAbove());
-				afternoon.setDangerRatingBelow(bulletin.getAfternoon().getDangerRatingBelow());
-				afternoon.setTerrainFeatureBelowTextcat(bulletin.getAfternoon().getTerrainFeatureBelowTextcat());
-				afternoon.setTerrainFeatureBelow(bulletin.getAfternoon().getTerrainFeatureBelow());
+				afternoon.setDangerRatingAbove(bulletin.getAfternoon().dangerRating(true));
+				afternoon.setTerrainFeatureAboveTextcat(bulletin.getAfternoon().terrainFeatureTextcat(true));
+				afternoon.setTerrainFeatureAbove(bulletin.getAfternoon().terrainFeature(true));
+				afternoon.setDangerRatingBelow(bulletin.getAfternoon().dangerRating(false));
+				afternoon.setTerrainFeatureBelowTextcat(bulletin.getAfternoon().terrainFeatureTextcat(false));
+				afternoon.setTerrainFeatureBelow(bulletin.getAfternoon().terrainFeature(false));
 				afternoon.setComplexity(bulletin.getAfternoon().getComplexity());
 				afternoon.setAvalancheProblem1(bulletin.getAfternoon().getAvalancheProblem1());
 				afternoon.setAvalancheProblem2(bulletin.getAfternoon().getAvalancheProblem2());

@@ -36,15 +36,16 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONArray;
 
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
-
 import jakarta.persistence.EntityManager;
 
 /**
@@ -163,132 +164,32 @@ public class AvalancheBulletinController {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
-			Map<String, AvalancheBulletin> originalBulletins = new HashMap<String, AvalancheBulletin>();
-
-			for (AvalancheBulletin loadedBulletin : loadedBulletins)
-				originalBulletins.put(loadedBulletin.getId(), loadedBulletin);
+			Map<String, AvalancheBulletin> originalBulletins = loadedBulletins.stream().collect(Collectors.toMap(AbstractPersistentObject::getId, b -> b));
 
 			List<String> ids = new ArrayList<String>();
 			for (AvalancheBulletin newBulletin : newBulletins) {
-
 				ids.add(newBulletin.getId());
-
-				// Bulletin already exists
-				if (originalBulletins.containsKey(newBulletin.getId())) {
-					AvalancheBulletin originalBulletin = originalBulletins.get(newBulletin.getId());
-
-					// own bulletin
-					// TODO: split needed if other region was published???
-					// What if the bulletin is still published for other region and is now changed only for this region?
-					// Do we have to split the bulletin and create a new one for this region with only savedRegions?
-					// Check: if !originalBulletin.hasPublishedRegions().startsWith(region) => split bulletin in two
-					if (originalBulletins.get(newBulletin.getId()).getOwnerRegion().startsWith(region.getId())) {
-
-						// get all own micro-regions from new bulletin
-						Set<String> newSavedRegions = newBulletin.getSavedRegions();
-						newSavedRegions.removeIf(r -> !r.startsWith(region.getId()));
-
-						// get all foreign micro-regions from original bulletin
-						Set<String> savedRegions = originalBulletin.getSavedRegions();
-						savedRegions.removeIf(r -> r.startsWith(region.getId()));
-						savedRegions.addAll(newSavedRegions);
-
-						originalBulletin.copy(newBulletin);
-						originalBulletin.setSavedRegions(savedRegions);
-
-						Set<String> tmpRegions = new HashSet<String>();
-						for (String suggestedRegion : originalBulletin.getSuggestedRegions()) {
-							if (newBulletin.getSavedRegions().contains(suggestedRegion))
-								tmpRegions.add(suggestedRegion);
-						}
-						for (String tmpRegion : tmpRegions)
-							originalBulletin.getSuggestedRegions().remove(tmpRegion);
-
-						tmpRegions = new HashSet<String>();
-						for (String publishedRegion : originalBulletin.getPublishedRegions()) {
-							if (!publishedRegion.startsWith(region.getId())) {
-								if (newBulletin.getSavedRegions().contains(publishedRegion))
-									tmpRegions.add(publishedRegion);
-							}
-						}
-						for (String tmpRegion : tmpRegions)
-							originalBulletin.getPublishedRegions().remove(tmpRegion);
-
-						originalBulletin.setOwnerRegion(newBulletin.getOwnerRegion());
-
-					// foreign bulletin
-					// no split of bulletin needed, because the published bulletin for the other region remains
+				AvalancheBulletin originalBulletin = originalBulletins.get(newBulletin.getId());
+				if (originalBulletin != null) {
+					// Bulletin already exists
+					if (isOwnBulletin(originalBulletin, region)) {
+						modifyOwnBulletin(region, newBulletin, originalBulletin);
 					} else {
-
-						// remove own saved regions from original bulletin which are not present in new bulletin
-						Set<String> tmpRegions = new HashSet<String>();
-						for (String savedRegion : originalBulletin.getSavedRegions()) {
-							if (savedRegion.startsWith(region.getId())) {
-								if (!newBulletin.getSavedRegions().contains(savedRegion))
-									tmpRegions.add(savedRegion);
-							}
-						}
-						for (String tmpRegion : tmpRegions)
-							originalBulletin.getSavedRegions().remove(tmpRegion);
-
-						// add own saved regions from new bulletin which are not present in original bulletin
-						for (String savedRegion : newBulletin.getSavedRegions()) {
-							if (savedRegion.startsWith(region.getId())) {
-								if (!originalBulletin.getSavedRegions().contains(savedRegion))
-									originalBulletin.addSavedRegion(savedRegion);
-							}
-						}
-
-						// remove own suggested regions from original bulletin which are not present in new bulletin
-						tmpRegions = new HashSet<String>();
-						for (String suggestedRegion : originalBulletin.getSuggestedRegions()) {
-							if (suggestedRegion.startsWith(region.getId())) {
-								if (!newBulletin.getSuggestedRegions().contains(suggestedRegion))
-									tmpRegions.add(suggestedRegion);
-							}
-						}
-						for (String tmpRegion : tmpRegions)
-							originalBulletin.getSuggestedRegions().remove(tmpRegion);
-
-						// own suggested regions are not possible (they are always in saved regions) -> nothing to add
-
-						// remove own published regions from original bulletin
-						tmpRegions = new HashSet<String>();
-						for (String publishedRegion : originalBulletin.getPublishedRegions()) {
-							if (publishedRegion.startsWith(region.getId()))
-								tmpRegions.add(publishedRegion);
-						}
-						for (String tmpRegion : tmpRegions)
-							originalBulletin.getPublishedRegions().remove(tmpRegion);
-
-						// add own published regions from new bulletin as saved regions to original bulletin
-						tmpRegions = new HashSet<String>();
-						for (String publishedRegion : newBulletin.getPublishedRegions()) {
-							if (publishedRegion.startsWith(region.getId()))
-								tmpRegions.add(publishedRegion);
-						}
-						for (String tmpRegion : tmpRegions)
-							originalBulletin.addSavedRegion(tmpRegion);
+						modifyForeignBulletin(region, newBulletin, originalBulletin);
 					}
-
 					entityManager.merge(originalBulletin);
 					resultBulletins.put(originalBulletin.getId(), originalBulletin);
-
-				} else {
-
+				} else if (isOwnBulletin(newBulletin, region)) {
 					// own bulletin
-					if (newBulletin.getOwnerRegion().startsWith(region.getId())) {
-
-						// Bulletin has to be created
-						newBulletin.setId(null);
-						entityManager.persist(newBulletin);
-						resultBulletins.put(newBulletin.getId(), newBulletin);
-
+					// Bulletin has to be created
+					newBulletin.setId(null);
+					entityManager.persist(newBulletin);
+					resultBulletins.put(newBulletin.getId(), newBulletin);
+				} else {
 					// foreign bulletin
-					} else {
-						// do not create the bulletin (it was removed by another user)
-					}
+					// do not create the bulletin (it was removed by another user)
 				}
+				logger.info("Bulletin {} for region {} updated by {}", newBulletin.getId(), region.getId(), user);
 			}
 
 			// Delete obsolete bulletins
@@ -296,7 +197,7 @@ public class AvalancheBulletinController {
 
 				// bulletin has to be removed
 				if (avalancheBulletin.affectsRegion(region) && !ids.contains(avalancheBulletin.getId())
-						&& avalancheBulletin.getOwnerRegion().startsWith(region.getId())) {
+						&& isOwnBulletin(avalancheBulletin, region)) {
 					entityManager.remove(avalancheBulletin);
 					resultBulletins.remove(avalancheBulletin.getId());
 				}
@@ -304,7 +205,6 @@ public class AvalancheBulletinController {
 
 			for (AvalancheBulletin bulletin : resultBulletins.values())
 				initializeBulletin(bulletin);
-
 
 			AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, region, user, entityManager);
 			// save report for super regions
@@ -314,6 +214,104 @@ public class AvalancheBulletinController {
 
 			return resultBulletins;
 		});
+	}
+
+	private static boolean isOwnBulletin(AvalancheBulletin newBulletin, Region region) {
+		return newBulletin.getOwnerRegion().startsWith(region.getId());
+	}
+
+	private static void modifyOwnBulletin(Region region, AvalancheBulletin newBulletin, AvalancheBulletin originalBulletin) {
+		// own bulletin
+		// TODO: split needed if other region was published???
+		// What if the bulletin is still published for other region and is now changed only for this region?
+		// Do we have to split the bulletin and create a new one for this region with only savedRegions?
+		// Check: if !originalBulletin.hasPublishedRegions().startsWith(region) => split bulletin in two
+
+		// get all own micro-regions from new bulletin
+		Set<String> newSavedRegions = newBulletin.getSavedRegions();
+		newSavedRegions.removeIf(r -> !r.startsWith(region.getId()));
+
+		// get all foreign micro-regions from original bulletin
+		Set<String> savedRegions = originalBulletin.getSavedRegions();
+		savedRegions.removeIf(r -> r.startsWith(region.getId()));
+		savedRegions.addAll(newSavedRegions);
+
+		originalBulletin.copy(newBulletin);
+		originalBulletin.setSavedRegions(savedRegions);
+
+		Set<String> tmpRegions = new HashSet<String>();
+		for (String suggestedRegion : originalBulletin.getSuggestedRegions()) {
+			if (newBulletin.getSavedRegions().contains(suggestedRegion))
+				tmpRegions.add(suggestedRegion);
+		}
+		for (String tmpRegion : tmpRegions)
+			originalBulletin.getSuggestedRegions().remove(tmpRegion);
+
+		tmpRegions = new HashSet<String>();
+		for (String publishedRegion : originalBulletin.getPublishedRegions()) {
+			if (!publishedRegion.startsWith(region.getId())) {
+				if (newBulletin.getSavedRegions().contains(publishedRegion))
+					tmpRegions.add(publishedRegion);
+			}
+		}
+		for (String tmpRegion : tmpRegions)
+			originalBulletin.getPublishedRegions().remove(tmpRegion);
+
+		originalBulletin.setOwnerRegion(newBulletin.getOwnerRegion());
+	}
+
+	private static void modifyForeignBulletin(Region region, AvalancheBulletin newBulletin, AvalancheBulletin originalBulletin) {
+		// foreign bulletin
+		// no split of bulletin needed, because the published bulletin for the other region remains
+		// remove own saved regions from original bulletin which are not present in new bulletin
+		Set<String> tmpRegions = new HashSet<String>();
+		for (String savedRegion : originalBulletin.getSavedRegions()) {
+			if (savedRegion.startsWith(region.getId())) {
+				if (!newBulletin.getSavedRegions().contains(savedRegion))
+					tmpRegions.add(savedRegion);
+			}
+		}
+		for (String tmpRegion : tmpRegions)
+			originalBulletin.getSavedRegions().remove(tmpRegion);
+
+		// add own saved regions from new bulletin which are not present in original bulletin
+		for (String savedRegion : newBulletin.getSavedRegions()) {
+			if (savedRegion.startsWith(region.getId())) {
+				if (!originalBulletin.getSavedRegions().contains(savedRegion))
+					originalBulletin.addSavedRegion(savedRegion);
+			}
+		}
+
+		// remove own suggested regions from original bulletin which are not present in new bulletin
+		tmpRegions = new HashSet<String>();
+		for (String suggestedRegion : originalBulletin.getSuggestedRegions()) {
+			if (suggestedRegion.startsWith(region.getId())) {
+				if (!newBulletin.getSuggestedRegions().contains(suggestedRegion))
+					tmpRegions.add(suggestedRegion);
+			}
+		}
+		for (String tmpRegion : tmpRegions)
+			originalBulletin.getSuggestedRegions().remove(tmpRegion);
+
+		// own suggested regions are not possible (they are always in saved regions) -> nothing to add
+
+		// remove own published regions from original bulletin
+		tmpRegions = new HashSet<String>();
+		for (String publishedRegion : originalBulletin.getPublishedRegions()) {
+			if (publishedRegion.startsWith(region.getId()))
+				tmpRegions.add(publishedRegion);
+		}
+		for (String tmpRegion : tmpRegions)
+			originalBulletin.getPublishedRegions().remove(tmpRegion);
+
+		// add own published regions from new bulletin as saved regions to original bulletin
+		tmpRegions = new HashSet<String>();
+		for (String publishedRegion : newBulletin.getPublishedRegions()) {
+			if (publishedRegion.startsWith(region.getId()))
+				tmpRegions.add(publishedRegion);
+		}
+		for (String tmpRegion : tmpRegions)
+			originalBulletin.addSavedRegion(tmpRegion);
 	}
 
 	/**
@@ -328,10 +326,9 @@ public class AvalancheBulletinController {
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
 	public synchronized Map<String, AvalancheBulletin> createBulletin(AvalancheBulletin newBulletin, Instant startDate, Instant endDate,
-			Region region) {
+			Region region, EntityManager entityManager) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
@@ -358,7 +355,6 @@ public class AvalancheBulletinController {
 				initializeBulletin(bulletin);
 
 			return resultBulletins;
-		});
 	}
 
 	/**
@@ -372,11 +368,9 @@ public class AvalancheBulletinController {
 	 *            the active region of the user who is updating the bulletin
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
-	public Map<String, AvalancheBulletin> updateBulletin(AvalancheBulletin updatedBulletin, Instant startDate, Instant endDate,
-			Region region, User user) {
+	public Map<String, AvalancheBulletin> updateBulletin(AvalancheBulletin updatedBulletin, Instant startDate, Instant endDate, Region region, User user, EntityManager entityManager) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
@@ -412,7 +406,6 @@ public class AvalancheBulletinController {
 			logger.info("Bulletin {} for region {} updated by {}", updatedBulletin.getId(), region.getId(), user);
 
 			return resultBulletins;
-		});
 	}
 
 	/**
@@ -427,10 +420,9 @@ public class AvalancheBulletinController {
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
     public synchronized Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
-			Region region, User user) {
+			Region region, User user, EntityManager entityManager) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> loadedBulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 					.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 
@@ -451,7 +443,6 @@ public class AvalancheBulletinController {
 			}
 
 			return resultBulletins;
-		});
 	}
 
 	/**
@@ -495,8 +486,7 @@ public class AvalancheBulletinController {
 	 *            the regions of the bulletins
 	 * @return the most recent bulletins for the given time period and regions
 	 */
-	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<Region> regions) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<Region> regions, EntityManager entityManager) {
 			List<AvalancheBulletin> bulletins = entityManager.createQuery(HibernateUtil.queryGetBulletins, AvalancheBulletin.class)
 				.setParameter("startDate", AlbinaUtil.getZonedDateTimeUtc(startDate)).setParameter("endDate", AlbinaUtil.getZonedDateTimeUtc(endDate)).getResultList();
 			List<AvalancheBulletin> results = bulletins.stream()
@@ -508,7 +498,6 @@ public class AvalancheBulletinController {
 				initializeBulletin(bulletin);
 
 			return results;
-		});
 	}
 
 	/**
@@ -593,7 +582,8 @@ public class AvalancheBulletinController {
 				if (bulletin.affectsRegionWithoutSuggestions(region)) {
 
 					// set author
-					if (user != null && !Objects.equals(user.getEmail(), ServerInstanceController.getInstance().getLocalServerInstance().getUserName())) {
+					ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance(entityManager);
+					if (user != null && !Objects.equals(user.getEmail(), serverInstance.getUserName())) {
 						if (!bulletin.getAdditionalAuthors().contains(user.getName()))
 							bulletin.addAdditionalAuthor(user.getName());
 						bulletin.setUser(user);
@@ -735,18 +725,18 @@ public class AvalancheBulletinController {
 						missingSnowpackStructureComment = true;
 
 					if (bulletin.getForenoon() == null
-							|| bulletin.getForenoon().getDangerRatingAbove() == DangerRating.missing
+							|| bulletin.getForenoon().dangerRating(true) == DangerRating.missing
 							|| (bulletin.getForenoon() != null && bulletin.getForenoon().isHasElevationDependency()
-									&& bulletin.getForenoon().getDangerRatingBelow() == DangerRating.missing)) {
+									&& bulletin.getForenoon().dangerRating(false) == DangerRating.missing)) {
 						missingDangerRating = true;
 					}
 
 					if (missingDangerRating || (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() == null)
 							|| (bulletin.isHasDaytimeDependency()
-									&& bulletin.getAfternoon().getDangerRatingAbove() == DangerRating.missing)
+									&& bulletin.getAfternoon().dangerRating(true) == DangerRating.missing)
 							|| (bulletin.isHasDaytimeDependency() && bulletin.getAfternoon() != null
 									&& bulletin.getAfternoon().isHasElevationDependency()
-									&& bulletin.getAfternoon().getDangerRatingBelow() == DangerRating.missing)) {
+									&& bulletin.getAfternoon().dangerRating(false) == DangerRating.missing)) {
 						missingDangerRating = true;
 					}
 				}
