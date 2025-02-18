@@ -414,7 +414,7 @@ public class AvalancheReportController {
 	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user, EntityManager entityManager) {
 		AvalancheReport latestReport = getInternalReport(date, region, entityManager);
 		BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
-		BulletinStatus newStatus = deriveStatus(latestStatus);
+		BulletinStatus newStatus = deriveStatus(avalancheBulletins, latestStatus);
 
 		// reuse existing report if status does not change
 		AvalancheReport avalancheReport = latestReport != null && Objects.equals(latestStatus, newStatus)
@@ -436,10 +436,15 @@ public class AvalancheReportController {
 		logger.info("Report for region {} saved by {}", region.getId(), user);
 	}
 
-	private static BulletinStatus deriveStatus(BulletinStatus latestStatus) {
+	private static BulletinStatus deriveStatus(Map<String, AvalancheBulletin> avalancheBulletins, BulletinStatus latestStatus) {
 		if (latestStatus == null) {
-			return BulletinStatus.draft;
+			if (avalancheBulletins.isEmpty()) {
+				return null;
+			} else {
+				return BulletinStatus.draft;
+			}
 		}
+
 		switch (latestStatus) {
 			case missing:
 			case republished:
@@ -448,6 +453,11 @@ public class AvalancheReportController {
 			case published:
 				return BulletinStatus.updated;
 			case draft:
+				if (avalancheBulletins.isEmpty()) {
+					return null;
+				} else {
+					return BulletinStatus.draft;
+				}
 			case submitted:
 				return BulletinStatus.draft;
 			default:
