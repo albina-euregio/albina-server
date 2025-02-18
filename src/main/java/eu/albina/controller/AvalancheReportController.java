@@ -451,7 +451,11 @@ public class AvalancheReportController {
 			case resubmitted:
 			case updated:
 			case published:
-				return BulletinStatus.updated;
+				if (avalancheBulletins.isEmpty()) {
+					return BulletinStatus.missing;
+				} else {
+					return BulletinStatus.updated;
+				}
 			case draft:
 				if (avalancheBulletins.isEmpty()) {
 					return null;
@@ -587,7 +591,7 @@ public class AvalancheReportController {
 					logger.warn("Bulletins already submitted!");
 					break;
 				case published:
-				avalancheReport.setStatus(BulletinStatus.published);
+					avalancheReport.setStatus(BulletinStatus.published);
 					logger.warn("Bulletins already published!");
 					break;
 				case updated:
