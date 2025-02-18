@@ -193,6 +193,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "SNOW_HEIGHT_LOWER_LIMIT")
 	private int snowHeightLowerLimit;
 
+	@Column(name = "SNOW_HEIGHT_AVERAGE")
+	private int snowHeightAverage;
+
 	@Column(name = "ZERO_DEGREE_ISOTHERM")
 	private Boolean zeroDegreeIsotherm;
 
@@ -571,6 +574,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setSnowHeightLowerLimit(int snowHeightLowerLimit) {
 		this.snowHeightLowerLimit = snowHeightLowerLimit;
+	}
+
+	public int getSnowHeightAverage() {
+		return this.snowHeightAverage;
+	}
+
+	public void setSnowHeightAverage(int snowHeightAverage) {
+		this.snowHeightAverage = snowHeightAverage;
 	}
 
 	public Boolean isZeroDegreeIsotherm() {
