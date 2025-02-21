@@ -1,6 +1,5 @@
 package eu.albina.model.enumerations;
 
 public enum DangerSign {
-	// TODO
-	shooting_cracks, whumpfing;
+	shooting_cracks, whumpfing, fresh_avalanches;
 }

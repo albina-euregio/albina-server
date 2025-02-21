@@ -29,6 +29,7 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Characteristic;
 import eu.albina.model.enumerations.CreationProcess;
+import eu.albina.model.enumerations.Crust;
 import eu.albina.model.enumerations.DangerSign;
 import eu.albina.model.enumerations.DangerSourceVariantStatus;
 import eu.albina.model.enumerations.DangerSourceVariantType;
@@ -193,6 +194,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "SNOW_HEIGHT_LOWER_LIMIT")
 	private int snowHeightLowerLimit;
 
+	@Column(name = "SNOW_HEIGHT_AVERAGE")
+	private int snowHeightAverage;
+
 	@Column(name = "ZERO_DEGREE_ISOTHERM")
 	private Boolean zeroDegreeIsotherm;
 
@@ -253,11 +257,13 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "WEAK_LAYER_WET")
 	private Boolean weakLayerWet;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_CRUST_ABOVE")
-	private Boolean weakLayerCrustAbove;
+	private Crust weakLayerCrustAbove;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_CRUST_BELOW")
-	private Boolean weakLayerCrustBelow;
+	private Crust weakLayerCrustBelow;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "WEAK_LAYER_POSITION")
@@ -573,6 +579,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.snowHeightLowerLimit = snowHeightLowerLimit;
 	}
 
+	public int getSnowHeightAverage() {
+		return this.snowHeightAverage;
+	}
+
+	public void setSnowHeightAverage(int snowHeightAverage) {
+		this.snowHeightAverage = snowHeightAverage;
+	}
+
 	public Boolean isZeroDegreeIsotherm() {
 		return this.zeroDegreeIsotherm;
 	}
@@ -713,27 +727,27 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.weakLayerWet = weakLayerWet;
 	}
 
-	public Boolean isWeakLayerCrustAbove() {
+	public Crust isWeakLayerCrustAbove() {
 		return this.weakLayerCrustAbove;
 	}
 
-	public Boolean getWeakLayerCrustAbove() {
+	public Crust getWeakLayerCrustAbove() {
 		return this.weakLayerCrustAbove;
 	}
 
-	public void setWeakLayerCrustAbove(Boolean weakLayerCrustAbove) {
+	public void setWeakLayerCrustAbove(Crust weakLayerCrustAbove) {
 		this.weakLayerCrustAbove = weakLayerCrustAbove;
 	}
 
-	public Boolean isWeakLayerCrustBelow() {
+	public Crust isWeakLayerCrustBelow() {
 		return this.weakLayerCrustBelow;
 	}
 
-	public Boolean getWeakLayerCrustBelow() {
+	public Crust getWeakLayerCrustBelow() {
 		return this.weakLayerCrustBelow;
 	}
 
-	public void setWeakLayerCrustBelow(Boolean weakLayerCrustBelow) {
+	public void setWeakLayerCrustBelow(Crust weakLayerCrustBelow) {
 		this.weakLayerCrustBelow = weakLayerCrustBelow;
 	}
 
