@@ -10,8 +10,6 @@ public enum TerrainType {
 	slope_discontinuities,
 	convex_terrain,
 	concave_terrain,
-	depressions,
-	couloirs,
 	steep_terrain,
 	very_steep_terrain,
 	open_terrain,
