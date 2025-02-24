@@ -67,7 +67,7 @@ public class CorsFilter implements Filter {
 		((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Methods",
 				"GET, OPTIONS, HEAD, PUT, POST, DELETE");
 		((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Headers",
-				"origin, content-type, accept, authorization, if-none-match");
+				"origin, content-type, accept, authorization, if-none-match, x-client-version");
 		((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Credentials", "true");
 		((HttpServletResponse) servletResponse).addHeader("Access-Control-Max-Age", "1209600");
 		((HttpServletResponse) servletResponse).addHeader("Access-Control-Expose-Headers", "ETag");
