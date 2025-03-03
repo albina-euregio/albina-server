@@ -2,6 +2,24 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.7] - 2025-03-03
+
+### 🐛 Bug Fixes
+
+- CorsFilter: Allow x-client-version
+- Bulletin: Set status from DRAFT to MISSING if no bulletin
+- Bulletin: Set status null if status was DRAFT and all bulletins were deleted
+- Report: Set report status to missing if all bulletins were deleted
+
+### Danger Sources
+
+- Add average snow height for gliding snow
+- Allow partly crusts above/below weak layer
+- Extend terrain-types enum
+- Extend danger-signs enum
+- Extend creation-process enum
+- Remove duplicate terrain types
+
 ## [7.1.6] - 2025-02-17
 
 ### 🐛 Bug Fixes
