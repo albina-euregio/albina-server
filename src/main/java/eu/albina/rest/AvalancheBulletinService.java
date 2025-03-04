@@ -133,6 +133,35 @@ public class AvalancheBulletinService {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> getJSONBulletins(date, regions, entityManager));
 	}
 
+	@GET
+	@Path("/edit/caaml/json")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Get bulletins for date as CAAML JSON")
+	public Response getCaamlJsonBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+		@QueryParam("regions") List<String> regionIds,
+		@QueryParam("lang") LanguageCode language,
+		@QueryParam("version") CaamlVersion version) {
+
+		Instant startDate = DateControllerUtil.parseDateOrToday(date);
+		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
+		List<Region> regions = RegionController.getInstance().getRegionsOrBulletinRegions(regionIds);
+		ZonedDateTime publicationDate = ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+
+		try {
+			List<AvalancheBulletin> bulletins = HibernateUtil.getInstance().runTransaction(entityManager ->
+				AvalancheBulletinController.getInstance().getBulletins(startDate, endDate, regions, entityManager));
+			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
+			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, ServerInstanceController.getInstance().getLocalServerInstance());
+			avalancheReport.setStatus(BulletinStatus.draft);
+			return makeCAAML(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
+		} catch (RuntimeException e) {
+			logger.warn("Error loading bulletins", e);
+			return Response.noContent().build();
+		}
+	}
+
 	private Response getJSONBulletins(String date, List<Region> regions, EntityManager entityManager) {
 		logger.debug("GET JSON bulletins");
 
@@ -166,6 +195,17 @@ public class AvalancheBulletinService {
 		return getPublishedCaamlBulletins(date, regionIds, language, version);
 	}
 
+	private static Response makeCAAML(AvalancheReport avalancheReport, LanguageCode language, CaamlVersion version) {
+		String caaml = Caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
+		if (caaml != null) {
+			final String type = version != CaamlVersion.V6_JSON ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
+			return Response.ok(caaml, type).build();
+		} else {
+			logger.debug("No bulletins with status published.");
+			return Response.noContent().build();
+		}
+	}
+
 	@GET
 	@Path("/caaml")
 	@Consumes(MediaType.APPLICATION_XML)
@@ -185,14 +225,7 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReport.of(
 				AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions), null,
 				ServerInstanceController.getInstance().getLocalServerInstance());
-			String caaml = Caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
-			if (caaml != null) {
-				final String type = version != CaamlVersion.V6_JSON ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
-				return Response.ok(caaml, type).build();
-			} else {
-				logger.debug("No bulletins with status published.");
-				return Response.noContent().build();
-			}
+			return makeCAAML(avalancheReport, language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
 			return Response.status(400).type(MediaType.APPLICATION_XML).build();
