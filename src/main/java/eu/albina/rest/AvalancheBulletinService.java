@@ -134,6 +134,8 @@ public class AvalancheBulletinService {
 	}
 
 	@GET
+	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/edit/caaml/json")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -201,7 +203,7 @@ public class AvalancheBulletinService {
 			final String type = version != CaamlVersion.V6_JSON ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
 			return Response.ok(caaml, type).build();
 		} else {
-			logger.debug("No bulletins with status published.");
+			logger.debug("No bulletins for this request.");
 			return Response.noContent().build();
 		}
 	}
