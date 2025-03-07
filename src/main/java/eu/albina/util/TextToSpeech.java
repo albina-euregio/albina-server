@@ -375,6 +375,7 @@ public interface TextToSpeech {
 			.POST(HttpRequest.BodyPublishers.ofString(json))
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getTokenValue())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
+			.timeout(Duration.ofSeconds(30))
 			.build();
 		HttpResponse<String> response = HttpClient.newBuilder()
 			.connectTimeout(Duration.ofSeconds(10))
