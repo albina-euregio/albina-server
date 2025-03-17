@@ -2,6 +2,17 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.8] - 2025-03-17
+
+### Bulletins
+
+- Add authenticated endpoint to retrieve non published bulletins in CAAMLv6 format
+
+### 🐛 Bug Fixes
+
+- Set timeout for TTS API calls in addition to connectTimeout
+- Do not create a report if no changes happened at 8AM
+
 ## [7.1.7] - 2025-03-03
 
 ### 🐛 Bug Fixes
