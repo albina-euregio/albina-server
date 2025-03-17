@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -40,12 +41,13 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Throwables;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import eu.albina.model.AbstractPersistentObject;
+import eu.albina.model.AvalancheReport;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Throwables;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
@@ -53,9 +55,7 @@ import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
-import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
@@ -96,8 +96,6 @@ public class PublicationJob implements org.quartz.Job {
 		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
 
-		User user = getUser(serverInstance);
-
 		List<Region> regions = getRegions().stream()
 			.filter(region -> {
 				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
@@ -106,9 +104,9 @@ public class PublicationJob implements org.quartz.Job {
 			}).collect(Collectors.toList());
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update/change.");
-			publishReports(avalancheReportController, startDate, publicationDate, getRegions(), user, new ArrayList<AvalancheBulletin>(), "");
 			return;
 		}
+		User user = getUser(serverInstance);
 
 		for (Region region : regions) {
 			logger.info("Publish bulletins for region {}", region.getId());
@@ -122,7 +120,6 @@ public class PublicationJob implements org.quartz.Job {
 		}
 		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
 		if (publishedBulletins.isEmpty()) {
-			publishReports(avalancheReportController, startDate, publicationDate, getRegions(), user, publishedBulletins, "");
 			return;
 		}
 
@@ -132,7 +129,6 @@ public class PublicationJob implements org.quartz.Job {
 			.collect(Collectors.toList());
 		if (publishedBulletins.isEmpty()) {
 			logger.info("No published regions found in bulletins.");
-			publishReports(avalancheReportController, startDate, publicationDate, getRegions(), user, publishedBulletins, "");
 			return;
 		}
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
@@ -141,8 +137,17 @@ public class PublicationJob implements org.quartz.Job {
 
 		Collections.sort(publishedBulletins);
 
-		publishReports(avalancheReportController, startDate, publicationDate, getRegions(), user, publishedBulletins,
+		// publish all regions which have to be published
+		for (Region region : regions) {
+			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
+				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
+				.collect(Collectors.toList());
+			logger.info("Publishing region {} with bulletins {} and publication time {}", region.getId(),
+				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
 				publicationTimeString);
+
+			avalancheReportController.publishReport(regionBulletins, startDate, region, user, publicationDate);
+		}
 
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
@@ -215,22 +220,6 @@ public class PublicationJob implements org.quartz.Job {
 		tasksAfterDirectoryUpdate.stream()
 			.map(CompletableFuture::runAsync)
 			.forEach(PublicationJob::await);
-	}
-
-	private void publishReports(AvalancheReportController avalancheReportController, Instant startDate,
-			Instant publicationDate, List<Region> regions, User user, List<AvalancheBulletin> publishedBulletins,
-			String publicationTimeString) {
-		// publish all regions which have to be published
-		for (Region region : regions) {
-			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
-				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
-				.collect(Collectors.toList());
-			logger.info("Publishing region {} with bulletins {} and publication time {}", region.getId(),
-				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
-				publicationTimeString);
-
-			avalancheReportController.publishReport(regionBulletins, startDate, region, user, publicationDate);
-		}
 	}
 
 	private static void await(CompletableFuture<Void> future) {
